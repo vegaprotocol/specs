@@ -1,18 +1,18 @@
-# Outline
-Trade settlement is the process of transferring securities between buyers and sellers, see Section 5.2 of the [whitepaper](/vega-protocol/product/wikis/Whitepaper). 
+Feature name: settlement-engine
+Start date: 2019-02-12
 
+# Guide-level explanation
+Explain the specification as if it was already included and you are explaining it to another developer working on Vega. This generally means:
+- Introducing new named concepts
+- Explaining the features, providing some simple high level examples
+- If applicable, provide migration guidance
 
-## Settlement actions are triggered when:
+# Reference-level explanation
 
-### **1. A position is fully or partially closed (0003))**
-An open position is closed when the owner of the open position enters into a counter trade (including if that trade is created as part of a forced risk management closeout). Settlement occurs for the closed volume / contracts.
+1. **A position is fully or partially closed (0003))** - An open position is closed when the owner of the open position enters into a counter trade (including if that trade is created as part of a forced risk management closeout). Settlement occurs for the closed volume / contracts.
+1. **Interim cash flows are generated** - not relevant for first instruments launched on Vega. Will be potentially relevant for perpetual futures with period settlement.
+3. **An instrument expires** - all open positions in the market are settled. After settlement at expiry, all positions are closed and collateral is released.
 
-### **2. Interim cash flows are generated**
-not relevant for first instruments launched on Vega. Will be potentially relevant for perpetual futures with period settlement.
-
-### **3. An instrument expires (0003-settlement-at-instrument-expiry)[./0003-settlement-at-instrument-expiry.md*
-All open positions in the market are settled.  
-After settlement at expiry, all positions are closed and collateral is released.
 
 
 ## Settlement actions which apply to all of the above triggers are:
@@ -20,9 +20,10 @@ After settlement at expiry, all positions are closed and collateral is released.
 The settlement engine's job is to convert settlement instructions scoped to a market from the [product](https://gitlab.com/vega-protocol/product/issues/80#product) into specific ledger entry instructions for the collateral engine.
 
 
-## Pseudo Code / Examples
 
-### Settlement Engine data structures
+# Pseudo Code / Examples
+
+## Settlement Engine data structures
 
 ```
 

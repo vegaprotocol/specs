@@ -1,7 +1,8 @@
 # Vega design
+This repository contains the 
 
 ## What is a specification
-A specification
+A specification is 
 
 ## When you need to follow this process
 
@@ -21,13 +22,11 @@ Any changes to the specification should be done in merge requests.
 When a pull request is open,
 
 ## Implementing a specification
-When a specification is merged, it is ready for development. The relevant team can then break the specification down in to
-technical tasks in their own task system.
+When a specification is merged, it is ready for development. The relevant team can then break the specification down in to technical tasks in their own task system.
 
-Issues may be created in the Product issue list to define a particular scope for an upcoming release. This can be used to limit the
-scope of work for technical tasking in the case that an MVP or spike is required. The specification should be as complete as it can be,
-while the issue may be a smaller piece on the way to implementing the first specification.
+Issues may be created in the Product issue list to define a particular scope for an upcoming release. This can be used to limit the scope of work for technical tasking in the case that an MVP or spike is required. The specification should be as complete as it can be, while the issue may be a smaller piece on the way to implementing the first specification.
 
 # Notes
-The workflow and for this is largely based on the Rust RFC process: https://github.com/rust-lang/rfcs#help-this-is-all-too-informal.
+The workflow and for this is largely based on the Rust RFC process: https://github.com/rust-lang/rfcs
+
 It is being adopted as a replacement for using Gitlab issues, which is where past product specifications have beeen written up.

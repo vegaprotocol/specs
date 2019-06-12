@@ -1,7 +1,12 @@
+Feature name: market-framework
+Start date: 2019-02-11 
+
 # Summary
+The market framework is a set of concepts that define the markets available on a Vega network in terms of the product and instrument being traded on each, the trading mode and related parameters, and the risk model being used for margin calculations.
 
-The market framework is described in Section 3 of the [whitepaper](../product/wikis/Whitepaper) and is a set of concepts that define the markets available on a Vega network in terms of the product and instrument being traded on each, the trading mode and related parameters, and the risk model being used for margin calculations.
+The market framework is described in Section 3 of the [whitepaper](../product/wikis/Whitepaper).
 
+# Guide-level explanation
 A the trading core will create order books, risk engines, etc. and accept orders and other instructions based on the data held within the market framework. Depending on the deployment context for the trading core, the market framework will be created and manipulated in different ways:
 
 - In the first Nicenet release and some private/permissioned Vega networks, the framework instances will be set up using configuration files.
@@ -17,8 +22,9 @@ Out of scope for this ticket:
 - products, smart products, and the first built-in product(s) to be built (futures, options)
 - APIs through which clients can query and update market framework data  
 
+# Reference-level explanation
+This is the main portion of the specification. Break it up as required.
 
-# Design
 
 The market framework is essentially a set of data structures that configure and control almost all of the behaviour of a Vega network (the main exceptions being per-instance network and node configuration, and network-wide parameters that apply to all markets). These data structures are described in the sections below.
 

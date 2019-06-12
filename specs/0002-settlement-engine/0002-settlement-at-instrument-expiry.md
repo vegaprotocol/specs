@@ -19,7 +19,7 @@ The settlement engine's job is to convert settlement instructions scoped to a ma
 
 ## Note / boundaries
 
-- [ ] The settlement engine does not keep a record of any collateral balances
+- The settlement engine does not keep a record of any collateral balances
 - [ ] The settlement engine does not maintain the settlement formula for cashflows to be calculated
 - [ ] The settlement engine does not actually execute the transfer of funds - it rather instructs the collateral engine to do this.
 - [ ] When an instrument expires, the sum of all the settlement cashflows nets to zero across all positions (assumes negative volumes for short positions).
