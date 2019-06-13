@@ -39,6 +39,24 @@ Issues may be created in the Product issue list to define a particular scope for
 - Future work will be scoped in a new ticket
 - Any changes to the specification should be done in new merge requests.
 
+```mermaid
+sequenceDiagram
+    loop Design
+        Specification->>Merge request: Write specification
+Merge request->>Specification: Integrate feedback    
+    end
+Merge request->>Product ticket: Scope next release
+        Product ticket->>Development: Technical tickets
+        Development-->>Development: Build
+Product ticket->>Development: Code review
+       Product ticket-->>Product ticket: Close ticket
+        Product ticket->>Development: Release
+ 
+
+```
+
+
+
 # RFCs
 When the core specification is more stable and existing functionality needs to be changed, we will start using an RFC process rather than the specification process outlined above. This will likely mean creating an RFC document in the RFC folder, discussing the merge and then integrating that in to the specifications.
 
