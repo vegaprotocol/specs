@@ -17,7 +17,7 @@ Explain the specification as if it was already included and you are explaining i
 
 ## Settlement actions which apply to all of the above triggers are:
 
-The settlement engine's job is to convert settlement instructions scoped to a market from the [product](https://gitlab.com/vega-protocol/product/issues/80#product) into specific ledger entry instructions for the collateral engine.
+The settlement engine's job is to convert settlement instructions scoped to a market from the [product](./0001-market-framework.md) into specific ledger entry instructions for the collateral engine.
 
 
 

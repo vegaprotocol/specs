@@ -2,7 +2,7 @@ Parent Issue: #81
 Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections: 3.2 and 5.2 
 
 
-The settlement engine's job is to convert settlement instructions scoped to a market from the [product](https://gitlab.com/vega-protocol/product/issues/80#product) into specific ledger entry instructions for the collateral engine. #81 
+The settlement engine's job is to convert settlement instructions into specific ledger entry instructions for the collateral engine. 
 
 ## Acceptance Criteria
 
@@ -26,15 +26,15 @@ The settlement engine's job is to convert settlement instructions scoped to a ma
 
 
 ## Expiry Trigger
-Logic encapsulated in the [product](https://gitlab.com/vega-protocol/product/issues/80#product) will define that the market has generated settlement cashflows for settlement, and emit an event accordingly. (note also same for interim cashflows)
+Logic encapsulated in the [product](./0001-market-framework.md) will define that the market has generated settlement cashflows for settlement, and emit an event accordingly. (note also same for interim cashflows)
 
-Logic encapsulated in the [product](https://gitlab.com/vega-protocol/product/issues/80#product) will define that the market has expired and that settlement cashflows may be generated for settlement. (note this is similar for interim cashflows)
+Logic encapsulated in the [product](./0001-market-framework.md) will define that the market has expired and that settlement cashflows may be generated for settlement. (note this is similar for interim cashflows)
 
 How this logic occurs is out of the scope of this ticket. 
 
 ## Resulting Actions
 
-1. The [product](https://gitlab.com/vega-protocol/product/issues/80#product) specifies the market-based settlement function which maybe be used by the settlement engine to calculate settlement instructions for each party.  This settlement function is paramaterised at expiry (this is outside the scope of this ticket) and is accessible by the settlement engine when this is completed.
+1. The [product](./0001-market-framework.md) specifies the market-based settlement function which maybe be used by the settlement engine to calculate settlement instructions for each party.  This settlement function is paramaterised at expiry (this is outside the scope of this ticket) and is accessible by the settlement engine when this is completed.
 
 ```rust
 // The product's definition contains the settlementByTrader function
@@ -44,7 +44,7 @@ enum Product {
 }
 ``` 
 
-2. The settlement engine will evaluate each party's net cashflows according to the formula provided and utilising knowledge of a trader's net [open position](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#open-position). 
+2. The settlement engine will evaluate each party's net cashflows according to the formula provided and utilising knowledge of a trader's net [open position](../wikis/Trading-and-Protocol-Glossary#open-position). 
 
 ```rust
 // maybe something like

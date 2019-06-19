@@ -17,7 +17,7 @@ A the trading core will create order books, risk engines, etc. and accept orders
 Out of scope for this ticket: 
 
 - the governance protocol and design of governance transactions is out of scope for this market framework design;
-- risk models and risk engine ( #15 );
+- risk models and risk engine;
 - trading modes and trading mode parameters;
 - products, smart products, and the first built-in product(s) to be built (futures, options)
 - APIs through which clients can query and update market framework data  
