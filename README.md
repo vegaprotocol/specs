@@ -12,12 +12,11 @@ While we are producing the detailed specifications for the Vega trading core, th
 
 ## The process for a new component
 1. Create a new branch
-1. If this is a new engine or core component, create a new folder in specs, with a leading number one higher than the previous (e.g. `specs/09-example-engine`)
-1. Copy `0000-template.md` to `specs/xx-core-section/xx-0000-my-feature.md`, (e.g. `specs/09-example-engine/09-0000-example-manager.md`
+1. Copy `0000-template.md` to `specs/0000-my-feature.md`, (e.g. `specs/0000-example-manager.md`
 1. Fill in the details.
 1. Submit a merge request to start soliciting feedback. Ensure that the appropriate team members are notified.
 1. Build consensus and integrate feedback.
-1. Assign a sequence number to your feature, (e.g. `specs/09-example-engine/09-0001-example-manager.md`)
+1. Assign a sequence number to your feature, (e.g. `specs/0001-example-manager.md`)
 1. Merge
 
 ## The *current* process for changes to existing component
