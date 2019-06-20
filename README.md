@@ -8,7 +8,7 @@ A specification outlines **our best understanding at the moment of how the softw
 
 - If a component is being built as a stand-in for a proper implementation, then the MVP should be written as a specification file.
 
-While we are producing the details specifications for the Vega trading core, the RFC process (see Notes) would be too heavyweight, so we're starting off by directly editing specifications. When the core specifications are more stable, we will adopt the RFC process.
+While we are producing the detailed specifications for the Vega trading core, the RFC process (see Notes) would be too heavyweight, so we're starting off by directly editing specifications. When the core specifications are more stable, we will adopt the RFC process.
 
 ## The process for a new component
 1. Create a new branch
