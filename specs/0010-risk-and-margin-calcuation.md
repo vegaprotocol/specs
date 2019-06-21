@@ -8,7 +8,7 @@ And how the various engines call it and react to the events it produces. Actuall
 # Orchestration
 See also: product#107
 
-![Screenshot_2019-06-07_at_13.16.27](/uploads/c2d10cc34eb173e4db194e7875e289d8/Screenshot_2019-06-07_at_13.16.27.png)
+![Screenshot_2019-06-07_at_13.16.27](./Fig2-risk1.png)
 
 ## Step 1 – calculate
 
@@ -51,7 +51,7 @@ For all positions for a TRADER where the balance in the TRADER’s margin accoun
 
 # Update to Margin Levels
 
-![Screenshot_2019-06-07_at_13.18.01](/uploads/1d65a3ffb86cbe1381637508d84fbab4/Screenshot_2019-06-07_at_13.18.01.png)
+![Screenshot_2019-06-07_at_13.18.01](./Fig3-risk2.png)
 
 Whenever positions, mark price, or risk factors change, the “not the risk engine” has to compile a list of traders with a margin balance that is less than the search balance. This data is sent to the collateral engine, which will attempt to top-up the margin account (taking funds from the market account, or general account if needed). The new margin balance should be the initial margin balance. If there’s not enough money available, we will top-up the account as much as possible. If the new balance is below the minimum margin, the trader is closed out.
 Traders who have a balance > release level should have the excess margin released to their market account, to the point where their new margin level is the initial balance.
@@ -64,7 +64,7 @@ Needed to update margin levels:
 
 # Call Quant Library
 
-![Screenshot_2019-06-07_at_13.19.08](/uploads/c7ecf6c1251eb5395a5dc7e7442c5f28/Screenshot_2019-06-07_at_13.19.08.png)
+![Screenshot_2019-06-07_at_13.19.08](./Fig4-risk3.png)
 
 
 We need a way for each market to calculate the risk factors for a market, this we have defined loosely as a `quant calculator`. It contains the pre-built risk calculation functions that the trading core will use to calculate the risk levels for a given position and uses the risk model and risk parameters specified in the product specification for a market. These will be derived from the market framework.
@@ -72,7 +72,7 @@ We need a way for each market to calculate the risk factors for a market, this w
 
 # Closeout
 
-![Screenshot_2019-06-07_at_13.19.54](/uploads/b20bf0e45a325c7a85b0a1f7ab2c8892/Screenshot_2019-06-07_at_13.19.54.png)
+![Screenshot_2019-06-07_at_13.19.54](./Fig5-risk4.png)
 
 When it’s been determined that close-outs need to occur (by the Orchestrater), position resolution kicks in.  
 
