@@ -16,8 +16,6 @@ See [Whitepaper](../product/wikis/Whitepaper), Section 5.3 , steps 1 - 3
 
 5. All bankrupt trader's remaining collateral in this market's margin account is confiscated to the market's insurance pool.
 
-**Note:** If the mark-to-market settlement from this order is unable to be covered by the margin accounts of the "distressed" traders, the insurance pool will be used and then loss socialisation.  This will automatically occur due to the way the [mark-to-market settlement](0003-mark-to-market-settlement.md) algorithm works.
-
 ## Acceptance Criteria
 
 * [ ] Cancels all orders of "distressed traders"
