@@ -1,34 +1,32 @@
-Position resolution is instigated when one or more participant's collateral balance is insufficient to fulfil their settlement or margin liabilities.
+# Position Resolution
 
-**Case 1.** During settlement, either during [mark-to-market settlement](0003-mark-to-market-settlement.md) or for [settlement expiry] (0004-settlement-at-instrument-expiry.md), a set of traders may have insufficient market collateral to cover the required settlement liability. Position resolution is triggered by the settlement engine (#81), atomically, so that the resolution occurs before further blockchain transactions are processed.
-
-Note: Position resolution for settlement only occurs if the insurance pool has insufficient capital to cover the liability shortfall.
-
-**Case 2.** If the risk margin requirements change, traders can find themselves with insufficient capital to cover their positions.
-
-Note: In this situation the insurance pool isn't used to cover their margin liabilities (insurance pool is only used for settlement liabilities).
-
-Position resolution will be immediately triggered if a collateral search fails.
+Position resolution is the mechanism which deals with closing out distressed positions on a given market. It is instigated when one or more participant's collateral balance is insufficient to fulfil their settlement or margin liabilities.
 
 ## Position resolution algorithm
 
 See [Whitepaper](../product/wikis/Whitepaper), Section 5.3 , steps 1 - 3
 
-1. Any trader that has insufficient capital to cover their settlement liability has all their open orders on that market are cancelled.
+1. Any trader that has insufficient capital to cover their settlement liability has all their open orders on that market are cancelled. Note, despite this potentially freeing up margin for the trader, we don't re-look at their collateral utilisation. They remain a 'distressed trader' and position resolution continues. The market may at any point in time have multiple distressed traders that require position resolution. They are 'resolved' together in a batch.
 
-2. The collection of long and short positions that are 'bankrupt' net to give an amount of *either* long or short volume that is "net distressed".  (note, this will only occur in Case 2)
+2. The batch of distressed open positions that require position resolution may be comprised of a collection of long and short positions. These positions are first 'netted' off against each other. If there is perfect netting (i.e. the total volume of distressed long positions = total volume of distressed short positions), the next two steps won't occur. Practically, the positions are all closed out with the network as the counterpart with the price set to the most recently calculated _Mark Price_ (note, these trades should not technically 'update' the _Mark Price_ as this will trigger a market wide mark to market settlement action). If there isn't perfect netting, the remaining net volume (which is either net long or net short) becomes an outstanding liability that needs further resolution via the order book (Step 3).   
 
-3. The outstanding liability is closed out in the market with a single market order (and hence the network is the counterpart of all trades that result from this market order). The network now has a position (for an instance in time).
+3. This net outstanding liability is closed out in the market with a single market order. The network is the counterpart of all trades that result from this single market order. The network now has a position (until conclusion of Step 4) which is comprised of a set of trades that transacted with the non-distressed traders on the order book. Note, any of the non-distressed traders who through this action have closed out volume need to have these settled against their specific close out price. This should happen after Step 5 which is a "settlement collect" action and therefore always needs to happen prior to a "settlement distribute" action.  This has been included as Step 6.
 
-4. It then calculates the volume weighted average price of its close outs. The system then generates a set of trades with the bankrupt traders all at the volume weighted average price. The open positions of all the "distressed" traders is now zero.
+4. The system then generates a set of trades with the bankrupt traders all at the volume weighted average price of the network's (new) open position. The open positions of all the "distressed" traders is now zero. Note, no updates to the _Mark Price_ should happen as a result of these trades (as this would erroneously trigger a market-wide mark to market settlement and potentially lead to cascade close outs).
 
-5. All bankrupt trader's remaining collateral in this market's margin account is confiscated to the market's insurance pool.
+5. All bankrupt trader's remaining collateral in their margin account for this market is confiscated to the market's insurance pool.
 
-**Note:** If the mark-to-market settlement from this order is unable to be covered by the margin accounts of the "distressed" traders, the insurance pool will be used and then loss socialisation.  This will automatically occur due to the way the [mark-to-market settlement](0003-mark-to-market-settlement.md) algorithm works.
+6. If Step 3 occurred, settle the closed out volume generated by the network trading on the order book.
 
 ## Acceptance Criteria
 
-* [ ] Cancels all orders of "distressed traders"
-* [ ] Nets long and short positions correctly
-* [ ] Closes out the distressed volume on the order book
+* [ ] All orders of "distressed traders" are cancelled
+* [ ] Long and short positions are netted correctly
 * [ ] Open positions of distressed traders are closed
+* [ ] One market order is submitted for the net liability
+* [ ] Mark Price is never updated during position resolution
+* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly.
+
+
+## Scenarios
+
