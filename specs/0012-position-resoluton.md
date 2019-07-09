@@ -20,8 +20,13 @@ See [Whitepaper](../product/wikis/Whitepaper), Section 5.3 , steps 1 - 3
 
 ## Acceptance Criteria
 
-* [ ] Cancels all orders of "distressed traders"
-* [ ] Nets long and short positions correctly
-* [ ] Closes out the distressed volume on the order book
+* [ ] All orders of "distressed traders" are cancelled
+* [ ] Long and short positions are netted correctly
 * [ ] Open positions of distressed traders are closed
+* [ ] One market order is submitted for the net liability
+* [ ] Mark Price is never updated during position resolution
+* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly.
+
+
+## Scenarios
 
