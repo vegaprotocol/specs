@@ -10,9 +10,9 @@ See [Whitepaper](../product/wikis/Whitepaper), Section 5.3 , steps 1 - 3
 
 2. The batch of distressed open positions that require position resolution may be comprised of a collection of long and short positions. The network calculates the overall net long or short position. This tells the network how much volume (either long or short) needs to be sourced from the order book. For example, if there are 3 distressed traders with +5, -4 and +2 positions respectively.  Then the net outstanding liability is +3. If this is a non-zero number, do Step 3.
 
-3. This net outstanding liability is sourced from the market's order book via a single market order (in above example, that would be a market order to sell 3 on the order book) executed by a "liquidity sourcing" network counterpart. This internal entity is the counterpart of all trades that result from this single market order and now has a position which is comprised of a set of trades that transacted with the non-distressed traders on the order book. Note, any of the non-distressed traders who through this action have closed out volume need to have these settled against their specific close out price. This should happen after Step 5 to ensure we don't bankrupt the insurance pool before collecting the distressed trader's collateral.  This has been included as Step 6.
+3. This net outstanding liability is sourced from the market's order book via a single market order (in above example, that would be a market order to sell 3 on the order book) executed by the network as a counterpart. This internal entity is the counterpart of all trades that result from this single market order and now has a position which is comprised of a set of trades that transacted with the non-distressed traders on the order book. Note, any of the non-distressed traders who through this action have closed out volume need to have these settled against their specific close out price. This should happen after Step 5 to ensure we don't bankrupt the insurance pool before collecting the distressed trader's collateral.  This has been included as Step 6.
 
-4. The network then generates a set of trades with all the distressed traders all at the volume weighted average price of the network's (new) open position. This is executed by a  "close-out" network counterpart.  The "liquidity sourcing" entity and the "close-out" entity need to execute and internal trade between them in order to effectively transfer the volume that the "liquidity sourcing" entity has attained from the order book.
+4. The network then generates a set of trades with all the distressed traders all at the volume weighted average price of the network's (new) open position.   These trades should be readily  distinguished from the trades executed by the network counterpart in Step 3 (suggest by a flag on the trades)
 Note, If there was no market order (i.e step 3 didn't happen) the close-out price is the most recently calculated _Mark Price_. See Scenario 1 below for the list of resulting trades for the above example. The open positions of all the "distressed" traders is now zero and the networks position is also zero. Note, no updates to the _Mark Price_ should happen as a result of any of 
 these trades (as this would result in a new market-wide mark to market settlement at this new price and potentially lead to cascade close outs).
 
@@ -56,73 +56,62 @@ NetOutstandingLiability = 5 - 4 + 2 = 3
 LiquiditySourcingOrder: {
   type: 'market',
   direction: 'sell',
-  size: 3  
+  size: 3 
 }
 
 LiquiditySourcingTrade1: {
   buyer: Trader4,
-  seller: NetworkLiquiditySourcingEntity,
+  seller: Network,
   size: 2,
-  price: 120
+  price: 120,
+  type: 'liquidity-sourcing'
 }
 
 LiquiditySourcingTrade2: {
   buyer: Trader5,
-  seller: NetworkLiquiditySourcingEntity,
+  seller: Network,
   size: 1,
-  price: 100  
+  price: 100,
+  type: 'liquidity-sourcing'
+
 }
 
 ```
 
 #### STEP 4
 
-This trade is internal to the network. It provides the close-out entity with the volume it needs.
-
-```
-TransferTrade {
-  buyer: NetworkLiquiditySourcingEntity,
-  seller: NetworkCloseOutEntity,
-  size: 3
-  price: 113.33 // volume weighted price of the liquidity sourcing trades   
-}
-```
-
-This results in the following open position sizes
-```
-// OpenPositionSize of NetworkLiquiditySourcingEntity =  0
-// OpenPositionSize of NetworkCloseOutEntity =  -3
-```
-
-Now close out trades are generated with the distressed traders
+Close out trades are generated with the distressed traders
 
 ```
 CloseOutTrade1 {
-  buyer: NetworkCloseOutEntity,
+  buyer: Network,
   seller: Trader1,
   size: 5,
-  price: 113.33  
+  price: 113.33,
+  type: 'safety-provision'  
 }
 
 CloseOutTrade2 {
   buyer: Trade2,
-  seller: NetworkCloseOutEntity,
+  seller: Network,
   size: 4,
-  price: 113.33  
+  price: 113.33,
+  type: 'safety-provision'   
 }
 
 CloseOutTrade3 {
-  buyer: NetworkCloseOutEntity,
+  buyer: Network,
   seller: Trader3,
   size: 2,
-  price: 113.33  
+  price: 113.33,
+  type: 'safety-provision'   
 }
 ```
 
 This results in the open position sizes for all distressed traders and the network entities to be zero.
 
 ```
-// OpenPosition of NetworkCloseOutEntity =  -3 +5 -4 +2 = 0
+// OpenPosition of Network =  -3 +5 -4 +2 = 0
 // OpenPosition of Trader1 =  +5 -5 = 0
 // OpenPosition of Trader2 = -4 +4 =  0
 // OpenPosition of Trader3 =  +2 - 2 = 0
