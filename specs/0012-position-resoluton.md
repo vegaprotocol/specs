@@ -6,27 +6,160 @@ Position resolution is the mechanism which deals with closing out distressed pos
 
 See [Whitepaper](../product/wikis/Whitepaper), Section 5.3 , steps 1 - 3
 
-1. Any trader that has insufficient capital to cover their settlement liability has all their open orders on that market are cancelled. Note, despite this potentially freeing up margin for the trader, we don't re-look at their collateral utilisation. They remain a 'distressed trader' and position resolution continues. The market may at any point in time have multiple distressed traders that require position resolution. They are 'resolved' together in a batch.
+1. Any trader that has insufficient capital to cover their settlement liability has all their open orders on that market are cancelled. Note, the network must then recalculate their margin requirement on their remaining open position and if they now have sufficient collateral (i.e. aren't in the close out zone) they are no longer considered a distressed trader and not subject to position resolution. The market may at any point in time have multiple distressed traders that require position resolution. They are 'resolved' together in a batch.
 
-2. The batch of distressed open positions that require position resolution may be comprised of a collection of long and short positions. These positions are first 'netted' off against each other. If there is perfect netting (i.e. the total volume of distressed long positions = total volume of distressed short positions), the next two steps won't occur. Practically, the positions are all closed out with the network as the counterpart with the price set to the most recently calculated _Mark Price_ (note, these trades should not technically 'update' the _Mark Price_ as this will trigger a market wide mark to market settlement action). If there isn't perfect netting, the remaining net volume (which is either net long or net short) becomes an outstanding liability that needs further resolution via the order book (Step 3).   
+2. The batch of distressed open positions that require position resolution may be comprised of a collection of long and short positions. The network calculates the overall net long or short position. This tells the network how much volume (either long or short) needs to be sourced from the order book. For example, if there are 3 distressed traders with +5, -4 and +2 positions respectively.  Then the net outstanding liability is +3. If this is a non-zero number, do Step 3.
 
-3. This net outstanding liability is closed out in the market with a single market order. The network is the counterpart of all trades that result from this single market order. The network now has a position (until conclusion of Step 4) which is comprised of a set of trades that transacted with the non-distressed traders on the order book. Note, any of the non-distressed traders who through this action have closed out volume need to have these settled against their specific close out price. This should happen after Step 5 which is a "settlement collect" action and therefore always needs to happen prior to a "settlement distribute" action.  This has been included as Step 6.
+3. This net outstanding liability is sourced from the market's order book via a single market order (in above example, that would be a market order to sell 3 on the order book) executed by the network as a counterpart. This internal entity is the counterpart of all trades that result from this single market order and now has a position which is comprised of a set of trades that transacted with the non-distressed traders on the order book. Note, the network's order should not incur a margin liability. Also, these new positions (including that incurred by the network) will need to be "MTM settled". This should happen after Step 5 to ensure we don't bankrupt the insurance pool before collecting the distressed trader's collateral.  This has been included as Step 6.
 
-4. The system then generates a set of trades with the bankrupt traders all at the volume weighted average price of the network's (new) open position. The open positions of all the "distressed" traders is now zero. Note, no updates to the _Mark Price_ should happen as a result of these trades (as this would erroneously trigger a market-wide mark to market settlement and potentially lead to cascade close outs).
+4. The network then generates a set of trades with all the distressed traders all at the volume weighted average price of the network's (new) open position.   These trades should be readily  distinguished from the trades executed by the network counterpart in Step 3 (suggest by a flag on the trades)
+Note, If there was no market order (i.e step 3 didn't happen) the close-out price is the most recently calculated _Mark Price_. See Scenario 1 below for the list of resulting trades for the above example. The open positions of all the "distressed" traders is now zero and the networks position is also zero. Note, no updates to the _Mark Price_ should happen as a result of any of 
+these trades (as this would result in a new market-wide mark to market settlement at this new price and potentially lead to cascade close outs).
 
 5. All bankrupt trader's remaining collateral in their margin account for this market is confiscated to the market's insurance pool.
 
-6. If Step 3 occurred, settle the closed out volume generated by the network trading on the order book.
+6. If Step 3 occurred, settle the new trade volume generated by the network trading on the order book using the process described [here](./0003-mark-to-market-settlement.md). This should also be settled for the network entity. In reality, this entity doesn't have collateral and so the funds it 'owes' will come out of the insurance fund. This will naturally happen if following the [settlement process](./0003-mark-to-market-settlement.md)  however, it's worth noting that the network entity should never have margins calculated for it. This also should naturally happen because no margin calculations should happen during the period that the network temporarily has an open position.
 
 ## Acceptance Criteria
 
 * [ ] All orders of "distressed traders" are cancelled
-* [ ] Long and short positions are netted correctly
 * [ ] Open positions of distressed traders are closed
 * [ ] One market order is submitted for the net liability
 * [ ] Mark Price is never updated during position resolution
 * [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly.
 
 
-## Scenarios
+## Examples and Pseudo code
 
+## ***Scenario -  All steps***
+```
+ 
+Trader1 open position: +5
+Trader1 open orders:  0
+Trader2 open position: -4
+Trader2 open orders:   0
+Trader3 open position: +2
+Trader3 open orders:   0
+```
+
+#### STEP 1
+No traders are removed from the distressed trader list.
+
+#### STEP 2
+
+```
+NetOutstandingLiability = 5 - 4 + 2 = 3
+```
+#### STEP 3
+
+```
+LiquiditySourcingOrder: {
+  type: 'market',
+  direction: 'sell',
+  size: 3 
+}
+
+LiquiditySourcingTrade1: {
+  buyer: Trader4,
+  seller: Network,
+  size: 2,
+  price: 120,
+  type: 'liquidity-sourcing'
+}
+
+LiquiditySourcingTrade2: {
+  buyer: Trader5,
+  seller: Network,
+  size: 1,
+  price: 100,
+  type: 'liquidity-sourcing'
+
+}
+
+```
+
+#### STEP 4
+
+Close out trades are generated with the distressed traders
+
+```
+CloseOutTrade1 {
+  buyer: Network,
+  seller: Trader1,
+  size: 5,
+  price: 113.33,
+  type: 'safety-provision'  
+}
+
+CloseOutTrade2 {
+  buyer: Trade2,
+  seller: Network,
+  size: 4,
+  price: 113.33,
+  type: 'safety-provision'   
+}
+
+CloseOutTrade3 {
+  buyer: Network,
+  seller: Trader3,
+  size: 2,
+  price: 113.33,
+  type: 'safety-provision'   
+}
+```
+
+This results in the open position sizes for all distressed traders and the network entities to be zero.
+
+```
+// OpenPosition of Network =  -3 +5 -4 +2 = 0
+// OpenPosition of Trader1 =  +5 -5 = 0
+// OpenPosition of Trader2 = -4 +4 =  0
+// OpenPosition of Trader3 =  +2 - 2 = 0
+```
+
+#### STEP 5
+
+The collateral from distressed traders is moved to the insurance pool
+
+```
+// sent by Settlement Engine to the Collateral Engine
+TransferRequest1 {
+  from: [Trader1_MarginAccount], 
+  to: MarketInsuranceAccount,
+  amount: Trader1_MarginAccount.size, // this needs to be the full amount
+}
+
+TransferRequest2 {
+  from: [Trader2_MarginAccount],
+  to: MarketInsuranceAccount, 
+  amount: Trader2_MarginAccount.size, // this needs to be the full amount
+}
+
+TransferRequest3 {
+  from: [Trader3_MarginAccount],
+  to:  MarketInsuranceAccount, 
+  amount: Trader3_MarginAccount.size, // this needs to be the full amount
+}
+```
+
+#### STEP 6
+
+Traders from step 3 need to be settled.
+
+Prior to STEP 3 trades, assume Trader 4 and Trader 5 had the following open positions.
+
+```
+// OpenPosition of Trader4 =  -3
+// OpenPosition of Trader5 =  15
+```
+
+Trader4 has therefore closed out 2 contracts through the LiquiditySourcingTrade1. These need to be settled against the trade price.
+
+```
+TransferRequest4 {
+  from: [MarketInsuranceAccount],
+  to:  Trader4_MarginAccount, 
+  amount: (120 - PreviousMarkPrice) * -2, // this is the movement since the last settlement multiplied by the volume of the closed out amount
+}
+
+```
