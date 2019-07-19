@@ -1,20 +1,22 @@
 # Outline
-The network calculates settlement cashflows for all traders with open positions, every time the mark price of the product changes. 
+The network calculates the change in mark to market valuation and generates settlement cashflows for each party's gains/losses every time the [mark price](./0009-mark-price.md) of the market changes.
 
 ## Design
 
 *Settlement Engine instructs the Collateral Engine via TransferRequests to reallocated collateral between trader's margin accounts based on MTM moves*
 
-1. When the _Mark Price_ changes, the network calculates settlement cash flows for each trader according to the following formula.
+1. When the [mark price](./0009-mark-price.md) changes, the network calculates settlement cash flows for each trader according to the following formula.
 
 ```
-MTM_MOVE( party ) =  party.PREV_OPEN_VOLUME * ( MARK_PRICE_NEW - MARK_PRICE_PREV ) + SUM(from i=1 to new_trades.length)( new_trade(i).VOLUME(party) * ( MARK_PRICE_NEW - new_trade(i).PRICE ) )
+MTM_MOVE( party ) =  party.PREV_OPEN_VOLUME * (product.value(mark_price) - product.value(prev_mark_price)) + SUM(from i=1 to new_trades.length)( new_trade(i).volume(party) * (product.value(current_price) - new_trade(i).price ) )
 ```
+
 *where*
 
+```product.value(mark_price)``` refers to the latest calculation of the [mark price](./0009-mark-price.md)
 ```party.PREV_OPEN_VOLUME``` refers to the trader's open volume at the last MTM calculation.
 ```new_trades``` refers to any trades that the party has been involved in since the last MTM calculation.
-```VOLUME(party)``` is the (signed) volume  of the trade i.e. +ve if the party was a buyer and -ve if a seller.
+```volume(party)``` is the (signed) volume  of the trade i.e. +ve if the party was a buyer and -ve if a seller.
 
 
 2. The settlement engine then instructs the collateral engine to *collect* from the margin accounts of those whose change in mark to market has been negative / incurred loss.  This will be collected into the market's *margin* account via a set of transfer requests ( see #81 ).  The collection instruction should first collect from a trader's margin account for the market and then the trader's general account and then the market's insurance pool.  
