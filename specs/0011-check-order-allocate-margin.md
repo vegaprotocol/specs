@@ -12,10 +12,7 @@ The logic is something like this:
 ```
 enum ValidationResult = Accept | Reject
 
-/* NB: a position contains 3 fields:
-    - net open volume
-    - net long order volume (sum of size of all the trader’s buy orders, e.g. +1000)
-    - net short order volume (sum of size of all the trader’s sell orders, e.g. -1000) 
+/* NB: a position record is assumed to contain all required data about a trader's open volume and active orders to calculate margin. For example, this means contianing or being able calculate the 'net worst' long and short positions given all orders.
 */
 
 /*** Ensure that it is reasonably likely (guaranteed, in a non-sharded 
