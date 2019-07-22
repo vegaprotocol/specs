@@ -4,7 +4,8 @@ Vega needs to keep track of positions for two purposes:
 
 - The **Position Engine** needs to keep basic position data for each trader in each market where they have a *non-zero net open position*:
 	- Position size (net volume: positive for long positions, negative for short positions)
-	- “Potential position size”: **TODO: WIP logic for additional potential position from orders**
+	- Net active long orders: the sum of the long volume for all the trader's active order (will always be >= 0)
+	- Net active short orders: the sum of the short volume for all the trader's active order (will always be <= 0)
 
 - The **Positions API**, for all practical purpose (to achieve reasonable performance) needs to maintain records of both open and closed positions for all traders, including:
 	- Position size (net volume: positive for long positions, negative for short positions)
