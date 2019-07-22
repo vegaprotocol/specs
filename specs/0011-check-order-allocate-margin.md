@@ -44,11 +44,11 @@ fn allocate_instruction_margin(
 			new_pos,
 			current_margin)
 
-	if new_margin > current_margin {
+	if new_margin.initial_margin > current_margin {
 		let available = collateral_account_balance(
 			party: i.sender, 
 			asset: m.margin_asset)
-		if available < new_margin - current_margin { 
+		if available < new_margin.initial_margin - current_margin { 
 			return ValidationResult.REJECT
 		}		
 		request_transfer(
@@ -59,7 +59,7 @@ fn allocate_instruction_margin(
 						party: i.sender,
 						market: m, 
 						asset: m.margin_asset),
-				amount: new_margin - current_margin)
+				amount: new_margin.initial_margin - current_margin)
 	}
 	
 	return ValidationResult.ACCEPT
