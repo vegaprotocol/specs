@@ -1,5 +1,6 @@
 # Description
-This ticket encapsulates the behaviours of:
+This ticket encapsulates the orchestration of business logic which interfaces with the [quant calculator](./0018-quant-calculator.md) to ensure that margin levels 
+
 - Risk levels
 - Margin calculation
 
@@ -14,9 +15,10 @@ See also: product#107
 
 Vega needs to evaluate after each market event (e.g. after processing each market instruction / transaction) whether or not any risk actions need to be performed. The outcome of this determination logic is either:
 - NO ACTION
-- CALL QUANT LIBRARY
-- UPDATE MARGIN LEVELS
-(If CALL QUANT LIBRARY is done, UPDATE MARGIN LEVELS will also be done)
+CALL QUANT CALCULATOR TO DO ONE OF THE FOLLOWING:
+- UPDATE RISK FACTORS
+- GET MARGIN LEVELS
+(If UPDATE RISK FACTORS is done, UPDATE MARGIN LEVELS will also be done)
 
 This can be determined based on the event details, which includes:
 * The market instruction that was processed
@@ -24,13 +26,13 @@ This can be determined based on the event details, which includes:
 * The set (possibly empty) of order book updates
 * The market data
 
-Action is CALL QUANT LIBRARY if: 
-* A quant library call is not already in progress asynchronously; AND
-* A specified period of time has elapsed (period can = 0 for always recalculate) for re-calculating risk factors (NB in Nicenet / for futures you can do this as often as you like since the calculation is dirt cheap and Edd is mean)
+Action is UPDATE RISK FACTORS if: 
+* A update risk factors call is not already in progress asynchronously; AND
+* A specified period of time has elapsed (period can = 0 for always recalculate) for re-calculating risk factors (NB in Nicenet / for futures you can do this as often as you like since the calculation is dirt cheap and Edd is definitely not mean)
 
-CALL QUANT LIBRARY will also happen on creation of a new market that does not yet have risk factors, as any active market needs to have risk factors.
+CALL UPDATE RISK FACTORS will also happen on creation of a new market that does not yet have risk factors, as any active market needs to have risk factors.
 
-Action is UPDATE MARGIN LEVELS if:
+Action is GET MARGIN LEVELS if:
   * Market data has changed (recalculate ALL margins)
     * [FUTURE] Dependent market data can be specified by Product
     * [FUTURE] Change can be subject to a threshold
