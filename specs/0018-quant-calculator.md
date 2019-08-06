@@ -34,7 +34,7 @@ The quantitative model returns two risk factors:
 
 ## _Calibrator_
 
-The calibrator calculates and/or sources a set of values (collectively, the calibration) that are used by the quantitative model. There can be multiple calibrators that can be used with each quantitative model, and each calibrator may be able to calibrate more than one quantitative model (i.e. `calibrator <--> model` is a many-to-many relationship). Howeber, the set of values needed will vary between quantitative models, therefore not all calibrators will be applicable to all models.
+The calibrator calculates and/or sources a set of values (collectively, the calibration) that are used by the quantitative model. There can be multiple calibrators that can be used with each quantitative model, and each calibrator may be able to calibrate more than one quantitative model (i.e. `calibrator <--> model` is a many-to-many relationship). However, the set of values needed will vary between quantitative models, therefore not all calibrators will be applicable to all models.
 
 Calibrators may use a combination of data available from oracles and from sources such at the market framework and order book for the market, and indeed other related markets (e.g. a spot or futures market may be used as a calibration source for options). 
 
