@@ -6,12 +6,11 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 The quant calculator calculates:
 
 1. Risk factors
-1. Margin level scaling factors
 1. Margin levels
 1. Calibration outputs (not required for Nicenet)
 
 # Guide-level explanation
-The “quant calculator” encapsulates a _calibrator_ ,  _quantitative model_ and  _margin calculator_.
+The “quant calculator” encapsulates a _quantitative model_, _margin calculator_ and _calibrator_.
 
 
 # Reference-level explanation
@@ -31,19 +30,6 @@ The quantitative model returns two risk factors:
 
 1. Long position risk factor
 2. Short position risk factor
-
-## _Calibrator_
-
-The calibrator calculates and/or sources a set of values (collectively, the calibration) that are used by the quantitative model. There can be multiple calibrators that can be used with each quantitative model, and each calibrator may be able to calibrate more than one quantitative model (i.e. `calibrator <--> model` is a many-to-many relationship). However, the set of values needed will vary between quantitative models, therefore not all calibrators will be applicable to all models.
-
-Calibrators may use a combination of data available from oracles and from sources such at the market framework and order book for the market, and indeed other related markets (e.g. a spot or futures market may be used as a calibration source for options). 
-
-In future: calibrators may also implement more complex logic, such as to create economic incentives for providing accurate and timeley calibration, where the correct values cannot be easily calculated by Vega. In general this would be done as an extension to the oracle protocol, i.e. by providing hard coded calibrator logic that interpets oracle inputs from potential calibration providers, and distributes rewards from fees based on some set of rules (NOTE: in this case, the calibration fee will be included in fee calculations).
-
-Eventually, some aspects of calibration logic and rules may be specified in the product definition language, though this is not currently a nown requirement.
-
-The quant model and calibrator will need to define and share a data structure/interface for the calibration data they require and produce respectively. This should be specified by the design of the model and calibrator themselves. 
-
 
 ## _Margin calculator_
 
@@ -80,5 +66,20 @@ QuantCalculator.getMargins( 120, [0.1, 0.12], Market.orderBook, -1025, 120 )
 margin_levels = [margin_maintenance, search_level, margin_initial, release_level]
 
 ```
+
+## _Calibrator_
+
+The calibrator calculates and/or sources a set of values (collectively, the calibration) that are used by the quantitative model. There can be multiple calibrators that can be used with each quantitative model, and each calibrator may be able to calibrate more than one quantitative model (i.e. `calibrator <--> model` is a many-to-many relationship). However, the set of values needed will vary between quantitative models, therefore not all calibrators will be applicable to all models.
+
+Calibrators may use a combination of data available from oracles and from sources such at the market framework and order book for the market, and indeed other related markets (e.g. a spot or futures market may be used as a calibration source for options). 
+
+In future: calibrators may also implement more complex logic, such as to create economic incentives for providing accurate and timeley calibration, where the correct values cannot be easily calculated by Vega. In general this would be done as an extension to the oracle protocol, i.e. by providing hard coded calibrator logic that interpets oracle inputs from potential calibration providers, and distributes rewards from fees based on some set of rules (NOTE: in this case, the calibration fee will be included in fee calculations).
+
+Eventually, some aspects of calibration logic and rules may be specified in the product definition language, though this is not currently a nown requirement.
+
+The quant model and calibrator will need to define and share a data structure/interface for the calibration data they require and produce respectively. This should be specified by the design of the model and calibrator themselves. 
+
+
+
 
 # Test cases
