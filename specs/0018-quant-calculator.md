@@ -56,7 +56,7 @@ See [here](./0019-margin-calculator) for specification of the [margin calculator
 
 # calling something like
 
-QuantCalculator.getMargins( Product.getObservableValues(), QuantitativeModel.getRiskFactors(), Market.orderBook, position_size, Product.value(current_price) )  -->
+MarginCalculator.getMargins( Product.getObservableValues(), QuantitativeModel.getRiskFactors(), Market.orderBook, position_size, Product.value(current_price) )  -->
 
 # e.g. for a trader's short futures position of size 1025 contracts where the market observable is just the latest "mark price"
 QuantCalculator.getMargins( 120, [0.1, 0.12], Market.orderBook, -1025, 120 )
