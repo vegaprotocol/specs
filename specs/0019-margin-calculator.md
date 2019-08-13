@@ -30,3 +30,10 @@ The other three margin levels are scaled relative to the maintenance margin leve
 ```collateral_release_level = margin_maintenance * collateral_release_scaling_factor```
 
 where the scaling factors are set as risk parameters ( see [market framework](./0001-market-framework.md) ).
+
+
+## Positive and Negative numbers
+
+Positive margin numbers mean the trader is required to pay a cost to  
+
+Therefore, if comparing two margin numbers, the greatest liability (i.e. 'worst' margin number for the trader) is the most positive number.
