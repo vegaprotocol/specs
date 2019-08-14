@@ -5,30 +5,30 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 # Summary
 The quant risk suite contains functionality to deliver:
 
-1. Risk factors
-1. Margin levels
+1. Risk factors (calculated by  the _quantitative risk model_)
+1. Margin levels (calculated by the _margin calculator_)
 1. Calibration outputs (not required for Nicenet)
 
 # Guide-level explanation
-The “quant risk suite” encapsulates a _quantitative model_, _margin calculator_ and _calibrator_.
+The “quant risk suite” encapsulates a _quantitative risk model_, _margin calculator_ and _calibrator_.
 
-The market parameter specifies which quantitative model is in play for a market.
+The market parameter specifies which _quantitative risk model_ is in play for a market.
 
 
 # Reference-level explanation
 
 
-## _Quantitative model_
-The quantitative model returns risk factors which are used in the **_margin calculator_** (see below).
+## _Quantitative risk model_
+The quantitative risk model calculates **risk factors** which are used in the **_margin calculator_** (see below).
 
-The quantitative model may take one or more of the following as inputs:
+The quantitative risk model may take one or more of the following as inputs:
 * risk parameters (e.g. volatility)
 * product parameters (e.g. minimum contract size)
 * order book data (full current order book with volume aggregated at price levels)
 * position data (for each trader)
 * event data (e.g. passage of time) (Not for Futures / Nicenet )
 
-The quantitative model returns two risk factors:
+The quantitative risk model returns two risk factors:
 
 1. Long position risk factor
 2. Short position risk factor
@@ -37,7 +37,7 @@ The quantitative model returns two risk factors:
 
 The [margin calculator](./0019-margin-calculator) may take one or more of the following as inputs:
 1. Data provided by the product.
-1. Risk factors provided by the quantitative model.
+1. Risk factors provided by the quantitative risk model.
 1. The market's order book
 1. The position size that the margin should be calculated for
 
@@ -58,7 +58,7 @@ See [here](./0019-margin-calculator) for specification of the [margin calculator
 
 # calling something like
 
-MarginCalculator.getMargins( Product.getObservableValues(), QuantitativeModel.getRiskFactors().longFactor, Market.orderBook, position_size, Product.value(current_price) )  -->
+MarginCalculator.getMargins( Product.getObservableValues(), QuantitativeRiskModel.getRiskFactors().longFactor, Market.orderBook, position_size, Product.value(current_price) )  -->
 
 # e.g. for a trader's short futures position of size 1025 contracts where the market observable is just the latest "mark price"
 MarginCalculator.getMargins( 120, [0.1, 0.12], Market.orderBook, -1025, 120 )
