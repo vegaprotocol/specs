@@ -8,7 +8,7 @@ The _margin calculator_ returns the set of relevant margin levels for a trader:
 
 ## Simple calculation
 
-In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-quant-calculator.md).
+In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-quant-risk-suite.md).
 
 The maintenance margin is calculated using the following formula:
 
