@@ -49,27 +49,28 @@ In this simple methodology, a linearised margin formula is used to return the ma
 
 **Step 1** 
 
-If ```riskiest long``` <= 0, maintenance_margin = 0
+If ```riskiest long == 0``` then ```maintenance_margin_long = 0```.
 
 Else
 
-```maintenance_margin_long = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors ] . [ Product.market_observables ]  ```,
+```maintenance_margin_long = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
 
 where
 
-```slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price)) ```,
+```slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price) ```,
 
-where ```mark price``` used is the last one used for the last settlement.
+where ```mark price``` used is the last one used for the last settlement and ```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited.
+This is by 'exiting' a long position through the bids on the order book, or for a short position through the asks on the order book.
 
-where ```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited.   This is by 'exiting' a long position through the bids on the order book, or for a short position through the asks on the order book.
-
-Note, if there is insufficient order book volume for this ```closeout_price``` to be calculated (per position), the ```closeout_price``` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
+Note, if there is insufficient order book volume for this ```exit_price``` to be calculated (per position), the ```exit_price``` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
 
 **Step 2** 
 
-If ```riskiest short``` >= 0, maintenance_margin = 0
+If ```riskiest short == 0``` then ```maintenance_margin_short = 0```.
 
-```maintenance_margin_short = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors ] . [ Product.market_observables ] ) + sell_orders * [ quantitative_model.risk_factors ] . [ Product.market_observables ]  ```,
+Else
+
+```maintenance_margin_short = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors_short ] . [ Product.market_observables ] ) + sell_orders * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]  ```,
 
 where meanings of terms in Step 1 apply.
 
@@ -118,25 +119,44 @@ risk_factor_long = 0.1
 
 last_trade = $144
 
-Trader1_futures_position = {open: 10, buys: 4,  sells: 8, price: $103.28}
+search_level_scaling_factor = 1.1
+initial_margin_scaling_factor = 1.2
+collateral_release_scaling_factor = 1.3
 
-```
-```
-Case 1 - protocol seeks margin calculation for Trader1's open position
+Trader1_futures_position = {open: 10, buys: 4,  sells: 8}
 
-closeout_price = ( 1*$120 + 4*$240 + 5*$258 ) / 10 = $237
-close-out-pnl = 10 * ($237 - $103.28) = $1,337.2
+getMargins(Trader1_position) 
 
-getMargins(Trader1_position.open) =  $1,337.2 + 10 * 0.1 * $144 = $1481.2
-```
+# Step 1
+riskiest long  = max( open_position + buy_orders, 0 ) = max( 10 + 4, 0 ) = 14
+riskiest short = min( open_position + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
-```
-Case 2 - protocol seeks margin calculation for Trader1's net long position
+# Step 2
 
-closeout_price = ( 1*$120 + 4*$240 + 5*$258 ) / 10 = $237
-close-out-pnl = 10 * ($237 - $103.28) = $1,337.2
+## exit price considers what selling the open position (10) on the order book would achieve. 
 
-getMargins(Trader1_position.netLong) =  $1,337.2 + 10 * 0.1 * $144 = $1481.2
+slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price) = Product.value((1*120 + 4*240 + 5*258)/10) - Product.value($144) = 237 - 144 = 93
+
+
+maintenance_margin_long = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]
+
+= 10 * (93 + 0.1 * 144)
+= 1074
+
+# Step 3
+
+Since riskiest short == 0 then maintenance_margin_short = 0
+
+# Step 4
+
+maintenance_margin = max ( 1074, 0) = 1074
+
+# Step 4
+
+collateral_release_level = 1074 * 1.1
+initial_margin = 1074 * 1.2
+search_level = 1074 * search_level_scaling_factor = 1074 * 1.3
+
 
 
 ```
