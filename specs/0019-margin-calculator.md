@@ -94,7 +94,7 @@ where the scaling factors are set as risk parameters ( see [market framework](./
 
 ## Positive and Negative numbers
 
-Positive margin numbers represent a liability for a trader. Therefore, if comparing two margin numbers, the greatest liability (i.e. 'worst' margin number for the trader) is the most positive number.
+Positive margin numbers represent a liability for a trader. Therefore, if comparing two margin numbers, the greatest liability (i.e. 'worst' margin number for the trader) is the most positive number. All margin levels returned are positive numbers.
 
 
 # Pseudo-code / Examples
