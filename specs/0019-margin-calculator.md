@@ -15,29 +15,71 @@ The _margin calculator_ returns the set of relevant margin levels for a given po
 # Reference Level Explanation
 
 The calculator takes as inputs:
-- ```size of position_on_market``` (this is net volume of transacted positions rather than orders)
-- ```price of position_on_market``` (this is the volume weighted entry price)
-- ```position size of buy OR sell orders``` (positive for buys, negative for sells)
 
-## Simple calculation for limit order book
+* position record = [```open_position```, ```buy_orders```, ```sell_orders```] where ```open_position``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side.
+- ```mark price```
 
-In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-quant-calculator.md).
+and returns 4 margin requirement levels
 
-The maintenance margin is calculated using the following formula:
+1. Maintenance margin
+1. Collateral search level
+1. Initial margin
+1. Collateral release level
 
-```margin_maintenance = close-out-pnl + (position_size_on_market + position_size_on_order) * [ quantitative_model.risk_factors ] . [ Product.market_observables ] ```
+## Steps to calculate margins
 
-If position_size_on_market = 0, ```close-out-pnl = 0```
+1. Calculate the maintenance margin for the riskiest long position.
+1. Calculate the maintenance margin for the riskiest short position.
+1. Select the maintenance margin that is highest out of steps 1 & 2.
+1. Scale this maintenance margin by the margin level scaling factors.
+1. Return 4 numbers: the maintenance margin, collateral search level, initial margin and collateral release level.
 
-If position_size_on_market <> 0, 
 
-```close-out-pnl = position_size_on_market * (Product.value(closeout_price) - Product.value(position_price)) ```
+## Calculation of riskiest long and short positions
 
-where ```closeout_price``` is the price that would be achieved on the order book if the trader's position size on market  were exited.   This is by 'exiting' a long position through the bids on the order book, or for a short position through the asks on the order book.
+The protocol calculates the margin requirements for the ```riskiest long``` and ```riskiest short``` positions.
+
+```riskiest long```  = max( ```open_position``` + ```buy_orders``` , 0 )
+
+```riskiest short``` = min( ```open_position``` + ```sell_orders```, 0 )
+
+## Limit order book linearised calculation
+
+In this simple methodology, a linearised margin formula is used to return the margin requirement levels, using risk factors returned by the [quantitative model](./0018-quant-calculator.md).
+
+**Step 1** 
+
+If ```riskiest long``` <= 0, maintenance_margin = 0
+
+Else
+
+```maintenance_margin_long = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors ] . [ Product.market_observables ]  ```,
+
+where
+
+```slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price)) ```,
+
+where ```mark price``` used is the last one used for the last settlement.
+
+where ```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited.   This is by 'exiting' a long position through the bids on the order book, or for a short position through the asks on the order book.
 
 Note, if there is insufficient order book volume for this ```closeout_price``` to be calculated (per position), the ```closeout_price``` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
 
+**Step 2** 
+
+If ```riskiest short``` >= 0, maintenance_margin = 0
+
+```maintenance_margin_short = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors ] . [ Product.market_observables ] ) + sell_orders * [ quantitative_model.risk_factors ] . [ Product.market_observables ]  ```,
+
+where meanings of terms in Step 1 apply.
+
+**Step 3** 
+
+```maintenance_margin = max ( maintenance_margin_long, maintenance_margin_short)```
+
 ## Scaling other margin levels
+
+**Step 4** 
 
 The other three margin levels are scaled relative to the maintenance margin level, using scaling levels defined in the risk parameters for a market.
 
@@ -48,7 +90,6 @@ The other three margin levels are scaled relative to the maintenance margin leve
 ```collateral_release_level = margin_maintenance * collateral_release_scaling_factor```
 
 where the scaling factors are set as risk parameters ( see [market framework](./0001-market-framework.md) ).
-
 
 ## Positive and Negative numbers
 
