@@ -53,7 +53,7 @@ If ```riskiest long == 0``` then ```maintenance_margin_long = 0```.
 
 Else
 
-```maintenance_margin_long = abs(slippage_volume) * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
+```maintenance_margin_long = slippage_volume * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
 
 where
 
