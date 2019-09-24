@@ -16,7 +16,7 @@ The _margin calculator_ returns the set of relevant margin levels for a given po
 
 The calculator takes as inputs:
 
-* position record = [```open_position```, ```buy_orders```, ```sell_orders```] where ```open_position``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side.
+* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_position``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side.
 - ```mark price```
 
 and returns 4 margin requirement levels
@@ -39,9 +39,9 @@ and returns 4 margin requirement levels
 
 The protocol calculates the margin requirements for the ```riskiest long``` and ```riskiest short``` positions.
 
-```riskiest long```  = max( ```open_position``` + ```buy_orders``` , 0 )
+```riskiest long```  = max( ```open_volume``` + ```buy_orders``` , 0 )
 
-```riskiest short``` = min( ```open_position``` + ```sell_orders```, 0 )
+```riskiest short``` = min( ```open_volume``` + ```sell_orders```, 0 )
 
 ## Limit order book linearised calculation
 
@@ -130,13 +130,13 @@ search_level_scaling_factor = 1.1
 initial_margin_scaling_factor = 1.2
 collateral_release_scaling_factor = 1.3
 
-Trader1_futures_position = {open: 10, buys: 4,  sells: 8}
+Trader1_futures_position = {open_volume: 10, buys: 4,  sells: 8}
 
 getMargins(Trader1_position) 
 
 # Step 1
-riskiest long  = max( open_position + buy_orders, 0 ) = max( 10 + 4, 0 ) = 14
-riskiest short = min( open_position + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
+riskiest long  = max( open_volume + buy_orders, 0 ) = max( 10 + 4, 0 ) = 14
+riskiest short = min( open_volume + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
 # Step 2
 
