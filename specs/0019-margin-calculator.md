@@ -147,7 +147,7 @@ slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price) = Pro
 slippage_volume =  max( open_volume, 0 ) = max ( 10, 0 ) = 10
 
 
-maintenance_margin_long = abs(slippage_volume) * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]
+maintenance_margin_long = slippage_volume * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]
 
 = 10 * (93 + 0.1 * 144) + 4 * 0.1 * 144
 = 1131.6
