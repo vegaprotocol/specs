@@ -53,11 +53,13 @@ If ```riskiest long == 0``` then ```maintenance_margin_long = 0```.
 
 Else
 
-```maintenance_margin_long = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
+```maintenance_margin_long = abs(slippage_volume) * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
 
 where
 
 ```slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price) ```,
+
+```slippage_volume =  max( open_volume, 0 ) ```,
 
 where ```mark price``` used is the last one used for the last settlement and ```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited.
 This is by 'exiting' a long position through the bids on the order book, or for a short position through the asks on the order book.
@@ -70,9 +72,11 @@ If ```riskiest short == 0``` then ```maintenance_margin_short = 0```.
 
 Else
 
-```maintenance_margin_short = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors_short ] . [ Product.market_observables ] ) + sell_orders * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]  ```,
+```maintenance_margin_short = abs(slippage_volume) * ( slippage_per_unit + [ quantitative_model.risk_factors_short ] . [ Product.market_observables ] ) + sell_orders * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]  ```,
 
-where meanings of terms in Step 1 apply.
+where meanings of terms in Step 1 apply except for:
+
+```slippage_volume =  min( open_volume, 0 ) ```,
 
 **Step 3** 
 
@@ -98,6 +102,9 @@ Positive margin numbers represent a liability for a trader. Therefore, if compar
 
 
 # Pseudo-code / Examples
+
+## EXAMPLE 1 - full worked example
+
 
 ```
 Current order book:
@@ -137,11 +144,13 @@ riskiest short = min( open_position + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
 slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price) = Product.value((1*120 + 4*240 + 5*258)/10) - Product.value($144) = 237 - 144 = 93
 
+slippage_volume =  max( open_volume, 0 ) = max ( 10, 0 ) = 10
 
-maintenance_margin_long = open_position * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]
 
-= 10 * (93 + 0.1 * 144)
-= 1074
+maintenance_margin_long = abs(slippage_volume) * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]
+
+= 10 * (93 + 0.1 * 144) + 4 * 0.1 * 144
+= 1131.6
 
 # Step 3
 
@@ -149,15 +158,56 @@ Since riskiest short == 0 then maintenance_margin_short = 0
 
 # Step 4
 
-maintenance_margin = max ( 1074, 0) = 1074
+maintenance_margin = max ( 1131.6, 0) = 1131.6
 
 # Step 4
 
-collateral_release_level = 1074 * 1.1
-initial_margin = 1074 * 1.2
-search_level = 1074 * search_level_scaling_factor = 1074 * 1.3
+collateral_release_level = 1131.6 * collateral_release_scaling_factor = 1131.6 * 1.1
+initial_margin = 1131.6 * initial_margin_scaling_factor = 1131.6 * 1.2
+search_level = 1131.6 * search_level_scaling_factor = 1131.6 * 1.3
 
 
 
 ```
+
+## EXAMPLE 2 - calculating correct slippage volume
+
+Given the following trader positions:
+
+| Tables        | Open           | Buys  | Sells |
+| ------------- |:-------------:| -----:| -----:|
+| case-1      | 1 | 1 | -2
+| case-2      | -1 | 2| 0
+| case-3 | 1 | 0 | -2
+
+
+*case-1*
+
+riskiest long: 2
+
+riskiest short: -1
+
+slippage volume long: 1
+
+slippage volume short: 0
+
+*case-2*
+
+riskiest long: 1
+
+riskiest short: -1
+
+slippage volume long: 0
+
+slippage volume short: -1
+
+*case-3*
+
+riskiest long: 1
+
+riskiest short: -1
+
+slippage volume long: 1
+
+slippage volume short: 0
 
