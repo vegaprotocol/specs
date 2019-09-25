@@ -3,6 +3,12 @@
 # Summary
 A *Mark Price* is a concept derived from traditional markets.  It is a calculated value for the 'current market price' on a market.
 
+# Acceptance criteria
+
+Algorithm 1:
+
+- [ ] Any transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade.
+- [ ] A transaction that doesn't result in a trade does not cause the mark price to change.
 
 # Guide-level explanation
 The *Mark Price* represents the "current" market value for an instrument that is being traded on a market on Vega. It is a calculated value primarily used to value trader's open portfolios against the prices they executed their trades at. Specifically, it is used to calculate the cash flows for [mark-to-market settlement](./0003-mark-to-market-settlement.md).
