@@ -10,13 +10,20 @@ The _margin calculator_ returns the set of relevant margin levels for a given po
 1. Initial margin
 1. Collateral release level
 
+# Acceptance Criteria
+
+- [ ] Get four margin levels for one or more parties
+- [ ] Margin levels are correctly calculated against riskiest long and short positions
+- [ ] Zero position and zero orders results in all zero margin levels
+- [ ] Maintenance margin < Collateral search level < Initial margin < Collateral release level
+
 # Guide Level Explanation
 
 # Reference Level Explanation
 
 The calculator takes as inputs:
 
-* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_position``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side.
+* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_volume``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side.
 - ```mark price```
 
 and returns 4 margin requirement levels
@@ -117,8 +124,8 @@ asks: [
 
 bids: [
     {volume: 1, price: $120},
-    {volume: 4, price: $240},
-    {volume: 7, price: $258}
+    {volume: 4, price: $110},
+    {volume: 7, price: $108}
 ]
 
 risk_factor_short = 0.11
