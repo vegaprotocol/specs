@@ -1,6 +1,25 @@
-# Position Resolution
+Feature name: position-resolution
+Start date: YYYY-MM-DD
+Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
+
+
+# Acceptance Criteria
+
+* [ ] All orders of "distressed traders" are cancelled
+* [ ] Open positions of distressed traders are closed
+* [ ] One market order is submitted for the net liability
+* [ ] Mark Price is never updated during position resolution
+* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly.
+
+# Summary
 
 Position resolution is the mechanism which deals with closing out distressed positions on a given market. It is instigated when one or more participant's collateral balance is insufficient to fulfil their settlement or margin liabilities.
+
+# Guide-level explanation
+
+
+# Reference-level explanation
+
 
 ## Position resolution algorithm
 
@@ -20,20 +39,11 @@ these trades (as this would result in a new market-wide mark to market settlemen
 
 6. If an order was executed on the market (in Step 3), the resulting trade volume between the network and passive orders must be mark-to-market settled for all parties involved including the network's internal 'virtual' party. As the network's closeout counterparty doesn't have collateral, any funds it 'owes' will be transferred from the insurance fund during this settlement process (as defined in the [settlement spec](./0003-mark-to-market-settlement.md).). It's worth noting that the network close-out party must never have margins calculated for it. This also should naturally happen because no margin calculations would happen during the period that the network temporarily (instantaneously) has an open position, as the entire position resolution process must happen atomically.
 
-## Acceptance Criteria
-
-* [ ] All orders of "distressed traders" are cancelled
-* [ ] Open positions of distressed traders are closed
-* [ ] One market order is submitted for the net liability
-* [ ] Mark Price is never updated during position resolution
-* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly.
-
-
-## Examples and Pseudo code
+# Examples and Pseudo code
 
 ## ***Scenario -  All steps***
+
 ```
- 
 Trader1 open position: +5
 Trader1 open orders:  0
 Trader2 open position: -4
