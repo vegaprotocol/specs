@@ -1,151 +1,88 @@
-Feature name: Core API Specification
-Start date: YYYY-MM-DD
+#Core API
 
-# Transactions
+## Background
 
-Submit an API request to post a transaction to the consensus layer. Use an API read call to retrieve the status of submitted transaction.
+When interacting with the Vega protocol we need a way to specify a set of APIs that are provided without significant additional processing. 
 
-## Transaction types
+## Definition
 
-- Authentication
-  - TBC
-- Collateral
-  - Deposit
-  - Withdraw
+This set of APIs can be thought of as a way of accessing the current state of processing within the network and nodes. They are to be known as **core** APIs. 
+
+## Write
+
+We define the protocol instruction set within the whitepaper, therefore the **core** API must implement the following instructions:
+
 - Order
-  - Amend
-  - Cancel
-  - Submit
-- TBC
+  - Submit Order
+  - Amend Order
+  - Cancel Order
+- Collateral
+  - Notify Depost
+  - Request Withdrawal
+  - Validate Withdrawal
+- Authentication
+  - *To be confirmed*
+- Governance
+  - Propose Open Market
+  - Propose Close Market
+  - Propose Parameter
+  - Vote for proposal
+   
+## Read
 
-# Read API calls
+To *observe the operation, and validate the state of the protocol, we must be able to obtain data provided by the following domains:
 
-## Market Framework data
+### Market
 
-Market framework data is immutable metadata specifying a Market.
+- List markets available
+	- Immutable market framework fields.
+- Retrieve a market by market identifier.
+   - All parameters for a market, from market definition.
+- Observe creation of new markets.
+- Observe market updates.
+ 
+### Party
 
-Market metadata returned:
-- ID
-- name
-- tradeable instrument
-- decimal places (used in UI)
-- trading mode (continuous / discrete)
+- List parties available.
+- Retrieve a party by party identifier.
+   - All parameters for a party, as specified by the party definition.
+- Observe creation of new parties.
+- Observe party updates.
 
-### API calls
+### Order
 
-- Get all Markets
-- Get Market by ID
+- List orders on the book, for all markets.
+- List orders on the book, for a particular market.
+- Retrieve an order, if its on the book, for a particular order identifier.
+- Current order book depth, for a particular market.
+- Observe order updates, for all markets.
+- Observe order updates, for a particular market.
 
-## Market Data
+### Trade
 
-Market data is data that changes (or at least can change) over time, contained in a running market.
+- Observe immutable trades that are created by all markets.
+- Observe immutable trades that are created for a particular market.
 
-### API calls
+### Collateral
 
-- Candles (TBC: core?)
-- Depth
-- Orders
-- Parties (filters: all, with open positions)
-- Trades
-- Risk data (incl risk factors, ...)
+- Current margin account balance for a party, per market, per asset.
+- Current general account balance for a party, per asset.
+- Observe creation of new collateral accounts.
+- Observe collateral account updates.
 
-## Account data
+### Risk
 
-TBD: short description
+- Current risk factors, long and short, for a given market.
 
-### API calls
+### Position
+  
+- Current long/short position for a party, if they have orders active on a market.
+- Observe position changes for a party, if they have orders active on a market.
 
-- all (filter: type, asset, non-zero balance)
-- by market ID (filter: type, asset, non-zero balance)
-- by party ID (filter: type, asset, non-zero balance)
+### Statistics
 
-## Asset data
+- Statistics for each market, execution engine and blockchain.
+- Observe statistics updates.
 
-Asset data returned:
-- short code
-- source chain
-- full blockchain reference
-- decimal places
-- TBC
 
-### API calls
-
-- all (filters: TBC)
-- by ID
-
-## Collateral data
-
-TBD: short description
-
-### API calls
-
-- TBD
-
-## Market depth data
-
-Market depth summarises the order book at price levels. Buy and sell side are sorted (buy: descending; sell: ascending) such that the first entries in each list are closest to the middle of the market.
-
-Market depth data returned:
-- Buy side (sorted by price descending)
-  - price
-  - number of orders
-  - volume at this price only
-  - cumulative volume
-- Sell side (sorted by price ascending)
-  - data as on Buy side
-
-### API calls
-
-- by Market ID
-
-## Order data
-
-Order data returned:
-
-- TBD
-
-### API calls
-
-- all (filters: party ID)
-- by ID (post-consensus, having been accepted or rejected)
-- by Reference (pre-consensus, not yet having been accepted or rejected)
-
-## Party data
-
-TBD: short description
-
-### API calls
-
-- all (filter: open positions)
-- by ID
-
-## Positions data
-
-### API calls
-
-- TBD
-
-## Trade data
-
-TBD: short description
-
-### API calls
-
-- all (filters: order ID; sender party ID; status; timestamp)
-- by ID
-
-## Transfer data
-
-Transfer data returned:
-- request ID
-- transfer ID (TBC)
-
-Notes:
-- multiple rows with a request ID are possible if multiple accounts are hit, type, market [opt], from acc, to acc, requested amount, transferred): // all requested including unsuccessful search
-
-### API calls
-
-- all (filter: type, asset)
-- by party ID (filter: type, asset)
-- by account ID (filter: from/to, type)
-- by market ID (filter: type, asset)
+**Note: When we observe a particular domain, the data may need a mechanism to push changes to an observer, in addition to pulling the data from the source.*
