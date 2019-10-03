@@ -1,78 +1,56 @@
-Parent Issue: #81 
+Feature name: feature-name
+Start date: YYYY-MM-DD
+Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections: 3.2 and 5.2 
 
 
-The settlement engine's job is to convert settlement instructions into specific ledger entry instructions for the collateral engine. 
+# Acceptance Criteria
 
-## Acceptance Criteria
-
-- [ ] When an instrument expires the settlement engine calculates the correct expiry cashflows for each trader.
-- [ ] The settlement engine informs the collateral engine to "collect" funds from the traders who have a negative cashflow (assuming that negative cashflow means you owe money to the market / are "out of the money") and deposits all these collected funds into the market's general account.
+- [ ] When an instrument expires the settlement instructions include correct expiry cashflows for each trader.
+- [ ] The settlement instructions are used to "collect" funds from the traders who have a negative cashflow (assuming that negative cashflow means you owe money to the market / are "out of the money") and deposits all these collected funds into the market's general account.
   - [ ] When "collecting" funds from a trader account, the settlement engine must instruct the collateral engine to debit in this order (this order is true on expiry for all instruments):
     1. Margin account of the trader
     2. Market account for the trader
     3. Insurance pool for the market
-- [ ] The settlement engine interprets the collateral engine's response and determines whether the traders who are owed money may be paid out of the market's general account.
+- [ ] The settlement function interprets the collateral responses and determines whether the traders who are owed money may be paid out of the market's general account.
   - [ ] If there are sufficient funds to pay all traders who are owed money, the settlement engine instructs the collateral engine to pay them out according the above calculated cashflows.
   - [ ] If there are insufficient funds to pay all traders who are owed money, the settlement engine adjusts the amounts according to the position resolution methodology, which for Nicenet is a pro-rated reduction in amounts by the size of the amount.
-
-
-## Note / boundaries
-
-- The settlement engine does not keep a record of any collateral balances
-- [ ] The settlement engine does not maintain the settlement formula for cashflows to be calculated
-- [ ] The settlement engine does not actually execute the transfer of funds - it rather instructs the collateral engine to do this.
 - [ ] When an instrument expires, the sum of all the settlement cashflows nets to zero across all positions (assumes negative volumes for short positions).
 
 
+## Implementation note / boundaries
+
+- The settlement function does not keep a record of any collateral balances
+- [ ] The settlement function does not maintain the settlement formula for cashflows to be calculated
+- [ ] The settlement function does not actually execute the transfer of funds - it rather instructs the collateral engine to do this.
+
+# Summary
+
+Instruments on Vega may specify a maturity (expiry) date and time, after which open positions are settled and the market no longer operates.
+
+If [mark to market settlement](0003-mark-to-market-settlement) has been undertaken, the final settlement cash flow will be the difference in position value since the most recently run [mark to market settlement](0003-mark-to-market-settlement).
+
+
+# Guide-level explanation
+
 ## Expiry Trigger
-Logic encapsulated in the [product](./0001-market-framework.md) will define that the market has generated settlement cashflows for settlement, and emit an event accordingly. (note also same for interim cashflows)
 
 Logic encapsulated in the [product](./0001-market-framework.md) will define that the market has expired and that settlement cashflows may be generated for settlement. (note this is similar for interim cashflows)
 
 How this logic occurs is out of the scope of this ticket. 
 
-## Resulting Actions
 
-1. The [product](./0001-market-framework.md) specifies the market-based settlement function which maybe be used by the settlement engine to calculate settlement instructions for each party.  This settlement function is paramaterised at expiry (this is outside the scope of this ticket) and is accessible by the settlement engine when this is completed.
+# Reference-level explanation
 
-```rust
-// The product's definition contains the settlementByTrader function
-enum Product {
-	Future { maturity: String, oracle: Oracle, asset: String },
+## Cash settled with mark-to-market settlement
 
-}
-``` 
+Cash settlement at expiry when [mark to market settlement](0003-mark-to-market-settlement) has occurred follows the same steps as described in [mark to market settlement](0003-mark-to-market-settlement), with a slight tweak to the formula in step 1:
 
-2. The settlement engine will evaluate each party's net cashflows according to the formula provided and utilising knowledge of a trader's net [open position](../wikis/Trading-and-Protocol-Glossary#open-position). 
+```product.value(current_price)``` uses for ```current_price``` the expiry price which is supplied by an oracle.
 
-```rust
-// maybe something like
-struct Position {
-  ... <contains trades> ...
-  size: uint,
-  average_entry_price: uint
-}
+Otherwise, all other steps are the same.
 
-// implementation options below - not 100% sure of how this might go, former is maybe more amenable to optimisation but less neat in terms of types and data encapsulation
-fn <product>.settle(entryPrice: uint, netPosition: uint) {  // OR could be...
-fn <product>.settle(position: Position) {
-
-  FinancialAmount {
-    asset: this.settlement_asset,
-    amount: <...>
-  }
-}
-``` 
-
-3. The settlement process has two phases.  In the first phase the settlement engine ***collects*** (by instructing the collateral engine - see parent ticket #81 ) funds from loss making positions and accesses the insurance pool if necessary where there is a shortfall in some parties' collateral accounts. In the second phase, the settlement engine ***distributes*** the collected funds including those collected from the insurance pool. Where there is a shortfall, the settlement engine calculates reduced amounts to be distributed to some participants according to the "Position resolution algorithm" (Section 5.3 Whitepaper).
-
-
-When the Settlement Engine has received all "collect" responses from the collateral engine, it will ascertain whether the collateral engine was able to move all of the requested ("from") amounts to the destination ("to") account (market's pool account) - e.g. if the total funds now in the market's settlement account are equal to the required total payouts for the distribute phase or not.
-
-If this is not the case, the settlement engine will need to alter the "distribute" amounts before sending them to the collateral engine. The amounts are altered using a formula which is out of scope for this ticket. As a stub implementation distribution can pro-rata the amount in the settlement account between positions by relative position size.
-
-### Settlement Engine Example
+# Pseudo-code / Examples
 
 *(see https://docs.google.com/spreadsheets/d/1PMTS8DUZ-s4881WCGMMlxVffOm5nRGUKWXEHqnmAC_c/edit#gid=79914074)*
 
@@ -390,3 +368,6 @@ let transfer_request_distribute_funds =
         },
     ]
 ```
+
+# Test cases
+
