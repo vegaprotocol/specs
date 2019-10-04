@@ -17,15 +17,16 @@ Position resolution is the mechanism which deals with closing out distressed pos
 
 # Guide-level explanation
 
-
 # Reference-level explanation
+
+Any trader that has insufficient collateral to cover their margin liability is referred to as a "distressed trader".
 
 
 ## Position resolution algorithm
 
 See [Whitepaper](../product/wikis/Whitepaper), Section 5.3 , steps 1 - 3
 
-1. Any trader that has insufficient capital to cover their settlement liability has all their open orders on that market are cancelled. Note, the network must then recalculate their margin requirement on their remaining open position and if they now have sufficient collateral (i.e. aren't in the close out zone) they are no longer considered a distressed trader and not subject to position resolution. The market may at any point in time have multiple distressed traders that require position resolution. They are 'resolved' together in a batch.
+1. A "distressed trader" has all their open orders on that market are cancelled. Note, the network must then recalculate their margin requirement on their remaining open position and if they now have sufficient collateral (i.e. aren't in the close out zone) they are no longer considered a distressed trader and not subject to position resolution. The market may at any point in time have multiple distressed traders that require position resolution. They are 'resolved' together in a batch.
 
 2. The batch of distressed open positions that require position resolution may be comprised of a collection of long and short positions. The network calculates the overall net long or short position. This tells the network how much volume (either long or short) needs to be sourced from the order book. For example, if there are 3 distressed traders with +5, -4 and +2 positions respectively.  Then the net outstanding liability is +3. If this is a non-zero number, do Step 3.
 
