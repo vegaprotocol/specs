@@ -51,7 +51,7 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 
 ### Order
 
-- List orders on the book, for all markets.
+- List orders on the book, for all markets, for a party.
 - List orders on the book, for a particular market.
 - Retrieve an order, if its on the book, for a particular order identifier.
 - Current order book depth, for a particular market.
