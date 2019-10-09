@@ -51,7 +51,7 @@ In this simple methodology, a linearised margin formula is used to return the ma
 
 If ```riskiest long == 0``` then ```maintenance_margin_long = 0```.
 
-Else
+In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-quant-risk-suite.md).
 
 ```maintenance_margin_long = slippage_volume * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
 
@@ -210,4 +210,3 @@ riskiest short: -1
 slippage volume long: 1
 
 slippage volume short: 0
-
