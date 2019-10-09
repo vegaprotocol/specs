@@ -8,6 +8,8 @@ When interacting with the Vega protocol we need a way to specify a set of APIs t
 
 This set of APIs can be thought of as a way of accessing the current state of processing within the network and nodes. They are to be known as **core** APIs. 
 
+Any subscription for a data type containing a market, party or asset should be filterable based on one or more of these (AND not OR filter)
+
 ## Write
 
 We define the protocol instruction set within the whitepaper, therefore the **core** API must implement the following instructions:
