@@ -17,6 +17,12 @@ Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections:
   - [ ] If there are insufficient funds to pay all traders who are owed money, the settlement engine adjusts the amounts according to the position resolution methodology, which for Nicenet is a pro-rated reduction in amounts by the size of the amount.
 - [ ] When an instrument expires, the sum of all the settlement cashflows nets to zero across all positions (assumes negative volumes for short positions).
 
+- [ ] check it can't happen before maturity
+- [ ] check it can't happen on invalid / other data from the oracle (i.e. a price with the wrong timestamp)
+- [ ] check it happens with the first and only the first price that is valid per the oracle definition
+- [ ] check mark price is updated
+- [ ] check mark to market settlement happens correctly
+
 
 ## Implementation note / boundaries
 
@@ -35,14 +41,21 @@ If [mark to market settlement](0003-mark-to-market-settlement) has been undertak
 
 ## Expiry Trigger
 
-Logic encapsulated in the [product](./0001-market-framework.md) will define that the market has expired and that settlement cashflows may be generated for settlement. (note this is similar for interim cashflows)
-
-How this logic occurs is out of the scope of this ticket. 
-
 
 # Reference-level explanation
 
 ## Cash settled with mark-to-market settlement
+
+Starting at T = maturity, wait until the expiry price specified in the Instrument (see Market Framework and Built-in Product - Futures specs) definition is available (i.e. a valid expiry price for this instrument appears on the internal or external oracle feed). Note this only happens once no matter how many valid prices are printed.
+
+Set the mark price = expiry price
+
+Perform [mark to market settlement](0003-mark-to-market-settlement) 
+
+
+
+
+
 
 Cash settlement at expiry when [mark to market settlement](0003-mark-to-market-settlement) has occurred follows the same steps as described in [mark to market settlement](0003-mark-to-market-settlement), with a slight tweak to the formula in step 1:
 
