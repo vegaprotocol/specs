@@ -61,7 +61,7 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 ### Trade
 
 - Observe immutable trades that are created by all markets.
-- Observe immutable trades that are created for a particular market.
+- Observe immutable trades that are created for a particular market and/or party.
 
 ### Collateral
 
