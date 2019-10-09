@@ -8,7 +8,7 @@ When interacting with the Vega protocol we need a way to specify a set of APIs t
 
 This set of APIs can be thought of as a way of accessing the current state of processing within the network and nodes. They are to be known as **core** APIs. 
 
-Any subscription for a data type containing a market, party or asset should be filterable based on one or more of these (AND not OR filter)
+When observing data containing a market, party or asset the data should be filterable based on one or more of these (AND operator).
 
 ## Write
 
@@ -87,4 +87,4 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 - Observe statistics updates.
 
 
-**Note: When we observe a particular domain, the data may need a mechanism to push changes to an observer, in addition to pulling the data from the source.*
+**Note: When we observe a particular domain, the data may need a mechanism to push changes to an observer (often known as a subscription), in addition to pulling the data from the source.*
