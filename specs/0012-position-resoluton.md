@@ -1,12 +1,32 @@
-# Position Resolution
+Feature name: position-resolution
+Start date: YYYY-MM-DD
+Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
+
+
+# Acceptance Criteria
+
+* [ ] All orders of "distressed traders" are cancelled
+* [ ] Open positions of distressed traders are closed
+* [ ] One market order is submitted for the net liability
+* [ ] Mark Price is never updated during position resolution
+* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly.
+
+# Summary
 
 Position resolution is the mechanism which deals with closing out distressed positions on a given market. It is instigated when one or more participant's collateral balance is insufficient to fulfil their settlement or margin liabilities.
+
+# Guide-level explanation
+
+# Reference-level explanation
+
+Any trader that has insufficient collateral to cover their margin liability is referred to as a "distressed trader".
+
 
 ## Position resolution algorithm
 
 See [Whitepaper](../product/wikis/Whitepaper), Section 5.3 , steps 1 - 3
 
-1. Any trader that has insufficient capital to cover their settlement liability has all their open orders on that market are cancelled. Note, the network must then recalculate their margin requirement on their remaining open position and if they now have sufficient collateral (i.e. aren't in the close out zone) they are no longer considered a distressed trader and not subject to position resolution. The market may at any point in time have multiple distressed traders that require position resolution. They are 'resolved' together in a batch.
+1. A "distressed trader" has all their open orders on that market are cancelled. Note, the network must then recalculate their margin requirement on their remaining open position and if they now have sufficient collateral (i.e. aren't in the close out zone) they are no longer considered a distressed trader and not subject to position resolution. The market may at any point in time have multiple distressed traders that require position resolution. They are 'resolved' together in a batch.
 
 2. The batch of distressed open positions that require position resolution may be comprised of a collection of long and short positions. The network calculates the overall net long or short position. This tells the network how much volume (either long or short) needs to be sourced from the order book. For example, if there are 3 distressed traders with +5, -4 and +2 positions respectively.  Then the net outstanding liability is +3. If this is a non-zero number, do Step 3.
 
@@ -20,20 +40,11 @@ these trades (as this would result in a new market-wide mark to market settlemen
 
 6. If an order was executed on the market (in Step 3), the resulting trade volume between the network and passive orders must be mark-to-market settled for all parties involved including the network's internal 'virtual' party. As the network's closeout counterparty doesn't have collateral, any funds it 'owes' will be transferred from the insurance fund during this settlement process (as defined in the [settlement spec](./0003-mark-to-market-settlement.md).). It's worth noting that the network close-out party must never have margins calculated for it. This also should naturally happen because no margin calculations would happen during the period that the network temporarily (instantaneously) has an open position, as the entire position resolution process must happen atomically.
 
-## Acceptance Criteria
-
-* [ ] All orders of "distressed traders" are cancelled
-* [ ] Open positions of distressed traders are closed
-* [ ] One market order is submitted for the net liability
-* [ ] Mark Price is never updated during position resolution
-* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly.
-
-
-## Examples and Pseudo code
+# Examples and Pseudo code
 
 ## ***Scenario -  All steps***
+
 ```
- 
 Trader1 open position: +5
 Trader1 open orders:  0
 Trader2 open position: -4
