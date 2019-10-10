@@ -3,11 +3,11 @@ Start date: YYYY-MM-DD
 Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Acceptance Criteria
-* [x] Transfer requests are the only way the collateral engine will change the amounts of assets
-* [x] A transfer request will always only instruct one asset to be transferred.
+* [ ] Transfer requests are the only way the collateral engine will change the amounts of assets
+* [ ] A transfer request will always only instruct one asset to be transferred.
 * [ ] If a transfer request does not contain an equal amount of debit assets to credit assets it is malformed and should be outright rejected by the collateral engine  
-* [x] One transfer request may result in multiple ledger entries. 
-* [x] Each ledger entry will specify one debit account, one credit account and one amount of a single asset.
+* [ ] One transfer request may result in multiple ledger entries. 
+* [ ] Each ledger entry will specify one debit account, one credit account and one amount of a single asset.
 * [ ] Creation of accounts - see [building trader accounts](./0013-building-trader-accounts)
 * [ ] Deletion of accounts - transfer requests may instruct the collateral engine to delete an account. If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (typically the insurance pool of the market).
 
