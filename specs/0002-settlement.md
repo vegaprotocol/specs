@@ -1,33 +1,45 @@
-Feature name: settlement-engine
+Feature name: settlement
 Start date: 2019-02-12
 
+# Acceptance Criteria
+- [ ] 
+
+
+# Summary
+
+Settlement is the process of moving collateral between accounts when a position is closed,  the market expires or if there is an interim settlement action defined in the product.
+
+Further to this, the protocol may elect to settle a market at a point in time by carrying out [mark to market settlement](0003-mark-to-market-settlement). This is helpful for maintaining lower margins requirements.
+
 # Guide-level explanation
-Explain the specification as if it was already included and you are explaining it to another developer working on Vega. This generally means:
-- Introducing new named concepts
-- Explaining the features, providing some simple high level examples
-- If applicable, provide migration guidance
 
 # Reference-level explanation
 
-1. **A position is fully or partially closed (0003))** - An open position is closed when the owner of the open position enters into a counter trade (including if that trade is created as part of a forced risk management closeout). Settlement occurs for the closed volume / contracts.
-1. **Interim cash flows are generated** - not relevant for first instruments launched on Vega. Will be potentially relevant for perpetual futures with period settlement.
-3. **An instrument expires** - all open positions in the market are settled. After settlement at expiry, all positions are closed and collateral is released.
+Settlement occurs when:
+
+1. **A position is fully or partially closed** - An open position is closed when the owner of the open position enters into a counter trade (including if that trade is created as part of a forced risk management closeout). Settlement occurs for the closed volume / contracts.
+1. **An instrument expires** - all open positions in the market are settled. After settlement at expiry, all positions are closed and collateral is released.
+1. **Interim cash flows are generated** - not relevant for first instruments launched on Vega. Will be potentially relevant for perpetual futures with periodic settlement.
+1. **Mark to market event** - when the protocol runs [mark to market settlement](0003-mark-to-market-settlement).
 
 
+Settlement instructions need to contain information regarding the accounts from which collateral should be sourced and deducted (in order of preference) and accounts to which the collateral should be deposited.
 
-## Settlement actions which apply to all of the above triggers are:
+For settlement at expiry scenarios, transfers should attempt to access 
+1. the trader's margin account for the Market, 
+1. the trader's general collateral account for that asset 
+1. the insurance pool. 
 
-The settlement engine's job is to convert settlement instructions scoped to a market from the [product](./0001-market-framework.md) into specific ledger entry instructions for the collateral engine.
+For interim and closeout settlement the trader's collateral account may be accessed first, then the margin account.
 
-
+Settlement instructions result in ledger entries being generated that strictly conform  to double entry accounting.
 
 # Pseudo Code / Examples
 
-## Settlement Engine data structures
+## Settlement data structures
 
 ```
 
-// sent by Settlement Engine to the Collateral Engine
 TransferRequest {
   from: [Account], // This is an array of accounts ion order of precedence, e.g. the first account in the list is emptied first when making transfers. For settlement at expiry scenarios, transferRequests will be sequenced to access 1. the trader's margin account for the Market, 2. the trader's collateral account and 3. the insurance pool. For interim and closeout settlement the trader's collateral account may be accessed first, then the margin account.
   to: Account, // For settlement scenarios, this is the market's settlement account.
@@ -37,7 +49,6 @@ TransferRequest {
   min_amount: uint // This needs to be scoped to each FinancialAmount
 }
 
-// The collateral engine will respond with the LedgerEntry it executed.
 
 TransferResponse {
   transfers: [LedgerEntry]
