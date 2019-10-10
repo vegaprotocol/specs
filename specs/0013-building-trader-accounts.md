@@ -9,8 +9,10 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 *  [ ] When a party withdraws collateral onto Vega, the _general account_ for that asset will decrease in balance by the same amount. 
 * [ ]  Every party that submits an order on a market will have a margin account for that market created.
 * [ ]  Each party should only have one margin account per market.
+* [ ]  Each party should only have a margin account created for a market they've ever put an order on.
+* [ ]  Margin accounts are transient and connected to open positions. There is a no such thing as a zero open position. There's no  such thing as a margin account that has a balance of zero.
 * [ ] Double entry accounting is maintained at all points.
-*  [ ] Only transfer requests move money between accounts.
+* [ ] Only transfer requests move money between accounts.
 
 # Summary
 When a participant deposits collateral to Vega, they need a general account created for those assets.  When a trader places an order, they need a margin account for the market they have placed an order into.
