@@ -39,22 +39,15 @@ If [mark to market settlement](0003-mark-to-market-settlement) has been undertak
 
 # Guide-level explanation
 
-## Expiry Trigger
-
-
 # Reference-level explanation
 
-## Cash settled with mark-to-market settlement
+## Cash settled futures with mark-to-market settlement
 
-Starting at T = maturity, wait until the expiry price specified in the Instrument (see Market Framework and Built-in Product - Futures specs) definition is available (i.e. a valid expiry price for this instrument appears on the internal or external oracle feed). Note this only happens once no matter how many valid prices are printed.
+Starting at T = maturity, wait until the expiry price specified in the Instrument (see [market framework](0001-market-framework) and [inbuilt futures](0016-product-create-inbuilt-futures)) definition is available (i.e. a valid expiry price for this instrument appears on the internal or external oracle feed). Note this only happens once no matter how many valid prices are printed.
 
 Set the mark price = expiry price
 
 Perform [mark to market settlement](0003-mark-to-market-settlement) 
-
-
-
-
 
 
 Cash settlement at expiry when [mark to market settlement](0003-mark-to-market-settlement) has occurred follows the same steps as described in [mark to market settlement](0003-mark-to-market-settlement), with a slight tweak to the formula in step 1:
