@@ -47,19 +47,6 @@ Params:
   - **Tick size** (size of an increment in price in terms of the quote currency)
   - **Decimal places**, number of decimals places for price quotes, e.g. if quote currency is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
 
-## Market data
-This data is a snapshot of the state of the market at a point in time.
-
-### Continuous trading (order book)
-All these values can be empty/nothing if there is insufficient relevant data.
-
-  - **Best bid price:** the highest price level on an order book for buy orders.
-  - **Best bid volume:** the aggregated volume being bid at the _best bid price_.
-  - **Best offer price:** the lowest price level on an order book for offer orders.
-  - **Best offer volume:** the aggregated volume being offered at the _best offer price_.
-  - **Mid price:** the arithmetic average of the _best bid price_ and _best offer price_.
-  - **Mark price:** the current mark price as calculated by the selected mark price methodology.
-
 ## Tradable instrument
 
 A tradable instrument is a combination of an instrument and a risk model. An instrument can only be traded when paired with a risk model, however regardless of the risk model, two identical instruments are expected to be fungible (see below). 
