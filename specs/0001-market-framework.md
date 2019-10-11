@@ -37,6 +37,9 @@ Data:
   - **Identifier:** this should unambiguously identify a market
   - **Trading mode:** this (I see it as something akin to an enum type/struct, see example below) defines the trading mode (e.g. continuous trading, auction, req — see whitepaper section 5.1) and any required configuration for the trading mode (note that Nicenet will support only *continuous trading* and does not necessarily require any configurable parameters for the trading mode, although it may turn out to be advantageous to include some as the implementation is fleshed out). Note also that each trading mode in future will have very different sets of applicable parameters.
   - **Tradable instrument:** an instance of or reference to a tradable instrument.
+  - **Mark price methodology:** reference to which [mark price](./0009-mark-price.md) calculation methodology will be used.
+  - **Mark price methodology parameters:**
+    - Algorithm 1 / Last Traded Price: initial mark price
 
 ### Trading mode - continuous trading
 
@@ -44,6 +47,18 @@ Params:
   - **Tick size** (size of an increment in price in terms of the quote currency)
   - **Decimal places**, number of decimals places for price quotes, e.g. if quote currency is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
 
+## Market data
+This data is a snapshot of the state of the market at a point in time.
+
+### Continuous trading (order book)
+All these values can be empty/nothing if there is insufficient relevant data.
+
+  - **Best bid price:** the highest price level on an order book for buy orders.
+  - **Best bid volume:** the aggregated volume being bid at the _best bid price_.
+  - **Best offer price:** the lowest price level on an order book for offer orders.
+  - **Best offer volume:** the aggregated volume being offered at the _best offer price_.
+  - **Mid price:** the arithmetic average of the _best bid price_ and _best offer price_.
+  - **Mark price:** the current mark price as calculated by the selected mark price methodology.
 
 ## Tradable instrument
 
