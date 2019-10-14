@@ -1,57 +1,48 @@
-Feature name: order types and validity
-Start date: YYYY-MM-DD
-Whitepaper section: 
+# Order types
 
-# Acceptance Critieria
+## Acceptance Critieria
 
 - [ ] A limit order that does not immediately trade is included on the orderbook at limit order price.
 
-# Summary
-Different order types are permitted depending on the price determination method of a market. For _continuous trading_, **limit orders** and **market orders** are examples of an order type. Each order type has different _validity_ conditions including the order's lifespan (time in force), "birthing" conditions i.e. events which trigger the existence of the order; and conditional pricing conditions (e.g. pegged orders).
+
+## Summary
+
+A market using a limit order book will permit orders of various types to be submitted depending on the market's current *trading mode* (see [Market Framework](0001-market-framework.md)). This specification encompasses multiple configurable aspects of an order including: triggering, time in force, price type, and execution constraints. It defines the allowable values for each, valid combinations of these, and their behaviour.
+
+Notes on scope of current version of this spec:
+- Includes only detailed specification for orders valid for *continuous trading*, does not specify behaviour of these order types in an auction.
+- Does not include detailed specification for **stop** orders. Inclusion of stops in guide level explanation is a placeholder/indicator of future requirements.
 
 
-# Guide-level explanation
+## Guide-level explanation
 
-Order types include:
-1. LIMIT order
-1. MARKET order
-1. PEGGED order
-1. STOP LIMIT
+### Order types:
+1. **Immediate:** order is evaluated immediately (this is the default)
+1. **Stop:** order is only evaluated if and when the _stop price_ is reached 
 
-Time in Force validity types on an order are 
-1. ENE
-1. FOK
-1. GTT
-1. GTC
+### Order pricing methods:
 
-# Reference-level explanation
+*Price type / price must be explicitly provided, there is no default.*
 
-## ORDER TYPES
+1. **Limit:** the order is priced with a static limit price, which is the worst price (i.e. highest buy price / lowest sell price) at which the order can trade. If the order has a persistent validity type it will remain on the order book until it fully executes, expires (as defined by the specific validity type), or is cancelled. 
+1. **Pegged:** the order is priced relative to a reference price in the market (i.e. best bid, mid, or best offer price) and is automatically repriced (losing time priority) when the reference price changes. Execution is as for a limit order at that price, including on entry and repricing. The order is removed from the book and 'parked' (in entry time priority) if the reference price is undefined, including during an auction.
+1. **Market:** the order is not priced and will take volume at any price (i.e. equivalent to a zero priced sell order or an infinitely priced buy order). Only valid on non-persistent validity types.
 
-### Limit orders
-A limit order is an order to buy or sell a contract at a specified price or better. 
+### Time in Force / validity:
 
+*Time in force must be explicitly provided, there is no default.*
 
-### Market orders
-A market order is a buy or sell order to be executed immediately at the current market prices. As long as there are willing sellers and buyers, market orders are filled.
-
-Market orders may *only* have FOK or ENE time in force. Default should be ENE. 
-
-### Stop orders
-
-### Pegged orders
+ - **Persistent:**
+	1. **Good 'Til Time (GTT):** order is valid until the supplied expiry time, which may be supplied either as an absolute date/time or a relative offset from the current timestamp at which 
+	1. **Good 'Til Cancelled (GTC):** order is valid indefinitely. 
+- **Non-persistent:**
+	1. **Immediate Or Cancel (IOC):** an order that trades as much of its volume as possible with passive orders already on the order book (assuming it is crossed with them) and then stops execution. It is never placed on the book even if it is not completely filled immediately, instead it is stopped/cancelled.
+	1. **Fill Or Kill (FOK):** an order that either trades all of its volume immediately on entry or is stopped/cancelled immediately without trading anything. That is, unless the order can be completely filled immediately, it does not trade at all. It is never placed on the book, even if it does not trade.
 
 
+### Valid order combinations
 
 ## Time in Force
 
-| Time in Force        | Abbreviation           | Description  |
+| Trigger        | Abbreviation           | Description  |
 | ------------- |:-------------:| -----:|
-| Execute and eliminate      | ENE | The order is matched on the order book to the extent that it can be matched immediately. The order then expires (i.e. unfilled volume doesn't remain active on the order book) |
-| Fill or kill      | FOK      |   The order is matched on the order book if and only if it can be fulfilled completely for the full volume size of the order. If this condition is not met, the order is cancelled (i.e. doesn't sit on the order book) |
-| Good til time | GTT      |    The order is valid until the specified time, after which point the order is invalid |
-| Good til cancel | GTC      |    The order remains valid until it is completely filled or cancelled by the trader who submitted it. |
-
-# Pseudo-code / Examples
-
-# Test cases
