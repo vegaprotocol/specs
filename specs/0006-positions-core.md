@@ -1,3 +1,26 @@
+Feature name: feature-name
+Start date: YYYY-MM-DD
+Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
+
+# Acceptance Criteria
+
+- Given the following scenarios, applies the rules described in functionality to update the position size (check new position size is as expected given the rules and the old position size):
+  - [ ] Open long position, trades occur increasing long position
+  - [ ] Open long position, trades occur decreasing long position
+  - [ ] Open short position, trades occur increasing (greater abs(size)) short position
+  - [ ] Open short position, trades occur decreasing (smaller abs(size)) short position
+  - [ ] Open short position, trades occur taking position to zero (closing it)
+  - [ ] Open long position, trades occur taking position to zero (closing it)
+  - [ ] Open short position, trades occur closing the short position and opening a long position
+  - [ ] Open long position, trades occur closing the long position and opening a short position
+  - [ ] No position, trades occur opening a long position
+  - [ ] No position, trades occur opening a short position
+  - [ ] Open position, trades occur that close it (take it to zero), in a separate transaction, trades occur and that opens a new position
+- [ ] Opening and closing positions for multiple traders, maintains position size for all open (non-zero) positions
+- [ ] Maintains separate position data for each market a trader is active in
+- [ ] Does not store data for positions that are reduced to size == 0
+- [ ] Does not change position size for a wash trade (buyer = seller)
+
 # Summary
 
 Vega needs to keep track of positions for two purposes:
@@ -15,10 +38,9 @@ Vega needs to keep track of positions for two purposes:
 
 Both components work by processing each Trade occurring in Vega in order, as they occur, and updating the required position record. As long as the right data is stored, this can be done in both cases without re-iterating over prior trades when ingesting a new trade.
 
+# Guide-level explanation
 
-## Position Engine
-
-### Functionality
+# Reference-level explanation
 
 The Position Engine processes each trade in the following way:
 
@@ -31,13 +53,3 @@ The Position Engine processes each trade in the following way:
 	- SellerPosition.size -= Trade.size
 
 1. If either position record has Position.size == 0, delete it, otherwise save the updated record.
-
-### Acceptance criteria
-
-- [ ] Maintains correct position size for all non-zero open positions
-- [ ] Maintains separate position data for each market a trader is active in
-- [ ] Updates correctly when increasing or decreasing the absolute position size for both long or short positions
-- [ ] Correctly handles positions that switch from long to short and vice versatility
-- [ ] Does not store data for positions that are reduced to size == 0
-- [ ] Correctly sets position size when a trader who has previously had a position then closed it fully (reduced size to 0) proceeds to trade again
-- [ ] Does not change position size for a wash trade

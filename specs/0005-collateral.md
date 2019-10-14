@@ -1,8 +1,26 @@
-# Collateral engine for core protocol
+Feature name: collateral
+Start date: YYYY-MM-DD
+Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
-### Description
+# Acceptance Criteria
+* [ ] Transfer requests are the only way the collateral engine will change the amounts of assets
+* [ ] A transfer request will always only instruct one asset to be transferred.
+* [ ] If a transfer request does not contain an equal amount of debit assets to credit assets it is malformed and should be outright rejected by the collateral engine  
+* [ ] One transfer request may result in multiple ledger entries. 
+* [ ] Each ledger entry will specify one debit account, one credit account and one amount of a single asset.
+* [ ] Creation of accounts - see [building trader accounts](./0013-building-trader-accounts)
+* [ ] Deletion of accounts - transfer requests may instruct the collateral engine to delete an account. If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (typically the insurance pool of the market).
+
+
+# Summary
 
 The collateral engine's **only job** is to maintain Vega's ledger of accounts and the assets they contain strictly using a double entry accounting system.  
+
+# Guide-level explanation
+
+
+
+# Reference-level explanation
 
 The collateral engine will receive a transfer request and return ledger entries of the resultant actions it has undertaken. This is the collateral engine's only job.  It does not treat any transfer request differently to another transfer request. It has no knowledge of the state of the system (e.g whether it's a transfer request due to a market expiring vs a transfer request due to a trader withdrawing collateral).
 
@@ -15,16 +33,10 @@ Note, this also includes when an account is initialised. All accounts that are i
 
 Accounts may be created and deleted by transfer requests. Deleted account transfer requests must specify which account should receive any outstanding funds in the account that's being deleted.
 
-### Acceptance Criteria
-* [x] Transfer requests are the only way the collateral engine will change the amounts of assets
-* [x] A transfer request will always only instruct one asset to be transferred.
-* [ ] If a transfer request does not contain an equal amount of debit assets to credit assets it is malformed and should be outright rejected by the collateral engine  
-* [x] One transfer request may result in multiple ledger entries. 
-* [x] Each ledger entry will specify one debit account, one credit account and one amount of a single asset.
-* [ ] Creation of accounts - see #108
-* [ ] Deletion of accounts - transfer requests may instruct the collateral engine to delete an account. If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (typically the insurance pool of the market).
 
-### Data Structures
+# Pseudo-code / Examples
+
+Data Structures
 
 ```
 TransferRequest {
@@ -57,19 +69,7 @@ LedgerEntry: {
 }
 ```
 
-### Tests
-
-TBA
-
+# Test cases
 
 # APIs
 At a minimum on the front end, a trader should know how much money is in each of their "main accounts" and each of their "margin account".  They will typically also want to know how much their Unrealised PnL / Mark to market is for each market, so that they understand the composition of the "margin account".  
-
-
-
-
-
-
-
-
- 
