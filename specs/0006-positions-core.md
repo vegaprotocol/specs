@@ -4,7 +4,8 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Acceptance Criteria
 
-- Given the following scenarios, applies the rules described in functionality to update the position size (check new position size is as expected given the rules and the old position size):
+## Open position data
+- Given the following scenarios, applies the rules described in functionality to update the open position size (check new open position size is as expected given the rules and the old open position size):
   - [ ] Open long position, trades occur increasing long position
   - [ ] Open long position, trades occur decreasing long position
   - [ ] Open short position, trades occur increasing (greater abs(size)) short position
@@ -13,36 +14,62 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
   - [ ] Open long position, trades occur taking position to zero (closing it)
   - [ ] Open short position, trades occur closing the short position and opening a long position
   - [ ] Open long position, trades occur closing the long position and opening a short position
-  - [ ] No position, trades occur opening a long position
-  - [ ] No position, trades occur opening a short position
-  - [ ] Open position, trades occur that close it (take it to zero), in a separate transaction, trades occur and that opens a new position
+  - [ ] No open position, trades occur opening a long position
+  - [ ] No open position, trades occur opening a short position
+  - [ ] Open position, trades occur that close it (take it to zero), in a separate transaction, trades occur and that open a new position
 - [ ] Opening and closing positions for multiple traders, maintains position size for all open (non-zero) positions
-- [ ] Maintains separate position data for each market a trader is active in
-- [ ] Does not store data for positions that are reduced to size == 0
+
 - [ ] Does not change position size for a wash trade (buyer = seller)
+
+## Open orders data
+- Given the following scenarios, applies the rules described in functionality to update the net buy order amounts (check new size is as expected given the rules and the old size).
+  - [ ] No active buy orders, a new buy order is added to the order book
+  - [ ] Active buy orders, a new buy order is added to the order book
+  - [ ] Active buy orders, an existing buy order is amended which increases its size.
+  - [ ] Active buy orders, an existing buy order is amended which decreases its size.
+  - [ ] Active buy orders, an existing buy order's price is amended such that it trades a partial amount.
+  - [ ] Active buy orders, an existing buy order's price is amended such that it trades in full.
+  - [ ] Active buy order, an order initiated by another trader causes a partial amount of the existing buy order to trade.
+  - [ ] Active buy order, an order initiated by another trader causes the full amount of the existing buy order to trade.
+  - [ ] Active buy orders, an existing order is cancelled
+  - [ ] Active buy orders, an existing order expires
+
+- Repeat the above but for sell orders.
+
+## General
+
+- [ ] Maintains separate position data for each market a trader is active in
+- [ ] If there is either one or more of the position record's fields is non zero (i.e. open position size, active buy order size, active sell order size), the position record exists.
+- [ ] Does not store data for positions that are reduced to size == 0 for all 3 data components (i.e. open position, active buy orders and active sell orders)
+- [ ] All a trader's orders are cancelled
 
 # Summary
 
-Vega needs to keep track of positions for two purposes:
+**Vega core** needs to keep basic position data for each trader in each market where they have a *non-zero net open position* and/or *non-zero net active buy orders* and/or *non-zero net active sell orders*.
 
-- The **Position Engine** needs to keep basic position data for each trader in each market where they have a *non-zero net open position*:
+A position record is comprised of:
+
 	- Position size (net volume: positive for long positions, negative for short positions)
 	- Net active long orders: the sum of the long volume for all the trader's active order (will always be >= 0)
 	- Net active short orders: the sum of the short volume for all the trader's active order (will always be <= 0)
 
-- The **Positions API**, for all practical purpose (to achieve reasonable performance) needs to maintain records of both open and closed positions for all traders, including:
-	- Position size (net volume: positive for long positions, negative for short positions)
-	- Volume weighted average entry price see [average price](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#average-entry-price)
-	- Volume weighted average closing price (for closed positions)
-	- Valuation / P&L (a.k.a. unrealised P&L for open positions, realised P&L for closed)
+This core processes each relevant transaction (in sequential order, as they occur):
+- trades
+- new orders
+- size updates to orders
+- cancellation or expiry of orders
 
-Both components work by processing each Trade occurring in Vega in order, as they occur, and updating the required position record. As long as the right data is stored, this can be done in both cases without re-iterating over prior trades when ingesting a new trade.
+and updates the required position record. 
 
-# Guide-level explanation
+In the case of trades, as long as the right data is stored, this can be done in both cases without re-iterating over prior trades when ingesting a new trade.
 
 # Reference-level explanation
 
-The Position Engine processes each trade in the following way:
+## Updating position size
+
+Position size is a number that represents the net transacted volume of a trader in the market. The position size is therefore only ever updated when a trader is party to a trade.
+
+The Position core functionality processes each trade in the following way:
 
 1. If the buyer and seller are the same (wash trade), do nothing.
 
@@ -53,3 +80,15 @@ The Position Engine processes each trade in the following way:
 	- SellerPosition.size -= Trade.size
 
 1. If either position record has Position.size == 0, delete it, otherwise save the updated record.
+
+## Updating net active buy and sell order volumes
+
+Net active buy volume (and net active sell) volume refer to the aggregated size of buy (and sell) orders that a trader has active on the order book at a point in time. 
+
+These numbers are affected by any transaction that alters the net sum of a trader's open orders on the order book, including:
+
+- trades that a trader is party to
+- a trader's new order (which will increase or decrease the net buy or sell volume)
+- a trader's size updates to existing orders
+- a trader's cancellation of an order
+- expiry of a trader's existing order
