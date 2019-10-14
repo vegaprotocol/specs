@@ -15,7 +15,8 @@ In this spec we are focusing on the first iteration of the `scenario-runner-cli`
 - [ ] `SubmitInstructions` function is avilable and all the write instructions that the API exposes can be submitted to it.
 - [ ] `ExtractData` function is available and can output any static data available via the API. The output file should be in the `JSON` format.
 - [ ] The input `JSON` file contains meta data defining the version of the schema.
-- [ ] The output file contains meta data with the information on the version of `trading-core` used to generate it.
+- [ ] The output file (`DataFile`) contains metadata with the information on the version of `trading-core` used to generate it.
+- [ ] `DataFile` contains **protocol metadata** defined in [commands](#commands) subsection.
 
 # Guide-level explanation
 
@@ -33,7 +34,16 @@ The main functionality is:
 ## Commands
 
 - `SubmitInstructions` - takes in a path to the `InstructionsFile` in JSON format.
-- `ExtractData` - takes a path where the `DataFile` should be saved.
+- `ExtractData` - takes a path where the `DataFile` should be saved:
+  - By default `DataFile` includes **protocol metadata** with:
+    - Number of instructions processed
+    - Number of omited instructions and a reference to `log` outlining the details of those instructions.
+    - Time taken to process all the instructions.
+    - Number of trades generated.
+    - State of the order book after last instruction.
+  - By default results of the synchronous calls (excluding streams) defined in `trading_data` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto)
+    are included in the `DataFile`.
+  - Optionally, user can fine-tune the contents of a `DataFile` with `scenario-runner-cli` specific commands to filter the results as needed before writing-out the file.
 
 ## Data formats
 
