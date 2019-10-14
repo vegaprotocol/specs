@@ -1,6 +1,4 @@
-Feature name: feature-name
-Start date: YYYY-MM-DD
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
+# Positions Core
 
 # Acceptance Criteria
 
