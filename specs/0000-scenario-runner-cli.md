@@ -56,7 +56,7 @@ The main functionality is:
 # Test cases
 
 - Output is the same irrespective of using `1` file with `n` instructions or `n` files with `1` instruction.
-- Empty instructions file flows through the system without errors, warning is recorded.
+- Empty `InstructionsFile` flows through the system without errors, warning is recorded.
 - Submiting a matching buy and sell order results in a trade being generated.
 - A large number of simple instructions (~ milion) can be processed in a reasonable amount of time (<10mins)
 - When a failure condition occurs all the resources are released and no partial outputs are given.
