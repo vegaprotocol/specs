@@ -79,9 +79,9 @@ The Position core functionality processes each trade in the following way:
 
 1. If either position record has Position.size == 0, delete it, otherwise save the updated record.
 
-## Updating net active buy and sell order volumes
+## Updating net active buy and sell order sizes
 
-Net active buy volume (and net active sell) volume refer to the aggregated size of buy (and sell) orders that a trader has active on the order book at a point in time. 
+Net active buy size (and net active sell) size refer to the aggregated size of buy (and sell) orders that a trader has active on the order book at a point in time. 
 
 These numbers are affected by any transaction that alters the net sum of a trader's open orders on the order book, including:
 
