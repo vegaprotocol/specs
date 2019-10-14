@@ -11,8 +11,10 @@ In this spec we are focusing on the first iteration of the `scenario-runner-cli`
 # Acceptance Criteria
 
 - [ ] --help command is available.
+- [ ] `config` file exposing default values (e.g. protocol time advancement per instruction is submitted) exists and can be modified by the user.
 - [ ] Example `InstructionsFile` in `JSON` format is available.
 - [ ] `SubmitInstructions` function is avilable and all the write instructions that the API exposes can be submitted to it.
+- [ ] Protocol time is advanced by a fixed amount after each instruction is submitted. User has the option to set it to 0. User has the option to explicitly specify change in protocol time with a dedicated instruction.
 - [ ] `ExtractData` function is available and can output any static data available via the API. The output file should be in the `JSON` format.
 - [ ] The input `JSON` file contains meta data defining the version of the schema.
 - [ ] The output file (`DataFile`) contains metadata with the information on the version of `trading-core` used to generate it.
@@ -34,6 +36,8 @@ The main functionality is:
 ## Commands
 
 - `SubmitInstructions` - takes in a path to the `InstructionsFile` in JSON format.
+  - By default each instruction advances the protocol time by a fixed amount (e.g. 1ms) controllable via the `config` file.
+  - Dedicated instruction exists which allows explicit control of the flow of time.
 - `ExtractData` - takes a path where the `DataFile` should be saved:
   - By default `DataFile` includes **protocol metadata** with:
     - Number of instructions processed
@@ -71,7 +75,6 @@ This sub-section lists future additions that may be required. It's meant to allo
 
 The currently identified additions that will likely be useful going forward are (please note ordering doesn't imply relative importance, that should be decided when these are scoped and included in a different spec):
 
-- Additional instructions (not available in the API) are exposed so that the flow of time within the node can be controlled.
 - Support filtering of outputs on the fly to aid performance and allow more control of the size of an output file.
 - Expose additional, internal/intermediate data not available via the API.
 - Support submitting instructions to an instance of the network running with the consensus layer. This will support only the subset of instructions available in scenario runner that overlap with the API.
