@@ -93,3 +93,7 @@ The currently identified additions that will likely be useful going forward are 
   - It's quite likely that we will end up adding more node instructions and/or modify the existing ones.
   - By that time we may already have a large collection of scenario runner `StateFile`s
   - Need to build in backwards compability or a way of updating them to the latest standard as considerable time and effort might have been put into generating some of them and the process might not be easy to reprodce (scrips that get lost or become stale, manual fine-tuning of certain values etc.)
+- Referencing data related to entities changing over time
+  - Some data will change throughout the life-cycle of the entities it relates to - e.g. first version of an order then updates when trades occur.
+    - Need to reference those entities in a consistent way and capture data relating to all the states (e.g. pending order, matched order & trade)
+    - We may want to include additional filtering options so that user can fine-tune the amount of data included in the output file to balance visibitlity of intermediate state with readability of output file for different use cases.
