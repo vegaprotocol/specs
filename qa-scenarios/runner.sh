@@ -13,6 +13,8 @@ if [ ! -f "$1.sh" ]; then
     exit 0
 fi
 
+timestamp=$(date +%Y%m%d-%H%M)
+
 testname=$1
 testfile="$1.sh"
 
@@ -24,20 +26,20 @@ echo "Waiting 1 sec"
 sleep 1
 
 # This assumes you have tendermint running locally:
-tendermint unsafe_reset_all && tendermint init && tendermint node  2> ./"$testname.tendermint.stderr.out" 1> ./"$testname.tendermint.stdout.out" &
+tendermint unsafe_reset_all && tendermint init && tendermint node  2> ./"${timestamp}_$testname.tendermint.stderr.out" 1> ./"${timestamp}_$testname.tendermint.stdout.out" &
 # and fresh Vega:
-rm -rf "$HOME/.vega/"*store && vega node 2> ./"$testname.vega.stderr.out" 1> ./"$testname.vega.stdout.out" &
+rm -rf "$HOME/.vega/"*store && vega node 2> ./"${timestamp}_$testname.vega.stderr.out" 1> ./"${timestamp}_$testname.vega.stdout.out" &
 
 echo "Waiting 5 sec"
 sleep 5
 
 # starting the streaming stuff
 echo "starting vega streams"
-vegastream -orders 2>> "$testfile.orders.out" 1>> "$testfile.orders.out" &
-vegastream -trades 2>> "$testfile.trades.out" 1>> "$testfile.trades.out" &
-vegastream -accounts 2>> "$testfile.accounts.out" 1>> "$testfile.accounts.out" &
-vegastream -transfers  2>> "$testfile.transfers.out" 1>> "$testfile.transfers.out"&
-vegastream -trades 2>> "$testfile.trades.out" 1>> "$testfile.trades.out" &
+vegastream -orders 2>> "${timestamp}_$testname.orders.out" 1>> "${timestamp}_$testname.orders.out" &
+vegastream -trades 2>> "${timestamp}_$testname.trades.out" 1>> "${timestamp}_$testname.trades.out" &
+vegastream -accounts 2>> "${timestamp}_$testname.accounts.out" 1>> "${timestamp}_$testname.accounts.out" &
+vegastream -transfers  2>> "${timestamp}_$testname.transfers.out" 1>> "${timestamp}_$testname.transfers.out"&
+vegastream -trades 2>> "${timestamp}_$testname.trades.out" 1>> "${timestamp}_$testname.trades.out" &
 
 echo -e "executing testfile: $testfile"
 ./$testfile
