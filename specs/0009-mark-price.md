@@ -39,10 +39,10 @@ The mark price is set to the higher / lower of the last traded price, bid/offer.
 
 >*Example a):* consider the last traded price was $1000 and the current best bid in the market is $1,100. The bid price is higher than the last traded price so the new Mark Price is $1,100. 
 
->*Example b):* consider the last traded price was $1000 and the current best bid in the market is $999. The last traded price is higher than the bid price so the new Mark Price is $1,100. 
+>*Example b):* consider the last traded price was $1000 and the current best bid in the market is $999. The last traded price is higher than the bid price so the new Mark Price is $1,000. 
 
  ### 3. Oracle 
- An oracle source external to the market provides updates to the Mark Price (TODO - add link to oracle specification)
+ An oracle source external to the market provides updates to the Mark Price
 
  ### 4. Model 
  The *Mark Price* may be calculated using a built in model.  
