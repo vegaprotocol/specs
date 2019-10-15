@@ -25,21 +25,23 @@ killall vega
 echo "Waiting 1 sec"
 sleep 1
 
+mkdir results.${timestamp}.$testname
+
 # This assumes you have tendermint running locally:
-tendermint unsafe_reset_all && tendermint init && tendermint node  2> ./"${timestamp}_$testname.tendermint.stderr.out" 1> ./"${timestamp}_$testname.tendermint.stdout.out" &
+tendermint unsafe_reset_all && tendermint init && tendermint node  2> ./"results.${timestamp}.$testname/tendermint.stderr.out" 1> ./"results.${timestamp}.$testname/tendermint.stdout.out" &
 # and fresh Vega:
-rm -rf "$HOME/.vega/"*store && vega node 2> ./"${timestamp}_$testname.vega.stderr.out" 1> ./"${timestamp}_$testname.vega.stdout.out" &
+rm -rf "$HOME/.vega/"*store && vega node 2> ./"results.${timestamp}.$testname/vega.stderr.out" 1> ./"results.${timestamp}.$testname/vega.stdout.out" &
 
 echo "Waiting 5 sec"
 sleep 5
 
 # starting the streaming stuff
 echo "starting vega streams"
-vegastream -orders 2>> "${timestamp}_$testname.orders.out" 1>> "${timestamp}_$testname.orders.out" &
-vegastream -trades 2>> "${timestamp}_$testname.trades.out" 1>> "${timestamp}_$testname.trades.out" &
-vegastream -accounts 2>> "${timestamp}_$testname.accounts.out" 1>> "${timestamp}_$testname.accounts.out" &
-vegastream -transfers  2>> "${timestamp}_$testname.transfers.out" 1>> "${timestamp}_$testname.transfers.out"&
-vegastream -trades 2>> "${timestamp}_$testname.trades.out" 1>> "${timestamp}_$testname.trades.out" &
+vegastream -orders 2>> "results.${timestamp}.$testname/orders.out" 1>> "results.${timestamp}.$testname/orders.out" &
+vegastream -trades 2>> "results.${timestamp}.$testname/trades.out" 1>> "results.${timestamp}.$testname/trades.out" &
+vegastream -accounts 2>> "results.${timestamp}.$testname/accounts.out" 1>> "results.${timestamp}.$testname/accounts.out" &
+vegastream -transfers  2>> "results.${timestamp}.$testname/transfers.out" 1>> "results.${timestamp}.$testname/transfers.out"&
+vegastream -trades 2>> "results.${timestamp}.$testname/trades.out" 1>> "results.${timestamp}.$testname/trades.out" &
 
 echo -e "executing testfile: $testfile"
 ./$testfile
@@ -52,4 +54,4 @@ killall tendermint
 killall vega
 
 echo ""
-echo "done, to view output: cat ${timestamp}_*.out"
+echo "done, to view output: cat results.${timestamp}.${testname}/*.out"
