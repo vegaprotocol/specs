@@ -1,30 +1,39 @@
-Feature name: margin-calculator
-Start date: YYYY-MM-DD
-Whitepaper section: 6.1, section "Margin Calculation"
-
-# Summary
-
-The _margin calculator_ returns the set of relevant margin levels for a given position and entry price:
-1. Maintenance margin
-1. Collateral search level
-1. Initial margin
-1. Collateral release level
+# Margin Calculator
 
 # Acceptance Criteria
 
 - [ ] Get four margin levels for one or more parties
 - [ ] Margin levels are correctly calculated against riskiest long and short positions
 - [ ] Zero position and zero orders results in all zero margin levels
-- [ ] Maintenance margin < Collateral search level < Initial margin < Collateral release level
+- [ ] If ```riskiest long > 0``` and there are no bids on the order book, the ```exit price``` is equal to the initial mark price, as set by a market parameter.  
+- [ ] If ```riskiest long > 0``` && ```0 <``` *sum of volume of order book bids* ```< riskiest long```, the ```exit price``` is equal to the *volume weighted price of the order book bids*. 
+- [ ] If ```riskiest short < 0``` and there are no offers on the order book, the ```exit price``` is equal to the initial mark price, as set by a market parameter.   
+- [ ] If ```riskiest short < 0``` && ```0 <``` *sum of absolute volume of order book offers* ```< riskiest short```, the ```exit price``` is equal to the *volume weighted price of the order book offers*. 
 
-# Guide Level Explanation
+# Summary
+
+The _margin calculator_ returns the set of relevant margin levels for a given position and entry price:
+1. ***Maintenance margin***
+1. ***Collateral search level***
+1. ***Initial margin***
+1. ***Collateral release level***
+
+The protocol is designed such that ***Maintenance margin < Collateral search level < Initial margin < Collateral release level***.
+
+Margin levels are used by the protocol to ascertain whether a trader has sufficient collateral to maintain a margined trade. When the trader enters an open position, this required amount is equal to the *initial margin*. Subsequently, throughout the life of this open position, the minimum required amount is the *maintenance margin*. As a trader's collateral level dips below the *collateral search level* the protocol will automatically search for more collateral to be assigned to support this open position from the trader's general collateral accounts. In the event that a trader has collateral that is above the *collateral release level* the protocol will automatically release collateral to a trader's general collateral account for the relevant asset.
+
+**Whitepaper reference:** 6.1, section "Margin Calculation"
+
+In future there can be multiple margin calculator implementations that would be configurable in the market framework. This spec describes one implementation.
 
 # Reference Level Explanation
 
 The calculator takes as inputs:
 
-* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_volume``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side.
+* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_volume``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side.  See [positions core specification](./0006-positions-core).
 - ```mark price```
+- ```scaling levels``` defined in the risk parameters for a market
+- ```quantitative risk factors```
 
 and returns 4 margin requirement levels
 
@@ -64,14 +73,23 @@ In this simple methodology, a linearised margin formula is used to return the ma
 
 where
 
-```slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price) ```,
+```slippage_per_unit =  Product.value(exit_price) - Product.value(settlement_mark_price) ```,
 
 ```slippage_volume =  max( open_volume, 0 ) ```,
 
-where ```mark price``` used is the last one used for the last settlement and ```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited.
-This is by 'exiting' a long position through the bids on the order book, or for a short position through the asks on the order book.
+where 
+
+```settlement_mark_price``` refers to the mark price most recently utilised in [mark to market settlement](./0003-mark-to-market-settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.
+
+```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited. Specifically:
+
+* **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the long position on the order book (i.e. by selling to the bids on the order book). 
+
+* **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the short position on the order book (i.e. by buying from the offers (asks) on the order book).
 
 Note, if there is insufficient order book volume for this ```exit_price``` to be calculated (per position), the ```exit_price``` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
+
+If there is zero order book volume on the relevant side of the order book to calculate the ```exit_price```, the initial mark price, as defined by a market parameter, should be used.
 
 **Step 2** 
 
