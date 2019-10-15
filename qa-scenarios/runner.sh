@@ -49,7 +49,6 @@ vegastream -orders 2>> "results.${timestamp}.$testname/orders.out" 1>> "results.
 vegastream -trades 2>> "results.${timestamp}.$testname/trades.out" 1>> "results.${timestamp}.$testname/trades.out" &
 vegastream -accounts 2>> "results.${timestamp}.$testname/accounts.out" 1>> "results.${timestamp}.$testname/accounts.out" &
 vegastream -transfers  2>> "results.${timestamp}.$testname/transfers.out" 1>> "results.${timestamp}.$testname/transfers.out"&
-vegastream -trades 2>> "results.${timestamp}.$testname/trades.out" 1>> "results.${timestamp}.$testname/trades.out" &
 
 echo -e "executing testfile: $testfile"
 ./$testfile $marketid
