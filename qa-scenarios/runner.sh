@@ -50,3 +50,6 @@ sleep 1
 killall vegastream
 killall tendermint
 killall vega
+
+echo ""
+echo "done, to view output: cat ${timestamp}_*.out"
