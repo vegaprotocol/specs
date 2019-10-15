@@ -7,6 +7,8 @@
 - [ ] Zero position and zero orders results in all zero margin levels
 - [ ] If ```riskiest long > 0``` and there are no bids on the order book, the ```exit price``` is equal to the initial mark price, as set by a market parameter.  
 - [ ] If ```riskiest long > 0``` && ```0 <``` *sum of volume of order book bids* ```< riskiest long```, the ```exit price``` is equal to the *volume weighted price of the order book bids*. 
+- [ ] If ```riskiest short < 0``` and there are no offers on the order book, the ```exit price``` is equal to the initial mark price, as set by a market parameter.   
+- [ ] If ```riskiest short < 0``` && ```0 <``` *sum of absolute volume of order book offers* ```< riskiest short```, the ```exit price``` is equal to the *volume weighted price of the order book offers*. 
 
 # Summary
 
