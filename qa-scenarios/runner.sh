@@ -24,9 +24,9 @@ echo "Waiting 1 sec"
 sleep 1
 
 # This assumes you have tendermint running locally:
-tendermint unsafe_reset_all && tendermint init && tendermint node  2> ./tendermint.stderr.out 1> ./tendermint.stdout.out &
+tendermint unsafe_reset_all && tendermint init && tendermint node  2> ./"$testname.tendermint.stderr.out" 1> ./"$testname.tendermint.stdout.out" &
 # and fresh Vega:
-rm -rf "$HOME/.vega/"*store && vega node 2> ./vega.stderr.out 1> ./vega.stdout.out &
+rm -rf "$HOME/.vega/"*store && vega node 2> ./"$testname.vega.stderr.out" 1> ./"$testname.vega.stdout.out" &
 
 echo "Waiting 5 sec"
 sleep 5
