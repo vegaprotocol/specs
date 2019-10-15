@@ -1,7 +1,7 @@
 #!/bin/bash
 # add some orders the party david is "market making" this creates volume on the book
 
-marketid="GDVRC6MR5A255GTNVYL4T7F2FUTUPV3U"
+marketid=$1
 
 # BUY SIDE
 

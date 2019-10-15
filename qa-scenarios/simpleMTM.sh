@@ -1,17 +1,23 @@
 #!/bin/bash
 
+# The top level file that gets run by the runner needs to return a valid market name as found in ~/.vega/markets
+if [ $1 = "-market" ]; then
+    echo "GBPUSD/JUN20"
+    exit 0
+fi
+
+# set your market
+marketid=$1
+
 # create accounts for david and edd:
 echo "creating accounts"
 vegaccount -traderid david
 vegaccount -traderid edd -amount 10000
 echo "Waiting 1 sec" && sleep 1
 
-# set your market
-marketid="GDVRC6MR5A255GTNVYL4T7F2FUTUPV3U"
-
 # Build the book with David market making
 echo -e "building the order book using: build-book.sh"
-./build-book.sh
+./build-book.sh $marketid
 echo "order book is built"
 
 echo ""

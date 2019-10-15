@@ -18,7 +18,15 @@ timestamp=$(date +%Y%m%d-%H%M)
 testname=$1
 testfile="$1.sh"
 
-clear
+marketname=$(./$testfile -market)
+marketid=$(cat ~/.vega/markets/*.json | jq -sr "map(select(.name==\"$marketname\")) | .[0].id")
+
+if [ $marketid = "null" ]; then
+    echo "error: couldn't find ID for market: $marketname"
+    exit 1
+fi
+echo "found ID for market: $marketname => $marketid"
+
 killall tendermint
 killall vega
 
@@ -44,7 +52,7 @@ vegastream -transfers  2>> "results.${timestamp}.$testname/transfers.out" 1>> "r
 vegastream -trades 2>> "results.${timestamp}.$testname/trades.out" 1>> "results.${timestamp}.$testname/trades.out" &
 
 echo -e "executing testfile: $testfile"
-./$testfile
+./$testfile $marketid
 echo "cleaning up"
 
 # get it a bit of time and then kill stuff
