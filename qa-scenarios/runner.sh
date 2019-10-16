@@ -19,6 +19,9 @@ testfile="$testname.sh"
 timestamp=$(date +%Y%m%d-%H%M%S)
 echo "test name: $testname (run at $timestamp)"
 
+# make sure local machine has all the test market config files (always overwrite)
+  cp -f ./qa_market_configs/* ~/.vega/markets
+
 marketname=$(./$testfile -market)
 marketid=$(cat ~/.vega/markets/*.json | jq -sr "map(select(.name==\"$marketname\")) | .[0].id")
 
