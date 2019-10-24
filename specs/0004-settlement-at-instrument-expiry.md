@@ -48,14 +48,7 @@ Starting at T = maturity, wait until the expiry price specified in the Instrumen
 
 Set the mark price = expiry price
 
-Perform [mark to market settlement](0003-mark-to-market-settlement) 
-
-
-Cash settlement at expiry when [mark to market settlement](0003-mark-to-market-settlement) has occurred follows the same steps as described in [mark to market settlement](0003-mark-to-market-settlement), with a slight tweak to the formula in step 1:
-
-```product.value(current_price)``` uses for ```current_price``` the expiry price which is supplied by an oracle.
-
-Otherwise, all other steps are the same.
+Perform [mark to market settlement](0003-mark-to-market-settlement) setting the ```current_price```  to the ```expiry price```.
 
 # Pseudo-code / Examples
 
