@@ -10,7 +10,7 @@ Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections:
 - [ ] The settlement instructions are used to "collect" funds from the traders who have a negative cashflow (assuming that negative cashflow means you owe money to the market / are "out of the money") and deposits all these collected funds into the market's general account.
   - [ ] When "collecting" funds from a trader account, the settlement engine must instruct the collateral engine to debit in this order (this order is true on expiry for all instruments):
     1. Margin account of the trader
-    2. Market account for the trader
+    2. General asset account for the trader
     3. Insurance pool for the market
 - [ ] The settlement function interprets the collateral responses and determines whether the traders who are owed money may be paid out of the market's general account.
   - [ ] If there are sufficient funds to pay all traders who are owed money, the settlement engine instructs the collateral engine to pay them out according the above calculated cashflows.
