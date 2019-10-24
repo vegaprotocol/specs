@@ -22,6 +22,7 @@ Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections:
 - [ ] check it happens with the first and only the first price that is valid per the oracle definition
 - [ ] check mark price is updated
 - [ ] check mark to market settlement happens correctly
+- [ ] settlement at expiry only ever happens  once
 
 
 ## Implementation note / boundaries
