@@ -1,0 +1,47 @@
+{
+  "id": "GDVRC6MR5A255GTNVYL4T7F2FUTUPV3U",
+  "name": "GBPUSD/JUN20",
+  "tradableInstrument": {
+    "instrument": {
+      "id": "Crypto/GBPUSD/Futures/Jun20",
+      "code": "CRYPTO:GBPUSD/JUN20",
+      "name": "June 2020 GBP vs USD future",
+      "baseName": "GBP",
+      "quoteName": "USD",
+      "metadata": {
+        "tags": [
+          "asset_class:fx/crypto",
+          "product:futures"
+        ]
+      },
+      "initialMarkPrice": "10",
+      "future": {
+        "maturity": "2020-06-30T22:59:59Z",
+        "asset": "ETH",
+        "ethereumEvent": {
+          "contractID": "0x0B484706fdAF3A4F24b2266446B1cb6d648E3cC1",
+          "event": "price_changed"
+        }
+      }
+    },
+    "marginCalculator": {
+      "scalingFactors": {
+        "searchLevel": 1.1,
+        "initialMargin": 1.2,
+        "collateralRelease": 1.4
+      }
+    },
+    "forward": {
+      "lambd": 0.01,
+      "tau": 0.00011407711613050422,
+      "params": {
+        "r": 0.016,
+        "sigma": 0.09
+      }
+    }
+  },
+  "decimalPlaces": "5",
+  "continuous": {
+
+  }
+}
