@@ -1,5 +1,4 @@
 #!/bin/bash
-
 clear
 killall tendermint
 killall vega
@@ -9,6 +8,7 @@ sleep 1
 
 # This assumes you have tendermint running locally: 
 tendermint unsafe_reset_all && tendermint init && tendermint node  2> ./tendermint.stderr.out 1> ./tenderming.stdout.out &
+
 # and fresh Vega: 
 rm -rf "$HOME/.vega/"*store && vega node 2> ./vega.stderr.out 1> ./vega.stdout.out &
 
@@ -38,7 +38,7 @@ echo "Waiting 2 sec" && sleep 2
 
 
 # Now let's see a trade Edd whould buy something
-curl 'http://localhost:3004/query' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'DNT: 1' -H 'Origin: http://localhost:3004' --data-binary '{"query":"mutation {\n  orderSubmit(\n    marketId: \"SM5FP5KTOKZHBPP5Q7U7WJ7BWH2J4IUL\"\n    partyId:\"edd\"\n    price: \"10500\"\n    size: \"5\"\n    side:Buy\n    timeInForce:GTC\n  ) {\n    reference\n  }\n}"}' --compressed
+curl 'http://localhost:3004/query' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'DNT: 1' -H 'Origin: http://localhost:3004' --data-binary '{"query":"mutation {\n  orderSubmit(\n    marketId: \"SM5FP5KTOKZHBPP5Q7U7WJ7BWH2J4IUL\"\n    partyId:\"edd\"\n    price: \"10500\"\n    size: \"1\"\n    side:Buy\n    timeInForce:GTC\n  ) {\n    reference\n  }\n}"}' --compressed
 
 
 echo ""
