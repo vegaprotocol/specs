@@ -42,7 +42,23 @@ Notes on scope of current version of this spec:
 
 ### Valid order combinations
 
-## Time in Force
+##### Continuous trading
 
-| Trigger        | Abbreviation           | Description  |
-| ------------- |:-------------:| -----:|
+| Pricing method | GTT | GTC | IOC | FOK |
+| -------------- |:---:|:---:|:---:|:----|
+| Limit          | Y   | Y   | Y   | Y   |
+| Pegged         | Y   | Y   | Y   | Y   | 
+| Market         | N   | N   | Y   | Y   |
+
+
+##### Auction
+
+GFA (Good for auction) not shown, spec. will be updated when auctions are adced.
+
+| Pricing method | GTT | GTC | IOC | FOK |
+| -------------- |:---:|:---:|:---:|:----|
+| Limit          | Y   | Y   | N   | N   |
+| Pegged         | N*  | N*  | N*  | N*  | 
+| Market         | N   | N   | Y   | Y   |
+
+\* Pegged orders will be parked during an auction, with time priority preserved
