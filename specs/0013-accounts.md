@@ -8,7 +8,6 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 - [ ] Double entry accounting is maintained at all points.
 - [ ] Only transfer requests move money between accounts.
-- [ ] 
 
 ## Trader asset accounts
 - [ ] Every party that deposits an asset on Vega will have an asset account created for that asset.
@@ -20,8 +19,6 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 ## Trader margin accounts
 - [ ]  Every party that submits an order on a market will have a margin account for that market created.
 - [ ]  Each party should only have one margin account per market.
-- [ ]  Each party should only have a margin account created for a market they've ever put an order on.
-- [ ]  Margin accounts are transient and connected to open positions. There is a no such thing as a zero open position. There's no  such thing as a margin account that has a balance of zero.
 
 ## Insurance pool accounts
 
@@ -65,7 +62,10 @@ The core protocol does not require these general asset accounts if they have a b
 
 ## Margin accounts
 
-Margin accounts are used by the protocol to maintain [margin requirements](./0010-risk-and-margin-orchestration) and collect and distribute [mark to market settlement](./0002-settlement). 
+Margin accounts are used by the protocol to maintain [margin requirements](./0010-risk-and-margin-orchestration) and collect and distribute [mark to market settlement](./0002-settlement). Each party only needs a margin account created for a market they've ever put an order on.
+
+Moreover, margin accounts are conceptually connected to open positions and given there no such thing as a zero open position a margin account may therefore be transient (i.e. there would be no such thing as a margin account that has a balance of zero).
+
 
 **Creation:**
 
@@ -75,7 +75,9 @@ When a trader places an order on a market and they do not have a margin account 
 
 **Deletion:**
 
-When a trader no longer has collateral requirements for a  market (because they don't have open positions or active orders), these accounts no longer have utility in the core protocol and may be deleted. If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (which for margin accounts will typically the insurance pool of the market).
+When a trader no longer has collateral requirements for a  market (because they don't have open positions or active orders), these accounts no longer have utility in the core protocol and may be deleted. Accounts may also be deleted for other reasons (e.g. a system account at the conclusion of a set of [closeouts](./0012-position-resolution)).
+
+If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (which for margin accounts will typically the insurance pool of the market).
 
 ## Insurance pools
 
