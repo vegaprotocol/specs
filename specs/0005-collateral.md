@@ -8,9 +8,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 * [ ] If a transfer request does not contain an equal amount of debit assets to credit assets it is malformed and should be outright rejected by the collateral engine  
 * [ ] One transfer request may result in multiple ledger entries. 
 * [ ] Each ledger entry will specify one debit account, one credit account and one amount of a single asset.
-* [ ] Creation of accounts - see [building trader accounts](./0013-building-trader-accounts)
-* [ ] Deletion of accounts - transfer requests may instruct the collateral engine to delete an account. If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (typically the insurance pool of the market).
-
+* [ ] Creation and deletion of accounts - see [accounts](./0013-accounts)
 
 # Summary
 
@@ -22,7 +20,7 @@ The collateral engine's **only job** is to maintain Vega's ledger of accounts an
 
 # Reference-level explanation
 
-The collateral engine will receive a transfer request and return ledger entries of the resultant actions it has undertaken. This is the collateral engine's only job.  It does not treat any transfer request differently to another transfer request. It has no knowledge of the state of the system (e.g whether it's a transfer request due to a market expiring vs a transfer request due to a trader withdrawing collateral).
+The collateral manager will receive a transfer request and return ledger entries of the resulting actions it has undertaken. This is the collateral manager's only job.  It does not treat any transfer request differently to another transfer request. It has no knowledge of the state of the system (e.g whether it's a transfer request due to a market expiring vs a transfer request due to a trader withdrawing collateral).
 
 Every transfer request will detail an account (or accounts) from which an amount of asset should be debited and a corresponding account (or accounts) which should have these assets credited.  Importantly, the total amount that is debited per transaction request must always equal the total amount that is credited for all assets (this maintains the double entry accounting). If the transfer request does not detail this it is malformed and should not be processed at all by the collateral engine
 
@@ -31,7 +29,7 @@ Note, this also includes when an account is initialised. All accounts that are i
 1. The trading core (e.g. if a trader has deposited collateral into the Vega Smart Contract).
 2. The settlement engine (e.g. during settlement)
 
-Accounts may be created and deleted by transfer requests. Deleted account transfer requests must specify which account should receive any outstanding funds in the account that's being deleted.
+Accounts may be created and deleted by transfer requests. Deleted account transfer requests must specify which account should receive any outstanding funds in the account that's being deleted (see [accounts](./0013-accounts))
 
 
 # Pseudo-code / Examples
