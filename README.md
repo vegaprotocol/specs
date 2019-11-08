@@ -10,10 +10,15 @@ A specification outlines **our best understanding at the moment of how the softw
 
 While we are producing the detailed specifications for the Vega trading core, the RFC process (see Notes) would be too heavyweight, so we're starting off by directly editing specifications. When the core specifications are more stable, we will adopt the RFC process.
 
+## Pre-specification analysis
+Some specification tasks will first require an analysis phase to investigate alternative ways of specifying the feature. Very early research and development of a feature will happen in the [reseach repo](https://gitlab.com/vega-protocol/papers) and this will be reflected in a published paper in that repo.  The analysis  tickets in the product repo are to initiate and capture any discussion required before proceeding on to writing up the specification file. Analysis tasks should be created when required and all subject matter experts, relevant solution architects and engineers should be notified in the discussion. 
+
+Analysis tasks should be prioritised by those taking the lead on specifying the relevant feature. They may also be prioritised as a result of the engineering OKR goals, coordinated across the team.
+
 ## The process for a new component
-1. Create an ticket in the [spec-writing board](https://gitlab.com/vega-protocol/product/-/boards/1356823?&label_name[]=TASK%3A%3Aspec-design).
+1. Create a ticket in the [spec-writing board](https://gitlab.com/vega-protocol/product/-/boards/1356823?&label_name[]=TASK%3A%3Aspec-design).
 1. When you are ready to commence the spec writing task, move the ticket to a status of _workflow::task-in-progress_.
-1. Create a merge request from the ticket with a brief description of the changes you need to make.
+1. Create a merge request *from the ticket* - this will ensure they are linked and the ticket is automatically closed when merged.
 1. Copy `0000-template.md` to `specs/0000-my-feature.md`, (e.g. `specs/0000-example-manager.md`.
 1. Fill in the details.
 1. Submit a merge request to start soliciting feedback. Ensure that the appropriate team members are notified.
@@ -22,8 +27,8 @@ While we are producing the detailed specifications for the Vega trading core, th
 1. Merge to master - this will automatically close the associated ticket. 
 
 ## The *current* process for changes to existing component
-1. Create an ticket in the [spec-writing board](https://gitlab.com/vega-protocol/product/-/boards/1356823?&label_name[]=TASK%3A%3Aspec-design). Please label this appropriately, including whether it is a _spec-bug_ or _blocking-code_ and assign to a milestone and individual if appropriate. Only use the already created labels.
-1. This ticket will be prioritised by the person it is assigned to, in collaboration with engineering team.
+1. Create an ticket in the [spec-writing board](https://gitlab.com/vega-protocol/product/-/boards/1356823?&label_name[]=TASK%3A%3Aspec-design). Label this appropriately, including whether it is a _spec-bug_ or _blocking-code_ and assign to a milestone and individual if appropriate. *Only use the already created labels* (see below for the defined list and raise a merge request against this file if you want to edit these).
+1. This ticket will be prioritised by the person it is assigned to, in collaboration with the engineering team.
 1. When you are ready to commence the spec writing task, move the ticket to a status of _workflow::task-in-progress_.
 1. Create a merge request from this ticket with a brief description of the changes you need to make
 1. Using the automatically created branch, start editing the document
