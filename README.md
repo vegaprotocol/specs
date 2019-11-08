@@ -39,7 +39,7 @@ While we are producing the detailed specifications for the Vega trading core, th
 sequenceDiagram
     loop Design
         Specification task->>Merge request: Write specification
-Merge request->>Specification: Integrate feedback    
+Merge request->>Specification task: Integrate feedback    
     end
 Merge request->>Implementation task: Scope next release
         Merge request -->>Merge request: Close ticket
@@ -66,7 +66,8 @@ Issues should be created in the Product issue list to define a particular scope 
 ```mermaid
 sequenceDiagram
 
-Implement task->>Development: Engineers create own tickets
+Implement task->>Development
+Development-->>Development:  Engineers use own process
 Implement task->>Development: Review acceptance criteria against tests
 Implement task->>Development: QA
 Implement task->>Development: Release
