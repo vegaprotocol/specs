@@ -67,10 +67,7 @@ Issues should be created in the Product issue list to define a particular scope 
 sequenceDiagram
 
 Implement task->>Development: Engineers link to their own tickets
-<!-- Development-->>Development:  Engineers create own tickets
-Implement task->>Development: Review acceptance criteria against tests
-Implement task->>Development: QA
-Implement task->>Development: Release -->
+
 ```
 
 # Prioritisation and ticket organisation
