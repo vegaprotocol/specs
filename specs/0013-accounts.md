@@ -20,7 +20,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 - [ ]  Every party that submits an order on a market will have a margin account for that market created.
 - [ ]  Each party should only have one margin account per market.
 - [ ] Cannot have a non-zero balance on a margin account where there's no position / position size = 0 and no active orders.
-
+- [ ] Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders.
 
 ## Insurance pool accounts
 
