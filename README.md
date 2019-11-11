@@ -84,9 +84,33 @@ Implement task->>Development: Release
 * All tickets in [the product repo](https://gitlab.com/vega-protocol/product/issues) must  be labelled as either a _TASK::analysis_ or _TASK::spec-design_ or _TASK::implement_. A ticket cannot be labelled as more than one of these.
 * New tickets should typically not be prioritised unless agreement is met by those doing the task (i.e. spec writing or implementation), with input from Barney and Tamlyn regarding overall product prioritisation.
 * LABELS:
-  * **Analysis**:  _TASK::analysis_, _workflow::prioritised_, _workflow::task-in-progress_, _network_, _trading-core_, _trading-ui_
-  * **Spec-writing**:  _TASK::spec-writing_, _workflow::prioritised_, _workflow::task-in-progress_, _spec-bug_, _blocking-code_, _blocking-review_, _network_, _trading-core_, _trading-ui_
-  * **Implement**:  _TASK::analysis_, _workflow::prioritised_, _workflow::task-in-progress_, _workflow::review_, _workflow::qa_, _blocked-by-spec, _network_, _trading-core_, _trading-ui_
+  * **Analysis**  
+     * _TASK::analysis_
+     * _workflow::prioritised_
+     * _workflow::task-in-progress_
+     * _network_
+     * _trading-core_
+     * _trading-ui_
+  * **Spec-writing**  
+    * _TASK::spec-writing_
+    * _workflow::prioritised_
+    * _workflow::task-in-progress_
+    * _spec-bug_
+    * _blocking-code_
+    * _blocking-review_
+    * _network_
+    * _trading-core_
+    * _trading-ui_
+  * **Implement**
+    * _TASK::analysis_ 
+    * _workflow::prioritised_
+    * _workflow::task-in-progress_
+    * _workflow::review_
+    * _workflow::qa_
+    * _blocked-by-spec_
+    * _network_
+    * _trading-core_
+    * _trading-ui_
 
 * Creation of new labels should only happen through a merge request to this file.
 * Asynchronous (via Slack) weekly meetings at the start of each week will be initiated by Tamlyn and will provide a chance to discuss ticket prioritisation and current work in progress across all three task sets. 
