@@ -31,7 +31,9 @@ The quantitative risk model may take one or more of the following as inputs:
 The quantitative risk model returns two risk factors:
 
 1. Long position risk factor
-2. Short position risk factor
+1. Short position risk factor
+
+The call to the quantitative risk model should *only* be made if any of the above inputs have changed from last time; if no input has changed then the quantitative risk model doesn't need to update the risk factors.  
 
 ## _Margin calculator_
 
