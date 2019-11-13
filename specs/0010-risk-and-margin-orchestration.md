@@ -45,19 +45,9 @@ Determination  of which action is appropriate to instigate is based on the event
 * The set (possibly empty) of order book updates
 * The market data
 
-#### Updating risk factors
+#### Updating margins when risk factors have been updated
 
-Risk factors are an input to the [margin calculation](./0019-margin-calculator.md) and are calculated using a [quantitative risk model](./0018-quant-risk-suite.md).
-
-Risk factors are updated if  
-* An update risk factors call is not already in progress asynchronously; AND
-* A specified period of time has elapsed (period can = 0 for always recalculate) for re-calculating risk factors. This period of time is defined as a risk parameter (see [market framework](./0001-market-framework.md)).
-
->Nicenet - for futures you can do this as often as you like since the calculation is dirt cheap
-
-Risk factors are also updated if on creation of a new market that does not yet have risk factors, as any active market needs to have risk factors.
-
-Note, when risk factors are updated, the margin levels for all market participants needs to also be recalculated and evaluated for solvency (see Step 2).
+If risk factors have been updated, the margin levels for all market participants needs to also be recalculated and evaluated for solvency (see Step 2).
 
 
 #### Calculating margin levels
@@ -110,4 +100,18 @@ Traders who have a margin account balance greater than the  _release level_ shou
 1. The mark price changes causing the trader’s margin to move into the close-out zone. A collateral search is initiated and the margin is topped back up to the search zone. No further actions are taken.
 1. The mark price changes causing the trader’s margin to move into the close-out zone. A collateral search is initiated and the margin is topped back up to a level which results in the trader still being in the close-out zone. This trader becomes a werewolf.
 1. The mark price changes causing the trader’s margin to move in to the release level. Margin should be released back to the trader. 
-1. On the market creation, the initial risk factors are created based on the market risk parameters
+
+
+
+#### calling something like
+```
+MarginCalculator.getMargins( Product.getObservableValues(), QuantitativeRiskModel.getRiskFactors().longFactor, Market.orderBook, position_size, Product.value(current_price) )  -->
+
+# e.g. for a trader's short futures position of size 1025 contracts where the market observable is just the latest "mark price"
+MarginCalculator.getMargins( 120, [0.1, 0.12], Market.orderBook, -1025, 120 )
+
+# returns
+
+margin_levels = [margin_maintenance, search_level, margin_initial, release_level]
+
+```
