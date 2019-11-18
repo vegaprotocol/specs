@@ -3,7 +3,7 @@
 ## Acceptance Criteria
 
 1. [ ] Different markets can have a different risk model.
-2. [ ] The quant math library is called only when the inputs have changed since the last call.
+2. [ ] The risk factors are recalculated only when the inputs have changed since the last call.
 3. [ ] If any of the input data has changed then an update to risk factors is initiated. 
 4. [ ] Risk factors are agreed upon by consensus.
 5. [ ] If the quant math library reports "guaranteed accuracy" then the risk factors are appropriately rounded. 
