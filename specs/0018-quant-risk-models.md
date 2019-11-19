@@ -6,7 +6,7 @@
 2. [ ] The risk factors are recalculated only when the inputs have changed since the last call.
 3. [ ] If any of the input data has changed then an update to risk factors is initiated. 
 4. [ ] Risk factors are agreed upon by consensus.
-5. [ ] If the quant math library reports "guaranteed accuracy" then the risk factors are appropriately rounded. 
+5. [ ] If the risk factor calculation reports "guaranteed accuracy" then the risk factors are appropriately rounded. 
 6. [ ] If an async update to risk factors is already running, don't start a new one until the previous one has finished. 
 
 
