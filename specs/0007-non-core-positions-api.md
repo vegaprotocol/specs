@@ -1,6 +1,20 @@
-## Positions API
+# Positions API
 
-### Functionality
+## Acceptance Criteria
+
+The Position API stores a net position for each trader who has ever traded in a market. Specifically, 
+
+- [ ] Stores all traders’ net open volume by market in which they have an open position.
+- [ ] Stores all traders’ volume weighted average entry prices for the net open volume for every market.
+- [ ] Stores all traders’ net closed volume by market for each closed position. (Note that once a position is closed, the volume is recorded as a positive number by convention.) **TODO: confirm this is what we will store… it means separately storing long/short and for consistency using negative size for short and *displaying* long and short labels plus the absolute size may be better?**
+- [ ] Stores the state of a trader’s net open position and closed positions by market. **TODO: what do we mean by this?**
+- [ ] Updates the open and closed volumes when a new trade is ingested as needed.
+- [ ] Creates new closed positions after net open volume reaches or passes 0. **TODO: confirm this**
+- [ ] Uses FIFO to adjust the volume weighted average entry prices for open and closed positions.
+- [ ] Updates the volume weighted close price for closed positions **TODO: confirm this is needed/wanted**
+- [ ] Does not reload/re-process all individual trades to calculate the new values
+
+## Summary
 
 The Positions API requires additional position data for each trader, one top of that calculated by the Position Engine in the core. This includes average entry price using ‘fifo’ (first in first out) methodology and P&L. Additionally, the Positions API also needs to be able to provide historic (closed) position data. For performance reasons, this data should be stored, and updated with each new trade or change in mark price.
 
@@ -11,7 +25,7 @@ For each new trade:
 
 1. If the buyer and seller are the same (wash trade), do nothing.
 
-1. Turn the scalar size from the trade into a directional size specific to the party for whom positions are being updated.
+1. Turn the scalar size from the trade into a directional size specific to the party for whom positions are being updated (negative for the seller, positive for the buyer).
 
 1. Calculate the opened and closed sizes. Opened size is zero if the trade only closes out volume and does not reverse the direction of the position. Closed size is zero if the position starts at zero or the trade is in the same direction as the position.
 
@@ -19,7 +33,7 @@ For each new trade:
 
 1. If there is some closed volume:
 
-	1. Calculate the entry VWAP of the volume being closed, using the fifo methology and remove that amount of volume from the first entry/ies in the fifo queue.
+	1. Calculate the entry VWAP of the volume being closed, using the fifo methodology and remove that amount of volume from the first entry/ies in the fifo queue.
 	
 	1. Update the closed position:
 		1. Update the fifo average entry price to add the newly closed volume at the fifo entry VWAP calculated above.
@@ -158,16 +172,3 @@ fn update_open(open_pos, opened_size, price, closed_size, closed_entry_vwap) {
 }
 ```
 
-### Acceptance Criteria
-
-The Position API stores a net position for each trader who has ever traded in a market. Specifically, 
-
-- [ ] Stores all traders’ net open volume by market in which they have an open position.
-- [ ] Stores all traders’ volume weighted average entry prices for the net open volume for every market.
-- [ ] Stores all traders’ net closed volume by market for each closed position. (Note that once a position is closed, the volume is recorded as a positive number by convention.) **TODO: confirm this is what we will store… it means separately storing long/short and for consistency using negative size for short and *displaying* long and short labels plus the absolute size may be better?**
-- [ ] Stores the state of a trader’s net open position and closed positions by market. **TODO: what do we mean by this?**
-- [ ] Updates the open and closed volumes when a new trade is ingested as needed.
-- [ ] Creates new closed positions after net open volume reaches or passes 0. **TODO: confirm this**
-- [ ] Uses FIFO to adjust the volume weighted average entry prices for open and closed positions.
-- [ ] Updates the volume weighted close price for closed positions **TODO: confirm this is needed/wanted**
-- [ ] Does not reload/re-process all individual trades to calculate the new values
