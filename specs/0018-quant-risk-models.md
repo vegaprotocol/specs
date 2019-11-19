@@ -2,7 +2,7 @@
 
 ## Acceptance Criteria
 
-1. [ ] Different markets can have a different risk model.
+1. [ ] Different markets can have a different risk model (i.e. a market A can be specified to run with risk model R1 while market B can be specified to run with risk model R2).  .
 2. [ ] The risk factors are recalculated only when the inputs have changed since the last call.
 3. [ ] If any of the input data has changed then an update to risk factors is initiated. 
 4. [ ] Risk factors are agreed upon by consensus.
