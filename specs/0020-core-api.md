@@ -42,6 +42,10 @@ To *observe the operation, and validate the state of the protocol, we must be ab
    - All parameters for a market, from market definition.
 - Observe creation of new markets.
 - Observe market updates.
+
+### Market data
+
+- Retrieve and stream market data (all fields described in [0021-market-data-spec.md](./0021-market-data-spec.md)) for a market
  
 ### Party
 
@@ -80,6 +84,7 @@ To *observe the operation, and validate the state of the protocol, we must be ab
   
 - Current long/short position for a party, if they have orders active on a market.
 - Observe position changes for a party, if they have orders active on a market.
+- Margin levels for the position (i.e. `margin { maintenance, search, initial, release }`)
 
 ### Statistics
 
