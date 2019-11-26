@@ -13,13 +13,31 @@ The Position API stores a net position for each trader who has ever traded in a 
 - [ ] Uses FIFO to adjust the volume weighted average entry prices for open and closed positions.
 - [ ] Updates the volume weighted close price for closed positions **TODO: confirm this is needed/wanted**
 - [ ] Does not reload/re-process all individual trades to calculate the new values
+- [ ]
 
 ## Summary
 
-The Positions API requires additional position data for each trader, one top of that calculated by the Position Engine in the core. This includes average entry price using ‘fifo’ (first in first out) methodology and P&L. Additionally, the Positions API also needs to be able to provide historic (closed) position data. For performance reasons, this data should be stored, and updated with each new trade or change in mark price.
+The Positions API requires additional position data for each trader, on top of that calculated by the Position Engine in the core, including:
 
-Note: it is possible to calculate valuation / P&L using other methodologies (e.g. VWAP only, no fifo) *for open and partially closed positions*, but fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in future.
+* A view of the "profit and loss" that a trader has incurred by fully closing out a position.
+* The portion of profit/loss (P&L) that has been "locked in" by partly closing out a position, i.e. "Closed P&L"
+* The [average entry price](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#average-entry-price) of an open position.
+* The portion of profit/loss (P&L) that continuously changes when the _mark price_ changes, i.e. "Open P&L".
+* The per trade closed P&L for the buyer and seller
 
+
+## Reference-level explanation
+
+The Positions API requires additional position data for each trader, on top of that calculated by the Position Engine in the core. This includes average entry price using [FIFO (first in first out)](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#fifo-first-in-first-out) trade matching methodology and P&L. 
+
+Implementation note: For performance reasons, this data can be stored, and updated with each new trade or change in mark price.
+
+Note: it is possible to calculate valuation / P&L using other methodologies (e.g. VWAP only, not fifo) when a position has been only partially closed out. However, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in future.
+
+### **FIFO**
+[FIFO ](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#fifo-first-in-first-out) is a methodology used for sorting a list of a single trader's trades into _closed out_ trades and _open_ trades. It is a matching methodology which prioritises older volume as an offset when counter volume is added to the ledger (of the trader's trades).  A worked example may be found [here](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#fifo-first-in-first-out).
+
+### **Incrementing the records**
 
 For each new trade:
 
@@ -40,7 +58,6 @@ For each new trade:
 		1. Update the average close price (VWAP) by incorporating the closed volume and trade price (note close price is the same independent of whether fifo or other valuation methodology is being used.)
 		1. **Subtract** the (directional) closed size from the closed position’s size. We subtract as the directional size closes *open* volume and therefore needs to be negated to increase the closed position volume in the correct direction.
 		1. Calculate the closed position’s fifo valuation as the difference between the product’s valuation at the close price and the fifo average entry price, multiplied by the closed position’s size.
-		1. Finalise the closed position if needed (as determined in 4, above) and create a new ‘active’ closed position. Note: when the position is finalised the fifo average entry price will agree with any other definition of the entry price for the set of trades included in the position (we can see this is true, as the gain/loss on the total position is now known and the close price can only be determined in one way.)
 
 1. If there is some opened volume, append the opened size and price to the fifo queue. Note: if the last entry in the queue has the same price, the size of the last entry should be incremented rather than adding a new entry.
 
@@ -51,7 +68,6 @@ For each new trade:
 	1. Calculate the open position’s fifo valuation as the difference between the market’s current mark price and the fifo average entry price, multiplied by the open position’s size.
 
 
-See https://docs.google.com/spreadsheets/d/10rfu4ayyy-EgTRsVHqazdXLUWPPLV0VnPzcMfXDM0go/edit for examples
 
 
 ### Data model
@@ -97,12 +113,11 @@ fn update_positions(party, open_pos, closed_pos, trade, fifo_queue) {
 
 	let size = party == trade.buyer ? trade.size : -trade.size	
 	let closed_size = closed_size(open_pos, size)
-	let opened_size = size - closed_size
-	let finalise_closed = closed_size >= open_pos.size
+	let opened_size = size + closed_size
 	
 	if closed_size > 0 {
 		let closed_entry_vwap_fifo = fifo_close(fifo_queue, closed_size)
-		update_closed(closed_pos, closed_size, closed_entry_vwap_fifo, trade.price, finalise_closed)
+		update_closed(closed_pos, closed_size, closed_entry_vwap_fifo, trade.price)
 	}
 	
 	if opened_size > 0 {
@@ -113,9 +128,11 @@ fn update_positions(party, open_pos, closed_pos, trade, fifo_queue) {
 	update_open(open_pos, opened_size, trade.price, closed_size, closed_entry_vwap_fifo)
 }
 
+// returns a +ve number if closing long volume, -ve if closing short
 fn closed_size(open_pos, size) {
+	// is position direction different to trade direction i.e. long position and selling
 	if open_pos.size != 0 && (open_pos.size > 0 != size > 0) {
-		return abs(size) > abs(open_pos.size) ? open_pos.size : size
+		return abs(size) > abs(open_pos.size) ? open_pos.size : -size
 	}
 	return 0
 }
@@ -138,7 +155,7 @@ fn update_vwap(vwap, size, add_price, add_size) {
 	return (vwap * size + add_price * add_size) / (size + add_size)
 }
 
-fn update_closed(closed_pos, closed_size, closed_entry_vwap_fifo, close_price, finalise_closed) {	
+fn update_closed(closed_pos, closed_size, closed_entry_vwap_fifo, close_price) {	
 	closed_pos.entry_vwap_fifo = update_vwap(closed_pos.entry_vwap_fifo, closed_pos.size, closed_entry_vwap_fifo, closed_size)	
 	closed_pos.close_vwap = update_vwap(closed_pos.close_vwap, closed_pos.size, close_price, closed_size)
 	closed_pos.size -= closed_size
@@ -146,11 +163,6 @@ fn update_closed(closed_pos, closed_size, closed_entry_vwap_fifo, close_price, f
 	// Work out gain/loss
 	closed_pos.value_fifo = closed_pos.size * (Product.value(closed_pos.close_vwap) - Product.value(closed_pos.entry_vwap_fifo))
 
-	// Finalise position when an open position is fully closed, including when a position is reversed. As it is no longer the active closed position, it should be saved and a new active closed position (size = 0) created.
-	if finalise_closed { 
-		// Also, once we fully close a position, all valuation (P&L calculation) methodologies must give the same number, so we could do something like:
-		closed_pos.final_value = closed_pos.value_fifo
-	}
 }
 
 fn fifo_open(fifo_queue, size, price) {
@@ -172,3 +184,9 @@ fn update_open(open_pos, opened_size, price, closed_size, closed_entry_vwap) {
 }
 ```
 
+
+
+## Examples / test cases
+
+### Showing closed and open volume changes
+[See spreadsheet here](https://docs.google.com/spreadsheets/d/10rfu4ayyy-EgTRsVHqazdXLUWPPLV0VnPzcMfXDM0go/edit) for examples
