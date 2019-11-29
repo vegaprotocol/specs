@@ -5,15 +5,11 @@
 The Position API stores a net position for each trader who has ever traded in a market. Specifically, 
 
 - [ ] Stores all traders’ net open volume by market in which they have an open position.
+- [ ] Updates the open volumes after a new trade
 - [ ] Stores all traders’ volume weighted average entry prices for the net open volume for every market.
-- [ ] Stores all traders’ net closed volume by market for each closed position. (Note that once a position is closed, the volume is recorded as a positive number by convention.) **TODO: confirm this is what we will store… it means separately storing long/short and for consistency using negative size for short and *displaying* long and short labels plus the absolute size may be better?**
-- [ ] Stores the state of a trader’s net open position and closed positions by market. **TODO: what do we mean by this?**
-- [ ] Updates the open and closed volumes when a new trade is ingested as needed.
-- [ ] Creates new closed positions after net open volume reaches or passes 0. **TODO: confirm this**
-- [ ] Uses FIFO to adjust the volume weighted average entry prices for open and closed positions.
-- [ ] Updates the volume weighted close price for closed positions **TODO: confirm this is needed/wanted**
-- [ ] Does not reload/re-process all individual trades to calculate the new values
-- [ ]
+- [ ] Uses VW methodology to adjust the volume weighted average entry prices for open position.
+- [ ] Stores all traders’ realised PnL for every market.
+- [ ] Uses VW methodology to adjust the realised PnL resulting from any trade that causes a reduction in the absolute size of open volume on every market (i.e. when volume has been closed out) 
 
 ## Summary
 
@@ -28,14 +24,12 @@ The Positions API requires additional position data for each trader, on top of t
 
 ## Reference-level explanation
 
-The Positions API requires additional position data for each trader, on top of that calculated by the Position Engine in the core. This includes average entry price using [FIFO (first in first out)](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#fifo-first-in-first-out) trade matching methodology and P&L. 
+The Positions API requires additional position data for each trader, on top of that calculated by the Position Engine in the core. 
 
 Implementation note: For performance reasons, this data can be stored, and updated with each new trade or change in mark price.
 
-Note: it is possible to calculate valuation / P&L using other methodologies (e.g. VWAP only, not fifo) when a position has been only partially closed out. However, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in future.
+Note: it is possible to calculate valuation / P&L using other methodologies (e.g. FIFO) when a position has been only partially closed out. However, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in future.
 
-### **FIFO**
-[FIFO ](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#fifo-first-in-first-out) is a methodology used for sorting a list of a single trader's trades into _closed out_ trades and _open_ trades. It is a matching methodology which prioritises older volume as an offset when counter volume is added to the ledger (of the trader's trades).  A worked example may be found [here](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#fifo-first-in-first-out).
 
 ### **Incrementing the records**
 
