@@ -32,7 +32,7 @@ Note, fully closed positions only have one possible calculation as the set of tr
 
 ## Formulae and test cases
 
-[See spreadsheet here](https://docs.google.com/spreadsheets/d/10rfu4ayyy-EgTRsVHqazdXLUWPPLV0VnPzcMfXDM0go/edit) for examples
+[See spreadsheet here](https://docs.google.com/spreadsheets/d/1XJESwh5cypALqlYludWobAOEH1Pz-1xS/edit#gid=1136043307) for examples (Please don't edit)
 
 ### Python notebook
 
