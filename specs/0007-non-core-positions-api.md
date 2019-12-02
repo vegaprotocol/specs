@@ -32,6 +32,23 @@ Note: it is possible to calculate valuation / P&L using various methodologies (e
 Note, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in future.
 
 
+## API 
+
+The API is expected to expose:
+
+### Position
+
+* Open volume (this is a core API)
+* Unrealised P&L (method = averaged)
+* Realised P&L (method = averaged)
+* Open volume average entry price (method = averaged)
+
+### Trade
+
+* Buyer P&L (0 if buyer is not closing volume)
+* Seller P&L (0 if seller is not closing volume)
+
+
 ## Definitions / glossary
 
 | Term        | Scope        | Definition           | Link  |
