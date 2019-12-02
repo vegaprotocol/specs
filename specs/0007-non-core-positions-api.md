@@ -11,9 +11,7 @@ The Position API stores a net position for each trader who has ever traded in a 
 - [ ] Stores all traders’ realised PnL for every market.
 - [ ] Uses VW methodology to adjust the realised PnL resulting from any trade that causes a reduction in the absolute size of open volume on every market (i.e. when volume has been closed out)
 - [ ] Stores all traders’ realised PnL for every trade that causes a reduction in the absolute size of open volume on every market (i.e. when volume has been closed out) 
-- [ ] Sotres all traders' total realised PnL
-
-Yeah we should have one criteria for storing the PnL realised with that trade, on the trade (in stores, not core) and one for storing the total realised PnL for the market
+- [ ] Stores all traders' total realised PnL
 
 ## Summary
 
@@ -51,17 +49,17 @@ The API is expected to expose:
 
 ## Definitions / glossary
 
-| Term        | Scope        | Definition           | Link  |
-| ------------- |:-------------:|-------------| -----:|
-| Open Volume     | Trader | Traded volume that hasn't been closed out with an offsetting trade, this is positive for a long position and negative for a short position. |  |
-| Closing Out     | Trader | Entering a trade that reduces the absolute size of the open volume (i.e. takes it closer to zero). Close out trades will generate a non-zero P&L if the Trade Price differs from the Open Volume Entry Price. | |
-| Unrealised P&L      | Trader | The profit/loss on the open volume (dependent on the P&L calculation mathodology): `Unrealised P&L [averaged] = (Open Volume Entry Price - Product.Value(mark_price)) *  open volume` |    |
-| Realised P&L | Trader | The total P&L realised across all trades (dependent on the P&L calculation mathodology). Note: only trades the close out volume can realise a P&L.  |    |
-| Trade Realised P&L | Trader | The change in Realised P&L caused by a single trade that closes volume (dependent on the P&L calculation mathodology) - *this can/will be different for the buyer and seller and must be calculated for each side of the trade*: `Trade Realised P&L [averaged] = Trade Volume * (Product.value(Trade Price) - Product.value(Open Volume Entry Price)`    |     |
-| Total Profit & Loss | Trader | Unrealised P&L + Realised P&L      |     |
-| Open Volume Entry Price | Trader | The average entry price of the currently open volume. `New Open Volume Entry Price = (Prev Open Volume Entry Price * Prev Open Volume + New Trade Price * New Trade Volume) / (Prev Open Volume + New Trade Volume)` |     |
-| Averaged price P&L calculation method | Trader | The accounting method whereby entry price for P&L calculation is averaged across all open volume, i.e. the open volume is considered fungible and close out trades are not matched with previous trades that opened volume to determine the entry price used for P&L calculations. |     |
-| FIFO (not used) | Trader | The accounting method whereby Realised P&L is allocated an entry price for purposes of calculating the profit/loss by comparing the trade price of the exit volume to the volume weighted average price of the oldest equivalent open trades (i.e. trades that have not already been 'matched' aby closed volume.)  |    $1 |
+| Term        | Definition           |
+| ------------- |-------------| 
+| Open Volume     | Traded volume that hasn't been closed out with an offsetting trade, this is positive for a long position and negative for a short position. |
+| Closing Out     | Entering a trade that reduces the absolute size of the open volume (i.e. takes it closer to zero). Close out trades will generate a non-zero P&L if the Trade Price differs from the Open Volume Entry Price. |
+| Unrealised P&L      | The profit/loss on the open volume (dependent on the P&L calculation mathodology): `Unrealised P&L [averaged] = (Product.value(Open Volume Entry Price) - Product.Value(mark_price)) *  open volume` |
+| Realised P&L | The total P&L realised across all trades (dependent on the P&L calculation mathodology). Note: only trades that close out volume can realise a P&L.  |
+| Trade Realised P&L | The change in Realised P&L caused by a single trade that closes volume (dependent on the P&L calculation mathodology) - *this can/will be different for the buyer and seller and must be calculated for each side of the trade*: `Trade Realised P&L [averaged] = Trade Volume * (Product.value(Trade Price) - Product.value(Open Volume Entry Price))`    |
+| Total Profit & Loss | Unrealised P&L + Realised P&L      |
+| Open Volume Entry Price | The average entry price of the currently open volume. `New Open Volume Entry Price = (Prev Open Volume Entry Price * Prev Open Volume + New Trade Price * New Trade Volume) / (Prev Open Volume + New Trade Volume)` |
+| Averaged price P&L calculation method | The accounting method whereby entry price for P&L calculation is averaged across all open volume, i.e. the open volume is considered fungible and close out trades are not matched with previous trades that opened volume to determine the entry price used for P&L calculations. |
+| FIFO (not used) | The accounting method whereby Realised P&L is allocated an entry price for purposes of calculating the profit/loss by comparing the trade price of the exit volume to the volume weighted average price of the oldest equivalent open trades (i.e. trades that have not already been 'matched' by closed volume.)  |
 
 
 ## Formulae (Python notebook)
