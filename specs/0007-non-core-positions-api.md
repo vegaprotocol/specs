@@ -9,8 +9,8 @@ The Position API stores a net position for each trader who has ever traded in a 
 - [ ] Stores all traders’ volume weighted average entry prices for the net open volume for every market.
 - [ ] Uses VW methodology to adjust the volume weighted average entry prices for open position.
 - [ ] Stores all traders’ realised PnL for every market.
-- [ ] Uses VW methodology to adjust the realised PnL resulting from any trade that causes a reduction in the absolute size of open volume on every market (i.e. when volume has been closed out)
-- [ ] Stores all traders’ realised PnL for every trade that causes a reduction in the absolute size of open volume on every market (i.e. when volume has been closed out) 
+- [ ] Uses VW methodology to adjust the realised PnL resulting from any trade that causes volume to have been closed out.
+- [ ] Stores all traders’ realised PnL for every trade that causes that causes volume to have been closed out. 
 - [ ] Stores all traders' total realised PnL
 
 ## Summary
@@ -52,7 +52,7 @@ The API is expected to expose:
 | Term        | Definition           |
 | ------------- |-------------| 
 | Open Volume     | Traded volume that hasn't been closed out with an offsetting trade, this is positive for a long position and negative for a short position. |
-| Closing Out     | Entering a trade that reduces the absolute size of the open volume (i.e. takes it closer to zero). Close out trades will generate a non-zero P&L if the Trade Price differs from the Open Volume Entry Price. |
+| Closing Out     | Entering a trade that reduces the absolute size of the open volume (i.e. takes it closer to zero) or switches the sign of the volume (i.e. a net long position (+'ve) becomes a net short position (-'ve)). Close out trades will generate a non-zero P&L if the Trade Price differs from the Open Volume Entry Price. |
 | Unrealised P&L      | The profit/loss on the open volume (dependent on the P&L calculation mathodology): `Unrealised P&L [averaged] = (Product.value(Open Volume Entry Price) - Product.Value(mark_price)) *  open volume` |
 | Realised P&L | The total P&L realised across all trades (dependent on the P&L calculation mathodology). Note: only trades that close out volume can realise a P&L.  |
 | Trade Realised P&L | The change in Realised P&L caused by a single trade that closes volume (dependent on the P&L calculation mathodology) - *this can/will be different for the buyer and seller and must be calculated for each side of the trade*: `Trade Realised P&L [averaged] = Trade Volume * (Product.value(Trade Price) - Product.value(Open Volume Entry Price))`    |
