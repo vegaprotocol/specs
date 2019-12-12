@@ -24,7 +24,7 @@ The Governance enable users to make proposals for changes on the network or vote
 When a proposal is created, it can be configured in multiple ways.
 
 ### Decision weighting
-The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few (or one option) for weighting but this must subject to configuration in the future.
+The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few (or one option) for weighting but this must be subject to configuration in the future.
 Initialy the weighting will be based on the amount of stake voter have on the network.
 
 ### How the win of a proposal is defined
@@ -49,7 +49,7 @@ This would let enough time for now operator to be ready for the changes, e.g in 
 version of the vega node, or something available only in a later version of the node.
 
 ## Restriction on who can create a proposal
-In a fist implementation anyone will be able to create a proposal.
+In a fist implementation anyone will be able to create a proposal if the weighting of their vote on the proposal would be >0
 
 In future iteration of the governance system we expect to be able to restrict which user can create a proposal.
 The restrictiong would be applied based on the weighting required by the proposal.
@@ -67,7 +67,7 @@ Users of the vega platform will be able to vote for or against a proposal.
 This action is binary:
  - a user can either say yes to a proposal
  - or no
- A user can vote as many time as needed.
+ A user can vote as many time as needed, only the last vote will be accounted for into the final decision for the proposal.
 
 # Reference-level explanation
 
