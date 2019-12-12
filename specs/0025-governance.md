@@ -1,0 +1,144 @@
+Feature name: feature-name
+Start date: YYYY-MM-DD
+Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
+
+# Summary
+
+Simply put, Governance allow users of the vega network to make on chain decisions.
+
+Governance will provide a simple framework for users create proposals involving Markets or the network in general, by creating new markets,
+or even updating a market parameter, or network parameters.
+
+Ideally this sould provide a very simple framewokr allowing users to:
+ - Create a proposal
+ - Vote for a proposal
+
+# Guide-level explanation
+
+The Governance enable users to make proposals for changes on the network or vote for an existings one. Proposal should be able to cover multiple aspect of the vega protocol:
+ - create a new market
+ - change paramters of an existing market (e.g: change some settings of a risk model for a given market)
+ - update parameters of the network itself (e.g: duration of a block)
+
+## Configuration of a proposal
+When a proposal is created, it can be configured in multiple ways.
+
+### Decision weighting
+The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few (or one option) for weighting but this must subject to configuration in the future.
+Initialy the weighting will be based on the amount of stake voter have on the network.
+
+### How the win of a proposal is defined
+For the proposal top be accepted, a number of positive vote will be required.
+This is something which can be defined at the creation of the proposal.
+
+First the win can be defined by a percentage of positive votes:
+e.g: the proposal require 80% of the voters to vote yes to be accepted.
+
+Also the proposal can require a minimum percentage of participation all over the network:
+e.g: require 80% of voters to vote yes and 90% of the active users of the vega network have to take part of the vote.
+
+### Duration of the proposal
+When a proposal is created, it will be configured with a variable date, until when the proposal is open for votes.
+e.g: A proposal is created and people have 3 weeks from the day it's send to the network in order to submit votes for it.
+
+### When change are applied
+The proposals can also be parameterized about when the change which are voted for will start to be applied.
+e.g: A new proposal is created in order to create a new market, after 3 weeks the proposal if closed, if there is enough vote
+in order to accept the new proposal, then the changes will be applied in the network 1 week later.
+This would let enough time for now operator to be ready for the changes, e.g in the case the proposal is to decide to use a new
+version of the vega node, or something available only in a later version of the node.
+
+## Restriction on who can create a proposal
+In a fist implementation anyone will be able to create a proposal.
+
+In future iteration of the governance system we expect to be able to restrict which user can create a proposal.
+The restrictiong would be applied based on the weighting required by the proposal.
+e.g: only user with a stack of 5k vega token are allowed to open a new proposal.
+
+## Edition of a proposal
+A proposal cannot be edited, once created the only thing which would be possible would be to vote for or against a proposal.
+
+We would expect edition on a proposal to be made by creating a new proposal changing parameter of the first proposal.
+e.g: I create a proposal for a new market using ETH as an asset. Later on I decide it would be better to use BTC, the solution
+will be to create a new proposal, to change this specific parameter on the market definition.
+
+## Vote for a proposal
+Users of the vega platform will be able to vote for or against a proposal.
+This action is binary:
+ - a user can either say yes to a proposal
+ - or no
+ A user can vote as many time as needed.
+
+# Reference-level explanation
+
+We introduce 2 new command which require consensus (needs to go through the chain)
+
+A first one in order to create a proposal.
+A second on in order to vote for a given proposal.
+
+## Types of proposals
+
+We allow user to create proposal covering 3 domains:
+
+1. Creation or edition of a market (market framework)
+2. Close or suspend an existing market
+3. Edit network parameters
+
+## APIs
+
+We expect the user to be able to do the following action by using the core apis:
+ - list all the open proposals on the network
+ - vote for a given proposal
+ - get the results for a given proposal
+ - get a list of proposals a user voted for
+ - a notification system in order to be notified of new proposal requiring attention
+
+# Pseudo-code / Examples
+
+Possible implementation of the Proposal format (protobuf):
+```
+enum ProposalKind {
+	Market = 1;
+	NetworkParam = 2;
+	// ...
+}
+
+message Proposal {
+	ProposalKind kind = 1;
+	oneof Data {
+		vega.Market market = 2;
+		string networkParam = 3;
+	}
+	int64 winThreshold = 4;
+	int64 openUntil = 5;
+	int64 takeEffectOn = 6;
+}
+```
+
+Possible implementation for a vote
+```
+enum VoteChoice {
+	Yes = 1;
+	No = 2;
+}
+
+message Vote {
+	string partyID = 1;
+	string proposalID = 2;
+	VoteChoice choice = 3;
+}
+```
+
+# Acceptance Criteria
+- [] As a user, I can create a new proposal to affect the vega network
+- [] As a user, I can vote for an existing proposal
+- [] As a user, I can list the open proposal on the network
+- [] As a user, I can get a list of all proposal I voted for
+- [] As a user, I can receive notification when a new proposal is created and may require attention.
+- [] As the vega network, all the vote for an existing proposal are accepted when the proposal is still open
+- [] As the vega network, all vote received are rejected once the proposal voting period is finished
+- [] As the vega network, once the voting period is finished, I validate the result based on the parameter of the proposal used to decide the outcome of it.
+- [] As the vega network, if a proposal is accepted, and the duration required before change takes effect is reached, the changes are applied
+
+# Test cases
+Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
