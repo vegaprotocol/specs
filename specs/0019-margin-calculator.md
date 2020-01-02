@@ -83,9 +83,9 @@ where
 
 ```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited. Specifically:
 
-* **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the long position on the order book (i.e. by selling to the bids on the order book). If there is no long position, the slippage per unit is zero.
+* **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the open long position (not riskiest long position) on the order book (i.e. by selling to the bids on the order book). If there is no open long position, the slippage per unit is zero.
 
-* **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the short position on the order book (i.e. by buying from the offers (asks) on the order book). If there is no short position, the slippage per unit is zero.
+* **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the open short position (not riskiest short position) on the order book (i.e. by buying from the offers (asks) on the order book). If there is no open short position, the slippage per unit is zero.
 
 Note, if there is insufficient order book volume for this ```exit_price``` to be calculated (per position), the ```exit_price``` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
 
@@ -161,37 +161,35 @@ Trader1_futures_position = {open_volume: 10, buys: 4,  sells: 8}
 
 getMargins(Trader1_position) 
 
-# Step 1
 riskiest long  = max( open_volume + buy_orders, 0 ) = max( 10 + 4, 0 ) = 14
 riskiest short = min( open_volume + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
-# Step 2
+# Step 1
 
 ## exit price considers what selling the open position (10) on the order book would achieve. 
 
-slippage_per_unit =  Product.value(exit_price) - Product.value(mark_price) = Product.value((1*120 + 4*240 + 5*258)/10) - Product.value($144) = 237 - 144 = 93
+slippage_per_unit =  Product.value(previous_mark_price) - Product.value(exit_price) = Product.value($144) - Product.value((1*120 + 4*110 + 5*108)/10) = 144 - 110  = 34
 
 slippage_volume =  max( open_volume, 0 ) = max ( 10, 0 ) = 10
 
 
-maintenance_margin_long = slippage_volume * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]
+maintenance_margin_long = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  
 
-= 10 * (93 + 0.1 * 144) + 4 * 0.1 * 144
-= 1131.6
+= max(10 * 34, 0) +  10 * 0.1 * 144 + 4 * 0.1 * 144 =  541.6
 
-# Step 3
+# Step 2
 
 Since riskiest short == 0 then maintenance_margin_short = 0
 
+# Step 3
+
+maintenance_margin = max ( 541.6, 0) = 541.6
+
 # Step 4
 
-maintenance_margin = max ( 1131.6, 0) = 1131.6
-
-# Step 4
-
-collateral_release_level = 1131.6 * collateral_release_scaling_factor = 1131.6 * 1.1
-initial_margin = 1131.6 * initial_margin_scaling_factor = 1131.6 * 1.2
-search_level = 1131.6 * search_level_scaling_factor = 1131.6 * 1.3
+collateral_release_level = 541.6 * collateral_release_scaling_factor = 541.6 * 1.1
+initial_margin = 541.6 * initial_margin_scaling_factor = 541.6 * 1.2
+search_level = 541.6 * search_level_scaling_factor = 541.6 * 1.3
 
 
 
