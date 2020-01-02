@@ -30,7 +30,7 @@ In future there can be multiple margin calculator implementations that would be 
 
 The calculator takes as inputs:
 
-* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_volume``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side.  See [positions core specification](./0006-positions-core).
+* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_volume``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side (+ve is long, -ve is short).  See [positions core specification](./0006-positions-core).
 - ```mark price```
 - ```scaling levels``` defined in the risk parameters for a market
 - ```quantitative risk factors```
@@ -69,11 +69,11 @@ If ```riskiest long == 0``` then ```maintenance_margin_long = 0```.
 
 In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-quant-risk-suite.md).
 
-```maintenance_margin_long = slippage_volume * ( slippage_per_unit + [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] ) + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
+```maintenance_margin_long = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
 
 where
 
-```slippage_per_unit =  Product.value(exit_price) - Product.value(settlement_mark_price) ```,
+```slippage_per_unit =  Product.value(settlement_mark_price) - Product.value(exit_price) ```,
 
 ```slippage_volume =  max( open_volume, 0 ) ```,
 
@@ -83,9 +83,9 @@ where
 
 ```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited. Specifically:
 
-* **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the long position on the order book (i.e. by selling to the bids on the order book). 
+* **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the long position on the order book (i.e. by selling to the bids on the order book). If there is no long position, the slippage per unit is zero.
 
-* **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the short position on the order book (i.e. by buying from the offers (asks) on the order book).
+* **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the short position on the order book (i.e. by buying from the offers (asks) on the order book). If there is no short position, the slippage per unit is zero.
 
 Note, if there is insufficient order book volume for this ```exit_price``` to be calculated (per position), the ```exit_price``` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
 
@@ -97,11 +97,13 @@ If ```riskiest short == 0``` then ```maintenance_margin_short = 0```.
 
 Else
 
-```maintenance_margin_short = abs(slippage_volume) * ( slippage_per_unit + [ quantitative_model.risk_factors_short ] . [ Product.market_observables ] ) + sell_orders * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]  ```,
+```maintenance_margin_short = max(abs(slippage_volume) * slippage_per_unit, 0) + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ] + abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]  ```,
 
 where meanings of terms in Step 1 apply except for:
 
 ```slippage_volume =  min( open_volume, 0 ) ```,
+
+```slippage_per_unit =  -1 * (Product.value(settlement_mark_price) - Product.value(exit_price) ) ```
 
 **Step 3** 
 
