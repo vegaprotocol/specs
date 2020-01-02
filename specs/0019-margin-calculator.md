@@ -89,7 +89,7 @@ where
 
 Note, if there is insufficient order book volume for this ```exit_price``` to be calculated (per position), the ```exit_price``` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
 
-If there is zero order book volume on the relevant side of the order book to calculate the ```exit_price```, the initial mark price, as defined by a market parameter, should be used.
+If there is zero order book volume on the relevant side of the order book to calculate the ```exit_price```, the most recent calculation of the mark price, should be used instead.
 
 **Step 2** 
 
