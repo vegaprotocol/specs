@@ -9,6 +9,7 @@
 - [ ] If ```riskiest long > 0``` && ```0 <``` *sum of volume of order book bids* ```< riskiest long```, the ```exit price``` is equal to the *volume weighted price of the order book bids*. 
 - [ ] If ```riskiest short < 0``` and there are no offers on the order book, the ```exit price``` is equal to the initial mark price, as set by a market parameter.   
 - [ ] If ```riskiest short < 0``` && ```0 <``` *sum of absolute volume of order book offers* ```< riskiest short```, the ```exit price``` is equal to the *volume weighted price of the order book offers*. 
+- [ ] Example 1, 2 and scenarios are tested in core 
 
 # Summary
 
@@ -73,9 +74,16 @@ In this simple methodology, a linearised margin formula is used to return the ma
 
 where
 
-```slippage_per_unit =  Product.value(settlement_mark_price) - Product.value(exit_price) ```,
-
 ```slippage_volume =  max( open_volume, 0 ) ```,
+
+and
+
+if ```open_volume > 0```  then 
+
+```slippage_per_unit =  Product.value(settlement_mark_price) - Product.value(exit_price) ```, 
+
+else ```slippage_per_unit = 0```.
+
 
 where 
 
@@ -235,3 +243,10 @@ riskiest short: -1
 slippage volume long: 1
 
 slippage volume short: 0
+
+
+
+## SCENARIOS
+
+Scenarios found [here](https://drive.google.com/file/d/1B8-rLK2NB6rWvjzZX9sLtqOQzLz8s2ky/view?usp=sharing)
+
