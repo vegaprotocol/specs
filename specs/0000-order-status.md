@@ -22,8 +22,8 @@ Orders have a status field. This specification details a set of situations and t
 | Pricing Method | Time In Force | Filled  | Resulting status |
 |----------------|---------------|---------|------------------|
 | Market         |      IOC      |    No   |      Stopped     |
-| Market         |      IOC      | Partial |      Filled      |
-| Market         |      IOC      |   Yes   | Partially Filled |
+| Market         |      IOC      | Partial |      Partially Filled      |
+| Market         |      IOC      |   Yes   |  Filled |
 | Limit          |      IOC      |    No   |      Stopped     |
-| Limit          |      IOC      | Partial | Partially Filled |
-| Limit          |      IOC      |   Yes   |      Filled      |
+| Limit          |      IOC      | Partial |  Filled |
+| Limit          |      IOC      |   Yes   |      Partially Filled      |
