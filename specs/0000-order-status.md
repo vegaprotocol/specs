@@ -9,24 +9,22 @@ Orders have a status field. This specification details a set of situations and t
 
 # Reference-level explanation
 
+## All order types
+* Orders can have a status of REJECTED if there is insufficient margin to place the order
+
 ## Fill or Or Kill
-| Pricing Method | Time In Force | Filled | Resulting status |
-|----------------|---------------|--------|------------------|
-| Market         |      FOK      |   No   |      Stopped     |
-| Market         |      FOK      |   Yes  |      Filled      |
-| Limit          |      FOK      |   No   |      Stopped     |
-| Limit          |      FOK      |   Yes  |      Filled      |
+| Time In Force | Filled | Resulting status |
+|---------------|--------|------------------|
+|      FOK      |   No   |      Stopped     |
+|      FOK      |   Yes  |      Filled      |
 
 
 ## Immediate Or Cancel
-| Pricing Method | Time In Force | Filled  | Resulting status |
-|----------------|---------------|---------|------------------|
-| Market         |      IOC      |    No   |      Stopped     |
-| Market         |      IOC      | Partial |      Partially Filled      |
-| Market         |      IOC      |   Yes   |  Filled |
-| Limit          |      IOC      |    No   |      Stopped     |
-| Limit          |      IOC      | Partial |  Filled |
-| Limit          |      IOC      |   Yes   |      Partially Filled      |
+| Time In Force | Filled  | Resulting status |
+|---------------|---------|------------------|
+|      IOC      |    No   |      Stopped     |
+|      IOC      | Partial |      Partially Filled      |
+|      IOC      |   Yes   |  Filled |
 
 
 ## Good ’Til Time
