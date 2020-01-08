@@ -8,11 +8,11 @@ Start date: 2020-01-08
 Orders have a status field. This specification details a set of situations and the expected status for an order.
 
 # Reference-level explanation
-For the definition of each Time In Force option, see [the Order Types spec](https://gitlab.com/vega-protocol/product/blob/master/specs/0014-order-types.md#time-in-force-validity)
+For the definition of each Time In Force option, see [the Order Types spec](./0014-order-types.md#time-in-force-validity)
 
 ## All order types
 * Orders can have a status of REJECTED if there is insufficient margin to place the order
-* [Order Pricing methods](https://gitlab.com/vega-protocol/product/blob/master/specs/0014-order-types.md#order-pricing-methods) are not listed below as they don't change the status outcome
+* [Order Pricing methods](./0014-order-types.md#order-pricing-methods) are not listed below as they don't change the status outcome
 
 ## Fill or Or Kill
 | Time In Force | Filled | Resulting status |
@@ -28,6 +28,20 @@ For the definition of each Time In Force option, see [the Order Types spec](http
 |      IOC      | Partial |      Partially Filled      |
 |      IOC      |   Yes   |  Filled |
 
+
+## Good ’Til Cancelled
+| Time In Force | Filled  | Cancelled by user | Stopped by system | Resulting status |
+|---------------|---------|-------------------|-------------------|------------------|
+|      GTT      |    No   |         No        |         No        |      Active      |
+|      GTT      |    No   |         No        |         No        |      Stopped     |
+|      GTT      |    No   |        Yes        |         No        |     Cancelled    |
+|      GTT      |    No   |         No        |        Yes        |      Stopped     |
+|      GTT      | Partial |         No        |         No        |      Active      |
+|      GTT      | Partial |         No        |         No        | Partially Filled |
+|      GTT      | Partial |        Yes        |         No        |     Cancelled    |
+|      GTT      | Partial |         No        |        Yes        |      Stopped     |
+|      GTT      |   Yes   |         No        |         No        |      Filled      |
+|      GTT      |   Yes   |         No        |         No        |      Filled      |
 
 ## Good ’Til Time
 Note: The last row in the table below is added for clarity rather than being a legitimate situation. If the order filled, it is marked as FILLED and it is removed from the book, so it can’t expire after filling. 
