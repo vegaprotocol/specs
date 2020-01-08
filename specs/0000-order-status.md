@@ -8,9 +8,11 @@ Start date: 2020-01-08
 Orders have a status field. This specification details a set of situations and the expected status for an order.
 
 # Reference-level explanation
+For the definition of each Time In Force option, see [the Order Types spec](https://gitlab.com/vega-protocol/product/blob/master/specs/0014-order-types.md#time-in-force-validity)
 
 ## All order types
 * Orders can have a status of REJECTED if there is insufficient margin to place the order
+* [Order Pricing methods](https://gitlab.com/vega-protocol/product/blob/master/specs/0014-order-types.md#order-pricing-methods) are not listed below as they don't change the status outcome
 
 ## Fill or Or Kill
 | Time In Force | Filled | Resulting status |
