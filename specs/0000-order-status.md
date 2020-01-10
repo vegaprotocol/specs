@@ -34,16 +34,14 @@ For the definition of each Time In Force option, see [the Order Types spec](./00
 ## Good ’Til Cancelled
 | Time In Force | Filled  | Cancelled by user | Stopped by system | Resulting status |
 |---------------|---------|-------------------|-------------------|------------------|
-|      GTT      |    No   |         No        |         No        |      Active      |
-|      GTT      |    No   |         No        |         No        |      Stopped     |
-|      GTT      |    No   |        Yes        |         No        |     Cancelled    |
-|      GTT      |    No   |         No        |        Yes        |      Stopped     |
-|      GTT      | Partial |         No        |         No        |      Active      |
-|      GTT      | Partial |         No        |         No        | Partially Filled |
-|      GTT      | Partial |        Yes        |         No        |     Cancelled    |
-|      GTT      | Partial |         No        |        Yes        |      Stopped     |
-|      GTT      |   Yes   |         No        |         No        |      Filled      |
-|      GTT      |   Yes   |         No        |         No        |      Filled      |
+|      GTC      |    No   |         No        |         No        |      Active      |
+|      GTC      |    No   |         No        |        Yes        |      Stopped     |
+|      GTC      |    No   |        Yes        |         No        |     Cancelled    |
+|      GTC      |    No   |         No        |        Yes        |      Stopped     |
+|      GTC      | Partial |         No        |         No        |      Active      |
+|      GTC      | Partial |        Yes        |         No        |     Cancelled    |
+|      GTC      | Partial |         No        |        Yes        |      Stopped     |
+|      GTC      |   Yes   |         No        |         No        |      Filled      |
 
 ## Good ’Til Time
 Note: The last row in the table below is added for clarity rather than being a legitimate situation. If the order filled, it is marked as FILLED and it is removed from the book, so it can’t expire after filling. 
