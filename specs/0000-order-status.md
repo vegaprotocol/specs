@@ -49,7 +49,7 @@ Note: The last row in the table below is added for clarity rather than being a l
 | Time In Force | Filled  | Expired | Cancelled by user | Stopped by system | Resulting status |
 |---------------|---------|---------|-------------------|-------------------|------------------|
 |      GTT      |    No   |    No   |         No        |         No        |      Active      |
-|      GTT      |    No   |   Yes   |         No        |         No        |      Stopped     |
+|      GTT      |    No   |   Yes   |         No        |         No        |      Expired     |
 |      GTT      |    No   |    No   |        Yes        |         No        |     Cancelled    |
 |      GTT      |    No   |    No   |         No        |        Yes        |      Stopped     |
 |      GTT      | Partial |    No   |         No        |         No        |      Active      |
