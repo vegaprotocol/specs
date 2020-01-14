@@ -39,7 +39,7 @@ For the definition of each Time In Force option, see [the Order Types spec](./00
 |      GTC      |    No   |        Yes        |         No        |     Cancelled    |
 |      GTC      |    No   |         No        |        Yes        |      Stopped     |
 |      GTC      | Partial |         No        |         No        |      Active      |
-|      GTC      | Partial |        Yes        |         No        |     Cancelled    |
+|      GTC      | Partial |        Yes        |         No        |     Partially Filled    |
 |      GTC      | Partial |         No        |        Yes        |      Stopped     |
 |      GTC      |   Yes   |         No        |         No        |      Filled      |
 
