@@ -7,7 +7,7 @@ To allow traders to interact with the market, they must be able to enter
 
 # Reference-level explanation
 - Orders can be submitted into any market that is not suspended or matured/expired/settled
-- Orders will only be accepted if sufficient margin can be allocated (see XXX)
+- Orders will only be accepted if sufficient margin can be allocated (see : [Margin Orchestration](./0010-margin-orchestration.md) and [Margin Calculator](./0019-margin-calculator.md))
 - Amendments that change price or increase size will be executed as an atomic cancel/replace (i.e. as if the original order was cancelled and removed from the book and a new order submitted with the modified values - that is, time priority is lost)
 - Execution of an order will be stopped and the order cancelled and removed (if on the book) if it is about to match with another order on the book for the same party (that is, execution can proceed up to the point a "wash" trade would be generated  but stopped before that and the order cancelled)
 
