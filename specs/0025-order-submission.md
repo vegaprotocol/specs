@@ -31,3 +31,6 @@ To allow traders to interact with the market, they must be able to enter
 
 # Acceptance Criteria
 Check list of statements that need to met for the feature to be considered correctly implemented.
+
+# Future Work
+This spec currently covers how we deal with orders that could trade between a single trader. This spec will be expanded in future merge requests to cover more aspects of order submission and updating.
