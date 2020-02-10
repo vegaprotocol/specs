@@ -12,9 +12,9 @@ This gives view of liquidity at one instant of time; we then use exponential wei
 ## Terminology
 - $`\Lambda_t`$ is the exponentially-in-time weighted and probabilistically-in-space-weighted liquidity which we are defining in this spec file.
 - mid price = (best bid - best offer) / 2 (or undefined if either side of the book is empty)
-- buy / sell side volume refer to the volume available at a distance from mid price, V = V(x), where x > 0 refers to sell side, x < 0 refers to buy side and x belongs to the set of all price points available on the book
-- probability of volume at distance from mid price being hit: p = p(x), this will come from risk model
-- auction level buy price x_min < 0 and auction level sell price x_max > 0 will come from risk model together with market parameter specifiyng what percentile move triggers auction  
+- buy / sell side volume refer to the volume available at a distance from mid price, $`V = V(x)`$, where $`x > 0`$ refers to sell side, $`x < 0`$ refers to buy side and $`x`$ belongs to the set of all price points available on the book
+- probability of volume at distance from mid price being hit: $`p = p(x)`$, this will come from risk model
+- auction level buy price $`x_{min} < 0`$ and auction level sell price $`x_{max} > 0`$ will come from risk model together with market parameter specifiyng what percentile move triggers auction  
 - instantenaous liquidity $`\lambda_t`$, defined below in detail.
 - decay parameter $`\delta`$ which determines how far back in time do we go when averaging instantenaous liquidity.
 - weighting parameter $`\alpha`$ which determines how steep the exponential decay is.
@@ -37,8 +37,8 @@ $`\lambda_t := 0`$ if there is no mid price (i.e. when either the buy or sell si
 
 Case 2: we have mid price
 1. Obtain $`x_{min}`$ and $`x_{max}`$ from the risk model. 
-1. Get the list of possible $`x_{max} \geq x > 0`$ values from the order book. Call these $`x^+_i`$, with $`i = 1,\ldots,N^+`$. 
-1. Get the list of possible $`x_min \leq x < 0`$ from the order book and call these $`x^-_i`$, with $`i = 1, \ldots , N^-`$. 
+1. Get the list of possible $`x`$ s.t. $`x_{max} \geq x > 0`$ values from the order book. Call these $`x^+_i`$, with $`i = 1,\ldots,N^+`$. 
+1. Get the list of possible $`x`$ s.t. $`x_{min} \leq x < 0`$ from the order book and call these $`x^-_i`$, with $`i = 1, \ldots , N^-`$. 
 1. Get the volume $`V(x)`$ available at each $`x = x^-_i`$ and $`x^+_i`$ from the order book.
 1. Get the probability $`p(x)`$ for each of $`x = x^-_i`$ and $`x^+_i`$ from the risk model. 
 
