@@ -21,11 +21,12 @@ The Governance enable users to make proposals for changes on the network or vote
  - update parameters of the network itself (e.g: duration of a block)
 
 ## Configuration of a proposal
-When a proposal is created, it can be configured in multiple ways.
+When a proposal is created, it can be configured in multiple ways. Depending on the type of proposal, restrictions on the fields in the proposal can be set.
+i.e. A proposal of type new market might have a minimum participation level set at 50% so the user can only choose the values 50->100% for the participation field.
 
 ### Decision weighting
 The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few options (or one) for weighting but this must be subject to configuration in the future.
-Initialy the weighting will be based on the amount of stake voter have on the network.
+Initially the weighting will be based on the amount of stake the voter has on the network.
 
 ### How the success of a proposal is defined
 For the proposal to be accepted, a number of positive votes will be required.
