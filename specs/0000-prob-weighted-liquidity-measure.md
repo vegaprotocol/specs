@@ -48,8 +48,8 @@ Now you can calculate
 ```math
 \lambda_t := 
 \min\left(
-    \sum_{i=1}^{N+} V(x^+_i) p(x^+_i), 
-    \sum_{i=1}^{N-} V(x^-_i) p(x^-_i), 
+    \sum_{i=1}^{N^+} V(x^+_i) p(x^+_i), 
+    \sum_{i=1}^{N^-} V(x^-_i) p(x^-_i), 
 \right)\,.
 ```
 
