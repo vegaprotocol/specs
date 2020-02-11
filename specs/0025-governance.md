@@ -33,7 +33,7 @@ i.e. A proposal of type new market might have a minimum participation level set 
 
 ### Decision weighting
 The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few options (or one) for weighting but this must be subject to configuration in the future.
-Initially the weighting will be based on the amount of stake the voter has on the network.
+Initially the weighting will be based on the amount of stake the voter has on the network: 1 VUSD represents 1 vote.
 
 ### How the success of a proposal is defined
 For the proposal to be accepted, a number of positive votes will be required.
