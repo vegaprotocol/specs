@@ -61,12 +61,12 @@ In future iteration of the governance system we expect to be able to restrict wh
 The restriction would be applied based on the weighting required by the proposal.
 e.g: only user with a stack of 5k vega token are allowed to open a new proposal.
 
-## Editing a proposal
-A proposal cannot be edited, once created the only thing which would be possible would be to vote for or against a proposal.
-
-We would expect amending a proposal to be made by creating a new proposal changing one or more parameters of the first proposal.
+## Editing a proposal is not possible
+A proposal cannot be edited, once created the only thing which would be possible would be to vote for or against a proposal. We would expect amending a proposal to be made by creating a new proposal.
 e.g: I create a proposal for a new market using ETH as an asset. Later on I decide it would be better to use BTC, the solution
 will be to create a new proposal, to change this specific parameter on the market definition.
+
+There will be no explicit link between the first proposal and the replacement one.
 
 ## Vote for a proposal
 Users of the vega platform will be able to vote for or against a proposal.
