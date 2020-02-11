@@ -51,10 +51,10 @@ e.g: A proposal is created and people have 3 weeks from the day it is sent to th
 
 ### When changes are applied
 The proposals can also be parameterized about when the change which are voted for will start to be applied.
-e.g: A new proposal is created in order to create a new market, after 3 weeks the proposal if closed, if there is enough vote
-in order to accept the new proposal, then the changes will be applied in the network 1 week later.
-This would allow enough time for the operator to be ready for the changes, e.g in the case the proposal is to decide to use a new
-version of the vega node, or something available only in a later version of the node.
+e.g: A new proposal is created in order to create a new market, after 3 weeks the proposal if closed, if there is enough votes  to accept the new proposal, then the changes will be applied in the network 1 week later.
+This would allow enough time for the operator to be ready for the changes, e.g in the case the proposal is to decide to use a new version of the vega node, or something available only in a later version of the node.
+
+Proposals are applied in the order they were created. This means that in the case that two proposals change the same parameter in roughly the same period, the oldest proposal will be applied first and the newest will be applied last. There is no attempt to resolve differences between the two/
 
 ## Restriction on who can create a proposal
 In a first implementation anyone will be able to create a proposal if the weighting of their vote on the proposal would be >0
