@@ -4,9 +4,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Summary
 
-Simply put, Governance allow token owning users of the vega network to make on-chain decisions.
-
-Governance will provide a simple framework for users to create proposals involving Markets or the network in general, by creating new markets,
+Governance allows token owning users of the vega network to make on-chain decisions. Implenting this specification will provide a simple framework for users to create proposals involving Markets or the network in general, by creating new markets,
 or updating a market parameter, or network parameters.
 
 Ideally this would provide a very simple framework allowing users to:
@@ -20,7 +18,7 @@ Also not covered is proposal rate limiting, spam protection or fees related to p
 
 # Guide-level explanation
 
-The Governance enable users to make proposals for changes on the network or vote for existings proposals. Proposals should be able to cover multiple aspect of the vega protocol:
+Governance enable users to make proposals for changes on the network or vote for existings proposals. Proposals should be able to cover multiple aspect of the vega protocol:
  - create a new market
  - change parameters of an existing market (e.g: change some settings of a risk model for a given market)
 
