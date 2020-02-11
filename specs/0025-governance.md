@@ -11,6 +11,8 @@ Ideally this would provide a very simple framework allowing users to:
  - Create a proposal
  - Vote on a proposal
 
+In this document, a "user" refers to a "party" on a Vega network.
+
 # Future work
 This version of the specification covers governance of data within the network. It does not cover changes to network level parameters such as validator sets, block duration or configuration file updates, which will be supported in the future.
 
@@ -33,17 +35,17 @@ i.e. A proposal of type new market might have a minimum participation level set 
 
 ### Decision weighting
 The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few options (or one) for weighting but this must be subject to configuration in the future.
-Initially the weighting will be based on the amount of stake the voter has on the network: 1 vega token represents 1 vote.
+Initially the weighting will be based on the amount of stake the user has on the network: 1 vega token represents 1 vote.
 
 ### How the success of a proposal is defined
 For the proposal to be accepted, a number of positive votes will be required.
 This is something which can be defined at the creation of the proposal.
 
 First the win can be defined by a percentage of positive votes:
-e.g: the proposal require 80% of the voters to vote yes to be accepted.
+e.g: the proposal require 80% of the users who vote to vote yes to be accepted.
 
 Also the proposal can require a minimum percentage of participation all over the network:
-e.g: require 80% of voters to vote yes and 90% of the active users of the vega network have to take part in the vote.
+e.g: require 80% of users whovote to vote yes and 90% of the active users of the vega network have to take part in the vote.
 
 ### Duration of the proposal
 When a proposal is created, it will be configured with a variable end date, until then the proposal is open for votes.
