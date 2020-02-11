@@ -4,7 +4,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Summary
 
-Governance allows token owning users of the vega network to make on-chain decisions. Implenting this specification will provide a simple framework for users to create proposals involving Markets or the network in general, by creating new markets,
+Governance allows token-owning users of the vega network to make on-chain decisions. Implenting this specification will provide a simple framework for users to create proposals involving Markets or the network in general, by creating new markets,
 or updating a market parameter, or network parameters.
 
 Ideally this would provide a very simple framework allowing users to:
@@ -75,7 +75,8 @@ Users of the vega platform will be able to vote for or against a proposal.
 This action is binary:
  - a user can either say yes to a proposal
  - or no
- A user can vote as many time as needed, only the last vote will be accounted for in the final decision for the proposal.
+
+A user can vote as many time as needed, only the last vote will be accounted for in the final decision for the proposal.
 
 # Reference-level explanation
 
