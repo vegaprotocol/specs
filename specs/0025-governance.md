@@ -16,6 +16,8 @@ This version of the specification covers governance of data within the network. 
 
 Also not covered is proposal rate limiting, spam protection or fees related to proposals. 
 
+Dependencies between proposals and their impact on voting is to be considered for future work.
+
 # Guide-level explanation
 
 Governance enable users to make proposals for changes on the network or vote for existings proposals. Proposals should be able to cover multiple aspect of the vega protocol:
