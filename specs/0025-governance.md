@@ -44,8 +44,7 @@ This is something which can be defined at the creation of the proposal.
 First the win can be defined by a percentage of positive votes:
 e.g: the proposal require 80% of the users who vote to vote yes to be accepted.
 
-Also the proposal can require a minimum percentage of participation all over the network:
-e.g: require 80% of users who vote to vote yes and 90% of the active users of the vega network have to take part in the vote.
+Not in scope: minimum percentage of participation. e.g: require 80% of users who vote to vote yes and 90% of the _active_ users of the vega network have to take part in the vote.
 
 ### Duration of the proposal
 When a proposal is created, it will be configured with a variable end date, until then the proposal is open for votes.
