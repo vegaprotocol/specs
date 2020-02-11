@@ -16,6 +16,8 @@ Ideally this would provide a very simple framework allowing users to:
 # Future work
 This version of the specification covers governance of data within the network. It does not cover changes to network level parameters such as validator sets, block duration or configuration file updates, which will be supported in the future.
 
+Also not covered is proposal rate limiting, spam protection or fees related to proposals. 
+
 # Guide-level explanation
 
 The Governance enable users to make proposals for changes on the network or vote for existings proposals. Proposals should be able to cover multiple aspect of the vega protocol:
