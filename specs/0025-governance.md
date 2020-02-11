@@ -4,7 +4,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Summary
 
-Governance allows token-owning users of the vega network to make on-chain decisions. Implenting this specification will provide a simple framework for users to create proposals involving Markets or the network in general, by creating new markets,
+Governance allows token-owning users of the vega network to make on-chain decisions. Implementing this specification will provide a simple framework for users to create proposals involving Markets or the network in general, by creating new markets,
 or updating a market parameter, or network parameters.
 
 Ideally this would provide a very simple framework allowing users to:
@@ -22,7 +22,7 @@ Dependencies between proposals and their impact on voting is to be considered fo
 
 # Guide-level explanation
 
-Governance enable users to make proposals for changes on the network or vote for existings proposals. Proposals should be able to cover multiple aspect of the vega protocol:
+Governance enable users to make proposals for changes on the network or vote for existing proposals. Proposals should be able to cover multiple aspect of the vega protocol:
  - create a new market
  - change parameters of an existing market (e.g: change some settings of a risk model for a given market)
 
@@ -45,14 +45,14 @@ First the win can be defined by a percentage of positive votes:
 e.g: the proposal require 80% of the users who vote to vote yes to be accepted.
 
 Also the proposal can require a minimum percentage of participation all over the network:
-e.g: require 80% of users whovote to vote yes and 90% of the active users of the vega network have to take part in the vote.
+e.g: require 80% of users who vote to vote yes and 90% of the active users of the vega network have to take part in the vote.
 
 ### Duration of the proposal
 When a proposal is created, it will be configured with a variable end date, until then the proposal is open for votes.
 e.g: A proposal is created and people have 3 weeks from the day it is sent to the network in order to submit votes for it.
 
 ### When changes are applied
-The proposals can also be parameterized about when the change which are voted for will start to be applied.
+The proposals can also be parameterised about when the change which are voted for will start to be applied.
 e.g: A new proposal is created in order to create a new market, after 3 weeks the proposal if closed, if there is enough votes  to accept the new proposal, then the changes will be applied in the network 1 week later.
 This would allow enough time for the operator to be ready for the changes, e.g in the case the proposal is to decide to use a new version of the vega node, or something available only in a later version of the node.
 
@@ -97,7 +97,7 @@ We allow users to create proposals covering 3 domains:
 
 ## APIs
 
-We expect the user to be able to do the following actions by using the core apis:
+We expect the user to be able to do the following actions by using the core APIs:
  - list all the open proposals on the network
  - vote for a given proposal
  - get the results for a given proposal
