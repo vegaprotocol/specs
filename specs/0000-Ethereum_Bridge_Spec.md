@@ -10,10 +10,17 @@ In order to integrate Vega with various external blockchains and oracles, we’v
 
 
 # Guide-level explanation
-Explain the specification as if it was already included and you are explaining it to another developer working on Vega. This generally means:
-- Introducing new named concepts
-- Explaining the features, providing some simple high level examples
-- If applicable, provide migration guidance
+## On Chain Event Recording
+	In order to enable decentralized and secure depositing and withdrawal of funds, we have created a series of “bridge” smart contracts. These bridges each target a specific asset type, such as ETH or ERC20 tokens, and expose simple functionality to allow the Vega network to accept deposits, hold, and then release assets as needed. This immutably records all deposits and withdrawals for all of the assets that Vega markets use.
+	Each bridge contains 3 primary functions and emits 3 primary events, each tailored to the asset type. They are deposit, make available, and withdraw and the corresponding events of available, deposited, withdrawn. Deposit is run by a user or process and ensures that the asset is stored safely on-contract and then emits the deposited event. Make available is run by the Vega network and makes the given amount of the asset available to a user for withdrawal, this emits the available event. The withdrawal function is run by the user or process credited by “make available” to withdraw the asset from the contract.
+	Each bridge limits the ability to make more assets available to users than it has on-contract and has already promised. This means that even in the event of a compromise, the damage is limited.
+
+
+## Off Chain Event Post Processing and Propagation
+Latency and throughput is of paramount importance to Vega validator nodes, so monitoring various 3rd party (and notably low transaction speed) blockchains and crypto-assets isn’t possible. To counter this problem we have created an event queue management system. This event queue uses a set of asset busses that allow the standardization, storing and propagation of transactions from 3rd party asset chains into the Vega oracle format. Once the events and transactions are gathered and processed, only the ones important to our system will be propagated through consensus and thus need to be validated by the validator node. This makes the event queue work as a buffer between the slow/complicated world of various blockchains, and the high throughput, low latency of Vega Core.
+This message queue will use grpc to communicate with the Vega network via 2 main functions: Propagate_Oracle_Event and Oracle_Event_Acceptance_Status. The first: Propagate_Oracle_Event  allows an event queue to send oracle events (events, transactions, setting changes, etc) through Vega consensus to ensure an event has been seen by the network. Each validator will individually process and validate the given transaction but only parse for the specified event reported.
+The second function, Oracle_Event_Acceptance_Status, returns the consensus acceptance status of a given transaction/event. The event queue uses this function to determine if it should attempt to send the event again.
+
 
 # Reference-level explanation
 This is the main portion of the specification. Break it up as required.
