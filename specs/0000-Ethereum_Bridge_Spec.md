@@ -23,10 +23,43 @@ The second function, Oracle_Event_Acceptance_Status, returns the consensus accep
 
 
 # Reference-level explanation
-This is the main portion of the specification. Break it up as required.
 
 
 [![](https://mermaid.ink/img/eyJjb2RlIjoiZ3JhcGggVERcbiAgQVtVc2VyXS0tPnxSdW5zIERlcG9zaXQgZnVuY3Rpb24gd2l0aCBWZWdhIHB1YmxpYyBrZXl8QlxuICBCW0JyaWRnZSBTbWFydCBDb250cmFjdF0gLS0-fEVtaXRzIERlcG9zaXQgZXZlbnR8Q1xuICBDW0V2ZW50IFF1ZXVlXS0tPnxGaWx0ZXJzIGFuZCBmb3J3YXJkcyBhcHBsaWNhYmxlIGV2ZW50fERcbiAgRFtWZWdhIENvbnNlbnN1c10tLT58Q2hlY2tzIGV2ZW50IGFjY2VwdGFuY2Ugc3RhdHVzfENcbiAgRC0tPnxSdW5zIE1ha2UgQXZhaWxhYmxlIGZ1bmN0aW9uIG9uIGFzc2V0IHdpdGhkcmF3YWx8QlxuICBBLS0-fFJ1bnMgV2l0aGRyYXdhbCBmdW5jdGlvbiB0byByZWNlaXZlIGF2YWlsYWJsZSBmdW5kc3xCXG4gIFxuXHRcdFx0XHRcdCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiZ3JhcGggVERcbiAgQVtVc2VyXS0tPnxSdW5zIERlcG9zaXQgZnVuY3Rpb24gd2l0aCBWZWdhIHB1YmxpYyBrZXl8QlxuICBCW0JyaWRnZSBTbWFydCBDb250cmFjdF0gLS0-fEVtaXRzIERlcG9zaXQgZXZlbnR8Q1xuICBDW0V2ZW50IFF1ZXVlXS0tPnxGaWx0ZXJzIGFuZCBmb3J3YXJkcyBhcHBsaWNhYmxlIGV2ZW50fERcbiAgRFtWZWdhIENvbnNlbnN1c10tLT58Q2hlY2tzIGV2ZW50IGFjY2VwdGFuY2Ugc3RhdHVzfENcbiAgRC0tPnxSdW5zIE1ha2UgQXZhaWxhYmxlIGZ1bmN0aW9uIG9uIGFzc2V0IHdpdGhkcmF3YWx8QlxuICBBLS0-fFJ1bnMgV2l0aGRyYXdhbCBmdW5jdGlvbiB0byByZWNlaXZlIGF2YWlsYWJsZSBmdW5kc3xCXG4gIFxuXHRcdFx0XHRcdCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)
+
+### Bridges
+For each asset class, there is a bridge smart contract. Currently all contracts are Ethereum-based assets, namely Ether, ERC20 tokens, ERC721 nonfungible tokens, ERC1155 crypto items, and Oracle Controlled Assets (assets that are reported by an authority). Each asset class will receive a bridge contract on the appropriate platform (ETH, EOS, Tron, etc). 
+Each bridge implements a standard interface:
+```
+contract IVega_Bridge {
+    //TODO: add pricing functions
+    //TODO: add asset registration
+
+    event Asset_Available(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, bytes32 unique_id);
+    event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount);
+    event Asset_Deposited(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount);
+    event Asset_Deposit_Minimum_Set(address indexed asset_source, uint256 indexed asset_id, uint256 new_minimum);
+
+    function make_asset_available(address user_address, address asset_source, uint256 asset_id, uint256 amount, bytes32 unique_id) public;
+
+    // VIEWS /////////////////
+    function is_unique_id_used(bytes32 unique_id) public view returns(bool);
+    function get_asset_promised_total(address asset_source, uint256 asset_id) public view returns(uint256);
+    function get_asset_available_for_user(address user, address asset_source, uint256 asset_id) public view returns(uint256);
+    function get_deposit_minimum(address asset_source, uint256 asset_id) public view returns(uint256);
+
+
+}
+```
+
+### Deposits
+Deposits happen when a users fun the deposit function of a bridge contract for a given asset. Once this is executed on-chain, an event is raised from the Ethereum protocol. This event is processed by the event queue and passed to Vega Consensus. Each node recieves notice of the event either from the Event Queue or through inter-node gossip and validates the transaction for itself on its local external blockchain node (such as Geth, Parity, etc). This necessitates each node to either run a given blockchain node locally or have a trusted source to the node.
+
+### Withdrawals 
+Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides to make funds available to a user. When this happens, the nodes either sign a command to run the 'make available' function on the appropriate bridge smart contract using TSS or begin a multi-signature process to run the command. This makes assets available to a user's given wallet address. Once funds are available to a user, the user can run the 'withdrawal' function on the appropriate smart contract that will transfer the funds from the smart contract to the wallet.
+
+### Oracle Controlled Assets
+An Oracle Controlled Asset is one where a deposit or withdrawal is recorded by the oracle/authority on the bridge. Once a deposit is recorded, the balance is under the control of the bridge/Vega consensus and is a method of accounting and keeping the authority honest.
 
 # Pseudo-code / Examples
 ```
