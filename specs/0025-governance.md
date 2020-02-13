@@ -37,6 +37,10 @@ i.e. A proposal of type new market might have a minimum participation level set 
 The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few options (or one) for weighting but this must be subject to configuration in the future.
 Initially the weighting will be based on the amount of stake the user has on the network: 1 vega token represents 1 vote.
 
+Note on future requirement:
+
+ - In future, some or all proposals for changes to a market will be weighted by a measure of participation in that market. The most likely way this would be calculated would be by the size of the voter's market making commitment vs. the total committed in the market (and participation ratios would be calculated from the same), although we may also consider metrics like the voter's share of traded volume over, say, the voting period or some other algorithm. Importantly this means a voter's weighting will vary between markets for these types of decision.
+
 ### How the success of a proposal is defined
 For the proposal to be accepted, a number of positive votes will be required.
 This is something which can be defined at the creation of the proposal.
