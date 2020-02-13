@@ -24,8 +24,17 @@ The second function, Oracle_Event_Acceptance_Status, returns the consensus accep
 
 # Reference-level explanation
 
-
-[![](https://mermaid.ink/img/eyJjb2RlIjoiZ3JhcGggVERcbiAgQVtVc2VyXS0tPnxSdW5zIERlcG9zaXQgZnVuY3Rpb24gd2l0aCBWZWdhIHB1YmxpYyBrZXl8QlxuICBCW0JyaWRnZSBTbWFydCBDb250cmFjdF0gLS0-fEVtaXRzIERlcG9zaXQgZXZlbnR8Q1xuICBDW0V2ZW50IFF1ZXVlXS0tPnxGaWx0ZXJzIGFuZCBmb3J3YXJkcyBhcHBsaWNhYmxlIGV2ZW50fERcbiAgRFtWZWdhIENvbnNlbnN1c10tLT58Q2hlY2tzIGV2ZW50IGFjY2VwdGFuY2Ugc3RhdHVzfENcbiAgRC0tPnxSdW5zIE1ha2UgQXZhaWxhYmxlIGZ1bmN0aW9uIG9uIGFzc2V0IHdpdGhkcmF3YWx8QlxuICBBLS0-fFJ1bnMgV2l0aGRyYXdhbCBmdW5jdGlvbiB0byByZWNlaXZlIGF2YWlsYWJsZSBmdW5kc3xCXG4gIFxuXHRcdFx0XHRcdCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiZ3JhcGggVERcbiAgQVtVc2VyXS0tPnxSdW5zIERlcG9zaXQgZnVuY3Rpb24gd2l0aCBWZWdhIHB1YmxpYyBrZXl8QlxuICBCW0JyaWRnZSBTbWFydCBDb250cmFjdF0gLS0-fEVtaXRzIERlcG9zaXQgZXZlbnR8Q1xuICBDW0V2ZW50IFF1ZXVlXS0tPnxGaWx0ZXJzIGFuZCBmb3J3YXJkcyBhcHBsaWNhYmxlIGV2ZW50fERcbiAgRFtWZWdhIENvbnNlbnN1c10tLT58Q2hlY2tzIGV2ZW50IGFjY2VwdGFuY2Ugc3RhdHVzfENcbiAgRC0tPnxSdW5zIE1ha2UgQXZhaWxhYmxlIGZ1bmN0aW9uIG9uIGFzc2V0IHdpdGhkcmF3YWx8QlxuICBBLS0-fFJ1bnMgV2l0aGRyYXdhbCBmdW5jdGlvbiB0byByZWNlaXZlIGF2YWlsYWJsZSBmdW5kc3xCXG4gIFxuXHRcdFx0XHRcdCIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)
+```mermaid
+graph TD
+  A[User]-->|Runs Deposit function with Vega public key|B
+  B[Bridge Smart Contract] -->|Emits Deposit event|C
+  C[Event Queue]-->|Filters and forwards applicable event|D
+  D[Vega Consensus]-->|Checks event acceptance status|C
+  D-->|Runs Make Available function on asset withdrawal|B
+  A-->|Runs Withdrawal function to receive available funds|B
+  
+					
+```
 
 ### Bridges
 For each asset class, there is a bridge smart contract. Currently all contracts are Ethereum-based assets, namely Ether, ERC20 tokens, ERC721 nonfungible tokens, ERC1155 crypto items, and Oracle Controlled Assets (assets that are reported by an authority). Each asset class will receive a bridge contract on the appropriate platform (ETH, EOS, Tron, etc). 
