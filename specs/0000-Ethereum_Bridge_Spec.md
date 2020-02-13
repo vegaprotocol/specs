@@ -39,7 +39,8 @@ graph TD
 ### Bridges
 For each asset class, there is a bridge smart contract. Currently all contracts are Ethereum-based assets, namely Ether, ERC20 tokens, ERC721 nonfungible tokens, ERC1155 crypto items, and Oracle Controlled Assets (assets that are reported by an authority). Each asset class will receive a bridge contract on the appropriate platform (ETH, EOS, Tron, etc). 
 Each bridge implements a standard interface:
-```
+
+```go
 contract IVega_Bridge {
     //TODO: add pricing functions
     //TODO: add asset registration
@@ -71,7 +72,7 @@ Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega
 An Oracle Controlled Asset is one where a deposit or withdrawal is recorded by the oracle/authority on the bridge. Once a deposit is recorded, the balance is under the control of the bridge/Vega consensus and is a method of accounting and keeping the authority honest.
 
 # Pseudo-code / Examples
-```
+```go
 enum Event_Types {
     UNKNOWN = 0;
     Asset_Made_Available=1;
@@ -88,7 +89,7 @@ enum Event_Types {
 }
 ```
 
-```
+```go
 message Oracle_Event_Propagation_Request {
         string oracle_source = 1; //address of oracle
         string asset_source = 2; //asset source according to that oracle
