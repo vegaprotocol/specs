@@ -18,7 +18,21 @@ This version of the specification covers governance of data within the network. 
 
 Also not covered is proposal rate limiting, spam protection or fees related to proposals. 
 
-Dependencies between proposals and their impact on voting is to be considered for future work.
+Dependencies between proposals and their impact on voting needs to be clarified in the network proposal spec.
+
+Proposals to upate market parameters are limited to the following:
+
+|-------------------------------------------------------|-----|-----------------------------------------------------------------------------------------|
+| Field                                                 | Y/N | Specifics                                                                               |
+|-------------------------------------------------------|-----|-----------------------------------------------------------------------------------------|
+| Market.Name                                           | Y   | provisionally                                                                           |
+| Market.TradingMode                                    | Y   | Both the trading mode itself, and the individual fields                                 |
+| Market.TradableInstrument.Instrument.Product.Maturity | Y   | This determins the EOL of a market, this field might need to be moved to a higher level |
+| Market.TradableInstrument.RiskModel                   | Y   | Both the entire risk model, and individual params of the risk model (needs spec!)       |
+| Market.TradableInstrument.MarginCalculator            | Y   | Updating all scaling factors is possible                                                |
+|-------------------------------------------------------|-----|-----------------------------------------------------------------------------------------|
+
+For a number of these parameters, different rules need to be specified depending on whether or not the market is active or not (e.g. if a market has been trading for some time, suddenly changing the risk factors and scaling factors is risky, less so if the market is not active yet).
 
 # Guide-level explanation
 
