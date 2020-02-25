@@ -4,21 +4,21 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Summary
 
-As of right now, vega implement continuous trading, in fact every time an order is places, vega evaluates it with the other side of the book and if the order cross a trade will result from it. This specification will introduce new trading modes for vega as auctions.
+As of right now, vega implements continuous trading, in fact every time an order is placed, vega evaluates it with the other side of the book and if the order crosses, a trade will result from it. This specification will introduce new trading modes for vega as auctions.
 
 # Guide-level explanation
-In comparison to continuous trading, the auction mode for a market, is a state of the orderbook where each order placed are just sitting on the book, for a given period of time or until some requirements are met (called `call period`), then the whole book is uncrossed.
+In comparison to continuous trading, the auction mode for a market, is a state of the orderbook where each order placed are just sitting on the book, for a given period of time or until some requirements are met (called `call period`), then the matching orders are uncrossed.
 
-Auctions purpose is to help with price discovery, and are mostly useful in very liquid market. In traditional market (where market open and close every day) we can find open an closing option for the price to stabilise at both ends.
+An auction's purpose is to help with price discovery, and are mostly useful in very liquid markets. In traditional markets (where markets open and close every day) we can run an open and closing auction for the price to stabilise at both ends.
 
 # Reference-level explanation
-As mentionned earlier, this specification introduce new trading modes. A first one which purpose is to calibrate a market / help with price discovery when a new market is started. A second one meant to be trading only through auction called `Frequent batch auction`.
+As mentioned earlier, this specification introduces new trading modes. A first one which purpose is to calibrate a market / help with price discovery when a new market is started. A second one meant to be trading only through auction called `Frequent batch auction`.
 
 ## First mode (name to be find, but it may just be actually the continuous trading changing to always start with an auction ?)
-This trading mode is very similar to the Continuous trading mode for a market. In this configuration, a market will start as in auction mode, then once the auction comes to an end the market will switch back to the continuous trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
+This trading mode is very similar to the Continuous trading mode for a market. In this configuration, a market will start in auction mode, then once the auction comes to an end the market will switch back to the continuous trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
 A market cannot be in both mode at the same time and will trade ever in a auction or continuous trading.
 
-As a first implementation this feature is expected to only support starting the market in auctions, then once the auction reach an end, switch back to the continuous trading mode forever.
+As a first implementation this feature is expected to only support starting the markets in auctions, then once the auction reaches an end, switch back to the continuous trading mode forever.
 
 ## Frequent batch auction
 The frequent batch auction mode is a trading mode in perpetual auction, meaning that all uncrossing on the book is done at the end of auction period, then once this is done, and trades happen, a new auction period is started, and this forever until the market close.
@@ -26,20 +26,20 @@ e.g: auctions could be set to last 10 minutes, then every 10 minutes the book wo
 
 ## An auction comes to an end
 As part of the market framework, we need to be able to specify the duration of auctions period. This should be added as a new setting to the trading modes.
-We can also imagine that a auction period could come to an end once a give number of orders have been placed on the system.
+We can also imagine that an auction period could come to an end once a give number of orders have been placed on the system.
 
 ### Volume maximising prices
-Once the auction period finish, vega need to figure out the best price for the price range in the book which can be uncrossed. This is called volumed maximising pricing.
-Once this range is decided we will run an algorithm in order to decided what's the best price to create the trade at (the algorithm is specified in a separate specification, @barney, @tamlyn, please edit / link it here, and had detail in here as well as I imagine this is quite weak at the mome).
+Once the auction period finishs, vega needs to figure out the best price for the order range in the book which can be uncrossed. This is called volumed maximising pricing.
+Once this range is decided we will run an algorithm in order to decided what's the best price to create the trades at (the algorithm is specified in a separate specification, @barney, @tamlyn, please edit / link it here, and had detail in here as well as I imagine this is quite weak at the moment).
 
-As a naive/first implementation we should decide the price as beeing the middle price in the volume maximising range.
+As a naive/first implementation we should decide the price as being the middle price in the volume maximising range.
 
 ## New core APIs related to auctions
-These new APIs need to expose data, some of which will be re-calculated each time the state of the book changes and will expose informations about the market in auction mode:
-- how long the market have been in auction mode
-- when does the next period start
+These new APIs need to expose data, some of which will be re-calculated each time the state of the book changes and will expose information about the market in auction mode:
+- how long the market has been in auction mode
+- when does the next auction period start
 - how long is a period
-- the indicative uncrossing price (e.g: if we uncross now what would be the price of the trades)
+- the indicative uncrossing price (e.g: if we uncross now what would be the best bid/ask prices of the trades)
 - indicative uncrossing volume
 
 ## Restriction for markets in auction modes
@@ -48,8 +48,8 @@ Also Fill Or Kill and Immediate Or Cancel time in force are not allowed.
 
 ## First/Naive implementation
 As a first version we expect:
-- A market in continuous trading mode, to be configured so it can start with in auction for a given period of time, then switch to continuous trading for the rest of the life of the market.
-- A market to be configured to run in frequent batch auction mode, but could not be changed to a continuous trading later on.
+- A market in continuous trading mode, to be configured so it can start with an auction for a given period of time, then switch to continuous trading for the rest of the life of the market.
+- A market to be configured to run in frequent batch auction mode, which could not be changed to a continuous trading later on.
 
 # Pseudo-code / Examples
 Possible changes for the TradingMode configuration.
