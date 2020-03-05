@@ -49,7 +49,7 @@ i.e. A proposal of type new market might have a minimum participation level set 
 
 ### Decision weighting
 The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few options (or one) for weighting but this must be subject to configuration in the future.
-Initially the weighting will be based on the amount of stake the user has on the network: 1 vega token represents 1 vote.
+Initially the weighting will be based on the amount of stake the user has on the network: 1 vega token represents 1 vote. A user with 0 tokens cannot vote.
 
 Note on future requirement:
 
@@ -76,7 +76,7 @@ This would allow enough time for the operator to be ready for the changes, e.g i
 Proposals are applied in the order they were created. This means that in the case that two proposals change the same parameter in roughly the same period, the oldest proposal will be applied first and the newest will be applied last. There is no attempt to resolve differences between the two/
 
 ## Restriction on who can create a proposal
-In a first implementation anyone will be able to create a proposal if the weighting of their vote on the proposal would be >0
+In a first implementation anyone will be able to create a proposal if the weighting of their vote on the proposal would be >0 (i.e. has more than 0 tokens)
 
 In future iteration of the governance system we expect to be able to restrict which users can create a proposal.
 The restriction would be applied based on the weighting required by the proposal.
@@ -90,12 +90,12 @@ will be to create a new proposal, to change this specific parameter on the marke
 There will be no explicit link between the first proposal and the replacement one.
 
 ## Vote for a proposal
-Users of the vega platform will be able to vote for or against a proposal.
+Users of the vega platform will be able to vote for or against a proposal, assuming they have more than 0 tokens.
 This action is binary:
  - a user can either say yes to a proposal
  - or no
 
-A user can vote as many time as needed, only the last vote will be accounted for in the final decision for the proposal.
+A user can vote as many times as needed, only the last vote will be accounted for in the final decision for the proposal.
 
 # Reference-level explanation
 
@@ -159,7 +159,8 @@ message Vote {
 
 # Acceptance Criteria
 - [] As a user, I can create a new proposal to affect the vega network
-- [] As a user, I can vote for an existing proposal
+- [] As a user, I can vote for an existing proposal if I have more than 0 tokens
+- [] As a user, My vote for an existing proposal is rejected if I have 0 tokens
 - [] As a user, I can list the open proposal on the network
 - [] As a user, I can get a list of all proposal I voted for
 - [] As a user, I can receive notification when a new proposal is created and may require attention.
