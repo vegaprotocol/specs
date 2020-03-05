@@ -97,6 +97,9 @@ This action is binary:
 
 A user can vote as many times as needed, only the last vote will be accounted for in the final decision for the proposal.
 
+## Outcome
+The result of a proposal is calculated as a sum of vote weightings of *valid* 'Yes' votes, divided by the sum of vote weightings for all valid votes cast for the proposal.
+
 # Reference-level explanation
 
 We introduce 2 new commands which require consensus (needs to go through the chain)
