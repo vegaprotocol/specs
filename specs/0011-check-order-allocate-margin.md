@@ -4,6 +4,8 @@ When an order or other market instruction (amend, cancel, etc.) is submitted we 
 
 Orders should be rejected if we can’t allocate sufficient margin.
 
+If a trader drops below the initial margin level, orders that _reduce_ the margin requirement should still be accepted (meaning a trader who's at risk of getting distressed should have the ability to close themselves out, or reduce their open position to a safer level).
+
 
 ## Pseudocode
 
