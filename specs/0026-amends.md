@@ -81,13 +81,13 @@ To keep all versions of an order available for historic lookup, when an order is
 
 # Pseudo-code / Examples
 
-```
+```proto
 message amendOrder {
-    orderID string
-    price   uint64
-    size    uint64
-    TIF     enum
-    expiryTime uint64
+    string orderID 1 [(validator.field) = {string_not_empty : true}];
+    uint64 price 2;   
+    uint64 size 3;      
+    enum   TIF 4;       
+    uint64 expiryTime 5; 
 }
 ```
 
