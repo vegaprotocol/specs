@@ -7,8 +7,8 @@ Specification PR: https://gitlab.com/vega-protocol/product/-/merge_requests/52 <
 - Price change amends will remove the order from the book and insert the order at the back of the queue at the new price level
 - Reducing the quantity will leave the order in its current spot but will reduce the remaining amount accordingly
 - Increasing the quantity will cause the order to be removed from the book and inserted at the back of the price level queue with the updated quantity
-- Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend an another `TIF` flag will be rejected.
-- All updated to an existing order will update the `UpdatedAt` time stamp field in the order
+- Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag will be rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.
+- All updates to an existing order will update the `UpdatedAt` time stamp field in the order
 - The `orderID` remains the same after an amend
 - Amends can occur in continuous trading or in an auction
 - All historic alteration to an order can be viewed from the order storage system
@@ -20,11 +20,6 @@ The amend order will be able to alter the quantity, price and expiry time/`TIF` 
 
 
 # Guide-level explanation
-Explain the specification as if it was already included and you are explaining it to another developer working on Vega. This generally means:
-- Introducing new named concepts
-- Explaining the features, providing some simple high level examples
-- If applicable, provide migration guidance
-
 The amend order message is a custom message containing the `orderID` of the original order and optional fields that can be altered. Prices can be changed with a new absolute value, quantity can be reduced or increased from their current remaining size. Expiry time can be set to a new value and the `TIF` type can be toggled between `GTC` and `GTT`.
 
 Some examples: 
@@ -58,7 +53,7 @@ Will result in this order book:
     Bids: 200@1005 GTC (OrderID V0000000001-0000000001)
 ```
 
-Unlike the message sent for a new order or a cancel, the amend message will only contain the fields that can be altered along with the `orderID` which is used to locate the original order.
+Unlike the message sent for a new order or a cancel, the amend message only contains the fields that can be altered along with the `orderID` which is used to locate the original order.
 
 
 # Reference-level explanation
@@ -80,7 +75,6 @@ To keep all versions of an order available for historic lookup, when an order is
 
 
 # Pseudo-code / Examples
-
 ```proto
 message amendOrder {
     string orderID 1 [(validator.field) = {string_not_empty : true}];
@@ -92,7 +86,6 @@ message amendOrder {
 ```
 
 # Test cases
-
 Test cases that need to be implemented to cover most of the edge cases are:
 - Attempt to amend an order that does not exist. The amend should be rejected.
 - Amend an order but using the same values as the original order. No order book actions should take place.
