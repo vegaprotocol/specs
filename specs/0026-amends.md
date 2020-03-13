@@ -37,7 +37,7 @@ amendOrder{
 
 This will be the resulting order book:
 ```
-    Bids: 200@1000 GTC (OrderID V0000000001-0000000001)
+    Bids: 300@1000 GTC (OrderID V0000000001-0000000001)
 ```
 
 Sending this amend order:
@@ -50,7 +50,7 @@ amendOrder{
 
 Will result in this order book:
 ```
-    Bids: 200@1005 GTC (OrderID V0000000001-0000000001)
+    Bids: 300@1005 GTC (OrderID V0000000001-0000000001)
 ```
 
 Unlike the message sent for a new order or a cancel, the amend message only contains the fields that can be altered along with the `orderID` which is used to locate the original order.
