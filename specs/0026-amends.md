@@ -5,7 +5,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/-/merge_requests/52 <
 # Acceptance Criteria
 - Only LIMIT orders can be amended, any attempt to amend a non LIMIT order will be rejected
 - Price change amends will remove the order from the book and insert the order at the back of the queue at the new price level
-- Reducing the quantity will leave the order in it's current spot but will reduce the remaining amount accordingly
+- Reducing the quantity will leave the order in its current spot but will reduce the remaining amount accordingly
 - Increasing the quantity will cause the order to be removed from the book and inserted at the back of the price level queue with the updated quantity
 - Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend an another `TIF` flag will be rejected.
 - All updated to an existing order will update the `UpdatedAt` time stamp field in the order
