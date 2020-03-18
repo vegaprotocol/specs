@@ -79,11 +79,27 @@ To keep all versions of an order available for historic lookup, when an order is
 message amendOrder {
     string orderID 1 [(validator.field) = {string_not_empty : true}];
     uint64 price 2;   
-    uint64 size 3;      
+    int64  size 3;      
     enum   TIF 4;       
-    uint64 expiryTime 5; 
+    int64  expiryTime 5; 
 }
 ```
+An example of using a negative size is shown below:
+```
+    Bids: 100@1000 GTC (OrderID V0000000001-0000000001)
+```
+
+If we send the following amendOrder:
+```
+amendOrder{ orderID:"V0000000001-0000000001",
+            size: -50 }
+```
+
+The resulting order book will be:
+```
+    Bids: 50@1000 GTC (OrderID V0000000001-0000000001)
+```
+
 
 # Test cases
 Test cases that need to be implemented to cover most of the edge cases are:
