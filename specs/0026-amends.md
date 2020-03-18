@@ -62,12 +62,12 @@ Amending an order does not alter the `orderID` and creation time of the original
 The fields which can be altered are:
 - `Price`
   * Amending the price causes the order to be removed from the book and re-inserted at the new price level. This can result in the order being filled if the price is moved to a level that would cross.
-- `Size`
-  * A size change is specified as a reduce-by or increase-by amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled.
+- `SizeDelta`
+  * A size change is specified as a delta to the current amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled.
 - `TimeInForce`
   * The `TIF` enumeration can only be toggled between `GTT` and `GTC`. Amending to `GTT` requires an `expiryTime` value to be set. Amending to `GTC` removes the `expiryTime` value.
 - `ExpiryTime`
-  * The Expiry time can be amended to any time in the future but only for orders that have a `TIF` set to `GTT`. Attempting to set the `expiryTime` to a time in the past causes the amend to be rejected.
+  * The Expiry time can be amended to any time in the future but only for orders that have a `TIF` set to `GTT`. Attempting to set the `expiryTime` to a time before the `creationTime` causes the amend to be rejected. Setting the `expiryTime` to a value after `creationTime` but before the current time will cause it to expire.
 
 
 ## Version numbering
@@ -79,7 +79,7 @@ To keep all versions of an order available for historic lookup, when an order is
 message amendOrder {
     string orderID 1 [(validator.field) = {string_not_empty : true}];
     uint64 price 2;   
-    int64  size 3;      
+    int64  sizeDelta 3;      
     enum   TIF 4;       
     int64  expiryTime 5; 
 }
