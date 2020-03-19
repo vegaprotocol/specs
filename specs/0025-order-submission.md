@@ -15,19 +15,19 @@ To allow traders to interact with the market, they must be able to enter
 # Test cases
 ## A completely matching order between the same party is rejected
 - On an empty market
-- Trade 1: Trader A enters a limit SELL order for 1 at price 1
-- Trade 2: Trader A enters a limit BUY order for 1 at price 1
-- Trade 1 remains on the book
-- Trade 2 is rejected
+- Order 1: Trader A enters a limit SELL order for 1 at price 1
+- Order 2: Trader A enters a limit BUY order for 1 at price 1
+- Order 1 remains on the book
+- Order 2 is rejected
 
 ## A partially matching order between the same party is rejected
 - On an empty market
-- Trade 1: Trader A enters a limit SELL order for 1 at price 2
-- Trade 2: Trader B enters a limit SELL order for 1 at price 1
-- Trade 3: Trader A enters a limit BUY order for 1 at price 100
-- Trade 1 remains on the book
-- Trade 2 is filled
-- Trade 3 is partially filled, then rejected
+- Order 1: Trader A enters a limit SELL order for 1 at price 2
+- Order 2: Trader B enters a limit SELL order for 1 at price 1
+- Order 3: Trader A enters a limit BUY order for 2 at price 100
+- Order 1 remains on the book
+- Order 2 is filled
+- Order 3 is partially filled, then rejected
 
 # Acceptance Criteria
 Check list of statements that need to met for the feature to be considered correctly implemented.
