@@ -38,7 +38,7 @@ For the definition of each Time In Force option, see [the Order Types spec](./00
 |      GTC      |    No   |         No        |        Yes        |      Stopped     |
 |      GTC      |    No   |        Yes        |         No        |     Cancelled    |
 |      GTC      | Partial |         No        |         No        |      Active      |
-|      GTC      | Partial |        Yes        |         No        |     Partially Filled    |
+|      GTC      | Partial |        Yes        |         No        |     Cancelled    |
 |      GTC      | Partial |         No        |        Yes        |      Stopped     |
 |      GTC      |   Yes   |         No        |         No        |      Filled      |
 
@@ -52,8 +52,8 @@ Note: The last row in the table below is added for clarity rather than being a l
 |      GTT      |    No   |    No   |        Yes        |         No        |     Cancelled    |
 |      GTT      |    No   |    No   |         No        |        Yes        |      Stopped     |
 |      GTT      | Partial |    No   |         No        |         No        |      Active      |
-|      GTT      | Partial |   Yes   |         No        |         No        | Partially Filled |
-|      GTT      | Partial |    No   |        Yes        |         No        | Partially Filled |
+|      GTT      | Partial |   Yes   |         No        |         No        |      Expired     |
+|      GTT      | Partial |    No   |        Yes        |         No        |     Cancelled    |
 |      GTT      | Partial |    No   |         No        |        Yes        |      Stopped     |
 |      GTT      |   Yes   |    No   |         No        |         No        |      Filled      |
 |      GTT      |   Yes   |   Yes   |         No        |         No        |      Filled      |
