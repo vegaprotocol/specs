@@ -31,7 +31,7 @@ If I send an amend with the following details:
 ```
 amendOrder{
     orderID: "V0000000001-0000000001"
-    size: 200
+    sizeDelta: 200
 }
 ```
 
@@ -92,7 +92,7 @@ An example of using a negative size is shown below:
 If we send the following amendOrder:
 ```
 amendOrder{ orderID:"V0000000001-0000000001",
-            size: -50 }
+            sizeDelta: -50 }
 ```
 
 The resulting order book will be:
