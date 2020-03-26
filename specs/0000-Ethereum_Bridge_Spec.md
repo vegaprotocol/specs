@@ -11,9 +11,8 @@ In order to integrate Vega with various external blockchains and oracles, we’v
 
 # Guide-level explanation
 ## On Chain Event Recording
-In order to enable decentralized and secure depositing and withdrawal of funds, we have created a series of “bridge” smart contracts. These bridges each target a specific asset type, such as ETH or ERC20 tokens, and expose simple functionality to allow the Vega network to accept deposits, hold, and then release assets as needed. This immutably records all deposits and withdrawals for all of the assets that Vega markets use.
-Each bridge contains 3 primary functions and emits 3 primary events, each tailored to the asset type. They are deposit, make available, and withdraw and the corresponding events of available, deposited, withdrawn. Deposit is run by a user or process and ensures that the asset is stored safely on-contract and then emits the deposited event. Make available is run by the Vega network and makes the given amount of the asset available to a user for withdrawal, this emits the available event. The withdrawal function is run by the user or process credited by “make available” to withdraw the asset from the contract.
-Each bridge limits the ability to make more assets available to users than it has on-contract and has already promised. This means that even in the event of a compromise, the damage is limited.
+In order to enable decentralized and secure depositing and withdrawal of funds, we have created a series of “bridge” smart contracts. These bridges each target a specific asset class, such as ETH or ERC20 tokens, and expose simple functionality to allow the Vega network to accept deposits, hold, and then release assets as needed. This immutably records all deposits and withdrawals for all of the assets that Vega markets use.
+Each bridge contains two primary functions and emits two primary events, each tailored to the asset type. They are deposit and withdraw and the corresponding events of deposited, withdrawn. Deposit is run by a user or process and ensures that the asset is stored safely on-contract and then emits the deposited event. The withdrawal function is run by the user or process once signatures have been aggregated from validator nodes.
 
 
 ## Off Chain Event Post Processing and Propagation
@@ -30,8 +29,8 @@ graph TD
   B[Bridge Smart Contract] -->|Emits Deposit event|C
   C[Event Queue]-->|Filters and forwards applicable event|D
   D[Vega Consensus]-->|Checks event acceptance status|C
-  D-->|Runs Make Available function on asset withdrawal|B
-  A-->|Runs Withdrawal function to receive available funds|B
+  A-->|Requests Withdrawal and aggregates signatures from validators |D
+  A-->|Submits signatures to Withdrawal function to receive funds|B
   
 					
 ```
@@ -41,50 +40,48 @@ For each asset class, there is a bridge smart contract. Currently all contracts 
 Each bridge implements a standard interface:
 
 ```go
-contract IVega_Bridge {
-    //TODO: add pricing functions
-    //TODO: add asset registration
+pragma solidity ^0.5.0;
 
-    event Asset_Available(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, bytes32 unique_id);
+
+contract IVega_Bridge {
+
     event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount);
     event Asset_Deposited(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, bytes vega_public_key);
     event Asset_Deposit_Minimum_Set(address indexed asset_source, uint256 indexed asset_id, uint256 new_minimum);
+    event Asset_Whitelisted(address indexed asset_source, uint256 indexed asset_id);
+    event Asset_Blacklisted(address indexed asset_source, uint256 indexed asset_id);
 
-    function make_asset_available(address user_address, address asset_source, uint256 asset_id, uint256 amount, bytes32 unique_id) public;
-
+    function whitelist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
+    function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
+    function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 minimum_amount) public;
+    function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 nonce, bytes memory signatures) public;
+    function deposit_asset(address asset_source, uint256 asset_id, uint256 amount) public;
+    
     // VIEWS /////////////////
-    function is_unique_id_used(bytes32 unique_id) public view returns(bool);
-    function get_asset_promised_total(address asset_source, uint256 asset_id) public view returns(uint256);
-    function get_asset_available_for_user(address user, address asset_source, uint256 asset_id) public view returns(uint256);
+    function is_asset_whitelisted(address asset_source, uint256 asset_id) public view returns(uint256);
+    function is_nonce_used(uint nonce) public view returns(bool);
     function get_deposit_minimum(address asset_source, uint256 asset_id) public view returns(uint256);
 
 
 }
+
 ```
 
 ### Deposits
 Deposits happen when a users fun the deposit function of a bridge contract for a given asset. Once this is executed on-chain, an event is raised from the Ethereum protocol. This event is processed by the event queue and passed to Vega Consensus. Each node recieves notice of the event either from the Event Queue or through inter-node gossip and validates the transaction for itself on its local external blockchain node (such as Geth, Parity, etc). This necessitates each node to either run a given blockchain node locally or have a trusted source to the node.
 
 ### Withdrawals 
-Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides to make funds available to a user. When this happens, the nodes either sign a command to run the 'make available' function on the appropriate bridge smart contract using TSS or begin a multi-signature process to run the command. This makes assets available to a user's given wallet address. Once funds are available to a user, the user can run the 'withdrawal' function on the appropriate smart contract that will transfer the funds from the smart contract to the wallet.
+Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides to make funds available to a user. When this happens, the client aggregates signatures from the validator nodes. Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorized signatures.
 
-### Oracle Controlled Assets
-An Oracle Controlled Asset is one where a deposit or withdrawal is recorded by the oracle/authority on the bridge. Once a deposit is recorded, the balance is under the control of the bridge/Vega consensus and is a method of accounting and keeping the authority honest.
 
 # Pseudo-code / Examples
 ```go
 enum Event_Types {
     UNKNOWN = 0;
-    Asset_Made_Available=1;
-    Asset_Deposited=2;
-    Asset_Withdrawn=3;
-    Transaction=4;
-    Settings_Change=5;
-    Ballot_Proposed=7;
-    Ballot_Cast=8;
-    Price_Updated=9;
-    Asset_Listed=10;
-    Asset_Delisted=11;
+    Asset_Deposited=1;
+    Asset_Withdrawn=2;
+    Asset_Listed=3;
+    Asset_Delisted=4;
     //TODO: add more
 }
 ```
@@ -104,5 +101,3 @@ message Oracle_Event_Propagation_Request {
 }
 ```
 
-# Test cases
-Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
