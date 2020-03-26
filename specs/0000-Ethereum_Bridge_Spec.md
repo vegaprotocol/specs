@@ -140,6 +140,6 @@ message Oracle_Event_Propagation_Request {
 *  an invalid multisig bundle is rejected by the setDepositMinimum function
 
 
-#TODO:
+# TODO:
 * Create event queue spec
 * Create Multisig spec
