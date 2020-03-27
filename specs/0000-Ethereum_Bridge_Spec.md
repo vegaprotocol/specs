@@ -1,13 +1,25 @@
-Feature name: feature-name
-Start date: YYYY-MM-DD
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
+* Feature name: ethereum-bridge
+* Start date: 2020-03-10
 
 
 # Summary
-In order to integrate Vega with various external blockchains to allow the deposit and withdrawal of settlement instruments (assets) into and out of the Vega network, we’ve determined that a set of “bridge” smart contracts along with an ‘event queue’ process to find and propagate applicable on-chain events is necessary for the deposit and withdrawal of funds/assets from Vega. This, collectively, is named the Vega Ramp as it is the on- and off-ramp of all assets regardless of chain of origin. This spec coveres the bridges.
+In order to integrate Vega with various external blockchains to allow the deposit and withdrawal of settlement instruments (assets) into and out of the Vega network, we’ve determined that a set of “bridge” smart contracts along with an ‘event queue’ process to find and propagate applicable on-chain events is necessary for the deposit and withdrawal of funds/assets from Vega. This, collectively, is named the Vega Ramp as it is the on- and off-ramp of all assets regardless of chain of origin. This spec covers the bridges.
 
 
 # Guide-level explanation
+This document outlines how assets will be able to be deposited from and withdrawn to Ethereum addresses. This will be achieved with a few new moving parts, outlined below:
+
+```mermaid
+graph TD
+	A[Ethereum Bridge Contract] --> B
+	C[ERC20 Bridge Contract] --> B[Event Queue]
+	D[ERC721 Bridge Contract] -->|Not in V1| B[Event Queue]
+	B --> F[Vega node]
+  F --> G[Vega chain]
+```
+
+There will be one smart contract per Ethereum asset class. We will consider new token standards as they are used, and develop new smart contracts to handle those. Regardless of asset type, the new Event Bus will be polling an Ethereum node for events on the known smart contracts, and pushing those in to Vega through a new API.
+
 ## On Chain Event Recording
 In order to enable decentralized and secure depositing and withdrawal of funds, we have created a series of “bridge” smart contracts. These bridges each target a specific asset class, such as ETH or ERC20 tokens, and expose simple functionality to allow the Vega network to accept deposits, hold, and then release assets as needed. This immutably records all deposits and withdrawals for all of the assets that Vega markets use, as well as any governance pertaining to the bridge smart contracts.
 Each bridge contains two primary functions and emits two primary events, each tailored to the asset class. They are deposit and withdraw and the corresponding events of deposited and withdrawn. Deposit is ran by a user or process and ensures that the asset is stored safely on-contract and then emits the deposited event. The withdrawal function itself is run by the user or process once signatures have been aggregated from validator nodes. This multisig aggregation is out of the scope of this specification and will be covered elsewhere.
@@ -23,8 +35,6 @@ graph TD
   D[Vega Consensus]-->|Checks event acceptance status|C
   A-->|Requests Withdrawal and aggregates signatures from validators |D
   A-->|Submits signatures to Withdrawal function to receive funds|B
-  
-					
 ```
 
 ### Bridges
