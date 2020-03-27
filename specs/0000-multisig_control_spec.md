@@ -1,5 +1,7 @@
 Feature name: Multisig Smart Contract Control
+
 Start date: 2020-03-27
+
 Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 
