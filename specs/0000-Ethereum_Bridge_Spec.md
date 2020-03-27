@@ -104,19 +104,18 @@ message Oracle_Event_Propagation_Request {
 ```
 
 ### Whitelisting and Blacklisting 
-The ERC20 contract, and any other contract that represents an asset class rather than an individual asset, will maintain a whitelist and a blacklist of assets that can and cannot be withdrawn or deposited. Only whitelisted assets can be withdrawn or deposited. The blacklist takes precedence over the whitelist, giving us the below states:
-* An asset that is not on the whitelist or on the blacklist cannot be withdrawn or deposited
-* An asset that is on the whitelist and not on the blacklist can be withdrawn or deposited
-* An asset that is on the blacklist and not on the whitelist cannot be withdrawn or deposited
-* An asset that is on the whitelist and not on the blacklist cannot be withdrawn or deposited (this shouldn't happen)
+The ERC20 contract, and any other contract that represents an asset class rather than an individual asset, will maintain a whitelist of assets that can and cannot be deposited. Only whitelisted assets can be deposited.
+* An asset that is not on the whitelist cannot be deposited
+* An asset that is on the whitelist can be withdrawn or deposited
+* An asset that is not on the whitelist can be withdrawn
 
 #### Whitelisting
 Whitelisting an asset occurs through a governance decision on the Vega chain. Eventually a user will be in possession of a bundle of signatures that they will send to the smart contract, along with the contact address of the asset to be whitelisted. After this has been accepted on the Ethereum chain, events for that asset will start being sent through to nodes via the Event Bus.
 
-The list of assets that are whitelisted could be inferred by looking through the chain at asset-related governance decisions, but the duty of storing the whitelist is with the Ethereum bridge smart contract, which stores the list on the ethereum chain.
+The list of assets that are whitelisted could be inferred by looking through the chain at asset-related governance decisions, but the duty of storing the whitelist is with the Ethereum bridge smart contract, which stores the list on the ethereum chain. This list is also available through watching for the `asset whitelisted` event raised by the smart contract.
 
 #### Blacklisting
-Blacklisting is not expected to be used much, but is provided in case it turns out to be needed.
+Blacklisting is simply removing an asset from the whitelist
 
 
 # Acceptance Criteria
