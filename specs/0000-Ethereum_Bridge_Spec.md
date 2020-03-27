@@ -37,7 +37,7 @@ graph TD
   A-->|Submits signatures to Withdrawal function to receive funds|B
 ```
 
-### Bridges
+### Bridge smart contracts
 For each asset class, there is a bridge smart contract. Currently all contracts are Ethereum-based assets, namely Ether and ERC20 tokens. In the future ERC721 nonfungible tokens, ERC1155 crypto items, and Oracle Controlled Assets (assets that are reported by an authority) and other asset classes will be added. Each asset class will receive a bridge contract on the appropriate platform (ETH, EOS, Tron, etc).
 
 Each bridge implements a standard interface (Ethereum shown here):
@@ -76,7 +76,7 @@ Deposits happen when a user runs the deposit function of a bridge contract for a
 Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides release an asset to a user. When this happens, the client aggregates signatures from the validator nodes (covered elsewhere). Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorized signatures.
 
 
-# Pseudo-code / Examples
+#### Pseudo-code / Examples
 ```go
 enum Event_Types {
     UNKNOWN = 0;
@@ -102,6 +102,22 @@ message Oracle_Event_Propagation_Request {
         uint32 block_number = 10; // block number of source chain the event occurred 
 }
 ```
+
+### Whitelisting and Blacklisting 
+The ERC20 contract, and any other contract that represents an asset class rather than an individual asset, will maintain a whitelist and a blacklist of assets that can and cannot be withdrawn or deposited. Only whitelisted assets can be withdrawn or deposited. The blacklist takes precedence over the whitelist, giving us the below states:
+* An asset that is not on the whitelist or on the blacklist cannot be withdrawn or deposited
+* An asset that is on the whitelist and not on the blacklist can be withdrawn or deposited
+* An asset that is on the blacklist and not on the whitelist cannot be withdrawn or deposited
+* An asset that is on the whitelist and not on the blacklist cannot be withdrawn or deposited (this shouldn't happen)
+
+#### Whitelisting
+Whitelisting an asset occurs through a governance decision on the Vega chain. Eventually a user will be in possession of a bundle of signatures that they will send to the smart contract, along with the contact address of the asset to be whitelisted. After this has been accepted on the Ethereum chain, events for that asset will start being sent through to nodes via the Event Bus.
+
+The list of assets that are whitelisted could be inferred by looking through the chain at asset-related governance decisions, but the duty of storing the whitelist is with the Ethereum bridge smart contract, which stores the list on the ethereum chain.
+
+#### Blacklisting
+Blacklisting is not expected to be used much, but is provided in case it turns out to be needed.
+
 
 # Acceptance Criteria
 
