@@ -106,49 +106,47 @@ message Oracle_Event_Propagation_Request {
 # Acceptance Criteria
 
 ## Deposit
-*  A bridge smart contract for Ethereum is deployed to Ethereum Testnet (tbd - ropsten?)
-*  A bridge smart contract for ERC20 is deployed to Ethereum Testnet (tbd - ropsten?)
-*  ETH smart contract
-** A multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size
-** An Ethereum Address can call the deposit function and successfully deposit Ethereum, as long as it is above the minimum size deposit
-** A request to deposit any non-Ethereum asset is rejected
-** A deposit call that is below the minimum size is rejected
+* A bridge smart contract for Ethereum is deployed to Ethereum Testnet (tbd - ropsten?)
+* A bridge smart contract for ERC20 is deployed to Ethereum Testnet (tbd - ropsten?)
+* ETH smart contract specific requirements:
+  * A multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size
+  * An Ethereum Address can call the deposit function and successfully deposit Ethereum, as long as it is above the minimum size deposit
+  * A request to deposit any non-Ethereum asset is rejected
+  * A deposit call that is below the minimum size is rejected
 
-* ERC20 smart contract (This can be repeated for many token standards - NFTs and crypto items will be more complex)
-** A valid multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size for a whitelisted token
-** A valid multisig bundle can not be passed to the setMinimum function for a token that is not whitelisted
-** An Ethereum Address can call the deposit function and successfully deposit any whitelisted token, as long as it is above the minimum size deposit
-** A deposit call with a blacklisted token is rejected
-** A deposit call with a non-whitelisted token is rejected
-** A deposit call with a whitelisted token that is below the minimum size is rejected
+* ERC20 smart contract (This can be repeated for many token standards - NFTs and crypto items will be more complex):
+  * A valid multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size for a whitelisted token
+  * A valid multisig bundle can not be passed to the setMinimum function for a token that is not whitelisted
+  * An Ethereum Address can call the deposit function and successfully deposit any whitelisted token, as long as it is above the minimum size deposit
+  * A deposit call with a blacklisted token is rejected
+  * A deposit call with a non-whitelisted token is rejected
+  * A deposit call with a whitelisted token that is below the minimum size is rejected
 
 ## Withdraw
-* ETH smart contract
-** A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
-** An  invalid multisig bundle will be rejected from withdraw
-* ERC20 smart contract
-** A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
-** An invalid multisig bundle will be rejected from withdraw
+* ETH smart contract specific requirements:
+  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
+  * An  invalid multisig bundle will be rejected from withdraw
+* ERC20 smart contract specific requirements:
+  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
+  * An invalid multisig bundle will be rejected from withdraw
 
 ## Whitelist a token (by eth address)
-
 * A bridge smart contract for ERC20 is deployed to Ethereum Testnet (tbd - ropsten?)
-* ERC20 smart contract
-** A valid multisig bundle can be passed to the whitelistToken function to successfully add a token to the whitelist
-** An invalid multisig bundle is rejected by the whitelistToken function
+* ERC20 smart contract specific requirements:
+  * A valid multisig bundle can be passed to the whitelistToken function to successfully add a token to the whitelist
+  * An invalid multisig bundle is rejected by the whitelistToken function
 
 ## Blacklist a token (by eth address)
 * A bridge smart contract for ERC20 is deployed to Ethereum Testnet (tbd - ropsten?)
-* ERC20 smart contract
-** A valid multisig bundle can be passed to the blacklistToken function to successfully remove a previously whitelisted token
-** An invalid multisig bundle is rejected by the blacklistToken function
+* ERC20 smart contract specific requirements:
+  * A valid multisig bundle can be passed to the blacklistToken function to successfully remove a previously whitelisted token
+  * An invalid multisig bundle is rejected by the blacklistToken function
 
 ## Set deposit minimum
 *  A bridge smart contract for Ethereum is deployed to Ethereum Testnet (tbd - ropsten?)
 *  A bridge smart contract for ERC20 is deployed to Ethereum Testnet (tbd - ropsten?)
 *  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset
 *  an invalid multisig bundle is rejected by the setDepositMinimum function
-
 
 # TODO:
 * Create event queue spec
