@@ -162,7 +162,3 @@ Blacklisting is simply removing an asset from the whitelist
 *  A bridge smart contract for ERC20 is deployed to Ethereum Testnet (tbd - ropsten?)
 *  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset
 *  an invalid multisig bundle is rejected by the setDepositMinimum function
-
-# TODO:
-* Create event queue spec
-* Create Multisig spec
