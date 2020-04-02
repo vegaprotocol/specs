@@ -49,7 +49,9 @@ i.e. A proposal of type new market might have a minimum participation level set 
 
 ### Decision weighting
 The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with a few options (or one) for weighting but this must be subject to configuration in the future.
-Initially the weighting will be based on the amount of stake the user has on the network: 1 vega token represents 1 vote. A user with 0 tokens cannot vote.
+Initially the weighting will be based on the amount of stake the user has on the network as determined by their balance of the  configured governance token as a percentage of the total issued supply of that token. 1 token represents 1 vote (0.0001 tokens represents 0.001 votes, etc.). A user with 0 tokens cannot vote, ideally this would be enforced before scheduling the voting transaction in a block.
+
+The governance token used for calculating voting weight must be an asset that is configured within the asset framework in Vega (this could be a "Vega native" asset on some networks or an asset deposited via a bridge, i.e. an ERC20 on Ethereum.) This means that the asset framework will *always* need to be able to support pre-configured assets (the configuration of which must be the same on every node) in order to bootstrap the governance system. The governance asset configuration will be different on different Vega networks, so this cannot be hard coded.
 
 Note on future requirement:
 
