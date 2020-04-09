@@ -19,7 +19,7 @@ This is the main portion of the specification. Break it up as required.
 
 # Pseudo-code / Examples
 ```go
-enum Event_Types {
+enum Asset_Event_Types {
     UNKNOWN = 0;
     Asset_Deposited=1;
     Asset_Withdrawn=2;
@@ -30,8 +30,8 @@ enum Event_Types {
 ```
 
 ```go
-message Oracle_Event_Propagation_Request {
-        string oracle_source = 1; //address of oracle
+message Asset_Event_Propagation_Request {
+        string oracle_source = 1; //address of asset
         string asset_source = 2; //asset source according to that oracle
         string asset_id = 3; //ID of asset specific to that asset_source
         Event_Types event_type = 4; // enumerated event type
@@ -46,6 +46,8 @@ message Oracle_Event_Propagation_Request {
 
 # Acceptance Criteria
 Check list of statements that need to met for the feature to be considered correctly implemented.
+* 
+
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
