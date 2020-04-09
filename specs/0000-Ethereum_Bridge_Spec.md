@@ -40,6 +40,14 @@ graph TD
 ### Bridge smart contracts
 For each asset class, there is a bridge smart contract. Currently all contracts are Ethereum-based assets, namely Ether and ERC20 tokens. In the future ERC721 nonfungible tokens, ERC1155 crypto items, and Oracle Controlled Assets (assets that are reported by an authority) and other asset classes will be added. Each asset class will receive a bridge contract on the appropriate platform (ETH, EOS, Tron, etc).
 
+### Deposits
+Deposits happen when a user runs the deposit function of a bridge contract for a given asset. Once this is executed on-chain, an event is raised from the Ethereum protocol. This event is processed by the event queue (covered in another spec) which passes the event to Vega Consensus. Each node recieves notice of the event either from the Event Queue or through inter-node gossip and validates the transaction for itself on its local external blockchain node (such as Geth, Parity, etc). This necessitates each node to either run a given blockchain node locally or have a trusted source to the node.
+
+### Withdrawals 
+Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides release an asset to a user. When this happens, the client aggregates signatures from the validator nodes (covered elsewhere). Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorized signatures.
+
+
+#### Pseudo-code / Examples
 Each bridge implements a standard interface (Ethereum shown here):
 ```go
 pragma solidity ^0.5.0;
@@ -67,40 +75,6 @@ contract IVega_Bridge {
     function get_multisig_control_address() public view returns(address);
 }
 
-```
-
-### Deposits
-Deposits happen when a user runs the deposit function of a bridge contract for a given asset. Once this is executed on-chain, an event is raised from the Ethereum protocol. This event is processed by the event queue (covered in another spec) which passes the event to Vega Consensus. Each node recieves notice of the event either from the Event Queue or through inter-node gossip and validates the transaction for itself on its local external blockchain node (such as Geth, Parity, etc). This necessitates each node to either run a given blockchain node locally or have a trusted source to the node.
-
-### Withdrawals 
-Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides release an asset to a user. When this happens, the client aggregates signatures from the validator nodes (covered elsewhere). Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorized signatures.
-
-
-#### Pseudo-code / Examples
-```go
-enum Event_Types {
-    UNKNOWN = 0;
-    Asset_Deposited=1;
-    Asset_Withdrawn=2;
-    Asset_Listed=3;
-    Asset_Delisted=4;
-    Deposit_Minimum_Set=5;
-}
-```
-
-```go
-message Oracle_Event_Propagation_Request {
-        string oracle_source = 1; //address of oracle
-        string asset_source = 2; //asset source according to that oracle
-        string asset_id = 3; //ID of asset specific to that asset_source
-        Event_Types event_type = 4; // enumerated event type
-        string source_party_id = 5; // source ethereum address 20 bytes hex preceded by 0x or other party ID of user/contract/system this pertains to
-        string target_party_id = 6; // provided public key on party to target the event to
-        string transaction_hash = 7; // tx hash in question that must lead us to parseable data based on 'event_type'
-        uint32 log_index = 8; // if the transaction outputs multiple events to the log, this tells you which one
-        string event_name = 9; // friendly name of event specific to bridge/source
-        uint32 block_number = 10; // block number of source chain the event occurred 
-}
 ```
 
 ### Whitelisting and Blacklisting 
@@ -160,5 +134,4 @@ Blacklisting is simply removing an asset from the whitelist
 *  A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten)
 *  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset
 *  an invalid multisig bundle is rejected by the setDepositMinimum function
-
 
