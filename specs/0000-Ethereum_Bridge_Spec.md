@@ -52,14 +52,13 @@ Each bridge implements a standard interface (Ethereum shown here):
 ```go
 pragma solidity ^0.5.0;
 
-
 contract IVega_Bridge {
 
-    event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount);
+    event Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, uint256 nonce);
     event Asset_Deposited(address indexed user_address, address indexed asset_source, uint256 indexed asset_id, uint256 amount, bytes32 vega_public_key);
-    event Asset_Deposit_Minimum_Set(address indexed asset_source, uint256 indexed asset_id, uint256 new_minimum);
-    event Asset_Whitelisted(address indexed asset_source, uint256 indexed asset_id);
-    event Asset_Blacklisted(address indexed asset_source, uint256 indexed asset_id);
+    event Asset_Deposit_Minimum_Set(address indexed asset_source, uint256 indexed asset_id, uint256 new_minimum, uint256 nonce);
+    event Asset_Whitelisted(address indexed asset_source, uint256 indexed asset_id, uint256 nonce);
+    event Asset_Blacklisted(address indexed asset_source, uint256 indexed asset_id, uint256 nonce);
     event Multisig_Control_Set(address indexed multisig_control_source);
 
     function whitelist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
