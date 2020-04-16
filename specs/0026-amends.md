@@ -12,6 +12,8 @@ Specification PR: https://gitlab.com/vega-protocol/product/-/merge_requests/52 <
 - The `orderID` remains the same after an amend
 - Amends can occur in continuous trading or in an auction
 - All historic alteration to an order can be viewed from the order storage system
+- All amendable fields can be amended in the same amend message
+- Fields left with default values (0) are not handled as part of the amend action
 
 
 # Summary
@@ -20,7 +22,7 @@ The amend order can alter the quantity, price and expiry time/`TIF` type. The al
 
 
 # Guide-level explanation
-The amend order message is a custom message containing the `orderID` of the original order and optional fields that can be altered. Prices can be changed with a new absolute value, quantity can be reduced or increased from their current remaining size. Expiry time can be set to a new value and the `TIF` type can be toggled between `GTC` and `GTT`.
+The amend order message is a custom message containing the `orderID` of the original order and optional fields that can be altered. Prices can be changed with a new absolute value, quantity can be reduced or increased from their current remaining size. Expiry time can be set to a new value and the `TIF` type can be toggled between `GTC` and `GTT`. Changing the `TIF` field will impact the value in the ExpiryTime field as it will either be blanked or set to a new valid value.
 
 Some examples: 
 A LIMIT order sitting on the bid side of the order book:
@@ -57,7 +59,7 @@ Unlike the message sent for a new order or a cancel, the amend message only cont
 
 
 # Reference-level explanation
-The idea behind amends is to allow the client to alter an existing order atomically preserving order priority where possible.
+The idea behind amends is to allow the client to alter an existing order atomically preserving order priority where possible. Multiple fields can be amended at the same time inside the same amend order message. Fields left with their default values of 0 will not be handled as part of the amend.
 Amending an order does not alter the `orderID` and creation time of the original order.
 The fields which can be altered are:
 - `Price`
@@ -112,3 +114,5 @@ Test cases that need to be implemented to cover most of the edge cases are:
 - Attempt to amend an order to a `TIF` that is not `GTC` or `GTT`. The amend is rejected.
 - Attempt to amend a `GTC` order to `GTT` without setting an expiry time. The amend is rejected.
 - Attempt to amend the expiry time on an order to a time in the past. The amend is rejected.
+- Attempt to amend all of the amendable fields at the same time with valid values.
+- Attempt to amend all of the amendable fields at the same time but with one invalid value which should force the amend to be rejected.
