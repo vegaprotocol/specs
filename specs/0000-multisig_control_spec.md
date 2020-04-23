@@ -11,7 +11,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 In order for the Vega network to authorize function execution on Ethereum smart contracts, a mechanism needs to be created to verify that this is the will of Vega while placing the burden of execution costs on the proposer of the function execution. To do this, we have created a multisig process that enables a proposer to aggregate and submit a number of Vega validator node signatures in order to execute any Vega controlled smart contract function.       
 
 # Guide-level explanation
-Vega controls and maintains a number of Ethereum smart contracts which have functions that can only be ran once authorized by Vega consensus and are always requested by an interested party. 
+Vega controls and maintains a number of Ethereum smart contracts which have functions that can only be run once authorized by Vega consensus and are always requested by an interested party. 
 For instance, for depositing of settlement instrument assets, such as Ether or DAI, Vega has launched a number of "bridge" smart contracts. These contracts contain functions that are controlled and thus only authorizable from Vega consensus. These functions include withdrawing and whitelisting assets.
 
 As an example: once a user has requested a withdrawal and Vega consensus has agreed that the withdrawal should happen, the user will be presented with a number of signed orders from validator nodes that exceeds the threshold of signatures required. The user will then submit this "signature bundle" to the withdrawal function on the bridge smart contract along with the asset type and amount. 
@@ -108,7 +108,7 @@ contract MultisigControl {
 ### MultisigControl Smart Contract 
 * MultisigControl smart contract is deployed to Ethereum testnet (Ropsten)
 * Set Threshold
-  * A valid signature bundle, threshold (in hundredths of %), and unused nonce can be passed to `set_threshold` function to set the approval threshold in hundredths of a percent (`TODO: check this mechanism/math`)
+  * A valid signature bundle, threshold (in tenths of %), and unused nonce can be passed to `set_threshold` function to set the approval threshold in hundredths of a percent (`TODO: check this mechanism/math`)
   * A successful call to `set_threshold` emits `ThresholdSet` event
   * Subsequent calls to `get_current_threshold()` returns updated threshold value
   * An invalid signature passed to `set_threshold` function is rejected 
