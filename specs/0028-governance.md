@@ -61,8 +61,11 @@ e.g: the proposal require 80% of the users who vote to vote yes to be accepted.
 Not in scope: minimum percentage of participation. e.g: require 80% of users who vote to vote yes and 90% of the _active_ users of the vega network have to take part in the vote.
 
 ### Duration of the proposal
-When a proposal is created, it will be configured with a variable end date, until then the proposal is open for votes.
+When a proposal is created it will be have a close date specified in seconds from proposal creation. After the proposal is created in the systm and before the close date, the proposal is open for votes.
+
 e.g: A proposal is created and people have 3 weeks from the day it is sent to the network in order to submit votes for it.
+
+The minimum and maximum close times are configured within the engine. The minimum close time is initially set to **48 hours** and the maximum close time is **1 year**. There is no technical reason for these numbers, but they have been selected as sensible defaults.
 
 ### When changes are applied
 The proposals can also be parameterised about when the change which are voted for will start to be applied.
@@ -167,6 +170,8 @@ message Vote {
 - [ ] As the vega network, all vote received are rejected once the proposal voting period is finished
 - [ ] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it.
 - [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied
+- [ ] As the vega network, proposals that close less than 2 days from enactment are rejected as invalid
+- [ ] As the vega network, proposals that close moreless than 1 year from enactment are rejected as invalid
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
