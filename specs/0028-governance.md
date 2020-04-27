@@ -61,7 +61,7 @@ e.g: the proposal require 80% of the users who vote to vote yes to be accepted.
 Not in scope: minimum percentage of participation. e.g: require 80% of users who vote to vote yes and 90% of the _active_ users of the vega network have to take part in the vote.
 
 ### Duration of the proposal
-When a proposal is created it will be have a close date specified in seconds from proposal creation. After the proposal is created in the systm and before the close date, the proposal is open for votes.
+When a proposal is created it will be have a close date specified as a timetamp. After the proposal is created in the system and before the close date, the proposal is open for votes.
 
 e.g: A proposal is created and people have 3 weeks from the day it is sent to the network in order to submit votes for it.
 
