@@ -1,8 +1,4 @@
-Feature name: feature-name
-Start date: YYYY-MM-DD
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
-
-# Summary
+# Governance
 
 Governance allows token-owning users of the vega network to make on-chain decisions. Implementing this specification will provide a simple framework for users to create proposals involving Markets or the network in general, by creating new markets,
 or updating a market parameter, or network parameters.
