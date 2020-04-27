@@ -22,7 +22,6 @@ Dependencies between proposals and their impact on voting needs to be clarified 
 
 Proposals to upate market parameters are limited to the following:
 
-|-------------------------------------------------------|-----|-----------------------------------------------------------------------------------------|
 | Field                                                 | Y/N | Specifics                                                                               |
 |-------------------------------------------------------|-----|-----------------------------------------------------------------------------------------|
 | Market.Name                                           | Y   | provisionally                                                                           |
@@ -30,7 +29,6 @@ Proposals to upate market parameters are limited to the following:
 | Market.TradableInstrument.Instrument.Product.Maturity | Y   | This determins the EOL of a market, this field might need to be moved to a higher level |
 | Market.TradableInstrument.RiskModel                   | Y   | Both the entire risk model, and individual params of the risk model (needs spec!)       |
 | Market.TradableInstrument.MarginCalculator            | Y   | Updating all scaling factors is possible                                                |
-|-------------------------------------------------------|-----|-----------------------------------------------------------------------------------------|
 
 For a number of these parameters, different rules need to be specified depending on whether or not the market is active or not (e.g. if a market has been trading for some time, suddenly changing the risk factors and scaling factors is risky, less so if the market is not active yet).
 
@@ -75,10 +73,10 @@ The proposals can also be parameterised about when the change which are voted fo
 e.g: A new proposal is created in order to create a new market, after 3 weeks the proposal if closed, if there is enough votes  to accept the new proposal, then the changes will be applied in the network 1 week later.
 This would allow enough time for the operator to be ready for the changes, e.g in the case the proposal is to decide to use a new version of the vega node, or something available only in a later version of the node.
 
-Proposals are applied in the order they were created. This means that in the case that two proposals change the same parameter in roughly the same period, the oldest proposal will be applied first and the newest will be applied last. There is no attempt to resolve differences between the two/
+Proposals are applied in the order they were created. This means that in the case that two proposals change the same parameter in roughly the same period, the oldest proposal will be applied first and the newest will be applied last. There is no attempt to resolve differences between the two.
 
 ## Restriction on who can create a proposal
-In a first implementation anyone will be able to create a proposal if the weighting of their vote on the proposal would be >0 (i.e. has more than 0 tokens)
+In a first implementation anyone will be able to create a proposal if the weighting of their vote on the proposal would be >0 (i.e. has more than 0 tokens).
 
 In future iteration of the governance system we expect to be able to restrict which users can create a proposal.
 The restriction would be applied based on the weighting required by the proposal.
@@ -163,16 +161,16 @@ message Vote {
 ```
 
 # Acceptance Criteria
-- [] As a user, I can create a new proposal to affect the vega network
-- [] As a user, I can vote for an existing proposal if I have more than 0 tokens
-- [] As a user, My vote for an existing proposal is rejected if I have 0 tokens
-- [] As a user, I can list the open proposal on the network
-- [] As a user, I can get a list of all proposal I voted for
-- [] As a user, I can receive notification when a new proposal is created and may require attention.
-- [] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open
-- [] As the vega network, all vote received are rejected once the proposal voting period is finished
-- [] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it.
-- [] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied
+- [ ] As a user, I can create a new proposal to affect the vega network
+- [ ] As a user, I can vote for an existing proposal if I have more than 0 tokens
+- [ ] As a user, My vote for an existing proposal is rejected if I have 0 tokens
+- [ ] As a user, I can list the open proposal on the network
+- [ ] As a user, I can get a list of all proposal I voted for
+- [ ] As a user, I can receive notification when a new proposal is created and may require attention.
+- [ ] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open
+- [ ] As the vega network, all vote received are rejected once the proposal voting period is finished
+- [ ] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it.
+- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
