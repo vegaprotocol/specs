@@ -1,6 +1,6 @@
 Feature name: price-monitoring
 Start date: 2020-04-29
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
+Specification PR: https://github.com/vegaprotocol/product/pull/275
 
 # Acceptance Criteria
 TODO
@@ -17,29 +17,31 @@ To achieve the above we need to be able to check if processing the latest set of
 
 - We need to emit a "significant price change" event if price move over the horizon τ turned out to be more more than what the risk model implied at a probability level α.
     - Take current value, S_t
-    - look-up value S_(t-τ) (prices aren't continuous so will need max(S_s : s  ≤ t-τ), call it  S_(t-τ)^*
-    - Feed S_t and S_(t-τ)^*, τ, α into the risk model get boolean indicating if the price move breached the levels implied by it.
+    - Within risk model
+        - look-up value S_(t-τ) (prices aren't continuous so will need max(S_s : s  ≤ t-τ), call it  S_(t-τ)^*
+        - Feed S_t and S_(t-τ)^*, τ, α into the risk model get boolean indicating if the price move breached the levels implied by it.
     - In general we might have a list of pairs of α, τ.
 - We need to have "atomicity" in order processing:
     - When we process orders at t we need to check what the mark price would've been if we processed all of them (S_t).
     - If is results in "significant price change" event then we want the order book to maintain the state from before we started processing any orders
+
+# Reference-level explanation
+
 - Notes:
     - we need a probability density function (p.d.f.) from the risk model and the inverse p.d.f.
-    - vector of pairs pairs of horizons and probabilities
-    - take 2 values from risk model for 1% move up and move down
+    - vector of pairs of horizons and probabilities
+    - take 2 values from risk model for say 1% move up and move down
     - Implement a cut-off on precision so we don’t return spuriously accurate results
     - Think about caching the quant risk library calculations
     - check tail estimates we get from prob models
 
-# Reference-level explanation
-
-- view from the trading-core side
+- View from the trading-core side:
     - at the end of the block:
         - pricing engine sends the risk model the **LAST** (is this ok or do we need all) mark price and a flag indicating if it was obtained via auction mode or not [DO WE CARE ABOUT THIS LAST BIT? CHECK WITH DAVID]
         - risk model sends back the price bounds applicable for the next block
     - during the block, if processing an order would've resulted in a trade at a price that breaches those bounds the market enters an auction mode (and that order is processed along with the other ones in that mode).
     - the market snaps out of the auction mode once the mark price is back within those bounds (either inside the block or in any of the ones that follow) [CHECK WITH DAVID]
-- view from quant library side (or perhaps another component that interfaces between the two):
+- View from quant library side (or perhaps another component that interfaces between the two):
     - we get a mark price (unless we want more than one) from trading-core and a timestamp (accurate to say a few seconds).
     - we can use that to build a time series (of required length) and can generate either:
         - a signal that tolerance has been breached
