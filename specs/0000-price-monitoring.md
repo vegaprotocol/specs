@@ -17,9 +17,8 @@ To achieve the above we need to be able to check if processing the latest set of
 
 - We need to emit a "significant price change" event if price move over the horizon τ turned out to be more more than what the risk model implied at a probability level α.
     - Take current value, S_t
-    - Within risk model
-        - look-up value S_(t-τ) (prices aren't continuous so will need max(S_s : s  ≤ t-τ), call it  S_(t-τ)^*
-        - Feed S_t and S_(t-τ)^*, τ, α into the risk model get boolean indicating if the price move breached the levels implied by it.
+    - look-up value S_(t-τ) (prices aren't continuous so will need max(S_s : s  ≤ t-τ), call it  S_(t-τ)^*
+     - Feed S_t and S_(t-τ)^*, τ, α into the risk model get boolean indicating if the price move breached the levels implied by it.
     - In general we might have a list of pairs of α, τ.
 - We need to have "atomicity" in order processing:
     - When we process orders at t we need to check what the mark price would've been if we processed all of them (S_t).
