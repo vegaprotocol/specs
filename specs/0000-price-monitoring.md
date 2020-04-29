@@ -34,19 +34,18 @@ To achieve the above we need to be able to check if processing the latest set of
     - Think about caching the quant risk library calculations
     - check tail estimates we get from prob models
 
-- View from the trading-core side:
+- View from the `vega` side:
     - at the end of the block:
         - pricing engine sends the risk model the **LAST** (is this ok or do we need all) mark price and a flag indicating if it was obtained via auction mode or not [DO WE CARE ABOUT THIS LAST BIT? CHECK WITH DAVID]
         - risk model sends back the price bounds applicable for the next block
     - during the block, if processing an order would've resulted in a trade at a price that breaches those bounds the market enters an auction mode (and that order is processed along with the other ones in that mode).
     - the market snaps out of the auction mode once the mark price is back within those bounds (either inside the block or in any of the ones that follow) [CHECK WITH DAVID]
-- View from quant library side (or perhaps another component that interfaces between the two):
+- View from `quant` library side (or perhaps another component that interfaces between the two):
     - we get a mark price (unless we want more than one) from trading-core and a timestamp (accurate to say a few seconds).
     - we can use that to build a time series (of required length) and can generate either:
         - a signal that tolerance has been breached
         - a tolerance bound to be checked at a future timestamp
         - a tolerance bound to apply within the next block
-
 
 # Pseudo-code / Examples
 TODO
