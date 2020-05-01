@@ -1,6 +1,6 @@
 Feature name: amends <br>
 Start date: `2020-03-12` <br>
-Specification PR: https://gitlab.com/vega-protocol/product/-/merge_requests/52 <br>
+Specification PR: https://github.com/vegaprotocol/product/pulls <br>
 
 # Acceptance Criteria
 - Only LIMIT orders can be amended, any attempt to amend a non LIMIT order is rejected
@@ -14,11 +14,12 @@ Specification PR: https://gitlab.com/vega-protocol/product/-/merge_requests/52 <
 - All historic alteration to an order can be viewed from the order storage system
 - All amendable fields can be amended in the same amend message
 - Fields left with default values (0) are not handled as part of the amend action
+- An amend with only the same values as the order still cause the `UpdateAt` field to update but nothing else
 
 
 # Summary
 Amends are sent into the VEGA system to alter fields on all persistent orders held within the order book.
-The amend order can alter the quantity, price and expiry time/`TIF` type. The altered order still uses the same `orderID` and creation time of the original order.
+The amend order can alter the quantity, price and expiry time/`TIF` type. The altered order still uses the same `orderID` and creation time of the original order. Every valid amend will cause the `UpdatedAt` field to be updated.
 
 
 # Guide-level explanation
@@ -59,7 +60,7 @@ Unlike the message sent for a new order or a cancel, the amend message only cont
 
 
 # Reference-level explanation
-The idea behind amends is to allow the client to alter an existing order atomically preserving order priority where possible. Multiple fields can be amended at the same time inside the same amend order message. Fields left with their default values of 0 will not be handled as part of the amend.
+The idea behind amends is to allow the client to alter an existing order atomically preserving order priority where possible. Multiple fields can be amended at the same time inside the same amend order message. Fields not specified in the amend message will not be handled as part of the amend.
 Amending an order does not alter the `orderID` and creation time of the original order.
 The fields which can be altered are:
 - `Price`
@@ -73,7 +74,7 @@ The fields which can be altered are:
 
 
 ## Version numbering
-To keep all versions of an order available for historic lookup, when an order is amended the new version of the order has a new version number so we can correctly identify when fields have changed. Each version of the order is stored in the storage system and the key will need to use the version number to prevent newer orders overwriting orders that have the same `orderID`
+To keep all versions of an order available for historic lookup, when an order is amended the new version of the order has a new version number so we can correctly identify when fields have changed. Each version of the order is stored in the storage system and the key will need to use the version number to prevent newer orders overwriting orders that have the same `orderID`. No-op amends that only update the `UpdatedAt' timestamp do not increment the version number.
 
 
 # Pseudo-code / Examples
@@ -116,3 +117,4 @@ Test cases that need to be implemented to cover most of the edge cases are:
 - Attempt to amend the expiry time on an order to a time in the past. The amend is rejected.
 - Attempt to amend all of the amendable fields at the same time with valid values.
 - Attempt to amend all of the amendable fields at the same time but with one invalid value which should force the amend to be rejected.
+- Send amends with only one amendable field specified with the current value in it. The amend will be accepted but nothing apart from the `ModifiedAt` field will be changed.
