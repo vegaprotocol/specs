@@ -3,14 +3,16 @@ Start date: 2020-04-29
 Specification PR: https://github.com/vegaprotocol/product/pull/275
 
 # Acceptance Criteria
-TODO
+**TODO**
 
 # Summary
 There will be times when prices in our markets move by a large amount over a short period of time. While there's nothing wrong with that per se (it may simply be a result of new information being published and market reacting to that), we need to make sure that we minimise the impact of that on the stability of our markets as measured by their volatility and number of traders getting closed-out by the network. One way of achieving this is to put markets into auction mode during those periods as it has been shown that this can result in a more orderly incorporation of new information into the market price.
 
 Another reason why this is important is the reliance on risk models for calculation of margin requirements for each trade and the fact that those margins are implied by the model's view of the range of prices that are possible in the near future with some specified probability level. To give an example, say the actual market move over last hour is larger than what our model was impling at the time, then the margins that were charged on positions that are still open may be insufficient to cover those moves for traders that were negatively impacted by them (if the margins haven't been updated over that time). To prevent that we need to be able to detect those moves as they occur and be able to change the trading mode on the fly.
 
-To achieve the above we need to be able to check if processing the latest set of orders in market's default trading mode (e.g. continous trading) would result in the "sensible" price level as implied by the risk model being breached. If that's the case we need to be able to roll-back processing of those orders, switch to the fallback trading mode (e.g. auction mode) and process those orders in that way. TODO: outline how would we switch back to deafault trading.
+To achieve the above we need to be able to check if processing the latest set of orders in market's default trading mode (e.g. continous trading) would result in the "sensible" price level as implied by the risk model being breached. If that's the case we need to be able to roll-back processing of those orders, switch to the fallback trading mode (e.g. auction mode) and process those orders in that way. 
+
+**TODO**: outline how would we switch back to deafault trading.
 
 
 # Guide-level explanation
@@ -48,7 +50,7 @@ To achieve the above we need to be able to check if processing the latest set of
         - a tolerance bound to apply within the next block
 
 # Pseudo-code / Examples
-TODO
+**TODO**
 
 # Test cases
-TODO
+**TODO**
