@@ -50,7 +50,7 @@ Price monitoring likely won't be the only possible trigger for changing the trad
   - pricing engine sends the risk model<sup>[1](#footnote1)</sup> the **LAST** ([![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `TODO (confirm): is this ok or do we need all/max)` mark price and a flag indicating if it was obtained via auction mode or not [![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `TODO (confirm): Do we care how the price was obtained?`]
   - risk model sends back the price bounds applicable for the next block
 - during the block, if processing an order would've resulted in a trade at a price that breaches those bounds the market enters an auction mode (and that order is processed along with the other ones in that mode) [![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `TODO (confirm): what's the finest resolution that we care about - do we want to monitor all price within the block (WG: I think so as getting different outcomes depending how we slice the blocks doesn't seem desirable) or just the final price at the end of the block` ].
-  - the market snaps out of the auction mode once the mark price is back within those bounds (either inside the block or in any of the ones that follow) ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `TODO (confirm)`
+  - the market snaps out of the auction mode once the market clearing price is back within those bounds (either inside the block or in any of the ones that follow) ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `TODO (confirm)`
 
 ## View from [quant](https://github.com/vegaprotocol/quant) library side<sup>[1](#myfootnote1)</sup>
 
