@@ -16,18 +16,21 @@ As mentioned earlier, this specification introduces new trading modes. A first o
 
 ## Auction period at market creation
 This trading mode is very similar to the Continuous trading mode for a market. In this configuration, a market will start in auction mode, then once the auction comes to an end the market will switch back to the continuous trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
-A market cannot be in both mode at the same time and will trade ever in a auction or continuous trading.
+A market cannot be in both mode at the same time and will trade ever in a auction or continuous trading. There will be the normal trading mode, configured in the market framework, and a period mode which temporarily overrides it. For example a market may be configured to be a Frequent Batch Auction market, but be in an Auction Period triggered by liquidity monitoring.
 
-As a first implementation this feature is expected to only support starting the markets in auctions, then once the auction reaches an end, switch back to the continuous trading mode forever.
+In the first implementation, auction periods will be used at opening only as price monitoring will not exist.
 
 There will be a network parameter that sets the minimum allowable duation of the auction period at market creation. New market proposals must specify a period of at least this duration.
 
 ## Frequent batch auction
 The frequent batch auction mode is a trading mode in perpetual auction, meaning that all uncrossing on the book is done at the end of auction period, then once this is done, and trades happen, a new auction period is started, and this forever until the market close.
+
 e.g: auctions could be set to last 10 minutes, then every 10 minutes the book would be uncrossing, and generating trades.
 
+Note that FBAs will still have an opening auction (which must have a duration equal to or greater than the minimum batch auction duration, as well as meeting the minimum opening auction duration. Price and liquidity monitoring will be able to override the trading mode and push the market into longer auctions to resolve the triggering event.
+
 ## Duration of frequent batch auctions
-As part of the market framework, we need to be able to specify the duration of auctions period. This should be added as a new setting to the trading modes.
+As part of the market framework, we need to be able to specify the duration of auctions period. This should be added as a new network setting to the trading modes, and can be changed through governance.
 We can also imagine that an auction period could come to an end once a give number of orders have been placed on the system.
 
 ### Volume maximising prices
@@ -86,15 +89,17 @@ message Market {
 ```
 # Acceptance Criteria
 - [] As a user, I can configure a market through the market configuration to use auction mode
- - [] I can define an opening auction for a continuous trading market, and the duration of the call period.
- - [] I can define a market to operate as Frequent Batch Auction, and the duration of the call period.
- - [] I can choose what algorithm is used to decided the pricing at the end of the auction period.
-- [] As the vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period.
+  - [] I can define an opening auction for a continuous trading market, and the duration of the call period.
+  - [] The duration of the auction period at market creation cannot be below the minimum auction period defined within the network
+  - [] I can define a market to operate as Frequent Batch Auction, and the duration of the call period.
+  - [] I can choose what algorithm is used to decided the pricing at the end of the auction period.
+- [] As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period.
 - [] As a user, I can place an order when the market is in auction mode, but it will not trade immediately.
 - [] As a user, I cannot place a Market order, or and order using FOK or IOC time in force.
 - [] As a user, I can get information about the trading mode of the market (through the market framework)
 - [] As a user, I can get real time information throught the API about a market in auction mode: indicative crossing price, indicative crossing volume.
-
-
-# Test cases
-Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
+- [] As an API user, I can identify:
+  - If a market is temporarily in an auction period
+  - Why it is in that period (e.g. Auction at open, liquididty sourcing)
+  - What price mode that auction will use when the auction is over
+  - When the auction mode ends
