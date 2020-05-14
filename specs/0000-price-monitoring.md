@@ -14,22 +14,25 @@ Specification PR: https://github.com/vegaprotocol/product/pull/275
 
 # Summary
 
-There will be times when prices in our markets move by a large amount over a short period of time. While there's nothing wrong with that per se (it may simply be a result of new information being published and market reacting to that), we need to make sure that we minimise the impact of that on the stability of our markets as measured by their volatility and number of traders getting closed-out by the network. One way of achieving this is to put markets into auction mode during those periods as it has been shown that this can result in a more orderly incorporation of new information into the market price.
+The dynamics of market price movements are such that prices don't always represent the participants' true average view of the price, but are instead artefacts of the market microstructure: sometimes low liquidity and/or a large quantity of order volume can cause the price to diverge from the true market price. It is impossible to tell at any point in time if this has happened or not.
 
-Another reason why this is important is the reliance on risk models for calculation of margin requirements for each trade and the fact that those margins are implied by the model's view of the range of prices that are possible in the near future with some specified probability level. To give an example, say the actual market move over last hour is larger than what our model was impling at the time, then the margins that were charged on positions that are still open may be insufficient to cover those moves for traders that were negatively impacted by them (if the margins haven't been updated over that time). To prevent that we need to be able to detect those moves as they occur and be able to change the trading mode on the fly.
+As a result, we assume that relatively small moves are "real" and that larger moves might not be. Price monitoring exists to determine the real price in the latter case. Distinguishing between small and large moves can be highly subjective and market-dependent. We are going to rely on the risk model to formalise this process. Risk model can be used to obtain the probability distribution of prices at a future point in time given the current price. A price monitoring trigger can be constructed using a fixed horizon and probability level.
+To give an example: get the price distribution in an hour as implied by the risk model given the current mid price, if after the hour has passed and the actual mid price is beyond (either too low or too high) what the model implied with some chosen probability level (say 99%), then we'd charaterise such market move as large.  In general we may want to use a few such triggers per market (i.e. different horizon and probability level pairs). The framework should be able to trigger a temporary period with any valid trading mode.
 
-To achieve the above we need to be able to check if processing the latest set of orders in market's default trading mode (e.g. continuous trading) would result in the "sensible" price level as implied by the risk model being breached. If that's not the case we need to be able to roll-back processing of those orders, switch to the fallback trading mode (e.g. auction mode) and process those, and any new, orders in that way.
+As mentioned above, price monitoring is meant to stop large market movements that are not "real" from occuring, rather than just detect them after the fact. To that end, it is necessary to pre-process every transaction in the current trading mode (e.g. continuous trading) and check if it triggers the price monitornig action. If pre-processing the transaction doesn't result in the trigger being activated then it should be "committed" by generating the associated events and modifying the order book accordingly (e.g. generate a trade and take the orders that matched off the book). On the other hand if the trigger is activated, the entire order book **along with that transaction** needs to be processed in a temporary auction mode. Once the auction period finishes the trading should return to the mode that was used prior to the trigger being hit.
 
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `TODO (confirm): Once the market is in the fallback trading mode the mid-price will still be update as trading occurs (e.g. via auctions). Throughout this process the risk model will continue to provide projections and once the mid price falls back into the range projected for a given point in time the market will switch trading mode back to market's default.`
+Please see the [auction spec](https://github.com/vegaprotocol/product/blob/187-auction-spec/specs/0026-auctions.md) for details of the auction mode.
 
 ### Note
 
-Price monitoring likely won't be the only possible trigger for changing the trading mode (liquidity monitoring - spec pending - or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other triggers and possibly different fallback modes (defined in the market configuration) per trigger.
+Price monitoring likely won't be the only possible trigger for changing the trading mode (liquidity monitoring - spec pending - or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
+
+Likewise, pre-processing transactions will be needed as part of the [fees spec](https://github.com/vegaprotocol/product/blob/WIP-fees-spec/specs/0029-fees.md), hence it should be implemented in such a way that it's easy to repurpose it.
 
 # Guide-level explanation
 
 - We need to emit a "significant price change" event if price move over the horizon τ turned out to be more than what the risk model implied at a probability level α.
-  - Take current mid-price S_t,
+  - Take current mid price S_t,
   - look-up value S_{t-τ} (prices aren't continuous so will need max(S_s : s  ≤ t-τ), call it  S_{t-τ}^*,
   - get the bounds associated with S_{t-τ}^* at a probability level α:
     - if S_t falls within those bounds then order book processing is carried out in the default trading mode,
