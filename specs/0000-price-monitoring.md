@@ -53,8 +53,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
   - pricing engine sends the risk model<sup>[1](#footnote1)</sup> the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`
   - risk model sends back signal informing if the price protection auction should be triggered (and if so how long the auction period should be)
   - if no trigger gets activated then the transaction is processed in a regular fashion, otherwise:
-    - the price protection auction commences and the transaction considered should be processed in this way (along with any other orders on the book that are valid for auction)
-    - [![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `TODO (research): Confirm what should we do about other transactions that are pending (e.g. there was an amend for one of the orders, that triggered the price protection auction. There are still other amends to be processed (do we get through all of them before we start trying to uncross the auction?]`
+    - the price protection auction commences and the transaction considered should be processed in this way (along with any other orders on the book and pending transactions that are valid for auction).
 
 ## View from [quant](https://github.com/vegaprotocol/quant) library side<sup>[1](#myfootnote1)</sup>
 
