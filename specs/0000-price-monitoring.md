@@ -57,17 +57,21 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 ## View from [quant](https://github.com/vegaprotocol/quant) library side<sup>[1](#myfootnote1)</sup>
 
-- we get arrival price of the next transaction and `vega time` from vega
+- we get arrival price of the next transaction and `vega time` from [vega](https://github.com/vegaprotocol/vega)
 - we can use that to build a time series and calculate the bounds associated with each trigger
 - these bounds are to be available to other components and included in the market data API
-- the bounds are to be updated at the one second resolution
-- the latest bounds and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should it's period be (see below).
+- note that bounds themselves will form a timeseries covering range from current time to the maximum τ specified in the triggers.
+- the bounds are to be calculated at the one second resolution
+- the bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
 
-To give an example, with 3 triggers the price protection auction can be calculated as follows:
+- To give an example, with 3 triggers the price protection auction can be calculated as follows:
 
-- \>=1% move in 10 min window -> 5 min auction
-- \>=2% move in 30 min window -> 15 min auction (i.e. if after 5 min this trigger condiiton is satisfied by the price we'd uncross at, extend auction by 10 mins)
-- \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins)
+  - \>=1% move in 10 min window -> 5 min auction
+  - \>=2% move in 30 min window -> 15 min auction (i.e. if after 5 min this trigger condiiton is satisfied by the price we'd uncross at, extend auction by 10 mins)
+  - \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins)
+
+- at the market start time and after each price-monitoring auction period the bounds will reset
+  - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
 
 ### Notes
 
