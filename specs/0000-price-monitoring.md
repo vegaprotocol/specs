@@ -33,7 +33,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 - We need to emit a "significant price change" event if price move over the horizon τ turned out to be more than what the risk model implied at a probability level α.
   - Take **arrival price of the next transaction** (the value that will be the last traded price if we process the next transaction): V<sub>t</sub>,
-  - look-up value S<sub>t-τ</sub>, (prices aren't continuous so will need max(S<sub>s</sub> : s  ≤ t-τ), call it  S<sub>t-τ</sub><sup>*</sup>,
+  - look-up mid-price S<sub>t-τ</sub>, (prices aren't continuous so will need max(S<sub>s</sub> : s  ≤ t-τ), call it  S<sub>t-τ</sub><sup>*</sup>,
   - get the bounds associated with S<sub>t-τ</sub><sup>*</sup>, at a probability level α:
     - if V<sub>t</sub> falls within those bounds then transaction is processed in the current trading mode
     - otherwise the transaction (along with the rest of order book) needs to be processed via a temporary auction.
