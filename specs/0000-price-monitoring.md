@@ -32,13 +32,13 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 # Guide-level explanation
 
 - We need to emit a "significant price change" event if price move over the horizon τ turned out to be more than what the risk model implied at a probability level α.
-  - Take **arrival price of the next transaction** (the value that will be the last traded price if we process the next transaction): V_t,
-  - look-up value S_{t-τ} (prices aren't continuous so will need max(S_s : s  ≤ t-τ), call it  S_{t-τ}^*,
-  - get the bounds associated with S_{t-τ}^* at a probability level α:
-    - if V_t falls within those bounds then transaction is processed in the current trading mode
+  - Take **arrival price of the next transaction** (the value that will be the last traded price if we process the next transaction): V<sub>t</sub>,
+  - look-up value S<sub>t-τ</sub>, (prices aren't continuous so will need max(S<sub>s</sub> : s  ≤ t-τ), call it  S<sub>t-τ</sub><sup>*</sup>,
+  - get the bounds associated with S<sub>t-τ</sub><sup>*</sup>, at a probability level α:
+    - if V<sub>t</sub> falls within those bounds then transaction is processed in the current trading mode
     - otherwise the transaction (along with the rest of order book) needs to be processed via a temporary auction.
 - We need to have "atomicity" in transaction processing:
-  - When we process transaction we need to check what the arrival price V_t is.
+  - When we process transaction we need to check what the arrival price V<sub>t</sup> is.
   - If it results in "significant price change" event then we want the order book to maintain the state from before we started processing the transation.
   - Price protection auction is then triggered for a period T.
 - In general we might have a list of triplets: α, τ, T specifying each trigger.
