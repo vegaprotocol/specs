@@ -42,8 +42,8 @@ these trades (as this would result in a new market-wide mark to market settlemen
 
 ### Note
 
-* Entire disstressed position should always be liquidated - even if reducing position size, by say 50%, would result in the remaining portion being above the trader's maintentance margin.
-* When there's insufficient volume on the order-book to close out a distressed position no action should be taken: the position remains open and any amounts in trader's margin account should stay there. Same pricnciple should apply if upon next margin recalculation the position is still distressed.
+* Entire distressed position should always be liquidated - even if reducing position size, by say 50%, would result in the remaining portion being above the trader's maintenance margin.
+* When there's insufficient volume on the order-book to close out a distressed position no action should be taken: the position remains open and any amounts in trader's margin account should stay there. Same principle should apply if upon next margin recalculation the position is still distressed.
   
 # Examples and Pseudo code
 
