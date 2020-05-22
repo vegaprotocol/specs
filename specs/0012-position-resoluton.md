@@ -40,6 +40,11 @@ these trades (as this would result in a new market-wide mark to market settlemen
 
 6. If an order was executed on the market (in Step 3), the resulting trade volume between the network and passive orders must be mark-to-market settled for all parties involved including the network's internal 'virtual' party. As the network's closeout counterparty doesn't have collateral, any funds it 'owes' will be transferred from the insurance fund during this settlement process (as defined in the [settlement spec](./0003-mark-to-market-settlement.md).). It's worth noting that the network close-out party must never have margins calculated for it. This also should naturally happen because no margin calculations would happen during the period that the network temporarily (instantaneously) has an open position, as the entire position resolution process must happen atomically.
 
+### Note
+
+* Entire disstressed position should always be liquidated - even if reducing position size, by say 50%, would result in the remaining portion being above the trader's maintentance margin.
+* When there's insufficient volume on the order-book to close out a distressed position no action should be taken: the position remains open and any amounts in trader's margin account should stay there. Same pricnciple should apply if upon next margin recalculation the position is still distressed.
+  
 # Examples and Pseudo code
 
 ## ***Scenario -  All steps***
