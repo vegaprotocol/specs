@@ -54,7 +54,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
   - if no trigger gets activated then the transaction is processed in a regular fashion, otherwise:
     - the price protection auction commences and the transaction considered should be processed in this way (along with any other orders on the book and pending transactions that are valid for auction).
 
-## View from [quant](https://github.com/vegaprotocol/quant) library side<sup>[1](#myfootnote1)</sup>
+## View from [quant](https://github.com/vegaprotocol/quant) library side<sup>[1](#footnote1)</sup>
 
 - we get arrival price of the next transaction and `vega time` from [vega](https://github.com/vegaprotocol/vega)
 - we can use that to build a time series and calculate the bounds associated with each trigger
