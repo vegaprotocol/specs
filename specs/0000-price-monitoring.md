@@ -4,8 +4,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/275
 
 # Acceptance Criteria
 
-- [ ] Risk model returns probability density function (p.d.f.) and the inverse p.d.f.
-- [ ] Risk model returns bounds for a move with a specified probability over a specified period.
+- [ ] Risk model exposes a function that takes as input: (current price, confidence level alpha, time period tau) and returns the signal instructing core if a price protection auction should commence, and if so, what should its' period be.
 - [ ] Risk model prescribes maximum probability level which it can support.
 - [ ] `vega` refuses to create a market if the specified probability level for price monitoring exceeds what the risk model specifies - to avoid spurious accuracy and runtime errors.
 - [ ] `vega` triggers price protection auction period based on the price monitoring signal.
@@ -72,6 +71,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 - at the market start time and after each price-monitoring auction period the bounds will reset
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
+- internally the risk model implements a function that takes as input: (current price, confidence level alpha, time period tau) and return limits S<sup>min</sup> and S<sup>max</sup> such that P(S<sup>min</sup> < <S<sup>τ</sup> < S<sup>max</sup>) ≥ α. Example input (100, 1 hour, 0.99) returns S_max = 111.2343 and S_min = 93.456.
 
 ### Notes
 
