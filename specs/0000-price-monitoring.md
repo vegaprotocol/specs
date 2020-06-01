@@ -71,7 +71,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 - at the market start time and after each price-monitoring auction period the bounds will reset
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
-- internally the risk model implements a function that takes as input: (current price, confidence level alpha, time period tau) and return limits S<sup>min</sup> and S<sup>max</sup> such that P(S<sup>min</sup> < <S<sup>τ</sup> < S<sup>max</sup>) ≥ α. Example input (100, 1 hour, 0.99) returns S_max = 111.2343 and S_min = 93.456.
+- internally the risk model implements a function that takes as input: (current price, confidence level alpha, time period tau) and return limits S<sup>min</sup> and S<sup>max</sup> such that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α. Example input (100, 1 hour, 0.99) returns S_max = 111.2343 and S_min = 93.456.
 
 ### Notes
 
