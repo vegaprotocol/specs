@@ -4,7 +4,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/275
 
 # Acceptance Criteria
 
-- [ ] Risk model exposes a function that takes as input: (current price, confidence level alpha, time period tau) and returns the signal instructing core if a price protection auction should commence, and if so, what should its' period be.
+- [ ] Risk model exposes a function that takes as input: (current price, confidence level alpha, time period tau) and returns the signal instructing core if a price protection auction should commence, and if so, what should its period be.
 - [ ] Risk model prescribes maximum probability level which it can support.
 - [ ] `vega` refuses to create a market if the specified probability level for price monitoring exceeds what the risk model specifies - to avoid spurious accuracy and runtime errors.
 - [ ] `vega` triggers price protection auction period based on the price monitoring signal.
@@ -49,7 +49,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 ## View from the [vega](https://github.com/vegaprotocol/vega) side
 
 - for each transaction:
-  - pricing engine sends the risk model<sup>[1](#footnote1)</sup> the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`
+  - The price monitoring engine sends the risk model<sup>[1](#footnote1)</sup> the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`
   - risk model sends back signal informing if the price protection auction should be triggered (and if so how long the auction period should be)
   - if no trigger gets activated then the transaction is processed in a regular fashion, otherwise:
     - the price protection auction commences and the transaction considered should be processed in this way (along with any other orders on the book and pending transactions that are valid for auction).
