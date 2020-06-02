@@ -37,7 +37,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
     - if V<sub>t</sub> falls within those bounds then transaction is processed in the current trading mode
     - otherwise the transaction (along with the rest of order book) needs to be processed via a temporary auction.
 - We need to have "atomicity" in transaction processing:
-  - When we process transaction we need to check what the arrival price V<sub>t</sup> is.
+  - When we process transaction we need to check what the arrival price V<sub>t</sub> is.
   - If it results in "significant price change" event then we want the order book to maintain the state from before we started processing the transation.
   - Price protection auction is then triggered for a period T.
 - In general we might have a list of triplets: α, τ, T specifying each trigger.
