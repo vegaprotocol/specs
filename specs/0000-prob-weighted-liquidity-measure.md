@@ -10,7 +10,7 @@ Here we propose a method counts liquidity as the probability weighted average of
 This gives view of liquidity at one instant of time; we then use exponential weighted average over time to obtain the desired measure.
 
 ## Terminology
-- $`\Lambda_t`$ is the exponentially-in-time weighted and probabilistically-in-space-weighted liquidity which we are defining in this spec file.
+- $\Lambda_t$ is the exponentially-in-time weighted and probabilistically-in-space-weighted liquidity which we are defining in this spec file.
 - mid price = (best bid - best offer) / 2 (or undefined if either side of the book is empty)
 - buy / sell side volume refer to the volume available at a distance from mid price, $`V = V(x)`$, where $`x > 0`$ refers to sell side, $`x < 0`$ refers to buy side and $`x`$ belongs to the set of all price points available on the book
 - probability of volume at distance from mid price being hit: $`p = p(x)`$, this will come from risk model
