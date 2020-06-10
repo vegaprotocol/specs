@@ -16,19 +16,18 @@ Not covered is proposal rate limiting, spam protection or fees related to propos
 
 # Guide-level explanation
 
-Governance actions enable users to make proposals for changes on the network or vote for existing proposals. Proposals should be able to cover multiple aspect of the vega protocol:
-1. create a new market
-1. close or suspend an existing market
-1. change parameters of an existing market (e.g: change some settings of a risk model for a given market)
-1. update parameters of the network
+Governance actions enable users to make proposals for changes on the network or vote for existing proposals. Proposals should be able to cover multiple aspects of the vega protocol:
+
+1. Creation of a market
+1. Edit market parameters
+1. Edit network parameters
 
 ## Lifecycle of a proposal
 1. Governance proposal is submitted to the network.
 1. The network validates the proposal.
 1. If valid, the network holds the proposal active for a proposal period.
 1. During the proposal period, network participants who are eligible to vote on the proposal may submit votes for or against the proposal.
-1. At the conclusion of the proposal period the network revalidates the proposal
-1. If the proposal is still valid, the network will calculate the outcome.
+1. The network calculates the outcome.
 
 Any actions that result from the outcome of the vote are covered in other spec files.
 
@@ -110,8 +109,7 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 
 We allow users to create proposals covering 4 domains:
 
-1. Creation or amending of a market (market framework)
-1. Close or suspend an existing market
+1. Creation of a market
 1. Edit market parameters
 1. Edit network parameters
 
@@ -130,53 +128,54 @@ All **market amend proposals** will reference a set of shared network parameters
 * `NetworkParameters.Governance.Markets.Amend.MinimumRequiredParticipation` [always used]
 * `NetworkParameters.Governance.Markets.Amend.MinimumRequiredMajority` [always used]
 
-## 2. Close or suspend an existing market
 
-All market proposals to **close or suspend a market** will reference a set of shared network parameters.
+## 2. Edit market parameters
 
-* `NetworkParameters.Governance.Markets.Close.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Markets.Close.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Markets.Close.MinimumRequiredMajority` [always used]
+In future when there are multiple products, parameters that can be changed via governance will be defined individually for the product.
 
-## 3. Edit market parameters
-
-
-Proposals to update market parameters are limited to the following:
+For now, proposals to update market parameters are limited to the following:
 
 | Field                                                 | Y/N | Specifics                                                                               |
 |-------------------------------------------------------|-----|-----------------------------------------------------------------------------------------|
 | Market.TradingMode                                    | Y   | Both the trading mode itself, and the individual fields                                 |
 | Market.TradableInstrument.RiskModel                   | Y   | Both the entire risk model, and individual params of the risk model (needs spec!)       |
 | Market.TradableInstrument.MarginCalculator            | Y   | Updating all scaling factors is possible                                                |
-| Market.TradableInstrument.Instrument.Code            | Y   | Updating the descriptive name                                                |                                              |
+| Market.TradableInstrument.Instrument.Code             | Y   | Updating the descriptive name                                           |                                              |
+| Market.Status            | Y   | Including for closing or suspending a market                                                |                                              |
 
+Add category/subtype: "Trading" (mode and status), others under instrument
 
-For version 1 of governance, all market parameters should reference the following network parameters:
-* `NetworkParameters.Governance.Market.Parameters.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Market.Parameters.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Market.Parameters.MinimumRequiredMajority` [always used]
+For version 1 of governance, all trading parameters should reference the following network parameters:
+* `NetworkParameters.Governance.Market.Trading.MinimumProposalPeriod` [default]
+* `NetworkParameters.Governance.Market.Trading.MinimumRequiredParticipation` [always used]
+* `NetworkParameters.Governance.Market.Trading.MinimumRequiredMajority` [always used]
+
+For version 1 of governance, all instrument parameters should reference the following network parameters:
+* `NetworkParameters.Governance.Market.Instrument.MinimumProposalPeriod` [default]
+* `NetworkParameters.Governance.Market.Instrument.MinimumRequiredParticipation` [always used]
+* `NetworkParameters.Governance.Market.Instrument.MinimumRequiredMajority` [always used]
 
 In future, we may define separate network parameters depending on either:
 1. The type of parameter that is the subject of the change proposal.
 1. A set of rules that specify which parameter would be used according to a set of conditions - such as, whether or not the market is active or not (e.g. if a market has been trading for some time, suddenly changing the risk factors and scaling factors is risky, less so if the market is not active yet).
-
 
 ## 4. Edit network parameters
 
 
 For version 1 of governance, all network parameter change proposals should reference the following network parameters:
 
-* `NetworkParameters.Governance.Network.Parameters.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Network.Parameters.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Network.Parameters.MinimumRequiredMajority` [always used]
+* `NetworkParameters.Governance.Network.<Type>.MinimumProposalPeriod` [default]
+* `NetworkParameters.Governance.Network.<Type>.MinimumRequiredParticipation` [always used]
+* `NetworkParameters.Governance.Network.<Type>.MinimumRequiredMajority` [always used]
+
+In the future, the network parameter framework will specify the Type.
 
 All network parameters may at some point be assigned individual network parameters that govern a particular change to themselves.
 
+Note
 
+`NetworkParameters.Governance.Network.<Type = governance>.MinimumProposalPeriod` control changing the minimum proposal periods.. blah blah
 
-* `NetworkParameters.Governance.Network.Parameters.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Network.Parameters.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Network.Parameters.MinimumRequiredMajority` [always used]
 
 ## APIs
 
