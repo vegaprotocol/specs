@@ -24,9 +24,11 @@ Governance actions enable users to make proposals for changes on the network or 
 
 ## Lifecycle of a proposal
 1. Governance proposal is submitted to the network.
-1. The network holds the proposal active for a proposal period.
+1. The network validates the proposal.
+1. If valid, the network holds the proposal active for a proposal period.
 1. During the proposal period, network participants who are eligible to vote on the proposal may submit votes for or against the proposal.
-1. At the conclusion of the proposal period the network will calculate the outcome.
+1. At the conclusion of the proposal period the network revalidates the proposal
+1. If the proposal is still valid, the network will calculate the outcome.
 
 Any actions that result from the outcome of the vote are covered in other spec files.
 
@@ -160,6 +162,21 @@ In future, we may define separate network parameters depending on either:
 
 
 ## 4. Edit network parameters
+
+
+For version 1 of governance, all network parameter change proposals should reference the following network parameters:
+
+* `NetworkParameters.Governance.Network.Parameters.MinimumProposalPeriod` [default]
+* `NetworkParameters.Governance.Network.Parameters.MinimumRequiredParticipation` [always used]
+* `NetworkParameters.Governance.Network.Parameters.MinimumRequiredMajority` [always used]
+
+All network parameters may at some point be assigned individual network parameters that govern a particular change to themselves.
+
+
+
+* `NetworkParameters.Governance.Network.Parameters.MinimumProposalPeriod` [default]
+* `NetworkParameters.Governance.Network.Parameters.MinimumRequiredParticipation` [always used]
+* `NetworkParameters.Governance.Network.Parameters.MinimumRequiredMajority` [always used]
 
 ## APIs
 
