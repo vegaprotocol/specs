@@ -46,11 +46,7 @@ Note that in all the above the $x$ is relative to the mid-price and so you may n
 
 Now you can calculate 
 $$
-\lambda_t := 
-\min\left(
-    \sum_{i=1}^{N^+} V(x^+_i) p(x^+_i), 
-    \sum_{i=1}^{N^-} V(x^-_i) p(x^-_i), 
-\right)\,.
+\lambda_t := \min\left( \sum_{i=1}^{N^+} V(x^+_i) p(x^+_i), \sum_{i=1}^{N^-} V(x^-_i) p(x^-_i) \right)\,.
 $$
 
 ### Calculating the time average
