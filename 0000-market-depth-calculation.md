@@ -1,4 +1,4 @@
-Feature name: feature-name
+Feature name: Market depth creation and distribution
 Start date: 2020-06-10
 Specification PR: https://gitlab.com/vega-protocol/product/pull/300
 
