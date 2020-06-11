@@ -11,17 +11,17 @@ Specification PR: https://gitlab.com/vega-protocol/product/pull/300
 
 
 # Summary
-The market depth builder receives a stream of events from the core from which it builds up an market depth structure for each given market. This structure is used to provide a market depth stream and full market depth dump to any clients which has requested/subscribed to it. 
+The market depth builder receives a stream of events from the core from which it builds up a market depth structure for each given market. This structure is used to provide a market depth stream and full market depth dump to any clients which have requested/subscribed to it. 
 
 # Guide-level explanation
-When the core processes orders, cancels, amends or auction states, it generates one or more events which are sent out via the event-bus. 
+When the core processes an external action such as an order, cancel, amend or changing auction state, it generates one or more events which are sent out via the event-bus. 
 
 The market depth module subscribes to all the event types in the market-event and order-event streams. From the events received from these event streams, we build up a market depth structure for each market which will be a representation of the orderbook stored in the core. 
 
 Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occuring to the market depth structure and will contain a sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date.
 
 
-# Reference-level explanation (This is the main portion of the specification. Break it up as required.)
+# Reference-level explanation
 
 The market depth builder needs to receive enough information from the core to be able to build the market depth structure to have exactly the same price and volume details as the order book stored in the matching-engine. Therefore any change to the order book in the matching engine must generate one or more events that can be used to update the market depth order book in the same way.
 
@@ -62,27 +62,29 @@ When a new event arrives at the market depth builder, we apply the change to our
 The definition of the market depth structure is:
 
     type MarketDepth struct {
-        MarketID string
-	    Buy      []PriceLevel
-	    Sell     []PriceLevel
+        MarketID    string
+        Buy         []PriceLevel
+        Sell        []PriceLevel
+        SequenceNum uint64
     }
 
     type PriceLevel struct {
         Price       int64
         Volume      uint64
         NumOfOrders uint64
-		Side        bool
+        Side        bool
     }
 
 An update message is:
 
     type UpdateMarketDepth struct {
-		Price       int64
-		Volume      uint64
-		NumOfOrders uint64
-		Delta       int64
-		Direction   bool // bid or ask
-		Reason      action enum // Cancel, fill, amend etc
+        SequenceNum uint64
+        Price       int64
+        Volume      uint64
+        NumOfOrders uint64
+        Delta       int64
+        Direction   bool // bid or ask
+        Reason      action enum // Cancel, fill, amend etc
 	}
 
 
@@ -98,22 +100,21 @@ The server side process to handle updates can be described as such:
 
 The client side will perform the following steps to build and keep an up to date market depth structure
 
-	Subscribe to market depth updates
-	Request current market depth structure
-	Forever
-		Receive market depth update
-	    If update sequence number in one above current sequence number
-		    Apply update to the market depth structure
-			Increment the sequence number
-		Else
-		    If update sequence number > market depth sequence number+1
-		        We are missing an update, throw an error 
-			Else
-			    Old update, ignore it
-			End
-		End
-	End
-
+    Subscribe to market depth updates
+    Request current market depth structure
+    Forever
+        Receive market depth update
+        If update sequence number in one above current sequence number
+            Apply update to the market depth structure
+            Increment the sequence number
+        Else
+            If update sequence number > market depth sequence number+1
+                We are missing an update, throw an error 
+            Else
+  	            Old update, ignore it
+            End
+        End
+    End
 
 
 # Test cases
@@ -126,4 +127,6 @@ The client side will perform the following steps to build and keep an up to date
 * Leave auction
 * Do nothing for many minutes, make sure subscribers do not timeout/fail
 * Send a large spike of order updates, make sure the system does not stall
+* Sequence number increments for each emitted book update
+* Updates that are not received/processed by the client are not buffered on their behalf
 
