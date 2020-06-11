@@ -8,7 +8,8 @@ Specification PR: https://gitlab.com/vega-protocol/product/pull/301
 - All orders for a given partyID will be removed from a single market if a cancel all party orders per market message is sent
 - All orders for a given party across all markets will be removed from the vega system when a cancel all orders message is sent
 - Orders which are not currently on the orderbook but are being held `offline` due to being in auction should also be affected by cancels.
-
+- A cancellation for a party that does not match the party on the order will be rejected
+- A cancellation without a partyID will be rejected
 
 # Summary
 
