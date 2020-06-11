@@ -16,14 +16,14 @@ The market depth builder receives a stream of events from the core from which it
 # Guide-level explanation
 When the core processes an external action such as an order, cancel, amend or changing auction state, it generates one or more events which are sent out via the event-bus. 
 
-The market depth module subscribes to all the event types in the market-event and order-event streams. From the events received from these event streams, we build up a market depth structure for each market which will be a representation of the orderbook stored in the core. 
+The market depth module subscribes to all the event types in the market-event and order-event streams. From the events received from these event streams, we build up a market depth structure for each market which will be a representation of the orderbook stored in the core. When the market is created the sequence number of the market depth structure is set to zero. Every update from then onwards increments the sequence number by one.
 
 Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occuring to the market depth structure and will contain a sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date.
 
 
 # Reference-level explanation
 
-The market depth builder needs to receive enough information from the core to be able to build the market depth structure to have exactly the same price and volume details as the order book stored in the matching-engine. Therefore any change to the order book in the matching engine must generate one or more events that can be used to update the market depth order book in the same way.
+The market depth builder needs to receive enough information from the core to be able to build the market depth structure to have exactly the same price and volume details as the order book stored in the matching-engine. Therefore any change to the order book in the matching engine must generate one or more events that can be used to update the market depth order book in the same way. After the market depth structure is updated we increment the sequence number. Therefore every sequence number reflects a single update in the market depth structure.
 
 The possible actions we know that can happen in the market engine are:
 
