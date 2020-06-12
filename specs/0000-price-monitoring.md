@@ -1,13 +1,13 @@
 Feature name: price-monitoring
 Start date: 2020-04-29
-Specification PR: https://github.com/vegaprotocol/product/pull/275
+Specification PR: [275](https://github.com/vegaprotocol/product/pull/275)
 
 # Acceptance Criteria
 
-- [ ] Risk model exposes a function that takes as input: (current price, confidence level alpha, time period tau) and returns the signal instructing core if a price protection auction should commence, and if so, what should its period be.
+- [ ] Price monitoring engine exists, holds all the horizon, confidence level, auction extension tripplets configured for the market and exposes a function that takes as input the arrival price of the next transaction and returns the signal instructing the matching engine if a price protection auction should commence, and if so, what should its period be.
 - [ ] Risk model prescribes maximum probability level which it can support.
 - [ ] `vega` refuses to create a market if the specified probability level for price monitoring exceeds what the risk model specifies - to avoid spurious accuracy and runtime errors.
-- [ ] `vega` triggers price protection auction period based on the price monitoring signal.
+- [ ] The matching engine triggers price protection auction period based on the price monitoring signal.
 - [ ] The market continues in regular fashion once price protection auction period ends.
 - [ ] Transactions are processed atomically so that the transaction which directly moved the price beyond allowed band gets processed again via price protection auction period (and no associated trades are generated prior to that period).
 
@@ -22,7 +22,7 @@ As mentioned above, price monitoring is meant to stop large market movements tha
 
 Please see the [auction spec](https://github.com/vegaprotocol/product/blob/187-auction-spec/specs/0026-auctions.md) for auction details.
 
-### Note
+## Note
 
 Price monitoring likely won't be the only possible trigger of auction period (liquidity monitoring - spec pending - or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
 
@@ -48,40 +48,43 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 ## View from the [vega](https://github.com/vegaprotocol/vega) side
 
-- for each transaction:
-  - The price monitoring engine sends the risk model<sup>[1](#footnote1)</sup> the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`
-  - risk model sends back signal informing if the price protection auction should be triggered (and if so how long the auction period should be)
+- Per each transaction:
+  - the matching engine sends the **price monitoring engine** the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`
+  - price monitoring engine sends back signal informing if the price protection auction should be triggered (and if so how long the auction period should be),
   - if no trigger gets activated then the transaction is processed in a regular fashion, otherwise:
     - the price protection auction commences and the transaction considered should be processed in this way (along with any other orders on the book and pending transactions that are valid for auction).
 
-## View from [quant](https://github.com/vegaprotocol/quant) library side<sup>[1](#footnote1)</sup>
+## View from the price monitoring engine side
 
-- we get arrival price of the next transaction and `vega time` from [vega](https://github.com/vegaprotocol/vega)
-- we can use that to build a time series and calculate the bounds associated with each trigger
-- these bounds are to be available to other components and included in the market data API
-- note that bounds themselves will form a timeseries covering range from current time to the maximum τ specified in the triggers.
-- the bounds are to be calculated at the one second resolution
-- the bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
+Price monitoring engine will interface between the matching engine and the risk model. It will communicate with the matching engine every time a new transaction is processed (to check it its' arrival price should trigger an auction). It will communicate with the risk model with a predefined frequency to inform the risk model of the latest price history and obtain a new set of min/max price move bounds.
 
+Specifically:
+
+- Price monitoring engine averages all the prices received from the matching engine that have the same timestamp.
+- It periodically (in a predefined, deterministic way) sends the accrued price history to the risk model and obtains the set of max up/down moves per period τ and the associated level α (it can keep more than one of the [τ, max move up, max move down] triplets).
+- It holds the history of average prices looking back to the maximum τ configured in the market.
+- Everytime a new price is received from the matching engine the price monitoring engine checks all the [period, max move up, max move down] triplets relevant for the timestamp, looks-up the associated past (averaged) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescirbed by the risk model.
+- The bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
 - To give an example, with 3 triggers the price protection auction can be calculated as follows:
-
-  - \>=1% move in 10 min window -> 5 min auction
-  - \>=2% move in 30 min window -> 15 min auction (i.e. if after 5 min this trigger condiiton is satisfied by the price we'd uncross at, extend auction by 10 mins)
-  - \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins)
-
-- at the market start time and after each price-monitoring auction period the bounds will reset
+  - \>=1% move in 10 min window -> 5 min auction,
+  - \>=2% move in 30 min window -> 15 min auction (i.e. if after 5 min this trigger condition is satisfied by the price we'd uncross at, extend auction by 10 mins),
+  - \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins).
+- At the market start time and after each price-monitoring auction period the bounds will reset
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
-- internally the risk model implements a function that takes as input: (current price, confidence level alpha, time period tau) and return limits S<sup>min</sup> and S<sup>max</sup> such that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α. Example input (100, 1 hour, 0.99) returns S_max = 111.2343 and S_min = 93.456.
+
+## View from [quant](https://github.com/vegaprotocol/quant) library side
+
+- The risk model calculates the bounds per current price, horizon τ and confidence level α beyond which a price monitoring auction should be triggered.
+- These bounds are to be available to other components and included in the market data API
+- Internally the risk model implements a function that takes as input: (current price, confidence level alpha, time period tau) and return limits S<sup>min</sup> and S<sup>max</sup> such that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α. Example input (100, 1 hour, 0.99) returns S_max = 111.2343 and S_min = 93.456.
 
 ### Notes
 
 - We need a probability density function (p.d.f.) from the risk model and the inverse p.d.f.
-- Should generally handle a vector of triplets: { horizon, probability, auction (extension) duration }
-- Implement a cut-off on probability level so we don’t return spuriously accurate results (check tail estimates we get from probability models)
+- Should generally handle a vector of triplets: { horizon, probability, auction (extension) duration }.
+- Implement a cut-off on probability level so we don’t return spuriously accurate results (check tail estimates we get from probability models).
 - Cache the results on quant library side.
 
 # Test cases
 
 See acceptance criteria.
-
-<a name="footnote1">[1]: </a>Or perhaps another component that interfaces between the two.
