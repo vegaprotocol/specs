@@ -78,13 +78,6 @@ Specifically:
 - These bounds are to be available to other components and included in the market data API
 - Internally the risk model implements a function that takes as input: (current price, confidence level alpha, time period tau) and return limits S<sup>min</sup> and S<sup>max</sup> such that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α. Example input (100, 1 hour, 0.99) returns S_max = 111.2343 and S_min = 93.456.
 
-### Notes
-
-- We need a probability density function (p.d.f.) from the risk model and the inverse p.d.f.
-- Should generally handle a vector of triplets: { horizon, probability, auction (extension) duration }.
-- Implement a cut-off on probability level so we don’t return spuriously accurate results (check tail estimates we get from probability models).
-- Cache the results on quant library side.
-
 # Test cases
 
 See acceptance criteria.
