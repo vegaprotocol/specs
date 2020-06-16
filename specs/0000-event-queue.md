@@ -1,5 +1,7 @@
 Feature name: Event Queue
+
 Start date: 2020-04-09
+
 Specification PR: https://github.com/vegaprotocol/product/pull/271
 
 
@@ -12,8 +14,8 @@ This event queue allows the standardization and propagation of transactions from
 Events and transactions are gathered and processed by the Event Queue from a given 3rd party blockchain, and only the ones subscribed to by Vega nodes will be propagated through consensus and then validated by the validator nodes.
 This makes the event queue works as a buffer between the slow/complicated world of various blockchains, and the high throughput, low latency of Vega Core.
 This message queue will use gRPC to communicate with the Vega network via 3 main functions: `Get_Subscribed_Event_Sources`, `Propagate_Event`, and `Event_Acceptance_Status`.
-The first, `Get_Subscribed_Event_Sources`, returns a list of smart contract addresses that consensus has deemed valid as sources of events
-The second function, `Propagate_Event`, allows an event queue to send events raised on 3rd party blockchains (deposits, withdrawals, etc) through Vega consensus to ensure an event has been seen by the network.
+The first, `Get_Subscribed_Event_Sources`, returns a list of smart contract addresses and events that consensus has deemed as a valid source.
+The second function, `Propagate_Event`, allows an event queue to send events raised on 3rd party blockchains (deposits, withdrawals, etc) through Vega consensus to ensure an event has been seen by the network. This function must support multiple blockchains as sources of events and multiple sources on a single blockchain (such as multiple deployments of an ERC20 bridge).
 Each validator will individually process and validate the given transaction and only parse for the specified event reported.
 The last function, `Event_Acceptance_Status`, returns the consensus acceptance status of a requested event. The event queue uses this function to determine if it should attempt to send the event again.
 
@@ -40,6 +42,7 @@ message Get_Subscribed_Event_Sources_Response {
   repeated string subscirbed_event_source=1;
 }
 
+//this will expand with the system
 enum Event_Types {
   EVENT_TYPE_UNSPECIFIED = 0;
   Asset_Deposited = 1;
@@ -54,8 +57,6 @@ message Event_Propagation_Request {
   string asset_source = 2; // address of asset
   string asset_id = 3; // ID of asset specific to that asset_source
   Event_Types event_type = 4; // enumerated event type
-  string source_party_id = 5; // source ethereum address 20 bytes hex preceded by 0x or other party ID of user/contract/system this pertains to
-  string target_party_id = 6; // provided Vega public key of party to target the event to
   string transaction_hash = 7; // tx hash in question that must lead us to parseable data based on 'event_type'
   uint32 log_index = 8; // if the transaction outputs multiple events to the log, this tells you which one
   string event_name = 9; // friendly name of event specific to bridge/source
@@ -71,10 +72,16 @@ message Event_Acceptance_Status_Request {
   uint32 log_index = 2;
 }
 
+//can be expanded as needed
+enum Event_Acceptance_Status {
+  Unknown = 0;
+  Accepted = 1;
+  Rejected = 2;
+}
 message Event_Acceptance_Status_Response {
   string transaction_hash = 1;
   uint32 log_index = 2;
-  bool accepted = 3;
+  Event_Acceptance_Status acceptance_status = 3;
 }
 ```
 
