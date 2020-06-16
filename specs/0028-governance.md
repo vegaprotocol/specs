@@ -73,7 +73,7 @@ e.g: A proposal is created and people have 3 weeks from the day it is sent to th
 
 The proposal's close date may optionally be set by the proposer and must be greater than or equal to a minimum duration time that is set by the network. The network will specify minimum duration times depending on the type of proposal. 
 
-The network's minimum duration time is used as the default when the new proposal either fails to include a minimum duration time or the proposal is submitted with a close date would fail to meet the network's minimum duration time constraint.
+The network's _minimum proposal duration time_ - as specified by a network parameter relevant to the proposal type - is used as the default when the new proposal either fails to include a minimum proposal duration time or the proposal is submitted with a close date would fail to meet the network's minimum proposal duration time constraint.
 
 ### When a proposal is enacted
 A new proposal can also specify when any changes resulting from a successful vote would start to be applied.
@@ -81,6 +81,8 @@ e.g: A new proposal is created in order to create a new market with a 1 week ena
 This would allow enough time for the operator to be ready for the changes, e.g in the case the proposal is to decide to use a new version of the vega node, or something available only in a later version of the node.
 
 Proposals are enacted in the order they were created. This means that in the case that two proposals change the same parameter in roughly the same period, the oldest proposal will be applied first and the newest will be applied last. There is no attempt to resolve differences between the two.
+
+The network's _minimum time between vote closing and enactment_ - as specified by a network parameter relevant to the proposal type is used to validate whether the enactment date is acceptable.
 
 ## Editing and/or cancelling a proposal is not possible
 A proposal cannot be edited, once created. The only possible action is to vote for or against a proposal. We would expect amending a proposal to be made by creating a new proposal.
@@ -174,7 +176,7 @@ All network parameters may at some point be assigned individual network paramete
 
 Note
 
-`NetworkParameters.Governance.Network.<Type = governance>.MinimumProposalPeriod` control changing the minimum proposal periods.. blah blah
+`NetworkParameters.Governance.Network.<Type = governance>.MinimumProposalPeriod` control changing the minimum proposal periods.. Barney to complete.
 
 
 ## APIs
