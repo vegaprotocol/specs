@@ -98,8 +98,8 @@ message Event_Acceptance_Status_Response {
 * Vega nodes write events to chain once verified
 * Vega nodes respond appropriately to `Event_Acceptance_Status`
 * Vega nodes verify Event existance and outcomes using local Ethereum node
-** Verify balance changes
-** Verify account identities
-** Verify transaction hashes
+  * Verify balance changes
+  * Verify account identities
+  * Verify transaction hashes
 * Vega nodes reject invalid events that fail verification in the previous step
 
