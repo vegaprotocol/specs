@@ -1,0 +1,154 @@
+\documentclass[10pt]{amsart}
+
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, lmargin=3cm, rmargin=3cm, tmargin=3cm, bmargin=2.8cm]{geometry}
+% \usepackage{charter}
+\usepackage{mathpazo}
+% \usepackage{newcent}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm} % for bold greek letters
+\usepackage{ifthen}
+\usepackage{paralist}
+\usepackage{dsfont}
+\usepackage{graphicx}
+\usepackage[UKenglish]{babel}
+\usepackage{epigraph}
+\usepackage{bbm}
+\usepackage{todonotes}
+\usepackage[title, titletoc]{appendix}
+\usepackage{titlesec}
+\usepackage{etoolbox}
+\usepackage{tocloft}
+\usepackage[normalem]{ulem}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{textcomp}
+\usepackage{float}
+% \usepackage{parskip}  % uncomment to remove paragraph indents
+%\usepackage{refcheck}
+
+% We don't want to see subsections of the appendices in the ToC
+\appto\appendices{\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}}
+\appto\listoffigures{\addtocontents{lof}{\protect\setcounter{tocdepth}{1}}}
+\appto\listoftables{\addtocontents{lot}{\protect\setcounter{tocdepth}{1}}}
+\addtocontents{toc}\protect\setcounter{tocdepth}{2}
+
+% Make bullets a little smaller
+\renewcommand\labelitemi{$\vcenter{\hbox{\footnotesize$\bullet$}}$}
+
+% Set up hyperlinks. Blue seems to be the only non-sucky default colour.
+%\definecolor{DarkBlueLinks}{RGB}{10,85,145}
+\definecolor{DarkBlueLinks}{RGB}{5,32,144} % more blue, less green
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=DarkBlueLinks,
+    filecolor=blue,      
+    urlcolor=blue,
+    citecolor=DarkBlueLinks,
+    pdftitle={Radical Liquidity on Vega},
+  	pdfauthor={W. G. and B. M. and  T. R. and D. \v{S}},
+}
+
+\title{WIP: Liquidity Measure}
+
+\date{
+%    \vspace{2em}
+    \today\\
+%    \vspace{0.5em}
+}
+
+
+
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+
+
+
+\begin{document}
+\maketitle
+\section*{Acceptance Criteria}
+
+To be provided later.
+
+\section*{Summary}
+We need to measure liquidity available on a market in order to see whether market makers are keeping 
+their commitment. 
+Here we propose a method counts liquidity as the probability weighted average of volume on the book. 
+This gives view of liquidity at one instant of time; we then use exponential weighted average over time to obtain the desired measure.
+
+\section*{Terminology}
+\begin{itemize}
+\item $\Lambda_t$ is the exponentially-in-time weighted and probabilistically-in-space-weighted liquidity which we are defining in this spec file.
+\item  mid price = (best bid - best offer) / 2 (or undefined if either side of the book is empty)
+\item buy / sell side volume refer to the volume available at a distance from mid price, $V = V(x)$, where $x > 0$ refers to sell side, $x < 0$ refers to buy side and $x$ belongs to the set of all price points available on the book
+\item probability of volume at distance from mid price being hit: $p = p(x)$, this will come from risk model
+\item auction level buy price $x_{min} < 0$ and auction level sell price $x_{max} > 0$ will come from risk model together with market parameter specifiyng what percentile move triggers auction  
+\item instantenaous liquidity $\lambda_t$, defined below in detail.
+\item decay parameter $\delta$ which determines how far back in time do we go when averaging instantenaous liquidity.
+\item weighting parameter $\alpha$ which determines how steep the exponential decay is.
+
+\end{itemize}
+
+
+Note that both $\delta$ and $\alpha$  are network wide parameters.
+	
+
+\section*{Details}
+Auction periods should be ignored during calculations (so we pretend time stops).
+
+The instantenaous liquidiy should get calculated periodically.
+To be more precise this should be after each "event" if a configurable liquidity time step parameter has been exceeded. 
+We will need to keep track of the instantenaous liquidity $\lambda_{t_k}$ and the period of time $[t_k,t_{k+1})$ for which it was calculated.
+
+\subsection*{Calculating the instantenaous liquidity}
+
+Assume that time now is $t = t_k$. We wish to calculate $\lambda_t$.
+
+Case 1: no mid price
+$\lambda_t := 0$ if there is no mid price (i.e. when either the buy or sell side of the book are empty)
+
+Case 2: we have mid price
+1. Obtain $x_{min}$ and $x_{max}$ from the risk model. 
+1. Get the list of possible $x$ s.t. $x_{max} \geq x > 0$ values from the order book. Call these $x^+_i$, with $i = 1,\ldots,N^+$. 
+1. Get the list of possible $x$ s.t. $x_{min} \leq x < 0$ from the order book and call these $x^-_i$, with $i = 1, \ldots , N^-$. 
+1. Get the volume $V(x)$ available at each $x = x^-_i$ and $x^+_i$ from the order book.
+1. Get the probability $p(x)$ for each of $x = x^-_i$ and $x^+_i$ from the risk model. 
+
+Note that in all the above the $x$ is relative to the mid-price and so you may need to perform the requisite transformations.
+
+Now you can calculate 
+$$
+\lambda_t := 
+\min\left(
+    \sum_{i=1}^{N^+} V(x^+_i) p(x^+_i), 
+    \sum_{i=1}^{N^-} V(x^-_i) p(x^-_i), 
+\right)\,.
+$$
+
+\subsection*{Calculating the time average}
+
+We now have a list of $\lambda_{t_k}$ and the corresponding time periods $[t_k,t_{k+1})$ from the market inception until now (time now is $t$). 
+From this we get $\lambda_t$ for any $t$ using peicewise constant extrapolation i.e. $\lambda_s = \lambda_{t_k}$ whenever $s \in [t_k, t_{k+1})$.
+
+We then have 
+$$
+\Lambda_t := \int_{t-\delta}^t e^{\alpha (s - (t-\delta))} \lambda_s \,ds\,.
+$$
+Note that the integral above is just a sum but it's an easy way to express over which indices $k$ we should sum up.
+
+
+\section*{Pseudo-code / Examples}
+
+To be provided later.
+
+\section*{Test cases}
+
+To be provided later.
+
+\end{document}
