@@ -13,11 +13,12 @@ This event queue allows the standardisation and propagation of transactions from
 # Guide-level explanation
 Events and transactions are gathered and processed by the Event Queue from a given 3rd party blockchain, and only the ones subscribed to by Vega nodes will be propagated through consensus and then validated by the validator nodes.
 This makes the event queue works as a buffer between the slow/complicated world of various blockchains, and the high throughput, low latency of Vega Core.
-This message queue will use gRPC to communicate with the Vega network via 3 main functions: `GetSubscribedEventSources`, `PropagateEvent`, and `GetEventAcceptanceStatus`.
-The first, `GetSubscribedEventSources`, returns a list of smart contract addresses and events that consensus has deemed as a valid source.
-The second function, `PropagateEvent`, allows an event queue to send events raised on 3rd party blockchains (deposits, withdrawals, etc) through Vega consensus to ensure an event has been seen by the network. This function must support multiple blockchains as sources of events and multiple sources on a single blockchain (such as multiple deployments of an ERC20 bridge).
-Each validator will individually process and validate the given transaction and process the specified event reported.
-The last function, `GetEventAcceptanceStatus`, returns the consensus acceptance status of a requested event. The event queue uses this function to determine if it should attempt to send the event again.
+This message queue will use gRPC to communicate with the Vega network via 3 main functions:
+1. `GetSubscribedEventSources` returns a list of smart contract addresses and events that consensus has deemed as a valid source.
+1. `PropagateEvent` allows an event queue to send events raised on 3rd party blockchains (deposits, withdrawals, etc) through Vega consensus to ensure an event has been seen by the network. This function must support multiple blockchains as sources of events and multiple sources on a single blockchain (such as multiple deployments of an ERC20 bridge).
+
+   Each validator will individually process and validate the given transaction and process the specified event reported.
+1. `GetEventAcceptanceStatus` returns the consensus acceptance status of a requested event. The event queue uses this function to determine if it should attempt to send the event again.
 
 # Reference-level explanation
 * The event queue calls `GetSubscribedEventSources` on a Vega node to get the list of subscribed smart contracts
