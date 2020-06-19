@@ -44,7 +44,7 @@ Data:
 ### Trading mode - continuous trading
 
 Params:
-  - **Tick size** (size of an increment in price in terms of the quote currency)
+  - **Tick size** (size of an increment in price in terms of the quote unit)
   - **Decimal places**, number of decimals places for price quotes, e.g. if quote currency is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
 
 ## Tradable instrument
