@@ -45,7 +45,7 @@ Data:
 
 Params:
   - **Tick size** (size of an increment in price in terms of the quote unit)
-  - **Decimal places**, number of decimals places for price quotes, e.g. if quote currency is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
+  - **Decimal places**, number of decimals places for quotes unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
 
 ### Trading mode - Auctions
 A market can be in Auction Mode for a number of reasons:
