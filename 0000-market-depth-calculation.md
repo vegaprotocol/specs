@@ -20,6 +20,8 @@ The market depth module subscribes to all the event types in the market-event an
 
 Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occuring to the market depth structure and will contain a sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date.
 
+`Cumulative volume` is built up in each side of the book at each price level to reflect how much volume is present throughout the book. The `Cumulative volume` is the total volume in the book between the current price level and top of the book.
+
 
 # Reference-level explanation
 
@@ -56,6 +58,9 @@ Clients are able to subscribe to a market to receive the market depth informatio
 
 When a new event arrives at the market depth builder, we apply the change to our market depth structure and then send a copy of the price level details for the affected price level. The client is responsible for applying that update to their copy of market depth structure.
 
+## Cumulative Volume
+
+Should this be handled by the client? I think so
 
 # Pseudo-code / Examples
 
@@ -69,10 +74,11 @@ The definition of the market depth structure is:
     }
 
     type PriceLevel struct {
-        Price       int64
-        Volume      uint64
-        NumOfOrders uint64
-        Side        bool
+        Price             int64
+        Volume            uint64
+        CumulativeVolume  uint64
+        NumOfOrders       uint64
+        Side              bool
     }
 
 An update message is:
@@ -85,7 +91,7 @@ An update message is:
         Delta       int64
         Direction   bool // bid or ask
         Reason      action enum // Cancel, fill, amend etc
-	}
+    }
 
 
 The server side process to handle updates can be described as such:
