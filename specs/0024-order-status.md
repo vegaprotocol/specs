@@ -57,3 +57,11 @@ Note: The last row in the table below is added for clarity rather than being a l
 |      GTT      | Partial |    No   |         No        |        Yes        |      Stopped     |
 |      GTT      |   Yes   |    No   |         No        |         No        |      Filled      |
 |      GTT      |   Yes   |   Yes   |         No        |         No        |      Filled      |
+
+## Wash trading
+If an order would be filled or partially filled with an existing order from the same traderID, the order is rejected. Any existing fills that happen before the wash trade is identified will be kept.
+
+| Filled State | Resulting status |
+|--------------|------------------|
+|   Unfilled   |     Rejected     |
+|   Partially  |     Rejected     |
