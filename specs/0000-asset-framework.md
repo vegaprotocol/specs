@@ -250,15 +250,26 @@ Once a successful withdrawal transaction has occurred, the `Asset_Withdrawn` eve
 See: https://github.com/vegaprotocol/product/blob/master/specs/0031-ethereum-bridge-spec.md
 
 ##### Ether
-[TODO]
+In the Vega Ether Bridge smart contract, Ether is the only asset available so users run `deposit_asset` with 0 as the `asset_source`, 0 as the `asset_id`.
+
 ##### ERC20
-[TODO]
+ERC20 tokens have a token address but no individual token ID, as such, the Vega ERC20 Bridge will require that a user pass 0 as `asset_id` for all ERC20 tokens. `asset_source` will be the address of the asset token smart contract.
+
 #### BTC
-[TODO]
+For withdrawal, the BTC virtual bridge uses bitcoin's built-in multi-signature wallets to allow a user to submit the aggregated withdrawal signatures from Vega validators to any bitcoin node to receive withdrawn BTC.  
+
 #### Other Asset Classes
-[TODO]
+This section will be expanded as new asset classes are supported by Vega. Since each asset class is different, each section will be unique but follow the multisig management pattern used by the other bridges.
+
 ### Event Queue Path
 Once a withdrawal is complete and the appropriate events/transaction information is available on the respective chain, the transaction is then recognized by the Vega Event Queue and packaged as an event. This event is submitted to Vega consensus, which will verify the event contents against a trusted node of the appropriate blockchain, which completes the cycle.
 
 # Acceptance Criteria
-[TODO]
+For each asset class to be considered "supported" by Vega, the following must happen:
+1. An asset of that class can Be voted into Vega
+2. An asset previously voted in can be voted out of Vega
+3. A voted-in asset can be deposited into a Vega bridge 
+4. A properly deposited asset is credited to the appropriate user
+5. A withdrawal can be requested and verified by Vega validator nodes
+6. multisig withdrawal order signatures from Vega validator nodes can be aggregated at the request of the user
+7. A user can submit the withdrawal order and receive their asset  
