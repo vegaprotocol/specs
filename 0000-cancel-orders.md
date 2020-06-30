@@ -30,6 +30,8 @@ Parked orders are affected as part of direct cancels or cancels that sweep over 
 
 # Reference-level explanation
 
+Whenever a partyID is supplied, it must be owned by the signer of the transaction.
+
 ## Cancel by orderID, partyID and marketID
 The orderbook is looked up using the marketID and then we issue a cancel on that orderbook. Validation takes place to make sure the partyID supplied matches the partyID stored with the order. At most a single order will be cancelled using this method. As the order price is not supplied in the cancel and the order book stores all the orders via price level, the market has a separate map linking all orderIDs to their position in the order book. This allows cancellations to be performed efficiently.
 
@@ -57,7 +59,7 @@ Cancelling an order triggers a margin recalculation for a party. This is true fo
 ## Cancel by partyID and marketID
 
     Lookup up the orderbook by marketID
-    For each order on the orderbook and parked storage
+    For each order in the market level lookup table
         If order.partyID == partyID
             Cancel the order and remove from the orderbook
         EndIf
@@ -67,7 +69,7 @@ Cancelling an order triggers a margin recalculation for a party. This is true fo
 
     For each market
         For each orderbook
-            For each order on the orderbook and parked storage
+            For each order in the market level lookup table
                 If order.partyID == partyID
                     Cancel the order and remove from the orderbook
                 EndIf
