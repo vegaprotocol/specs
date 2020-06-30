@@ -87,7 +87,11 @@ message NewAsset {
 ```
 [LINK TO GOVERNANCE SPEC]
 
- 
+### Signature Aggregation
+[TODO]
+
+See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md 
+
 ### Vega Asset Bridges
 Before an asset can be accepted for deposit by a bridge, it needs to be whitelisted on that bridge. 
 
@@ -140,6 +144,8 @@ To add a new asset to Vega, a market maker or other interested party will submit
 
 ### Signature Aggregation
 [TODO]
+
+See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md 
 
 ### Vega Asset Bridges
 Once a whitelisted asset is voted out as a valid asset by the governance process, the asset needs to be removed from that bridge. 
@@ -220,6 +226,7 @@ This section will be expanded as new token standards are supported by Vega. New 
 #### BTC
 For deposit, the BTC virtual bridge generates a deposit address that is presented to the user. This address is a secure, multisignature wallet, decentrally controlled by the validators of the Vega network, similar to the MultisigControl pattern used for Ethereum. 
 The user will provide their Vega public key along with a standard bitcoin transfer transaction. This public key will be picked up by the Vega Event Queue for later processing.
+See: [insert BTC spec here]
 
 #### Other Asset Classes
 This section will be expanded as new asset classes are supported by Vega. Since each asset class is different, each section will be unique but follow the multisig management pattern used by the other bridges.
@@ -234,7 +241,9 @@ Once a user decides they would like to remove their assets from the Vega network
 [API REFERENCE]
 
 ### Validator Signature Aggregation
-[SIGNATURE AGGREGATION PROCESS]
+[TODO]
+
+See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md 
 
 ### Vega Asset Bridges
 After signatures are aggregated a user is ready to make the withdrawal transaction. Each asset has a different withdrawal process, but they will primarily be managed by Vega Bridges, a CQRS pattern Vega uses to integrate the various blockchains and asset management APIs. 
@@ -257,6 +266,7 @@ ERC20 tokens have a token address but no individual token ID, as such, the Vega 
 
 #### BTC
 For withdrawal, the BTC virtual bridge uses bitcoin's built-in multi-signature wallets to allow a user to submit the aggregated withdrawal signatures from Vega validators to any bitcoin node to receive withdrawn BTC.  
+See: [insert BTC spec here]
 
 #### Other Asset Classes
 This section will be expanded as new asset classes are supported by Vega. Since each asset class is different, each section will be unique but follow the multisig management pattern used by the other bridges.
