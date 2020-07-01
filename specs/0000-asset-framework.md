@@ -235,7 +235,9 @@ This section will be expanded as new asset classes are supported by Vega. Since 
 Once a deposit is complete and the appropriate events/transaction information is available on the respective chain, the transaction is recognized by the Vega Event Queue and packaged as an event. This event is submitted to Vega consensus, which will verify the event contents against a trusted node of the appropriate blockchain. A consequence of the transaction being verified is the Vega public key submitted in the transaction will be credited with the deposited asset in their Vega account.  
 
 ## Asset Withdrawal Process
-Once a user decides they would like to remove their assets from the Vega network, they will submit a withdrawal request via the Vega website or API. This request, if valid, will be approved and an order will be put through Vega consensus. After the order is made and saved to chain, the validators will sign the multi-signature withdrawal order and the aggregate of these will be made available to the user to submit to the approprite blockchain/asset management API.  
+Once a user decides they would like to remove their assets from the Vega network, they will submit a withdrawal request via the Vega website or API. 
+This request, if valid, will be approved and assigned en expiry. This order will then be put through Vega consensus. 
+After the order is made and saved to chain, the validators will sign the multi-signature withdrawal order and the aggregate of these will be made available to the user to submit to the approprite blockchain/asset management API.  
 
 ### Withdrawal Request
 [API REFERENCE]
@@ -247,12 +249,13 @@ See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_con
 
 ### Vega Asset Bridges
 After signatures are aggregated a user is ready to make the withdrawal transaction. Each asset has a different withdrawal process, but they will primarily be managed by Vega Bridges, a CQRS pattern Vega uses to integrate the various blockchains and asset management APIs. 
+Where available, multisignature withdrawal orders will have a built-in and protocol-enforced expiration timestamp.  
 
 #### Ethereum-based assets
 All Ethereum assets are managed by a smart contract that supports the IVega_Bridge interface.
 The interface defines a function to withdrawal assets:
 
-`function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 nonce, bytes memory signatures) public;`
+`function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;`
 
 Once a successful withdrawal transaction has occurred, the `Asset_Withdrawn` event will be emitted for later use by the Vega Event Queue.
 
@@ -265,7 +268,8 @@ In the Vega Ether Bridge smart contract, Ether is the only asset available so us
 ERC20 tokens have a token address but no individual token ID, as such, the Vega ERC20 Bridge will require that a user pass 0 as `asset_id` for all ERC20 tokens. `asset_source` will be the address of the asset token smart contract.
 
 #### BTC
-For withdrawal, the BTC virtual bridge uses bitcoin's built-in multi-signature wallets to allow a user to submit the aggregated withdrawal signatures from Vega validators to any bitcoin node to receive withdrawn BTC.  
+For withdrawal, the BTC virtual bridge uses bitcoin's built-in multi-signature wallets to allow a user to submit the aggregated withdrawal signatures from Vega validators to any bitcoin node to receive withdrawn BTC.
+NOTE:  
 See: [insert BTC spec here]
 
 #### Other Asset Classes
@@ -283,3 +287,4 @@ For each asset class to be considered "supported" by Vega, the following must ha
 5. A withdrawal can be requested and verified by Vega validator nodes
 6. multisig withdrawal order signatures from Vega validator nodes can be aggregated at the request of the user
 7. A user can submit the withdrawal order and receive their asset  
+8. Withdrawal orders expire successfully (where available).
