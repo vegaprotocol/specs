@@ -32,10 +32,10 @@ NOTE: the embedded encodings `encode(encode(...))`, this is required to verify w
 NOTE: when msg.sender is required by function, that account must also be the submitter of the transaction to the Ethereum blockchain 
 
 Pseudo Example:  
-A bridge smart contract has a `withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 nonce, bytes memory signatures)` function,
+A bridge smart contract has a `withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures)` function,
 the function requires that msg.sender be passed along as well (given that it's the wallet address that will be credited with this withdrawal)
 This means that the message to sign will look like this: 
-    `abi.encode(abi.encode(asset_source, asset_id, amount, address_of_user, nonce, "withdraw_asset"), bridge_address)`
+    `abi.encode(abi.encode(asset_source, asset_id, amount, expiry, address_of_user, nonce, "withdraw_asset"), bridge_address)`
 The resulting message is then hashed to a bytes32 message_hash which is then signed by a Vega validator (that has been previously added as a valid signer to the `MultisigControl` smart contract)
  
 Each signature is a 65 byte hex string in the format `0x1230477...` the `0x` is removed (except for the first in the bundle) and appended to the end of the bundle of other validator signatures. 
