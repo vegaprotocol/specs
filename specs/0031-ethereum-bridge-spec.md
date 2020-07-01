@@ -44,7 +44,7 @@ For each asset class, there is a bridge smart contract. Currently all contracts 
 Deposits happen when a user runs the deposit function of a bridge contract for a given asset. Once this is executed on-chain, an event is raised from the Ethereum protocol. This event is processed by the event queue (covered in another spec) which passes the event to Vega Consensus. Each node recieves notice of the event either from the Event Queue or through inter-node gossip and validates the transaction for itself on its local external blockchain node (such as Geth, Parity, etc). This necessitates each node to either run a given blockchain node locally or have a trusted source to the node.
 
 ### Withdrawals 
-Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides release an asset to a user. When this happens, the client aggregates signatures from the validator nodes (covered elsewhere). Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorized signatures.
+Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides release an asset to a user. When this happens, the client aggregates signatures from the validator nodes (covered elsewhere). Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorized signatures. Each withdrawal command requires an expiry that is included in the signature and that time must still be in the future, according to the blockchain time.
 
 
 #### Pseudo-code / Examples
@@ -65,7 +65,7 @@ contract IVega_Bridge {
     function whitelist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
     function blacklist_asset(address asset_source, uint256 asset_id, uint256 nonce, bytes memory signatures) public;
     function set_deposit_minimum(address asset_source, uint256 asset_id, uint256 nonce, uint256 minimum_amount, bytes memory signatures) public;
-    function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 nonce, bytes memory signatures) public;
+    function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;
     function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;
     function set_multisig_control(address new_multisig_contract_address) public;
 
@@ -113,9 +113,14 @@ Blacklisting is simply removing an asset from the whitelist
 * ETH smart contract specific requirements:
   * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
   * An  invalid multisig bundle will be rejected from withdraw
+  * A withdrawal with a valid future timestamp is allowed to continue
+  * A withdrawal with a valid expired timestamp is rejected
+  * A withdrawal with an invalid timestamp is rejected
 * ERC20 smart contract specific requirements:
   * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
   * An invalid multisig bundle will be rejected from withdraw
+  * A withdrawal with a valid expired timestamp is rejected
+  * A withdrawal with an invalid timestamp is rejected
 
 ## Whitelist a token (by eth address)
 * A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten)
