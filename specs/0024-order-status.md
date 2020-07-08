@@ -61,7 +61,7 @@ Note: The last row in the table below is added for clarity rather than being a l
 ## Wash trading
 If an order would be filled or partially filled with an existing order from the same traderID, the order is rejected. Any existing fills that happen before the wash trade is identified will be kept.
 
-| Filled State | Resulting status |
-|--------------|------------------|
-|   Unfilled   |     Rejected     |
-|   Partially  |     Rejected     |
+| Filled State | Resulting status | Reason |
+|--------------|------------------|--------|
+|   Unfilled   |     Rejected     | Order would match with an order with the same partyID |
+|   Partially  |     Rejected     | Order has been partially filled but the next partial fill would be with an order with the same partyID |
