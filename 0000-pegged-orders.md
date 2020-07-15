@@ -25,11 +25,9 @@ Marker Maker orders are a special order type that must be used by Market Makers 
 
 ## Guide-level explanation
 
-### Reference Price
-This is the price against which the final order priced is calculated. Possible options are best bid/ask and mid price.
+**Reference Price:** This is the price against which the final order priced is calculated. Possible options are best bid/ask and mid price.
 
-### Offset
-This is a value added to the reference price. It can be negative.
+**Offset:** This is a value added to the reference price. It can be negative.
 
 When a party submits a new pegged order, only a LIMIT order is accepted. The party also specifies the reference price to which the order will be priced along with an offset to apply to this price. The reference price is looked up from the live market and the final price is calculated and used to insert the new order. If the price would result in a hit, the order is executed in the same way as a normal LIMIT order. If the price does not hit, the order is placed on the book at the back of the calculated price level.
 
