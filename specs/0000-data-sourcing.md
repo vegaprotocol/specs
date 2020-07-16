@@ -22,17 +22,45 @@ As a result:
 
 We define several classes of data source with varying complexity of functionality. It is expected that the simplest will be implemented first.
 
-### Native data source 
+### Native Data Source 
 
-**This is the only version required for the MVP of this functionality.**
+**NOTE: This is the only version available in testnet**
 
-Data providers that are native to Vega. Data is supplied through a transaction being posted directly on the Vega network that is signed by one (or more) of the valid signers for that specific data source.
+Given that there are a large number of possible products and markets on Vega that use non-crypto sources of pricing a given underlying, we offer a Native Data Source underlying. 
+This Native Data Source (NDS) is typically a price submitted and attested to by a party in Vega. In initial markets on Vega (and beyond) this user submits the price at market expiry.
+Data is supplied through a transaction being posted directly on the Vega network that is signed by one (or more) of the valid signers for that specific data source.
 
-Specification: public keys of valid signers, potentially and optionally valid data keys, number (m of n) of signers required, and/or timestamp range(s).
+[TODO] how does incentivisation to be honest work?
+[TODO] how does disagreement work?
 
-Data format: [TODO: confirm] the transaction message contains a time stamp and zero (in case of a time or trigger signal) or more key-value pairs.
 
-Implementation: this will be a protobuf transaction, simples. Signing will be the same as signing for other transactions.
+```protobuf
+
+message NativeDataSource {
+    bytes32 NativeDataSourceId = 1;
+    bytes32 underlyingId = 2;  
+    bytes23 settlementAssetId = 3;   
+    uint max_age =4; //max difference between report timestamp and market expiry (optional?)  
+    uint reportSignerThreshold =5; // signers required 
+    bytes[] signers = 5; //public keys of signers
+    //TODO ?
+} 
+
+
+
+NativeDataSourceReportRequest {
+    message NDSReport {
+        bytes32 NativeDataSourceId = 1001;
+        uint(float?) price = 1002;  //price in specified settlement asset
+        uint timestamp = 1003; //timestamp of provided price
+    }
+    NDSReport report = 1;
+    byte[] signature = 2; // the report, signed    
+}
+```
+
+
+
 
 
 ### Remote simplex data sources 
