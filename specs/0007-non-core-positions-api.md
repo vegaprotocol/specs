@@ -21,7 +21,7 @@ The Positions API requires additional position data for each trader, on top of t
 
 * A view of the "profit and loss" that a trader has incurred by fully closing out a position.
 * The portion of profit/loss (P&L) that has been "locked in" by partly closing out a position, i.e. "Realised P&L" (this is a cumulative of the per trade realised P&L)
-* The [volume weighted average entry price](https://gitlab.com/vega-protocol/product/wikis/Trading-and-Protocol-Glossary#average-entry-price) of an open position.
+* The [volume weighted average entry price](#calculating-the-volume-weighted-average-entry-price) of an open position.
 * The portion of profit/loss (P&L) that continuously changes when the _mark price_ changes, i.e. "Open P&L".
 * The per trade realised P&L for the buyer and seller 
 
@@ -29,6 +29,32 @@ Note: it is possible to calculate valuation / P&L using various methodologies (e
 
 Note, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in future.
 
+## Calculating the Volume Weighted Average Entry Price
+This is the *volume weighted price* of a trader's Open Volume.  The open volume will always be comprised of all buys or all sells.
+
+*Example 1 - all buys:*
+
+A trader has 3 price levels at which their open volume was purchased:
+
+1.  Long 3 contracts @ $100
+2.  Long 2 contracts @ $80
+3.  Long 5 contracts @ $150
+
+***Average Entry Price*** = (3 * $100 + 2 * $80 + 5 * $150)/(3 + 2 + 5) = ($300 + $160 + $750) / 10 = $121
+
+*Example 2 - all sells:* 
+
+A trader has 3 price levels at which their open volume was sold:
+
+1.  Short -3 contracts @ $100
+2.  Short -2 contracts @ $80
+3.  Short -5 contracts @ $150
+
+Note, with position management we treat the volume of sells as negative for calculation purposes (not necessarily display purposes to users). Note, that in this calculation however, the negatives cancel each other out. 
+
+***Average Entry Price*** = (-3 * $100 + -2 * $80 + -5 * $150)/(-3 - 2 - 5) = (-$300 - $160 - $750) / -10 = $121
+
+The Average Entry Price is useful when calculating Unrealised P&L or Realised P&L
 
 ## API 
 
