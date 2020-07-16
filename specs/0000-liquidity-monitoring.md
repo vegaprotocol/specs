@@ -1,43 +1,52 @@
-Feature name: liquidity-monitoring
-Start date: 2020-07-14
+Feature name: liquidity-monitoring\
+Start date: 2020-07-14\
 Specification PR: https://github.com/vegaprotocol/product/pull/322
 
-# Acceptance Criteria
+## Summary
 
-- [ ]
-- [ ]
-- [ ]
+Liquidity in the market is not only a desirable feature from a trader's point of view, but also an important consideration from the risk-management standpoint. Position of a distressed trader can only be liquidated if there's enough volume on the order book to offload it, otherwise a potentially insolvent party remains part of the market.
 
-# Summary
+Similarly to [price monitoring](0032-price-monitoring.md), we need to be able to detect when the market liquidity drops below the desired level, launch a liquidity auction and terminate it when the market liquidity level is back at a sufficiently high level.
 
-WIP
+## Liquidity auction network parameters
 
-# Guide-level explanation
+**c<sub>1</sub>** - constant multiple of open interest estimate triggering the commencement of liquidity auction.
 
-## Measuring the liquidity
+**c<sub>2</sub>** - constant multiple of open interest estimate triggering the termination of liquidity auction (such that c<sub>2</sub> > c<sub>1</sub>).
 
-### Liquidity required
+**p** - period of time used for the open interest estimate.
 
-Lower bound on liquidity requirement measured as a constant multiple of Open Interest [Do we want to apply some smoothing e.g.: average or max open interest over a rolling window? If so do we want to apply some operation to the measure of liquidity supplied?]
+## Glossary
 
-### Liquidity supplied
+**Open interest** - volume of all long positions.
 
-Committed & supplied Siskas [What are these, do we want to count just the MM-posted liquidity or overall?]
+**Open interest estimate** - maximum open interest in the market captured between the current time t and t-[p](#Liquidity-auction-network-parameters)
+
+## Required liquidity
+
+Minimum liquidity requirement measured as a constant multiple c<sub>1</sub> (market parameter) of max Open Interest over period p
+
+## Supplied liquidity
+
+Count (probability of trading weighted) liquidity committed via market making orders. Please see the [liquidity measurement spec](0034-prob-weighted-liquidity-measure.ipynb) for details.
 
 ## Trigger for entering an auction
 
-When liquidity supplied < liquidity required
+When liquidity supplied < c<sub>1</sub> * [open interest estimate](#Glossary).
+
+Similarly to [price monitoring](0032-price-monitoring.md), the auction should be triggered pre-emptively. That is, the transaction that would have triggered the liquidity auction should be re-processed once auction mode is on. Please note that this transaction may be cancelled if it's type is not valid for auction, however even in that case the market should still go into the auction mode to send a signal that it requires more liquidity.
 
 ## Trigger for exiting the auction
 
-When liquidity supplied > c * liquidity required,
-where c is a constant greater than 1 (part of the market configuration), to reduce the chance of another auction getting triggered soon after.
+When liquidity supplied ≥ c_2 * [open interest estimate](#Glossary), \
+where c_2 > c_1, to reduce the chance of another auction getting triggered soon after.
+
+During the liquidity monitoring auction new or existing market makers can commit more liquidity through the special market making order type and enable this by posting enough margin - see market making mechanics spec (WIP) for details. These need to be monitored to see if auction mode can be exit.
 
 ## What happens during the auction?
 
-[Is there any trading?]
+The auction proceeds as usual. Please see the auction spec for details.
 
-# Reference-level explanation
+## Test cases
 
-# Test cases
-
+* Market with no market makers enters liquidity auction immediately.
