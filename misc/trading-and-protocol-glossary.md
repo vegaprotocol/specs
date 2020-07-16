@@ -168,6 +168,33 @@ The minimum stake lockup period is the minimum time that market maker collateral
 
 ## N
 
+### Net Position
+This describes an implementation methodology for calculating positions and P&L for an individual trader.  Refer to Trading and Protocol Glossary for definitions of unspecified terms.
+
+Assume an individual has a set of trades which they have executed on one market.
+
+Calculate:
+
+1.  Open Volume Sign:  If sum of the long volume > sum of the short volume, trader's open position is net long (and vice versa).
+
+2.  Closed Volume Amount:  If Open Volume Sign > 0, the ***Closed Volume Amount*** is the sum of the short volume of the trades (and vice versa).
+
+3.  Closed Long Contracts - ***the first n volume***, where n is the ***Closed Volume Amount*** (note this methodology is a shortcut way to implementing FIFO at any point in time).
+
+4.  Closed Short Contracts - ***the first n volume***, where n is the ***Closed Volume Amount*** (note this methodology is a shortcut way to implementing FIFO at any point in time).
+
+5.  Open Contracts - whatever is left of the volume that isn't in ***Closed Long Contracts*** or ***Closed Short Contracts***.  These will always be either long contracts OR short contracts but never both (else they'd have been matched off).  Contracts specify a price level and a volume.  They are not trades, as they may be residual volume from a trade that has been partially matched.
+
+
+* ***Realised Volume*** is the ***Closed Volume Amount***
+
+* ***Realised PnL*** = ***Closed Volume Amount*** * (***Average Entry Price*** (of Closed Short Contracts)  - [Average Entry Price](#average-entry-prive) (of Closed Long Contracts)) 
+
+* ***Unrealised Volume*** is the sum of the volume of all the ***Open Contracts***
+
+* ***Unrealised PnL*** = ***Unrealised Volume*** * (***Mark Price*** - ***Average Entry Price***(of Open Contracts)) 
+
+
 ### Notional Value
 The multiplication of a contract's volume by market price.  This may be used in various contexts - i.e. across the whole market or for an individual trader.  A typical application is for a trade, to multiply the [trade volume](#trade-volume) by the [trade entry price](#trade-entry-price) to give the notional value of that trade. It is common to report a market's total daily notional volume which is simply the addition of all the notional volume for all trades that have transacted in a market on a given day.
 
