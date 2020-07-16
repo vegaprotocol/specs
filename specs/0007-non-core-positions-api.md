@@ -21,40 +21,13 @@ The Positions API requires additional position data for each trader, on top of t
 
 * A view of the "profit and loss" that a trader has incurred by fully closing out a position.
 * The portion of profit/loss (P&L) that has been "locked in" by partly closing out a position, i.e. "Realised P&L" (this is a cumulative of the per trade realised P&L)
-* The [volume weighted average entry price](#calculating-the-volume-weighted-average-entry-price) of an open position.
+* The [volume weighted average entry price](../misc/trading-and-protocol-glossary.md#average-entry-price) of an open position.
 * The portion of profit/loss (P&L) that continuously changes when the _mark price_ changes, i.e. "Open P&L".
 * The per trade realised P&L for the buyer and seller 
 
 Note: it is possible to calculate valuation / P&L using various methodologies (e.g. Average cost, FIFO, LIFO) when a position has been only partially closed out. These are well known alternative accounting methods that can be used when account for profit/loss on selling 'inventory' of a product. In this case, we can consider a trader's open positonn as their inventory. We will be outlining the average cost methodology in this API as described at https://www.investopedia.com/terms/a/averagecostmethod.asp, however we may also add others in future and the API should be designed to allow for multiple such approaches to be used simulatnaeously.
 
 Note, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in future.
-
-## Calculating the Volume Weighted Average Entry Price
-This is the *volume weighted price* of a trader's Open Volume.  The open volume will always be comprised of all buys or all sells.
-
-*Example 1 - all buys:*
-
-A trader has 3 price levels at which their open volume was purchased:
-
-1.  Long 3 contracts @ $100
-2.  Long 2 contracts @ $80
-3.  Long 5 contracts @ $150
-
-***Average Entry Price*** = (3 * $100 + 2 * $80 + 5 * $150)/(3 + 2 + 5) = ($300 + $160 + $750) / 10 = $121
-
-*Example 2 - all sells:* 
-
-A trader has 3 price levels at which their open volume was sold:
-
-1.  Short -3 contracts @ $100
-2.  Short -2 contracts @ $80
-3.  Short -5 contracts @ $150
-
-Note, with position management we treat the volume of sells as negative for calculation purposes (not necessarily display purposes to users). Note, that in this calculation however, the negatives cancel each other out. 
-
-***Average Entry Price*** = (-3 * $100 + -2 * $80 + -5 * $150)/(-3 - 2 - 5) = (-$300 - $160 - $750) / -10 = $121
-
-The Average Entry Price is useful when calculating Unrealised P&L or Realised P&L
 
 ## API 
 
