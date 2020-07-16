@@ -30,9 +30,7 @@ Given that there are a large number of possible products and markets on Vega tha
 This Native Data Source (NDS) is typically a price submitted and attested to by a party in Vega. In initial markets on Vega (and beyond) this user submits the price at market expiry.
 Data is supplied through a transaction being posted directly on the Vega network that is signed by one (or more) of the valid signers for that specific data source.
 
-[TODO] how does incentivisation to be honest work?
-[TODO] how does disagreement work?
-
+Note: With this type of oracle there’s no incentive in the Vega data source system, you’re trusting the keyholder(s) at settlement.
 
 ```protobuf
 
@@ -45,8 +43,6 @@ message NativeDataSource {
     bytes[] signers = 5; //public keys of signers
     //TODO ?
 } 
-
-
 
 NativeDataSourceReportRequest {
     message NDSReport {
