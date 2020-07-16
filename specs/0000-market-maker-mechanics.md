@@ -56,11 +56,13 @@
 
 ## Summary
 
+WIP
 
 ## Explanation
 
+## Notes
 
-
-
+- Market Makers not allowed to withdraw below c_2 * open interest estimate (see liquidity monitoring spec for details).
+- When choosing from commitment/fee bids, choose amount that gets us c_2 * open interest estimate.
 
 ## Scenarios / tests
