@@ -87,3 +87,24 @@ If an existing market maker, say, without loss of generality, MM 1 as in the abo
 1. For `i` in `2` to `N` update `New MM i eq share = r x [MM i eq share]`. 
 
 **Check** the sum from over `i` from `1` to `N` of `New MM i` is equal to `1`.
+
+
+## Distributing fees
+The fees are collected into a per-market "bucket" belonging to market makers for that market. We will create a new network parameter (which can be 0 in which case fees are transferred immediately) called `market_maker_fee_distribition_time_step` which will define how frequently fees are distributed from the per-market "bucket" belonging to market makers to their margin accounts for the market. 
+
+The fees are distributed pro-rata depending on the `MM i eq share` at a given time. 
+
+### Example
+The fee bucket contains `103.5 ETH`. We have `3` MMs with equity shares:
+share as below
+```
+MM 1 eq share = 0.65
+MM 2 eq share = 0.25
+MM 3 eq share = 0.1
+```
+When the time defined by ``market_maker_fee_distribition_time_step` elapses we do transfers:
+```
+0.65 x 103.5 = 67.275 ETH to MM 1's margin account
+0.25 x 103.5 = 25.875 ETH to MM 2's margin account
+0.10 x 103.5 = 10.350 ETH to MM 3's margin account
+```
