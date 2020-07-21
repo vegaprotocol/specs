@@ -15,7 +15,7 @@ The aim of this specification is to set out how fees on Vega are set based on co
 
 ## Calculating market fees
 
-As part of the market making order type, the market maker submits his desired fee level for the market. Here we describe how the market fee is set from all these submitted values. 
+As part of the market making order type, the market maker submits their desired fee level for the market. Here we describe how the market fee is set from all these submitted values. 
 First, we produce a list of pairs which capture committed liquidity of each mm together with their desired fee and arrange this list in an increasing order by fee amount. Thus we have 
 ```
 [MM 1 liquidity, MM 1 fee]
@@ -52,7 +52,9 @@ Is calculated to be the estimated fee income for the entire future existence of 
 We have a period over which we measure the maximum open interest to estimate liquidity demand. This is a network parameter as per [liquidity monitoring](????-liquidity-monitoring.md) spec. 
 We need to keep track of the total amount of fees collected on this market over this period. 
 
-The market value estimate is then then amount of fees collected over the last period (or zero if a full period hasn't elapsed yet) multiplied by the number of full periods until the settlement time. 
+The market value estimate is then then amount of fees collected over the last period (or zero if a full period hasn't elapsed yet) multiplied by the number of full periods until the settlement time. For perpetual markets we will update the spec by including a discount factor and use formula for geometric series. 
+
+
 
 ### Example
 1. The market was just proposed and one MM commited stake. No full fee collecting period has yet elapsed and so the market value estimate is equal to the stake of the committed MM. 
