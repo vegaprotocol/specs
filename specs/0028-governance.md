@@ -1,228 +1,214 @@
 # Governance
 
-Governance allows the vega network to arrive at on-chain decisions. Implementing this specification will provide a simple framework for users to create proposals involving Markets or the network in general, by creating new markets,
-or updating a market parameter, or network parameters.
+Governance allows the vega network to arrive at on-chain decisions. Implementing this specification will provide the ability for users to create proposals involving Markets or the network in general, by creating new markets, or updating a market or netowrk parameter.
 
-Ideally this would provide a very simple framework allowing users to:
- - Create a proposal
- - Vote on a proposal
+This is achieved by creating a simple protocol framework for the creation, approval/rejection, and enactment of governance proposals. Where a _proposal_ is comprises a supported governance action and metadata that determines the conditions and timing for it's enactment.
 
-In this document, a "user" refers to a "party" on a Vega network.
+To implement this framework, two new transactions must be supported by the Vega core:
+ - Submit Proposal: deploy a new (valid) proposal to the network
+ - Vote: record a vote for or against a live proposal
+
+In this document, a "user" refers to a "party" (private key holder) on a Vega network.
+
 
 # Future work
-This version of the specification covers governance of data within the network. 
+This version of the specification covers the core governance protocol. Not currently covered is proposal rate limiting or spam / denial of service prevention (including via fees or other methods). 
 
-Not covered is proposal rate limiting, spam protection or fees related to proposals. 
 
 # Guide-level explanation
 
-Governance actions enable users to make proposals for changes on the network or vote for existing proposals. Proposals should be able to cover multiple aspects of the vega protocol:
+Governance actions enable users to make proposals for changes on the network or vote for existing proposals. The allowable types of change to be proposed are known as "governance actions". In future, enactment of governance actions may also be possible by other means (for example, automatically by the protocol in repsonse to certain conditions), which should be kept in mind during implementation.
 
-1. Creation of a market
-1. Edit market parameters
-1. Edit network parameters
+The type of governance action are:
+
+1. Create market
+1. Change market parameters
+1. Change network parameters
+1. Add external asset to Vega (*out of scope for this document*, proposes a new asset controlled by a bridge to become usable on Vega)
+
 
 ## Lifecycle of a proposal
-1. Governance proposal is submitted to the network.
-1. The network validates the proposal.
-1. If valid, the network holds the proposal active for a proposal period.
+
+1. Governance proposal is accepted by the network as a transaction.
+1. The nodes validate the proposal. Note: this is where the network parameters that validate the minimum duration, minimum to to enactment, minimum participation rate, and required majority are evaluated. The proposal is not revalidated. This is also where, if not specified on the proposal, the required participation rate and majoirty for success are defined and copied to the proposal. The proposal is immutable once entered and future parameter changes don't impact it (this is to prevent surprisiing behaviour where other proposals with as yet unknown outcomes can impact the success of a proposal).
+1. If valid, the the proposal is considered "active" for a proposal period. This period is defined on the proposal and must be at least as long as the minimum duration for the proposal type/subtype (specified by a network parameter)
 1. During the proposal period, network participants who are eligible to vote on the proposal may submit votes for or against the proposal.
-1. The network calculates the outcome.
+1. When the proposal perios closes, the network calculates the outcome by:
+    - comparing the total number of votes cast as a percentage of the number eligible to be cast to the minimum participation requirement (if the minimum is not reaced, the proposal is rejected)
+		- comparing the number of positive votes as a percentage of all votes cast (maximum one vote counted per party) to the required majority. 
+1. If the required majoirty of "for" votes was met, the action described in the proposal will be taken (proposal is enacted) on the enactment date, which is defined by the proposal and must be at least the minimum enactment period for the proposal type/subtype (which is specified by a network parameter) _after_ voting on the proposal closes.
 
 Any actions that result from the outcome of the vote are covered in other spec files.
 
-## Voting weights
 
-For on-chain voting mechanisms, the weighting of a vote can be based off:
+## Geovernance weighting
 
-1. The amount of a particular token that a participant holds
-1. The amount of financial stake or bond that a participant has placed on the network 
-1. The amount of some other internally calculated number specific to a participant (e.g. the size of their open positions on a particular market). See note below.
+A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. (Note: a party's weighitng must be greater than 0 for the proposal type in question in order for the party to submit a new proposal.):
 
-The governance system must be generic in term of weighting of the vote for a given proposal, the first implementation will start with _the amount of a particular token that a participant holds_ but this must be subject to configuration in the future.
+Weighting will initially be determined by the user's general account balance of a specific asset on the Vega network in question. This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, includng between Testnets and Mainnets.
 
-Initially the weighting will be based on the amount of the configured governance token that the user has on the network as determined by their balance of this token as a percentage of the total issued supply of that token. 1 token represents 1 vote (0.0001 tokens represents 0.001 votes, etc.). A user with 0 tokens cannot vote, ideally this would be enforced before scheduling the voting transaction in a block.
+In future, governance weighting for some proposal types will be based on alternative measures, such as:
 
-The governance token used for calculating voting weight must be an asset that is configured within the asset framework in Vega (this could be a "Vega native" asset on some networks or an asset deposited via a bridge, i.e. an ERC20 on Ethereum.) This means that the asset framework will *always* need to be able to support pre-configured assets (the configuration of which must be the same on every node) in order to bootstrap the governance system. The governance asset configuration will be different on different Vega networks, so this cannot be hard coded.
+1. The amount of market making bond that a participant has placed with the network for a specific market, or in total.
+1. The value of some other internally calculated number specific to a participant (e.g. the size of their open positions on a particular market). See note below.
 
-Note: in future, some or all proposals for changes to a market will be weighted by a measure of participation in that market. The most likely way this would be calculated would be by the size of the voter's market making commitment vs. the total committed in the market (and participation ratios would be calculated from the same), although we may also consider metrics like the voter's share of traded volume over, say, the voting period or some other algorithm. Importantly this means a voter's weighting will vary between markets for these types of decision.
+The governance system must be generic in term of weighting of the vote for a given proposal. As noted above, the first implementation will start with _the amount of a particular token that a participant holds_ but this will be extended in the near future, as additional protocol features and governance actions are added.
+
+Initially the weighting will be based on the amount of the configured governance asset that the user has on the network as determined by their general account balance of this asset. 1 token represents 1 vote (0.0001 tokens represents 0.0001 votes, etc.). A user with a balance of 0 cannot vote or submit a proposal of that type, and ideally this would be enforced in a check _before_ scheduling the voting transaction in a block.
+
+The governance token used for calculating voting weight must be an asset that is configured within the asset framework in Vega (this could be a "Vega native" asset on some networks or an asset deposited via a bridge, i.e. an ERC20 on Ethereum). Note: this means that the asset framework will _always_ need to be able to support pre-configured assets (the configuration of which must be verifiably the same on every node) in order to bootstrap the governance system. The governance asset configuration will be different on different Vega networks, so this cannot be hard coded.
+
+Note: in future, some or all proposals for changes to a market will be weighted by a measure of participation in that market. The most likely way this would be calculated would be by the size of the voter's market making commitment or vs. the total committed in the market (and participation ratios would be calculated from the same), although we may also consider metrics like the voter's share of traded volume over, say, the voting period or some other algorithm. _Importantly this means a voter's weighting will vary between markets for these types of proposal._
+
 
 ## Voting for a proposal
 
-Users of the vega platform will be able to vote for or against a proposal, if they hold an eligible amount of the voting weight.
-This action is binary:
- - a user can either say yes to a proposal
- - or no
+Users of the vega platform will be able to vote for or against a proposal, if they have an eligible (non-zero) voting weight. A user may choose whether or not to vote. If a user votes, the action is binary: they may either vote **for the proposal** or **against the proposal**, and this will apply to their full weighting.
 
-A user can vote as many times as needed, only the last vote will be accounted for in the final decision for the proposal.
+A user can vote as many times as needed, only the last vote will be accounted for in the final decision for the proposal. We do not consider prevention of spam/DOS attacks by multiple voting in this spec, though they will need to be covered (potentially by a fee and/or proof of work cost).
 
-The amount of voting weight that a user is considered to be voting with is the amount they hold, as measured by the network, at the conclusion of the proposal period - as part of calculating the vote outcome. For example, if a user votes "yes" for a proposal and then adds to their governance token balance after submitting their vote (and prior to the end of the proposal period), their new balance of voting asset is the one used.
+The amount of voting weight that a user is considered to be voting with is the full amount they hold, as measured by the network, **at the conclusion of the proposal period** - as part of calculating the vote outcome. For example, if a user votes "yes" for a proposal and then adds to or withdraws from (including via movements to and from margin accounts for trading the asset) their governance token balance after submitting their vote and prior to the end of the proposal period, their new balance of voting asset is the one used. (Note: this may change in future, if it is deemed to allow misleading or eploitative voting behaviour. Particularly, we may lock the balance from being withdrawn or used for trading for the duration of the vote, once a participant has voted.)
 
 
 ## Restriction on who can create a proposal
-In a first implementation anyone will be able to create a proposal if the weighting of their vote on the proposal would be >0 (e.g. if they have more than 0 of the relevant governance token).
 
-In future iteration of the governance system we expect to be able to restrict which users can create a specific type of proposal. The restriction would be applied based on the weighting required by the proposal. e.g: only user with 5k vega tokens are allowed to open a "network parameter change" proposal.
+Anyone can create a proposal if the weighting of their vote on the proposal would be >0 (e.g. if they have more than 0 of the relevant governance token).
+
+In a future iteration of the governance system we may restrict proposal submission by type of proposal based on a minimum weighting. e.g: only user with a certain number or percentage of the governance asset are allowed to open a "network parameter change" proposal.
+
 
 ## Configuration of a proposal
+
 When a proposal is created, it can be configured in multiple ways. 
 
+
 ### Duration of the proposal
-A new proposal will have a close date specified as a timestamp. After the proposal is created in the system and before the close date, the proposal is open for votes.
-e.g: A proposal is created and people have 3 weeks from the day it is sent to the network in order to submit votes for it.
 
-The proposal's close date may optionally be set by the proposer and must be greater than or equal to a minimum duration time that is set by the network. The network will specify minimum duration times depending on the type of proposal. 
+A new proposal will have a close date specified as a timestamp. After the proposal is created in the system and before the close date, the proposal is open for votes. e.g: A proposal is created and people have 3 weeks from the day it is sent to the network in order to submit votes for it.
 
-The network's _minimum proposal duration time_ - as specified by a network parameter relevant to the proposal type - is used as the default when the new proposal either fails to include a minimum proposal duration time or the proposal is submitted with a close date would fail to meet the network's minimum proposal duration time constraint.
+The proposal's close date may optionally be set by the proposer and must be greater than or equal to a minimum duration time that is set by the network. Minimum duration times will be specified as network parameters depending on the type of proposal. 
+
+The network's _minimum proposal duration_ - as specified by a network parameter specific to each proposal type - is used as the default when the new proposal does not include a proposal duration. If a proposal is submitted with a close date would fail to meet the network's minimum proposal duration time constraint, the proposal must be rejected.
+
 
 ### When a proposal is enacted
-A new proposal can also specify when any changes resulting from a successful vote would start to be applied.
-e.g: A new proposal is created in order to create a new market with a 1 week enactment date. After 3 weeks the proposal is closed (the duration of the proposal), and if there is enough votes to accept the new proposal, then the changes will be applied in the network 1 week later.
-This would allow enough time for the operator to be ready for the changes, e.g in the case the proposal is to decide to use a new version of the vega node, or something available only in a later version of the node.
 
-Proposals are enacted in the order they were created. This means that in the case that two proposals change the same parameter in roughly the same period, the oldest proposal will be applied first and the newest will be applied last. There is no attempt to resolve differences between the two.
+A new proposal can also specify when any changes resulting from a successful vote would start to be applied. e.g: A new proposal is created in order to create a new market with an enactment date 1 week after vote closing. After 3 weeks the proposal is closed (the duration of the proposal), and if there are enough votes to accept the new proposal, then the changes will be applied in the network 1 week later.
 
-The network's _minimum time between vote closing and enactment_ - as specified by a network parameter relevant to the proposal type is used to validate whether the enactment date is acceptable.
+This allows time for users to be ready for changes that may effect them financially or technically, e.g in the case the proposal is to decide to use a new version of the vega node, or something available only in a later version of the node, or a change that might increase capital requirements for positions singificantly and thus could trigger close-outs. It also allows markets to be pre-approved early and launched at a chosen time in the future.
+
+Proposals are enacted by timestamp, earliest first, as soon as the enactment time is reached by the network (i.e. "Vega time"). Proposals sharing the same exact enactment time are enacted in the order they were created. This means that in the case that two proposals change the same parameter with the same timestamp, the oldest proposal will be applied first and the newest will be applied last, overwriting the change made by the older proposal. There is no attempt to resolve differences between the two.
+
+The network's _minimum pre-enactment perios_ - as specified by a network parameter specific to each proposal type is used to validate whether the enactment date is acceptable.
+
 
 ## Editing and/or cancelling a proposal is not possible
-A proposal cannot be edited, once created. The only possible action is to vote for or against a proposal. We would expect amending a proposal to be made by creating a new proposal.
-e.g: I create a proposal for a new market using ETH as an asset. Later on I decide it would be better to use BTC, the solution
-will be to create a new proposal, to change this specific parameter on the market definition.
 
-There will be no explicit link between the first proposal and the replacement one.
+A proposal cannot be edited, once created. The only possible action is to vote for or against a proposal, or submit a new proposal. 
+
+If a proposal is created and later a different outcome is preferred by network participants, two courses of action are possible:
+
+1. Vote against the proposal and create a new proposal with the correct change
+1. Vote for or against the proposal and create a new proposal for the additional change
+
+Which of these makes most sense will depend on the type of change, the timing of the events, and how the rest of the community votes for the initial proposal.
+
 
 ## Outcome
-At the conclusion of the voting period the network will calculate the sum of vote weightings of *valid* 'Yes' votes, divided by the sum of vote weightings for all valid votes cast for the proposal.
 
-If this amount is greater than or equal to the minimum majority amount required for this proposal, then the vote is considered to be successful. Note, the network will specify minimum majority amounts depending on the type of proposal.
+At the conclusion of the voting period the network will calculate two values:
 
-If this "yes" result is greater than the 
+1. The participation rate: `participation_rate = SUM ( weightings of ALL valid votes cast ) / max total weighting possible` (e.g. sum of token balances of all votes cast / total supply of governance asset)
+1. The "for" rate: `for_rate = SUM ( weightings of votes cast for ) / SUM ( weightings of all votes cast )`
 
-Not in scope: minimum percentage of participation. e.g: require 80% of users who vote to vote yes and 90% of the _active_ users of the vega network have to take part in the vote.
+The proposal is considered succesful and will be enacted if:
+
+- The `participation_rate` is greater than or equal to the minimum participation rate for the proposal
+- The `for_rate` is greater than or equal to the minimum required majority for the proposal
+
+Note: see below for details on minimum participation rate and minimum required majority, which are defined by type of governance action, and in some cases a category or sub-type.
+
+Not in scope: minimum participation of active users, i.e. 90% of the _active_ users of the vega network have to take part in the vote. Minimum participation is currently always measured against the total possible participation.
+
 
 # Reference-level explanation
 
 We introduce 2 new commands which require consensus (needs to go through the chain)
 
-- create a proposal.
+- submit a proposal.
 - vote for a given proposal.
+
 
 ## Types of proposals
 
-We allow users to create proposals covering 4 domains:
+We allow users to submit proposals covering 3 types of governance action:
 
 1. Creation of a market
-1. Edit market parameters
-1. Edit network parameters
-
-We have proposed the set of network parameters that will be utilised by each type of  proposal. However, in the future, different sub-types of these categories may reference different sets of (or specific) network parameters. For example, amending a long-running liquid market may have different network parameter requirements to a smaller, short term market.
-
-## 1. Creation or amending of a market
-
-All **new market proposals** will reference a set of shared network parameters:
-
-* `NetworkParameters.Governance.Markets.New.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Markets.New.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Markets.New.MinimumRequiredMajority` [always used]
-
-All **market amend proposals** will reference a set of shared network parameters:
-* `NetworkParameters.Governance.Markets.Amend.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Markets.Amend.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Markets.Amend.MinimumRequiredMajority` [always used]
+1. Change market parameters
+1. Change network parameters
 
 
-## 2. Edit market parameters
+## 1. Create market
 
-In future when there are multiple products, parameters that can be changed via governance will be defined individually for the product.
+A proposal to create a market contains a compelte market specification as per the Market Framework (see spec) that describes the market to be created. 
 
-For now, proposals to update market parameters are limited to the following:
-
-| Field                                                 | Y/N | Specifics                                                                               |
-|-------------------------------------------------------|-----|-----------------------------------------------------------------------------------------|
-| Market.TradingMode                                    | Y   | Both the trading mode itself, and the individual fields                                 |
-| Market.TradableInstrument.RiskModel                   | Y   | Both the entire risk model, and individual params of the risk model (needs spec!)       |
-| Market.TradableInstrument.MarginCalculator            | Y   | Updating all scaling factors is possible                                                |
-| Market.TradableInstrument.Instrument.Code             | Y   | Updating the descriptive name                                           |                                              |
-| Market.Status            | Y   | Including for closing or suspending a market                                                |                                              |
-
-Add category/subtype: "Trading" (mode and status), others under instrument
-
-For version 1 of governance, all trading parameters should reference the following network parameters:
-* `NetworkParameters.Governance.Market.Trading.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Market.Trading.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Market.Trading.MinimumRequiredMajority` [always used]
-
-For version 1 of governance, all instrument parameters should reference the following network parameters:
-* `NetworkParameters.Governance.Market.Instrument.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Market.Instrument.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Market.Instrument.MinimumRequiredMajority` [always used]
-
-In future, we may define separate network parameters depending on either:
-1. The type of parameter that is the subject of the change proposal.
-1. A set of rules that specify which parameter would be used according to a set of conditions - such as, whether or not the market is active or not (e.g. if a market has been trading for some time, suddenly changing the risk factors and scaling factors is risky, less so if the market is not active yet).
-
-## 4. Edit network parameters
+All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
 
-For version 1 of governance, all network parameter change proposals should reference the following network parameters:
+## 2. Change market parameters
 
-* `NetworkParameters.Governance.Network.<Type>.MinimumProposalPeriod` [default]
-* `NetworkParameters.Governance.Network.<Type>.MinimumRequiredParticipation` [always used]
-* `NetworkParameters.Governance.Network.<Type>.MinimumRequiredMajority` [always used]
+Market parameters that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. See the Market Framework spec for details on these parameters, including those that cannot be changed and the category of the parameters.
 
-In the future, the network parameter framework will specify the Type.
+All **change market parameter proposals** have their validation configured by the network parameters `Governance.UpdateMarket.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Market Framework spec.
 
-All network parameters may at some point be assigned individual network parameters that govern a particular change to themselves.
 
-Note
+## 3. Change network parameters
 
-`NetworkParameters.Governance.Network.<Type = governance>.MinimumProposalPeriod` control changing the minimum proposal periods.. Barney to complete.
+Netowrk parameters that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters.
+
+All **change market parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Netowrk Parameter spec.
+
+
+## Proposal validation parameters
+
+As described throughout this specification, there are several sets of network parameters that control the minimum durations of the voting and pre-enactment periods, as well as the minimum participation rate and required majority for a proposal.
+
+These sets of parameters are named in the form `Governance.<ActionType>.<Category>.*`, i.e.
+
+* `Governance.<ActionType>.<Cateogry>.MinimumProposalPeriod`
+* `Governance.<ActionType>.<Cateogry>.MinimumPreEnactmentPeriod`
+* `Governance.<ActionType>.<Cateogry>.MinimumRequiredParticipation` 
+* `Governance.<ActionType>.<Cateogry>.MinimumRequiredMajority`
+
+
+See the details in 1-3 above for the action type and category (or references to where to find them). For example, for market creation the parameters are as below (and for updating market and network parameters, there are multiple sets of these by category):
+
+* `Governance.CreateMarket.All.MinimumProposalPeriod`
+* `Governance.CreateMarket.All.MinimumPreEnactmentPeriod`
+* `Governance.CreateMarket.All.MinimumRequiredParticipation` 
+* `Governance.CreateMarket.All.MinimumRequiredMajority`
+
+
+Notes:
+
+* The categorisation of parameters is liable to chaneg and be added to as the protocol evolves.
+* As these are themselves network parameters, a set of parameters will control these parameters for the actions that update these parameters (including being self-referential), i.e. the parameter `Governance.UpdateNetwork.GovernanceProposalValidation.MinimumRequiredParticipation` would control the amount of voting participation needed to change these parameters. See the Network Parameters spec.
 
 
 ## APIs
 
-We expect the user to be able to do the following actions by using the core APIs:
- - list all the open proposals on the network
- - vote for a given proposal
- - get the results for a given proposal
- - get a list of proposals a user voted for
- - a notification system in order to be notified of new proposal requiring attention
+The core should exopse via core APIs:
+ - all the active proposals on the network
+ - the current results for an active proposal or a proposal awaiting enactment
 
-# Pseudo-code / Examples
+APIs should also exist for clients to:
+ - list all proposals including historic ones, filter by status/type, sort either way by submission date, vote closing date, or enactment date
+ - retrieve the summary results and status for any proposal
+ - retrieve the party IDs (pub keys) of all votes counting for (i.e. only one latest vote per party) and against a proposal
+ - retrieve the full voting history for a proposal including where a party voted multiple times
+ - get a list of all proposals a party voted on
 
-Possible implementation of the Proposal format (protobuf):
-```
-enum ProposalKind {
-	Market = 1;
-	NetworkParam = 2;
-	// ...
-}
 
-message Proposal {
-	ProposalKind kind = 1;
-	oneof Data {
-		vega.Market market = 2;
-		string networkParam = 3;
-	}
-	int64 winThreshold = 4;
-	int64 openUntil = 5;
-	int64 takeEffectOn = 6;
-}
-```
-
-Possible implementation for a vote
-```
-enum VoteChoice {
-	Yes = 1;
-	No = 2;
-}
-
-message Vote {
-	string partyID = 1;
-	string proposalID = 2;
-	VoteChoice choice = 3;
-}
-```
 
 # Acceptance Criteria
 
