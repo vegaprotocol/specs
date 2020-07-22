@@ -46,36 +46,41 @@ Let us say that `c_2 = 10`.
 Initially (before market opened) the maximum open interest is by definition zero (it's no possible to have a position on a market that's not opened yet). Hence by default the initial fee is the one supplied by the market maker who commited stake *first*. 
 Once the market opens (opening auction starts) a clock starts ticking. We have a period over which we measure the maximum open interest to estimate liquidity demand. This is a network parameter `t_liquidity_window`. The fee is continuosly re-evalueated using the mechanism above. 
 
-## Calculating market value estimate
+## Calculating market value proxy
 
-Is calculated to be the estimated fee income for the entire future existence of the market using recent fee income. If this results in a smaller amount than the committed market making bonds then the market value estimate is the sum of all the committed market making bonds. 
+This will be used for determining what "equity like share" does commiting market making stage at a given time lead to. 
+It's calculated, with `t` denoting time now, as follows:
+```
+total_stake = sum of all mm stakes
+active_time_window = [max(t-t_liquidity_window,0), t]
 
-We have a period over which we measure the maximum open interest to estimate liquidity demand. This is a network parameter as per [liquidity monitoring](????-liquidity-monitoring.md) spec. 
-We need to keep track of the total amount of fees collected on this market over this period. 
+traded_value_over_window = total trade value for fee purposes of all trades executed on a given market the active_time_window
 
-The market value estimate is then then amount of fees collected over the last period (or zero if a full period hasn't elapsed yet) multiplied by the number of full periods until the settlement time. For perpetual markets we will update the spec by including a discount factor and use formula for geometric series. 
+market_value_proxy = max(total_stake, traded_value_over_window)
+```
 
+Note that trade value for fee purposes is provided by each instrument, see [fees][0024-fees.md]. For futures it's just the notional and in the examples below we will only think of futures. 
 
 
 ### Example
-1. The market was just proposed and one MM commited stake. No full fee collecting period has yet elapsed and so the market value estimate is equal to the stake of the committed MM. 
-1. A MM has committed stake of `10000 ETH`. The fees collected over the last period were `10 ETH` and there are `100` periods till the settlement. The estimated future fee income is `10 x 100 = 1000 ETH` but that's less than the stake of the MM so the market value estimate is still `10000 ETH`.
-1. A MM has committed stake of `10000 ETH`. The fees collected over the last period were `250 ETH` and there are `1000` periods till the settlement. The estimated future fee income is `250 x 1000 = 250000 ETH` so the market value estimate is still `250 000 ETH`.
+1. The market was just proposed and one MM commited stake. No trading happened so the `market_value_proxy` is the stake of the committed MM. 
+1. A MM has committed stake of `10000 ETH`. The traded notional over `active_time_window` is `9000 ETH`. So the `market_value_proxy` is `10000 ETH`.
+1. A MM has committed stake of `10000 ETH`. The traded notional over `active_time_window` is `250 000 ETH`. Thus the `market_value_proxy` is `250 000 ETH`.
 
 ## Calculating market maker equity-like share
 
-The guiding principle of this section is that by commiting stake a market maker buys a portion of the "value" of the market. 
+The guiding principle of this section is that by commiting stake a market maker buys a portion of the `market_value_proxy` of the market. 
 
-At any time let's say we have `market value estimate` calculated above and existing market makers with equity-like share as below
+At any time let's say we have `market_value_proxy` calculated above and existing market makers with equity-like share as below
 ```
 [MM 1 eq share, MM 1 ownership amt]
 [MM 2 eq share, MM 2 ownership amt]
 ...
 [MM N eq share, MM 3 ownership amt]
 ```
-Here `MM i ownership amt = [MM i equity share] x [market value estimate]`. 
+Here `MM i ownership amt = [MM i equity share] x market_value_proxy`. 
 
-If a new market maker `MM N+1` who commits stake (by sucessfully submitting a MM order) equal to `S` then purchases a `MM N+1 eq share = S / ([market value estimate] + S)`. 
+If a new market maker `MM N+1` who commits stake (by sucessfully submitting a MM order) equal to `S` then purchases a `MM N+1 eq share = S / (market_value_proxy + S)`. 
 This "dilutes" the equity-like share of existing MMs as follows: 
 ```
 New MM i eq share = (1 - [MM N+1 eq share]) x [MM i eq share].
