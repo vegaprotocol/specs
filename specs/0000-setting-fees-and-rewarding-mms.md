@@ -8,7 +8,8 @@ The aim of this specification is to set out how fees on Vega are set based on co
 - **Open interest**: the volume of all open positions in a given market (ie order book)
 - **Liquidity**: measured as per [liquidity measurement spec](0034-prob-weighted-liquidity-measure.ipynb) (but it's basically volume on the book weighted by the probability of trading)
 - **Supplied liquidity**: this counts only the liquidity provided through the special market making order that market makers have committed to as per [market maker order spec](????.md) 
-- **Liquidity demand estimate**: as defined in [liquidity monitoring](????-liquidity-monitoring.md) spec we use maximum open interest in the market captured between the current time t and t-[p](#Liquidity-auction-network-parameters) for now. 
+- **Liquidity demand window length `t_liquidity_window`**: sets the length of the window over which we estimate liquidity demand for fee setting purposes. This is a network parameter.  
+- **Liquidity demand estimate**: as defined in [liquidity monitoring](????-liquidity-monitoring.md) spec we use maximum open interest in the market captured between `max(t-t_liquidity_window,0)` and the current time `t`. Here time `t=0` denotes the end of market opening auction.  
 - **Sufficient liquidity trigger `c_2`**: a network parameter `c_2` defined in [liquidity monitoring](????-liquidity-monitoring.md) spec. 
 - **Market value estimate** is calculated to be the estimated fee income for the entire future existence of the market using recent fee income. See further in this spec for details.
 
@@ -43,7 +44,7 @@ Let us say that `c_2 = 10`.
 ## Timing market fee changes
 
 Initially (before market opened) the maximum open interest is by definition zero (it's no possible to have a position on a market that's not opened yet). Hence by default the initial fee is the one supplied by the market maker who commited stake *first*. 
-Once the market opens (opening auction starts) a clock starts ticking. We have a period over which we measure the maximum open interest to estimate liquidity demand. This is a network parameter as per [liquidity monitoring](????-liquidity-monitoring.md) spec. Every time this period elapses the market fee is re-evaluated. This is written with the assumption that this parameter is something between 24 hours and 7 days. If it's significantly longer then this doesn't really work so well. On the other hand I don't want to introduce more parameters for now... and we don't want to update fees continuously as this will create another source of unpredictability for users. 
+Once the market opens (opening auction starts) a clock starts ticking. We have a period over which we measure the maximum open interest to estimate liquidity demand. This is a network parameter `t_liquidity_window`. The fee is continuosly re-evalueated using the mechanism above. 
 
 ## Calculating market value estimate
 
