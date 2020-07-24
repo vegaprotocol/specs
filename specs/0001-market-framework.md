@@ -114,7 +114,10 @@ The Market Framework is controlled by a number of parameters that can come from 
 | Name | Category | Description | Source |
 |------|----------|:------:|:--------:|
 | [Mark Price algorithm selection](https://github.com/vegaprotocol/product/blob/master/specs/0009-mark-price.md#acceptance-criteria) | Market         | The algorithm used to determine mark price is set per market | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md)         |
+| [Minimum auction duration](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md) | Auction         | The shortest allowable auction period for all auctions | [Network parameter](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md)         |
 | [Minimum auction duration](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md) | Auction         | The shortest allowable auction period for all auctions | [Network parameter](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md)         |
+| [Risk Model](https://github.com/vegaprotocol/product/blob/master/specs/0018-quant-risk-models.ipynb) | Market         | The shortest allowable auction period for all auctions | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md)           |
+| [Initial mark price](https://github.com/vegaprotocol/product/blob/master/specs/0009-mark-price.md) | Market         | The initial price for a market | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md)           |
 
 
 ----
