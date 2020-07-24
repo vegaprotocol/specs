@@ -108,6 +108,19 @@ Note: product definition for futures is out of scope for this ticket.
 
 ----
 
+# Parameters
+The Market Framework is controlled by a number of parameters that can come from defaults, configuration, or network parameters. The latter category are controlled by [Governance](.0028-governance.md), and thus can change over the course of the life of a market. Market configuration can also be changed through governance, albeit only one property at a time. The source of these is the Market Creation proposal.
+
+| Name | Description | Source | Category |
+|------|-------------|:------:|:--------:|
+|      |             |        |          |
+|      |             |        |          |
+|      |             |        |          |
+
+
+
+----
+
 # Pseudo-code / examples
 
 
