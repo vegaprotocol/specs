@@ -118,8 +118,9 @@ The Market Framework is controlled by a number of parameters that can come from 
 | [Minimum auction duration](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md) | Auction         | The shortest allowable auction period for all auctions | [Network parameter](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md)         |
 | [Risk Model](https://github.com/vegaprotocol/product/blob/master/specs/0018-quant-risk-models.ipynb) | Market         | The shortest allowable auction period for all auctions | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md)           |
 | [Initial mark price](https://github.com/vegaprotocol/product/blob/master/specs/0009-mark-price.md) | Market         | The initial price for a market | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md)           |
-
-
+| [Infrastructure Fee Factor](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md) | Fee         | The fee infrastructure fee factor | [Network Parameter](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md)           |
+| [Maker Fee Factor](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md) | Fee         | The price maker fee factor | [Network Parameter](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md)           |
+| [Liquidity Fee Factor](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md) | Fee         | The liquidity fee factor | [Network Parameter](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md)           |
 ----
 
 # Pseudo-code / examples
