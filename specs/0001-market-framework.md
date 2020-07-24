@@ -111,12 +111,10 @@ Note: product definition for futures is out of scope for this ticket.
 # Parameters
 The Market Framework is controlled by a number of parameters that can come from defaults, configuration, or network parameters. The latter category are controlled by [Governance](.0028-governance.md), and thus can change over the course of the life of a market. Market configuration can also be changed through governance, albeit only one property at a time. The source of these is the Market Creation proposal.
 
-| Name | Description | Source | Category |
-|------|-------------|:------:|:--------:|
-|      |             |        |          |
-|      |             |        |          |
-|      |             |        |          |
-
+| Name | Category | Description | Source |
+|------|----------|:------:|:--------:|
+| [Mark Price algorithm selection](https://github.com/vegaprotocol/product/blob/master/specs/0009-mark-price.md#acceptance-criteria) | Market         | The algorithm used to determine mark price is set per market | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md)         |
+| [Minimum auction duration](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md) | Auction         | The shortest allowable auction period for all auctions | [Network parameter](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md)         |
 
 
 ----
