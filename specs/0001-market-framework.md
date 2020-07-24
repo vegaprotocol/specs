@@ -115,12 +115,20 @@ The Market Framework is controlled by a number of parameters that can come from 
 |------|----------|:------:|:--------:|
 | [Mark Price algorithm selection](https://github.com/vegaprotocol/product/blob/master/specs/0009-mark-price.md#acceptance-criteria) | Market         | The algorithm used to determine mark price is set per market | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md)         |
 | [Minimum auction duration](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md) | Auction         | The shortest allowable auction period for all auctions | [Network parameter](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md)         |
-| [Minimum auction duration](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md) | Auction         | The shortest allowable auction period for all auctions | [Network parameter](https://github.com/vegaprotocol/product/blob/master/specs/0026-auctions.md)         |
+| Maximum auction duration | Auction         | The longest allowable auction period for all auctions | [Network parameter](https://github.com/vegaprotocol/vega/blob/master/governance/networkparams.go)         |
+| Minimum auction enactment time | Auction         | The shortest allowable auction for enactment of all auctions | [Network parameter](https://github.com/vegaprotocol/vega/blob/master/governance/networkparams.go)         |
+| Maximum auction enactment time | Auction         | The longest allowable auction for enactment of all auctions | [Network parameter](https://github.com/vegaprotocol/vega/blob/master/governance/networkparams.go)         |
+| Required auction participation | Auction         | The shortest allowable auction for enactment of all auctions | [Network parameter](https://github.com/vegaprotocol/vega/blob/master/governance/networkparams.go)         |
+| Maximum auction enactment time | Auction         | The longest allowable auction for enactment of all auctions | [Network parameter](https://github.com/vegaprotocol/vega/blob/master/governance/networkparams.go)         |
+| Required auction majority | Auction         | Proportion of FOR votes for an auction to win | [Network parameter](https://github.com/vegaprotocol/vega/blob/master/governance/networkparams.go)         |
+| Minimum proposer balance | Auction         | The required governance token balance a proposer must have at enactment time | [Network parameter](https://github.com/vegaprotocol/vega/blob/master/governance/networkparams.go)         |
+| Minimum voter balance | Auction         | The required governance token balance a voter must have at vote time | [Network parameter](https://github.com/vegaprotocol/vega/blob/master/governance/networkparams.go)         |
 | [Risk Model](https://github.com/vegaprotocol/product/blob/master/specs/0018-quant-risk-models.ipynb) | Market         | The shortest allowable auction period for all auctions | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md)           |
 | [Initial mark price](https://github.com/vegaprotocol/product/blob/master/specs/0009-mark-price.md) | Market         | The initial price for a market | [Market proposal](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md)           |
 | [Infrastructure Fee Factor](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md) | Fee         | The fee infrastructure fee factor | [Network Parameter](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md)           |
 | [Maker Fee Factor](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md) | Fee         | The price maker fee factor | [Network Parameter](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md)           |
 | [Liquidity Fee Factor](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md) | Fee         | The liquidity fee factor | [Network Parameter](https://github.com/vegaprotocol/product/blob/master/specs/0029-fees.md)           |
+
 ----
 
 # Pseudo-code / examples
