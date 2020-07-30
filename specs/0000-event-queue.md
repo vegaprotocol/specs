@@ -33,39 +33,81 @@ This message queue will use gRPC to communicate with the Vega network via 3 main
 
 The protobuf of the service:
 ```proto
-service event_queue_receiver {
+
+service VegaChainEvent {
+  rpc PropagateChainEvent(PropagateChainEventRequest) returns (PropagateChainEventResponse);
   rpc GetSubscribedEventSources() returns (GetSubscribedEventSourcesResponse);
-  rpc PropagateEvent(PropagateEventRequest) returns (PropagateEventResponse);
   rpc GetEventAcceptanceStatus(GetEventAcceptanceStatusRequest) returns (GetEventAcceptanceStatusResponse);
+}
+
+message PropagateChainEventRequest {
+  vega.ChainEvent evt = 1;
+  string pubKey = 2;
+  bytes signature = 3;
+}
+
+message PropagateChainEventResponse {
+  // Did the event get accepted by the node successfully
+  // and forwarded to the network
+  bool success = 1;
+}
+
+message ChainEvent {
+  string txID = 1;
+
+  oneof event {
+    ERC20Event erc20 = 1001;
+	// etc to support more foregin chains
+  }
+}
+
+// An event related to an erc20 token
+message ERC20Event {
+  // Index of the transaction
+  uint64 index = 1;
+  // The block in which the transaction was added
+  uint64 block = 2;
+
+  oneof action {
+    ERC20AssetList assetList = 1001;
+    ERC20AssetDelist assetDelist = 1002;
+    ERC20Deposit deposit = 1003;
+    ERC20Withdrawal withdrawal = 1004;
+  }
+}
+
+message ERC20AssetList {
+  // The vega network internally ID of the asset
+  string vegaAssetID = 1;
+}
+
+message ERC20AssetDelist {
+  // The vega network internally ID of the asset
+  string vegaAssetID = 1;
+}
+
+message ERC20Deposit {
+  // The vega network internally ID of the asset
+  string vegaAssetID = 1;
+  // The ethereum wallet that initiated the deposit
+  string sourceEthereumAddress = 2;
+  // The Vega public key of the target vega user
+  string targetPartyID = 3;
+}
+
+message ERC20Withdrawal {
+  // The vega network internally ID of the asset
+  string vegaAssetID = 1;
+  // The party inititing the withdrawal
+  string sourcePartyId = 2;
+  // The target Ethereum wallet address
+  string targetEthereumAddress = 3;
+  // The reference nonce used for the transaction
+  string referenceNonce = 4;
 }
 
 message GetSubscribedEventSourcesResponse {
   repeated string subscribed_event_source = 1;
-}
-
-//this will expand with the system
-enum EventType {
-  EVENT_TYPE_UNSPECIFIED = 0;
-  EVENT_TYPE_ASSET_DEPOSITED = 1;
-  EVENT_TYPE_ASSET_WITHDRAWN = 2;
-  EVENT_TYPE_ASSET_LISTED = 3;
-  EVENT_TYPE_ASSET_DELISTED = 4;
-  EVENT_TYPE_DEPOSIT_MINIMUM_SET = 5;
-}
-
-message PropagateEventRequest {
-  string event_source = 1; // address of bridge
-  string asset_source = 2; // address of asset
-  string asset_id = 3; // ID of asset specific to that asset_source
-  EventType event_type = 4; // enumerated event type
-  string transaction_hash = 7; // tx hash in question that must lead us to parseable data based on 'event_type'
-  uint32 log_index = 8; // if the transaction outputs multiple events to the log, this tells you which one
-  string event_name = 9; // friendly name of event specific to bridge/source
-  uint32 block_number = 10; // block number of source chain the event occurred
-}
-
-message PropagateEventResponse {
-  bool success = 1; // indicate if the request was valid
 }
 
 message GetEventAcceptanceStatusRequest {
