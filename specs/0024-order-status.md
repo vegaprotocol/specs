@@ -43,7 +43,6 @@ For the definition of each Time In Force option, see [the Order Types spec](./00
 |      GTC      |   Yes   |         No        |         No        |      Filled      |
 
 ## Good ’Til Time
-Note: The last row in the table below is added for clarity rather than being a legitimate situation. If the order filled, it is marked as FILLED and it is removed from the book, so it can’t expire after filling. 
 
 | Time In Force | Filled  | Expired | Cancelled by user | Stopped by system | Resulting status |
 |---------------|---------|---------|-------------------|-------------------|------------------|
@@ -56,7 +55,9 @@ Note: The last row in the table below is added for clarity rather than being a l
 |      GTT      | Partial |    No   |        Yes        |         No        |     Cancelled    |
 |      GTT      | Partial |    No   |         No        |        Yes        |      Stopped     |
 |      GTT      |   Yes   |    No   |         No        |         No        |      Filled      |
-|      GTT      |   Yes   |   Yes   |         No        |         No        |      Filled      |
+|      GTT      |   Yes   |   Yes   |         No        |         No        | not possible (see note) |
+
+Note: The last row in the table above is added for clarity. If the order was filled, it is marked as Filled and it is removed from the book, so it can't expire after being filled.
 
 ## Wash trading
 If an order would be filled or partially filled with an existing order from the same traderID, the order is rejected. Any existing fills that happen before the wash trade is identified will be kept.
@@ -65,3 +66,4 @@ If an order would be filled or partially filled with an existing order from the 
 |--------------|------------------|--------|
 |   Unfilled   |     Rejected     | Order would match with an order with the same partyID |
 |   Partially  |     Rejected     | Order has been partially filled but the next partial fill would be with an order with the same partyID |
+
