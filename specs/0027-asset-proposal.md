@@ -45,20 +45,29 @@ Changes to the voting:
 
 ```
 
-message Erc20 {
+message ERC20 {
+	// contract address of an ERC20 token
 	string contractAddress = 1;
 }
 
-message Eth {} // tbd
+message BTC {
+	// some btc require fields
+	// e.g network to use etc.
+}
 
-message Btc {} // tbd
+message AssetSource {
+  oneof source {
+    // vega internal assets
+	BuiltinAsset builtinAsset = 1;
+	// foreign chains assets
+    ERC20 erc20 = 2;
+	// more to be done, BTC, ETH, etc..
+	BTC btc = 3;
+  }
+}
 
 message NewAsset {
-	oneof Asset {
-		Erc20 erc20 = 1;
-		Eth eth = 2;
-		Btc btc = 3;
-	}
+  AssetSource changes = 1 [(validator.field) = {msg_exists: true}];
 }
 
 message ProposalTerms {
