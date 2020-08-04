@@ -72,6 +72,6 @@ GFA (Good for auction) not shown, spec. will be updated when auctions are added.
 | -------------- |:---:|:---:|:---:|:----|:---:|:---:|
 | Limit          | Y   | Y   | N   | N   | Y   | N   |
 | Pegged         | N*  | N*  | N*  | N*  | Y   | N   |
-| Market         | N   | N   | Y   | Y   | Y   | N   |
+| Market         | N   | N   | N   | N   | N   | N   |
 
 \* Pegged orders will be parked during an auction, with time priority preserved
