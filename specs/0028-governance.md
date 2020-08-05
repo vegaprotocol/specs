@@ -166,7 +166,7 @@ All **change market parameter proposals** have their validation configured by th
 
 Netowrk parameters that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters.
 
-All **change market parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Netowrk Parameter spec.
+All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
 
 
 ## Proposal validation parameters
