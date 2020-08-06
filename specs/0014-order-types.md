@@ -66,12 +66,11 @@ Notes on scope of current version of this spec:
 
 ##### Auction
 
-GFA (Good for auction) not shown, spec. will be updated when auctions are added.
-
 | Pricing method | GTT | GTC | IOC | FOK | GFA | GFC |
 | -------------- |:---:|:---:|:---:|:----|:---:|:---:|
 | Limit          | Y   | Y   | N   | N   | Y   | N   |
-| Pegged         | N*  | N*  | N*  | N*  | Y   | N   |
+| Pegged         | Y*  | Y*  | Y*  | Y*  | N$  | Y$  |
 | Market         | N   | N   | N   | N   | N   | N   |
 
-\* Pegged orders will be parked during an auction, with time priority preserved
+\* Pegged orders will be parked during an auction, with time priority preserved<br>
+\$ New pegged orders can only be GFC and will be immediately parked during an auction
