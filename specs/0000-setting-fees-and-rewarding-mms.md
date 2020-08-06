@@ -38,12 +38,12 @@ Let us say that `c_2 = 10`.
 [MM 3 liquidity = 60, MM 3 fee = 3.75%]
 ```
 1. If the `liquidity demand estimate = 10` then `c_2 x [liquidity demand estimate] = 100` which means that the needed liquidity is given by MM 1, thus `k=1` and so the market fee is  `MM 1 fee = 0.5%`. 
-1. If the `liquidity demand estimate = 11.5` then `c_2 x [liquidity demand estimate] = 115` which means that the needed liquidity is given by MM 1 and MM 2, thus `k=2` and so the market fee is  `MM 2 fee = 0.75%`. 
+1. If the `liquidity demand estimate = 12.5` then `c_2 x [liquidity demand estimate] = 125` which means that the needed liquidity is given by MM 1 and MM 2, thus `k=2` and so the market fee is  `MM 2 fee = 0.75%`. 
 1. If the `liquidity demand estimate = 123` then `c_2 x [liquidity demand estimate] = 1230` which means that even putting all the liquidity supplied above does not meet the estimated market liquidity demand and thus we set `k=N` and so the market fee is `MM N fee = MM 3 fee = 3.75%`. 
 
 ## Timing market fee changes
 
-Initially (before market opened) the maximum open interest is by definition zero (it's no possible to have a position on a market that's not opened yet). Hence by default the initial fee is the one supplied by the market maker who commited stake *first*. 
+Initially (before market opened) the maximum open interest is by definition zero (it's not possible to have a position on a market that's not opened yet). Hence by default the initial fee is the one supplied by the market maker who committed stake *first*.
 Once the market opens (opening auction starts) a clock starts ticking. We have a period over which we measure the maximum open interest to estimate liquidity demand. This is a network parameter `t_liquidity_window`. The fee is continuosly re-evalueated using the mechanism above. 
 
 ## Calculating market value proxy
