@@ -137,8 +137,8 @@ We are assuming that:
 
 Use the same calculation as above with the following re-defined: 
 - in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.
-- For the open position part of the margin: `Product.market_observables = indicateive_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the previous value for `Product.market_observables` whatever it was (i.e. the last `indicative_uncrossing_price` or `mark_price`).
-- For the orders part of the margin: `Product.market_observables = indicateive_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders. 
+- For the open position part of the margin: `Product.market_observables = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the previous value for `Product.market_observables` whatever it was (i.e. the last `indicative_uncrossing_price` or `mark_price`).
+- For the orders part of the margin: `Product.market_observables = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders. 
 
 
 ## Scaling other margin levels
