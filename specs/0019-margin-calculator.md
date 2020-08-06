@@ -70,7 +70,12 @@ If ```riskiest long == 0``` then ```maintenance_margin_long = 0```.
 
 In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-quant-risk-suite.md).
 
-```maintenance_margin_long = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
+```maintenance_margin_long = maintenance_margin_long_open_position + maintenance_margin_long_open_orders```
+
+with
+
+```maintenance_margin_long_open_position = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]```,
+```maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
 
 where
 
@@ -105,7 +110,12 @@ If ```riskiest short == 0``` then ```maintenance_margin_short = 0```.
 
 Else
 
-```maintenance_margin_short = max(abs(slippage_volume) * slippage_per_unit, 0) + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ] + abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]  ```,
+```maintenance_margin_short = maintenance_margin_short_open_position + maintenance_margin_short_open_orders```
+
+with 
+
+```maintenance_margin_short_open_position = max(abs(slippage_volume) * slippage_per_unit, 0) + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]```,
+```maintenance_margin_short_open_orders = abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]  ```,
 
 where meanings of terms in Step 1 apply except for:
 
@@ -116,6 +126,20 @@ where meanings of terms in Step 1 apply except for:
 **Step 3** 
 
 ```maintenance_margin = max ( maintenance_margin_long, maintenance_margin_short)```
+
+## Margin calculation for auctions
+
+We are assuming that:
+- `indicative_uncrossing_price` is *not* the mark price, so no mark-to-market transfers happen (update mark-to-market spec)
+- mark price never changes during an auction, so it's the last mark price from before auction,
+- during an auction we never release money from the margin account, however we top-it-up as required,
+- no closeouts during auctions
+
+Use the same calculation as above with the following re-defined: 
+- in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.
+- For the open position part of the margin: `Product.market_observables = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the previous value for `Product.market_observables` whatever it was (i.e. the last `indicative_uncrossing_price` or `mark_price`).
+- For the orders part of the margin: `Product.market_observables = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders. 
+
 
 ## Scaling other margin levels
 
