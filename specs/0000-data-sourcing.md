@@ -17,10 +17,70 @@ As a result:
 - Once upstream finality is achieved, Vega may provide optional mechanisms for querying, verification or dispute resolution that are independent of the source.
 - Vega will allow composition of data sources, including those with disparate sources, and may provide a variety of methods to aggregate and filter/validate data provided by each.
 
+In order to close a given market in Vega, an oracle must be queried to provide closing data for that market. 
+Often this data looks like:
+ ```json
+{
+    assetId:"0f234167a...", //target settlement instrument VegaID
+    timestamp:1596761519, //timestamp of the report (must be within a specifid range as configured by a market) //<---  TODO SPEC THIS
+    price:1234.2512,            
+}
+ ```
+Sometimes however, the data required to settle an oracle is based on more complex information:
+```json
+{
+    timestamp:1596761519, //timestamp of the report (must be within a specifid range as configured by a market) //<---  TODO SPEC THIS
+    temperatures:[42, 38, 36]
+}
+``` 
+ To accommodate the multitude of ways that markets can be settled, we've adopted a key value pair-based data sourcing system:
+ 
+ ```proto
+
+message KeyValuePair {
+   string key = 1;
+   string value = 2;
+}
+
+message OracleEvent {
+    ...
+    repeated KeyValuePair payload;
+    ***
+}
+```
+ So the above examples would be:
+ ```proto
+    payload [
+        { key = "assetId", value = "0f234167a..." },
+        { key = "timestamp", value = 1596761519 },
+        { key = "price", value = 1234.2512 }
+    ]
+ ```
+ and 
+ ```proto
+    payload [
+        { key = "timestamp", value = 1596761519 },
+        { key = "temperatures", value = [42, 38, 36] }
+    ]
+```
+ 
+ [TODO fix that code ^]
+ 
+ 
+ In all cases they will need to be signed by the designated signer, this signer can come in many forms:
+ * Ethereum oracle (Chainlink, Band Protocol, etc) signed transaction
+ * API signed by the SSL of 
+ * Apointed Vega user
+ * Etc
+ 
+
+
+[TODO Add bit about how traditional markets settle things]
+
 
 ## Data sourcing functionality
-
 We define several classes of data source with varying complexity of functionality. It is expected that the simplest will be implemented first.
+[TODO, better intro]
 
 ### Native Data Source 
 
@@ -32,8 +92,8 @@ Data is supplied through a transaction being posted directly on the Vega network
 
 Note: With this type of oracle there’s no incentive in the Vega data source system, you’re trusting the keyholder(s) at settlement.
 
+[TODO: review PROTO below]
 ```protobuf
-
 message NativeDataSource {
     bytes32 NativeDataSourceId = 1;
     bytes32 underlyingId = 2;  
@@ -55,41 +115,139 @@ NativeDataSourceReportRequest {
 }
 ```
 
+### API Data Source
+A data payload that provably came from (and signed by) a "Trusted API".
+[TODO: justification of why this would be acceptible: SSL and server reputation, see notes]
 
 
+### External Blockchain Data Source
+```proto
+
+//TODO Jeremy Please Review
+
+service trading {
+    ...
+  // chain events
+  rpc PropagateChainEvent(PropagateChainEventRequest) returns (PropagateChainEventResponse);
+}
+
+message PropagateChainEventRequest {
+  // The event
+  vega.ChainEvent evt = 1;
+  string pubKey = 2;
+  bytes signature = 3;
+}
+
+// The response for a new event sent to vega
+message PropagateChainEventResponse {
+  // Did the event get accepted by the node successfully
+  bool success = 1;
+}
+
+message ChainEvent {
+  // The ID of the transaction in which the things happened
+  // usually a hash
+  string txID = 1;
+    
+  oneof event {
+    ...
+    OracleEvent
+  }
+}
+
+message KeyValuePair {
+   string key = 1;
+   string value = 2;
+}
+
+message OracleEvent {
+    string[] signers;
+    repeated KeyValuePair payload;
+    uint timestamp;
+    oneof oracleEventMetadata {
+        BuiltinOracleEvent builtin;
+        ChainlinkOracleEvent chainlink;
+        BandProtocolEvent band;
+        APIOracleEvent api;
+    }
+}
+
+message BuiltinOracleEvent { 
+}
+
+message ChainlinkOracleEvent {
+  // Index of the transaction
+  uint64 index = 1;  
+
+  // The block in which the transaction was added
+  uint64 block = 2;
+  string vegaOracleId = 3;
+}
+
+message BandProtocolEvent {
+  // Index of the transaction
+  uint64 index = 1;  
+
+  // The block in which the transaction was added
+  uint64 block = 2;  
+}
+message APIOracleEventSource {      
+}
 
 
-### Remote simplex data sources 
+message Oracle {
+    string[] expectedSigners;
+    repeated KeyValuePair expectedPayload;
+    uint targetTime;
+    uint timeSlippage;//max time that timestamp can differ from targetTime and still be valid
+    string vegaOracleId;   
+    
+    oneof oracleSource {
+        BuiltinOracleEventSource builtin;
+        ChainlinkOracleEventSource chainlink; //chain specific config TODO
+        BandProtocolEventSource band;
+        APIOracleEventSource api;
+    }
+}
+```
+Each Oracle Queue will connect to either hosted blockchain nodes or local blockchain nodes in order to find the subscribed [TODO] oracle events for a given blockchain.
+Once propagated through the Vega API to a Vega validator node, the validator node will connect to its applicable local blockchain node to validate that the provided event did, in fact, happen as far as it can see locally. 
+This message is then gossiped to other Vega validator nodes which will do the same validation process.
 
-Data sources in which Vega reads signed data from another source (i.e. transaction or event on Ethereum, etc.). Generally this would be another blockchain with which Vega has an integration, directly or through an inter-blockchain protocol.
+### Internal observation
 
-From a technical perspective this could also include, for example, other sources to which nodes will have access, such as an HTTP resource, however it is suspected that supporting this might be a bad idea, or at least one requiring significant caution.
+A data source can be made of a given parameter from within Vega itself, be it number of validators, or the current price of a given market.
 
-Specification: type (e.g. ‘Ethereum event’, ‘bitcoin transaction’, whatever), type specific details (e.g. contract address, method or event name, etc.), valid signers.
-
-Data format: [TODO: design this more] <dependent on type> (data consumers will likely describe the subset of data they reference with a string/key selector)
-
-Implementation: nodes will be running or have access to trusted source of the remote system (chain), they will post the signed (by the original creator) transaction data from the remote source in a transaction. 
-
-NB: this may be a variant of the native data source type, or may even be able to be the same transaction if we’re lucky, in which case only reading the host chain is necessary.
-
-NB2: Instead of the remote source, each Vega node can sign the data as a ‘witness’ in which case Vega requires a quorum (based on stake) of witnesses to accept the data. This would be true in the case of a source like an HTTP server, manual observation, or where the signer isn’t trusted. 
-
-
-### Remote duplex data sources (FUTURE! Not required for v1)
-
-[TODO: design and write this spec] 
-
-This future spec will cover data sources that, for instance, apply a levy on fees in the market(s) they are used in in order to remunerate providers.
-
-Good test case for the design of this might be UMA’s planned oracle.
+[TODO, is this true? Can we do this? ] 
 
 
 ### Composite data sources (Also not required for v1)
 
-Vega will also provide a number of functions to compose together data sources of any type, or even other composed sources, such as:
+Vega will also provide a number of functions to compose together combinations of defined data sources of any type, or even other composed sources, such as:
 
 - Average multiple sources (option to reject outliers)
 - Subject a wrapped source to an on-chain vote
 - Require precise agreement from m of n separate independent sources (different from m of n signers on a native source)
 - ...other features that allow for higher robustness, etc....
+[TODO, think up more]
+
+
+## Oracle Failure Mitigation
+To mitigate the risk of a given data source going rogue, Vega has developed a number of safeguards to ensure the greatest flexibility of the network to deal with threats as they occour.
+[TODO blab about oracle problem]
+
+
+### Changing oracle sources
+[TODO: "if risk too high, need better oracles"]
+See: [TODO Governance]
+
+### Contesting Data Source Reports
+Vega provides a mechanism to dispute reported oracle prices/results.
+
+[TODO]
+
+
+## Oracle Queue 
+[TODO]
+
+[TODO, maybe move Oracle Queue to own spec?]
