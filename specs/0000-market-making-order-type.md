@@ -56,3 +56,7 @@ Market makers are always allowed to ammend:
 Market makers are allowed to increase the liquidity commitment 3. subject to being able to top up the bond commitment from the general account (check the new commitment amount, and transfer the difference from the general account to the bond account). 
 
 Market makers are allowed to decrease the liquidity commitment 3. subject to there being sufficient liquidity committed to the market so that we stay above `liquidity supplied >= c_2 x liquidity demand estimate` see [liquidity monitoring spec](0035-liquidity-monitoring.md). This means we calculate the supplied liquidity with the amended order plus all other committed market makers, if the above inequality is still satisfied the order is accepted, otherwise rejected.
+
+
+## Network parameters in this spec
+1. A per-asset network parameter: `siskas_to_bond_in_asset_X`. This means every new asset that is created on Vega needs to make sure this parameter is assigned.
