@@ -2,61 +2,75 @@
 
 ## Summary 
 
-Market makers can commit to provide liquidity to a market by submitting this special order type. This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](????-setting-fees-and-rewarding-mms.md). 
+When market makers commit to providing liquidity they are required to submit a set of valid buy orders and sell orders [market making mechanics](????-mm-mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](????-setting-fees-and-rewarding-mms.md).
 
-The liquidity is measured in "siskas" as set out in the [Probability Weighted Liquidity Measure](0034-prob-weighted-liquidity-measure.ipynb) specification. 
 
-As part of the market making order the market maker submits the following:
-1) their desired fee for the market, 
-1) the amount of liquidity to commit and how they want to distribute it (details follow below) and
-1) optionally, they can submit mid price (this will change where their orders are placed on the order book or nothing else). Otherwise, market mid-price is used.
+## Market making order features
 
-The liquidity commitment they make (in siskas) is converted using, a per-asset network parameter `siskas_to_bond_in_asset_X` as follows: 
-``` mm_bond = liquidity_commitment x siskas_to_bond_in_asset_X.```
+Market maker orders are a special order type with the following features:
+- Is a batch order: allows simultaneously specifying multiple orders in one message/transaction
+- Initially all are pegged orders but other price types may be available in future
+- Are always priced limit orders that sit on the book
+- Are “post only” and do not trade on entry
+- The order is always refreshed after trading (once the tx is processed so not refreshed before closeouts, etc.) based on the above requirements so that the full commitment is always supplied (spec coming) 
 
-The volume implied by these MM order types is *not* placed on the book during auctions. 
+## Market making order data
 
-## Specifying liquidity in terms of fraction-of-commitment-at-a-distance
+_Market maker orders submitted:_
 
-The market maker submits:
-1) market ID 
-1) desired fee
-1) liquidity commitment
-1) optional mid price
-1) sell-side: list of `[distance from mid, fraction-of-sell-side-commitment]` pairs. 
-1) buy-side: list of `[distance from mid, fraction-of-buy-side-commitment]` pairs. 
+2 x batch orders are submitted as part of a market making transaction (one for buy side, one for sell side). Each order must specify the proportion of its liquidity applicable to that order and then either the price peg or the order size.
 
-We check that the sum across the list of the `fraction-of-***-side-commitment` is `1`, with `***=[sell,buy]`. If not reject the order.
-We check that they have 
+### INPUT DATA ###
 
-``` mm_bond = liquidity_commitment x siskas_to_bond_in_asset_X```
+**Liquidity proportion:** the relative proportion of the commitment to be allocated at a price level. Note, the network will normalise these liquidity proportions by:
 
-in their general account for the relevant asset; if not the order is rejected. If yes, then the amount is transferred into their per-asset market making bond amount.  
+`liquidity-normalised-proportion = liquidity-proportion-for-order / sum-all-buy/sell-orders(liquidity-proportion-for-order)`
 
-## Converting fraction-of-commitment-at-a-distance into volume
+***PLUS EITHER:***
 
-Assumption: Either the MM order specifies mid price or there is a mid price for the book. If not a price monitoring auction should be triggered (!!! Barney, Tamlyn, Witold, true? false? !!!!). 
+**Price peg:** the price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away (initially we offer this specified in ticks. In future this could be specified as a % or number of standard deviations as per risk model distribution).
 
-For each entry on the buy and sell side list we now do the following:
+***OR***
 
-Given `mid_price`, `distance_from_mid` and  `fraction-of-commitment` we obtain the `probability_of_trading` at that `distance_from_mid` at that `mid_price` from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). 
+**Size:** the size of the order at the given price
 
-The volume implied by the oder at that distance from mid price is then 
+```
+# Example 1:
+Buy-batch-orders: {
+  buy-order-1: [liquidity-proportion-1, [price-peg-reference-1, number-of-units-from-reference-1]],
+  buy-order-2: [[price-peg-reference-2, number-of-units-from-reference-2], size-of-order-at-price],
+  buy-order-3: [liquidity-proportion-3, [price-peg-reference-3, number-of-units-from-reference-3]],
+}
 
-``` volume = liquidity_commitment x fraction-of-commitment / probability_of_trading```. 
+# Example 1 with values
+Buy-batch-orders: {
+  buy-order-1: [2, [best-offer, -10]],
+  buy-order-2: [[best-offer, -12], 100],
+  buy-order-3: [4, [price-peg-reference-3, number-of-units-from-reference-3]],
+}
 
-This volume should be added to the order book subject to margin account check (and perhaps transfer from general to margin account). If there is still insufficient margin then the required amount should be transferred from the market maker bond account. Additionally there may be a penalty applied as per the [slashing spec](????-????.md). 
+```
+
+### CALCULATED ORDERS FOR ORDER BOOK ### 
+
+The network calculates either the price-peg or the size of the order, depending on which field is missing. If both fields are provided, the price-peg takes precedence and the size of the order isn't used.
+
+*Calculating the price peg when size is provided:*
+
+
+
+*Calculating size when price peg is provided:*
+
+Given the price peg information (`price-peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). 
+
+The volume implied by the order at that distance from mid price is then 
+
+``` volume = liquidity_obligation x liquidity-normalised-proportion / probability_of_trading```. 
+
+## Adding MM orders to the book:
+
+The set of buy orders are applied to the resulting order price and volume.
 
 ## Amending the MM order:
 
-Market makers are always allowed to ammend:
-- 2. and 4.,
-- 5. and 6. - as long as the relevant fractions add up to `1`, 
-
-Market makers are allowed to increase the liquidity commitment 3. subject to being able to top up the bond commitment from the general account (check the new commitment amount, and transfer the difference from the general account to the bond account). 
-
-Market makers are allowed to decrease the liquidity commitment 3. subject to there being sufficient liquidity committed to the market so that we stay above `liquidity supplied >= c_2 x liquidity demand estimate` see [liquidity monitoring spec](0035-liquidity-monitoring.md). This means we calculate the supplied liquidity with the amended order plus all other committed market makers, if the above inequality is still satisfied the order is accepted, otherwise rejected.
-
-
-## Network parameters in this spec
-1. A per-asset network parameter: `siskas_to_bond_in_asset_X`. This means every new asset that is created on Vega needs to make sure this parameter is assigned.
+Market makers are always allowed to amend their orders by submitting a market maker network transaction with a set of revised orders (see [market making mechanics spec](./0000-mm-mechanics.md))
