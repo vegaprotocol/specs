@@ -96,18 +96,11 @@ The network transaction is used by market makers to nominate a fee amount which 
 Market makers may amend their nominated fee amount by submitting a market maker transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the nominated fee amount is set to zero, as per above criteria.
 
 ### How fee amounts are used
-The [liqudity_fee](./0029-fees.md) of a market on Vega takes as an input, a [fee factor[liquidity]](./0029-fees.md) which is calculated by the network according to the data submitted by the market makers in their market making network transactions.
+The [liqudity_fee](./0029-fees.md) of a market on Vega takes as an input, a [fee factor[liquidity]](./0029-fees.md) which is calculated by the network, taking as an input the data submitted by the market makers in their market making network transactions (see [this spec]() for more information on the specific calculation).
 
-To calculate the `fee factor[liquidity]`, 
-
-Let `sorted-mm-obligations-list = [mm_liquidity_obligation, mm_nominated_fee_rate]` be the full list of market making obligations (in siskas) for a market, sorted by nominated fee amount (lowest to highest).
-
-`fee factor[liquidity]` is the lowest fee where `c_2 x liquidity-demand-estimate` < `cumulative-mm-obligations`, 
-
-The lowest fee rate that covers the commitment required at the time of trading is the one used for the liquidity fee.
 
 ### Distributing fees between market makers
-When calculating fees for a trade, the size of a market maker’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between market makers. See this spec for the calculation of the split.
+When calculating fees for a trade, the size of a market maker’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between market makers. See [this spec]() for the calculation of the split.
 
 
 ## ORDERS
@@ -117,7 +110,7 @@ In a market  maker proposal transaction the participant must submit a valid set 
 1. A set of valid buy orders
 1. A set of valid sell orders
 
-Market maker orders are a special order type described in the (market maker order spec.)[] and validity is also defined in that spec.
+Market maker orders are a special order type described in the [market maker order spec](). Validity is also defined in that spec.
 
 
 A market maker can amend their orders by providing a new set of orders in the market maker network transaction. If the amended orders are invalid, the previous set of orders will be retained.
