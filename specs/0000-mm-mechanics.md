@@ -2,15 +2,7 @@
 
 The point of market making on Vega is to incentivise people to place orders on the market that maintain liquidity on the book. This is done via a financial commitment and reward + penalty mechanics, and through the use of a special batch order type that automatically updates price/size as needed to meet the commitment and automatically refreshes its volume after trading to ensure continuous liquidity provision.
 
-## Summary
-
-1. A market maker applies to market make a particular market, by submitting a transaction to the network that commits an amount of their capital to this market.
-1. With that application they contribute their fee bid (see fee auctions).
-1. They also submit a set of orders
-1. If they have sufficient 
-
-
-## Committing to market making
+## Market making network transaction
 
 Any Vega participant can apply to market make on a market by submitting a transaction to the network which includes the following
 
@@ -20,16 +12,16 @@ Any Vega participant can apply to market make on a market by submitting a transa
 1. ORDERS: a set of _buy orders_ and _sell orders_ to meet the market making obligation.
 
 Accepted if all of the following are true:
-    - [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
-    - [ ] The market is active
-    - [ ] The nominated fee amount is not less than zero.
-    - [ ] There are a set of valid buy and sell orders (see MM orders spec)       
+- [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
+- [ ] The market is active
+- [ ] The nominated fee amount is not less than zero.
+- [ ] There are a set of valid buy and sell orders (see MM orders spec)       
 
 Invalid if:
-    - [ ] Tx settlement asset does not equal settlement asset of market
-    - [ ] Liquidity commitment amount is less than or equal to zero
-    - [ ] Nominated fee amount is less than zero
-    - [ ] Acceptance criteria from ORDERS spec is not met.
+- [ ] Tx settlement asset does not equal settlement asset of market
+- [ ] Liquidity commitment amount is less than or equal to zero
+- [ ] Nominated fee amount is less than zero
+- [ ] Acceptance criteria from ORDERS spec is not met.
 
 ## COMMITMENT AMOUNT
 
@@ -79,10 +71,10 @@ i.e. market makers are allowed to decrease the liquidity commitment subject to t
 
 When `actual-reduction-amount > 0`:
 
-    - [ ] the difference between their previous commitment and new commitment is transferred back to their general account, i.e.
+- [ ] the difference between their previous commitment and new commitment is transferred back to their general account, i.e.
 `transferred-to-general-account-amount =  old-commitment-amount - new-actual-commitment-amount `
 
-    - [ ] the revised fee amount and set of orders are processed.
+- [ ] the revised fee amount and set of orders are processed.
 
 When `actual-reduction-amount = 0`:
     - [ ] the previous market making commitment is retained
@@ -91,7 +83,7 @@ When `actual-reduction-amount = 0`:
         - [ ] the new market maker orders are ignored
 
 ### Network automatically amends commitment amount
-
+The network will amend the commitment amount if they market maker's obligations have not been met (see section below)
 
 ## FEES
 
