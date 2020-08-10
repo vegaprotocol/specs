@@ -44,20 +44,16 @@ Notes on scope of current version of this spec:
 - **Non-persistent:**
 	1. **Immediate Or Cancel (IOC):** an order that trades as much of its volume as possible with passive orders already on the order book (assuming it is crossed with them) and then stops execution. It is never placed on the book even if it is not completely filled immediately, instead it is stopped/cancelled.
 	1. **Fill Or Kill (FOK):** an order that either trades all of its volume immediately on entry or is stopped/cancelled immediately without trading anything. That is, unless the order can be completely filled immediately, it does not trade at all. It is never placed on the book, even if it does not trade.
-
-### Good For / validity:
-
-*Good for must be explicitly provided, there in no default.*
-
-1. **Good For Auction (GFA):** This order will only be accepted by the system if it arrives during an auction period. Otherwise it will be rejected.
-1. **Good For Continuous (GFC):** This order will only be accepted by the system if it arrived during continuous trading. Otherwise it will be rejected.
+- **Market-state:**
+	1. **Good For Auction (GFA):** This order will only be accepted by the system if it arrives during an auction period, otherwise it will be rejected. The order can act like either a GTC or GTT order depending on whether the expiresAt field is set.
+	1. **Good For Normal (GFN):** This order will only be accepted by the system if it arrived during normal trading, otherwise it will be rejected. Normal trading is defined as either continuous trading on a normal market or auction trading in a frequent batch auction market. The order can act like either a GTC or GTT order depending on whether the expiresAt field is set.
 
 
-### Valid order combinations
+### Valid order entry combinations
 
 ##### Continuous trading
 
-| Pricing method | GTT | GTC | IOC | FOK | GFA | GFC |
+| Pricing method | GTT | GTC | IOC | FOK | GFA | GFN |
 | -------------- |:---:|:---:|:---:|:---:|:---:|:---:|
 | Limit          | Y   | Y   | Y   | Y   | N   | Y   |
 | Pegged         | Y   | Y   | Y   | Y   | N   | Y   |
@@ -66,11 +62,13 @@ Notes on scope of current version of this spec:
 
 ##### Auction
 
-| Pricing method | GTT | GTC | IOC | FOK | GFA | GFC |
+| Pricing method | GTT | GTC | IOC | FOK | GFA | GFN |
 | -------------- |:---:|:---:|:---:|:----|:---:|:---:|
 | Limit          | Y   | Y   | N   | N   | Y   | N   |
-| Pegged         | Y*  | Y*  | Y*  | Y*  | N$  | Y$  |
+| Pegged         | Y*  | Y*  | N   | N   | Y*  | N   |
 | Market         | N   | N   | N   | N   | N   | N   |
 
 \* Pegged orders will be parked during an auction, with time priority preserved<br>
-\$ New pegged orders can only be GFC and will be immediately parked during an auction
+
+Futher details can be found here:
+https://docs.google.com/spreadsheets/d/1kTkE7frlsVtS1YE4m4AdZjACO-mmNOZrTQj4gXGQW0I
