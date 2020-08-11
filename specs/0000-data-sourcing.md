@@ -273,10 +273,10 @@ disputable: takes an input oracle (again can be any of the composite types, a de
 To mitigate the risk of a given data source going rogue, Vega has developed a number of safeguards to ensure the greatest flexibility of the network to deal with threats as they occur.
 [TODO blab about oracle problem]
 
-
 ### Changing oracle sources
 Oracles may get compromised, shut down, change location/certificates, or otherwise become too risky to use alone before a market has expired. 
-To mitigate these risks, a governance can change oracle parameters. To do this, see [TODO Governance] 
+To mitigate these risks, a governance can change oracle parameters. To do this, see [TODO Governance]
+ 
 This governance vote is open to all participants in the market, provided they have a balance above a threshold of value (configurable). 
 These votes will be and weighted by value in the market and then weighted against market maker votes and network governance voters.  
 
@@ -292,7 +292,16 @@ Provided the user has enough stake in the market, the vote will be put out to go
 Once a halt market vote has been sucessful, the market is locked down and all assets frozen until a `release market` command is voted through governance.
 While halted, the oracle can be changed by another governance vote. Other market parameters can be updated during this time as well.
 
+The contest process will start automatically if, upon expiry, the oracle is unavailable. 
+Again, during this time, oracle changes and other configuration governance will be available to Vega governance holders, Market Makers, and Participants in the given market.
+
 ## Oracle Queue 
 [TODO]
 
 [TODO, maybe move Oracle Queue to own spec?]
+
+## External Vega Oracles
+Any value that is within the Vega network and visible to all the validators can be submitted to external blockchain oracles as a price provider for the wider DeFi space.
+These oracles often take the form of smart contracts on blockchains like Ethereum, but can also be made available on blockchains which allow key value pair storage such as bitcoin or stellar.
+
+[TODO: external oracle spec]
