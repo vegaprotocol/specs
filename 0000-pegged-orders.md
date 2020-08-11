@@ -6,7 +6,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 
 ## Acceptance Criteria
 - [ ] Pegged orders can only be LIMIT orders, all other types are rejected.
-- [ ] Pegged orders can only be GTT, GTC, IOC and FOK orders.
+- [ ] Pegged orders can only be GTT and GTC orders. IOC and FOK will be added in the second phase of pegged orders.
 - [ ] A markets ability to handle pegged orders is set at creation time and should be turned on by default.
 - [ ] Pegged orders are removed from the order book when going into an auction and are parked.
 - [ ] Parked orders are returned to the order book once continuous trading is resumed.
@@ -30,7 +30,7 @@ When a party submits a new pegged order, only a LIMIT order is accepted. The par
 
 Whenever the reference price changes all the pegged orders that rely on it need to be repriced. We run through a time sorted list of all the pegged orders and remove each order from the book, recalculate it's price and then reinsert it into the orderbook at the back of the price queue. Following a price move margin checks take place on the positions of the parties. If a p[egged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it removed, the price level is removed as well.
 
-Pegged orders can be GTC, GTC, IOC or FOK TIF orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
+Pegged orders can be GTC or GTC TIF orders with IOC and FOK being added in the second phase of pegged orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
 
 If the reference point moves to such a value that it would create an invalid order once the offset was applied, the pegged order is parked. As the reference price moves, any orders on the parked list will be evaluated to see if they can come back into the order book.
 
@@ -39,14 +39,29 @@ When a pegged order is removed from the book due to cancelling, expiring or fill
 # Reference-level explanation
 
 Pegged orders are restricted in what values can be used when they are created, these can be defined by a list of rules each order must abide with.
-* Buy orders must be pegged against best bid or mid and the offset must be negative (<0).
-* Sell order must be pegged agaisnt best ask or mid and the offset must be positive (>0).
+
+| Type	                          | Side  | Bid Peg | Mid Peg |  Offer Peg  |
+|---------------------------------|-------|---------|---------|-------------|
+| Persistent (GTC, GTT, etc.)	  | Buy	  | <= 0    | < 0     | Not allowed |
+| Persistent (GTC, GTT, etc.)	  | Sell  | >= 0    | > 0     | Not allowed |
+| Non persistent (IOC, FOK, etc.) |	Buy   | > 0     | > 0     | >= 0        |
+| Non persistent (IOC, FOK, etc.) |	Sell  | <= 0    | < 0	  | < 0         |
+
+As the calculation of mid price can result in an invalid result due to precision, the value will be rounded depending on which side of the book is being handled.
+
+For persistent pegged orders:
+
+Best bid = 100, best offer = 105 => mid = **102.5**<br>
+A buy pegged to Mid - 1 should take the mid as 103, and thus be at 102<br>
+A sell pegged to Mid + 1 should take the mid as 102, and thus be at 103
+
 
 # Pseudo-code / Examples
 Each market has a slice containing all the pegged orders. New pegged orders are added to the end of the slice to maintain time ordering.
 
     PeggedOrder{
         PeggedType type
+        int64      offset
         OrderID    orderID
     }
     PeggedOrders []PeggedOrder
