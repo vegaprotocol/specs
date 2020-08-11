@@ -20,6 +20,12 @@ The market depth module subscribes to all the event types in the market-event an
 
 Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occuring to the market depth structure and will contain a sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date.
 
+The market depth information should include pegged order volume.
+
+The volume at each level should be split into normal, pegged and market making order volumes to allow them to be drawn with different attributes in the console.
+
+Best bid/ask pairs should be generated for all orders and for all orders excluding pegged.
+
 `Cumulative volume` is built up in each side of the book at each price level to reflect how much volume is present throughout the book. The `Cumulative volume` is the total volume in the book between the current price level and top of the book.
 
 
@@ -101,7 +107,7 @@ The server side process to handle updates can be described as such:
         Apply update to the market depth structure and record which price levels have been touched
         Increment market depth sequence number
         Send updates to all subscribers for price levels that changed
-	End
+    End
 
 
 The client side will perform the following steps to build and keep an up to date market depth structure
