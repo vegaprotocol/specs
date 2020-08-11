@@ -24,7 +24,7 @@ Accepted if all of the following are true:
 - [ ] The participant has sufficient collateral in their general account to also meet the margins required to support their orders.
 - [ ] The market is not in a closed or expired state. It is in a proposed, pending or active state (TODO: link to market lifecycle spec)
 - [ ] The nominated fee amount is greater than or equal to zero and less than a maximum level set by a network parameter
-- [ ] There are a set of valid buy/sell liquidity provision orders (see MM orders spec)       
+- [ ] There are a set of valid buy/sell liquidity provision orders (see [MM orders spec](./????-market-making-order-type.md))       
 
 Invalid if any of the following are true:
 - [ ] Commitment amount is less than zero (zero is considered to be nominating to cease market making)
@@ -70,11 +70,7 @@ A participant may apply to amend their commitment amount by submitting a transac
 ***Case:*** `proposed-commitment-variation >= 0`
 A market maker can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount and cover the margins required.
 
-If they do not have sufficient collateral:
-    - [ ] the previous market making commitment is retained
-    - [ ] any other details contained within the new transaction is ignored by the network, i.e.
-        - [ ] the new fee bid is ignored
-        - [ ] the new market maker orders are ignored
+If they do not have sufficient collateral the transaction is rejected in entirety. This means that any data from the fees or orders are not applied.
 
 
 **DECREASING COMMITMENT**
@@ -105,11 +101,8 @@ Example: if you have a commitment of 500DAI and your bond account only has 400DA
 
 - [ ] the revised fee amount and set of orders are processed.
 
-When `actual-reduction-amount = 0`:
-    - [ ] the previous market making commitment is retained
-    - [ ] any other details contained within the new transaction is ignored by the network, i.e.
-        - [ ] the new fee bid is ignored
-        - [ ] the new market maker orders are ignored
+When `actual-reduction-amount = 0` the transaction is still processed for any data and actions resulting from the transaction's new fees or order information.
+
 
 
 ## FEES
@@ -118,16 +111,16 @@ When `actual-reduction-amount = 0`:
 
 The network transaction is used by market makers to nominate a fee amount which is used by the network to calculate the [liqudity_fee](./0029-fees.md) of the market.
 - [ ] A nominated fee amount must be greater than or equal to zero. The units of the fee amount are a percentage. A number greater than 1 is permitted.
-- [ ] If nominated fee amount is malformed or less than zero, the network should assign a default amount of zero.
+- [ ] If nominated fee amount is less than zero, the network should reject the transaction.
 
-Market makers may amend their nominated fee amount by submitting a market maker transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the nominated fee amount is set to zero, as per above criteria.
+Market makers may amend their nominated fee amount by submitting a market maker transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the entire transaction is considered invalid.
 
 ### How fee amounts are used
-The [liqudity_fee](./0029-fees.md) of a market on Vega takes as an input, a [fee factor[liquidity]](./0029-fees.md) which is calculated by the network, taking as an input the data submitted by the market makers in their market making network transactions (see [this spec]() for more information on the specific calculation).
+The [liqudity_fee](./0029-fees.md) of a market on Vega takes as an input, a [fee factor[liquidity]](./0029-fees.md) which is calculated by the network, taking as an input the data submitted by the market makers in their market making network transactions (see [this spec](./????-setting-fees-and-rewarding-mms.md) for more information on the specific calculation).
 
 
 ### Distributing fees between market makers
-When calculating fees for a trade, the size of a market maker’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between market makers. See [this spec]() for the calculation of the split.
+When calculating fees for a trade, the size of a market maker’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between market makers. See this spec](./????-setting-fees-and-rewarding-mms.md) for the calculation of the split.
 
 
 ## ORDERS
@@ -137,7 +130,7 @@ In a market  maker proposal transaction the participant must submit a valid set 
 1. A set of valid buy orders
 1. A set of valid sell orders
 
-Market maker orders are a special order type described in the [market maker order spec](). Validity is also defined in that spec.
+Market maker orders are a special order type described in the [market making orders spec](./????-market-making-order-type.md). Validity is also defined in that spec.
 
 
 A market maker can amend their orders by providing a new set of orders in the market maker network transaction. If the amended orders are invalid, the previous set of orders will be retained.
