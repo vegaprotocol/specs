@@ -16,7 +16,7 @@ Any Vega participant can apply to market make on a market by submitting a transa
 
 1. Market ID
 1. COMMITMENT AMOUNT: liquidity commitment amount (specified as a unitless number that represents the amount of settlement asset of the market)
-1. FEES: nominated [liquidity fee factor](./0029-fees.md).
+1. FEES: nominated [liquidity fee factor](./0029-fees.md) (which is an input to the calculation of taker fees on the market).
 1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ to meet the market making obligation (see spec []())
 
 Accepted if all of the following are true:
@@ -27,7 +27,7 @@ Accepted if all of the following are true:
 - [ ] There are a set of valid buy/sell liquidity provision orders (see MM orders spec)       
 
 Invalid if any of the following are true:
-- [ ] Liquidity commitment amount is less than or equal to zero
+- [ ] Commitment amount is less than zero (zero is considered to be nominating to cease market making)
 - [ ] Nominated liquidity fee factor is less than zero
 - [ ] Acceptance criteria from ORDERS spec is not met.
 
@@ -52,12 +52,12 @@ When a commitment is made the liquidity commitment amount is assumed to be speci
 If the participant has sufficient collateral to cover their commitment and margins for their proposed orders, this amount is transferred from the participant's general account to their market making bond account (new account type, 1 per market maker per market).
 
 - Market maker bond account:
-	- [ ] Each active market has one bond account per settlement asset for that market.
+	- [ ] Each active market has one bond account per market maker, per settlement asset for that market.
     - [ ] When a market maker is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
-    - [ ] Only the network may withdraw collateral from this account.
+    - [ ] A market maker can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment)
     - [ ] Collateral withdrawn from this account may only  be transferred to either:
       - [ ] The insurance pool of the market (in event of slashing)
-      - [ ] The market maker's margin account (during a margin search)
+      - [ ] The market maker's margin account (during a margin search) in the event that they fall below the maintenance level and have zero balance in their general account.
       - [ ] The market maker's general account (in event of market maker reducing their commitment)
 
 ### Market maker proposes to amend commitment amount
@@ -78,6 +78,7 @@ If they do not have sufficient collateral:
 
 
 **DECREASING COMMITMENT**
+
 ***Case:*** `proposed-commitment-variation < 0`
 We to calculate whether the market maker may lower their commitment amount and if so, by how much. To do this we first evaluate the maximum amount that the market can reduce by given the current liquidity demand in the market.
 
