@@ -34,7 +34,7 @@ Pegged orders can be GTC or GTC TIF orders with IOC and FOK being added in the s
 
 If the reference point moves to such a value that it would create an invalid order once the offset was applied, the pegged order is parked. As the reference price moves, any orders on the parked list will be evaluated to see if they can come back into the order book.
 
-When a pegged order is removed from the book due to cancelling, expiring or filling. The order details is removed from the pegged/parked orders list.
+When a pegged order is removed from the book due to cancelling, expiring or filling, the order details are removed from the pegged/parked orders list.
 
 # Reference-level explanation
 
