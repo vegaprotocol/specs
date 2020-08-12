@@ -17,7 +17,7 @@ Any Vega participant can apply to market make on a market by submitting a transa
 1. Market ID
 1. COMMITMENT AMOUNT: liquidity commitment amount (specified as a unitless number that represents the amount of settlement asset of the market)
 1. FEES: nominated [liquidity fee factor](./0029-fees.md) (which is an input to the calculation of taker fees on the market).
-1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ to meet the market making obligation (see spec []())
+1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ to meet the market making obligation (see [MM orders spec](./????-market-making-order-type.md)
 
 Accepted if all of the following are true:
 - [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
@@ -173,20 +173,23 @@ Let `market-maker-bond-penalty = bond-penalty-parameter * margin-shortfall` be t
 
 NOTE: if this occurs at the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will always be set to zero.
 
-TODO: describe non compliance conditions? 
+We have two cases to consider
+
+***Case: where *** `margin-shortfall > market-maker-commitment-amount - market-maker-bond-penalty`
+
+
+
 
 The network will:
 1. Transfer an amount equal to `margin-shortfall` from the market maker's bond account into the market maker's margin account. If there is insufficient funds to cover this amount, transfer the maximum amount it is able to. Note, this can happen as part of the normal margin search steps - i.e. search the market makers' margin account then general account then market maker's bond account.
-1. Transfer an amount equal to `market-maker-bond-penalty` from the market's market maker's bond account and add it to the insurance pool. If there is insufficient funds to cover this penalty, search the margin account for the penalty for any remaining amounts owed.
-1. Adjust the market maker's `actual-stake-amount` to match the amount netted from the penalty: `actual-stake-amount = previous-commitment-amount - market-maker-bond-penalty`
-1. Adjust the market maker's `market-maker-commitment-amount` to zero (including removing the fee amount and market making orders as if amending the commitment to zero is accepted) if the market maker undergoes position resolution.
+2. Transfer an amount equal to `market-maker-bond-penalty` from the market's market maker's bond account and add it to the insurance pool subject to condition that if this occurs at the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will always be set to zero. If there is insufficient funds to cover this penalty, search the margin and general accounts for the penalty for any remaining amounts owed.
+3. Adjust the market maker's `actual-stake-amount` to match the amount netted from the penalty: `actual-stake-amount = previous-commitment-amount - market-maker-bond-penalty`
+4. Position resolution occurs if the `margin-shortfall` and/or the `market-maker-bond-penalty` can't be fulfilled.
+5. Adjust the market maker's `market-maker-commitment-amount` to zero (including removing the fee amount and market making orders as if amending the commitment to zero is accepted) if the market maker undergoes position resolution.
 
 **Bond account top up by collateral search:**
 Important: a trader's general account should be periodically searched to top back up its bond account to the level that meets its current commitment.. i.e. so actual stake = commitment. This should happen every time the network is performing a margin calculation / search.
 
-***Case:*** `margin-shortfall > market-maker-commitment-amount - market-maker-bond-penalty` 
-
-This is the case when the market maker In this case when the margin is evaluated the market maker will be distressed and placed into position resolution.
 
 ***Case:*** `margin-shortfall <= market-maker-commitment-amount - market-maker-bond-penalty` 
 
