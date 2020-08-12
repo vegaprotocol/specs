@@ -22,7 +22,7 @@ Any Vega participant can apply to market make on a market by submitting a transa
 Accepted if all of the following are true:
 - [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
 - [ ] The participant has sufficient collateral in their general account to also meet the margins required to support their orders.
-- [ ] The market is not in a closed or expired state. It is in a proposed, pending or active state (TODO: link to market lifecycle spec)
+- [ ] The market is not in an expired state. It is in a pending or active state (TODO: link to market lifecycle spec). In future we will want it to also include when in a proposed state.
 - [ ] The nominated fee amount is greater than or equal to zero and less than a maximum level set by a network parameter
 - [ ] There are a set of valid buy/sell liquidity provision orders (see [MM orders spec](./????-market-making-order-type.md))       
 
@@ -39,9 +39,10 @@ Engineering notes:
 
 Assume MarketID is always submitted, then a participant can submit the following combinations:
 1. A transaction containing all fields specified can be submitted at any time to either create or change a commitment (if commitment size is zero, the orders and fee bid cannot be supplied - i.e. tx is invalid)
-1. Any other combination of a subset of fields can be supplied any time a market maker has a non-zero commitment already. If commitment is set to zero, it must be the only field supplied (otherwise tx is invalid).
+1. Any other combination of a subset of fields can be supplied any time a market maker has a non-zero commitment already.
 
 Example: it's possible to amend fee bid or orders individually or together without changing the commitment level.
+Example: amending only a commitment amount but retaining old fee bid and orders.
 
 
 ## COMMITMENT AMOUNT
@@ -49,15 +50,17 @@ Example: it's possible to amend fee bid or orders individually or together witho
 ### Processing the commitment
 When a commitment is made the liquidity commitment amount is assumed to be specified in terms of the settlement currency of the market.
 
-If the participant has sufficient collateral to cover their commitment and margins for their proposed orders, this amount is transferred from the participant's general account to their market making bond account (new account type, 1 per market maker per market).
+If the participant has sufficient collateral to cover their commitment and margins for their proposed orders, the commitment amount is transferred from the participant's general account to their (maybe newly created) market making bond account (new account type, 1 per market maker per market and asset). For clarity, market makers will have a separate margin account and bond account.
+
+In future a market may only be successfully approved from pending state if the market has a minimum amount of total committed stake.
 
 - Market maker bond account:
 	- [ ] Each active market has one bond account per market maker, per settlement asset for that market.
-    - [ ] When a market maker is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
+    - [ ] When a market maker transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
     - [ ] A market maker can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment)
     - [ ] Collateral withdrawn from this account may only  be transferred to either:
       - [ ] The insurance pool of the market (in event of slashing)
-      - [ ] The market maker's margin account (during a margin search) in the event that they fall below the maintenance level and have zero balance in their general account.
+      - [ ] The market maker's margin account (during a margin search and mark to market settlement) in the event that they fall below the maintenance level and have zero balance in their general account.
       - [ ] The market maker's general account (in event of market maker reducing their commitment)
 
 ### Market maker proposes to amend commitment amount
@@ -70,7 +73,7 @@ A participant may apply to amend their commitment amount by submitting a transac
 ***Case:*** `proposed-commitment-variation >= 0`
 A market maker can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount and cover the margins required.
 
-If they do not have sufficient collateral the transaction is rejected in entirety. This means that any data from the fees or orders are not applied.
+If they do not have sufficient collateral the transaction is rejected in entirety. This means that any data from the fees or orders are not applied. This means that the  `old-commitment-amount` is retained.
 
 
 **DECREASING COMMITMENT**
@@ -109,11 +112,7 @@ When `actual-reduction-amount = 0` the transaction is still processed for any da
 
 ### Nominating and amending fee amounts
 
-The network transaction is used by market makers to nominate a fee amount which is used by the network to calculate the [liqudity_fee](./0029-fees.md) of the market.
-- [ ] A nominated fee amount must be greater than or equal to zero. The units of the fee amount are a percentage. A number greater than 1 is permitted.
-- [ ] If nominated fee amount is less than zero, the network should reject the transaction.
-
-Market makers may amend their nominated fee amount by submitting a market maker transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the entire transaction is considered invalid.
+The network transaction is used by market makers to nominate a fee amount which is used by the network to calculate the [liqudity_fee](./0029-fees.md) of the market. Market makers may amend their nominated fee amount by submitting a market maker transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the entire transaction is considered invalid.
 
 ### How fee amounts are used
 The [liqudity_fee](./0029-fees.md) of a market on Vega takes as an input, a [fee factor[liquidity]](./0029-fees.md) which is calculated by the network, taking as an input the data submitted by the market makers in their market making network transactions (see [this spec](./????-setting-fees-and-rewarding-mms.md) for more information on the specific calculation).
@@ -127,17 +126,16 @@ When calculating fees for a trade, the size of a market maker’s commitment alo
 
 In a market  maker proposal transaction the participant must submit a valid set of orders, comprised of:
 
-1. A set of valid buy orders
-1. A set of valid sell orders
+1. A set / batch of valid buy orders
+1. A set / batch of valid sell orders
 
-Market maker orders are a special order type described in the [market making orders spec](./????-market-making-order-type.md). Validity is also defined in that spec.
+Market maker orders are a special order type described in the [market making orders spec](./????-market-making-order-type.md). Validity is also defined in that spec. Note, market maker participants can place regular (non market maker orders) but these are not considered to be contributing to them meeting their obligation. That said, the market maker's bond account can still be used for covering margin obligations regardless if it's resulting from a market making or regular order.
 
-
-A market maker can amend their orders by providing a new set of orders in the market maker network transaction. If the amended orders are invalid, the previous set of orders will be retained.
+A market maker can amend their orders by providing a new set of orders in the market maker network transaction. If the amended orders are invalid the transaction is rejected, hence the previous set of orders will be retained.
 
 ### Checking margins for orders
 
-As pegged orders are parked during an auction are parked and not placed on the book, margin checks will not occur. This includes checking the orders margin when checking the validity of the transaction.
+As pegged orders are parked during an auction are parked and not placed on the book, margin checks will not occur for these orders. This includes checking the orders margin when checking the validity of the transaction so orders are accepted. Open positions are treated the same as any other open positions and their market maker orders are pegged orders and will be treated the same as any other pegged orders.
 
 Engineering notes:
 - check that other pegged orders are treated the same
@@ -148,7 +146,7 @@ Engineering notes:
 ### Measuring liquidity obligation from commitment
 Each market maker has a _market making obligation_ specified by the network at a point in time and measured in siskas.
 
-The liquidity obligations they make (in siskas) is converted from the commitment amount using, a per-asset network parameter `siskas_to_bond_in_asset_X` as follows: 
+The liquidity obligations they make (in siskas) is converted from the commitment amount using, a network parameter `siskas_to_bond` as follows: 
 ``` mm_liquidity_obligation = liquidity_commitment x siskas_to_bond_in_asset_X.```
 
 
@@ -171,19 +169,11 @@ Since market maker orders automatically refresh, a market maker is only non-comp
 
 If at any point in time during continuous trading, the market maker has insufficient capital to meet their margin requirements arising from their market making orders and open positions, the network will utilise their market making commitment, held in the market maker's bond account to cover their commitment, and penalise them at a proportional rate.
 
-Let `market-maker-bond-penalty = bond-fine-parameter * margin-shortfall` be the amount of commitment that has been slashed, where `bond-fine-parameter` is a network parameter and the `margin-shortfall` refers to the absolute value of the amount of margin that the market maker was unable to cover through their margin and general account.
+Let `market-maker-bond-penalty = bond-penalty-parameter * margin-shortfall` be the amount of commitment that has been slashed, where `bond-penalty-parameter` is a network parameter and the `margin-shortfall` refers to the absolute value of the amount of margin that the market maker was unable to cover through their margin and general account.
 
-NOTE: if this occurs and the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will always be set to zero.
+NOTE: if this occurs at the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will always be set to zero.
 
-Note: in future versions, the degree to which a market maker has met their obligation may be measured over a rolling time period (specified by a network parameter, initially set to 24 hours) and calculated as an average of their (attained outcome - obligation). The penalty would then be proportional to the amount of failure and the amount of time in breach.
-
-In the following cases, we assume that the `market-maker-bond-penalty` is not available collateral able to be utilised to cover the shortfalls of the market maker.
-
-***Case:*** `margin-shortfall > market-maker-commitment-amount - market-maker-bond-penalty` 
-
-In this case when the margin is evaluated the market maker will be distressed and placed into position resolution.
-
-***Case:*** `margin-shortfall <= market-maker-commitment-amount - market-maker-bond-penalty` 
+TODO: describe non compliance conditions? 
 
 The network will:
 1. Transfer an amount equal to `margin-shortfall` from the market maker's bond account into the market maker's margin account. If there is insufficient funds to cover this amount, transfer the maximum amount it is able to. Note, this can happen as part of the normal margin search steps - i.e. search the market makers' margin account then general account then market maker's bond account.
@@ -194,17 +184,25 @@ The network will:
 **Bond account top up by collateral search:**
 Important: a trader's general account should be periodically searched to top back up its bond account to the level that meets its current commitment.. i.e. so actual stake = commitment. This should happen every time the network is performing a margin calculation / search.
 
+***Case:*** `margin-shortfall > market-maker-commitment-amount - market-maker-bond-penalty` 
+
+This is the case when the market maker In this case when the margin is evaluated the market maker will be distressed and placed into position resolution.
+
+***Case:*** `margin-shortfall <= market-maker-commitment-amount - market-maker-bond-penalty` 
+
+
+
 ## Network parameters 
-`bond-fine-parameter` - used to calculate the penalty to market makers when they fail to meet their obligations.
+`bond-penalty-parameter` - used to calculate the penalty to market makers when they fail to meet their obligations.
 `market-size-measurement-period` - used in fee splitting
 `maximum-liquidity-fee-factor-level` - used in validating fee amounts
+`siskas_to_bond` - used to translate a commitment to an obligation (in siskas)
 
 ## What data do we keep relating to market making?
 1. List of all market makers and their commitment sizes and their “equity-like share” for each market (https://github.com/vegaprotocol/product/pull/323/files)
 1. Liquidity provision orders (probably need to be indexed somewhere in addition to the order book)
 1. New account per market holding all committed market maker bonds
 1. Actual amount of liquidity supplied (can be calculated from order book “0034-prob-weighted-liquidity-measure.ipynb”)
-1. The market size (this will be something like the average trading volume (trade value for fee purposes - see fees spec, for futures this is notional) per 24 hours during a period defined as a network parameter)
 1. Each market maker's actual bond amount
 
 
