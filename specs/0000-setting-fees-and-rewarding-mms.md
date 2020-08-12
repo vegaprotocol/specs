@@ -9,14 +9,14 @@ The aim of this specification is to set out how fees on Vega are set based on co
 - **Liquidity**: measured as per [liquidity measurement spec](0034-prob-weighted-liquidity-measure.ipynb) (but it's basically volume on the book weighted by the probability of trading)
 - **Supplied liquidity**: this counts only the liquidity provided through the special market making order that market makers have committed to as per [market maker order spec](????.md) 
 - **Liquidity demand window length `t_liquidity_window`**: sets the length of the window over which we estimate liquidity demand for fee setting purposes. This is a network parameter.  
-- **Liquidity demand estimate**: as defined in [liquidity monitoring](????-liquidity-monitoring.md) spec we use maximum open interest in the market captured between `max(t-t_liquidity_window,0)` and the current time `t`. Here time `t=0` denotes the end of market opening auction.  
+- **Liquidity demand estimate**: as defined in [liquidity demand estimate spes](????-liquidity-demand-estimate.md) using `t_fee_liquidity_window` which is a network paratemer. 
 - **Sufficient liquidity trigger `c_2`**: a network parameter `c_2` defined in [liquidity monitoring](????-liquidity-monitoring.md) spec. 
 - **Market value estimate** is calculated to be the estimated fee income for the entire future existence of the market using recent fee income. See further in this spec for details.
 
 
 ## Calculating market fees
 
-As part of the market making order type, the market maker submits their desired fee level for the market. Here we describe how the market fee is set from all these submitted values. 
+As part of the [commit liquidity network transaction ](????-mm-mechanics.md), the market maker submits their desired fee level for the market. Here we describe how the market fee is set from the values submitted by all market makers for a given market. 
 First, we produce a list of pairs which capture committed liquidity of each mm together with their desired fee and arrange this list in an increasing order by fee amount. Thus we have 
 ```
 [MM 1 liquidity, MM 1 fee]
@@ -40,11 +40,11 @@ Let us say that `c_2 = 10`.
 1. If the `liquidity demand estimate = 10` then `c_2 x [liquidity demand estimate] = 100` which means that the needed liquidity is given by MM 1, thus `k=1` and so the market fee is  `MM 1 fee = 0.5%`. 
 1. If the `liquidity demand estimate = 12.5` then `c_2 x [liquidity demand estimate] = 125` which means that the needed liquidity is given by MM 1 and MM 2, thus `k=2` and so the market fee is  `MM 2 fee = 0.75%`. 
 1. If the `liquidity demand estimate = 123` then `c_2 x [liquidity demand estimate] = 1230` which means that even putting all the liquidity supplied above does not meet the estimated market liquidity demand and thus we set `k=N` and so the market fee is `MM N fee = MM 3 fee = 3.75%`. 
+1. Initially (before market opened) the `[liquidity demand estimate]` is by definition zero (it's not possible to have a position on a market that's not opened yet). Hence by default the initial fee is the lowest fee.
 
 ## Timing market fee changes
 
-Initially (before market opened) the maximum open interest is by definition zero (it's not possible to have a position on a market that's not opened yet). Hence by default the initial fee is the one supplied by the market maker who committed stake *first*.
-Once the market opens (opening auction starts) a clock starts ticking. We have a period over which we measure the maximum open interest to estimate liquidity demand. This is a network parameter `t_liquidity_window`. The fee is continuosly re-evalueated using the mechanism above. 
+Once the market opens (opening auction starts) a clock starts ticking. We calculate the `[liquidity demand estimate]` using [liquidity demand estimate spes](????-liquidity-demand-estimate.md) with the network parameter `t_fee_liquidity_window`. The fee is continuosly re-evalueated using the mechanism above. 
 
 ## Calculating market value proxy
 
@@ -52,7 +52,7 @@ This will be used for determining what "equity like share" does commiting market
 It's calculated, with `t` denoting time now, as follows:
 ```
 total_stake = sum of all mm stakes
-active_time_window = [max(t-t_liquidity_window,0), t]
+active_time_window = [max(t-t_fee_liquidity_window,0), t]
 
 traded_value_over_window = total trade value for fee purposes of all trades executed on a given market the active_time_window
 
