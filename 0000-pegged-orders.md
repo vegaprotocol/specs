@@ -55,6 +55,8 @@ Best bid = 100, best offer = 105 => mid = **102.5**<br>
 A buy pegged to Mid - 1 should take the mid as 103, and thus be at 102<br>
 A sell pegged to Mid + 1 should take the mid as 102, and thus be at 103
 
+Pegged orders which are entered during an auction are placed directly on the parked queue. No margin checks will take place in this case even to validate the order would be allowed during normal trading. The margin checks will take place when the order is added to the live orderbook.
+
 
 # Pseudo-code / Examples
 Each market has a slice containing all the pegged orders. New pegged orders are added to the end of the slice to maintain time ordering.
