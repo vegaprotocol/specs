@@ -49,8 +49,12 @@ Let us say that `c_2 = 10`.
 
 Once the market opens (opening auction starts) a clock starts ticking. We calculate the `[liquidity demand estimate]` using [liquidity demand estimate spes](????-liquidity-demand-estimate.md) with the network parameter `t_fee_liquidity_window`. The fee is continuously re-evaluated using the mechanism above. 
 
-### APIs for fee factor calculations
-* 
+### APIs for fee factor calculations - what should core be exposing?
+
+At time of call:
+* The `liquidity-fee-factor` for the market.
+* Current market making commitments and their individually nominated fee factors
+* Liquidity demand estimate
 
 ## SPLITTING FEES BETWEEN MARKET MAKERS
 
@@ -127,7 +131,8 @@ When the time defined by ``market_maker_fee_distribition_time_step` elapses we d
 ```
 
 ### APIs for fee splits and payments
-* 
+* Each market maker's equity-like share
+* The `market-value-proxy`
 
 
 ## Acceptance Criteria
@@ -136,8 +141,10 @@ When the time defined by ``market_maker_fee_distribition_time_step` elapses we d
 - [ ] The examples provided result in the given outcomes
 - [ ] The resulting liquidity-fee-factor is always equal to one of the market maker's individually nominated fee factors
 - [ ] The resulting liquidity-fee-factor is never less than zero
-- [ ] Liquidity fee factors are recalculated every time a market maker nominates a new fee factor (using the commit liqudity network transaction).
+- [ ] Liquidity fee factors are recalculated every time a market maker nominates a new fee factor (using the commit liquidity network transaction).
 - [ ] Liquidity fee factors are recalculated every time the liquidity demand estimate changes.
+- [ ] If a change in the open interest causes the liquidity demand estimate to change, the fee factor is correctly recalculated. 
+- [ ] If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated. 
 
 ### SPLITTING FEES BETWEEN MARKET MAKERS
 - [ ] The examples provided result in the given outcomes. 
