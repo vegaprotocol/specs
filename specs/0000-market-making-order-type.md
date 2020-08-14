@@ -44,28 +44,34 @@ Buy-batch-orders: {
 
 ## How they are constructed for the order book
 
+Input data:
+1. The commitment, batch of buy orders, batch of sell orders (as submitted in the [liquidity provision network transaction](????-mm-mechanics.md).) 
+1. Any limit orders that the market maker has on the book at a point in time.
+
 ### Refining list of orders
 
-Market makers may post 
-- remove any that would trade on entry.
-- 
-- calculate the normalised volume with this filtered list.
+Steps:
+1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](????-mm-mechanics.md).
 
-1. Subtract limit orders from your liquidity obligations on each side. Subtract the siskas implied by your limit orders from your obligation.
+1. Subtract from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any limit orders the market maker has on the book at this point in time.
 
-_Example: ADD_
+1. Using this adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the orders in the batch of buy or sell orders (for clarity, this does not include any other limit orders that the market maker has).
 
-2. If any of the orders submitted would result in a trade, they are excluded from the valid list of market making orders.
+1. Calculate the volumes of each order in the refined buy/sell order list
 
-_Example: ADD_
+1. Remove any that would trade on entry
 
-Resulting List:
+1. Redo step-3 and step-4. These orders now form the refined list of orders. Each of them has a volume and a price level and can be applied to the order book.
 
-### Calculating volume / size
 
-Once a final valid list of orders is ascertained, we must undertake the following steps:
+### Calculating volume / size (for step-3)
 
-1. Calculate the `liquidity-normalised-proportion` for all valid orders, where:
+For any list of market maker orders, first normalise the liquidity proportions, then calculate the volumes of orders using the `probability_of_trading` (see [Quant risk model spec](0018-quant-risk-models.ipynb)). 
+
+
+#### Normalising liquidity proportions for a set of market making orders:
+
+Calculate the `liquidity-normalised-proportion` for all valid orders, where:
 
 `liquidity-normalised-proportion = liquidity-proportion-for-order / sum-all-buy/sell-orders(liquidity-proportion-for-order)`
 
@@ -76,10 +82,9 @@ liquidity-normalised-proportion-order-1 = 2 / (2 + 13) = 0.133333
 liquidity-normalised-proportion-order-2 = 13 / (2 + 13) = 0.866666
 
 ```
-
 The sum of all normalised proportions must = 1 for all refined buy / sell order list.
 
-2. Calculate the volumes of each order in the refined buy/sell order list:
+#### Calculating volumes for a set of market making orders:
 
 Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). 
 
@@ -102,7 +107,12 @@ mid-price = 105
 
 ## Refreshing of orders
 
-Each market maker's orders will refresh after trading. These should be refreshed 
+Unlike normal peg orders, when a market maker's order (that has been a result of the batch orders above, not one of their normal limit orders) has traded, their submitted batch of orders to meet their obligation remains as they have specified and the system refreshed the order book volume accordingly. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself. 
+
+
+his means that after the order has traded (at the end of a transaction), their full set of orders are recalculated as per the process described in the steps above.
+
+The system should refresh the market maker pegged orders, in time priority according to which traded first. The process of refreshing is to 
 
 ________________________
 **Example**: we have a buy side of an order book that looks like this:
@@ -119,7 +129,7 @@ and a new market order sells 8. Then, a plausible refreshed set of orders could 
  [mm-2-order, buy-volume=5, buy-price=96, order-time=16459]
 ```
 
-The system should refresh the market maker pegged orders, in time priority according to which traded first. 
+
 
 *NB the actual values of the buy-prices and buy-volumes are dependent on the result of step 2 above and this example is not to test that, so don't try to replicate this with numbers, it's for illustrative purposes only.
 ________________________
