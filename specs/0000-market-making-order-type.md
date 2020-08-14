@@ -105,14 +105,22 @@ mid-price = 105
 
 ```
 
-## Refreshing of orders
+## Refreshing of orders / recalculating order volume
 
-Unlike normal peg orders, when a market maker's order (that has been a result of the batch orders above, not one of their normal limit orders) has traded, their submitted batch of orders to meet their obligation remains as they have specified and the system refreshed the order book volume accordingly. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself. 
+Market maker orders are recalculated and refreshed during a normal peg reprice when either of the two following occurs:
 
+1. Order book status has changed such that the peg reference changes,
+2. A market maker's order(s) have traded 
 
-his means that after the order has traded (at the end of a transaction), their full set of orders are recalculated as per the process described in the steps above.
+In both cases, the pegged orders prices and volumes are recalculated. 
 
-The system should refresh the market maker pegged orders, in time priority according to which traded first. The process of refreshing is to 
+Note on time priority: for all orders that are repriced but not as a result of trading (i.e. pegged orders that move as a result of peg moving), should be given new time priority that preserves their relative ordering (to each other) as per the ordering implied from their time priority prior to the refreshing.
+
+Unlike normal peg orders, when a market maker's order has traded, their submitted "order shapes" to meet their obligation remains as they have specified (by and the system refreshed the order book volume accordingly. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself. 
+
+This means that after the order has traded (at the end of a transaction), their full set of orders are recalculated as per the process described in the steps above.
+
+The system should refresh the market maker pegged orders, in time priority according to which traded first. 
 
 ________________________
 **Example**: we have a buy side of an order book that looks like this:
@@ -135,14 +143,7 @@ and a new market order sells 8. Then, a plausible refreshed set of orders could 
 ________________________
 
 
-### Recalculating order volume during peg reprice
 
-1. Order book status has changed: 
-2. A market maker's order(s) have traded: 
-
-In both cases, the pegged orders prices are recalculated. As a special case for market maker orders, the volume of the order is also recalculated based on the formula above.
-
-Note on time priority: for all orders that are repriced but not as a result of trading (i.e. pegged orders that move as a result of peg moving), should be given new time priority that preserves their relative ordering (to each other) as per the ordering implied from their time priority prior to the refreshing.
 
 
 
