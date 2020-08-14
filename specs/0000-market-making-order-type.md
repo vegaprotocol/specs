@@ -17,27 +17,27 @@ Market maker orders are a special order type with the following features:
 
 ## How they are submitted
 
-2 x batch orders are submitted as part of a market making transaction (one for buy side, one for sell side). Each order must specify the proportion of its liquidity applicable to that order and a price peg.
+2 x shapes are submitted as part of a market making transaction (one for buy side, one for sell side). Each entry in this shape must specify a proportion of the liquidity obligation applicable to that entry and a price peg.
 
-The network will translate these orders into order book volume by refining the order set according to a set of logic directives (see below)
+The network will translate these shapes into order book volume by creating an order set according to a set of rules (see below).
 
-Each order must specify:
+Each entry must specify:
 
 1. **Liquidity proportion:** the relative proportion of the commitment to be allocated at a price level. Note, the network will normalise the liquidity proportions of the refined order set (see below).
 
-2. A **price peg:** , as per normal [pegged orders](), the price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. These orders work the same as a usual peg order, except that size is calculated from the liquidity proportions.
+2. A **price peg:** , as per normal [pegged orders](), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. 
 
 ```
 # Example 1:
-Buy-batch-orders: {
-  buy-order-1: [liquidity-proportion-1, [price-peg-reference-1, number-of-units-from-reference-1]],
-  buy-order-2: [liquidity-proportion-2, [price-peg-reference-2, number-of-units-from-reference-2]],
+Buy-shape: {
+  buy-entry-1: [liquidity-proportion-1, [price-peg-reference-1, number-of-units-from-reference-1]],
+  buy-entry-2: [liquidity-proportion-2, [price-peg-reference-2, number-of-units-from-reference-2]],
 }
 
 # Example 1 with values
-Buy-batch-orders: {
-  buy-order-1: [2, [best-offer, -10]],
-  buy-order-2: [13, [price-peg-reference-2, number-of-units-from-reference-2]],
+Buy-shape: {
+  buy-entry-1: [2, [best-offer, -10]],
+  buy-entry-2: [13, [price-peg-reference-2, number-of-units-from-reference-2]],
 }
 
 ```
@@ -45,38 +45,34 @@ Buy-batch-orders: {
 ## How they are constructed for the order book
 
 Input data:
-1. The commitment, batch of buy orders, batch of sell orders (as submitted in the [liquidity provision network transaction](????-mm-mechanics.md).) 
+1. The commitment, buy-shape, sell-shape (as submitted in the [liquidity provision network transaction](????-mm-mechanics.md).) 
 1. Any limit orders that the market maker has on the book at a point in time.
 
 ### Refining list of orders
 
 Steps:
+
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](????-mm-mechanics.md).
 
-1. Subtract from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any limit orders the market maker has on the book at this point in time.
+1. Subtract the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any limit orders the market maker has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liqudity-measure.ipynb)).
 
-1. Using this adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the orders in the batch of buy or sell orders (for clarity, this does not include any other limit orders that the market maker has).
+1. Exclude from the following calculation, any buy-shape and sell-shape entries with a price that if an order were created at this price would trade on the order book, it would trade immediately. 
 
-1. Calculate the volumes of each order in the refined buy/sell order list
+1. If no entry remains ???
 
-1. Remove any that would trade on entry
+1. Using the adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the remaining entries in the buy / sell shape (for clarity, this does not include any other limit orders that the market maker has).
 
-1. Redo step-3 and step-4. These orders now form the refined list of orders. Each of them has a volume and a price level and can be applied to the order book.
-
-
-### Calculating volume / size (for step-3)
-
-For any list of market maker orders, first normalise the liquidity proportions, then calculate the volumes of orders using the `probability_of_trading` (see [Quant risk model spec](0018-quant-risk-models.ipynb)). 
+1. Calculate the volume implied by each entry in the refined buy/sell order list. You will now create orders from this volume at the relevant price point and apply them to the order book. 
 
 
-#### Normalising liquidity proportions for a set of market making orders:
+#### Normalising liquidity proportions for a set of market making orders (step 5):
 
-Calculate the `liquidity-normalised-proportion` for all valid orders, where:
+Calculate the `liquidity-normalised-proportion` for all remaining entries, where:
 
-`liquidity-normalised-proportion = liquidity-proportion-for-order / sum-all-buy/sell-orders(liquidity-proportion-for-order)`
+`liquidity-normalised-proportion = liquidity-proportion-for-entry / sum-all-buy/sell-entries(liquidity-proportion-for-order)`
 
 ```
-Example 1 (from above) where refined-buy-order-list = [buy-order-1, buy-order-2]:
+Example 1 (from above) where refined-buy-order-list = [buy-entry-1, buy-entry-2]:
 
 liquidity-normalised-proportion-order-1 = 2 / (2 + 13) = 0.133333
 liquidity-normalised-proportion-order-2 = 13 / (2 + 13) = 0.866666
@@ -84,7 +80,7 @@ liquidity-normalised-proportion-order-2 = 13 / (2 + 13) = 0.866666
 ```
 The sum of all normalised proportions must = 1 for all refined buy / sell order list.
 
-#### Calculating volumes for a set of market making orders:
+#### Calculating volumes for a set of market making orders (step 6):
 
 Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). 
 
