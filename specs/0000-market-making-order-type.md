@@ -82,7 +82,7 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 
 #### Calculating volumes for a set of market making orders (step 6):
 
-Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). 
+Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). Note, if the peg reference is not the `mid-price`, then first calculate the distance from mid price.
 
 ``` volume = liquidity_obligation x liquidity-normalised-proportion / probability_of_trading```. 
 
@@ -91,13 +91,18 @@ where `liquidity_obligation` is calculated as defined in the [market making mech
 ```
 Example: 
 
-Order = {
+best-bid-on-order-book = 103
+
+shape-entry = {
   peg: {reference: 'best-bid', units-from-ref: 2}, 
   liquidity-normalised-proportion-order: 0.32
 }
 
-mid-price = 105
+peg-implied-price = 103 - 2 = 101
 
+mid-price-from-order-book = 105
+
+Call probability-of-trading function with current-price = 105, mm-time-horizon (network parameter), peg-implied-price. This will give probably of trading at price = 101. This can be used in the formula for volume, above.
 
 ```
 
@@ -105,18 +110,16 @@ mid-price = 105
 
 Market maker orders are recalculated and refreshed during a normal peg reprice when either of the two following occurs:
 
-1. Order book status has changed such that the peg reference changes,
-2. A market maker's order(s) have traded 
+1. Order book status has changed,
+2. A market maker's order(s) have traded (both limit orders and shape implied orders)
 
-In both cases, the pegged orders prices and volumes are recalculated. 
+In both cases, repeat all steps above. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself. 
 
-Note on time priority: for all orders that are repriced but not as a result of trading (i.e. pegged orders that move as a result of peg moving), should be given new time priority that preserves their relative ordering (to each other) as per the ordering implied from their time priority prior to the refreshing.
+TIME PRIORITY FOR REFRESHING:
 
-Unlike normal peg orders, when a market maker's order has traded, their submitted "order shapes" to meet their obligation remains as they have specified (by and the system refreshed the order book volume accordingly. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself. 
+1. For all orders that are repriced but not as a result of trading (i.e. pegged orders that move as a result of peg moving), should be given new time priority that preserves their relative ordering (to each other) as per the ordering implied from their time priority prior to the refreshing.
 
-This means that after the order has traded (at the end of a transaction), their full set of orders are recalculated as per the process described in the steps above.
-
-The system should refresh the market maker pegged orders, in time priority according to which traded first. 
+1. The system should refresh the market maker pegged orders, in time priority according to which traded first (see below example).
 
 ________________________
 **Example**: we have a buy side of an order book that looks like this:
@@ -133,26 +136,14 @@ and a new market order sells 8. Then, a plausible refreshed set of orders could 
  [mm-2-order, buy-volume=5, buy-price=96, order-time=16459]
 ```
 
-
-
 *NB the actual values of the buy-prices and buy-volumes are dependent on the result of step 2 above and this example is not to test that, so don't try to replicate this with numbers, it's for illustrative purposes only.
 ________________________
 
-
-
-
-
-
-- 
-
-
-## Adding MM orders to the book:
-
-The set of buy orders are applied to the resulting order price and volume. In the case that there are multiple market makers
-
 ## Amending the MM order:
 
-Market makers are always allowed to amend their orders by submitting a market maker network transaction with a set of revised orders (see [market making mechanics spec](./0000-mm-mechanics.md))
+Market makers are always allowed to amend their orders by submitting a market maker network transaction with a set of revised order shapes (see [market making mechanics spec](./0000-mm-mechanics.md)).
 
+## Network Parameters:
+* mm-time-horizon: market making time horizon to imply probability of trading.
 
 ## Acceptance Criteria:
