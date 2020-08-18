@@ -7,7 +7,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 ## Acceptance Criteria
 - [ ] Pegged orders can only be LIMIT orders, all other types are rejected.
 - [ ] Pegged orders can only be GTT and GTC orders. IOC and FOK will be added in the second phase of pegged orders.
-- [ ] A markets ability to handle pegged orders is set at creation time and should be turned on by default.
+- [ ] All markets must be able to handle pegged orders.
 - [ ] Pegged orders are removed from the order book when going into an auction and are parked.
 - [ ] Parked orders are returned to the order book once continuous trading is resumed.
 - [ ] Pegged orders are repriced when their reference price moves.
