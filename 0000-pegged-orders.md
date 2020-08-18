@@ -13,6 +13,8 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 - [ ] Pegged orders are repriced when their reference price moves.
 - [ ] Cancelling a pegged order removes it from the book and the pegged/parked slice.
 - [ ] An expired pegged order is removed from the book and the pegged/parked slice.
+- [ ] A filled pegged order is removed from the book and the pegged/parked slice.
+- [ ] Pegged orders are not repriced and do not lose time priority when their specific reference price is unchanged, even if other peg reference prices move.
 
 ## Summary
 
