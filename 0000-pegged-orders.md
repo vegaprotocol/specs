@@ -15,6 +15,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 - [ ] An expired pegged order is removed from the book and the pegged/parked slice.
 - [ ] A filled pegged order is removed from the book and the pegged/parked slice.
 - [ ] Pegged orders are not repriced and do not lose time priority when their specific reference price is unchanged, even if other peg reference prices move.
+- [ ] If the midprice is calculated to be a fraction (e.g. 102.5), it should be rounded up for a buy and rounded down for a sell.
 
 ## Summary
 
@@ -26,15 +27,15 @@ Pegged orders are limit orders where the price is specified of the form `REFEREN
 
 **Reference Price:** This is the price against which the final order priced is calculated. Possible options are best bid/ask and mid price.
 
-**Offset:** This is a value added to the reference price. It can be negative.
+**Offset:** This is a value added to the reference price. It can be negative and must be a multiple of the tick size.
 
-When a party submits a new pegged order, only a LIMIT order is accepted. The party also specifies the reference price to which the order will be priced along with an offset to apply to this price. The reference price is looked up from the live market and the final price is calculated and used to insert the new order. If the price would result in a hit, the order is executed in the same way as a normal LIMIT order. If the price does not hit, the order is placed on the book at the back of the calculated price level.
+When a party submits a new pegged order, only a LIMIT order is accepted. The party also specifies the reference price to which the order will be priced along with an offset to apply to this price. The reference price is looked up from the live market and the final price is calculated and used to insert the new order. The order is placed on the book at the back of the calculated price level.
 
-Whenever the reference price changes all the pegged orders that rely on it need to be repriced. We run through a time sorted list of all the pegged orders and remove each order from the book, recalculate it's price and then reinsert it into the orderbook at the back of the price queue. Following a price move margin checks take place on the positions of the parties. If a pegged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it is removed, the price level is removed as well.
+Whenever the reference price changes all the pegged orders that rely on it need to be repriced. We run through a time sorted list of all the pegged orders that match the moved reference price and remove each order from the book, recalculate it's price and then reinsert it into the orderbook at the back of the price queue. Pegged orders which reference a price that has not changed are untouched. Following a price move margin checks take place on the positions of the parties. If a pegged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it is removed, the price level is removed as well.
 
 Pegged orders can be GTC or GTC TIF orders with IOC and FOK being added in the second phase of pegged orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
 
-If the reference point moves to such a value that it would create an invalid order once the offset was applied, the pegged order is parked. As the reference price moves, any orders on the parked list will be evaluated to see if they can come back into the order book.
+If the reference point does not exist (e.g no best bid) or moves to such a value that it would create an invalid order once the offset was applied, the pegged order is parked. As the reference price moves, any orders on the parked list will be evaluated to see if they can come back into the order book.
 
 When a pegged order is removed from the book due to cancelling, expiring or filling, the order details are removed from the pegged/parked orders list.
 
@@ -112,3 +113,4 @@ Some plain text walkthroughs of some scenarios that would prove that the impleme
 * Switch a market to auction and make sure the pegged orders are parked.
 * Switch a market from auction to continuous trading to make sure the orders are unparked.
 * Try to insert non LIMIT orders and make sure they are rejected.
+* Test where both buy and sell orders are pegged against a mid which is not a whole number.
