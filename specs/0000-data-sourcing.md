@@ -32,7 +32,7 @@ Often this data looks like:
  ```proto
 {
     assetId = "0f234167a...", //target settlement instrument VegaID
-    timestamp = 1596761519, //timestamp of the report (must be within a specifid range as configured by a market)
+    timestamp = 1596761519, //timestamp of the report (must be within a specified range as configured by a market)
     price = 1234.2512
 }
  ```
@@ -137,7 +137,6 @@ message OracleEvent {
     }
 }
 
-
 message Oracle {
     string[] expectedSigners;
     uint signerThreshold;
@@ -173,7 +172,7 @@ Note: With this type of oracle there’s no incentive in the Vega data source sy
 message BuiltinOracleEvent {
 }
 
- message BuiltinOracleEventSource {
+message BuiltinOracleEventSource {
 }
 ```
 
@@ -272,7 +271,7 @@ message APIOracleEventSource {
     string URL;
     stirng PORT;
     string ApiKey;
-    string CeritificatePublicKey;
+    string CertificatePublicKey;
     string[] DataKeys;
 }
 ```
@@ -296,7 +295,7 @@ To mitigate these risks, Vega has developed a number of safeguards to ensure the
 
 ### Changing Oracle Sources
 Oracles may get compromised, shut down, change location/certificates, or otherwise become too risky to use alone before a market has expired. 
-To mitigate these risks, a governance can change oracle parameters. To do this, see https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md
+To mitigate these risks, a governance can change oracle parameters. To do this, see [the Governance specification[(https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md).
  
 Unlike a typical Vega governance vote, this type of vote is open to all participants in the market, provided they have a balance above a threshold of value (configurable).
 These votes will be and weighted by value in the market and then weighted against market maker votes and network governance voters.  
@@ -326,7 +325,7 @@ Since latency and throughput is key to Vega's ability to compete with traditiona
 This Oracle Queue continuously monitors all of the data sources that Vega is subscribed to and propagates the key information to enable validators to each independently verify that the event has been mined on-chain or has been signed by the assigned party.   
 
 For more on Oracle Queue: [TODO, link to Oracle Queue spec]
-For more on Event Queue: https://github.com/vegaprotocol/product/blob/master/specs/0036-event-queue.md
+For more on Event Queue, see [the Event Queue spec](https://github.com/vegaprotocol/product/blob/master/specs/0036-event-queue.md).
 
 
 ## Vega Provided Oracles
