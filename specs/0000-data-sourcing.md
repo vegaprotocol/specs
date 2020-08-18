@@ -295,7 +295,7 @@ To mitigate these risks, Vega has developed a number of safeguards to ensure the
 
 ### Changing Oracle Sources
 Oracles may get compromised, shut down, change location/certificates, or otherwise become too risky to use alone before a market has expired. 
-To mitigate these risks, a governance can change oracle parameters. To do this, see [the Governance specification[(https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md).
+To mitigate these risks, a governance can change oracle parameters. To do this, see [the Governance specification](https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md).
  
 Unlike a typical Vega governance vote, this type of vote is open to all participants in the market, provided they have a balance above a threshold of value (configurable).
 These votes will be and weighted by value in the market and then weighted against market maker votes and network governance voters.  
