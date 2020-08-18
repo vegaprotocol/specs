@@ -60,7 +60,7 @@ message OracleEvent {
 So the above examples would be:
 
 ```proto
-  payload [
+payload [
   { key = "assetId", value = "0f234167a..." },
     { key = "timestamp", value = 1596761519 },
     { key = "price", value = 1234.2512 }
