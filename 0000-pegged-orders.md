@@ -36,6 +36,9 @@ If the reference point moves to such a value that it would create an invalid ord
 
 When a pegged order is removed from the book due to cancelling, expiring or filling, the order details are removed from the pegged/parked orders list.
 
+Pegged orders being added back into the book after being parked (either due to an auction or their reference price not being available) are treated the same as any other order being added to the book and therefore come after all persistent orders at that price level that are already on the book (i.e. the pegs are added to the end/back of the price level as if new incoming orders). This is also true if a pegged order is re-priced and its price changes, as price amendments are equivalent to a cancel/replace so the order enters at the back of its new price level.
+
+When there are multiple pegged orders needing reprice, they must be repriced in order of entry (note: certain types of amend are considered amend in place and others as cancel/replace, for the cancel replace type, the entry time becomes the time of the amend, i.e. a pegged order loses its reprice ordering priority). Generally the way I’ve seen this is to maintain an ordered list of pegged orders for use in re-pricing (and parking/unparking), with new pegged orders added to the end of this list and cancel/replace amends causing the order to be removed from the list and re-added at the end.
 # Reference-level explanation
 
 Pegged orders are restricted in what values can be used when they are created, these can be defined by a list of rules each order must abide with.
