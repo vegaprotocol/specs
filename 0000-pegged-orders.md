@@ -9,7 +9,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 - [ ] Pegged orders can only be GTT and GTC orders. IOC and FOK will be added in the second phase of pegged orders.
 - [ ] All markets must be able to handle pegged orders.
 - [ ] Pegged orders are removed from the order book when going into an auction and are parked.
-- [ ] Parked orders are returned to the order book once continuous trading is resumed.
+- [ ] Parked orders are returned to the order book in entry order once continuous trading is resumed.
 - [ ] Pegged orders are repriced when their reference price moves.
 - [ ] Cancelling a pegged order removes it from the book and the pegged/parked slice.
 - [ ] An expired pegged order is removed from the book and the pegged/parked slice.
