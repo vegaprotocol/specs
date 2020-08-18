@@ -28,13 +28,13 @@ Pegged orders are limit orders where the price is specified of the form `REFEREN
 
 When a party submits a new pegged order, only a LIMIT order is accepted. The party also specifies the reference price to which the order will be priced along with an offset to apply to this price. The reference price is looked up from the live market and the final price is calculated and used to insert the new order. If the price would result in a hit, the order is executed in the same way as a normal LIMIT order. If the price does not hit, the order is placed on the book at the back of the calculated price level.
 
-Whenever the reference price changes all the pegged orders that rely on it need to be repriced. We run through a time sorted list of all the pegged orders and remove each order from the book, recalculate it's price and then reinsert it into the orderbook at the back of the price queue. Following a price move margin checks take place on the positions of the parties. If a p[egged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it removed, the price level is removed as well.
+Whenever the reference price changes all the pegged orders that rely on it need to be repriced. We run through a time sorted list of all the pegged orders and remove each order from the book, recalculate it's price and then reinsert it into the orderbook at the back of the price queue. Following a price move margin checks take place on the positions of the parties. If a pegged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it is removed, the price level is removed as well.
 
 Pegged orders can be GTC or GTC TIF orders with IOC and FOK being added in the second phase of pegged orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
 
 If the reference point moves to such a value that it would create an invalid order once the offset was applied, the pegged order is parked. As the reference price moves, any orders on the parked list will be evaluated to see if they can come back into the order book.
 
-When a pegged order is removed from the book due to cancelling, expiring or filling. The order details is removed from the pegged/parked orders list.
+When a pegged order is removed from the book due to cancelling, expiring or filling, the order details are removed from the pegged/parked orders list.
 
 # Reference-level explanation
 
@@ -54,6 +54,8 @@ For persistent pegged orders:
 Best bid = 100, best offer = 105 => mid = **102.5**<br>
 A buy pegged to Mid - 1 should take the mid as 103, and thus be at 102<br>
 A sell pegged to Mid + 1 should take the mid as 102, and thus be at 103
+
+Pegged orders which are entered during an auction are placed directly on the parked queue. No margin checks will take place in this case even to validate the order would be allowed during normal trading. The margin checks will take place when the order is added to the live orderbook.
 
 
 # Pseudo-code / Examples
