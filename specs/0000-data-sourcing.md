@@ -31,47 +31,47 @@ In order to close a given market in Vega, or to update a risk model, an oracle m
 Often this data looks like:
  ```proto
 {
-    assetId = "0f234167a...", //target settlement instrument VegaID
-    timestamp = 1596761519, //timestamp of the report (must be within a specified range as configured by a market)
-    price = 1234.2512
+  assetId = "0f234167a...", //target settlement instrument VegaID
+  timestamp = 1596761519, //timestamp of the report (must be within a specified range as configured by a market)
+  price = 1234.2512
 }
  ```
 Sometimes however, the data required to settle an oracle is based on more complex information:
 ```proto
 {
-    timestamp = 1596761519, //timestamp of the report (must be within a specifid range as configured by a market)
-    temperatures = [42, 38, 36]
+  timestamp = 1596761519, //timestamp of the report (must be within a specifid range as configured by a market)
+  temperatures = [42, 38, 36]
 }
 ``` 
  To accommodate the multitude of data types that could be required internally to Vega, we've adopted a key value pair-based data sourcing system:
  
  ```proto
-
 message KeyValuePair {
-   string key = 1;
-   string value = 2;
+  string key = 1;
+  string value = 2;
 }
 
 message OracleEvent {
-    ...
-    repeated KeyValuePair payload;
-    ***
+  ...
+  repeated KeyValuePair payload;
+  ***
 }
 ```
- So the above examples would be:
- ```proto
-    payload [
-        { key = "assetId", value = "0f234167a..." },
-        { key = "timestamp", value = 1596761519 },
-        { key = "price", value = 1234.2512 }
-    ]
- ```
- and 
- ```proto
-    payload [
-        { key = "timestamp", value = 1596761519 },
-        { key = "temperatures", value = [42, 38, 36] }
-    ]
+So the above examples would be:
+
+```proto
+  payload [
+  { key = "assetId", value = "0f234167a..." },
+    { key = "timestamp", value = 1596761519 },
+    { key = "price", value = 1234.2512 }
+  ]
+```
+and 
+```proto
+payload [
+  { key = "timestamp", value = 1596761519 },
+  { key = "temperatures", value = [42, 38, 36] }
+]
 ```
  
  ### Signers
@@ -121,36 +121,35 @@ message ChainEvent {
 }
 
 message KeyValuePair {
-   string key = 1;
-   string value = 2;
+  string key = 1;
+  string value = 2;
 }
 
 message OracleEvent {
-    string[] signers;
-    repeated KeyValuePair payload;
-    uint timestamp;
-    oneof oracleEventMetadata {
-        BuiltinOracleEvent builtin;
-        ChainlinkOracleEvent chainlink;
-        BandProtocolEvent band;
-        APIOracleEvent api;
-    }
+  string[] signers;
+  repeated KeyValuePair payload;
+  uint timestamp;
+  oneof oracleEventMetadata {
+    BuiltinOracleEvent builtin;
+    ChainlinkOracleEvent chainlink;
+    BandProtocolEvent band;
+    APIOracleEvent api;
+  }
 }
 
 message Oracle {
-    string[] expectedSigners;
-    uint signerThreshold;
-    repeated KeyValuePair expectedPayload;
-    uint targetTime;
-    uint timeSlippage;//max time that timestamp can differ from targetTime and still be valid
-    string vegaOracleId;   
-    
-    oneof oracleSource {
-        BuiltinOracleEventSource builtin;
-        ChainlinkOracleEventSource chainlink; //chain specific config TODO
-        BandProtocolEventSource band;
-        APIOracleEventSource api;
-    }
+  string[] expectedSigners;
+  uint signerThreshold;
+  repeated KeyValuePair expectedPayload;
+  uint targetTime;
+  uint timeSlippage; //max time that timestamp can differ from targetTime and still be valid
+  string vegaOracleId;
+  oneof oracleSource {
+    BuiltinOracleEventSource builtin;
+    ChainlinkOracleEventSource chainlink; //chain specific config TODO
+    BandProtocolEventSource band;
+    APIOracleEventSource api;
+  }
 }
 ```
 
@@ -167,8 +166,7 @@ Data is supplied through a transaction being posted directly on the Vega network
 
 Note: With this type of oracle there’s no incentive in the Vega data source system, you’re trusting the keyholder(s) at settlement.
 
-```protobuf
-
+```proto
 message BuiltinOracleEvent {
 }
 
@@ -187,15 +185,16 @@ This signature acts as the verifiable signer for this class of data source.
 While this is a very centralized type of data source, it is the only way to get the correct and official reports from the most trusted authorities on a given dataset.
 Combined with composite data sources and the contest mechanism, we believe that the API data source is a valuable tool in the Vega arsenal.
 
-```protobuf
+```proto
 message APIOracleEvent { 
 }
+
 message APIOracleEventSource {
-    string URL;
-    stirng PORT;
-    string ApiKey;
-    string CeritificatePublicKey;
-    string[] DataKeys;
+  string URL;
+  string PORT;
+  string ApiKey;
+  string CeritificatePublicKey;
+  string[] DataKeys;
 }
 ```
 
@@ -206,7 +205,7 @@ Each Oracle Queue will connect to either hosted blockchain nodes or local blockc
 Once propagated through the Vega API to a Vega validator node, the validator node will connect to its applicable local blockchain node to validate that the provided event did, in fact, happen as far as it can see locally. 
 This message is then gossiped to other Vega validator nodes which will do the same validation process.
 
-```protobuf
+```proto
 message ChainlinkOracleEvent {
   // Index of the transaction
   uint64 index = 1;  
@@ -235,9 +234,10 @@ Some potential examples include:
 * derivatives on a market’s fee level
 * derivatives on the network stats (tx per second, worst 1% block latency)
 
-```protobuf
+```proto
 message InternalOracleEvent { 
 }
+
 message InternalOracleEventSource {
 }
 ```
@@ -257,32 +257,32 @@ Vega governance allows for the adding and removing of external data events that 
 Every event must be added through governance and include all of the information necessary for both the Oracle Queue and the Vega validators to find and verify. 
 The data required to add a new subscribed event will change based on the class of oracle (where it originated from).
 For instance, a Band protocol event looks like:
-```protobuf
+```proto
 message BandProtocolOracleEventSource {
-    string ContractAddress;
-    string QueryData;
-    string[] DataKeys;
+  string ContractAddress;
+  string QueryData;
+  string[] DataKeys;
 }
 ```
 
 whereas an API event looks like:
 ```protobuf
 message APIOracleEventSource {
-    string URL;
-    stirng PORT;
-    string ApiKey;
-    string CertificatePublicKey;
-    string[] DataKeys;
+  string URL;
+  string PORT;
+  string ApiKey;
+  string CertificatePublicKey;
+  string[] DataKeys;
 }
 ```
 New classes and unique instances of events will need to be added to the code, rather than be voted in.  
 
 Once an event is subscribed to, it will be available when querying `GetSubscribedOracleEventSources`. 
 This endpoint provides for a list of available oracles when configuring a market as well as provides the Oracle Queue with the data necessary to find and propagate target events.
-```
-    message GetSubscribedOracleEventSourcesResponse {
-     repeated string subscribed_oracle_event_source = 1;
-   }
+```proto
+message GetSubscribedOracleEventSourcesResponse {
+  repeated string subscribed_oracle_event_source = 1;
+}
 ```
 
 ## Oracle Failure Mitigation
