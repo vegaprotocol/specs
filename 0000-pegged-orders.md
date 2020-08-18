@@ -40,12 +40,12 @@ When a pegged order is removed from the book due to cancelling, expiring or fill
 
 Pegged orders are restricted in what values can be used when they are created, these can be defined by a list of rules each order must abide with.
 
-| Type	                          | Side  | Bid Peg | Mid Peg |  Offer Peg  |
-|---------------------------------|-------|---------|---------|-------------|
-| Persistent (GTC, GTT, etc.)	  | Buy	  | <= 0    | < 0     | Not allowed |
-| Persistent (GTC, GTT, etc.)	  | Sell  | >= 0    | > 0     | Not allowed |
-| Non persistent (IOC, FOK, etc.) |	Buy   | > 0     | > 0     | >= 0        |
-| Non persistent (IOC, FOK, etc.) |	Sell  | <= 0    | < 0	  | < 0         |
+| Type	                          | Side  |   Bid Peg   | Mid Peg |  Offer Peg  |
+|---------------------------------|-------|-------------|---------|-------------|
+| Persistent (GTC, GTT, etc.)	  | Buy	  | <= 0        | < 0     | Not allowed |
+| Persistent (GTC, GTT, etc.)	  | Sell  | Not allowed | > 0     | >= 0        |
+| Non persistent (IOC, FOK, etc.) |	Buy   | > 0         | > 0     | >= 0        |
+| Non persistent (IOC, FOK, etc.) |	Sell  | <= 0        | < 0	  | < 0         |
 
 As the calculation of mid price can result in an invalid result due to precision, the value will be rounded depending on which side of the book is being handled.
 
