@@ -123,8 +123,9 @@ At the conclusion of the voting period the network will calculate two values:
 
 The proposal is considered succesful and will be enacted if:
 
-- The `participation_rate` is greater than or equal to the minimum participation rate for the proposal
+- The `participation_rate` is greater than or equal to the minimum participation rate for the proposa
 - The `for_rate` is greater than or equal to the minimum required majority for the proposal
+- The `participation rate` is calculated against the *total supply of the governance asset*.
 
 Note: see below for details on minimum participation rate and minimum required majority, which are defined by type of governance action, and in some cases a category or sub-type.
 
@@ -226,6 +227,9 @@ APIs should also exist for clients to:
 ## Using Vega governance tokens as voting weight:
 - [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens
 - [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens
+- [ ] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens
+  - [ ] Only my most recent vote is counted
+- [ ] When calculating the participation rate of an auction, the participation rate of the votes takes in to account the total supply of the governance asset.
 
 ## Future criteria, once a new weighting method is introduced?
 - [ ] As a user, I can understand which voting weighting methodology a proposal requires
