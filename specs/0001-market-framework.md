@@ -47,6 +47,14 @@ Params:
   - **Tick size** (size of an increment in price in terms of the quote currency)
   - **Decimal places**, number of decimals places for price quotes, e.g. if quote currency is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
 
+### Trading mode - Auctions
+A market can be in Auction Mode for a number of reasons:
+- At market creation, markets will start in an [opening auction](0026-auctions.md#auction-period-at-market-creation), as a price discovery mechanism
+- A market can be a [Frequent Batch Auction](0026-auctions.md#frequent-batch-auction), rather than continuous trading
+- Due to [price monitoring](./0032-price-monitoring.md) triggering a price discovery auction.
+
+How markets operate during auction mode is a separate specification: [0026 - Auctions](0026-auctions.md)
+
 ## Tradable instrument
 
 A tradable instrument is a combination of an instrument and a risk model. An instrument can only be traded when paired with a risk model, however regardless of the risk model, two identical instruments are expected to be fungible (see below). 
