@@ -44,8 +44,9 @@ Once the auction period finishs, vega needs to figure out the best price for the
 
 Initially we will use the mid price within this range. For example, if the volume maximising range is 98-102, we would price all trades in the uncrossing at 100. In future there will be other options, which will be selectable via a network parameter specified at market creation, and changeable through governance. These other options are not yet specified.
 
-## New core APIs related to auctions
+## APIs related to auctions
 
+### New APIs
 These new APIs need to expose data, some of which will be re-calculated each time the state of the book changes and will expose information about the market in auction mode:
 - how long the market has been in auction mode
 - when does the next auction period start
@@ -54,6 +55,9 @@ These new APIs need to expose data, some of which will be re-calculated each tim
 - indicative uncrossing volume
 
 The Indicative Uncrossing Price is the price at which all trades would occur if we uncrossed the auction now. This will need to be streamed like a normal price, but API users will need a way to know it's an *indicative* uncrossing price and **not** a last traded or mid price. This will likely be a new field.
+
+### Existing APIs
+Unlike in traditional centralised trading venues, we will continue to calculate and emit Market Depth events which will contain the shape of the entire book, as it normally does during [continuous trading](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md#trading-mode---continuous-trading). This is because the orders are already public, and calculating the Market Depth based on already-available orders would be trivial.
 
 ## Restriction on orders in auction mode
 
@@ -125,6 +129,7 @@ message Market {
 - [] As a user, I cannot place a Market order, or and order using FOK or IOC time in force.
 - [] As a user, I can get information about the trading mode of the market (through the market framework)
 - [] As a user, I can get real time information throught the API about a market in auction mode: indicative crossing price, indicative crossing volume.
+- [] As a user, the market depth API provides the same data that would be sent during continuous trading
 - [] As an API user, I can identify:
   - If a market is temporarily in an auction period
   - Why it is in that period (e.g. Auction at open, liquididty sourcing)
