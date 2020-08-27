@@ -1,6 +1,6 @@
 Feature name: feature-name
 Start date: YYYY-MM-DD
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
+Specification PR: https://github.com/vegaprotocol/product/pull/PRNUMBER
 
 # Acceptance Criteria
 Check list of statements that need to met for the feature to be considered correctly implemented.

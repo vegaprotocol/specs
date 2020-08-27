@@ -9,7 +9,7 @@ Start date: 2019-02-12
 
 Settlement is the process of moving collateral between accounts when a position is closed,  the market expires or if there is an interim settlement action defined in the product.
 
-Further to this, the protocol may elect to settle a market at a point in time by carrying out [mark to market settlement](0003-mark-to-market-settlement). This is helpful for maintaining lower margins requirements.
+Further to this, the protocol may elect to settle a market at a point in time by carrying out [mark to market settlement](0003-mark-to-market-settlement.md). This is helpful for maintaining lower margins requirements.
 
 # Guide-level explanation
 
