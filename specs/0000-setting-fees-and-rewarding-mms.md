@@ -17,7 +17,7 @@ The aim of this specification is to set out how fees on Vega are set based on co
 The [liquidity fee factor](0029-fees.md) is an input to the total taker fee that a price taker of a trade pays:
 
 `total_fee = infrastructure_fee + maker_fee + liquidity_fee`
-`liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes`
+`liquidity_fee = fee_factor[liquidity] x trade_value_for_fee_purposes`
 
 As part of the [commit liquidity network transaction ](????-mm-mechanics.md), the market maker submits their desired level for the [liquidity fee factor](0029-fees.md) for the market. Here we describe how this fee factor is set from the values submitted by all market makers for a given market. 
 First, we produce a list of pairs which capture committed liquidity of each mm together with their desired liquidity fee factor and arrange this list in an increasing order by fee amount. Thus we have 
@@ -83,37 +83,44 @@ Note that trade value for fee purposes is provided by each instrument, see [fees
 
 The guiding principle of this section is that by committing stake a market maker buys a portion of the `market_value_proxy` of the market. 
 
-At any time let's say we have `market_value_proxy` calculated above and existing market makers with equity-like share as below
+At any time let's say we have `market_value_proxy` calculated above and existing market makers as below
 ```
-[MM 1 eq share, MM 1 ownership amt]
-[MM 2 eq share, MM 2 ownership amt]
+[MM 1 stake, MM 1 entry_valuation]
+[MM 1 stake, MM 2 entry_valuation]
 ...
-[MM N eq share, MM 3 ownership amt]
-```
-Here `MM i ownership amt = [MM i equity share] x market_value_proxy`. 
-
-If a new market maker `MM N+1` who commits stake (by sucessfully submitting a MM order) equal to `S` then purchases a `MM N+1 eq share = S / (market_value_proxy + S)`. 
-This "dilutes" the equity-like share of existing MMs as follows: 
-```
-New MM i eq share = (1 - [MM N+1 eq share]) x [MM i eq share].
+[MM N stake, MM N entry_valuation]
 ```
 
-**Check** the sum from over `i` from `1` to `N` of `New MM i` is equal to `1`.
+At market creation all these are set `zero`.  
 
-If an existing market maker, say, without loss of generality, MM 1 as in the above list there is no order, wishes to reduce their MM stake `S` to a lower amount `0 <= New S < S` then we adjust every MM's `eq share` as follows. 
-1. Calculate the MM 1 reduction factor `f=[New S] / S`. 
-1. Calculate the rescaling factor `r = 1/(1-[MM 1 eq share] x (1-f))`
-1. For MM 1 let `New MM 1 eq share = r x f x [MM 1 eq share]`.
-1. For `i` in `2` to `N` update `New MM i eq share = r x [MM i eq share]`. 
+From these stored quantities we can calculate
+- `MM i equity = (MM i stake) x market_value_proxy / (MM i entry_valuation)`
+- `MM i equity_share = MM i equity / (sum over j from 1 to N of MM j equity)`
 
-**Check** the sum from over `i` from `1` to `N` of `New MM i` is equal to `1`.
+If a market maker `i` wishes to set its stake to `new_stake` then update the above values as follows:
+1. Calculate new `total_stake` (sum of all but `i`'s stake + `new_stake`). Check that this is sufficient for market demand estimate; if not abort. 
+1. Update the `market_value_proxy` using the `new_stake`. 
+1. Update `MM i stake` and `MM i entry_valuation` as follows:
+```
+if new_stake < MM i stake then
+    MM i stake = new_stake
+else if new_stake > MM i stake then
+    delta = new_stake - self.stake
+    MM i entry_valuation = ((MM i equity x MM i entry_valuation) 
+                            + (delta x market_value_proxy)) / (MM i equity + MM i stake)
+    MM i stake = new_stake
+```
+
+**Check** the sum from over `i` from `1` to `N` of `MM i equity` is equal to `market_value_proxy`.
+**Check** the sum from over `i` from `1` to `N` of `MM i equity_share` is equal to `1`.
+**Warning** the above will be either floating point calculations  and / or there will be rounding errors arising from rounding (both stake and entry valuation can be kept with decimals) so the above checks will only be true up to a certain tolerance. 
 
 ### Distributing fees
 The liquidity fee is collected into either a per-market "bucket" belonging to market makers for that market or into an account for each market maker, according to their share of that fee. This account is not accessible by market makers until the fee is distributed to them according to the below mechanism.
 
 We will create a new network parameter (which can be 0 in which case fees are transferred immediately) called `market_maker_fee_distribition_time_step` which will define how frequently fees are distributed to a market maker's margin account for the market. 
 
-The liquidity fees are distributed pro-rata depending on the `MM i eq share` at a given time. 
+The liquidity fees are distributed pro-rata depending on the `MM i equity_share` at a given time. 
 
 #### Example
 The fee bucket contains `103.5 ETH`. We have `3` MMs with equity shares:
@@ -132,6 +139,7 @@ When the time defined by ``market_maker_fee_distribition_time_step` elapses we d
 
 ### APIs for fee splits and payments
 * Each market maker's equity-like share
+* Each market maker's entry valuation
 * The `market-value-proxy`
 
 
@@ -143,12 +151,13 @@ When the time defined by ``market_maker_fee_distribition_time_step` elapses we d
 - [ ] The resulting liquidity-fee-factor is never less than zero
 - [ ] Liquidity fee factors are recalculated every time a market maker nominates a new fee factor (using the commit liquidity network transaction).
 - [ ] Liquidity fee factors are recalculated every time the liquidity demand estimate changes.
-- [ ] If a change in the open interest causes the liquidity demand estimate to change, the fee factor is correctly recalculated. 
+- [ ] If a change in the open interest causes the liquidity demand estimate to change, then fee factor is correctly recalculated. 
 - [ ] If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated. 
 
 ### SPLITTING FEES BETWEEN MARKET MAKERS
 - [ ] The examples provided result in the given outcomes. 
-- [ ] The examples provided in a Python notebook give the same outcomes. Note, if this notebook is not linked at the time of formulating these tests, please request it.
+- [ ] The examples provided in a Python notebook give the same outcomes. See 
+`https://github.com/vegaprotocol/sim/sim/notebooks/` 
 - [ ] All market makers in the market receive a greater than zero amount of liquidity fee.
 - [ ] The total amount of liquidity fee distributed is equal to the most recent liquidity-fee-factor x notional-value-of-the-trade
 - [ ] Every time a price taker is charged a trading fee, the mm equity shares are recalculated to determine their relative "ownership" of the liquidity portion of that fee.
