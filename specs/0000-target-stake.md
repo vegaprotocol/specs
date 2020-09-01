@@ -3,7 +3,7 @@
 ## Definitions / Parameters used
 - **Open interest**: the volume of all open positions in a given market (ie order book)
 - `t_window_for_tagret_stake` is a network parameter defining the length of window over which we measure open interest (see below) 
-- `v_for_target_stake` is a network paramter defining scaling between liquidity demand estimate based on open interest and target stake
+- Co(v)erage `v_for_target_stake` is a network paramter defining scaling between liquidity demand estimate based on open interest and target stake
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see `0018-quant-risk-models.ipynb`. 
 
 The target stake a calculated quantity, utilised by various mechanisms in the core.
