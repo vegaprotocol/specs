@@ -2,12 +2,12 @@
 
 ## Summary
 
-The aim of this specification is to set out how fees on Vega are set based on committed market making stake and prevailing open interest on the market. Let us recall that market makers can commit and withdraw stake by submitting / amending a special market making pegged order type [market maker order spec](????-market-making-order-type.md). 
+The aim of this specification is to set out how fees on Vega are set based on committed market making stake and prevailing open interest on the market leading to [target stake](????-target-stake.md). Let us recall that market makers can commit and withdraw stake by submitting / amending a special market making pegged order type [market maker order spec](????-market-making-order-type.md). 
 
 ## Definitions / Glossary of terms used
-- **Liquidity**: measured as per [liquidity measurement spec](0034-prob-weighted-liquidity-measure.ipynb) (but it's basically volume on the book weighted by the probability of trading)
-- **Supplied liquidity**: this counts only the liquidity provided through the special market making order that market makers have committed to as per [market maker order spec](????-market-making-order-type.md) 
-- **Liquidity demand window length `t_liquidity_window`**: sets the length of the window over which we estimate liquidity demand for fee setting purposes. This is a network parameter.  
+(remove?)- **Liquidity**: measured as per [liquidity measurement spec](0034-prob-weighted-liquidity-measure.ipynb) (but it's basically volume on the book weighted by the probability of trading)
+(remove?)- **Supplied liquidity**: this counts only the liquidity provided through the special market making order that market makers have committed to as per [market maker order spec](????-market-making-order-type.md) 
+- **Market value proxy window length `t_market_value_window `**: sets the length of the window over which we estimate the market value. This is a network parameter.  
 - **Target stake**: as defined in [target stake spec](????-target-stake.md). The amount of stake we would like MMs to commit to this market.
 
 ## CALCULATING LIQUIDITY FEE FACTOR
@@ -25,7 +25,7 @@ First, we produce a list of pairs which capture committed liquidity of each mm t
 ...
 [MM-N-stake, MM-N-liquidity-fee-factor]
 ```
-where `N` is the number of market makers who have committed to supply liquidity to this market. Note that `MM-1-liquidity-fee-factor <= MM-2-liquidity-fee-factor <= ... <= MM-N-liquidity-fee-factor` because we demand this list of pairs to be sorted. 
+where `N` is the number of market makers who have committed to supply liquidity to this market. Note that `MM-1-liquidity-fee-factor <= MM-2-liquidity-fee-factor <= ... <= MM-N-liquidity-fee-factor` because we demand this list of pairs to be sorted in this way. 
 
 We now find smallest integer `k` such that `[target stake] < sum from i=1 to k of [MM-stake-i]`. In other words we want in this ordered list to find the market makers that supply the liquidity that's required. If no such `k` exists we set `k=N`.
 
@@ -59,13 +59,18 @@ At time of call:
 ### Calculating market value proxy
 
 This will be used for determining what "equity like share" does committing market making stage at a given time lead to. 
-It's calculated, with `t` denoting time now, as follows:
+It's calculated, with `t` denoting time now measured so that at `t=0` the opening auction ended, as follows:
 ```
 total_stake = sum of all mm stakes
-active_time_window = [max(t-t_fee_liquidity_window,0), t]
-factor =  t_fee_liquidity_window / (max(t-t_fee_liquidity_window,0) - t)
-traded_value_over_window = total trade value for fee purposes of all trades executed on a given market the active_time_window
-market_value_proxy = max(total_stake, factor x traded_value_over_window)
+active_time_window = [max(t-t_market_value_window,0), t]
+active_window_lenght = max(t-t_market_value_window,0) - t 
+
+if (active_window_lenght > 0)
+    factor =  t_market_value_window / active_window_lenght
+    traded_value_over_window = total trade value for fee purposes of all trades executed on a given market during the active_time_window
+    market_value_proxy = max(total_stake, factor x traded_value_over_window)
+else
+    market_value_proxy = 0
 ```
 
 Note that trade value for fee purposes is provided by each instrument, see [fees][0024-fees.md]. For futures it's just the notional and in the examples below we will only think of futures. 
@@ -135,7 +140,7 @@ When the time defined by ``market_maker_fee_distribition_time_step` elapses we d
 
 ### APIs for fee splits and payments
 * Each market maker's equity-like share
-* Each market maker's entry valuation
+* Each market maker's average entry valuation
 * The `market-value-proxy`
 
 
