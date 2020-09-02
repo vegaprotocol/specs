@@ -71,7 +71,7 @@ After an asset has been approved and voted in, the proof of that action needs to
 There are many interfaces and protocols to manage cryptocurrencies and other digital assets, so each protocol and asset class that is supported by Vega has a bridge that decentrally manages the storage and distribution of deposited assets.
 Most of these rely on some form of multisignature security managed either by the protocol itself or via smart contracts.
 In order for the Vega network to hold value via asset bridges, assets must be added to Vega and that order must be propagated to the appropriate Vega bridge smart contract.
-To add a new asset to Vega, a market maker or other interested party will submit the (`TODO`) to the Vega API for a governance vote.
+To add a new asset to Vega, a market maker or other interested party will submit the a new asset proposal to the Vega API for a governance vote.
 
 
 ### Governance Vote
@@ -91,7 +91,9 @@ message NewAsset {
 See: https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md
 
 ### Signature Aggregation
-[TODO]
+All new asset listing is first accepted through governance as describe before. In order to reflect the approval / the decision of the network of accespting a new asset, all validators are required to sign a specific message using a private key to which the signature can be verified by the foreign chain owning the asset.
+The public key counterpart of the private key must have previously been added to the set of allowed signer for the smart contract of the bridge hosted in the foreign chain.
+All vega node will aggregate the signature emitted by the validators, the clients could request at anytime the list of generated signature, and apply verification using the public keys of the validators.
 
 See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md
 
@@ -137,15 +139,13 @@ Once the listing transaction has completed the Vega Event Queue will package it 
 
 ## Asset Delisting Process
 In order for the Vega network to hold value via asset bridges, assets must be added to Vega and that order must be propagated to the appropriate Vega bridge smart contract.
-To add a new asset to Vega, a market maker or other interested party will submit the (`TODO`) to the Vega API for a governance vote.
+To add a new asset to Vega, a market maker or other interested party will submit the proposal to the Vega API for a governance vote.
 
 ### Governance Vote
-[TODO FILL THIS IN]
-
-[LINK TO GOVERNANCE]
+Same process than for listing an asset here.
 
 ### Signature Aggregation
-[TODO]
+Same process than for listing an asset here.
 
 See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md
 
@@ -242,10 +242,32 @@ This request, if valid, will be approved and assigned en expiry. This order will
 After the order is made and saved to chain, the validators will sign the multi-signature withdrawal order and the aggregate of these will be made available to the user to submit to the approprite blockchain/asset management API.
 
 ### Withdrawal Request
-[API REFERENCE]
+All withdrawal request contains a common part, in order to identify a party on the network, specify an asset and amount, as well as a foreign chain specific part in order to identify the user wallet / address / public key in the foreign chain.
+```
+ // A request for withdrawing funds from a trader
+ message WithdrawSubmission {
+   // The party which wants to withdraw funds
+   string partyID = 1;
+   // The amount to be withdrawn
+   uint64 amount = 2;
+   // The asset we want to withdraw
+   string asset = 3;
+
+   // foreign chain specifics
+   oneof ext {
+     Erc20WithdrawExt erc20 = 1001;
+   }
+ }
+
+ // An extension of data required for the withdraw submissions
+ message Erc20WithdrawExt {
+   // The address into which the bridge will release the funds
+   string receiverAddress = 1;
+ }
+```
 
 ### Validator Signature Aggregation
-[TODO]
+Same process than AssetList.
 
 See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md
 
