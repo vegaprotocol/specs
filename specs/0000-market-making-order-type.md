@@ -149,4 +149,4 @@ No cancellation of orders other than by lowering commitment as per [market makin
 * Order datatype for market maker orders. Any order APIs should contain these orders.
 
 ## Acceptance Criteria:
-- [ ] 
+- [ ] The volume generated on the book matches examples produced from https://github.com/vegaprotocol/sim/notebooks/fee_margin_examples.ipynb
