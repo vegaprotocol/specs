@@ -10,11 +10,11 @@ Similarly to [price monitoring](0037-price-monitoring.md), we need to be able to
 
 ## Liquidity auction network parameters
 
-**c<sub>1</sub>** - constant multiple of [liquidity demand estimate](#Glossary) triggering the commencement of liquidity auction.
+`liquidityDemandConstantTriggerEntry` - **c<sub>1</sub>** - constant multiple of [liquidity demand estimate](#Glossary) triggering the commencement of liquidity auction.
 
-**c<sub>2</sub>** - constant multiple of [liquidity demand estimate](#Glossary) triggering the termination of liquidity auction (such that c<sub>2</sub> > c<sub>1</sub>).
+`liquidityDemandConstantTriggerExit` - **c<sub>2</sub>** - constant multiple of [liquidity demand estimate](#Glossary) triggering the termination of liquidity auction (such that c<sub>2</sub> > c<sub>1</sub>).
 
-**p** - period of time used for the [liquidity demand estimate](#Glossary).
+`liquidityDemandTimeWindow` - **p** - period of time used for the [liquidity demand estimate](#Glossary).
 
 ## Glossary
 
@@ -50,3 +50,5 @@ The auction proceeds as usual. Please see the auction spec for details.
 ## Test cases
 
 * Market with no market makers enters liquidity auction immediately.
+
+
