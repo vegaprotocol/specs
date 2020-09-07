@@ -133,7 +133,7 @@ We are assuming that:
 - `indicative_uncrossing_price` is *not* the mark price, so no mark-to-market transfers happen (update mark-to-market spec)
 - mark price never changes during an auction, so it's the last mark price from before auction,
 - during an auction we never release money from the margin account, however we top-it-up as required,
-- no closeouts during auctions
+- no close-outs during auctions
 
 Use the same calculation as above with the following re-defined: 
 - in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.

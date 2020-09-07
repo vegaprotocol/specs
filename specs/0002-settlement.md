@@ -17,7 +17,7 @@ Further to this, the protocol may elect to settle a market at a point in time by
 
 Settlement occurs when:
 
-1. **A position is fully or partially closed** - An open position is closed when the owner of the open position enters into a counter trade (including if that trade is created as part of a forced risk management closeout). Settlement occurs for the closed volume / contracts.
+1. **A position is fully or partially closed** - An open position is closed when the owner of the open position enters into a counter trade (including if that trade is created as part of a forced risk management close out). Settlement occurs for the closed volume / contracts.
 1. **An instrument expires** - all open positions in the market are settled. After settlement at expiry, all positions are closed and collateral is released.
 1. **Interim cash flows are generated** - not relevant for first instruments launched on Vega. Will be potentially relevant for perpetual futures with periodic settlement.
 1. **Mark to market event** - when the protocol runs [mark to market settlement](0003-mark-to-market-settlement).
@@ -30,7 +30,7 @@ For settlement at expiry scenarios, transfers should attempt to access
 1. the trader's general collateral account for that asset 
 1. the insurance pool. 
 
-For interim and closeout settlement the trader's collateral account may be accessed first, then the margin account.
+For interim and close out settlement the trader's collateral account may be accessed first, then the margin account.
 
 Settlement instructions result in ledger entries being generated that strictly conform  to double entry accounting.
 

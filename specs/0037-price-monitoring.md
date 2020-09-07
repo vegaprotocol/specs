@@ -16,9 +16,9 @@ Specification PR: [275](https://github.com/vegaprotocol/product/pull/275)
 The dynamics of market price movements are such that prices don't always represent the participants' true average view of the price, but are instead artefacts of the market microstructure: sometimes low liquidity and/or a large quantity of order volume can cause the price to diverge from the true market price. It is impossible to tell at any point in time if this has happened or not.
 
 As a result, we assume that relatively small moves are "real" and that larger moves might not be. Price monitoring exists to determine the real price in the latter case. Distinguishing between small and large moves can be highly subjective and market-dependent. We are going to rely on the risk model to formalise this process. Risk model can be used to obtain the probability distribution of prices at a future point in time given the current price. A price monitoring trigger can be constructed using a fixed horizon and probability level.
-To give an example: get the price distribution in an hour as implied by the risk model given the current mid price, if after the hour has passed and the actual mid price is beyond what the model implied (either too low or too high) with some chosen probability level (say 99%), then we'd charaterise such market move as large.  In general we may want to use a few such triggers per market (i.e. different horizon and probability level pairs). The framework should be able to trigger a price protection auction period with any valid trading mode.
+To give an example: get the price distribution in an hour as implied by the risk model given the current mid price, if after the hour has passed and the actual mid price is beyond what the model implied (either too low or too high) with some chosen probability level (say 99%), then we'd characterise such market move as large.  In general we may want to use a few such triggers per market (i.e. different horizon and probability level pairs). The framework should be able to trigger a price protection auction period with any valid trading mode.
 
-As mentioned above, price monitoring is meant to stop large market movements that are not "real" from occuring, rather than just detect them after the fact. To that end, it is necessary to pre-process every transaction and check if it triggers the price monitoring action. If pre-processing the transaction doesn't result in the trigger being activated then it should be "committed" by generating the associated events and modifying the order book accordingly (e.g. generate a trade and take the orders that matched off the book). On the other hand if the trigger is activated, the entire order book **along with that transaction** needs to be processed via price protection auction. Auction period associated with a given distribution projection horizon and probability level will be specified as part of market setup. Once the auction period finishes the trading should resume in regular fashion (unless other triggers are active, more on that in [reference-level explanation](#reference-level-explanation)).
+As mentioned above, price monitoring is meant to stop large market movements that are not "real" from occurring, rather than just detect them after the fact. To that end, it is necessary to pre-process every transaction and check if it triggers the price monitoring action. If pre-processing the transaction doesn't result in the trigger being activated then it should be "committed" by generating the associated events and modifying the order book accordingly (e.g. generate a trade and take the orders that matched off the book). On the other hand if the trigger is activated, the entire order book **along with that transaction** needs to be processed via price protection auction. Auction period associated with a given distribution projection horizon and probability level will be specified as part of market setup. Once the auction period finishes the trading should resume in regular fashion (unless other triggers are active, more on that in [reference-level explanation](#reference-level-explanation)).
 
 Please see the [auction spec](https://github.com/vegaprotocol/product/blob/187-auction-spec/specs/0027-auctions.md) for auction details.
 
@@ -26,7 +26,7 @@ Please see the [auction spec](https://github.com/vegaprotocol/product/blob/187-a
 
 Price monitoring likely won't be the only possible trigger of auction period (liquidity monitoring - spec pending - or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
 
-Likewise, pre-processing transactions will be needed as part of the [fees spec](https://github.com/vegaprotocol/product/blob/WIP-fees-spec/specs/0030-fees.md), hence it should be implemented in such a way that it's easy to repurpose it.
+Likewise, pre-processing transactions will be needed as part of the [fees spec](https://github.com/vegaprotocol/product/blob/WIP-fees-spec/specs/0030-fees.md), hence it should be implemented in such a way that it's easy to re-purpose it.
 
 # Guide-level explanation
 
@@ -46,7 +46,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 # Reference-level explanation
 
-## View from the [vega](https://github.com/vegaprotocol/vega) side
+## View from the [Vega](https://github.com/vegaprotocol/vega) side
 
 - Per each transaction:
   - the matching engine sends the **price monitoring engine** the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`
@@ -63,7 +63,7 @@ Specifically:
 - Price monitoring engine averages all the prices received from the matching engine that have the same timestamp.
 - It periodically (in a predefined, deterministic way) sends the accrued price history to the risk model and obtains the set of max up/down moves per period τ and the associated level α (it can keep more than one of the [τ, max move up, max move down] triplets).
 - It holds the history of average prices looking back to the maximum τ configured in the market.
-- Everytime a new price is received from the matching engine the price monitoring engine checks all the [period, max move up, max move down] triplets relevant for the timestamp, looks-up the associated past (averaged) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescirbed by the risk model.
+- Every time a new price is received from the matching engine the price monitoring engine checks all the [period, max move up, max move down] triplets relevant for the timestamp, looks-up the associated past (averaged) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescribed by the risk model.
 - The bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
 - To give an example, with 3 triggers the price protection auction can be calculated as follows:
   - \>=1% move in 10 min window -> 5 min auction,

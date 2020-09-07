@@ -4,11 +4,11 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Summary
 
-As of right now, vega implements continuous trading, in fact every time an order is placed, vega evaluates it with the other side of the book and if the order crosses, a trade will result from it. This specification will introduce new trading modes for vega as auctions.
+As of right now, vega implements continuous trading, in fact every time an order is placed, Vega evaluates it with the other side of the book and if the order crosses, a trade will result from it. This specification will introduce new trading modes for Vega as auctions.
 
 # Guide-level explanation
 
-In comparison to continuous trading, the auction mode for a market, is a state of the orderbook where each order placed are just sitting on the book, for a given period of time or until some requirements are met (called `call period`), then the matching orders are uncrossed.
+In comparison to continuous trading, the auction mode for a market, is a state of the order-book where each order placed are just sitting on the book, for a given period of time or until some requirements are met (called `call period`), then the matching orders are uncrossed.
 
 They are mostly useful in less liquid markets, or in specific scenarios where a price must be determined, i.e. at opening of a market, when a potentially excessively large price move might occur (price monitoring) or when liquidity needs to be sourced and aggregated (liquidity monitoring). In traditional markets (where markets open and close every day) we can run an open and closing auction for the price to stabilise at both ends.
 
@@ -23,7 +23,7 @@ A market cannot be in both mode at the same time and will trade ever in a auctio
 
 In the first implementation, auction periods will be used at opening only as price monitoring will not exist.
 
-There will be a network parameter that sets the minimum allowable duation of the auction period at market creation. New market proposals must specify a period of at least this duration.
+There will be a network parameter that sets the minimum allowable duration of the auction period at market creation. New market proposals must specify a period of at least this duration.
 
 ## Frequent batch auction
 
@@ -40,7 +40,7 @@ We can also imagine that an auction period could come to an end once a give numb
 
 ### Volume maximising prices
 
-Once the auction period finishs, vega needs to figure out the best price for the order range in the book which can be uncrossed. The first stage in this is to calculate the Volume Maximising Price Range - the range of prices (which will be a contiguous range in an unconstrained order book) at which the highest total quantity of trades can occur.
+Once the auction period finishes, Vega needs to figure out the best price for the order range in the book which can be uncrossed. The first stage in this is to calculate the Volume Maximising Price Range - the range of prices (which will be a contiguous range in an unconstrained order book) at which the highest total quantity of trades can occur.
 
 Initially we will use the mid price within this range. For example, if the volume maximising range is 98-102, we would price all trades in the uncrossing at 100. In future there will be other options, which will be selectable via a network parameter specified at market creation, and changeable through governance. These other options are not yet specified.
 
@@ -69,12 +69,12 @@ Additional Time in Force order options need to be added: only good for normal tr
 
 ### Upon exiting auction mode
 
-- Pegged orders (all kinds, inclucing MM ones) get reinstated in the order they were originally submitted in.
+- Pegged orders (all kinds, including MM ones) get reinstated in the order they were originally submitted in.
 - Limit orders stay on the book (unless they have a TIF: only good for auction).
 
 ## Exiting the auction mode
 
-Please note auction should only ever be exitted if doing so wouldn't trigger entry triggers of any other auction types defined for the market (e.g. price monitoring auction, liquidity monitoring auction). Otherwise the auction gets extended by the period prescribed by the appropriate trigger(s).
+Please note auction should only ever be exited if doing so wouldn't trigger entry triggers of any other auction types defined for the market (e.g. price monitoring auction, liquidity monitoring auction). Otherwise the auction gets extended by the period prescribed by the appropriate trigger(s).
 
 ## First/Naive implementation
 
@@ -127,7 +127,7 @@ message Market {
 - [] As a user, I can get real time information throught the API about a market in auction mode: indicative crossing price, indicative crossing volume.
 - [] As an API user, I can identify:
   - If a market is temporarily in an auction period
-  - Why it is in that period (e.g. Auction at open, liquididty sourcing)
+  - Why it is in that period (e.g. Auction at open, liquidity sourcing)
   - What price mode that auction will use when the auction is over
   - When the auction mode ends
 

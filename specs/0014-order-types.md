@@ -3,7 +3,7 @@
 ## Acceptance Critieria
 
 - Immediate orders, continuous trading:
-	- [ ] An aggressive persistent (GTT, GTC) limit order that is not crossed with the order book is included on the orderbook at limit order price at the back of the queue of orders at that price. No trades are generated.
+	- [ ] An aggressive persistent (GTT, GTC) limit order that is not crossed with the order book is included on the order-book at limit order price at the back of the queue of orders at that price. No trades are generated.
 	- [ ] An aggressive persistent (GTT, GTC) limit order that crosses with trades >= to its volume is filled completely and does not appear on the order book or in the order book volume. Trades are atomically generated for the full volume.
 	- [ ] An aggressive persistent (GTT, GTC) limit order that is partially filled generates trades commensurate with the filled volume. The remaining volume is placed on the order book at the limit order price, at the back of the queue of orders at that price.
 	- [ ] Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporate its volume and/or price level.
@@ -17,7 +17,7 @@ A market using a limit order book will permit orders of various types to be subm
 
 Notes on scope of current version of this spec:
 - Includes only detailed specification for orders valid for *continuous trading*, does not specify behaviour of these order types in an auction.
-- Does not include detailed specification for **stop** orders. Inclusion of stops in guide level explanation is a placeholder/indicator of future requirements.
+- Does not include detailed specification for **stop** orders. Inclusion of stops in guide level explanation is a place-holder/indicator of future requirements.
 
 
 ## Guide-level explanation

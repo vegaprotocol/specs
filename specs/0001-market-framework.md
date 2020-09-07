@@ -4,7 +4,7 @@ Start date: 2019-02-11
 # Summary
 The market framework is a set of concepts that define the markets available on a Vega network in terms of the product and instrument being traded on each, the trading mode and related parameters, and the risk model being used for margin calculations.
 
-The market framework is described in Section 3 of the [whitepaper](../product/wikis/Whitepaper).
+The market framework is described in Section 3 of the [Whitepaper](../product/wikis/Whitepaper).
 
 # Guide-level explanation
 A the trading core will create order books, risk engines, etc. and accept orders and other instructions based on the data held within the market framework. Depending on the deployment context for the trading core, the market framework will be created and manipulated in different ways:
@@ -35,7 +35,7 @@ The market data structure collects all of the information required for Vega to o
 
 Data:
   - **Identifier:** this should unambiguously identify a market
-  - **Trading mode:** this (I see it as something akin to an enum type/struct, see example below) defines the trading mode (e.g. continuous trading, auction, req — see whitepaper section 5.1) and any required configuration for the trading mode (note that Nicenet will support only *continuous trading* and does not necessarily require any configurable parameters for the trading mode, although it may turn out to be advantageous to include some as the implementation is fleshed out). Note also that each trading mode in future will have very different sets of applicable parameters.
+  - **Trading mode:** this (I see it as something akin to an enum type/struct, see example below) defines the trading mode (e.g. continuous trading, auction, req — see Whitepaper section 5.1) and any required configuration for the trading mode (note that Nicenet will support only *continuous trading* and does not necessarily require any configurable parameters for the trading mode, although it may turn out to be advantageous to include some as the implementation is fleshed out). Note also that each trading mode in future will have very different sets of applicable parameters.
   - **Tradable instrument:** an instance of or reference to a tradable instrument.
   - **Mark price methodology:** reference to which [mark price](./0009-mark-price.md) calculation methodology will be used.
   - **Mark price methodology parameters:**
@@ -74,14 +74,14 @@ Data:
 
 ## Product
 
-Products define the behaviour of a position throughout the trade lifecycle. They do this by taking a pre-defined set of product parameters as inputs and emitting a stream of *lifecycle events* which enable Vega to margin, trade and settle the product.
+Products define the behaviour of a position throughout the trade life cycle. They do this by taking a pre-defined set of product parameters as inputs and emitting a stream of *lifecycle events* which enable Vega to margin, trade and settle the product.
 
 Products will be of two types:
 
 - **Built-ins:** products that are hard coded as part of Vega (built in futures and then options will be our first products).
 - **Smart Products:** products that are defined in Vega's Smart Product language (future functionality, not part of Nicenet or the first Testnet or Mainnet releases.)
 
-Product lifecycle events:
+Product life cycle events:
 
 - **Cash/asset flows:** these are consumed by the settlement engine and describe a movement of a number of some asset from (-ve value) or to (+ve value) the holder of a (long position), with the size of the flow specify the quantity of the asset per unit of long volume.
 - **Maturity:** this event moves an instrument from 'active' to 'inactive' state, means that further trading is not possible, and triggers final settlement of positions and release of margin.

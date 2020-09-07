@@ -1,4 +1,4 @@
-Feature name: Builtin Cash Settled Future Product
+Feature name: Built in Cash Settled Future Product
 Start date: 2019-11-03
 
 
@@ -6,11 +6,11 @@ Start date: 2019-11-03
 It must be possible to:
 - set maturity
 - set oracle, this sets the reference asset and its units 
-- calculate mark-to-market cashflows
-- calculate final settlement cashflow
+- calculate mark-to-market cash-flows
+- calculate final settlement cash-flow
 
 # Summary
-This specification gives details for the cash-settled futures product. It should match terminology from Section 3.2 of the white paper. 
+This specification gives details for the cash-settled futures product. It should match terminology from Section 3.2 of the Whitepaper. 
 
 # Guide-level explanation
 A future is a simple derivative contract which, in its classical form pays the difference between strike price and final price of a reference asset at a fixed future time (the maturity). The final price of the reference asset will be provided by the oracle. 
@@ -24,7 +24,7 @@ To generate mark-to-market cash flow:
 - We need the "trade price" (e.g. previous mark price) from when the last time the mark-to-market settlement was run, or if this is the first mark-to-market then it would be the actual trade price
 - The mark-to-market cash flow is `[(mark price) - (trade price)]` credited to someone who is long one unit 
 
-Generating the final settlement cashflow is identical except that the `mark price` is now the price provided by oracle for the underlying asset at the time of maturity. The final settlement cashflow is then `(mark price) - (trade price)`.
+Generating the final settlement cashflow is identical except that the `mark price` is now the price provided by oracle for the underlying asset at the time of maturity. The final settlement cash-flow is then `(mark price) - (trade price)`.
 
 # Pseudo-code / Examples
 Example: ETHUSD December 2019 future. 

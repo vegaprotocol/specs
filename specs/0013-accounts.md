@@ -77,7 +77,7 @@ When a trader places an order on a market and they do not have a margin account 
 
 **Deletion:**
 
-When a trader no longer has collateral requirements for a  market (because they don't have open positions or active orders), these accounts no longer have utility in the core protocol and may be deleted. Accounts may also be deleted for other reasons (e.g. a system account at the conclusion of a set of [closeouts](./0012-position-resolution)).
+When a trader no longer has collateral requirements for a  market (because they don't have open positions or active orders), these accounts no longer have utility in the core protocol and may be deleted. Accounts may also be deleted for other reasons (e.g. a system account at the conclusion of a set of [close outs](./0012-position-resolution)).
 
 If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (which for margin accounts will typically the insurance pool of the market).
 
@@ -91,7 +91,7 @@ When a market launches, an insurance pool account is created for that market for
 
 **Deletion:**
 
-When a market is finalised / closed remaining funds are distributed to other same-currency insurance pools as per white paper section 6.4.  This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
+When a market is finalised / closed remaining funds are distributed to other same-currency insurance pools as per Whitepaper section 6.4.  This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
 
 
 # Pseudo-code / Examples

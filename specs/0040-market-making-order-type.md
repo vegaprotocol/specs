@@ -12,7 +12,7 @@ Market maker orders are a special order type with the following features:
 - Initially all are pegged orders but other price types may be available in future
 - Are always priced limit orders that sit on the book
 - Are “post only” and do not trade on entry (as per normal pegged orders)
-- The order is always refreshed after it trades (once the tx is processed so not refreshed before closeouts, etc.) based on the above requirements so that the full commitment is always supplied.
+- The order is always refreshed after it trades (once the tx is processed so not refreshed before close-outs, etc.) based on the above requirements so that the full commitment is always supplied.
 
 
 ## How they are submitted

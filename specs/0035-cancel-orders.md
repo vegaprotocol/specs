@@ -6,7 +6,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/pull/301
 
 - An order cancelled by orderID+marketID+partyID will be removed from the order book and an order update message will be emitted
 - All orders for a given partyID will be removed from a single market if a cancel all party orders per market message is sent
-- All orders for a given party across all markets will be removed from the vega system when a cancel all orders message is sent
+- All orders for a given party across all markets will be removed from the Vega system when a cancel all orders message is sent
 - Orders which are not currently on the orderbook but are being held `offline` due to being in auction should also be affected by cancels.
 - A cancellation for a party that does not match the party on the order will be rejected
 - A cancellation without a partyID will be rejected
@@ -14,7 +14,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/pull/301
 
 # Summary
 
-Orders stay on the order book until they are filled, expired or cancelled. A client can cancel orders in 3 ways, either directly given an orderID+marketID+partyID, cancel all orders for the partyID in a given market, or cancel all orders in the vega system for a given partyID. Each of these ways will remove the orders from the order book, and push out order update messages via the eventbus
+Orders stay on the order book until they are filled, expired or cancelled. A client can cancel orders in 3 ways, either directly given an orderID+marketID+partyID, cancel all orders for the partyID in a given market, or cancel all orders in the Vega system for a given partyID. Each of these ways will remove the orders from the order book, and push out order update messages via the eventbus
 
 
 # Guide-level explanation 

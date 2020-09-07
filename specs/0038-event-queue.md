@@ -160,7 +160,7 @@ message GetEventAcceptanceStatusResponse {
 * Vega nodes accept events submitted to `PropagateEvent` and verifies them against configured external blockchain node
 * Vega nodes write events to chain once verified
 * Vega nodes respond appropriately to `GetEventAcceptanceStatus`
-* Vega nodes verify Event existance and outcomes using local Ethereum node
+* Vega nodes verify Event existence and outcomes using local Ethereum node
   * Verify balance changes
   * Verify account identities
   * Verify transaction hashes

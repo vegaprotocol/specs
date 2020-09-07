@@ -25,7 +25,7 @@ The Positions API requires additional position data for each trader, on top of t
 * The portion of profit/loss (P&L) that continuously changes when the _mark price_ changes, i.e. "Open P&L".
 * The per trade realised P&L for the buyer and seller 
 
-Note: it is possible to calculate valuation / P&L using various methodologies (e.g. Average cost, FIFO, LIFO) when a position has been only partially closed out. These are well known alternative accounting methods that can be used when account for profit/loss on selling 'inventory' of a product. In this case, we can consider a trader's open positonn as their inventory. We will be outlining the average cost methodology in this API as described at https://www.investopedia.com/terms/a/averagecostmethod.asp, however we may also add others in future and the API should be designed to allow for multiple such approaches to be used simulatnaeously.
+Note: it is possible to calculate valuation / P&L using various methodologies (e.g. Average cost, FIFO, LIFO) when a position has been only partially closed out. These are well known alternative accounting methods that can be used when account for profit/loss on selling 'inventory' of a product. In this case, we can consider a trader's open positonn as their inventory. We will be outlining the average cost methodology in this API as described at https://www.investopedia.com/terms/a/averagecostmethod.asp, however we may also add others in future and the API should be designed to allow for multiple such approaches to be used simultaneously.
 
 Note, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in future.
 
@@ -52,8 +52,8 @@ The API is expected to expose:
 | ------------- |-------------| 
 | Open Volume     | Traded volume that hasn't been closed out with an offsetting trade, this is positive for a long position and negative for a short position. |
 | Closing Out     | Entering a trade that reduces the absolute size of the open volume (i.e. takes it closer to zero) or switches the sign of the volume (i.e. a net long position (+'ve) becomes a net short position (-'ve)). Close out trades will generate a non-zero P&L if the Trade Price differs from the Open Volume Entry Price. |
-| Unrealised P&L      | The profit/loss on the open volume (dependent on the P&L calculation mathodology): `Unrealised P&L [averaged] = (Product.value(Open Volume Entry Price) - Product.Value(mark_price)) *  open volume` |
-| Realised P&L | The total P&L realised across all trades (dependent on the P&L calculation mathodology). Note: only trades that close out volume can realise a P&L.  |
+| Unrealised P&L      | The profit/loss on the open volume (dependent on the P&L calculation methodology): `Unrealised P&L [averaged] = (Product.value(Open Volume Entry Price) - Product.Value(mark_price)) *  open volume` |
+| Realised P&L | The total P&L realised across all trades (dependent on the P&L calculation methodology). Note: only trades that close out volume can realise a P&L.  |
 | Trade Realised P&L | The change in Realised P&L caused by a single trade that closes volume (dependent on the P&L calculation mathodology) - *this can/will be different for the buyer and seller and must be calculated for each side of the trade*: `Trade Realised P&L [averaged] = Trade Volume * (Product.value(Trade Price) - Product.value(Open Volume Entry Price))`    |
 | Total Profit & Loss | Unrealised P&L + Realised P&L      |
 | Open Volume Entry Price | The average entry price of the currently open volume. `New Open Volume Entry Price = (Prev Open Volume Entry Price * Prev Open Volume + New Trade Price * New Trade Volume) / (Prev Open Volume + New Trade Volume)` |

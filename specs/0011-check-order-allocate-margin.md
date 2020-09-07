@@ -5,7 +5,7 @@ When an order or other market instruction (amend, cancel, etc.) is submitted we 
 Orders should be rejected if we can’t allocate sufficient margin.
 
 
-## Pseudocode
+## Pseudo-code
 
 The logic is something like this:
 

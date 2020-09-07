@@ -1,13 +1,13 @@
 Feature name: feature-name
 Start date: YYYY-MM-DD
 Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
-Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections: 3.2 and 5.2 
+Whitepaper link: [Whitepaper](/vega-protocol/product/wikis/Whitepaper) sections: 3.2 and 5.2 
 
 
 # Acceptance Criteria
 
-- [ ] When an instrument expires the settlement instructions include correct expiry cashflows for each trader.
-- [ ] The settlement instructions are used to "collect" funds from the traders who have a negative cashflow (assuming that negative cashflow means you owe money to the market / are "out of the money") and deposits all these collected funds into the market's general account.
+- [ ] When an instrument expires the settlement instructions include correct expiry cash flows for each trader.
+- [ ] The settlement instructions are used to "collect" funds from the traders who have a negative cash flow (assuming that negative cash flow means you owe money to the market / are "out of the money") and deposits all these collected funds into the market's general account.
   - [ ] When "collecting" funds from a trader account, the settlement engine must instruct the collateral engine to debit in this order (this order is true on expiry for all instruments):
     1. Margin account of the trader
     2. General asset account for the trader
@@ -15,7 +15,7 @@ Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections:
 - [ ] The settlement function interprets the collateral responses and determines whether the traders who are owed money may be paid out of the market's general account.
   - [ ] If there are sufficient funds to pay all traders who are owed money, the settlement engine instructs the collateral engine to pay them out according the above calculated cashflows.
   - [ ] If there are insufficient funds to pay all traders who are owed money, the settlement engine adjusts the amounts according to the position resolution methodology, which for Nicenet is a pro-rated reduction in amounts by the size of the amount.
-- [ ] When an instrument expires, the sum of all the settlement cashflows nets to zero across all positions (assumes negative volumes for short positions).
+- [ ] When an instrument expires, the sum of all the settlement cash flows nets to zero across all positions (assumes negative volumes for short positions).
 
 - [ ] check it can't happen before maturity
 - [ ] check it can't happen on invalid / other data from the oracle (i.e. a price with the wrong timestamp)
@@ -28,7 +28,7 @@ Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections:
 ## Implementation note / boundaries
 
 - The settlement function does not keep a record of any collateral balances
-- [ ] The settlement function does not maintain the settlement formula for cashflows to be calculated
+- [ ] The settlement function does not maintain the settlement formula for cash flows to be calculated
 - [ ] The settlement function does not actually execute the transfer of funds - it rather instructs the collateral engine to do this.
 
 # Summary

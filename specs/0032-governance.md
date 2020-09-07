@@ -1,6 +1,6 @@
 # Governance
 
-Governance allows the vega network to arrive at on-chain decisions. Implementing this specification will provide the ability for users to create proposals involving Markets or the network in general, by creating new markets, or updating a market or netowrk parameter.
+Governance allows the vega network to arrive at on-chain decisions. Implementing this specification will provide the ability for users to create proposals involving Markets or the network in general, by creating new markets, or updating a market or network parameter.
 
 This is achieved by creating a simple protocol framework for the creation, approval/rejection, and enactment of governance proposals. Where a _proposal_ is comprises a supported governance action and metadata that determines the conditions and timing for it's enactment.
 
@@ -17,7 +17,7 @@ This version of the specification covers the core governance protocol. Not curre
 
 # Guide-level explanation
 
-Governance actions enable users to make proposals for changes on the network or vote for existing proposals. The allowable types of change to be proposed are known as "governance actions". In future, enactment of governance actions may also be possible by other means (for example, automatically by the protocol in repsonse to certain conditions), which should be kept in mind during implementation.
+Governance actions enable users to make proposals for changes on the network or vote for existing proposals. The allowable types of change to be proposed are known as "governance actions". In future, enactment of governance actions may also be possible by other means (for example, automatically by the protocol in response to certain conditions), which should be kept in mind during implementation.
 
 The type of governance action are:
 
@@ -30,22 +30,22 @@ The type of governance action are:
 ## Lifecycle of a proposal
 
 1. Governance proposal is accepted by the network as a transaction.
-1. The nodes validate the proposal. Note: this is where the network parameters that validate the minimum duration, minimum to to enactment, minimum participation rate, and required majority are evaluated. The proposal is not revalidated. This is also where, if not specified on the proposal, the required participation rate and majoirty for success are defined and copied to the proposal. The proposal is immutable once entered and future parameter changes don't impact it (this is to prevent surprisiing behaviour where other proposals with as yet unknown outcomes can impact the success of a proposal).
+1. The nodes validate the proposal. Note: this is where the network parameters that validate the minimum duration, minimum to to enactment, minimum participation rate, and required majority are evaluated. The proposal is not revalidated. This is also where, if not specified on the proposal, the required participation rate and majority for success are defined and copied to the proposal. The proposal is immutable once entered and future parameter changes don't impact it (this is to prevent surprising behaviour where other proposals with as yet unknown outcomes can impact the success of a proposal).
 1. If valid, the the proposal is considered "active" for a proposal period. This period is defined on the proposal and must be at least as long as the minimum duration for the proposal type/subtype (specified by a network parameter)
 1. During the proposal period, network participants who are eligible to vote on the proposal may submit votes for or against the proposal.
-1. When the proposal perios closes, the network calculates the outcome by:
-    - comparing the total number of votes cast as a percentage of the number eligible to be cast to the minimum participation requirement (if the minimum is not reaced, the proposal is rejected)
+1. When the proposal period closes, the network calculates the outcome by:
+    - comparing the total number of votes cast as a percentage of the number eligible to be cast to the minimum participation requirement (if the minimum is not reached, the proposal is rejected)
 		- comparing the number of positive votes as a percentage of all votes cast (maximum one vote counted per party) to the required majority. 
-1. If the required majoirty of "for" votes was met, the action described in the proposal will be taken (proposal is enacted) on the enactment date, which is defined by the proposal and must be at least the minimum enactment period for the proposal type/subtype (which is specified by a network parameter) _after_ voting on the proposal closes.
+1. If the required majority of "for" votes was met, the action described in the proposal will be taken (proposal is enacted) on the enactment date, which is defined by the proposal and must be at least the minimum enactment period for the proposal type/subtype (which is specified by a network parameter) _after_ voting on the proposal closes.
 
 Any actions that result from the outcome of the vote are covered in other spec files.
 
 
-## Geovernance weighting
+## Governance weighting
 
-A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. (Note: a party's weighitng must be greater than 0 for the proposal type in question in order for the party to submit a new proposal.):
+A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. (Note: a party's weighting must be greater than 0 for the proposal type in question in order for the party to submit a new proposal.):
 
-Weighting will initially be determined by the user's general account balance of a specific asset on the Vega network in question. This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, includng between Testnets and Mainnets.
+Weighting will initially be determined by the user's general account balance of a specific asset on the Vega network in question. This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, including between Testnets and Mainnets.
 
 In future, governance weighting for some proposal types will be based on alternative measures, such as:
 
@@ -67,7 +67,7 @@ Users of the vega platform will be able to vote for or against a proposal, if th
 
 A user can vote as many times as needed, only the last vote will be accounted for in the final decision for the proposal. We do not consider prevention of spam/DOS attacks by multiple voting in this spec, though they will need to be covered (potentially by a fee and/or proof of work cost).
 
-The amount of voting weight that a user is considered to be voting with is the full amount they hold, as measured by the network, **at the conclusion of the proposal period** - as part of calculating the vote outcome. For example, if a user votes "yes" for a proposal and then adds to or withdraws from (including via movements to and from margin accounts for trading the asset) their governance token balance after submitting their vote and prior to the end of the proposal period, their new balance of voting asset is the one used. (Note: this may change in future, if it is deemed to allow misleading or eploitative voting behaviour. Particularly, we may lock the balance from being withdrawn or used for trading for the duration of the vote, once a participant has voted.)
+The amount of voting weight that a user is considered to be voting with is the full amount they hold, as measured by the network, **at the conclusion of the proposal period** - as part of calculating the vote outcome. For example, if a user votes "yes" for a proposal and then adds to or withdraws from (including via movements to and from margin accounts for trading the asset) their governance token balance after submitting their vote and prior to the end of the proposal period, their new balance of voting asset is the one used. (Note: this may change in future, if it is deemed to allow misleading or exploitative voting behaviour. Particularly, we may lock the balance from being withdrawn or used for trading for the duration of the vote, once a participant has voted.)
 
 
 ## Restriction on who can create a proposal
@@ -95,7 +95,7 @@ The network's _minimum proposal duration_ - as specified by a network parameter 
 
 A new proposal can also specify when any changes resulting from a successful vote would start to be applied. e.g: A new proposal is created in order to create a new market with an enactment date 1 week after vote closing. After 3 weeks the proposal is closed (the duration of the proposal), and if there are enough votes to accept the new proposal, then the changes will be applied in the network 1 week later.
 
-This allows time for users to be ready for changes that may effect them financially or technically, e.g in the case the proposal is to decide to use a new version of the vega node, or something available only in a later version of the node, or a change that might increase capital requirements for positions singificantly and thus could trigger close-outs. It also allows markets to be pre-approved early and launched at a chosen time in the future.
+This allows time for users to be ready for changes that may effect them financially or technically, e.g in the case the proposal is to decide to use a new version of the vega node, or something available only in a later version of the node, or a change that might increase capital requirements for positions significantly and thus could trigger close-outs. It also allows markets to be pre-approved early and launched at a chosen time in the future.
 
 Proposals are enacted by timestamp, earliest first, as soon as the enactment time is reached by the network (i.e. "Vega time"). Proposals sharing the same exact enactment time are enacted in the order they were created. This means that in the case that two proposals change the same parameter with the same timestamp, the oldest proposal will be applied first and the newest will be applied last, overwriting the change made by the older proposal. There is no attempt to resolve differences between the two.
 
@@ -121,9 +121,9 @@ At the conclusion of the voting period the network will calculate two values:
 1. The participation rate: `participation_rate = SUM ( weightings of ALL valid votes cast ) / max total weighting possible` (e.g. sum of token balances of all votes cast / total supply of governance asset, this implies that for this version it is only possible to use an asset with **fixed supply** as the governance asset)
 1. The "for" rate: `for_rate = SUM ( weightings of votes cast for ) / SUM ( weightings of all votes cast )`
 
-The proposal is considered succesful and will be enacted if:
+The proposal is considered successful and will be enacted if:
 
-- The `participation_rate` is greater than or equal to the minimum participation rate for the proposa
+- The `participation_rate` is greater than or equal to the minimum participation rate for the proposal
 - The `for_rate` is greater than or equal to the minimum required majority for the proposal
 - The `participation rate` is calculated against the *total supply of the governance asset*.
 
@@ -151,7 +151,7 @@ We allow users to submit proposals covering 3 types of governance action:
 
 ## 1. Create market
 
-A proposal to create a market contains a compelte market specification as per the Market Framework (see spec) that describes the market to be created. 
+A proposal to create a market contains a complete market specification as per the Market Framework (see spec) that describes the market to be created. 
 
 All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
@@ -198,7 +198,7 @@ Notes:
 
 ## APIs
 
-The core should exopse via core APIs:
+The core should expose via core APIs:
  - all the active proposals on the network
  - the current results for an active proposal or a proposal awaiting enactment
 
