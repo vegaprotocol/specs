@@ -130,3 +130,7 @@ message Market {
   - Why it is in that period (e.g. Auction at open, liquididty sourcing)
   - What price mode that auction will use when the auction is over
   - When the auction mode ends
+
+# Network Parameters
+
+`marketCreationMinAllowableCallPeriod` - Network parameter that sets the minimum allowable duation of the auction period at market creation.
