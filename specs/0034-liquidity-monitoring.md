@@ -1,4 +1,4 @@
-Feature name: liquidity-monitoring\
+0032-price-monitoring.mdFeature name: liquidity-monitoring\
 Start date: 2020-07-14\
 Specification PR: https://github.com/vegaprotocol/product/pull/322
 
@@ -6,7 +6,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/322
 
 Liquidity in the market is not only a desirable feature from a trader's point of view, but also an important consideration from the risk-management standpoint. Position of a distressed trader can only be liquidated if there's enough volume on the order book to offload it, otherwise a potentially insolvent party remains part of the market.
 
-Similarly to [price monitoring](0032-price-monitoring.md), we need to be able to detect when the market liquidity drops below the desired level, launch a liquidity auction and terminate it when the market liquidity level is back at a sufficiently high level.
+Similarly to [price monitoring](0037-price-monitoring.md), we need to be able to detect when the market liquidity drops below the desired level, launch a liquidity auction and terminate it when the market liquidity level is back at a sufficiently high level.
 
 ## Liquidity auction network parameters
 
@@ -28,13 +28,13 @@ Minimum liquidity requirement measured as a constant multiple c<sub>1</sub> (mar
 
 ## Supplied liquidity
 
-Count (probability of trading weighted) liquidity committed via market making orders. Please see the [liquidity measurement spec](0034-prob-weighted-liquidity-measure.ipynb) for details.
+Count (probability of trading weighted) liquidity committed via market making orders. Please see the [liquidity measurement spec](0036-prob-weighted-liquidity-measure.ipynb) for details.
 
 ## Trigger for entering an auction
 
 When liquidity supplied < c<sub>1</sub> * [liquidity demand estimate](#Glossary).
 
-Similarly to [price monitoring](0032-price-monitoring.md), the auction should be triggered pre-emptively. That is, the transaction that would have triggered the liquidity auction should be re-processed once auction mode is on. Please note that this transaction may be cancelled if it's type is not valid for auction, however even in that case the market should still go into the auction mode to send a signal that it requires more liquidity.
+Similarly to [price monitoring](0037-price-monitoring.md), the auction should be triggered pre-emptively. That is, the transaction that would have triggered the liquidity auction should be re-processed once auction mode is on. Please note that this transaction may be cancelled if it's type is not valid for auction, however even in that case the market should still go into the auction mode to send a signal that it requires more liquidity.
 
 ## Trigger for exiting the auction
 
