@@ -236,3 +236,15 @@ APIs should also exist for clients to:
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
+
+# Network Parameters
+
+`MinProposerBalance` Minimum proposer balance - The required governance token balance a proposer must have at enactment time
+`MinVoterBalance` Minimum voter balance - The required governance token balance a voter must have at vote time
+`MinimumPreEnactmentPeriod`
+`MaximumPreEnactmentPeriod`
+`MinClose` Minimum close
+`MaxClose` Maximum close
+`MinimumProposalPeriod` 
+`MinimumRequiredParticipation`
+`MinimumRequiredMajority`
