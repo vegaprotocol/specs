@@ -274,3 +274,10 @@ slippage volume short: 0
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
 
+# Network Parameters
+
+`SearchLevel`
+`InitialMargin`
+`CollateralRelease`
+
+
