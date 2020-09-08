@@ -5,8 +5,6 @@
 The aim of this specification is to set out how fees on Vega are set based on committed market making stake and prevailing open interest on the market leading to [target stake](????-target-stake.md). Let us recall that market makers can commit and withdraw stake by submitting / amending a special market making pegged order type [market maker order spec](????-market-making-order-type.md). 
 
 ## Definitions / Glossary of terms used
-(remove?)- **Liquidity**: measured as per [liquidity measurement spec](0034-prob-weighted-liquidity-measure.ipynb) (but it's basically volume on the book weighted by the probability of trading)
-(remove?)- **Supplied liquidity**: this counts only the liquidity provided through the special market making order that market makers have committed to as per [market maker order spec](????-market-making-order-type.md) 
 - **Market value proxy window length `t_market_value_window `**: sets the length of the window over which we estimate the market value. This is a network parameter.  
 - **Target stake**: as defined in [target stake spec](????-target-stake.md). The amount of stake we would like MMs to commit to this market.
 
@@ -32,13 +30,12 @@ We now find smallest integer `k` such that `[target stake] < sum from i=1 to k o
 Finally, we set the liquidity-fee-factor for this market to be the fee `MM-k-liquidity-fee-factor`. 
 
 ### Example for fee setting mechanism
-Let us say that `c_2 = 1.2`. 
 ``` 
 [MM 1 stake = 120 ETH, MM 1 liquidity-fee-factor = 0.5%]
 [MM 2 stake = 20 ETH, MM 2 liquidity-fee-factor = 0.75%]
 [MM 3 stake = 60 ETH, MM 3 liquidity-fee-factor = 3.75%]
 ```
-1. If the `target stake = 120` then the needed liquidity is given by MM 1, thus `k=1` and so the market's liquidity-fee-factor is  `MM 1 fee = 0.5%`. 
+1. If the `target stake = 119` then the needed liquidity is given by MM 1, thus `k=1` and so the market's liquidity-fee-factor is  `MM 1 fee = 0.5%`. 
 1. If the `target stake = 123` then the needed liquidity is given by MM 1 and MM 2, thus `k=2` and so the market's liquidity-fee-factor is  `MM 2 fee = 0.75%`. 
 1. If the `target stake = 240` then even putting all the liquidity supplied above does not meet the estimated market liquidity demand and thus we set `k=N` and so the market's liquidity-fee-factor is `MM N fee = MM 3 fee = 3.75%`. 
 1. Initially (before market opened) the `[target stake]` is by definition zero (it's not possible to have a position on a market that's not opened yet). Hence by default the market's initial liquidity-fee-factor is the lowest liquidity-fee-factor.
@@ -52,25 +49,24 @@ Once the market opens (opening auction starts) a clock starts ticking. We calcul
 At time of call:
 * The `liquidity-fee-factor` for the market.
 * Current market making commitments and their individually nominated fee factors
-* Liquidity demand estimate
 
 ## SPLITTING FEES BETWEEN MARKET MAKERS
 
 ### Calculating market value proxy
 
-This will be used for determining what "equity like share" does committing market making stage at a given time lead to. 
+This will be used for determining what "equity like share" does committing market making stake at a given time lead to. 
 It's calculated, with `t` denoting time now measured so that at `t=0` the opening auction ended, as follows:
 ```
 total_stake = sum of all mm stakes
 active_time_window = [max(t-t_market_value_window,0), t]
-active_window_lenght = max(t-t_market_value_window,0) - t 
+active_window_length = max(t-t_market_value_window,0) - t 
 
-if (active_window_lenght > 0)
-    factor =  t_market_value_window / active_window_lenght
+if (active_window_length > 0)
+    factor =  t_market_value_window / active_window_length
     traded_value_over_window = total trade value for fee purposes of all trades executed on a given market during the active_time_window
     market_value_proxy = max(total_stake, factor x traded_value_over_window)
 else
-    market_value_proxy = 0
+    market_value_proxy = total_stake
 ```
 
 Note that trade value for fee purposes is provided by each instrument, see [fees][0024-fees.md]. For futures it's just the notional and in the examples below we will only think of futures. 
@@ -100,14 +96,14 @@ From these stored quantities we can calculate
 - `MM i equity_share = MM i equity / (sum over j from 1 to N of MM j equity)`
 
 If a market maker `i` wishes to set its stake to `new_stake` then update the above values as follows:
-1. Calculate new `total_stake` (sum of all but `i`'s stake + `new_stake`). Check that this is sufficient for market demand estimate; if not abort. 
+1. Calculate new `total_stake` (sum of all but `i`'s stake + `new_stake`). Check that this is sufficient for `market target stake`; if not abort. 
 1. Update the `market_value_proxy` using the `new_stake`. 
 1. Update `MM i stake` and `MM i avg_entry_valuation` as follows:
 ```
 if new_stake < MM i stake then
     MM i stake = new_stake
 else if new_stake > MM i stake then
-    delta = new_stake - self.stake
+    delta = new_stake - MM i stake // this will be > 0
     MM i avg_entry_valuation = ((MM i equity x MM i avg_entry_valuation) 
                             + (delta x market_value_proxy)) / (MM i equity + MM i stake)
     MM i stake = new_stake
@@ -158,7 +154,7 @@ When the time defined by ``market_maker_fee_distribition_time_step` elapses we d
 ### SPLITTING FEES BETWEEN MARKET MAKERS
 - [ ] The examples provided result in the given outcomes. 
 - [ ] The examples provided in a Python notebook give the same outcomes. See 
-`https://github.com/vegaprotocol/sim/sim/notebooks/` 
+`https://github.com/vegaprotocol/sim/sim/notebooks/` (on a branch  `mlp-modelling`, need to give link to specific commit)
 - [ ] All market makers in the market receive a greater than zero amount of liquidity fee.
 - [ ] The total amount of liquidity fee distributed is equal to the most recent liquidity-fee-factor x notional-value-of-the-trade
 - [ ] Every time a price taker is charged a trading fee, the mm equity shares are recalculated to determine their relative "ownership" of the liquidity portion of that fee.
