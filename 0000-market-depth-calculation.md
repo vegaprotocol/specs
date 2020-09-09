@@ -26,7 +26,7 @@ The volume at each level should be split into normal, pegged and market making o
 
 Best bid/ask pairs should be generated for all orders and for all orders excluding pegged.
 
-`Cumulative volume` is built up in each side of the book at each price level to reflect how much volume is present throughout the book. The `Cumulative volume` is the total volume in the book between the current price level and top of the book.
+`Cumulative volume` is the total volume in the book between the current price level and top of the book. The market depth service will not build this information, instead we will rely on the client building it.
 
 
 # Reference-level explanation
@@ -38,25 +38,21 @@ The possible actions we know that can happen in the market engine are:
 - Create a new order on the book
   * Send the order details in a new order event
 - Cancel an existing order
-  * Send the cancel details in a cancel event
+  * Send the cancel details in an order event
 - Fully/Partially fill an order on the book
   * Send the order update details in an order event
 - Expire an order
-  * Treat like a cancel
+  * Send the expire details in an order event
 - Amend an order in place
-  * Send an amend order event
+  * Send an order event with the new details in
 - Cancel/Replace amend an order
-  * Send a cancel and a replace event
+  * Send an order event with the new details in
 - Enter auction
-  * Send an entering auction event **OR**
   * Send cancels/new order events for all orders that change
 - Leave auction
-  * Send a leaving auction event **OR**
   * Send cancels/new order events for all orders that change
 - Pegged orders
-  * Generate cancel/new when orders move **OR**
-  * Generate amends for changed orders **OR**
-  * Send price change to the MarketDepth system to handle
+  * Send cancels/new order events for all orders that change
 
 Market depth information is not as detailed as the full orderbook. We have no need to store the individual orders, order ids and order types. The only information needed is the book side, price level, the number of orders at that level and the total volume at that level.
 
@@ -66,7 +62,7 @@ When a new event arrives at the market depth builder, we apply the change to our
 
 ## Cumulative Volume
 
-Should this be handled by the client? I think so
+The cumulative volume at each level is a useful thing for clients to know but it is difficult for the service to keep up to date in a live system. Therefore this calculation will not be performed by the market depth system. The client will be responsible for generating this data if and when they need it.
 
 # Pseudo-code / Examples
 
