@@ -24,6 +24,10 @@ There will be one smart contract per Ethereum asset class (such as ETH or ERC20 
 In order to enable decentralized and secure depositing and withdrawal of funds, we have created a series of “bridge” smart contracts. These bridges each target a specific asset class, such as ETH or ERC20 tokens, and expose simple functionality to allow the Vega network to accept deposits, hold, and then release assets as needed. This immutably records all deposits and withdrawals for all of the assets that Vega markets use, as well as any governance pertaining to the bridge smart contracts.
 Each bridge contains two primary functions and emits two primary events, each tailored to the asset class. They are deposit and withdraw and the corresponding events of deposited and withdrawn. Deposit is ran by a user or process and ensures that the asset is stored safely on-contract and then emits the deposited event. The withdrawal function itself is run by the user or process once signatures have been aggregated from validator nodes. This multisig aggregation is out of the scope of this specification and will be covered elsewhere.
 
+## Block confirmations
+It is normal behaviour when validating transfers to wait a certain number of blocks for a deposit to be 'confirmed'. For example, [this is Kraken's wait time](https://support.kraken.com/hc/en-us/articles/203325283-Cryptocurrency-deposit-processing-times). We need to do the same, to be sure that enough time has passed that it is a certainty that the event we saw is included in the chain.
+
+This will need to be configured per chain that we connect to. ETH, ERC20, ERCXXX can all share a value, which should be configurable and changeable via governance. For Ethereum, this should be 20 confirmations. It is safe to lower this for development networks.
 
 # Reference-level explanation
 
