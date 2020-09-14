@@ -59,7 +59,9 @@ The Indicative Uncrossing Price is the price at which all trades would occur if 
 
 Market orders are not permitted while a market is in auction mode.
 
-Additional Time in Force order options need to be added: only good for normal trading and only good for auction.
+Pegged orders are accepted but are immediately parked and do not enter the live order book.
+
+Additional Time in Force order options need to be added: only good for normal trading (GFN) and only good for auction (GFA).
 
 ### Upon entering auction mode
 
@@ -69,7 +71,7 @@ Additional Time in Force order options need to be added: only good for normal tr
 
 ### Upon exiting auction mode
 
-- Pegged orders (all kinds, inclucing MM ones) get reinstated in the order they were originally submitted in.
+- Pegged orders (all kinds, including MM ones) get reinstated in the order they were originally submitted in.
 - Limit orders stay on the book (unless they have a TIF: only good for auction).
 
 ## Exiting the auction mode
