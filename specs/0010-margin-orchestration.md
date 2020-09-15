@@ -15,7 +15,7 @@
 1. [ ] The mark price changes causing the trader’s margin to move in to the release level. Margin should be released back to the trader. 
 
 ## Summary
-This ticket encapsulates the orchestration of business logic which interfaces with the specified [risk model](./0018-quant-risk-models.md) (specified at the instrument level) to ensure that margin levels are calculated whenever certain conditions are met.
+This ticket encapsulates the orchestration of business logic which interfaces with the specified [risk model](./0018-quant-risk-models.ipynb) (specified at the instrument level) to ensure that margin levels are calculated whenever certain conditions are met.
 
 ## Reference-level explanation
 
