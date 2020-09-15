@@ -32,7 +32,7 @@ The [margin calculator](./0019-margin-calculator.md) will calculate the margin l
 1. initial margin
 1. collateral release level
 
-The [margin calculator](./0019-margin-calculator.md) utilises risk factors which are updated by the [quant risk model](./0018-quant-risk-models.md).  
+The [margin calculator](./0019-margin-calculator.md) utilises risk factors which are updated by the [quant risk model](./0018-quant-risk-models.ipynb).  
 
 
 ###  **Conditions for recalculating margins**
