@@ -124,3 +124,14 @@ Blacklisting is simply removing an asset from the whitelist
 *  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset
 *  an invalid multisig bundle is rejected by the setDepositMinimum function
 
+## Block confirmations
+* Block confirmations must be configurable per-asset, and changeable via governance
+* A deposit from chain X does not as deposited until Y blocks have passed since the deposit event:
+
+| Bridged currency | Confirmations | Estimated time |
+|------------------|:-------------:|:--------------:|
+| Bitcoin          |       6       |   60 mintues   |
+| Ether            |       30      |    6 minutes   |
+| --ERC20          |       30      |    6 minutes   |
+
+
