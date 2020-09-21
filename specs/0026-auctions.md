@@ -76,9 +76,9 @@ Additional Time in Force order options need to be added: only good for normal tr
 
 Please note auction should only ever be exitted if doing so wouldn't trigger entry triggers of any other auction types defined for the market (e.g. price monitoring auction, liquidity monitoring auction). Otherwise the auction gets extended by the period prescribed by the appropriate trigger(s).
 
-## Market expiry
+## Market end
 
-Auction mode must be exited at or before market expiry. Furthermore, `min_auction_length` parameter should be added and used to determine if the auction can be started close to market expiry. If time left to market expiry is less than `min_auction_length` the auction should not be entered.
+Auction mode must be exited at or before market end time. Furthermore, `min_auction_length` parameter should be added and used to determine if the auction can be started close to market market end time. If time left to market end is less than `min_auction_length` the auction should not be entered.
 
 ## First/Naive implementation
 
