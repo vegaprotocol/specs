@@ -8,6 +8,7 @@ Specification PR: https://github.com/vegaprotocol/product/pulls <br>
 - Reducing the quantity leaves the order in its current spot but reduces the remaining amount accordingly
 - Increasing the quantity causes the order to be removed from the book and inserted at the back of the price level queue with the updated quantity
 - Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag is rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.
+- Any attempt to amend to or from the `TIF` values `GFA` and `GFN` will result in an rejected amend.
 - All updates to an existing order update the `UpdatedAt` time stamp field in the order
 - The `orderID` remains the same after an amend
 - Amends can occur in continuous trading or in an auction
