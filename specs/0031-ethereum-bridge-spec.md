@@ -102,13 +102,13 @@ Blacklisting is simply removing an asset from the whitelist
   * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
   * An invalid multisig bundle will be rejected from withdraw
 
-## Whitelist a token (by eth address)
+## Allowlist a token (by eth address)
 * A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten)
 * ERC20 smart contract specific requirements:
   * A valid multisig bundle can be passed to the whitelistToken function to successfully add a token to the whitelist
   * An invalid multisig bundle is rejected by the whitelistToken function
 
-## Blacklist a token (by eth address)
+## Blocklist a token (by eth address)
 * A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten)
 * ERC20 smart contract specific requirements:
   * A valid multisig bundle can be passed to the blacklistToken function to successfully remove a previously whitelisted token
