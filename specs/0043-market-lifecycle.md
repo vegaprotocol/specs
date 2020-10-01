@@ -11,18 +11,18 @@ A market can progress through a number of states through its life. The overall m
 
 ### Active markets
 
-All markets have a "trading mode" (plus its coniguration) as part of the [market framework](0001-market-framework.md). When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market once it opens, but in future, trading modes may specify a schedule of periods). When created, a market will generally start in an opening auction period. Markets can also enter exeptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
+All markets have a "trading mode" (plus its configuration) as part of the [market framework](0001-market-framework.md). When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market once it opens, but in future, trading modes may specify a schedule of periods). When created, a market will generally start in an opening auction period. Markets can also enter exeptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
 
 
 ## Market status details
 
 ### Proposed
 
-Markets created via governance proposals and voting will always begin in a proposed state. At this point governance is deciding whether the market should be created, and liquidity providers may also support the market proposal by committing liquidity.
+Markets created via [governance proposals](./0028-governance.md#1-create-market) and voting will always begin in a proposed state. At this point governance is deciding whether the market should be created, and liquidity providers may also support the market proposal by committing liquidity.
 
 **Entry:**
 
-- Valid governance proposal submitted and accepted
+- Valid [governance proposal](./0028-governance.md#1-create-market) submitted and accepted
 
 **Exit:**
 
@@ -64,13 +64,10 @@ Once creation of a market is approved via a governance proposal, or (in future) 
 
 
 
-
-
-
 ### Problematic states and their resolutions
 
 #### Insufficient liquidity to close out a trader
-In the situation that there is insufficient liquidity to close out a trader, the market is put in to a liquidity sourcing auction. This will be triggered by liquidity monitoring.
+In the situation that there is insufficient liquidity to close out a trader, the market is put in to a [liquidity sourcing auction](./0026-auctions.md). This will be triggered by [liquidity monitoring](./0035-liquidity-monitoring.md).
 
 The parameters for the auction will be as follows:
 - Duration: ???
