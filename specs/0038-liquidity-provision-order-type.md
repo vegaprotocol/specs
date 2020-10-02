@@ -2,7 +2,7 @@
 
 ## Summary 
 
-When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [market making mechanics](????-mm-mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](????-setting-fees-and-rewarding-mms.md).
+When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [market making mechanics](./0044-lp-mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-setting-fees-and-rewarding-lps.md).
 
 
 ## Market making order features
@@ -45,14 +45,14 @@ Buy-shape: {
 ## How they are constructed for the order book
 
 Input data:
-1. The commitment, buy-shape, sell-shape (as submitted in the [liquidity provision network transaction](????-mm-mechanics.md).) 
+1. The commitment, buy-shape, sell-shape (as submitted in the [liquidity provision network transaction](./0044-lp-mechanics.md).) 
 1. Any limit orders that the market maker has on the book at a point in time.
 
 ### Refining list of orders
 
 Steps:
 
-1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](????-mm-mechanics.md).
+1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-lp-mechanics.md).
 
 1. Subtract the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any limit orders the market maker has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liqudity-measure.ipynb)). If you end up with 0 or negative number, stop, you are done.
 
@@ -82,7 +82,7 @@ Given the price peg information (`peg-reference`, `number-of-units-from-referenc
 
 ``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading)```. 
 
-where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](????-mm-mechanics.md).
+where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-lp-mechanics.md).
 
 ```
 Example: 

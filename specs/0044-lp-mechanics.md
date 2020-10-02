@@ -17,14 +17,14 @@ Any Vega participant can apply to market make on a market by submitting a transa
 1. Market ID
 1. COMMITMENT AMOUNT: liquidity commitment amount (specified as a unitless number that represents the amount of settlement asset of the market)
 1. FEES: nominated [liquidity fee factor](./0029-fees.md) (which is an input to the calculation of taker fees on the market).
-1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ to meet the liquidity provision obligation (see [MM orders spec](./????-market-making-order-type.md)
+1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ to meet the liquidity provision obligation (see [MM orders spec](./0038-liquidity-provision-order-type.md)
 
 Accepted if all of the following are true:
 - [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
 - [ ] The participant has sufficient collateral in their general account to also meet the margins required to support their orders.
 - [ ] The market is not in an expired state. It is in a pending or active state (TODO: link to market lifecycle spec). In future we will want it to also include when in a proposed state.
 - [ ] The nominated fee amount is greater than or equal to zero and less than a maximum level set by a network parameter
-- [ ] There are a set of valid buy/sell liquidity provision orders (see [MM orders spec](./????-market-making-order-type.md))       
+- [ ] There are a set of valid buy/sell liquidity provision orders (see [MM orders spec](./0038-liquidity-provision-order-type.md))       
 
 Invalid if any of the following are true:
 - [ ] Commitment amount is less than zero (zero is considered to be nominating to cease liquidity provision)
@@ -115,11 +115,11 @@ When `actual-reduction-amount = 0` the transaction is still processed for any da
 The network transaction is used by liquidity providers to nominate a fee amount which is used by the network to calculate the [liqudity_fee](./0029-fees.md) of the market. liquidity providers may amend their nominated fee amount by submitting a liquidity provider transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the entire transaction is considered invalid.
 
 ### How fee amounts are used
-The [liqudity_fee](./0029-fees.md) of a market on Vega takes as an input, a [fee factor[liquidity]](./0029-fees.md) which is calculated by the network, taking as an input the data submitted by the liquidity providers in their liquidity provision network transactions (see [this spec](./0042-setting-fees-and-rewarding-mms.md) for more information on the specific calculation).
+The [liqudity_fee](./0029-fees.md) of a market on Vega takes as an input, a [fee factor[liquidity]](./0029-fees.md) which is calculated by the network, taking as an input the data submitted by the liquidity providers in their liquidity provision network transactions (see [this spec](./0042-setting-fees-and-rewarding-lps.md) for more information on the specific calculation).
 
 
 ### Distributing fees between liquidity providers
-When calculating fees for a trade, the size of a liquidity provider’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between liquidity providers. See this spec](./????-setting-fees-and-rewarding-mms.md) for the calculation of the split.
+When calculating fees for a trade, the size of a liquidity provider’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between liquidity providers. See this spec](./????-setting-fees-and-rewarding-lps.md) for the calculation of the split.
 
 
 ## ORDERS

@@ -2,7 +2,7 @@
 
 ## Summary
 
-The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](./0041-target-stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special liquidity provider pegged order type [liquidity provider order spec](????-market-making-order-type.md). 
+The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](./0041-target-stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special liquidity provider pegged order type [liquidity provider order spec](./0038-liquidity-provision-order-type.md). 
 
 ## Definitions / Glossary of terms used
 - **Market value proxy window length `t_market_value_window `**: sets the length of the window over which we estimate the market value. This is a network parameter.  
