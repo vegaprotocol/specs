@@ -1,5 +1,7 @@
 # Target stake
 
+This spec outlines how to measure how much stake we want committed to a market relative to what is happening on the market (currently open interest). If there is less stake than c_1 x target stake committed to a market we trigger liquidity auction. See [Liquidity Monitoring](./0035-liquidity-monitoring.md)
+
 ## Definitions / Parameters used
 - **Open interest**: the volume of all open positions in a given market.
 - `t_window_for_target_stake` is a network parameter defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds. 
