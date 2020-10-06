@@ -18,12 +18,10 @@ As mentioned earlier, this specification introduces new trading modes. A first o
 
 ## Auction period at market creation
 
-This trading mode is very similar to the Continuous trading mode for a market. In this configuration, a market will start in auction mode, then once the auction comes to an end the market will switch back to the continuous trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
-A market cannot be in both mode at the same time and will trade ever in a auction or continuous trading. There will be the normal trading mode, configured in the market framework, and a period mode which temporarily overrides it. For example a market may be configured to be a Frequent Batch Auction market, but be in an Auction Period triggered by liquidity monitoring.
+This trading mode is very similar to the Continuous trading mode for a market. In this configuration, a market will start in auction mode, then once the auction comes to an end the market will switch to the default trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
+A market cannot be in both modes at the same time and will trade either in an opening auction mode or in the defaul trading mode (e.g. continuous trading). This default trading mode is configured in the market framework, and a period mode can temporarily override it. For example a market may be configured to be a Frequent Batch Auction market, but be in an Auction Period triggered by liquidity monitoring.
 
-In the first implementation, auction periods will be used at opening only as price monitoring will not exist.
-
-There will be a network parameter that sets the minimum allowable duation of the auction period at market creation. New market proposals must specify a period of at least this duration.
+The enactment period of the governance proposal refers to the time between the proposal being accepted and active trading commencing, therefore inclusive of the opening auction period (see [market lifecycle spec](./0043-market-lifecycle.md)).  A governance network parameter will set the minimum allowable enactment period for new market proposals.
 
 ## Frequent batch auction
 
@@ -40,7 +38,7 @@ We can also imagine that an auction period could come to an end once a give numb
 
 ### Volume maximising prices
 
-Once the auction period finishs, vega needs to figure out the best price for the order range in the book which can be uncrossed. The first stage in this is to calculate the Volume Maximising Price Range - the range of prices (which will be a contiguous range in an unconstrained order book) at which the highest total quantity of trades can occur.
+Once the auction period finishes, vega needs to figure out the best price for the order range in the book which can be uncrossed. The first stage in this is to calculate the Volume Maximising Price Range - the range of prices (which will be a contiguous range in an unconstrained order book) at which the highest total quantity of trades can occur.
 
 Initially we will use the mid price within this range. For example, if the volume maximising range is 98-102, we would price all trades in the uncrossing at 100. In future there will be other options, which will be selectable via a network parameter specified at market creation, and changeable through governance. These other options are not yet specified.
 
@@ -80,7 +78,7 @@ Additional Time in Force order options need to be added: only good for normal tr
 
 ## Exiting the auction mode
 
-Please note auction should only ever be exitted if doing so wouldn't trigger entry triggers of any other auction types defined for the market (e.g. price monitoring auction, liquidity monitoring auction). Otherwise the auction gets extended by the period prescribed by the appropriate trigger(s).
+Please note auction should only ever be exited if doing so wouldn't trigger entry triggers of any other auction types defined for the market (e.g. price monitoring auction, liquidity monitoring auction). Otherwise the auction gets extended by the period prescribed by the appropriate trigger(s).
 
 ## First/Naive implementation
 

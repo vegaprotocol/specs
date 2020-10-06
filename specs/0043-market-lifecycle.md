@@ -28,12 +28,12 @@ A market can progress through a number of states through its life. The overall m
 
 
 
-| State              | LP nominations | Trading    | Entry                 | Exit                                                  |
+| State              | New LP | Trading    | Entry                 | Exit                                                  |
 |--------------------|----------------|------------|-----------------------|-------------------------------------------------------|
 |  Proposed          |   Yes          |  No        | Governance vote valid | Governance proposal period ends                       |
-|  Rejected          |   Yes          |  No        | Governance vote loses | N/A                                                   | 
-|  Opening Auction   |   Yes          |  Yes       | Governance vote wins  | Auction period ends                                   |
-|  Active            |   Yes          |  Yes       | Auction period ends   | Governance vote (to close) OR maturity of market      |
+|  Rejected          |   Yes          |  No        | Governance vote fails/loses | N/A                                                   | 
+|  Opening Auction   |   Yes          |  Yes       | Governance vote passes/wins  | Auction period ends                                   |
+|  ???            |   Yes          |  Yes       | Auction period ends   | Governance vote (to close) OR maturity of market      |
 |  Closed            |   Yes          |  No        | Governance vote by LP's (future version) | Governance vote by LP's (future version)    |
 |  Matured           |   No           |  No        | Vega time > market-parameter        |      Settlement event commences     |
 |  Settled at Expiry |   No           |  No        | Settlement event concludes       |      N/A      |
@@ -58,8 +58,8 @@ All markets are first [proposed via the governance mechanism](./0028-governance.
 
 - Voting period ends
 
-  - Passed (yes votes win & thresholds met) → Pending
-  - Failed (no votes win or thresholds not met) → Pending
+  - Passed (yes votes win & thresholds met) → Opening Auction
+  - Failed (no votes win or thresholds not met) → Rejected Market
 
 **Behaviour:**
 
@@ -69,6 +69,22 @@ All markets are first [proposed via the governance mechanism](./0028-governance.
 - No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
 
 ### Opening Auction
+
+**Entry:**
+
+- Valid [governance proposal](./0028-governance.md#1-create-market) passed (yes votes win & thresholds met)
+
+**Exit:**
+
+- Auction period ends. This is governed by a network parameter.
+
+  - Opening auction period ends → ???
+
+**Behaviour:**
+
+- Liquidity providers can make, change, or exit commitments
+- Trading is possible as per [any regular auction period](./0026-auctions.md).
+- No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
 
 
 ### Active markets
