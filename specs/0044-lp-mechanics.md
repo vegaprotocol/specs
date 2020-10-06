@@ -16,15 +16,15 @@ Any Vega participant can apply to market make on a market by submitting a transa
 
 1. Market ID
 1. COMMITMENT AMOUNT: liquidity commitment amount (specified as a unitless number that represents the amount of settlement asset of the market)
-1. FEES: nominated [liquidity fee factor](./0029-fees.md) (which is an input to the calculation of taker fees on the market).
-1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ to meet the liquidity provision obligation (see [MM orders spec](./0038-liquidity-provision-order-type.md)
+1. FEES: nominated [liquidity fee factor](./0029-fees.md), which is an input to the calculation of taker fees on the market, as per [seeting fees and rewarding lps](0042-setting-fees-and-rewarding-lps.md)
+1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ to meet the liquidity provision obligation, see [MM orders spec](./0038-liquidity-provision-order-type.md).
 
 Accepted if all of the following are true:
 - [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
 - [ ] The participant has sufficient collateral in their general account to also meet the margins required to support their orders.
-- [ ] The market is not in an expired state. It is in a pending or active state (TODO: link to market lifecycle spec). In future we will want it to also include when in a proposed state.
+- [ ] The market is not in an expired state. It is in a pending or active state, see the [market lifecycle spec](./0043-market-lifecycle.md). In future we will want it to also include when in a proposed state.
 - [ ] The nominated fee amount is greater than or equal to zero and less than a maximum level set by a network parameter
-- [ ] There are a set of valid buy/sell liquidity provision orders (see [MM orders spec](./0038-liquidity-provision-order-type.md))       
+- [ ] There is a set of valid buy/sell liquidity provision orders (see [MM orders spec](./0038-liquidity-provision-order-type.md)).
 
 Invalid if any of the following are true:
 - [ ] Commitment amount is less than zero (zero is considered to be nominating to cease liquidity provision)
@@ -51,8 +51,6 @@ Example: amending only a commitment amount but retaining old fee bid and orders.
 When a commitment is made the liquidity commitment amount is assumed to be specified in terms of the settlement currency of the market.
 
 If the participant has sufficient collateral to cover their commitment and margins for their proposed orders, the commitment amount is transferred from the participant's general account to their (maybe newly created) liquidity provision bond account (new account type, 1 per liquidity provider per market and asset). For clarity, liquidity providers will have a separate margin account and bond account.
-
-In future a market may only be successfully approved from pending state if the market has a minimum amount of total committed stake.
 
 - liquidity provider bond account:
 	- [ ] Each active market has one bond account per liquidity provider, per settlement asset for that market.
@@ -81,19 +79,19 @@ If they do not have sufficient collateral the transaction is rejected in entiret
 ***Case:*** `proposed-commitment-variation < 0`
 We to calculate whether the liquidity provider may lower their commitment amount and if so, by how much. To do this we first evaluate the maximum amount that the market can reduce by given the current liquidity demand in the market.
 
-`maximum-reduction-amount-market = max(1/siskas_to_bond_in_asset_X x (total-market-making-liquidity - (c_2 x liquidity-demand-estimate)), 0)`
+`maximum-reduction-amount = total_stake - target_stake`
 
 where:
 
-`total-market-making-liquidity` is the sum of all liquidity provision obligations [TODO: LINK TO BELOW] that the market has, measured in siskas and using the previous-commitment-amount for the proposing liquidity provider.
+`total_stake` is the sum of all stake of all liquidity providers bonded to this market.
 
-`liquidity-demand-estimate` is a measure of the market's current liquidity requirements, as per the calculation in the [liquidity monitoring spec](0035-liquidity-monitoring.md).
+`target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](0041-target-stake.md).
 
-`actual-reduction-amount = min (abs(proposed-reduction-amount), maximum-reduction-amount-market`
+`actual-reduction-amount = min(-proposed-commitment-variation, maximum-reduction-amount)`
 
 `new-actual-commitment-amount =  old-commitment-amount - actual-reduction-amount ` 
 
-i.e. liquidity providers are allowed to decrease the liquidity commitment subject to there being sufficient liquidity committed to the market so that it stays above the market's minimum liquidity threshold. The above formulae result in the fact that if `maximum-reduction-amount = 0`, then `actual-reduction-amount = 0` and therefore the liquidity provider is unable to reduce their commitment amount.
+i.e. liquidity providers are allowed to decrease the liquidity commitment subject to there being sufficient stake committed to the market so that it stays above the market's required stake threshold. The above formulae result in the fact that if `maximum-reduction-amount = 0`, then `actual-reduction-amount = 0` and therefore the liquidity provider is unable to reduce their commitment amount.
 
 When `actual-reduction-amount > 0`:
 
@@ -112,14 +110,14 @@ When `actual-reduction-amount = 0` the transaction is still processed for any da
 
 ### Nominating and amending fee amounts
 
-The network transaction is used by liquidity providers to nominate a fee amount which is used by the network to calculate the [liqudity_fee](./0029-fees.md) of the market. liquidity providers may amend their nominated fee amount by submitting a liquidity provider transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the entire transaction is considered invalid.
+The network transaction is used by liquidity providers to nominate a fee amount which is used by the network to calculate the [liqudity_fee](./0042-setting-fees-and-rewarding-lps) of the market. Liquidity providers may amend their nominated fee amount by submitting a liquidity provider transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the entire transaction is considered invalid.
 
 ### How fee amounts are used
 The [liqudity_fee](./0029-fees.md) of a market on Vega takes as an input, a [fee factor[liquidity]](./0029-fees.md) which is calculated by the network, taking as an input the data submitted by the liquidity providers in their liquidity provision network transactions (see [this spec](./0042-setting-fees-and-rewarding-lps.md) for more information on the specific calculation).
 
 
 ### Distributing fees between liquidity providers
-When calculating fees for a trade, the size of a liquidity provider’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between liquidity providers. See this spec](./????-setting-fees-and-rewarding-lps.md) for the calculation of the split.
+When calculating fees for a trade, the size of a liquidity provider’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between liquidity providers. See [setting fees and rewarding lps]](./0042-setting-fees-and-rewarding-lps.md) for the calculation of the split.
 
 
 ## ORDERS
@@ -146,8 +144,8 @@ Engineering notes:
 ### Measuring liquidity obligation from commitment
 Each liquidity provider has a _liquidity provision obligation_ specified by the network at a point in time and measured in siskas.
 
-The liquidity obligations they make (in siskas) is converted from the commitment amount using, a network parameter `siskas_to_bond` as follows: 
-``` mm_liquidity_obligation = liquidity_commitment x siskas_to_bond_in_asset_X.```
+The stake they commit implies liquidity obligations. This is derived using a *single* network parameter `stake_to_ccy_siskas` as follows: 
+``` lp_liquidity_obligation_in_ccy_siskas = stake_to_ccy_siskas x stake.```
 
 
 ### How a liquidity provider fulfils their obligation
@@ -168,16 +166,13 @@ Since liquidity provider orders automatically refresh, a liquidity provider is o
 
 If at any point in time during continuous trading, the liquidity provider has insufficient capital to meet their margin requirements arising from their liquidity provision orders and open positions, the network will utilise their liquidity provision commitment, held in the liquidity provider's bond account to cover their commitment, and penalise them at a proportional rate.
 
-Let `market-maker-bond-penalty = bond-penalty-parameter * margin-shortfall` be the amount of commitment that has been slashed, where `bond-penalty-parameter` is a network parameter and the `margin-shortfall` refers to the absolute value of the amount of margin that the liquidity provider was unable to cover through their margin and general account.
+Let `market-maker-bond-penalty = bond-penalty-parameter x margin-shortfall` be the amount of commitment that has been slashed, where `bond-penalty-parameter` is a network parameter and the `margin-shortfall` refers to the absolute value of the amount of margin that the liquidity provider was unable to cover through their margin and general account.
 
 NOTE: if this occurs at the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will always be set to zero.
 
 We have two cases to consider
 
 ***Case: where *** `margin-shortfall > market-maker-commitment-amount - market-maker-bond-penalty`
-
-
-
 
 The network will:
 1. Transfer an amount equal to `margin-shortfall` from the liquidity provider's bond account into the liquidity provider's margin account. If there is insufficient funds to cover this amount, transfer the maximum amount it is able to. Note, this can happen as part of the normal margin search steps - i.e. search the liquidity providers' margin account then general account then liquidity provider's bond account.
