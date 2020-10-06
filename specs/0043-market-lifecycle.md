@@ -2,23 +2,53 @@
 
 ## Overview
 
-### Market status
+Markets on Vega are permissionlessly proposed using the [governance mechanism](./0028-governance.md#1-create-market). If a market passes the governance vote, it undergoes various state changes throughout its lifecycle. Aspects of the state that change include:
+- trading mode
+- whether the market is open for trading
+- status of settlement
+
+## Market Creation
+
+Markets proposed via [governance proposals](./0028-governance.md#1-create-market) undergo certain additional validations. 
+
+1. [Future version] A "market creation" governance proposal should be rejected by the network if the proposer does not [also nominate to provide liquidity](./0044-lp-mechanics.md) on their proposed market (we will spec details of this at some point - not for MVP).
+
+
+## Market lifecycle states
 
 A market can progress through a number of states through its life. The overall market status flow is shown in the diagram below.
 
-![](0029-market-lifecycle-flow-diagram.svg)
+<br>
+
+![](IMG_mkt-lifecycle-temp.jpg)
+
+<br>
+<br>
+<br>
 
 
-### Active markets
 
-All markets have a "trading mode" (plus its configuration) as part of the [market framework](0001-market-framework.md). When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market once it opens, but in future, trading modes may specify a schedule of periods). When created, a market will generally start in an opening auction period. Markets can also enter exeptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
+| State              | LP nominations | Trading    | Entry                 | Exit                                                  |
+|--------------------|----------------|------------|-----------------------|-------------------------------------------------------|
+|  Proposed          |   Yes          |  No        | Governance vote valid | Governance proposal period ends                       |
+|  Rejected          |   Yes          |  No        | Governance vote loses | N/A                                                   | 
+|  Opening Auction   |   Yes          |  Yes       | Governance vote wins  | Auction period ends                                   |
+|  Active            |   Yes          |  Yes       | Auction period ends   | Governance vote (to close) OR maturity of market      |
+|  Closed            |   Yes          |  No        | Governance vote by LP's (future version) | Governance vote by LP's (future version)    |
+|  Matured           |   No           |  No        | Vega time > market-parameter        |      Settlement event commences     |
+|  Settled at Expiry |   No           |  No        | Settlement event concludes       |      N/A      |
 
 
-## Market status details
+
+<br>
+<br>
+<br>
+
+## Market state descriptions
 
 ### Proposed
+All markets are first [proposed via the governance mechanism](./0028-governance.md#1-create-market). We can think of the market as being in a "proposed state", in the same way that any governance proposal is in a proposed state. At this point governance is deciding whether the market should be created.
 
-Markets created via [governance proposals](./0028-governance.md#1-create-market) and voting will always begin in a proposed state. At this point governance is deciding whether the market should be created, and liquidity providers may also support the market proposal by committing liquidity.
 
 **Entry:**
 
@@ -38,6 +68,12 @@ Markets created via [governance proposals](./0028-governance.md#1-create-market)
 - No trading is possible, no orders can be placed (except the liquidity provider order/shape that forms part of their commitment)
 - No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
 
+### Opening Auction
+
+
+### Active markets
+
+All markets have a "trading mode" (plus its configuration) as part of the [market framework](0001-market-framework.md). When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market once it opens, but in future, trading modes may specify a schedule of periods). When created, a market will generally start in an opening auction period. Markets can also enter exeptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
 
 ### Pending
 

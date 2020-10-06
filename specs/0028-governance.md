@@ -151,9 +151,11 @@ We allow users to submit proposals covering 3 types of governance action:
 
 ## 1. Create market
 
-A proposal to create a market contains a compelte market specification as per the Market Framework (see spec) that describes the market to be created. 
+A proposal to create a market contains a complete market specification as per the Market Framework (see spec) that describes the market to be created. 
 
 All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
+
+Note that additional requirements on validity of the governance proposal may in future include a requirement that the proposer also commits to [supply liquidity to the market](./0044-lp-mechanics.md). More details in the [market lifecycle spec](./0043-market-lifecycle.md).
 
 
 ## 2. Change market parameters
