@@ -33,7 +33,7 @@ A market can progress through a number of states through its life. The overall m
 |  Proposed          |   Yes          |  No        | Governance vote valid | Governance proposal period ends                       |
 |  Rejected          |   Yes          |  No        | Governance vote fails/loses | N/A                                                   | 
 |  Opening Auction   |   Yes          |  Yes       | Governance vote passes/wins  | Auction period ends                                   |
-|  ???            |   Yes          |  Yes       | Auction period ends   | Governance vote (to close) OR maturity of market      |
+|  Active            |   Yes          |  Yes       | Auction period ends   | Governance vote (to close) OR maturity of market      |
 |  Closed            |   Yes          |  No        | Governance vote by LP's (future version) | Governance vote by LP's (future version)    |
 |  Matured           |   No           |  No        | Vega time > market-parameter        |      Settlement event commences     |
 |  Settled at Expiry |   No           |  No        | Settlement event concludes       |      N/A      |
@@ -76,15 +76,15 @@ All markets are first [proposed via the governance mechanism](./0028-governance.
 
 **Exit:**
 
-- Auction period ends. This is governed by a network parameter.
+- Auction period ends when the enactment period has concluded, subject to the usual [ending of auction checks](./0026-auctions.md).
 
-  - Opening auction period ends → ???
+  - Opening auction period ends & checks pass → Active
 
 **Behaviour:**
 
 - Liquidity providers can make, change, or exit commitments
 - Trading is possible as per [any regular auction period](./0026-auctions.md).
-- No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
+- Margins on orders as per auction based instructions in [margin calculator spec](./0019-margin-calculator.md).
 
 
 ### Active markets
