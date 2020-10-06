@@ -1,3 +1,6 @@
+# DRAFT DRAFT DRAFT DRAFT DRAFT DRAFT
+🧫 [This spec is still evolving](https://github.com/vegaprotocol/product/pull/375)
+
 # Market Lifecycle
 
 ## Overview
