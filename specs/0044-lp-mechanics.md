@@ -178,8 +178,8 @@ The network will:
 1. Transfer an amount equal to `margin-shortfall` from the liquidity provider's bond account into the liquidity provider's margin account. If there is insufficient funds to cover this amount, transfer the maximum amount it is able to. Note, this can happen as part of the normal margin search steps - i.e. search the liquidity providers' margin account then general account then liquidity provider's bond account.
 2. Transfer an amount equal to `market-maker-bond-penalty` from the market's liquidity provider's bond account and add it to the insurance pool subject to condition that if this occurs at the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will always be set to zero. If there is insufficient funds to cover this penalty, search the margin and general accounts for the penalty for any remaining amounts owed.
 3. Adjust the liquidity provider's `actual-stake-amount` to match the amount netted from the penalty: `actual-stake-amount = previous-commitment-amount - market-maker-bond-penalty`
-4. Position resolution occurs if the `margin-shortfall` and/or the `market-maker-bond-penalty` can't be fulfilled.
-5. Adjust the liquidity provider's `market-maker-commitment-amount` to zero (including removing the fee amount and liquidity provision orders as if amending the commitment to zero is accepted) if the liquidity provider undergoes position resolution.
+4. Initiate closeout of the LPs positions if the `margin-shortfall` and/or the `market-maker-bond-penalty` can't be fulfilled.
+5. Adjust the liquidity provider's `market-maker-commitment-amount` to zero (including removing the fee amount and liquidity provision orders as if amending the commitment to zero is accepted) if the liquidity provider undergoes closeout of any positions.
 
 **Bond account top up by collateral search:**
 Important: a trader's general account should be periodically searched to top back up its bond account to the level that meets its current commitment.. i.e. so actual stake = commitment. This should happen every time the network is performing a margin calculation / search.
@@ -190,16 +190,16 @@ Important: a trader's general account should be periodically searched to top bac
 
 
 ## Network parameters 
-`bond-penalty-parameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations.
-`market-size-measurement-period` - used in fee splitting
-`maximum-liquidity-fee-factor-level` - used in validating fee amounts
-`siskas_to_bond` - used to translate a commitment to an obligation (in siskas)
+- `bond-penalty-parameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations.
+- ~~`market-size-measurement-period` - used in fee splitting~~
+- `maximum-liquidity-fee-factor-level` - used in validating fee amounts
+- `stake_to_ccy_siskas` - used to translate a commitment to an obligation (in siskas)
 
 ## What data do we keep relating to liquidity provision?
-1. List of all liquidity providers and their commitment sizes and their “equity-like share” for each market (https://github.com/vegaprotocol/product/pull/323/files)
+1. List of all liquidity providers and their commitment sizes and their “equity-like share” for each market [see 0042-setting-fees-and-rewarding-lps](./0042-setting-fees-and-rewarding-lps.md)
 1. Liquidity provision orders (probably need to be indexed somewhere in addition to the order book)
 1. New account per market holding all committed liquidity provider bonds
-1. Actual amount of liquidity supplied (can be calculated from order book “0034-prob-weighted-liquidity-measure.ipynb”)
+1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-prob-weighted-liquidity-measure.ipynb))
 1. Each liquidity provider's actual bond amount
 
 
