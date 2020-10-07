@@ -20,12 +20,6 @@ Markets proposed via [governance proposals](./0028-governance.md#1-create-market
 
 A market can progress through a number of states through its life. The overall market status flow is shown in the diagram below.
 
-<br>
-
-<br>
-<br>
-<br>
-
 
 DAVID/BARNEY - note, I've suggested we don't use "matured" or "expired" but rather "trading terminated" which is the terminology of CME to describe when that happens at end of trading of a market. Then, after the expiry via the oracle data, the last state could be "settled", though I'd prefer to be more explicit that it's the final settlement (for when we one day have interim settlements).
 
@@ -41,9 +35,7 @@ DAVID/BARNEY - note, I've suggested we don't use "matured" or "expired" but rath
 | Trading Terminated|   No           |  No        | Market parameter setting closing date OR defined on the product | Settlement event commences                       
 | Settled           |   No           |  No        | Settlement event concludes                                | N/A                                             
 
-<br>
-<br>
-<br>
+
 
 ## Market status descriptions
 

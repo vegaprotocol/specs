@@ -28,7 +28,7 @@ Any auction that would be less than `min_auction_length` seconds should not be s
 
 ## Opening auctions (at creation of the market)
 
-A newly created market will start in auction mode, then once the auction comes to an end the market will switch to the default trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
+A newly created market will start in auction mode, then once the auction comes to an end, the market will switch to the default trading mode, and will stay like that until there's a need for it to go in auction mode again (e.g: based on the price changes).
 A market cannot be in both modes at the same time and will trade either in an opening auction mode or in the defaul trading mode (e.g. continuous trading). This default trading mode is configured in the market framework, and a period mode can temporarily override it. For example a market may be configured to be a Frequent Batch Auction market, but be in an Auction Period triggered by liquidity monitoring.
 
 The enactment period of the governance proposal refers to the time between the proposal being accepted and active trading commencing, therefore inclusive of the opening auction period (see [market lifecycle spec](./0043-market-lifecycle.md)).  A governance network parameter will set the minimum allowable enactment period for new market proposals.
@@ -98,10 +98,10 @@ Any auction that would be less than `min_auction_length` seconds should not be s
 
 ### Exiting during opening auction
 
-The auction should not exit unless at least one trade an ending criteria for the opening auction rather than restart it, we already extend if liquidity criteria aren’t met and I think these things will play better together if we simply have the opening auction last until we are ready to start trading, which given the above should include having had a trade.'
+The auction should not exit unless:
 
-Please note auction should only ever be exited if doing so wouldn't trigger entry triggers of any other auction types defined for the market (e.g. price monitoring auction, liquidity monitoring auction). Otherwise the auction gets extended by the period prescribed by the appropriate trigger(s).
-
+- there has been at least one trade on the market
+- the [liquidity monitoring](./0035-liquidity-monitoring.md) exiting criteria is met 
 
 ## First/Naive implementation
 
