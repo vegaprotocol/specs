@@ -146,6 +146,7 @@ Each liquidity provider has a _liquidity provision obligation_ specified by the 
 
 The stake they commit implies liquidity obligations. This is derived using a *single* network parameter `stake_to_ccy_siskas` as follows: 
 ``` lp_liquidity_obligation_in_ccy_siskas = stake_to_ccy_siskas x stake.```
+Note here "ccy" stands for "currency" and that the liquidity measure units are actually a currency e.g. ETH or USD. This is because it's basically `volume x probability of trading x price of the volume` and price of the volume is in the said currency.
 
 
 ### How a liquidity provider fulfils their obligation
