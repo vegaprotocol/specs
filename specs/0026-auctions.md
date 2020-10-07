@@ -14,11 +14,21 @@ They are mostly useful in less liquid markets, or in specific scenarios where a 
 
 # Reference-level explanation
 
-As mentioned earlier, this specification introduces new trading modes. A first one which purpose is to calibrate a market / help with price discovery when a new market is started. A second one meant to be trading only through auction called `Frequent batch auction`.
+As mentioned earlier, this specification introduces new trading modes. 
 
-## Auction period at market creation
+1. General auctions
+1. Opening auctions: purpose is to calibrate a market / help with price discovery when a new market is started.
+1. Frequent batch auctions: a trading mode that may be set as the default / normal mode that has trading occur only through repeated auctions (as opposed to continuous trading)
 
-This trading mode is very similar to the Continuous trading mode for a market. In this configuration, a market will start in auction mode, then once the auction comes to an end the market will switch to the default trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
+## Auction config
+
+All auctions have a `min_auction_length`, which defines the minimum `call period` for an auction.
+
+Any auction that would be less than `min_auction_length` seconds should not be started (e.g. if the market is nearing the end of its open period / active trading).
+
+## Opening auctions (at creation of the market)
+
+A newly created market will start in auction mode, then once the auction comes to an end the market will switch to the default trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
 A market cannot be in both modes at the same time and will trade either in an opening auction mode or in the defaul trading mode (e.g. continuous trading). This default trading mode is configured in the market framework, and a period mode can temporarily override it. For example a market may be configured to be a Frequent Batch Auction market, but be in an Auction Period triggered by liquidity monitoring.
 
 The enactment period of the governance proposal refers to the time between the proposal being accepted and active trading commencing, therefore inclusive of the opening auction period (see [market lifecycle spec](./0043-market-lifecycle.md)).  A governance network parameter will set the minimum allowable enactment period for new market proposals.
@@ -78,7 +88,20 @@ Additional Time in Force order options need to be added: only good for normal tr
 
 ## Exiting the auction mode
 
+```auction_end_time = min(calculated_end_time, market_expiry)```
+
+where `calculated_end_time` is the call period of the auction.
+
+If the market is going to expire the auction must end and uncross at or before expiry.
+
+Any auction that would be less than `min_auction_length` seconds should not be started.
+
+### Exiting during opening auction
+
+The auction should not exit unless at least one trade an ending criteria for the opening auction rather than restart it, we already extend if liquidity criteria aren’t met and I think these things will play better together if we simply have the opening auction last until we are ready to start trading, which given the above should include having had a trade.'
+
 Please note auction should only ever be exited if doing so wouldn't trigger entry triggers of any other auction types defined for the market (e.g. price monitoring auction, liquidity monitoring auction). Otherwise the auction gets extended by the period prescribed by the appropriate trigger(s).
+
 
 ## First/Naive implementation
 
