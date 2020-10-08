@@ -57,7 +57,7 @@ All markets are first [proposed via the governance mechanism](./0028-governance.
 **Behaviour:**
 
 - Participants can vote for or against the market
-- Liquidity providers can make, change, or exit commitments (proposer can't commit below proposer minimum)
+- Liquidity providers can make, change, or exit commitments (proposer can't commit below proposer minimum which is a future feature not for MVP)
 - No trading is possible, no orders can be placed (except the liquidity provider order/shape that forms part of their commitment)
 - No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
 
