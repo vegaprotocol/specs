@@ -24,7 +24,7 @@ As mentioned earlier, this specification introduces new trading modes.
 
 All auctions have a `min_auction_length`, which defines the minimum `call period` for an auction.
 
-Any auction that would be less than `min_auction_length` seconds should not be started (e.g. if the market is nearing the end of its open period / active trading).
+Any auction that would be less than `min_auction_length` seconds (network parameter) should not be started (e.g. if the market is nearing the end of its open period / active trading). This is to prevent auction calls that are too short given the network latency/granularity, so should be some multiple of the worst case expected block time at some confidence level, which is best maintained by governance voting (hence being a network parameter).
 
 ## Opening auctions (at creation of the market)
 
@@ -110,6 +110,11 @@ As a first version we expect:
 
 - A market in continuous trading mode, to be configured so it can start with an auction for a given period of time, then switch to continuous trading for the rest of the life of the market.
 - A market to be configured to run in frequent batch auction mode, which could not be changed to a continuous trading later on.
+
+
+# Network Parameters
+
+`min_auction_length`: any auction that would be less than `min_auction_length` seconds (network parameter) should not be started.
 
 # Pseudo-code / Examples
 
