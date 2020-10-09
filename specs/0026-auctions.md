@@ -91,11 +91,11 @@ Additional Time in Force order options need to be added: only good for normal tr
 
 ```auction_end_time = min(calculated_end_time, market_expiry)```
 
-where `calculated_end_time` is the call period of the auction.
+where `calculated_end_time` is the call period of the auction, and note, for [liquidity monitoring](./0035-liquidity-monitoring.md) this may be an infinite time.
 
 If the market is going to terminate trading, the auction must end and uncross at or before this point.
 
-Any auction that would be less than `min_auction_length` seconds should not be started.
+Any auction that would be less than (network parameter) `min_auction_length` seconds should not be started.
 
 ### Exiting during opening auction
 
