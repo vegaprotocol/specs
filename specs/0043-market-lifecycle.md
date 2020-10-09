@@ -175,13 +175,13 @@ A market terminates trading at some point prior to, or at, the settlement of the
 
 - No trading occurs, no orders are accepted
 - Mark to market settlement is performed if required after termination is triggered then never again
-- No market data are emitted
-- No risk management of price/liquidity monitoring occurs
+- A single set of market data may be emitted for the final settlement data (e.g. settlement mark price), after which no market data are emitted.
+- No risk management or price/liquidity monitoring occurs
 
 
 ### Settled
 
-Once the required data to calculate the settlement cashflows is available for an Expired market, these cashflows are calcualted and applied to all traders with an open position (settlement). The positions are then closed and all orders cleared. All money held in margin accoutns after final settlement is returned to traders' general accounts. The market can be deleted entirely at this point, from a core perspective. Any insurance pool funds are distributed as per the insurance pool spec.
+Once the required data to calculate the settlement cashflows is available for an Expired market, these cashflows are calculated and applied to all traders with an open position (settlement). The positions are then closed and all orders cleared. All money held in margin accounts after final settlement is returned to traders' general accounts. The market can be deleted entirely at this point, from a core perspective. Any insurance pool funds are distributed as per the [insurance pool spec](./0015-market-insurance-pool-collateral.md).
 
 **Entry:**
 
