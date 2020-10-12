@@ -1,6 +1,6 @@
 # Market Lifecycle
 
-All markets have a "trading mode" (plus its coniguration) as part of the [market framework](0001-market-framework.md). When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market once it opens, but in future, trading modes may specify a schedule of periods). When created, a market will generally start in an opening auction period. Markets can also enter exeptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
+All markets have a "trading mode" (plus its coniguration) as part of the [market framework](0001-market-framework.md). When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market unless changed by governance once it opens, but in future, trading modes may specify a schedule of periods). When created, a market will generally start in an opening auction period. Markets can also enter exceptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
 
 ## Overview
 
@@ -21,19 +21,15 @@ Markets proposed via [governance proposals](./0028-governance.md#1-create-market
 A market can progress through a number of states through its life. The overall market status flow is shown in the diagram below.
 
 
-DAVID/BARNEY - note, I've suggested we don't use "matured" or "expired" but rather "trading terminated" which is the terminology of CME to describe when that happens at end of trading of a market. Then, after the expiry via the oracle data, the last state could be "settled", though I'd prefer to be more explicit that it's the final settlement (for when we one day have interim settlements).
-
-
-| State              | New LP         | Trading    | Entry                                                     | Exit                                                  
-|--------------------|----------------|------------|-----------------------------------------------------------|-------------------------------------------------------
-| Proposed          |   Yes          |  No        | Governance vote valid                                     | Governance proposal period ends                       
-| Rejected          |   Yes          |  No        | Governance vote fails/loses                               | N/A                                                    
-| Pending           |   Yes          |  Yes       | Governance vote passes/wins                               | Governance vote (to close) OR enactment date reached
-| Active            |   Yes          |  Yes       | Enactment date reached and usual auction exit checks pass | Governance vote (to close) OR maturity of market      
-| Suspended         |   Yes          |  Yes       | Price monitoring or liquidity monitoring trigger          | Monitoring definition
-| Closed            |   Yes          |  No        | Governance vote (to close)                                | Governance vote (to reopen)                           
-| Trading Terminated|   No           |  No        | Market parameter setting closing date OR defined on the product | Settlement event commences                       
-| Settled           |   No           |  No        | Settlement event concludes                                | N/A                                             
+| State             | New LP         | Trading    | Trading Mode        | Entry                                                     | Exit                   
+| Proposed          |   Yes          |  No        | N/A                 | Governance vote valid                                     | Governance proposal period ends                       
+| Rejected          |   No           |  No        | N/A                 | Governance vote fails/loses                               | N/A                                                    
+| Pending           |   Yes          |  Yes       | Opening auction     | Governance vote passes/wins                               | Governance vote (to close) OR enactment date reached
+| Active            |   Yes          |  Yes       | Normal trading      | Enactment date reached and usual auction exit checks pass | Governance vote (to close) OR maturity of market      
+| Suspended         |   Yes          |  Yes       | Exceptional auction | Price monitoring or liquidity monitoring trigger          | Monitoring definition
+| Closed            |   No           |  No        | N/A                 | Governance vote (to close)                                | N/A
+| Trading Terminated|   No           |  No        | N/A                 | Market parameter setting closing date OR defined on the product | Settlement event commences                       
+| Settled           |   No           |  No        | N/A                 | Settlement event concludes                                | N/A                                            
 
 
 
@@ -81,7 +77,7 @@ A "new market" governance proposal that is unsuccessful is a rejected governance
 
 ### Pending
 
-If a "new market" governance proposal is successful the market is opened into a "pending" state, where the price determination method is an auction period with a callPeriod that ends at the enactment date, specified in the governance proposal.
+If a "new market" governance proposal is successful the market is opened into a "pending" state, where the price determination method is an auction period with a callPeriod that ends at the enactment date, specified in the governance proposal. Note, this is a state for any market that is due to be created and that currently this means by governance proposal, but in future there may be automated market creations? e.g. a series of markets, creation from an oracle/data source, etc.
 
 **Entry:**
 
@@ -92,7 +88,7 @@ If a "new market" governance proposal is successful the market is opened into a 
 - Auction period ends when either of the following occur:
 
   - Enactment date is reached and the usual [ending of auction checks pass](./0026-auctions.md) → Active
-  - Market change governance vote approves closure/cancellation of market → Cancelled
+  - Market change governance vote approves closure of market → Closed
 
 **Behaviour:**
 
@@ -103,7 +99,7 @@ If a "new market" governance proposal is successful the market is opened into a 
 
 ### Active
 
-Once the enactment date is reached the market becomes Active. This status indicates it is trading via it's normally configured trading mode according to the market framework (continuous trading, frequent batch auction, RFQ, block only, etc.). The specification for the trading mode should describe which orders are accepted and how trading proceeds. The market can become Expired via a product trigger (for futures, if the trading termination date is reached) and can be temporarily suspended automatically by various monitoring systems ([price monitoring](./0032-price-monitoring.md), [liquidity monitoring](./0035-liquidity-monitoring.md)). The market can also be closed via a governance vote (market parameter update) to change the status to closed.
+Once the enactment date is reached the market becomes Active. This status indicates it is trading via its normally configured trading mode according to the market framework (continuous trading, frequent batch auction, RFQ, block only, etc.). The specification for the trading mode should describe which orders are accepted and how trading proceeds. The market will terminate trading according to a product trigger (for futures, if the trading termination date is reached) and can be temporarily suspended automatically by various monitoring systems ([price monitoring](./0032-price-monitoring.md), [liquidity monitoring](./0035-liquidity-monitoring.md)). The market can also be closed via a governance vote (market parameter update) to change the status to closed.
 
 **Entry:**
 
@@ -113,7 +109,7 @@ Once the enactment date is reached the market becomes Active. This status indica
 **Exit:**
 
 - Price, liquidity or other monitoring system triggers suspension → Suspended
-- Trading termination is triggered (defined by a market parameter) → Trading Terminated
+- Trading termination is triggered by a product trigger (for futures, if the trading termination date, set by a market parameter, is reached) → Trading Terminated
 - Market change governance vote approves closure of market → Closed
 
 **Behaviour:**
@@ -133,7 +129,7 @@ A suspended market occurs when an Active market is temporarily stopped from trad
 
 **Exit:**
 
-- Conditions specified in [price monitoring](./0032-price-monitoring.md) and [liquidity monitoring](./0035-liquidity-monitoring.md) are met for the market to exit the suspended status back to Active.
+- Conditions specified in [price monitoring](./0032-price-monitoring.md) and [liquidity monitoring](./0035-liquidity-monitoring.md) and the usual [ending of auction checks pass](./0026-auctions.md) → Active 
 
 **Behaviour:**
 
