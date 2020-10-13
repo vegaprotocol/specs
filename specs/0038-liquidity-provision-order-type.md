@@ -1,13 +1,13 @@
-# Market Making Order Type
+# Liquidity Provisioning Order Type
 
 ## Summary 
 
-When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [market making mechanics](./0044-lp-mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-setting-fees-and-rewarding-lps.md).
+When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [Liquidity Provisioning mechanics](./0044-lp-mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-setting-fees-and-rewarding-lps.md).
 
 
-## Market making order features
+## Liquidity Priviosioning order features
 
-Market maker orders are a special order type with the following features:
+LP orders are a special order type with the following features:
 - Is a batch order: allows simultaneously specifying multiple orders in one message/transaction
 - Initially all are pegged orders but other price types may be available in future
 - Are always priced limit orders that sit on the book
@@ -46,7 +46,7 @@ Buy-shape: {
 
 Input data:
 1. The commitment, buy-shape, sell-shape (as submitted in the [liquidity provision network transaction](./0044-lp-mechanics.md).) 
-1. Any limit orders that the market maker has on the book at a point in time.
+1. Any limit orders that the liquidity provider has on the book at a point in time.
 
 ### Refining list of orders
 
@@ -54,9 +54,9 @@ Steps:
 
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-lp-mechanics.md).
 
-1. Subtract the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any limit orders the market maker has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liqudity-measure.ipynb)). If you end up with 0 or negative number, stop, you are done.
+1. Subtract the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any limit orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liqudity-measure.ipynb)). If you end up with 0 or negative number, stop, you are done.
 
-1. Using the adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the remaining entries in the buy / sell shape (for clarity, this does not include any other limit orders that the market maker has).
+1. Using the adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the remaining entries in the buy / sell shape (for clarity, this does not include any other limit orders that the liquidity provider has).
 
 1. Calculate the volume implied by each entry in the refined buy/sell order list. You will now create orders from this volume at the relevant price point and apply them to the order book. 
 
@@ -104,7 +104,7 @@ Call probability-of-trading function with current-price = 105, mm-time-horizon (
 
 ## Refreshing of orders / recalculating order volume
 
-Market maker orders are recalculated and refreshed during a normal peg reprice when the order book status has changed, including if a market maker's order(s) have traded (both limit orders and shape implied orders).
+LP orders are recalculated and refreshed during a normal peg reprice when the order book status has changed, including if a liquidity provider's order(s) have traded (both limit orders and shape implied orders).
 
 In both cases, repeat all steps above, preserving the order as an order, but recalculating the volume and price of it. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself. 
 
@@ -112,7 +112,7 @@ TIME PRIORITY FOR REFRESHING:
 
 1. For all orders that are repriced but not as a result of trading (i.e. pegged orders that move as a result of peg moving), treat as per normal pegged orders.
 
-1. The system should refresh the market maker pegged orders, in time priority according to which traded first (see below example).
+1. The system should refresh the liquidity provider's pegged orders, in time priority according to which traded first (see below example).
 
 ________________________
 **Example**: we have a buy side of an order book that looks like this:
@@ -135,18 +135,18 @@ and then this
 *NB the actual values of the buy-prices and buy-volumes are dependent on the result of step 2 above and this example is not to test that, so don't try to replicate this with numbers, it's for illustrative purposes only.
 ________________________
 
-## Amending the MM order:
+## Amending the LP order:
 
-Market makers are always allowed to amend their orders by submitting a market maker network transaction with a set of revised order shapes (see [market making mechanics spec](./0000-mm-mechanics.md)). They are not able to amend orders using "normal" amend orders.
+Liquidity providers are always allowed to amend their orders by submitting a LP order with a set of revised order shapes (see [Liquidity Provisioning mechanics](./0044-lp-mechanics.md)). They are not able to amend orders using "normal" amend orders.
 
-No cancellation of orders other than by lowering commitment as per [market making mechanics spec](./0000-mm-mechanics.md)
+No cancellation of orders other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-lp-mechanics.md).
 
 
 ## Network Parameters:
 * mm-time-horizon: market making time horizon to imply probability of trading.
 
 ## APIs:
-* Order datatype for market maker orders. Any order APIs should contain these orders.
+* Order datatype for LP orders. Any order APIs should contain these orders.
 
 ## Acceptance Criteria:
 - [ ] The volume generated on the book matches examples produced from https://github.com/vegaprotocol/sim/notebooks/fee_margin_examples.ipynb
