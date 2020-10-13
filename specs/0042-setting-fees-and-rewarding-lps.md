@@ -49,7 +49,7 @@ Once the market opens (opening auction starts) a clock starts ticking. We calcul
 At time of call:
 * The `liquidity-fee-factor` for the market.
 * Current liquidity provider commitments and their individually nominated fee factors
-* Liquidity demand estimate
+* [Target stake](./0041-target-stake.md)
 
 ## SPLITTING FEES BETWEEN LIQUIDITY PROVIDERS
 
