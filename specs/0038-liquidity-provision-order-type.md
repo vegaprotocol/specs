@@ -5,7 +5,7 @@
 When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [Liquidity Provisioning mechanics](./0044-lp-mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-setting-fees-and-rewarding-lps.md).
 
 
-## Liquidity Priviosioning order features
+## Liquidity Provisioning order features
 
 LP orders are a special order type with the following features:
 - Is a batch order: allows simultaneously specifying multiple orders in one message/transaction
