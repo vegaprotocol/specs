@@ -10,11 +10,11 @@ Similarly to [price monitoring](0032-price-monitoring.md), we need to be able to
 
 ## Liquidity auction network parameters
 
-**c<sub>1</sub>** - constant multiple for [target stake](0000-target-stake.md) triggering the commencement of liquidity auction.  
+**c<sub>1</sub>** - constant multiple for [target stake](0041-target-stake.md) triggering the commencement of liquidity auction.  
 
 ## Glossary
 
-[target stake](0000-target-stake.md) is defined in a separate spec.
+[target stake](0041-target-stake.md) is defined in a separate spec.
 
 ## Required stake
 
