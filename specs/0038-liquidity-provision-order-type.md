@@ -137,7 +137,7 @@ ________________________
 
 ## Amending the LP order:
 
-Liquidity providers are always allowed to amend their shape generated orders by submitting a new liquidity provider order with a set of revised order shapes (see [market making mechanics spec](./0044-lp-mechanics.md)). They are not able to amend orders using "normal" amend orders.
+Liquidity providers are always allowed to amend their shape generated orders by submitting a new liquidity provider order with a set of revised order shapes (see [Liquidity Provisioning mechanics](./0044-lp-mechanics.md)). They are not able to amend orders using "normal" amend orders.
 
 No cancellation of orders other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-lp-mechanics.md).
 
