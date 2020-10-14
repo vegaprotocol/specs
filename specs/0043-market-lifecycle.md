@@ -1,6 +1,8 @@
 # Market Lifecycle
 
-All markets have a "trading mode" (plus its coniguration) as part of the [market framework](0001-market-framework.md). When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market unless changed by governance once it opens, but in future, trading modes may specify a schedule of periods). When created, a market will generally start in an opening auction period. Markets can also enter exceptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
+All markets have a "trading mode" (plus its configuration) as part of the [market framework](0001-market-framework.md). 
+When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market unless changed by governance once it opens, but in future, trading modes may specify a schedule of periods). 
+When created, a market will generally start in an opening auction period. Markets can also enter exceptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
 
 ## Overview
 
