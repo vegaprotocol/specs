@@ -2,7 +2,7 @@
 
 All markets have a "trading mode" (plus its configuration) as part of the [market framework](0001-market-framework.md). 
 When a market is Active (i.e. it is open for trading), it will be in a trading period. Normally, the trading period will be defined by the trading mode (additionally, this is one period for the life of the market unless changed by governance once it opens, but in future, trading modes may specify a schedule of periods). 
-When created, a market will generally start in an opening auction period. Markets can also enter exceptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
+When created, a market be in a pending state which is currently an opening auction. Markets can also enter exceptional periods of either defined or indefinite length as the result of triggers such as price or liquidity monitoring or a governance vote (this spec does not specify any triggers that should switch periods, only that it must be possible).
 
 ## Overview
 
@@ -14,36 +14,36 @@ Markets on Vega are permissionlessly proposed using the [governance mechanism](.
 ## Market Creation
 
 Markets proposed via [governance proposals](./0028-governance.md#1-create-market) undergo certain additional validations. 
-
-1. [Future version] A "market creation" governance proposal should be rejected by the network if the proposer does not [also nominate to provide liquidity](./0044-lp-mechanics.md) on their proposed market (we will spec details of this at some point - not for MVP).
-
+Please distinguish between a proposal that is `valid` or `accepted` and a proposal that `sucessful`. A valid / accepted proposal just passed validation checks; a successful proposal has been voted for and won.
 
 ## Market lifecycle statuses
 
 A market can progress through a number of states through its life. The overall market status flow is shown in the diagram below.
+A market is created in a `proposed` state upon submission of a valid market creation governance proposal. 
 
 
-| State             | New LP         | Trading    | Trading Mode        | Entry                                                     | Exit                   
-| Proposed          |   Yes          |  No        | N/A                 | Governance vote valid                                     | Governance proposal period ends                       
-| Rejected          |   No           |  No        | N/A                 | Governance vote fails/loses                               | N/A                                                    
-| Pending           |   Yes          |  Yes       | Opening auction     | Governance vote passes/wins                               | Governance vote (to close) OR enactment date reached
-| Active            |   Yes          |  Yes       | Normal trading      | Enactment date reached and usual auction exit checks pass | Governance vote (to close) OR maturity of market      
-| Suspended         |   Yes          |  Yes       | Exceptional auction | Price monitoring or liquidity monitoring trigger          | Monitoring definition
-| Closed            |   No           |  No        | N/A                 | Governance vote (to close)                                | N/A
-| Trading Terminated|   No           |  No        | N/A                 | Market parameter setting closing date OR defined on the product | Settlement event commences                       
-| Settled           |   No           |  No        | N/A                 | Settlement event concludes                                | N/A                                            
+| State              | Accepting LPs  | Trading Mode        | Entry                                                           | Exit                   
+| ------------------ | -------------- | ------------------- | --------------------------------------------------------------- | -----------------------------------------         
+| Proposed           |   Yes          | No trading          | Governance proposal valid                                       | Governance proposal voting period ends
+| Rejected           |   No           | No trading          | Outcome of governance votes is to reject the market             | N/A                                                    
+| Pending            |   Yes          | Opening auction     | Governance vote passes/wins                                     | Governance vote (to close) OR enactment date reached
+| Active             |   Yes          | Normal trading      | Enactment date reached and usual auction exit checks pass       | Governance vote (to close) OR maturity of market      
+| Suspended          |   Yes          | Exceptional auction | Price monitoring or liquidity monitoring trigger                | Monitoring definition
+| Closed             |   No           | No trading          | Governance vote (to close)                                      | N/A
+| Trading Terminated |   No           | No trading          | Market parameter setting closing date OR defined on the product | Settlement event commences                       
+| Settled            |   No           | No trading          | Settlement event concludes                                      | N/A                                            
 
 
 
 ## Market status descriptions
 
 ### Proposed
-All markets are first [proposed via the governance mechanism](./0028-governance.md#1-create-market). We can think of the market as being in a "proposed state", in the same way that any governance proposal is in a proposed state. At this point governance is deciding whether the market should be created.
-
+All markets are first [proposed via the governance mechanism](./0028-governance.md#1-create-market). 
+Once the proposal is accepted the market is created, voting begins and its state is `proposed`.
 
 **Entry:**
 
-- Valid [governance proposal](./0028-governance.md#1-create-market) submitted and accepted
+- Valid [governance proposal](./0028-governance.md#1-create-market) submitted and accepted.
 
 **Exit:**
 
@@ -55,14 +55,13 @@ All markets are first [proposed via the governance mechanism](./0028-governance.
 **Behaviour:**
 
 - Participants can vote for or against the market
-- Liquidity providers can make, change, or exit commitments (proposer can't commit below proposer minimum which is a future feature not for MVP)
+- Liquidity providers can make, change, or exit commitments (proposer can't commit below proposer minimum)
 - No trading is possible, no orders can be placed (except the liquidity provider order/shape that forms part of their commitment)
 - No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
 
-
 ### Rejected
 
-A "new market" governance proposal that is unsuccessful is a rejected governance proposal. We can also think of this as a rejected market. 
+When governance proposal is not accepted, see [governance proposal](./0028-governance.md#outcome), market is rejected. 
 
 **Entry:**
 
@@ -75,15 +74,18 @@ A "new market" governance proposal that is unsuccessful is a rejected governance
 
 **Behaviour:**
 
-- Nothing can happen to the market with this status - it is an inert state.
+- Nothing can happen to the market with this status - it does not exist (Vega core has no need to keep any information about this market proposal).
 
 ### Pending
 
-If a "new market" governance proposal is successful the market is opened into a "pending" state, where the price determination method is an auction period with a callPeriod that ends at the enactment date, specified in the governance proposal. Note, this is a state for any market that is due to be created and that currently this means by governance proposal, but in future there may be automated market creations? e.g. a series of markets, creation from an oracle/data source, etc.
+If a "new market" governance proposal is successful the market is moves into a "pending" state, where the price determination method is an auction period with a callPeriod that ends at the enactment date, specified in the governance proposal. 
+
+Note; this is a state for any market that is due to be created and that currently this means by governance proposal.
+In future there may be automated market creations e.g. a series of markets, creation from an oracle/data source, etc. so don't tie market creation too closely to governance proposals in implementation. 
 
 **Entry:**
 
-- Valid [governance proposal](./0028-governance.md#1-create-market) passed (yes votes win & thresholds met)
+- Valid [governance proposal](./0028-governance.md#1-create-market) was successful (yes votes win & thresholds met)
 
 **Exit:**
 

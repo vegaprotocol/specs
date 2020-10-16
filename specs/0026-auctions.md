@@ -81,6 +81,7 @@ Additional Time in Force order options need to be added: only good for normal tr
 - Pegged orders get parked (see pegged orders spec for details).
 - Limit orders stay on the book (unless they have a TIF: only good for normal trading, in this case they get cancelled).
 - Cannot accept non-persistent orders (Fill Or Kill and Immediate Or Cancel)
+- Any auction that would be less than (network parameter) `min_auction_length` seconds should not be started.
 
 ### Upon exiting auction mode
 
@@ -89,13 +90,19 @@ Additional Time in Force order options need to be added: only good for normal tr
 
 ## Exiting the auction mode
 
+An auction may exit for a) the auction end time is reached or b) other functionality triggers the end of auction. 
+
+### Ending at scheduled end time
+Let `calculated_end_time` be the call period of the auction, and note, for [liquidity monitoring](./0035-liquidity-monitoring.md) this may be an infinite time.
+If an auction has `calculated_end_time` which is finite then 
+
 ```auction_end_time = min(calculated_end_time, market_expiry)```
 
-where `calculated_end_time` is the call period of the auction, and note, for [liquidity monitoring](./0035-liquidity-monitoring.md) this may be an infinite time.
+On the other hand if the `calculated_end_time` is infinite (ie liquidity monitoring auction) then, 
+if the market settlement time is reached during an auction, do not terminate the auction but settle everyone based on the positions they had upon auction start.
 
-If the market is going to terminate trading, the auction must end and uncross at or before this point.
-
-Any auction that would be less than (network parameter) `min_auction_length` seconds should not be started.
+### Ending an auction due to functional triggers
+- [liquidity monitoring](./0035-liquidity-monitoring.md)
 
 ### Exiting during opening auction
 
