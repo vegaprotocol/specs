@@ -151,6 +151,8 @@ We allow users to submit proposals covering 3 types of governance action:
 
 ## 1. Create market
 
+This action differs from from other governance actions in that the market is created and some transactions (namely around liquidity provision) may be accepted for the market before the proposal has succesfully passed. The lifecycle of a market and its triggers are covered in the [market lifecycle](./0043-market-lifecycle.md) spec.
+
 A proposal to create a market contains 
 1. a complete market specification as per the Market Framework (see spec) that describes the market to be created. 
 1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](0044-lp-mechanics.md). 

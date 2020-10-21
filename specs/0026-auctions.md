@@ -1,8 +1,4 @@
-Feature name: auctions\
-Start date: 2019-12-13\
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
-
-# Summary
+# Auctions
 
 As of right now, vega implements continuous trading, in fact every time an order is placed, vega evaluates it with the other side of the book and if the order crosses, a trade will result from it. This specification will introduce new trading modes for vega as auctions.
 
@@ -90,26 +86,27 @@ Additional Time in Force order options need to be added: only good for normal tr
 
 ## Exiting the auction mode
 
-An auction may exit for a) the auction end time is reached or b) other functionality triggers the end of auction. 
+Auction periods may be ended which an uncrossing and the creation of any resulting trades due to:
+
+- the auction call period end time being reached (if such a time is set); or 
+- other functionality (related to the type of auction period) that triggers the end of auction.
+
+Auction periods do not end if the resulting state woudld immediately cause another auction to occur. Instead an _extension period_ is added to the auction of the relevant type. For example, if a liquidity monitoring auction would be triggered at the end of an opening auction, then the auction continues and the market is in a "liquidity monitoring extension [auction]".
+
 
 ### Ending at scheduled end time
-Let `calculated_end_time` be the call period of the auction, and note, for [liquidity monitoring](./0035-liquidity-monitoring.md) this may be an infinite time.
-If an auction has `calculated_end_time` which is finite then 
 
-```auction_end_time = min(calculated_end_time, market_expiry)```
+If the auction period specifies and end time and the market is about to transition to the "Trading Terminated" state before the auction end time is reached, then the auction must end immediately before the transition occurs. 
 
-On the other hand if the `calculated_end_time` is infinite (ie liquidity monitoring auction) then, 
-if the market settlement time is reached during an auction, do not terminate the auction but settle everyone based on the positions they had upon auction start.
 
 ### Ending an auction due to functional triggers
+
+Functionality that either triggers the end of an auction or delays the auction ending until conditions are met, even if the end time is otherwise met is defined in the relevant specs that detail the various period types that use auction, and how their entry/exit is triggered:
+
+- opening auction (market creation): [governance](./0028-governance.md)
+- [price monitoring](./0032-price-monitoring.md)
 - [liquidity monitoring](./0035-liquidity-monitoring.md)
 
-### Exiting during opening auction
-
-The auction should not exit unless:
-
-- there has been at least one trade on the market
-- the [liquidity monitoring](./0035-liquidity-monitoring.md) exiting criteria is met 
 
 ## First/Naive implementation
 
