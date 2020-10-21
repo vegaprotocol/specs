@@ -157,6 +157,7 @@ A proposal to create a market contains
 1. a complete market specification as per the Market Framework (see spec) that describes the market to be created. 
 1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](0044-lp-mechanics.md). 
 The stake commitment must exceed the `minimum_proposal_stake_amount` which is a per-asset parameter.
+1. an enactment time that is at least the *minimum auction duraton* after the vote closing time (see [auction spec](./0026-auctions.md))
 
 All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
