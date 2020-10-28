@@ -192,9 +192,9 @@ Important: a trader's general account should be periodically searched to top bac
 
 ## Network parameters 
 - `bond-penalty-parameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations. 
-Valid values: any decimal number `>= 0` with a default value of `1`.  
+Valid values: any decimal number `>= 0` with a default value of `0.1`.  
 - ~~`market-size-measurement-period` - used in fee splitting~~
-- `maximum-liquidity-fee-factor-level` - used in validating fee amounts. Any decimal number `>0` and `<=1`. Default value `1`.
+- `maximum-liquidity-fee-factor-level` - used in validating fee amounts that are submitted as part of [lp order type](./0038-liquidity-provision-order-type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
 - `stake_to_ccy_siskas` - used to translate a commitment to an obligation (in siskas). Any decimal number `>0` with default value `1`.
 
 ## What data do we keep relating to liquidity provision?
