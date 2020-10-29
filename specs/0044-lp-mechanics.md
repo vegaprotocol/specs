@@ -212,4 +212,6 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
     - [ ] The application is accepted by the network if both of following are true:
        - [ ] The participant has sufficient collateral in their general account to meet the size of staked bond, specified in their transaction.
        - [ ] The market is active
-    - [ ] Any Vega participant can apply to market make on a market.
+    - [ ] Any Vega participant can apply to provide liquidity on any market.
+    	- When a user has submitted a [Liquidity Provision order](./0038-liquidity-provision-order-type.md), a Bond account is created for that user and for that market
+	- Collateral required to maintain the Liquidity Provision Order will be held in the Bond account.
