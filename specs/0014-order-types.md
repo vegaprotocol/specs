@@ -57,7 +57,7 @@ Notes on scope of current version of this spec:
 | -------------- |:---:|:---:|:---:|:---:|:---:|:---:|
 | Limit          | Y   | Y   | Y   | Y   | N   | Y   |
 | Pegged         | Y   | Y   | Y   | Y   | N   | Y   |
-| Market         | N   | N   | Y   | Y   | N   | Y   |
+| Market         | N   | N   | Y   | Y   | N   | N   |
 
 
 ##### Auction
