@@ -1,5 +1,7 @@
 Feature name: accounts
+
 Start date: 2019-10-01
+
 Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Acceptance Criteria
@@ -17,13 +19,17 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 
 ## Trader margin accounts
-- [ ]  Every party that submits an order on a market will have a margin account for that market created.
-- [ ]  Each party should only have one margin account per market.
+- [ ] Every party that submits an order on a market will have a margin account for that market created.
+- [ ] Each party should only have one margin account per market.
 - [ ] Cannot have a non-zero balance on a margin account where there's no position / position size = 0 and no active orders.
 - [ ] Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders.
 
-## Insurance pool accounts
+## Liquidity Provider bond accounts
+- [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-lp-mechanics.md).
+- [ ] Each party that has place a [Liquidity Provision order](./0038-liquidity-provision-order-type.md) will have one bond account per market they have provided liquidity to
+- [ ] [Fees earned from liquidity provision)[https://github.com/vegaprotocol/product/blob/master/specs/0044-lp-mechanics.md#fees] are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](https://github.com/vegaprotocol/product/blob/master/specs/0042-setting-fees-and-rewarding-lps.md#distributing-fees)
 
+## Insurance pool accounts
 - [ ] When a market opens for trading, there an insurance account that is able to be used by that market for every settlement asset of that market.
 - [ ] Only transfer requests move money in or out of the insurance account.
 - [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds distributed to other same-currency insurance pools.
