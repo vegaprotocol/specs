@@ -97,8 +97,8 @@ Product lifecycle events:
 - **Maturity:** this event moves an instrument from 'active' to 'inactive' state, means that further trading is not possible, and triggers final settlement of positions and release of margin.
 
 Products must expose certain data to Vega WHEN they are instantiated as an instrument by providing parameters:
-- **Settlement assets:** one or more (for Nicenet it'll be one) assets that can be involved in settlement
-- **Margin assets:** one or more (for Nicenet it'll be one) assets that may be required as margin (usually the same set as settlement assets, but not always)
+- **Settlement assets:** one or more  assets that can be involved in settlement
+- **Margin assets:** one or more  assets that may be required as margin (usually the same set as settlement assets, but not always)
 - **Price / quote units:** the unit in which prices (e.g. on the order book are quoted), usually but not always one of the settlement assets. Usually but not always (e.g. for bonds traded on yield, units = % return or options traded on implied volatility, units = % annualised vol) an asset (currency, commodity, etc.)
 - **Status:** e.g. Active | Matured (these are the only statuses I can think of for now)
 
@@ -132,8 +132,6 @@ See [price monitoring spec](./0032-price-monitoring.md) for details.
 
 ## Market framework data structures
 
-**Note:** commented out lines are not needed for Nicenet.
-
 ```rust
 
 struct Market {
@@ -164,23 +162,23 @@ struct Instrument {
 
 // Note: this is not finalised, see https://gitlab.com/vega-protocol/product/issues/85
 struct InstrumentMetadata {
-	tags: Vec<String>,
+  tags: Vec<String>,
 }
 
 enum Product {
-        // maturity should be some sort of DateTime, asset is however we refer to crypto-assets (collateral) on Vega 
-	Future { maturity: String, oracle: Oracle, asset: String },
-	// EuropeanOption {},
-	// SmartProduct {},
+  // maturity should be some sort of DateTime, settlement_asset is however we refer to crypto-assets (collateral) on Vega 
+  Future { maturity: String, oracle: Oracle, settlement_asset: String },
+  // EuropeanOption {},
+  // SmartProduct {},
 }
 
 enum Oracle {
-	EthereumEvent { contract_id: String, event: String } // totally guessed at these :-)
-	// ... more oracle types here...
+  thereumEvent { contract_id: String, event: String } // totally guessed at these :-)
+  // ... more oracle types here...
 }
 
 enum RiskModel {
-	BuiltinFutures { historic_volatility: f64 } // parameters here subject to change and may not be correct now
+  BuiltinFutures { historic_volatility: f64 } // parameters here subject to change and may not be correct now
 }
 ```
 
@@ -209,7 +207,7 @@ Market {
                     contract_id: "0x0B484706fdAF3A4F24b2266446B1cb6d648E3cC1",
                     event: "price_changed"
                 },
-                asset: "Ethereum/Ether"
+                settlement_asset: "Ethereum/Ether"
             }
         },
         risk_model: BuiltinFutures {
