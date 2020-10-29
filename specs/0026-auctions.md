@@ -16,7 +16,7 @@ They are mostly useful in less liquid markets, or in specific scenarios where a 
 
 As mentioned earlier, this specification introduces new trading modes. A first one which purpose is to calibrate a market / help with price discovery when a new market is started. A second one meant to be trading only through auction called `Frequent batch auction`.
 
-## Auction period at market creation
+## Auction period at market creation (Opening auction)
 
 This trading mode is very similar to the Continuous trading mode for a market. In this configuration, a market will start in auction mode, then once the auction comes to an end the market will switch back to the continuous trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
 A market cannot be in both mode at the same time and will trade ever in a auction or continuous trading. There will be the normal trading mode, configured in the market framework, and a period mode which temporarily overrides it. For example a market may be configured to be a Frequent Batch Auction market, but be in an Auction Period triggered by liquidity monitoring.
@@ -128,6 +128,8 @@ message Market {
   - [] I can choose what algorithm is used to decided the pricing at the end of the auction period.
 - [] As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period.
 - [] As a user, I can place an order when the market is in auction mode, but it will not trade immediately.
+- [] As a user, I can cancel an order that it either live on the order book or parked.
+- [] As a user, I can amend orders that are on the order book. Specifics can be found in the [amends](https://github.com/vegaprotocol/product/blob/master/specs/0026-amends.md) spec
 - [] As a user, I cannot place a Market order, or and order using FOK or IOC time in force.
 - [] As a user, I can get information about the trading mode of the market (through the market framework)
 - [] As a user, I can get real time information throught the API about a market in auction mode: indicative crossing price, indicative crossing volume.
