@@ -50,13 +50,13 @@ Example: amending only a commitment amount but retaining old fee bid and orders.
 ### Processing the commitment
 When a commitment is made the liquidity commitment amount is assumed to be specified in terms of the settlement currency of the market.
 
-If the participant has sufficient collateral to cover their commitment and margins for their proposed orders, the commitment amount is transferred from the participant's general account to their (maybe newly created) liquidity provision bond account (new account type, 1 per liquidity provider per market and asset). For clarity, liquidity providers will have a separate margin account and bond account.
+If the participant has sufficient collateral to cover their commitment and margins for their proposed orders, the commitment amount is transferred from the participant's general account to their (maybe newly created) [liquidity provision bond account](./0013-accounts.md#liquidity-provider-bond-accounts) (new account type, 1 per liquidity provider per market and asset). For clarity, liquidity providers will have a separate [bond account](./0013-accounts.md#trader-bond-accounts) and [bond account](./0013-accounts.md#liquidity-provider-bond-accounts).
 
 - liquidity provider bond account:
-	- [ ] Each active market has one bond account per liquidity provider, per settlement asset for that market.
+    - [ ] Each active market has one bond account per liquidity provider, per settlement asset for that market.
     - [ ] When a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
     - [ ] A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment)
-    - [ ] Collateral withdrawn from this account may only  be transferred to either:
+    - [ ] Collateral withdrawn from this account may only be transferred to either:
       - [ ] The insurance pool of the market (in event of slashing)
       - [ ] The liquidity provider's margin account (during a margin search and mark to market settlement) in the event that they fall below the maintenance level and have zero balance in their general account.
       - [ ] The liquidity provider's general account (in event of liquidity provider reducing their commitment)
@@ -203,7 +203,6 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 1. New account per market holding all committed liquidity provider bonds
 1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-prob-weighted-liquidity-measure.ipynb))
 1. Each liquidity provider's actual bond amount
-
 
 ## Further Acceptance Criteria
 
