@@ -41,6 +41,7 @@ Data:
   - **Mark price methodology parameters:**
     - Algorithm 1 / Last Traded Price: initial mark price
   - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
+  - **Default trading commences**: submitted with the market creation proposal, this will affect the length of the opening auction. 
 
 
 ### Trading mode - continuous trading
@@ -100,17 +101,17 @@ Products must expose certain data to Vega WHEN they are instantiated as an instr
 - **Settlement assets:** one or more  assets that can be involved in settlement
 - **Margin assets:** one or more  assets that may be required as margin (usually the same set as settlement assets, but not always)
 - **Price / quote units:** the unit in which prices (e.g. on the order book are quoted), usually but not always one of the settlement assets. Usually but not always (e.g. for bonds traded on yield, units = % return or options traded on implied volatility, units = % annualised vol) an asset (currency, commodity, etc.)
-- **Status:** e.g. Active | Matured (these are the only statuses I can think of for now)
+- **Status:** e.g. Proposed | Active | Closed | Cancelled (see [market lifecycle spec]())
 
 Products need to re-evaluate their logic when any of their inputs change e.g. oracle publishes a value, change in time, parameter changed etc., so Vega will need to somehow notify of that update.
 
 Data: 
 - **Product name/code/reference/instance:** to be obtained either via a specific string identifying a builtin, e.g. 'Future', 'Option' or in future smart product code OR a reference to a product (e.g. a hash of the compiled smart product) where an existing product is being reused. Stored as a reference to a built-in product instance or a 'compiled' bytecode/AST instance for the smart product language.
 - **Product specific parameters** which can be single values or streams (e.g. events from an oracle), e.g. for a future:
-  - Settlement, pricing, and margin asset
+  - Settlement and margin asset
   - Maturity date
-  - Oracle reference
-  - 'Contract' size
+  - Oracle / settlement price data reference
+  - Minimum order size
   - *Note: the specific parameters for a product are defined by the product and will vary between products, so the system needs to be flexible in this regard.* 
 
 Note: product definition for futures is out of scope for this ticket.
@@ -173,7 +174,7 @@ enum Product {
 }
 
 enum Oracle {
-  thereumEvent { contract_id: String, event: String } // totally guessed at these :-)
+  EthereumEvent { contract_id: String, event: String } // totally guessed at these :-)
   // ... more oracle types here...
 }
 
@@ -198,15 +199,24 @@ Market {
             metadata: InstrumentMetadata {
                 tags: [
                     "asset_class:fx/crypto",
-                    "product:futures"
+                    "product:futures",
+                    "underlying:BTC/USD",
+                    "fx/base: BTC",
+                    "fx/quote: USD"
                 ]
             },
             product: Future {
                 maturity: "2019-12-31",
-                oracle: EthereumEvent {
-                    contract_id: "0x0B484706fdAF3A4F24b2266446B1cb6d648E3cC1",
-                    event: "price_changed"
-                },
+                settlementPriceSource: {
+                  sourceType: "signedMessage",
+                  sourcePubkeys: ["YOUR_PUBKEY_HERE"],
+                  field: "price",
+                  dataType: "decimal",
+                  filters: [ 
+                      { "field": "feed_id", "equals": "BTCUSD/EOD" },
+                      { "field": "mark_time", "equals": "31/12/20" }
+                  ]
+                }
                 settlement_asset: "Ethereum/Ether"
             }
         },
