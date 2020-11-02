@@ -41,8 +41,8 @@ Data:
   - **Mark price methodology parameters:**
     - Algorithm 1 / Last Traded Price: initial mark price
   - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
-  - **Default trading commences**: submitted with the market creation proposal, this will affect the length of the opening auction. 
-
+  - **Default trading commences**: datetime submitted with the market creation proposal, this will affect the length of the opening auction. 
+  - **Default trading terminated**: datetime submitted with the market creation proposal, this will determine when trading ceases (prior to settlement). 
 
 ### Trading mode - continuous trading
 
