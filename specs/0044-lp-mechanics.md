@@ -22,7 +22,7 @@ Any Vega participant can apply to market make on a market by submitting a transa
 Accepted if all of the following are true:
 - [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
 - [ ] The participant has sufficient collateral in their general account to also meet the margins required to support their orders.
-- [ ] The market is not in an expired state. It is in a pending or active state, see the [market lifecycle spec](./0043-market-lifecycle.md). In future we will want it to also include when in a proposed state.
+- [ ] The market is in a state that accepts new liquidity provision [market lifecycle spec](./0043-market-lifecycle.md). 
 - [ ] The nominated fee amount is greater than or equal to zero and less than a maximum level set by a network parameter
 - [ ] There is a set of valid buy/sell liquidity provision orders (see [MM orders spec](./0038-liquidity-provision-order-type.md)).
 
