@@ -16,6 +16,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 - [ ] A filled pegged order is removed from the book and the pegged/parked slice.
 - [ ] Pegged orders are not repriced and do not lose time priority when their specific reference price is unchanged, even if other peg reference prices move.
 - [ ] If the midprice is calculated to be a fraction (e.g. 102.5), it should be rounded up for a buy and rounded down for a sell.
+- [ ] The order version is not updated during a repricing
 
 ## Summary
 
@@ -118,3 +119,4 @@ Some plain text walkthroughs of some scenarios that would prove that the impleme
 * Switch a market from auction to continuous trading to make sure the orders are unparked.
 * Try to insert non LIMIT orders and make sure they are rejected.
 * Test where both buy and sell orders are pegged against a mid which is not a whole number.
+* Check that a repriced pegged order does not have the version value incremented.
