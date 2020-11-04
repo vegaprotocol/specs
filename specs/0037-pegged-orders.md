@@ -43,6 +43,8 @@ Pegged orders being added back into the book after being parked (either due to a
 
 When there are multiple pegged orders needing reprice, they must be repriced in order of entry (note: certain types of amend are considered amend in place and others as cancel/replace, for the cancel replace type, the entry time becomes the time of the amend, i.e. a pegged order loses its reprice ordering priority). Generally the way I’ve seen this is to maintain an ordered list of pegged orders for use in re-pricing (and parking/unparking), with new pegged orders added to the end of this list and cancel/replace amends causing the order to be removed from the list and re-added at the end.
 
+Pegged orders can be amended like normal limit orders, in such their size, reference, offset and TIF values can be amended in line with normal limit orders.
+
 
 # Reference-level explanation
 
