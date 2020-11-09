@@ -33,7 +33,7 @@ When a party submits a new pegged order, only a LIMIT order is accepted. The par
 
 Whenever the reference price changes all the pegged orders that rely on it need to be repriced. We run through a time sorted list of all the pegged orders that match the moved reference price and remove each order from the book, recalculate it's price and then reinsert it into the orderbook at the back of the price queue. Pegged orders which reference a price that has not changed are untouched. Following a price move margin checks take place on the positions of the parties. If a pegged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it is removed, the price level is removed as well.
 
-Pegged orders can be GTC or GTC TIF orders with IOC and FOK being added in the second phase of pegged orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
+Pegged orders can be GTC or GTT TIF orders with IOC and FOK being added in the second phase of pegged orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
 
 If the reference point does not exist (e.g no best bid) or moves to such a value that it would create an invalid order once the offset was applied, the pegged order is parked. As the reference price moves, any orders on the parked list will be evaluated to see if they can come back into the order book.
 
