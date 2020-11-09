@@ -69,6 +69,8 @@ Pegged orders which are entered during an auction are placed directly on the par
 
 Amending a pegged order can cause it to lose time priority in the entry time sorted list of pegged orders. This will occur if the amend cannot be performed in-place.
 
+The position state for a party is updated wherever an order is placed, amended or cancelled. This it to allow the core to calculate the correct margin for the party. For pegged orders we reduce the position whenever we park the order and we increase the position whenever an order is unparked. An order only contributes to a parties position when it is live and on the order book.
+
 
 # Pseudo-code / Examples
 Each market has a slice containing all the pegged orders. New pegged orders are added to the end of the slice to maintain time ordering.
