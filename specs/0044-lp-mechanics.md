@@ -153,15 +153,16 @@ Note here "ccy" stands for "currency" and that the liquidity measure units are a
 
 **During continuous trading:**
 A liquidity provider complies with their liquidity provision obligation by:
+1. Submitting valid orders of any type to the book.
 1. Submitting valid _liquidity provider orders_ in the liquidity provider network transaction.
-1. Holding sufficient collateral to meet the usual margin obligations associated with these orders. 
+1. Holding sufficient collateral to meet the usual margin obligations associated with all the submitted orders.
 
 Since liquidity provider orders automatically refresh, a liquidity provider is only non-compliant when they have insufficient capital to meet the margin requirements of these orders.
 
 **During auction:**
 - liquidity provider obligation during auction (including market commencement auction):
-    - [ ] liquidity provider pegged orders that are placed during an auction call period are parked and reinstated when the limit order book is reinstated.
-	- [ ] At conclusion of auction period call period, liquidity provider's pegged orders are reinstated.
+    - [ ] liquidity provider [GFN](./0014-order-types.md) orders (both orders submitted as part of _liquidity provider orders_ and any other orders submitted in regular way) that are placed during an auction call period are parked and reinstated when the limit order book is reinstated.
+	- [ ] At conclusion of auction period call period, liquidity provider's GFN orders are reinstated.
 
 ### Non-compliance
 
