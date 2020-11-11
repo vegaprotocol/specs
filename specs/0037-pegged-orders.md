@@ -34,7 +34,7 @@ When a party submits a new pegged order, only a LIMIT order is accepted. The par
 
 Whenever the reference price changes all the pegged orders that rely on it need to be repriced. We run through a time sorted list of all the pegged orders that match the moved reference price and remove each order from the book, recalculate it's price and then reinsert it into the orderbook at the back of the price queue. Pegged orders which reference a price that has not changed are untouched. Following a price move margin checks take place on the positions of the parties. If a pegged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it is removed, the price level is removed as well.
 
-Pegged orders can be GTC or GTC TIF orders with IOC and FOK being added in the second phase of pegged orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
+Pegged orders can be GTC or GTT TIF orders with IOC and FOK being added in the second phase of pegged orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
 
 If the reference point does not exist (e.g no best bid) or moves to such a value that it would create an invalid order once the offset was applied, the pegged order is parked. As the reference price moves, any orders on the parked list will be evaluated to see if they can come back into the order book.
 
@@ -43,6 +43,8 @@ When a pegged order is removed from the book due to cancelling, expiring or fill
 Pegged orders being added back into the book after being parked (either due to an auction or their reference price not being available) are treated the same as any other order being added to the book and therefore come after all persistent orders at that price level that are already on the book (i.e. the pegs are added to the end/back of the price level as if new incoming orders). This is also true if a pegged order is re-priced and its price changes, as price amendments are equivalent to a cancel/replace so the order enters at the back of its new price level.
 
 When there are multiple pegged orders needing reprice, they must be repriced in order of entry (note: certain types of amend are considered amend in place and others as cancel/replace, for the cancel replace type, the entry time becomes the time of the amend, i.e. a pegged order loses its reprice ordering priority). Generally the way I’ve seen this is to maintain an ordered list of pegged orders for use in re-pricing (and parking/unparking), with new pegged orders added to the end of this list and cancel/replace amends causing the order to be removed from the list and re-added at the end.
+
+Pegged orders can be amended like normal limit orders, in such their size, reference, offset and TIF values can be amended in line with normal limit orders.
 
 
 # Reference-level explanation
@@ -67,6 +69,8 @@ A sell pegged to Mid + 1 should take the mid as 102, and thus be at 103
 Pegged orders which are entered during an auction are placed directly on the parked queue. No margin checks will take place in this case even to validate the order would be allowed during normal trading. The margin checks will take place when the order is added to the live orderbook.
 
 Amending a pegged order can cause it to lose time priority in the entry time sorted list of pegged orders. This will occur if the amend cannot be performed in-place.
+
+The position state for a party is updated wherever an order is placed, amended or cancelled. This it to allow the core to calculate the correct margin for the party. For pegged orders we reduce the position whenever we park the order and we increase the position whenever an order is unparked. An order only contributes to a parties position when it is live and on the order book.
 
 
 # Pseudo-code / Examples
