@@ -18,9 +18,9 @@ There are a number of validations that can be performed on every transaction to 
 
 All valid tansactions in the Vega protocol meet at least one of the following conditions:
 
-1. Signed with a key with as positive balance of some asset
-1. Signed with a key with >0 voting eight in the governance protocol. Currently this always also means a positive balance of some asset, namely the governance asset, but this is not guaranteed to be true forever, though this condition should remain easy to verify.
-1. Signed with a validator's key
+* Signed with a key with as positive balance of some asset
+* Signed with a key with >0 voting eight in the governance protocol. Currently this always also means a positive balance of some asset, namely the governance asset, but this is not guaranteed to be true forever, though this condition should remain easy to verify.
+* Signed with a validator's key
 
 Therefore a node should not accept or include a transaction in a block that's signed with a key that is not known to meet one or more of these conditions.
 
@@ -30,8 +30,8 @@ Future enhancemments: for each root transaction message type (e.g. SubmitOrder, 
 
 #### `1.1.2` Acceptance criteria 
 
-- [ ] Transaction is included in the block if signed with a validator's key
-- [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset
-- [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that has never had a balance
-- [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that previously had a balance > 0
-- [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset, where the transaction was rejected from a previous block where the party had no balance
+1. [ ] Transaction is included in the block if signed with a validator's key
+1. [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset
+1. [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that has never had a balance
+1. [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that previously had a balance > 0
+1. [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset, where the transaction was rejected from a previous block where the party had no balance
