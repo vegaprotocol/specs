@@ -80,9 +80,9 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 
 Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). Note, if the peg reference is not the `mid-price`, then first calculate the distance from mid price.
 
-``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading)```. 
+``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)```. 
 
-where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-lp-mechanics.md).
+where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-lp-mechanics.md) and `price` is the price level at which the `volume` will be placed.
 
 ```
 Example: 
