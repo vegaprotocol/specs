@@ -1,7 +1,5 @@
 # `0044` Validate transaction pre-consensus
 
-## Overview
-
 There are a number of validations that can be performed on every transaction to determine whether it can be included in a valid block. Doing validation at this stage is advantageous because the validation can done syncronously on receipt of the transaction and occurs before the transaction is included in a block. This:
 
 * Reduces the size the block and the overall chain 
