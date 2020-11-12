@@ -46,7 +46,25 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 # Reference-level explanation
 
+<<<<<<< HEAD:specs/0037-price-monitoring.md
 ## View from the [Vega](https://github.com/vegaprotocol/vega) side
+=======
+## Parameters
+
+### Market
+
+- `priceMonitoringParameters` - an array of more price monitoring parameters with the following fields:
+  - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
+  - `probability` - probability level used in price monitoring. Must be in the (0,1) range.
+  - `auctionExtension` - auction duration (or extension in case market is already in auction mode) per breach of the `horizon`, `probability` trigger pair specified above. Must be greater than 0.
+
+### Network
+
+- `PriceMonitoringDefaultParameters`: Specifies default market parameters outlined in the previous pargraph. These will be used if market parameters don't get explicitly specified.
+- `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring bounds should be updated by the risk model.
+
+## View from the [vega](https://github.com/vegaprotocol/vega) side
+>>>>>>> master:specs/0032-price-monitoring.md
 
 - Per each transaction:
   - the matching engine sends the **price monitoring engine** the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`

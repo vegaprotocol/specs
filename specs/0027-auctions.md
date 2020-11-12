@@ -16,7 +16,7 @@ They are mostly useful in less liquid markets, or in specific scenarios where a 
 
 As mentioned earlier, this specification introduces new trading modes. A first one which purpose is to calibrate a market / help with price discovery when a new market is started. A second one meant to be trading only through auction called `Frequent batch auction`.
 
-## Auction period at market creation
+## Auction period at market creation (Opening auction)
 
 This trading mode is very similar to the Continuous trading mode for a market. In this configuration, a market will start in auction mode, then once the auction comes to an end the market will switch back to the continuous trading mode, and will stay like until there's a need for it to go in auction mode again (e.g: based on the price changes).
 A market cannot be in both mode at the same time and will trade ever in a auction or continuous trading. There will be the normal trading mode, configured in the market framework, and a period mode which temporarily overrides it. For example a market may be configured to be a Frequent Batch Auction market, but be in an Auction Period triggered by liquidity monitoring.
@@ -44,8 +44,9 @@ Once the auction period finishes, Vega needs to figure out the best price for th
 
 Initially we will use the mid price within this range. For example, if the volume maximising range is 98-102, we would price all trades in the uncrossing at 100. In future there will be other options, which will be selectable via a network parameter specified at market creation, and changeable through governance. These other options are not yet specified.
 
-## New core APIs related to auctions
+## APIs related to auctions
 
+### New APIs
 These new APIs need to expose data, some of which will be re-calculated each time the state of the book changes and will expose information about the market in auction mode:
 - how long the market has been in auction mode
 - when does the next auction period start
@@ -55,11 +56,16 @@ These new APIs need to expose data, some of which will be re-calculated each tim
 
 The Indicative Uncrossing Price is the price at which all trades would occur if we uncrossed the auction now. This will need to be streamed like a normal price, but API users will need a way to know it's an *indicative* uncrossing price and **not** a last traded or mid price. This will likely be a new field.
 
+### Existing APIs
+Unlike in traditional centralised trading venues, we will continue to calculate and emit Market Depth events which will contain the shape of the entire book, as it normally does during [continuous trading](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md#trading-mode---continuous-trading). This is because the orders are already public, and calculating the Market Depth based on already-available orders would be trivial.
+
 ## Restriction on orders in auction mode
 
 Market orders are not permitted while a market is in auction mode.
 
-Additional Time in Force order options need to be added: only good for normal trading and only good for auction.
+Pegged orders are accepted but are immediately parked and do not enter the live order book.
+
+Additional Time in Force order options need to be added: only good for normal trading (GFN) and only good for auction (GFA).
 
 ### Upon entering auction mode
 
@@ -122,9 +128,12 @@ message Market {
   - [] I can choose what algorithm is used to decided the pricing at the end of the auction period.
 - [] As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period.
 - [] As a user, I can place an order when the market is in auction mode, but it will not trade immediately.
+- [] As a user, I can cancel an order that it either live on the order book or parked.
+- [] As a user, I can amend orders that are on the order book. Specifics can be found in the [amends](https://github.com/vegaprotocol/product/blob/master/specs/0026-amends.md) spec
 - [] As a user, I cannot place a Market order, or and order using FOK or IOC time in force.
 - [] As a user, I can get information about the trading mode of the market (through the market framework)
 - [] As a user, I can get real time information throught the API about a market in auction mode: indicative crossing price, indicative crossing volume.
+- [] As a user, the market depth API provides the same data that would be sent during continuous trading
 - [] As an API user, I can identify:
   - If a market is temporarily in an auction period
   - Why it is in that period (e.g. Auction at open, liquidity sourcing)

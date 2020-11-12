@@ -31,21 +31,31 @@ The market framework is essentially a set of data structures that configure and 
 
 ## Market
 
-The market data structure collects all of the information required for Vega to operate a market. The component structures tradable instrument, instrument, and product may not exist in a Vega network at all unless defined and used by one (or more, in the case of products) markets. Risk models are a set of instances of a risk model data structure that are external to the market framework and provided by the risk model implementation (out of scope for this section, although for Nicenet there will initially be only one, for futures), they are part of the Vega codebase and in the current version of the protocol, new risk models are not created by governance or configuration on a running Vega node. All structures in the market framework should be fully and unambiguously defined by their parameters. That is, two instances of a structure with precisely the same parameters are equivalent and identical, and should probably be de-duplicated on this basis within the implementation.
+The market data structure collects all of the information required for Vega to operate a market. The component structures tradable instrument, instrument, and product may not exist in a Vega network at all unless defined and used by one (or more, in the case of products) markets. Risk models are a set of instances of a risk model data structure that are external to the market framework and provided by the risk model implementation. They are part of the Vega codebase and in the current version of the protocol, new risk models are not created by governance or configuration on a running Vega node. All structures in the market framework should be fully and unambiguously defined by their parameters. That is, two instances of a structure with precisely the same parameters are equivalent and identical, and should probably be de-duplicated on this basis within the implementation.
 
 Data:
   - **Identifier:** this should unambiguously identify a market
-  - **Trading mode:** this (I see it as something akin to an enum type/struct, see example below) defines the trading mode (e.g. continuous trading, auction, req — see Whitepaper section 5.1) and any required configuration for the trading mode (note that Nicenet will support only *continuous trading* and does not necessarily require any configurable parameters for the trading mode, although it may turn out to be advantageous to include some as the implementation is fleshed out). Note also that each trading mode in future will have very different sets of applicable parameters.
+  - **Trading mode:** this defines the trading mode (e.g. [continuous trading](#trading-mode---continuous-trading), [auction](#trading-mode---auctions)) and any required configuration for the trading mode. Note also that each trading mode in future will have very different sets of applicable parameters.
   - **Tradable instrument:** an instance of or reference to a tradable instrument.
   - **Mark price methodology:** reference to which [mark price](./0009-mark-price.md) calculation methodology will be used.
   - **Mark price methodology parameters:**
     - Algorithm 1 / Last Traded Price: initial mark price
+  - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
+
 
 ### Trading mode - continuous trading
 
 Params:
-  - **Tick size** (size of an increment in price in terms of the quote currency)
-  - **Decimal places**, number of decimals places for price quotes, e.g. if quote currency is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
+  - **Tick size** (size of an increment in price in terms of the quote unit)
+  - **Decimal places**, number of decimals places for quotes unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
+
+### Trading mode - Auctions
+A market can be in Auction Mode for a number of reasons:
+- At market creation, markets will start in an [opening auction](0026-auctions.md#auction-period-at-market-creation), as a price discovery mechanism
+- A market can be a [Frequent Batch Auction](0026-auctions.md#frequent-batch-auction), rather than continuous trading
+- Due to [price monitoring](./0032-price-monitoring.md) triggering a price discovery auction.
+
+How markets operate during auction mode is a separate specification: [0026 - Auctions](0026-auctions.md)
 
 ## Tradable instrument
 
@@ -87,8 +97,8 @@ Product life cycle events:
 - **Maturity:** this event moves an instrument from 'active' to 'inactive' state, means that further trading is not possible, and triggers final settlement of positions and release of margin.
 
 Products must expose certain data to Vega WHEN they are instantiated as an instrument by providing parameters:
-- **Settlement assets:** one or more (for Nicenet it'll be one) assets that can be involved in settlement
-- **Margin assets:** one or more (for Nicenet it'll be one) assets that may be required as margin (usually the same set as settlement assets, but not always)
+- **Settlement assets:** one or more  assets that can be involved in settlement
+- **Margin assets:** one or more  assets that may be required as margin (usually the same set as settlement assets, but not always)
 - **Price / quote units:** the unit in which prices (e.g. on the order book are quoted), usually but not always one of the settlement assets. Usually but not always (e.g. for bonds traded on yield, units = % return or options traded on implied volatility, units = % annualised vol) an asset (currency, commodity, etc.)
 - **Status:** e.g. Active | Matured (these are the only statuses I can think of for now)
 
@@ -105,6 +115,15 @@ Data:
 
 Note: product definition for futures is out of scope for this ticket.
 
+## Price monitoring parameters**
+
+Price monitoring parameters specify an array of price monitoring triggers and the associated auction durations. Each parameter contains the following fields:
+
+- `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
+- `probability` - probability level used in price monitoring. Must be in the (0,1) range.
+- `auctionExtension` - auction duration (or extension in case market is already in auction mode) per breach of the `horizon`, `probability` trigger pair specified above. Must be greater than 0.
+
+See [price monitoring spec](./0032-price-monitoring.md) for details.
 
 ----
 
@@ -112,8 +131,6 @@ Note: product definition for futures is out of scope for this ticket.
 
 
 ## Market framework data structures
-
-**Note:** commented out lines are not needed for Nicenet.
 
 ```rust
 
@@ -145,23 +162,23 @@ struct Instrument {
 
 // Note: this is not finalised, see https://gitlab.com/vega-protocol/product/issues/85
 struct InstrumentMetadata {
-	tags: Vec<String>,
+  tags: Vec<String>,
 }
 
 enum Product {
-        // maturity should be some sort of DateTime, asset is however we refer to crypto-assets (collateral) on Vega 
-	Future { maturity: String, oracle: Oracle, asset: String },
-	// EuropeanOption {},
-	// SmartProduct {},
+  // maturity should be some sort of DateTime, settlement_asset is however we refer to crypto-assets (collateral) on Vega 
+  Future { maturity: String, oracle: Oracle, settlement_asset: String },
+  // EuropeanOption {},
+  // SmartProduct {},
 }
 
 enum Oracle {
-	EthereumEvent { contract_id: String, event: String } // totally guessed at these :-)
-	// ... more oracle types here...
+  thereumEvent { contract_id: String, event: String } // totally guessed at these :-)
+  // ... more oracle types here...
 }
 
 enum RiskModel {
-	BuiltinFutures { historic_volatility: f64 } // parameters here subject to change and may not be correct now
+  BuiltinFutures { historic_volatility: f64 } // parameters here subject to change and may not be correct now
 }
 ```
 
@@ -190,7 +207,7 @@ Market {
                     contract_id: "0x0B484706fdAF3A4F24b2266446B1cb6d648E3cC1",
                     event: "price_changed"
                 },
-                asset: "Ethereum/Ether"
+                settlement_asset: "Ethereum/Ether"
             }
         },
         risk_model: BuiltinFutures {

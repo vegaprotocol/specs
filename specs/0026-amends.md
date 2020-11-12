@@ -8,6 +8,7 @@ Specification PR: https://github.com/vegaprotocol/product/pulls <br>
 - Reducing the quantity leaves the order in its current spot but reduces the remaining amount accordingly
 - Increasing the quantity causes the order to be removed from the book and inserted at the back of the price level queue with the updated quantity
 - Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag is rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.
+- Any attempt to amend to or from the `TIF` values `GFA` and `GFN` will result in an rejected amend.
 - All updates to an existing order update the `UpdatedAt` time stamp field in the order
 - The `orderID` remains the same after an amend
 - Amends can occur in continuous trading or in an auction
@@ -15,11 +16,13 @@ Specification PR: https://github.com/vegaprotocol/product/pulls <br>
 - All amendable fields can be amended in the same amend message
 - Fields left with default values (0) are not handled as part of the amend action
 - An amend with only the same values as the order still cause the `UpdateAt` field to update but nothing else
+- Amending a pegged orders offset or reference will force a reprice
+- Attempting to alter pegged details on a non pegged or will cause the amend to be rejected
 
 
 # Summary
 Amends are sent into the VEGA system to alter fields on all persistent orders held within the order book.
-The amend order can alter the quantity, price and expiry time/`TIF` type. The altered order still uses the same `orderID` and creation time of the original order. Every valid amend will cause the `UpdatedAt` field to be updated.
+The amend order can alter the quantity, price and expiry time/`TIF` type. For pegged orders they can also alter the reference and the offset value. The altered order still uses the same `orderID` and creation time of the original order. Every valid amend will cause the `UpdatedAt` field to be updated.
 
 
 # Guide-level explanation
@@ -71,7 +74,10 @@ The fields which can be altered are:
   * The `TIF` enumeration can only be toggled between `GTT` and `GTC`. Amending to `GTT` requires an `expiryTime` value to be set. Amending to `GTC` removes the `expiryTime` value.
 - `ExpiryTime`
   * The Expiry time can be amended to any time in the future but only for orders that have a `TIF` set to `GTT`. Attempting to set the `expiryTime` to a time before the `creationTime` causes the amend to be rejected. Setting the `expiryTime` to a value after `creationTime` but before the current time will cause it to expire.
-
+- `PeggedOrder.Reference`
+  * The reference peg to which the order is related
+- `PeggedOrder.Offset`
+  * The offset of the order from the reference price
 
 ## Version numbering
 To keep all versions of an order available for historic lookup, when an order is amended the new version of the order has a new version number so we can correctly identify when fields have changed. Each version of the order is stored in the storage system and the key will need to use the version number to prevent newer orders overwriting orders that have the same `orderID`. No-op amends that only update the `UpdatedAt' timestamp do not increment the version number.
@@ -85,6 +91,7 @@ message amendOrder {
     int64  sizeDelta 3;      
     enum   TIF 4;       
     int64  expiryTime 5; 
+    PeggedOrder *peggedOrder 6;
 }
 ```
 An example of using a negative size is shown below:
@@ -118,3 +125,6 @@ Test cases that need to be implemented to cover most of the edge cases are:
 - Attempt to amend all of the amendable fields at the same time with valid values.
 - Attempt to amend all of the amendable fields at the same time but with one invalid value which should force the amend to be rejected.
 - Send amends with only one amendable field specified with the current value in it. The amend will be accepted but nothing apart from the `ModifiedAt` field will be changed.
+- Attempt to amend a pegged order to use a different reference price
+- Attempt to amend a pegged order to use a different offset value
+- Attempt to add pegged details to a non pegged order to make sure the amend is rejected

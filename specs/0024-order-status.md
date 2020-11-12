@@ -64,6 +64,6 @@ If an order would be filled or partially filled with an existing order from the 
 
 | Filled State | Resulting status | Reason |
 |--------------|------------------|--------|
-|   Unfilled   |     Rejected     | Order would match with an order with the same partyID |
-|   Partially  |     Rejected     | Order has been partially filled but the next partial fill would be with an order with the same partyID |
+|   Unfilled   |     Stopped     | Order would match with an order with the same partyID |
+|   Partially  |     Partially Filled     | Order has been partially filled but the next partial fill would be with an order with the same partyID |
 

@@ -26,6 +26,10 @@ The manner in which a distributed system with no central authority agrees upon a
 ## CQRS 
 Command Query Responsibility Segregation is a software [design pattern](https://martinfowler.com/bliki/CQRS.html). It separates data writes ("commands") and reads ("queries") from each other into different data stores. This helps scalability and/or makes queries easier. In industrial systems, write stores are often structured as [high throughput logs](https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying). Read stores use whatever technologies make it easiest to query data. A read store can have a very different schema than the corresponding write store. The data in the read store can always be reconstructed from the commands in the write store. CQRS maps very well from the "normal" software world to the blockchain world. In CQRS terms, a blockchain is the write store, but it doesn't allow for easy querying.
 
+## DLT
+Short for [Distributed Ledger Technology](https://en.wikipedia.org/wiki/Distributed_ledger)
+...
+
 
 ## Erasure Coding 
 ... TODO but see [here](https://github.com/ethereum/research/wiki/A-note-on-data-availability-and-erasure-coding).
