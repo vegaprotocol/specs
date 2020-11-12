@@ -240,7 +240,7 @@ Some plain text walkthroughs of some scenarios that would prove that the impleme
 # Network Parameters
 
 | Network Parameters | Details |
-| :-----: | :-----: |
+| ----- | ----- |
 `governance.proposal.asset.requiredParticipation` | Participation level required for any new Asset proposal to pass |
 `governance.proposal.updateNetParam.requiredParticipation` | Participation level required for any Network Parameters update proposal to pass |
 `governance.vote.asset` | Product Asset name |
