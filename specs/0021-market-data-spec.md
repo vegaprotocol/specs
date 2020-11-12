@@ -12,6 +12,7 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests/22
 - [ ] The mark price calculation uses the methodology specified in the market framework.
 - [ ] The Open interest returns the sum of the size for all open positions where positions size is greater than 0.
 - [ ] The Open interest returns 0 if there are no positions on the market
+- [ ] Pegged orders are excluded from the best price and volume calculations.
 
 # Summary
 This data is a snapshot of the state of the market at a point in time.
@@ -26,10 +27,10 @@ This data is a snapshot of the state of the market at a point in time.
 
 All these values can be empty/nothing if there is insufficient relevant data.
 
-  - **Best bid price:** the highest price level on an order book for buy orders.
-  - **Best bid volume:** the aggregated volume being bid at the _best bid price_.
-  - **Best offer price:** the lowest price level on an order book for offer orders.
-  - **Best offer volume:** the aggregated volume being offered at the _best offer price_.
+  - **Best bid price:** the highest price level on an order book for persistent, non pegged buy orders.
+  - **Best bid volume:** the aggregated volume being bid at the _best bid price_ excluding pegged orders.
+  - **Best offer price:** the lowest price level on an order book for persistent, non pegged offer orders.
+  - **Best offer volume:** the aggregated volume being offered at the _best offer price_ excluding pegged orders.
   - **Mid price:** the arithmetic average of the _best bid price_ and _best offer price_.
   - **Mark price:** the current mark price as calculated by the selected mark price methodology.
   - **Open interest:** the sum of the size of all positions greater than 0.

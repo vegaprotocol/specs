@@ -17,6 +17,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 - [ ] Pegged orders are not repriced and do not lose time priority when their specific reference price is unchanged, even if other peg reference prices move.
 - [ ] If the midprice is calculated to be a fraction (e.g. 102.5), it should be rounded up for a buy and rounded down for a sell.
 - [ ] The order version is not updated during a repricing
+- [ ] Pegged orders are excluded from the calculation of the BEST_BID, BEST_ASK and MID prices
 
 ## Summary
 
