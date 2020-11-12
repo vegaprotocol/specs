@@ -239,12 +239,39 @@ Some plain text walkthroughs of some scenarios that would prove that the impleme
 
 # Network Parameters
 
-`MinProposerBalance` Minimum proposer balance - The required governance token balance a proposer must have at enactment time
-`MinVoterBalance` Minimum voter balance - The required governance token balance a voter must have at vote time
-`MinimumPreEnactmentPeriod`
-`MaximumPreEnactmentPeriod`
-`MinClose` Minimum close
-`MaxClose` Maximum close
-`MinimumProposalPeriod` 
-`MinimumRequiredParticipation`
-`MinimumRequiredMajority`
+| Network Parameters | Details |
+| :-----: | :-----: |
+`governance.proposal.asset.requiredParticipation` | Participation level required for any new Asset proposal to pass |
+`governance.proposal.updateNetParam.requiredParticipation` | Participation level required for any Network Parameters update proposal to pass |
+`governance.vote.asset` | Product Asset name |
+`governance.proposal.updateMarket.minProposerBalance` | Minimum balance required for a party to be able to submit a Market update proposal | 
+`governance.proposal.updateNetParam.minEnact` | Minimum enact time (Network Parameters update proposal)|
+`governance.proposal.asset.maxClose` | Max close time (New Asset proposal)|
+`governance.proposal.market.maxEnact` | Max enact time (New Market proposal) |
+`governance.proposal.market.requiredMajority` | Majority required for a new Market proposal to pass |
+`governance.proposal.asset.requiredMajority` | Majority required for a new Asset proposal to pass |
+`governance.proposal.updateMarket.minVoterBalance` | Minimum balance for Voter(s) in a Market update proposal |
+`governance.proposal.asset.minVoterBalance` | Minimum balance for Voter(s) in a new Asset proposal |
+`governance.proposal.asset.minClose` | Minimum close time (New Asset proposal) |
+`governance.proposal.updateMarket.requiredParticipation` | Participation level required for any Market update proposal to pass |
+`governance.proposal.market.minProposerBalance` | Minimum balance required for a party to be able to submit a new Market proposal | 
+`governance.proposal.updateMarket.maxEnact` | Max enact time (Market update proposal) |
+`governance.proposal.updateNetParam.minClose`  | Minimum close time (Network Parameters update) |
+`governance.proposal.asset.maxEnact` | Max enact time (Asset proposal) |
+`governance.proposal.asset.minProposerBalance` | Minimum balance required for a party to be able to submit a new Asset proposal | 
+`governance.proposal.market.minEnact` | Minimum enact time (Market proposal)|
+`governance.proposal.updateMarket.requiredMajority` | Majority required for a Market update proposal to pass |
+`governance.proposal.updateNetParam.maxEnact` | Max enact time (Network Parameters update) |
+`governance.proposal.market.minClose` | Minimum close time (Market proposal) |
+`governance.proposal.market.requiredParticipation` | Participation level required for any Market proposal to pass |
+`governance.proposal.updateNetParam.maxClose` | Max close time (Network Parameters update proposal)|
+`governance.proposal.updateMarket.minEnact` | Minimum enact time (Market update proposal)|
+`governance.proposal.market.minVoterBalance` | Minimum balance for Voter(s) in a new Market proposal |
+`governance.proposal.updateNetParam.requiredMajority` | Majority required for a Network Parameters update proposal to pass |
+`governance.proposal.asset.minEnact` | Minimum enact time (New Asset proposal)
+`governance.proposal.updateMarket.maxClose` | Max close time (Market update proposal)|
+`governance.proposal.updateMarket.minClose` | Min close time (Market update proposal) |
+`governance.proposal.market.maxClose` | Max close time (New Market proposal)|
+`governance.proposal.updateNetParam.minProposerBalance` | The required governance token balance a proposer must have at enactment time (Network Parameters update proposal) |
+`governance.proposal.updateNetParam.minVoterBalance` | The required governance token balance a voter must have at vote time (Network Parameters update proposal) |
+
