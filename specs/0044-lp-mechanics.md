@@ -160,9 +160,7 @@ A liquidity provider complies with their liquidity provision obligation by:
 Since liquidity provider orders automatically refresh, a liquidity provider is only non-compliant when they have insufficient capital to meet the margin requirements of these orders.
 
 **During auction:**
-- liquidity provider obligation during auction (including market commencement auction):
-    - [ ] liquidity provider [GFN](./0014-order-types.md) orders (both orders submitted as part of _liquidity provider orders_ and any other orders submitted in regular way) that are placed during an auction call period are parked and reinstated when the limit order book is reinstated.
-	- [ ] At conclusion of auction period call period, liquidity provider's GFN orders are reinstated.
+- liquidity provider can still submit/amend/cancel any orders during the auction. However, depending on type of the auction some of them might be rejected (e.g. a GFN limit order will be rejected in all auction modes, a request to decrease _liquidity provision obligation_ will be denied during the liquidity monitoring auction as if there was enough liquidity in the market the auction wouldn't have happened). The supplied liquidity will be calculated assuming the market is in it's default trading mode - so even though the pegged orders will be parked for the duration of the auction the liquidity that they would've supplied under normal trading mode gets counted towards the supplied liquidity. 
 
 ### Non-compliance
 
