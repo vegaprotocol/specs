@@ -8,7 +8,7 @@ Note: With this type of oracle there’s no incentive in the Vega data source sy
 
 *NOTE: This is the only version available in testnet, and initially will require only one of the specified keys to sign and submit the data transaction**
 ## Specifying TPO on Products
-When a market is proposed, the settlement data source is specified as part of specifying the instrument.
+When a market is proposed, the settlement data source is specified as part of specifying the instrument. This data source may be a TPO. Note, a TPO may submit data that is used by multiple markets. Each market may use a different field of the data.
 
 ### Futures
 A [Cash Settled Direct Futures](./xxxx) product requires specification of a settlementPriceSource for settlement of the product (at expiry). TODO: Move this to the WIP built in futures spec!!
@@ -18,7 +18,7 @@ Future {
     ... 
     settlementPriceSource:  { 
         signedMessage: {
-	    sourcePubkeys: ["A VEGA_PUBKEY_HERE"],
+	    sourcePubkeys: ["VEGA_PUBKEY_HERE"],
 	    field: "price",
 	    dataType: "decimal",
 	    filters: [ 
@@ -63,13 +63,12 @@ A future feature requirement - any participant may propose a change to a market'
 
 ## Contingencies
 
-### What happens when Oracle Data doesn't arrive?
-For the minimum requirement, a timeout should be implemented, whereby if the oracle price data doesn't arrive, the market is settled by another means. See [settlement at expiry spec](./0004-settlement-at-instrument-expiry.md).
+### What happens if Oracle Data doesn't arrive?
+For the minimum requirement, a (network parameter) timeout should be implemented, whereby if the oracle price data doesn't arrive, the market is settled by another means. See [settlement at expiry spec](./0004-settlement-at-instrument-expiry.md).
 
 
-
-## Examples
-
+## Network Parameters
+1. Timeout, after which the oracle data source is considered undelivered and the Product will settle itself according to contingencies.
 ## Acceptance
 
 ### Trusted Party Oracle
@@ -78,12 +77,11 @@ For the minimum requirement, a timeout should be implemented, whereby if the ora
     - Identified by its public key
 
 #### Active Trusted Party Oracle
-
-- A valid TPO that has an existing commitment to provide data is referred to in this section as an Active TPO
-
+- A valid [Trusted Party Oracle](#trusted-party-oracle) that has an existing commitment to provide data is referred to in this section as an Active TPO
+- An existing commitment is when a [Trusted Party Oracle](#trusted-party-oracle) is listed as a source on one or more [active markets](./0043-market-lifecycle.md#active-markets).
 #### Inactive Trusted Party Oracle
 
-- A valid TPO that has no existing commitments to provide data is referred to in this section as an Inactive TPO
+- A valid [Trusted Party Oracle](#trusted-party-oracle) that has no existing commitments to provide data is referred to in this section as an Inactive TPO
     - Note: that most accounts on the network that have ever traded thus count as 'Inactive TPOs' 
 
 ### Invalid Trusted Party Oracle
@@ -94,21 +92,23 @@ A invalid Trusted Party Oracle (TPO) is:
 ### Criteria
 
 1. A [product can be specified](./0028-governance.md) to rely on a [valid Trusted Party Oracle](#trusted-party-oracle)
-    1. [ ] The product must specify a [valid Trusted Party Oracle](#trusted-party-oracle)
-    1. [ ] A market proposal specifying an [Invalid TPO](#invalid-trusted-party-oracle) will be rejected
-        1. [ ] This rejection will happen at *the [creation of the proposal](./0028-governance.md#lifecycle-of-a-proposal)*
+    1. The product must specify a [valid Trusted Party Oracle](#trusted-party-oracle)
+    1. A market proposal specifying an [Invalid TPO](#invalid-trusted-party-oracle) will be rejected
+        1. This rejection will happen at *the [creation of the proposal](./0028-governance.md#lifecycle-of-a-proposal)*
+    1. Multiple products can rely on the same TPO, and can settle based on the same `SubmitOracleData`.
 1. `SubmitOracleData` transactions can be submitted by any [Trusted Party Oracle](#trusted-party-oracle)
-    1. [ ] `SubmitOracleData` transactions by [Active TPOs](#active-trusted-party-oracle) will be accepted.
-    1. [ ] `SubmitOracleData` transactions by [Inactive TPOs](#inactive-trusted-party-oracle) will be rejected.
-    1. [ ] `SubmitOracleData` transactions by [Invalid TPOs](#invalid-trusted-party-oracles) will be rejected.
+    1. `SubmitOracleData` transactions by [Active TPOs](#active-trusted-party-oracle) will be accepted.
+    1. `SubmitOracleData` transactions by [Inactive TPOs](#inactive-trusted-party-oracle) will be rejected.
+    1. `SubmitOracleData` transactions by [Invalid TPOs](#invalid-trusted-party-oracle) will be rejected.
 1. To be valid, a `SubmitOracleData` transaction must:
-    1. Be from an Active, valid TPO,
-    1. **Questionable:** Include a `mark_time` date format,
+    1. Be from an [Active TPO](#active-trusted-party-oracle),
+    1. **Questionable**: Be from an [Active TPO](#active-trusted-party-oracle) and for a market that that TPO is a sourceKey for. (this would mean checking the filters for a data source for every active market for every SubmitOracleData)
+    1. **Questionable:** Include a `mark_time` date format (this field probably isn't a hard requirement and thus this is probably wrong),
     1. Invalid `SubmitOracleData` transactions must be rejected.
 ### Notes
 - There are no [rewards](./0029-fees.md) associated with being an [Active TPO](#active-trusted-party-oracle)
 - There are no [fees](./0029-fees.md) associated with being an [Active TPO](#active-trusted-party-oracle)
-- There is no internal tracking of reliability or timeliness of data provided by [TPOs](#trusted-party-oracle)
+- There is no internal tracking of reliability of data provided by [TPOs](#trusted-party-oracle)
 - There is no explicit block list for unreliable [TPO](#trusted-party-oracle).
 - There is no API required to list [Invalid](#invalid-trusted-party-oracle), [Active](#active-trusted-party-oracle) or [Inactive](#inactive-trusted-party-oracle) TPOs.
 - There is no requirement for a [Trusted Party Oracle](#trusted-party-oracle) to have any [collateral](./0013-accounts.md) at any point in time.
