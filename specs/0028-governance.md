@@ -41,7 +41,7 @@ The type of governance action are:
 Any actions that result from the outcome of the vote are covered in other spec files.
 
 
-## Geovernance weighting
+## Governance weighting
 
 A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. (Note: a party's weighitng must be greater than 0 for the proposal type in question in order for the party to submit a new proposal.):
 
