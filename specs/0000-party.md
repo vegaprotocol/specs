@@ -19,6 +19,11 @@ A party can:
 
 # Guide-level explanation
 
+## Special Parties
+There are a limited number of 'special' parties in Vega.
+
+### 'network' party
+The `network` party is a pseudoparty. It is used in [position resolution](./0012/position-resolution.md) to close distressed [positions](./0006-positions-core.md) or [orders](./0024-order-status.md).
 
 # Acceptance Criteria
 
@@ -26,3 +31,4 @@ A party can:
 ## Criteria
 1. When a party must be uniquely identified, it must be identified by the public key of an ed25519 keypair
 1. A party with no balance in any account must have their transactions rejected.
+1. The special network party...
