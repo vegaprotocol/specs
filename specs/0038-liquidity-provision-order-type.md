@@ -83,6 +83,7 @@ Given the price peg information (`peg-reference`, `number-of-units-from-referenc
 ``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)```. 
 
 where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-lp-mechanics.md) and `price` is the price level at which the `volume` will be placed.
+Note: if the resulting price for any of the entries in the buy / sell shape is outside the valid price range as provided by the price monitoring module it should get shifted to the valid price that's furthest away from the mid for the given order-book side.
 
 ```
 Example: 
