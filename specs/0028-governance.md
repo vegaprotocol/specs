@@ -218,7 +218,7 @@ APIs should also exist for clients to:
 - [ ] As a user, I can get a list of all proposals I voted for
 - [ ] As a user, I can receive notification when a new proposal is created and may require attention.
 - [ ] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open
-- [ ] As the vega network, all votes received are rejected once the proposal voting period is finished
+- [ ] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected*
 - [ ] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it.
 - [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied
 - [ ] As the vega network, proposals that close less than 2 days from enactment are rejected as invalid
