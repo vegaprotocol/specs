@@ -141,6 +141,8 @@ Liquidity providers are always allowed to amend their shape generated orders by 
 
 No cancellation of orders other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-lp-mechanics.md).
 
+Existing orders that are used as part of the liquidity commitment can be cancelled and amended just like normal orders on the book which are not part of liquidity provisioning.
+
 
 ## Network Parameters:
 * mm-time-horizon: market making time horizon to imply probability of trading.
