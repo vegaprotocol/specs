@@ -71,6 +71,7 @@ Specifically:
   - \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins).
 - At the market start time and after each price-monitoring auction period the bounds will reset
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
+- The resulting auction length should be at least `min_auction_length` (see the [auctions](./0026-auctions.md#auction-config) spec). If the auction length implied by the triggers is less than that it should be extended.
 
 ## View from [quant](https://github.com/vegaprotocol/quant) library side
 
