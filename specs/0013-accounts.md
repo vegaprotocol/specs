@@ -1,9 +1,5 @@
 Feature name: accounts
 
-Start date: 2019-10-01
-
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
-
 # Acceptance Criteria
 
 ## All accounts
@@ -26,11 +22,11 @@ Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 ## Liquidity Provider bond accounts
 - [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-lp-mechanics.md).
-- [ ] Each party that has place a [Liquidity Provision order](./0038-liquidity-provision-order-type.md) will have one bond account per market they have provided liquidity to
+- [ ] Each party that has placed a [Liquidity Provision order](./0038-liquidity-provision-order-type.md) will have one bond account per market they have provided liquidity to
 - [ ] [Fees earned from liquidity provision](https://github.com/vegaprotocol/product/blob/master/specs/0044-lp-mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](https://github.com/vegaprotocol/product/blob/master/specs/0042-setting-fees-and-rewarding-lps.md#distributing-fees)
 
 ## Insurance pool accounts
-- [ ] When a market opens for trading, there an insurance account that is able to be used by that market for every settlement asset of that market.
+- [ ] When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market.
 - [ ] Only transfer requests move money in or out of the insurance account.
 - [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds distributed to other same-currency insurance pools.
 
@@ -55,7 +51,7 @@ All accounts must:
 
 **Creation:**
 
-The first time an entity deposits an asset into Vega's collateral smart contract, an asset account is created for that party on Vega and credited with the equivalent amount. Also if a market attempts to transfer 
+The first time an entity deposits an asset into Vega's collateral smart contract, an asset account is created for that party on Vega and credited with the equivalent amount. 
 
 This account:
 
@@ -85,7 +81,7 @@ When a trader places an order on a market and they do not have a margin account 
 
 When a trader no longer has collateral requirements for a  market (because they don't have open positions or active orders), these accounts no longer have utility in the core protocol and may be deleted. Accounts may also be deleted for other reasons (e.g. a system account at the conclusion of a set of [closeouts](./0012-position-resolution)).
 
-If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (which for margin accounts will typically the insurance pool of the market).
+If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (which for margin accounts will typically be the insurance pool of the market).
 
 ## Insurance pools
 

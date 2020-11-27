@@ -1,5 +1,4 @@
 Feature name: market-framework
-Start date: 2019-02-11 
 
 # Summary
 The market framework is a set of concepts that define the markets available on a Vega network in terms of the product and instrument being traded on each, the trading mode and related parameters, and the risk model being used for margin calculations.
@@ -7,7 +6,7 @@ The market framework is a set of concepts that define the markets available on a
 The market framework is described in Section 3 of the [whitepaper](../product/wikis/Whitepaper).
 
 # Guide-level explanation
-A the trading core will create order books, risk engines, etc. and accept orders and other instructions based on the data held within the market framework. Depending on the deployment context for the trading core, the market framework will be created and manipulated in different ways:
+The trading core will create order books, risk engines, etc. and accept orders and other instructions based on the data held within the market framework. Depending on the deployment context for the trading core, the market framework will be created and manipulated in different ways:
 
 - In the first Nicenet release and some private/permissioned Vega networks, the framework instances will be set up using configuration files.
 - In later test network releases, the public Mainnet, and other private/permissioned networks, entities in the framework will be created by governance transactions.
@@ -23,9 +22,6 @@ Out of scope for this ticket:
 - APIs through which clients can query and update market framework data  
 
 # Reference-level explanation
-This is the main portion of the specification. Break it up as required.
-
-
 The market framework is essentially a set of data structures that configure and control almost all of the behaviour of a Vega network (the main exceptions being per-instance network and node configuration, and network-wide parameters that apply to all markets). These data structures are described in the sections below.
 
 
@@ -35,7 +31,7 @@ The market data structure collects all of the information required for Vega to o
 
 Data:
   - **Identifier:** this should unambiguously identify a market
-  - **Trading mode:** this defines the trading mode (e.g. [continuous trading](#trading-mode---continuous-trading), [auction](#trading-mode---auctions)) and any required configuration for the trading mode. Note also that each trading mode in future will have very different sets of applicable parameters.
+  - **Trading mode:** this defines the trading mode (e.g. [continuous trading](#trading-mode---continuous-trading), [auction](#trading-mode---auctions)) and any required configuration for the trading mode. Note also that each trading mode in the future will have very different sets of applicable parameters.
   - **Tradable instrument:** an instance of or reference to a tradable instrument.
   - **Mark price methodology:** reference to which [mark price](./0009-mark-price.md) calculation methodology will be used.
   - **Mark price methodology parameters:**
@@ -69,7 +65,7 @@ Data:
 
 ## Instrument
 
-Uniquely and unambiguously describes something that can be traded on Vega, two identical instruments should be fungible, potentially (in future, when multiple markets per instrument are allowed) even across markets. At least initially Vega will allow a maximum of one market per instrument, but the design should allow for this to be relaxed in future when additional trading modes are added.
+Uniquely and unambiguously describes something that can be traded on Vega, two identical instruments should be fungible, potentially (in the future, when multiple markets per instrument are allowed) even across markets. At least initially Vega will allow a maximum of one market per instrument, but the design should allow for this to be relaxed in the future when additional trading modes are added.
 
 Instruments are the data structure that provides most of the metadata that allows for market discovery in addition to providing a concrete instance of a product to be traded. An instrument may also be described as a 'contract' (among other things) in trading literature and press.
 
@@ -97,8 +93,8 @@ Product lifecycle events:
 - **Maturity:** this event moves an instrument from 'active' to 'inactive' state, means that further trading is not possible, and triggers final settlement of positions and release of margin.
 
 Products must expose certain data to Vega WHEN they are instantiated as an instrument by providing parameters:
-- **Settlement assets:** one or more  assets that can be involved in settlement
-- **Margin assets:** one or more  assets that may be required as margin (usually the same set as settlement assets, but not always)
+- **Settlement assets:** one or more assets that can be involved in settlement
+- **Margin assets:** one or more assets that may be required as margin (usually the same set as settlement assets, but not always)
 - **Price / quote units:** the unit in which prices (e.g. on the order book are quoted), usually but not always one of the settlement assets. Usually but not always (e.g. for bonds traded on yield, units = % return or options traded on implied volatility, units = % annualised vol) an asset (currency, commodity, etc.)
 - **Status:** e.g. Active | Matured (these are the only statuses I can think of for now)
 
