@@ -1,6 +1,4 @@
 Feature name: mark-to-market-settlement
-Start date: YYYY-MM-DD
-Specification PR: 
 
 # Acceptance Criteria
 
@@ -19,7 +17,7 @@ Specification PR:
 - [ ] The total amount *collected* by the network should be less than  or equal to the sum of all of the negative settlement amounts (in absolute size)
 - [ ] If a trader's settlement amount is positive and the amount collected, i.e. the balance of the temporary settlement account, equals the sum of all negative settlement amounts (in absolute size), every trader with a positive settlement amount receives that amount transferred to their margin account from the temporary settlement account.
 -  [ ] If the total amount *collected* by the network, as determined by the balance of the market’s margin account, is less than the sum of all of the negative settlement amount amounts (in absolute size), for all traders with a positive settlement amount, an amount  is transferred from the market’s margin account to each trader’s margin account that is less than or equal to their settlement amount amount.
-- [ ] The total amount *collected* collateral equals the total amount of *distributed* collateral.
+- [ ] The total amount of *collected* collateral equals the total amount of *distributed* collateral.
 
 - [ ] The market’s settlement account balance is zero at the start of the market-to-market settlement process
 - [ ] After completing the mark-to-market settlement process, the market’s settlement account balance is zero

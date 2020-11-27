@@ -1,5 +1,4 @@
 Feature name: settlement
-Start date: 2019-02-12
 
 # Acceptance Criteria
 - [ ] 

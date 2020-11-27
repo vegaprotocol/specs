@@ -1,6 +1,4 @@
 Feature name: collateral
-Start date: YYYY-MM-DD
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 
 # Acceptance Criteria
 * [ ] Transfer requests are the only way the collateral engine will change the amounts of assets
