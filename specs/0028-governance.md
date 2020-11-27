@@ -43,7 +43,10 @@ Any actions that result from the outcome of the vote are covered in other spec f
 
 ## Governance weighting
 
-A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. (Note: a party's weighitng must be greater than 0 for the proposal type in question in order for the party to submit a new proposal.):
+A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. 
+
+To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`. 
+
 
 Weighting will initially be determined by the user's general account balance of a specific asset on the Vega network in question. This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, includng between Testnets and Mainnets.
 
