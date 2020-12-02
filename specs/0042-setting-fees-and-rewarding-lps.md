@@ -16,7 +16,7 @@ The [liquidity fee factor](0029-fees.md) is an input to the total taker fee that
 
 `liquidity_fee = fee_factor[liquidity] x trade_value_for_fee_purposes`
 
-As part of the [commit liquidity network transaction ](????-liqudity-mechanics.md), the liquidity provider submits their desired level for the [liquidity fee factor](0029-fees.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market. 
+As part of the [commit liquidity network transaction ](0044-lp-mechanics.md), the liquidity provider submits their desired level for the [liquidity fee factor](0029-fees.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market. 
 First, we produce a list of pairs which capture committed liquidity of each mm together with their desired liquidity fee factor and arrange this list in an increasing order by fee amount. Thus we have 
 ```
 [MM-1-stake, MM-1-liquidity-fee-factor]
