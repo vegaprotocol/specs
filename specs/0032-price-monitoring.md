@@ -74,14 +74,14 @@ Price monitoring engine will interface between the matching engine and the risk 
 
 Specifically:
 
-- Price monitoring engine averages all the prices received from the matching engine that have the same timestamp.
+- Price monitoring engine averages (weighted by volume) all the prices received from the matching engine that have the same timestamp.
 - It periodically (in a predefined, deterministic way) sends the:
   - the probability level α,
   - period τ,
   - the associated reference price
 to the risk model and obtains the max up/down scaling factors per each of the specified triggers. The reference price is the latest price such that it's at least τ old or the earliest available price should price history be shorter than τ.
-- It holds the history of average prices looking back to the maximum τ configured in the market.
-- Everytime a new price is received from the matching engine the price monitoring engine checks all the [τ, up factor, down factor] triplets relevant for the timestamp, looks-up the associated past (averaged) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescirbed by the risk model.
+- It holds the history of volume weighted average prices looking back to the maximum τ configured in the market.
+- Everytime a new price is received from the matching engine the price monitoring engine checks all the [τ, up factor, down factor] triplets relevant for the timestamp, looks-up the associated past (volume weighted) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescirbed by the risk model.
 - The bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
 - To give an example, with 3 triggers the price protection auction can be calculated as follows:
   - \>=1% move in 10 min window -> 5 min auction,
