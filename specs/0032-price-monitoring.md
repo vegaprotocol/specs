@@ -58,7 +58,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 ### Network
 
 - `PriceMonitoringDefaultParameters`: Specifies default market parameters outlined in the previous pargraph. These will be used if market parameters don't get explicitly specified.
-- `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring bounds should be updated by the risk model.
+- `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
 
 ## View from the [vega](https://github.com/vegaprotocol/vega) side
 
@@ -70,7 +70,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 ## View from the price monitoring engine side
 
-Price monitoring engine will interface between the matching engine and the risk model. It will communicate with the matching engine every time a new transaction is processed (to check it its' arrival price should trigger an auction). It will communicate with the risk model with a predefined frequency to inform the risk model of the latest price history and obtain a new set of min/max price move bounds.
+Price monitoring engine will interface between the matching engine and the risk model. It will communicate with the matching engine every time a new transaction is processed (to check it its' arrival price should trigger an auction). It will communicate with the risk model with a predefined frequency to inform the risk model of the latest price history and obtain a new set of scaling factors used to calculate min/max prices from the reference price.
 
 Specifically:
 
