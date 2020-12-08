@@ -79,7 +79,7 @@ Specifically:
   - the probability level α,
   - period τ,
   - the associated reference price
-to the risk model and obtains the max up/down scaling factors per each of the specified triggers. Please note the scaling factors can be either additive or multiplicative depending on the risk model used. The reference price is the latest price such that it's at least τ old or the earliest available price should price history be shorter than τ.
+to the risk model and obtains the range of valid up/down price moves per each of the specified triggers. Please note that these can be expressed as either additive offsets or multiplicative factors depending on the risk model used. The reference price is the latest price such that it's at least τ old or the earliest available price should price history be shorter than τ.
 - It holds the history of volume weighted average prices looking back to the maximum τ configured in the market.
 - Everytime a new price is received from the matching engine the price monitoring engine checks all the [τ, up factor, down factor] triplets relevant for the timestamp, looks-up the associated past (volume weighted) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescirbed by the risk model.
 - The bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
@@ -93,10 +93,10 @@ to the risk model and obtains the max up/down scaling factors per each of the sp
 ## View from [quant](https://github.com/vegaprotocol/quant) library side
 
 - The risk model calculates the bounds per reference price, horizon τ and confidence level α beyond which a price monitoring auction should be triggered.
-- The bounds are returned as either additive or multiplicative factors for the up and down move. Applying these factors to the references price with the methodlogy implied by the risk model (additive or multiplicative) yields the min/max price per trigger.
+- The ranges of valid price moves are returned as either additive offsets or multiplicative factors for the up and down move. The price monitoring engine (PME) will know how to cope with either and apply it to the price bounds.
 - These bounds are to be available to other components and included in the market data API
 - Internally the risk model implements a function that takes as input: (reference price, confidence level alpha, time period tau) and returns either: 
-  - the additive factors: f<sub>min</sub><sup>additive</sup>, f<sub>max</sub><sup>additive</sup> such that S<sub>min</sub>:=S<sub>ref</sub>+f<sub>min</sub><sup>additive</sup> and S<sub>max</sub>:=S<sub>ref</sub>+f<sub>max</sub><sup>additive</sup>  or
+  - the additive offsets: f<sub>min</sub><sup>additive</sup>, f<sub>max</sub><sup>additive</sup> such that S<sub>min</sub>:=S<sub>ref</sub>+f<sub>min</sub><sup>additive</sup> and S<sub>max</sub>:=S<sub>ref</sub>+f<sub>max</sub><sup>additive</sup>  or
   - the multiplicative factors: f<sub>min</sub><sup>multiplicative</sup>, f<sub>max</sub><sup>multiplicative</sup> such that S<sub>min</sub>:=S<sub>ref</sub>*f<sub>min</sub><sup>multiplicative</sup> and S<sub>max</sub>:=S<sub>ref</sub>*f<sub>max</sub><sup>multiplicative</sup> 
 
   so that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α.
