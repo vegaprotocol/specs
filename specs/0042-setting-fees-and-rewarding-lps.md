@@ -5,7 +5,7 @@
 The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](./0041-target-stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special liquidity provider pegged order type [liquidity provider order spec](./0038-liquidity-provision-order-type.md). 
 
 ## Definitions / Glossary of terms used
-- **Market value proxy window length `t_market_value_window `**: sets the length of the window over which we estimate the market value. This is a network parameter.  
+- **Market value proxy window length `t_market_value_window_length`**: sets the length of the window over which we estimate the market value. This is a network parameter.  
 - **Target stake**: as defined in [target stake spec](????-target-stake.md). The amount of stake we would like MMs to commit to this market.
 
 ## CALCULATING LIQUIDITY FEE FACTOR
@@ -60,11 +60,11 @@ This will be used for determining what "equity like share" does committing liqui
 It's calculated, with `t` denoting time now measured so that at `t=0` the opening auction ended, as follows:
 ```
 total_stake = sum of all mm stakes
-active_time_window = [max(t-t_market_value_window,0), t]
-active_window_length = max(t-t_market_value_window,0) - t 
+active_time_window = [max(t-t_market_value_window_length,0), t]
+active_window_length = t - max(t-t_market_value_window_length,0)
 
 if (active_window_length > 0)
-    factor =  t_market_value_window / active_window_length
+    factor =  t_market_value_window_length / active_window_length
     traded_value_over_window = total trade value for fee purposes of all trades executed on a given market during the active_time_window
     market_value_proxy = max(total_stake, factor x traded_value_over_window)
 else
@@ -72,6 +72,14 @@ else
 ```
 
 Note that trade value for fee purposes is provided by each instrument, see [fees][0024-fees.md]. For futures it's just the notional and in the examples below we will only think of futures. 
+
+#### Example 
+Let's say `total_stake = 100`. The network parameter `t_market_value_window_length = 60s` (though in practice a more sensible value is e.g. one week).
+
+1. Current time `t = 0s` i.e. the opening auction just resulted in a trade. Then `active_window_length = 0 - max(0-60,0) = 0 - 0 =0` and so `market_value_proxy = 100`.
+1. Current time `t = 10s` i.e. the opening auction resulted in a trade and ended `10s` ago. Then `active_time_window = [0,t] = [0,30s]` and `active_window_length = 10 - max(10-60,0) = 10 - 0 = 10`. Let's say the trade value for fee purposes over the time `[0,t]` was `traded_value_over_window = 10 tUSD`. We calculate `factor = 60 / 10 = 6`. Then `market_value_proxy = max(100, 6 x 10)  = 100`. 
+1. Current time `t = 30s` i.e. the opening auction resulted in a trade and ended `30s` ago. Then `active_time_window = [0,t] = [0,30s]` and `active_window_length = 30 - max(30-60,0) = 30 - 0 = 30`. Let's say the trade value for fee purposes over the time `[0,30s]` was `traded_value_over_window = 100 tUSD`. We calculate `factor = 60 / 30 = 2`. Then `market_value_proxy = max(100, 2 x 100)  = 200`. 
+1. Current time `t = 90s` i.e. the opening auction resulted in a trade and ended `90s` ago. Then `active_time_window = [30s,90s]` and `active_window_length = 90 - max(90-60,0) = 90 - 30 = 60`. Let's say the trade value for fee purposes over the time `[30s,90s]` was `traded_value_over_window = 300 tUSD`. We calculate `factor = 60 / 60 = 1`. Then `market_value_proxy = max(100, 1 x 300)  = 300`. 
 
 
 #### Example
@@ -97,7 +105,6 @@ From these stored quantities we can calculate
 - `MM i equity = (MM i stake) x market_value_proxy / (MM i avg_entry_valuation)`
 - `MM i equity_share = MM i equity / (sum over j from 1 to N of MM j equity)`
 
-<<<<<<< HEAD
 If a market maker `i` wishes to set its stake to `new_stake` then update the above values as follows:
 1. Calculate new `total_stake` (sum of all but `i`'s stake + `new_stake`). Check that this is sufficient for `market target stake`; if not abort. 
 1. Update the `market_value_proxy` using the `new_stake`. 
