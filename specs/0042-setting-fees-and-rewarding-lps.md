@@ -5,7 +5,7 @@
 The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](./0041-target-stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special liquidity provider pegged order type [liquidity provider order spec](./0038-liquidity-provision-order-type.md). 
 
 ## Definitions / Glossary of terms used
-- **Market value proxy window length `t_market_value_window `**: sets the length of the window over which we estimate the market value. This is a network parameter.  
+- **Market value proxy window length `t_market_value_window_length`**: sets the length of the window over which we estimate the market value. This is a network parameter.  
 - **Target stake**: as defined in [target stake spec](????-target-stake.md). The amount of stake we would like MMs to commit to this market.
 
 ## CALCULATING LIQUIDITY FEE FACTOR
@@ -60,11 +60,11 @@ This will be used for determining what "equity like share" does committing liqui
 It's calculated, with `t` denoting time now measured so that at `t=0` the opening auction ended, as follows:
 ```
 total_stake = sum of all mm stakes
-active_time_window = [max(t-t_market_value_window,0), t]
-active_window_length = max(t-t_market_value_window,0) - t 
+active_time_window = [max(t-t_market_value_window_length,0), t]
+active_window_length = t - max(t-t_market_value_window_length,0)
 
 if (active_window_length > 0)
-    factor =  t_market_value_window / active_window_length
+    factor =  t_market_value_window_length / active_window_length
     traded_value_over_window = total trade value for fee purposes of all trades executed on a given market during the active_time_window
     market_value_proxy = max(total_stake, factor x traded_value_over_window)
 else
@@ -97,7 +97,6 @@ From these stored quantities we can calculate
 - `MM i equity = (MM i stake) x market_value_proxy / (MM i avg_entry_valuation)`
 - `MM i equity_share = MM i equity / (sum over j from 1 to N of MM j equity)`
 
-<<<<<<< HEAD
 If a market maker `i` wishes to set its stake to `new_stake` then update the above values as follows:
 1. Calculate new `total_stake` (sum of all but `i`'s stake + `new_stake`). Check that this is sufficient for `market target stake`; if not abort. 
 1. Update the `market_value_proxy` using the `new_stake`. 
