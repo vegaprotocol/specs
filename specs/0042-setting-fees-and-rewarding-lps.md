@@ -93,33 +93,35 @@ The guiding principle of this section is that by committing stake a liquidity pr
 
 At any time let's say we have `market_value_proxy` calculated above and existing liquidity providers as below
 ```
-[MM 1 stake, MM 1 avg_entry_valuation]
-[MM 1 stake, MM 2 avg_entry_valuation]
+[LP 1 stake, LP 1 avg_entry_valuation]
+[LP 1 stake, LP 2 avg_entry_valuation]
 ...
-[MM N stake, MM N avg_entry_valuation]
+[LP N stake, LP N avg_entry_valuation]
 ```
 
-At market creation all these are set `zero`.  
+At market creation all these are set `zero`; when LPs commit stake we update these as per the description below.   
 
-From these stored quantities we can calculate
-- `MM i equity = (MM i stake) x market_value_proxy / (MM i avg_entry_valuation)`
-- `MM i equity_share = MM i equity / (sum over j from 1 to N of MM j equity)`
+From these stored quantities we can calculate, at time step `n` the following:
+- `(LP i equity)(n) = (LP i stake)(n) x market_value_proxy(n) / (LP i avg_entry_valuation)(n)`
+- `(LP i equity_share)(n) = (LP i equity)(n) / (sum over j from 1 to N of (LP j equity)(n))`
 
-If a market maker `i` wishes to set its stake to `new_stake` then update the above values as follows:
-1. Calculate new `total_stake` (sum of all but `i`'s stake + `new_stake`). Check that this is sufficient for `market target stake`; if not abort. 
-1. Update the `market_value_proxy` using the `new_stake`. 
-1. Update `MM i stake` and `MM i avg_entry_valuation` as follows:
+If at time step `n` liquidity provider `i` wishes to set its stake to `new_stake` then at update the above values as follows:
+1. Calculate new `total_stake(n+1) = sum of all but i's stake(n) + new_stake`). Check that this is sufficient for `market target stake`; if not abort. 
+1. Update the `market_value_proxy(n+1)` using the `new_stake` (section "Calculating market value proxy"). 
+1. Update `(LP i stake)(n+1)` and `(LP i avg_entry_valuation)(n+1)` as follows:
 ```
-if new_stake < MM i stake then
-    MM i stake = new_stake
-else if new_stake > MM i stake then
-    delta = new_stake - MM i stake // this will be > 0
-    MM i avg_entry_valuation = ((MM i equity x MM i avg_entry_valuation) 
-                            + (delta x market_value_proxy)) / (MM i equity + MM i stake)
-    MM i stake = new_stake
+if new_stake < (LP i stake)(n) then
+    (LP i stake)(n+1) = new_stake
+else if new_stake > (LP i stake)(n) then
+    delta = new_stake - (LP i stake)(n) // this will be > 0
+    (LP i avg_entry_valuation)(n+1) = (((LP i equity)(n) x (LP i avg_entry_valuation)(n)) 
+                            + (delta x market_value_proxy(n+1))) / ((LP i equity)(n) + (LP i stake)(n))
+    (LP i stake)(n+1) = new_stake
+    (LP i equity)(n+1) = (LP i stake)(n+1) x market_value_proxy(n+1) / (LP i avg_entry_valuation)(n+1)
+    (LP i equity_share)(n+1) = (LP i equity)(n+1) / (sum over j from 1 to N of (LP j equity)(n+1))
 ```
 
-**Check** the sum from over `i` from `1` to `N` of `MM i equity_share` is equal to `1`.
+**Check** the sum from over `i` from `1` to `N` of `LP i equity_share` is equal to `1`.
 **Warning** the above will be either floating point calculations  and / or there will be rounding errors arising from rounding (both stake and entry valuation can be kept with decimals) so the above checks will only be true up to a certain tolerance. 
 
 ### Distributing fees
