@@ -105,7 +105,7 @@ From these stored quantities we can calculate, at time step `n` the following:
 - `(LP i equity)(n) = (LP i stake)(n) x market_value_proxy(n) / (LP i avg_entry_valuation)(n)`
 - `(LP i equity_share)(n) = (LP i equity)(n) / (sum over j from 1 to N of (LP j equity)(n))`
 
-If at time step `n` liquidity provider `i` wishes to set its stake to `new_stake` then at update the above values as follows:
+If at time step `n` liquidity provider `i` wishes to set its stake to `new_stake` then update the above values as follows:
 1. Calculate new `total_stake(n+1) = sum of all but i's stake(n) + new_stake`). Check that this is sufficient for `market target stake`; if not abort. 
 1. Update the `market_value_proxy(n+1)` using the `new_stake` (section "Calculating market value proxy"). 
 1. Update `(LP i stake)(n+1)` and `(LP i avg_entry_valuation)(n+1)` as follows:
