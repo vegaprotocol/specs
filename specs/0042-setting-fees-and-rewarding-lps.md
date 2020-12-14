@@ -106,7 +106,7 @@ From these stored quantities we can calculate, at time step `n` the following:
 - `(LP i equity_share)(n) = (LP i equity)(n) / (sum over j from 1 to N of (LP j equity)(n))`
 Here `market_value_proxy(n)` is calculated as per Section "Calculating market value proxy".
 
-If at time step `n` liquidity provider `i` submits an order of type [0038-liquidity-provision-order-type.md](./0038-liquidity-provision-order-type.md) that changes its stake to `new_stake` then update the above values as follows:
+If at time step `n` liquidity provider `i` submits an order of type [0038-liquidity-provision-order-type.md](./0038-liquidity-provision-order-type.md) that requests its stake to be changed to `new_stake` then update the above values as follows:
 
 ```
 total_stake(n+1) = sum of all but i's stake(n) + new_stake 
