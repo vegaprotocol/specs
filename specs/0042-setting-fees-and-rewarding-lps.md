@@ -94,7 +94,7 @@ The guiding principle of this section is that by committing stake a liquidity pr
 At any time let's say we have `market_value_proxy` calculated above and existing liquidity providers as below
 ```
 [LP 1 stake, LP 1 avg_entry_valuation]
-[LP 1 stake, LP 2 avg_entry_valuation]
+[LP 2 stake, LP 2 avg_entry_valuation]
 ...
 [LP N stake, LP N avg_entry_valuation]
 ```
