@@ -99,7 +99,7 @@ At any time let's say we have `market_value_proxy` calculated above and existing
 [LP N stake, LP N avg_entry_valuation]
 ```
 
-These have to all be greater or equal to `zero` at all times. At market creation all these are set `zero` but there has to be at least one LP that commits stake at market creation. So the initial configuration is the `LP i stake = their commitment before market proposal gets enacted` and `LP i avg_entry_valuation = sum of total commited before market proposal is enacted`. We then update these as per the description below.   
+These have to all be greater or equal to `zero` at all times. At market creation all these are set `zero` except at least one LP that commits stake at market creation. So the initial configuration is the `LP i stake = their commitment before market proposal gets enacted` and `LP i avg_entry_valuation = sum of total commited before market proposal is enacted`. We then update these as per the description below.   
 
 From these stored quantities we can calculate, at time step `n` the following:
 - `(LP i equity)(n) = (LP i stake)(n) x market_value_proxy(n) / (LP i avg_entry_valuation)(n)`
