@@ -35,28 +35,36 @@ The market data structure collects all of the information required for Vega to o
 
 Data:
   - **Identifier:** this should unambiguously identify a market
+  - **Status:** Proposed | Pending | Cancelled | Active | Suspended | Closed | Trading Terminated | Settled (see [market lifecycle spec](./0043-market-lifecycle.md))
   - **Trading mode:** this defines the trading mode (e.g. [continuous trading](#trading-mode---continuous-trading), [auction](#trading-mode---auctions)) and any required configuration for the trading mode. Note also that each trading mode in future will have very different sets of applicable parameters.
   - **Tradable instrument:** an instance of or reference to a tradable instrument.
   - **Mark price methodology:** reference to which [mark price](./0009-mark-price.md) calculation methodology will be used.
   - **Mark price methodology parameters:**
     - Algorithm 1 / Last Traded Price: initial mark price
   - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
-  - **Default trading commences**: datetime submitted with the market creation proposal, this will affect the length of the opening auction. 
-  - **Default trading terminated**: datetime submitted with the market creation proposal, this will determine when trading ceases (prior to settlement). 
+  - **Market activation time:** Read only, set by system when market opens. The date/time at which the opening auction uncrossed and the market first entered it's normal trading mode (empty if this had not happened)
+  - **Tick size** (size of an increment in price in terms of the quote unit)
+  - **Decimal places**, number of decimals places for quotes unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
+
 
 ### Trading mode - continuous trading
 
 Params:
-  - **Tick size** (size of an increment in price in terms of the quote unit)
-  - **Decimal places**, number of decimals places for quotes unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
+  - None currently
+
 
 ### Trading mode - Auctions
+
+Params: 
+  - **Call period end:** when the call period ends (date/time), may be empty if indefinite
+
 A market can be in Auction Mode for a number of reasons:
 - At market creation, markets will start in an [opening auction](0026-auctions.md#auction-period-at-market-creation), as a price discovery mechanism
 - A market can be a [Frequent Batch Auction](0026-auctions.md#frequent-batch-auction), rather than continuous trading
 - Due to [price monitoring](./0032-price-monitoring.md) triggering a price discovery auction.
 
 How markets operate during auction mode is a separate specification: [0026 - Auctions](0026-auctions.md)
+
 
 ## Tradable instrument
 
@@ -95,13 +103,13 @@ Products will be of two types:
 Product lifecycle events:
 
 - **Cash/asset flows:** these are consumed by the settlement engine and describe a movement of a number of some asset from (-ve value) or to (+ve value) the holder of a (long position), with the size of the flow specify the quantity of the asset per unit of long volume.
-- **Maturity:** this event moves an instrument from 'active' to 'inactive' state, means that further trading is not possible, and triggers final settlement of positions and release of margin.
+- **Trading Terminated:** this event moves a market to 'Trading Terminated' state, means that further trading is not possible (see [market lifecycle spec](./0043-market-lifecycle.md)).
+- **Settlement:** this event triggers final settlement of positions and release of margin, e.g. once settlement data is received from a data source/oracle and final settlement cashflows are calculated (see [market lifecycle spec](./0043-market-lifecycle.md)).
 
 Products must expose certain data to Vega WHEN they are instantiated as an instrument by providing parameters:
 - **Settlement assets:** one or more  assets that can be involved in settlement
 - **Margin assets:** one or more  assets that may be required as margin (usually the same set as settlement assets, but not always)
 - **Price / quote units:** the unit in which prices (e.g. on the order book are quoted), usually but not always one of the settlement assets. Usually but not always (e.g. for bonds traded on yield, units = % return or options traded on implied volatility, units = % annualised vol) an asset (currency, commodity, etc.)
-- **Status:** e.g. Proposed | Active | Closed | Cancelled (see [market lifecycle spec]())
 
 Products need to re-evaluate their logic when any of their inputs change e.g. oracle publishes a value, change in time, parameter changed etc., so Vega will need to somehow notify of that update.
 
@@ -185,12 +193,13 @@ enum RiskModel {
 
 ## Example of a market in the above structure
 
-**Note:** all the naming conventions, IDs, etc. here are made up and just examples of the kind of thing that might happen.
+**Note:** all the naming conventions, IDs, etc. here are made up and just examples of the kind of thing that might happen and some fields are missing 🤷‍♀️.
 
 ```rust
 Market {
     id: "BTC/DEC18",
-    trading_mode: ContinuousTrading,
+    status: "Active",
+    trading_mode: ContinuousTrading { ... },
     tradable_instrument: TradableInstrument {
         instrument: Instrument {
             id: "Crypto/BTCUSD/Futures/Dec19", // maybe a concatenation of all the data or maybe a hash/digest
