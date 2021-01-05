@@ -46,7 +46,9 @@ Any actions that result from the outcome of the vote are covered in other spec f
 
 ## Governance weighting
 
-A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. (Note: a party's weighitng must be greater than 0 for the proposal type in question in order for the party to submit a new proposal.):
+A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. 
+
+To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`. 
 
 Weighting will initially be determined by the user's general account balance of a specific asset on the Vega network in question. This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, includng between Testnets and Mainnets.
 
@@ -234,7 +236,7 @@ APIs should also exist for clients to:
 - [ ] As a user, I can get a list of all proposals I voted for
 - [ ] As a user, I can receive notification when a new proposal is created and may require attention.
 - [ ] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open
-- [ ] As the vega network, all votes received are rejected once the proposal voting period is finished
+- [ ] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected*
 - [ ] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it.
 - [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied
 - [ ] As the vega network, proposals that close less than 2 days from enactment are rejected as invalid

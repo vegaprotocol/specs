@@ -10,11 +10,11 @@ Similarly to [price monitoring](0032-price-monitoring.md), we need to be able to
 
 ## Liquidity auction network parameters
 
-**c<sub>1</sub>** - constant multiple for [target stake](0000-target-stake.md) triggering the commencement of liquidity auction.  
+**c<sub>1</sub>** - constant multiple for [target stake](0041-target-stake.md) triggering the commencement of liquidity auction.  
 
 ## Glossary
 
-[target stake](0000-target-stake.md) is defined in a separate spec.
+[target stake](0041-target-stake.md) is defined in a separate spec.
 
 ## Required stake
 
@@ -35,10 +35,10 @@ Similarly to [price monitoring](0032-price-monitoring.md), the auction should be
 
 ## Trigger for exiting the auction
 
-When supplied stake ≥ `target_stake`, \
+When supplied stake ≥ `target_stake`.
 
 
-During the liquidity monitoring auction new or existing market makers can commit more stake (and hence liquidity) through the special market making order type and enable this by posting enough margin - see market making mechanics spec (WIP) for details. These need to be monitored to see if auction mode can be exit.
+During the liquidity monitoring auction new or existing market makers can commit more stake (and hence liquidity) through the special market making order type and enable this by posting enough margin - see the [liquidity provision mechanics](0044-lp-mechanics.md) spec for details. These need to be monitored to see if auction mode can be exit.
 
 ## What happens during the auction?
 

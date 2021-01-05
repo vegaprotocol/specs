@@ -1,6 +1,4 @@
 Feature name: feature-name
-Start date: YYYY-MM-DD
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
 Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections: 3.2 and 5.2 
 
 
@@ -13,7 +11,7 @@ Whitepaper link: [whitepaper](/vega-protocol/product/wikis/Whitepaper) sections:
     2. General asset account for the trader
     3. Insurance pool for the market
 - [ ] The settlement function interprets the collateral responses and determines whether the traders who are owed money may be paid out of the market's general account.
-  - [ ] If there are sufficient funds to pay all traders who are owed money, the settlement engine instructs the collateral engine to pay them out according the above calculated cashflows.
+  - [ ] If there are sufficient funds to pay all traders who are owed money, the settlement engine instructs the collateral engine to pay them out according to the above calculated cashflows.
   - [ ] If there are insufficient funds to pay all traders who are owed money, the settlement engine adjusts the amounts according to the position resolution methodology, which for Nicenet is a pro-rated reduction in amounts by the size of the amount.
 - [ ] When an instrument expires, the sum of all the settlement cashflows nets to zero across all positions (assumes negative volumes for short positions).
 

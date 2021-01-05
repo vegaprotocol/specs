@@ -5,7 +5,7 @@ Auctions are a trading mode that 'collect' orders during an *auction call period
 
 # Guide-level explanation
 
-In comparison to continuous trading, the auction mode for a market, is a state of the orderbook where each order placed are just sitting on the book, for a given period of time or until some requirements are met (called `call period`), then the matching orders are uncrossed.
+In comparison to continuous trading, the auction mode for a market, is a state of the orderbook where each order placed is just sitting on the book, for a given period of time or until some requirements are met (called `call period`), then the matching orders are uncrossed.
 
 They are mostly useful in less liquid markets, or in specific scenarios where a price must be determined, i.e. at opening of a market, when a potentially excessively large price move might occur (price monitoring) or when liquidity needs to be sourced and aggregated (liquidity monitoring). In traditional markets (where markets open and close every day) we can run an open and closing auction for the price to stabilise at both ends.
 
@@ -39,9 +39,9 @@ The enactment period of the governance proposal refers to the time between the p
 
 ## Frequent batch auction
 
-The frequent batch auction mode is a trading mode in perpetual auction, meaning that all uncrossing on the book is done at the end of auction period, then once this is done, and trades happen, a new auction period is started, and this forever until the market close.
+The frequent batch auction mode is a trading mode in perpetual auction, meaning that all uncrossing on the book is done at the end of auction period, then once this is done, and trades happen, a new auction period is started, and this continues forever until the market close.
 
-e.g: auctions could be set to last 10 minutes, then every 10 minutes the book would be uncrossing, and generating trades.
+e.g: auctions could be set to last 10 minutes, then every 10 minutes the book would uncross, potentially generating trades.
 
 Note that FBAs will still have an opening auction (which must have a duration equal to or greater than the minimum batch auction duration, as well as meeting the minimum opening auction duration. Price and liquidity monitoring will be able to override the trading mode and push the market into longer auctions to resolve the triggering event.
 
@@ -55,7 +55,7 @@ We can also imagine that an auction period could come to an end once a give numb
 
 Once the auction period finishes, vega needs to figure out the best price for the order range in the book which can be uncrossed. The first stage in this is to calculate the Volume Maximising Price Range - the range of prices (which will be a contiguous range in an unconstrained order book) at which the highest total quantity of trades can occur.
 
-Initially we will use the mid price within this range. For example, if the volume maximising range is 98-102, we would price all trades in the uncrossing at 100. In future there will be other options, which will be selectable via a network parameter specified at market creation, and changeable through governance. These other options are not yet specified.
+Initially we will use the mid price within this range. For example, if the volume maximising range is 98-102, we would price all trades in the uncrossing at 100 ((minimum price of range+maximum price of range)/2). In future there will be other options, which will be selectable via a network parameter specified at market creation, and changeable through governance. These other options are not yet specified.
 
 
 ## APIs related to auctions
@@ -69,7 +69,7 @@ These new APIs need to expose data, some of which will be re-calculated each tim
 - the indicative uncrossing price
 - indicative uncrossing volume
 
-The Indicative Uncrossing Price is the price at which all trades would occur if we uncrossed the auction now. This will need to be streamed like a normal price, but API users will need a way to know it's an *indicative* uncrossing price and **not** a last traded or mid price. This will likely be a new field.
+The Indicative Uncrossing Price is the price at which all trades would occur if we uncrossed the order book now. This will need to be streamed like a normal price, but API users will need a way to know it's an *indicative* uncrossing price and **not** a last traded or mid price. This will likely be a new field.
 
 ### Existing APIs
 
@@ -82,21 +82,21 @@ Market orders are not permitted while a market is in auction mode.
 
 Pegged orders are accepted but are immediately parked and do not enter the live order book.
 
-Additional Time in Force order options need to be added: only good for normal trading (GFN) and only good for auction (GFA).
+Good for normal trading (GFN) orders are rejected during an auction.
 
 
 ### Upon entering auction mode
 
 - Pegged orders get parked (see pegged orders spec for details).
-- Limit orders stay on the book (unless they have a TIF: only good for normal trading, in this case they get cancelled).
+- Limit orders stay on the book (unless they have a TIF:GFN only good for normal trading, in this case they get cancelled).
 - Cannot accept non-persistent orders (Fill Or Kill and Immediate Or Cancel)
 - Any auction that would be less than (network parameter) `min_auction_length` seconds should not be started.
 
 
 ### Upon exiting auction mode
 
-- Pegged orders (all kinds, including MM ones) get reinstated in the order they were originally submitted in.
-- Limit orders stay on the book (unless they have a TIF: only good for auction).
+- Pegged orders (all kinds, including MM ones) get reinstated in the order book they were originally submitted in.
+- Limit orders stay on the book (unless they have a TIF:GFA only good for auction, in this case they are cancelled).
 
 
 ## Exiting the auction mode
@@ -174,12 +174,14 @@ message Market {
   - [] I can choose what algorithm is used to decided the pricing at the end of the auction period.
 - [] As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period.
 - [] As a user, I can place an order when the market is in auction mode, but it will not trade immediately.
+- [] As a user, I can cancel an order that it either live on the order book or parked.
+- [] As a user, I can amend orders that are on the order book. Specifics can be found in the [amends](https://github.com/vegaprotocol/product/blob/master/specs/0026-amends.md) spec
 - [] As a user, I cannot place a Market order, or and order using FOK or IOC time in force.
 - [] As a user, I can get information about the trading mode of the market (through the market framework)
-- [] As a user, I can get real time information throught the API about a market in auction mode: indicative crossing price, indicative crossing volume.
+- [] As a user, I can get real time information through the API about a market in auction mode: indicative crossing price, indicative crossing volume.
 - [] As a user, the market depth API provides the same data that would be sent during continuous trading
 - [] As an API user, I can identify:
   - If a market is temporarily in an auction period
-  - Why it is in that period (e.g. Auction at open, liquididty sourcing)
+  - Why it is in that period (e.g. Auction at open, liquidity sourcing)
   - What price mode that auction will use when the auction is over
   - When the auction mode ends
