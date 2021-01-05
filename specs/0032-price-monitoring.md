@@ -58,7 +58,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 ### Network
 
 - `PriceMonitoringDefaultParameters`: Specifies default market parameters outlined in the previous pargraph. These will be used if market parameters don't get explicitly specified.
-- `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring bounds should be updated by the risk model.
+- `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
 
 ## View from the [vega](https://github.com/vegaprotocol/vega) side
 
@@ -70,14 +70,18 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 ## View from the price monitoring engine side
 
-Price monitoring engine will interface between the matching engine and the risk model. It will communicate with the matching engine every time a new transaction is processed (to check it its' arrival price should trigger an auction). It will communicate with the risk model with a predefined frequency to inform the risk model of the latest price history and obtain a new set of min/max price move bounds.
+Price monitoring engine will interface between the matching engine and the risk model. It will communicate with the matching engine every time a new transaction is processed (to check it its' arrival price should trigger an auction). It will communicate with the risk model with a predefined frequency to inform the risk model of the latest price history and obtain a new set of scaling factors used to calculate min/max prices from the reference price.
 
 Specifically:
 
-- Price monitoring engine averages all the prices received from the matching engine that have the same timestamp.
-- It periodically (in a predefined, deterministic way) sends the accrued price history to the risk model and obtains the set of max up/down moves per period τ and the associated level α (it can keep more than one of the [τ, max move up, max move down] triplets).
-- It holds the history of average prices looking back to the maximum τ configured in the market.
-- Everytime a new price is received from the matching engine the price monitoring engine checks all the [period, max move up, max move down] triplets relevant for the timestamp, looks-up the associated past (averaged) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescirbed by the risk model.
+- Price monitoring engine averages (weighted by volume) all the prices received from the matching engine that have the same timestamp.
+- It periodically (in a predefined, deterministic way) sends the:
+  - the probability level α,
+  - period τ,
+  - the associated reference price
+to the risk model and obtains the range of valid up/down price moves per each of the specified triggers. Please note that these can be expressed as either additive offsets or multiplicative factors depending on the risk model used. The reference price is the latest price such that it's at least τ old or the earliest available price should price history be shorter than τ.
+- It holds the history of volume weighted average prices looking back to the maximum τ configured in the market.
+- Everytime a new price is received from the matching engine the price monitoring engine checks all the [τ, up factor, down factor] triplets relevant for the timestamp, looks-up the associated past (volume weighted) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescirbed by the risk model.
 - The bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
 - To give an example, with 3 triggers the price protection auction can be calculated as follows:
   - \>=1% move in 10 min window -> 5 min auction,
@@ -85,12 +89,18 @@ Specifically:
   - \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins).
 - At the market start time and after each price-monitoring auction period the bounds will reset
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
+- The resulting auction length should be at least `min_auction_length` (see the [auctions](./0026-auctions.md#auction-config) spec). If the auction length implied by the triggers is less than that it should be extended.
 
 ## View from [quant](https://github.com/vegaprotocol/quant) library side
 
-- The risk model calculates the bounds per current price, horizon τ and confidence level α beyond which a price monitoring auction should be triggered.
+- The risk model calculates the bounds per reference price, horizon τ and confidence level α beyond which a price monitoring auction should be triggered.
+- The ranges of valid price moves are returned as either additive offsets or multiplicative factors for the up and down move. The price monitoring engine (PME) will know how to cope with either and apply it to the price bounds.
 - These bounds are to be available to other components and included in the market data API
-- Internally the risk model implements a function that takes as input: (current price, confidence level alpha, time period tau) and return limits S<sup>min</sup> and S<sup>max</sup> such that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α. Example input (100, 1 hour, 0.99) returns S_max = 111.2343 and S_min = 93.456.
+- Internally the risk model implements a function that takes as input: (reference price, confidence level alpha, time period tau) and returns either: 
+  - the additive offsets: f<sub>min</sub><sup>additive</sup>, f<sub>max</sub><sup>additive</sup> such that S<sub>min</sub>:=S<sub>ref</sub>+f<sub>min</sub><sup>additive</sup> and S<sub>max</sub>:=S<sub>ref</sub>+f<sub>max</sub><sup>additive</sup>  or
+  - the multiplicative factors: f<sub>min</sub><sup>multiplicative</sup>, f<sub>max</sub><sup>multiplicative</sup> such that S<sub>min</sub>:=S<sub>ref</sub>*f<sub>min</sub><sup>multiplicative</sup> and S<sub>max</sub>:=S<sub>ref</sub>*f<sub>max</sub><sup>multiplicative</sup> 
+
+  so that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α.
 
 # Test cases
 

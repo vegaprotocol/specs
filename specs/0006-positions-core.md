@@ -14,7 +14,7 @@
   - [ ] Open long position, trades occur closing the long position and opening a short position
   - [ ] No open position, trades occur opening a long position
   - [ ] No open position, trades occur opening a short position
-  - [ ] Open position, trades occur that close it (take it to zero), in a separate transaction, trades occur and that open a new position
+  - [ ] Open position, trades occur that close it (take it to zero), in a separate transaction, trades occur that open a new position
 - [ ] Opening and closing positions for multiple traders, maintains position size for all open (non-zero) positions
 
 - [ ] Does not change position size for a wash trade (buyer = seller)
@@ -39,7 +39,7 @@
 - [ ] Maintains separate position data for each market a trader is active in
 - [ ] If there is either one or more of the position record's fields is non zero (i.e. open position size, active buy order size, active sell order size), the position record exists.
 - [ ] Does not store data for positions that are reduced to size == 0 for all 3 data components (i.e. open position, active buy orders and active sell orders)
-- [ ] All a trader's orders are cancelled
+- [ ] All of a trader's orders are cancelled
 
 # Summary
 
@@ -77,7 +77,7 @@ The Position core functionality processes each trade in the following way:
 	- BuyerPosition.size += Trade.size
 	- SellerPosition.size -= Trade.size
 
-1. If either position record has Position.size == 0, delete it, otherwise save the updated record.
+1. If either position record has Position.size == 0 and no active orders, delete it, otherwise save the updated record.
 
 ## Updating net active buy and sell order sizes
 

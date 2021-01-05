@@ -13,7 +13,7 @@ The target stake is a calculated quantity, utilised by various mechanisms in the
 ### Current definitions
 
 First, `max_oi` is defined  maximum (open interest) measured over a time window, 
-`t_window = [max(t-target_stake_time_window,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction.  
+`t_window = [max(t-target_stake_time_window,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction. Note that `max_oi` should be calculated recorded per transaction, so if there are multiple OI changes withing the same block (which implies the same timestamp), we should pick the max one, NOT the last one that was processed.
 
 Example 1:
 `t_window_for_tagret_stake = 1 hour`
@@ -23,6 +23,7 @@ We have the following information about open interest over time:
 [time, OI]
 [3:51, 140]
 [3:57, 120]
+[4:32, 90]
 [4:32, 60]
 [4:33, 70]
 [4:52, 110]

@@ -1,5 +1,4 @@
 Feature name: scenario-runner-cli 
-Start date: 2019-10-14
 
 # Summary
 
@@ -13,7 +12,7 @@ In this spec we are focusing on the first iteration of the `scenario-runner-cli`
 - [ ] --help command is available.
 - [ ] `config` file exposing default values (e.g. protocol time advancement per submitted instruction) exists and can be modified by the user.
 - [ ] Example `InstructionsFile` in `JSON` format is available.
-- [ ] `SubmitInstructions` function is avilable and all the write instructions defined in `trading` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto) can be submitted to it.
+- [ ] `SubmitInstructions` function is available and all the write instructions defined in `trading` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto) can be submitted to it.
 - [ ] Protocol time is advanced by a fixed amount after each instruction is submitted. User has the option to set it to 0. User has the option to explicitly specify change in protocol time with a dedicated instruction.
 - [ ] `ExtractData` function is available and can output results of any synchronous calls defined in `trading_data` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto). The output file should be in the `JSON` format.
 - [ ] The input `JSON` file contains metadata defining the version of the schema.
@@ -63,7 +62,7 @@ The main functionality is:
 - Output is the same irrespective of using `1` file with `n` instructions or `n` files with `1` instruction.
 - Empty `InstructionsFile` flows through the system without errors, warning is recorded.
 - Submiting a matching buy and sell order results in a trade being generated.
-- A large number of simple instructions (~ milion) can be processed in a reasonable amount of time (<10mins)
+- A large number of simple instructions (~ million) can be processed in a reasonable amount of time (<10mins)
 - When a failure condition occurs all the resources are released and no partial outputs are given.
 
 # Appendix
@@ -91,8 +90,8 @@ The currently identified additions that will likely be useful going forward are 
 - Versioning
   - It's quite likely that we will end up adding more node instructions and/or modify the existing ones.
   - By that time we may already have a large collection of scenario runner `StateFile`s
-  - Need to build in backwards compability or a way of updating them to the latest standard as considerable time and effort might have been put into generating some of them and the process might not be easy to reprodce (scrips that get lost or become stale, manual fine-tuning of certain values etc.)
+  - Need to build in backwards compatibility or a way of updating them to the latest standard as considerable time and effort might have been put into generating some of them and the process might not be easy to reproduce (scrips that get lost or become stale, manual fine-tuning of certain values etc.)
 - Referencing data related to entities changing over time
   - Some data will change throughout the life-cycle of the entities it relates to - e.g. first version of an order then updates when trades occur.
     - Need to reference those entities in a consistent way and capture data relating to all the states (e.g. pending order, matched order & trade)
-    - We may want to include additional filtering options so that user can fine-tune the amount of data included in the output file to balance visibitlity of intermediate state with readability of output file for different use cases.
+    - We may want to include additional filtering options so that user can fine-tune the amount of data included in the output file to balance visibility of intermediate state with readability of output file for different use cases.

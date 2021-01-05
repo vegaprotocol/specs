@@ -1,3 +1,5 @@
+# Check Order Allocate Margin
+
 # Outline
 
 When an order or other market instruction (amend, cancel, etc.) is submitted we need to check if it changes the margin requirement for the trader who has submitted it, and if it increases them we need to allocate (request to allocate in a future, shared world) margin before accepting the order.
@@ -12,7 +14,7 @@ The logic is something like this:
 ```
 enum ValidationResult = Accept | Reject
 
-/* NB: a position record is assumed to contain all required data about a trader's open volume and active orders to calculate margin. For example, this means contianing or being able calculate the 'net worst' long and short positions given all orders.
+/* NB: a position record is assumed to contain all required data about a trader's open volume and active orders to calculate margin. For example, this means containing or being able calculate the 'net worst' long and short positions given all orders.
 */
 
 /*** Ensure that it is reasonably likely (guaranteed, in a non-sharded 

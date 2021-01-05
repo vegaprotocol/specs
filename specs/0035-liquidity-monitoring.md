@@ -35,10 +35,10 @@ Similarly to [price monitoring](0032-price-monitoring.md), the auction should be
 
 ## Trigger for exiting the auction
 
-When supplied stake ≥ `target_stake`, \
+When supplied stake ≥ `target_stake`.
 
 
-During the liquidity monitoring auction new or existing market makers can commit more stake (and hence liquidity) through the special market making order type and enable this by posting enough margin - see market making mechanics spec (WIP) for details. These need to be monitored to see if auction mode can be exit.
+During the liquidity monitoring auction new or existing market makers can commit more stake (and hence liquidity) through the special market making order type and enable this by posting enough margin - see the [liquidity provision mechanics](0044-lp-mechanics.md) spec for details. These need to be monitored to see if auction mode can be exit.
 
 ## What happens during the auction?
 

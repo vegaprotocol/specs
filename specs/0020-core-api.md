@@ -1,4 +1,4 @@
-#Core API
+# Core API
 
 ## Background
 
@@ -19,7 +19,7 @@ We define the protocol instruction set within the whitepaper, therefore the **co
   - Amend Order
   - Cancel Order
 - Collateral
-  - Notify Depost
+  - Notify Deposit
   - Request Withdrawal
   - Validate Withdrawal
 - Authentication
@@ -59,8 +59,9 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 
 - List orders on the book, for all markets, for a party.
 - List orders on the book, for a particular market.
-- Retrieve an order, if its on the book, for a particular order identifier.
+- Retrieve an order, if its on the book or parked, for a particular order identifier.
 - Current order book depth, for a particular market.
+- Order book depth deltas, for a particular market.
 - Observe order updates, for all markets.
 - Observe order updates, for a particular market.
 
