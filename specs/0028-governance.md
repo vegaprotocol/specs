@@ -2,7 +2,7 @@
 
 Governance allows the vega network to arrive at on-chain decisions. Implementing this specification will provide the ability for users to create proposals involving Markets or the network in general, by creating new markets, or updating a market or netowrk parameter.
 
-This is achieved by creating a simple protocol framework for the creation, approval/rejection, and enactment of governance proposals. Where a _proposal_ is comprises a supported governance action and metadata that determines the conditions and timing for it's enactment.
+This is achieved by creating a simple protocol framework for the creation, approval/rejection, and enactment of governance proposals. Where a _proposal_ comprises a supported governance action and metadata that determines the conditions and timing for it's enactment.
 
 To implement this framework, two new transactions must be supported by the Vega core:
  - Submit Proposal: deploy a new (valid) proposal to the network
@@ -12,6 +12,7 @@ In this document, a "user" refers to a "party" (private key holder) on a Vega ne
 
 
 # Future work
+
 This version of the specification covers the core governance protocol. Not currently covered is proposal rate limiting or spam / denial of service prevention (including via fees or other methods). 
 
 
@@ -24,24 +25,26 @@ The type of governance action are:
 1. Create market
 1. Change market parameters
 1. Change network parameters
-1. Add external asset to Vega (*out of scope for this document*, proposes a new asset controlled by a bridge to become usable on Vega)
+1. Add external asset to Vega (*out of scope for this document*, proposes a new asset controlled by a bridge to become usable on Vega
 
 
 ## Lifecycle of a proposal
+
+Note: there are some differences/additional points for market creation proposals, see the section on market creation below.
 
 1. Governance proposal is accepted by the network as a transaction.
 1. The nodes validate the proposal. Note: this is where the network parameters that validate the minimum duration, minimum to to enactment, minimum participation rate, and required majority are evaluated. The proposal is not revalidated. This is also where, if not specified on the proposal, the required participation rate and majoirty for success are defined and copied to the proposal. The proposal is immutable once entered and future parameter changes don't impact it (this is to prevent surprisiing behaviour where other proposals with as yet unknown outcomes can impact the success of a proposal).
 1. If valid, the the proposal is considered "active" for a proposal period. This period is defined on the proposal and must be at least as long as the minimum duration for the proposal type/subtype (specified by a network parameter)
 1. During the proposal period, network participants who are eligible to vote on the proposal may submit votes for or against the proposal.
-1. When the proposal perios closes, the network calculates the outcome by:
+1. When the proposal period closes, the network calculates the outcome by:
     - comparing the total number of votes cast as a percentage of the number eligible to be cast to the minimum participation requirement (if the minimum is not reaced, the proposal is rejected)
 		- comparing the number of positive votes as a percentage of all votes cast (maximum one vote counted per party) to the required majority. 
-1. If the required majoirty of "for" votes was met, the action described in the proposal will be taken (proposal is enacted) on the enactment date, which is defined by the proposal and must be at least the minimum enactment period for the proposal type/subtype (which is specified by a network parameter) _after_ voting on the proposal closes.
+1. If the required majority of "for" votes was met, the action described in the proposal will be taken (proposal is enacted) on the enactment date, which is defined by the proposal and must be at least the minimum enactment period for the proposal type/subtype (which is specified by a network parameter) _after_ voting on the proposal closes.
 
 Any actions that result from the outcome of the vote are covered in other spec files.
 
 
-## Geovernance weighting
+## Governance weighting
 
 A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. (Note: a party's weighitng must be greater than 0 for the proposal type in question in order for the party to submit a new proposal.):
 
@@ -92,6 +95,8 @@ The network's _minimum proposal duration_ - as specified by a network parameter 
 
 
 ### When a proposal is enacted
+
+Note: market creation proposals are handled slightly differently, see below
 
 A new proposal can also specify when any changes resulting from a successful vote would start to be applied. e.g: A new proposal is created in order to create a new market with an enactment date 1 week after vote closing. After 3 weeks the proposal is closed (the duration of the proposal), and if there are enough votes to accept the new proposal, then the changes will be applied in the network 1 week later.
 
@@ -153,15 +158,18 @@ We allow users to submit proposals covering 3 types of governance action:
 
 This action differs from from other governance actions in that the market is created and some transactions (namely around liquidity provision) may be accepted for the market before the proposal has succesfully passed. The lifecycle of a market and its triggers are covered in the [market lifecycle](./0043-market-lifecycle.md) spec.
 
+Note the following key points from the market lifecycyle spec:
+* A market is created in Proposed status as soon as the proposal is accepted
+* A market enters a Pending status as soon as the proposal is Succesful (before enactment)
+* A market usually enters Active status at the proposal's enactment date/time, but some conditions may delay this or cause the market to be Cancelled instead
+
 A proposal to create a market contains 
 1. a complete market specification as per the Market Framework (see spec) that describes the market to be created. 
-1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](0044-lp-mechanics.md). 
+1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](0044-lp-mechanics.md). The proposal must be rejected if the liquidity provision commitment is invalid or the proposer does not have the reqiured collateral for the stake.
 The stake commitment must exceed the `minimum_proposal_stake_amount` which is a per-asset parameter.
 1. an enactment time that is at least the *minimum auction duraton* after the vote closing time (see [auction spec](./0026-auctions.md))
 
 All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
-
-Note that additional requirements on validity of the governance proposal may in future include a requirement that the proposer also commits to [supply liquidity to the market](./0044-lp-mechanics.md). More details in the [market lifecycle spec](./0043-market-lifecycle.md).
 
 
 ## 2. Change market parameters
