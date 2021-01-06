@@ -1,14 +1,18 @@
 # Target stake
 
-This spec outlines how to measure how much stake we want committed to a market relative to what is happening on the market (currently open interest). If there is less stake than c_1 x target stake committed to a market we trigger liquidity auction. See [Liquidity Monitoring](./0035-liquidity-monitoring.md)
+This spec outlines how to measure how much stake we want committed to a market relative to what is happening on the market (currently open interest). 
+The target stake is a calculated quantity, utilised by various mechanisms in the protocol:
+
+- If there LPs total commited stake is less than c_1 x `target_stake` we trigger liquidity auction. See [Liquidity Monitoring](./0035-liquidity-monitoring.md). Note that there is a one-to-one correspondence between the amount of stake LPs committed and the supplied liquidity.
+- It is used to set the fee factor for the LPs: see [Setting fees and rewarding LPs](0042-setting-fees-and-rewarding-lps.md).
 
 ## Definitions / Parameters used
 - **Open interest**: the volume of all open positions in a given market.
 - `target_stake_time_window` is a network parameter defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds. 
 - Co(v)erage `target_stake_scaling_factor` is a network paramter defining scaling between liquidity demand estimate based on open interest and target stake
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see `0018-quant-risk-models.ipynb`. 
+- `mark_price`, see [mark price](0009-mark-price.md) spec. 
 
-The target stake is a calculated quantity, utilised by various mechanisms in the core.
 
 ### Current definitions
 
@@ -35,9 +39,10 @@ Example 2: As above but the market opened at `t_0 = 4:15`. Then `t_window = [4:1
 
 From `max_oi` we calculate 
 
-`target_stake = max_oi x target_stake_scaling_factor x rf`,
+`target_stake = mark_price x max_oi x target_stake_scaling_factor x rf`,
 
 where `rf = max(risk_factor_short, risk_factor_long)`. Note that currently we always have that `risk_factor_short >= risk_factor_long` but this could change once we go beyond futures... so safer to take a `max`.
+Note that the units of `target_stake` are the settlement currency of the market as those are the units of the `mark_price`. 
 
 Example 3: if `target_stake_scaling_factor = 10`, `rf = 0.004` and `max_oi = 120` then `target_stake = 4.8`.
 
