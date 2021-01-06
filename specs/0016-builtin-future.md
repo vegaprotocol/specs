@@ -1,4 +1,16 @@
-Feature name: Builtin Cash Settled Future Product
+# Built-in Product: Futures
+
+Product parameters
+Valuation function
+Product lifecycle / how settlement happens
+
+
+
+
+
+
+/////// OLD STUFF ///////
+
 
 # Acceptance Criteria
 It must be possible to:
