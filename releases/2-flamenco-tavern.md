@@ -1,6 +1,7 @@
-# Flamenco Tavern
+# 💃 Flamenco Tavern
 
-Status of this file: Agreed
+* **Status**: Agreed
+* **Overview** 💃 Flamenco Tavern adds Liquidity Commitments to Vega Testnet
 
 ## Core
 - Fees
@@ -24,17 +25,12 @@ Status of this file: Agreed
 - Market lifecycles and states
 
 
-## Bridge
+## [Ethereum Bridge](https://github.com/vegaprotocol/MultisigControl) 
 
-## Console
+## [Console](https://github.com/vegaprotocol/console)
 
-## Web Wallet
-
-## Block Explorer
-
-## Go Wallet
+## [Go Wallet](https://github.com/vegaprotocol/go-wallet) 
 
 ## Faucets
 
-## Bots
 
