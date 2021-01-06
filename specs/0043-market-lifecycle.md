@@ -1,7 +1,6 @@
-# DRAFT DRAFT DRAFT DRAFT DRAFT DRAFT
-🧫 [This spec is still evolving](https://github.com/vegaprotocol/product/pull/375)
 
 # Market Lifecycle
+🧫 [This spec is still evolving](https://github.com/vegaprotocol/product/pull/375)
 
 This spec decribes the lifecycle of a market. The market lifecycle begins at acceptance of a proposal and is driven by the market's `status`. Each status and the entry and exit criteria are described below.
 
