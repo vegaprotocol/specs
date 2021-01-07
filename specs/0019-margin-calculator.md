@@ -75,6 +75,7 @@ In this simple methodology, a linearised margin formula is used to return the ma
 with
 
 ```maintenance_margin_long_open_position = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]```,
+
 ```maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
 
 where
