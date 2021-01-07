@@ -39,6 +39,15 @@ Validation of values can occur in two phases:
 1. Logic that requires access to the Vega state which includes, for example, the current date/time, market data from another Vega market, or values from a data source reference. These validations occur once a transaction is confirmed and could cause an market proposal to fail even though it is accepted by the network and processed.
 
 
+## Valuation function
+
+
+## Lifecycle triggers
+
+??? does product need to:
+- return list of settlement assets i.e. product.get_settlement_assets() -> [Asset]
+- return market observable per settlement asset, i.e.  product.get_observable_value(Asset) -> Number
+???
 
 Products have
 
@@ -51,6 +60,6 @@ Lifecycle events and settlement events
 How do products emit settlement asset data
 
 
-# Acceptance critera
+# Acceptance criteria
 
 1. 
