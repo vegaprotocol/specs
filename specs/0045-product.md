@@ -88,6 +88,14 @@ Generally the function might use conditional logic to apply tests to the data/ma
 See the [built-in Futures spec](./0016-builtin-future.md) for an example. 
 
 
+## APIs
+
+APIS should be avilable to:
+- Emit an event bus event any time a product lifecycle trigger is triggered
+- Emit an event bus event any time a product lifecycle event calls `settle(...)`
+- Emit an event bus event any time a product lifecycle event changes a market's status
+
+
 # Acceptance criteria
 
 1. 
