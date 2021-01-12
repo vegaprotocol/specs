@@ -74,3 +74,11 @@ cash_settled_future.settlement_data(event) {
 1. A market that was suspended for receiving settlement data before trading termination remains suspended until a governance vote changes the status
 1. A market that was suspended for receiving settlement data before trading termination can be closed by governance vote
 1. A market that was suspended for receiving settlement data before trading termination can be settled by governance vote if the trading_termination_trigger and settlement_data source are changed and the status is set to ACTIVE by governance vote
+
+
+## Final Settlement
+
+- [ ] check it can't happen on invalid / other data from the data source (i.e. a price with the wrong timestamp)
+- [ ] check it happens with the first and only the first price that is valid per the data source definition
+- [ ] check mark price is updated
+- [ ] settlement at expiry only ever happens once
