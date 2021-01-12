@@ -41,7 +41,7 @@ cash_settled_future.trading_termination_trigger(event) {
 ```
 
 
-### 4.2 Termination of trading
+### 4.2 Final settlement ("expiry")
 
 ```javascript
 cash_settled_future.settlement_data(event) {
