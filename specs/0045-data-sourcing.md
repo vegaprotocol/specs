@@ -27,7 +27,7 @@ Any part of Vega requiring a data source should be able to use any type of data 
 
 a) Data sources can differ in the following ways:
 
-1. Type of data source (trusted party oracle, internal data, date/time, Ethereum, etc.)
+1. Type of data source (signed message, internal data, date/time, Ethereum, etc.)
 1. Data type (e.g. float for a price)
 1. "Single shot", first n events, stream of any number of events
 
@@ -57,7 +57,11 @@ a) Data sources must be able to emit the following data types:
 1. Floating point
 1. DecimalFromInteger (i.e. how Ethereum stores decimal places, need to specify number of decimal places with this type)
 1. Integer/Floating/DecimalFromInteger from string (we need to support the cases where numbers come from APIs in string format / are too large for basic number types to represent)
+1. Strings
+1. Date/Time
+1. Boolean
 1. Empty (ignore all values, source is used as a trigger only)
+1. Key value pairs (needed so we can have price(s) and timestamp, etc. for filtering)
 
 Note that for number types the system should convert appropriately when these are used in a situation that requires Vega's internal price/quote type using the configured decimal places, etc. for the market.
 
@@ -65,21 +69,32 @@ Note that we should support all the number types as we want to enable the commun
 
 
 b) Future types (when we create new products and add calculation features we will need these):
-1. Date/Time
-1. Boolean
 1. List of items of any type (i.e. list of floats)
-1. Map/struct of key value pairs
 
 
-## Types of data source
+## 5. Tracking active data sources
+
+Vega will need to keep track of all "active" defined data sources that are referenced either by markets that are still being managed by the core (i.e. excluding Closed/Settled/Cancelled/other "end state" markets) or by other data source definitions.
+
+Data sources that are no longer active as defined above can be discarded.
+
+
+## 6. Types of data source
 
 The following data sources have been defined:
 1. Internal basic data sources (Vega time, direct value) [TODO: link]
-1. [Trusted party oracles](./trusted-party-oracles.md)
+1. [signed message](./0046-data-source-signed-message.md)
 1. Time triggered (at a certain date/time)
+1. Filters (exclude certain events basd on conditions and boolean logic against the fields on the data such as equals, simple comparisons, is/is not in a predefined list, an MVP of this functionality is needed to allow TPOs to be practical)
+
+## 7. APIs
+
+APIs should be available to:
+1. List active data sources and their configuration
+1. Emit an event on the event bus when a data source value is emitted. For example a signed message data source would emit an event for EVERY signed message that matched on of the public keys for an active signed message data source definition (*even if these are later filtered out*). A filter data source defined on a signed message data source would therefore only emit an event bus message when data passes the filters, etc.
 
 
-## Future work
+## 8. Future work
 
 The following are expected to be implemented in future.
 
@@ -91,7 +106,6 @@ a) New base data source types:
 1. Other blockchains that we bridge to
 
 b) Composable modifiers/combinators for data sources:
-1. Filters (exclude certain values)
 1. Repeating time triggers
 1. Aggregation (m of n and/or averaging, etc.) of multiple other data sources
 1. Verification of outputs of another data source by governance vote
@@ -135,7 +149,7 @@ Trigger for settlement three times daily (used for instance to settle perpetuals
 repeating: { times: ['00:00', '08:00', '16:00'], days: '*', data: Empty }
 ```
 
-Trusted party oracle filtered to return a single value:
+Signed message stream filtered to return a single value:
 ```
 filteredData: {
   onceOnly: true,
