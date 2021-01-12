@@ -1,331 +1,159 @@
 # Data sourcing (aka oracles)
 
-## Principles and summary
+## 1. Principles and summary
 
-The Vega network runs on data. Market settlement, risk models, and other features require a supplied price (or other data), which must come from somewhere, often completely external to Vega.
-This necessitates the use of external data sources.
-The goals of Vega Protocol with regards to data sourcing are threefold:
-
-1. To support a wide range of third party data sourcing solutions rather than to implement a complete solution in-house.
-2. To be a source of definitive and final data to Products and Risk Models that can be trusted by market participants.
-3. To build simple, generic and anti-fragile data sourcing functionality, and not to introduce third party dependencies.
-
-As a result: 
-
-- Vega will not integrate directly with specific oracle/data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles
-- Data sources must be able to provide a measure of finality that is either definitive or a configurable threshold on a probabilistic measure (‘upstream finality’).
-- Once upstream finality is achieved, Vega may provide optional mechanisms for querying, verification or dispute resolution that are independent of the source.
-- Vega will allow composition of data sources, including those with disparate sources, and may provide a variety of methods to aggregate and filter/validate data provided by each.
+The Vega network runs on data. Market settlement, risk models, and other features require a supplied price (or other data), which must come from somewhere, often completely external to Vega. This necessitates the use of both internal and external data sources for a variety of purposes.
 
 
-Traditional futures markets are settled when the market expires by using trusted individuals as pricing oracles. These individuals are responsible to report the prices accurately and without conflict of interest. $11.6 trillion annually is settled this way and there is an infrastructure of rules, regulations, and reputation to ensure it's accuracy. Vega allows for the use of these same oracles and many others to ensure accuracy and manipulation resistance. Using Vega's composite oracles, products can be made by combining centralized authority and decentralized oracles to obtain the most accurate price for a given market. 
+b) The goals of Vega Protocol with regards to data sourcing are:
+
+1. To provide access to data internal to the Vega network in a standardised way, including data and triggers related to the "Vega Time" and market data (prices, etc.)
+1. To support a wide range of third party data sourcing solutions for external data rather than to implement a complete solution in-house.
+1. To be a source of definitive and final data to Products and Risk Models that can be trusted by market participants.
+1. To build simple, generic and anti-fragile data sourcing functionality, and not to introduce third party dependencies.
 
 
-## Data sourcing functionality
-In order to close a given market in Vega, or to update a risk model, an oracle must be queried to provide required data. 
+b) As a result: 
 
-Often this data looks like:
- ```proto
-{
-  assetId = "0f234167a...", //target settlement instrument VegaID
-  timestamp = 1596761519, //timestamp of the report (must be within a specified range as configured by a market)
-  price = 1234.2512
-}
- ```
-Sometimes however, the data required to settle an oracle is based on more complex information:
-```proto
-{
-  timestamp = 1596761519, //timestamp of the report (must be within a specifid range as configured by a market)
-  temperatures = [42, 38, 36]
-}
-``` 
- To accommodate the multitude of data types that could be required internally to Vega, we've adopted a key value pair-based data sourcing system:
- 
- ```proto
-message KeyValuePair {
-  string key = 1;
-  string value = 2;
-}
+1. Vega will not integrate directly with specific oracle/data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles
+1. External data sources must be able to provide a measure of finality that is either definitive or a configurable threshold on a probabilistic measure (‘upstream finality’).
+1. Once upstream finality is achieved, Vega may provide optional mechanisms for querying, verification or dispute resolution that are independent of the source.
+1. Vega will allow composition of data sources, including those with disparate sources, and may provide a variety of methods to aggregate and filter/validate data provided by each. 
 
-message OracleEvent {
-  ...
-  repeated KeyValuePair payload;
-  ***
-}
+
+## 2. Data sourcing framework
+
+Any part of Vega requiring a data source should be able to use any type of data source. This means that there is a single common schema for specifying a data source where one is required.
+
+a) Data sources can differ in the following ways:
+
+1. Type of data source (trusted party oracle, internal data, date/time, Ethereum, etc.)
+1. Data type (e.g. float for a price)
+1. "Single shot", first n events, stream of any number of events
+
+b) Additionally, for each type of data source there will be parameters that specify how to interpret the data source, such as:
+1. Data source specifics (contract address, method name, public key of sender, etc.)
+1. Fields of interest (i.e. if the source provides JSON, key/value pairs, etc.)
+1. Filters (i.e. to restrict the data source to a subset of events)
+
+c) Data sources may refer to other data sources, for example:
+1. A governance approval data source might have a field for another data source and create a governance proposal to accept or reject the value received from that data source
+1. Aggregation data sources may allow n data sources to be specified and average them or apply "m of n" logic before emitting one value
+1. etc.
+
+
+## 3. Defining a data source
+
+When defining a data source, the specification for that data source must describe:
+1. What parameters (input data) are required to create a data source of that type
+1. How the data source interprets those parameters to emit one or more values
+1. Any additional requirements needed for the data source to work (such as external "bridge" infrastrcuture to other blockchains)
+
+
+## 4. Data types
+
+a) Data sources must be able to emit the following data types:
+1. Integer
+1. Floating point
+1. DecimalFromInteger (i.e. how Ethereum stores decimal places, need to specify number of decimal places with this type)
+1. Integer/Floating/DecimalFromInteger from string (we need to support the cases where numbers come from APIs in string format / are too large for basic number types to represent)
+1. Empty (ignore all values, source is used as a trigger only)
+
+Note that for number types the system should convert appropriately when these are used in a situation that requires Vega's internal price/quote type using the configured decimal places, etc. for the market.
+
+Note that we should support all the number types as we want to enable the community to easily submit data from various sources and not worry about conversion, and different market types will have different data types for settlement, and different underlying source assumptions.
+
+
+b) Future types (when we create new products and add calculation features we will need these):
+1. Date/Time
+1. Boolean
+1. List of items of any type (i.e. list of floats)
+1. Map/struct of key value pairs
+
+
+## Types of data source
+
+The following data sources have been defined:
+1. Internal basic data sources (Vega time, direct value) [TODO: link]
+1. [Trusted party oracles](./trusted-party-oracles.md)
+1. Time triggered (at a certain date/time)
+
+
+## Future work
+
+The following are expected to be implemented in future.
+
+a) New base data source types:
+1. Ethereum oracles (events, contract read methods)
+1. Internal market parameters and data
+1. Internal network parameters and metrics
+1. Signed or validator verified HTTPS endpoints
+1. Other blockchains that we bridge to
+
+b) Composable modifiers/combinators for data sources:
+1. Filters (exclude certain values)
+1. Repeating time triggers
+1. Aggregation (m of n and/or averaging, etc.) of multiple other data sources
+1. Verification of outputs of another data source by governance vote
+1. Calculations (i.e. simple maths/stats plus access to quant library functions, product valuation function, including reference to product parameters or arbitrary other data sources)
+
+
+## Examples
+
+Here are some examples of how a data source might be specified. 
+
+Note that these are examples *not actual specs*, please see specs for currently specified data types! 
+
+Simple value, emitted immediately:
 ```
-So the above examples would be:
-
-```proto
-payload [
-  { key = "assetId", value = "0f234167a..." },
-    { key = "timestamp", value = 1596761519 },
-    { key = "price", value = 1234.2512 }
-  ]
+value: { value: 0.2, type: 'float' }
 ```
-and 
-```proto
-payload [
-  { key = "timestamp", value = 1596761519 },
-  { key = "temperatures", value = [42, 38, 36] }
-]
+
+Simple value, emitted at a date/time:
 ```
- 
- ### Signers
- In all cases they will need to be signed by the designated signer, this signer can come in many forms:
- * Ethereum oracle (Chainlink, Band Protocol, etc) signed transaction
- * API signed by the SSL of 
- * Apointed Vega user
- * Etc
- 
- In all cases, there will be 1 or more validated signers assigned to the data source/oracle. 
- When the number of signers is greater than 1, a threshold will be required to set the minimum number of signers required to submit a report.   
- 
- ### Timestamps
- In all cases, Oracle reports will need to be timestamped and this timestamp must be within a specific time of the configured target time. This time slippage is also configurable as part of the oracle.
-  
-### General Pattern 
-  
-```proto
-service trading {
-    ...
-  // chain events
-  rpc PropagateChainEvent(PropagateChainEventRequest) returns (PropagateChainEventResponse);
-}
-
-message PropagateChainEventRequest {
-  // The event
-  vega.ChainEvent evt = 1;
-  string pubKey = 2;
-  bytes signature = 3;
-}
-
-// The response for a new event sent to vega
-message PropagateChainEventResponse {
-  // Did the event get accepted by the node successfully
-  bool success = 1;
-}
-
-message ChainEvent {
-  // The ID of the transaction in which the things happened
-  // usually a hash
-  string txID = 1;
-    
-  oneof event {
-    ...
-    OracleEvent
-  }
-}
-
-message KeyValuePair {
-  string key = 1;
-  string value = 2;
-}
-
-message OracleEvent {
-  string[] signers;
-  repeated KeyValuePair payload;
-  uint timestamp;
-  oneof oracleEventMetadata {
-    BuiltinOracleEvent builtin;
-    ChainlinkOracleEvent chainlink;
-    BandProtocolEvent band;
-    APIOracleEvent api;
-  }
-}
-
-message Oracle {
-  string[] expectedSigners;
-  uint signerThreshold;
-  repeated KeyValuePair expectedPayload;
-  uint targetTime;
-  uint timeSlippage; //max time that timestamp can differ from targetTime and still be valid
-  string vegaOracleId;
-  oneof oracleSource {
-    BuiltinOracleEventSource builtin;
-    ChainlinkOracleEventSource chainlink; //chain specific config TODO
-    BandProtocolEventSource band;
-    APIOracleEventSource api;
+on: { 
+  timestamp: '2021-01-31T23:59:59Z', 
+  data: { 
+    value { value: 0.2, type: 'float', } 
   }
 }
 ```
 
-## Data Source Types
-We define several classes of data sources with varying complexity of functionality. It is expected that the simplest will be implemented first.
-
-### Native Data Source 
-
-**NOTE: This is the only version available in testnet**
-
-Given that there are a large number of possible products and markets on Vega that use non-crypto sources of pricing a given underlying, we offer a Native Data Source underlying. 
-This Native Data Source (NDS) is typically a price submitted and attested to by a party in Vega. In initial markets on Vega (and beyond) this user submits the price at market expiry.
-Data is supplied through a transaction being posted directly on the Vega network that is signed by one (or more) of the valid signers for that specific data source.
-
-Note: With this type of oracle there’s no incentive in the Vega data source system, you’re trusting the keyholder(s) at settlement.
-
-```proto
-message BuiltinOracleEvent {
-}
-
-message BuiltinOracleEventSource {
-}
+Empty value, trigger only, i.e. trigger trading treminated at a date/time for futures:
+```
+on: { timestamp: '2021-01-31T23:59:59Z', data: Empty }
 ```
 
-### API Data Source
-A data payload that provably came from (and signed by) a "Trusted API".
-Many companies/brands who act as the authority in their industry proudly defend their reputation. 
-This defence extends to their online presence. 
-
-SSL certificates sign every https transaction to and from public APIs. 
-This signature acts as the verifiable signer for this class of data source.
-
-While this is a very centralized type of data source, it is the only way to get the correct and official reports from the most trusted authorities on a given dataset.
-Combined with composite data sources and the contest mechanism, we believe that the API data source is a valuable tool in the Vega arsenal.
-
-```proto
-message APIOracleEvent { 
-}
-
-message APIOracleEventSource {
-  string URL;
-  string PORT;
-  string ApiKey;
-  string CeritificatePublicKey;
-  string[] DataKeys;
-}
+NB: it should be possible to avoid specifying the 'data' data source field if value = empty:
+```
+on: { timestamp: '2021-01-31T23:59:59Z' }
 ```
 
 
-### External Blockchain Data Source
+Trigger for settlement three times daily (used for instance to settle perpetuals):
+```
+repeating: { times: ['00:00', '08:00', '16:00'], days: '*', data: Empty }
+```
 
-Each Oracle Queue will connect to either hosted blockchain nodes or local blockchain nodes in order to find the subscribed oracle events for a given blockchain.
-Once propagated through the Vega API to a Vega validator node, the validator node will connect to its applicable local blockchain node to validate that the provided event did, in fact, happen as far as it can see locally. 
-This message is then gossiped to other Vega validator nodes which will do the same validation process.
-
-```proto
-message ChainlinkOracleEvent {
-  // Index of the transaction
-  uint64 index = 1;  
-
-  // The block in which the transaction was added
-  uint64 block = 2;
-  string vegaOracleId = 3;
-}
-
-message BandProtocolEvent {
-  // Index of the transaction
-  uint64 index = 1;  
-
-  // The block in which the transaction was added
-  uint64 block = 2;  
-}
+Trusted party oracle filtered to return a single value:
+```
+filteredData: {
+  onceOnly: true,
+  filters: [ 
+    { 'field': 'feed_id', 'equals': 'BTCUSD/EOD' },
+    { 'field': 'mark_time', 'equals': '31/12/20' }
+  ],
+  data: { 
+    signedMessage: {
+      sourcePubkeys: ['VEGA_PUBKEY_HERE'],
+      field: "price",
+      dataType: { type: 'decimal', places: 5 }
+    }
+  }
+} 
 ```
 
 
-### Internal observation
-A data source can be made of a given parameter from within Vega itself, be it number of validators, or the current price of a given market.
-Any data in the core that’s deterministic could be used directly as an oracle
+# Acceptance criteria
 
-Some potential examples include:
-* a futures market on the POS yield returned to validators
-* derivatives on a market’s fee level
-* derivatives on the network stats (tx per second, worst 1% block latency)
-
-```proto
-message InternalOracleEvent { 
-}
-
-message InternalOracleEventSource {
-}
-```
-
-### Composite data sources (Also not required for v1)
-
-Vega also provides a number of functions to compose together combinations to provide confidence, durability, and robustness.
-Composite data sources can be build of any defined data sources of any type, or even other composed sources, such as:
-
-* Average multiple sources (option to reject outliers [e,g. further than x% from mean/median])
-* Subject a wrapped source to an on-chain vote
-* Require precise agreement from m of n separate independent sources (different from m of n signers on a native source)
-* Combinations across oracle classes
-
-## Event Subscription
-Vega governance allows for the adding and removing of external data events that can be used by Vega internally, be it to update a risk model or close a market.
-Every event must be added through governance and include all of the information necessary for both the Oracle Queue and the Vega validators to find and verify. 
-The data required to add a new subscribed event will change based on the class of oracle (where it originated from).
-For instance, a Band protocol event looks like:
-```proto
-message BandProtocolOracleEventSource {
-  string ContractAddress;
-  string QueryData;
-  string[] DataKeys;
-}
-```
-
-whereas an API event looks like:
-```protobuf
-message APIOracleEventSource {
-  string URL;
-  string PORT;
-  string ApiKey;
-  string CertificatePublicKey;
-  string[] DataKeys;
-}
-```
-New classes and unique instances of events will need to be added to the code, rather than be voted in.  
-
-Once an event is subscribed to, it will be available when querying `GetSubscribedOracleEventSources`. 
-This endpoint provides for a list of available oracles when configuring a market as well as provides the Oracle Queue with the data necessary to find and propagate target events.
-```proto
-message GetSubscribedOracleEventSourcesResponse {
-  repeated string subscribed_oracle_event_source = 1;
-}
-```
-
-## Oracle Failure Mitigation
-Oracles are simply providers of information. 
-These data sources are the only way for the Vega network to extend its reach into other blockchains or the real world.
-As such, this places a dangerous amount of power in the hands of potentially centralized or compromised parties. 
-This is widely know as The Oracle Problem.
-Despite the ability to both use diverse oracles and also compose them, there will always be the possibility of a rogue oracle or bug in the latest DeFi protocol.    
-To mitigate these risks, Vega has developed a number of safeguards to ensure the greatest flexibility of the network to deal with threats as they occur.
-
-### Changing Oracle Sources
-Oracles may get compromised, shut down, change location/certificates, or otherwise become too risky to use alone before a market has expired. 
-To mitigate these risks, a governance can change oracle parameters. To do this, see [the Governance specification](https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md).
- 
-Unlike a typical Vega governance vote, this type of vote is open to all participants in the market, provided they have a balance above a threshold of value (configurable).
-These votes will be and weighted by value in the market and then weighted against market maker votes and network governance voters.  
-
-### Contesting Data Source Reports
-Vega provides a mechanism to dispute reported oracle prices/results.
-
-When the oracle emits a value, Vega waits the required time and if no valid dispute occurs the events that rely on this oracle (like settlement) are executed.
-If however, the threshold for dispute is met, a governance process of accepting proposals occurs to decide the final value.
-
-Unlike the rest of Vega, to submit a complaint to contest a data source result a user must be involved in the market being contested.
-Both market makers and market participants may contest the results of an oracle if they have more than a threshold of the market's value. 
-This limitation is to cut down on spamming and sybil attacks.
-
-To contest the process, a halt market vote will be submitted to governance. 
-Provided the user has enough stake in the market, the vote will be put out to governance.
-Once a halt market vote has been successful, the market is locked down and all assets frozen until a `release market` command is voted through governance.
-While halted, the oracle can be changed by another governance vote. Other market parameters can be updated during this time as well.
-
-The contest process will start automatically if, upon expiry, the oracle is unavailable. 
-Again, during this time, oracle changes and other configuration governance will be available to Vega governance holders, Market Makers, and Participants in the given market.
-
-
-## Oracle Queue 
-Like other external events such as "asset deposit" Vega applies Command Query Responsibility Segregation (CQRS) methodology to data source (oracle) events. 
-Since latency and throughput is key to Vega's ability to compete with traditional, centralized trading platforms, we have created an Oracle Queue to act as a buffer between Vega validators and the (notably slow, fickle) external blockchains and hosted services.
-This Oracle Queue continuously monitors all of the data sources that Vega is subscribed to and propagates the key information to enable validators to each independently verify that the event has been mined on-chain or has been signed by the assigned party.   
-
-For more on Oracle Queue: [TODO, link to Oracle Queue spec]
-For more on Event Queue, see [the Event Queue spec](https://github.com/vegaprotocol/product/blob/master/specs/0036-event-queue.md).
-
-
-## Vega Provided Oracles
-Any value that is within the Vega network and visible to all the validators can be submitted to external blockchain oracles as a price provider for the wider DeFi space.
-These oracles often take the form of smart contracts on blockchains like Ethereum, but can also be made available on blockchains which allow key value pair storage such as bitcoin or stellar.
-
-[TODO: vega as oracle spec]
+1. 
