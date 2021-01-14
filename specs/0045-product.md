@@ -73,6 +73,14 @@ callOption.value(quote) {
 	return BlackScholesCallPrice(underlying, strike, timeToMaturity, rfRate, bsVol)
 }
 ```
+## Quote-to-value function 
+
+See [Fees spec](./0029-fees.md) for context. Fees are calculated based on `trade_value_for_fee_purposes`. Any product *may* provide `product.valueForFeePurposes(quote)` function which returns the value of the product for size of `1` which will be used in calculating fees: 
+For many products this will simply be
+```javascript
+trade_value_for_fee_purposes = math.Abs(size) * product.valueForFeePurposes(quote)
+```
+For products which do *not* define this, `product.value(quote)` will be used by default.
 
 
 ## Lifecycle triggers
