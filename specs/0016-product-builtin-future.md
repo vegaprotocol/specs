@@ -24,8 +24,9 @@ Validation: none required as these are validated by the asset and data source fr
 ## 3. Valuation function
 
 ```javascript
-cash_settled_future.value(price) {
-	return price
+// Futures are quoted in directly terms of price 
+cash_settled_future.value(quote) {
+	return quote
 }
 ```
 

@@ -48,15 +48,31 @@ This is used so that Vega knows which assets will be required for margining. Tha
 For example, a product such as a physically settled future (NB: a cash settled future only has one settlement asset) with two *settlement asset* parameters: `base_asset` and `quote_asset` would return `product.settlement assets == [base_asset, quote_asset]` as the settlement assets.
 
 
-## Valuation function
+## Quote-to-value function
 
-Every product must specify a valuation function. This is often referred to in other specs as `product.value(price)`. It returns the value in terms of the settlement asset(s) of a position of size +1. It must provide a value for all settlement assets defined in the product parameters. For built-in cash settled Futures (and other cash settled products, e.g. cash settlend options) there is a single settlement asset only but this will not be true for other products.
+Every product must specify a quote-to-valuation function. This will often be referred to in other specs as `product.value(quote)` (but some specs that need an update will use `product.value(price)`). It returns the value in terms of the settlement asset(s) of a position of size +1 given a market `quote`. It must provide a value for all settlement assets defined in the product parameters. For built-in cash settled Futures (and other cash settled products, e.g. cash settlend options) there is a single settlement asset only but this will not be true for other products.
 
-Note that in future it is likely that the valuation function may also take a parameter for direction (long/short) and/or size, in order to work for more complex products. For now it only has to provide a value for size +1.
+Note that we are assuming tacitly in all specs that `product.value` scales linearly with position size and direction. 
 
-The valuation function has access to the state of the market including the current Vega time, product parameters, and any values received on data sources defined as product parameters. If does not have access to other markets' data unless these are defined as data source parameters.
+The valuation function has access to the state of the market including the current Vega time, product parameters, and any values received on data sources defined as product parameters. It does not have access to other markets' data unless these are defined as data source parameters.
 
 See the [built-in Futures spec](./0016-builtin-future.md) for an example.
+
+### Example: call options market quoted in Black-Scholes implied volatility
+```javascript
+// Call options market quoted in Black-Scholes vol
+// strike and rfRate will be product parameters
+// underlying will come from a data source
+callOption.value(quote) {
+	bsVol = quote
+	rfRate = callOption.parameters["rfRate"]
+	strike = callOption.parameters["strike"]
+	timeToMaturity = dateTimeToYearFraction(callOption.parameters["expiryTime"] - vegaTime)
+	underlying = callOption.underlying_data_source.currentPrice()
+	
+	return BlackScholesCallPrice(underlying, strike, timeToMaturity, rfRate, bsVol)
+}
+```
 
 
 ## Lifecycle triggers
