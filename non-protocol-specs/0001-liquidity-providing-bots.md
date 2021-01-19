@@ -19,7 +19,7 @@ The aim of this spec is bots that
 1. serve as a liquidity provider for the market by submitting the [LP order type](../specs/0038-liquidity-provision-order-type.md).
 1. participate in an opening auction (optional)
 1. create markets that look real with more-or-less correct price by placing limit orders that "steer" the price up-or-down as appropriate
-1. manage their position in such a way so as to not require ever growing amount of collateral.
+1. manage their position in such a way so as to not require ever growing amount of collateral. This will mean changing the "shape" in the liquidity provision order and also being strategic about placing limit orders to steer the price.
 1. the code should be "nice" and "simple" so it can be shared with community.
 
 ## Proposed solution
