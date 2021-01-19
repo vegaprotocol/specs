@@ -153,7 +153,7 @@ LP 1 stake = 300, LP 1 avg_entry_valuation = 120
 LP 2 stake = 200, LP 2 avg_entry_valuation = 200
 ```
 
-Another "liquidity-provision-order-type" type comes in saying that LP 1 wants `new_stake = 1`. We check that `market target stake <= 1` (assume true for purposes of example) and so we proceed so that after the update, at `n=4` we record the state as
+Another "liquidity-provision-order-type" type comes in saying that LP 1 wants `new_stake = 1`. We check that `market target stake <= 201` (assume true for purposes of example) and so we proceed so that after the update, at `n=4` we record the state as
 ```
 LP 1 stake =   1, LP 1 avg_entry_valuation = 120
 LP 2 stake = 200, LP 2 avg_entry_valuation = 200
