@@ -96,8 +96,9 @@ product.<data_source>(data) {
 	// calculation logic with access to product params, data sources, market state
 	settle(ASSET, amount)
 	settle(ASSET, amount)
+	setMarkPrice(value)
 	...
-	market.status = XXXX
+	setMarketStatus(XXXX)
 }
 ```
 
@@ -105,7 +106,8 @@ where:
 
 - `product.<data_source>(data) { ... }` defines a function to executed when data is received from the `<data_source>` by Vega. The `<data_source>` must be one of the product parameters that defines a data source used by the product, and `data` will contain the received data.
 - `settle(ASSET, amount)` means that a long position of size +1 will receive `amount` of `ASSET` (and a short position, size = -1) will similarly lose the same amount. `ASSET` must be one of the *settlement assets* defined on the product.
-- `market.status = XXXX` means that the market status is changed. Currently the only valid status changes are to `SUSPENDED`, `TRADING_TERMINATED`, and `SETTLED` (see [./0043-market-lifecycle.md] for details of the statuses and their meaning). If a market is set to `SUSPENDED` this way, it can *only* exit this state via a governance vote to return it to normal trading or close it.
+- `setMarkPrice(value)` means that the market's mark price is updated to `value`. This _always_ implies that after the event is processed positions will be marked to market, using the [mark to market settlement](./0003-mark-to-market-settlement.md) logic.
+- `setMarketStatus(XXXX)` means that the market status is changed. Currently the only valid status changes are to `SUSPENDED`, `TRADING_TERMINATED`, and `SETTLED` (see [./0043-market-lifecycle.md] for details of the statuses and their meaning). If a market is set to `SUSPENDED` this way, it can *only* exit this state via a governance vote to return it to normal trading or close it.
 
 Generally the function might use conditional logic to apply tests to the data/market state and then if certain conditions are matched do one or both of emitting settlement cashflows and changing market status.
 

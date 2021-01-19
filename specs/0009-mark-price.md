@@ -17,11 +17,17 @@ Algorithm 1:
 # Guide-level explanation
 The *Mark Price* represents the "current" market value for an instrument that is being traded on a market on Vega. It is a calculated value primarily used to value trader's open portfolios against the prices they executed their trades at. Specifically, it is used to calculate the cash flows for [mark-to-market settlement](./0003-mark-to-market-settlement.md).
 
+Note that a mark price may not be a true "price" in the financial sense of the word, i.e. if the `price` changes by `X` then the value of a position does not necessarily change by `X * position size`, instead, the product's quote-to-value function must be used to ascertain the change, i.e. `change_in_value == product.value(new_mark_price) - product.value(old_mark_price)`.
+
+
 # Reference-level explanation
 
-The mark price is instantiated at a non zero level when a market opens.
+The mark price is instantiated at a non zero level when a market opens, for instance via the opening auction.
 
 It will subsequently be calculated according to a methodology selected from a suite of algorithms. The selection of the algorithm for calculating the *Mark Price* is specified at the "market" level as a market parameter.
+
+Mark price can also be adjusted by [product lifecycle events](./0045-product.md), in which case the mark price set by the product remains the mark price until it is next recalculated (e.g. if the methodology is last traded price, until there is a new trade).
+
 
 ## Usage of the *Mark Price*:
 The most recently calculated *Mark Price* is used in the [mark-to-market settlement](./0003-mark-to-market-settlement.md).  A change in the *Mark Price* is one of the triggers for the mark-to-market settlement to run.

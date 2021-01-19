@@ -37,7 +37,7 @@ cash_settled_future.value(quote) {
 
 ```javascript
 cash_settled_future.trading_termination_trigger(event) {
-	market.status = TRADING_TERMINATED
+	setMarketStatus(TRADING_TERMINATED)
 }
 ```
 
@@ -50,23 +50,24 @@ cash_settled_future.settlement_data(event) {
 	// Suspend the market if we receive settlement data before trading termination
 	// this would require investigation and governance action
 	if market.status != TRADING_TERMINATED {
-		market.status = SUSPENDED
+		setMarketStatus(SUSPENDED)
 		return
 	}
 
 	final_cashflow = cash_settled_future.value(event.data) - cash_settled_future.value(market.mark_price)) 
 	settle(cash_settled_future.settlement_asset, final_cashflow)
-	market.status = SETTLED
+	setMarkPrice(event.data)
+	setMarketStatus(SETTLED)
 }
 ```
 
 
 # Acceptance Criteria
 
-1. Create a CSF with trading termination triggered by a date/time based data source
-1. Create a CSF with trading termination triggered by an external data source
-1. Create a CSF with the settlement data provided by an external data source
-1. Create a CSF for any settlement asset that's configureed in Vega
+1. Create a Cash Settled Future with trading termination triggered by a date/time based data source
+1. Create a Cash Settled Future with trading termination triggered by an external data source
+1. Create a Cash Settled Future with the settlement data provided by an external data source
+1. Create a Cash Settled Future for any settlement asset that's configureed in Vega
 1. Either data source can be changed via governance
 1. It is not possible to change settlement asset via governance
 1. Mark to market settlement works correctly
@@ -75,11 +76,6 @@ cash_settled_future.settlement_data(event) {
 1. A market that was suspended for receiving settlement data before trading termination remains suspended until a governance vote changes the status
 1. A market that was suspended for receiving settlement data before trading termination can be closed by governance vote
 1. A market that was suspended for receiving settlement data before trading termination can be settled by governance vote if the trading_termination_trigger and settlement_data source are changed and the status is set to ACTIVE by governance vote
-
-
-## Final Settlement
-
-- [ ] check it can't happen on invalid / other data from the data source (i.e. a price with the wrong timestamp)
-- [ ] check it happens with the first and only the first price that is valid per the data source definition
-- [ ] check mark price is updated
-- [ ] settlement at expiry only ever happens once
+1. A market that has already settled and is in trading terminated status never processes any more lifecycle events even if the data source sends more valid data
+1. Lifecycle events are processed atomically as soon as they are triggered, i.e. the above condition always holds even for two or more transactions arriving at effectively the same time - only the transaction that is sequenced first triggers final settlement
+1. Once a market is finally settled, the mark price is equal to the settlement data and this is exposed on event bus and market data APIs
