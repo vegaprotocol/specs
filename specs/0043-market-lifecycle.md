@@ -26,7 +26,7 @@ A market can progress through a number of statuses through its life. The overall
 | Pending            |   Yes          | Opening auction     | Governance vote passes/wins                                     | Governance vote (to close) OR enactment date reached
 | Cancelled           |  No           | No trading          | Market triggers cancellation condition or governance votes to close before market becomes Active              | N/A                                                    
 | Active             |   Yes          | Normal trading      | Enactment date reached and usual auction exit checks pass       | Governance vote (to close) OR maturity of market      
-| Suspended          |   Yes          | Exceptional auction | Price monitoring or liquidity monitoring trigger                | Exit conditions met per monitoring spec. that triggered it, no other monitoring triggered [TODO: check]
+| Suspended          |   Yes          | Exceptional auction | Price monitoring or liquidity monitoring trigger, or product lifecycle trigger                | Exit conditions met per monitoring spec. that triggered it, no other monitoring triggered or governance vote if allowed (see below)
 | Closed             |   No           | No trading          | Governance vote (to close)                                      | N/A
 | Trading Terminated |   No           | No trading          | Defined by the product (i.e. from a product parameter, specified in market definition, giving close date/time) | Settlement event commences                       
 | Settled            |   No           | No trading          | Settlement triggered and completed as defined by product                                      | N/A                                            
@@ -141,7 +141,7 @@ Once the enactment date is reached and the other conditions specified to exit th
 **Exit:**
 
 - Price, liquidity or other monitoring system triggers suspension → Suspended
-- Trading termination is triggered by a product trigger (for futures, if the trading termination date, set by a market parameter, is reached) → Trading Terminated
+- Trading termination, settlement, or suspension is triggered by a product trigger (for futures, if the trading termination date, set by a market parameter, is reached) → Trading Terminated | Settled | Suspended
 - Market change governance vote approves closure of market → Closed
 
 **Behaviour:**
@@ -166,6 +166,7 @@ Suspension currently always operates as an auction call period. Depending on the
 
 - Conditions specified in [price monitoring](./0032-price-monitoring.md) and [liquidity monitoring](./0035-liquidity-monitoring.md) and the usual [ending of auction checks](./0026-auctions.md) pass → Active 
 - Governance vote to close a market passes → Closed
+- Market was suspended by governance vote of product lifecycle trigger and a governance vote passes to set the status to ACTIVE → Active
 
 **Behaviour:**
 
