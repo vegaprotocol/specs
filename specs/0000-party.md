@@ -24,16 +24,11 @@ A standard party can:
 ## Standard party
 A standard party is any that is controlled via transactions signed by an [ed25519 keypair](./0027-auth.md). Throughout the specifications, if the term 'party' is used without qualification, it probably means a standard party.
 
-## Special party
-There are a limited number of 'special' parties in Vega. They are controlled by Vega, and no entity should be able to perform an action as a special party other than Vega. Transactions cannot be submitted via the blockchain as any special party.
+## Special parties
+There is currently one 'special' party in Vega. They are controlled by the Vega core, and no entity should be able to perform an action as a special party other than the core. Transactions cannot be submitted via the blockchain as any special party, and there is no keypair specifically associated with a special party.
 
-### Common properties of Special Parties
-... 
-
-### 'network' party
-The `network` party is a pseudoparty. It is used in [position resolution](./0012/position-resolution.md) to close distressed [positions](./0006-positions-core.md) or [orders](./0024-order-status.md). 
-
-
+### 'network' parties
+The `network` party is a pseudoparty. It is used in [position resolution](./0012/position-resolution.md) to close distressed [positions](./0006-positions-core.md) or [orders](./0024-order-status.md).
 
 # Acceptance Criteria
 
