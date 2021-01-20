@@ -39,5 +39,5 @@ The `network` party is a pseudoparty. It is used in [position resolution](./0012
         1. A special party must not have a public/private keypair
 1. A transaction recieved through the blockchain as any [special party](#special-parties) must be rejected/
 1. A [party](#standard-party) with no balance in any account must have their transactions rejected.
-1. The special network party...
+1. Any transaction submitted to `submitTx` with a party of `network` should be rejected.
 1. It's not a party until the police shows up.
