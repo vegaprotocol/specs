@@ -1,6 +1,6 @@
 # [Data Source](./0045-data-sourcing.md): Signed message
 
-Signed message data sources are the first external data source to be support by Vega. See the [Data Sourcing spec](./0045-data-sourcing.md) for more information no data sources in general and the data source framework.
+Signed message data sources are the first external data source to be support by Vega. See the [Data Sourcing spec](./0045-data-sourcing.md) for more information on data sources in general and the data source framework.
 
 Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by one of a set of public keys provided as part of the data source definition. Note the data supplied by can be used when [settling a market at expiry](./0004-settlement-at-instrument-expiry.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
 
@@ -70,6 +70,8 @@ If data is supplied in a signed message but no active data source (see [data sou
 Where possible, this should be done before the transaction is included in a block.
 
 
+
+
 ### Criteria
 
 1. An [instrument can be created](./0028-governance.md) to rely on a signed message data source
@@ -88,6 +90,10 @@ Where possible, this should be done before the transaction is included in a bloc
     1. Be from an active signed message data source,
     1. Invalid `SubmitData` transactions must be rejected.
 1. Must work with Coinbase oracle
+1. Reject any data source tx that is not explicitly required, so this would include a tx:
+
+    - For a pubkey never used in a data source
+    - For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal
 
 
 ## Notes
