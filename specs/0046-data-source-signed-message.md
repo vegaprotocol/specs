@@ -91,8 +91,8 @@ Where possible, this should be done before the transaction is included in a bloc
     1. Invalid `SubmitData` transactions must be rejected.
 1. Must work with Coinbase oracle
 1. Reject any data source tx that is not explicitly required, so this would include a tx:
-
     - For a pubkey never used in a data source
+    - For a data source where a filter rejects the message based on its contents
     - For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal
 
 

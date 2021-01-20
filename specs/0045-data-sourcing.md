@@ -76,11 +76,7 @@ b) Future types (when we create new products and add calculation features we wil
 
 Vega will need to keep track of all "active" defined data sources that are referenced either by markets that are still being managed by the core (i.e. excluding Closed/Settled/Cancelled/other "end state" markets) or by other data source definitions (see each individual data source definition spec, such as [signed message](./0046-data-source-signed-message.md) for this specific information).
 
-Vega should reect any data source tx that is not explicitly required, so this would include a tx:
-
-- For a pubkey never used in a data source
-- For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal
-- If a data source combines a primary source (like a signed message) with a filter (for instance saying we are only interested in messages where ticker = GBPUSD and timestamp = 20211231T23:59:00) then the complete data source definition defines the source and can be used to accept/reject transactions, so even if this data source is active, transactions from the same pubkey would be rejected if the ticker and timestamp were not correct, then the whole data source would be discarded once it is no longer referenced by a market
+Vega should consider the specific definition including filters, combinations etc. not just the primary source. So, for example, if two markets use the same public key(s)  but different filters or aggregations etc. then these constitute two different data sources and each transaction that arrives signed by these public keys should only be accepted if one or more of these specific active data sources "wants" the data.
 
 Data sources that are no longer active as defined above can be discarded.
 
@@ -185,5 +181,9 @@ ethereumCall: {
 
 
 # Acceptance criteria
+
+Vega should reject any data source tx that is not explicitly required, so this would include a tx:
+
+- If a data source combines a primary source (like a signed message) with a filter (for instance saying we are only interested in messages where ticker = GBPUSD and timestamp = 20211231T23:59:00) then the complete data source definition defines the source and can be used to accept/reject transactions, so even if this data source is active, transactions from the same pubkey would be rejected if the ticker and timestamp were not correct, then the whole data source would be discarded once it is no longer referenced by a market
 
 
