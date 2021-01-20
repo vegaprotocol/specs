@@ -8,7 +8,7 @@ Filtered data defines a type of data source that is a compound data source. That
 For example, a [signed message](./0046-data-source-signed-message.md) data source may submit a stream of transactions providing hourly data for several tickers, like this:
 
 ```
-SOURCE_A = SignedMessage{ pubkey=0xA45e...d6 }, gives:
+DATA_SOURCE = SignedMessage{ pubkey=0xA45e...d6 }, gives:
 
 	{ ticker: 'TSLA', timestamp: '2021-12-31T00:00:00Z', price: 420.69}
 	{ ticker: 'BTCUSD', timestamp: '2021-12-31T00:00:00Z', price: 42069.303}
@@ -28,7 +28,7 @@ SOURCE_A = SignedMessage{ pubkey=0xA45e...d6 }, gives:
 In order to use messages from this signer as, for example, the settlement trigger and data for a [futures](./0016-builtin-future.md) market, Vega needs a way to define a data source that will trigger settlement when a price is received for the correct underlying and the right expiry timestamp. For example:
 
 ```
-SOURCE_B = Filter { data=SignedMessage{ pubkey=0xA45e...d6 }, filters=[
+DATA_SOURCE = Filter { data=SignedMessage{ pubkey=0xA45e...d6 }, filters=[
 	Equal { key='ticker', value='TSLA' },
 	Equal { key='timestamp', value='2021-12-31T23:59:59Z' }
 ]}
@@ -74,7 +74,7 @@ Once data is filtered it is often necessary to select a single field, for instan
 To continue the example above:
 
 ```
-SOURCE_B = Filter { select='price', data=SignedMessage{ pubkey=0xA45e...d6 }, filters=[
+DATA_SOURCE = Filter { select='price', data=SignedMessage{ pubkey=0xA45e...d6 }, filters=[
 	Equals { key='ticker', value='TSLA' },
 	Equals { key='timestamp', value='2021-12-31T23:59:59Z' }
 ]}
