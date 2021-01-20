@@ -1,13 +1,15 @@
 # Party 
 
-A party is...
+A party is any entity participating on Vega blockchain with one-to-one mapping between a Vega wallet public key and “party”. Also known as user / trader / participant / voter.
 
 
 # Summary
 
 A standard party may have:
-- 0 or more [accounts](./0013-accounts.md)
-    - These accounts may contain a balance of a single [asset](./0040-asset-framework). This is known as [collateral](./0005-collateral.md)
+- 0 or more [accounts](./0013-accounts.md). These accounts may contain a balance of a single [asset](./0040-asset-framework). This is known as [collateral](./0005-collateral.md)
+- positions on 0 or more [markets](./0001-market-framework.md)
+- orders on 0 or more [markets](./0001-market-framework.md)
+- 0 or more governance proposals submitted,see [governance](./0028-governance.md)
 
 A standard party can:
 - [Submit an order](./0025-order-submission.md)
@@ -43,3 +45,4 @@ The `network` party is a pseudoparty. It is used in [position resolution](./0012
 1. A transaction recieved through the blockchain as any [special party](#special-parties) must be rejected/
 1. A [party](#standard-party) with no balance in any account must have their transactions rejected.
 1. The special network party...
+1. It's not a party until the police shows up.
