@@ -17,6 +17,8 @@ In the case of an ERC20 token for example, only the contract address of the toke
 
 The asset specific part is represented by the source field, which can be one of the different source of assets supported by vega.
 
+Note that the `minLPstake` field sets the minimum liquidity commitment required for any market using the assest as settlement asset, see [LP mechais spec](0044-lp-mechanics.md).
+
 ```protobuf
 syntax = "proto3";
 
@@ -30,6 +32,7 @@ message Asset {
   string symbol = 3;
   string totalSupply = 4;
   uint64 decimals = 5;
+  decimal minLPstake = 100.01; 
 
   oneof source {
     BuiltinAsset builtinAsset = 101;

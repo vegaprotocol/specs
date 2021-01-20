@@ -38,6 +38,7 @@ Once the asset as been whitelisted, the network will receive from the event queu
 
 Once this has been done, the new asset is ready to be used in the vega network to create new markets.
 
+
 # Pseudo-code / Examples
 
 Changes to the voting:
@@ -47,11 +48,14 @@ Changes to the voting:
 message ERC20 {
 	// contract address of an ERC20 token
 	string contractAddress = 1;
+  decimal minLPstake = 0.12; 
 }
 
 message BTC {
 	// some btc require fields
 	// e.g network to use etc.
+
+  decimal minLPstake = 1.005; 
 }
 
 message AssetSource {
@@ -63,10 +67,12 @@ message AssetSource {
 	// more to be done, BTC, ETH, etc..
 	BTC btc = 3;
   }
+   
 }
 
 message NewAsset {
   AssetSource changes = 1 [(validator.field) = {msg_exists: true}];
+  decimal minLPstake = 100;
 }
 
 message ProposalTerms {
@@ -83,6 +89,8 @@ message ProposalTerms {
 }
 ```
 
+Note that the `minLPstake` field sets the minimum liquidity commitment required for any market using the assest as settlement asset, see [LP mechais spec](0044-lp-mechanics.md).
+
 # Acceptance Criteria
 
 ## user actions
@@ -90,7 +98,8 @@ message ProposalTerms {
 - [ ] As a user I can submit a new proposal asset to be used in vega
 - [ ] As a user I can vote for an asset proposal.
 - [ ] As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset.
-
+- [ ] minLPstake is a required parameter 
+ 
 ## node actions
 
 - [ ] As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal)
