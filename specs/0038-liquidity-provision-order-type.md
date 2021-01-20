@@ -139,7 +139,9 @@ ________________________
 
 Liquidity providers are always allowed to amend their shape generated orders by submitting a new liquidity provider order with a set of revised order shapes (see [Liquidity Provisioning mechanics](./0044-lp-mechanics.md)). They are not able to amend orders using "normal" amend orders.
 
-No cancellation of orders other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-lp-mechanics.md).
+No cancellation of orders that arise from this LP batch order type other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-lp-mechanics.md).
+
+Note that any other orders that the LP has on the book (limit orders, other pegged orders) that are *not* part of this LP batch order (call them "normal" in this paragraph) can be cancelled and ammended as normal. When volume is removed / added / pegs moved (on "normal" orders) then as part of the normal peg updates the LP batch order may add or remove volume as described in section "How they are constructed for the order book" above.
 
 
 ## Network Parameters:
