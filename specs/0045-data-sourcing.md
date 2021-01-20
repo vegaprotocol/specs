@@ -52,6 +52,9 @@ When defining a data source, the specification for that data source must describ
 
 ## 4. Data types
 
+
+### Allowable types:
+
 a) Data sources must be able to emit the following data types:
 1. Integer
 1. Floating point
@@ -67,12 +70,39 @@ Note that for number types the system should convert appropriately when these ar
 
 Note that we should support all the number types as we want to enable the community to easily submit data from various sources and not worry about conversion, and different market types will have different data types for settlement, and different underlying source assumptions.
 
-
 b) Future types (when we create new products and add calculation features we will need these):
+
 1. List of items of any type (i.e. list of floats)
 
 
-## 5. Tracking active data sources
+### Type checking
+
+The context in which the data source is used should determine the type of data required to be emitted. Data sources that emit data of an incorrect type to a defined data source should trigger an event to be emitted via the node API. 
+
+For [futures](./0016-builtin-future.md) the data type expected will always be a number ("price"/quote) in any of the acceptable numeric types (including string-encoded). For filtered data, the input data source can be any type and the output must be the type required by the part of the system using the data source.
+
+
+## 5. Selecting a field 
+
+Often, a data source will provide a set of key/value pairs when what is needed is a single value from the object. It should be possible in any definition to define a field to be "selected" from the data, for example:
+
+```
+DATA_SOURCE: {
+  select: 'price',
+  // rest of definition
+}
+```
+
+This would emit just the value of the price field, i.e. 
+
+```
+{ ticker: 'GOLD', price: 27.2 } -> 27.2
+[ { timestamp: '10:00:00', price: 27.2 }, { timestamp: '11:00:00', price: 28.1 } ] -> [27.2, 28.1]
+```
+
+
+
+## 6. Tracking active data sources
 
 Vega will need to keep track of all "active" defined data sources that are referenced either by markets that are still being managed by the core (i.e. excluding Closed/Settled/Cancelled/other "end state" markets) or by other data source definitions (see each individual data source definition spec, such as [signed message](./0046-data-source-signed-message.md) for this specific information).
 
@@ -80,23 +110,23 @@ Vega should consider the specific definition including filters, combinations etc
 
 Data sources that are no longer active as defined above can be discarded.
 
-## 6. Types of data source
+## 7. Types of data source
 
 The following data sources have been defined:
 1. Internal basic data sources (Vega time, direct value) [TODO: link]
 1. [signed message](./0046-data-source-signed-message.md)
-1. Time triggered (at a certain date/time)
-1. Filters (exclude certain events basd on conditions and boolean logic against the fields on the data such as equals, simple comparisons, is/is not in a predefined list, an MVP of this functionality is needed to allow TPOs to be practical)
-1. Ethereum oracles (events, contract read methods)
+1. Time triggered (at a certain date/time) [TODO: link]
+1. [Filters](./0047-data-source-filter.md) (exclude certain events based on conditions and boolean logic against the fields on the data such as equals, simple comparisons). An MVP of this functionality is needed to allow signed message data sources to be practical, more complex filters are included in the "future work" section below.
+1. Ethereum oracles (events, contract read methods) [TODO: link]
 
-## 7. APIs
+## 8. APIs
 
 APIs should be available to:
 1. List active data sources and their configuration
 1. Emit an event on the event bus when a data source value is emitted. For example a signed message data source would emit an event for EVERY signed message that matched on of the public keys for an active signed message data source definition (*even if these are later filtered out*). A filter data source defined on a signed message data source would therefore only emit an event bus message when data passes the filters, etc.
 
 
-## 8. Future work
+## 9. Future work
 
 The following are expected to be implemented in future.
 
@@ -111,6 +141,7 @@ b) Composable modifiers/combinators for data sources:
 1. Aggregation (m of n and/or averaging, etc.) of multiple other data sources
 1. Verification of outputs of another data source by governance vote
 1. Calculations (i.e. simple maths/stats plus access to quant library functions, product valuation function, including reference to product parameters or arbitrary other data sources)
+1. Additional filters
 
 
 ## Examples

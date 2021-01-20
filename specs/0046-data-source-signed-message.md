@@ -19,12 +19,40 @@ Note: With this type of oracle there’s no incentive in the Vega data source sy
 
 ## Defining the data source
 
+
+### Parameters 
+
 A data source must define:
 
 - Public keys (and key algorithm to be used?) that can sign and submit values for this oracle
 - Type of data to be supplied in the transaction (key/value or OpenOracle / 'ABI encoded')
 
+A data source may also define a `select` parameter (see overall [data sourcing spec](./0045-data-sourcing.md) for details) to emit only a single field. Note that `select` should NOT be used on the signed message data source definition if other fields need to be used by a filter, aggregation, etc. and instead should be applied to the filtered data.
+
 Note: that as transactions provide multiple values and many use cases call for only one value, a [filter](./0047-data-source-filter.md) is likely to be needed to extract the required value.
+
+
+### Examples:
+
+Data source for a public key that will only send one transaction containing a prices for several markets and therefore doesn't need to be filtered, but the correct value does need to be extracted:
+
+```
+// emits 1503.42 if 0xBLAHBLAH submits { ETHUSD: 1503.42, BTCUSD: 80123.45 } 
+SignedMessage = { select='ETHUSD', pubkey=0xBLAHBLAH }
+```
+
+Data source for a public key that will send multiple transactions containing prices for several markets and must be [filtered](./0047-data-source-filter.md):
+
+```
+// emits 80123.45 if 0xBLAHBLAH submits:
+// { ticker='ETHUSD', price=1503.42 } 
+// then { ticker='BTCUSD', price=80123.45 } 
+Filter { 
+    select='price', 
+    SignedMessage = { pubkey=0xBLAHBLAH }, 
+    filters=[ Equal { key='ticker', value=''BTCUSD } ]
+```
+
 
 ### Validation
 

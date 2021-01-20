@@ -1,35 +1,96 @@
-PLACEHOLDER FROM OTHER SPEC - WIP / IGNORE! 
-
-NOT STARTED
+# [Data Source](./0045-data-sourcing.md): Filtered data
 
 
-PROBABLY NONSENSE
+# Overview
+
+Filtered data defines a type of data source that is a compound data source. That is, they include another data source definition in their definition and output a modified stream of data. Specifically, a filtered data source contains one or more conditions that are applied to data from the input data source to determine whether that data is output by the compound (filtered) data source.
+
+For example, a [signed message](./0046-data-source-signed-message.md) data source may submit a stream of transactions providing hourly data for several tickers, like this:
+
+```
+SOURCE_A = SignedMessage{ pubkey=0xA45e...d6 }, gives:
+
+	{ ticker: 'TSLA', timestamp: '2021-12-31T00:00:00Z', price: 420.69}
+	{ ticker: 'BTCUSD', timestamp: '2021-12-31T00:00:00Z', price: 42069.303}
+	{ ticker: 'ETHGAS', timestamp: '2021-12-31T00:00:00Z', price: 100.1}
+	...
+	{ ticker: 'TSLA', timestamp: '2021-12-31T01:00:00Z', price: 469.20}
+	{ ticker: 'BTCUSD', timestamp: '2021-12-31T01:00:00Z', price: 52069.42}
+	{ ticker: 'ETHGAS', timestamp: '2021-12-31T01:00:00Z', price: 101.0}
+	...
+	{ ticker: 'TSLA', timestamp: '2021-12-31T02:00:00Z', price: 440.20}
+	{ ticker: 'BTCUSD', timestamp: '2021-12-31T02:00:00Z', price: 501.666}
+	{ ticker: 'ETHGAS', timestamp: '2021-12-31T02:00:00Z', price: 90.92}
+	... and so on ...
+```
+
+
+In order to use messages from this signer as, for example, the settlement trigger and data for a [futures](./0016-builtin-future.md) market, Vega needs a way to define a data source that will trigger settlement when a price is received for the correct underlying and the right expiry timestamp. For example:
+
+```
+SOURCE_B = Filter { data=SignedMessage{ pubkey=0xA45e...d6 }, filters=[
+	Equal { key='ticker', value='TSLA' },
+	Equal { key='timestamp', value='2021-12-31T23:59:59Z' }
+]}
+
+gives:
+	{ ticker: 'TSLA', timestamp: '2021-12-31T23:59:59Z', price: 694.20 }
+```
+
+Unlike the first example, this would be useful for trigger final settlement of a futures market. 
+
+
+## Specifiying a filtered data source
+
+To specify a filtered data source the following parameters can be specified:
+
+- `data`: (required) another data source definition defining the input data
+- `filters`: (required) a list of _at least one_ filter to apply to the data
+- `select`: (optional) key/field name to emit from data passing the filter
+
+
+### Parameter: data
+
+This can be *any* other data source within the data sourcing framework.
+
+
+### Parameter: filters
+
+These specify the condition to apply to the data. If ALL filters match the data is emitted (note that in future we may add things like 'or' filters that combine other filters but initially this is not required).
+
+For each filter, a `key` parameter is required 
+
+Filter types:
+
+- Equals: data must exactly match the filter, i.e. `Equals { key='ticker', value='TSLA' }`
+- Greater/GreaterOrEqual: `GreaterOrEqual { key='timestamp', value='2021-12-31T23:59:59' }`
+- Less/LessOrEqual: `GreaterOrEqual { key='timestamp', value='2021-12-31T23:59:59' }`
+
+
+### Parameter: select
+
+Once data is filtered it is often necessary to select a single field, for instance to supply a settlement price. This is done by specifying a select value (note select is a standard operation available for all data sources that can return key/value pairs).
+
+To continue the example above:
+
+```
+SOURCE_B = Filter { select='price', data=SignedMessage{ pubkey=0xA45e...d6 }, filters=[
+	Equals { key='ticker', value='TSLA' },
+	Equals { key='timestamp', value='2021-12-31T23:59:59Z' }
+]}
+
+gives: 694.20
+```
+
+
+## Accepting/rejecting filtered data
+
+Data that does not pass all fitlers can be ignored. Ideally this would be done before accepting the transaction into a block, this would mean that for a configured pubkey that may be submitting many transactions to a node, Vega would automatically choose to accept only the specific messages that will be processed by a product or some other part of the system.
+
+To be clear, this also means that if the input data is the wrong "shape" or type to allow the defined filters to be applied to it, it will also be rejected. For instance if a ticker or timestamp field that is being filtered on is not present, the data does not pass the filter.
 
 
 
+## Acceptance criteria
 
-SERIOUSLY, NO...
-
-
-
-
-I HOPE YOU KNOW WHAT YOU'RE DOING
-
-
-
-
-If any of filters do not match (or are of the wrong type) the message is ignored and not passed as a valid data point to whatever defined the source.
-
-Also if the specified field is of the wrong type, the data is not passed as a valid data point, but this should create a warning event i.e. "data event passed filter but format of XX field doesn't match data soruce definition" as the format may have changed and it could be necessary for a [market, in the case of settlement] governance action to change the data source.
-
-Need to specify what filters we'll allow and data types.
-
-We support some ability to have arbitrary feeds.
-We need to support selecting messages from a stream (e.g. by datetime or by field). Using comparisons (e.g. greater than or equal to a timestamp) and exact equals.
-Don't allow nesting of filters
-All filters are AND (so all filters must match for a message)
-
-
-If any of filters do not match (or are of the wrong type) the message is ignored and not passed as a valid data point to whatever defined the source.
-
-Also if the specified field is of the wrong type, the data is not passed as a valid data point, but this should create a warning event i.e. "data event passed filter but format of XX field doesn't match data soruce definition" as the format may have changed and it could be necessary for a [market, in the case of settlement] governance action to change the data source.
+1. 
