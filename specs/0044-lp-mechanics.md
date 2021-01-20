@@ -48,7 +48,7 @@ Example: amending only a commitment amount but retaining old fee bid and orders.
 ## COMMITMENT AMOUNT
 
 ### Processing the commitment
-When a commitment is made the liquidity commitment amount is assumed to be specified in terms of the settlement currency of the market.
+When a commitment is made the liquidity commitment amount is assumed to be specified in terms of the settlement currency of the market. There is an minimum LP stake specified per asset, see [asset framework spec](0040-asset-framework.md).
 
 If the participant has sufficient collateral to cover their commitment and margins for their proposed orders, the commitment amount is transferred from the participant's general account to their (maybe newly created) [liquidity provision bond account](./0013-accounts.md#liquidity-provider-bond-accounts) (new account type, 1 per liquidity provider per market and asset). For clarity, liquidity providers will have a separate [bond account](./0013-accounts.md#trader-bond-accounts) and [bond account](./0013-accounts.md#liquidity-provider-bond-accounts).
 
