@@ -25,7 +25,7 @@ b) As a result:
 
 Any part of Vega requiring a data source should be able to use any type of data source. This means that there is a single common schema for specifying a data source where one is required.
 
-a) Data sources can differ in the following ways:
+a) Data sources can differ in tThis forms only part of the Vega system which also includes a bridge contract to the Vega blockchain, which may also hold tokens. All token functionality exists on the Vega blockchain, except for the (disabled in locked tokens) ability to transfer tokens on Ethereume following ways:
 
 1. Type of data source (signed message, internal data, date/time, Ethereum, etc.)
 1. Data type (e.g. float for a price)
@@ -91,6 +91,7 @@ The following data sources have been defined:
 1. [signed message](./0046-data-source-signed-message.md)
 1. Time triggered (at a certain date/time)
 1. Filters (exclude certain events basd on conditions and boolean logic against the fields on the data such as equals, simple comparisons, is/is not in a predefined list, an MVP of this functionality is needed to allow TPOs to be practical)
+1. Ethereum oracles (events, contract read methods)
 
 ## 7. APIs
 
@@ -104,7 +105,6 @@ APIs should be available to:
 The following are expected to be implemented in future.
 
 a) New base data source types:
-1. Ethereum oracles (events, contract read methods)
 1. Internal market parameters and data
 1. Internal network parameters and metrics
 1. Signed or validator verified HTTPS endpoints
@@ -164,12 +164,23 @@ filteredData: {
   ],
   data: { 
     signedMessage: {
-      sourcePubkeys: ['VEGA_PUBKEY_HERE'],
+      sourcePubkeys: ['VEGA_PUBKEY_HERE', ...],
       field: "price",
       dataType: { type: 'decimal', places: 5 }
     }
   }
 } 
+```
+
+Value from a read only call on Ethereum
+```
+ethereumCall: {
+  at: '2021-01-31T23:59:59Z',
+  contractAddress: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+  ABI: '...ABI...BLAH...'
+  method: 'getPrice'
+  params: []
+}
 ```
 
 
