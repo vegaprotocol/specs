@@ -5,7 +5,7 @@
 The Vega network runs on data. Market settlement, risk models, and other features require a supplied price (or other data), which must come from somewhere, often completely external to Vega. This necessitates the use of both internal and external data sources for a variety of purposes.
 
 
-b) The goals of Vega Protocol with regards to data sourcing are:
+a) The goals of Vega Protocol with regards to data sourcing are:
 
 1. To provide access to data internal to the Vega network in a standardised way, including data and triggers related to the "Vega Time" and market data (prices, etc.)
 1. To support a wide range of third party data sourcing solutions for external data rather than to implement a complete solution in-house.
@@ -25,7 +25,7 @@ b) As a result:
 
 Any part of Vega requiring a data source should be able to use any type of data source. This means that there is a single common schema for specifying a data source where one is required.
 
-a) Data sources can differ in tThis forms only part of the Vega system which also includes a bridge contract to the Vega blockchain, which may also hold tokens. All token functionality exists on the Vega blockchain, except for the (disabled in locked tokens) ability to transfer tokens on Ethereume following ways:
+a) Data sources can differ in this forms only part of the Vega system which also includes a bridge contract to the Vega blockchain, which may also hold tokens. All token functionality exists on the Vega blockchain, except for the (disabled in locked tokens) ability to transfer tokens on Ethereum following ways:
 
 1. Type of data source (signed message, internal data, date/time, Ethereum, etc.)
 1. Data type (e.g. float for a price)
@@ -165,7 +165,7 @@ on: {
 }
 ```
 
-Empty value, trigger only, i.e. trigger trading treminated at a date/time for futures:
+Empty value, trigger only, i.e. trigger trading terminated at a date/time for futures:
 ```
 on: { timestamp: '2021-01-31T23:59:59Z', data: Empty }
 ```
