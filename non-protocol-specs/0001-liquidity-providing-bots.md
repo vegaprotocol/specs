@@ -37,8 +37,9 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 - `auctionVolume`
 - `maxLong` and `maxShort` position limits and `posManagementFraction` controlling size of market order used to manage position
 - `stakeFraction`, `ordersFraction`, these will be used in rule-of-thumb heuristics to decide how the bot should deploy collateral.
-- `defaultSellingShape`, `defaultBuyingShape` (note that the initial shape used will be the buying shape because being long is a little cheaper in position margin than being short)
-- `positionManagementSleep`
+- `shorteningShape`, `longeningShape` both of these are *both* sides of the book (note that the initial shape used will be the buying shape because being long is a little cheaper in position margin than being short)
+- `positionManagementSleep` e.g. 10s and `posManagementFraction` e.g. `0.1`
+- `marketPriceSteeringRate` e.g. 2 per second would be 2
 
 ### Submitting a market proposal
 The bot will read the required market proposal from a file (configuration option), decide if it has minimum LP stake in the right asset, check it's got enough vote tokens and then submit the proposal and vote for it. They will also need to submit [liquidity shapes](../specs/0038-liquidity-provision-order-type.md) but that will be treated below. 
@@ -81,9 +82,9 @@ Step 3. Repeat the following forever:
 positionManagementTimer.start()
 if (positionManagementTimer > positionManagementSleep) then 
     if botPositionLong() == true and botCurrentMood() == "buying" then
-        submit LP order with defaultSellingShape
+        submit LP order with shorteningShape
     else if botPositionLong() == false and botCurrentMood() == "selling" then 
-        submit LP order with defaultBuyingShape
+        submit LP order with longeningShape
     fi 
     positionManagementTimer.reset()
     positionManagementTimer.start()
@@ -111,6 +112,7 @@ Note that Vega uses worst long / short internally so orders and positions margin
 
 Repeat the following:
 ```
+positionManagementSleep = 1.0/marketPriceSteeringRate //in seconds
 
 positionManagementTimer.start()
 if (positionManagementTimer > positionManagementSleep) then 
