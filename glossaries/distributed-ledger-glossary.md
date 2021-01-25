@@ -77,7 +77,7 @@ The amount of time before a system can achieve both consensus and finality; it's
 A theoretical problem in [Proof of Stake](#proof-of-stake) blockchains: validators can effectively break safety by voting for multiple conflicting blocks at a given block height without incurring cost for doing so. TODO: check with George: *PBFT style blockchains don't suffer from this problem because their finality properties are stronger*.
 
 ## Oracles
-An oracle is a sytem that allows external data to be represented on a blockchain. If a market on Vega were to be based on the amount of rainfall in Gibraltar on a specific day, the Oracle would be the system through which the volume of rain that fell on that day was logged to Vega in a way that could be used to settle the market. This would require a trusted source of rainfall data in Gibraltar to publish the data.
+An oracle is a system that allows external data to be represented on a blockchain. If a market on Vega were to be based on the amount of rainfall in Gibraltar on a specific day, the Oracle would be the system through which the volume of rain that fell on that day was logged to Vega in a way that could be used to settle the market. This would require a trusted source of rainfall data in Gibraltar to publish the data.
 
 There are entire protocols ([Band](https://bandprotocol.com/), [Chainlink](https://chain.link/)) and data standards ([Open Oracle](https://github.com/compound-finance/open-oracle)) that define how this data can be sourced, signed and verified. In Vega, this is handled by the [data sourcing specs](https://github.com/vegaprotocol/product/pull/450).
 
