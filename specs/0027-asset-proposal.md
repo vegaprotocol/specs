@@ -48,22 +48,19 @@ Changes to the voting:
 message ERC20 {
 	// contract address of an ERC20 token
 	string contractAddress = 1;
-  decimal minLPstake = 0.12; 
 }
 
 message BTC {
 	// some btc require fields
 	// e.g network to use etc.
-
-  decimal minLPstake = 1.005; 
 }
 
 message AssetSource {
   oneof source {
-    // vega internal assets
+	// vega internal assets
 	BuiltinAsset builtinAsset = 1;
 	// foreign chains assets
-    ERC20 erc20 = 2;
+	ERC20 erc20 = 2;
 	// more to be done, BTC, ETH, etc..
 	BTC btc = 3;
   }
@@ -72,7 +69,10 @@ message AssetSource {
 
 message NewAsset {
   AssetSource changes = 1 [(validator.field) = {msg_exists: true}];
-  decimal minLPstake = 100;
+  // an minimal amount of stake to be committed 
+  // by liquidity providers.
+  // use the number of decimals defined by the asset.
+  uint64 minLPstake = 2;
 }
 
 message ProposalTerms {
@@ -88,6 +88,19 @@ message ProposalTerms {
   };
 }
 ```
+
+## An ERC20 example
+```
+{
+	"newAsset": {
+		"changes": {
+			"contractAddress": "0xsomething"
+		},
+		"minLPStake": 10000000 // if tge asset supports 5 decimals = 100.00000
+	}
+}
+```
+
 
 Note that the `minLPstake` field sets the minimum liquidity commitment required for any market using the assest as settlement asset, see [LP mechais spec](0044-lp-mechanics.md).
 
