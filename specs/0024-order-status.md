@@ -1,7 +1,5 @@
 Feature name: order-status
 
-Start date: 2020-01-08
-
 # Acceptance Criteria
 - Status table below is replicated and each is tested by at least one scenario
 
@@ -15,6 +13,7 @@ For the definition of each Time In Force option, see [the Order Types spec](./00
 * Orders can have a status of REJECTED if there is insufficient margin to place the order
 * [Order Pricing methods](./0014-order-types.md#order-pricing-methods) are not listed below as they don't change the status outcome
 * `Stopped` and `Cancelled` are used to determine whether an order was closed as a result of a user action (`Cancelled`) or by the system (`Stopped`) as a result of, for example, insufficient margin (see [Position Resolution](./0012-position-resoluton.md#position-resolution-algorithm))
+* A pegged order that is unable to reprice or during an auction will have a status of PARKED. This indicates that the order in not on the order book but can re-enter it once the conditions change
 
 ## Fill or Or Kill
 | Time In Force | Filled | Resulting status |

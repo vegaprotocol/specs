@@ -1,5 +1,4 @@
 Feature name: market-framework
-Start date: 2019-02-11 
 
 # Summary
 The market framework is a set of concepts that define the markets available on a Vega network in terms of the product and instrument being traded on each, the trading mode and related parameters, and the risk model being used for margin calculations.
@@ -7,7 +6,7 @@ The market framework is a set of concepts that define the markets available on a
 The market framework is described in Section 3 of the [whitepaper](../product/wikis/Whitepaper).
 
 # Guide-level explanation
-A the trading core will create order books, risk engines, etc. and accept orders and other instructions based on the data held within the market framework. Depending on the deployment context for the trading core, the market framework will be created and manipulated in different ways:
+The trading core will create order books, risk engines, etc. and accept orders and other instructions based on the data held within the market framework. Depending on the deployment context for the trading core, the market framework will be created and manipulated in different ways:
 
 - In the first Nicenet release and some private/permissioned Vega networks, the framework instances will be set up using configuration files.
 - In later test network releases, the public Mainnet, and other private/permissioned networks, entities in the framework will be created by governance transactions.
@@ -23,9 +22,6 @@ Out of scope for this ticket:
 - APIs through which clients can query and update market framework data  
 
 # Reference-level explanation
-This is the main portion of the specification. Break it up as required.
-
-
 The market framework is essentially a set of data structures that configure and control almost all of the behaviour of a Vega network (the main exceptions being per-instance network and node configuration, and network-wide parameters that apply to all markets). These data structures are described in the sections below.
 
 
@@ -35,27 +31,36 @@ The market data structure collects all of the information required for Vega to o
 
 Data:
   - **Identifier:** this should unambiguously identify a market
+  - **Status:** Proposed | Pending | Cancelled | Active | Suspended | Closed | Trading Terminated | Settled (see [market lifecycle spec](./0043-market-lifecycle.md))
   - **Trading mode:** this defines the trading mode (e.g. [continuous trading](#trading-mode---continuous-trading), [auction](#trading-mode---auctions)) and any required configuration for the trading mode. Note also that each trading mode in future will have very different sets of applicable parameters.
   - **Tradable instrument:** an instance of or reference to a tradable instrument.
   - **Mark price methodology:** reference to which [mark price](./0009-mark-price.md) calculation methodology will be used.
   - **Mark price methodology parameters:**
     - Algorithm 1 / Last Traded Price: initial mark price
   - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
+  - **Market activation time:** Read only, set by system when market opens. The date/time at which the opening auction uncrossed and the market first entered it's normal trading mode (empty if this had not happened)
+  - **Tick size** (size of an increment in price in terms of the quote unit)
+  - **Decimal places**, number of decimals places for quotes unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
 
 
 ### Trading mode - continuous trading
 
 Params:
-  - **Tick size** (size of an increment in price in terms of the quote unit)
-  - **Decimal places**, number of decimals places for quotes unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
+  - None currently
+
 
 ### Trading mode - Auctions
+
+Params: 
+  - **Call period end:** when the call period ends (date/time), may be empty if indefinite
+
 A market can be in Auction Mode for a number of reasons:
 - At market creation, markets will start in an [opening auction](0026-auctions.md#auction-period-at-market-creation), as a price discovery mechanism
 - A market can be a [Frequent Batch Auction](0026-auctions.md#frequent-batch-auction), rather than continuous trading
 - Due to [price monitoring](./0032-price-monitoring.md) triggering a price discovery auction.
 
 How markets operate during auction mode is a separate specification: [0026 - Auctions](0026-auctions.md)
+
 
 ## Tradable instrument
 
@@ -69,7 +74,7 @@ Data:
 
 ## Instrument
 
-Uniquely and unambiguously describes something that can be traded on Vega, two identical instruments should be fungible, potentially (in future, when multiple markets per instrument are allowed) even across markets. At least initially Vega will allow a maximum of one market per instrument, but the design should allow for this to be relaxed in future when additional trading modes are added.
+Uniquely and unambiguously describes something that can be traded on Vega, two identical instruments should be fungible, potentially (in the future, when multiple markets per instrument are allowed) even across markets. At least initially Vega will allow a maximum of one market per instrument, but the design should allow for this to be relaxed in the future when additional trading modes are added.
 
 Instruments are the data structure that provides most of the metadata that allows for market discovery in addition to providing a concrete instance of a product to be traded. An instrument may also be described as a 'contract' (among other things) in trading literature and press.
 
@@ -94,23 +99,23 @@ Products will be of two types:
 Product lifecycle events:
 
 - **Cash/asset flows:** these are consumed by the settlement engine and describe a movement of a number of some asset from (-ve value) or to (+ve value) the holder of a (long position), with the size of the flow specify the quantity of the asset per unit of long volume.
-- **Maturity:** this event moves an instrument from 'active' to 'inactive' state, means that further trading is not possible, and triggers final settlement of positions and release of margin.
+- **Trading Terminated:** this event moves a market to 'Trading Terminated' state, means that further trading is not possible (see [market lifecycle spec](./0043-market-lifecycle.md)).
+- **Settlement:** this event triggers final settlement of positions and release of margin, e.g. once settlement data is received from a data source/oracle and final settlement cashflows are calculated (see [market lifecycle spec](./0043-market-lifecycle.md)).
 
 Products must expose certain data to Vega WHEN they are instantiated as an instrument by providing parameters:
-- **Settlement assets:** one or more  assets that can be involved in settlement
-- **Margin assets:** one or more  assets that may be required as margin (usually the same set as settlement assets, but not always)
+- **Settlement assets:** one or more assets that can be involved in settlement
+- **Margin assets:** one or more assets that may be required as margin (usually the same set as settlement assets, but not always)
 - **Price / quote units:** the unit in which prices (e.g. on the order book are quoted), usually but not always one of the settlement assets. Usually but not always (e.g. for bonds traded on yield, units = % return or options traded on implied volatility, units = % annualised vol) an asset (currency, commodity, etc.)
-- **Status:** e.g. Active | Matured (these are the only statuses I can think of for now)
 
 Products need to re-evaluate their logic when any of their inputs change e.g. oracle publishes a value, change in time, parameter changed etc., so Vega will need to somehow notify of that update.
 
 Data: 
 - **Product name/code/reference/instance:** to be obtained either via a specific string identifying a builtin, e.g. 'Future', 'Option' or in future smart product code OR a reference to a product (e.g. a hash of the compiled smart product) where an existing product is being reused. Stored as a reference to a built-in product instance or a 'compiled' bytecode/AST instance for the smart product language.
 - **Product specific parameters** which can be single values or streams (e.g. events from an oracle), e.g. for a future:
-  - Settlement, pricing, and margin asset
+  - Settlement and margin asset
   - Maturity date
-  - Oracle reference
-  - 'Contract' size
+  - Oracle / settlement price data reference
+  - Minimum order size
   - *Note: the specific parameters for a product are defined by the product and will vary between products, so the system needs to be flexible in this regard.* 
 
 Note: product definition for futures is out of scope for this ticket.
@@ -173,7 +178,7 @@ enum Product {
 }
 
 enum Oracle {
-  thereumEvent { contract_id: String, event: String } // totally guessed at these :-)
+  EthereumEvent { contract_id: String, event: String } // totally guessed at these :-)
   // ... more oracle types here...
 }
 
@@ -184,12 +189,13 @@ enum RiskModel {
 
 ## Example of a market in the above structure
 
-**Note:** all the naming conventions, IDs, etc. here are made up and just examples of the kind of thing that might happen.
+**Note:** all the naming conventions, IDs, etc. here are made up and just examples of the kind of thing that might happen and some fields are missing 🤷‍♀️.
 
 ```rust
 Market {
     id: "BTC/DEC18",
-    trading_mode: ContinuousTrading,
+    status: "Active",
+    trading_mode: ContinuousTrading { ... },
     tradable_instrument: TradableInstrument {
         instrument: Instrument {
             id: "Crypto/BTCUSD/Futures/Dec19", // maybe a concatenation of all the data or maybe a hash/digest
@@ -198,15 +204,24 @@ Market {
             metadata: InstrumentMetadata {
                 tags: [
                     "asset_class:fx/crypto",
-                    "product:futures"
+                    "product:futures",
+                    "underlying:BTC/USD",
+                    "fx/base: BTC",
+                    "fx/quote: USD"
                 ]
             },
             product: Future {
                 maturity: "2019-12-31",
-                oracle: EthereumEvent {
-                    contract_id: "0x0B484706fdAF3A4F24b2266446B1cb6d648E3cC1",
-                    event: "price_changed"
-                },
+                settlementPriceSource: {
+                  sourceType: "signedMessage",
+                  sourcePubkeys: ["YOUR_PUBKEY_HERE"],
+                  field: "price",
+                  dataType: "decimal",
+                  filters: [ 
+                      { "field": "feed_id", "equals": "BTCUSD/EOD" },
+                      { "field": "mark_time", "equals": "31/12/20" }
+                  ]
+                }
                 settlement_asset: "Ethereum/Ether"
             }
         },

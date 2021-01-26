@@ -1,12 +1,10 @@
 Feature name: Builtin Cash Settled Future Product
-Start date: 2019-11-03
-
 
 # Acceptance Criteria
 It must be possible to:
 - set maturity
 - set oracle, this sets the reference asset and its units 
-- calculate mark-to-market cashflows
+- calculate mark-to-market cashflow
 - calculate final settlement cashflow
 
 # Summary
