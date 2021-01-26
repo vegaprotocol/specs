@@ -32,7 +32,7 @@ message Asset {
   string symbol = 3;
   string totalSupply = 4;
   uint64 decimals = 5;
-  decimal minLPstake = 100.01; 
+  string minLPstake = 6; 
 
   oneof source {
     BuiltinAsset builtinAsset = 101;
