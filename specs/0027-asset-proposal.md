@@ -72,7 +72,7 @@ message NewAsset {
   // an minimal amount of stake to be committed 
   // by liquidity providers.
   // use the number of decimals defined by the asset.
-  uint64 minLPstake = 2;
+  string minLPstake = 2;
 }
 
 message ProposalTerms {
@@ -96,7 +96,7 @@ message ProposalTerms {
 		"changes": {
 			"contractAddress": "0xsomething"
 		},
-		"minLPStake": 10000000 // if tge asset supports 5 decimals = 100.00000
+		"minLPStake": "10000000" // if tge asset supports 5 decimals = 100.00000
 	}
 }
 ```
