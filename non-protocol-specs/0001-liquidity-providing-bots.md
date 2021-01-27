@@ -40,6 +40,7 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 - `shorteningShape`, `longeningShape` both of these are *both* sides of the book (note that the initial shape used will be the buying shape because being long is a little cheaper in position margin than being short)
 - `positionManagementSleep` e.g. 10s and `posManagementFraction` e.g. `0.1`
 - `marketPriceSteeringRate` e.g. 2 per second would be 2
+- `targetLNVol` target log-normal volatility (e.g. 0.5 for 50%),  `limitOrderDistributionParams` (a little data structure which sets the algo and params for how limits orders are generated).
 
 ### Submitting a market proposal
 The bot will read the required market proposal from a file (configuration option), decide if it has minimum LP stake in the right asset, check it's got enough vote tokens and then submit the proposal and vote for it. They will also need to submit [liquidity shapes](../specs/0038-liquidity-provision-order-type.md) but that will be treated below. 
@@ -98,7 +99,23 @@ The distance and volume should be consistent with market risk parameters (spec w
 
 ### Create markets that look real
 
-Place good till time limit orders of random duration () near the reference price consistently with the market risk parameters (again, Witold, feel like trying to come up with a formula?). 
+Place good till time limit orders of some duration near the reference price consistently with `targetLNVol` according to `limitOrderDistributionParams`. 
+
+Example:
+```
+limitOrderDistributionParams = { 
+    method = "dicreteThreeLevel"
+    gttLengh = "60s"
+    tgtTimeHorizon = "1 hour"
+    tickSize = 0.01
+    numTicksFromMid = 5
+    tgtOrdersPerSecond = 2
+    numIdentialBots = 3
+}
+```
+With the above example you can generate the correct orders using the method in the [notebook](./BotParameterCalcAndTest.ipynb) with `delta=tickSize x numTicksFromMid` and `N = 3600 x 2 / 3`.
+
+Generate the orders using the above method *but*:
 
 If the position of the bot is long *only* place sell orders. 
 
