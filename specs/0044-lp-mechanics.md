@@ -19,8 +19,8 @@ Any Vega participant can apply to market make on a market by submitting a transa
 Accepted if all of the following are true:
 - [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
 - [ ] The participant has sufficient collateral in their general account to also meet the margins required to support the orders generated from their commitment.
-- [ ] The market is in a state that accepts new liquidity provision [market lifecycle spec](./0043-market-lifecycle.md). 
-- [ ] The nominated fee amount is greater than or equal to zero and less than the maximum level set by a network parameter (1maximum-liquidity-fee-factor-level`)
+- [ ] The market is in a state that accepts new liquidity provision [market lifecycle spec](./0043-market-lifecycle.md).
+- [ ] The nominated fee amount is greater than or equal to zero and less than the maximum level set by a network parameter (`maximum-liquidity-fee-factor-level`)
 - [ ] There is a set of valid buy/sell liquidity provision orders aka "buy shape" and "sell shape" (see [MM orders spec](./0038-liquidity-provision-order-type.md)).
 
 Invalid if any of the following are true:
@@ -55,7 +55,7 @@ If the participant has sufficient collateral to cover their commitment and margi
     - [ ] Each active market has one bond account per liquidity provider, per settlement asset for that market.
     - [ ] When a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
     - [ ] A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment). 
-    Transfers to/from whe this account also occur when it is used for settlementor margin shortfall, when penalties are applied, and if the account is under-collateralised because of these uses and is subsequently topped up to the commitment amount during collateral search (see below)
+    Transfers to/from this account also occur when it is used for settlementor margin shortfall, when penalties are applied, and if the account is under-collateralised because of these uses and is subsequently topped up to the commitment amount during collateral search (see below)
     - [ ] Collateral withdrawn from this account may only be transferred to either:
       - [ ] The insurance pool of the market (in event of penalties/slashing)
       - [ ] The liquidity provider's margin account or the network's settlement account/other participant's margin acounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
@@ -127,7 +127,7 @@ When calculating fees for a trade, the size of a liquidity provider’s commitme
 
 ## Orders (buy shape/sell shape)
 
-In a market  maker proposal transaction the participant must submit a valid set of liquidity provider orders (buy shape and sell shape). Liquidity provider orders are a special order type described in the [liquidity provision orders spec](./0038-market-making-order-type.md). Validity is also defined in that spec. Note, liquidity provider participants can place regular (non liquidity provider orders) and these are considered to be contributing to them meeting their obligation, but they must also have provided the set of valid buy/sell orders as described in the [liquidity provision orders spec](./0038-market-making-order-type.md).
+In a market maker proposal transaction the participant must submit a valid set of liquidity provider orders (buy shape and sell shape). Liquidity provider orders are a special order type described in the [liquidity provision orders spec](./0038-market-making-order-type.md). Validity is also defined in that spec. Note, liquidity provider participants can place regular (non liquidity provider orders) and these are considered to be contributing to them meeting their obligation, but they must also have provided the set of valid buy/sell orders as described in the [liquidity provision orders spec](./0038-market-making-order-type.md).
 
 A liquidity provider can amend their orders by providing a new set of liquidity provision orders in the liquidity provider network transaction. If the amended orders are invalid the transaction is rejected, and the previous set of orders will be retained.
 
@@ -141,18 +141,18 @@ As pegged orders are parked during an auction are parked and not placed on the b
 
 ### Calculating liquidity from commitment
 
-Each liquidity provider supplies an amount of liquidity which is calculated from their commitment (stake) and measured in 'currency siskas' (i.e. USD siskas, ETH siskas, etc.).This is calculated by multiplying the stake by the network parameter `stake_to_ccy_siskas` as follows: 
+Each liquidity provider supplies an amount of liquidity which is calculated from their commitment (stake) and measured in 'currency siskas' (i.e. USD siskas, ETH siskas, etc.).This is calculated by multiplying the stake by the network parameter `stake_to_ccy_siskas` as follows:
 
 ```
 lp_liquidity_obligation_in_ccy_siskas = stake_to_ccy_siskas ⨉ stake.
 ```
 
-Note here "ccy" stands for "currency". Liquidity measure units are 'currency sisks', e.g. ETH or USD isksa. This is because the calculation is basically `volume ⨉ probability of trading ⨉ price of the volume` and the price of the volume is in the said currency.
+Note here "ccy" stands for "currency". Liquidity measure units are 'currency siskas', e.g. ETH or USD siskas. This is because the calculation is basically `volume ⨉ probability of trading ⨉ price of the volume` and the price of the volume is in the said currency.
 
 
 ### How liquidity is supplied
 
-When a liquidity provider commits to a market, the LP Commitment transaction includes a _buy shape_ and _sell shape_ which allow the LP to spread their liquidity provision over a number of pegged orders at varying distances from the best prices on each side of the book. These 'shapes' are used to generate pegged orders (see the [liquidity provision order type spec](./0038-liquidity-provision-order-type.md)). 
+When a liquidity provider commits to a market, the LP Commitment transaction includes a _buy shape_ and _sell shape_ which allow the LP to spread their liquidity provision over a number of pegged orders at varying distances from the best prices on each side of the book. These 'shapes' are used to generate pegged orders (see the [liquidity provision order type spec](./0038-liquidity-provision-order-type.md)).
 
 Since liquidity provider orders automatically refresh, the protocol ensures that a liquidity provider always supplies their committed liquidity as long as they have sufficient capital to meet the margin requirements of these orders.
 
@@ -172,7 +172,7 @@ Calculating the penalty:
 market-maker-bond-penalty = bond-penalty-parameter ⨉ shortfall`
 ````
 
-The above simple formula defines the amound by which the bond accouint will be 'slashed', where:
+The above simple formula defines the amount by which the bond account will be 'slashed', where:
 
 -  `bond-penalty-parameter` is a network parameter
 -  `shortfall` refers to the absolute value of the funds that the liquidity provider was unable to cover through their margin and general accounts, that are needed for settlement (mark to market or [product](./0045-product.md) driven) or to meet their margin requirements.
