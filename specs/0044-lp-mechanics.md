@@ -164,7 +164,7 @@ Since liquidity provider orders automatically refresh, the protocol ensures that
 
 ### Penalties
 
-If at any point in time, a liquidity provider has insufficient capital to meet their mark to market movements and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall. The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
+If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall. The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
 
 Calculating the penalty:
 
@@ -175,7 +175,7 @@ market-maker-bond-penalty = bond-penalty-parameter ⨉ shortfall`
 The above simple formula defines the amound by which the bond accouint will be 'slashed', where:
 
 -  `bond-penalty-parameter` is a network parameter
--  `shortfall` refers to the absolute value of the funds that the liquidity provider was unable to cover through their margin and general accounts, that are needed for mark to market settlemnt or to meet their margin requirements.
+-  `shortfall` refers to the absolute value of the funds that the liquidity provider was unable to cover through their margin and general accounts, that are needed for settlement (mark to market or [product](./0045-product.md) driven) or to meet their margin requirements.
 
 **Auctions:** if this occurs at the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will not be applied / will always be set to zero.
 
