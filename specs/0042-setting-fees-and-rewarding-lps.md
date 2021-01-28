@@ -7,6 +7,8 @@ The aim of this specification is to set out how fees on Vega are set based on co
 ## Definitions / Glossary of terms used
 - **Market value proxy window length `t_market_value_window_length`**: sets the length of the window over which we estimate the market value. This is a network parameter.  
 - **Target stake**: as defined in [target stake spec](????-target-stake.md). The amount of stake we would like LPs to commit to this market.
+- `min_LP_stake`: There is an minimum LP stake specified per asset, see [asset framework spec](0040-asset-framework.md).
+
 
 ## CALCULATING LIQUIDITY FEE FACTOR
 
@@ -107,6 +109,12 @@ From these stored quantities we can calculate, at time step `n` the following:
 Here `market_value_proxy(n)` is calculated as per Section "Calculating market value proxy".
 
 If at time step `n` liquidity provider `i` submits an order of type [0038-liquidity-provision-order-type.md](./0038-liquidity-provision-order-type.md) that requests its stake to be changed to `new_stake` then update the above values as follows:
+
+```
+if new_stake < min_LP_stake then
+    reject transaction and stop. 
+fi
+```
 
 ```
 total_stake(n+1) = sum of all but i's stake(n) + new_stake 
