@@ -199,5 +199,4 @@ Don't use any of the pseudocode above!
 - [ ] Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).
 - [ ] Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached. 
 - [ ] The repository is public from the start. 
-- [ ] Bot is called Bot Mc BotFace. 
-
+- [ ] Bot is not called Bot Mc BotFace. 
