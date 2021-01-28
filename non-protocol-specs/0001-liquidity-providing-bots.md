@@ -110,10 +110,27 @@ limitOrderDistributionParams = {
     tickSize = 0.01
     numTicksFromMid = 5
     tgtOrdersPerSecond = 2
-    numIdentialBots = 3
+    numIdenticalBots = 3
 }
 ```
 With the above example you can generate the correct orders using the method in the [notebook](./BotParameterCalcAndTest.ipynb) with `delta=tickSize x numTicksFromMid` and `N = 3600 x 2 / 3`.
+
+Another Example:
+```
+limitOrderDistributionParams = { 
+    method = "coinAndBinomial"
+    gttLengh = "60s"
+    tgtTimeHorizon = "1 hour"
+    tickSize = 0.01
+    numTicksFromMidMax = 5 // nMoves in IPython notebook
+    tgtOrdersPerSecond = 0.5 // i.e. one order every 2 seconds
+    numIdenticalBots = 10
+}
+```
+
+Again, the algorithm for choosing the parameters and generating samples is in the [notebook](./BotParameterCalcAndTest.ipynb) with `delta=tickSize x numTicksFromMid` and `N = 3600 x 0.5 / 10`.
+
+
 
 Generate the orders using the above method *but*:
 
@@ -175,4 +192,13 @@ fi
 Don't use any of the pseudocode above! 
 
 ### Acceptance criteria
+
+- [ ] Bot can submit a market proposal (optional), commit liquidity and then manage it's position as described above, see also [LP order type](../specs/0038-liquidity-provision-order-type.md).
+- [ ] Bot can connect to an existing market, submit an [LP order type](../specs/0038-liquidity-provision-order-type.md) and then manage it's position as described above.  
+- [ ] Bot can participate in an opening auction placing orders around target price (set via params, see above).
+- [ ] Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).
+- [ ] Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached. 
+- [ ] The code can be open sourced. 
+- [ ] Bot is called Bot Mc BotFace. 
+
 
