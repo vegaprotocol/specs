@@ -17,6 +17,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 - [ ] Pegged orders are not repriced and do not lose time priority when their specific reference price is unchanged, even if other peg reference prices move.
 - [ ] If the midprice is calculated to be a fraction (e.g. 102.5), it should be rounded up for a buy and rounded down for a sell.
 - [ ] The order version is not updated during a repricing
+- [ ] Pegged orders are excluded from the calculation of the BEST_BID, BEST_ASK and MID prices
 
 ## Summary
 
@@ -44,7 +45,14 @@ Pegged orders being added back into the book after being parked (either due to a
 
 When there are multiple pegged orders needing reprice, they must be repriced in order of entry (note: certain types of amend are considered amend in place and others as cancel/replace, for the cancel replace type, the entry time becomes the time of the amend, i.e. a pegged order loses its reprice ordering priority). Generally the way I’ve seen this is to maintain an ordered list of pegged orders for use in re-pricing (and parking/unparking), with new pegged orders added to the end of this list and cancel/replace amends causing the order to be removed from the list and re-added at the end.
 
-Pegged orders can be amended like normal limit orders, in such their size, reference, offset and TIF values can be amended in line with normal limit orders.
+Pegged orders can be amended like normal limit orders, in such their size, reference, offset and TIF values can be amended in line with normal limit orders. There are restrictions on the amendable values for references due to some combinations of reference and order side being incompatible.
+
+| Original Reference |   BEST_BID   |   BEST_ASK   |   MID   |
+|--------------------|--------------|--------------|---------|
+| BEST_BID           | N/A          | Not allowed  | Allowed |
+| BEST_ASK           | Not allowed  | N/A          | Allowed |
+| MID (for a sell)   | Not allowed  | Allowed      | N/A     |
+| MID (for a buy)    | Allowed      | Not allowed  | N/A     |
 
 
 # Reference-level explanation

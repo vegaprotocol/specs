@@ -74,8 +74,9 @@ In this simple methodology, a linearised margin formula is used to return the ma
 
 with
 
-```maintenance_margin_long_open_position = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]```,
-```maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  ```,
+```maintenance_margin_long_open_position = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]```,
+
+```maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]  ```,
 
 where
 
@@ -85,12 +86,14 @@ and
 
 if ```open_volume > 0```  then 
 
-```slippage_per_unit =  Product.value(settlement_mark_price) - Product.value(exit_price) ```, 
+```slippage_per_unit =  Product.value(market_observable) - Product.value(exit_price) ```, 
 
 else ```slippage_per_unit = 0```.
 
 
 where 
+
+```market_observable``` = ```settlement_mark_price``` if in continuous trading and ```indicative_uncrossing_price``` if in an auction
 
 ```settlement_mark_price``` refers to the mark price most recently utilised in [mark to market settlement](./0003-mark-to-market-settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.
 
@@ -114,14 +117,15 @@ Else
 
 with 
 
-```maintenance_margin_short_open_position = max(abs(slippage_volume) * slippage_per_unit, 0) + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]```,
-```maintenance_margin_short_open_orders = abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.market_observables ]  ```,
+```maintenance_margin_short_open_position = max(abs(slippage_volume) * slippage_per_unit, 0) + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]```
+
+```maintenance_margin_short_open_orders = abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]  ```,
 
 where meanings of terms in Step 1 apply except for:
 
 ```slippage_volume =  min( open_volume, 0 ) ```,
 
-```slippage_per_unit =  -1 * (Product.value(settlement_mark_price) - Product.value(exit_price) ) ```
+```slippage_per_unit =  -1 * (Product.value(market_observable) - Product.value(exit_price) ) ```
 
 **Step 3** 
 
@@ -137,8 +141,8 @@ We are assuming that:
 
 Use the same calculation as above with the following re-defined: 
 - in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.
-- For the open position part of the margin: `Product.market_observables = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the previous value for `Product.market_observables` whatever it was (i.e. the last `indicative_uncrossing_price` or `mark_price`).
-- For the orders part of the margin: `Product.market_observables = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders. 
+- For the open position part of the margin: `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the previous value for `market_observable` whatever it was (i.e. the last `indicative_uncrossing_price` or `mark_price`).
+- For the orders part of the margin: `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders. 
 
 
 ## Scaling other margin levels
@@ -205,7 +209,7 @@ slippage_per_unit =  Product.value(previous_mark_price) - Product.value(exit_pri
 slippage_volume =  max( open_volume, 0 ) = max ( 10, 0 ) = 10
 
 
-maintenance_margin_long = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.market_observables ]  
+maintenance_margin_long = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]  
 
 = max(10 * 34, 0) +  10 * 0.1 * 144 + 4 * 0.1 * 144 =  541.6
 

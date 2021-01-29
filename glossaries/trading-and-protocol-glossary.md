@@ -245,6 +245,11 @@ The collection of live, open bids and offers for an instrument.
 ### Party
 An entity that is trading on the VEGA network.  Each order has one party who submits the order.  Each trade has two parties - a buyer and a seller.  Note that the buyer and the seller may be the same entity (unless we choose to design it otherwise).
 
+### Pegged order
+Pegged orders are limit orders where the price is specified of the form `REFERENCE +/- OFFSET`, therefore 'pegged' is a _price type_, and can be used for any limit order that is valid during continuous trading.
+
+A pegged order's price is calculated from the value of the reference price on entry to the order book. Pegged orders that are persistent will be repriced, losing time priority, _after processing any event_ which causes the `REFERENCE` price to change.
+
 ### Position resolution
 The methodology by which distressed trades are unwound through deleveraging market positions.
 
@@ -348,3 +353,10 @@ Let's assume the latest [mark price](#mark-price) is set by the last trade in th
 
 The trader has made a loss of -$140.67 across their trades.  However, this isn't locked in (realised) and the market may still move back in their favour.
 
+# V
+## Vega time
+Vega time is the current time of the chain (decided through consensus); it's based on the timestamp* agreed by the nodes.
+Vega needs validators to have a share idea of what time it is, regardless of their location or their clock being incorrect.
+Vega time is determined in Tendermint: ["Tendermint provides a deterministic, Byzantine fault-tolerant, source of time. Time in Tendermint is defined with the Time field of the block header."](https://docs.tendermint.com/master/spec/consensus/bft-time.html)
+
+*The timestamp is an integer that represents the number of seconds elapsed since January 1st 1970 (UTC).
