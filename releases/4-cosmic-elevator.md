@@ -18,7 +18,7 @@ Status of this file: WIP
 ## Console
 
 - Market discovery
-
+- Console can use web wallet
 
 ## Web Wallet
 
