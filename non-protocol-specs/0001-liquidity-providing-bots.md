@@ -43,6 +43,8 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 - `targetLNVol` target log-normal volatility (e.g. 0.5 for 50%),  `limitOrderDistributionParams` (a little data structure which sets the algo and params for how limits orders are generated).
 
 ### Submitting a market proposal
+This is only relevant if the option to submit a market proposal is enabled. 
+
 The bot will read the required market proposal from a file (configuration option), decide if it has minimum LP stake in the right asset, check it's got enough vote tokens and then submit the proposal and vote for it. They will also need to submit [liquidity shapes](../specs/0038-liquidity-provision-order-type.md) but that will be treated below. 
 To decide that it will ask Vega for `assetBalance` and `minimumLpStakeForAsset` and proceed if 
 ```
@@ -51,6 +53,7 @@ assetBalance * stakeFraction > minimumLpStakeForAsset
 It will then check whether it has enough collateral for maintaining the commitment but that will be described below as it applies below too. 
 
 ### Serving as a liquidity provider for a market
+This section is only relevant if: a) the option to act as a liquidity provider is selected or b) the bot submitted a new market proposal as this needs a minimum liquidity commitment [LP mechanics](../specs/0044-lp-mechanics.md ). 
 
 Step 1. decide what current price is. 
 ``` 
@@ -93,11 +96,13 @@ fi
 ```
 
 ### Participate in an opening auction 
+This section is only relevant if the option to participate in an opening auction is selected and the relevant market given by the market ID is still in an opening auction.
 
 If the bot has `currentPrice` then it should place  buy / sell limit orders (good till time with duration a bit longer than opening auction length) in the auction at random distance and volume away from `currentPrice` up to total `auctionVolume`. 
 The distance and volume should be consistent with market risk parameters (spec work for later, Witold, do you feel like coming up with a formula?)
 
 ### Create markets that look real
+This section is only relevant if the bot is configured with a price source providing a reference price.
 
 Place good till time limit orders of some duration near the reference price consistently with `targetLNVol` according to `limitOrderDistributionParams`. 
 
