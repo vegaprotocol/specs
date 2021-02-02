@@ -32,7 +32,7 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 - vega Wallet credentials 
 - market proposal file
 - market ID (the market to engage with), can come from proposal above
-- reference price source (optional), it is assumed that this is updated in real time and let's discuss this it may be best if this is provided by an independent bot to keep things simple here. So in particular if a price source has API time limits then the bot accessing the price source should be the one making up random price moves to fill the time, *not* the bot we are specc'ing here.
+- reference price source (optional), it is assumed that this is updated in real time. provided by an independent process / bot to keep things simple here. So in particular if a price source has API time limits then a separate bot / process should be accessing the price source and making up random price moves to fill the time(*) and , *not* the bot we are specifying here.
 - `expectedMarkPrice` (optional, can be from the reference price above). This will be used in markets that don't yet have mark price to calculate margin cost of orders meeting liquidity requirement.
 - `auctionVolume`
 - `maxLong` and `maxShort` position limits and `posManagementFraction` controlling size of market order used to manage position
@@ -41,6 +41,8 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 - `positionManagementSleep` e.g. 10s and `posManagementFraction` e.g. `0.1`
 - `marketPriceSteeringRate` e.g. 2 per second would be 2
 - `targetLNVol` target log-normal volatility (e.g. 0.5 for 50%),  `limitOrderDistributionParams` (a little data structure which sets the algo and params for how limits orders are generated).
+
+(*) This separate process will then also need to use correct distributions to make the price moves look plausible. 
 
 ### Submitting a market proposal
 This is only relevant if the option to submit a market proposal is enabled. 
