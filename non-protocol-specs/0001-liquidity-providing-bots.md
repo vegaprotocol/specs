@@ -14,9 +14,9 @@ The downside is that if the bot is "unlucky" they can run out of even large amou
 
 From Flamenco Tavern onvards any market on Vega will need a committed liquidity provider, see [LP mechanics spec](../specs/0044-lp-mechanics.md) to function. See also [LP order type spec](../specs/0038-liquidity-provision-order-type.md). 
 
-If a feature marked "optional" then the bot can be configured in such a way that it is not providing this functionality but still doing other tasks.
+If a feature is marked as "optional" then the bot can be configured in such a way that it is not providing this functionality but still doing other tasks.
 The aim of this spec is bots that
-1. submits a market proposal (optional) or connects to an existing market
+1. submit a market proposal (optional) or connects to an existing market
 1. serve as a liquidity provider for the market by submitting the [LP order type](../specs/0038-liquidity-provision-order-type.md) (optional).
 1. participate in an opening auction (optional)
 1. create markets that look real with more-or-less correct price by placing limit orders that "steer" the price up-or-down as appropriate (optional)
