@@ -25,8 +25,11 @@
   - Validator rewards (and delegator rewards)
   - Vega interacting with the Tendermint validator power
   - Quality of Life improvements for node runners (_[VIP-1](https://github.com/vegaprotocol/VIPs/pull/1))_
- - Refactors
  - Expanded spam protection
+
+### Refactors
+- API server split out from the core
+- ...
 
 ### Limits / Training wheels (refine after January workshop)
  - Max (lifetime) deposit or maximum balance per party (including margin). This may be different for liquidity providers.
