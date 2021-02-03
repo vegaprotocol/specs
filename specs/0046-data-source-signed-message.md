@@ -14,22 +14,21 @@ For instance, the Coinbase oracle API provides a stream of signed messages for m
 
 Note: With this type of oracle there’s no incentive in the Vega data source system, you’re trusting the keyholder(s) and any modifiers or verification applied through the [data source framework](./0045-data-sourcing.md) at settlement.
 
-*NOTE: This is the only external oracle available initially in Vega, and initially requires only one of the specified keys to sign and submit the data transaction. This means that initially it will only be possible to construct external oracles on Vega in which one or more third party entities/systems must be trusted. This will change with modifiers that allow combinations of data sources, verification of data stream via governance votes, and data sources that birdge to events included on other blockchains.**
+*NOTE: This is the only external oracle available initially in Vega, and initially requires only one of the specified keys to sign and submit the data transaction. This means that initially it will only be possible to construct external oracles on Vega in which one or more third party entities/systems must be trusted. This will change with modifiers that allow combinations of data sources, verification of data stream via governance votes, and data sources that birdge to events included on other blockchains.*
 
 
 ## Defining the data source
-
 
 ### Parameters 
 
 A data source must define:
 
-- Public keys (and key algorithm to be used?) that can sign and submit values for this oracle
-- Type of data to be supplied in the transaction (key/value or OpenOracle / 'ABI encoded')
+- Public keys (and key algorithm to be used if required) that can sign and submit values for this oracle
+- Type of data to be supplied in the transaction. Initially we should support the following types:
+    - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main oracle spec (keys are strings) 
+    - ABI encoded encoded data. Specifically, we want to be able to support at least the OpenOracle standard by this method 
 
-A data source may also define a `select` parameter (see overall [data sourcing spec](./0045-data-sourcing.md) for details) to emit only a single field. Note that `select` should NOT be used on the signed message data source definition if other fields need to be used by a filter, aggregation, etc. and instead should be applied to the filtered data.
-
-Note: that as transactions provide multiple values and many use cases call for only one value, a [filter](./0047-data-source-filter.md) is likely to be needed to extract the required value.
+Note: that as a public key may provide many messages, a [filter](./0047-data-source-filter.md) is likely to be needed to extract the required message, and a field select would be used to extract the required field ('price' or 'temperature', etc.)
 
 
 ### Examples:
@@ -38,7 +37,7 @@ Data source for a public key that will only send one transaction containing a pr
 
 ```
 // emits 1503.42 if 0xBLAHBLAH submits { ETHUSD: 1503.42, BTCUSD: 80123.45 } 
-SignedMessage = { select='ETHUSD', pubkey=0xBLAHBLAH }
+select { field: 'ETHUSD', data: signed_message: { pubkey=0xBLAHBLAH } }
 ```
 
 Data source for a public key that will send multiple transactions containing prices for several markets and must be [filtered](./0047-data-source-filter.md):
@@ -47,10 +46,15 @@ Data source for a public key that will send multiple transactions containing pri
 // emits 80123.45 if 0xBLAHBLAH submits:
 // { ticker='ETHUSD', price=1503.42 } 
 // then { ticker='BTCUSD', price=80123.45 } 
-Filter { 
-    select='price', 
-    SignedMessage = { pubkey=0xBLAHBLAH }, 
-    filters=[ Equal { key='ticker', value=''BTCUSD } ]
+
+select { 
+  field: 'price', 
+  data: filter {
+    filters: [ equal { key: 'ticker', value: 'BTCUSD' } ]
+    data: signed_message { 
+    pubkey=0xBLAHBLAH 
+  }, 
+}
 ```
 
 
@@ -75,18 +79,7 @@ SubmitData {
 // or
 
 SubmitData {
-   // TODO: schema for ABI encoded / OpenOracle data
-}
-```
-
-### Example
-
-```
-SubmitData {
-    feed_id: 'USDETH'
-    mark_time: 31/12/2021 23:59:59
-    price: 2109.5
-    volume: 100,000
+   << ABI ENCODED DATA >>
 }
 ```
 
@@ -96,8 +89,6 @@ SubmitData {
 If data is supplied in a signed message but no active data source (see [data sourcing framework](./0045-data-sourcing.md) section on keeping track of data sources) matches the received message i.e. the pubkey does not exist on any defined data source or in all cases where it is referenced, the message is rejected by a filter, the transaction can be ignored.
 
 Where possible, this should be done before the transaction is included in a block.
-
-
 
 
 ### Criteria
