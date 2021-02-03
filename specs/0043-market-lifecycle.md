@@ -237,5 +237,6 @@ Once the required data to calculate the settlement cashflows is available for an
 - During the transition into this state:
   - All final settlement cashflows are calculated and applied (settled) 
   - Margins are trannsferred back to general accounts
-  - Insurance pool funds are redistributed
+  - All insurance pool funds are redistributed or moved to a network wide insurance fund account
+  - All fees are distributed (after a delay/at the next relevant epoch if needed - this means the market may continue to need to be "tracked" by the core until this step is complete)
 - Market is over and can be removed from core data, nothing happens after the final settlement above is complete.
