@@ -101,12 +101,14 @@ This would emit just the value of the price field, i.e.
 ## 6. Types of data source
 
 The following data sources have been defined:
-1. Internal basic data sources (Vega time, direct value) [TODO: link]
+1. [Internal basic data sources](./0048-data-source-internal.md)
 1. [signed message](./0046-data-source-signed-message.md)
 1. [Filters](./0047-data-source-filter.md) (exclude certain events based on conditions and boolean logic against the fields on the data such as equals, simple comparisons). An MVP of this functionality is needed to allow signed message data sources to be practical, more complex filters are included in the "future work" section below.
 
-Future:
+Future (needed sooner than the others listed in 9 below)
 1. Ethereum oracles (events, contract read methods)
+1. Repeating time triggers
+1. Vega market data (i.e. prices from other markets on Vega)
 
 
 ## 7. Tracking active data sources
@@ -130,7 +132,8 @@ APIs should be available to:
 The following are expected to be implemented in future.
 
 a) New base data source types:
-1. Internal market parameters and data
+1. Internal market parameters
+1. Internal market data (prices)
 1. Internal network parameters and metrics
 1. Signed or validator verified HTTPS endpoints
 1. Other blockchains that we bridge to
