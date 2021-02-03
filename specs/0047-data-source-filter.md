@@ -39,6 +39,23 @@ gives:
 
 Unlike the first example, this would be useful for trigger final settlement of a futures market. 
 
+Note that to extract the price value, this would need to be wrapped in a 'select' data source (see [Data Sourcing main spec](./0045-data-sourcing.md)) that specifies the field of interest ('price', here), i.e.:
+
+```
+DATA_SOURCE = select {
+	field: 'price'
+	data: filter { 
+		data: SignedMessage{ pubkey=0xA45e...d6 }, 
+		filters: [
+	    equal { key: 'ticker', value: 'TSLA' },
+	    equal { key: 'timestamp', value: '2021-12-31T23:59:59Z' }
+		]
+	}
+}
+
+gives: 694.20
+```
+
 
 ## Specifiying a filtered data source
 
@@ -46,7 +63,6 @@ To specify a filtered data source the following parameters can be specified:
 
 - `data`: (required) another data source definition defining the input data
 - `filters`: (required) a list of _at least one_ filter to apply to the data
-- `select`: (optional) key/field name to emit from data passing the filter
 
 
 ### Parameter: data
@@ -67,28 +83,11 @@ Filter types:
 - Less/LessOrEqual: `GreaterOrEqual { key='timestamp', value='2021-12-31T23:59:59' }`
 
 
-### Parameter: select
-
-Once data is filtered it is often necessary to select a single field, for instance to supply a settlement price. This is done by specifying a select value (note select is a standard operation available for all data sources that can return key/value pairs).
-
-To continue the example above:
-
-```
-DATA_SOURCE = Filter { select='price', data=SignedMessage{ pubkey=0xA45e...d6 }, filters=[
-	Equals { key='ticker', value='TSLA' },
-	Equals { key='timestamp', value='2021-12-31T23:59:59Z' }
-]}
-
-gives: 694.20
-```
-
-
 ## Accepting/rejecting filtered data
 
 Data that does not pass all fitlers can be ignored. Ideally this would be done before accepting the transaction into a block, this would mean that for a configured pubkey that may be submitting many transactions to a node, Vega would automatically choose to accept only the specific messages that will be processed by a product or some other part of the system.
 
 To be clear, this also means that if the input data is the wrong "shape" or type to allow the defined filters to be applied to it, it will also be rejected. For instance if a ticker or timestamp field that is being filtered on is not present, the data does not pass the filter.
-
 
 
 ## Acceptance criteria
