@@ -3,7 +3,8 @@
 This spec outlines how to measure how much stake we want committed to a market relative to what is happening on the market (currently open interest). 
 The target stake is a calculated quantity, utilised by various mechanisms in the protocol:
 
-- If the LPs total committed stake is less than c_1 x `target_stake` we trigger liquidity auction. See [Liquidity Monitoring](./0035-liquidity-monitoring.md). Note that there is a one-to-one correspondence between the amount of stake LPs committed and the supplied liquidity.
+- If the LPs total committed stake is less than c_1 x `target_stake` we trigger liquidity auction. See [Liquidity Monitoring](./0035-liquidity-monitoring.md). Note that there is a one-to-one correspondence between the amount of stake LPs committed and the supplied liquidity. 
+The parameter c_1 is a network parameter defined in the [liquidity Monitoring](./0035-liquidity-monitoring.md) spec.
 - It is used to set the fee factor for the LPs: see [Setting fees and rewarding LPs](0042-setting-fees-and-rewarding-lps.md).
 
 ## Definitions / Parameters used
