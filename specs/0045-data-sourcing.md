@@ -15,13 +15,13 @@ a) The goals of Vega Protocol with regards to data sourcing are:
 b) Things that are explicitly NOT goals of the data sourcing framework at this time:
 
 1. Calculations or processing of data other than selecting the value of a specific field and filtering events in the data stream are out of scope.
-1. Processing arbitrary message formats is out-of-scope. Each reqiured format should be specified explicitly. For instance we may spceify that "Vega native protobuf message of key/value pairs" or "ABI encoded data in the OpenOracle format" must be valid data (and there may be more than one required format), but do not require general consumption of arbitrary data.
+1. Processing arbitrary message formats is out-of-scope. Each required format should be specified explicitly. For instance we may specify that "Vega native protobuf message of key/value pairs" or "ABI encoded data in the OpenOracle format" must be valid data (and there may be more than one required format), but do not require general consumption of arbitrary data.
 1. Whilst we do need to build a framework that will be *extensible* with new sources and transformation/aggregation options, and *composable* by combining options, we are not aiming to build a large library of such features for unproven use cases initially. The MVP can be built and will be very useful with a small number of features.
 
 
 Note that this approach means:
 
-1. Vega will not integrate directly with specific oracle/data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles and standards (so that oracles implementing these standards will hopefully be compatibe with little or no work).
+1. Vega will not integrate directly with specific oracle/data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles and standards (so that oracles implementing these standards will hopefully be compatible with little or no work).
 1. External data sources must be able to provide a measure of finality that is either definitive or a configurable threshold on a probabilistic measure (‘upstream finality’).
 1. Once upstream finality is achieved, Vega may in future provide optional mechanisms for querying, verification or dispute resolution that are independent of the source. These would be composable steps that could be added to any source.
 1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each. 
@@ -37,7 +37,7 @@ Data sources will be specified by providing:
 
 1. Type of data source (signed message, internal Vega market data, date/time, Ethereum, etc.)
 1. Data type (e.g. float for a price) - this must be compatible with the usage of the data source (if it is a settlement price, a numeric value would be required; for a trading termination trigger which consumes no data then any data type, etc.). Note that it is possible to have more than one "compatible" type, for instance it might be that a number could be a string or a raw numeric value in a JSON data source.
-1. Data source specific detailss (for signed message, public key of sender; for Ethereum, contract address, method name; etc.)
+1. Data source specific details (for signed message, public key of sender; for Ethereum, contract address, method name; etc.)
 
 Data sources may refer to other data sources, for example:
 1. A data source that takes a source of structured data records as input and emits only the value of a named field (e.g. to return "BTCUSD_PRICE" from a record containing many prices, for instance)
@@ -51,7 +51,7 @@ NB: the above could be composed, so filter the stream and then select a field.
 When defining a data source, the specification for that data source must describe:
 1. What parameters (input data) are required to create a data source of that type
 1. How the data source interprets those parameters to emit one or more values
-1. Any additional requirements needed for the data source to work (such as external "bridge" infrastrcuture to other blockchains)
+1. Any additional requirements needed for the data source to work (such as external "bridge" infrastructure to other blockchains)
 
 
 ## 4. Data types
@@ -74,7 +74,7 @@ In future there will likely be other types.
 
 ### Type checking
 
-The context in which the data source is used can determine the type of data required to be received. Data sources that emit data of an incorrect type to a defined data source should trigger an event or log of some sort (the type may depend if this is detected within processing of a block or before accepting a tx). If the error is detected synchronously on submisission, the error message returned by the node should explicitly detail the issue (i.e. what mismatched, how, and in what part of what data source definition it occurred).
+The context in which the data source is used can determine the type of data required to be received. Data sources that emit data of an incorrect type to a defined data source should trigger an event or log of some sort (the type may depend if this is detected within processing of a block or before accepting a tx). If the error is detected synchronously on submission, the error message returned by the node should explicitly detail the issue (i.e. what mismatched, how, and in what part of what data source definition it occurred).
 
 For [futures](./0016-builtin-future.md) the data type expected will  be a number ("price"/quote) for settlement, and any event for the trading terminated trigger. For filtered data, the input data source can be any type and the output must be the type required by the part of the system using the data source.
 

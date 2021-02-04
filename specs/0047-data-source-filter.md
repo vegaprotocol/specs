@@ -57,7 +57,7 @@ gives: 694.20
 ```
 
 
-## Specifiying a filtered data source
+## Specifying a filtered data source
 
 To specify a filtered data source the following parameters can be specified:
 
@@ -85,7 +85,7 @@ Filter types:
 
 ## Accepting/rejecting filtered data
 
-Data that does not pass all fitlers can be ignored. Ideally this would be done before accepting the transaction into a block, this would mean that for a configured pubkey that may be submitting many transactions to a node, Vega would automatically choose to accept only the specific messages that will be processed by a product or some other part of the system.
+Data that does not pass all filters can be ignored. Ideally this would be done before accepting the transaction into a block, this would mean that for a configured pubkey that may be submitting many transactions to a node, Vega would automatically choose to accept only the specific messages that will be processed by a product or some other part of the system.
 
 To be clear, this also means that if the input data is the wrong "shape" or type to allow the defined filters to be applied to it, it will also be rejected. For instance if a ticker or timestamp field that is being filtered on is not present, the data does not pass the filter.
 
