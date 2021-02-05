@@ -146,6 +146,10 @@ b) Composable modifiers/combinators for data sources:
 1. Calculations (i.e. simple maths/stats plus access to quant library functions, product valuation function, including reference to product parameters or arbitrary other data sources)
 1. Additional filter conditions
 
+In future, we would therefore expect arbitrary compositions of these features to allow market designers to design robust and useful data sources. An visual example of a data source "pipeline" / definition that might eventually be used is below:
+
+![dta source pipeline example](./data-source-diagram.png)
+
 
 ## Examples
 
