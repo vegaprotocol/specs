@@ -148,7 +148,7 @@ b) Composable modifiers/combinators for data sources:
 
 In future, we would therefore expect arbitrary compositions of these features to allow market designers to design robust and useful data sources. An visual example of a data source "pipeline" / definition that might eventually be used is below:
 
-![dta source pipeline example](./data-source-diagram.png)
+![dta source pipeline example](./data-sources.png)
 
 
 ## Examples
