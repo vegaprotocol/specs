@@ -23,7 +23,7 @@ The network will translate these shapes into order book volume by creating an or
 
 Each entry must specify:
 
-1. **Liquidity proportion:** the relative proportion of the commitment to be allocated at a price level. Note, the network will normalise the liquidity proportions of the refined order set (see below). This must be strictly positive number.
+1. **Liquidity proportion:** the relative proportion of the commitment to be allocated at a price level. Note, the network will normalise the liquidity proportions of the refined order set (see below). This must be a strictly positive number.
 
 2. A **price peg:** , as per normal [pegged orders](), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. 
 
@@ -36,8 +36,8 @@ Buy-shape: {
 
 # Example 1 with values
 Buy-shape: {
-  buy-entry-1: [2, [best-offer, -10]],
-  buy-entry-2: [13, [best-offer, -11]],
+  buy-entry-1: [2, [best-bid, -10]],
+  buy-entry-2: [13, [best-bid, -11]],
 }
 
 ```
@@ -54,7 +54,7 @@ Steps:
 
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-lp-mechanics.md).
 
-1. Subtract the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liquidity-measure.ipynb)). If you end up with 0 or negative number, stop, you are done.
+1. Subtract from the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liquidity-measure.ipynb)). If you end up with 0 or a negative number, stop, you are done.
 
 1. Using the adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the remaining entries in the buy / sell shape (for clarity, this does not include any other persistent orders that the market maker has).
 
@@ -91,7 +91,7 @@ Example:
 best-bid-on-order-book = 103
 
 shape-entry = {
-  peg: {reference: 'best-bid', units-from-ref: 2}, 
+  peg: {reference: 'best-bid', units-from-ref: -2}, 
   liquidity-normalised-proportion-order: 0.32
 }
 
