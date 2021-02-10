@@ -7,7 +7,7 @@
 ## Core
 
 ### Features
-- Data Sourcing (Spec not yet merged)
+- Data Sourcing
   - Signed message data source (OpenOracle/ABI encoded, Protobuf key value?)
   - Time based trigger
   - Simple filters (<=>)
