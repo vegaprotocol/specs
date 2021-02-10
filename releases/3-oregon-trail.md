@@ -3,7 +3,6 @@
 * **Status**: Being confirmed
 * **Overview** 🤠 Feature readiness for mainnet 1️⃣
 
-
 ## Core
 
 ### Features
@@ -40,4 +39,4 @@
 - Open source block explorer
   - Backed by a database
 
-1️⃣ This doesn't mean mainnet happens immediately at the end of this release, just that the features we need for it exist
+1️⃣ This doesn't mean mainnet happens immediately at the end of this release, just that the features we need for it exist. This means that no real tokens will be used on this network. This network will still run with valueless test tokens. 
