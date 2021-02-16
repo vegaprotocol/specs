@@ -24,7 +24,7 @@ Please see the [auction spec](https://github.com/vegaprotocol/product/blob/187-a
 
 ## Note
 
-Price monitoring likely won't be the only possible trigger of auction period (liquidity monitoring - spec pending - or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
+Price monitoring likely won't be the only possible trigger of auction period ([liquidity monitoring](0035-liquidity-monitoring.md) or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
 
 Likewise, pre-processing transactions will be needed as part of the [fees spec](https://github.com/vegaprotocol/product/blob/WIP-fees-spec/specs/0029-fees.md), hence it should be implemented in such a way that it's easy to repurpose it.
 
