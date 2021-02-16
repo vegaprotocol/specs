@@ -39,8 +39,8 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 - We need to have "atomicity" in transaction processing:
   - When we process transaction we need to check what the arrival price V<sub>t</sub> is.
   - If it results in "significant price change" event then we want the order book to maintain the state from before we started processing the transation.
-    - If the transaction is valid in auction mode then price protection auction gets triggered for a period T.
-    - If the transaction is not valid in auction mode then it gets rejected, an appropriate event gets sent and market continues in current trading mode.
+    - If the transaction is valid for auction mode then price protection auction gets triggered for a period T.
+    - If the transaction is not valid for auction mode then it gets rejected, an appropriate event gets sent and market continues in current trading mode.
 - In general we might have a list of triplets: α, τ, T specifying each trigger.
 - Once the price protection auction period finishes, the remaining triggers should be examined and if hit the auction period should be extended accordingly.
 - Then the market continues in the regular fashion.
