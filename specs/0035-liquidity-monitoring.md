@@ -34,7 +34,22 @@ total_stake < c_1 x target_stake OR there is no best_bid OR there is no best off
 ```
 Here 0 < c<sub>1</sub> < 1, to reduce the chance of another auction getting triggered soon after e.g. c<sub>1</sub> = 0.7. The parameter c<sub>1</sub> is a network parameter.
 
-Similarly to [price monitoring](0032-price-monitoring.md), the auction should be triggered pre-emptively. That is, the transaction that would have triggered the liquidity auction should be [re-]processed once auction mode is on. Please note that this transaction may be cancelled if it's type is not valid for auction, however even in that case the market should still go into the auction mode to send a signal that it requires more liquidity.
+### Increasing target stake
+
+If an incoming order would match orders on the book resulting in trades increasing `target_stake` so that liquidity auction gets triggered then:
+
+- if the incoming order would stay on the book in auction mode then auction should get triggered pre-emptively (the order doesn't get matched in market's default trading mode, market switches to auction mode and the incoming order gets added to the book once market is in auction mode).
+- if the incoming would not stay on the book in auction mode then the order gets rejected, appropriate event gets sent to signal to the market that insufficient `supplied_stake` has prevented the market from increasing the open interest and the market remain in it's default trading mode. 
+
+### Decreasing supplied stake
+
+If the commit liquidity transaction would decrease `supplied_stake` so that liquidity auction gets triggered then the liquidity provision amendment should be rejected and market should stay in it's current trading mode.
+
+If the `supplied_stake` decreases as a result of a closeout of an insolvent liquidity provider, then closeout should proceed and market should go into liquidity auction.
+
+### Removing `best_bid` or `best_offer`
+
+If an incoming order would get matched so that entire side of the order book gets consumed and `best_bid` or `best_offer` no longer exists, then the order should be allowed to go through and market should go into liquidity auction.
 
 ## Trigger for exiting the auction
 
