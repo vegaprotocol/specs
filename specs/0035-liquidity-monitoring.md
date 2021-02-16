@@ -38,18 +38,18 @@ Here 0 < c<sub>1</sub> < 1, to reduce the chance of another auction getting trig
 
 If an incoming order would match orders on the book resulting in trades increasing `target_stake` so that liquidity auction gets triggered then:
 
-- if the incoming order would stay on the book in auction mode then auction should get triggered pre-emptively (the order doesn't get matched in market's default trading mode, market switches to auction mode and the incoming order gets added to the book once market is in auction mode).
-- if the incoming would not stay on the book in auction mode then the order gets rejected, appropriate event gets sent to signal to the market that insufficient `supplied_stake` has prevented the market from increasing the open interest and the market remain in it's default trading mode. 
+- if the incoming order would stay on the book in auction mode the auction should get triggered pre-emptively (the order doesn't get matched in market's current trading mode, market switches to auction mode and the incoming order gets added to the book once market is in auction mode).
+- if the incoming would not stay on the book in auction mode then the order gets rejected, appropriate event gets sent to signal to the market that insufficient `supplied_stake` has prevented the market from increasing the open interest and the market remains in the current trading mode.
 
 ### Decreasing supplied stake
 
-If the commit liquidity transaction would decrease `supplied_stake` so that liquidity auction gets triggered then the liquidity provision amendment should be rejected and market should stay in it's current trading mode.
+If the [liquidity provision transaction would decrease](0044-lp-mechanics.md#liquidity-provider-proposes-to-amend-commitment-amount) `supplied_stake` so that liquidity auction gets triggered then the liquidity provision amendment should be rejected and market should stay in it's current trading mode.
 
 If the `supplied_stake` decreases as a result of a closeout of an insolvent liquidity provider, then closeout should proceed and market should go into liquidity auction.
 
 ### Removing `best_bid` or `best_offer`
 
-If an incoming order would get matched so that entire side of the order book gets consumed and `best_bid` or `best_offer` no longer exists, then the order should be allowed to go through and market should go into liquidity auction.
+If an incoming order would get matched so that entire side of the order book gets consumed and `best_bid` or `best_offer` no longer exists, then the order should be allowed to go through and market should go into liquidity auction after it gets matched and the resulting trades get generated.
 
 ## Trigger for exiting the auction
 
