@@ -4,14 +4,13 @@ Feature name: Dynamic Validator Set
 
 * A new validator joins the set with a given power.
 * A validator leaves the set.
-* Each time the validator set changes, the power is redistributed based on the
-validator the validators stake proportion.
+* Each time the validator set changes, the power is redistributed based on the validators stake proportion.
 * Validator set should be reflected by the [Tendermint Validators API](http://localhost:26657/validators).
 * Validator set should be stored in the persistent storage so that it can be restored upon a node recovery.
 
 # Summary
 
-The current network considers a fix number of validators and signers (see
+The current network considers a fixed number of validators and signers (see
 [Multisig Control]()?), meaning that the initial validator set (defined in the
 Genesis Block) is immutable. However, since there is an economic incentive for
 being a validator, new participants will join and old participants will leave.
@@ -22,19 +21,21 @@ As stated in the [summary](#summary) the Genesis block contains an initial set
 of validators which (may) vary over time. Since these changes are part of the
 consensus, and they change the `AppState`, they are ultimately triggered by a
 `DeliverTx` Transaction. The effect of such transaction might not happen
-immediately, but recorded and executed after a new [`epoch`](TODO: More on this)
+immediately, but recorded and executed after a new [`epoch`](TODO: More on this / link to another spec)
 happens.
 
 ## Adding a new Validator
 
-The process starts with an event from the Bridge which atests that a the
+The process starts with an event from the Bridge which attests that the
 contract (TODO: Add Reference) has been executed. Once this reaches Vega
 network the event is included in a block (via `DeliverTx`).
 
 ## Removing a Validator
 
 In this case the process starts with a Vega transaction sent by the validator
-who wants to leave the network and unstake its tokens.
+who wants to leave the network and unstake its tokens. 
+
+(TODO: Validators me also not want to leave but be required to)
 
 # Reference-Level Explanation
 The application may set the validator set during `InitChain`, and update it
