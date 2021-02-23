@@ -1,14 +1,13 @@
-Dynamic Validator Set
-
+Feature name: Dynamic Validator Set
 
 # Acceptance Criteria
 
-• A new validator joins the set with a given power.
-• A validator leaves the set.
-• Each time the validator set changes, the power is redistributed based on the
+* A new validator joins the set with a given power.
+* A validator leaves the set.
+* Each time the validator set changes, the power is redistributed based on the
 validator the validators stake proportion.
-• Validator set should be reflected by the [Tendermint Validators API](http://localhost:26657/validators).
-• Validator set should be stored in the persistent storage so that it can be restored upon a node recovery.
+* Validator set should be reflected by the [Tendermint Validators API](http://localhost:26657/validators).
+* Validator set should be stored in the persistent storage so that it can be restored upon a node recovery.
 
 # Summary
 
@@ -63,7 +62,7 @@ type Set interface {
    Remove(id Pubkey)
 
    // Iterate calls fn for each validator on the Set.
-   Iterate(fn func(id pubkey, power Decimal))
+   Iterate(fn func(id Pubkey, power Decimal))
 }
 
 // Store is a generic storage interface. It's designed to integrate well with
