@@ -12,7 +12,7 @@
   - Signed message data source (OpenOracle/ABI encoded, Protobuf key value?)
   - Time based trigger
   - Simple filters (<=>)
-- [Settlement at expiry](https://github.com/orgs/vegaprotocol/projects/69) - [[SPEC-0016](https://github.com/vegaprotocol/product/blob/master/specs/0016-product-builtin-future.md#42-final-settlement-expiry)]
+- [Settlement at expiry](https://github.com/orgs/vegaprotocol/projects/5) - [[SPEC-0016](https://github.com/vegaprotocol/product/blob/master/specs/0016-product-builtin-future.md#42-final-settlement-expiry)]
 - [Fractional order and position sizes](https://github.com/orgs/vegaprotocol/projects/69) (Needs a spec)
   - Orders and positions can be fractional with a configurable by market number of decimal places
   - Validate order sizes are a non-zero multiple of the smallest increment (i.e. )
