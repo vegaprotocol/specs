@@ -1,18 +1,19 @@
 # Oregon Trail
 
 * **Status**: Being confirmed
-* **Overview** 🤠 Feature readiness for mainnet 1️⃣.
-* **Result** A new network named Wild Westnet will be launched based on this release, which will point at Ethereum mainnet and be run with Validators none of which are controlled by the Vega team.
+* **Overview**: 🤠 Feature readiness for mainnet 1️⃣.
+* **Result**: A new network named Wild Westnet will be launched based on this release, which will point at Ethereum mainnet and be run with Validators none of which are controlled by the Vega team.
+* **Project board**: https://github.com/orgs/vegaprotocol/projects/58
 
 ## Core
 
 ### Features
-- Data Sourcing
+- [Data Sourcing](https://github.com/orgs/vegaprotocol/projects/19)
   - Signed message data source (OpenOracle/ABI encoded, Protobuf key value?)
   - Time based trigger
   - Simple filters (<=>)
-- Settlement at expiry (_[SPEC-0016](https://github.com/vegaprotocol/product/blob/master/specs/0016-product-builtin-future.md#42-final-settlement-expiry)_)
-- Fractional order and position sizes (Needs a spec)
+- [Settlement at expiry](https://github.com/orgs/vegaprotocol/projects/69) (_[SPEC-0016](https://github.com/vegaprotocol/product/blob/master/specs/0016-product-builtin-future.md#42-final-settlement-expiry)_)
+- [Fractional order and position sizes](https://github.com/orgs/vegaprotocol/projects/69) (Needs a spec)
   - Orders and positions can be fractional with a configurable by market number of decimal places
   - Validate order sizes are a non-zero multiple of the smallest increment (i.e. )
   - Positions and margin work correctly with fractional orders
@@ -20,7 +21,7 @@
 - Limited network life (No spec written)
   - How to finally settle/unwind/do withdrawals after the end
   - Migrating balances between network runs 
-- Validators (No spec written, _[Research Paper](https://github.com/vegaprotocol/research-internal/blob/master/validator_rewards/ValPol.pdf)_)
+- [Validators](https://github.com/orgs/vegaprotocol/projects/65) (No spec written, _[Research Paper](https://github.com/vegaprotocol/research-internal/blob/master/validator_rewards/ValPol.pdf)_)
   - Stake delegation
   - Validator rewards (and delegator rewards)
   - Vega interacting with the Tendermint validator power
@@ -28,7 +29,7 @@
  - Expanded spam protection
 
 ### Refactors
-- API server split out from the core
+- [API server split out from the core](https://github.com/orgs/vegaprotocol/projects/56)
 - ...
 
 ### Limits / Training wheels (refine after January workshop)
