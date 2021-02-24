@@ -18,7 +18,7 @@
   - Validate order sizes are a non-zero multiple of the smallest increment (i.e. )
   - Positions and margin work correctly with fractional orders
   - For engineeering: can be implemented with a decimal data type or uint[256?] same as for amounts
-- Limited network life (No spec written)
+- [Limited network life](https://github.com/orgs/vegaprotocol/projects/70) (No spec written)
   - How to finally settle/unwind/do withdrawals after the end
   - Migrating balances between network runs 
 - [Validators](https://github.com/orgs/vegaprotocol/projects/65) (No spec written, _[Research Paper](https://github.com/vegaprotocol/research-internal/blob/master/validator_rewards/ValPol.pdf)_)
@@ -32,7 +32,7 @@
 - [API server split out from the core](https://github.com/orgs/vegaprotocol/projects/56)
 - ...
 
-### Limits / Training wheels (refine after January workshop)
+### [Limits / Training wheels](https://github.com/orgs/vegaprotocol/projects/44) (refine after January workshop)
  - Max (lifetime) deposit or maximum balance per party (including margin). This may be different for liquidity providers.
  - Withdrawal waiting period
  - Governance to interrupt withdrawal
