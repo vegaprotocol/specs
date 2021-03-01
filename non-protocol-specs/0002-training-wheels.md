@@ -4,7 +4,6 @@
 - limits on deposits: reduce how much do we allow people to risk initially 
 - limits on withdrawals: reduce the probability that due to a bug in the system someone can drain all the asssets 
 
-### Questions: 
 - should we create limits that can be circumvented with Sybil accounts? Yes! It sends a message. 
 - how do we compare across assets? Maximum deposit is a multiple of minimum stake per asset (already in asset in framework) or constant per asset - for the life of the vega chain, changeable via governance
 
@@ -17,7 +16,6 @@
 - there is BIG RED BUTTON available to the validators that stops the bridge from processing deposits / withdrawals (and a smaller green button which can resume this by re-signing the original or a new bridge contract).  
 
 - orderly withdrawal of funds at the end of life of Vega network is in (link to TODO limited network life spec). This will cover insurance pool money too.
-
 
 
 
