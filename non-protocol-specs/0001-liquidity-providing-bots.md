@@ -153,7 +153,7 @@ Note that Vega uses worst long / short internally so orders and positions margin
 
 Repeat the following:
 ```
-positionManagementSleep = 1.0/marketPriceSteeringRate //in seconds
+// positionManagementSleep is a config param, in seconds
 
 positionManagementTimer.start()
 if (positionManagementTimer > positionManagementSleep) then 
