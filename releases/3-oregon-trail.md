@@ -26,6 +26,10 @@
   - Validator rewards (and delegator rewards)
   - Vega interacting with the Tendermint validator power
   - Quality of Life improvements for node runners (_[VIP-1](https://github.com/vegaprotocol/VIPs/pull/1))_
+- [On-chain rewards](https://github.com/vegaprotocol/research-internal/issues/197) (Research Task, no spec written)
+  - Trade mining
+  - Liquidity mining
+  - Validator mining?
  - Expanded spam protection
 
 ### Refactors
