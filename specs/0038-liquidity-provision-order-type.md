@@ -52,7 +52,7 @@ Input data:
 
 Steps:
 
-1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-lp-mechanics.md). 
+1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-lp-mechanics.md).
 
 1. Subtract from the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liquidity-measure.ipynb)). If you end up with 0 or a negative number, stop, you are done. 
 Note that the book `mid-price` must be used when calculating the probability weighted liquidity measure. 
