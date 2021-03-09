@@ -41,7 +41,7 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 ## 4. Vesting/unlock tranches and rules
 
 1. New tranches can be created at any time by the contract "owner"
-1. Each tranche has a `cliff duration` (i.e. 1 month, 4 months, immediate)
+1. Each tranche has a `cliff duration` (i.e. 1 month, 4 months, 0 = immediate)
 1. Each tranche has a `vesting duration` (i.e. 6 months, 9 months, immediate/all at once)
 1. The countdown to unlock (i.e. start of the cliff) is triggered by a manual smart contract call with a `trigger start date/time` parameter, which may be in the past or future
 1. Each tranche may be triggered with a different `trigger start date/time` and this may be set at different times for each tranche
