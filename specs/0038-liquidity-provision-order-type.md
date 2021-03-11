@@ -54,7 +54,8 @@ Steps:
 
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-lp-mechanics.md).
 
-1. Subtract from the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liquidity-measure.ipynb)). If you end up with 0 or a negative number, stop, you are done.
+1. Subtract from the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](0034-prob-weighted-liquidity-measure.ipynb)). If you end up with 0 or a negative number, stop, you are done. 
+Note that the book `mid-price` must be used when calculating the probability weighted liquidity measure. 
 
 1. Using the adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the remaining entries in the buy / sell shape (for clarity, this does not include any other persistent orders that the market maker has).
 
@@ -78,7 +79,9 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 
 #### Calculating volumes for a set of market making orders (step 6):
 
-Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). Note, if the peg reference is not the `mid-price`, then first calculate the distance from mid price.
+Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). 
+Use `mid-price` when getting the probability of trading from the risk model.
+Note, if the peg reference is not the `mid-price`, then first calculate the distance from mid price.
 
 ``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)```. 
 
