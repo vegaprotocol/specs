@@ -8,13 +8,24 @@ Start date: 2021-03-11
 - [ ] For each validator, a list of vote arrival times is available
 - [ ] After a network has been active for some minimum amount of time (say 100 blocks), statistics for vote time (mean, standard deviation, percentiles) are available for each validator
 - [ ] By looking at the above statistics, it is clear which validators (if any) are at the end of high-latency network connections.
+- [ ] If possible, also provide statistics on the point-to-point connection speeds between validators (e.g., measuring the time
+      between sending a message and receiving an ack, if that exists.
+
+Listing all voters is preferable if the API allows that reliably
+The protocol halso as a pre-vote which is interesting (ig the API gives us that data, too)
+Slowness could also come from computational overload; this might be interesting for us to know for other reasons.
 
 # Summary
 Validator nodes are located across the world, and therefore have internet connections with varying levels of latency between them.
+They also might have different levels of computational or communication ressources; while someone who is far away and thus has
+a higher latency at least contributes to diversity, someone who sits in a central place with an underpowered server is slowing everyone
+down.
 
 Tendermint consensus requires more than two thirds of validators sign pre-commit votes for a block at the same round ([ref](https://docs.tendermint.com/master/nodes/validators.html#committing-a-block)). It is of interest to gather statistics on the timing of vote submission in order to analyse over time which validators are signing and communicating their votes quickly enough to be in the first two thirds of nodes that are actively participating in consensus.
 
 As external validators participate in short-lived iterations of Testnet or early Mainnet, these statistics will help rank validators, which will inform the decision (made not by Vega but by an external organisation/foundation of some sort) on which validators are best for later long-lived iterations of Testnet and Mainnet.
+
+Also, in later versions, some form of performance evaulation will be linked to rewards.
 
 # Guide-level explanation
 Tendermint has API endpoints that provide access to performance statistics (or enough raw data from which statistics can be calculated) of validators as they participate in consensus with varying levels of latency.
