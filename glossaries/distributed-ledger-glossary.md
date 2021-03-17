@@ -1,3 +1,6 @@
+## ABI
+Application Binary Interface - A JSON representation list of a smart contract's functions and arguments. It is used by wallets or clients to produce a transaction that interacts with a contract that exists on the the Ethereum chain - mapping function calls and parameters in to a bytecode form that the [EVM](#EVM) will execute.
+
 ## Algorithm
 A generally understood set of rules and calculations for solving a particular problem.
 
@@ -30,12 +33,14 @@ Command Query Responsibility Segregation is a software [design pattern](https://
 Short for [Distributed Ledger Technology](https://en.wikipedia.org/wiki/Distributed_ledger)
 ...
 
-
 ## Erasure Coding 
 ... TODO but see [here](https://github.com/ethereum/research/wiki/A-note-on-data-availability-and-erasure-coding).
 
 ## Eventual consistency
 ...
+
+## EVM
+The Ethereum Virtual Machine. Here's a [good overview blog post](https://medium.com/mycrypto/the-ethereum-virtual-machine-how-does-it-work-9abac2b7c9e). This is the environment in which Smart Contracts are executed on-chain.
 
 ## Finality
 The point in time that a system is able to guarantee that transaction data is safely committed. Blockchain latency, then, is the time during which permanent data availability is not yet certain.
