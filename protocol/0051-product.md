@@ -16,9 +16,9 @@ Product parameters my be one of two types:
 
 * **Explicit value:** for example a number (0.1, 500, ...), date, duration, string, list of values, etc. that is specified when the Product is created along with the Instrument and Market.
 
-* **Data source reference:** this is a reference as defined in the [Data Sourcing Framework]() [TODO: reference once merged] for a value or stream of values which will be used by the Product logic.
+* **Data source reference:** this is a reference as defined in the [Data Sourcing Framework](./0045-data-sourcing.md) for a value or stream of values which will be used by the Product logic.
 
-* **Settlement asset:** settlement asset parameters may either be one of more single asset references [TODO: link asset framework], e.g. ("base_asset" and "quote_asset" or "settlement_asset" if there's just one), or in the case of a more advanced product could be a single parameter that holds a list of assets, which may or may not have a required length.
+* **Settlement asset:** settlement asset parameters may either be one of more single [asset references](./0040-asset-framework.md), e.g. ("base_asset" and "quote_asset" or "settlement_asset" if there's just one), or in the case of a more advanced product could be a single parameter that holds a list of assets, which may or may not have a required length.
 
 
 ### Changing product parameters
@@ -87,7 +87,7 @@ For products which do *not* define this, `product.value(quote)` will be used by 
 
 Some products can expire and be settled or create interim settlement cashflows that are triggered by certain events such as the passage of time and/or the receipt of data from a data source (oracle, another Vega market, etc.).
 
-Lifecycle events are triggered by receipt of data from a data source defined as a product parameter. Data sources can include internal Vega data feeds, including the time and data from other markets, as well as external (oracle) data source, see the [data sourcing framework spec]() [TODO: data sourcing spec link] for more details.
+Lifecycle events are triggered by receipt of data from a data source defined as a product parameter. Data sources can include internal Vega data feeds, including the time and data from other markets, as well as external (oracle) data source, see the [data sourcing framework spec](./0045-data-sourcing.md) for more details.
 
 A lifecycle trigger looks like this, in pseudocode:
 
