@@ -79,7 +79,7 @@ The amount of time before a system can achieve both consensus and finality; it's
 ...
 
 ## Nothing At Stake
-A theoretical problem in [Proof of Stake](#proof-of-stake) blockchains: validators can effectively break safety by voting for multiple conflicting blocks at a given block height without incurring cost for doing so. TODO: check with George: *PBFT style blockchains don't suffer from this problem because their finality properties are stronger*.
+A theoretical problem in [Proof of Stake](#proof-of-stake) blockchains: validators can effectively break safety by voting for multiple conflicting blocks at a given block height without incurring cost for doing so. 
 
 ## Oracles
 An oracle is a system that allows external data to be represented on a blockchain. If a market on Vega were to be based on the amount of rainfall in Gibraltar on a specific day, the Oracle would be the system through which the volume of rain that fell on that day was logged to Vega in a way that could be used to settle the market. This would require a trusted source of rainfall data in Gibraltar to publish the data.
@@ -93,7 +93,7 @@ There are entire protocols ([Band](https://bandprotocol.com/), [Chainlink](https
 ...
 
 ## Proof of Stake
-... TODO but see here.
+... 
 
 ## Proof of Work
 ...
