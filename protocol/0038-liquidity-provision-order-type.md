@@ -163,7 +163,7 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 - [x] Filled orders are replaced immediately to confirm to the LP commitment shapes
 
 ### LP commitment amendment
-- [x] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected
+- [x] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](0035-liquidity-monitoring.md#decreasing-supplied-stake))
 
 ### LP commitment fees
 See [Setting fees and rewarding LPs](./0042-setting-fees-and-rewarding-lps.md)
