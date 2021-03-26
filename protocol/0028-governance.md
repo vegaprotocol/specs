@@ -230,22 +230,32 @@ APIs should also exist for clients to:
 
 # Acceptance Criteria
 
-- [ ] As a user, I can create a new proposal to affect the vega network
-- [ ] As a user, I can list the open proposal on the network
+- [x] As a user, I can create a new proposal to affect the vega network
+- [x] As a user, I can list the open proposal on the network
 - [ ] As a user, I can get a list of all proposals I voted for
-- [ ] As a user, I can receive notification when a new proposal is created and may require attention.
-- [ ] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open
-- [ ] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected*
-- [ ] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it.
-- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied
+- [x] As a user, I can receive notification when a new proposal is created and may require attention.
+- [x] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open
+- [x] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected*
+- [x] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it.
+- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied
 - [ ] As the vega network, proposals that close less than 2 days from enactment are rejected as invalid
 - [ ] As the vega network, proposals that close more/less than 1 year from enactment are rejected as invalid
 
+## Governance proposal types
+### New Market proposals
+- [ ] New market proposals must contain a Liquidity Commitment
+
+### Market change proposals
+- [ ] Market change proposals can only propose a change to a single parameter
+
+### Network parameter change proposals
+- [x] Network parameter change proposals can only propose a change to a single parameter
+
 ## Using Vega governance tokens as voting weight:
-- [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens
-- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens
-- [ ] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens
-  - [ ] Only my most recent vote is counted
+- [x] As a user, I can vote for an existing proposal if I have more than 0 governance tokens
+- [x] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens
+- [x] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens
+  - [x] Only my most recent vote is counted
 - [ ] When calculating the participation rate of an auction, the participation rate of the votes takes in to account the total supply of the governance asset.
 
 ## Future criteria, once a new weighting method is introduced?
