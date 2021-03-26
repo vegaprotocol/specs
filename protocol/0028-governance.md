@@ -226,8 +226,6 @@ APIs should also exist for clients to:
  - retrieve the full voting history for a proposal including where a party voted multiple times
  - get a list of all proposals a party voted on
 
-
-
 # Acceptance Criteria
 
 - [x] As a user, I can create a new proposal to affect the vega network
