@@ -156,3 +156,17 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 
 ## Acceptance Criteria:
 - [ ] The volume generated on the book matches examples produced from https://github.com/vegaprotocol/sim/notebooks/fee_margin_examples.ipynb
+
+### LP commitment order creation
+- [ ] A liquidity provisioning order must specify orders for both sides of the book
+- [x] All orders created by an LP commitment must be pegged orders
+- [x] Filled orders are replaced immediately to confirm to the LP commitment shapes
+
+### LP commitment amendment
+- [x] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected
+
+### LP commitment fees
+See [Setting fees and rewarding LPs](./0042-setting-fees-and-rewarding-lps.md)
+
+### LP commitment at market creation
+See [Governance spec](./0028-governance.md)

@@ -214,6 +214,7 @@ When the time defined by ``liquidity_providers_fee_distribution_time_step` elaps
 
 ### SPLITTING FEES BETWEEN liquidity providers
 - [ ] The examples provided result in the given outcomes. 
-- [ ] The examples provided in a Python notebook give the same outcomes. See 
+- [ ] The examples provided in a Python notebook give the same outcomes. See [0034 Liquidity measuring](./0034-prob-weighted-liquidity-measure.ipynb)
 - [ ] All liquidity providers in the market receive a greater than zero amount of liquidity fee.
-- [ ] The total amount of liquidity fee distributed is equal to the most recent liquidity-fee-factor x notional-value-of-the-trade
+- [ ] The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-the-trade`
+- [x] Liquidity providers with a commitment of 0 will not receive a share ot the fees
