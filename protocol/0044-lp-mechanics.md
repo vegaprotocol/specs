@@ -2,6 +2,11 @@
 
 The point of liquidity provision on Vega is to incentivise people to place orders on the market that maintain liquidity on the book. This is done via a financial commitment and reward + penalty mechanics, and through the use of a special batch order type that automatically updates price/size as needed to meet the commitment and automatically refreshes its volume after trading to ensure continuous liquidity provision.
 
+Each market on Vega must have at least one committed liquidity provider (LP). 
+This is enforced when a [governance proposal to create a market is submitted](0028-governance.md#1-create-market). 
+In particular the proposal has to include [liquidity provision commitment](0038-liquidity-provision-order-type.md), 
+see also below. 
+
 Important note on wording:
 * liquidity provision / liquidity COMMITMENTs are the amount of stake a liquidity provider places as a bond on the market to earn rewards.
 * the COMMITMENT is converted to a liquidity OBLIGATION, measured in siskas.
@@ -9,7 +14,7 @@ Important note on wording:
 
 ## Commit liquidity network transaction
 
-Any Vega participant can apply to market make on a market by submitting a transaction to the network which includes the following
+Any Vega participant can apply to become a liquidity provider (LP) on a market by submitting a transaction to the network which includes the following
 
 1. Market ID
 1. COMMITMENT AMOUNT: liquidity commitment amount (specified as a unitless number that represents the amount of settlement asset of the market)
