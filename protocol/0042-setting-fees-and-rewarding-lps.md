@@ -73,7 +73,7 @@ else
     market_value_proxy = total_stake
 ```
 
-Note that trade value for fee purposes is provided by each instrument, see [fees][0024-fees.md]. For futures it's just the notional and in the examples below we will only think of futures. 
+Note that trade value for fee purposes is provided by each instrument, see [fees](./0024-fees.md). For futures it's just the notional and in the examples below we will only think of futures. 
 
 #### Example 
 Let's say `total_stake = 100`. The network parameter `t_market_value_window_length = 60s` (though in practice a more sensible value is e.g. one week).
