@@ -314,4 +314,43 @@ Feature: Test interactions between different auction types
     And the price monitoring bounds are [[1010,1030]]
     And the target stake is 3060 
     And the supplied stake is 5000
-    
+
+  Scenario: Once market is in continuous trading mode: post a GFN order that should trigger liquidity auction, check that the order gets rejected, appropriate event is sent and market remains in TRADING_MODE_CONTINUOUS
+    Given the network parameter "market.liquidity.targetstake.triggering.ratio" is "0.8"
+
+    Then traders place following liquidity provisions:
+      | trader  | market id | commitment amount | fee bid | buy shape object | sell shape object |
+      | lp1     | ETH/DEC19 |              1000 | 0.001   | "buy_shape"      | "sell_shape"      |
+
+     Then traders place following orders:
+      | trader  | market id | side | volume | price | resulting trades | type       | tif     | 
+      | trader1 | ETH/DEC19 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC |
+      | trader1 | ETH/DEC19 | buy  | 10     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+      | trader2 | ETH/DEC19 | sell | 1      | 1100  | 0                | TYPE_LIMIT | TIF_GTC |
+      | trader2 | ETH/DEC19 | sell | 10     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+
+    And the price monitoring bounds are []
+
+    Then the opening auction period for market "ETH/DEC19" ends
+    And the auction ends resulting in traded volume of "10" at a price of "1000"
+    And the trading mode for the market "ETH/DEC19" is "TRADING_MODE_CONTINUOUS"
+    And the max_oi for the market "ETH/DEC21" is "10"
+    And the mark price is "1000"
+    And the price monitoring bounds are [[990,1010]]
+    And the target stake is 1000 
+    And the supplied stake is 1000
+
+    Then traders place following orders:
+      | trader  | market id | side | volume | price | resulting trades | type       | tif     | reference |
+      | trader1 | ETH/DEC19 | buy  | 10     | 1010  | 0                | TYPE_LIMIT | TIF_GFN |
+      | trader2 | ETH/DEC19 | sell | 10     | 1010  | 0                | TYPE_LIMIT | TIF_GTC | reject-me |
+    And the order with reference "reject-me" gets rejected
+    And the event informing that non-persistent order was rejected due to violating trigger "AUCTION_TRIGGER_LIQUIDITY"  
+
+    And the auction ends resulting in traded volume of "10" at a price of "1000"
+    And the trading mode for the market "ETH/DEC19" is "TRADING_MODE_CONTINUOUS"
+    And the max_oi for the market "ETH/DEC21" is "10"
+    And the mark price is "1000"
+    And the price monitoring bounds are [[990,1010]]
+    And the target stake is 1000 
+    And the supplied stake is 1000
