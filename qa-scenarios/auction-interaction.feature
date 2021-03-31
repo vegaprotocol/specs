@@ -314,3 +314,4 @@ Feature: Test interactions between different auction types
     And the price monitoring bounds are [[1010,1030]]
     And the target stake is 3060 
     And the supplied stake is 5000
+    
