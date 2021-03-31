@@ -3,7 +3,7 @@
 
 This spec decribes the lifecycle of a market. The market lifecycle begins at acceptance of a proposal and is driven by the market's `status`. Each status and the entry and exit criteria are described below.
 
-![Life cycle diagram](specs/0043-market-lifecycle-flow-diagram.png "Life cycle diagram")
+![Life cycle diagram](0043-market-lifecycle-flow-diagram.png "Life cycle diagram")
 
 ## Market proposal and creation
 
