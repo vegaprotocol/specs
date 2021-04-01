@@ -11,7 +11,6 @@ Specification PR: https://gitlab.com/vega-protocol/product/pull/301
 - A cancellation for a party that does not match the party on the order will be rejected
 - A cancellation without a partyID will be rejected
 - Margins should be recalculated after a cancel event
-
 # Summary
 
 Orders stay on the order book until they are filled, expired or cancelled. A client can cancel orders in 3 ways, either directly given an orderID+marketID+partyID, cancel all orders for the partyID in a given market, or cancel all orders in the vega system for a given partyID. Each of these ways will remove the orders from the order book, and push out order update messages via the eventbus
