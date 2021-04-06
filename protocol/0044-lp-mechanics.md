@@ -37,6 +37,9 @@ Engineering notes:
 - check transaction, allocation margin could replace "check order, allocate margin"
 - some of these checks can happen pre consensus
 
+General notes:
+- If market is in auction mode it won't be possible to check the margin requirements for orders generated from LP commitment. If on transition from auction the funds in margin and general accounts are insufficient to cover the margin requirements associated with those orders funds in bond account should be used to cover the shortfall (with no penalty applied as outlined in the [Penalties](#penalties) section). If even the entire bond account balance is insufficient to cover those margin requirement the liquidity commitment transaction should get cancelled.
+
 
 ### Valid submission combinations:
 
@@ -174,7 +177,7 @@ Calculating the penalty:
 
 ```
 market-maker-bond-penalty = bond-penalty-parameter ⨉ shortfall`
-````
+```
 
 The above simple formula defines the amount by which the bond account will be 'slashed', where:
 
@@ -189,10 +192,15 @@ The network will:
 
 1. **If there was a shortfall and the bond account was accessed:** Transfer an amount equal to the `market-maker-bond-penalty` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
 
-1. Initiate closeout of the LPs order and/or positions as normal if their margin does not meet the minimum maintenance margin level required. (NB: this should involve no change.
+1. Initiate closeout of the LPs order and/or positions as normal if their margin does not meet the minimum maintenance margin level required. (NB: this should involve no change)
 
-1. **If the liquidity provider's orders or positions were closed out, and they are therefore no longer supplying the liquidity implied by their Commitment:** In this case the liquidity provider's Commitment size is set to zero and they are no longer a liquidity provider for fee/reward purposes, and their commitment can no longer be counted towards the supplied liquidity in the market. (From a Core perspective, it is as if the liquidity provider has exited their commitment entirely and they no longer need to be tracked as an LP.) 
+1. **If the liquidity provider's orders or positions were closed out, and they are therefore no longer supplying the liquidity implied by their Commitment:** In this case the liquidity provider's Commitment size is set to zero and they are no longer a liquidity provider for fee/reward purposes, and their commitment can no longer be counted towards the supplied liquidity in the market. (From a Core perspective, it is as if the liquidity provider has exited their commitment entirely and they no longer need to be tracked as an LP.)
 
+Note:
+
+* As mentioned above, closeout should happen as per regular trader account (with the addition of cancelling the liquidity provision and the associated LP rewards & fees consequences). So, if after cancelling all open orders (both manually maintained and the ones created automatically as part of liqudity provision commitment) the party can afford to keep the open positions sufficiently collateralised they should be left open, otherwise the positions should get liquidated.
+
+* Bond account balance should never get directly confiscated. It should only be used to cover margin shortfalls with appropriate penalty applied each time it's done. Once the funds are in margin account they should be treated as per normal rules involving that account.
 
 ### Bond account top up by collateral search
 
