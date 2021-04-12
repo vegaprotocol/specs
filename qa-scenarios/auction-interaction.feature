@@ -51,7 +51,8 @@ Feature: Test interactions between different auction types
     And the max_oi for the market "ETH/DEC21" is "10"
     And the mark price is "1000"
     And the price monitoring bounds are [[990,1010]]
-    And the target stake is 1000 
+    # target_stake = mark_price x max_oi x target_stake_scaling_factor x rf = 1000 x 10 x 1 x 0.1
+    And the target stake is 1000  
     And the supplied stake is 10000
 
   Scenario: When trying to exit opening auction liquidity monitoring is triggered due to missing best bid, hence the opening auction gets extended, the markets trading mode is TRADING_MODE_MONITORING_AUCTION and the trigger is AUCTION_TRIGGER_LIQUIDITY.
@@ -155,6 +156,8 @@ Feature: Test interactions between different auction types
     And the target stake is 1000 
     And the supplied stake is 1000
 
+    # If the order traded there'd be insufficient liquidity for the market to operate, hence the order doesn't trade
+    # and the market enters a liquidity monitoring auction
     Then traders place following orders:
       | trader  | market id | side | volume | price | resulting trades | type       | tif     | reference   |
       | trader1 | ETH/DEC19 | buy  | 10     | 1010  | 0                | TYPE_LIMIT | TIF_GTC | cancel-me-1 |
