@@ -47,7 +47,7 @@
 
 A position record is comprised of:
 
-	- Position size (net volume: positive for long positions, negative for short positions, may be less than 1)
+	- Position size, decimal (net volume: positive for long positions, negative for short positions)
 	- Net active long orders: the sum of the long volume for all the trader's active order (will always be >= 0)
 	- Net active short orders: the sum of the short volume for all the trader's active order (will always be <= 0)
 
