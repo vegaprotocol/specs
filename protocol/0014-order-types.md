@@ -68,7 +68,7 @@ Notes on scope of current version of this spec:
 | Pegged         | Y*  | Y*  | N   | N   | Y*  | N   |
 | Market         | N   | N   | N   | N   | N   | N   |
 
-\* Pegged orders will be parked during an auction, with time priority preserved<br>
+\* Pegged orders will be parked during [an auction](./0026-auctions.md), with time priority preserved<br>
 
 Further details can be found here:
 https://docs.google.com/spreadsheets/d/1kTkE7frlsVtS1YE4m4AdZjACO-mmNOZrTQj4gXGQW0I

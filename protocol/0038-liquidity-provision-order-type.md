@@ -86,7 +86,11 @@ Note, if the peg reference is not the `mid-price`, then first calculate the dist
 ``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)```. 
 
 where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-lp-mechanics.md) and `price` is the price level at which the `volume` will be placed.
+
 Note: if the resulting price for any of the entries in the buy / sell shape is outside the valid price range as provided by the price monitoring module (the min/max price that would not trigger the price monitoring auction per triggers configured in the market, see [price monitoring](./0032-price-monitoring.md#view-from-quanthttpsgithubcomvegaprotocolquant-library-side) spec for details) it should get shifted to the valid price that's furthest away from the mid for the given order-book side.
+
+Note: calculating the order volumes needs take into account Position Decimal Places and create values (which may be int64s or similar) that are the correct size and precision given the number of Position Decimal Places specified in the [Market Framework](0001-market-framework.md).
+
 
 ```
 Example: 
