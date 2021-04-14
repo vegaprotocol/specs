@@ -33,7 +33,10 @@ Pegged orders are limit orders where the price is specified of the form `REFEREN
 
 When a party submits a new pegged order, only a LIMIT order is accepted. The party also specifies the reference price to which the order will be priced along with an offset to apply to this price. The reference price is looked up from the live market and the final price is calculated and used to insert the new order. The order is placed on the book at the back of the calculated price level.
 
-Whenever the reference price changes all the pegged orders that rely on it need to be repriced. First we remove all active pegged orders from the orderbook, then we reprice them to calculate their new price. If we are unable to reprice the order it is parked. We then process each unparked order in the same time sorted way as they were received for margin and if successful we reinsert the order back into the orderbook. Pegged orders which reference a price that has not changed are untouched. 
+Whenever the reference price changes all the pegged orders that rely on it need to be repriced. First we remove all active pegged orders from the orderbook, then we reprice them to calculate their new price. If we are unable to reprice the order it is parked. 
+We then process each unparked order in the same time-priority order as they were originally submitted.
+If successful we reinsert the order back into the orderbook. 
+Pegged orders which reference a price that has not changed are untouched. 
  
 If a pegged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it is removed, the price level is removed as well.
 
