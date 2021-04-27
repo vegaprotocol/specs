@@ -80,8 +80,8 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 #### Calculating volumes for a set of market making orders (step 6):
 
 Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). 
-Use `mid-price` when getting the probability of trading from the risk model.
-Note, if the peg reference is not the `mid-price`, then first calculate the distance from mid price.
+Use `best static bid-price` or `best static ask-price` depending on which side of the book the orders are when getting the probability of trading from the risk model. 
+Note that for volume pegged between best static bid and best static ask the probability of trading is `1` as per [Quant risk model spec](0018-quant-risk-models.ipynb).
 
 ``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)```. 
 
@@ -95,7 +95,7 @@ Note: calculating the order volumes needs take into account Position Decimal Pla
 ```
 Example: 
 
-best-bid-on-order-book = 103
+best-static-bid-on-order-book = 103
 
 shape-entry = {
   peg: {reference: 'best-bid', units-from-ref: -2}, 
@@ -104,9 +104,9 @@ shape-entry = {
 
 peg-implied-price = 103 - 2 = 101
 
-mid-price-from-order-book = 105
+Call probability-of-trading function with best-static-bid-on-order-book = 105, LP-time-horizon (network parameter), peg-implied-price. 
 
-Call probability-of-trading function with current-price = 105, mm-time-horizon (network parameter), peg-implied-price. This will give probably of trading at price = 101. This can be used in the formula for volume, above.
+This will return probably of trading at price = 101. This can be used in the formula for volume, above.
 
 ```
 
