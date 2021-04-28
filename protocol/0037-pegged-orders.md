@@ -33,7 +33,12 @@ Pegged orders are limit orders where the price is specified of the form `REFEREN
 
 When a party submits a new pegged order, only a LIMIT order is accepted. The party also specifies the reference price to which the order will be priced along with an offset to apply to this price. The reference price is looked up from the live market and the final price is calculated and used to insert the new order. The order is placed on the book at the back of the calculated price level.
 
-Whenever the reference price changes all the pegged orders that rely on it need to be repriced. We run through a time sorted list of all the pegged orders that match the moved reference price and remove each order from the book, recalculate it's price and then reinsert it into the orderbook at the back of the price queue. Pegged orders which reference a price that has not changed are untouched. Following a price move margin checks take place on the positions of the parties. If a pegged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it is removed, the price level is removed as well.
+Whenever the reference price changes all the pegged orders that rely on it need to be repriced. First we remove all active pegged orders from the orderbook, then we reprice them to calculate their new price. If we are unable to reprice the order it is parked. 
+We then process each unparked order in the same time-priority order as they were originally submitted.
+If successful we reinsert the order back into the orderbook. 
+Pegged orders which reference a price that has not changed are untouched. 
+ 
+If a pegged order is to be inserted at a price level that does not currently exist, that price level is created. Likewise if a pegged order is the only order at a price level and it is removed, the price level is removed as well.
 
 Pegged orders can be GTC or GTT TIF orders with IOC and FOK being added in the second phase of pegged orders. This means they might never land on the book or they can hit the book and be cancelled at any time and in the case of GTT they can expire and be removed from the book in the same way that normal GTT orders can.
 
@@ -93,14 +98,19 @@ Each market has a slice containing all the pegged orders. New pegged orders are 
 
 When a reference price is changed we scan through the pegged orders to update them
 
-    for each item in the PeggedOrders slice
+    for each item in the PeggedOrders slice that matches the reference that has moved
     { 
-        if type is equal to the reference price change type
-        {
-            Remove order from the orderbook
-            Update the order price
-            Insert the order back into the orderbook at the back of the new price level
-        }
+        Remove order from the orderbook
+    }
+
+    for each item in the PeggedOrders slice that matches the reference that has moved
+    { 
+        Update the order price
+    }
+
+    for each item in the PeggedOrders slice that matches the reference that has moved
+    { 
+        Insert the order back into the orderbook at the back of the new price level
     }
 
 Extra functionality will be added to the expiring and cancelling steps
