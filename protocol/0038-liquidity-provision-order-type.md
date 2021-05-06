@@ -158,7 +158,7 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 
 ## Network Parameters:
 * mm-time-horizon: market making time horizon to imply probability of trading.
-* minimum-prob-of-trading-for-LP-orders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the minimum-prob-of-trading-for-LP-orders. Reasonable value `1e-8`.
+* minimum-prob-of-trading-for-LP-orders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the minimum-prob-of-trading-for-LP-orders. Reasonable value `1e-8`. For validation purposes the minimum value is `1e-15` and maximum value is `0.1`. 
 
 ## APIs:
 * Order datatype for LP orders. Any order APIs should contain these orders.
