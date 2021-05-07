@@ -8,7 +8,7 @@ An API node is a read only service that connects to a stream node (non-validator
 
 ## Guide-level explanation
 
-An API node is a stand alone executable that connects to the eventbus stream of a stream node (also called a non-validator node). It constructs any data objects from the incoming data required to provide information to the client such as user positions and market depth. It allows users to make one off requests for data such as information about a market or a particular order. It also allows subscriptions to be started in which the API node sends update messages to the client as events occur in the core. The API node is started at the same time as the stream node so that all events can be captured. The steam node has a small buffer of events that it keeps to allow the API node to query older information should it require it to build up the full local dataset required to be consistent with the core.
+An API node is a stand alone executable that connects to the eventbus stream of a stream node (also called a non-validator node). It constructs any data objects from the incoming data required to provide information to the client such as user positions and market depth. It allows users to make one off requests for data such as information about a market or a particular order. It also allows subscriptions to be started in which the API node sends update messages to the client as events occur in the core. The API node is started at the same time as the stream node so that all events can be captured. This is required for stage 1 so that the API node sees all the event messgaes and can have a complete picture of the validator node state. The steam node has a small buffer of events (several blocks/seconds) that it keeps to allow the API node to connect after the stream node comes up so that the API dataset is consistent with the core.
 
 ## Reference-level explanation
 
@@ -23,7 +23,7 @@ The API node may consist of one or more executables that subscribe to some or al
 
 ## Acceptance Criteria
 ### Stage 1
-* The API node must be a separate executable in it’s own source code repository
+* The API node must be a separate executable in it's own source code repository
 * No API related code must be left in the Core Node
 * The API node must be started within a few seconds of a newly started stream node
 * The API node must be able to handle brief network outages and disconnects
@@ -31,6 +31,7 @@ The API node may consist of one or more executables that subscribe to some or al
 * All information available from the API node must be retrievable via all of the 3 connections types (gRPC, GraphQL and REST)
 * The validator node will only accept requests for event bus subscriptions. All other API requests will be invalid.
 * The event bus stream is only available from the stream node and not the validator or API node
+* All information that is emitted from the stream node is processed by the API node (no data is lost)
 
 ### Stage 2 (for further discussion)
 * The API Node will be split into different services to allow data types to be handled more optimally using better suited tools and technologies.
