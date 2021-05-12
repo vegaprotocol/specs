@@ -79,6 +79,10 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 
 #### Calculating volumes for a set of market making orders (step 6):
 
+From the network parameter `minimum-prob-of-trading-for-LP-orders` and from `best static bid-price` we get `minPrice` from the [Quant risk model spec](0018-quant-risk-models.ipynb): the smallest price level that has probability of trading greater than or equal to `minimum-prob-of-trading-for-LP-orders`. 
+Similarly from `best static ask-price` we get `maxPrice`: the largest price level that has probability of trading greater than or equal to `minimum-prob-of-trading-for-LP-orders`. 
+Any shape entry with a peg less than `minPrice` should have the resulting volume implied at `minPrice` (instead of what the level the peg would be) while any shape entry with peg greater than `maxPrice` should have the resulting volume implied at `maxPrice`. 
+
 Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](0018-quant-risk-models.ipynb). 
 Use `best static bid-price` or `best static ask-price` depending on which side of the book the orders are when getting the probability of trading from the risk model. 
 Note that for volume pegged between best static bid and best static ask the probability of trading is `1` as per [Quant risk model spec](0018-quant-risk-models.ipynb).
@@ -154,6 +158,7 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 
 ## Network Parameters:
 * mm-time-horizon: market making time horizon to imply probability of trading.
+* minimum-prob-of-trading-for-LP-orders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the minimum-prob-of-trading-for-LP-orders. Reasonable value `1e-8`. For validation purposes the minimum value is `1e-15` and maximum value is `0.1`. 
 
 ## APIs:
 * Order datatype for LP orders. Any order APIs should contain these orders.
