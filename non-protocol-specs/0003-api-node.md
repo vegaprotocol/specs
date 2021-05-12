@@ -7,15 +7,16 @@ A DataNode is a read only service that connects to a stream node (non-validator 
 
 ## Glossary
 ### DataNode
-This executable which is responsible for accepting requests and distributing data.
+This executable which is responsible for accepting an event stream from a validator or non validator node and client requests from which it can distribute the resulting data. It supports REST, GraphQL and gRPC. It also supports the SubmitTransaction API which it forwards to the same node which it subscribes to the event stream from.
 ### Validator Node
-A core node that is part of the tendermint consensus system and processes all incoming messages to produce an event stream.
+A core node that is part of the tendermint consensus system and processes all incoming messages to produce an event stream. It exposes:
+* gRPC SubmitTransaction API
+* gRPC event stream
+* REST statistics, health and metrics
 ### Non Validator Node (Streaming Node)
-A core node that does not contribute to the tendermint consensus but processes all the tendermint messages and produces an event stream.
-
+The same as the validator node except it does not contribute to the tendermint consensus but it has the same API and event stream production.
 
 ## Guide-level explanation
-
 
 A DataNode is a stand alone executable that connects to the eventbus stream of a stream node (also called a non-validator node). It constructs any data objects from the incoming data required to provide information to the client such as user positions and market depth. It allows users to make one off requests for data such as information about a market or a particular order. It also allows subscriptions to be started in which the DataNode sends update messages to the client as events occur in the core. The DataNode is started at the same time as the stream node so that all events can be captured. This is required for stage 1 so that the DataNode sees all the event messgaes and can have a complete picture of the validator node state. The steam node has a small buffer of events (several blocks/seconds) that it keeps to allow the DataNode to connect after the stream node comes up so that the API dataset is consistent with the core.
 
