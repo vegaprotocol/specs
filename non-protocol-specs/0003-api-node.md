@@ -24,7 +24,10 @@ A DataNode is a stand alone executable that connects to the event-bus stream of 
 
 The DataNode will be developed in two stages, the first stage requires us to move the existing API code into a separate executable so that it can be built, run and tested independently of the (non-)validator nodes. The second stage is taking each data type and optimising how we create, handle and store the information. As well as adding features such as restarting the node and allowing other DataNodes to retrieve a snapshot of state so that they can start up at any point in the lifetime of a Vega network.
 
-The DataNode will consume the events sent through the event-bus stream. Messages on this stream may arrive in in non id order. It is the responsibility of the DataNode to process the messages in the correct order and to verify that all the messages have arrived and none have gone missing.
+The DataNode will consume the events sent through the event-bus stream. Messages on this stream may arrive in non id order. It is the responsibility of the DataNode to process the messages in the correct order and to verify that all the messages have arrived and none have gone missing.
+
+### Blockchain statistics
+Clients are currently able to request blockchain information via a gRPC API. As the DataNode will not have direct access to the blockchain it will need to subscribe to the gRPC stream of a Validator/Non-Validator node and then relay that information into interested clients. While the blockchain stats are only available via gRPC, the DataNode will be able to distribute the data in all three supported formats (gRPC, REST and GraphQL)
 
 ### Stage 1
 A new executable will be developed in it’s own repository that connects to a newly started stream node and requests all event bus messages. It will pass those messages onto the appropriate handlers and they will build up any data structures required to represent the information. The node will allow incoming requests from clients as well as subscriptions for setting up persistent connects that updates are sent down. This node will continue to use the Badger database to store its data as it did prior to this change. The only requests that will be handled by the (non-)validator nodes will be requests for event streams.
