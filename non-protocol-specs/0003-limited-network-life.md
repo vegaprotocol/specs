@@ -4,7 +4,7 @@ Vega networks will at least initially and perhaps always run for a limited time 
 This spec covers the necessary features to ensure this works smoothly.
 
 # Relevant network parameters
-- `markets_freeze_date` sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infnity or another way of indicating "never". 
+- `markets_freeze_date` sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infinity or another way of indicating "never". 
 - `chain_end_of_life_date` This must be `> markets_freeze_date`. At this time the chain will be shutdown.  
 - `time_elapsed_between_checkpoints` sets the time elapsed between checkpoints
 
