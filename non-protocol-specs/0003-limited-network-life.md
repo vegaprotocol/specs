@@ -22,7 +22,7 @@ This is especially important early on when rapid iteration is desirable, as the 
 
 # Overview
 There are really two main features:
-1. Create checkpoints with relevant (but minimal, basically balances) information every `time_elapsed_between_checkpoints` 
+1. Create checkpoints with relevant (but minimal, basically balances) information every `time_elapsed_between_checkpoints` and every deposit and every withdrawal request.
 1. Ability to add load a checkpoint file as part of genesis. At load time calc hash of the checkpoint file and send this through consensus to make sure we the new networks is agreeing on the state.  
 
 
@@ -31,13 +31,22 @@ Information to store:
 - All asset definitions. Insurance pool balance from the markets will be summed up per asset and balance per asset stored. 
 - On chain treasury balances.
 - Balances for all parties per asset: sum of general, margin and LP bond accounts. 
+- Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zere "signed-for-withdrawal" balances)
 - `chain_end_of_life_date`
+When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain(*). 
+
+When to create a checkpoint:
+- if `current_time - time_elapsed_between_checkpoints > time_of_last_checkpoint`
+- if there was withdrawal 
+- and if there was a deposit
 
 Information we explicitly don't try to checkpoint:
 - Positions
 - Balances in the "signed for withdrawal" account. 
 
-When a checkpoint is created, each validator should calculate its has and submit this is a transaction to the chain(*). 
+
+
+
 The checkpoint file should either be human-readable OR there should be a command line tool to convert into human readable form. 
 
 (*) This is so that non-validating parties can trust the hash being restored represnts truly the balances. 
@@ -45,6 +54,13 @@ The checkpoint file should either be human-readable OR there should be a command
 # Restoring a checkpoint
 The hash of the state file to be restored must me specified in genesis. 
 Any validator will submit a transaction containing the checkpoint file. Nodes calculate the hash, if it doesn't match what's in genesis it's ignored otherwise the state is restored. This transaction can only be accepted once per life of the chain. 
+When loading the asset definitions (which has to be done first) the network will compare the asset coming from the restore file with the genesis assets, one by one. 
+If there is an exact match on asset id:
+- either the rest of the asset definition matches exactly in which case move to next asset coming from restore file. 
+- or any of the part of the definition differ, in which case ignore the restore transaction. 
+If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then ignore the restore transaction.(*) 
+
+There should be a tool to extract all assets from the restore file so that they can be added to genesis block manually, should the validators so desire.
 
 # Taking limited network life into account 
 - Market proposals would not be accepted for markets that would live past this date/time and new deposits would be prevented after end of life date.
@@ -57,5 +73,7 @@ That is we need `markets_freeze_date > market_settlement > market_trading_termin
 # Acceptance criteria
 
 [ ] Checkpoints are created every `time_elapsed_between_checkpoints` period of time passes. 
+[ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain.
+[ ] Checkpoint is created on every deposit.
 [ ] We can launch a network with any valid checkpoint file. 
 [ ] Hash of the checkpoint file is agreed via consensus.
