@@ -6,7 +6,7 @@ This spec covers the necessary features to ensure this works smoothly.
 # Relevant network parameters
 - `markets_freeze_date` sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infinity or another way of indicating "never". 
 - `chain_end_of_life_date` This must be `> markets_freeze_date`. At this time the chain will be shutdown.  
-- `time_elapsed_between_checkpoints` sets the time elapsed between checkpoints
+- `time_elapsed_between_checkpoints` sets the minimum time elapsed between checkpoints
 
 
 # Background
@@ -23,55 +23,76 @@ This is especially important early on when rapid iteration is desirable, as the 
 # Overview
 There are really two main features:
 1. Create checkpoints with relevant (but minimal, basically balances) information every `time_elapsed_between_checkpoints` and every deposit and every withdrawal request.
-1. Ability to add load a checkpoint file as part of genesis. At load time calc hash of the checkpoint file and send this through consensus to make sure we the new networks is agreeing on the state.  
-
+1. Ability to add load a checkpoint file as part of genesis. 
+At load time calculate the hash of the checkpoint file. Send this through consensus to make sure that all the nodes in the new networks are agreeing on the state.
 
 # Creating a checkpoint
 Information to store:
+- All network parameters
 - All asset definitions. Insurance pool balance from the markets will be summed up per asset and balance per asset stored. 
 - On chain treasury balances.
 - Balances for all parties per asset: sum of general, margin and LP bond accounts. 
-- Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zere "signed-for-withdrawal" balances)
+- Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
 - `chain_end_of_life_date`
+- hash of the previous block, block number and transaction id of the block from which the snapshot is derived
 When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain(*). 
+- last block height and hash and event ID of all bridged chains (e.g. Ethereum) that the core has seen `number_of_confirmations` of the event. 
 
 When to create a checkpoint:
-- if `current_time - time_elapsed_between_checkpoints > time_of_last_checkpoint`
+- if `current_time - time_elapsed_between_checkpoints > time_of_last_full_checkpoint`
 - if there was withdrawal 
-- and if there was a deposit
+Withdrawal checkpoint can be just a delta containing the balance change + hash of previous checkpoint (either delta or full)
 
 Information we explicitly don't try to checkpoint:
 - Positions
 - Balances in the "signed for withdrawal" account. 
+- Governence proposals that haven't been enacted yet aren't stored.
 
 When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain(*). 
-The checkpoint file should either be human-readable OR there should be a command line tool to convert into human readable form. 
-
 (*) This is so that non-validating parties can trust the hash being restored represents truly the balances. 
+
+The checkpoint file should either be human-readable OR there should be a command line tool to convert into human readable form. 
 
 # Restoring a checkpoint
 The hash of the state file to be restored must me specified in genesis. 
-Any validator will submit a transaction containing the checkpoint file. Nodes calculate the hash, if it doesn't match what's in genesis it's ignored otherwise the state is restored. This transaction can only be accepted once per life of the chain. 
-When loading the asset definitions (which has to be done first) the network will compare the asset coming from the restore file with the genesis assets, one by one. 
+Any validator will submit a transaction containing the checkpoint file. Nodes verify the hash / chain of hashes to verify hash that's in genesis it's ignored otherwise the state is restored. 
+If the genesis file has a previous state hash no transactions will be processed until the restore transaction arrives and is processed. 
+
+1. Restore network parameters. 
+2. Load the asset definitions. 
+The network will compare the asset coming from the restore file with the genesis assets, one by one. 
 If there is an exact match on asset id:
 - either the rest of the asset definition matches exactly in which case move to next asset coming from restore file. 
 - or any of the part of the definition differ, in which case ignore the restore transaction. 
 If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then ignore the restore transaction.(*) 
 
+3. Replay events from bridged chains from the last event id stored in the checkpoint.
+
 There should be a tool to extract all assets from the restore file so that they can be added to genesis block manually, should the validators so desire.
 
 # Taking limited network life into account 
-- Market proposals would not be accepted for markets that would live past this date/time and new deposits would be prevented after end of life date.
-That is we need `markets_freeze_date > market_settlement > market_trading_terminated`. 
-- Participants need access to funds after network ends. This will be facilitaded both (a) the chain will run past the configured `market_trading_terminated` until `chain_end_of_life_date` so that people have time to withdraw; and (b) using restoration of balances to allow participants to withdraw or continue to trade with funds during the next iteration of the chain.
-- A governance proposal to change `markets_freeze_date` and `chain_end_of_life_date` must check that `chain_end_of_life_date > markets_freeze_date > market_settlement > market_trading_terminated`. If this is not the case the proposal should be rejected(*).
-
-(*) A cororollary to this is that if the token holders want to shorten the network life then they may have to propose changes to all markets to bring the settlement to an earlier date. 
+- Participants need access to funds after network ends. This will be facilitaded both 
+(a) the chain will run past the configured `market_trading_terminated` until `chain_end_of_life_date` so that people have time to withdraw; and 
+(b) using restoration of balances to allow participants to withdraw or continue to trade with funds during the next iteration of the chain.
+- A governance proposal to change `markets_freeze_date` and `chain_end_of_life_date` must check that `chain_end_of_life_date > markets_freeze_date`.
 
 # Acceptance criteria
 
 [ ] Checkpoints are created every `time_elapsed_between_checkpoints` period of time passes. 
 [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain.
-[ ] Checkpoint is created on every deposit.
 [ ] We can launch a network with any valid checkpoint file. 
+[ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction.
 [ ] Hash of the checkpoint file is agreed via consensus.
+[ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint.
+[ ] Test case 1 (below)
+
+## Test case 1
+A party has general account balance of 100 tUSD. 
+The party submits a withdrawal transaction for 100 tUSD. A checkpoint is immediately created. 
+The network is shut down. 
+The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+The check the following subcases
+1) If the ethereum replay says withrawal completed. The party has general account balance of 0 tUSD. The party has "signed for withdrawal" 0.
+2) If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 tUSD. The party has "signed for withdrawal" 100.
+3) If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 tUSD. 
+ 
