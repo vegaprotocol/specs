@@ -37,7 +37,7 @@ Information we explicitly don't try to checkpoint:
 - Positions
 - Balances in the "signed for withdrawal" account. 
 
-When a checkpoint is created, each validator should calculate its has and submit this is a transaction to the chain(*). 
+When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain(*). 
 The checkpoint file should either be human-readable OR there should be a command line tool to convert into human readable form. 
 
 (*) This is so that non-validating parties can trust the hash being restored represnts truly the balances. 
