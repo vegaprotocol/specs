@@ -4,7 +4,7 @@ Vega networks will at least initially and perhaps always run for a limited time 
 This spec covers the necessary features to ensure this works smoothly.
 
 # Relevant network parameters
-- `markets_freeze_date` sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infnity or another way of indicating "never". 
+- `markets_freeze_date` sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infinity or another way of indicating "never". 
 - `chain_end_of_life_date` This must be `> markets_freeze_date`. At this time the chain will be shutdown.  
 - `time_elapsed_between_checkpoints` sets the time elapsed between checkpoints
 
@@ -18,7 +18,7 @@ This is especially important early on when rapid iteration is desirable, as the 
 
 - Trading at 1000s of tx/sec generates a lot of data. Given that most instruments are non-perpetual (they expire), this gives the ability to create new markets on a new chain and naturally let the old one come to an end rather than dragging around its history forever.
 
-- Bugs, security breaches, or other issues during alpha could either take out the chain OR make it desirable to halt block production. It's important to consider what happens next if this occurss.
+- Bugs, security breaches, or other issues during alpha could either take out the chain OR make it desirable to halt block production. It's important to consider what happens next if this occurs.
 
 # Overview
 There are really two main features:
@@ -44,12 +44,10 @@ Information we explicitly don't try to checkpoint:
 - Positions
 - Balances in the "signed for withdrawal" account. 
 
-
-
-
+When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain(*). 
 The checkpoint file should either be human-readable OR there should be a command line tool to convert into human readable form. 
 
-(*) This is so that non-validating parties can trust the hash being restored represnts truly the balances. 
+(*) This is so that non-validating parties can trust the hash being restored represents truly the balances. 
 
 # Restoring a checkpoint
 The hash of the state file to be restored must me specified in genesis. 
