@@ -1,6 +1,5 @@
 # On-chain treasury - trading rewards
 
-
 ## Behaviour we want to incentivise:
 
 NOTE: trading activity for the purposes of these rewards can mean one or more of:
@@ -20,12 +19,20 @@ A participant's:
 1. use of special orders to create trading (e.g. pegged orders)
 1. contribution to increasing or decreasing open interest
 1. supplying of the orders that get filled for liquidations
-1. good behaviour - never donated to the insurance pool and the insurance pool has never been accessed to cover your losses
+1. good behaviour - never used or "donated to" insurance pool 
 
-All participant-wide (could give extra boost/bonus the prize pool?):
+Network's (could give extra boost/bonus the prize pool?):
 1. total traded notional
 1. breadth of trading across markets
 
+
+## Assumptions:
+
+[note, I can't recall if these are general principles that we will build into the on-chain treasury reward spec]
+- Rewards are calculated deterministically at a point in time for all eligible participants
+- Rewards are allocated at a point in time based on the amount of fees paid by a participant since the last time this reward was calculated. 
+- Each reward will have an allocation of tokens that is split between eligible participants according to defined rules
+- Each of the reward specifications may be active or not; set by network parameter
 
 
 ## Reward specifications
