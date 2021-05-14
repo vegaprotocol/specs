@@ -1,11 +1,28 @@
 # On-chain treasury - trading rewards
 
+## Reward framework
+
+Components of the rewards framework:
+- Onchain treasury per asset
+- Reward pools:
+  - asset
+  - reward-calculation
+  - eligible recipients
+- Recipients
+  - Vega party general
+  - market insurance pool
+- Transfer type
+
+
+
+
 ## Behaviour we want to incentivise:
 
 NOTE: trading activity for the purposes of these rewards can mean one or more of:
 1. Price taking
 1. Price making that results in a trade (seperate to liquidity commitments)
 1. Trades resulting from auctions
+
 
 ### Behaviours:
 
