@@ -39,7 +39,6 @@ Here 0 < c<sub>1</sub> < 1, to reduce the chance of another auction getting trig
 If an incoming order would match orders on the book resulting in trades increasing `target_stake` so that liquidity auction gets triggered then:
 
 - if the incoming order would stay on the book in auction mode the auction should get triggered pre-emptively (the order doesn't get matched in market's current trading mode, market switches to auction mode and the incoming order gets added to the book once market is in auction mode).
-- if the incoming would not stay on the book in auction mode then the order gets rejected, appropriate event gets sent to signal to the market that insufficient `supplied_stake` has prevented the market from increasing the open interest and the market remains in the current trading mode.
 
 ### Decreasing supplied stake
 
