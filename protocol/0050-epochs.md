@@ -50,7 +50,8 @@ Options: We could make it a system parameter how many blocks after the deadline 
  episode following the one the block is in that finalized the vote.
 
 ## Parameters 
-	Epoch length (in seconds)
+
+Epoch length (in seconds), to begin with, this will be set to 86400 seconds (24h).
 
 
 # (Un)delegation
