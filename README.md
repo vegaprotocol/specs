@@ -11,9 +11,9 @@ For peripheral things that need to be hashed out through pull requests, we have 
 where this could be useful is the design process for the Liquidity Bots, or the short-lived 'training wheels' for a
 limited mainnet.
 
-## [Releases](./releases/)
-The canonical source for what features are going in to which release. Progress on these releases is tracked on 
-[🎱 Release Board](https://github.com/orgs/vegaprotocol/projects/12).
+## [Milestones](./milestones/)
+The canonical source for what feature bundles represent major milestones in our product roadmap. Progress against these milestones is tracked on 
+[🎱 Roadmap Board](https://github.com/orgs/vegaprotocol/projects/12).
 
 ## [Glossaries](./glossaries/)
 These are quick reference points for general terminology we use. Some of the specs are really dense with trading terms 
