@@ -32,7 +32,7 @@ Analysis tasks should be prioritised by those taking the lead on specifying the 
 
 ## The specification lifecycle
 - When a specification is merged to `master`, it is ready for development and if this requires any engineering implementation, a new _implement_ ticket must be created in the [implement board](https://gitlab.com/vega-protocol/product/-/boards/1356766?&label_name[]=TASK%3A%3Aimplement). The person responsible for creating this ticket is the person who has taken the lead on the specification task. See below for further information on implementation lifecycle.
-- Scoping of specifications to releases will be done in both _spec-design_ and _implement_ tickets rather than in the specification files.
+- Scoping of specifications to milestones will be done in both _spec-design_ and _implement_ tickets rather than in the specification files.
 
 [![](https://mermaid.ink/img/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgbG9vcCBEZXNpZ25cbiAgICAgICAgU3BlY2lmaWNhdGlvbiB0YXNrLT4-TWVyZ2UgcmVxdWVzdDogV3JpdGUgc3BlY2lmaWNhdGlvblxuTWVyZ2UgcmVxdWVzdC0-PlNwZWNpZmljYXRpb24gdGFzazogSW50ZWdyYXRlIGZlZWRiYWNrICAgIFxuICAgIGVuZFxuTWVyZ2UgcmVxdWVzdC0-PkltcGxlbWVudGF0aW9uIHRhc2s6IFNjb3BlIG5leHQgcmVsZWFzZVxuICAgICAgICBNZXJnZSByZXF1ZXN0IC0tPj5NZXJnZSByZXF1ZXN0OiBDbG9zZSB0aWNrZXRcbiAgICAgICAgSW1wbGVtZW50YXRpb24gdGFzayAtLT4-SW1wbGVtZW50YXRpb24gdGFzazogTmV3IHRpY2tldCAiLCJtZXJtYWlkIjp7fSwidXBkYXRlRWRpdG9yIjpmYWxzZX0)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgbG9vcCBEZXNpZ25cbiAgICAgICAgU3BlY2lmaWNhdGlvbiB0YXNrLT4-TWVyZ2UgcmVxdWVzdDogV3JpdGUgc3BlY2lmaWNhdGlvblxuTWVyZ2UgcmVxdWVzdC0-PlNwZWNpZmljYXRpb24gdGFzazogSW50ZWdyYXRlIGZlZWRiYWNrICAgIFxuICAgIGVuZFxuTWVyZ2UgcmVxdWVzdC0-PkltcGxlbWVudGF0aW9uIHRhc2s6IFNjb3BlIG5leHQgcmVsZWFzZVxuICAgICAgICBNZXJnZSByZXF1ZXN0IC0tPj5NZXJnZSByZXF1ZXN0OiBDbG9zZSB0aWNrZXRcbiAgICAgICAgSW1wbGVtZW50YXRpb24gdGFzayAtLT4-SW1wbGVtZW50YXRpb24gdGFzazogTmV3IHRpY2tldCAiLCJtZXJtYWlkIjp7fSwidXBkYXRlRWRpdG9yIjpmYWxzZX0)
 
@@ -46,7 +46,7 @@ These issues will be prioritised on a weekly basis through a collaborative Slack
 
 The relevant team can then break the specification down in to technical tasks in their own task system.
 
-Issues should be created in the Product issue list to define a particular scope for an upcoming release. The specification should be as complete as it can be, while the issue may be a smaller piece on the way to implementing the first specification.
+Issues should be created in the Product issue list to define a particular scope for an upcoming release/milestone. The specification should be as complete as it can be, while the issue may be a smaller piece on the way to implementing the first specification.
 
 - Implementation tickets will be handled by the relevant team and linked back to the product tickets
 - At the completion of implementation, the product ticket should be closed.
