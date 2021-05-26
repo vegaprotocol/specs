@@ -8,12 +8,12 @@
 ## Core
 
 ### Features
-- [Data Sourcing](https://github.com/orgs/vegaprotocol/projects/19) - [[SPEC-0045](https://github.com/vegaprotocol/specs/blob/master/protocol/0045-data-sourcing.md)]
+- [Data Sourcing](https://github.com/orgs/vegaprotocol/projects/19) - [[SPEC-0045](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0045-data-sourcing.md)]
   - Signed message data source (OpenOracle/ABI encoded, Protobuf key value?)
   - Time based trigger
   - Simple filters (<=>)
-- [Settlement at expiry](https://github.com/orgs/vegaprotocol/projects/5) - [[SPEC-0016](https://github.com/vegaprotocol/specs/blob/protocol/specs/0016-product-builtin-future.md#42-final-settlement-expiry)]
-- [Fractional order and position sizes](https://github.com/orgs/vegaprotocol/projects/69) [[SPEC-0052](https://github.com/vegaprotocol/specs/blob/master/protocol/0052-fractional-orders-positions.md)]
+- [Settlement at expiry](https://github.com/orgs/vegaprotocol/projects/5) - [[SPEC-0016](https://github.com/vegaprotocol/specs-internal/blob/protocol/specs/0016-product-builtin-future.md#42-final-settlement-expiry)]
+- [Fractional order and position sizes](https://github.com/orgs/vegaprotocol/projects/69) [[SPEC-0052](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0052-fractional-orders-positions.md)]
   - Orders and positions can be fractional with a configurable by market number of decimal places
   - Validate order sizes are a non-zero multiple of the smallest increment (i.e. )
   - Positions and margin work correctly with fractional orders
