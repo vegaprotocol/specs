@@ -32,10 +32,10 @@ Settlement at instrument expiry is the end of a market.
 ### When does a market settle at instrument expiry
 The expiry of a market happens when an oracle publishes data that meets the filter requirements.
 1. Default trading mode/auction is happening
-2. The product's trading terminated trigger is hit, so no more trading is possible (link), market status is set to x
+2. The product's trading terminated trigger is hit, so no more trading is possible (link), [market status is set to x](./0016-product-builtin-future.md#41-termination-of-trading)
 3. Time passes
 4. An oracle event occurs that matches the oracle data spec (link)
-5. [Final cashflow is calculated](https://github.com/vegaprotocol/specs-internal/blob/settlement-at-expiry/protocol/0016-product-builtin-future.md#42-final-settlement-expiry)
+5. [Final cashflow is calculated](./0016-product-builtin-future.md#42-final-settlement-expiry)
 6. Accounts are settled: [Collection and distribution](https://github.com/vegaprotocol/specs-internal/blob/settlement-at-expiry/protocol/0003-mark-to-market-settlement.md#reference-level-explanation) as per Mark to Market settlement
 7. Insurance pool stuff is dealt with in some way
 8. Market status is now set to SETTLED
