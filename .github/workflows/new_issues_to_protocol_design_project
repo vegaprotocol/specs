@@ -1,0 +1,16 @@
+name: Auto Assign New Issues to Project(s)
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign_one_project:
+    runs-on: ubuntu-latest
+    name: Add new issues to org Protocol Design project
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.7.1
+        with:
+          project: Protocol Design
+          column: To do
+          repo-token: ${{ secrets.GH_NEW_CARD_TO_PROJECT }}
