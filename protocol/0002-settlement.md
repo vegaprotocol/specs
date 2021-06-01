@@ -32,8 +32,10 @@ Settlement at instrument expiry is the end of a market.
 ### When does a market settle at instrument expiry
 The expiry of a market happens when an oracle publishes data that meets the filter requirements.
 1. Default trading mode/auction is happening
-2. An oracle event occurs that matches the oracle data spec (link)
-3. Market moves in to 'Trading Terminated' mode (link)
+2. The product's trading terminated trigger is hit, so no more trading is possible
+3. Time passes
+4. An oracle event occurs that matches the oracle data spec (link)
+5. 
 
 
 ### Actions taken at instrument expiry
