@@ -27,7 +27,15 @@ Settlement at instrument expiry is the end of a market.
   - What fees happen at expiry (none) 
 - Insurance pool is the only account for a market. How is that transferred
   - How does this interact with any rewards
+- What happens if we're in an auction at expiry time
+- 
 ### When does a market settle at instrument expiry
+The expiry of a market happens when an oracle publishes data that meets the filter requirements.
+1. Default trading mode/auction is happening
+2. An oracle event occurs that matches the oracle data spec (link)
+3. Market moves in to 'Trading Terminated' mode (link)
+
+
 ### Actions taken at instrument expiry
 - All positions are fully closed and settled
 - All accounts related to the market are zeroed, balances being transferred elsewhere
