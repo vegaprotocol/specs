@@ -22,3 +22,12 @@ For settlement at expiry scenarios, transfers should attempt to access
 1. the insurance pool. 
 
 ## Settlement at instrument expiry
+Settlement at instrument expiry is the end of a market.
+- Fees 
+  - What fees happen at expiry (none) 
+- Insurance pool is the only account for a market. How is that transferred
+  - How does this interact with any rewards
+### Actions taken at instrument expiry
+- All positions are fully closed and settled
+- All accounts related to the market are zeroed, balances being transferred elsewhere
+- The market's status is set to x
