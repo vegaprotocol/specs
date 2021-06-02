@@ -6,17 +6,27 @@ There are certain parameters within Vega that influence the behaviour of the sys
 
 A constant (or an array of constants) in the system whose values are able to be changed by on-chain governance. Not all constants are network parameters.
 
-## Naming Convention
+A network parameter is defined by:
+* Name
+* Type
+* Value
+* Constraints
+* Governance update policy 
 
+## Name
 
-## Data Formats
+* Editable by governance
 
-Data formats available to network parameters:
+## Type
+
+Types available to network parameters:
 - JSON as string
 - string
 - number
 - Boolean
 - array of data (that meets format requirements)
+
+## Value
 
 ## Adding and removing network parameters
 
