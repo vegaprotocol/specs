@@ -28,6 +28,12 @@ Types available to network parameters:
 
 ## Value
 
+## Constraints
+
+## Governance update policy
+
+---
+
 ## Adding and removing network parameters
 
 Network parameters are only added and removed with code releases.
