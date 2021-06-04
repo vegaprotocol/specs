@@ -26,9 +26,11 @@ Settlement instructions contain information regarding the accounts from which co
 Vega executes settlement with a two step process:
 
 1. _Collecting_
+
 Vega *collects* from the margin accounts of those who, according to the settlement formula, are liable to pay collateral.  The collection instruction should first collect from a trader's margin account for the market and then the trader's general account and then the market's insurance pool.  
 
 2. _Distributing_
+
 This will result in ledger entries  being formulated ( see [collateral](./0005-collateral.md) ) which adhere to double entry accounting and record the actual transfers that occurred on the ledger.
 
 If the net amounts are what was requested, the settlement function will formulate instructions to *distribute* to the margin accounts of those whose moves have been positive according to the amount they are owed. These transfers will be requested to debit from the market's *margin* account and credit the traders who have are due to receive a "cash / asset flow" as a result of the settlement.
@@ -53,10 +55,13 @@ The [market lifecycle spec](./0043-market-lifecycle.md) provides detail on all t
 1. The market's status is set to [TRADING TERMINATED](./0043-market-lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs.
 1. An [oracle event occurs](./0045-data-sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-market-framework.md) (see also [cash settled futures spec](./0016-product-builtin-future.md)
 1. Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-product-builtin-future.md#42-final-settlement-expiry))
-1. Accounts are settled as per collection and distribution methods described above. The traders' margin accounts and LP bond accounts for these markets are no longer required.
+1. Accounts are settled as per collection and distribution methods described above.
+1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
+1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-market-insurance-pool-collateral.md)
-1. Market status is now set to [SETTLED](./0043-market-lifecycle.md)
+1. The market's insurance pool is [redistributed](./0015-market-insurance-pool-collateral.md) to the on-chain treasury for the settlement asset of the market.
+1. Market status is now set to [SETTLED](./0043-market-lifecycle.md).
+1. Now the market can be deleted.
 
 Note, this mechanism does not incur fees to traders that have open positions that are settled at expiry.
 
