@@ -14,12 +14,13 @@
 - [Positions](./0006-positions-core.md)
 - [Trading Workflow](./0008-trading-workflow.md)
 - [Market Framework](./0001-market-framework.md)
-- [Settlement](./0002-settlement.md)
-  - [Mark to market settlement](./0003-mark-to-market-settlement.md)
 - [Mark price](./0009-mark-price.md)
 - [Position resolution](./0012-position-resolution.md)
 - [Market Data](./0021-market-data-spec.md)
 - [Market depth calculation](./0039-market-depth-calculation.md)
+
+## [Settlement](./0002-settlement.md)
+- [Mark to market settlement](./0003-mark-to-market-settlement.md)
 
 ## Market protections
 - [Price monitoring](./0032-price-monitoring.md)
