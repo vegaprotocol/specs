@@ -57,14 +57,14 @@ Feature: Test liquidity provider bond slashing
       | prices.ETH.value | 100   |
     And the traders deposit on asset's general account the following amount:
       | trader  | asset | amount     |
-      | lp1     | ETH   | 10000000   |
-      | trader1 | ETH   |  1000000   |
-      | trader2 | ETH   |  1000000   |
+      | lp1     | ETH   | 100000000   |
+      | trader1 | ETH   |  10000000   |
+      | trader2 | ETH   |  10000000   |
   Scenario: first slashing scenario 
     Given the traders submit the following liquidity provision:
       | id          | party   | market id | commitment amount | fee   | order side | order reference | order proportion | order offset |
-      | commitment1 | lp1     | ETH/DEC21 | 7800000             | 0.001 | buy        | BID             | 500              | -100         |
-      | commitment1 | lp1     | ETH/DEC21 | 7800000             | 0.001 | sell       | ASK             | 500              | 100          |
+      | commitment1 | lp1     | ETH/DEC21 | 78000000             | 0.001 | buy        | BID             | 500              | -100         |
+      | commitment1 | lp1     | ETH/DEC21 | 78000000             | 0.001 | sell       | ASK             | 500              | 100          |
  
     And the traders place the following orders:
       | trader  | market id | side | volume | price | resulting trades | type       | tif     | reference  |
@@ -83,12 +83,12 @@ Feature: Test liquidity provider bond slashing
 
     And the traders should have the following account balances:
       | trader    | asset | market id | margin     | general   | bond    |
-      | lp1       | ETH   | ETH/DEC21 | 2080080    | 119920    | 7800000 |
+      | lp1       | ETH   | ETH/DEC21 | 20800080    | 1199920    | 78000000 |
 
     
     And the market data for the market "ETH/DEC21" should be:
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest   |
-      | 1000       | TRADING_MODE_CONTINUOUS | 1       | 900       | 1100      | 1000         | 7800000          | 10            |
+      | 1000       | TRADING_MODE_CONTINUOUS | 1       | 900       | 1100      | 1000         | 78000000        | 10            |
 
 
     And the traders place the following orders:
@@ -101,5 +101,5 @@ Feature: Test liquidity provider bond slashing
     # What am I missing?
     And the traders should have the following account balances:
        | trader    | asset | market id | margin     | general   | bond    |
-       | lp1       | ETH   | ETH/DEC21 | 2080080    | 119920    | 7800000 |
+       | lp1       | ETH   | ETH/DEC21 | 20800080    | 1199920    | 78000000 |
 
