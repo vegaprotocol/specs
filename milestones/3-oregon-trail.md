@@ -18,6 +18,7 @@
   - Orders and positions can be fractional with a configurable by market number of decimal places
   - Validate order sizes are a non-zero multiple of the smallest increment (i.e. )
   - Positions and margin work correctly with fractional orders
+- [On Chain Rewards](https://github.com/vegaprotocol/specs-internal/pull/517/files)
 
 ### Refactors
 - ?
