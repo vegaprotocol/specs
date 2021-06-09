@@ -20,3 +20,6 @@ The staking bridge contracts live in [vegaprotocol/staking_bridge](https://githu
   ~~              ~~
 
 ```
+
+## Accounts
+Staked assets will appear in a user's [staking account](../protocol/0013-accounts.md). As the staked tokens will be used for [governance](../protocol/0028-governance.md) in the first mainnet (aka Sweetwater), governance will need to be updated to check for staked balances as well as general account balances.
