@@ -38,8 +38,8 @@ Feature: Test liquidity provider bond slashing
     
     And the average block duration is "1"
     And the simple risk model named "simple-risk-model-1":
-      | long | short | max move up | min move down | probability of trading |
-      | 0.1  | 0.1   | 100         | -100           | 0.1                    |
+       | long | short | max move up | min move down | probability of trading |
+       | 0.1  | 0.1   | 100         | -100          | 0.1                    |
     And the log normal risk model named "log-normal-risk-model-1":
       | risk aversion | tau | mu | r   | sigma |
       | 0.000001      | 0.1 | 0  | 1.4 | -1    |
@@ -81,6 +81,11 @@ Feature: Test liquidity provider bond slashing
       | trader1          |  10    | 0              | 0            |
       | trader2          | -10    | 0              | 0            |
 
+    And the traders should have the following margin levels:
+      | trader    | market id | maintenance | search   | initial  | release  |
+      | lp1       | ETH/DEC21 | 17333400    | 19066740 | 20800080 | 24266760 |
+    
+
     And the traders should have the following account balances:
       | trader    | asset | market id | margin     | general   | bond    |
       | lp1       | ETH   | ETH/DEC21 | 20800080    | 1199920    | 78000000 |
@@ -91,15 +96,32 @@ Feature: Test liquidity provider bond slashing
       | 1000       | TRADING_MODE_CONTINUOUS | 1       | 900       | 1100      | 1000         | 78000000        | 10            |
 
 
-    And the traders place the following orders:
+    Then the traders place the following orders:
       | trader  | market id | side | volume | price | resulting trades | type       | tif     | reference  |
-      | trader1 | ETH/DEC21 | buy  | 1      | 1000   | 0                | TYPE_LIMIT | TIF_GTC | buy-ref-3  |
+      | trader1 | ETH/DEC21 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC | buy-ref-3  |
     
-    And the mark price should be "1000" for the market "ETH/DEC21"
+    And the traders should have the following margin levels:
+      | trader    | market id | maintenance | search   | initial   | release   |
+      | lp1       | ETH/DEC21 | 17333400    | 19066740 | 20800080  | 24266760  |
+
+    Then the traders place the following orders:
+      | trader  | market id | side | volume | price | resulting trades | type       | tif     | reference  |
+      | trader1 | ETH/DEC21 | buy  | 1      | 901   | 0                | TYPE_LIMIT | TIF_GTC | buy-ref-4  |
     
-    # Now the following step fails claiming that there should be 10000000 in the margin account and 0 in the others. 
-    # What am I missing?
-    And the traders should have the following account balances:
-       | trader    | asset | market id | margin     | general   | bond    |
-       | lp1       | ETH   | ETH/DEC21 | 20800080    | 1199920    | 78000000 |
+    And the traders should have the following margin levels:
+      | trader    | market id | maintenance | search   | initial    | release    |
+      | lp1       | ETH/DEC21 | 86666701    | 95333371 | 104000041  | 121333381  |
+
+
+    # price 999 above   | lp1       | ETH/DEC21 | 86666701    | 95333371 | 104000041 | 121333381 | 
+    
+    
+    
+    # And the mark price should be "1000" for the market "ETH/DEC21"
+    
+    # # Now the following step fails claiming that there should be 10000000 in the margin account and 0 in the others. 
+    # # What am I missing?
+    # And the traders should have the following account balances:
+    #    | trader    | asset | market id | margin     | general   | bond    |
+    #    | lp1       | ETH   | ETH/DEC21 | 20800080    | 1199920    | 78000000 |
 
