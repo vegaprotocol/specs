@@ -48,7 +48,9 @@ Note that the units of `target_stake` are the settlement currency of the market 
 Example 3: if `target_stake_scaling_factor = 10`, `rf = 0.004` and `max_oi = 120` then `target_stake = 4.8`.
 
 ### APIs
-* current (real-time) target stake to be available
+* target stake
+  * return current (real-time) target stake when market is in default trading mode.
+  * return theoretical (based on idicative uncrossing volume) target stake when market is in auction mode.
 
 ### Acceptance Criteria
 * examples showing a growing list (before we hit t-window)
