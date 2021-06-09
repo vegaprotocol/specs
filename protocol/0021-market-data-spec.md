@@ -23,20 +23,34 @@ Due to supporting dynamic orders such as pegged orders the main market data fiel
 
 ## Market data
 
-### Continuous trading (order book)
+List of market data fields to be available via the API. All these values can be empty/nothing if there is insufficient relevant data.
 
-All these values can be empty/nothing if there is insufficient relevant data.
-
-  - **Best bid price:** the highest price level on an order book for persistent, non pegged buy orders.
-  - **Best bid volume:** the aggregated volume being bid at the _best bid price_ excluding pegged orders.
-  - **Best offer price:** the lowest price level on an order book for persistent, non pegged offer orders.
-  - **Best offer volume:** the aggregated volume being offered at the _best offer price_ excluding pegged orders.
+  - **Market** market ID.
+  - **Timestamp** current time used by the market in nanoseconds since the epoch.
+  - **Market trading mode** the current trading mode of the market.
+  - **Best bid price:** the highest bid price level on the order book.
+  - **Best bid volume:** the aggregated volume being bid at the _best bid price_.
+  - **Best offer price:** the lowest offer price level on the order book.
+  - **Best offer volume:** the aggregated volume being offered at the _best offer price_.
   - **Mid price:** the arithmetic average of the _best bid price_ and _best offer price_.
   - **Mark price:** the current mark price as calculated by the selected mark price methodology.
   - **Open interest:** the sum of the size of all positions greater than 0. This needs take into account Position Decimal Places, unless raw ints are being used as for prices, in which case, clients will need to take into account the position d.p.s.
-  - **Best static bid price:** the highest price level on the order book for non-dynamic buy orders.
-  - **Best static offer price:** the lowest price level on an order book for non-dynamic offer orders.
+  - **Best static bid price:** the highest bid price level on an order book for persistent, non pegged buy orders.
+  - **Best static bid volume:** the aggregate volume at the _best static bid price_ excluding pegged orders
+  - **Best static offer price:** the lowest offer price level on an order book for persistent, non pegged sell orders.
+  - **Best static offer volume:** the aggregate volume at the _best static offer price_ excluding pegged orders.
   - **Static mid price:** the arithmetic average of the _best static bid price_ and _best static offer price_.
+  - **Indicative price** indicative auction uncrossing price.
+  - **Indicative volume** indicative auction uncrossing volume.
+  - **Auction start** start time of the current auction.
+  - **Auction end** end time of the current auction (if auction exit trigger is time-based).
+  - **Auction trigger** trigger of the current auction.
+  - **Auction extension trigger** trigger of the extension of the current auction.
+  - **Target stake** market's target stake based on current open interest when market is in default trading mode and a theoretical value based on auction's indicative volume when market is in auction mode.
+  - **Supplied stake** market's supplied stake.
+  - **Price monitoring bounds** one or more price monitoring bounds for the current timestamp.
+  - **Market value proxy** market value proxy for liquidity provision reward calculation purposes.
+  - **Liquidity provider fee share** share of the accrued fees each liquidity provider is eligible to.
 
 # Pseudo-code / Examples
 
