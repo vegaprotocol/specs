@@ -9,9 +9,15 @@ Feature name: accounts
 
 ## Trader asset accounts
 - [ ] Every party that deposits an asset on Vega will have an asset account created for that asset.
--  [ ] Only one asset account exists per party per asset.
--  [ ] When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. 
--  [ ] When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. 
+  -  [ ] Only one general asset account exists per party per asset.
+  -  [ ] When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. 
+  -  [ ] When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. 
+
+## Trader staking accounts
+- [ ] Every party that deposits staked asset on Vega will have a stake account created for that asset.
+  - [ ] Only one staked asset account exists per party per asset.
+  - [ ] The balance can only be delegated to Validators
+  - [ ] The balance cannot be traded, or used as margin, or transferred, or withdrawn
 
 ## Trader margin accounts
 - [ ] Every party that submits an order on a market will have a margin account for that market created.
