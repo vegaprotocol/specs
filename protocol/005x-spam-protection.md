@@ -18,7 +18,7 @@ To operate efficiently, Vega should make an effort to drop transactions that are
 - 3.1 A validator node can keep a running total of the transactions for each party, across a number of blocks
 - 3.2 Through configuration, a maximum number of transactions for that block-window, for each party, can be set
 - 3.3 Any transactions beyond that maximum will be rejected
-- 3.4 This should be replaced by [4. client side proof of work](#4.-rate-limiting-through-client-side-proof-of-work) when it is specified
+- 3.4 This should be replaced by [4. client side proof of work](#4-rate-limiting-through-client-side-proof-of-work) when it is specified
 
 ## 4. Rate limiting through client-side Proof Of Work
 
