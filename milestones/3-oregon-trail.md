@@ -8,11 +8,11 @@
 ## Core
 
 ### Features
-| Priority | Feature | Because | Status |  Acceptance Criteria | Owner |
-|:---------:|---------|---------|:------:| :------:|  :------:|
-| **1** | [Data Sourcing](https://github.com/orgs/vegaprotocol/projects/19) Oracle Data bot |  Markets need settlement data |  [Unspecced](https://github.com/vegaprotocol/specs-internal/issues/541) | 0| @barnabee  |
-| **2** | [Fractional order sizes](https://github.com/orgs/vegaprotocol/projects/69) |  We need to support more prevision. |  [Specced](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0052-fractional-orders-positions.md) | 0 | @barnabee  |
-| **3** | On Chain Rewards |  More rewards. |  [Draft spec](https://github.com/vegaprotocol/specs-internal/pull/517) | 0 | @tamlyn  |
+| Priority | Feature | Because | Owner |
+|:---------:|---------|---------|:------:|
+| **1** | [Data Sourcing](https://github.com/orgs/vegaprotocol/projects/19) Oracle Data bot |  Markets need settlement data | @barnabee  |
+| **2** | [Fractional order sizes](https://github.com/orgs/vegaprotocol/projects/69) |  We need to support more prevision. | @barnabee  |
+| **3** | On Chain Rewards |  More rewards. | @tamlyn  |
 
 
 ### Refactors
