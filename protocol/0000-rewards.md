@@ -5,11 +5,11 @@ Vega core will initially specify a number of Reward Functions. In the future the
 Rewards are deployed using the Reward Functions. Individual Reward Pools are automatically created when an asset is transferred to the Reward.
 
 Components of the rewards framework:
-- Onchain treasury per asset
+- [Onchain treasury per asset]()
 - Rewards:
-  - RewardFunctions
-  - Rewards
-  - Pools
+  - Reward Function
+  - Reward Function inputs
+  - Reward Pool
 - Reward execution engine
 
 Recipients of a reward can be Vega party general account and markets' insurance pool.
@@ -39,7 +39,9 @@ RewardFunction: {
 }
 ```
 
-## Rewards
+See [here]() for a specified list of built in Reward Functions.
+
+## Reward
 
 Rewards are deployed using a governance proposal which will specify the RewardFunction, its parameters and its recalculation period (currently time ticks over at the start of the block). 
 Once the governance proposal to create a reward is enacted the reward is assigned a reward ID. 

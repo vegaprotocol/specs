@@ -26,7 +26,7 @@ The type of governance action are:
 1. Change market parameters
 1. Change network parameters
 1. Add external asset to Vega (*out of scope for this document*, proposes a new asset controlled by a bridge to become usable on Vega
-
+1. Authorise a transfer to or from the [Network Treasury](TODO: LINK)
 
 ## Lifecycle of a proposal
 
@@ -151,10 +151,11 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 
 We allow users to submit proposals covering 3 types of governance action:
 
-1. Creation of a market
+1. Proposal of a market
 1. Change market parameters
 1. Change network parameters
-
+1. Transfer of funds to/from treasury
+1. Propose an asset to be accepted as collateral on the network
 
 ## 1. Create market
 
@@ -185,6 +186,41 @@ All **change market parameter proposals** have their validation configured by th
 Network parameters that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters.
 
 All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
+
+## 4. Allocation of funds from treasury
+
+The onchain treasury is a set of accounts (one per asset) that are able to have funds sent to and from using on-chain governance.
+
+#### Sending funds to treasury (direct funding treasury by governance)
+
+A governance proposal may be submitted to transfer funds on enactment to the on-chain treasury from any of the following account types:
+
+- The network wide insurance pool for the asset
+- A market's insurance pool for the asset
+
+Other governance actions, such as the closing of a RewardPool account _may_ also prompt the funding of the treasury account but this is an indirect action, as defined in the protocol and will be specified where relevant.
+
+#### Sending funds from treasury (direct allocation by governance)
+
+A governance proposal may be submitted to transfer funds on enactment from the on-chain treasury to any of the following account types:
+
+- The network wide insurance pool for the asset
+- A market's insurance pool for the asset
+- A reward mechanism account for the asset
+- A party's general account for the asset (via direct allocation only)
+
+The proposal specifies:
+
+- `type`, which can be either "all or nothing", "best effort" or "fraction", where:
+	- all or nothing: either transfers the specified amount or does not transfer anything
+    - best effort: transfers the specified amount or the max allowable amount if this is less than the specified amount
+    - fraction: transfers a fraction of the on-chain treasury's balance at the time of enactment, in the given asset
+- `amount` or `fraction_of_balance` (dependant on the type chosen), which specifies how much to transfer
+- `destination` specifies the account to transfer to
+- Plus the normal proposal fields (i.e. voting and enactment dates, etc.)
+
+If the proposal is successful and enacted, the amount specified will be transferred to the destination account on the enactment date, subject to the limit specified by the `max_transfer_fraction` network parameter.
+
 
 
 ## Proposal validation parameters
