@@ -149,14 +149,6 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 
 ## Types of proposals
 
-We allow users to submit proposals covering 3 types of governance action:
-
-1. Proposal of a market
-1. Change market parameters
-1. Change network parameters
-1. Transfer of funds to/from treasury
-1. Propose an asset to be accepted as collateral on the network
-
 ## 1. Create market
 
 This action differs from from other governance actions in that the market is created and some transactions (namely around liquidity provision) may be accepted for the market before the proposal has successfully passed. The lifecycle of a market and its triggers are covered in the [market lifecycle](./0043-market-lifecycle.md) spec.
@@ -187,7 +179,11 @@ Network parameters that may be changed are described in the *Network Parameters*
 
 All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
 
-## 4. Allocation of funds from treasury
+## 4. Transfers initiated by Governance
+
+TODO - insert a general table of permitted source and destination combinations.
+
+### Example - on-chain treasury
 
 The onchain treasury is a set of accounts (one per asset) that are able to have funds sent to and from using on-chain governance.
 

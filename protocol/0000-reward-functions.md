@@ -33,21 +33,14 @@ RewardFunction: {
 
 Principle: the more frequently a participant is active, the greater share of rewards they receive through this mechanism.
 
-```
-RewardFunction: {
-  daytrader_rewards(asset, Optional[Market]):
-		reward_proportions(eligible_accounts, frequency):
-			for acc in eligible_accounts 
-			if(averageTradingFrequency > frequency):
-                Proportions[acc] = taker-fees-paid-by-participant-since-last-reward-calc / total-taker-fees-paid-with-this-reward-since-last-reward-calc
-            else:
-                Proportions[acc] = 0
-            return Proportions
-		}
-    return [eligible_accounts, proportions]
-  }
-}
-```
+
 
 ### T.3 - Good risk citizen
+
+
+
+## Staking
+
+### S.1 - Rewarding consistent delegation
+
 

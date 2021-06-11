@@ -5,65 +5,53 @@ Vega core will initially specify a number of Reward Functions. In the future the
 Rewards are deployed using the Reward Functions. Individual Reward Pools are automatically created when an asset is transferred to the Reward.
 
 Components of the rewards framework:
-- [Onchain treasury per asset]()
-- Rewards:
-  - Reward Function
-  - Reward Function inputs
-  - Reward Pool
+- Reward Policies
+- Reward Pool Accounts
 - Reward execution engine
 
 Recipients of a reward can be Vega party general account and markets' insurance pool.
 
-## Reward Functions
+## Reward Policies
+
+- Reward Policy Type:
+  - Reward Function
+  - Reward Function inputs
+  - Reward Pool
+- Reward Policy parameters
+
+
+### Reward Functions
 
 A Reward Function consists of: A reward calculation and its parameters. 
 Its outputs are:
 A table with one account per row and a proportion of a pool balance to be transferred to this account. 
 The proportions must sum up to `<= 1.0`.
 
-Example:
+See [here](./0000) for a specified list of built in Reward Functions.
 
-```
-RewardFunction: {
-  taker_rewards(asset, Optional[Market]):
-		reward_proportions(eligible_accounts):
-			for acc in eligible_accounts 
-			if(totalAmtTraded > triggerAmt):
-                Proportions[acc] = taker-fees-paid-by-participant-since-last-reward-calc / total-taker-fees-paid-with-this-reward-since-last-reward-calc
-            else:
-                Proportions[acc] = 0
-            return Proportions
-		}
-    return [eligible_accounts, proportions]
-  }
-}
-```
+## Reward Scheme
 
-See [here]() for a specified list of built in Reward Functions.
-
-## Reward
-
-Rewards are deployed using a governance proposal which will specify the RewardFunction, its parameters and its recalculation period (currently time ticks over at the start of the block). 
+Reward Schemes are deployed using a governance proposal which will specify the RewardFunction, its parameters and its recalculation period (currently time ticks over at the start of the block). 
 Once the governance proposal to create a reward is enacted the reward is assigned a reward ID. 
 TODO: create this governance proposal type as well as one for deactivating rewards, perhaps in [governance spec](0028-governance.md).
 
-A Reward :
+A Reward Scheme:
 
 - May have an asset "sent" to it. This triggers:
   - if a Reward Pool exists for this Reward and Asset, the asset is transferred to that Reward Pool Account
   - otherwise, a new Reward Pool Account is created for this Reward, Asset.
 
 ```
-Reward {
+Reward Scheme {
   name: taker_rewards(asset = "DAI"),
   period: weekly,
 }
 ```
 
-A Reward may be deactivated by governance. If there are no assets submitted to the Reward, or if the assets that have previously been submitted have been distributed, the Reward may be inactive.
+A Reward Scheme may be deactivated by governance. If there are no assets submitted to the Reward, or if the assets that have previously been submitted have been distributed, the Reward may be inactive.
 
 Acceptance Criteria:
-- [ ] Rewards proposed by governance transaction but not yet enacted cannot receive asset transfers
+- [ ] Reward Schemes proposed by governance transaction but not yet enacted cannot receive asset transfers
 - [ ] If there is no Reward, no Reward Pools exist that reference that Reward.
 
 
