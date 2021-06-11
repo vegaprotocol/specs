@@ -61,3 +61,5 @@ For each period of duration `period_length_seconds` a transfer is made from the 
 ```
 transfer_amount = min(max_amount_per_period, max_percent_per_period * on_chain_treasury_balance)
 ```
+
+![On-chain System Map](0000-on-chain-treasury-draft-sketch.jpg)
