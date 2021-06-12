@@ -3,17 +3,17 @@ To operate efficiently, Vega should make an effort to drop transactions that are
 
 
 ## 1. Vote spam prevention
- -1.1 Governance vote
+ - 1.1 Governance vote
   For each governance parameter, each account has 2 votes per epoch, as well as the possibility to cancel the vote. All further votes are rejected until the next epoch. 
   Adding a PoW (see below) for votes is supported, but not activated in the beginning.
- -1.2 Delegation Vote
+ - 1.2 Delegation Vote
   The number of re-delegates per epoch depends on the amount of represented stake:
-   -1.2.1 Users with up to 100 tokens have 2 (re)delegates
-   -1.2.2 Users with up to 1000 tokens have 3
-   -1.2.3 Users with more than 10000 tokens have 3 per 10000 tokens.
+   - 1.2.1 Users with up to 100 tokens have 2 (re)delegates
+   - 1.2.2 Users with up to 1000 tokens have 3
+   - 1.2.3 Users with more than 10000 tokens have 3 per 10000 tokens.
    The rationale is that accounts with few tokens are cheap to generate, but accounts with many tokens will need more redelegation. Precise numbers may still be adapted.
-   -1.2.4 Users can always undelegate-in-anger, though this has to remove all delegation from a validator and thus can be done only once per validator per epoch
- -1.3 Market votes
+   - 1.2.4 Users can always undelegate-in-anger, though this has to remove all delegation from a validator and thus can be done only once per validator per epoch
+ - 1.3 Market votes
    Not relevant for Sweet water. 
 ## 2. Reject transactions from accounts with no balance
 - 2.1 All of the actions that a [party](./0017-party.md) can take require [an account balance](./0013-accounts.md) in at least one asset. For example:
@@ -44,17 +44,17 @@ The proof of work for a transaction is done in a way similar to bitcoin, i.e., t
 to the transaction identifyer so that the hash of (nonce|tid) ends with a number of zeroes depending on the
 difficulty level. The hash algorithm used at this time is MD6, primarilty due to the absence of optimised hardware. 
 This may change though in future versions and be replaced by a different hash function or a variant of a VDF.
--4.3 Dynamic Adaption
+- 4.3 Dynamic Adaption
 In a future version, the difficulty of the PoW and other parameters might be changes on the fly depending on network 
 load. This needs to be worked out further though, as it causes some issues
-  -4.3.1 To react ro a real attack, an adaption needs to be executed fast. This however can cause old transactions
+  - 4.3.1 To react ro a real attack, an adaption needs to be executed fast. This however can cause old transactions
          to float around that are not adapted to the new PoW difficulty. A fast change of parameters could form a
          DoS in itself
-  -4.3.2 If votes are handeled indepedndently, validators could make it difficult to vote once they're happy
- -4.4 Other Todos:
-  -4.4.1 Anaylise the Tendermint gossip protocol if there's potential to spam directly on that level
-  -4.4.2 Analyse all buffers if it is possible to fill up buffers through spam
-  -4.4.3 Analyse of there's a possibility to cause computation work, e.g., verifying a lot of signatures
-  -4.4.4 Look into classical DoS attacks on TCP/IP level
+  - 4.3.2 If votes are handeled indepedndently, validators could make it difficult to vote once they're happy
+ - 4.4 Other Todos:
+  - 4.4.1 Anaylise the Tendermint gossip protocol if there's potential to spam directly on that level
+  - 4.4.2 Analyse all buffers if it is possible to fill up buffers through spam
+  - 4.4.3 Analyse of there's a possibility to cause computation work, e.g., verifying a lot of signatures
+  - 4.4.4 Look into classical DoS attacks on TCP/IP level
 
 
