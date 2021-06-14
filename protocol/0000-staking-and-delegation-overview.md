@@ -49,4 +49,4 @@ Question - is this a two step process for the participant?
 - These fees are distributed to the general accounts of the validators and delegators in amounts calculated according to the [staking and delegation rewards]() scheme.
 
 ## Use of tokens for governance
-- Locked and staked token may be used as voting weight for governance proposals
+- Locked and staked token balances may be used as voting weight for governance proposals
