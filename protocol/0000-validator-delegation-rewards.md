@@ -1,3 +1,5 @@
+THIS FILE CAN BE REPLACED BY EDD'S simple-staking-and-delegating.md file.
+
 # Validator and Staking Rewards
 This describes the Alpha Mainnet requirements for calculation and distribution of rewards to delegators and validators. For more information on the overall approach, please see this [research document](https://github.com/vegaprotocol/research-internal/blob/master/validator_rewards/ValPol7.pdf).
 
