@@ -22,26 +22,29 @@ This is especially important early on when rapid iteration is desirable, as the 
 
 # Overview
 There are really two main features:
-1. Create checkpoints with relevant (but minimal, basically balances) information every `time_elapsed_between_checkpoints` and every deposit and every withdrawal request.
-1. Ability to add load a checkpoint file as part of genesis. 
-At load time calculate the hash of the checkpoint file. Send this through consensus to make sure that all the nodes in the new networks are agreeing on the state.
+1. Create checkpoints with relevant (but minimal) information every `time_elapsed_between_checkpoints` and every deposit and every withdrawal request.
+1. Ability to load a checkpoint file as part of genesis. 
+At load time calculate the hash of the checkpoint file. Send this through consensus to make sure that all the nodes in the new network are agreeing on the state.
 
 # Creating a checkpoint
 Information to store:
 - All network parameters
 - All asset definitions. Insurance pool balance from the markets will be summed up per asset and balance per asset stored. 
+- All market proposals.
+- All asset proposals.
+- All delegation info.
 - On chain treasury balances.
 - Balances for all parties per asset: sum of general, margin and LP bond accounts. 
 - Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
 - `chain_end_of_life_date`
 - hash of the previous block, block number and transaction id of the block from which the snapshot is derived
-When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain(*). 
+When a checkpoint is created, each validator should calculate its hash and submit this as a transaction to the chain(*). 
 - last block height and hash and event ID of all bridged chains (e.g. Ethereum) that the core has seen `number_of_confirmations` of the event. 
 
 When to create a checkpoint:
 - if `current_time - time_elapsed_between_checkpoints > time_of_last_full_checkpoint`
 - if there was withdrawal 
-Withdrawal checkpoint can be just a delta containing the balance change + hash of previous checkpoint (either delta or full)
+Withdrawal checkpoint can be just a delta containing the balance change + hash of previous checkpoint (either delta or full). Note that for the "Sweetwater" release we don't need to create a checkpoint on every withdrawal.
 
 Information we explicitly don't try to checkpoint:
 - Positions
