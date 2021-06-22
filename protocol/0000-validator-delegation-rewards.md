@@ -11,6 +11,6 @@ This describes the Alpha Mainnet requirements for calculation and distribution o
 
 A component of the trading fees that are collected from price takers of a market are reserved for rewarding validators and stakers (see [fees](./0029-fees.md)). These fees are denominated in the settlement currencies of the markets and are collected into an infrastructure fee account for that asset.
 
-These fees are "held" in this pool account for a length of time, determined by a network parameter (initially set to zero).
+These fees are "held" in this pool account for a length of time, determined by a network parameter.
 
 They are then distributed to the general accounts of eligible recipients; that is, the validators and delegators, in amounts as per above calculation.
