@@ -31,22 +31,5 @@ Functions:
 * `stake_tokens(uint256 amount, bytes32 vega_public_key)` emits `Stake_Deposited`
 * `remove_stake(uint256 amount, bytes32 vega_public_key)` emits `Stake_Removed`
 
-
-## Staking Event Queue
-```
-       _--~~--_
-     /~/_|  |_\~\
-    |____________|                    Help Me Obi Wan.
-    |[][][][][][]|:=  .               You're my only hope!
-  __| __         |__ \  ' .          /
- |  ||. |   ==   |  |  \    ' .     /
-(|  ||__|   ==   |  |)   \      '<
- |  |[] []  ==   |  |      \    '\|
- |  |____________|  |        \    |
- /__\            /__\          \ / \
-  ~~              ~~
-
-```
-
 ## Accounts
 Staked assets will appear in a user's [staking account](../protocol/0013-accounts.md). As the staked tokens will be used for [governance](../protocol/0028-governance.md) in the first mainnet (aka Sweetwater), governance will need to be updated to check for staked balances as well as general account balances.
