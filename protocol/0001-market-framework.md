@@ -137,6 +137,21 @@ See [price monitoring spec](./0032-price-monitoring.md) for details.
 
 ----
 
+# Updating Parameters
+All proposer defined parameters should be able to be updated by [onchain governance](./0028-governance.md) except:
+- settlement assets
+- margin assets
+- Product (revisit after new products added)
+
+
+All updateable market parameters will have a category (initially `easy` or `hard` which defines the parameters used in the governance vote;
+* `MinimumProposalPeriod`
+* `MinimumPreEnactmentPeriod`
+* `MinimumRequiredParticipation` 
+* `MinimumRequiredMajority`
+
+TODO: create a table with the categories defined for each market parameter after the network parameter PR is merged
+
 # Pseudo-code / examples
 
 
