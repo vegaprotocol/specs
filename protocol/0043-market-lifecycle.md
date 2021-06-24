@@ -34,6 +34,7 @@ A market can progress through a number of statuses through its life. The overall
 
 [1] Accepting LPs: it is possible to make or amend [Liquidity Provision Commitments](protocol/https://github.com/vegaprotocol/product/blob/master/specs/0044-lp-mechanics.md)
 
+![Life cycle flow diagram](./0043-market-lifecycle-flow-diagram.svg)
 
 ## Market status descriptions
 
