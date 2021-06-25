@@ -100,4 +100,11 @@ There should be a tool to extract all assets from the restore file so that they 
  
 ## Test case 2: Orders and positions are not maintained across resets
 
-## Test case 3: Governance proposals are kept across resets
+## Test case 3: Governance proposals are maintained across resets
+
+## Test case 4: Party's Margin Account balance is put in to a General Account balance for that asset
+1. A party has tSD general account balance of 100 tUSD. 
+2. That party has tUSD margin account balance of 100 tUSD.
+3. The network is shut down. 
+4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+5. That party has a tUSD general account balance of 200 tUSD
