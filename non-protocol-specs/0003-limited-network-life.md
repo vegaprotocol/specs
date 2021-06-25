@@ -49,7 +49,7 @@ Withdrawal checkpoint can be just a delta containing the balance change + hash o
 Information we explicitly don't try to checkpoint:
 - Positions
 - Balances in the "signed for withdrawal" account. 
-- Governence proposals that haven't been enacted yet aren't stored.
+- Governance proposals that haven't been enacted yet aren't stored.
 
 When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain(*). 
 (*) This is so that non-validating parties can trust the hash being restored represents truly the balances. 
@@ -81,13 +81,13 @@ There should be a tool to extract all assets from the restore file so that they 
 
 # Acceptance criteria
 
-[ ] Checkpoints are created every `time_elapsed_between_checkpoints` period of time passes. 
-[ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain.
-[ ] We can launch a network with any valid checkpoint file. 
-[ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction.
-[ ] Hash of the checkpoint file is agreed via consensus.
-[ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint.
-[ ] Test case 1 (below)
+- [ ] Checkpoints are created every `time_elapsed_between_checkpoints` period of time passes. 
+- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain.
+- [ ] We can launch a network with any valid checkpoint file. 
+- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction.
+- [ ] Hash of the checkpoint file is agreed via consensus.
+- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint.
+- [ ] Test case 1 (below)
 
 ## Test case 1
 1. A party has general account balance of 100 tUSD. 
