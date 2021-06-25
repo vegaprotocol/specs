@@ -98,3 +98,6 @@ There should be a tool to extract all assets from the restore file so that they 
 6. 2. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 tUSD. The party has "signed for withdrawal" 100.
 6. 3. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 tUSD. 
  
+## Test case 2: Orders and positions are not maintained across resets
+
+## Test case 3: Governance proposals are kept across resets
