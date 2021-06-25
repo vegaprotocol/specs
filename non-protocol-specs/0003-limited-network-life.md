@@ -87,9 +87,8 @@ There should be a tool to extract all assets from the restore file so that they 
 - [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction.
 - [ ] Hash of the checkpoint file is agreed via consensus.
 - [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint.
-- [ ] Test case 1 (below)
 
-## Test case 1
+## Test case 1: Withdrawal status is correctly tracked across resets
 1. A party has general account balance of 100 tUSD. 
 2. The party submits a withdrawal transaction for 100 tUSD. A checkpoint is immediately created. 
 3. The network is shut down. 
