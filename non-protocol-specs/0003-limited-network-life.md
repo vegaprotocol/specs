@@ -57,7 +57,7 @@ When a checkpoint is created, each validator should calculate its hash and submi
 The checkpoint file should either be human-readable OR there should be a command line tool to convert into human readable form. 
 
 # Restoring a checkpoint
-The hash of the state file to be restored must me specified in genesis. 
+The hash of the state file to be restored must be specified in genesis. 
 Any validator will submit a transaction containing the checkpoint file. Nodes verify the hash / chain of hashes to verify hash that's in genesis it's ignored otherwise the state is restored. 
 If the genesis file has a previous state hash no transactions will be processed until the restore transaction arrives and is processed. 
 
@@ -90,12 +90,12 @@ There should be a tool to extract all assets from the restore file so that they 
 [ ] Test case 1 (below)
 
 ## Test case 1
-A party has general account balance of 100 tUSD. 
-The party submits a withdrawal transaction for 100 tUSD. A checkpoint is immediately created. 
-The network is shut down. 
-The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
-The check the following subcases
-1) If the ethereum replay says withrawal completed. The party has general account balance of 0 tUSD. The party has "signed for withdrawal" 0.
-2) If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 tUSD. The party has "signed for withdrawal" 100.
-3) If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 tUSD. 
+1. A party has general account balance of 100 tUSD. 
+2. The party submits a withdrawal transaction for 100 tUSD. A checkpoint is immediately created. 
+3. The network is shut down. 
+4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+5. The check the following subcases
+6. 1. If the ethereum replay says withrawal completed. The party has general account balance of 0 tUSD. The party has "signed for withdrawal" 0.
+6. 2. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 tUSD. The party has "signed for withdrawal" 100.
+6. 3. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 tUSD. 
  
