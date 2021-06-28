@@ -85,12 +85,14 @@ The Ethereum Bridge uses 1 network parameter, `blockchains.ethereumConfig`, a JS
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `chain_id`       | String |  `"3"`        | Ethereum [Chain ID](https://eips.ethereum.org/EIPS/eip-155) to 
-| `network_id`     | String |  `"3"`        | Ethereum [Network ID](https://eips.ethereum.org/EIPS/eip-155) to connect to.     |
-| `bridge_address` | String | `"0xCcB517899f714BD1B2f32931fF429aDEdDd02A93"`            | The Ethereum address for a deployed instance of the bridge contract |
-| `confirmations`  | Integer |  `3`           | Ethereum block confirmations to wait for before confirming an action   |
+| `chain_id`       | String |  `"3"`        | Ethereum [Chain ID](https://eips.ethereum.org/EIPS/eip-155) to connect to 
+| `network_id`     | String |  `"3"`        | Ethereum [Network ID](https://eips.ethereum.org/EIPS/eip-155) to connect to     |
+| `bridge_address` | String | `"0xCcB517899f714BD1B2f32931fF429aDEdDd02A93"`            | The address for a deployed instance of the bridge contract |
+| `confirmations`  | Integer |  `3`           | Block confirmations to wait for before confirming an action   |
 
-### Example value
+### Full example
+This example connects the network to Ropsten:
+
 ```json
 {
   "network_id": "3",
@@ -99,9 +101,6 @@ The Ethereum Bridge uses 1 network parameter, `blockchains.ethereumConfig`, a JS
   "confirmations": 3
 }
 ```
-
-
-
 
 # Acceptance Criteria
 
