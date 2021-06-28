@@ -41,6 +41,32 @@ Principle: the more frequently a participant is active, the greater share of rew
 
 ## Staking
 
-### S.1 - Rewarding consistent delegation
+### S.1 - Rewarding getting started with delegation
 
+_Eligible recipients:_ anyone who delegates at least once during the period.
 
+_Reward Pot:_ Fixed total pot amount (N), all distributed at the reward distribution point
+
+_Reward Calculation:_ between the reward commencement time and the reward distribution time, any party who has made a deleegation at least once will receive N/(total count of eligible participants) tokens. Everyone receives the same amount of tokens.
+
+_Acceptance Criteria:_
+
+- [ ] a party that locks money on the bridge but does not delegate it, will not receive any reward
+- [ ] a party that delegates and then undelegates during the period is considered an eligible participant
+- [ ] all eligible participants receive the same size reward
+- [ ] the reward pot is empty at the conclusion of the reward distribution
+
+### S.2 - Rewarding consistent delegation
+
+_Eligible recipients:_ anyone who delegates at least once during the period.
+
+_Reward Pot:_ Fixed total pot amount (N), all distributed at the reward distribution point
+
+_Reward Calculation:_ between the reward commencement time and the reward distribution time, any party who has delegated for [90% of the time] will receive N/(total count of eligible participants) tokens. Everyone receives the same amount of tokens.
+
+_Acceptance Criteria:_
+
+- [ ] a party that locks money on the bridge but does not delegate it, will not receive any reward
+- [ ] a party that delegates for [10 x 1%] lengths of the total time is eligible participant
+- [ ] all eligible participants receive the same size reward
+- [ ] the reward pot is empty at the conclusion of the reward distribution
