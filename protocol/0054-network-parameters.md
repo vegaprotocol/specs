@@ -111,8 +111,8 @@ The full list of network parameters must be available to the governance communit
 |`market.monitor.price.defaultParameters`                  | JSON     | [0032 - Price Monitoring](./0032-price-monitoring.md#market)| Configuration for price monitoring | - |
 |`market.value.windowLength`                               |          |               |               | - |
 |`market.fee.factors.infrastructureFee`                    |          |               |               | - |
-|`market.auction.maximumDuration`                          |          |               |               | - |
-|`market.auction.minimumDuration`                          |          |               |               | - |
+|`market.auction.maximumDuration`                          | String   | [0026 - Auctions](./0026-auctions.md#auction-config) | The longest duration an auction can be. Auctions that would be shorter (or [proposals that require a shorter auction](./0028-governance.md#duration-of-the-proposal)) should not be started | - |
+|`market.auction.minimumDuration`                          | String   | [0026 - Auctions](./0026-auctions.md#auction-config) | The shortest duration an auction can be. Auctions that would be longer should not be started | - |
 |`market.fee.factors.makerFee`                             |          |               |               | - |
 |`market.liquidityProvision.shapes.maxSize`                |          |               |               | - |
 |`market.liquidity.maximumLiquidityFeeFactorLevel`         |          |               |               | - |
@@ -121,6 +121,6 @@ The full list of network parameters must be available to the governance communit
 |`market.liquidity.targetstake.triggering.ratio`           |          |               |               | - |
 |`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               | - |
 |`market.liquidity.bondPenaltyParameter`                   |          |               |               | - |
-|`market.liquidity.stakeToCcySiskas`                       |          |               |               | - |
+|`market.liquidity.stakeToCcySiskas`                       | String (float)   | [0044 - Liquidity Provision Mechanics](./0044-lp-mechanics.md#network-parameters) | Translates a [Liquidity Commitment size](./0044-lp-mechanics.md#calculating-liquidity-from-commitment) to an [obligation](./0044-lp-mechanics.md#calculating-liquidity-from-commitment) | - |
 
 * A `-` in the *Version added* column indicates that the network parameter existed before `0.38.0`, when this table was added. 
