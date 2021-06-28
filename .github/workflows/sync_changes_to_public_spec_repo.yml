@@ -1,0 +1,101 @@
+name: Synchronize latest changes from the private specs repository to the public specs repository
+
+on:
+  # Triggers the workflow on push to main branch
+  push:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch: null
+
+jobs:
+  sync-to-public-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout specs private repository as source
+        uses: actions/checkout@v2
+        with:
+          repository: 'vegaprotocol/specs-internal'
+          path: 'src-repo'
+          token: ${{ secrets.GH_SYNC_REPOSITORIES }}
+
+      - name: Checkout specs public repository as target
+        uses: actions/checkout@v2
+        with:
+          repository: 'vegaprotocol/specs'
+          path: 'target-repo'
+          token: ${{ secrets.GH_SYNC_REPOSITORIES }}
+
+      - name: Remove synced directories from target repository
+        working-directory: target-repo
+        run: |
+          rm -rf protocol
+          rm -rf qa-scenarios
+
+      - name: Copy synced directories from source repository to target repository
+        run: |
+          cp -r src-repo/protocol target-repo
+          cp -r src-repo/qa-scenarios target-repo
+
+      - name: Git stage synced directories
+        working-directory: target-repo
+        run: |
+          git add protocol
+          git add qa-scenarios
+
+      - name: Check if there are any changes to commit in target repository
+        id: git-status
+        working-directory: target-repo
+        run: |
+          CHANGES="$(git diff-index --quiet HEAD -- . && echo "false" || echo "true")"
+          echo "::set-output name=changed::${CHANGES}"
+          [ "$CHANGES" != "false" ] || echo "There are no New changes"
+
+      - name: Get last commit information for source repository
+        if: steps.git-status.outputs.changed == 'true'
+        id: commit-data
+        working-directory: src-repo
+        run: |
+          # Get commit information
+          COMMIT_MESSAGE="$(git log --oneline --format=%B -n 1)"
+          AUTHOR_EMAIL="$(git log --oneline --format=%ae -n 1)"
+          AUTHOR_NAME="$(git log --oneline --format=%an -n 1)"
+          echo "::set-output name=commit-message::${COMMIT_MESSAGE}"
+          echo "::set-output name=author-email::${AUTHOR_EMAIL}"
+          echo "::set-output name=author-name::${AUTHOR_NAME}"
+          # Check if commit message contains PR number
+          # -n - don't print (not modified lines)
+          # /p - print modified lines
+          PR="$(echo $COMMIT_MESSAGE | sed -n "s/.*#\([0-9]\+\)[^0-9].*/\1/p")"
+          echo "::set-output name=pr::${PR}"
+          # Get PR title
+          [[ $PR =~ ^[0-9]+$ ]] && TITLE=$(curl \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: token ${{ secrets.GH_SYNC_REPOSITORIES }}" \
+              https://api.github.com/repos/vegaprotocol/specs-internal/pulls/${PR} | jq ".title // empty")
+          echo "::set-output name=title::${TITLE}"
+
+      - name: Commit and push the target repository
+        if: steps.git-status.outputs.changed == 'true'
+        working-directory: target-repo
+        env:
+          COMMIT_MESSAGE: ${{ steps.commit-data.outputs.commit-message }}
+          AUTHOR_EMAIL: ${{ steps.commit-data.outputs.author-email }}
+          AUTHOR_NAME: ${{ steps.commit-data.outputs.author-name }}
+          PR_TITLE: ${{ steps.commit-data.outputs.title }}
+        run: |
+          echo "COMMIT_MESSAGE=${COMMIT_MESSAGE}"
+          echo "AUTHOR_EMAIL=${AUTHOR_EMAIL}"
+          echo "AUTHOR_NAME=${AUTHOR_NAME}"
+          echo "PR_TITLE=${PR_TITLE}"
+          # setup message
+          MESSAGE="${PR_TITLE:-$COMMIT_MESSAGE}"
+          echo "MESSAGE=${MESSAGE}"
+          # setup author
+          git config user.email "${AUTHOR_EMAIL}"
+          git config user.name "${AUTHOR_NAME}"
+          # commit
+          git commit -m "$MESSAGE"
+          # push
+          git push
