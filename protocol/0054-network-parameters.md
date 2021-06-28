@@ -105,10 +105,7 @@ The full list of network parameters must be available to the governance communit
 |`governance.vote.asset`                                   | String   | [0028 - Governance](./0028-governance.md#governance-weighting)              | The [Asset ID](./0040-asset-framework.md#asset-definition) of the asset used for all [governance measurements](.0028-governance.md#restriction-on-who-can-create-a-proposal)             |
 |`market.stake.target.timeWindow`                          |          |               |               |
 |`market.stake.target.scalingFactor`                       |          |               |               |
-|`market.liquidity.providers.fee.distributionTimeStep`     |          |               |               |
-|`market.liquidity.minimum.probabilityOfTrading.lpOrders`  |          |               |               |
-|`market.liquidity.targetstake.triggering.ratio`           |          |               |               |
-|`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               |
+|`market.margin.scalingFactors`                            |          |               |               |
 |`market.monitor.price.updateFrequency`                    | String   | [0032 - Price Monitoring](./0032-price-monitoring.md#network) | Frequency to update the price monitoring scaling factors|
 |`market.monitor.price.defaultParameters`                  | JSON     | [0032 - Price Monitoring](./0032-price-monitoring.md#market)| Configuration for price monitoring |
 |`market.value.windowLength`                               |          |               |               |
@@ -118,6 +115,9 @@ The full list of network parameters must be available to the governance communit
 |`market.fee.factors.makerFee`                             |          |               |               |
 |`market.liquidityProvision.shapes.maxSize`                |          |               |               |
 |`market.liquidity.maximumLiquidityFeeFactorLevel`         |          |               |               |
-|`market.margin.scalingFactors`                            |          |               |               |
+|`market.liquidity.providers.fee.distributionTimeStep`     |          |               |               |
+|`market.liquidity.minimum.probabilityOfTrading.lpOrders`  |          |               |               |
+|`market.liquidity.targetstake.triggering.ratio`           |          |               |               |
+|`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               |
 |`market.liquidity.bondPenaltyParameter`                   |          |               |               |
 |`market.liquidity.stakeToCcySiskas`                       |          |               |               |
