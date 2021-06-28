@@ -80,9 +80,9 @@ The full list of network parameters must be available to the governance communit
 |`governance.proposal.market.requiredParticipation`        |          |               |               | - |
 |`governance.proposal.market.maxEnact`                     |          |               |               | - |
 |`governance.proposal.updateMarket.maxEnact`               |          |               |               | - |
-|`governance.proposal.updateMarket.requiredMajority`       | String   |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion on a [a market update proposal](./0028-governance.md#1-create-market)      | - |
-|`governance.proposal.updateMarket.minVoterBalance`        | String   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [vote on a market update proposal](./0028-governance.md#1-create-market)               | - |
-|`governance.proposal.updateMarket.minProposerBalance`     | String   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [create a market update proposal](./0028-governance.md#1-create-market)              | - |
+|`governance.proposal.updateMarket.requiredMajority`       | String (integer)  |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion on a [a market update proposal](./0028-governance.md#1-create-market)      | - |
+|`governance.proposal.updateMarket.minVoterBalance`        | String (integer)   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [vote on a market update proposal](./0028-governance.md#1-create-market)               | - |
+|`governance.proposal.updateMarket.minProposerBalance`     | String (Integer)  | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [create a market update proposal](./0028-governance.md#1-create-market)              | - |
 |`governance.proposal.updateMarket.requiredParticipation`  |          |               |               | - |
 |`governance.proposal.updateMarket.maxClose`               |          |               |               | - |
 |`governance.proposal.updateMarket.minClose`               |          |               |               | - |
@@ -107,12 +107,12 @@ The full list of network parameters must be available to the governance communit
 |`market.stake.target.timeWindow`                          |          |               |               | - |
 |`market.stake.target.scalingFactor`                       |          |               |               | - |
 |`market.margin.scalingFactors`                            |          |               |               | - |
-|`market.monitor.price.updateFrequency`                    | String   | [0032 - Price Monitoring](./0032-price-monitoring.md#network) | Frequency to update the price monitoring scaling factors| - |
+|`market.monitor.price.updateFrequency`                    | String (duration)  | [0032 - Price Monitoring](./0032-price-monitoring.md#network) | Frequency to update the price monitoring scaling factors| - |
 |`market.monitor.price.defaultParameters`                  | JSON     | [0032 - Price Monitoring](./0032-price-monitoring.md#market)| Configuration for price monitoring | - |
 |`market.value.windowLength`                               |          |               |               | - |
 |`market.fee.factors.infrastructureFee`                    |          |               |               | - |
-|`market.auction.maximumDuration`                          | String   | [0026 - Auctions](./0026-auctions.md#auction-config) | The longest duration an auction can be. Auctions that would be shorter (or [proposals that require a shorter auction](./0028-governance.md#duration-of-the-proposal)) should not be started | - |
-|`market.auction.minimumDuration`                          | String   | [0026 - Auctions](./0026-auctions.md#auction-config) | The shortest duration an auction can be. Auctions that would be longer should not be started | - |
+|`market.auction.maximumDuration`                          | String (duration)  | [0026 - Auctions](./0026-auctions.md#auction-config) | The longest duration an auction can be. Auctions that would be shorter (or [proposals that require a shorter auction](./0028-governance.md#duration-of-the-proposal)) should not be started | - |
+|`market.auction.minimumDuration`                          | String (duration)   | [0026 - Auctions](./0026-auctions.md#auction-config) | The shortest duration an auction can be. Auctions that would be longer should not be started | - |
 |`market.fee.factors.makerFee`                             |          |               |               | - |
 |`market.liquidityProvision.shapes.maxSize`                |          |               |               | - |
 |`market.liquidity.maximumLiquidityFeeFactorLevel`         |          |               |               | - |
