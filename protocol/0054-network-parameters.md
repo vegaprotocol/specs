@@ -69,7 +69,7 @@ The full list of network parameters must be available to the governance communit
 # Current network parameters
 | Name                                                     | Type     | Specification | Description                                                       |
 |----------------------------------------------------------|:--------:|---------------|-------------------------------------------------------------------|
-|`blockchains.ethereumConfig`                              | JSON     | [0031 - Ethereum Bridge](./0031-ethereum-bridge-spec.md#network-parameters)              | Configuration for how this Vega network connections to Ethereum   |
+|`blockchains.ethereumConfig`                              | JSON     | [0031 - Ethereum Bridge](./0031-ethereum-bridge-spec.md#network-parameters)           | Configuration for how this Vega network connections to Ethereum   |
 |`governance.proposal.asset.maxEnact`                      |          |               |               |
 |`governance.proposal.asset.minVoterBalance`               |          |               |               |
 |`governance.proposal.asset.requiredParticipation`         |          |               |               |
@@ -109,8 +109,8 @@ The full list of network parameters must be available to the governance communit
 |`market.liquidity.minimum.probabilityOfTrading.lpOrders`  |          |               |               |
 |`market.liquidity.targetstake.triggering.ratio`           |          |               |               |
 |`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               |
-|`market.monitor.price.updateFrequency`                    |          |               |               |
-|`market.monitor.price.defaultParameters`                  |          |               |               |
+|`market.monitor.price.updateFrequency`                    | String   | [0032 - Price Monitoring](./0032-price-monitoring.md#network) | Frequency to update the price monitoring scaling factors|
+|`market.monitor.price.defaultParameters`                  | JSON     | [0032 - Price Monitoring](./0032-price-monitoring.md#market)| Configuration for price monitoring |
 |`market.value.windowLength`                               |          |               |               |
 |`market.fee.factors.infrastructureFee`                    |          |               |               |
 |`market.auction.maximumDuration`                          |          |               |               |
