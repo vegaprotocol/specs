@@ -79,9 +79,9 @@ The full list of network parameters must be available to the governance communit
 |`governance.proposal.market.requiredParticipation`        |          |               |               |
 |`governance.proposal.market.maxEnact`                     |          |               |               |
 |`governance.proposal.updateMarket.maxEnact`               |          |               |               |
-|`governance.proposal.updateMarket.minVoterBalance`        |          |               |               |
-|`governance.proposal.updateMarket.requiredMajority`       | String   |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion              |
-|`governance.proposal.updateMarket.minProposerBalance`     | String   |               | Minimum Governance token balance for proposals              |
+|`governance.proposal.updateMarket.requiredMajority`       | String   |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion on a [a market update proposal](./0028-governance.md#1-create-market)      |
+|`governance.proposal.updateMarket.minVoterBalance`        | String   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [vote on a market update proposal](./0028-governance.md#1-create-market)               |
+|`governance.proposal.updateMarket.minProposerBalance`     | String   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [create a market update proposal](./0028-governance.md#1-create-market)              |
 |`governance.proposal.updateMarket.requiredParticipation`  |          |               |               |
 |`governance.proposal.updateMarket.maxClose`               |          |               |               |
 |`governance.proposal.updateMarket.minClose`               |          |               |               |
