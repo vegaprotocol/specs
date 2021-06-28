@@ -64,60 +64,63 @@ Then a proposal that attempted to change the `feeAmtValidators.MinimumProposalPe
 
 ## Data to Expose
 
-The full list of network parameters must be available to the governance community. All proposals to change a network parameter should be easily discoverable.@
+The full list of network parameters must be available to the governance community. All proposals to change a network parameter should be easily discoverable.
 
 # Current network parameters
-| Name                                                     | Type     | Specification | Description                                                       |
-|----------------------------------------------------------|:--------:|---------------|-------------------------------------------------------------------|
-|`blockchains.ethereumConfig`                              | JSON     | [0031 - Ethereum Bridge](./0031-ethereum-bridge-spec.md#network-parameters)           | Configuration for how this Vega network connections to Ethereum   |
-|`governance.proposal.asset.maxEnact`                      |          |               |               |
-|`governance.proposal.asset.minVoterBalance`               |          |               |               |
-|`governance.proposal.asset.requiredParticipation`         |          |               |               |
-|`governance.proposal.asset.minProposerBalance`            |          |               |               |
-|`governance.proposal.market.minVoterBalance`              |          |               |               |
-|`governance.proposal.market.minProposerBalance`           |          |               |               |
-|`governance.proposal.market.requiredParticipation`        |          |               |               |
-|`governance.proposal.market.maxEnact`                     |          |               |               |
-|`governance.proposal.updateMarket.maxEnact`               |          |               |               |
-|`governance.proposal.updateMarket.requiredMajority`       | String   |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion on a [a market update proposal](./0028-governance.md#1-create-market)      |
-|`governance.proposal.updateMarket.minVoterBalance`        | String   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [vote on a market update proposal](./0028-governance.md#1-create-market)               |
-|`governance.proposal.updateMarket.minProposerBalance`     | String   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [create a market update proposal](./0028-governance.md#1-create-market)              |
-|`governance.proposal.updateMarket.requiredParticipation`  |          |               |               |
-|`governance.proposal.updateMarket.maxClose`               |          |               |               |
-|`governance.proposal.updateMarket.minClose`               |          |               |               |
-|`governance.proposal.updateNetParam.requiredParticipation`|          |               |               |
-|`governance.proposal.updateNetParam.minClose`             |          |               |               |
-|`governance.proposal.updateNetParam.maxEnact`             |          |               |               |
-|`governance.proposal.updateNetParam.minEnact`             |          |               |               |
-|`governance.proposal.updateNetParam.minVoterBalance`      |          |               |               |
-|`governance.proposal.updateNetParam.minProposerBalance`   |          |               |               |
-|`governance.proposal.asset.maxClose`                      |          |               |               |
-|`governance.proposal.market.minClose`                     |          |               |               |
-|`governance.proposal.market.requiredMajority`             |          |               |               |
-|`governance.proposal.market.minEnact`                     |          |               |               |
-|`governance.proposal.asset.requiredMajority`              |          |               |               |
-|`governance.proposal.market.maxClose`                     |          |               |               |
-|`governance.proposal.asset.minEnact`                      |          |               |               |
-|`governance.proposal.updateMarket.minEnact`               |          |               |               |
-|`governance.proposal.asset.minClose`                      |          |               |               |
-|`governance.proposal.updateNetParam.requiredMajority`     |          |               |               |
-|`governance.proposal.updateNetParam.maxClose`             |          |               |               |
-|`governance.vote.asset`                                   | String   | [0028 - Governance](./0028-governance.md#governance-weighting)              | The [Asset ID](./0040-asset-framework.md#asset-definition) of the asset used for all [governance measurements](.0028-governance.md#restriction-on-who-can-create-a-proposal)             |
-|`market.stake.target.timeWindow`                          |          |               |               |
-|`market.stake.target.scalingFactor`                       |          |               |               |
-|`market.margin.scalingFactors`                            |          |               |               |
-|`market.monitor.price.updateFrequency`                    | String   | [0032 - Price Monitoring](./0032-price-monitoring.md#network) | Frequency to update the price monitoring scaling factors|
-|`market.monitor.price.defaultParameters`                  | JSON     | [0032 - Price Monitoring](./0032-price-monitoring.md#market)| Configuration for price monitoring |
-|`market.value.windowLength`                               |          |               |               |
-|`market.fee.factors.infrastructureFee`                    |          |               |               |
-|`market.auction.maximumDuration`                          |          |               |               |
-|`market.auction.minimumDuration`                          |          |               |               |
-|`market.fee.factors.makerFee`                             |          |               |               |
-|`market.liquidityProvision.shapes.maxSize`                |          |               |               |
-|`market.liquidity.maximumLiquidityFeeFactorLevel`         |          |               |               |
-|`market.liquidity.providers.fee.distributionTimeStep`     |          |               |               |
-|`market.liquidity.minimum.probabilityOfTrading.lpOrders`  |          |               |               |
-|`market.liquidity.targetstake.triggering.ratio`           |          |               |               |
-|`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               |
-|`market.liquidity.bondPenaltyParameter`                   |          |               |               |
-|`market.liquidity.stakeToCcySiskas`                       |          |               |               |
+
+| Name                                                     | Type     | Specification | Description                                                       | Version added  |   
+|----------------------------------------------------------|:--------:|---------------|-------------------------------------------------------------------|:--------:|
+|`blockchains.ethereumConfig`                              | JSON     | [0031 - Ethereum Bridge](./0031-ethereum-bridge-spec.md#network-parameters)           | Configuration for how this Vega network connections to Ethereum   | - |
+|`governance.proposal.asset.maxEnact`                      |          |               |               | - |
+|`governance.proposal.asset.minVoterBalance`               |          |               |               | - |
+|`governance.proposal.asset.requiredParticipation`         |          |               |               | - |
+|`governance.proposal.asset.minProposerBalance`            |          |               |               | - |
+|`governance.proposal.market.minVoterBalance`              |          |               |               | - |
+|`governance.proposal.market.minProposerBalance`           |          |               |               | - |
+|`governance.proposal.market.requiredParticipation`        |          |               |               | - |
+|`governance.proposal.market.maxEnact`                     |          |               |               | - |
+|`governance.proposal.updateMarket.maxEnact`               |          |               |               | - |
+|`governance.proposal.updateMarket.requiredMajority`       | String   |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion on a [a market update proposal](./0028-governance.md#1-create-market)      | - |
+|`governance.proposal.updateMarket.minVoterBalance`        | String   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [vote on a market update proposal](./0028-governance.md#1-create-market)               | - |
+|`governance.proposal.updateMarket.minProposerBalance`     | String   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [create a market update proposal](./0028-governance.md#1-create-market)              | - |
+|`governance.proposal.updateMarket.requiredParticipation`  |          |               |               | - |
+|`governance.proposal.updateMarket.maxClose`               |          |               |               | - |
+|`governance.proposal.updateMarket.minClose`               |          |               |               | - |
+|`governance.proposal.updateNetParam.requiredParticipation`|          |               |               | - |
+|`governance.proposal.updateNetParam.minClose`             |          |               |               | - |
+|`governance.proposal.updateNetParam.maxEnact`             |          |               |               | - |
+|`governance.proposal.updateNetParam.minEnact`             |          |               |               | - |
+|`governance.proposal.updateNetParam.minVoterBalance`      |          |               |               | - |
+|`governance.proposal.updateNetParam.minProposerBalance`   |          |               |               | - |
+|`governance.proposal.asset.maxClose`                      |          |               |               | - |
+|`governance.proposal.market.minClose`                     |          |               |               | - |
+|`governance.proposal.market.requiredMajority`             |          |               |               | - |
+|`governance.proposal.market.minEnact`                     |          |               |               | - |
+|`governance.proposal.asset.requiredMajority`              |          |               |               | - |
+|`governance.proposal.market.maxClose`                     |          |               |               | - |
+|`governance.proposal.asset.minEnact`                      |          |               |               | - |
+|`governance.proposal.updateMarket.minEnact`               |          |               |               | - |
+|`governance.proposal.asset.minClose`                      |          |               |               | - |
+|`governance.proposal.updateNetParam.requiredMajority`     |          |               |               | - |
+|`governance.proposal.updateNetParam.maxClose`             |          |               |               | - |
+|`governance.vote.asset`                                   | String   | [0028 - Governance](./0028-governance.md#governance-weighting)              | The [Asset ID](./0040-asset-framework.md#asset-definition) of the asset used for all [governance measurements](.0028-governance.md#restriction-on-who-can-create-a-proposal)             | - |
+|`market.stake.target.timeWindow`                          |          |               |               | - |
+|`market.stake.target.scalingFactor`                       |          |               |               | - |
+|`market.margin.scalingFactors`                            |          |               |               | - |
+|`market.monitor.price.updateFrequency`                    | String   | [0032 - Price Monitoring](./0032-price-monitoring.md#network) | Frequency to update the price monitoring scaling factors| - |
+|`market.monitor.price.defaultParameters`                  | JSON     | [0032 - Price Monitoring](./0032-price-monitoring.md#market)| Configuration for price monitoring | - |
+|`market.value.windowLength`                               |          |               |               | - |
+|`market.fee.factors.infrastructureFee`                    |          |               |               | - |
+|`market.auction.maximumDuration`                          |          |               |               | - |
+|`market.auction.minimumDuration`                          |          |               |               | - |
+|`market.fee.factors.makerFee`                             |          |               |               | - |
+|`market.liquidityProvision.shapes.maxSize`                |          |               |               | - |
+|`market.liquidity.maximumLiquidityFeeFactorLevel`         |          |               |               | - |
+|`market.liquidity.providers.fee.distributionTimeStep`     |          |               |               | - |
+|`market.liquidity.minimum.probabilityOfTrading.lpOrders`  |          |               |               | - |
+|`market.liquidity.targetstake.triggering.ratio`           |          |               |               | - |
+|`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               | - |
+|`market.liquidity.bondPenaltyParameter`                   |          |               |               | - |
+|`market.liquidity.stakeToCcySiskas`                       |          |               |               | - |
+
+* A `-` in the *Version added* column indicates that the network parameter existed before `0.38.0`, when this table was added. 
