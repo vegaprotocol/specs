@@ -80,7 +80,7 @@ The full list of network parameters must be available to the governance communit
 |`governance.proposal.market.requiredParticipation`        |          |               |               | - |
 |`governance.proposal.market.maxEnact`                     |          |               |               | - |
 |`governance.proposal.updateMarket.maxEnact`               |          |               |               | - |
-|`governance.proposal.updateMarket.requiredMajority`       | String (integer)  |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion on a [a market update proposal](./0028-governance.md#1-create-market)      | - |
+|`governance.proposal.updateMarket.requiredMajority`       | String (integer)  | [0028 - Governance](./0028-governance.md#governance-weighting) | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion on a [a market update proposal](./0028-governance.md#1-create-market)      | - |
 |`governance.proposal.updateMarket.minVoterBalance`        | String (integer)   | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [vote on a market update proposal](./0028-governance.md#1-create-market)               | - |
 |`governance.proposal.updateMarket.minProposerBalance`     | String (Integer)  | [0028 - Governance](./0028-governance.md#governance-weighting) | Minimum [Governance token balance](/0028-governance.md#restriction-on-who-can-create-a-proposal) required to [create a market update proposal](./0028-governance.md#1-create-market)              | - |
 |`governance.proposal.updateMarket.requiredParticipation`  |          |               |               | - |
@@ -121,6 +121,6 @@ The full list of network parameters must be available to the governance communit
 |`market.liquidity.targetstake.triggering.ratio`           |          |               |               | - |
 |`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               | - |
 |`market.liquidity.bondPenaltyParameter`                   |          |               |               | - |
-|`market.liquidity.stakeToCcySiskas`                       | String (float)   | [0044 - Liquidity Provision Mechanics](./0044-lp-mechanics.md#network-parameters) | Translates a [Liquidity Commitment size](./0044-lp-mechanics.md#calculating-liquidity-from-commitment) to an [obligation](./0044-lp-mechanics.md#calculating-liquidity-from-commitment) | - |
+|`market.liquidity.stakeToCcySiskas`                       | String (float)   | [0044 - Liquidity Provision Mechanics](./0044-lp-mechanics.md#network-parameters) | Translates a [Liquidity Commitment size](./0044-lp-mechanics.md#calculating-liquidity-from-commitment) to a [volume obligation](./0044-lp-mechanics.md#calculating-liquidity-from-commitment) | - |
 
 * A `-` in the *Version added* column indicates that the network parameter existed before `0.38.0`, when this table was added. 
