@@ -67,47 +67,31 @@ Then a proposal that attempted to change the `feeAmtValidators.MinimumProposalPe
 The full list of network parameters must be available to the governance community. All proposals to change a network parameter should be easily discoverable.@
 
 # Current network parameters
-| Name                                                     | Type     | Specification | Description                                                 |
-|----------------------------------------------------------|:--------:|---------------|-------------------------------------------------------------|
-|`market.liquidity.minimum.probabilityOfTrading.lpOrders`  |          |               |               |
-|`market.liquidity.targetstake.triggering.ratio`           |          |               |               |
-|`governance.proposal.market.requiredParticipation`        |          |               |               |
-|`governance.proposal.updateMarket.requiredMajority`       | String   |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion              |
-|`governance.proposal.updateMarket.minProposerBalance`     | String   |               | Minimum Governance token balance for proposals              |
-|`market.stake.target.timeWindow`                          |          |               |               |
-|`governance.proposal.market.minVoterBalance`              |          |               |               |
-|`governance.proposal.market.minProposerBalance`           |          |               |               |
-|`governance.proposal.updateMarket.minVoterBalance`        |          |               |               |
-|`market.liquidity.providers.fee.distributionTimeStep`     |          |               |               |
-|`governance.proposal.asset.minProposerBalance`            |          |               |               |
-|`governance.proposal.updateMarket.maxEnact`               |          |               |               |
-|`market.stake.target.scalingFactor`                       |          |               |               |
-|`governance.proposal.updateNetParam.minVoterBalance`      |          |               |               |
-|`market.monitor.price.updateFrequency`                    |          |               |               |
-|`governance.proposal.updateNetParam.minClose`             |          |               |               |
-|`governance.proposal.updateMarket.maxClose`               |          |               |               |
-|`governance.proposal.updateNetParam.minEnact`             |          |               |               |
-|`blockchains.ethereumConfig`                              |          |               |               |
-|`governance.proposal.asset.requiredParticipation`         |          |               |               |
-|`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               |
-|`governance.proposal.market.maxEnact`                     |          |               |               |
-|`market.value.windowLength`                               |          |               |               |
-|`market.fee.factors.infrastructureFee`                    |          |               |               |
+| Name                                                     | Type     | Specification | Description                                                       |
+|----------------------------------------------------------|:--------:|---------------|-------------------------------------------------------------------|
+|`blockchains.ethereumConfig`                              | JSON     | [0031 - Ethereum Bridge](./0031-ethereum-bridge-spec.md#network-parameters)              | Configuration for how this Vega network connections to Ethereum   |
 |`governance.proposal.asset.maxEnact`                      |          |               |               |
 |`governance.proposal.asset.minVoterBalance`               |          |               |               |
-|`governance.vote.asset`                                   |          |               |               |
-|`market.auction.maximumDuration`                          |          |               |               |
-|`governance.proposal.updateNetParam.maxEnact`             |          |               |               |
-|`market.monitor.price.defaultParameters`                  |          |               |               |
+|`governance.proposal.asset.requiredParticipation`         |          |               |               |
+|`governance.proposal.asset.minProposerBalance`            |          |               |               |
+|`governance.proposal.market.minVoterBalance`              |          |               |               |
+|`governance.proposal.market.minProposerBalance`           |          |               |               |
+|`governance.proposal.market.requiredParticipation`        |          |               |               |
+|`governance.proposal.market.maxEnact`                     |          |               |               |
+|`governance.proposal.updateMarket.maxEnact`               |          |               |               |
+|`governance.proposal.updateMarket.minVoterBalance`        |          |               |               |
+|`governance.proposal.updateMarket.requiredMajority`       | String   |               | 'Yes' votes must outnumber 'No' votes on this proposal by this proportion              |
+|`governance.proposal.updateMarket.minProposerBalance`     | String   |               | Minimum Governance token balance for proposals              |
 |`governance.proposal.updateMarket.requiredParticipation`  |          |               |               |
-|`market.liquidityProvision.shapes.maxSize`                |          |               |               |
+|`governance.proposal.updateMarket.maxClose`               |          |               |               |
+|`governance.proposal.updateMarket.minClose`               |          |               |               |
+|`governance.proposal.updateNetParam.requiredParticipation`|          |               |               |
+|`governance.proposal.updateNetParam.minClose`             |          |               |               |
+|`governance.proposal.updateNetParam.maxEnact`             |          |               |               |
+|`governance.proposal.updateNetParam.minEnact`             |          |               |               |
+|`governance.proposal.updateNetParam.minVoterBalance`      |          |               |               |
 |`governance.proposal.updateNetParam.minProposerBalance`   |          |               |               |
 |`governance.proposal.asset.maxClose`                      |          |               |               |
-|`market.fee.factors.makerFee`                             |          |               |               |
-|`governance.proposal.updateNetParam.requiredParticipation`|          |               |               |
-|`market.liquidity.maximumLiquidityFeeFactorLevel`         |          |               |               |
-|`governance.proposal.updateMarket.minClose`               |          |               |               |
-|`market.auction.minimumDuration`                          |          |               |               |
 |`governance.proposal.market.minClose`                     |          |               |               |
 |`governance.proposal.market.requiredMajority`             |          |               |               |
 |`governance.proposal.market.minEnact`                     |          |               |               |
@@ -117,7 +101,23 @@ The full list of network parameters must be available to the governance communit
 |`governance.proposal.updateMarket.minEnact`               |          |               |               |
 |`governance.proposal.asset.minClose`                      |          |               |               |
 |`governance.proposal.updateNetParam.requiredMajority`     |          |               |               |
+|`governance.proposal.updateNetParam.maxClose`             |          |               |               |
+|`governance.vote.asset`                                   |          |               |               |
+|`market.stake.target.timeWindow`                          |          |               |               |
+|`market.stake.target.scalingFactor`                       |          |               |               |
+|`market.liquidity.providers.fee.distributionTimeStep`     |          |               |               |
+|`market.liquidity.minimum.probabilityOfTrading.lpOrders`  |          |               |               |
+|`market.liquidity.targetstake.triggering.ratio`           |          |               |               |
+|`market.liquidity.probabilityOfTrading.tau.scaling`       |          |               |               |
+|`market.monitor.price.updateFrequency`                    |          |               |               |
+|`market.monitor.price.defaultParameters`                  |          |               |               |
+|`market.value.windowLength`                               |          |               |               |
+|`market.fee.factors.infrastructureFee`                    |          |               |               |
+|`market.auction.maximumDuration`                          |          |               |               |
+|`market.auction.minimumDuration`                          |          |               |               |
+|`market.fee.factors.makerFee`                             |          |               |               |
+|`market.liquidityProvision.shapes.maxSize`                |          |               |               |
+|`market.liquidity.maximumLiquidityFeeFactorLevel`         |          |               |               |
 |`market.margin.scalingFactors`                            |          |               |               |
 |`market.liquidity.bondPenaltyParameter`                   |          |               |               |
-|`governance.proposal.updateNetParam.maxClose`             |          |               |               |
 |`market.liquidity.stakeToCcySiskas`                       |          |               |               |
