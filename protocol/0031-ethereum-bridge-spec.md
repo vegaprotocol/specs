@@ -80,6 +80,28 @@ The list of assets that are whitelisted could be inferred by looking through the
 Blacklisting is simply removing an asset from the whitelist
 
 
+# Network Parameters
+The Ethereum Bridge uses 1 network parameter, `blockchains.ethereumConfig`, a JSON value which must configure:
+
+| Property         | Type   | Example value | Description |
+|------------------|--------| ------------|--------------|
+| `chain_id`       | String |  `"3"`        | Ethereum [Chain ID](https://eips.ethereum.org/EIPS/eip-155) to connect to 
+| `network_id`     | String |  `"3"`        | Ethereum [Network ID](https://eips.ethereum.org/EIPS/eip-155) to connect to     |
+| `bridge_address` | String | `"0xCcB517899f714BD1B2f32931fF429aDEdDd02A93"`            | The address for a deployed instance of the bridge contract |
+| `confirmations`  | Integer |  `3`           | Block confirmations to wait for before confirming an action   |
+
+### Full example
+This example connects the network to Ropsten:
+
+```json
+{
+  "network_id": "3",
+  "chain_id": "3",
+  "bridge_address": "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", 
+  "confirmations": 3
+}
+```
+
 # Acceptance Criteria
 
 ## Deposit
