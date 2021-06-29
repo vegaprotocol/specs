@@ -1,9 +1,9 @@
 Feature: Test interactions between different auction types
 
-  # Related spec files:
-  #  ../spec/0026-auctions.md
-  #  ../spec/0032-price-monitoring.md
-  #  ../spec/0035-liquidity-monitoring.md
+  # Spec files:
+  #   0026-auctions.md
+  #   0032-price-monitoring.md
+  #   0035-liquidity-monitoring.md
 
   Background:
     Given the network parameter "market.stake.target.timeWindow" is "1 day"
