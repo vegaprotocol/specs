@@ -1,6 +1,6 @@
 Feature: Test liquidity provider reward distribution 
 
-# Spec file: ../spec/0042-setting-fees-and-rewarding-lps.md
+# Spec file: 0042-setting-fees-and-rewarding-lps.md
 
   Background:
     Given time is updated to "2020-10-16T00:00:00Z"

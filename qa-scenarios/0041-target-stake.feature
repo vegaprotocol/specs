@@ -1,4 +1,6 @@
-Feature: Target stake implementation ../spec/0041-target-stake.md
+Feature: Test target stake calculation
+
+# Spec file: 0041-target-stake.md
 
 # Market risk parameters and assets don't really matter.
 # We need to track open interst i.e. sum of all long positions across the parties and how they change over time
