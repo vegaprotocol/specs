@@ -110,10 +110,10 @@ The full list of network parameters must be available to the governance communit
 |`market.monitor.price.updateFrequency`                    | String (duration)  | [0032 - Price Monitoring](./0032-price-monitoring.md#network) | Frequency to update the price monitoring scaling factors| - |
 |`market.monitor.price.defaultParameters`                  | JSON     | [0032 - Price Monitoring](./0032-price-monitoring.md#market)| Configuration for price monitoring | - |
 |`market.value.windowLength`                               |          |               |               | - |
-|`market.fee.factors.infrastructureFee`                    |          |               |               | - |
 |`market.auction.maximumDuration`                          | String (duration)  | [0026 - Auctions](./0026-auctions.md#auction-config) | The longest duration an auction can be. Auctions that would be shorter (or [proposals that require a shorter auction](./0028-governance.md#duration-of-the-proposal)) should not be started | - |
 |`market.auction.minimumDuration`                          | String (duration)   | [0026 - Auctions](./0026-auctions.md#auction-config) | The shortest duration an auction can be. Auctions that would be longer should not be started | - |
-|`market.fee.factors.makerFee`                             |          |               |               | - |
+|`market.fee.factors.infrastructureFee`                    | String (float) | [0029 - Fees](./0029-fees.md) | Proportion of a trade's notional value to be taken as an [infrastructure fee](./0029-fees.md#factors)| - |
+|`market.fee.factors.makerFee`                             | String (float) | [0029 - Fees](./0029-fees.md) | Proportion of a trade's notional value to be taken as a [price maker fee](./0029-fees.md#factors)| - |
 |`market.liquidityProvision.shapes.maxSize`                |          |               |               | - |
 |`market.liquidity.maximumLiquidityFeeFactorLevel`         |          |               |               | - |
 |`market.liquidity.providers.fee.distributionTimeStep`     |          |               |               | - |
