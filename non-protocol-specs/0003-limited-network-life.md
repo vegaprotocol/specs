@@ -3,11 +3,6 @@
 Vega networks will at least initially and perhaps always run for a limited time only. 
 This spec covers the necessary features to ensure this works smoothly.
 
-# Relevant network parameters
-- `markets_freeze_date` sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infinity or another way of indicating "never". 
-- `chain_end_of_life_date` This must be `> markets_freeze_date`. At this time the chain will be shutdown.  
-- `time_elapsed_between_checkpoints` sets the minimum time elapsed between checkpoints
-
 
 # Background
 
@@ -78,6 +73,12 @@ There should be a tool to extract all assets from the restore file so that they 
 (a) the chain will run past the configured `market_trading_terminated` until `chain_end_of_life_date` so that people have time to withdraw; and 
 (b) using restoration of balances to allow participants to withdraw or continue to trade with funds during the next iteration of the chain.
 - A governance proposal to change `markets_freeze_date` and `chain_end_of_life_date` must check that `chain_end_of_life_date > markets_freeze_date`.
+
+# Network parameters
+- `markets_freeze_date` sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infinity or another way of indicating "never". 
+- `chain_end_of_life_date` This must be `> markets_freeze_date`. At this time the chain will be shutdown.  
+- `time_elapsed_between_checkpoints` sets the minimum time elapsed between checkpoints
+
 
 # Acceptance criteria
 
