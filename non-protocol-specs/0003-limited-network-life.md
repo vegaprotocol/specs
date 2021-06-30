@@ -79,9 +79,9 @@ There should be a tool to extract all assets from the restore file so that they 
 # Network parameters
 | Name                                                     | Type     | Description                                                       | Version added  |   
 |----------------------------------------------------------|:--------:|-------------------------------------------------------------------|:--------:|
-|`limits.market.freezeDate` | String (date)| Sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infinity or another way of indicating "never". | 💧 Sweetwater |
-|`limits.chain.endOfLifeDate`| String (date) | This must be `>` `markets_freeze_date`. At this time the chain will be shutdown.  |  💧 Sweetwater |
-|`limits.chain.timeBetweenCheckouts` | String (duration) |  sets the minimum time elapsed between checkpoints|  💧 Sweetwater |
+|`network.checkpoint.marketFreezeDate` | String (date)| Sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infinity or another way of indicating "never". | 💧 Sweetwater |
+|`network.checkpoint.networkEndOfLifeDate`| String (date) | This must be `>` `markets_freeze_date`. At this time the chain will be shutdown.  |  💧 Sweetwater |
+|`network.checkpoint.timeElapsedBetweenCheckpoints` | String (duration) |  sets the minimum time elapsed between checkpoints|  💧 Sweetwater |
 
 # Acceptance criteria
 - [ ] Checkpoints are created every `time_elapsed_between_checkpoints` period of time passes. 
