@@ -4,9 +4,9 @@ the concepts of epochs. An epoch is a time period (initially 24 hours, but chang
 via governance vote) during which changes can be announced, but will not be executed
 until the next epoch (with some rare exceptions).
 
-# Episode Transition
+# Epoch Transition
 
-The trigger to start a new episode is blocktime. To this end, there is a
+The trigger to start a new epoch is blocktime. To this end, there is a
 defined time when an epoch ends; the first block after the block that
 exceeds this time is the last block of its epoch.
 
@@ -47,7 +47,7 @@ Options: We could make it a system parameter how many blocks after the deadline 
 
 ## Parameter changes
  All parameters that are changed through a governance vote are valid starting the 
- episode following the one the block is in that finalized the vote.
+ epoch following the one the block is in that finalized the vote.
 
 ## Parameters 
 	Epoch length (in seconds)
@@ -185,8 +185,6 @@ assures that the responsibility for these blocks still rotates between the valid
 Thus, even if the inconsistency blocks delegation related commands, the primary operation of 
 the chain can still go on. 
 
-In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow. In later
-versions, we'd need a simple resync protocol (e.g., all validators put on the block what
-they think the parameters are; the majority of the first n-t blocks wins).
+In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow. In later versions, we'd need a simple resync protocol (e.g., all validators put on the block what they think the parameters are; the majority of the first n-t blocks wins).
 
 
