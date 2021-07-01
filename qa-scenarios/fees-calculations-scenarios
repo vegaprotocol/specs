@@ -1,0 +1,50 @@
+Feature - Fees Calculations
+
+# Test Scenarios -
+
+Scenario : Fees Calculations 
+Given I have open orders on my account
+When the order gets matched resulting in one or multple trades 
+Then each fee is correctly calculated in settlement currency of the market as below -
+  infrastructure_fee = fee_factor[infrastructure] * trade_value_for_fee_purposes
+  maker_fee =  fee_factor[maker]  * trade_value_for_fee_purposes
+  liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes
+  total_fee = infrastructure_fee + maker_fee + liquidity_fee
+
+Scenario : General Account Balance during cont. & auction sessions
+Given the orders are matched and trades get created
+When each of 3 fees are calculated for the trade 
+Then the money is collected from general account
+
+Scenario : Insuffcient General Account Balance during cont. & auction sessions
+Given the orders are matched and trades get created
+When each of 3 fees are calculated for the trade
+And general account balance is insufficient to cover full / part of all 3 fees or total_fee
+Then the money is collected from Margin account
+
+Scenario : Insuffcient General and & Margin Account Balance
+Given the orders are matched and trades get created
+When each of 3 fees are calculated for the trade
+And general & margin account balance is insufficient to cover full / part of all 3 fees or total_fee
+Then different rules apply between continuous trading and auctions - TBC
+During cont. session -
+During Normal auction sessions - The fee is distributed so that the infrastructure_fee is paid first and only then the liquidity_fee
+
+Scenario : No maker,taker relationship between the trading parties in Auction (No Proce maker)
+Given the markets are in Normal Auctions (including market protection and opening auctions) 
+When the orders are matched and trades get created
+Then for the trade
+  maker_fee = 0
+  infrastructure_fee and liquidity_fee = Spilt 1/2 between both parties / takers
+
+Given 
+When 
+Then
+
+Given 
+When 
+Then
+
+Given 
+When 
+Then
