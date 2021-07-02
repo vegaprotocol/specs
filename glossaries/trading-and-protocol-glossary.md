@@ -31,6 +31,13 @@ The Average Entry Price is useful when calculating [Unrealised P&L](#unrealised-
 
 [IG Index: Fill Definition](https://www.ig.com/uk/glossary-trading-terms/fill-definition)
 
+### Aggressor
+The "aggressor or price taker" of each trade is the participant who submitted or amended the incoming order that caused the trade (including automatic amendments like pegged orders).The "aggressor or price taker" pays the maker fee.
+
+### Passive
+The "passive or price maker" party is the participant in the trade whose order was hit (i.e. on the order book prior to the uncrossing that caused this trade). The "aggressor or price taker" earns the maker fee. 
+
+
 ## B
 ### Base currency
 The currency used for settlement and margining.
@@ -135,6 +142,9 @@ A store of capital instantiated with the order book into which fines are contrib
 ## L
 ### Liable position 
 The net riskiest composition of a trader's open positions and live orders.  For example if a trader holds +10 contracts and has buy orders of +10 and sell orders of +10, the liable position would be +20 contracts for margin calculation purposes.
+
+### Loss Socialisation
+If there's not enough money for the reallocation due to some traders having insufficient collateral in their margin account and general account to handle the price or position move, and if the insurance pool can't cover the full distribute requirements, the settlement function will need to alter the "distribute" amounts accordingly. This is called loss socialisation.
 
 ## M
 ### Margin
