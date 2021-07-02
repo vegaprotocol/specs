@@ -11,7 +11,9 @@ Then each fee is correctly calculated in settlement currency of the market as be
   liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes
   total_fee = infrastructure_fee + maker_fee + liquidity_fee
   trade_value_for_fee_purposes = = size_of_trade * price_of_trade
-  Realistic values might be: fee_factor[liquidity] = 0.001 = 0.1%, fee_factor[infrastructure] = 0.0005 = 0.05%, fee_factor[maker] = 0.00025 = 0.025% ???
+  
+  Seperate Scenario for below -
+  Realistic values might be: fee_factor[liquidity] = 0.001 = 0.1%, fee_factor[infrastructure] = 0.0005 = 0.05%, fee_factor[maker] = 0.00025 = 0.025% 
   
 Scenario : General Account Balance during cont. & auction sessions
 Given the orders are matched and trades get created
