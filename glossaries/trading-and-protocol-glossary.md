@@ -137,7 +137,7 @@ Parameters:
 
 
 ### Insurance Pool
-A store of capital instantiated with the order book into which fines are contributed.  It is utilised for financially covering [close out trades](#close-out-trades).
+A store of capital instantiated with the order book into which fines are contributed.  It is utilised for financially covering [close out trades](#close-out-trades). TODO FOR WG - To extend on this topic
 
 ## L
 ### Liable position 
