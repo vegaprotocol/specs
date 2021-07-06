@@ -28,7 +28,7 @@ Information to store:
 - All market proposals ([creation](../protocol/0028-governance.md#1-create-market) and [update](../protocol/0028-governance.md#2-change-market-parameters)) that have been *accepted*. 
 - All [asset proposals](../protocol/0028-governance.md) that have been *accepted*.
 - All delegation info.
-- On chain treasury balances.
+- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the network params that govern [Staking and delegation](0000-reward-functions.md) ).
 - [Account balances](../protocol/0013-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below. 
 - Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
 - hash of the previous block, block number and transaction id of the block from which the snapshot is derived
@@ -174,3 +174,22 @@ There should be a tool to extract all assets from the restore file so that they 
 5. That party has a tUSD general account balance of 200 tUSD
 
 
+## 💧 Test case 5: Delegation (test with N=5, 10, 20000)
+1. There is a Vega token asset. 
+1. There are `5` validators on the network. 
+1. Each validator party `validator_party_1`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
+1. There are `N` other parties. Each of the other parties has `other_party_i`, `i=1,2,...,N` has locked exactly `i` tokens on that staking Ethereum bridge and these tokens are undelegeated at this point.
+1. Other party `i` delegates all its tokens to `validator_party_j` with `j = i mod 5` (i.e. the remainder after integer division of `j` by `i`.). For example if `N=20000` then party `i=15123` will delegate all its `15123` tokens to validator `validator_party_3` since `15123 mod 5 = 3`.   
+1. The `Staking and delegation` rewards are active so that every hour each party that has delegated tokens receives `0.01` of the delegated amount as a reward.
+1. The network runs for 5 hours. 
+1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
+1. Enough time passes after the 5 hour period so that a checkpoint is created and no party submitted any withdrawal transactions throughout.
+1. The network is shut down. 
+1. Validator `1` has freed `500` tokens from the Vega Ethereum staking contract.
+1. The network is restarted with the same `5` validators and checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. There is a Vega token asset. 
+1. Validator parties `validator_party_2`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
+1. Validator party `validator_party_1` has `500` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
+1. There are `N` other parties and the delegation info in core says that other party `i` has delegated all its tokens to `validator_party_j` with `j = i mod 5`.
+1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
+1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
