@@ -18,6 +18,16 @@ These features:
 
 ## Required limits and controls
 
+
+### Sweetwater
+
+For 💧 Sweetwater we require only the ability to entirely disable deposits of assets until governance (either via token holders or a quroum of validators) chooses to enable them. Ideally this would also require a code release in the first instance so that it could not be purely voted for initially. Once a certain level of code readiness is achieved it would then be a community governance (token holder vote or valdiator quorum) decision.
+
+It would be advantageous is assets could be proposed and added to the asset framework via governance during Sweetwater, though again this could be delivered after the initial release. This would only be useful if the save and restore of asset framework definitions was also implemtented as per [limited network life](./0003-limited-network-life.md)
+
+
+### Oregon Tail
+
 We have identified three types of limit/control that will together achieve these aims:
 
 - Deposit limits reduce the exposure of individual participants as well as the total funds at risk
