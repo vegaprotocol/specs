@@ -23,7 +23,7 @@ Point two requires that at load time, each node calculates the hash of the check
 # Creating a checkpoint
 Information to store:
 - All [network parameters](../protocol/0054-network-parameters.md)
- - Including those defined [below](#network-parameters).
+- Including those defined [below](#network-parameters).
 - All [asset definitions](../protocol/0040-asset-framework.md#asset-definition). Insurance pool balance from the markets will be summed up per asset and balance per asset stored. 
 - All market proposals ([creation](../protocol/0028-governance.md#1-create-market) and [update](../protocol/0028-governance.md#2-change-market-parameters)).
 - All [asset proposals](../protocol/0028-governance.md).
@@ -41,7 +41,7 @@ When to create a checkpoint:
 Withdrawal checkpoint can be just a delta containing the balance change + hash of previous checkpoint (either delta or full). Note that for the "Sweetwater" release we don't need to create a checkpoint on every withdrawal.
 
 Information we explicitly don't try to checkpoint:
-- Positions
+- Positions, limit orders, pegged orders or any order book data. 
 - Balances in the "signed for withdrawal" account. 
 - Governance proposals that haven't been enacted yet aren't stored.
 
