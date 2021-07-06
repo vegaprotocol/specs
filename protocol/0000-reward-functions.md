@@ -1,6 +1,6 @@
-# Reward Functions
+# Reward Types
 
-Below is a list of reward functions that will be built in to Vega and available when proposing or creating a new [Reward]().
+Below is a list of reward types that will be built in to Vega and available when proposing or creating a new [Reward]().
 
 ## Acceptance Criteria
 - [ ] Built in Reward Functions are discoverable to participants 
@@ -8,65 +8,36 @@ Below is a list of reward functions that will be built in to Vega and available 
 
 ## Trading
 
-### T.1 - Total fees paid
+### T.1 - Taker fees paid (not 💧)
 
 Principle: the more someone has been a price-taker, the greater share of rewards they receive through this mechanism.
 
-```
-RewardFunction: {
-  taker_rewards(asset, Optional[Market]):
-		reward_proportions(eligible_accounts, triggerAmt):
-			for acc in eligible_accounts 
-			if(totalAmtTraded > triggerAmt):
-                Proportions[acc] = taker-fees-paid-by-participant-since-last-reward-calc / total-taker-fees-paid-with-this-reward-since-last-reward-calc
-            else:
-                Proportions[acc] = 0
-            return Proportions
-		}
-    return [eligible_accounts, proportions]
-  }
-}
-```
+Scope: This reward type can be scoped either to all trading settled in an asset, or to trading in one or more markets which must all settle in the same asset.
+
+Calculation: the scaling factor for a party's rewards is simply the sum of all *taker fees* the party has paid within the defined scope (asset or market(s)) during the period.
 
 
-### T.2 - Day Trader
+### Placeholder future reward (revisit for Oregon Trail)
 
-Principle: the more frequently a participant is active, the greater share of rewards they receive through this mechanism.
-
-
-
-### T.3 - Good risk citizen
+- Day Trader (the more frequently a participant is active, the greater share of rewards they receive through this mechanism)
+- Good risk citizen
 
 
+## Liquidity Provision (placeholder for future)
 
-## Staking
+- Reward proportionate to LP fees received (i.e. liquidity scaled by LP shares)
+- Reward proportionate to liquidity committed and provided NOT scaled by LP shares
+- Reward proportionate to maker fees recevied (i.e. reward casual liquidity provision)
+
+
+## Staking and delegation (required for 💧)
 
 ### S.1 - Rewarding getting started with delegation
 
-_Eligible recipients:_ anyone who delegates at least once during the period.
+Principle: reward staking and delegation with additional incentives, particularly to allow the network to be bootstrapped and create attractive early rewards.
 
-_Reward Pot:_ Fixed total pot amount (N), all distributed at the reward distribution point
+Scope: this reward type is always scoped as network-wide
 
-_Reward Calculation:_ between the reward commencement time and the reward distribution time, any party who has made a deleegation at least once will receive N/(total count of eligible participants) tokens. Everyone receives the same amount of tokens.
+Parameters: none 
 
-_Acceptance Criteria:_
-
-- [ ] a party that locks money on the bridge but does not delegate it, will not receive any reward
-- [ ] a party that delegates and then undelegates during the period is considered an eligible participant
-- [ ] all eligible participants receive the same size reward
-- [ ] the reward pot is empty at the conclusion of the reward distribution
-
-### S.2 - Rewarding consistent delegation
-
-_Eligible recipients:_ anyone who delegates at least once during the period.
-
-_Reward Pot:_ Fixed total pot amount (N), all distributed at the reward distribution point
-
-_Reward Calculation:_ between the reward commencement time and the reward distribution time, any party who has delegated for [90% of the time] will receive N/(total count of eligible participants) tokens. Everyone receives the same amount of tokens.
-
-_Acceptance Criteria:_
-
-- [ ] a party that locks money on the bridge but does not delegate it, will not receive any reward
-- [ ] a party that delegates for [10 x 1%] lengths of the total time is eligible participant
-- [ ] all eligible participants receive the same size reward
-- [ ] the reward pot is empty at the conclusion of the reward distribution
+Reward calculation: the total payout amount for the period is treated in the same way as the infrastructure fee pool, and the relative payout scaling factors are calculated as per the staking and delegation specification for distributing infrastructure fees to token holders and validators. (Payout delay and max amount per recipient are still respected).

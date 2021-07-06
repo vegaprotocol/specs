@@ -1,7 +1,10 @@
 # Network Treasury
 
 The Network Treasury is a set of accounts (up to 1 per asset supported by the network via ther asset framework) that are funded by parties, deposits, or by direct transfers (e.g. a portion of fees, or from insurance pools at market closure). 
-The funds in the network treasury are spent either by direct governance action (transfer) or by mechanisms controlled by governance, such as a periodic transfer into a reward pot. 
+The purpose of the Network Treasury is to allow funding to be allocated to rewards, grants, etc. by token holder governance.
+
+The funds in the network treasury are spent by being transferred to another account, either by direct governance action (i.e. voting on a specific proposed transfer) or by mechanisms controlled by governance, such as a periodic transfer, which may have network parameters that control the frequency of transfers, calculation of the amount, etc.. 
+These transfers may be to a party general account, reward pool account, or insruance pool account for a market.
 There is no requirement or expectation of symmetry between funds flowing into the Network Treasury and funds flowing out.
 For example, the treasury account may be seeded by funds held by the team or investors, or through the issuance of tokens at various irregular points in time, and these funds may then be allocated to incentives/rewards, grants, etc. on a different schedule.
 
@@ -14,18 +17,28 @@ Funding is how the on-chain treasury account receives collateral to be allocated
 A transfer may specify the network treasury as the destination of the transfer. 
 The funds, if available would be transferred instantly and irrevocably to the network treasury account for the asset in question (the treasury account for the asset will be created if it doesn’t exist).
 
-- Transfer from protocol mechanics: there may be a protocol feature such as the charging of fees or handling of expired insurance pool balances that specifies the Netwok Treasury as destination in a transfer.
+- Transfer from protocol mechanics: there may be a protocol feature such as the charging of fees or handling of expired insurance pool balances that specifies the Netwok Treasury as destination in a transfer. (Not required for MVP/Sweetwater)
 
-- Transfer by governance: a governance proposal can be submitted to transfer funds either from a market's insurance pool or from the network wide per-asset insurance pool into the on chain treasury account for the asset. TODO: link transfer spec
+- Transfer by governance: a governance proposal can be submitted to transfer funds either from a market's insurance pool or from the network wide per-asset insurance pool into the on chain treasury account for the asset. (Not required for MVP/Sweetwater)
 
-- Transfer transaction: a transaction submitted to the network may request to transfer funds from an account controlled by the owner’s private key (i.e. an asset general account) to the Network Treasury. TODO: link transfer spec
+- Transfer transaction: a transaction submitted to the network may request to transfer funds from an account controlled by the owner’s private key (i.e. an asset general account) to the Network Treasury. (TODO: Not required for MVP/Sweetwater IF Funding by deposit is implemented)
 
 
 ### Funding by deposit
 
 A deposit via a Vega bridge may directly specify the Network Treasury as the destination for the deposited funds. The deposited funds would then appear in the Network Treasury account
 
-NOTE: this may not be needed once transfer transactions are built 
+(TODO: Not required for MVP/Sweetwater or perhaps at all IF Funding by transfer transaction is implemented)
+
+
+### Funding from fee revenue (future — placeholder)
+
+In future a fee factor (controlled by governance) may be added to allow the treasury to be funded from a component of the trading fees on the network.
+
+
+### Funding from inflation or tax (future — placeholder)
+
+In future a tax rate and/or inflation rate (controlled by governance) may be used to allow funding the network treasury with governance tokens. This would either involve transferring a fraction of each staked user's tokens to the network treausry per epoch (it is implied that this fraction would be a significantly lower value than the other assets they receive in fees), or periodic issuance of new tokens into the treasury (this would not be possible before the inflation cut-off date in the token contract).
 
 
 ## Allocation 
@@ -37,10 +50,10 @@ Reward calculation mechanics etc. never directly allocate funds from the on-chai
 
 ### Allocation maximums
 
-There is also a network parameter that controls transfers from the treasury:
+There are two network parameters that control transfers from the treasury:
 
-- `max_transfer_fraction` specifies the maximum fraction of the on chain treasury balances that can be allocated (transferred out) in any one allocation. Validation: must be strictly positive. Must be less than or equal to 1. Default 1. This applies to each treasury account.
-This limits the transfers that are specified via `amount` as well as those specified as `fraction_of_balance`, see below.
+- `max_transfer_fraction` specifies the maximum fraction of the on chain treasury balances that can be allocated (transferred out) in any one allocation. Validation: must be strictly positive. Must be less than or equal to 1. Default 1. This single parameter applies to each per-asset treasury account.
+- `max_transfer_amount` specifies the maximum absolute amount that can be allocated (transferred out) from the network treasury in any one allocation. Validation: must be strictly positive. Must be less than or equal to 1. Default 1. This single parameter applies to each per-asset treasury account.
 
 
 ### Direct allocation by governance
@@ -50,16 +63,23 @@ A governance proposal may be submitted to transfer funds on enactment from the o
 
 ### Periodic automated allocation to reward pool account
 
-For each on chain reward pool account (i.e. each combination of reward type and asset that rewards are made in) there will be three network parameters:
+For each on chain reward pool account (i.e. each combination of reward scheme and asset that rewards are made in) there may be a network parameter:
 
-- `max_percent_per_period`
-- `max_amount_per_period`
-- `period_length_seconds`
+- `<reward_scheme_id>.<asset_id>.periodic_allocation`: a data structure with three elements:
+	- `max_fraction_per_period`
+	- `max_amount_per_period`
+	- `period_length_seconds` 
 
-For each period of duration `period_length_seconds` a transfer is made from the on-chain treasury to the reward pool account in question, with the amount trasnferred calculated as:
+This parameter must be defaulted as empty for each reward scheme that's created, which ensures that periodic automated allocation will not happen for any reward scheme unless separately enabled through a separate governance process. That is, periodic allocation should not be able to be configured in the same proposal that creates the reward scheme itself.
 
-```
-transfer_amount = min(max_amount_per_period, max_percent_per_period * on_chain_treasury_balance)
-```
+For each period of duration `period_length_seconds` a transfer is made from the on-chain treasury to the reward pool account in question as described in the governance initiated transfers spec (including network wide amount limits, etc.) (TODO: link), where the following are used for the transfer details:
+- `source_type` =  network treasury
+- `source` = blank (only one per asset)
+- `type` =  "best effort"
+- `asset` = the `asset_id` matching the one in network parameter name
+- `amount` = `max_amount_per_period`
+- `fraction_of_balance` = `max_fraction_per_period`
+- `destination_type` = "reward pool"
+- `destination` = the `reward_scheme_id` matching the one in network parameter name
 
-![On-chain System Map](0000-on-chain-treasury-draft-sketch.jpg)
+The transfer occurs immediately per once every `period_length_seconds` and does not require voting, etc. as the governance proposal used to set the parameters for the periodic transfer has already approved it.

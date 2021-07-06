@@ -175,48 +175,89 @@ All **change market parameter proposals** have their validation configured by th
 
 
 ## 3. Change network parameters
+
 Network parameters that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters.
 
 All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
 
+
 ## 4. Transfers initiated by Governance
 
-TODO - insert a general table of permitted source and destination combinations.
+### Permitted source and destination account types
 
-### Example - on-chain treasury
+The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal. 
 
-The onchain treasury is a set of accounts (one per asset) that are able to have funds sent to and from using on-chain governance.
+| Source type | Destinaton type | Governance transfer permitted |
+| --- | --- | --- |
+| Party account (any type) | Any | No |
+| Network treasury | Reward pool account | Yes [1] |
+| Network treasury | Party general account(s) | Yes |
+| Network treasury | Party other account types | No |
+| Network treasury | Network insurance pool account | Yes |
+| Network treasury | Market insurance pool account | Yes |
+| Network treasury | Any other account | No |
+| Network insurance pool account | Network treasury | Yes |
+| Network insurance pool account | Market insurance pool account | Yes |
+| Network insurance pool account | Any other account | No |
+| Market insurance pool account | Party account(s) | Yes [2] |
+| Market insurance pool account | Network treasury | Yes [2] |
+| Market insurance pool account | Network insurance pool account | Yes [2] |
+| Market insurance pool account | Any other account | No |
+| Any other account | Any | No | 
 
-#### Sending funds to treasury (direct funding treasury by governance)
+[1] This is **the only type of this functionality required for Sweetwater/MVP**
 
-A governance proposal may be submitted to transfer funds on enactment to the on-chain treasury from any of the following account types:
+[2] In future, by market governance vote (i.e. weighted by LP shares)
 
-- The network wide insurance pool for the asset
-- A market's insurance pool for the asset
 
-Other governance actions, such as the closing of a RewardPool account _may_ also prompt the funding of the treasury account but this is an indirect action, as defined in the protocol and will be specified where relevant.
-
-#### Sending funds from treasury (direct allocation by governance)
-
-A governance proposal may be submitted to transfer funds on enactment from the on-chain treasury to any of the following account types:
-
-- The network wide insurance pool for the asset
-- A market's insurance pool for the asset
-- A reward mechanism account for the asset
-- A party's general account for the asset (via direct allocation only)
+### Transfer proposal details
 
 The proposal specifies:
 
-- `type`, which can be either "all or nothing", "best effort" or "fraction", where:
+- `source_type`: the source account type (i.e. network treasury, network insurance pool, market insurance pool)
+- `source` specifies the account to transfer from, depending on the account type:
+  - network treasury: leave blank (only one per asset)
+  - network insurance pool: leave blank (only one per asset)
+  - market insurance pool: market ID
+- `type`, which can be either "all or nothing" or "best effort":
 	- all or nothing: either transfers the specified amount or does not transfer anything
-    - best effort: transfers the specified amount or the max allowable amount if this is less than the specified amount
-    - fraction: transfers a fraction of the on-chain treasury's balance at the time of enactment, in the given asset
-- `amount` or `fraction_of_balance` (dependant on the type chosen), which specifies how much to transfer
-- `destination` specifies the account to transfer to
-- Plus the normal proposal fields (i.e. voting and enactment dates, etc.)
+  - best effort: transfers the specified amount or the max allowable amount if this is less than the specified amount
+- `amount`: the maximum amount to transfer
+- `asset`: the asset to transfer
+- `fraction_of_balance`: the maximum fraction of the source account's balance to transfer as a decimal (i.e. 0.1 = 10% of the balance)
+- `destination_type` specifies the account type to transfer to (reward pool, party, network insurance pool, market insurance pool)
+- `destination` specifies the account to transfer to, depending on the account type:
+  - reward pool: the reward scheme ID
+  - party: the party's public key
+  - network insurance pool: leave blank (there's only one per asset)
+  - market insurance pool: market ID
+- Plus the standard proposal fields (i.e. voting and enactment dates, etc.)
 
-If the proposal is successful and enacted, the amount specified will be transferred to the destination account on the enactment date, subject to the limit specified by the `max_transfer_fraction` network parameter.
 
+### Transfer proposal enactment
+
+If the proposal is successful and enacted, the amount will be transferred from the source account to the destination account on the enactment date.
+
+The amount is calculated by
+```
+  transfer_amount = min( 
+    proposal.fraction_of_balance * source.balance, 
+    proposal.amount, 
+    NETWORK_MAX_AMOUNT,
+    NETWORK_MAX_FRACTION * source.balance )
+```
+
+Where:
+-  NETWORK_MAX_AMOUNT is a network parameter specifying the maximum absolute amount that can be transferred by governance for the source account type
+-  NETWORK_MAX_FRACTION is a network parameter specifying the maximum fraction of the balance that can be transferred by governance for the source account type (must be <= 1)
+
+If `type` is "all or nothing" then the transfer will only proceed if:
+
+```
+transfer_amount == min( 
+    proposal.fraction_of_balance * source.balance, 
+    proposal.amount )
+```
 
 
 ## Proposal validation parameters
