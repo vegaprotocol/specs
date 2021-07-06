@@ -110,7 +110,7 @@ Another option would be to withdraw stake proportionally from the validators.
 
 #### Types of undelegations
 
-_Undelegate towards the end of the episode_
+_Undelegate towards the end of the epoch_
 - The action is announced in the next available block, but the delegator keeps the delegation alive till the last block of the epoch. The delegator can then re-delegate the stake, which then be valid once the next epoch starts. The delegator cannot move the tokens before the epoch ends, they remain locked.
 
 
@@ -163,7 +163,7 @@ block creator has the responsibility to filter out these transactions.
 - Timings
   - Any locked (but undelegated) tokens can be delegated at any time. 
   - The delegation only becomes valid at the next [episode](./0050-epochs.md), though it can be undone through undelegate.
-  - The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next episode) 
+  - The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next epoch) 
 
 ### Adding more stake
 - More tokens may be locked at any time on the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md)
@@ -175,8 +175,8 @@ block creator has the responsibility to filter out these transactions.
  - Unlocking your tokens in the bridge contract will effectively "remove" them from any delegation they're doing (unless you have remaining undelegated tokens that could fulfil your delegation)
 - Delegation may be fully or partially removed. The amount specified in the [function: Remove](../non-protocol-specs/0004-staking-bridge.md) - is the size by which the existing staked amount will be decremented
 - Removal of delegation may happen in the following 2 ways:
-  - Announcing removal, but maintaining stake until last block of the current episode. This "announced stake" may be then (re)delegated (e.g. to a different validator).
-  - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end fo the episode, but they are sent to the onchain treasury account for that asset.
+  - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator).
+  - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the onchain treasury account for that asset.
 
 ### Changing delegation
 - Changing the validator to whom a participant wants to validate to involves:
