@@ -25,13 +25,29 @@ Settlement instructions contain information regarding the accounts from which co
 
 Vega executes settlement with a two step process:
 
-1. Vega *collects* from the margin accounts of those who, according to the settlement formula, are liable to pay collateral.  The collection instruction should first collect from a trader's margin account for the market and then the trader's general account and then the market's insurance pool.  
+### Step 1: collection
 
-2. This will result in ledger entries  being formulated ( see [collateral](./0005-collateral.md) ) which adhere to double entry accounting and record the actual transfers that occurred on the ledger.
+Vega *collects* from the margin accounts of those who, according to the settlement formula, are liable to pay collateral.  The collection instruction should first collect as much as possible from the trader's margin account for the market, then the trader's general account, then the market's insurance pool. If the full required amount cannot be collected from these accounts then as much as possible is collected.
 
-If the net amounts are what was requested, the settlement function will formulate instructions to *distribute* to the margin accounts of those whose moves have been positive according to the amount they are owed. These transfers will be requested to debit from the market's *margin* account and credit the traders who have are due to receive a "cash / asset flow" as a result of the settlement.
+This will result in ledger entries being formulated ( see [collateral](./0005-collateral.md) ) which adhere to double entry accounting and record the actual transfers that occurred on the ledger. The destination account is the *market settlement account* for the market. This may be a persistent account or can be created for each settlement process run-through and destroyed after the process completes, but either way, **the *market settlement account* must have a zero balance before the settlement process begins and after it completes**.
 
-If there's not enough money for the reallocation due to some traders having insufficient collateral in their margin account and general account to handle the price / position move, and if the insurance pool can't cover the full *distribute* requirements, the settlement function will need to alter the "distribute" amounts accordingly. This is called [loss socialisation](). Note, the stub implementation of loss socialisation is to reduce by pro-rata the distributed amounts by relative position size.
+
+### Step 2: distribution
+
+#### Normal
+
+If all requested amounts are succesfully transferred to the *market settlement account*, then the amount collected will match the amount to be distributed and the settlement function will formulate instructions to *distribute* to the margin accounts of those whose moves have been positive according to the amount they are owed. These transfers will debit from the market's *market settlement account* and credited to the margin accounts of traders who have are due to receive a "cash / asset flow" as a result of the settlement.
+
+#### Loss socialisation
+
+If some of the collection transfers are not able to supply the full amount to the *market settlement account* due to some traders having insufficient collateral in their margin account and general account to handle the price / position (mark to market) move, and if the insurance pool can't cover the shortfall for some of these, then not enough funds will have been collected to distribute the full amount of the mark to market gains made by traders on the other side. Therefore, settlement needs to decide how to fairly distribute the funds that have been collected. This is called *loss socialisation*. 
+
+In future, a more sophisticated algorithm may be used for this (perhaps taking into account a trader's overall profit on their positions, for example) but initially this will be implemented by reducing the amount to distribute to each trader with an MTM gain pro-rata by relative position size:
+
+```
+distribute_amount[trader] = mtm_gain[trader] * ( actual_collected_amount / target_collect_amount )
+
+```
 
 
 ## Settlement at instrument expiry
