@@ -38,7 +38,7 @@ When a checkpoint is created, each validator should calculate its hash and submi
 When to create a checkpoint:
 - if `current_time - time_elapsed_between_checkpoints > time_of_last_full_checkpoint`
 - if there was withdrawal 
-Withdrawal checkpoint can be just a delta containing the balance change + hash of previous checkpoint (either delta or full). Note that for the "Sweetwater" release we don't need to create a checkpoint on every withdrawal.
+Withdrawal checkpoint can be just a delta containing the balance change + hash of previous checkpoint (either delta or full). 
 
 Information we explicitly don't try to checkpoint:
 - Positions, limit orders, pegged orders or any order book data. 
