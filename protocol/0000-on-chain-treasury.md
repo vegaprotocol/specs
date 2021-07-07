@@ -98,14 +98,14 @@ The transfer occurs immediately per once every `period_length_seconds` and does 
 	- The Network Treasury accounts API returns the correct balance for the new account
 - No party can withdraw assets from the Network Treasury account via the ERC20 bridge
 - No party can use assets in the Network Treasury account as margin or transfer them to another account on Vega
-- The network treasury account balances [are restored after a network restart](../non-protocol/0000-limited-network-life.md) (TODO: correct link)
+- The network treasury account balances [are restored after a network restart](../non-protocol-specs/0003-limited-network-life.md)
 - It is possible to set a network parameter for periodic allocation to the [staking and delegation reward scheme](0000-reward-functions.md) **for any valid asset ID** in the asset framework:
 	- The parameter can be set/changed via governance
 	- The parameter defaults to an empty/null/false state (or doesn't exist by default)
-	- The parameter includes values for `max fraction per period`, `max amount per period`, and `period length in seconds`
+	- The parameter is a structure that includes values for `max fraction per period`, `max amount per period`, and `period length in seconds`
 	- If `max_fraction_per_period` is zero, no funds are allocated 
 	- If `max_amount_per_period` is zero, no funds are allocated 
-	- If `period_length_seconds` is zero, no attempt to allocate funds occurs
+	- If `period_length_seconds` is zero or blank/empty, no attempt to allocate funds occurs
 - The allocation network parameter can be set for an asset in order to distribute funds to the staking and delegation reward pool for the asset:
   - If `period_length_seconds` is non-zero, the amount to be transferred to the reward pool is calculated and the distribution occurs. This happens `period_length_seconds` seconds after the last attempt to calculate and distribute funds, if no attempt has ever been made then the first distribution is calculated immediately.
 	- The amount sent to the reward pool account is equal to the smaller of `max_amount_per_period` and `max_fraction_per_period * network_treasury_balance[assset]`
