@@ -21,14 +21,12 @@ The funds, if available would be transferred instantly and irrevocably to the ne
 
 - Transfer by governance: a governance proposal can be submitted to transfer funds either from a market's insurance pool or from the network wide per-asset insurance pool into the on chain treasury account for the asset. (Not required for MVP/Sweetwater)
 
-- Transfer transaction: a transaction submitted to the network may request to transfer funds from an account controlled by the owner’s private key (i.e. an asset general account) to the Network Treasury. (TODO: Not required for MVP/Sweetwater IF Funding by deposit is implemented)
+- Transfer transaction: a transaction submitted to the network may request to transfer funds from an account controlled by the owner’s private key (i.e. an asset general account) to the Network Treasury. (TODO: Not required for MVP/Sweetwater)
 
 
 ### Funding by deposit
 
 A deposit via a Vega bridge may directly specify the Network Treasury as the destination for the deposited funds. The deposited funds would then appear in the Network Treasury account
-
-(TODO: Not required for MVP/Sweetwater or perhaps at all IF Funding by transfer transaction is implemented)
 
 
 ### Funding from fee revenue (future — placeholder)
@@ -68,7 +66,7 @@ For each on chain reward pool account (i.e. each combination of reward scheme an
 - `<reward_scheme_id>.<asset_id>.periodic_allocation`: a data structure with three elements:
 	- `max_fraction_per_period`
 	- `max_amount_per_period`
-	- `period_length_seconds` 
+	- `period_length_seconds`
 
 This parameter must be defaulted as empty for each reward scheme that's created, which ensures that periodic automated allocation will not happen for any reward scheme unless separately enabled through a separate governance process. That is, periodic allocation should not be able to be configured in the same proposal that creates the reward scheme itself.
 
@@ -83,3 +81,40 @@ For each period of duration `period_length_seconds` a transfer is made from the 
 - `destination` = the `reward_scheme_id` matching the one in network parameter name
 
 The transfer occurs immediately per once every `period_length_seconds` and does not require voting, etc. as the governance proposal used to set the parameters for the periodic transfer has already approved it.
+
+
+## Acceptance criteria
+
+
+### 💧 Sweetwater
+
+- Depositing funds via the ERC20 bridge to the Network Treasury account (i.e. zero address) when there is no Network Treasury account for the asset being deposited:
+	- Creates a Network Treasury account for that asset 
+	- Results in the balance of the Network Treasury account for the asset being equal to the amount of the asset that was deposited
+	- The Network Treasury accounts API includes the new account 
+	- The Network Treasury accounts API returns the correct balance for the new account
+- Depositing funds via the ERC20 bridge to the Network Treasury account (i.e. zero address) when there is already a Network Treasury account for the asset being deposited:
+	- Increments the balance of the Network Treasury account for the asset by the amount of the asset that was deposited
+	- The Network Treasury accounts API returns the correct balance for the new account
+- No party can withdraw assets from the Network Treasury account via the ERC20 bridge
+- No party can use assets in the Network Treasury account as margin or transfer them to another account on Vega
+- The network treasury account balances [are restored after a network restart](../non-protocol/0000-limited-network-life.md) (TODO: correct link)
+- It is possible to set a network parameter for periodic allocation to the [staking and delegation reward scheme](0000-reward-functions.md) **for any valid asset ID** in the asset framework:
+	- The parameter can be set/changed via governance
+	- The parameter defaults to an empty/null/false state (or doesn't exist by default)
+	- The parameter includes values for `max fraction per period`, `max amount per period`, and `period length in seconds`
+	- If `max_fraction_per_period` is zero, no funds are allocated 
+	- If `max_amount_per_period` is zero, no funds are allocated 
+	- If `period_length_seconds` is zero, no attempt to allocate funds occurs
+- The allocation network parameter can be set for an asset in order to distribute funds to the staking and delegation reward pool for the asset:
+  - If `period_length_seconds` is non-zero, the amount to be transferred to the reward pool is calculated and the distribution occurs. This happens `period_length_seconds` seconds after the last attempt to calculate and distribute funds, if no attempt has ever been made then the first distribution is calculated immediately.
+	- The amount sent to the reward pool account is equal to the smaller of `max_amount_per_period` and `max_fraction_per_period * network_treasury_balance[assset]`
+	- The balance of the treasury account for the asset is reduced by the amount sent
+	- The balance of the target reward pool account for the asset is increased by the amount sent
+
+NOTE: for Sweetwater the allocation logic and reward pools can be simplified to work only for the governance asset (i.e. VEGA tokens) if needed.
+
+
+### 🤠 Oregon Trail
+
+- TBD

@@ -41,3 +41,19 @@ Scope: this reward type is always scoped as network-wide
 Parameters: none 
 
 Reward calculation: the total payout amount for the period is treated in the same way as the infrastructure fee pool, and the relative payout scaling factors are calculated as per the staking and delegation specification for distributing infrastructure fees to token holders and validators. (Payout delay and max amount per recipient are still respected).
+
+
+## Acceptance criteria
+
+
+### 💧 Sweetwater
+
+- Staking and delegation reward type is available and used for the single, "hard coded" (i.e. not changeable through transactions on chain in this release) reward scheme
+- The reward amounts are calculated using the same formula and code as the staking and delegation reward calculation described in that spec, subject to the application of the max payout amount per participant (public key) if one is specified in the reward parameters (which are controllable by governance)
+- Both stakers (identified by being self-delegators AND being in the active validator set) and delegators are rewarded, as per the calculation
+- The calculation respects the rules around epochs and timing of delegation and undelegation when calculating rewards for a period
+
+
+### 🤠 Oregon Trail
+
+- TBC

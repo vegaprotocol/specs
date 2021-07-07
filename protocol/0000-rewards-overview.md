@@ -72,7 +72,7 @@ Reward schemes are created by a transaction that specifies the information descr
 - Reward scheme end date/time (blank for never)
 - Payout type and parameters, either:
   - Fractional: try to pay a specified fraction of reward pool account balance(s) each period expressed as a decimal (`0.0 < fraction <= 1.0`).
-  - Balanced: pay `X/n` out each period where `X` is the balance of the reward pool account and `n` is the number of period remaining including the current period (only valid where the scheme has an end date)
+  - Balanced: pay `X/n` out each period where `X` is the balance of the reward pool account and `n` is the number of period remaining until the end date, including the current period (only valid where the scheme has an end date)
 - Max payout per asset per recipient: optionally a list of `{asset, max_amount}` pairs. Where provided, `max_amount` limits the amount of `asset` that will be paid out to any one account during a period.
 - Payout delay: number of seconds between reward calculation and payout (may be zero)
 
@@ -88,6 +88,16 @@ Once reward is created it is assigned a reward ID, which is also used to identif
 Creating a reward scheme outside of govrnance must be accomanpanied by an amount of funding for the reward pool in at least one asset. At least one asset included in this funding must have an amount included greater than or equal to `reward_funding_multiple * asset.min_lp_stake` where `reward_funding_multiple` is a network parameter and `asset.min_lp_stake` is the minimum LP stake amount configured for the asset.
 
 
+### Updating reward scheme parameters
+
+A Reward Scheme may be updated by the same method it was created (i.e. governance proposal or individual transaction). Updates work like network parameter changes where the parameter name is an identifier and the reward scheme ID (i.e. something like `rewards.<SCHEME_ID>`) and the values are stored as a single structured network parameter. If the reward scheem was created and is "owned by" a party and they submit an update proposal, it is automatically accepted, and a proposal to update the scheme from anyone else is automatically rejected. The following may be changed: 
+- scheme parameters
+- scheme end date/time
+- payout type and parameters
+- max payout per asset per recipient
+- payout delay
+
+
 ### Cancelling reward schemes
 
 A Reward Scheme may be cancelled by the same method it was created (i.e. governance proposal or individual transaction). On cancellation, any undistributed funds in the reward pool account will be transferred to the network treasury for the asset.
@@ -96,8 +106,6 @@ A Reward Scheme may be cancelled by the same method it was created (i.e. governa
 ## Reward Pool Accounts
 
 A Reward Pool is account is created for a `{reward scheme, asset}` combination when funds are transferred to the reward scheme ID. Reward Pool Accounts do not need to be tracked by core if they have a zero balance, however APIs may be required to previously used accounts for active reward schemes even if they have a zero balance, as some reward scheme configurations will reach zero balance after each payout and be expected to be topped up, so having the account disappear from APIs/views after payouts would be strange.
-
-A reward scheme can have a reward pool 
 
 
 ## Reward Execution:
@@ -119,15 +127,39 @@ Sweetwater scope only requires that a single instance of the single reward funct
 It is therefore not necessary to build any of the transactions or control logic that will be needed for the reward framework once trading and liquidity provision rewards exist (required for Oregon Trail). Max payout per recipient and payout delay are required for 💧.
 
 
-## Acceptance Criteria
 
-- [ ] Reward Schemes proposed by governance transaction but not yet enacted cannot receive asset transfers
-- [ ] If there is no Reward, no Reward Pools exist that reference that Reward.
+## Acceptance criteria
 
 
-## Assumptions:
+### 💧 Sweetwater
 
-- Rewards are calculated deterministically at a point in time for all eligible participants
-- Rewards are allocated at a point in time based on the activity by a participant since the last time this reward was calculated. 
-- Each reward will have an allocation of tokens that is split between eligible participants according to defined rules
-- Each of the reward specifications may be active or not; set by network parameter
+- There is a single reward scheme of type [staking and delegation rewards](0000-reward-functions.md)
+  - It has a reward scheme ID
+  - Its parameters can be updated by governance vote
+  - It cannot be cancelled entirely (though the payout amount can be set to 0)
+  - Rewards are paid out correctly at the frequency specified by the current parameters
+  - Rewards are capped to the max payout per recipient correctly
+  - Payout is delayed by the correct amount of time if a payout delay is specified
+  - The reward scheme doesn't and cannot have an end time specified (as we do not allow creation of new schemes, this one cannot end)
+  - Fractional payout type is available
+  - The reward scheme scope is network-wide
+- When funds in a given asset are allocated to the reward scheme ID (for 💧 this only needs to be via automated allocation controlled by governance) a reward pool account is created for the asset:
+  - Funds in all reward pool accounts for the scheme are paid out when rewards are paid
+  - Each account's balance is used when calculating the amount based on the configured payout fraction
+  - Funds cannot be transferred out of the reward pool accounts other than when they are paid out as rewards
+  - Funds cannot be transferred directly to a reward pool account
+- APIs allow the reward scheme and its parameters to be queried
+- APIs allow a party to see how much was paid out to them (ideally this would just use the generalised transfers API filtered by type, but that may not exist for 💧 and this is needed)
+- Updated to the reward scheme parameters are applied correctly for all future distributions
+- No reward schemes can be created
+- Only staking and delegation reward types are available
+
+
+### 🤠 Oregon Trail (WIP)
+
+- The are more reward types
+- New reward scehemes can be created, including multiple of the same type
+- Reward schemes owned and controlled by individual parties can be created as well as network owned ones created through governance
+- Funds can be sent directly to a reward pool account
+- Fudns cannot be allocated to a party controlled reward scheme via periodic allocation from the on-chain treasury
+- TBC

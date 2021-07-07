@@ -334,3 +334,7 @@ APIs should also exist for clients to:
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
+
+## 💧 Sweetwater
+
+- Transfers created by the period allocation of funds from the Network Treasury to a reward pool account are executed correctly as define here (though they are initiated by governance setting the parameters not by a direct governance proposal)
