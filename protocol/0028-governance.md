@@ -250,14 +250,12 @@ APIs should also exist for clients to:
 - [x] Network parameter change proposals can only propose a change to a single parameter
 
 ## Using Vega governance tokens as voting weight:
-- [x] As a user, I can vote for an existing proposal if I have more than 0 governance tokens
-- [x] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens
-- [x] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens
+- [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens in my staking account
+- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account
+- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account even if I have more than 0 governance tokens in my general or margin accounts
+- [ ] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens in my staking account
   - [x] Only my most recent vote is counted
 - [ ] When calculating the participation rate of an auction, the participation rate of the votes takes in to account the total supply of the governance asset.
-
-## Future criteria, once a new weighting method is introduced?
-- [ ] As a user, I can understand which voting weighting methodology a proposal requires
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
