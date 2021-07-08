@@ -15,6 +15,10 @@
     # And a stake_deposited event is emitted by the staking bridge contract
     # and the vega key has a staking account for the VEGA asset
     # and the vega key's staking account has increased by the sum of the vested and unvested tokens deposited
+## Scenario: When staking vested tokens with the staking bridge, the staked tokens are removed from the Ethereum key's balance💧
+    # Note: This is an entirely Ethereum side test
+## Scenario: When staking vested tokens with the vesting bridge, balance of staked tokens cannot be removed 💧
+    # Note: This is an entirely Ethereum side test
 
 ## Scenario: An ethereum key unstakes unvested tokens via the vesting contract💧
     # Given an ethereum key has staked 100 tokens in the vesting contract
