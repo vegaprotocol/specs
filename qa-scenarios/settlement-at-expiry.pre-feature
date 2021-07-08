@@ -102,12 +102,17 @@ Feature: Test margin for lp near price monitoring boundaries
       # this last one may be ignored since balance is zero and we'll cook up  a scenario where it actually has to happen
       the insurance pool balance of 0 is transferred to network thesure for asset USD 
     
+    And the traders should have the following profit and loss:
+      | trader  | volume | unrealised pnl | realised pnl  |
+      | trader1 | 0      | 0              | 10            |
+      | trader2 | 0      | 0              | -10           |
+
 
     # as above, sure whether we want SETTLED in the trading mode or whether we want another market status field here to
     # match the possible states in "market lifecycle"
     And  the market data for the market "ETH/DEC21" should be:
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
-      | 1001       | SETTLED                 | 1       | 900       | 1100      | 1000         | 78000000       | 10            | 
+      | 1001       | SETTLED                 | 1       | 900       | 1100      | 0            | 0              | 0             | 
 
     
     
