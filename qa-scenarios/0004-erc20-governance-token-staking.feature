@@ -44,6 +44,16 @@
     # Given an ethereum key has staked 100 tokens in the staking bridge
     # and that key calls unstake on the vesting contrract with an amount of 110
     # No stake_removed event is emitted by the vesting contract
+## Scenario: An ethereum key deposits unvested via the vesting contract, and vested tokens via the staking bridge, then tries to withdraw them via the wrong contract 💧
+    # Given an ethereum key has called stake on the vesting contract with a balance of 200 
+    # and an ethereum key has called stake on the staking bridge with a balance of 100 
+    # and an ethereum key calls unstake on the staking bridge with a balance of 200 
+    # and no stake_removed event is emitted by the staking bridge contract
+## Scenario: An ethereum key deposits unvested via the vesting contract, and vested tokens via the staking bridge, then tries to withdraw them via the right contract 💧
+    # Given an ethereum key has called stake on the vesting contract with a balance of 200 
+    # and an ethereum key has called stake on the staking bridge with a balance of 100 
+    # and an ethereum key calls unstake on the staking bridge with a balance of 200 
+    # A stake_removed event is emitted by the staking bridge
 
 ## Scenario: A vega party that has VEGA tokens in a Vega general account cannot withdraw them via the vesting contract 💧
     # Given a Vega party has a General account for the VEGA asset with a balance of 100
