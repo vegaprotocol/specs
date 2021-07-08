@@ -87,6 +87,7 @@ There should be a tool to extract all assets from the restore file so that they 
 |`network.checkpoint.timeElapsedBetweenCheckpoints` | String (duration) |  sets the minimum time elapsed between checkpoints|  💧 Sweetwater |
 
 # Acceptance criteria
+
 - [ ] Checkpoints are created every `time_elapsed_between_checkpoints` period of time passes. 💧
 - [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧
 - [ ] We can launch a network with any valid checkpoint file. 💧
@@ -166,6 +167,42 @@ There should be a tool to extract all assets from the restore file so that they 
 1. There is no market and there are no market proposals.
 1. The LP party has general account balance in tUSD of `10 000`.
 
+### 💧 Test case 3.4: Recovery from proposed Markets with no votes, voting is open, proposal not restored
+1. There is an asset tUSD and no asset proposals.
+1. There are no markets and no market proposals.
+1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
+1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD. 
+2. Checkpoint is taken during voting period
+1. The network is shut down. 
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. There is an asset tUSD. 
+1. There is no market and there are no market proposals.
+1. The LP party has general account balance in tUSD of `10 000`.
+
+### 💧 Test case 3.5: Recovery from proposed Markets with votes, voting is open, proposal not restored
+1. There is an asset tUSD and no asset proposals.
+1. There are no markets and no market proposals.
+1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
+1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD. 
+2. Checkpoint is taken during voting period
+1. The network is shut down. 
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. There is an asset tUSD. 
+1. There is no market and there are no market proposals.
+1. The LP party has general account balance in tUSD of `10 000`.
+
+### 💧 Test case 3.6: Market proposals ignored when restoring twice from same checkpoint
+1. A party has general account balance of 100 tUSD. 
+2. The party submits a withdrawal transaction for 100 tUSD. A checkpoint is immediately created. 
+3. The network is shut down. 
+4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+5. A new market is proposed
+6. The network is shut down. 
+7. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. There is no market and there are no market proposals.
+1. The party has general account balance in tUSD of `0` and The party has "signed for withdrawal" `100`.
+
+
 ## 💧 Test case 4: Party's Margin Account balance is put in to a General Account balance for that asset after a reset
 1. A party has tUSD general account balance of 100 tUSD. 
 2. That party has tUSD margin account balance of 100 tUSD.
@@ -193,3 +230,4 @@ There should be a tool to extract all assets from the restore file so that they 
 1. There are `N` other parties and the delegation info in core says that other party `i` has delegated all its tokens to `validator_party_j` with `j = i mod 5`.
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
+
