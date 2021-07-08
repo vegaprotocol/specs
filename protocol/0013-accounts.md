@@ -7,13 +7,20 @@ Feature name: accounts
 - [ ] Double entry accounting is maintained at all points.
 - [ ] Only transfer requests move money between accounts.
 
-## Trader asset accounts
+## Party asset accounts
 - [ ] Every party that deposits an asset on Vega will have an asset account created for that asset.
--  [ ] Only one asset account exists per party per asset.
--  [ ] When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. 
--  [ ] When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. 
+  -  [ ] Only one general asset account exists per party per asset.
+  -  [ ] When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. 
+  -  [ ] When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. 
 
-## Trader margin accounts
+## Party staking accounts
+- [ ] Every party that deposits staked asset on Vega will have a stake account created for that asset.
+  - [ ] Only one staked asset account exists per party per asset.
+  - [ ] The balance can only be delegated to Validators
+  - [ ] The balance cannot be traded, or used as margin, or transferred, or withdrawn
+  - [ ] Delegated stake remains in the trader's staking account
+
+## Party margin accounts
 - [ ] Every party that submits an order on a market will have a margin account for that market created.
 - [ ] Each party should only have one margin account per market.
 - [ ] Cannot have a non-zero balance on a margin account where there's no position / position size = 0 and no active orders.
@@ -51,7 +58,7 @@ All accounts must:
 
 - only be created and deleted by transfer requests. Deletion account transfer requests must specify which account should receive any outstanding funds in the account that's being deleted.
 
-## Accounts for  assets
+## Accounts for assets
 
 **Creation:**
 
@@ -109,5 +116,4 @@ When new market is proposed, accepted and its open auction ends Vega will transf
 # Pseudo-code / Examples
 
 # Test cases
-
 

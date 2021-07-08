@@ -119,4 +119,10 @@ A software library, written in Go, which is an [implementation](#implementation)
 ## Throughput
 The amount of data that can be processed by a system in a given unit of time, e.g. 100 transactions per second. From a user point of view, it's one component of perceived blockchain speed. The other is latency. Throughput has no relationship with latency, though: a system may have a throughput of 1 million transactions per second, but at a 6 second latency. It may meet quite different needs than a system that can achieve 300 transactions per second at a 500 millisecond latency.
 
+## Validators
+From the [Tendermint documentation](https://docs.tendermint.com/master/nodes/validators.html):
+> Validators are responsible for committing new blocks in the blockchain. These validators participate in the consensus protocol by broadcasting votes which contain cryptographic signatures signed by each validator's private key.
+
+> Some Proof-of-Stake consensus algorithms aim to create a "completely" decentralized system where all stakeholders (even those who are not always available online) participate in the committing of blocks. [Tendermint](#tendermint) has a different approach to block creation. Validators are expected to be online, and the set of validators is permissioned/curated by some external process.
+
 
