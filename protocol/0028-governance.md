@@ -50,7 +50,7 @@ A party on the Vega network will have a weighting for each type of proposal that
 
 To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`. 
 
-Weighting will initially be determined by the user's general account balance of a specific asset on the Vega network in question. This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, including between Testnets and Mainnets.
+Weighting will initially be determined by the user's general account balance or staking account balance of a specific asset on the Vega network in question. This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, including between Testnets and Mainnets.
 
 In future, governance weighting for some proposal types will be based on alternative measures, such as:
 
@@ -59,7 +59,7 @@ In future, governance weighting for some proposal types will be based on alterna
 
 The governance system must be generic in term of weighting of the vote for a given proposal. As noted above, the first implementation will start with _the amount of a particular token that a participant holds_ but this will be extended in the near future, as additional protocol features and governance actions are added.
 
-Initially the weighting will be based on the amount of the configured governance asset that the user has on the network as determined by their general account balance of this asset. 1 token represents 1 vote (0.0001 tokens represents 0.0001 votes, etc.). A user with a balance of 0 cannot vote or submit a proposal of that type, and ideally this would be enforced in a check _before_ scheduling the voting transaction in a block.
+Initially the weighting will be based on the amount of the configured governance asset that the user has on the network as determined *only* by their staking account balance of this asset. 1 token represents 1 vote (0.0001 tokens represents 0.0001 votes, etc.). A user with a balance of 0 cannot vote or submit a proposal of that type, and ideally this would be enforced in a check _before_ scheduling the voting transaction in a block.
 
 The governance token used for calculating voting weight must be an asset that is configured within the asset framework in Vega (this could be a "Vega native" asset on some networks or an asset deposited via a bridge, i.e. an ERC20 on Ethereum). Note: this means that the asset framework will _always_ need to be able to support pre-configured assets (the configuration of which must be verifiably the same on every node) in order to bootstrap the governance system. The governance asset configuration will be different on different Vega networks, so this cannot be hard coded.
 
@@ -323,14 +323,12 @@ APIs should also exist for clients to:
 - [x] Network parameter change proposals can only propose a change to a single parameter
 
 ## Using Vega governance tokens as voting weight:
-- [x] As a user, I can vote for an existing proposal if I have more than 0 governance tokens
-- [x] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens
-- [x] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens
+- [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens in my staking account
+- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account
+- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account even if I have more than 0 governance tokens in my general or margin accounts
+- [ ] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens in my staking account
   - [x] Only my most recent vote is counted
 - [ ] When calculating the participation rate of an auction, the participation rate of the votes takes in to account the total supply of the governance asset.
-
-## Future criteria, once a new weighting method is introduced?
-- [ ] As a user, I can understand which voting weighting methodology a proposal requires
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
