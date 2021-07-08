@@ -61,3 +61,4 @@ The transfer type informs the collateral engine that the `FromAccount` ought to 
 ## Payment of rewards
 - [Infrastructure fees](./0029-fees.md) are collected into an infrastructure fee account for the asset
 - These fees are distributed to the general accounts of the validators and delegators after `infra-fee-hold-time` in amounts calculated according to the above calculation.
+- There may also be additional rewards for participating in stake delegation from the rewards function. These are accumulated and distributed separately.
