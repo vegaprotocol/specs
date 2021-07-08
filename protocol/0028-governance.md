@@ -26,7 +26,7 @@ The type of governance action are:
 1. Change market parameters
 1. Change network parameters
 1. Add external asset to Vega (*out of scope for this document*, proposes a new asset controlled by a bridge to become usable on Vega
-
+1. Authorise a transfer to or from the [Network Treasury](TODO: LINK)
 
 ## Lifecycle of a proposal
 
@@ -149,13 +149,6 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 
 ## Types of proposals
 
-We allow users to submit proposals covering 3 types of governance action:
-
-1. Creation of a market
-1. Change market parameters
-1. Change network parameters
-
-
 ## 1. Create market
 
 This action differs from from other governance actions in that the market is created and some transactions (namely around liquidity provision) may be accepted for the market before the proposal has successfully passed. The lifecycle of a market and its triggers are covered in the [market lifecycle](./0043-market-lifecycle.md) spec.
@@ -182,9 +175,89 @@ All **change market parameter proposals** have their validation configured by th
 
 
 ## 3. Change network parameters
+
 Network parameters that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters.
 
 All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
+
+
+## 4. Transfers initiated by Governance
+
+### Permitted source and destination account types
+
+The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal. 
+
+| Source type | Destinaton type | Governance transfer permitted |
+| --- | --- | --- |
+| Party account (any type) | Any | No |
+| Network treasury | Reward pool account | Yes [1] |
+| Network treasury | Party general account(s) | Yes |
+| Network treasury | Party other account types | No |
+| Network treasury | Network insurance pool account | Yes |
+| Network treasury | Market insurance pool account | Yes |
+| Network treasury | Any other account | No |
+| Network insurance pool account | Network treasury | Yes |
+| Network insurance pool account | Market insurance pool account | Yes |
+| Network insurance pool account | Any other account | No |
+| Market insurance pool account | Party account(s) | Yes [2] |
+| Market insurance pool account | Network treasury | Yes [2] |
+| Market insurance pool account | Network insurance pool account | Yes [2] |
+| Market insurance pool account | Any other account | No |
+| Any other account | Any | No | 
+
+[1] This is **the only type of this functionality required for Sweetwater/MVP**
+
+[2] In future, by market governance vote (i.e. weighted by LP shares)
+
+
+### Transfer proposal details
+
+The proposal specifies:
+
+- `source_type`: the source account type (i.e. network treasury, network insurance pool, market insurance pool)
+- `source` specifies the account to transfer from, depending on the account type:
+  - network treasury: leave blank (only one per asset)
+  - network insurance pool: leave blank (only one per asset)
+  - market insurance pool: market ID
+- `type`, which can be either "all or nothing" or "best effort":
+	- all or nothing: either transfers the specified amount or does not transfer anything
+  - best effort: transfers the specified amount or the max allowable amount if this is less than the specified amount
+- `amount`: the maximum amount to transfer
+- `asset`: the asset to transfer
+- `fraction_of_balance`: the maximum fraction of the source account's balance to transfer as a decimal (i.e. 0.1 = 10% of the balance)
+- `destination_type` specifies the account type to transfer to (reward pool, party, network insurance pool, market insurance pool)
+- `destination` specifies the account to transfer to, depending on the account type:
+  - reward pool: the reward scheme ID
+  - party: the party's public key
+  - network insurance pool: leave blank (there's only one per asset)
+  - market insurance pool: market ID
+- Plus the standard proposal fields (i.e. voting and enactment dates, etc.)
+
+
+### Transfer proposal enactment
+
+If the proposal is successful and enacted, the amount will be transferred from the source account to the destination account on the enactment date.
+
+The amount is calculated by
+```
+  transfer_amount = min( 
+    proposal.fraction_of_balance * source.balance, 
+    proposal.amount, 
+    NETWORK_MAX_AMOUNT,
+    NETWORK_MAX_FRACTION * source.balance )
+```
+
+Where:
+-  NETWORK_MAX_AMOUNT is a network parameter specifying the maximum absolute amount that can be transferred by governance for the source account type
+-  NETWORK_MAX_FRACTION is a network parameter specifying the maximum fraction of the balance that can be transferred by governance for the source account type (must be <= 1)
+
+If `type` is "all or nothing" then the transfer will only proceed if:
+
+```
+transfer_amount == min( 
+    proposal.fraction_of_balance * source.balance, 
+    proposal.amount )
+```
 
 
 ## Proposal validation parameters
@@ -261,3 +334,7 @@ APIs should also exist for clients to:
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
+
+## 💧 Sweetwater
+
+- Transfers created by the period allocation of funds from the Network Treasury to a reward pool account are executed correctly as define here (though they are initiated by governance setting the parameters not by a direct governance proposal)
