@@ -20,6 +20,9 @@ There are really two main features:
 
 Point two requires that at load time, each node calculates the hash of the checkpoint file. It then sends this through consensus to make sure that all the nodes in the new network are agreeing on the state.
 
+# Network parameters
+- `time_elapsed_between_checkpoints` determines how often is a checkpoint created. If the value is set to `0` or the parameter is undefined then no checkpoints are created. Otherwise any time-length value `>0` is valid e.g. `1min`, `2h30min10s`, `1month`. 
+
 # Creating a checkpoint
 Information to store:
 - All [network parameters](../protocol/0054-network-parameters.md)
