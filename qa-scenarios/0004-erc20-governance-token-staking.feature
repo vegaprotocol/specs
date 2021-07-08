@@ -80,3 +80,10 @@
 # Scenario: An ethereum key with staked, ested assets in the staking bridge can transfer the ownership to another ethereum key 💧 
     # Note: This means that that key can no longer unstake those tokens
     #       But the on-vega balance remains untouched 
+
+# Scenario: An ethereum key with vested tokens in the vesting contract that are staked via the vesting contract tries to redeem them
+    # Call to redemption functon fails
+    # Holder's balance in vesting contract is unchanged
+    # Holder does not receive tokens in their wallet
+    # Holders stake account balance on Vega is unchanged
+   
