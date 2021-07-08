@@ -20,8 +20,6 @@ There are really two main features:
 
 Point two requires that at load time, each node calculates the hash of the checkpoint file. It then sends this through consensus to make sure that all the nodes in the new network are agreeing on the state.
 
-# Network parameters
-- `time_elapsed_between_checkpoints` determines how often is a checkpoint created. If the value is set to `0` or the parameter is undefined then no checkpoints are created. Otherwise any time-length value `>0` is valid e.g. `1min`, `2h30min10s`, `1month`. If the value is invalid Vega should not start e.g. if set to `3 fish`. 
 
 # Creating a checkpoint
 Information to store:
@@ -39,7 +37,7 @@ When a checkpoint is created, each validator should calculate its hash and submi
 - last block height and hash and event ID of all bridged chains (e.g. Ethereum) that the core has seen `number_of_confirmations` of the event. 
 
 When to create a checkpoint:
-- if `current_time - time_elapsed_between_checkpoints > time_of_last_full_checkpoint`
+- if `current_time - network.checkpoint.timeElapsedBetweenCheckpoints > time_of_last_full_checkpoint`
 - if there was withdrawal 
 Withdrawal checkpoint can be just a delta containing the balance change + hash of previous checkpoint (either delta or full). 
 
@@ -89,9 +87,11 @@ There should be a tool to extract all assets from the restore file so that they 
 |`network.checkpoint.networkEndOfLifeDate`| String (date) | This must be `>` `markets_freeze_date`. At this time the chain will be shutdown.  |  💧 Sweetwater |
 |`network.checkpoint.timeElapsedBetweenCheckpoints` | String (duration) |  sets the minimum time elapsed between checkpoints|  💧 Sweetwater |
 
+If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0` or the parameter is undefined then no checkpoints are created. Otherwise any time-length value `>0` is valid e.g. `1min`, `2h30min10s`, `1month`. If the value is invalid Vega should not start e.g. if set to `3 fish`. 
+
 # Acceptance criteria
 
-- [ ] Checkpoints are created every `time_elapsed_between_checkpoints` period of time passes. 💧
+- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧
 - [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧
 - [ ] We can launch a network with any valid checkpoint file. 💧
 - [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧
