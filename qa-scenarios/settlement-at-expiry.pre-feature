@@ -6,7 +6,7 @@ Feature: Test settlement at expiry for built-in futures
 # Scenario: The balance of a `TRADING_TERMINATED` market's insurance balance should move to the on chain treasury. 
 # Scenario: The correct balances end up with the correct people at settlement
 
-Feature: Test margin for lp near price monitoring boundaries
+Feature: Test settlement at expiry
 
   Background:
     Given the following network parameters are set:
@@ -29,15 +29,17 @@ Feature: Test margin for lp near price monitoring boundaries
       | horizon | probability | auction extension |
       | 1       | 0.99        | 300               |
     
-    # First comment here: I don't think we should be setting market maturity but instead trading terminated trigger
-    # So I comment out the usual formulation and instead put a "fake trigger"
-    # And the markets:
-    #  | id        | quote name | asset | risk model          | margin calculator         | auction duration | fees          | price monitoring   | oracle config          | maturity date        |
-    #  | ETH/DEC21 | ETH        | USD   | simple-risk-model-1 | default-margin-calculator | 1                | fees-config-1 | price-monitoring-1 | default-eth-for-future | 2021-12-31T23:59:59Z |
-    
+    And the internal data source named "ETH_DEC21_trading_term_trig":
+      | on        | value                |
+      | timestamp | 2021-12-31T23:59:59Z |
+
+    And the signed message data source named "ETH_DEC21_settle_price_source"
+      | field     | key                  |
+      | ETHUSD    | 0xDEADBEEF           |
+
     And the markets:
-      | id        | quote name | asset | risk model          | margin calculator         | auction duration | fees          | price monitoring   | oracle config          | trading terminated trigger  |
-      | ETH/DEC21 | ETH        | USD   | simple-risk-model-1 | default-margin-calculator | 1                | fees-config-1 | price-monitoring-1 | default-eth-for-future | ETH_DEC21_trading_term_trig |
+      | id        | quote name | asset | risk model          | margin calculator         | auction duration | fees          | price monitoring   | settlement price source        | trading terminated trigger  |
+      | ETH/DEC21 | ETH        | USD   | simple-risk-model-1 | default-margin-calculator | 1                | fees-config-1 | price-monitoring-1 | ETH_DEC21_settle_price_source  | ETH_DEC21_trading_term_trig |
     
     And the traders deposit on asset's general account the following amount:
       | trader  | asset | amount    |
@@ -71,14 +73,28 @@ Feature: Test margin for lp near price monitoring boundaries
 
     Scenario: happy path, trading terminated is triggered market changes mode, orders are rejected, settlement data comes and we settle
 
+    # If we get settlement price before trading terminated then it should not do anything
+    When the signed message from data source "ETH_DEC21_settle_price_source" is received with content
+      | name             | value  |
+      | prices.ETH.value | 990    |
+    
+    Then the traders should have the following profit and loss:
+      | trader  | volume | unrealised pnl | realised pnl |
+      | trader1 | 10     | 0              | 0            |
+      | trader2 | -10    | 0              | 0            |
+
+
     When the ETH_DEC21_trading_term_trig event is triggered
 
 
     # not sure whether we want TRADING_TERMINATED in the trading mode or whether we want another market status field here to
     # match the possible states in "market lifecycle"
-    Then the market data for the market "ETH/DEC21" should be:
+    
+    Then the market state for the market "ETH/DEC21" should be "TRADING_TERMINATED".
+    
+    And the market data for the market "ETH/DEC21" should be:
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
-      | 1000       | TRADING_TERMINATED      | 1       | 900       | 1100      | 1000         | 78000000       | 10            |
+      | 1000       | TRADING_MODE_CONTINUOUS | 1       | 900       | 1100      | 1000         | 78000000       | 10            |
 
     When the traders place the following orders:
       | trader  | market id | side | volume | price | resulting trades | type       | tif     | reference  |
@@ -86,7 +102,7 @@ Feature: Test margin for lp near price monitoring boundaries
     
     Then the order is rejected. 
 
-    When the oracles broadcast data signed with "0xDEADBEEF":
+    When the signed message from data source "ETH_DEC21_settle_price_source" is received with content
       | name             | value  |
       | prices.ETH.value | 1001   |
     
@@ -108,11 +124,6 @@ Feature: Test margin for lp near price monitoring boundaries
       | trader2 | 0      | 0              | -10           |
 
 
-    # as above, sure whether we want SETTLED in the trading mode or whether we want another market status field here to
-    # match the possible states in "market lifecycle"
-    And  the market data for the market "ETH/DEC21" should be:
-      | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
-      | 1001       | SETTLED                 | 1       | 900       | 1100      | 0            | 0              | 0             | 
-
+    And the market state for the market "ETH/DEC21" should be "SETTLED".
     
     
