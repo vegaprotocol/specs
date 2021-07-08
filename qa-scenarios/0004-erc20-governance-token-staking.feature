@@ -40,3 +40,25 @@
     # No stake_removed event is emitted by the vesting contract
     # and no stake_removed event is emitted by the staking bridge contract
     # and the vega key's staking account balance is unchanged
+## Scenario: An ethereum key that has staked tokens cannot unstake more than it has 💧
+    # Given an ethereum key has staked 100 tokens in the staking bridge
+    # and that key calls unstake on the vesting contrract with an amount of 110
+    # No stake_removed event is emitted by the vesting contract
+
+## Scenario: A vega party that has VEGA tokens in a Vega general account cannot withdraw them via the vesting contract 💧
+    # Given a Vega party has a General account for the VEGA asset with a balance of 100
+    # and that key calls unstake on the vesting contract with an amount of 100
+    # No stake_removed event is emitted by the vesting contract
+## Scenario: A vega party that has VEGA tokens in a Vega general account cannot withdraw them via the staking bridge 💧
+    # Given a Vega party has a General account for the VEGA asset with a balance of 100
+    # and that key calls unstake on the staking bridge with an amount of 100
+    # No stake_removed event is emitted by the vesting contract
+### Scenario: A vega party that has VEGA tokens in a Vega general account can withdraw them via the ERC20 bridge, then stake them via the staking bridge💧
+    # Given a Vega party has a General account for the VEGA asset with a balance of 100
+    # and that key withdraws the asset balance via the ERC20 bridge
+    # And that key receives the VEGA balance in their wallet
+    # And that key calls stake on the staking bridge with a balance of 100
+    # a stake_deposited event is emitted by the staking bridge contract
+    # and the vega key has a staking account for the VEGA asset
+    # and the vega key's staking account will have a balance of 100
+    # and the vega key's general account will have a balance of 0
