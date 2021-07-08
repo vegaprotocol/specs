@@ -149,7 +149,7 @@ execute (as this would exceed the maximum stake the validator wants). To save re
 block creator has the responsibility to filter out these transactions.
 
 ## Parameters: 
-- `minimum_delegatable_stake`
+- `minimum_delegatable_stake` (see [staking spec](./#))
 - `max_wanted_stake[Validator]`	
 
 ## Commands:
@@ -192,5 +192,4 @@ In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow.
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
 | `validators.epoch.length`       | String (period) |  `"1"`        | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  | 
-| `validators.staking.minimumDelegatableStake`       | String |  `"1"`        | The minimum amount of the governance asset that can be delegated to a validator  | 
 
