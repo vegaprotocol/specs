@@ -30,7 +30,7 @@ Information to store:
 - All [asset proposals](../protocol/0028-governance.md) that have been *accepted*.
 - All delegation info.
 - On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the network params that govern [Staking and delegation](0000-reward-functions.md) ).
-- [Account balances](../protocol/0013-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below. 
+- [Account balances](../protocol/0013-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below about signed-for-withdrawal. Does *not* include the "staking" account balance.  
 - Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
 - hash of the previous block, block number and transaction id of the block from which the snapshot is derived
 When a checkpoint is created, each validator should calculate its hash and submit this as a transaction to the chain(*). 
