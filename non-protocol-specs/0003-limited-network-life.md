@@ -242,3 +242,17 @@ There should be a tool to extract all assets from the restore file so that they 
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
 
+## 💧 Test case 6: Network Parameters / Exceptional case handling 
+### 💧 Test case 6.1: timeElapsedBetweenCheckpoints not set ?
+### 💧 Test case 6.2: timeElapsedBetweenCheckpoints set to value outside acceptable range ?
+
+
+### 💧 Test case 6.3: Restore from same checkpoint run twice
+1. A party has general account balance of 100 tUSD. 
+2. The party submits a withdrawal transaction for 50 tUSD. A checkpoint is immediately created. 
+3. The ethereum replay says withrawal completed
+4. The network is shut down. 
+5. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+6. Party has a balance of 50 tUSD
+7. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+8. Party has a balance of 50 tUSD
