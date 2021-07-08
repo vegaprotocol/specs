@@ -203,10 +203,7 @@ There should be a tool to extract all assets from the restore file so that they 
 1. The party has general account balance in tUSD of `0` and The party has "signed for withdrawal" `100`.
 
 ### 💧 Test case 3.7: Suspended markets retain status after restore
-1. There is an asset tUSD and no asset proposals.
-1. There are no markets and no market proposals.
-1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
-1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD. 
+1. A market is proposed by a party that commits a stake. 
 2. Market becomes Active as enactment date reached and vote successful
 3. Traded market falls into Suspended status by either Price monitoring or liquidity monitoring trigger, or product lifecycle trigger
 2. Checkpoint is taken 
