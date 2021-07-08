@@ -187,4 +187,10 @@ the chain can still go on.
 
 In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow. In later versions, we'd need a simple resync protocol (e.g., all validators put on the block what they think the parameters are; the majority of the first n-t blocks wins).
 
+# Network Parameters
+
+| Property         | Type   | Example value | Description |
+|------------------|--------| ------------|--------------|
+| `validators.epoch.length`       | String (period) |  `"1"`        | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  | 
+| `validators.staking.minimumDelegatableStake`       | String |  `"1"`        | The minimum amount of the governance asset that can be delegated to a validator  | 
 
