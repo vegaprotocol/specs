@@ -72,3 +72,7 @@
     # and the vega key has a staking account for the VEGA asset
     # and the vega key's staking account will have a balance of 100
     # and the vega key's general account will have a balance of 0
+
+# Scenario: An ethereum key with staked, ested assets in the staking bridge can transfer the ownership to another ethereum key 💧 
+    # Note: This means that that key can no longer unstake those tokens
+    #       But the on-vega balance remains untouched 
