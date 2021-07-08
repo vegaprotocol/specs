@@ -18,6 +18,7 @@ Feature name: accounts
   - [ ] Only one staked asset account exists per party per asset.
   - [ ] The balance can only be delegated to Validators
   - [ ] The balance cannot be traded, or used as margin, or transferred, or withdrawn
+  - [ ] Delegated stake remains in the trader's staking account
 
 ## Trader margin accounts
 - [ ] Every party that submits an order on a market will have a margin account for that market created.
@@ -115,5 +116,4 @@ When new market is proposed, accepted and its open auction ends Vega will transf
 # Pseudo-code / Examples
 
 # Test cases
-
 
