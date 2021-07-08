@@ -65,8 +65,8 @@ The state will be restored in this order:
 2. Load the asset definitions. 
     1. The network will compare the asset coming from the restore file with the genesis assets, one by one. If there is an exact match on asset id:
       -  either the rest of the asset definition matches exactly in which case move to next asset coming from restore file. 
-      -  or any of the part of the definition differ, in which case ignore the restore transaction. 
-    2. If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then ignore the restore transaction.
+      -  or any of the part of the definition differ, in which case ignore the entire restore transaction, the node should stop with an error. 
+    2. If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then restore the asset.
 4. Load the accepted market proposals.
     - If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending. 
     - In case `now + net_param_min_enact >= trading_terminated` set the status to cancelled. 
