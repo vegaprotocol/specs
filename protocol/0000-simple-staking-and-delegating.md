@@ -158,8 +158,9 @@ block creator has the responsibility to filter out these transactions.
   - Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" 
   - Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).
 - These accounts will be created:
-  - After locking a staking account denominated in the governance token asset is created
-  - After delegating or when first rewards are received, a general account for each settlement currency (so they can receive infrastructure fee rewards)
+  - A [staking account](./0013-accounts.md#party-staking-accounts) denominated in the governance token asset is created
+  - When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards)
+  - It is possible that a [separate reward function](./0000-reward-functions.md) will cause an account to be created for the user as a result of rewards.
 - Timings
   - Any locked (but undelegated) tokens can be delegated at any time. 
   - The delegation only becomes valid at the next [episode](./0050-epochs.md), though it can be undone through undelegate.
