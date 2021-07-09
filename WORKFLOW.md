@@ -99,4 +99,4 @@ While the specifications are still in major flux. we will make merge requests di
 # Notes
 The workflow for this is partially based on the Rust RFC process: https://github.com/rust-lang/rfcs, adapted for an earlier stage software design process.
 
-It is being adopted as a replacement for using Gitlab issues, which is where past product specifications have beeen written up.
+It is being adopted as a replacement for using Github issues, which is where past product specifications have beeen written up.
