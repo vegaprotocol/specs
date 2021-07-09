@@ -78,3 +78,4 @@ https://docs.google.com/spreadsheets/d/1kTkE7frlsVtS1YE4m4AdZjACO-mmNOZrTQj4gXGQ
 Network orders are used during [position resolution](./0012-position-resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders. 
 * Network orders have a counterparty of `Network`
 * Network orders are a Fill Or Kill limit orders
+* Network orders cannot be submitted by any party, they are created during transaction processing.
