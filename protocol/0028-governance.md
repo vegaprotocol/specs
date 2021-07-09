@@ -50,7 +50,10 @@ A party on the Vega network will have a weighting for each type of proposal that
 
 To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`. 
 
-Weighting will initially be determined by the user's general account balance or staking account balance of a specific asset on the Vega network in question. This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, including between Testnets and Mainnets.
+Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-staking-bridge.md).
+
+This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, including between Testnets and Mainnets.
+
 
 In future, governance weighting for some proposal types will be based on alternative measures, such as:
 
