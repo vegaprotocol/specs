@@ -13,6 +13,13 @@ Feature name: accounts
   -  [ ] When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. 
   -  [ ] When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. 
 
+## Party margin accounts
+- [ ] Every party that submits an order on a market will have a margin account for that market created.
+- [ ] Each party should only have one margin account per market.
+- [ ] Cannot have a non-zero balance on a margin account where there's no position / position size = 0 and no active orders.
+- [ ] Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders.
+- [ ] [Fees earned from liquidity provision](./0044-lp-mechanics.md#fees) are paid in to this account.
+
 ## Party staking accounts
 - [ ] Every party that deposits staked asset on Vega will have a stake account created for that asset.
   - [ ] Only one staked asset account exists per party per asset.
@@ -20,12 +27,7 @@ Feature name: accounts
   - [ ] The balance cannot be traded, or used as margin, or transferred, or withdrawn
   - [ ] Delegated stake remains in the trader's staking account
 
-## Party margin accounts
-- [ ] Every party that submits an order on a market will have a margin account for that market created.
-- [ ] Each party should only have one margin account per market.
-- [ ] Cannot have a non-zero balance on a margin account where there's no position / position size = 0 and no active orders.
-- [ ] Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders.
-- [ ] [Fees earned from liquidity provision](./0044-lp-mechanics.md#fees) are paid in to this account.
+One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol/0004-erc20-governance-token-staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
 ## Liquidity Provider bond accounts
 - [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-lp-mechanics.md).
