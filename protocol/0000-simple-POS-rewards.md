@@ -1,5 +1,5 @@
 # Validator and Staking POS Rewards
-This describes the Alpha Mainnet requirements for calculation and distribution of rewards to delegators and validators. For more information on the overall approach, please see this [research document](https://github.com/vegaprotocol/research-internal/blob/master/validator_rewards/ValPol7.pdf).
+This describes the Alpha Mainnet requirements for calculation and distribution of rewards to delegators and validators. For more information on the overall approach, please see the relevant research document.
 
 ## Calculation
 
