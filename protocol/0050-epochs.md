@@ -52,7 +52,6 @@ Options: We could make it a system parameter how many blocks after the deadline 
 ## Parameters 
 	Epoch length (in seconds)
 
-
 # (Un)delegation
 
 A delegator can lock a token in the smart contract, which is then available for
@@ -186,5 +185,3 @@ Thus, even if the inconsistency blocks delegation related commands, the primary 
 the chain can still go on. 
 
 In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow. In later versions, we'd need a simple resync protocol (e.g., all validators put on the block what they think the parameters are; the majority of the first n-t blocks wins).
-
-

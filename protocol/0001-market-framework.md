@@ -170,7 +170,6 @@ struct Instrument {
 	product: Product,
 }
 
-// Note: this is not finalised, see https://gitlab.com/vega-protocol/product/issues/85
 struct InstrumentMetadata {
   tags: Vec<String>,
 }

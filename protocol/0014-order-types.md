@@ -24,14 +24,15 @@ Notes on scope of current version of this spec:
 
 ### Order types:
 1. **Immediate:** order is evaluated immediately (this is the default)
-1. **Stop:** order is only evaluated if and when the _stop price_ is reached 
+2. **Stop:** order is only evaluated if and when the _stop price_ is reached 
+3. **Network:** an order triggered by the network. See [Network Orders](#network-orders)
 
 ### Order pricing methods:
 
 *Price type and associated data if required (i.e. limit price, peg reference and offset) must be explicitly provided as one of the below three options and required data, there is no default.*
 
 1. **Limit (+ limit price):** the order is priced with a static limit price, which is the worst price (i.e. highest buy price / lowest sell price) at which the order can trade. If the order has a persistent validity type it will remain on the order book until it fully executes, expires (as defined by the specific validity type), or is cancelled. 
-1. **Pegged (+ reference, price offset):** the order is priced relative to a reference price in the market (i.e. best bid, mid, or best offer price) and is automatically repriced (losing time priority) when the reference price changes. Execution is as for a limit order at that price, including on entry and repricing. The order is removed from the book and 'parked' (in entry time priority) if the reference price is undefined, including during an auction.
+1. **Pegged (+ reference, price offset):** the order is priced relative to a reference price in the market (i.e. best bid, mid, or best offer price) and is automatically repriced (losing time priority) when the reference price changes. Execution is as for a limit order at that price, including on entry and repricing. The order is removed from the book and 'parked' (in entry time priority) if the reference price is undefined, including during an auction. See the [0037 - Pegged Orders](./0037-pegged-orders.md) spec for more detail.
 1. **Market:** the order is not priced and will take volume at any price (i.e. equivalent to a zero priced sell order or an infinitely priced buy order). Only valid on non-persistent validity types.
 
 ### Time in Force / validity:
@@ -72,3 +73,9 @@ Notes on scope of current version of this spec:
 
 Further details can be found here:
 https://docs.google.com/spreadsheets/d/1kTkE7frlsVtS1YE4m4AdZjACO-mmNOZrTQj4gXGQW0I
+
+### Network orders
+Network orders are used during [position resolution](./0012-position-resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders. 
+* Network orders have a counterparty of `Network`
+* Network orders are a Fill Or Kill, Market orders
+* Network orders cannot be submitted by any party, they are created during transaction processing.

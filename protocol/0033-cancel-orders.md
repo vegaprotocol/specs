@@ -1,7 +1,3 @@
-Feature name: Cancels
-Start date: 2020-06-11
-Specification PR: https://gitlab.com/vega-protocol/product/pull/301
-
 # Acceptance Criteria
 
 - An order cancelled by orderID+marketID+partyID will be removed from the order book and an order update message will be emitted
