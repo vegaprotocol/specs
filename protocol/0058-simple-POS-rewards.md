@@ -3,7 +3,7 @@ This describes the Alpha Mainnet requirements for calculation and distribution o
 
 ## Calculation
 
-At the end of an epoch, payments are calculated. This is done per active validator:
+At the end of an [epoch](./0050-epochs.md), payments are calculated. This is done per active validator:
 
 * First, `score_val(stake_val)` calculates the relative weight of the validator given the stake it represents.
 * For each delegator that delegated to that validator, `score_del` is computed: `score_del(stake_del, stake_val)` where `stake_del` is the stake of that delegator, delegated to the validator, and `stake_val` is the stake that validator represents.
@@ -29,7 +29,7 @@ Functions:
 
 ## Distribution of Rewards
 
-A component of the trading fees that are collected from price takers of a market are reserved for rewarding validators and stakers . These fees are denominated in the settlement currencies of the markets and are collected into an infrastructure fee account for that asset.These fees are "held" in this pool account for a length of time, determined by a network parameter (`infra-fee-hold-time`). 
+A component of the trading fees that are collected from price takers of a market are reserved for rewarding validators and stakers. These fees are denominated in the settlement currencies of the markets and are collected into an [infrastructure fee](./0029-feeds.md) [account](./0013-accounts.md) for that asset. These fees are "held" in this pool account for a length of time, determined by a network parameter (`infra-fee-hold-time`). 
 
 They are then distributed to the general accounts of eligible recipients; that is, the validators and delegators, in amounts as per above calculation.
 

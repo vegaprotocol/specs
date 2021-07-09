@@ -123,7 +123,7 @@ For each reward pool account for the reward scheme with a non-zero balance:
 
 ## Sweetwater
 
-Sweetwater scope only requires that a single instance of the single reward function for staking and delegation is active and can accept and payout funds from the on-chain treasury.
+Sweetwater scope only requires that a single instance of the single reward function for staking and delegation is active and can accept and payout funds from [the on-chain treasury](./0058-on-chain-treasury.md).
 It is therefore not necessary to build any of the transactions or control logic that will be needed for the reward framework once trading and liquidity provision rewards exist (required for Oregon Trail). Max payout per recipient and payout delay are required for 💧.
 
 
@@ -133,7 +133,7 @@ It is therefore not necessary to build any of the transactions or control logic 
 
 ### 💧 Sweetwater
 
-- There is a single reward scheme of type [staking and delegation rewards](0000-reward-functions.md)
+- There is a single reward scheme of type [staking and delegation rewards](./0057-reward-functions.md)
   - It has a reward scheme ID
   - Its parameters can be updated by governance vote
   - It cannot be cancelled entirely (though the payout amount can be set to 0)
@@ -161,5 +161,4 @@ It is therefore not necessary to build any of the transactions or control logic 
 - New reward scehemes can be created, including multiple of the same type
 - Reward schemes owned and controlled by individual parties can be created as well as network owned ones created through governance
 - Funds can be sent directly to a reward pool account
-- Fudns cannot be allocated to a party controlled reward scheme via periodic allocation from the on-chain treasury
-- TBC
+- Funds cannot be allocated to a party controlled reward scheme via periodic allocation from [the on-chain treasury](./0058-on-chain-treasury.md).

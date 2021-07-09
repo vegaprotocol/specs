@@ -39,7 +39,7 @@ This provides the information the core needs to keep track of:
 	* Total Delegatable Stake
 	* Undelegated Stake
 	* [n] Stake delegated per validator
-	* [n] Stake marked for delegation per validator in the next epoch
+	* [n] Stake marked for delegation per validator in the next [epoch](./0050-epochs.md).
 	* Total stake (should be the summ of all the others)
 
 There is no interaction with the smart contract that is initiated by Vega.
@@ -160,7 +160,7 @@ block creator has the responsibility to filter out these transactions.
 - These accounts will be created:
   - A [staking account](./0013-accounts.md#party-staking-accounts) denominated in the governance token asset is created
   - When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards)
-  - It is possible that a [separate reward function](./0000-reward-functions.md) will cause an account to be created for the user as a result of rewards.
+  - It is possible that a [separate reward function](./0057-reward-functions.md) will cause an account to be created for the user as a result of rewards.
 - Timings
   - Any locked (but undelegated) tokens can be delegated at any time. 
   - The delegation only becomes valid at the next [episode](./0050-epochs.md), though it can be undone through undelegate.
