@@ -27,17 +27,17 @@ Feature name: accounts
   - [ ] The balance cannot be traded, or used as margin, or transferred, or withdrawn
   - [ ] Delegated stake remains in the trader's staking account
 
-One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol/0004-erc20-governance-token-staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
+One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol/0006-erc20-governance-token-staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
 ## Liquidity Provider bond accounts
 - [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-lp-mechanics.md).
 - [ ] Each party that has placed a [Liquidity Provision order](./0038-liquidity-provision-order-type.md) will have one bond account per market they have provided liquidity to
-- [ ] [Fees earned from liquidity provision](https://github.com/vegaprotocol/product/blob/master/specs/0044-lp-mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](https://github.com/vegaprotocol/product/blob/master/specs/0042-setting-fees-and-rewarding-lps.md#distributing-fees)
+- [ ] [Fees earned from liquidity provision](./0044-lp-mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](./0042-setting-fees-and-rewarding-lps.md#distributing-fees)
 
 ## Insurance pool accounts
 - [ ] When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market.
 - [ ] Only transfer requests move money in or out of the insurance account.
-- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds distributed to other same-currency insurance pools, see [insurance pool collateral](0015-market-insurance-pool-collateral.md). 
+- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds distributed to other same-currency insurance pools, see [insurance pool collateral](./0015-market-insurance-pool-collateral.md). 
 
 ## Per-asset insurance pool account
 - [ ] There is a per asset insurance pool account. Initially this is 0
