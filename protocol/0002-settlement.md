@@ -49,6 +49,9 @@ distribute_amount[trader] = mtm_gain[trader] * ( actual_collected_amount / targe
 
 ```
 
+### Network orders
+
+When a trader is distressed their position is closed out by the network placing an order to bring their position back to 0. This network order will match against normal orders in the order book and will be part of a mark to market settlement action. As the network user is a virtual user it does not have collateral accounts from which to provide or collect wins and loses. The market insurance account is used in place of these. If a network order is settled as a win, the collateral will be transferred from the matched trader directly into the insurance account for the market. If the network order is a loss, the insurance pool will be used to pay the matched traders. Loss socialization is used if the insurance pool does not have enough collateral to cover the loss situation.
 
 ## Settlement at instrument expiry
 
