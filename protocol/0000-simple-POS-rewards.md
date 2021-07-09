@@ -23,7 +23,7 @@ Functions:
 
 - `score_val(stake_val)`: `sqrt(a*stake_val/3)-(sqrt(a*stake_val/3)^3)`
 - `score_del(stake_del, stake_val)`: for now, this will just return `stake_del`, but will be replaced with a more complex formula later on, which deserves independent testing.
-- `delegator_reward(stake_val)`: `stake_val*.delegator_share`. Long term, there will be bonuses in addition to the reward.
+- `delegator_reward(stake_val)`: `stake_val * delegator_share`. Long term, there will be bonuses in addition to the reward.
 
 
 
@@ -57,7 +57,7 @@ The transfer type informs the collateral engine that the `FromAccount` ought to 
 ## Network Parameters
 
 `infra-fee-hold-time` - the length of time between when a price taker infrastructure fee is incurred and when it is paid out to validators.
-
+`delegator_share` - The proportion of the total validator reward that go to its validators. Likely to be lower than 0.1.
 
 ## Payment of rewards
 - [Infrastructure fees](./0029-fees.md) are collected into an infrastructure fee account for the asset
