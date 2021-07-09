@@ -17,12 +17,13 @@ Variables used:
 - `compLevel`: competitition level we want between validators (1.1)
 - `num_val`: actual number of active validators
 - `a`: The scaling factor; which will be `max(min_val, num_val/compLevel)`. So with `min_val` being 5, if we have 6 validators, `a` will be `max(5, 5.4545...)` or `5.4545...`
+- `delegator_share`: propotion of the validator reward that goes to the delegators.
 
 Functions:
 
 - `score_val(stake_val)`: `sqrt(a*stake_val/3)-(sqrt(a*stake_val/3)^3)`
 - `score_del(stake_del, stake_val)`: for now, this will just return `stake_del`, but will be replaced with a more complex formula later on, which deserves independent testing.
-- `delegator_reward(stake_val)`: `stake_val*.1`. Long term, there will be bonuses in addition to the reward.
+- `delegator_reward(stake_val)`: `stake_val*.delegator_share`. Long term, there will be bonuses in addition to the reward.
 
 
 
