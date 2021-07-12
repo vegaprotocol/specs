@@ -18,6 +18,20 @@ These features:
 
 ## Required limits and controls
 
+
+### Sweetwater
+
+For Sweetwater, we only require the ability to:
+
+1. Prevent the submission of market creation proposals until a validator initiated and agreed change (i.e. a genesis/config/code change required rather than a network parameter)
+2. Prevent the submission of asset addition proposals until a validator initiated and agreed change (i.e. a genesis/config/code change required rather than a network parameter)
+3. Set a date/time before which no market creation proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
+4. Set a date/time before which no asset addition proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
+
+At genesis, Sweetwater will be started with only one asset: VEGA. As no new assets can be proposed (limit 2), only VEGA tokens can be deposited or withdrawn via the bridge.
+
+### Oregon Tail
+
 We have identified three types of limit/control that will together achieve these aims:
 
 - Deposit limits reduce the exposure of individual participants as well as the total funds at risk

@@ -52,12 +52,23 @@ The set of long and short contracts with price and volume specified that are mat
 The volume that is matched into [closed volume](#closed-volume) during the [FIFO](#fifo) netting process.  It is measured as the sum of the buys of the matched volume.  So, if 2 long (or +2) contracts are netted with 2 short (or -2) contracts, the ***Closed Volume*** = 2. 
 
 The profit or loss that a trader locks in when they close volume is called the [Realised P&L](#realised-pnl) and is not affected by future price moves in the instrument.
+## D
+### Delegation
+See: [Staking](#staking).
 
 ## E
 ### ENE - Execute and Eliminate
 Any order that trades any amount and as much as possible but does not remain on the book (whether it trades or not)
 
 ## F
+### Fees
+Fees are incurred on trades in Vega. There are three categories of fee, each of which is paid out to different participants:
+- Infrastructure fee: paid to [validators](#validators),
+- Maker fee: paid to the price maker,
+- Liquidity fee: paid to [Liquidity Providers](#liquidity-providers)
+
+See [the fees specification](../protocol/0029-fees.md) for more detail.
+
 ### FIFO (First In, First Out)
 A matching methodology which prioritises older volume as an offset when counter volume is added to the ledger.  The ledger may be a market order book (used for matching orders into trades), or a record of an individual trader's trades (used for calculating their open and closed positions).
 
@@ -135,6 +146,9 @@ A store of capital instantiated with the order book into which fines are contrib
 ## L
 ### Liable position 
 The net riskiest composition of a trader's open positions and live orders.  For example if a trader holds +10 contracts and has buy orders of +10 and sell orders of +10, the liable position would be +20 contracts for margin calculation purposes.
+
+### Liquidity Providers
+Liquidity providers commit a bond and place a special Liquidity Commitment that automatically maintains orders on the book for a specific market. In return, liquidity providers earn a [fee](#fee) for ensuring that markets always have open volume. See [the liquidity provision spec](../protocol/0044-lp-mechanics.md) for more detail.
 
 ## M
 ### Margin
@@ -308,6 +322,11 @@ A language for creating smart financial products on Vega.
 ### Smart Product
 A financial agreement which involves transfer of value (in digital currency) between two counterparts at a specified time, according to specified conditions which must be specified digitally. Example: Future, European Options, CFD 
 
+### Staking
+Staking is the act of committing governance tokens to a validator node in order to earn a portion of the [infrastructure fee](#fees).
+
+Staking and delegation are used relatively interchangeably as in Vega, staking has the same meaning as self-delegation. 
+
 ## T
 ### Trade Volume
 The number of contracts multiplied by the size of each contract for each market.  For example, the market may have a contract size of $1USD and one trade may be for 10 contracts.  The *trade volume* then equals $1 x 10 = $10.
@@ -331,7 +350,7 @@ A trader's open volume is comprised of the following:
 
 Let's assume the latest [mark price](#mark-price) is set by the last trade in this market at $120.
 
-***Unealised PnL*** = Total Volume * ([mark price](#mark-price) - [average entry price](#average-entry-price)) 
+***Unrealised PnL*** = Total Volume * ([mark price](#mark-price) - [average entry price](#average-entry-price)) 
 =  10 ( $120 - (3 * $100 + $2 * 80 + 5 * $150)/Abs(10) ) 
 = 10 ($120 - $121) = - $10
 
@@ -354,6 +373,10 @@ Let's assume the latest [mark price](#mark-price) is set by the last trade in th
 The trader has made a loss of -$140.67 across their trades.  However, this isn't locked in (realised) and the market may still move back in their favour.
 
 # V
+
+## Validators
+Validators are the nodes that run Vega and participate in the creation of the blocks. See [the distributed ledger glossary](distributed-ledger-glossary.md#validators) for more information on validators.
+
 ## Vega time
 Vega time is the current time of the chain (decided through consensus); it's based on the timestamp* agreed by the nodes.
 Vega needs validators to have a share idea of what time it is, regardless of their location or their clock being incorrect.

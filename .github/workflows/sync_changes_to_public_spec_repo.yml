@@ -3,7 +3,7 @@ name: Synchronize latest changes from the private specs repository to the public
 on:
   # Triggers the workflow on push to main branch
   push:
-    branches: [ main ]
+    branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch: null
@@ -32,17 +32,20 @@ jobs:
         run: |
           rm -rf protocol
           rm -rf qa-scenarios
+          rm -rf glossaries
 
       - name: Copy synced directories from source repository to target repository
         run: |
           cp -r src-repo/protocol target-repo
           cp -r src-repo/qa-scenarios target-repo
+          cp -r src-repo/glossaries target-repo
 
       - name: Git stage synced directories
         working-directory: target-repo
         run: |
           git add protocol
           git add qa-scenarios
+          git add glossaries
 
       - name: Check if there are any changes to commit in target repository
         id: git-status

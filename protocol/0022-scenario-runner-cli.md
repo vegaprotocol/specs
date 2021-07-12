@@ -12,9 +12,9 @@ In this spec we are focusing on the first iteration of the `scenario-runner-cli`
 - [ ] --help command is available.
 - [ ] `config` file exposing default values (e.g. protocol time advancement per submitted instruction) exists and can be modified by the user.
 - [ ] Example `InstructionsFile` in `JSON` format is available.
-- [ ] `SubmitInstructions` function is available and all the write instructions defined in `trading` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto) can be submitted to it.
+- [ ] `SubmitInstructions` function is available and all the write instructions defined in `trading` in [`trading.proto`](https://github.com/vegaprotocol/api/blob/develop/proto/api/trading.proto) can be submitted to it.
 - [ ] Protocol time is advanced by a fixed amount after each instruction is submitted. User has the option to set it to 0. User has the option to explicitly specify change in protocol time with a dedicated instruction.
-- [ ] `ExtractData` function is available and can output results of any synchronous calls defined in `trading_data` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto). The output file should be in the `JSON` format.
+- [ ] `ExtractData` function is available and can output results of any synchronous calls defined in `trading_data` in [`trading.proto`](https://github.com/vegaprotocol/api/blob/develop/proto/api/trading.proto). The output file should be in the `JSON` format.
 - [ ] The input `JSON` file contains metadata defining the version of the schema.
 - [ ] The output file (`DataFile`) contains metadata with the information on the version of `trading-core` used to generate it.
 - [ ] `DataFile` contains **protocol metadata** defined in [commands](#commands) subsection.
@@ -35,7 +35,7 @@ The main functionality is:
 ## Commands
 
 - `SubmitInstructions` - takes in a path to the `InstructionsFile` in `JSON` format.
-  - Supports all the instructions defined in `trading` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto).
+  - Supports all the instructions defined in `trading` in [`trading.proto`](https://github.com/vegaprotocol/api/blob/develop/proto/api/trading.proto).
   - By default each instruction advances the protocol time by a fixed amount (e.g. 1ms) controllable via the `config` file.
   - Dedicated instruction exists which allows explicit control of the flow of time.
 - `ExtractData` - takes a path where the `DataFile` should be saved:
@@ -45,7 +45,7 @@ The main functionality is:
     - Time taken to process all the instructions.
     - Number of trades generated.
     - State of the order book after last instruction.
-  - By default results of the synchronous calls (excluding streams) defined in `trading_data` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto)
+  - By default results of the synchronous calls (excluding streams) defined in `trading_data` in [`trading.proto`](https://github.com/vegaprotocol/api/blob/develop/proto/api/trading.proto)
     are included in the `DataFile`.
   - Optional: user can fine-tune the contents of a `DataFile` with `scenario-runner-cli` specific commands to filter the results as needed before writing-out the file - **nice to have**
 
@@ -76,8 +76,8 @@ This sub-section lists future additions that may be required. It's meant to allo
 The currently identified additions that will likely be useful going forward are (please note ordering doesn't imply relative importance, that should be decided when these are scoped and included in a different spec):
 
 - Support filtering of outputs on the fly to aid performance and allow more control of the size of an output file.
-- Expose additional, internal/intermediate data not defined in `trading_data` in [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto)
-- Support submitting instructions to an instance of the network running with the consensus layer. This will support only the subset of instructions available in scenario runner that overlap with the [`trading.proto`](https://gitlab.com/vega-protocol/trading-core/blob/develop/proto/api/trading.proto).
+- Expose additional, internal/intermediate data not defined in `trading_data` in [`trading.proto`](https://github.com/vegaprotocol/api/blob/develop/proto/api/trading.proto)
+- Support submitting instructions to an instance of the network running with the consensus layer. This will support only the subset of instructions available in scenario runner that overlap with the [`trading.proto`](https://github.com/vegaprotocol/api/blob/develop/proto/api/trading.proto).
 - Add bots - the option to add trading logic which works algorithmically as opposed to reading a static set of instructions.
 - "Diff" network states: compare another pre-saved state of network with the one generated by a given scenario (this is for general regression testing / continuous integration.)
 - Extend set of available commands to allow modelling more complex network interactions within the network (multi-node configuration, node failures, nodes joining etc.)
