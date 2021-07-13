@@ -76,7 +76,7 @@ jobs:
           [[ $PR =~ ^[0-9]+$ ]] && TITLE=$(curl \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: token ${{ secrets.GH_SYNC_REPOSITORIES }}" \
-              https://api.github.com/repos/vegaprotocol/specs-internal/pulls/${PR} | jq ".title // empty")
+              https://api.github.com/repos/vegaprotocol/specs-internal/pulls/${PR} | jq -r ".title // empty")
           echo "::set-output name=title::${TITLE}"
 
       - name: Commit and push the target repository
