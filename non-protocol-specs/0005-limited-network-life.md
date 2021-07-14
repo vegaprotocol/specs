@@ -58,7 +58,7 @@ Any validator will submit a transaction containing the checkpoint file. Nodes ve
 - If the hash matches, it will be restored.
 - If it does not, the hash transaction will have no effect.
 
-If the genesis file has a previous state hash no transactions will be processed until t@he restore transaction arrives and is processed.
+If the genesis file has a previous state hash no transactions will be processed until the restore transaction arrives and is processed.
 
 The state will be restored in this order:
 

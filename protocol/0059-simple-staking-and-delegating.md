@@ -24,10 +24,10 @@ staking. To this end, an Vega token
 
 ## Smart Contract / Staking Bridge Interaction
 
-It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md) through the validators; thus, all actions regarding locking 
-and unlocking of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), not by Vega.
+It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md) through the validators; thus, all actions regarding locking 
+and unlocking of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md), not by Vega.
 
-In order to delegate, users require tokens that will be locked in a smart contract (see [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md)). Vega will be made aware of how many tokens a given party has locked through bridge events. When the same tokens are unlocked, a corresponding event will be emitted:
+In order to delegate, users require tokens that will be locked in a smart contract (see [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md)). Vega will be made aware of how many tokens a given party has locked through bridge events. When the same tokens are unlocked, a corresponding event will be emitted:
 
 ```
   event Stake_Deposited(address indexed user, uint256 amount, bytes32 vega_public_key);
