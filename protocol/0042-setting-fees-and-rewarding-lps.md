@@ -176,7 +176,7 @@ LP 2 stake = 200, LP 2 avg_entry_valuation = 200
 ### Distributing fees
 The liquidity fee is collected into either a per-market "bucket" belonging to liquidity providers for that market or into an account for each liquidity provider, according to their share of that fee. This account is not accessible by liquidity providers until the fee is distributed to them according to the below mechanism.
 
-We will create a new network parameter (which can be 0 in which case fees are transferred immediately) called `liquidity_providers_fee_distribition_time_step` which will define how frequently fees are distributed to a liquidity provider's general account for the market. 
+We will create a new network parameter (which can be 0 in which case fees are transferred at the end of next block) called `liquidity_providers_fee_distribition_time_step` which will define how frequently fees are distributed to a liquidity provider's general account for the market. 
 
 The liquidity fees are distributed pro-rata depending on the `LP i equity_share` at a given time. 
 
