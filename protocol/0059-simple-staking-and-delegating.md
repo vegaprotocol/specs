@@ -5,11 +5,13 @@ Validators and delegators receive incentives from the network, depending on vari
 
 ## Note on terminology
 
+*Staking* is the act of allocating governance tokens from Ethereum to a Vega account.
+*Delegation* is the act of allocating staked Vega tokens to a validator.
+
+Delegation does not convey governance power to the validator. It is used to determine the validator's consensus weight. To allocate both voting power & consensus weight, tokens can be staked directly to the Vega public key.
+
 Staking requires the combined action of:
 - Locking tokens on the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md); and 
-- Delegating these tokens to a one or more validators
-
-Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator.
 
 A delegator can lock a token in the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), which is then available for
 staking. To this end, an Vega token
@@ -23,7 +25,6 @@ staking. To this end, an Vega token
 	delegated or unlocked.
 
 ## Smart Contract / Staking Bridge Interaction
-
 It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md) through the validators; thus, all actions regarding locking 
 and unlocking of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), not by Vega.
 
