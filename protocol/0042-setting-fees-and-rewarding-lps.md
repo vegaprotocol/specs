@@ -6,7 +6,7 @@ The aim of this specification is to set out how fees on Vega are set based on co
 
 ## Definitions / Glossary of terms used
 - **Market value proxy window length `t_market_value_window_length`**: sets the length of the window over which we estimate the market value. This is a network parameter.  
-- **Target stake**: as defined in [target stake spec](????-target-stake.md). The amount of stake we would like LPs to commit to this market.
+- **Target stake**: as defined in [target stake spec](./0041-target-stake.md). The amount of stake we would like LPs to commit to this market.
 - `min_LP_stake`: There is an minimum LP stake specified per asset, see [asset framework spec](0040-asset-framework.md).
 
 
@@ -18,7 +18,7 @@ The [liquidity fee factor](0029-fees.md) is an input to the total taker fee that
 
 `liquidity_fee = fee_factor[liquidity] x trade_value_for_fee_purposes`
 
-As part of the [commit liquidity network transaction ](0044-lp-mechanics.md), the liquidity provider submits their desired level for the [liquidity fee factor](0029-fees.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market. 
+As part of the [commit liquidity network transaction](./0044-lp-mechanics.md), the liquidity provider submits their desired level for the [liquidity fee factor](./0029-fees.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market. 
 First, we produce a list of pairs which capture committed liquidity of each LP together with their desired liquidity fee factor and arrange this list in an increasing order by fee amount. Thus we have 
 ```
 [LP-1-stake, LP-1-liquidity-fee-factor]
