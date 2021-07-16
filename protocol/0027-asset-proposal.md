@@ -11,15 +11,15 @@ As of now, we will only cover implementation of ERC-20 tokens, following specs w
 
 ## Proposing a new asset
 
-The proposal of a new asset must be done through the governance system.
+The proposal of a new asset must be done through the [governance system](./0028-governance.md).
 This means the introduction of a new proposal type in order to propose a new asset to be added to the network.
 This proposal could be done by anyone with stake in vega token, although we expect market makers to do it.
 
 The proposal vote for an asset is done in two step, first by the validator nodes firsts, then by the token holders.
 
-First, When a new asset is proposed to vega, the asset validity is verified with their origin blockchain, this allow the vega network to recover information about the asset class (e.g: symbol, name, decimal place, etc).
+First, When a new asset is proposed to the network, the [asset validity](./0040-asset-framework.md) is verified with their origin blockchain, which allows the vega network to recover information about the asset class (e.g: symbol, name, decimal place, etc).
 If the asset is accepted by the node, the node will then send it's own vote as a transaction to the chain, so the other validators can keep track of whom is accepting the new asset.
-This first phase may be configured through network parameters (e.g: duration of the phase, how much validator needs to succeed to validate the asset).
+This first phase may be configured through [network parameters](./0054-network-parameters.md) (e.g: duration of the phase, how much validator needs to succeed to validate the asset).
 In a first version we could hard code these value (e.g: 1 hours duration for the node to validate the asset, only two thirds + one of the nodes needs to succeed.
 
 Once this first step is done, if enough nodes were able to validate the asset, the network will proceed with accepting token holders votes, but if not enough nodes were able to validate the asset, then the new asset is rejected.
