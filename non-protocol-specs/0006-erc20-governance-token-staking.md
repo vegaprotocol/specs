@@ -25,7 +25,9 @@ Staked assets will appear in a user's [staking account](../protocol/0013-account
 - There will be APIs to query `Stake_Deposited` and `Stake_Removed` events that have been processed by the network
 - Both governance and delegation will need to handle the fact that the stake account balance can be reduced without warning if a user unstakes tokens.
 
-Note: the behaviour of delegation is covered in [staking and delegation]() TODO: link, and the use of stake to determine a party's weight in governance votes is covered in [governance](../protocol/0028-governance.md).
+Note: the behaviour of delegation is covered in [staking and delegation](../protocol/0059-simple-staking-and-delegation.md), and the use of stake to determine a party's weight in governance votes is covered in [governance](../protocol/0028-governance.md).
+
+### Staking event queue
 
 
 ## Ethereum network (Solidity contracts)
@@ -81,3 +83,5 @@ Other functionality:
 
 * Attempts to redeem vested tokens will fail if there are not sufficient tokens held on behalf of the sender address that are not staked. Sender must first unstake tokens before they can be redeemed.
 * This functionality does not interact in any way with the staking bridge contract. They are effectively completely separate staking mechanisms, so to unstake all an address's tokens when some are staked on each contract will require calls to both contracts.
+
+

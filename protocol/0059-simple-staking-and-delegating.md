@@ -14,13 +14,10 @@ Delegation and staking are terms that may be used interchangably, since delegati
 A delegator can lock a token in the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), which is then available for
 staking. To this end, an Vega token
 (or a fraction thereof) can be
-- Unlocked: The tokenholder is free to do with the token as they
-	want, but cannot delegate it
-- Locked: The token is locked in the smart contract, and cen be used
-	inside the delegation system
+- Unlocked: The tokenholder is free to do with the token as they want, but cannot delegate it
+- Locked: The token is locked in the smart contract, and cen be used inside the delegation system
 - Delegated: The (locked) token is delegated to a validator
-- Undelegated: The token is not delegated to a validator, and can be either
-	delegated or unlocked.
+- Undelegated: The token is not delegated to a validator, and can be either delegated or unlocked.
 
 ## Smart Contract / Staking Bridge Interaction
 
