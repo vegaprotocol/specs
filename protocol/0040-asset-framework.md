@@ -1,9 +1,3 @@
-Feature name: Asset Framework
-
-Start date: 2020-04-09
-
-Specification PR: https://gitlab.com/vega-protocol/product/merge_requests
-
 # Summary
 Vega uses various asset classes as settlement assets for markets. In order to ensure the safety, security, and allocation of these assets, they must be managed in a fully decentralized and extensible way. Here, we lay out a framework for assets in Vega.
 This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, are not covered deposits and withdrawal for an asset.

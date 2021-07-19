@@ -52,7 +52,6 @@ Options: We could make it a system parameter how many blocks after the deadline 
 ## Parameters 
 	Epoch length (in seconds)
 
-
 # (Un)delegation
 
 A delegator can lock a token in the smart contract, which is then available for

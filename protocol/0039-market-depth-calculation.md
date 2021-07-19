@@ -1,7 +1,3 @@
-Feature name: Market depth creation and distribution
-Start date: 2020-06-10
-Specification PR: https://gitlab.com/vega-protocol/product/pull/300
-
 # Acceptance Criteria
 - The market depth builder must be able to handle all available order types
 - The construction of the market depth structure must not impact the core performance.

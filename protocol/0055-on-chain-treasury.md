@@ -19,7 +19,7 @@ The funds, if available would be transferred instantly and irrevocably to the ne
 
 - Transfer from protocol mechanics: there may be a protocol feature such as the charging of fees or handling of expired insurance pool balances that specifies the Netwok Treasury as destination in a transfer. (Not required for MVP/Sweetwater)
 
-- Transfer by governance: a governance proposal can be submitted to transfer funds either from a market's insurance pool or from the network wide per-asset insurance pool into the on chain treasury account for the asset. (Not required for MVP/Sweetwater)
+- Transfer by governance: a [governance proposal](./0028-governance.md) can be submitted to transfer funds either from a market's insurance pool or from the network wide per-asset insurance pool into the on chain treasury account for the asset. (Not required for Sweetwater)
 
 - Transfer transaction: a transaction submitted to the network may request to transfer funds from an account controlled by the owner’s private key (i.e. an asset general account) to the Network Treasury. (TODO: Not required for MVP/Sweetwater)
 
@@ -88,7 +88,7 @@ The transfer occurs immediately per once every `period_length_seconds` and does 
 
 ### 💧 Sweetwater
 
-- Depositing funds via the ERC20 bridge to the Network Treasury account (i.e. zero address) when there is no Network Treasury account for the asset being deposited:
+- Depositing funds via the [ERC20 bridge](./0031-ethereum-bridge-spec.md) to the Network Treasury account (i.e. zero address) when there is no Network Treasury account for the asset being deposited:
 	- Creates a Network Treasury account for that asset 
 	- Results in the balance of the Network Treasury account for the asset being equal to the amount of the asset that was deposited
 	- The Network Treasury accounts API includes the new account 
@@ -98,8 +98,8 @@ The transfer occurs immediately per once every `period_length_seconds` and does 
 	- The Network Treasury accounts API returns the correct balance for the new account
 - No party can withdraw assets from the Network Treasury account via the ERC20 bridge
 - No party can use assets in the Network Treasury account as margin or transfer them to another account on Vega
-- The network treasury account balances [are restored after a network restart](../non-protocol-specs/0003-limited-network-life.md)
-- It is possible to set a network parameter for periodic allocation to the [staking and delegation reward scheme](0000-reward-functions.md) **for any valid asset ID** in the asset framework:
+- The network treasury account balances [are restored after a network restart](../non-protocol-specs/0005-limited-network-life.md)
+- It is possible to set a network parameter for periodic allocation to the [staking and delegation reward scheme](./0057-reward-functions.md) **for any valid asset ID** in the asset framework:
 	- The parameter can be set/changed via governance
 	- The parameter defaults to an empty/null/false state (or doesn't exist by default)
 	- The parameter is a structure that includes values for `max fraction per period`, `max amount per period`, and `period length in seconds`
