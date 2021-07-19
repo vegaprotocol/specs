@@ -1,5 +1,5 @@
-# Simple Staking and Delegation
-Vega runs on a delegated proof of stake (DPOS) blockchain. Participants who hold a balance of the governance asset can stake these on the network by delegating their tokens to one or more validators that they trust. This helps to secure the network. 
+# simple Staking and Delegation
+Vega runs on a delegated proof of stake (DPOS) blockchain. Participants who hold a balance of the configured [governance asset](./0028-governance.md) can stake these on the network by delegating their tokens to one or more validators that they trust. This helps to secure the network. 
 
 Validators and delegators receive incentives from the network, depending on various factors, including how much stake is delegated and how honest they are.
 
@@ -7,7 +7,7 @@ Validators and delegators receive incentives from the network, depending on vari
 
 Staking requires the combined action of:
 - Locking tokens on the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md); and 
-- Delegating these tokens to a one or more validators
+- Delegating these tokens to one or more validators
 
 Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator.
 
@@ -142,10 +142,14 @@ execute (as this would exceed the maximum stake the validator wants). To save re
 block creator has the responsibility to filter out these transactions.
 
 
-## Network Parameters
-`minimum delegateable stake` - the smallest unit of (fractions of) tokens that can be used for delegation
-`max stake per validator` - maximum amount of stake that a validator can accept
+# Network Parameters
 
+| Property         | Type   | Example value | Description |
+|------------------|--------| ------------|--------------|
+| `validators.delegation.minAmount`       | String (float) |  `"0.001"`        | The smallest fraction of the [governance token](./0028-governance.md) that can be [delegated to a validator](#delegation-transaction). | 
+| `validators.delegation.maxDelegatedStake`       | String (float) |  `"1"`        | The largest sum of the [governance token](./0028-governance.md) that can be [delegated to an individual validator](#delegation-transaction). | 
+
+See the [network paramters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
 
 ## Acceptance Criteria
 
@@ -158,7 +162,7 @@ block creator has the responsibility to filter out these transactions.
   - Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" 
   - Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).
 - These accounts will be created:
-  - A [staking account](./0013-accounts.md#party-staking-accounts) denominated in the governance token asset is created
+  - A [staking account](./0013-accounts.md#party-staking-accounts) denominated in the governance asset is created
   - When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards)
   - It is possible that a [separate reward function](./0057-reward-functions.md) will cause an account to be created for the user as a result of rewards.
 - Timings

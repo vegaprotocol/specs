@@ -120,6 +120,9 @@ An order that either trades completely until the remaining size is 0, or not at 
 The market in which currencies are traded. The largest and most liquid market.
 
 ## G
+### Governance Asset
+A running Vega network will have an asset specified as the Governance Asset. This can be any asset that has been proposed and accepted through governance. See the [governance spec](./../protocol/0028-governance.md) for more detail.
+
 ### GTC - Good 'til close
 An order that trades any amount and as much as possible and remains on the book until it either trades completely or is cancelled
 
@@ -323,7 +326,7 @@ A language for creating smart financial products on Vega.
 A financial agreement which involves transfer of value (in digital currency) between two counterparts at a specified time, according to specified conditions which must be specified digitally. Example: Future, European Options, CFD 
 
 ### Staking
-Staking is the act of committing governance tokens to a validator node in order to earn a portion of the [infrastructure fee](#fees).
+Staking is the act of committing a governance asset balance to a validator node in order to earn a portion of the [infrastructure fee](#fees).
 
 Staking and delegation are used relatively interchangeably as in Vega, staking has the same meaning as self-delegation. 
 

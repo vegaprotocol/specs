@@ -103,7 +103,6 @@ The full list of network parameters must be available to the governance communit
 |`governance.proposal.asset.minClose`                      |          |               |               | - |
 |`governance.proposal.updateNetParam.requiredMajority`     |          |               |               | - |
 |`governance.proposal.updateNetParam.maxClose`             |          |               |               | - |
-|`governance.vote.asset`                                   | String   | [0028 - Governance](./0028-governance.md#governance-weighting)              | The [Asset ID](./0040-asset-framework.md#asset-definition) of the asset used for all [governance measurements](.0028-governance.md#restriction-on-who-can-create-a-proposal)             | - |
 |`market.stake.target.timeWindow`                          |          |               |               | - |
 |`market.stake.target.scalingFactor`                       |          |               |               | - |
 |`market.margin.scalingFactors`                            |          |               |               | - |

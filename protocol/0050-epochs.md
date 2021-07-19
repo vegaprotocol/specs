@@ -190,5 +190,7 @@ In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow.
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `validators.epoch.length`       | String (period) |  `"1"`        | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  | 
+| `validators.epoch.length`       | String (period) |  `"1"`      :w
+  | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  | 
 
+See the [network paramters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
