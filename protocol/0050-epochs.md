@@ -24,10 +24,6 @@ the block one after means that every epoch has a defined last block, and it is p
 to put some information needed to terminate an epoch cleanly/prepare the
 next epoch into that block.
 
-Options: We could make it a system parameter how many blocks after the deadline the epoch starts
- if we need more space to reconfigure/close an epoch. This can be added through a software update
- at a later point if needed.
-
 ## Fringe cases
  If the epoch-time is too short, then it is possible to have several epochs starting
  at the same time (say, we have 5 second epochs, and one block takes 20 seconds, thus  pushing the
