@@ -103,7 +103,6 @@ The full list of network parameters must be available to the governance communit
 |`governance.proposal.asset.minClose`                      |          |               |               | - |
 |`governance.proposal.updateNetParam.requiredMajority`     |          |               |               | - |
 |`governance.proposal.updateNetParam.maxClose`             |          |               |               | - |
-|`governance.vote.asset`                                   | String   | [0028 - Governance](./0028-governance.md#governance-weighting)              | The [Asset ID](./0040-asset-framework.md#asset-definition) of the asset used for all [governance measurements](.0028-governance.md#restriction-on-who-can-create-a-proposal)             | - |
 |`market.stake.target.timeWindow`                          |          |               |               | - |
 |`market.stake.target.scalingFactor`                       |          |               |               | - |
 |`market.margin.scalingFactors`                            |          |               |               | - |
@@ -125,5 +124,8 @@ The full list of network parameters must be available to the governance communit
 |`network.checkpoint.marketsFreezeDate`                    | String (date) | [0005 - Limited Network Life](../non-protocol-specs/0005-limited-network-life.md#network-parameters) | The date before which all markets are expected to settle | [:droplet: Sweetwater](../milestones/2.5-Sweetwater.md) |
 |`network.checkpoint.chainEndOfLifeDate`                   | String (date) | [0005 - Limited Network Life](../non-protocol-specs/0005-limited-network-life.md#network-parameters) | The point at which the chain will be shutdown | [:droplet: Sweetwater](../milestones/2.5-Sweetwater.md) |
 |`network.checkpoint.timeElapsedBetweenCheckpoints`        | String (duration) | [0005 - Limited Network Life](../non-protocol-specs/0005-limited-network-life.md#network-parameters) | The minimum time that should pass before another checkpoint is taken | [:droplet: Sweetwater](../milestones/2.5-Sweetwater.md) |
+|`validators.epoch.length`        | String (integer) | [0050 - Epochs](./0050-epochs.md#network-parameters) | The length (in seconds) of an Epoch | [:droplet: Sweetwater](../milestones/2.5-Sweetwater.md) |
+|`validators.delegation.minAmount`        | String (float) | [0059 - Simple staking & delegating](./0059-simple-staking-and-delegating.md#network-parameters) | The smallest amount of the governance asset that can be delegated |
+|`validators.delegation.maxStakePerValidator`        | String (float) | [0059 - Simple staking & delegating](./0059-simple-staking-and-delegating.md#network-parameters) | The highest total amount of the governance asset that can be delegated to a single validator |
 
 * A `-` in the *Version added* column indicates that the network parameter existed before `0.38.0`, when this table was added. 

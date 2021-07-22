@@ -1,5 +1,5 @@
-# Simple Staking and Delegation
-Vega runs on a delegated proof of stake (DPOS) blockchain. Participants who hold a balance of the governance asset can stake these on the network by delegating their tokens to one or more validators that they trust. This helps to secure the network. 
+# simple Staking and Delegation
+Vega runs on a delegated proof of stake (DPOS) blockchain. Participants who hold a balance of the configured [governance asset](./0028-governance.md) can stake these on the network by delegating their tokens to one or more validators that they trust. This helps to secure the network. 
 
 Validators and delegators receive incentives from the network, depending on various factors, including how much stake is delegated and how honest they are.
 
@@ -7,23 +7,16 @@ Validators and delegators receive incentives from the network, depending on vari
 
 Staking requires the combined action of:
 - Locking tokens on the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md); and 
-- Delegating these tokens to a one or more validators
+- Delegating these tokens to one or more validators
 
-Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator.
-
-A delegator can lock a token in the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), which is then available for
-staking. To this end, an Vega token
-(or a fraction thereof) can be
-- Unlocked: The tokenholder is free to do with the token as they
-	want, but cannot delegate it
-- Locked: The token is locked in the smart contract, and cen be used
-	inside the delegation system
+Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can lock a token in the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), which is then available for
+staking. To this end, an Vega token (or a fraction thereof) can be:
+- Unlocked: The tokenholder is free to do with the token as they want, but cannot delegate it
+- Locked: The token is locked in the smart contract, and can be used inside the delegation system
 - Delegated: The (locked) token is delegated to a validator
-- Undelegated: The token is not delegated to a validator, and can be either
-	delegated or unlocked.
+- Undelegated: The token is not delegated to a validator, and can be either delegated or unlocked.
 
 ## Smart Contract / Staking Bridge Interaction
-
 It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md) through the validators; thus, all actions regarding locking 
 and unlocking of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), not by Vega.
 
@@ -36,11 +29,11 @@ In order to delegate, users require tokens that will be locked in a smart contra
 
 This provides the information the core needs to keep track of:
 
-	* Total Delegatable Stake
-	* Undelegated Stake
-	* [n] Stake delegated per validator
-	* [n] Stake marked for delegation per validator in the next [epoch](./0050-epochs.md).
-	* Total stake (should be the summ of all the others)
+* Total Delegatable Stake
+* Undelegated Stake
+* Stake delegated per validator
+* Stake marked for delegation per validator in the next [epoch](./0050-epochs.md).
+* Total stake (should be the summ of all the others)
 
 There is no interaction with the smart contract that is initiated by Vega.
 
@@ -48,11 +41,12 @@ The validators watch the smart contract, and observe the following actions:
 
 - A token gets locked: This token is now available for delegation
 - A token gets unlocked: 
+
 If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegatable tokens is reduced to match the (un)locking status). 
 
 This could mean that the token-holder has a delegation-command scheduled that is no longer executable; this command will then be ignored at the start of the next epoch. 
 
-If the token holder does not have sufficient undelegated stake, at first the validators verify if tokens are in the process of being delegated(i.e., the delegation command has been issued, but not yet executed), and uses those tokens to cover the unlocking. If this is insufficient, the `undelegate-now` command is automatically triggered, undelegating evenly from all validators to cover the needs. 
+If the token holder does not have sufficient undelegated stake, at first the validators verify if tokens are in the process of being delegated (i.e., the delegation command has been issued, but not yet executed), and uses those tokens to cover the unlocking. If this is insufficient, the `undelegate-now` command is automatically triggered, undelegating evenly from all validators to cover the needs. 
 
 ## Delegation Transaction
 
@@ -85,7 +79,7 @@ well as in the beginning of the next epoch just before the command takes effect.
 The amount of delegatable stake is reduced right away once the command is put into 
 a block.
 
-Each validator will have a maximum amount of stake that they can accept as delegation (initially this will be the same for all validators, governed by a network parameter `max stake per validator`). If a participant is delegating such that the size of their stake would cause this amount to be exceeded, then they are only staked up to this maximum amount. The remaining of their stake is therefore eligible to stake to another validator.
+Each validator will have a maximum amount of stake that they can accept as delegation (initially this will be the same for all validators, governed by a network parameter `maxStakePerValidator`). If a participant is delegating such that the size of their stake would cause this amount to be exceeded, then they are only staked up to this maximum amount. The remaining of their stake is therefore eligible to stake to another validator.
 
 ### Undelegating
 Users can remove stake by submitting an `Undelegate` transaction. The tokens will then be restored back to their token balance.
@@ -142,10 +136,14 @@ execute (as this would exceed the maximum stake the validator wants). To save re
 block creator has the responsibility to filter out these transactions.
 
 
-## Network Parameters
-`minimum delegateable stake` - the smallest unit of (fractions of) tokens that can be used for delegation
-`max stake per validator` - maximum amount of stake that a validator can accept
+# Network Parameters
 
+| Property         | Type   | Example value | Description |
+|------------------|--------| ------------|--------------|
+| `validators.delegation.minAmount`       | String (float) |  `"0.001"`        | The smallest fraction of the [governance token](./0028-governance.md) that can be [delegated to a validator](#delegation-transaction). | 
+| `validators.delegation.maxStakePerValidator`       | String (float) |  `"1"`        | The largest sum of the [governance token](./0028-governance.md) that can be [staked and/or delegated to an individual validator](#delegation-transaction). | 
+
+See the [network paramters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
 
 ## Acceptance Criteria
 
@@ -158,7 +156,7 @@ block creator has the responsibility to filter out these transactions.
   - Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" 
   - Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).
 - These accounts will be created:
-  - A [staking account](./0013-accounts.md#party-staking-accounts) denominated in the governance token asset is created
+  - A [staking account](./0013-accounts.md#party-staking-accounts) denominated in the governance asset is created
   - When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards)
   - It is possible that a [separate reward function](./0057-reward-functions.md) will cause an account to be created for the user as a result of rewards.
 - Timings
@@ -184,3 +182,13 @@ block creator has the responsibility to filter out these transactions.
   - Announcing removal of stake for current validator
   - Staking on the new validator, as per normal [function: Stake](../non-protocol-specs/0004-staking-bridge.md)
   - These can happen concurrently, so that at the next epoch, the stake is removed from the current validator and staked on the new validator 
+  
+### A delegation transaction that would cause a single validator's total delegated amount to exceed `validators.delegation.maxStakePerValidator` will be reduced to fit
+- A validator, Validator A exists
+- `validators.delegation.maxStakePerValidator` is set to `99.99`
+- Party A delegates 99.8 to validator A
+- This delegation is successful
+- Party B delegates 10 to validator A
+- This delegation only successfully delegates 0.1
+- Party C delegates 0.1 to validator A
+- This transaction is rejected as it would exceed `maxStakePerValidator`

@@ -11,14 +11,9 @@ To implement this framework, two new transactions must be supported by the Vega 
 In this document, a "user" refers to a "party" (private key holder) on a Vega network.
 
 
-# Future work
-
-This version of the specification covers the core governance protocol. Not currently covered is proposal rate limiting or spam / denial of service prevention (including via fees or other methods). 
-
-
 # Guide-level explanation
 
-Governance actions enable users to make proposals for changes on the network or vote for existing proposals. The allowable types of change to be proposed are known as "governance actions". In future, enactment of governance actions may also be possible by other means (for example, automatically by the protocol in response to certain conditions), which should be kept in mind during implementation.
+Governance actions enable users to make proposals for changes on the network or vote for existing proposals. The allowable types of change to be proposed are known as "governance actions". In future, enactment of governance actions may also be possible by other means (for example, automatically by the protocol in response to certain conditiouns), which should be kept in mind during implementation.
 
 The type of governance action are:
 
@@ -43,17 +38,19 @@ Note: there are some differences/additional points for market creation proposals
 
 Any actions that result from the outcome of the vote are covered in other spec files.
 
+## Governance Asset
+The Governance Asset is the on-chain [asset](./0040-asset-framework.md) representing the [token configured in the staking bridge](./../non-protocol-specs/0006-erc20-governance-token-staking.md). Users with a staking account balance in the governance asset can:
+
+- [Create proposals](#restriction-on-who-can-create-a-proposal)
+- [Vote on proposals](#voting-for-a-proposal)
+- [Delegate to validators](./0059-simple-staking-and-delegating.md)
 
 ## Governance weighting
-
 A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. 
 
 To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`. 
 
 Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-staking-bridge.md).
-
-This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, including between Testnets and Mainnets.
-
 
 In future, governance weighting for some proposal types will be based on alternative measures, such as:
 
@@ -320,7 +317,7 @@ APIs should also exist for clients to:
 
 ## Governance proposal types
 ### New Market proposals
-- [ ] New market proposals must contain a Liquidity Commitment
+- [x] New market proposals must contain a Liquidity Commitment
 
 ### Market change proposals
 - [ ] Market change proposals can only propose a change to a single parameter
