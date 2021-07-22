@@ -45,17 +45,10 @@ Options: We could make it a system parameter how many blocks after the deadline 
  the year 2038 problem; this is a bit unrelated, but can easily hit anything that
  works on a second-basis.
 
-## Parameter changes
- All parameters that are changed through a governance vote are valid starting the 
- epoch following the one the block is in that finalized the vote.
-
-## Parameters 
-	Epoch length (in seconds)
-
 # (Un)delegation
 
 A delegator can lock a token in the smart contract, which is then available for
-staking (@Danny to provide details where necessary). To this end, an Vega token
+staking. To this end, an Vega token
 (or a frction thereof) can be
 - Unlocked: The tokenholder is free to do with the token as they
 	want, but cannot delegate it
@@ -69,12 +62,8 @@ Any locked and undelegated stake can be delegated at any time by putting a
 delegation-message on the chain. However, the delegation only becomes valid 
 towards the next epoch, though it can be undone through undelegate.
 
-It is important that no action triggered on Vega needs to directly invoke the 
-ETH smart contract through the validators; thus, all actions regarding locking 
-and unlocking of stake are initiated by the ETH, not by Vega.
-
 To avoid fragmentation or spam, there is a system parameter "Minimum delegateable stake"
-that defines the smallest unit of (fractions of) tokens that can be used for delegation.
+that defines the smallest unit of (fractions of) tokens that can be used for delegation - see [Simple staking & delegating](./0059-simple-staking-and-delegating.md#network-parameters).
 
 To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
@@ -185,6 +174,8 @@ In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow.
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
 | `validators.epoch.length`       | String (period) |  `"1"` | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  |
-| `validators.delegation.length`       | String (period) |  `"1"` | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  |
 
 See the [network paramters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
+
+## Parameter changes
+All parameters that are changed through a governance vote are valid starting the epoch following the one the block is in that finalized the vote.
