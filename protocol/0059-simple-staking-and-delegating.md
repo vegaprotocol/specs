@@ -9,18 +9,17 @@ Staking requires the combined action of:
 - Locking tokens on the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md); and 
 - Delegating these tokens to one or more validators
 
+=======
 Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can lock a token in the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), which is then available for
 staking. To this end, an Vega token (or a fraction thereof) can be:
 - Unlocked: The tokenholder is free to do with the token as they want, but cannot delegate it
 - Locked: The token is locked in the smart contract, and can be used inside the delegation system
-- Delegated: The (locked) token is delegated to a validator
-- Undelegated: The token is not delegated to a validator, and can be either delegated or unlocked.
 
 ## Smart Contract / Staking Bridge Interaction
-It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md) through the validators; thus, all actions regarding locking 
-and unlocking of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), not by Vega.
+It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md) through the validators; thus, all actions regarding locking 
+and unlocking of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md), not by Vega.
 
-In order to delegate, users require tokens that will be locked in a smart contract (see [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md)). Vega will be made aware of how many tokens a given party has locked through bridge events. When the same tokens are unlocked, a corresponding event will be emitted:
+In order to delegate, users require tokens that will be locked in a smart contract (see [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md)). Vega will be made aware of how many tokens a given party has locked through bridge events. When the same tokens are unlocked, a corresponding event will be emitted:
 
 ```
   event Stake_Deposited(address indexed user, uint256 amount, bytes32 vega_public_key);
