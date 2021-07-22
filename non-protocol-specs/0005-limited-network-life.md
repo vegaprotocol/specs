@@ -14,7 +14,7 @@ This is especially important early on when rapid iteration is desirable, as the 
 - Bugs, security breaches, or other issues during alpha could either take out the chain OR make it desirable to halt block production. It's important to consider what happens next if this occurs.
 
 # Overview
-There are three main features:
+There are four main features:
 1. Create checkpoints with relevant (but minimal) information at regular intervals, and on every deposit and every withdrawal request.
 2. Ability to specify a checkpoint hash as part of genesis.
 3. A new 'Restore' transaction that contains the full checkpoint file and triggers state restoration
