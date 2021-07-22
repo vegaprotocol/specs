@@ -6,7 +6,6 @@ Background reading: https://www.cmegroup.com/education/courses/introduction-to-f
 
 Futures are a simple "delta one" product and the first product supported by Vega. Note that in future (hah) there will likely be a number of other products (synthetics, contracts for difference).
 
-
 ## 1. Product parameters
 
 1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status ahead of settlement at expiry (required to ensure no trading can occur after the settlement result may be known by participants). (This would usally be a date/time based trigger but may also use an oracle.)
@@ -79,3 +78,4 @@ cash_settled_future.settlement_data(event) {
 1. A market that has already settled and is in trading terminated status never processes any more lifecycle events even if the data source sends more valid data
 1. Lifecycle events are processed atomically as soon as they are triggered, i.e. the above condition always holds even for two or more transactions arriving at effectively the same time - only the transaction that is sequenced first triggers final settlement
 1. Once a market is finally settled, the mark price is equal to the settlement data and this is exposed on event bus and market data APIs
+1. Assure ./qa-scenarios/settlement-at-expiry.feature is implemented and executes correctly

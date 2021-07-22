@@ -1,0 +1,129 @@
+Feature: Test settlement at expiry for built-in futures
+# Scenario: A market with an expired product should have a status of `TRADING_TERMINATED`.
+# Scenario: A `TRADING_TERMINATED` market should settle all accounts when a valid, matching oracle event occurs
+# Scenario: A `TRADING_TERMINATED` market should move to `SETTLED` after settlement is complete
+# Scenario: A valid, matching oracle event should not change the status of a market with any status other than `TRADING_TERMINATED`
+# Scenario: The balance of a `TRADING_TERMINATED` market's insurance balance should move to the on chain treasury. 
+# Scenario: The correct balances end up with the correct people at settlement
+
+Feature: Test settlement at expiry
+
+  Background:
+    Given the following network parameters are set:
+      | name                                                | value |
+      | market.value.windowLength                           | 1h    |
+      | market.stake.target.timeWindow                      | 24h   |
+      | market.stake.target.scalingFactor                   | 1     |
+      | market.liquidity.targetstake.triggering.ratio       | 0     |
+      | market.liquidity.providers.fee.distributionTimeStep | 10m   |
+
+    And the average block duration is "1"
+
+    And the simple risk model named "simple-risk-model-1":
+      | long | short | max move up | min move down | probability of trading |
+      | 0.1  | 0.1   | 100         | -100          | 0.1                    |
+    And the fees configuration named "fees-config-1":
+      | maker fee | infrastructure fee |
+      | 0.004     | 0.001              |
+    And the price monitoring updated every "1" seconds named "price-monitoring-1":
+      | horizon | probability | auction extension |
+      | 1       | 0.99        | 300               |
+    
+    And the internal data source named "ETH_DEC21_trading_term_trig":
+      | on        | value                |
+      | timestamp | 2021-12-31T23:59:59Z |
+
+    And the signed message data source named "ETH_DEC21_settle_price_source"
+      | field     | key                  |
+      | ETHUSD    | 0xDEADBEEF           |
+
+    And the markets:
+      | id        | quote name | asset | risk model          | margin calculator         | auction duration | fees          | price monitoring   | settlement price source        | trading terminated trigger  |
+      | ETH/DEC21 | ETH        | USD   | simple-risk-model-1 | default-margin-calculator | 1                | fees-config-1 | price-monitoring-1 | ETH_DEC21_settle_price_source  | ETH_DEC21_trading_term_trig |
+    
+    And the traders deposit on asset's general account the following amount:
+      | trader  | asset | amount    |
+      | lp1     | USD   | 100000000 |
+      | trader1 | USD   | 10000000  |
+      | trader2 | USD   | 10000000  |
+
+    Given the traders submit the following liquidity provision:
+      | id          | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset |
+      | commitment1 | lp1   | ETH/DEC21 | 10000000          | 0.001 | buy  | BID              | 500        | -10   |
+      | commitment1 | lp1   | ETH/DEC21 | 10000000          | 0.001 | sell | ASK              | 500        | 10    |
+    
+    And the traders place the following orders:
+      | trader  | market id | side | volume | price | resulting trades | type       | tif     | reference  |
+      | trader1 | ETH/DEC21 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC | buy-ref-1  |
+      | trader1 | ETH/DEC21 | buy  | 10     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | buy-ref-2  |
+      | trader2 | ETH/DEC21 | sell | 1      | 1100  | 0                | TYPE_LIMIT | TIF_GTC | sell-ref-1 |
+      | trader2 | ETH/DEC21 | sell | 10     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | sell-ref-2 |
+
+    When the opening auction period ends for market "ETH/DEC21"
+    Then the auction ends with a traded volume of "10" at a price of "1000"
+
+    And the traders should have the following profit and loss:
+      | trader  | volume | unrealised pnl | realised pnl |
+      | trader1 | 10     | 0              | 0            |
+      | trader2 | -10    | 0              | 0            |
+
+    And the market data for the market "ETH/DEC21" should be:
+      | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
+      | 1000       | TRADING_MODE_CONTINUOUS | 1       | 900       | 1100      | 1000         | 78000000       | 10            |
+
+    Scenario: happy path, trading terminated is triggered market changes mode, orders are rejected, settlement data comes and we settle
+
+    # If we get settlement price before trading terminated then it should not do anything
+    When the signed message from data source "ETH_DEC21_settle_price_source" is received with content
+      | name             | value  |
+      | prices.ETH.value | 990    |
+    
+    Then the traders should have the following profit and loss:
+      | trader  | volume | unrealised pnl | realised pnl |
+      | trader1 | 10     | 0              | 0            |
+      | trader2 | -10    | 0              | 0            |
+
+
+    When the ETH_DEC21_trading_term_trig event is triggered
+
+
+    # not sure whether we want TRADING_TERMINATED in the trading mode or whether we want another market status field here to
+    # match the possible states in "market lifecycle"
+    
+    Then the market state for the market "ETH/DEC21" should be "TRADING_TERMINATED".
+    
+    And the market data for the market "ETH/DEC21" should be:
+      | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
+      | 1000       | TRADING_MODE_CONTINUOUS | 1       | 900       | 1100      | 1000         | 78000000       | 10            |
+
+    When the traders place the following orders:
+      | trader  | market id | side | volume | price | resulting trades | type       | tif     | reference  |
+      | trader1 | ETH/DEC21 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC | buy-ref-1  |
+    
+    Then the order is rejected. 
+
+    When the signed message from data source "ETH_DEC21_settle_price_source" is received with content
+      | name             | value  |
+      | prices.ETH.value | 1001   |
+    
+    Then there are the following cashflows: 
+      trader2 has 10 debited from the margin account
+      trader1 has 10 credited to the margin account 
+      # that's the settlement part done we can now get rid of margin balances, bond account and insurance pool
+      trader1 has their margin balance transferred to the general USD account 
+      trader2 has their margin balance transferred to the general USD account  
+      lp1 has their bond balance transferred to their general USD account
+      lp1 has their margin balance transferred to their general USD account 
+      
+      # this last one may be ignored since balance is zero and we'll cook up  a scenario where it actually has to happen
+      the insurance pool balance of 0 is transferred to network thesure for asset USD 
+    
+    And the traders should have the following profit and loss:
+      | trader  | volume | unrealised pnl | realised pnl  |
+      | trader1 | 0      | 0              | 10            |
+      | trader2 | 0      | 0              | -10           |
+
+
+    And the market state for the market "ETH/DEC21" should be "SETTLED".
+    
+    

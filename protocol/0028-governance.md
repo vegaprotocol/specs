@@ -11,21 +11,16 @@ To implement this framework, two new transactions must be supported by the Vega 
 In this document, a "user" refers to a "party" (private key holder) on a Vega network.
 
 
-# Future work
-
-This version of the specification covers the core governance protocol. Not currently covered is proposal rate limiting or spam / denial of service prevention (including via fees or other methods). 
-
-
 # Guide-level explanation
 
-Governance actions enable users to make proposals for changes on the network or vote for existing proposals. The allowable types of change to be proposed are known as "governance actions". In future, enactment of governance actions may also be possible by other means (for example, automatically by the protocol in response to certain conditions), which should be kept in mind during implementation.
+Governance actions enable users to make proposals for changes on the network or vote for existing proposals. The allowable types of change to be proposed are known as "governance actions". In future, enactment of governance actions may also be possible by other means (for example, automatically by the protocol in response to certain conditiouns), which should be kept in mind during implementation.
 
 The type of governance action are:
 
 1. Create market
 1. Change market parameters
 1. Change network parameters
-1. Add external asset to Vega (*out of scope for this document*, proposes a new asset controlled by a bridge to become usable on Vega
+1. Add external asset to Vega (covered in a [separate spec - see 0027](./0027-asset-proposal.md))
 1. Authorise a transfer to or from the [Network Treasury](TODO: LINK)
 
 ## Lifecycle of a proposal
@@ -43,17 +38,19 @@ Note: there are some differences/additional points for market creation proposals
 
 Any actions that result from the outcome of the vote are covered in other spec files.
 
+## Governance Asset
+The Governance Asset is the on-chain [asset](./0040-asset-framework.md) representing the [token configured in the staking bridge](./../non-protocol-specs/0006-erc20-governance-token-staking.md). Users with a staking account balance in the governance asset can:
+
+- [Create proposals](#restriction-on-who-can-create-a-proposal)
+- [Vote on proposals](#voting-for-a-proposal)
+- [Delegate to validators](./0059-simple-staking-and-delegating.md)
 
 ## Governance weighting
-
 A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. 
 
 To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`. 
 
 Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-staking-bridge.md).
-
-This asset can be any asset supported in the Vega asset framework, but the asset will initially be the same one for all votes across the network. This will be configurable by network and known as the _governance asset_, and will differ between different deployments, including between Testnets and Mainnets.
-
 
 In future, governance weighting for some proposal types will be based on alternative measures, such as:
 
@@ -172,19 +169,22 @@ All **new market proposals** initially have their validation configured by the n
 
 ## 2. Change market parameters
 
-Market parameters that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. See the Market Framework spec for details on these parameters, including those that cannot be changed and the category of the parameters.
+[Market parameters](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0001-market-framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. See the [Market Framework spec](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0001-market-framework.md#market) for details on these parameters, including those that cannot be changed and the category of the parameters.
 
 All **change market parameter proposals** have their validation configured by the network parameters `Governance.UpdateMarket.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Market Framework spec.
 
 
 ## 3. Change network parameters
 
-Network parameters that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters.
+[Network parameters](./0054-network-parameters.md) that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters. New network parameters require a code change, so there is no support for adding new network parameters.
 
 All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
 
+## 4. Add a new asset
 
-## 4. Transfers initiated by Governance
+New [assets](./0040-asset-framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-asset-proposal.md)). Unlike markets, assets cannot be updated after they have been added.
+
+## 5. Transfers initiated by Governance
 
 ### Permitted source and destination account types
 
@@ -317,7 +317,7 @@ APIs should also exist for clients to:
 
 ## Governance proposal types
 ### New Market proposals
-- [ ] New market proposals must contain a Liquidity Commitment
+- [x] New market proposals must contain a Liquidity Commitment
 
 ### Market change proposals
 - [ ] Market change proposals can only propose a change to a single parameter
