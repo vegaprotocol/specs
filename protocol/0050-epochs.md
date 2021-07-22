@@ -147,10 +147,6 @@ If several delegators change the delegation within the same block, some of them 
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
 block creator has the responsibility to filter out these transactions.
 
-## Parameters: 
-- `minimum_delegatable_stake` (see [staking spec](./0059-simple-staking-and-delegating))
-- `max_wanted_stake[Validator]`	
-
 ## Commands:
 ```javascript
 delegate(delegator_ID, validator_ID, amount/'all')
@@ -161,8 +157,6 @@ delegate(delegator_ID, validator_ID, amount/'all')
 undelegate(delegator_ID, validator_ID, amount/'all')
 
 undelegate_now(delegator_ID, validator_ID, amount/'all')
-	
-change_max_wanted_stake(Validator_ID)
 ```
 
 
@@ -191,5 +185,6 @@ In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow.
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
 | `validators.epoch.length`       | String (period) |  `"1"` | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  |
+| `validators.delegation.length`       | String (period) |  `"1"` | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  |
 
 See the [network paramters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
