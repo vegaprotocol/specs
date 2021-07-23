@@ -35,9 +35,8 @@ pipeline {
             steps {
                 retry(3) {
                     dir('vega/integration') {
-                        sh 'godog -format=junit ../../specs-internal/qa-scenarios/ | grep -v "^202" | grep -v "^\\s*$" > qa-scenarios-report.xml'
+                        sh 'godog --format=junit:qa-scenarios-report.xml ../../specs-internal/qa-scenarios/'
                         junit skipPublishingChecks: true, testResults: 'qa-scenarios-report.xml'
-                        sh 'godog ../../specs-internal/qa-scenarios/'
                     }
                 }
             }
