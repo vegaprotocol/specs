@@ -2,6 +2,7 @@ pipeline {
     agent { label 'general' }
     options {
         skipDefaultCheckout true
+        parallelsAlwaysFailFast()
     }
     environment {
         GO111MODULE = 'on'
@@ -39,6 +40,18 @@ pipeline {
                         junit 'qa-scenarios-report.xml'
                     }
                 }
+            }
+        }
+    }
+    post {
+        success {
+            retry(3) {
+                slackSend(channel: "#protocol-design-notify", color: "good", message: ":white_check_mark: Specs-Internal CI » <${RUN_DISPLAY_URL}|Jenkins ${BRANCH_NAME} Job> » <${CHANGE_URL}|GitHub PR #${CHANGE_ID}>")
+            }
+        }
+        failure {
+            retry(3) {
+                slackSend(channel: "#protocol-design-notify", color: "danger", message: ":red_circle: Specs-Internal CI » <${RUN_DISPLAY_URL}|Jenkins ${BRANCH_NAME} Job Failed> » <${CHANGE_URL}|GitHub PR #${CHANGE_ID}>")
             }
         }
     }
