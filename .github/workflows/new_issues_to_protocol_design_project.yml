@@ -1,6 +1,8 @@
+---
+
 name: Auto Assign New Issues to Project(s)
 
-on:
+"on":
   issues:
     types: [opened]
 
