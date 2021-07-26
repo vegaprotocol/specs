@@ -6,9 +6,16 @@ pipeline {
     }
     environment {
         GO111MODULE = 'on'
+        SLACK_MESSAGE = "Specs-Internal CI » <${RUN_DISPLAY_URL}|Jenkins ${BRANCH_NAME} Job>${ env.CHANGE_URL ? " » <${CHANGE_URL}|GitHub PR #${CHANGE_ID}>" : '' }"
     }
 
     stages {
+        stage('setup') {
+            steps {
+                sh 'printenv'
+                echo "${params}"
+            }
+        }
         stage('Git clone') {
             parallel {
                 stage('specs-internal') {
@@ -46,12 +53,12 @@ pipeline {
     post {
         success {
             retry(3) {
-                slackSend(channel: "#protocol-design-notify", color: "good", message: ":white_check_mark: Specs-Internal CI » <${RUN_DISPLAY_URL}|Jenkins ${BRANCH_NAME} Job> » <${CHANGE_URL}|GitHub PR #${CHANGE_ID}>")
+                slackSend(channel: "#protocol-design-notify", color: "good", message: ":white_check_mark: ${SLACK_MESSAGE}")
             }
         }
         failure {
             retry(3) {
-                slackSend(channel: "#protocol-design-notify", color: "danger", message: ":red_circle: Specs-Internal CI » <${RUN_DISPLAY_URL}|Jenkins ${BRANCH_NAME} Job Failed> » <${CHANGE_URL}|GitHub PR #${CHANGE_ID}>")
+                slackSend(channel: "#protocol-design-notify", color: "danger", message: ":red_circle: ${SLACK_MESSAGE}")
             }
         }
     }
