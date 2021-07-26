@@ -39,12 +39,25 @@ pipeline {
             }
         }
 
-        stage('Run qa-scenarios') {
-            steps {
-                retry(3) {
-                    dir('vega/integration') {
-                        sh 'godog --format=junit:qa-scenarios-report.xml ../../specs-internal/qa-scenarios/'
-                        junit 'qa-scenarios-report.xml'
+        stage('Run checks') {
+            parallel {
+                stage('Run qa-scenarios') {
+                    steps {
+                        retry(3) {
+                            dir('vega/integration') {
+                                sh 'godog --format=junit:qa-scenarios-report.xml ../../specs-internal/qa-scenarios/'
+                                junit 'qa-scenarios-report.xml'
+                            }
+                        }
+                    }
+                }
+                stage('lint: yaml') {
+                    steps {
+                        retry(3) {
+                            dir('specs-internal') {
+                                sh 'yamllint -s -d "{extends: default, rules: {line-length: {max: 160}}}" .'
+                            }
+                        }
                     }
                 }
             }
