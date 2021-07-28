@@ -10,7 +10,7 @@ The trigger to start a new epoch is blocktime. To this end, there is a
 defined time when an epoch ends; the first block after the block that
 exceeds this time is the last block of its epoch.
 
-The length of an epoch is a system parameter. To make the chain understandable
+The length of an epoch is a [network parameter](#network-parameters). To make the chain understandable
 without having to trace all system parameters, the time an epoch ends is added
 to its first block. This also means that the block validity check needs to verify 
 that deadline.
