@@ -57,6 +57,10 @@ for _, d := range delegators {
 
 ```
 
+Sample code for the full distribution (slightly unclean, but fully functional):
+https://github.com/vegaprotocol/research-internal/commit/a800f647952a06d69b90973b83607febc0e2dec1
+
+
 The transfer type informs the collateral engine that the `FromAccount` ought to be the infrastructure fee account, and the `ToAccount` is the general account for the party for the given asset. The delegator can then withdraw the amount much like they would any other asset/balance. Note, the transfers should only be made when the `infra-fee-hold-time` has elapsed. 
 
 
