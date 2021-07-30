@@ -21,8 +21,14 @@ Variables used:
 
 Functions:
 
-- `score_val(stake_val)`: `sqrt(a*stake_val/3)-(sqrt(a*stake_val/3)^3)`
+- `score_val(stake_val)`: `sqrt(a*stake_val/3)-(sqrt(a*stake_val/3)^3)`. To avoid issues with floating point computation, the sqrt function is
+  computed to exactly four digits after the point. An example how this can be done using only integer calculations is in the example code.
+  Also, this function assumes that the stake is normalized, i.e., the sum of stake_val for all validators equals 1. If this is not the case, 
+  stake_val needs to be replaced by stake_val/total_stake, where total_stake is the sum of stake_val over all validators.
 - `score_del(stake_del, stake_val)`: for now, this will just return `stake_del`, but will be replaced with a more complex formula later on, which deserves independent testing.
+- The scoring function can give negative values if a validator has too much stake, which can upset subsequent computations. Thus, an additional
+  correction is required: if (score_val) < 0 then score_val = 0. This point should never be reached in a real run though, as validators should to be able to 
+  obtain enough delegation.
 - `delegator_reward(stake_val)`: `stake_val * delegator_share`. Long term, there will be bonuses in addition to the reward.
 
 
