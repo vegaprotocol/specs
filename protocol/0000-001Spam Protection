@@ -1,0 +1,27 @@
+At this point, we cannot reject a transaction based on any data that is not the shared state 
+of the blockchain. This means, it is unavoidable that one spammer can essentially fill a block.
+What we can do is
+- remove the offending transactions after the block is sheduled, i.e., not process them
+- update the state once a block is finalized and block transactions based on the new state
+- delete transactions from every (honest) validators mempool based on the new state.
+
+Thus, no matter what the anti-spam policy is, there is a scenario where someone creates
+a lot of identities and spams one block with each. Therefore, we have to enforce a minimum
+investment to be allowed to send anything to the Vega network.
+
+For governance votes, that means that there is a minimum amount of tokens required to be allowed
+to issue a proposal/vote on one. If the network detects successfull spam in spite of this minimum,
+then the limit can be increased automatically.
+
+For SW, we only have governance, so the following two policies will do:
+
+Vote proposals can only be done using a lot of tokens (say, 100.0000), or through v1 tokens (the latter is the current proposal)
+Any qualified voter can vote three times per epoch per active proposal (i.e., one initial vote and twice change their mind).
+
+Initially, a qualified voter required at least 100 tokens (i.e., a value of $1500 taking the last coinlsit sale).
+Thus, spamming the network for 1 minute would cost $135.000. 
+If 3 blocks in a row for filled with spam i.e., parties sending substantially more than 3 votes, let's say 50 votes), 
+then the number of required tokens is doubled, up to a maximum of 1600 (if someone pays 1.5 million to spam us for 60 
+secondsso be it).
+
+All parameters are up to discussion/governance vote.
