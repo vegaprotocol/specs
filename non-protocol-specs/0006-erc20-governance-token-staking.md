@@ -28,12 +28,12 @@ Note: the behaviour of delegation is covered in [staking and delegation](../prot
 
 ### Bootstraping of a network / of the staking accounts balances
 
-When a vega network is bootstraping it's necessary for each validators nodes to re0compute the current balance of all the parties which ever locked token on the staking or vesting bridge.
-This is required so when the network is finally starting or if a snapshot is loaded, then no delegation request would become incorrect either because of token being locked, or unlocked during the shutdown of the network.
+When a vega network is bootstraping it's necessary for each validators nodes to recompute the current balance of all the parties which ever locked tokens on the staking or vesting bridge.
+This is required, so when the network is finally starting or if a snapshot is loaded, then no delegation request would become incorrect either because of token being locked, or unlocked during the shutdown of the network.
 
 We introduce a new network parameter `staking_balances_bootstrap_block_count`, which in number of blocks to be executed, from the genesis block. During this time the network will accept no new transaction from any parties, and only transaction from the validators used to validate staking accounts balances will be accepted.
 
-Transaction to restor a snapshot would also be allowed during this time.
+Transaction to restore a snapshot would also be allowed during this time.
 
 
 ## Ethereum network (Solidity contracts)
