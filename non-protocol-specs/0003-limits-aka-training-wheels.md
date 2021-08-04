@@ -28,7 +28,7 @@ For Sweetwater, we only require the ability to:
 3. Set a date/time before which no market creation proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
 4. Set a date/time before which no asset addition proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
 
-At genesis, Sweetwater will be started with only one asset: VEGA. As no new assets can be proposed (limit 2), only VEGA tokens can be deposited or withdrawn via the bridge.
+At genesis, Sweetwater will be started with only one asset: VEGA. As no new assets can be proposed (limit 2), only VEGA tokens can be deposited or withdrawn via the bridge. There will be no markets at genesis, and due to point 1 above, no markets can be created.
 
 ### Oregon Tail
 
