@@ -10,7 +10,7 @@ a lot of identities and spams one block with each. Therefore, we have to enforce
 investment to be allowed to send anything to the Vega network.
 
 For governance votes, that means that there is a minimum amount of tokens required to be allowed
-to issue a proposal/vote on one. If the network detects successfull spam in spite of this minimum,
+to issue a proposal/vote. If the network detects successfull spam in spite of this minimum,
 then the limit can be increased automatically.
 
 For SW, we only have governance, so the following two policies will do:
@@ -25,3 +25,60 @@ then the number of required tokens is doubled, up to a maximum of 1600 (if someo
 secondsso be it).
 
 All parameters are up to discussion/governance vote.
+
+More detailed desctiption:
+
+Policy Enforcement:
+
+The policy enforcement mechanism rejects messages that do not follow the anti-spam rules. This can happen in
+twoe different ways:
+- pre-block reject: A transaction is rejected before it enters the validators mempool. For Tendermint-internal
+	reasons, this can only happen based on the global state an coordinated through the previous block; especially,
+	it cannot be based on any other transactions received by the validator but not yet put into a block
+	(e.g., only three transactions per perty per block).
+	Once a block is scheduled, all validators also test all transactions in their mempool if they are
+	still passing the test, and remove them otherwise.
+-post-block-reject: A transaction has made it into the block, but is rejected before it is passed to the application layer.
+	This mechanism allows for more fine-grained policies than the previous one, but at the price that the
+	offendig transaction has already taken up space in the blockchain.
+
+
+For Sweetwater, the policies we enforce are relatively simple:
+<num_votes> = 3
+<min_voting_tokens>  = 100
+<min_proposing_tokens> = 100.000
+- Any voting proposal has to come via v1 tokens and carry the corresponding authentication (I have no 
+  idea what that is though @Danny. I assume we just bind v1 tokens to vega adresses and then give
+  those adresses proposal rights.
+  [Alternative: A proposal can only be issued by a tokenholder with more than <min_proposing_tokens>. Also
+   (like below), only 3 proposals per tokenholder per epoch.]
+
+- Any tokenholder with more than <min_voting_tokens> tokens has <num_votes> voting attempts per epoch
+ and issue, i.e., they can change their mind <num_votes>-1 times in one epoch. This means, a transaction is
+ pre_block rejected, if there are <num_votes> or more votes on the same issue in the blockchain in this epoch, and
+ post_block rejected, if there are <num_votes> or more on the same issue in the blockchain plus earlier in the current block.
+
+- Any tokenholder that had more than 50% if its votes post-rejected is banned for 4 epochs, and all its votes are immediatelly 
+  rejected. 
+  
+Notes
+-What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
+ and ETH speed) that the same token is moved around to different entities, this explicitely doesn't work.
+-This means that every tokenholder with more than <min_voting_tokens> can spam exactly one block on SW.
+-There is some likelyhood that policies will change. It would thus be good to have a clean separation of
+ policy definition and enforcement, so a change in the policies can be implemented and tested independently of
+ the enforcement code.
+
+Increasing thresholds:
+If on average for the last 10 blocks, more than 30% of all transactions need to be post-rejected, then the network is
+under Spam attack. In this case, the <min_voting_tokens> value is doubled, until it reaches 1600. The threshold
+is then not increased for another 10 blocks.
+At the beginning of every epoch, the value of <min_voting_tokens> is reset to its original.
+
+
+Issues: It is possible for a tokenholder to deliberatelly spam the network to block poorer parties from voting. Due to the
+  banning policy this is not doable from one account, but with a sybil attack it can be done. If this ends up being a
+  problem, we can adress it by increasing the bann-time.
+  
+
+
