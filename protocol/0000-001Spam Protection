@@ -46,12 +46,9 @@ twoe different ways:
 For Sweetwater, the policies we enforce are relatively simple:
 <num_votes> = 3
 <min_voting_tokens>  = 100
-<min_proposing_tokens> = 100.000
-- Any voting proposal has to come via v1 tokens and carry the corresponding authentication (I have no 
-  idea what that is though @Danny. I assume we just bind v1 tokens to vega adresses and then give
-  those adresses proposal rights.
-  [Alternative: A proposal can only be issued by a tokenholder with more than <min_proposing_tokens>. Also
-   (like below), only 3 proposals per tokenholder per epoch.]
+<num_proposals> = 3
+<min_proposing_tokens> = 100000
+
 
 - Any tokenholder with more than <min_voting_tokens> tokens has <num_votes> voting attempts per epoch
  and issue, i.e., they can change their mind <num_votes>-1 times in one epoch. This means, a transaction is
@@ -61,6 +58,12 @@ For Sweetwater, the policies we enforce are relatively simple:
 - Any tokenholder that had more than 50% if its votes post-rejected is banned for 4 epochs, and all its votes are immediatelly 
   rejected. 
   
+- A proposal can only be issued by a tokenholder owning more than <min_proposing_tokens> at the start of the epoch. Also
+   (like above), only <num_proposals> proposals can be made per tokenholder per epoch, i.e., every proposal past <num_proposals> in an epoch is
+   rejected by post-block-reject (if there sum of proposals in past blocks and the ones in the current block exceed
+   <num_proposals>) or pre-block reject (if the sum of proposals olready in the blockchain for that epoch equals or exceeds 
+   <num_proposals>.
+   
 Notes
 -What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
  and ETH speed) that the same token is moved around to different entities, this explicitely doesn't work.
