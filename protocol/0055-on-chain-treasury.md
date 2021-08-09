@@ -88,6 +88,11 @@ The transfer occurs immediately per once every `period_length_seconds` and does 
 
 ### 💧 Sweetwater
 
+- Depositing funds via the [ERC20 bridge](./0031-ethereum-bridge-spec.md) directly to the Validators Rewards account (i.e. xxx address). There will be no more  on-chain-treasury on sweetwater.
+
+### 🤠 Oregon Trail WIP
+
+- TBD for a lot of this
 - Depositing funds via the [ERC20 bridge](./0031-ethereum-bridge-spec.md) to the Network Treasury account (i.e. zero address) when there is no Network Treasury account for the asset being deposited:
 	- Creates a Network Treasury account for that asset 
 	- Results in the balance of the Network Treasury account for the asset being equal to the amount of the asset that was deposited
@@ -115,6 +120,6 @@ The transfer occurs immediately per once every `period_length_seconds` and does 
 NOTE: for Sweetwater the allocation logic and reward pools can be simplified to work only for the governance asset (i.e. VEGA tokens) if needed.
 
 
-### 🤠 Oregon Trail
 
-- TBD
+
+

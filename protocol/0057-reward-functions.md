@@ -48,6 +48,8 @@ Reward calculation: the total payout amount for the period is treated in the sam
 
 ### 💧 Sweetwater
 
+
+- There is a network parameter specifying the maximum balance to be payed out by "simple-POS-reward" per epoch. 
 - Staking and delegation reward type is available and used for the single, "hard coded" (i.e. not changeable through transactions on chain in this release) reward scheme
 - The reward amounts are calculated using the same formula and code as the staking and delegation reward calculation described in that spec, subject to the application of the max payout amount per participant (public key) if one is specified in the reward parameters (which are controllable by governance)
 - Both stakers (identified by being self-delegators AND being in the active validator set) and delegators are rewarded, as per the calculation
