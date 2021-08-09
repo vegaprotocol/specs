@@ -26,7 +26,14 @@ Staked assets will appear in a user's [staking account](../protocol/0013-account
 
 Note: the behaviour of delegation is covered in [staking and delegation](../protocol/0059-simple-staking-and-delegation.md), and the use of stake to determine a party's weight in governance votes is covered in [governance](../protocol/0028-governance.md).
 
-### Staking event queue
+### Bootstraping of a network / of the staking accounts balances
+
+When a vega network is bootstraping it's necessary for each validators nodes to recompute the current balance of all the parties which ever locked tokens on the staking or vesting bridge.
+This is required, so when the network is finally starting or if a snapshot is loaded, then no delegation request would become incorrect either because of token being locked, or unlocked during the shutdown of the network.
+
+We introduce a new network parameter `staking_balances_bootstrap_block_count`, which in number of blocks to be executed, from the genesis block. During this time the network will accept no new transaction from any parties, and only transaction from the validators used to validate staking accounts balances will be accepted.
+
+Transaction to restore a snapshot would also be allowed during this time.
 
 
 ## Ethereum network (Solidity contracts)

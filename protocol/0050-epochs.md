@@ -24,6 +24,13 @@ the block one after means that every epoch has a defined last block, and it is p
 to put some information needed to terminate an epoch cleanly/prepare the
 next epoch into that block.
 
+Correction: As we cannot (at this point) control the block into which a particular transaction
+goes, for Sweetwater the epoch changes will be done as described in the
+beginning without a synchronizing block: There is a time (determined by the 
+network parameter epoch_length), when a new epoch starts. The last block in every epoch is the
+first block that has a blocktime exceeding the length of its epoch, i.e., the later blocks
+then go into the next epoch. In a later version we will have better control of the mempool,
+and then can add a synchronizing block.
 ## Fringe cases
  If the epoch-time is too short, then it is possible to have several epochs starting
  at the same time (say, we have 5 second epochs, and one block takes 20 seconds, thus  pushing the
