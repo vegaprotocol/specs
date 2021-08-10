@@ -34,11 +34,10 @@ Functions:
 
 
 ## Distribution of Rewards
-
-We assume a function "total_payment" which computes the total payment for a given epoch, as well as some ressource pool 
+We assume a function total_payment() which computes the total payment for a given epoch, as well as some ressource pool 
 from which the resources are taken; if the total_payment for a given epoch exceeds the size of the pool, then the 
 entire pool is paid out. 
-[Check: Do we need to synchronize on that ?]
+
 
 The total payment will then be distributed among validators and delegators following above formulars.
 
