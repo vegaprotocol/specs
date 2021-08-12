@@ -3,7 +3,7 @@ Feature: 565-on-chain-rewards-Staking-and-Delegation
 #calculations are treated the same as infrastructure fee pool - https://github.com/vegaprotocol/specs-internal/issues/630
 
 
-Background:
+  Background:
 #setup
     Given the simple risk model named "simple-risk-model-1":
       | long | short | max move up | min move down | probability of trading |
@@ -11,9 +11,6 @@ Background:
     And the fees configuration named "fees-config-1":
       | maker fee | infrastructure fee |
       | 0.0004    | 0.001              |
-    And the rewards configuration are set:
-      |reward fee|
-      |0.2       |
     And the price monitoring updated every "1" seconds named "price-monitoring":
       | horizon | probability | auction extension |
       | 1       | 0.99        | 3                 |
@@ -28,30 +25,14 @@ Background:
       | market.stake.target.scalingFactor                   | 1     |
       | market.liquidity.targetstake.triggering.ratio       | 0     |
       | market.liquidity.providers.fee.distributionTimeStep | 10m   |
-    
+    And there is a rewards staking and delegation bucket
+
   @tag
-  Scenario: infrastructure bucket constains fees for staking and delegation
-    Given the infrastructure fees is checked
-    Then the infrastructure fees bucket must contain fees for staking and delegation  
-  
+  Scenario: staking and delegation fee  is not null
+    Then there must be an allocated amount for staking and delegation
+
   @tag
   Scenario: Validators joining at start, checking rewards over one period
-    Given the following parties are active in the network:
-      | partyType      |PartyId|period|
-      | validator1     |1      |0     |   
-    And the parties deposit on asset's general account the following amount:
-      |party     |asset|amount|
-      |validator1|VEGA |500000|
-
-    When the staking rewards are calculated
-
-    Then the infrastructure fees bucket must contain fees for staking and delegation
-    And the infrastructure fees for staking and delegation should be:
-    |party     |feeType               |feeAmount|period|
-    |validator1|staking and delegation|21       |0     |
-
-@tag
-Scenario: Validators joining at start, checking rewards over 3 period
     Given the following parties are active in the network:
       | partyType  | PartyId | period |
       | validator1 | 1       | 0      |
@@ -61,19 +42,35 @@ Scenario: Validators joining at start, checking rewards over 3 period
 
     When the staking rewards are calculated
 
-    Then the infrastructure fees bucket must contain fees for staking and delegation
-    And the infrastructure fees for staking and delegation should be:
+    Then there must be an allocated amount for staking and delegation
+    And the fees for staking and delegation should be:
+      | party      | feeType                | feeAmount | period |
+      | validator1 | staking and delegation | 21        | 0      |
+
+  @tag
+  Scenario: Validators joining at start, checking rewards over 3 period
+    Given the following parties are active in the network:
+      | partyType  | PartyId | period |
+      | validator1 | 1       | 0      |
+    And the parties deposit on asset's general account the following amount:
+      | party      | asset | amount |
+      | validator1 | VEGA  | 500000 |
+
+    When the staking rewards are calculated
+
+    Then there must be an allocated amount for staking and delegation
+    And the fees for staking and delegation should be:
       | party      | feeType                | feeAmount | period |
       | validator1 | staking and delegation | 21        | 0      |
       | validator1 | staking and delegation | 21        | 1      |
       | validator1 | staking and delegation | 15        | 2      |
 
-@tag
-Scenario: Delegators joining at start - checking rewards for participating in stake delegation
+  @tag
+  Scenario: Delegators joining at start - checking rewards for participating in stake delegation
     Given the following parties are active in the network:
-      | partyType      | PartyId | period |
-      | validator1     | 1       | 0      |
-      | delegator1     | 2       | 0      |
+      | partyType  | PartyId | period |
+      | validator1 | 1       | 0      |
+      | delegator1 | 2       | 0      |
     And the parties deposit on asset's general account the following amount:
       | party      | asset | amount |
       | validator1 | VEGA  | 500000 |
@@ -81,20 +78,20 @@ Scenario: Delegators joining at start - checking rewards for participating in st
 
     When the staking rewards are calculated
 
-    Then the infrastructure fees bucket must contain fees for staking and delegation
-    And the infrastructure fees for staking and delegation should be:
-      | partyType      | partyId|feeType                | feeAmount | period |
-      | validator1     |   1    |staking and delegation | 21        | 0      |
-      | delegator1     |   2    |staking and delegation | 21        | 1      |
-  
-@tag
-Scenario: Validators joining at start and Validators joining later - checking rewards over 4 periods.
+    Then there must be an allocated amount for staking and delegation
+    And the fees for staking and delegation should be:
+      | partyType  | partyId | feeType                | feeAmount | period |
+      | validator1 | 1       | staking and delegation | 21        | 0      |
+      | delegator1 | 2       | staking and delegation | 21        | 1      |
+
+  @tag
+  Scenario: Validators joining at start and Validators joining later - checking rewards over 4 periods.
     Given the following validators are active:
-      | partyType      | partyId|period |
-      | validator1     | 1      |0      |
-      | validator2     | 2      |1      |
-      | validator3     | 3      |2      |
-      | validator4     | 4      |3      |
+      | partyType  | partyId | period |
+      | validator1 | 1       | 0      |
+      | validator2 | 2       | 1      |
+      | validator3 | 3       | 2      |
+      | validator4 | 4       | 3      |
     And the parties deposit on asset's general account the following amount:
       | party      | asset | amount |
       | validator1 | VEGA  | 500000 |
@@ -104,23 +101,23 @@ Scenario: Validators joining at start and Validators joining later - checking re
 
     When the staking rewards are calculated
 
-    Then the infrastructure fees bucket must contain fees for staking and delegation
-    And the infrastructure fees for staking and delegation should be:
-      | partyType      | partyId|feeType                | feeAmount | period |
-      | validator1     | 1      |staking and delegation | 21        | 0      |
-      | validator2     | 2      |staking and delegation | 21        | 1      |
-      | validator3     | 3      |staking and delegation | 21        | 2      |
-      | validator4     | 4      |staking and delegation | 21        | 3      |
+    Then there must be an allocated amount for staking and delegation
+    And the fees for staking and delegation should be:
+      | partyType  | partyId | feeType                | feeAmount | period |
+      | validator1 | 1       | staking and delegation | 21        | 0      |
+      | validator2 | 2       | staking and delegation | 21        | 1      |
+      | validator3 | 3       | staking and delegation | 21        | 2      |
+      | validator4 | 4       | staking and delegation | 21        | 3      |
 
-@tag
+  @tag
   Scenario: Validators joining at start and Validators joining later - checking rewards over 4 periods.
     Given the following delegators are active:
       | partyType  | partyId | period |
-      | delegator1 | 1       |0       |
-      | validator1 | 2       |1       |
-      | validator2 | 3       |2       |
-      | validator3 | 4       |2       |
-      | validator4 | 5       |3       |
+      | delegator1 | 1       | 0      |
+      | validator1 | 2       | 1      |
+      | validator2 | 3       | 2      |
+      | validator3 | 4       | 2      |
+      | validator4 | 5       | 3      |
     And the parties deposit on asset's general account the following amount:
       | party      | asset | amount |
       | delegator1 | VEGA  | 500000 |
@@ -131,8 +128,8 @@ Scenario: Validators joining at start and Validators joining later - checking re
 
     When the staking rewards are calculated
 
-    Then the infrastructure fees bucket must contain fees for staking and delegation
-    And the infrastructure fees for staking and delegation should be:
+    Then there must be an allocated amount for staking and delegation
+    And the fees for staking and delegation should be:
       | party      | feeType                | feeAmount | period |
       | validator1 | staking and delegation | 21        | 1      |
       | validator2 | staking and delegation | 21        | 2      |
