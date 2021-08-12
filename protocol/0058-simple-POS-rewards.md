@@ -67,7 +67,7 @@ The transfer type informs the collateral engine that the `FromAccount` ought to 
 ## Network Parameters
 
 `infra-fee-hold-time` - the length of time between when a price taker infrastructure fee is incurred and when it is paid out to validators.
-`delegator_share` - The proportion of the total validator reward that go to its validators. Likely to be lower than 0.1.
+`delegator_share` - The proportion of the total validator reward that go to its delegators. Likely to be lower than 0.1.
 
 ## Payment of rewards
 - [Infrastructure fees](./0029-fees.md) are collected into an infrastructure fee account for the asset
