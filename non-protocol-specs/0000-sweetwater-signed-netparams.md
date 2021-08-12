@@ -17,6 +17,9 @@ The values to be specified as a PR against ??? repo.
 | Name                                                     | Comment                                                            |
 |----------------------------------------------------------|:------------------------------------------------------------------:|
 | `???? where is governance and staking token set ????`    | We need to lock that so that Vega token has utility.               |
+| `???? min number of validators ???? `                    | Not in [network paramters](../protocol/0054-network-parameters.md) |
+| `???? validator min balance ???? `                       | Not in [network paramters](../protocol/0054-network-parameters.md) |                                                                  
+| `validators.epoch.length`                                | Rewards currently make an assumption on epoch lenght, best fix it. |
 |`blockchains.ethereumConfig`                              | Sets collateral and staking bridge adderesses.                     | 
 |`governance.proposal.asset.minEnact`                      | Can prevent asset creation before certain date.                    |
 |`governance.proposal.market.minEnact`                     | Can prevent market creation before certain date.                   | 
