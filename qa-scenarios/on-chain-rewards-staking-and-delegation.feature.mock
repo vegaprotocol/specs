@@ -56,6 +56,7 @@ Feature: 565-on-chain-rewards-Staking-and-Delegation
 
     Then the following parties are active in the network:
       | party      | type      | 
+      | validator1 | validator |
       | validator2 | validator |
       | validator3 | validator |
 
