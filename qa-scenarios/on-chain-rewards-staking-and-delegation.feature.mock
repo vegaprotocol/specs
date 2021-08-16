@@ -4,51 +4,74 @@ Feature: 565-on-chain-rewards-Staking-and-Delegation
 
 
   Background:
-    Given the following network parameters are set:
-      | name                                                | value |
-      | market.liquidity.providers.fee.distributionTimeStep | 10m   |
-    And there is a rewards staking and delegation bucket with a balance of "0"
-    And the staking and delegation rewards framework in instantiated with a period of "1" epoch
+    Given the following network parameters are set:      
+      | name                         | value |
+      | validators.epoch.length      | 10m   |
+      | validators_minimum_number    | 1     |
+      | validators_competition_level | 1.1   |
+      | validators_delegator_share   | 0.1   |
+      | epoch_                       | 20s   |
+      | rewards_payout_delay         | 5s    |
+    And the average block duration is "1"
+    And there is a rewards staking and delegation reward scheme with a balance of "0" and a period equal to "1" epochs.
 
   @on-chain-rewards
-  Scenario: Validators joining at start, checking rewards over one period
-    Given the following parties are active in the network:
-      | partyType  | PartyId | period |
-      | validator1 | 1       | 0      |
-    And the parties deposit on asset's general account the following amount:
+  Scenario: Network can score and transfer rewards for staking and delegation to validators
+    Given the parties have deposited the following on asset's general account:
       | party      | asset | amount |
       | validator1 | VEGA  | 500000 |
+      
+    And the following parties join the validator set:
+      |party|
+      |validator1|
 
-    When the rewards for staking and delegation is calculated
+    Then the following parties are active in the network:
+    |party     |type     |
+    |validator1|validator|
 
-    Then there must be an allocated amount for staking and delegation
-    And the rewards for staking and delegation should be:
-      | party      | rewardsType            | reward | period |
-      | validator1 | staking and delegation | <>     | 0      |
-    And then the network moves ahead to the end of the period "1"
-    And the following rewards amount is transferred to the party:
-      | party      | amount | period |
-      | validator1 | 0      | 0      |
+    #Move to the end of the epoch/period
+    Then the network moves ahead "20" blocks
+    And the scores for staking and delegation should be:
+      | party      | rewardsType            | score |
+      | validator1 | staking and delegation | ??    |
+    
+    #Move to payout
+    Then the network moves ahead "5" blocks
 
-    * the parties deposit on asset's general account the following amount:
+    Then the following transfers should happen:
+      | from    | to         | from account         | to account           | amount | asset |
+      | network | validator1 | ACCOUNT_TYPE_REWARDS | ACCOUNT_TYPE_GENERAL | 0      | VEGA  |
+
+    Then parties deposit on asset's general account the following amount:
       | party      | asset | amount |
       | validator2 | VEGA  | 100000 |
       | validator3 | VEGA  | 250000 |
+    And the following parties join the validator set:
+      | party      |
+      | validator2 |
+      | validator3 |
 
-    * the rewards for staking and delegation is calculated
+    Then the following parties are active in the network:
+      | party      | type      |
+      | validator1 | validator |
+      | validator2 | validator |
+      | validator3 | validator |
 
-    Then there must be an allocated amount for staking and delegation
-    And the rewards for staking and delegation should be:
-      | party      | rewardsType            | reward | period |
-      | validator1 | staking and delegation | <>     | 0      |
-      | validator2 | staking and delegation | <>     | 0      |
-      | validator3 | staking and delegation | <>     | 0      |
+    Then a deposit of "100" is made to the staking and delevation reward account
 
-    And then the network moves ahead to the end of the period "1"
-    And the following rewards amount is transferred to the party:
-      | party      | amount | period |
-      | validator1 | 0      | 0      |
-      | validator2 | 0      | 0      |
-      | validator3 | 0      | 0      |
+    Then the network moves ahead "15" blocks
 
+    And the scores for staking and delegation should be:
+      | party      | rewardType             | score |
+      | validator1 | staking and delegation | ??    |
+      | validator2 | staking and delegation | ??    |
+      | validator3 | staking and delegation | ??    |
 
+    # Move to the payout
+    Then the network moves ahead "5" blocks
+
+    Then the following transfers should happen:
+      | from    | to         | from account         | to account           | amount | asset |
+      | network | validator1 | ACCOUNT_TYPE_REWARDS | ACCOUNT_TYPE_GENERAL | ??     | VEGA  |
+      | network | validator2 | ACCOUNT_TYPE_REWARDS | ACCOUNT_TYPE_GENERAL | ??     | VEGA  |
+      | network | validator3 | ACCOUNT_TYPE_REWARDS | ACCOUNT_TYPE_GENERAL | ??     | VEGA  |
