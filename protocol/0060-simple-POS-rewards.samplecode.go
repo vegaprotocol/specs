@@ -185,9 +185,8 @@ func main() {
 	for _, val := range validators {
 		tokensDelegatedToValidator := validatorTotalDelegatedTokens[val.id]
 		tokensDelegatedPlusOwned := validatorOwnPlusDelegatedTokens[val.id]
-		fractionDelegatorsGet := valSettings.delegatorShare * float64(tokensDelegatedToValidator) / float64(tokensDelegatedPlusOwned)
-		validatorAmountGiveToDelegators[val.id] = fractionDelegatorsGet * validatorAmounts[val.id]
-		validatorAmountKeep[val.id] = (1.0 - fractionDelegatorsGet) * validatorAmounts[val.id]
+		validatorAmountGiveToDelegators[val.id] = valSettings.delegatorShare * validatorAmounts[val.id]
+		validatorAmountKeep[val.id] = (1.0 - valSettings.delegatorShare) * validatorAmounts[val.id]
 	}
 
 	// let's do more accounting
