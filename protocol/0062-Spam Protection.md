@@ -1,6 +1,9 @@
+# Spam protection
+
 At this point, we cannot reject a transaction based on any data that is not the shared state 
 of the blockchain. This means, it is unavoidable that one spammer can essentially fill a block.
-What we can do is
+
+What we can do is:
 - remove the offending transactions after the block is sheduled, i.e., not process them
 - update the state once a block is finalized and block transactions based on the new state
 - delete transactions from every (honest) validators mempool based on the new state.
@@ -26,9 +29,9 @@ secondsso be it).
 
 All parameters are up to discussion/governance vote.
 
-More detailed desctiption:
+## More detailed desctiption:
 
-Policy Enforcement:
+### Policy Enforcement:
 
 The policy enforcement mechanism rejects messages that do not follow the anti-spam rules. This can happen in
 twoe different ways:
@@ -64,7 +67,7 @@ For Sweetwater, the policies we enforce are relatively simple:
    <num_proposals>) or pre-block reject (if the sum of proposals olready in the blockchain for that epoch equals or exceeds 
    <num_proposals>.
    
-Notes
+### Notes
 -What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
  and ETH speed) that the same token is moved around to different entities, this explicitely doesn't work.
 -This means that every tokenholder with more than <min_voting_tokens> can spam exactly one block on SW.
@@ -72,14 +75,14 @@ Notes
  policy definition and enforcement, so a change in the policies can be implemented and tested independently of
  the enforcement code.
 
-Increasing thresholds:
+### Increasing thresholds:
 If on average for the last 10 blocks, more than 30% of all transactions need to be post-rejected, then the network is
 under Spam attack. In this case, the <min_voting_tokens> value is doubled, until it reaches 1600. The threshold
 is then not increased for another 10 blocks.
 At the beginning of every epoch, the value of <min_voting_tokens> is reset to its original.
 
 
-Issues: It is possible for a tokenholder to deliberatelly spam the network to block poorer parties from voting. Due to the
+### Issues: It is possible for a tokenholder to deliberatelly spam the network to block poorer parties from voting. Due to the
   banning policy this is not doable from one account, but with a sybil attack it can be done. If this ends up being a
   problem, we can adress it by increasing the bann-time.
   
