@@ -73,13 +73,13 @@ func setValidatorSettings(numberOfValidators uint) validatorSettings {
 
 func validatorScore(valStake uint, s validatorSettings) float64 {
 	a := math.Max(float64(s.minVal), float64(s.numVal)/s.compLevel)
-	fmt.Println(valStake, s.total, float64(valStake)/float64(s.total))
-	score := foursqrt(a*float64(valStake)/(3.0*float64(s.total))) - math.Pow(foursqrt(a*float64(valStake)/(3.0*float64(s.total))), 3.0)
+	//fmt.Println(valStake, s.total, float64(valStake)/float64(s.total))
+	//score := foursqrt(a*float64(valStake)/(3.0*float64(s.total))) - math.Pow(foursqrt(a*float64(valStake)/(3.0*float64(s.total))), 3.0)
+	score :=  Math.min(valStake/s.total,1/a)
 	// Nobody should get a negative score (i.e., pay)
 	if score < 0 {
 		score = 0
 	}
-	fmt.Println(score)
 	return score
 }
 
