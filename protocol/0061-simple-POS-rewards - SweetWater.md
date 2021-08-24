@@ -8,7 +8,9 @@ At the end of an [epoch](./0050-epochs.md), payments are calculated. This is don
 * First, `score_val(stake_val)` calculates the relative weight of the validator given the stake it represents.
 * For each delegator that delegated to that validator, `score_del` is computed: `score_del(stake_del, stake_val)` where `stake_del` is the stake of that delegator, delegated to the validator, and `stake_val` is the stake that validator represents.
 * The fraction of the total available reward a validator gets is then `score_val(stake_val) / total_score` where `total_score` is the sum of all scores achieved by the validators. The fraction a delegator gets is calculated accordingly.
-* Finally, the total reward for a validator is computed, and their delegator fee subtracted and divided among the delegators
+* Finally, the total reward for a validator is computed, and their delegator fee subtracted and divided among the delegators.
+* If the validator (or, the associated key) does not have sufficient stake (at least the network parameter min_own_take), 
+  then the reward is set to zero. The corresponding money is kept by the network, not distributed among the other validators.
 
 
 Variables used:
