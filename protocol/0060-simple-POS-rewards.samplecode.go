@@ -120,6 +120,7 @@ func main() {
 	var numValidators uint = 0
 	var totalTokens uint = 0
 	var totalTokensPlusDelegated uint = 0
+	var min_stake = 3000
 
 	for _, val := range validators {
 		numValidators++
@@ -188,6 +189,13 @@ func main() {
 		fractionDelegatorsGet := valSettings.delegatorShare * float64(tokensDelegatedToValidator) / float64(tokensDelegatedPlusOwned)
 		validatorAmountGiveToDelegators[val.id] = fractionDelegatorsGet * validatorAmounts[val.id]
 		validatorAmountKeep[val.id] = (1.0 - fractionDelegatorsGet) * validatorAmounts[val.id]
+		// If the validator has sufficient own_stake, then they get nothing
+		// The corrsponding finds are kept, not given to other validators
+		// However, they don't need to have those tokens delegated to self, just
+		// own them; thus, there's something along the line of
+		// if (owned_stake(val.id) < min_stake} {
+		//	validatorAmountKeep[val.id] = 0
+		//
 	}
 
 	// let's do more accounting
