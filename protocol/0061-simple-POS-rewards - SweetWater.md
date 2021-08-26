@@ -36,5 +36,5 @@ from which the resources are taken; if the total_payment for a given epoch excee
 entire pool is paid out. 
 
 
-The total payment will then be distributed among validators and delegators following above formulars.
+The total payment will then be distributed among validators and delegators following above formulas.
 

@@ -10,7 +10,7 @@ Staking requires the combined action of:
 - Delegating these tokens to one or more validators
 
 Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can lock a token in the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), which is then available for
-staking. To this end, an Vega token (or a fraction thereof) can be:
+staking. To this end, a Vega token (or a fraction thereof) can be:
 - Unlocked: The tokenholder is free to do with the token as they want, but cannot delegate it
 - Locked: The token is locked in the smart contract, and can be used inside the delegation system
 

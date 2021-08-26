@@ -8,17 +8,17 @@ Terminology:
 - **Reward Type**: a reward type is a class of reward, for instance "simple staking rewards". This specifies:
   - the parameters that control reward calculation and dissemination including the applicable scope(s) of the reward type (i.e. network wide, per asset, per market)
   - the logic that defines how to calculate and distribute the reward
-- **Reward Scheme**: a reward scheme is an instance of a reward type that includes all the parameters needed to calculate the reward. Multiple reward schemes may instantiated for each reard type, even with duplicate parameters.
+- **Reward Scheme**: a reward scheme is an instance of a reward type that includes all the parameters needed to calculate the reward. Multiple reward schemes may instantiated for each reward type, even with duplicate parameters.
 - **Reward Pool Accounts**: each active reward scheme has one reward pool account for each asset that has been transferred to it (these would be created as needed)
 
-Vega will initially provide built-in reward types for key types of incentive related to staking/delegation, liqudiity provision, and trading (note: only a single staking/delegation reward type is required for Sweetwater).
+Vega will initially provide built-in reward types for key types of incentives related to staking/delegation, liqudiity provision, and trading (note: only a single staking/delegation reward type is required for Sweetwater).
 
 💧 see section at bottom of file on Sweetwater scope
 
 
 ## Reward Types
 
-Reward types will be specified in separate files, with each reward type specifying its applicable scope requirements, parameters, and calculation method.
+Reward types will be specified in separate spec files, with each reward type specifying its applicable scope requirements, parameters, and calculation method.
 
 
 ### Applicable scope
@@ -90,7 +90,7 @@ Creating a reward scheme outside of govrnance must be accomanpanied by an amount
 
 ### Updating reward scheme parameters
 
-A Reward Scheme may be updated by the same method it was created (i.e. governance proposal or individual transaction). Updates work like network parameter changes where the parameter name is an identifier and the reward scheme ID (i.e. something like `rewards.<SCHEME_ID>`) and the values are stored as a single structured network parameter. If the reward scheem was created and is "owned by" a party and they submit an update proposal, it is automatically accepted, and a proposal to update the scheme from anyone else is automatically rejected. The following may be changed: 
+A Reward Scheme may be updated by the same method it was created (i.e. governance proposal or individual transaction). Updates work like network parameter changes where the parameter name is an identifier and the reward scheme ID (i.e. something like `rewards.<SCHEME_ID>`) and the values are stored as a single structured network parameter. If the reward scheme was created and is "owned by" a party and they submit an update proposal, it is automatically accepted, and a proposal to update the scheme from anyone else is automatically rejected. The following may be changed: 
 - scheme parameters
 - scheme end date/time
 - payout type and parameters
