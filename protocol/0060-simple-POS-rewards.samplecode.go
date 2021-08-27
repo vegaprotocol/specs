@@ -67,7 +67,7 @@ func setValidatorSettings(numberOfValidators uint) validatorSettings {
 	s.minVal = 5
 	s.compLevel = 1.1
 	s.numVal = numberOfValidators
-	s.delegatorShare = 0.3
+	s.delegatorShare = 0.883
 	return s
 }
 
