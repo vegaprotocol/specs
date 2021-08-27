@@ -19,7 +19,7 @@ Variables used:
 - `compLevel`: competitition level we want between validators (1.1)
 - `num_val`: actual number of active validators
 - `a`: The scaling factor; which will be `max(min_val, num_val/compLevel)`. So with `min_val` being 5, if we have 6 validators, `a` will be `max(5, 5.4545...)` or `5.4545...`
-- `delegator_share`: propotion of the validator reward that goes to the delegators.
+- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883
 
 Functions:
 
