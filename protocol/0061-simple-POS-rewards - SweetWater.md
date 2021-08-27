@@ -38,3 +38,23 @@ entire pool is paid out.
 
 The total payment will then be distributed among validators and delegators following above formulas.
 
+
+## Maximal Delegatable Stake
+The maximal delegatable amount of stake is supposed to prevent delegators from delegating too much to an individual validator, and is an additional measure to the economic incentive.
+For this value to be meaningful, it needs to be based on the total number of delegated tokens, not on the total number of existing tokens, which can be substantially higher.
+
+To this end, at the beginning of each epoch, we need to compute the total number of tokens (it is sufficient to make an approximation that can be slightly higher. To simplify things, this can be done by simple adding all delegations and substracting all undelegations to the current amount of delegated tokens, ignoring that some delegations might fail.
+
+The value at which delegation is stopped is then computed similar to the reward function:
+a := math.Max(float64(s.minVal), float64(s.numVal)/s.compLevel)
+max_delegatable_tokens = total_delegated_tokens / a
+
+Comments:
+
+With the new reward function, this is not critical, as validators do not lose money if they
+get too much delegation
+We can recursively compute the exact amount (compute the approximation as above, see if any delegations would fail with this threshold, substract, those, repeat). This is not necessary at this point though
+We can use the existing parameter to add a stretch-factor to allow every validator go get a little bit too much. This is also not needed for SW though.
+
+
+
