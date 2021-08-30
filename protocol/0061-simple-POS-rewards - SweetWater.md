@@ -19,7 +19,7 @@ Variables used:
 - `compLevel`: competitition level we want between validators (default 1.1). This is a Network parameter that can be changed through a governance vote.
 - `num_val`: actual number of active validators. The value is derived from the environment.
 - `a`: The scaling factor; which will be `max(min_val, num_val/compLevel)`. So with `min_val` being 5, if we have 6 validators, `a` will be `max(5, 5.4545...)` or `5.4545...`. This is computed from the parameters/staking data.
-- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote.
+- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. 0 <= delegator_share <= 1.
 
 Functions:
 
