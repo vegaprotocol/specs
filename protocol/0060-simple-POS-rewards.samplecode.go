@@ -19,49 +19,6 @@ type validatorSettings struct {
 	total          uint
 }
 
-// Sqrt returns the square root of x.
-// Based on code found in Hacker's Delight (Addison-Wesley, 2003):
-// http://www.hackersdelight.org/
-func iSqrt(x int) (r int) {
-	if x < 0 {
-		return -1
-	}
-
-	//Fast way to make p highest power of 4 <= x
-	var n uint
-	p := x
-	if int64(p) >= 1<<32 {
-		p >>= 32
-		n = 32
-	}
-	if p >= 1<<16 {
-		p >>= 16
-		n += 16
-	}
-	if p >= 1<<8 {
-		p >>= 8
-		n += 8
-	}
-	if p >= 1<<4 {
-		p >>= 4
-		n += 4
-	}
-	if p >= 1<<2 {
-		n += 2
-	}
-	p = 1 << n
-	var b int
-	for ; p != 0; p >>= 2 {
-		b = r | p
-		r >>= 1
-		if x >= b {
-			x -= b
-			r |= p
-		}
-	}
-	return
-}
-
 func setValidatorSettings(numberOfValidators uint) validatorSettings {
 	s := validatorSettings{}
 	s.minVal = 5
@@ -73,9 +30,7 @@ func setValidatorSettings(numberOfValidators uint) validatorSettings {
 
 func validatorScore(valStake uint, s validatorSettings) float64 {
 	a := math.Max(float64(s.minVal), float64(s.numVal)/s.compLevel)
-	//fmt.Println(valStake, s.total, float64(valStake)/float64(s.total))
-	//score := foursqrt(a*float64(valStake)/(3.0*float64(s.total))) - math.Pow(foursqrt(a*float64(valStake)/(3.0*float64(s.total))), 3.0)
-	score :=  Math.min(valStake/s.total,1/a)
+	score := math.Min(float64(valStake)/float64(s.total), 1.0/a)
 	// Nobody should get a negative score (i.e., pay)
 	if score < 0 {
 		score = 0
@@ -85,14 +40,6 @@ func validatorScore(valStake uint, s validatorSettings) float64 {
 
 func delegatorScore(delegatorStake, valStake uint) float64 {
 	return float64(delegatorStake)
-}
-
-func foursqrt(x float64) float64 {
-	// Calculate the square root with 4 digits
-	// Use only integer manipualtions to do so.
-	var y int = int(x * 10000 * 10000)
-	var s int = iSqrt(y)
-	return (float64(s) / 10000)
 }
 
 func main() {
@@ -120,7 +67,7 @@ func main() {
 	var numValidators uint = 0
 	var totalTokens uint = 0
 	var totalTokensPlusDelegated uint = 0
-	var min_stake = 3000
+	var min_stake uint = 3000
 
 	for _, val := range validators {
 		numValidators++
@@ -182,6 +129,7 @@ func main() {
 	fmt.Printf("First sanity check, remaining should be 0 and is=%f\n", remainingFromRewardForEpoch)
 
 	validatorAmountKeep := make([]float64, numValidators)
+	var leftOverDueToInsufficientStake float64 = 0.0
 	validatorAmountGiveToDelegators := make([]float64, numValidators)
 	for _, val := range validators {
 		tokensDelegatedToValidator := validatorTotalDelegatedTokens[val.id]
@@ -189,13 +137,16 @@ func main() {
 		fractionDelegatorsGet := valSettings.delegatorShare * float64(tokensDelegatedToValidator) / float64(tokensDelegatedPlusOwned)
 		validatorAmountGiveToDelegators[val.id] = fractionDelegatorsGet * validatorAmounts[val.id]
 		validatorAmountKeep[val.id] = (1.0 - fractionDelegatorsGet) * validatorAmounts[val.id]
+
 		// If the validator has sufficient own_stake, then they get nothing
 		// The corrsponding finds are kept, not given to other validators
 		// However, they don't need to have those tokens delegated to self, just
 		// own them; thus, there's something along the line of
-		// if (owned_stake(val.id) < min_stake} {
-		//	validatorAmountKeep[val.id] = 0
-		//
+		if val.numTokens < min_stake {
+			leftOverDueToInsufficientStake += validatorAmountKeep[val.id]
+			validatorAmountKeep[val.id] = 0
+
+		}
 	}
 
 	// let's do more accounting
@@ -217,5 +168,5 @@ func main() {
 		fmt.Printf("validator id=%d, gets amt=%f\n", val.id, totalValidatorGets)
 	}
 
-	fmt.Printf("Second sanity check, we should distribute %d and we distributed=%f\n", totalRewardForEpoch, totalDistributed)
+	fmt.Printf("Second sanity check, we should distribute %d and we distributed=%d\n", totalRewardForEpoch-uint(leftOverDueToInsufficientStake), int(totalDistributed))
 }
