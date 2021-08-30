@@ -127,5 +127,6 @@ The full list of network parameters must be available to the governance communit
 |`validators.epoch.length`        | String (integer) | [0050 - Epochs](./0050-epochs.md#network-parameters) | The length (in seconds) of an Epoch | [:droplet: Sweetwater](../milestones/2.5-Sweetwater.md) |
 |`validators.delegation.minAmount`        | String (float) | [0059 - Simple staking & delegating](./0059-simple-staking-and-delegating.md#network-parameters) | The smallest amount of the governance asset that can be delegated |
 |`validators.delegation.maxStakePerValidator`        | String (float) | [0059 - Simple staking & delegating](./0059-simple-staking-and-delegating.md#network-parameters) | The highest total amount of the governance asset that can be delegated to a single validator |
+|`validators.delegation.competitionFactor         `        | String (float) | [0059 - Simple staking & delegating](./0059-simple-staking-and-delegating.md#network-parameters) | The level of competition of the validators (factor how much stake would be needed for all validators to reach optimal revenue). Default value 1.1 |
 
 * A `-` in the *Version added* column indicates that the network parameter existed before `0.38.0`, when this table was added. 
