@@ -31,7 +31,7 @@ This provides the information the core needs to keep track of:
 * Undelegated Stake
 * Stake delegated per validator
 * Stake marked for delegation per validator in the next [epoch](./0050-epochs.md).
-* Total stake (should be the summ of all the others)
+* Total stake (should be the sum of all the others)
 
 There is no interaction with the smart contract that is initiated by Vega.
 
