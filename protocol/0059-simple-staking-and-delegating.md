@@ -85,7 +85,7 @@ Users can remove stake by submitting an `Undelegate` transaction. The tokens wil
 At the top level, `Stake_Deposited` simply adds `amount` of tokens to the account of the user associated with the `user`. Likewise, the `Stake_Removed` event subtracts the `amount` of tokens from their account.
 
 - If the `Stake_Removed` amount of tokens is higher than the balance of said user, something went seriously wrong somewhere. This is a good time to panic.
-- If the amount is higher than the amound of undelegated stake, the missing amount must be freed using the undelegate function (see section above about bridge contract interaction). There is currently no rule how to choose this; 
+- If the amount is higher than the amount of undelegated stake, the missing amount must be freed using the undelegate function (see section above about bridge contract interaction). There is currently no rule how to choose this; 
 
 *Option-1*
 A first heuristic would be to take from the highest delegation first and then go down, e.g.
