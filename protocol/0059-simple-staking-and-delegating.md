@@ -137,7 +137,7 @@ It is possible in Sweetwater that a Delegator gets removed (e.g., due to non-par
 In this case, it must be assured that the rewards are distributed only to the remaining active validators.
 This will also leave some delegators that have delegated to a non-existing validator; the easiest solution
 is to simply declare all their stake undelegated (if they delegated to a bad validators, their problem).
-THis means we also need to test how the formulars react to changing numbers of validators.
+This means we also need to test how the formulars react to changing numbers of validators.
 
 # Network Parameters
 
