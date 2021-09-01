@@ -15,7 +15,7 @@ At the end of an [epoch](./0050-epochs.md), payments are calculated. This is don
 
 Variables used:
 
-- `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a givernanve vote (post-sweetwater).
+- `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a governance vote (post-sweetwater).
 - `compLevel`: competitition level we want between validators (default 1.1). This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`.
 - `num_val`: actual number of active validators. The value is derived from the environment.
 - `a`: The scaling factor; which will be `max(min_val, num_val/compLevel)`. So with `min_val` being 5, if we have 6 validators, `a` will be `max(5, 5.4545...)` or `5.4545...`. This is computed from the parameters/staking data.
