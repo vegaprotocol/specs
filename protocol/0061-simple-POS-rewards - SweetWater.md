@@ -46,8 +46,10 @@ For this value to be meaningful, it needs to be based on the total number of del
 To this end, at the beginning of each epoch, we need to compute the total number of tokens (it is sufficient to make an approximation that can be slightly higher. To simplify things, this can be done by simple adding all delegations and substracting all undelegations to the current amount of delegated tokens, ignoring that some delegations might fail.
 
 The value at which delegation is stopped is then computed similar to the reward function:
-a := math.Max(float64(s.minVal), float64(s.numVal)/s.compLevel)
+```
+a := max(s.minVal, s.numVal/s.compLevel)
 max_delegatable_tokens = total_delegated_tokens / a
+```
 
 Comments:
 

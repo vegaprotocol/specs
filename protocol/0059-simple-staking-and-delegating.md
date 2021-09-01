@@ -144,7 +144,8 @@ THis means we also need to test how the formulars react to changing numbers of v
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
 | `validators.delegation.minAmount`       | String (float) |  `"0.001"`        | The smallest fraction of the [governance token](./0028-governance.md) that can be [delegated to a validator](#delegation-transaction). | 
-| `validators.delegation.maxStakePerValidator`       | String (float) |  `"1"`        | The largest sum of the [governance token](./0028-governance.md) that can be [staked and/or delegated to an individual validator](#delegation-transaction). | 
+
+Actual validator score calculation is in [simple scheme for Sweetwater](0061-simple-POS-rewards\ -\ SweetWater.md) and it introduces its own network parameters.
 
 See the [network paramters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
 
