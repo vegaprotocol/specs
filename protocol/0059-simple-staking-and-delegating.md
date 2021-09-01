@@ -31,7 +31,7 @@ This provides the information the core needs to keep track of:
 * Undelegated Stake
 * Stake delegated per validator
 * Stake marked for delegation per validator in the next [epoch](./0050-epochs.md).
-* Total stake (should be the summ of all the others)
+* Total stake (should be the sum of all the others)
 
 There is no interaction with the smart contract that is initiated by Vega.
 
@@ -85,7 +85,7 @@ Users can remove stake by submitting an `Undelegate` transaction. The tokens wil
 At the top level, `Stake_Deposited` simply adds `amount` of tokens to the account of the user associated with the `user`. Likewise, the `Stake_Removed` event subtracts the `amount` of tokens from their account.
 
 - If the `Stake_Removed` amount of tokens is higher than the balance of said user, something went seriously wrong somewhere. This is a good time to panic.
-- If the amount is higher than the amound of undelegated stake, the missing amount must be freed using the undelegate function (see section above about bridge contract interaction). There is currently no rule how to choose this; 
+- If the amount is higher than the amount of undelegated stake, the missing amount must be freed using the undelegate function (see section above about bridge contract interaction). There is currently no rule how to choose this; 
 
 *Option-1*
 A first heuristic would be to take from the highest delegation first and then go down, e.g.
@@ -137,7 +137,7 @@ It is possible in Sweetwater that a Delegator gets removed (e.g., due to non-par
 In this case, it must be assured that the rewards are distributed only to the remaining active validators.
 This will also leave some delegators that have delegated to a non-existing validator; the easiest solution
 is to simply declare all their stake undelegated (if they delegated to a bad validators, their problem).
-THis means we also need to test how the formulars react to changing numbers of validators.
+This means we also need to test how the formulars react to changing numbers of validators.
 
 # Network Parameters
 
