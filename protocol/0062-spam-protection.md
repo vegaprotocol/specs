@@ -78,8 +78,7 @@ For Sweetwater, the policies we enforce are relatively simple:
 ### Increasing thresholds:
 If on average for the last 10 blocks, more than 30% of all transactions need to be post-rejected, then the network is
 under Spam attack. In this case, the <min_voting_tokens> value is doubled, until it reaches 1600. The threshold
-is then not increased for another 10 blocks.
-At the beginning of every epoch, the value of <min_voting_tokens> is reset to its original.
+is then not increased for another 10 blocks. At the beginning of every epoch, the value of <min_voting_tokens> is reset to its original.
 
 
 ### Issues: It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting. Due to the
