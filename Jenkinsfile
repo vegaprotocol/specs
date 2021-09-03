@@ -64,12 +64,12 @@ pipeline {
         }
     }
     post {
-        success {
-            retry(3) {
-                slackSend(channel: "#protocol-design-notify", color: "good", message: ":white_check_mark: ${SLACK_MESSAGE}")
-            }
-        }
-        failure {
+        // success {
+        //     retry(3) {
+        //         slackSend(channel: "#protocol-design-notify", color: "good", message: ":white_check_mark: ${SLACK_MESSAGE}")
+        //     }
+        // }
+        unsuccessful {
             retry(3) {
                 slackSend(channel: "#protocol-design-notify", color: "danger", message: ":red_circle: ${SLACK_MESSAGE}")
             }
