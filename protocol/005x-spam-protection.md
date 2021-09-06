@@ -34,7 +34,7 @@ To operate efficiently, Vega should make an effort to drop transactions that are
 
 ## 4. Rate limiting through client-side Proof Of Work
 
-- 4.1 Account qaulity:
+- 4.1 Account quality:
 Every account has a quality level that is determined by the investment required to create that account. Accounts with 
 a low quality thus are required to do a more difficult proof of work than accounts with a high quality. 
 For sweet water, accounts cannot perform any market actions, and thus their quality is entirely determined by
