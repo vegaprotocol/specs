@@ -106,7 +106,11 @@ This allows time for users to be ready for changes that may effect them financia
 
 Proposals are enacted by timestamp, earliest first, as soon as the enactment time is reached by the network (i.e. "Vega time"). Proposals sharing the same exact enactment time are enacted in the order they were created. This means that in the case that two proposals change the same parameter with the same timestamp, the oldest proposal will be applied first and the newest will be applied last, overwriting the change made by the older proposal. There is no attempt to resolve differences between the two.
 
-The network's _minimum pre-enactment period_ - as specified by a network parameter specific to each proposal type is used to validate whether the enactment date is acceptable.
+The network's `governance.proposal.*.minEnact` network parameter specific to each proposal type is used to validate whether the enactment date is acceptable. 
+Here `*` stands for any of `asset, market, updateMarket, updateNetParam`. 
+Note that this is validation is in units of time from current time i.e. if the proposal is received 
+at e.g. `09:00:00 on 1st Jan 2021` and `governance.proposal.asset.minEnact` is `72h` then the proposal must contain enactment date/time that after `09:00:00 on 4th Jan 2021`. 
+If there is `governance.proposal.asset.maxEnact` of e.g. `360h` then the proposed enactment date / time must be before `09:00:00 on 16th Jan 2021`.
 
 
 ## Editing and/or cancelling a proposal is not possible
