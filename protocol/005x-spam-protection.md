@@ -40,8 +40,8 @@ a low quality thus are required to do a more difficult proof of work than accoun
 For sweet water, accounts cannot perform any market actions, and thus their quality is entirely determined by
 the locked thake these accounts represent.
 - 4.2 Proof of Work
-The proof of work for a transaction is done in a way similar to bitcoin, i.e., through finding a a nonce to add
-to the transaction identifyer so that the hash of (nonce|tid) ends with a number of zeroes depending on the
+The proof of work for a transaction is done in a way similar to bitcoin, i.e., through finding a nonce to add
+to the transaction identifier so that the hash of (nonce|tid) ends with a number of zeroes depending on the
 difficulty level. The hash algorithm used at this time is MD6, primarilty due to the absence of optimised hardware. 
 This may change though in future versions and be replaced by a different hash function or a variant of a VDF.
 - 4.3 Dynamic Adaption
