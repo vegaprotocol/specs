@@ -64,6 +64,7 @@ For Sweetwater, the policies we enforce are relatively simple:
 
 <min_delegation_tokens> = 1
 
+
 [TODO: If accepted, the thresholds should be added as network parameters]
 
 
