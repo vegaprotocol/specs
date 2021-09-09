@@ -51,12 +51,19 @@ twoe different ways:
 
 
 For Sweetwater, the policies we enforce are relatively simple:
+
 <num_votes> = 3
+
 <min_voting_tokens>  = 100
+
 <num_proposals> = 10
+
 <min_proposing_tokens> = 200000
+
 <num_delegations> = 390
+
 <min_delegation_tokens> = 1
+
 [TODO: If accepted, the thresholds should be added as network parameters]
 
 
