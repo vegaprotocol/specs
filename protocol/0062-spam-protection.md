@@ -41,7 +41,7 @@ two different ways:
 	(e.g., only three transactions per party per block).
 	Once a block is scheduled, all validators also test all transactions in their mempool if they are
 	still passing the test, and remove them otherwise.
--post-block-reject: A transaction has made it into the block, but is rejected before it is passed to the application layer.
+- post-block-reject: A transaction has made it into the block, but is rejected before it is passed to the application layer.
 	This mechanism allows for more fine-grained policies than the previous one, but at the price that the
 	offending transaction has already taken up space in the blockchain.
 
@@ -68,10 +68,10 @@ For Sweetwater, the policies we enforce are relatively simple:
    <num_proposals>.
    
 ### Notes
--What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
+- What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
  and ETH speed) that the same token is moved around to different entities, this explicitly doesn't work.
--This means that every tokenholder with more than <min_voting_tokens> can spam exactly one block on SW.
--There is some likelihood that policies will change. It would thus be good to have a clean separation of
+- This means that every tokenholder with more than <min_voting_tokens> can spam exactly one block on SW.
+- There is some likelihood that policies will change. It would thus be good to have a clean separation of
  policy definition and enforcement, so a change in the policies can be implemented and tested independently of
  the enforcement code.
 
