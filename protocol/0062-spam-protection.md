@@ -64,7 +64,9 @@ For Sweetwater, the policies we enforce are relatively simple:
 
 <min_delegation_tokens> = 1
 
-[TODO: If accepted, the thresholds should be added as network parameters]
+[On the long run, we might want to be able to change this through governance; however, rather than adding a network
+parameter per transaction type (which will be a lot eventually), it would be better to have a table with
+transactions/parameters that forms one network parameter]
 
 
 - Any tokenholder with more than <min_voting_tokens> tokens has <num_votes> voting attempts per epoch
