@@ -4,13 +4,13 @@ This spec outlines how to measure how much stake we want committed to a market r
 The target stake is a calculated quantity, utilised by various mechanisms in the protocol:
 
 - If the LPs total committed stake is less than c_1 x `target_stake` we trigger liquidity auction. See [Liquidity Monitoring](./0035-liquidity-monitoring.md). Note that there is a one-to-one correspondence between the amount of stake LPs committed and the supplied liquidity. 
-The parameter c_1 is a network parameter defined in the [liquidity Monitoring](./0035-liquidity-monitoring.md) spec.
+The parameter c_1 is a market parameter (with network parameter `market.liquidity.targetstake.triggering.ratio` providing a default value) defined in the [liquidity Monitoring](./0035-liquidity-monitoring.md) spec.
 - It is used to set the fee factor for the LPs: see [Setting fees and rewarding LPs](0042-setting-fees-and-rewarding-lps.md).
 
 ## Definitions / Parameters used
 - **Open interest**: the volume of all open positions in a given market.
-- `target_stake_time_window` is a network parameter defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds. 
-- Co(v)erage `target_stake_scaling_factor` is a network paramter defining scaling between liquidity demand estimate based on open interest and target stake
+- `target_stake_time_window` is a market parameter (with network parameter `market.stake.target.timeWindow` giving a default value) defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds. 
+- Co(v)erage `target_stake_scaling_factor` is a market parameter (with network paramter `market.stake.target.scalingFactor` giving a default value) defining scaling between liquidity demand estimate based on open interest and target stake.
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see `0018-quant-risk-models.ipynb`. 
 - `mark_price`, see [mark price](0009-mark-price.md) spec. 
 
