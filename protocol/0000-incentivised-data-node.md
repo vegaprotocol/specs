@@ -41,7 +41,8 @@ Who does the measuring? Validators as part of their day-to-day job?
 ### Is the node carrying the full set of data (NOT needed for MVP / Sweetwater++)
 - Validators can send a datanode a challenge at any time consisting of a random seed value S and a start event bundle number; the datanode then needs to find the first event bundle B in the data set after the start bundle such that HASH(pubkey, S, B) ends with N zeros (e.g. N = 4).
 - The validator request is signed to prevent a DoS
-- If datanodes consistently get statistical oddities (e.g., searching 50000 blocks to find the hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full chain [TODO: be specific]
+- If datanodes consistently get statistical oddities (e.g., searching 50000 blocks to find the hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full chain. 
+Expected number of blocks is `(1/2) x 10^N`. 
 - The Merkle tree stored by both valdiators and data nodes (described above) is used by the validator to verify that the data returned in response to the challenge is correct, i.e. the answer is the actual data that existed at block B. This does not verify that the node is storing it, hence the expensive search challenge above.
 - This challenge/response to prove data storage can be done fairly irregularly
 
