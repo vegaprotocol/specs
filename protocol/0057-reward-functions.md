@@ -1,6 +1,6 @@
 # Reward Types
 
-Below is a list of reward types that will be built in to Vega and available when proposing or creating a new [Reward]().
+Below is a list of reward types that will be built in to Vega and available when proposing or creating a new [Reward](0056-rewards-overview.md).
 
 ## Acceptance Criteria
 - [ ] Built in Reward Functions are discoverable to participants 
@@ -8,7 +8,7 @@ Below is a list of reward types that will be built in to Vega and available when
 
 ## Trading
 
-### T.1 - Taker fees paid (not 💧)
+### T.1 - Taker rewards, based on fees paid (for 🤠)
 
 Principle: the more someone has been a price-taker, the greater share of rewards they receive through this mechanism.
 
@@ -16,6 +16,7 @@ Scope: This reward type can be scoped either to all trading settled in an asset,
 
 Calculation: the scaling factor for a party's rewards is simply the sum of all *taker fees* the party has paid within the defined scope (asset or market(s)) during the period.
 
+This is the complete definition for this reward *type*, other per-instance parameters are in [rewards overview](0056-rewards-overview.md#Creating-reward-schemes).
 
 ### Placeholder future reward (revisit for Oregon Trail)
 
@@ -40,8 +41,7 @@ Scope: this reward type is always scoped as network-wide
 
 Parameters: none 
 
-Reward calculation: the total payout amount for the period is treated in the same way as the infrastructure fee pool, and the relative payout scaling factors are calculated as per the staking and delegation specification for distributing infrastructure fees to token holders and validators. (Payout delay and max amount per recipient are still respected).
-
+Reward calculation: the total payout amount for the period is treated in the same way as the infrastructure fee pool, and the relative payout scaling factors are calculated as per the staking and delegation specification for distributing infrastructure fees to token holders and validators, currently [simple POS rewards](0058-simple-POS-rewards.md). (Payout delay and max amount per recipient are still respected).
 
 ## Acceptance criteria
 
