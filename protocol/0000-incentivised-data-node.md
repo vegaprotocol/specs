@@ -31,33 +31,61 @@ This spec isn't about what functionality data-nodes should have. It is about how
 Who does the measuring? Validators as part of their day-to-day job?
 
 
-
-
-### Is the node carrying full set of data?
-
+### Data bucketing and Merkle tree (commmon, used by both checks below)
 - Data is divided into sequential event bundles which contain all events the included types related to a defined period, e.g. 1 block
 - Only defined event types are included: trades, positions, accounts [TODO: confirm types]
 - Validators and data nodes will build a Merkle tree from event bundles. Validators do not store the data, but data nodes must (and this is what we verify with this algorithm).
+- This merkle tree is exposed by APIs and also allows any user to verify an aPI response from the data node
+
+
+### Is the node carrying the full set of data (NOT needed for MVP / Sweetwater++)
 - Validators can send a datanode a challenge at any time consisting of a random seed value S and a start event bundle number; the datanode then needs to find the first event bundle B in the data set after the start bundle such that HASH(pubkey, S, B) ends with N zeros (e.g. N = 4).
 - The validator request is signed to prevent a DoS
-- If datanodes consistently get statistical oddities (e.g., searching 50000 blocks to find te hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full chain
+- If datanodes consistently get statistical oddities (e.g., searching 50000 blocks to find the hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full chain [TODO: be specific]
 - The Merkle tree stored by both valdiators and data nodes (described above) is used by the validator to verify that the data returned in response to the challenge is correct, i.e. the answer is the actual data that existed at block B. This does not verify that the node is storing it, hence the expensive search challenge above.
-- This merkle tree is exposed by APIs and also allows any user to verify a response from the data node
 - This challenge/response to prove data storage can be done fairly irregularly
 
 
-### Is the node up and responding
-- Additionally validators will randomly query the APIs to confirm that the node is up and serving the data (also the reponse must be verified against the Merkle tree), and the response time.
+### Is the node up and responding (Needed for MVP / Sweetwater++)
+- Additionally validators will randomly query the APIs to confirm that the node is up and serving the data
+- The reponse must be verified against the Merkle tree
+- The response time must be recorded
 - These queries should be done regularly to ensure and measure liveness
-
+- TODO: exact details
 
 ### Reward score formula
 
+Inputs: 
+- number of times data verification challenge is done per epoch
+- distance from start block (or no response from data verification challange)
+- expected distance from start block 
+
+- number of times API challenge is per epoch 
+- fraction of responses from API challenge, 
+- average response time from API challenge 
+
+Calculation:
+
+Each validator is assigned a subset of S/N * M data nodes where S is a number >= 1, N is the number of validators, and M is the number of data nodes. The assignment must pick datanodes at random (uniformly with random seed agreed through consensus e.g. last block hash) from the as yet unpicked nodes, if N > 1 the process repeats once all data nodes are assigned.
+
+For each validator that assesses a given data node:
+- If (no response from any data verification challange) or (average distance from start block > K * expected distance from start block): node is considered not to be live and will not be rewarded this epoch, reward score = 0
+- Else: reward score = fraction of correct responses to API challenge / average response time
+
+Reward scores assesed by a validator that epoch are submitted in a transaction
+A data node's score is the average of all score submitted for that node.
+
+Rewards are paid by multiplying a data node's reward score as a fraction of the sum of all reward scores by the total to be distributed for the epoch.
+
+A data node receiving a zero score for 3 consecutive epochs will be unregistered. 
+
+
+### MVP version requirements
+- only measure API challenge response time
+- only build Merkle tree but don't bother with the rest of the challenge 
 
 
 
 
-
-
-
-
+### Acceptance criteria (test case stories)
+- TODO: QA team
