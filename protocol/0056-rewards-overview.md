@@ -66,7 +66,7 @@ Reward schemes are created by a transaction that specifies the information descr
 - Reward type
 - Scope of reward scheme, e.g. a specific market, asset, or network wide (must be a scope compatible with the reward type)
 - Reward scheme parameters (as required for the reward type)
-- Frequency of calculation (specified as interval between payouts in seconds)
+- Frequency of calculation (specified as interval between payouts)
 - Reward scheme start date/time
 - Reward scheme end date/time (blank for never)
 - Payout type and parameters, either:
