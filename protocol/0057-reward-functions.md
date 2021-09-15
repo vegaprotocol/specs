@@ -20,7 +20,7 @@ This is the complete definition for this reward *type*, other per-instance param
 
 Exactly same as T.1 above but for *maker fees*. 
 
-### T.3 - Good risk citizen  (for 🤠)
+### T.3 - Good risk citizen  (not for 🤠, later)
 
 Principle: anyone who's got a position but hasn't been closed out is rewarded. 
 
@@ -54,6 +54,15 @@ Principle: anyone who's market proposal gets accepted is eligible for reward.
 Scope: This reward can be scoped Vega wide or to a specific asset. 
 
 Calculation: From the start of the payout period collect all parties that proposed a market that's enacted during the period. Their scaling factor is `1` divided by the total number of markets enacted in that period. 
+
+### M.2 Get a market proposal accepted and grow volume (for 🤠)
+
+Principle: anyone who's market proposal gets accepted is eligible for reward.
+
+Scope: This reward can be scoped Vega wide or to a specific asset. 
+
+Calculation: From the start of the payout period collect all parties that proposed a market that's enacted during the period. Their scaling factor is `1` divided by the total number of markets enacted in that period. 
+
 
 
 ## Staking and delegation (required for 💧)
