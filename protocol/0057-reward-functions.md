@@ -2,8 +2,6 @@
 
 Below is a list of reward types that will be built in to Vega and available when proposing or creating a new [Reward](0056-rewards-overview.md).
 
-## Acceptance Criteria
-- [ ] Built in Reward Functions are discoverable to participants 
 
 
 ## Trading
@@ -14,21 +12,48 @@ Principle: the more someone has been a price-taker, the greater share of rewards
 
 Scope: This reward type can be scoped either to all trading settled in an asset, or to trading in one or more markets which must all settle in the same asset.
 
-Calculation: the scaling factor for a party's rewards is simply the sum of all *taker fees* the party has paid within the defined scope (asset or market(s)) during the period.
+Calculation: From the start of a payout interval collect the total *taker fees* paid by all the parties that paid taker fees within the scope (asset / market(s)). The scaling factor for a party's rewards is simply the sum of all *taker fees* the party has paid within the defined scope (asset or market(s)) during the period divided by the total taker fees paid in the period within the scope. 
 
 This is the complete definition for this reward *type*, other per-instance parameters are in [rewards overview](0056-rewards-overview.md#Creating-reward-schemes).
 
-### Placeholder future reward (revisit for Oregon Trail)
+### T.1 - Maker rewards, based on fees paid (for 🤠)
 
-- Day Trader (the more frequently a participant is active, the greater share of rewards they receive through this mechanism)
-- Good risk citizen
+Exactly same as T.1 above but for *maker fees*. 
+
+### T.3 - Good risk citizen  (for 🤠)
+
+Principle: anyone who's got a position but hasn't been closed out is rewarded. 
+
+Scope: This reward type can be scoped either to all trading settled in an asset, or to trading in one or more markets which must all settle in the same asset.
+
+Calculation: From the start of a payout interval collect all parties that have position open during the entire period but haven't had their position closed out. The scaling factor for a party is `1` divided by the total number of parties that qualify within the scope for the period. 
 
 
-## Liquidity Provision (placeholder for future)
+## Liquidity Provision 
 
-- Reward proportionate to LP fees received (i.e. liquidity scaled by LP shares)
-- Reward proportionate to liquidity committed and provided NOT scaled by LP shares
-- Reward proportionate to maker fees recevied (i.e. reward casual liquidity provision)
+### L.1 - Providing LP stake in a market (for 🤠)
+
+Principle: anyone who's got LP stake within scope is rewarded proportionally to stake size
+
+Scope: This reward type can be scoped either to all trading settled in an asset, or to trading in one or more markets which must all settle in the same asset.
+
+Calculation: From the start of a payout interval collect all parties that have LP stake during the entire period. Track the minimum LP stake for the period. The scaling factor for a party is the minimum LP stake the party had for the period divided by the total of all the mininmum LP stakes this and other parties maintained. 
+
+### L.2 - Providing "good" liquidity in a market (for 🤠)
+
+Same as T.1 but only for those who provide LP stake and receive LP fees. 
+
+
+
+## Market Creation
+
+### M.1 Get a market proposal accepted (for 🤠)
+
+Principle: anyone who's market proposal gets accepted is eligible for reward.
+
+Scope: This reward can be scoped Vega wide or to a specific asset. 
+
+Calculation: From the start of the payout period collect all parties that proposed a market that's enacted during the period. Their scaling factor is `1` divided by the total number of markets enacted in that period. 
 
 
 ## Staking and delegation (required for 💧)
@@ -58,4 +83,5 @@ Reward calculation: the total payout amount for the period is treated in the sam
 
 ### 🤠 Oregon Trail
 
-- TBC
+- [ ] Built in Reward Functions are discoverable to participants 
+- [ ] For each reward function create scenario where the reward is created, funded, pays out rewards to eligible participants during the correct period and doesn't outside...  
