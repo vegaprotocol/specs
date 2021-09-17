@@ -45,24 +45,20 @@ Same as T.1 but only for those who provide LP stake and receive LP fees.
 
 
 
-## Market Creation
+## Market Creation (for 🤠)
 
 ### M.1 Get a market proposal accepted (for 🤠)
 
-Principle: anyone who's market proposal gets accepted is eligible for reward.
+Principle: anyone who's market proposal gets accepted and the market meets criteria is eligible for reward.
 
-Scope: This reward can be scoped Vega wide or to a specific asset. 
+Scope: A specific asset. 
 
-Calculation: From the start of the payout period collect all parties that proposed a market that's enacted during the period. Their scaling factor is `1` divided by the total number of markets enacted in that period. 
+Parameters: 
+- `market_size` a monetary value to be compared against the total `value for fee purposes` traded on the market since enactment. 
+- `size_eval_period`  a time period added on top of market enactment time for when the the evaluation is made. 
 
-### M.2 Get a market proposal accepted and grow volume (for 🤠)
-
-Principle: anyone who's market proposal gets accepted is eligible for reward.
-
-Scope: This reward can be scoped Vega wide or to a specific asset. 
-
-Calculation: From the start of the payout period collect all parties that proposed a market that's enacted during the period. Their scaling factor is `1` divided by the total number of markets enacted in that period. 
-
+Calculation: From the start of the payout period collect all parties that proposed a market that's enacted during the period and are eligible according to the criteria: at `enactment time + size_eval_period` we have total `value for fee purposes` traded on the market >= to `market_size`. If either `market_size` or `size_eval_period` are set to `0` then any market that's enacted is eligible.
+The party's scaling factor is `1` divided by the total number of markets meeting the criteria in that period. 
 
 
 ## Staking and delegation (required for 💧)
