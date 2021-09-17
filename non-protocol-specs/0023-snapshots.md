@@ -1,5 +1,7 @@
 # Snapshots
 
+This spec describes how Vega will produce the snapshots. Tendermint handles the process of triggering a snapshot's creation and broadcasting snapshots to new nodes. For more information see the [Tendermint state sync documentation](https://docs.tendermint.com/master/spec/abci/apps.html#state-sync)
+
 To allow a Vega node to be restarted without the need to replay the whole blockchain, a Vega node can load an existing snapshot created by a different node. This snapshot we enable the starting node to populate all the state inside the core as if the core had processed the historic blockchain. The node can then resume listening to blocks after the snapshot until it gets to the live block height where it will be classed as a normal contributing node.
 
 Every node in a network is able to produce snapshots, the configuration values needed for each node include
@@ -33,7 +35,7 @@ snapshot{
         Collateral: {
             Chunk: 1,
             Accounts: "hash for account data",
-            Assets: "enabdled assets hash",
+            Assets: "enabled assets hash",
         },
     }
 }
