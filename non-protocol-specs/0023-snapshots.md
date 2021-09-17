@@ -7,16 +7,42 @@ Every node in a network is able to produce snapshots, the configuration values n
 1. Are snapshots enabled (true or false, default is true)
 1. The number of blocks between snapshots (default 1000 blocks)
 1. The number of snapshots to keep (default is 10 snapshots)
-1. The file system directory where the snapshots should be saved (default to `/tmp/snapshots`)
+1. The storage config for the DB which will store the snapshot data (most likely GoLevelDB)
 
 ## Snapshot Generation
 A snapshot is generated when the current block height MOD blocks_between_snapshots gives us zero. This makes sure that it does not matter when a node is started it will always generate snapshots at the same block heights. A snapshot can only be created once the block has been completed and the call to commit has finished. At which point we can generate a snapshot of the core state and persist it to file storage. If there is not enough space on the file system to store the snapshot we log an error and remove any partial write that has occurred. We could support removal of the oldest snapshots in an attempt to create free space but for this version we will leave all spring cleaning decisions to the app owner. Assuming no space issues the node will generate as many snapshots as the configured amount allows. Once we hit this limit we will remove the oldest snapshot before creating any further snapshots.
 
 ### The contents of a snapshot
-***Please fill in Elias***
+A snapshot should contain the full state of the core (collateral, markets and their orderbooks, etc...), in such a way so a node can be loaded into the exact same state the node that created the snapshot was in. After loading a snapshot, any subsequent transactions that node processes _has_ to produce the exact same result as if that node had replayed the entire chain. Compared to checkpoints, for example, where collateral aggregates the balances per party, per asset, a snapshot ought to contain every account a party has, and what its balance is.
+
+The snapshot type in tendermint itself does not contain any state data, but rather identifying information and metadata. The data is sent out in chunks. Our snapshot metadata should contain hashes for all the chunks, so that the node can verify each chunk as it receives it from another node. If a node provides a chunk with a different hash, either the snapshot data we are trying to load is corrupt (unlikely), or a malicious node is providing bad data, in which case we can, and should, reject the chunk (and fetch it again), and perhaps ban that node so as to not receive any more potentially corrupt data.
+
+The snapshot chunks will reflect the core's internal structure quite a lot. Tendermint snapshot chunks are size restricted to 16MB, so we'll have to deal with chunks regardless. The entire app state will be stored in an AVL tree, so we can add each engine as a separate node (or set of nodes) to that tree, and update nodes as we go (this avoids us having to serialise the entire app state each time). This also facilitates the validation of each chunk we're trying to load. Roughly speaking, this is what a snapshot would look like:
+
+```
+snapshot{
+    Height: 123,
+    Hash: "0xDEADBEEF", // hash of the entire snapshot
+    Chunks: 14, // this checkpoint comes in 14 chunks
+    Metadata: {
+        Assets: {
+            Chunk: 0, // which chunk is expected to contain this data
+            Active: "0xabc123", // hash of active asset serialised data
+            Pending: "0xdef456", // hash for assets awaiting validation
+        },
+        Collateral: {
+            Chunk: 1,
+            Accounts: "hash for account data",
+            Assets: "enabdled assets hash",
+        },
+    }
+}
+```
+
+The chunks themselves are just of type `[]byte`. When receiving a chunk, we know its _"id"_ (the Nth chunk, its offset), so we can use the snapshot metadata to verify the data we received. Hashing the chunk should match the hashes contained within the metadata. Once the hashes match, we should be able to unmarshal the data, and restore the app state.
 
 ## Snapshot Consumption
-When a node wants to start up via the snapshot system, we have to pass the required block height to the node during the start up process. The node will then send a tendermint request out asking for a snapshot matching that block using a predefined protocol type and version (we will only be using a single protocol type and version so these filters can be set to 0). Tendermint will then gather the available snapshots information from the network and then propose each one to the node for it to consider as a candidate to initialise from. Once the node is happy with the snapshot information it can accept the snapshot and tendermint to start to send teh snapshot data in checks to the node. The node should store these blocks of data locally until it had the full file saved. Then it can use that file to start up and initialise it's internal structures.
+When a node wants to start up via the snapshot system, we have to pass the required block height to the node during the start up process. The node will then send a tendermint request out asking for a snapshot matching that block using a predefined protocol type and version (we will only be using a single protocol type and version so these filters can be set to 0). Tendermint will then gather the available snapshots information from the network and then propose each one to the node for it to consider as a candidate to initialise from. Once the node is happy with the snapshot information it can accept the snapshot and tendermint to start to send the snapshot data in chunks to the node. The node should store these chunks of data locally until it has the full state saved. Depending on what data has already been received, the node can start loading its engines (e.g. After having received both Assets and Collateral, we should be able to restore the collateral and assets engines). Once all data has been received, the node can finalise loading the state, and run like any other node that just started by replaying the chain.
 
 
 ## Spam Protection
@@ -25,6 +51,6 @@ A bad node can swamp the network by requesting snapshots from other nodes which 
 
 ## Acceptance Criteria
 * A node can be started up so that it generates snapshots at given block intervals
-* A node will generate snapshots files on the local filesystem
-* A node will have a maximum amount of snapshots file on the filesystem. Older ones will be to be removed before a new one can be created.
+* A node will generate snapshots files on the local filesystem (most likely using GOLevelDB)
+* A node will have a maximum amount of snapshots file on the filesystem. Older ones will be to be removed before a new one can be created. How many snapshots we keep may be something that can be configured.
 * The state of a node that is started from a snapshot should be identical to a node that had reached the same block height via replay.
