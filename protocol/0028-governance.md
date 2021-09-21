@@ -271,7 +271,9 @@ transfer_amount == min(
 The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. Instead the proposals will contain an link to text describing the required actions. The proposal will contain 
 - a link to a text file in markdown format and 
 - a cryptographically secure hash of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
-- a description field to show a short title / something in case the link goes offline. 
+- a description field to show a short title / something in case the link goes offline. This is to be between `0` and `255` unicode characters.
+
+The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level. 
 
 The following network parameters will decide how these proposals are treated: 
 `governance.proposal.freeform.maxClose` e.g. `720h`,
