@@ -8,6 +8,7 @@ This spec isn't about what functionality data-nodes should have. It is about how
 
 ## 
 
+- Without at least one data node, it is likely that a network will see minimal activity 
 - It is beneficial to the network for the community to run data nodes as a service to users of Vega
 - Therefore this spec introduces a method to reward operators of data nodes from the Network Treasury and/or infrastructure fees
 - There needs to be a way of not rewarding non-perfomant data nodes (where the spec needs to define what non-performing means). 
