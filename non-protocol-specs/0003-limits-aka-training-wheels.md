@@ -30,7 +30,7 @@ For Sweetwater, we only require the ability to:
 
 At genesis, Sweetwater will be started with only one asset: VEGA. As no new assets can be proposed (limit 2), only VEGA tokens can be deposited or withdrawn via the bridge. There will be no markets at genesis, and due to point 1 above, no markets can be created.
 
-### Oregon Tail
+### Sweetwater++
 
 We have identified three types of limit/control that will together achieve these aims:
 
