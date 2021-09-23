@@ -17,6 +17,8 @@ What happens on the Ethereum side? Validators to use their public master key as 
 
 What happens at startup? The public master key has to be added to validators' identities in the genesis configuration.
 
+When the keys have been rotated, the node needs to be restarted to be taken into account.
+
 Acceptance Criteria:
 
 Sweetwater:
