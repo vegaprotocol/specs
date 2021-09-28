@@ -119,6 +119,15 @@ _optional (not needed now, but later)_
 To unlock any stake fast, this has the same effect as `UndelegateNow`, but the stake is removed from the validator right away (at least as far as voting rights are concerned). The delegator loses the delegated stake and the income with it, as well as their voting weight.
 As this is not required for first mainnet, and involves more subtleties (weights need to be recalculated on the fly, there may be a mixture of normal undelegated and undelegate in anger, ...), this feature does not need to be implemented right away for Mainnet alpha.
 
+### Auto [Un]delegation
+- A party become eligible to participate in auto delegation once they have manually delegated (nominated) over x% of the association. In theory this should be 100% but in practice due to rounding issues we can make this closer to 100%. It is currently defined as 95% of the association. 
+- Once entering auto delegation mode, any un-nominated associated tokens will be automatically distributed according to the current validator nomination of the party maintaining the same proportion. 
+- Edge cases:
+  - If a party has entered auto delegation mode, and their association has increased it should be automatically distributed for the epoch following the increase of association. However, if during the same epoch the party requests to execute manual delegation, no automatic delegation will be done in that epoch. If there is still un-nominated association in the next epoch, it will be automatically distributed. 
+  - If a party qualifies for auto delegation and have un-nominated association, however the party requests to undelegate (either during the epoch or at the end of the epoch) - they exit auto delegation mode. The rationale here is that they probably want to do some rearrangement of their nomination and we give them a chance to do so. Once the party reached more than x% of nomination again, they would enter auto delegation mode again and any future un-nominated association will be automatically distributed. 
+  - When distributing the newly available association according to the current validators nomination of the party, if validator A should get X but can only accept X - e (due to max per validator constraint), we don't try to distribute e between the other validators and will try to distribute it again in the next round. 
+- Auto undelegation - whenever the party dissociates tokens, their nomination must be updated such that their maximum nomination reflects the association. 
+
 ## Fringe Cases:
 A delegator can delegate some stake, and immediatelly undelegate it before the next
 epoch starts. This is fine with us.
@@ -196,3 +205,43 @@ See the [network paramters spec](./0054-network-parameters.md#current-network-pa
 - This delegation only successfully delegates 0.1
 - Party C delegates 0.1 to validator A
 - This transaction is rejected as it would exceed `maxStakePerValidator`
+
+## Auto delegation scenarios
+
+### Normal scenario auto undelegation:
+- epoch 0: party associated 1000 VEGA
+- epoch 0: party nominated 200 VEGA to validators 1-5
+- epoch 1: party dissociated 200 VEGA
+- at the end of epoch1: party one would have left 160 tokens nominated to validators 1-5 (for both epoch 1 and onwards - the former is important so that they don't get rewarded for 200 per validator)
+
+### Normal scenario auto delegation:
+- epoch 0: party associated 1000 VEGA
+- epoch 0: party nominated 200 VEGA to validators 1-5
+- epoch 1: party associated 200 VEGA
+- end of epoch 1: there's sufficient space on each validator 1-5 to accept the delegation of 40 VEGA from party 1 and party1 now has delegation of 240 for validators 1-5 for epoch 2.
+
+### Edge case 1: manual delegation for party eligible for auto delegation:
+- epoch 0: party associated 1000 VEGA
+- epoch 0: party nominated 200 VEGA to validators 1-5
+- epoch 1: party associated 200 VEGA
+- epoch 1: party requests to delegate 100 VEGA to validator1
+- end of epoch1: party1 has 300 delegated to validator1, 200 delegated to validators 2-5 and 100 remain undelegated.
+- end of epoch2: the remaining associated undelegated 100 VEGA get auto-delegated and distrubuted such that validator1 gets 27 (100 * 300/1100) and validators 2-5 get each 18 - and 1 token remains undelegated
+
+### Edge case 2: manual undelegation for party eligible for auto delegation:
+- epoch 0: party associated 1000 VEGA
+- epoch 0: party nominated 200 VEGA to validators 1-5
+- epoch 1: party associated 100 VEGA
+- epoch 1: party requests to undelegate 200 VEGA from validator1
+- end of epoch1: party has 300 unnominated VEGA which will NOT be auto delegated
+- epoch 2: party requests to delegate 300 to validator 2
+- epoch 2: party associated 100 VEGA
+- end of epoch 2: party has 500 nominated to validator2 and 200 nominated to validators 3-5
+- end of epoch 3: party has 100 unnominated VEGA which gets nominated proportionally between validators 2-5 - i.e. validator 2 gets 45, validator 3-4-5 get 18 each
+
+### Edge case 3: respecting max per validator
+- epoch 0: party associated 1500 VEGA
+- epoch 0: party nominated 100, 200, 300, 400, 500 VEGA to validators 1-5 respectively
+- epoch 1: party associated 300 VEGA
+- end of epoch 1: according to the proportion of nomination, validators need to get 20,40,60,80,100 respectively - however max per validator implies availale balances of 100, 80, 60, 40, 20 for validators 1,2,3,4,5 respectively
+- meaning that at the following delegation will apply: 120, 240, 360, 440, 520. There will be no attempt to top up validators against the proportion implied by the nomination.
