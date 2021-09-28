@@ -214,7 +214,7 @@ See the [network paramters spec](./0054-network-parameters.md#current-network-pa
 - epoch 1: party dissociated 200 VEGA
 - at the end of epoch1: party one would have left 160 tokens nominated to validators 1-5 (for both epoch 1 and onwards - the former is important so that they don't get rewarded for 200 per validator)
 
-### Noraml scenario auto delegation:
+### Normal scenario auto delegation:
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
 - epoch 1: party associated 200 VEGA
