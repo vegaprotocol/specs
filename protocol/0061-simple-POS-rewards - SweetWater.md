@@ -9,9 +9,9 @@ At the end of an [epoch](./0050-epochs.md), payments are calculated. This is don
 * For each delegator that delegated to that validator, `score_del` is computed: `score_del(stake_del, stake_val)` where `stake_del` is the stake of that delegator, delegated to the validator, and `stake_val` is the stake that validator represents.
 * The fraction of the total available reward a validator gets is then `score_val(stake_val) / total_score` where `total_score` is the sum of all scores achieved by the validators. The fraction a delegator gets is calculated accordingly.
 * Finally, the total reward for a validator is computed, and their delegator fee subtracted and divided among the delegators.
-* If the validator (or, the associated key) does not have sufficient stake (at least the network parameter min_own_take), 
-  then the reward is set to zero. The corresponding money is kept by the network, not distributed among the other validators. Note this only applies to the part of the reward attributable directly to such a validator, its delegators should still receive their rewards.
+* If the validator (or, the associated key) does not have sufficient stake (at least the network parameter `min_own_stake`), then the reward (both the validator and self-delegation component) is set to zero. The corresponding amount is kept by the network, not distributed among the other validators. Note this only applies to the part of the reward attributable directly to such a validator, its delegators should still receive their rewards. If a validator delegates amount below `min_own_stake` to a different validator then the reward associated with that delegation will be paid out just like for any other delegator.
 
+**Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
 
 Variables used:
 
@@ -31,13 +31,9 @@ Functions:
 
 
 ## Distribution of Rewards
-We assume a function total_payment() which computes the total payment for a given epoch, as well as some ressource pool 
-from which the resources are taken; if the total_payment for a given epoch exceeds the size of the pool, then the 
-entire pool is paid out. 
-
+We assume a function `total_payment()` which computes the total payment for a given epoch, as well as some resource pool from which the resources are taken; if the total_payment for a given epoch exceeds the size of the pool, then the entire pool is paid out.
 
 The total payment will then be distributed among validators and delegators following above formulas.
-
 
 ## Maximal Delegatable Stake
 The maximal delegatable amount of stake is supposed to prevent delegators from delegating too much to an individual validator, and is an additional measure to the economic incentive.
@@ -53,10 +49,8 @@ max_delegatable_tokens = total_delegated_tokens / a
 
 Comments:
 
-With the new reward function, this is not critical, as validators do not lose money if they
-get too much delegation
-We can recursively compute the exact amount (compute the approximation as above, see if any delegations would fail with this threshold, substract, those, repeat). This is not necessary at this point though
-We can use the existing parameter to add a stretch-factor to allow every validator go get a little bit too much. This is also not needed for SW though.
-
-
+* Delegations from the previous epoch exceeding the calculated `max_delegatable_token` will be capped to meet the limit. Validator self-delegation will always take priority. After that, if the cap is still not exceeded the delegations (with a possible application of a cap) will be applied in the order they were submitted in. Delegations that would exceed the cap will be set to 0.
+* A decrease in the `max_delegatable_token` threshold doesn't result in undelegation or capping of delegations submitted before the previous epoch.
+* An increase in the `max_delegatable_token` threshold in the subsequent epoch doesn't result in auto-delegation of previously capped delegations.
+* If only a subset of validators self-delegates and there aren't enough other delegations the `max_delegatable_token` might end up being below `min_own_stake` in which case validators receive no rewards.
 
