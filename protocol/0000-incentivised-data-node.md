@@ -40,7 +40,16 @@ Who does the measuring? Validators as part of their day-to-day job?
 
 
 ### Is the node carrying the full set of data (NOT needed for MVP / Sweetwater++)
-- Validators can send a datanode a challenge at any time consisting of a random seed value S and a start event bundle number; the datanode then needs to find the first event bundle B in the data set after the start bundle such that HASH(pubkey, S, B) ends with N zeros (e.g. N = 4).
+- Validators can send a datanode a challenge at any time consisting of a random seed value S and a start event bundle number; the datanode then needs to find the first event bundle B in the data set after the start bundle such that HASH(pubkey, S, B) ends with N zeros (e.g. N = 4). 
+    In addition (to lower the load for validators), validators need to answer challenges randomly generated from the
+    vega blocks.
+    Details: To prevent Datanodes from being overwhelmed by overactive Validators, the answers to the challenge
+    (together with the signed challenge itself) is sent to all validators. Furthermore, a validator can only
+    send 1 challenge to a datanode, and then must wait for t other validators to challenge it before it can challenge it
+    again.
+    For the randomization, if the hash of the latest block modulo 10000 equals the datanodes ID (padded with zeros), then
+    thet block forms a challenge. Similarly, the start bundle S is calculated psuedorandomly from the hash of that block.
+    The challenge frequency can be changed by governance vote. 
 - The validator request is signed to prevent a DoS
 - If datanodes consistently get statistical oddities (e.g., searching 50000 blocks to find the hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full chain. 
 Expected number of blocks is `(1/2) x 10^N`. 
@@ -53,7 +62,9 @@ Expected number of blocks is `(1/2) x 10^N`.
 - The reponse must be verified against the Merkle tree
 - The response time must be recorded
 - These queries should be done regularly to ensure and measure liveness
-- TODO: exact details
+- Details:
+        Validators keep statistical information of the last 100 requests they did (mostly, median, average
+        and standard derivation. The response score of a datanode is the inverse of the standard errors.
 
 ### Reward score formula
 
