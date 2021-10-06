@@ -18,9 +18,9 @@ The funds, if available would be transferred instantly and irrevocably to the ne
 
 - Transfer from protocol mechanics: there may be a protocol feature such as the charging of fees or handling of expired insurance pool balances that specifies the Netwok Treasury as destination in a transfer. (Charging of fees is placeholder, currently not to be implemented.)
 
-- Transfer by governance: a [governance proposal](./0028-governance.md) can be submitted to transfer funds either from a market's insurance pool into the on chain treasury account for the asset. (required only for Oregon Trail)
+- Transfer by governance: a [governance proposal](./0028-governance.md) can be submitted to transfer funds from a market's insurance pool into the on chain treasury account for the asset. (required for Oregon Trail)
 
-- Transfer transaction: a transaction submitted to the network may request to transfer funds from an the generel account controlled by the owner’s private key to the Network Treasury. (required only for Oregon Trail)
+- Transfer transaction: a transaction submitted to the network may request to transfer funds from the generel account for an asset, controlled by the owner’s private key, to the Network Treasury. (required only for Oregon Trail)
 
 
 ### Funding by deposit
