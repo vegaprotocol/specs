@@ -6,21 +6,16 @@ Below is a list of reward types that will be built in to Vega and available when
 
 ## Trading
 
-### T.1 - Taker rewards, based on fees paid (for 🤠)
 
-Principle: the more someone has been a price-taker, the greater share of rewards they receive through this mechanism.
+### T.1 - Fees based reward (for 🤠)
 
-Scope: This reward type can be scoped either to all trading settled in an asset, or to trading in one or more markets which must all settle in the same asset.
+Principle: reward certain activities measured by the fee amount they pay or receive. The more of certain fee they pay relative to others the more of the reward they get. 
 
-Calculation: From the start of a payout interval collect the total *taker fees* paid by all the parties that paid taker fees within the scope (asset / market(s)). The scaling factor for a party's rewards is simply the sum of all *taker fees* the party has paid within the defined scope (asset or market(s)) during the period divided by the total taker fees paid in the period within the scope. 
+Scope: This reward type can be scoped either to all trading settled in an asset, or to trading in one or more markets which must all settle in the same asset (so we don't need to covert values to compare).
 
-This is the complete definition for this reward *type*, other per-instance parameters are in [rewards overview](0056-rewards-overview.md#Creating-reward-schemes).
+Parameters: A Vega asset or a list of markets to define scope. A string specifying a fee type to be one of: `taker fee paid`, `maker fee received`, `liquidity provision fees received`.
 
-### T.1 - Maker rewards, based on fees paid (for 🤠)
-
-Exactly same as T.1 above but for *maker fees*. 
-
-### T.3 - Good risk citizen  (not for 🤠, later)
+### T.2 - Good risk citizen  (not for 🤠, later)
 
 Principle: anyone who's got a position but hasn't been closed out is rewarded. 
 
@@ -39,17 +34,11 @@ Scope: This reward type can be scoped either to all trading settled in an asset,
 
 Calculation: From the start of a payout interval collect all parties that have LP stake during the entire period. Track the minimum LP stake for the period. The scaling factor for a party is the minimum LP stake the party had for the period divided by the total of all the mininmum LP stakes this and other parties maintained. 
 
-### L.2 - Providing "good" liquidity in a market (for 🤠)
-
-Same as T.1 but only for those who provide LP stake and receive LP fees. 
-
-
-
 ## Market Creation (for 🤠)
 
 ### M.1 Get a market proposal accepted (for 🤠)
 
-Principle: anyone who's market proposal gets accepted and the market meets criteria is eligible for reward.
+Principle: anyone whose market proposal gets accepted and the market meets criteria is eligible for reward.
 
 Scope: A specific asset. 
 
