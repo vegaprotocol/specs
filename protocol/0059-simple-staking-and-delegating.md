@@ -1,4 +1,4 @@
-# simple Staking and Delegation
+# Simple Staking and Delegation
 Vega runs on a delegated proof of stake (DPOS) blockchain. Participants who hold a balance of the configured [governance asset](./0028-governance.md) can stake these on the network by delegating their tokens to one or more validators that they trust. This helps to secure the network. 
 
 Validators and delegators receive incentives from the network, depending on various factors, including how much stake is delegated and how honest they are.
@@ -6,19 +6,22 @@ Validators and delegators receive incentives from the network, depending on vari
 ## Note on terminology
 
 Staking requires the combined action of:
-- Locking tokens on the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md); and 
-- Delegating these tokens to one or more validators
+- Associating tokens on the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md); and 
+- Nominating these tokens to one or more validators
+- Delegation in some contexts is used to mean `associate + nominate`. For the purposes of this document, once it's clear from context that association has happened `delegate` and `nominate` may be used interchangeably. 
 
-Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can lock a token in the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), which is then available for
-staking. To this end, a Vega token (or a fraction thereof) can be:
-- Unlocked: The tokenholder is free to do with the token as they want, but cannot delegate it
-- Locked: The token is locked in the smart contract, and can be used inside the delegation system
+Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can associate a token in the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md), which is then available for
+nomination. To this end, a Vega token (or a fraction thereof) can be:
+- Unassociated: The tokenholder is free to do with the token as they want, but cannot nominate it
+- Associated: The token is locked in the staking and delegation smart contract and associated to a Vega key. It can be used on the Vega chain for governance and it can be nominated to a validator.
 
 ## Smart Contract / Staking Bridge Interaction
-It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md) through the validators; thus, all actions regarding locking 
-and unlocking of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md), not by Vega.
+It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md) through the validators; thus, all actions regarding associating 
+and dissociating of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md), not by the Vega chain.
 
-In order to delegate, users require tokens that will be locked in a smart contract (see [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md)). Vega will be made aware of how many tokens a given party has locked through bridge events. When the same tokens are unlocked, a corresponding event will be emitted:
+In order to delegate, users require tokens that will be associated in a smart contract (see [Vega staking bridge contract](../non-protocol-specs/0006-erc20-governance-token-staking.md)). Vega will be made aware of how many tokens a given party has associated through bridge events. When the same tokens are dissociated, a corresponding event will be emitted:
+
+Note that the bridge contract uses `deposited` and `removed` instead of `associated` and `dissociated`.
 
 ```
   event Stake_Deposited(address indexed user, uint256 amount, bytes32 vega_public_key);
@@ -31,15 +34,16 @@ This provides the information the core needs to keep track of:
 * Undelegated Stake
 * Stake delegated per validator
 * Stake marked for delegation per validator in the next [epoch](./0050-epochs.md).
-* Total stake (should be the sum of all the others)
+* Total stake (should be the sum of all those listed immediately above).
 
 There is no interaction with the smart contract that is initiated by Vega.
 
-The validators watch the smart contract, and observe the following actions:
+The validators watch for events emitted by the staking and delegation smart contract, and observe the following actions:
 
-- A token gets locked: This token is now available for delegation
-- A token gets unlocked: 
+### A token gets associated: 
+This token is now available for delegation.
 
+### A token gets dissociated: 
 If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegatable tokens is reduced to match the (un)locking status). 
 
 This could mean that the token-holder has a delegation-command scheduled that is no longer executable; this command will then be ignored at the start of the next epoch. 
