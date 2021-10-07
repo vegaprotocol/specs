@@ -48,9 +48,9 @@ two different ways:
 
 For Sweetwater, the policies we enforce are relatively simple:
 <num_votes> = 3
-<min_voting_tokens>  = 100
+<min_voting_tokens>  = 1
 <num_proposals> = 3
-<min_proposing_tokens> = 100000
+<min_proposing_tokens> = 200000
 
 
 - Any tokenholder with more than <min_voting_tokens> tokens has <num_votes> voting attempts per epoch
@@ -65,7 +65,10 @@ For Sweetwater, the policies we enforce are relatively simple:
    (like above), only <num_proposals> proposals can be made per tokenholder per epoch, i.e., every proposal past <num_proposals> in an epoch is
    rejected by post-block-reject (if there sum of proposals in past blocks and the ones in the current block exceed
    <num_proposals>) or pre-block reject (if the sum of proposals already in the blockchain for that epoch equals or exceeds 
-   <num_proposals>.
+   <num_proposals>. This parameter is the same for all proposals (also market-creation related ones). 
+   There also is a separate parameter to the same end that is enforced in the core. For SW, both these parameters have the same value. 
+   In the future, we can set the spam protection value lower, as the amplification effect of a proposal (i.e., a proposal resulting in
+   a very large number of votes) would also be covered by the core then.
    
 ### Notes
 - What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
