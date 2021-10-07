@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" viewBox="-809.5 1193.836 1377.25 382.44717" width="1377.25" height="382.44717">
+  <defs>
+    <font-face font-family="Helvetica Neue" font-size="16" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="white">
+      <g>
+        <path d="M 8 0 L 0 -3 L 0 3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <font-face font-family="Courier" font-size="13" units-per-em="1000" underline-position="-144.04297" underline-thickness="91.79688" slope="0" x-height="456.54297" cap-height="586.91406" ascent="753.90625" descent="-246.09375" font-weight="700">
+      <font-face-src>
+        <font-face-name name="Courier-Bold"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Courier" font-size="13" units-per-em="1000" underline-position="-178.22266" underline-thickness="57.61719" slope="0" x-height="456.54297" cap-height="586.91406" ascent="753.90625" descent="-246.09375" font-weight="400">
+      <font-face-src>
+        <font-face-name name="Courier"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Helvetica Neue" font-size="12" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.18.4\n2021-06-09 12:20:55 +0000</metadata>
+  <g id="best_option" stroke="none" stroke-opacity="1" fill="none" fill-opacity="1" stroke-dasharray="none">
+    <title>best option</title>
+    <rect fill="black" x="-806" y="1193.836" width="1373.75" height="382.44717"/>
+    <g id="best_option_Layer_1">
+      <title>Layer 1</title>
+      <g id="Graphic_64">
+        <rect x="85" y="1372" width="355" height="125.6471" fill="white" fill-opacity=".2054269"/>
+        <text transform="translate(95 1378)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="white" x="0" y="15">Exception</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="white" x="0" y="33.448">auction</tspan>
+        </text>
+      </g>
+      <g id="Graphic_41">
+        <rect x="-753.9" y="1200.8794" width="355" height="296.7677" fill="white" fill-opacity=".2054269"/>
+        <text transform="translate(-743.9 1206.8794)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="white" x="0" y="15">Governance period</tspan>
+        </text>
+      </g>
+      <g id="Graphic_62">
+        <rect x="-388.1" y="1200.8794" width="332.6" height="296.7677" fill="white" fill-opacity=".2054269"/>
+        <text transform="translate(-378.1 1206.8794)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="white" x="0" y="15">Opening auction</tspan>
+        </text>
+      </g>
+      <g id="Graphic_63">
+        <rect x="-43" y="1200.836" width="343.826" height="131.664" fill="white" fill-opacity=".2054269"/>
+        <text transform="translate(-33 1206.836)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="white" x="0" y="15">Normal trading</tspan>
+        </text>
+      </g>
+      <g id="Line_20">
+        <path d="M -438.8849 1271.5287 L -428.8849 1271.5287 L -390.19245 1271.4232 L -356.4 1271.3177 L -351.4 1271.3177" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_66">
+        <line x1="263.37468" y1="1418.625" x2="271.6" y2="1418.625" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_4">
+        <rect x="-341.5" y="1252.1927" width="99" height="38.25" fill="black"/>
+        <rect x="-341.5" y="1252.1927" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(-336.5 1263.3177)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x="13.695557" y="13">PENDING</tspan>
+        </text>
+      </g>
+      <g id="Graphic_5">
+        <rect x="-553.3849" y="1521.2752" width="99" height="38.25" fill="black"/>
+        <rect x="-553.3849" y="1521.2752" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(-548.3849 1532.4002)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="400" fill="#ff471c" x="9.294922" y="13">REJECTED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_6">
+        <rect x="-688.5" y="1252.1927" width="99" height="38.25" fill="black"/>
+        <rect x="-688.5" y="1252.1927" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(-683.5 1263.3177)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x="9.294922" y="13">PROPOSED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_7">
+        <rect x="-199.5" y="1521.2752" width="99" height="38.25" fill="black"/>
+        <rect x="-199.5" y="1521.2752" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(-194.5 1532.4002)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x="4.894287" y="13">CANCELLED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_9">
+        <rect x="35.5" y="1252.1927" width="99" height="38.25" fill="black"/>
+        <rect x="35.5" y="1252.1927" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(40.5 1263.3177)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x="18.096191" y="13">ACTIVE</tspan>
+        </text>
+      </g>
+      <g id="Graphic_10">
+        <rect x="164.37468" y="1399.5" width="99" height="38.25" fill="black"/>
+        <rect x="164.37468" y="1399.5" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(169.37468 1410.625)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x="4.894287" y="13">SUSPENDED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_11">
+        <rect x="201.826" y="1521.6972" width="99" height="38.25" fill="black"/>
+        <rect x="201.826" y="1521.6972" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(206.826 1532.8222)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x="18.096191" y="13">CLOSED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_12">
+        <rect x="322.5" y="1252.1927" width="99" height="38.25" fill="black"/>
+        <rect x="322.5" y="1252.1927" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(327.5 1255.3177)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x="13.195557" y="13">TRADING </tspan>
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x=".49365234" y="29">TERMINATED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_13">
+        <rect x="461.5" y="1251.9817" width="99" height="38.25" fill="black"/>
+        <rect x="461.5" y="1251.9817" width="99" height="38.25" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5"/>
+        <text transform="translate(466.5 1263.1067)" fill="#ff471c">
+          <tspan font-family="Courier" font-size="13" font-weight="700" fill="#ff471c" x="13.695557" y="13">SETTLED</tspan>
+        </text>
+      </g>
+      <g id="Graphic_16">
+        <path d="M -503.8849 1227.0687 L -438.8849 1271.5287 L -503.8849 1315.9887 L -568.8849 1271.5287 Z" fill="black"/>
+        <text transform="translate(-546.3349 1263.4715)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="7.408" y="11">Vote deadline</tspan>
+        </text>
+      </g>
+      <g id="Graphic_17">
+        <path d="M -144 1245.0247 L -74 1271.5287 L -144 1298.0327 L -214 1271.5287 Z" fill="black"/>
+        <text transform="translate(-195.1 1256.6627)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="20.268" y="11">Auction end</tspan>
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="#a5a5a5" x="8.262" y="25.336">Conditions met?</tspan>
+        </text>
+      </g>
+      <g id="Line_18">
+        <path d="M -589.5 1271.3177 L -579.5 1271.3177 L -579.19245 1271.4232 L -578.7844 1271.4288" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_19">
+        <line x1="-503.8849" y1="1315.9887" x2="-503.8849" y2="1511.3752" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_21">
+        <path d="M -242.5 1271.3177 L -232.5 1271.3177 L -228.25 1271.4232 L -228.9 1271.5287 L -223.9 1271.5287" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_33">
+        <path d="M 85 1290.4427 L 85 1350.6764 L 213.87468 1350.6764 L 213.87468 1389.6" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_37">
+        <path d="M 421.5 1271.3177 L 431.5 1271.3177 L 441.5 1271.2122 L 446.6 1271.1067 L 451.6 1271.1067" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_42">
+        <rect x="-416.60535" y="1259.2594" width="49.78" height="24.335999" fill="#343434"/>
+        <text transform="translate(-411.60535 1264.2594)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="0" y="11">Passed</tspan>
+        </text>
+      </g>
+      <g id="Graphic_43">
+        <rect x="-524.9949" y="1348.4872" width="42.22" height="24.335999" fill="#343434"/>
+        <text transform="translate(-519.9949 1353.4872)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="58264504e-20" y="11">Failed</tspan>
+        </text>
+      </g>
+      <g id="Line_45">
+        <line x1="-703.5" y1="1271.1067" x2="-698.39775" y2="1271.1067" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_46">
+        <rect x="-802.5" y="1251.7707" width="99" height="38.671997" fill="#edff21"/>
+        <text transform="translate(-797.5 1256.7707)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="black" x="20.722" y="11">Proposal </tspan>
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="#666" x="6.49" y="25.336">Create market</tspan>
+        </text>
+      </g>
+      <g id="Line_50">
+        <line x1="-74" y1="1271.5287" x2="25.6" y2="1271.5287" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_51">
+        <rect x="-61.56297" y="1259.3607" width="28.888" height="24.335999" fill="#343434"/>
+        <text transform="translate(-56.56297 1264.3607)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="0" y="11">Yes</tspan>
+        </text>
+      </g>
+      <g id="Line_57">
+        <path d="M -144 1298.0327 L -144 1331.579 L -267.25 1331.579 L -267.25 1300.3427" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_65">
+        <rect x="93.87752" y="1338.5084" width="107.73728" height="24.335999" fill="black"/>
+        <text transform="translate(98.87752 1343.5084)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="1.0906409" y="11">Monitoring trigger</tspan>
+        </text>
+      </g>
+      <g id="Graphic_70">
+        <rect x="395" y="1200.8794" width="95.14" height="24.335999" fill="#edff22"/>
+        <text transform="translate(400 1205.8794)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="black" x="0" y="11">Settlement data</tspan>
+        </text>
+      </g>
+      <g id="Line_78">
+        <path d="M 442.57 1225.2154 L 442.57 1225.673 L 442.57 1224.671 L 442.57 1258.3153" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_79">
+        <path d="M 351.5 1392.121 L 421.5 1418.625 L 351.5 1445.129 L 281.5 1418.625 Z" fill="black"/>
+        <text transform="translate(300.4 1403.759)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="20.268" y="11">Auction end </tspan>
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="#a5a5a5" x="8.262" y="25.336">Conditions met?</tspan>
+        </text>
+      </g>
+      <g id="Line_81">
+        <line x1="134.5" y1="1271.3177" x2="312.6" y2="1271.3177" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_82">
+        <path d="M 351.5 1445.129 L 351.5 1468.9815 L 220.02575 1468.9815 L 220.02575 1447.2732" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_88">
+        <rect x="169.46768" y="1259.1497" width="99" height="24.335999" fill="#343434"/>
+        <text transform="translate(174.46768 1264.1497)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="4.276" y="11">Product trigger</tspan>
+        </text>
+      </g>
+      <g id="Line_115">
+        <path d="M 351.5 1392.121 L 351.5 1323.077 L 110.23622 1323.077 L 109.75 1305.3427 L 109.75 1300.3427" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_116">
+        <rect x="337.056" y="1340.0198" width="28.888" height="24.335999" fill="black"/>
+        <text transform="translate(342.056 1345.0198)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="0" y="11">Yes</tspan>
+        </text>
+      </g>
+      <g id="Graphic_117">
+        <rect x="228.3354" y="1456.8135" width="113.572" height="24.335999" fill="#343434"/>
+        <text transform="translate(233.3354 1461.8135)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="4973799e-20" y="11">No. </tspan>
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="#a5a5a5" y="11">Repeat auction</tspan>
+        </text>
+      </g>
+      <g id="Graphic_121">
+        <rect x="-243.01846" y="1312.243" width="91.348" height="38.671997" fill="#343434"/>
+        <text transform="translate(-238.01846 1317.243)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="32.898" y="11">No </tspan>
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="#a5a5a5" x="881073e-18" y="25.336">Repeat auction</tspan>
+        </text>
+      </g>
+      <g id="Line_123">
+        <path d="M -292 1290.4427 L -292 1383.4586 L -125.25 1383.4586 L -125.25 1511.3752" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_125">
+        <rect x="-263.8758" y="1364.1226" width="116.02" height="38.671997" fill="#343434"/>
+        <text transform="translate(-258.8758 1369.1226)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="white" x="29.556" y="11">Time out</tspan>
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="#a5a5a5" x="21316282e-20" y="25.336">Too long in Pending</tspan>
+        </text>
+      </g>
+      <g id="Line_126">
+        <path d="M -316.75 1290.4427 L -316.75 1452.5641 L -316.3161 1506.3752 L -316.3161 1511.3752" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_127">
+        <rect x="-361.9901" y="1521.2752" width="91.348" height="38.671997" fill="#edff21"/>
+        <text transform="translate(-356.9901 1526.2752)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="black" x="16.896" y="11">Proposal </tspan>
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="#666" x="1.7759998" y="25.336">Cancel market</tspan>
+        </text>
+      </g>
+      <g id="Line_129">
+        <path d="M 60.25 1290.4427 L 60.25 1453.633 L 60.06114 1506.7972 L 60.06114 1511.7972" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_128">
+        <rect x="37.22414" y="1521.6972" width="91.348" height="38.671997" fill="#edff21"/>
+        <text transform="translate(42.22414 1526.6972)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="black" x="16.896" y="11">Proposal </tspan>
+          <tspan font-family="Helvetica Neue" font-size="12" font-weight="400" fill="#666" x="5.112" y="25.336">Close market</tspan>
+        </text>
+      </g>
+      <g id="Line_131">
+        <path d="M 189.12468 1437.75 L 189.12468 1504.6378 L 105.73514 1504.6378 L 105.73514 1511.7972" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_132">
+        <path d="M -270.6421 1540.6112 L -260.6421 1540.6112 L -226.06838 1540.4002 L -209.4 1540.4002" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_133">
+        <path d="M 128.57214 1541.0332 L 138.57214 1541.0332 L 165.19907 1540.9277 L 186.926 1540.8222 L 191.926 1540.8222" marker-end="url(#FilledArrow_Marker)" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+    </g>
+  </g>
+</svg>
