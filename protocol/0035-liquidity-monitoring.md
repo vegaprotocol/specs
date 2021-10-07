@@ -20,7 +20,7 @@ Note that [target stake](0041-target-stake.md) is defined in a separate spec.
 
 ## Liquidity auction network parameters
 
-**c<sub>1</sub>** - constant multiple for [target stake](0041-target-stake.md) triggering the commencement of liquidity auction.  
+**c<sub>1</sub>** - constant multiple for [target stake](0041-target-stake.md) triggering the commencement of liquidity auction. In this spec it is referred to as `c_1` but in fact it's name is `market.liquidity.targetstake.triggering.ratio` and it's a market parameter (with a network parameter providing a default value for markets that don't specify it). 
 
 ## Total stake
 

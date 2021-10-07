@@ -10,7 +10,7 @@ The trigger to start a new epoch is blocktime. To this end, there is a
 defined time when an epoch ends; the first block after the block that
 exceeds this time is the last block of its epoch.
 
-The length of an epoch is a system parameter. To make the chain understandable
+The length of an epoch is a [network parameter](#network-parameters). To make the chain understandable
 without having to trace all system parameters, the time an epoch ends is added
 to its first block. This also means that the block validity check needs to verify 
 that deadline.
@@ -24,10 +24,13 @@ the block one after means that every epoch has a defined last block, and it is p
 to put some information needed to terminate an epoch cleanly/prepare the
 next epoch into that block.
 
-Options: We could make it a system parameter how many blocks after the deadline the epoch starts
- if we need more space to reconfigure/close an epoch. This can be added through a software update
- at a later point if needed.
-
+Correction: As we cannot (at this point) control the block into which a particular transaction
+goes, for Sweetwater the epoch changes will be done as described in the
+beginning without a synchronizing block: There is a time (determined by the 
+network parameter epoch_length), when a new epoch starts. The last block in every epoch is the
+first block that has a blocktime exceeding the length of its epoch, i.e., the later blocks
+then go into the next epoch. In a later version we will have better control of the mempool,
+and then can add a synchronizing block.
 ## Fringe cases
  If the epoch-time is too short, then it is possible to have several epochs starting
  at the same time (say, we have 5 second epochs, and one block takes 20 seconds, thus  pushing the
@@ -45,17 +48,10 @@ Options: We could make it a system parameter how many blocks after the deadline 
  the year 2038 problem; this is a bit unrelated, but can easily hit anything that
  works on a second-basis.
 
-## Parameter changes
- All parameters that are changed through a governance vote are valid starting the 
- epoch following the one the block is in that finalized the vote.
-
-## Parameters 
-	Epoch length (in seconds)
-
 # (Un)delegation
 
 A delegator can lock a token in the smart contract, which is then available for
-staking (@Danny to provide details where necessary). To this end, an Vega token
+staking. To this end, an Vega token
 (or a frction thereof) can be
 - Unlocked: The tokenholder is free to do with the token as they
 	want, but cannot delegate it
@@ -69,12 +65,8 @@ Any locked and undelegated stake can be delegated at any time by putting a
 delegation-message on the chain. However, the delegation only becomes valid 
 towards the next epoch, though it can be undone through undelegate.
 
-It is important that no action triggered on Vega needs to directly invoke the 
-ETH smart contract through the validators; thus, all actions regarding locking 
-and unlocking of stake are initiated by the ETH, not by Vega.
-
 To avoid fragmentation or spam, there is a system parameter "Minimum delegateable stake"
-that defines the smallest unit of (fractions of) tokens that can be used for delegation.
+that defines the smallest unit of (fractions of) tokens that can be used for delegation - see [Simple staking & delegating](./0059-simple-staking-and-delegating.md#network-parameters).
 
 To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
@@ -147,10 +139,6 @@ If several delegators change the delegation within the same block, some of them 
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
 block creator has the responsibility to filter out these transactions.
 
-## Parameters: 
-- `minimum_delegatable_stake`
-- `max_wanted_stake[Validator]`	
-
 ## Commands:
 ```javascript
 delegate(delegator_ID, validator_ID, amount/'all')
@@ -161,8 +149,6 @@ delegate(delegator_ID, validator_ID, amount/'all')
 undelegate(delegator_ID, validator_ID, amount/'all')
 
 undelegate_now(delegator_ID, validator_ID, amount/'all')
-	
-change_max_wanted_stake(Validator_ID)
 ```
 
 
@@ -185,3 +171,14 @@ Thus, even if the inconsistency blocks delegation related commands, the primary 
 the chain can still go on. 
 
 In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow. In later versions, we'd need a simple resync protocol (e.g., all validators put on the block what they think the parameters are; the majority of the first n-t blocks wins).
+
+# Network Parameters
+
+| Property         | Type   | Example value | Description |
+|------------------|--------| ------------|--------------|
+| `validators.epoch.length`       | String (period) |  `"1"` | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  |
+
+See the [network parameters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
+
+## Parameter changes
+All parameters that are changed through a governance vote are valid starting the epoch following the one the block is in that finalized the vote.

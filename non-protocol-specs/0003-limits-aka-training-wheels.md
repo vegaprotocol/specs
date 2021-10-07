@@ -28,27 +28,25 @@ For Sweetwater, we only require the ability to:
 3. Set a date/time before which no market creation proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
 4. Set a date/time before which no asset addition proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
 
-At genesis, Sweetwater will be started with only one asset: VEGA. As no new assets can be proposed (limit 2), only VEGA tokens can be deposited or withdrawn via the bridge.
+At genesis, Sweetwater will be started with only one asset: VEGA. As no new assets can be proposed (limit 2), only VEGA tokens can be deposited or withdrawn via the bridge. There will be no markets at genesis, and due to point 1 above, no markets can be created.
 
-### Oregon Tail
+### Sweetwater++
 
 We have identified three types of limit/control that will together achieve these aims:
 
 - Deposit limits reduce the exposure of individual participants as well as the total funds at risk
 - Withdrawal controls reduce the probability that funds acquired in error on Vega can be taken outside the control of the system before the error can be fixed
-- A system wide deposite/withdrawal stop provides the ability to buy extra time to investigate or fix any issues 
+- A system wide deposit/withdrawal stop provides the ability to buy extra time to investigate or fix any issues 
 
 
 ### Deposit limits
 
 These limits restrict the risk that can be easily taken by each participant. They can be overcome by creating multiple keypairs on Vega and the host chain, but per the principles above and given the impact of gas costs, this is not a problem.  
 
-- There will be a `maximum lifetime deposit` configured for each asset. This amount will be stored in the host chain's bridge contract system and set during the whitelisting process for adding a new asset to Vega.
-- It should be possible to amend the `maximum lifetime deposit` via a Vega governance transaction (update asset). This feature may be omitted in an MVP while the network is reset regularly.
-- Any attempt to deposit funds where `total funds deposited by sender address > maximum lifetime deposit` must be rejected.
-- Any attempt to deposit funds where `total funds deposited to receiver address > maximum lifetime deposit` must be rejected.
-
-
+- There will be a `maximum lifetime deposit` configured for each asset (as part of Vega asset proposal). This amount will be stored in the host chain's bridge contract system and set during the whitelisting process for adding a new asset to Vega.
+- It should be possible to amend the `maximum lifetime deposit` via a Vega governance transaction (update asset). This should cause Vega to create a signed bundle when the governance transaction is enacted. Someone would be expected to submit this transaction to the Ethereum chain for it to take effect.  
+- Any attempt to deposit funds where `total funds deposited by sender address > maximum lifetime deposit` must be rejected (by the Ethereum bridge contract).
+- Any attempt to deposit funds where `total funds deposited to receiver address > maximum lifetime deposit` must be rejected (by the Ethereum bridge contract).
 
 ### Withdrawal limits
 
@@ -56,11 +54,9 @@ These limits reduce the risk that someone who is able to exploit implementation 
 
 - A single `withdrawal delay period` to apply for all assets will be stored in the bridge contract system. This will default to 120 hours (5 days) and may be changed via multisig control.
 - There will be a `withdrawal delay threshold` configured for each asset. This amount will be stored in the host chain's bridge contract system and set during the whitelisting process for adding a new asset to Vega.
-- It should be possible to amend the `withdrawal delay threshold` via a Vega governance transaction (update asset). This feature may be omitted in an MVP while the network is reset regularly.
+- It should be possible to amend the `withdrawal delay threshold` via a Vega governance transaction (update asset). This should cause Vega to create a signed bundle when the governance transaction is enacted. Someone would be expected to submit this transaction to the Ethereum chain for it to take effect.  
 - Any withdrawal bundle created where `withdrawal amount > withdrawal delay threshold` will be rejected by the bridge if `time since bundle creation <= withdrawal delay period` (the bundle must therefore contain a timestamp of its creation, which must be validated by nodes before they sign the bundle)
-- An API is required to list all pending withdrawals (i.e. those that have not been executed on the bridge and have not expired) on the Vega chain across all public keys. This is required to allow the community to identify transactiosn that require withdrawals to stopped pending investigation
-- [TODO: maybe delete, see comment on PR] A quorum of validators may sign a transaction bundle which, when submitted to the bridge contract system, will halt a withdrawal with a given ID. Once a valid transaction of this type is received, any bundle with the specified ID must be rejected.
-
+- An API is required to list all pending withdrawals (i.e. those that have not been executed on the bridge) on the Vega chain across all public keys. This is required to allow the community to identify transactiosn that require withdrawals to stopped pending investigation
 
 ### Global bridge stop
 
@@ -73,15 +69,15 @@ This allows the stoppage of all deposits and withdrawals after the discovery of 
 
 ### Tooling/UI support
 
-- A simple tool is required to generate valid transactions for operating all features in this spec. This must be able to be used regardless of whether the Vega chain is running.
-- A tool to manually sign sich transactions and to create the required multisig control signature bundle from these signatures (which will be performed remotely from each other) is also required.
+- A simple tool is required to generate valid transactions for operating all features in this spec. This must be usable regardless of whether the Vega chain is running.
+- A tool to manually sign such transactions and to create the required multisig control signature bundle from these signatures (which will be performed remotely from each other) is also required.
 - Unless explicitly mentioned, Vega transactions (governance or otherwise) are **not required** and the Vega chain does not need to interact with these features directly.
 - Console should be aware of limits, delays, thresholds etc. (i.e. by querying the bridge contract system)
 
 
 ## Out of scope
 
-- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [TODO:limited network life spec](#).
+- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](0005-limited-network-life.md).
 
 
 ## Limitations

@@ -87,7 +87,8 @@ The Ethereum Bridge uses 1 network parameter, `blockchains.ethereumConfig`, a JS
 |------------------|--------| ------------|--------------|
 | `chain_id`       | String |  `"3"`        | Ethereum [Chain ID](https://eips.ethereum.org/EIPS/eip-155) to connect to 
 | `network_id`     | String |  `"3"`        | Ethereum [Network ID](https://eips.ethereum.org/EIPS/eip-155) to connect to     |
-| `bridge_address` | String | `"0xCcB517899f714BD1B2f32931fF429aDEdDd02A93"`            | The address for a deployed instance of the bridge contract |
+| `collateral_bridge_address` | String | `"0xCcB517899f714BD1B2f32931fF429aDEdDd02A93"`            | The address for a deployed instance of the bridge contract |
+| `staking_bridge_address` | Array(strings) | `["0xCcB517899f714BD1B2f32931fF429aDEdDd02A93"]`            | The addresses to listen to for [staking events](./0059-simple-staking-and-delegating.md). |
 | `confirmations`  | Integer |  `3`           | Block confirmations to wait for before confirming an action   |
 
 ### Full example

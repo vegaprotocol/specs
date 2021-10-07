@@ -127,13 +127,13 @@ Note: product definition for futures is out of scope for this ticket.
 
 ## Price monitoring parameters**
 
-Price monitoring parameters specify an array of price monitoring triggers and the associated auction durations. Each parameter contains the following fields:
+[Price monitoring (spec)](./0032-price-monitoring.md) parameters specify an array of price monitoring triggers and the associated auction durations. Each parameter contains the following fields:
 
 - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
 - `probability` - probability level used in price monitoring. Must be in the (0,1) range.
 - `auctionExtension` - auction duration (or extension in case market is already in auction mode) per breach of the `horizon`, `probability` trigger pair specified above. Must be greater than 0.
 
-See [price monitoring spec](./0032-price-monitoring.md) for details.
+An arbitrary limit of 4 price parameters can be set per market. This prevents building up a confusing set of price monitoring rules on a market. 4 was chosen as a practical limit, but could be increased should the need arise. 
 
 ----
 

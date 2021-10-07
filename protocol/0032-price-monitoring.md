@@ -1,5 +1,7 @@
 Feature name: price-monitoring
+
 Start date: 2020-04-29
+
 Specification PR: [275](https://github.com/vegaprotocol/product/pull/275)
 
 # Acceptance Criteria
@@ -10,6 +12,7 @@ Specification PR: [275](https://github.com/vegaprotocol/product/pull/275)
 - [ ] The matching engine triggers price protection auction period based on the price monitoring signal.
 - [ ] The market continues in regular fashion once price protection auction period ends.
 - [ ] Transactions are processed atomically so that the transaction which directly moved the price beyond allowed band gets processed again via price protection auction period (and no associated trades are generated prior to that period).
+- [ ] A maximum of 4 price monitoring triggers can be added per market
 
 # Summary
 
