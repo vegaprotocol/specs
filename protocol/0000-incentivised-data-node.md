@@ -63,9 +63,12 @@ Expected number of blocks is `(1/2) x 10^N`.
 - The response time must be recorded
 - These queries should be done regularly to ensure and measure liveness
 - Details:
-        Validators keep statistical information of the last 100 requests they did (mostly, median, average
-        and standard derivation. The response score of a datanode is the inverse of the standard errors.
-
+        Validators choose the datan_node they test randomly.
+        The number of tests per epoch is a governance parameter <data_node_test_frequency> set to 100 initially. The tests are spread out evenly over the
+        epoch, i.e., a test is done every <epoch_length>/<data_node_test_frequency>
+        Validators keep statistical information of reponses concerning the last 100*<number_of_data_nodes> requests (median, average
+        and standard derivation). 
+        The response score of a datanode ...
 ### Reward score formula
 
 Inputs: 
