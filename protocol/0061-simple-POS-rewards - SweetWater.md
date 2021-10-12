@@ -33,10 +33,10 @@ Functions:
 ## Distribution of Rewards
 We assume a function `total_payment()` which computes the total payment for a given epoch, as well as some resource pool from which the resources are taken; if the total_payment for a given epoch exceeds the size of the pool, then the entire pool is paid out.
 
-The total payment will then be distributed among validators and delegators following above formulas subject to `reward.staking.delegation.maxPayoutPerEpoch`. This is the maximum amount that can be distributed per that epoch even if the reward pool contains more assets. 
+The total payment will then be distributed among validators and delegators following above formulas subject to `reward.staking.delegation.maxPayoutPerEpoch`. This is the maximum amount that can be distributed per that epoch even if the reward pool contains more assets. Setting it to `0` means no cap. 
 
 Rewards are distributed after the end of an epoch with a delay set by `reward.staking.delegation.payoutDelay` and subject to `reward.staking.delegation.maxPayoutPerParticipant`. 
-The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch.
+The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Setting it to `0` means no cap. 
 
 ## Maximal Delegatable Stake
 The maximal delegatable amount of stake is supposed to prevent delegators from delegating too much to an individual validator, and is an additional measure to the economic incentive.
