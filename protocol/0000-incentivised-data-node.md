@@ -68,7 +68,7 @@ Expected number of blocks is `(1/2) x 10^N`.
         epoch, i.e., a test is done every <epoch_length>/<data_node_test_frequency>
         Validators keep statistical information of reponses concerning the last 100*<number_of_data_nodes> requests (median, average
         and standard derivation). 
-        The response score of a datanode ...
+        The response score of a datanode is computed as follows:
 ### Reward score formula
 
 Inputs: 
