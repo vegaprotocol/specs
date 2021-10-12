@@ -33,7 +33,7 @@ Functions:
 ## Distribution of Rewards
 We assume a function `total_payment()` which computes the total payment for a given epoch, as well as some resource pool from which the resources are taken; if the total_payment for a given epoch exceeds the size of the pool, then the entire pool is paid out.
 
-The total payment will then be distributed among validators and delegators following above formulas.
+The total payment will then be distributed among validators and delegators following above formulas. Furthermore, there is a network parameter `reward.staking.delegation.maxPayoutPerParticipant` which caps the reward amount. Setting that parameter to `0` results in no capping.
 
 ## Maximal Delegatable Stake
 The maximal delegatable amount of stake is supposed to prevent delegators from delegating too much to an individual validator, and is an additional measure to the economic incentive.
