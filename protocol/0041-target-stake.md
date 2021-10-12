@@ -10,7 +10,7 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 ## Definitions / Parameters used
 - **Open interest**: the volume of all open positions in a given market.
 - `target_stake_time_window` is a market parameter (with network parameter `market.stake.target.timeWindow` giving a default value) defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds.
-- Co(v)erage `target_stake_scaling_factor` is a market parameter (with network paramter `market.stake.target.scalingFactor` giving a default value) defining scaling between liquidity demand estimate based on open interest and target stake.
+- `target_stake_scaling_factor` is a market parameter (with network paramter `market.stake.target.scalingFactor` giving a default value) defining scaling between liquidity demand estimate based on open interest and target stake.
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see `0018-quant-risk-models.ipynb`. 
 - `mark_price`, see [mark price](0009-mark-price.md) spec.
 - `indicative_uncrossing_price`, see [auction](0026-auctions.md) spec.
