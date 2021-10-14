@@ -15,11 +15,11 @@ At the end of an [epoch](./0050-epochs.md), payments are calculated. This is don
 
 Variables used:
 
-- `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a governance vote (post-sweetwater).
-- `compLevel`: competitition level we want between validators (default 1.1). This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`.
+- `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.minValidators`.
+- `compLevel`: competitition level we want between validators (default 1.1). This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`. Full name: `reward.staking.delegation.competitionLevel`.
 - `num_val`: actual number of active validators. The value is derived from the environment.
 - `a`: The scaling factor; which will be `max(min_val, num_val/compLevel)`. So with `min_val` being 5, if we have 6 validators, `a` will be `max(5, 5.4545...)` or `5.4545...`. This is computed from the parameters/staking data.
-- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`.
+- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
 
 Functions:
 
@@ -33,7 +33,11 @@ Functions:
 ## Distribution of Rewards
 We assume a function `total_payment()` which computes the total payment for a given epoch, as well as some resource pool from which the resources are taken; if the total_payment for a given epoch exceeds the size of the pool, then the entire pool is paid out.
 
-The total payment will then be distributed among validators and delegators following above formulas. Furthermore, there is a network parameter `reward.staking.delegation.maxPayoutPerParticipant` which caps the reward amount. Setting that parameter to `0` results in no capping.
+The total payment will then be distributed among validators and delegators following above formulas subject to `reward.staking.delegation.maxPayoutPerEpoch`. This is the maximum amount that can be distributed per that epoch even if the reward pool contains more assets. Setting this to `0` means no cap.
+
+Rewards are distributed after the end of an epoch with a delay set by `reward.staking.delegation.payoutDelay` and subject to `reward.staking.delegation.maxPayoutPerParticipant`. 
+The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch.
+Setting this to `0` means no cap.
 
 ## Maximal Delegatable Stake
 The maximal delegatable amount of stake is supposed to prevent delegators from delegating too much to an individual validator, and is an additional measure to the economic incentive.
