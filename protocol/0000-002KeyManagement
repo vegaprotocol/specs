@@ -1,0 +1,158 @@
+Ethereum Key
+The Ethereum key is the key used to communicate with the multisig contract. It is the most
+critical key, as a compromise of n-t keys allows full access to the Vega ressources, while
+the loss of t+1 keys stops the ability to communicate with the smart contract. For this key,
+it is thus most important the HSM support is enabeled. Performance here is a smaller issue,
+as this key is used on Ethereum speed, and thus added latency is usually tolerable.
+
+Note that this key has nothing to do with the (also Ethereum) key that holds a validator's
+tokens. That key is not used in operations, and every validator can manage it as they see
+fit.
+
+As the verification of signatures done with this key is happening on the smart
+contract, in the current implementation it is also required to communicate 
+with the smart contract to deactivate of change this key; this is done
+through the add/remove multisig, so a validator cannot do this alone at this point.
+This may change if/when we switch to threshold signature.
+
+Signatures issues with the ETH key currently have no expiration for signatures, so an attack
+would be that an attacker compromises one validator, asks the HSM to sign a transaction that
+transfers all wealth to them, leaves, and then tries the same over time with other validators 
+until they get n-t shares. Thus, a resonably frequent key update woiuld be a good practice.
+(there is a way to handle this, but it'd add enourmous gas cost per validator). 
+\footnote{
+  We could time-limit the signatures, but that'd mean that if a user gets a withdrawal signed, 
+  they have to submit it fast-ish; this is not wanted (though I don't see a big issue with a time
+  limit of a week).
+  The alternative is that the individual signatures have a timestamp using the hash of
+  the last ETH block, and the block number used for the different components of the multisig
+  must be 'close to each other'; this would also prevent a pre-singing attack. This, however,
+  would add $10+ of gas cost for each validator, as now each singature would be different and
+  need to be hashed individually).
+}
+
+Disaster management procedures in case this key gets lost are currently in the works.
+
+The local management of thr ETH key is done using CLEF. This is not my area of expertise.
+
+Vega Key
+The Vega key is the identity of the validator, which other parties use to delegate; also,
+rewards go to this key, and this key is needed to retrieve the rewards. 
+
+Internally, this keu is also used to signtransfers of vega users, which requires it to be a hot
+key; it is possible though to use different keys for these two use keys, and thus keep the 
+identity key on a less connected offline storage.
+
+As this key is not required to be accesses as a low latency, there is now issue with
+storing it on a Hardware security module and/or on a remote site; the exact implementation
+of this is out of scope for this. 
+
+Key rotation is specified in https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0063-validator-vega-master-keys.md
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tendermint Key
+The Tendermint key is used to sign block and Tendermint internal messages. This is thus
+the key that protects the consensus layer, and a compromise might compromise the 
+consensus itself. The primary way that would happen is through "double signing", i.e.,
+validators sign contradicting messages with the intent to create a fork. 
+
+Each compromised key (or double signing through misconfiguration) lowersthe fault
+tolerance of the protocol. This is, if x parties double sign, t+1-x parties are
+required to halt or to create a fork. The latter is still non trivial though, as
+it requires a level of control on what honest parties communicate with each other,
+i.e., compromise of either the routing or some manipulation on the level of the gossip
+protocol.
+
+One additional risk (which holds for all keys) is that an attacker compromises a validator,
+obtains a copy of the key, and then silently goes after other validators until they get
+a critical number of keys. Thus, the lifetime of the key should be limited.
+
+As a single double-signing validator is of limited impact (since it requires t+1 to 
+pose a meaningful attack), we do not penalize or ban validators for such; thus, if
+a missconfiguration in some parallelization causes a single missigning, the damage is
+limited (if the validator in question is the leader, we lose one block; this will be
+counted against that validator in the performance measurements). An alarm should be raised
+though if
+ - a validator frequently double-signs (this is likely not malicious behehaviour of 
+   that validator, but a misconfiguratio or a leaked key; in either case, it is something
+   the validator needs to fix
+ - several validators double sign on the same block (especially on the same values). This
+   is either a systemic bug, or a cross-validator attack (though of little use to the 
+   attacker if the number is < t+1
+ - more than t+1 validators double sign. This is either a critical attack or a critical bug.
+   As the base assumption for the consensus is that less than t+1 parties act malicious, 
+   this should have drastic measures, potentially even stopping the chain for an investigation,
+   and at the minimum closing down the bridge until the cause is known.
+
+The exact measures and meaning of 'frequnelty' are still to be done.
+
+The Tenderint key is the only performance critical signing key in the Vega system. This is
+because the key needs to be used several times per block, and a slow access to the key -
+for example through remote signing or a slow HSM - can thus become the dominant perfomance
+factor for a validator. 
+
+Though direct HSM support for this key is envisioned, we want to offer an alternative for
+validators that do not have access to a fast HSM (e.g., the IBM 4768), but use a slow one
+(such as the Yubikey HSM). The basic model here is that the HSM offers certificates for
+the actual Tendermint key, which can then have a very short lifetime (e.g., 2 blocks);
+the certificates can then be signed in parallel to the running blockchain, and thus 
+do not add to latency. 
+As opposed to the other keys, these certificates have an expiry time, and keys are not 
+retired once replaced; this prevents an attacker who compromised a validator to try 
+prevent the validator from performing a key reneval and thus keep the old key valid.
+
+
+This means that an attacker who compromises a validator will be able to double-sign 
+messages for at most two blocks longer than it could with direct HSM usage. 
+
+- If t+1 validators are outright malicious, they control access to their HSM, and nothing 
+  changes
+- If some validators are compromised, the best case scenario is that they detect this latest
+  on the first double signed message and then cut access to the HSM. If the threshold of
+  malicious+compromised validators is smaller than t+1, this will not lead to a fork; other
+  wise, this could lead to a fork of lenght 2 blocks (with above parameter).
+  Given the severity of that situation (more than a third of the validators compromised), 
+
+As the certitifacion key is 'hot', i.e., needs to be reachable at any time, we also
+use another key that can be used to change the tendermint certification key 
+[Note: We could reuse a key for different keys here]. This key also can be used
+to change configuration data, such as the maximum lifetime of a certificate.
+
+
+The Key certificate looks as follows: Key Certificate
+sign(
+	"Vega_validator_tendermint_key",
+	Validator_identity,
+	Chain_restart_version,
+	sequence number
+	hash(block 0),
+	New Key Start Time
+	New Key End Time,
+	New Key Start Block,
+	New Key End Block,
+	hash(current_block)
+)
+
+Zero Values indicate that this parameter isn't used. This allows a validator to make
+a certificate either for a given time (in which case it expires with the first block
+that has a larger blocktime) or for a block height.
+Each validator can define a maximum cerfiticate lifetime, which is authenticated by
+a separate key.
+
+The certificate key can also be renewed (in case of a compromise, as this key is semi-hot
+and an attacker could sign itselfs future certificates, or one with an infinite running time.
+Current_block is used to prevent signing of too future certificates; a certificate with a start time
+more than 1 hour or 3600 blocks in the future will be rejected.)
+If two periods overlap, the newer one counts.
