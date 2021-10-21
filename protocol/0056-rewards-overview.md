@@ -114,7 +114,7 @@ For each reward pool account for the reward scheme with a non-zero balance:
 
 1. Calculate the `total_payout` either as a fixed fraction of the balance (if payout type = fraction) or as the fraction of the balance resulting from dividing the balance equally by the number of remaining periods (if payout type = balanced).
 1. Calculate the payout per eligible account by: `account_payout = total_payout * (account_scaling_factor / sum(scaling_factors)`
-1. If a per asset max amount per recipient is specified for the asset cap each eligible account's payout to the `max_amount` specified and redistribute any leftover funds between accounts receiving less than the `max_amount`. If all accounts are receiving the maximum allowable, the remaining funds will not be distributed and so remain in reward scheme account.
+1. If a per asset max amount per recipient is specified for the asset, then cap each eligible account's payout to the `max_amount` specified. The remaining funds will not be distributed and so remain in reward scheme account.
 1. If a non-zero payout delay is specified, wait for the required time before continuing to the next step
 1. Transfer the capped `account_payout` amounts calulated in the previous step to each eligible account.
 
