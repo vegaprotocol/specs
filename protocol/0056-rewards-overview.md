@@ -2,7 +2,7 @@
 
 The reward framework provides for a standardised transaction API, funding approach, and execution methodology through which to calculate and distribute financial rewards to participants in the network based on performance in a number of metrics.
 
-These rewards sit outside the core protocol as they can be created and funded arbitrarily by users of the network and will be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
+These rewards operate in addition to the main protocol economic incentives as they can be created and funded arbitrarily by users of the network and will be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
 
 Terminology:
 - **Reward Type**: a reward type is a class of reward, for instance "simple staking rewards". This specifies:
@@ -14,19 +14,17 @@ Terminology:
 Vega will initially provide built-in reward types for key types of incentives related to staking/delegation, liqudiity provision, and trading (note: only a single staking/delegation reward type is required for Sweetwater).
 
 💧 see section at bottom of file on Sweetwater scope
-
+🤠 see section at bottom on Oregon Train scope
 
 ## Reward Types
 
 Reward types will be specified in separate spec files, with each reward type specifying its applicable scope requirements, parameters, and calculation method.
 
-
 ### Applicable scope
 
 Scope defines the constraints on a reward calculation. For example, a reward type that looks at total governance token holdings may always apply network-wide (i.e. to all participants), whereas a reward looking at traded notional might be restricted to trading in a single asset (because values in two or more assets are not comparable/convertable), but could also operate on narrower scopes, for instance trades on a specific market.
 
-When defining a reward type, the specification should stake the allowable scopes for rewards schemes of that type.
-
+When defining a reward type, the specification should state the allowable scopes for rewards schemes of that type.
 
 ### Paraemters
 
@@ -35,7 +33,7 @@ A reward type may have one or more parameters that can be defined for each rewar
 
 ### Calculation method
 
-The calculation method defines the logic that is used to determine which participants are eligible for a reward and how to calculate the relative amount  distributed to each participant.
+The calculation method defines the logic that is used to determine which participants are eligible for a reward and how to calculate the relative amount distributed to each participant.
 
 The calculation method should provide a list of parties and scaling relative amounts. The relative amounts will be used to calculate the amount actuallly distributed as a share of the available pot for each reward scheme, taking into account the parameters.
 
@@ -48,6 +46,7 @@ Care must be taken when defining calculation methods to create reward calculatio
 - Should calculate, store and maintain single values rather than arbitrarily long lists (i.e. a reward calculation that maintains a running total traded volume by asset for each party over a period, rather than one that requires a list of all of a party's trades)
 - Should only need to store a maximum of one set of metrics for the reward type, as opposed to needing to store separate running metrics for each instance (therefore, differences in parameterisation or scope should take effect when using the metrics in the calculation of the rewards at period end)
 - Should try to use simple logic and maths and avoid complex calculations and logic involving looping, etc.
+- All calculations must work in the decimal data type (no floats allowed)
 - Should reuse data and metrics that are already known to the core protocol due to being used elsewhere, examples of [nearly] "free" data like this include:
   - fees collected or paid
   - cumulative order book or trading volumes
@@ -67,30 +66,30 @@ Reward schemes are created by a transaction that specifies the information descr
 - Reward type
 - Scope of reward scheme, e.g. a specific market, asset, or network wide (must be a scope compatible with the reward type)
 - Reward scheme parameters (as required for the reward type)
-- Frequency of calculation (specified as interval between payouts in seconds)
+- Frequency of calculation (specified as interval between payouts)
 - Reward scheme start date/time
 - Reward scheme end date/time (blank for never)
 - Payout type and parameters, either:
   - Fractional: try to pay a specified fraction of reward pool account balance(s) each period expressed as a decimal (`0.0 < fraction <= 1.0`).
   - Balanced: pay `X/n` out each period where `X` is the balance of the reward pool account and `n` is the number of period remaining until the end date, including the current period (only valid where the scheme has an end date)
 - Max payout per asset per recipient: optionally a list of `{asset, max_amount}` pairs. Where provided, `max_amount` limits the amount of `asset` that will be paid out to any one account during a period.
-- Payout delay: number of seconds between reward calculation and payout (may be zero)
+- Payout delay: time period between reward calculation and payout (may be zero)
 
 The transaction to create a reward scheme must either be:
 - a governance proposal including the above information; OR
-- a standard transaction accompanied by a transfer of initial funds to the reward pool
+- a standard transaction accompanied by a transfer of initial funds to the reward pool subject to per-asset minimum (based off minimum LP stake amount)
 
 Once reward is created it is assigned a reward ID, which is also used to identify the reward pool account(s) for the scheme in transfers.
 
 
 ### Spam protection
 
-Creating a reward scheme outside of govrnance must be accomanpanied by an amount of funding for the reward pool in at least one asset. At least one asset included in this funding must have an amount included greater than or equal to `reward_funding_multiple * asset.min_lp_stake` where `reward_funding_multiple` is a network parameter and `asset.min_lp_stake` is the minimum LP stake amount configured for the asset.
+Creating a reward scheme outside of governance must be accomanpanied by an amount of funding for the reward pool in at least one asset. At least one asset included in this funding must have an amount included greater than or equal to `reward_funding_multiple * asset.min_lp_stake` where `reward_funding_multiple` is a network parameter and `asset.min_lp_stake` is the minimum LP stake amount configured for the asset.
 
 
 ### Updating reward scheme parameters
 
-A Reward Scheme may be updated by the same method it was created (i.e. governance proposal or individual transaction). Updates work like network parameter changes where the parameter name is an identifier and the reward scheme ID (i.e. something like `rewards.<SCHEME_ID>`) and the values are stored as a single structured network parameter. If the reward scheme was created and is "owned by" a party and they submit an update proposal, it is automatically accepted, and a proposal to update the scheme from anyone else is automatically rejected. The following may be changed: 
+A Reward Scheme may only be updated by governance proposal. Updates work like network parameter changes where the parameter name is an identifier and the reward scheme ID (i.e. something like `rewards.<SCHEME_ID>`) and the values are stored as a single structured network parameter. The following may be changed: 
 - scheme parameters
 - scheme end date/time
 - payout type and parameters
@@ -100,13 +99,12 @@ A Reward Scheme may be updated by the same method it was created (i.e. governanc
 
 ### Cancelling reward schemes
 
-A Reward Scheme may be cancelled by the same method it was created (i.e. governance proposal or individual transaction). On cancellation, any undistributed funds in the reward pool account will be transferred to the network treasury for the asset.
+A Reward Scheme may only be cancelled by a governance proposal. On cancellation, any undistributed funds in the reward pool account will be transferred to the network treasury for the asset.
 
 
 ## Reward Pool Accounts
 
-A Reward Pool is account is created for a `{reward scheme, asset}` combination when funds are transferred to the reward scheme ID. Reward Pool Accounts do not need to be tracked by core if they have a zero balance, however APIs may be required to previously used accounts for active reward schemes even if they have a zero balance, as some reward scheme configurations will reach zero balance after each payout and be expected to be topped up, so having the account disappear from APIs/views after payouts would be strange.
-
+A Reward Pool is account created for a `{reward scheme, asset}` combination when funds are transferred to the reward scheme ID. 
 
 ## Reward Execution:
 
@@ -116,8 +114,8 @@ For each reward pool account for the reward scheme with a non-zero balance:
 
 1. Calculate the `total_payout` either as a fixed fraction of the balance (if payout type = fraction) or as the fraction of the balance resulting from dividing the balance equally by the number of remaining periods (if payout type = balanced).
 1. Calculate the payout per eligible account by: `account_payout = total_payout * (account_scaling_factor / sum(scaling_factors)`
-1. If a per asset max amount per recipient is specified for the asset cap each eligible account's payout to the `max_amount` specified and redistribute any leftover funds between accounts receiving less than the `max_amount`. If all accounts are receiving the maximum allowable, the remaining funds will not be distributed.
-1. If a non-zero payout delay is specified, wait for the number of seconds required before continuing to the next step
+1. If a per asset max amount per recipient is specified for the asset, then cap each eligible account's payout to the `max_amount` specified. The remaining funds will not be distributed and so remain in reward scheme account.
+1. If a non-zero payout delay is specified, wait for the required time before continuing to the next step
 1. Transfer the capped `account_payout` amounts calulated in the previous step to each eligible account.
 
 
@@ -125,7 +123,6 @@ For each reward pool account for the reward scheme with a non-zero balance:
 
 Sweetwater scope only requires that a single instance of the single reward function for staking and delegation is active and can accept and payout funds from [the on-chain treasury](./0058-on-chain-treasury.md).
 It is therefore not necessary to build any of the transactions or control logic that will be needed for the reward framework once trading and liquidity provision rewards exist (required for Oregon Trail). Max payout per recipient and payout delay are required for 💧.
-
 
 
 ## Acceptance criteria
@@ -157,7 +154,7 @@ It is therefore not necessary to build any of the transactions or control logic 
 
 ### 🤠 Oregon Trail (WIP)
 
-- The are more reward types
+- The are more reward types: staking and delegation, liquidity provision, trading, market creation TODO: individual specs 
 - New reward scehemes can be created, including multiple of the same type
 - Reward schemes owned and controlled by individual parties can be created as well as network owned ones created through governance
 - Funds can be sent directly to a reward pool account
