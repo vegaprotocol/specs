@@ -104,7 +104,7 @@ A Reward Scheme may only be cancelled by a governance proposal. On cancellation,
 
 ## Reward Pool Accounts
 
-A Reward Pool is account is created for a `{reward scheme, asset}` combination when funds are transferred to the reward scheme ID. 
+A Reward Pool is account created for a `{reward scheme, asset}` combination when funds are transferred to the reward scheme ID. 
 
 ## Reward Execution:
 
