@@ -1,4 +1,20 @@
-Ethereum Key
+Definitions:
+The term "key loss" usually refers to both the key becomming unavailable, and the key being obtained
+by a non-authorized party. To distinguish these two cases, we will use the term 'key loss' for the former
+(the validator looses access to the key), and 'key compromise' for the later.
+
+Ethereum Key [Staking]
+The staking Ethereum Key is the key to which the Vega tokens are tied. This key is no different
+to the key held by any other tokenholder, and is only required to be used when the vega tokens
+are moved, or when they are assiciated to a vega key. This key is not required for any operational
+aspects and thus can be as cold as possible.
+Changing this key would require to move the Vega tokes. This may not be possible due to the conditions
+of the Vesting contract for some time, so there is little mitigation for a key compromise. If the key
+gets lost, the the Vegsa tokens become unmovable (they still may generate interest through the Vega key 
+though).
+TODO: Verify that it is correct that a Vega key can pay its reward to a different ETH key than the one it's associated with.
+
+Ethereum Key [MultiSig]
 The Ethereum key is the key used to communicate with the multisig contract. It is the most
 critical key, as a compromise of n-t keys allows full access to the Vega ressources, while
 the loss of t+1 keys stops the ability to communicate with the smart contract. For this key,
@@ -33,9 +49,9 @@ until they get n-t shares. Thus, a resonably frequent key update woiuld be a goo
 
 Disaster management procedures in case this key gets lost are currently in the works.
 
-The local management of thr ETH key is done using CLEF. This is not my area of expertise.
+The local management of thr ETH key is done using CLEF. Details of this are specified elsewhere.
 
-Vega Key
+Vega Key [Identity]
 The Vega key is the identity of the validator, which other parties use to delegate; also,
 rewards go to this key, and this key is needed to retrieve the rewards. 
 
@@ -49,16 +65,19 @@ of this is out of scope for this.
 
 Key rotation is specified in https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0063-validator-vega-master-keys.md
 
+Vega Key [Event-Forwarder]
+This key (which may be the same of the above one) is used by the event forwarder to authorize events seen on a vega bridge (at this 
+point, only Ethereum). This key is a hot key, and is constantly used in operations. However, as events signed with this key come
+in at Ethereum speed, the latency in accessing this key is of little relevance, and it can easily stay in a remote signer or an HSM.
 
+Loss of this key is (in prionciple) easy to mitigate, though this functionality is not implemented yet; the same master key that is
+used for the Vega Identity key could also authorize a new event forwarder key.
 
-
-
-
-
-
-
-
-
+Compromise of this key is only critical if a significant number of keys are compromised (i.e., 2/3); in this case, it is possible to
+authorize non-existing events. Though this is not done yet, such an occurence is easy to detect, and validators are recommended to stop the chain
+to recover if that happens. 
+In the future (i.e., before serious trading happens), this key should be stored in an HSM, and it should be a good policy to frequently 
+update it. The mechanism to this end is the same as for the other vega key specified in the document above.
 
 
 
@@ -83,7 +102,9 @@ As a single double-signing validator is of limited impact (since it requires t+1
 pose a meaningful attack), we do not penalize or ban validators for such; thus, if
 a missconfiguration in some parallelization causes a single missigning, the damage is
 limited (if the validator in question is the leader, we lose one block; this will be
-counted against that validator in the performance measurements). An alarm should be raised
+counted against that validator in the performance measurements). This allows validators
+to have a less strict double signing protection (and as seen in the testnet, a strict
+one can cause a validator failure due to wrongly blocking key accerss). An alarm should be raised
 though if
  - a validator frequently double-signs (this is likely not malicious behehaviour of 
    that validator, but a misconfiguratio or a leaked key; in either case, it is something
@@ -156,3 +177,35 @@ and an attacker could sign itselfs future certificates, or one with an infinite 
 Current_block is used to prevent signing of too future certificates; a certificate with a start time
 more than 1 hour or 3600 blocks in the future will be rejected.)
 If two periods overlap, the newer one counts.
+
+
+
+
+Key Abuse Monitoring
+A number of events that involve bad keys are easy to detect and can be mitigated with limited damage if this is done so in 
+an early stage. To this end, a monitoring functionallity is required. 
+Stopping the chain primarily means to (idealy physically) stopp all access to the ETH multisig key, and to stop the 
+Tendermint protocol. In case of a malicious intrusion, it is (in theory) possible that an attacker can keep the
+chain going; the damage caused by this can be limited though as long as the attacker has no access to the multisig keys.
+
+- Double Signing
+	Every double signing with a Tendermint key should be logged. If a validator repeatedly double signs, this indicates
+	a misconfiguration, and the validator in question should rais an alarm (as should the others to make sure the
+	affected party is motivated to resolve their issues).
+	Coordinated double signing by more than one party indicated either a structural issue or an attack. If more than 1/3
+	of the validators double-sign the same block, it is possible to crearte a fork. In this case, the chain should be stopped
+	and a thorough investigation should be done. 
+	Intermediate issues (such as two parties double-signing a block) should trigger an investigation, but at this point does
+	not require any immediate action.
+- False Event Forwarding
+	If a non-existing Ethereum event is signed by 2/3 of the validators, the chain should be stopped immediatelly, and all
+	validators should change all keys and assume a full compromise of their systems.
+	A single wrong signature on an event should trigger an investigation, as this is a rather unlikely bug to happen, but
+	also a pretty ineffective attack.
+- Wrong Multisigs
+	If is possible to detect (some) wrong interactins with the smart contract, e.g., giving a party more assets than they own, or
+	failing to reduce the vega assets according to the vega chain. If this happens, the chain should be stopped immediatelly.
+	A single validator issuing a wrong signature on the multisig contract indicates a serious bug or malice. This should trigger
+	an immediate investigation, but not a stopp of the chain right away (as that would be an efficient DoS). It might be a consideration
+	to temporarily suspend payouts in such a case until the cause of the issue is identified.
+
