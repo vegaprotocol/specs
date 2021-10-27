@@ -152,6 +152,8 @@ This will also leave some delegators that have delegated to a non-existing valid
 is to simply declare all their stake undelegated (if they delegated to a bad validators, their problem).
 This means we also need to test how the formulars react to changing numbers of validators.
 
+Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted propotionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calcualte first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is gurarnteed to be less than or equal to the available un-nominated association. 
+
 # Network Parameters
 
 | Property         | Type   | Example value | Description |
@@ -193,6 +195,7 @@ See the [network paramters spec](./0054-network-parameters.md#current-network-pa
 - Removal of delegation may happen in the following 2 ways:
   - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator).
   - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the onchain treasury account for that asset.
+- Every 30 seconds (and at the end of an epoch) the associated stake is reconciled against the current nomination to ensure that the total nomination is not exceeding the total association. In case it does we proportionally un-nominate from the validators until the nomination is not exceeding the association. It's worth mentioning that this only affects the balance of the current epoch - we don't attempt to reconcile the balance for the next epoch until the epoch ends, so if for example the party had an association of a 100 tokens, then they requested to nominate 100 tokens to validator1, their balance for the next epoch would remain 100 until the end of the epoch even if they immediately dissociate the 100 tokens. 
 
 ### Changing delegation
 - Changing the validator to whom a participant wants to validate to involves:
