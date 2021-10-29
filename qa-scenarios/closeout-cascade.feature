@@ -1,5 +1,10 @@
 Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/files)
-
+# This is a test case to demonstrate that closeout cascase does NOT happen. In this test case, trader3 gets closed
+# out first after buying volumn 50 at price 100, and then trader3's position is sold to the network while trader2 got the position 
+# for volumne 50 price 50 (which is what availabe on the order book)
+# At this moment, trader2 is under margin but the fuse breaks (if the mark price is actually updated from 100 to 50)
+# however, the design of the system is like a fuse and circuit breaker, the mark price will NOT update, so trader2 will not be closed out
+# Till a new trade happens, and new mark price is set
   Background:
 
     And the margin calculator named "margin-calculator-1":
@@ -72,6 +77,7 @@ Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/file
       | auxiliary2| ETH/DEC19 | buy  | 50    | 10    | 0                | TYPE_LIMIT | TIF_GTC | sell-provider-1|
 
     And the mark price should be "100" for the market "ETH/DEC19"
+
     # trader3 got close-out, trader3's order has been sold to network, and then trader2 bought the order from the network 
     # as it had the highest buy price 
     And the following trades should be executed:
@@ -93,7 +99,8 @@ Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/file
       | trader2 | 50     | 2500           | -2400        |
       | trader3 | 0      | 0              | -100         |
 
-    # check trader2 margin level, trader2 is not close-out yet, but trader2 does not have enough margin 
+    # check trader2 margin level, trader2 is not close-out yet since new mark price is not updated
+    # eventhough  trader2 does not have enough margin 
 
     Then the parties should have the following account balances:
       | party  | asset | market id | margin   | general |
@@ -102,7 +109,7 @@ Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/file
       | auxiliary1 | BTC   | ETH/DEC19 | 109400    | 999999889700     |
       | auxiliary2 | BTC   | ETH/DEC19 | 3200      | 999999997700     |
      
-    # setup new markprice, which is the same as when trader2 traded with network
+    # setup new mark price, which is the same as when trader2 traded with network
     Then the parties place the following orders:
       | party     | market id | side | volume | price  | resulting trades| type       | tif     | reference |
       | auxiliary2| ETH/DEC19 | buy  | 10     | 50     | 0               | TYPE_LIMIT | TIF_GTC | aux-b-1   |
