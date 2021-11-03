@@ -72,7 +72,7 @@ message Undelegate {
 
 Where `Delegate` adds the `Amount` to the delegation of validator `Val` at the biginning of the next epoch (if still available to them), and `Undelegate` subtracts the amount from the delegation of `Val` by the next epoch if available.
 
-To avoid fragmentation or spam, there is a system parameter `minimum delegateable stake` that defines the smallest unit of (fractions of) tokens that can be used for delegation.
+To avoid fragmentation or spam, there is a network parameter `minimum delegateable stake` that defines the smallest unit of (fractions of) tokens that can be used for delegation.
 
 To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
