@@ -1,93 +1,91 @@
-Definitions:
+# Key Management
+
+## Definitions:
 The term "key loss" usually refers to both the key becomming unavailable, and the key being obtained
 by a non-authorized party. To distinguish these two cases, we will use the term 'key loss' for the former
 (the validator looses access to the key), and 'key compromise' for the later.
 
-Ethereum Key [Staking]
-The staking Ethereum Key is the key to which the Vega tokens are tied. This key is no different
-to the key held by any other tokenholder, and is only required to be used when the vega tokens
-are moved, or when they are assiciated to a vega key. This key is not required for any operational
-aspects and thus can be as cold as possible.
-Changing this key would require to move the Vega tokes. This may not be possible due to the conditions
-of the Vesting contract for some time, so there is little mitigation for a key compromise. If the key
-gets lost, the the Vegsa tokens become unmovable (they still may generate interest through the Vega key 
-though).
-TODO: Verify that it is correct that a Vega key can pay its reward to a different ETH key than the one it's associated with.
+## Keys
 
-Ethereum Key [MultiSig]
-The Ethereum key is the key used to communicate with the multisig contract. It is the most
-critical key, as a compromise of n-t keys allows full access to the Vega ressources, while
-the loss of t+1 keys stops the ability to communicate with the smart contract. For this key,
-it is thus most important the HSM support is enabeled. Performance here is a smaller issue,
-as this key is used on Ethereum speed, and thus added latency is usually tolerable.
+### Ethereum Key [Staking]
+The staking Ethereum Key is the key to which the Vega ERC20 tokens are tied. This key is no different
+to the key held by any other tokenholder or indeed any participant on the Ethereum blockchain. 
+It is only required to move the vega tokens to another Ethereum address (public key) or to assiciate the tokens 
+to a Vega key. 
 
-Note that this key has nothing to do with the (also Ethereum) key that holds a validator's
-tokens. That key is not used in operations, and every validator can manage it as they see
-fit.
+Once the association to a Vega key is finished this key is not required and thus can be kept in cold storage. 
+"Changing" this key would require the holder to move the Vega tokes to another public key they control. 
+This is not possible for Vega tokens held by the vesting contract. If this key
+gets lost, the the Vegsa tokens become unmovable. If they have previously been associated to a Vega key 
+then they keep generating staking income. The Vega key can be used on the Vega network to withdraw staking rewards
+from the Vega general account to any Ethereum address (specified during submission of the withdrawal transaction). 
 
-As the verification of signatures done with this key is happening on the smart
+### Ethereum Key [MultiSig]
+The Ethereum key is the key used to communicate with the multisig contract. 
+This is *the most critical key*, as a compromise of n-t keys allows full access to the ERC20 tokens 
+held by the Vega multisig contract (network treasury, all parties staking rewards, all collateral assets). 
+The loss of t+1 keys stops the ability of the validators (multisig signers) to use the smart contract (add / remove signers, approve withdrawals). 
+
+For this key, it is thus most important the HSM support is enabled. Signing latency here is a non-issue issue,
+as this key is used on Ethereum speed, and thus added latency is easily tolerable.
+
+Note that this key has nothing to do with the "Ethereum Key [staking]" that holds a validator's
+Vega ERC20 tokens they use for staking and self-delegation. 
+
+As the verification of signatures done with this key is happening on the Ethereum MultiSig smart
 contract, in the current implementation it is also required to communicate 
-with the smart contract to deactivate of change this key; this is done
-through the add/remove multisig, so a validator cannot do this alone at this point.
-This may change if/when we switch to threshold signature.
+with the smart contract to deactivate or change this key; this is done
+through the add/remove calls to the multisig contract, so a validator cannot do this alone at this point.
 
-Signatures issues with the ETH key currently have no expiration for signatures, so an attack
-would be that an attacker compromises one validator, asks the HSM to sign a transaction that
-transfers all wealth to them, leaves, and then tries the same over time with other validators 
-until they get n-t shares. Thus, a resonably frequent key update woiuld be a good practice.
-(there is a way to handle this, but it'd add enourmous gas cost per validator). 
-\footnote{
-  We could time-limit the signatures, but that'd mean that if a user gets a withdrawal signed, 
-  they have to submit it fast-ish; this is not wanted (though I don't see a big issue with a time
-  limit of a week).
-  The alternative is that the individual signatures have a timestamp using the hash of
-  the last ETH block, and the block number used for the different components of the multisig
-  must be 'close to each other'; this would also prevent a pre-singing attack. This, however,
-  would add $10+ of gas cost for each validator, as now each singature would be different and
-  need to be hashed individually).
-}
+Signatures issued by the ETH key currently have no expiration for signatures. Thus a possible attack could run as follows: 
+1) an attacker compromises one validator, asks the HSM to sign a transaction that
+transfers all assets to an address of their choice, leaves that validator. 
+Of course one signature isn't enough to transfer the assets. 
+2) Repeat the same over time with other validators. 
+3) Now they have n-t signatures and at this point they can withdraw all Ethereum assets controlled by the 
+MultiSig contract.
+
+Hence, a resonably frequent key update would constitute good practice. 
+Adding and removing an ethereum key from the MultiSig contract incurs gas costs to all the validators,
+not just the one switching the key.(*) 
 
 Disaster management procedures in case this key gets lost are currently in the works.
 
-The local management of thr ETH key is done using CLEF. Details of this are specified elsewhere.
+The local management of the ETH key is done using CLEF. Details of this are specified elsewhere.
 
-Vega Key [Identity]
-The Vega key is the identity of the validator, which other parties use to delegate; also,
-rewards go to this key, and this key is needed to retrieve the rewards. 
+### Vega Key [Identity]
 
-Internally, this keu is also used to signtransfers of vega users, which requires it to be a hot
-key; it is possible though to use different keys for these two use keys, and thus keep the 
-identity key on a less connected offline storage.
+This key is split into master and hot key as specified in https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0063-validator-vega-master-keys.md . 
 
-As this key is not required to be accesses as a low latency, there is now issue with
-storing it on a Hardware security module and/or on a remote site; the exact implementation
-of this is out of scope for this. 
+It is possible to update the hot key at network restarts. The master key can be kept in cold storage
+and only used to sign the update transaction. 
 
-Key rotation is specified in https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0063-validator-vega-master-keys.md
+The master Vega key is the identity of the validator, which other parties use to delegate. 
+Staking rewards go to the general account on Vega controlled by a hot key generated from the 
+master key. The Vega identity hot key is needed to retrieve the rewards. 
 
-Vega Key [Event-Forwarder]
-This key (which may be the same of the above one) is used by the event forwarder to authorize events seen on a vega bridge (at this 
-point, only Ethereum). This key is a hot key, and is constantly used in operations. However, as events signed with this key come
-in at Ethereum speed, the latency in accessing this key is of little relevance, and it can easily stay in a remote signer or an HSM.
+The hot key needs to be signing many transactions with low latency. Hence storing it on a hardware security module and/or on a remote site is problematic; the exact implementation of this is out of scope for this. 
 
-Loss of this key is (in prionciple) easy to mitigate, though this functionality is not implemented yet; the same master key that is
-used for the Vega Identity key could also authorize a new event forwarder key.
+### Vega Key [Event-Forwarder]
+This key (which may be the same of the above one) is used by the event forwarder to authorize events seen on  Vega bridge contracts (at this 
+point, only Ethereum, ERC20, staking and vesting contracts). 
+This key is a hot key, and is constantly used in operations. 
+However, as events signed with this key come in at Ethereum speed, the latency in accessing this key is of little relevance, and it can easily stay in a remote signer or an HSM.
 
-Compromise of this key is only critical if a significant number of keys are compromised (i.e., 2/3); in this case, it is possible to
-authorize non-existing events. Though this is not done yet, such an occurence is easy to detect, and validators are recommended to stop the chain
-to recover if that happens. 
-In the future (i.e., before serious trading happens), this key should be stored in an HSM, and it should be a good policy to frequently 
-update it. The mechanism to this end is the same as for the other vega key specified in the document above.
+Loss of this key is (in prionciple) easy to mitigate, though this functionality is not implemented yet; the same master key that is used for the Vega Identity key could also authorize a new event forwarder key.
+
+Compromise of this key is only critical if a significant number of keys are compromised (i.e., 2/3); in this case, it is possible to authorize non-existing events on the Vega chain. 
+Though this is not done yet, such an occurence is easy to detect, and validators are recommended to stop the chain to recover if that happens. 
+In the future (i.e., before serious trading happens), this key should be stored in an HSM, and it should be a good policy to frequently update it. The mechanism to this end is the same as for the other vega key specified in the document above.
 
 
-
-Tendermint Key
+### Tendermint Key
 The Tendermint key is used to sign block and Tendermint internal messages. This is thus
 the key that protects the consensus layer, and a compromise might compromise the 
 consensus itself. The primary way that would happen is through "double signing", i.e.,
 validators sign contradicting messages with the intent to create a fork. 
 
-Each compromised key (or double signing through misconfiguration) lowersthe fault
+Each compromised key (or double signing through misconfiguration) lowers the fault
 tolerance of the protocol. This is, if x parties double sign, t+1-x parties are
 required to halt or to create a fork. The latter is still non trivial though, as
 it requires a level of control on what honest parties communicate with each other,
@@ -103,19 +101,20 @@ pose a meaningful attack), we do not penalize or ban validators for such; thus, 
 a missconfiguration in some parallelization causes a single missigning, the damage is
 limited (if the validator in question is the leader, we lose one block; this will be
 counted against that validator in the performance measurements). This allows validators
-to have a less strict double signing protection (and as seen in the testnet, a strict
-one can cause a validator failure due to wrongly blocking key accerss). An alarm should be raised
-though if
- - a validator frequently double-signs (this is likely not malicious behehaviour of 
+to have a less strict double signing protection (and as seen in the testnet, too strict
+double-signing protection can cause a validator failure due to wrongly blocking key access). 
+
+An alarm should be raised if
+- a validator frequently double-signs (this is likely not malicious behehaviour of 
    that validator, but a misconfiguratio or a leaked key; in either case, it is something
    the validator needs to fix
- - several validators double sign on the same block (especially on the same values). This
+- several validators double sign on the same block (especially on the same values). This
    is either a systemic bug, or a cross-validator attack (though of little use to the 
    attacker if the number is < t+1
- - more than t+1 validators double sign. This is either a critical attack or a critical bug.
+- more than t+1 validators double sign. This is either a critical attack or a critical bug.
    As the base assumption for the consensus is that less than t+1 parties act malicious, 
-   this should have drastic measures, potentially even stopping the chain for an investigation,
-   and at the minimum closing down the bridge until the cause is known.
+   this should prompt drastic measures, potentially even stopping the chain for an investigation,
+   and at the minimum closing down the MultiSig bridge until the cause is known.
 
 The exact measures and meaning of 'frequnelty' are still to be done.
 
@@ -126,14 +125,15 @@ factor for a validator.
 
 Though direct HSM support for this key is envisioned, we want to offer an alternative for
 validators that do not have access to a fast HSM (e.g., the IBM 4768), but use a slow one
-(such as the Yubikey HSM). The basic model here is that the HSM offers certificates for
+(such as the Yubikey HSM). 
+
+The proposed model here is that the HSM offers certificates for
 the actual Tendermint key, which can then have a very short lifetime (e.g., 2 blocks);
 the certificates can then be signed in parallel to the running blockchain, and thus 
 do not add to latency. 
 As opposed to the other keys, these certificates have an expiry time, and keys are not 
 retired once replaced; this prevents an attacker who compromised a validator to try 
 prevent the validator from performing a key reneval and thus keep the old key valid.
-
 
 This means that an attacker who compromises a validator will be able to double-sign 
 messages for at most two blocks longer than it could with direct HSM usage. 
@@ -150,7 +150,6 @@ As the certitifacion key is 'hot', i.e., needs to be reachable at any time, we a
 use another key that can be used to change the tendermint certification key 
 [Note: We could reuse a key for different keys here]. This key also can be used
 to change configuration data, such as the maximum lifetime of a certificate.
-
 
 The Key certificate looks as follows: Key Certificate
 sign(
@@ -179,13 +178,12 @@ more than 1 hour or 3600 blocks in the future will be rejected.)
 If two periods overlap, the newer one counts.
 
 
+## Key Abuse Monitoring
+A number of events that involve bad keys are easy to detect and can be mitigated with limited damage if this is done so in an early stage. To this end, a monitoring functionallity is required. 
 
+Stopping the chain primarily means to (idealy physically) stop all access to the ETH multisig key, and to stop the Tendermint protocol. 
 
-Key Abuse Monitoring
-A number of events that involve bad keys are easy to detect and can be mitigated with limited damage if this is done so in 
-an early stage. To this end, a monitoring functionallity is required. 
-Stopping the chain primarily means to (idealy physically) stopp all access to the ETH multisig key, and to stop the 
-Tendermint protocol. In case of a malicious intrusion, it is (in theory) possible that an attacker can keep the
+In case of a malicious intrusion, it is (in theory) possible that an attacker can keep the
 chain going; the damage caused by this can be limited though as long as the attacker has no access to the multisig keys.
 
 - Double Signing
@@ -209,3 +207,14 @@ chain going; the damage caused by this can be limited though as long as the atta
 	an immediate investigation, but not a stopp of the chain right away (as that would be an efficient DoS). It might be a consideration
 	to temporarily suspend payouts in such a case until the cause of the issue is identified.
 
+
+#### Footnotes
+
+(*) We could time-limit the signatures, but that'd mean that if a user gets a withdrawal signed, 
+they have to submit it fast-ish; this is not wanted (though I don't see a big issue with a time
+limit of a week).
+The alternative is that the individual signatures have a timestamp using the hash of
+the last ETH block, and the block number used for the different components of the multisig
+must be 'close to each other'; this would also prevent a pre-singing attack. This, however,
+would add $10+ of gas cost for each validator, as now each singature would be different and
+need to be hashed individually).
