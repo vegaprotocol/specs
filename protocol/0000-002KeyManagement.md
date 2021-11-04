@@ -5,6 +5,10 @@ The term "key loss" usually refers to both the key becomming unavailable, and th
 by a non-authorized party. To distinguish these two cases, we will use the term 'key loss' for the former
 (the validator looses access to the key), and 'key compromise' for the later.
 
+For all thresholds, we assume n validators, up to t of them may be malicious. At this point, we do not
+take into account validator weights; this will change eventually for the Tendermint key, at which 
+point we will have a total weight of n with up to t weight being tolerated to be corrupted.
+
 ## Keys
 
 ### Ethereum Key [Staking]
@@ -49,9 +53,15 @@ Hence, a resonably frequent key update would constitute good practice.
 Adding and removing an ethereum key from the MultiSig contract incurs gas costs to all the validators,
 not just the one switching the key.(*) 
 
-Disaster management procedures in case this key gets lost are currently in the works.
-
 The local management of the ETH key is done using CLEF. Details of this are specified elsewhere.
+
+## Future Features
+Better disaster management procedures in case this key gets lost are currently in the works. Especially, we're
+currently looking into integrating threshold signatures, which can allow Validators to be removed, added
+or change their keys without any interaction with the smart contract - the main issue here is the asynchrony
+and assuring we generate a Ethereum native signature.
+
+
 
 ### Vega Key [Identity]
 
@@ -72,12 +82,15 @@ point, only Ethereum, ERC20, staking and vesting contracts).
 This key is a hot key, and is constantly used in operations. 
 However, as events signed with this key come in at Ethereum speed, the latency in accessing this key is of little relevance, and it can easily stay in a remote signer or an HSM.
 
-Loss of this key is (in prionciple) easy to mitigate, though this functionality is not implemented yet; the same master key that is used for the Vega Identity key could also authorize a new event forwarder key.
+
 
 Compromise of this key is only critical if a significant number of keys are compromised (i.e., 2/3); in this case, it is possible to authorize non-existing events on the Vega chain. 
-Though this is not done yet, such an occurence is easy to detect, and validators are recommended to stop the chain to recover if that happens. 
+
+## Future Features
+THough is not done yet, the authorisatiojn on non-events is easy to detect, and validators are recommended to stop the chain to recover if that happens. 
 In the future (i.e., before serious trading happens), this key should be stored in an HSM, and it should be a good policy to frequently update it. The mechanism to this end is the same as for the other vega key specified in the document above.
 
+Loss of this key is (in principle) easy to mitigate, though this functionality is not implemented yet; the same master key that is used for the Vega Identity key could also authorize a new event forwarder key.
 
 ### Tendermint Key
 The Tendermint key is used to sign block and Tendermint internal messages. This is thus
@@ -104,6 +117,7 @@ counted against that validator in the performance measurements). This allows val
 to have a less strict double signing protection (and as seen in the testnet, too strict
 double-signing protection can cause a validator failure due to wrongly blocking key access). 
 
+##Future Features
 An alarm should be raised if
 - a validator frequently double-signs (this is likely not malicious behehaviour of 
    that validator, but a misconfiguratio or a leaked key; in either case, it is something
@@ -116,7 +130,7 @@ An alarm should be raised if
    this should prompt drastic measures, potentially even stopping the chain for an investigation,
    and at the minimum closing down the MultiSig bridge until the cause is known.
 
-The exact measures and meaning of 'frequnelty' are still to be done.
+The exact measures and meaning of 'frequently' are still to be done.
 
 The Tenderint key is the only performance critical signing key in the Vega system. This is
 because the key needs to be used several times per block, and a slow access to the key -
@@ -178,7 +192,7 @@ more than 1 hour or 3600 blocks in the future will be rejected.)
 If two periods overlap, the newer one counts.
 
 
-## Key Abuse Monitoring
+### More Future Features: Key Abuse Monitoring
 A number of events that involve bad keys are easy to detect and can be mitigated with limited damage if this is done so in an early stage. To this end, a monitoring functionallity is required. 
 
 Stopping the chain primarily means to (idealy physically) stop all access to the ETH multisig key, and to stop the Tendermint protocol. 
