@@ -66,6 +66,13 @@ This allows the stoppage of all deposits and withdrawals after the discovery of 
 - Similarly, a quorum of validators may sign a transaction bundle which, when submitted to the bridge contract system, will resume deposits and withdrawals by assigning a bridge contract to the pool again. This may be the original bridge contract or, if it was the source of the problem, an alternative bridge contract that may be deployed with fixes.
 - Note that this entire feature is understood to be existing functionality of the bridge contract system and should require no new development other than that described in the "Tooling/UI support" section below.
 
+### Deposit Limit Exemptions
+
+This allows for the listing of specific Ethereum addresses to be able to deposit more than the lifetime limit for the asset. This is primarily for liquidity providers and rewards.
+
+- A single ETH address (not validators) can list/delist liquidity and reward provider Ethereum addresses.
+- Validators, through MultisigControl can change the address that can list/delist liquidity/rewards providers.
+- A listed liquidity/rewards provider can deposit as normal, bypassing deposit limits.
 
 ### Tooling/UI support
 
