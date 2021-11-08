@@ -26,14 +26,6 @@ Basically, we don't want core to waste CPU cycles on signature verification in c
 It must be possible to launch a data node alongside this and record everything that data node is normally able to record. 
 It must be possible to record event bus events.
 
-## CLI support
-
-There is a command line tool to launch vega with null blockchain, data node and any other processes needed for this functioning. 
-It will should have the following command line options:
-
-- genesis config file
-- current time (optional, if wanted to be different from wall time)
-- event bus output file
 
 ## API Support
 
