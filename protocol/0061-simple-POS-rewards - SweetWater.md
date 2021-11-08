@@ -6,7 +6,7 @@ This describes the SweetWater requirements for calculation and distribution of r
 1. `numberOfValidators` - the actual number of validators running the consensus (derived from running chain)
 1. `totalStake` - the total number of units of the staking and governance asset (VEGA) associated to the Vega chain (but not necessarily delegated to a specific validator).
 1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
-1. `optimalStakeMultiplier` - another network parameter which together control how much the validators "compete" for delegated stake. 
+1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake. 
 1. `reward.staking.delegation.payoutDelay` - the time betweeen the end of epoch (when the rewards are calculated)  
 
 ### Other network parameters: 
@@ -14,7 +14,6 @@ This describes the SweetWater requirements for calculation and distribution of r
 - `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
 
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
-
 
 # Calculation
 At the end of an [epoch](./0050-epochs.md), payments are calculated. First we determine the amount to pay out during that epoch: 
@@ -47,13 +46,12 @@ Rewards are distributed after the end of an epoch with a delay set by `reward.st
 
 This is defined as follows: 
 ```
-function validatorScore(valStake, numberOfValidators, s_total, s_compLevel) {
-  s_numVal = numberOfValidators 
+function validatorScore(valStake) { 
   a = Math.max(s_minVal, s_numVal/s_compLevel)
   optStake = s_total / a
   
-  penaltyFlatAmt = Math.max(0.0, valStake-optStakeMultFlat*optStake)
-  penaltyDownAmt = Math.max(0.0, valStake-optStakeMultDown*optStake)
+  penaltyFlatAmt = Math.max(0.0, valStake - optStake)
+  penaltyDownAmt = Math.max(0.0, valStake - optimalStakeMultiplier*optStake)
   linearScore = (valStake - penaltyFlatAmt - penaltyDownAmt)/s_total
 
   // make sure we're between 0 and 1.
