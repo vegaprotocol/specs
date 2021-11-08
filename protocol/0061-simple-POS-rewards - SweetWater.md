@@ -1,60 +1,62 @@
 # Validator and Staking POS Rewards
 This describes the SweetWater requirements for calculation and distribution of rewards to delegators and validators. For more information on the overall approach, please see the relevant research document.
 
-## Calculation
+### Network parameters used for `score_val` calculation:
+1. `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.minValidators`.
+1. `numberOfValidators` - the actual number of validators running the consensus (derived from running chain)
+1. `totalStake` - the total number of units of the staking and governance asset (VEGA) associated to the Vega chain (but not necessarily delegated to a specific validator).
+1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
+1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake. 
+1. `reward.staking.delegation.payoutDelay` - the time betweeen the end of epoch (when the rewards are calculated)  
 
-At the end of an [epoch](./0050-epochs.md), payments are calculated. This is done per active validator:
-
-* First, `score_val(stake_val)` calculates the relative weight of the validator given the stake it represents.
-* For each delegator that delegated to that validator, `score_del` is computed: `score_del(stake_del, stake_val)` where `stake_del` is the stake of that delegator, delegated to the validator, and `stake_val` is the stake that validator represents.
-* The fraction of the total available reward a validator gets is then `score_val(stake_val) / total_score` where `total_score` is the sum of all scores achieved by the validators. The fraction a delegator gets is calculated accordingly.
-* Finally, the total reward for a validator is computed, and their delegator fee subtracted and divided among the delegators.
-* If the validator (or, the associated key) does not have sufficient stake (at least the network parameter `min_own_stake`), then the reward (both the validator and self-delegation component) is set to zero. The corresponding amount is kept by the network, not distributed among the other validators. Note this only applies to the part of the reward attributable directly to such a validator, its delegators should still receive their rewards. If a validator delegates amount below `min_own_stake` to a different validator then the reward associated with that delegation will be paid out just like for any other delegator.
+### Other network parameters: 
+- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
+- `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
 
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
 
-Variables used:
+# Calculation
+At the end of an [epoch](./0050-epochs.md), payments are calculated. First we determine the amount to pay out during that epoch: 
+1. multiply the amount in the reward pool by `reward.staking.delegation.payoutFraction`; this is the amount going into next step, call it `stakingRewardAmtForEpoch`.
+1. The `stakingRewardAmtForEpoch` is updated to `max(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
 
-- `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.minValidators`.
-- `compLevel`: competitition level we want between validators (default 1.1). This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`. Full name: `reward.staking.delegation.competitionLevel`.
-- `num_val`: actual number of active validators. The value is derived from the environment.
-- `a`: The scaling factor; which will be `max(min_val, num_val/compLevel)`. So with `min_val` being 5, if we have 6 validators, `a` will be `max(5, 5.4545...)` or `5.4545...`. This is computed from the parameters/staking data.
-- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
+## For each validator we then do:
+1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is  both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`. 
+Here `allDelegatedTokens` is the count of the tokes delegated to this validator. 
+Note `validatorScore` also depends on the other network parameters, see below where the exact `validatorScore` function is defined.  
+1. The fraction of the total available reward that goes to a validator (some of this will be theirs to keep, some is for their delegators) is then `valAmt := stakingRewardAmtForEpoch x (1 - delegatorShare) x validatorScore / sumAllValidatorScores` where `sumAllValidatorScores` is the sum of all scores achieved by the validators. Note that this is subject to `min_own_stake` and to `reward.staking.delegation.maxPayoutPerParticipant` (see below).
+1. The amount to be distributed among all the parties that delegated to this validator is `allDelegatorsAmt := stakingRewardAmtForEpoch x delegatorShare x score_val / total_score`.  
 
-Functions:
+### For each delegator that delegated to this validator
+Each delegator should now recieve `delegatorTokens / (allDelegatedTokens + validatorsOwnTokens)`. 
+Note that this is subject to `reward.staking.delegation.maxPayoutPerParticipant`, see below. 
 
-- `score_val(stake_val)`: `min(stake_val, 1/a), where totalstake is the total number of staked tokens. This function assumes that the stake is normalized, i.e., the sum of stake_val for all validators equals 1. If this is not the case, 
-  stake_val needs to be replaced by stake_val/total_stake, where total_stake is the sum of stake_val over all validators.
-- `score_del(stake_del, stake_val)`: for now, this will just return `stake_del`, but will be replaced with a more complex formula later on, which deserves independent testing.
-- `delegator_reward(stake_val)`: `stake_val * delegator_share`. Long term, there will be bonuses in addition to the reward.
+### Minimum validator stake 
+If the validator (i.e. the associated key) does not have sufficient stake self-delegated (at least the network parameter `min_own_stake`), then the reward for the validator is set to zero. The corresponding amount is kept by the network, not distributed among the other validators. Note this only applies to the part of the reward attributable directly to such a validator, its delegators should still receive their rewards. If a Vega key which defines a validator delegates any amount to a different validator then the reward associated with that delegation will be paid out just like for any other delegator.
 
-
-
-## Distribution of Rewards
-We assume a function `total_payment()` which computes the total payment for a given epoch, as well as some resource pool from which the resources are taken; if the total_payment for a given epoch exceeds the size of the pool, then the entire pool is paid out.
-
-The total payment will then be distributed among validators and delegators following above formulas subject to `reward.staking.delegation.maxPayoutPerEpoch`. This is the maximum amount that can be distributed per that epoch even if the reward pool contains more assets. Setting this to `0` means no cap.
-
-Rewards are distributed after the end of an epoch with a delay set by `reward.staking.delegation.payoutDelay` and subject to `reward.staking.delegation.maxPayoutPerParticipant`. 
-The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch.
+### Maximum payout per participant
+Payments are subject to `reward.staking.delegation.maxPayoutPerParticipant`. 
+The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant recieves their due, capped by the max. The unpaid amount remain in the treasury.
 Setting this to `0` means no cap.
 
-## Maximal Delegatable Stake
-The maximal delegatable amount of stake is supposed to prevent delegators from delegating too much to an individual validator, and is an additional measure to the economic incentive.
-For this value to be meaningful, it needs to be based on the total number of delegated tokens, not on the total number of existing tokens, which can be substantially higher.
+### Payout delay
+Rewards are distributed after the end of an epoch with a delay set by `reward.staking.delegation.payoutDelay` 
 
-To this end, at the beginning of each epoch, we need to compute the total number of tokens (it is sufficient to make an approximation that can be slightly higher. To simplify things, this can be done by simple adding all delegations and substracting all undelegations to the current amount of delegated tokens, ignoring that some delegations might fail.
+## validatorScore functions:
 
-The value at which delegation is stopped is then computed similar to the reward function:
+This is defined as follows: 
 ```
-a := max(s.minVal, s.numVal/s.compLevel)
-max_delegatable_tokens = total_delegated_tokens / a
+function validatorScore(valStake) { 
+  a = Math.max(s_minVal, s_numVal/s_compLevel)
+  optStake = s_total / a
+  
+  penaltyFlatAmt = Math.max(0.0, valStake - optStake)
+  penaltyDownAmt = Math.max(0.0, valStake - optimalStakeMultiplier*optStake)
+  linearScore = (valStake - penaltyFlatAmt - penaltyDownAmt)/s_total
+
+  // make sure we're between 0 and 1.
+  linearScore = Math.min(1.0, Math.max(0.0,linearScore))
+  return linearScore
 ```
 
-Comments:
-
-* Delegations from the previous epoch exceeding the calculated `max_delegatable_token` will be capped to meet the limit. Validator self-delegation will always take priority. After that, if the cap is still not exceeded the delegations (with a possible application of a cap) will be applied in the order they were submitted in. Delegations that would exceed the cap will be set to 0.
-* A decrease in the `max_delegatable_token` threshold doesn't result in undelegation or capping of delegations submitted before the previous epoch.
-* An increase in the `max_delegatable_token` threshold in the subsequent epoch doesn't result in auto-delegation of previously capped delegations.
-* If only a subset of validators self-delegates and there aren't enough other delegations the `max_delegatable_token` might end up being below `min_own_stake` in which case validators receive no rewards.
 
