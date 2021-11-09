@@ -84,6 +84,10 @@ Feature: Test closeout type 1: margin >= cost of closeout
 
     Then the mark price should be "126" for the market "ETH/DEC19"   
 
+    Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release  |
+      | party3 | ETH/DEC19 | 276         | 552    | 828     | 1380     |
+
    # how to explain the margin acc for party3?????????????????
     Then the parties should have the following account balances:
       | party            | asset | market id | margin    | general     |
