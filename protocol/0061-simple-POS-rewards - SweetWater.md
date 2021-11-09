@@ -18,7 +18,7 @@ This describes the SweetWater requirements for calculation and distribution of r
 # Calculation
 At the end of an [epoch](./0050-epochs.md), payments are calculated. First we determine the amount to pay out during that epoch: 
 1. multiply the amount in the reward pool by `reward.staking.delegation.payoutFraction`; this is the amount going into next step, call it `stakingRewardAmtForEpoch`.
-1. The `stakingRewardAmtForEpoch` is updated to `max(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
+1. The `stakingRewardAmtForEpoch` is updated to `min(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
 
 ## For each validator we then do:
 1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is  both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`. 
