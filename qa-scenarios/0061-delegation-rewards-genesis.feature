@@ -416,6 +416,7 @@ Feature: Staking & Delegation - scenarios focusing on initial epoch
       | party1 | VEGA  | 3528   | 
       | party2 | VEGA  | 4958   | 
       | party3 | VEGA  | 8486   | 
+      | party4 | VEGA  | 14290  | 
       | node1  | VEGA  | 2266   | 
       | node2  | VEGA  | 1409   | 
       | node3  | VEGA  | 1441   |  
@@ -581,7 +582,7 @@ Feature: Staking & Delegation - scenarios focusing on initial epoch
       | party1 |  node1   |  111000 | 
       | party2 |  node2   |  222000 | 
 
-  Scenario: In presence of max delegation cap self-delegation gets priorities even if submitted later
+  Scenario: Validator self-delegation can be submitted after other delegate to that validator
 
     Given the parties deposit on asset's general account the following amount:
       | party  | asset  | amount |
@@ -682,13 +683,13 @@ Feature: Staking & Delegation - scenarios focusing on initial epoch
         | node12 | VEGA  | 0      | 
         | node13 | VEGA  | 0      | 
 
-  Scenario: Validator subset can self-delegate as to push themselves below min validator stake due to max delegatable amount cap
+  Scenario: Validator can self-delegate so much relative to others as to push their reward to 0
 
     Then the parties submit the following delegations:
       | party  | node id  | amount |
       | node1  |  node1   |    100 | 
       | node2  |  node2   |    200 |       
-      | node3  |  node3   |    300 | 
+      | node3  |  node3   |    310 | 
 
     Then the network moves ahead "1" blocks
 
@@ -696,27 +697,26 @@ Feature: Staking & Delegation - scenarios focusing on initial epoch
       | party  | node id  | amount |
       | node1  |  node1   |    100 | 
       | node2  |  node2   |    200 |       
-      | node3  |  node3   |    300 | 
-      | node4  |  node4   |      0 | 
+      | node3  |  node3   |    310 | 
 
       And the global reward account gets the following deposits:
         | asset | amount |
         | VEGA  | 100000 | 
       
       #complete the initial epoch for delegation to take effect
-      Then the network moves ahead "172802" blocks
+      Then the network moves ahead "172803" blocks
 
       And the parties should have the following delegation balances for epoch 1:
         | party  | node id  | amount |
         | node1  |  node1   |   100  | 
         | node2  |  node2   |   200  |       
-        | node3  |  node3   |   300  | 
+        | node3  |  node3   |   310  | 
         | node4  |  node4   |     0  | 
 
       And the parties receive the following reward for epoch 1:
         | party  | asset | amount |
-        | node1  | VEGA  | 0      | 
-        | node2  | VEGA  | 0      | 
+        | node1  | VEGA  | 25000  | 
+        | node2  | VEGA  | 25000  | 
         | node3  | VEGA  | 0      |  
         | node4  | VEGA  | 0      | 
         | node5  | VEGA  | 0      | 
