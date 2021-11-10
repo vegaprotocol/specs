@@ -160,33 +160,47 @@ Feature: Test closeout type 1: margin >= cost of closeout
       | party3 | ETH/DEC19 | sell | 50     | 30    | 1                | TYPE_LIMIT | TIF_GTC | ref-3-xxx |
     And the insurance pool balance should be "25000" for the market "ETH/DEC19" 
 
-    #check margin account and margin level
-    # And the parties should have the following account balances:
-    #   | party  | asset | market id | margin   | general   |
-    #   | party2 | USD   | ETH/DEC19 | 18120    | 49974784  |
-    #   | party3 | USD   | ETH/DEC19 | 30096    |  0        |
+    Then the mark price should be "30" for the market "ETH/DEC19"  
 
-    #  Then the parties should have the following margin levels:
-    #   | party  | market id | maintenance | search | initial | release  |
-    #   | party2 | ETH/DEC19 | 6040        | 12080  | 18120   | 30200    |
-    #   | party3 | ETH/DEC19 | 26826       | 53652  | 80478   | 134130   |
+    Then the parties should have the following profit and loss:
+      | party  | volume | unrealised pnl | realised pnl |
+      | party3 | -51    | 96             | 0            |
+
+    #check margin account and margin level
+    And the parties should have the following account balances:
+      | party  | asset | market id | margin   | general   |
+      | party2 | USD   | ETH/DEC19 | 18120    | 49974784  |
+      | party3 | USD   | ETH/DEC19 | 30096    |  0        |
+
+    # party3 maintenance margin: position*(mark_price*risk_factor_short+slippage_per_unit) + mark_price*risk_factor_short=51*(30*2+466)+0=26826
+    # (slippage calulated as follows) slippager_per_unit=exit_price-mark_price=(300*1+500*50)/51-30=496-30=466
+    Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release  |
+      | party2 | ETH/DEC19 | 6040        | 12080  | 18120   | 30200    |
+      | party3 | ETH/DEC19 | 26826       | 53652  | 80478   | 134130   |
 
     Then the order book should have the following volumes for market "ETH/DEC19":
       | side | price    | volume |
       | sell | 500      | 1000   |
       | sell | 300      | 1      |
       | sell | 30       | 0      |
-     
+
     When the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
       #| party2 | ETH/DEC19 | buy  | 50     | 30    | 0                | TYPE_LIMIT | TIF_GTC | ref-2-xxx |
       | party3 | ETH/DEC19 | sell | 50     | 30    | 0                | TYPE_LIMIT | TIF_GTC | ref-3-xxx |
 
+    # party3 maintenance margin: position*(mark_price*risk_factor_short+slippage_per_unit) + open_order*mark_price*risk_factor_short=51*(30*2+466) + 50 * 30 * 2 = 26826 + 3000 = 29826
+    # (slippage calulated as follows) slippager_per_unit=exit_price-mark_price=(300*1+500*50)/51-30=496-30=466
+    Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release  |
+      | party3 | ETH/DEC19 | 29826       | 59652  | 89478   | 149130   |
+
     Then the order book should have the following volumes for market "ETH/DEC19":
       | side | price    | volume |
-      | sell | 500     | 1000     |
+      | sell | 500      | 1000   |
       | sell | 300      | 1      |
-      | sell | 30       | 50      |
+      | sell | 30       | 50     |
       # | buy  | 50       | 0      |
       # | buy  | 10       | 0      |
       # | buy  | 5        | 5      |
