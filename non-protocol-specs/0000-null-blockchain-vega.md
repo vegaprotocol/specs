@@ -26,7 +26,7 @@ Transactions are submitted in the same way as for a normal live system, i.e. mes
 ## Data node and events
 
 It must be possible to launch a data node alongside this and record everything that data node is normally able to record. 
-It must be possible to record event bus events.
+Event bus data can be recorded either in the test app via a subscription to the event stream or using externals tools such as `vegatools stream`
 
 
 ## API Support
