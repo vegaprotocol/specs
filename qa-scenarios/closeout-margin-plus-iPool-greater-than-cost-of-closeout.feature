@@ -41,6 +41,12 @@ Feature: Test closeout type 1: margin >= cost of closeout
       | aux2             | ETH/DEC19 | buy  | 1      | 100   | 0                | TYPE_LIMIT | TIF_GTC | aux-b-2         |
       | buySideProvider  | ETH/DEC19 | buy  | 1000   | 80    | 0                | TYPE_LIMIT | TIF_GTC | buy-provider-1  |
       | aux2             | ETH/DEC19 | buy  | 1      | 20    | 0                | TYPE_LIMIT | TIF_GTC | aux-b-1         |
+      Then the parties should have the following account balances:
+      | party            | asset | market id | margin    | general     |
+      | aux1             | USD   | ETH/DEC19 | 3600      |  999996400  |
+      | aux2             | USD   | ETH/DEC19 | 960       |  999999040  |
+      | sellSideProvider | USD   | ETH/DEC19 | 2700000    |  997300000  |
+      | buySideProvider  | USD   | ETH/DEC19 | 540000    |  999460000  |
       
     Then the opening auction period ends for market "ETH/DEC19"
     #And the mark price should be "100" for the market "ETH/DEC19"
@@ -88,17 +94,24 @@ Feature: Test closeout type 1: margin >= cost of closeout
 
    # Then the parties should have the following margin levels:
 
-    #check margin account and margin level
-      # | party  | market id | maintenance | search | initial | release  |
-      # | party1 | ETH/DEC19 | 0           | 0      | 0       | 0        |
-      # | party2 | ETH/DEC19 | 17372       | 34744  | 52116   | 86860    |
-      # | party3 | ETH/DEC19 | 276         | 552    | 828     | 1380     |
+    check margin account and margin level
+      | party  | market id | maintenance | search | initial | release  |
+      | party1 | ETH/DEC19 | 0           | 0      | 0       | 0        |
+      | party2 | ETH/DEC19 | 17372       | 34744  | 52116   | 86860    |
+      | party3 | ETH/DEC19 | 276         | 552    | 828     | 1380     |
 
     #party1 gets closeout with MTM 
-    And the following trades should be executed:
-      | buyer   | price  | size | seller           | 
-      | party1  |  150   | 100  | network          | 
-      | network |  150   | 100  | sellSideProvider |
+    # And the following trades should be executed:
+    #   | buyer   | price  | size | seller           | 
+    #   | party1  |  150   | 100  | network          | 
+    #   | network |  150   | 100  | sellSideProvider |
+
+    Then the order book should have the following volumes for market "ETH/DEC19":
+      | side | price    | volume |
+      | sell | 150      | 900   |
+      | sell | 300      | 1      |
+      | buy  | 80       | 1000   |
+      | buy  | 20       | 1      |
 
     Then the mark price should be "126" for the market "ETH/DEC19"   
     And the insurance pool balance should be "25000" for the market "ETH/DEC19" 
@@ -159,8 +172,12 @@ Feature: Test closeout type 1: margin >= cost of closeout
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
       | party3 | ETH/DEC19 | sell | 50     | 30    | 1                | TYPE_LIMIT | TIF_GTC | ref-3-xxx |
     And the insurance pool balance should be "25000" for the market "ETH/DEC19" 
-
     Then the mark price should be "30" for the market "ETH/DEC19"  
+    Then the order book should have the following volumes for market "ETH/DEC19":
+      | side | price    | volume |
+      | sell | 500      | 1000   |
+      | sell | 300      | 1      |
+      | buy  | 20       | 1001   |
 
     Then the parties should have the following profit and loss:
       | party  | volume | unrealised pnl | realised pnl |
@@ -183,7 +200,6 @@ Feature: Test closeout type 1: margin >= cost of closeout
       | side | price    | volume |
       | sell | 500      | 1000   |
       | sell | 300      | 1      |
-      | sell | 30       | 0      |
 
     When the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
@@ -192,6 +208,8 @@ Feature: Test closeout type 1: margin >= cost of closeout
 
     # party3 maintenance margin: position*(mark_price*risk_factor_short+slippage_per_unit) + open_order*mark_price*risk_factor_short=51*(30*2+466) + 50 * 30 * 2 = 26826 + 3000 = 29826
     # (slippage calulated as follows) slippager_per_unit=exit_price-mark_price=(300*1+500*50)/51-30=496-30=466
+
+    # party3 has put the order twice 
     Then the parties should have the following margin levels:
       | party  | market id | maintenance | search | initial | release  |
       | party3 | ETH/DEC19 | 29826       | 59652  | 89478   | 149130   |
@@ -201,16 +219,17 @@ Feature: Test closeout type 1: margin >= cost of closeout
       | sell | 500      | 1000   |
       | sell | 300      | 1      |
       | sell | 30       | 50     |
-      # | buy  | 50       | 0      |
-      # | buy  | 10       | 0      |
-      # | buy  | 5        | 5      |
+      | buy  | 20       | 1001   |
+  
     And the insurance pool balance should be "25000" for the market "ETH/DEC19" 
       # And the following trades should be executed:
       # | buyer   | price  | size | seller           | 
       # | party3  |  300   | 1   | network          | 
-      # #| network |  500   | 50  | sellSideProvider |
+      #| network |  500   | 50  | sellSideProvider |
       # | network |  300   | 1  | aux1 |
 
+
+      
     #check margin account and margin level
     And the parties should have the following account balances:
       | party  | asset | market id | margin   | general   |
@@ -222,19 +241,23 @@ Feature: Test closeout type 1: margin >= cost of closeout
      # | party2 | ETH/DEC19 | 8040        | 16080  | 24120   | 40200    |
       | party3 | ETH/DEC19 | 29826           | 59652      | 89478       | 149130   |
 
-    # And the insurance pool balance should be "22826" for the market "ETH/DEC19" 
+     When the parties place the following orders:
+      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
+      | party2 | ETH/DEC19 | buy  | 50     | 30    | 0                | TYPE_LIMIT | TIF_GTC | ref-2-xxx |
+
+     And the insurance pool balance should be "7826" for the market "ETH/DEC19" 
 
     # # When the parties place the following orders:
     # #   | party            | market id | side | volume  | price | resulting trades | type       | tif     | reference |
     # #   | sellSideProvider | ETH/DEC19 | sell | 1       | 150   | 0                | TYPE_LIMIT | TIF_GTC | sell-provider-2 |
     # #   | buySideProvider  | ETH/DEC19 | buy  | 1       | 150   | 1                | TYPE_LIMIT | TIF_GTC | buy-provider-2  |
 
-    #   #party3 gets closeout with MTM 
-    #   And the parties should have the following account balances:
-    #     | party  | asset | market id | margin   | general   |
-    #     | party1 | USD   | ETH/DEC19 | 0        |  0        |
-    #     | party2 | USD   | ETH/DEC19 | 22620   |  49970284 |
-    #     | party3 | USD   | ETH/DEC19 | 0        |  0        |
+      #party3 gets closeout with MTM 
+      And the parties should have the following account balances:
+        | party  | asset | market id | margin   | general   |
+        | party1 | USD   | ETH/DEC19 | 0        |  0        |
+        | party2 | USD   | ETH/DEC19 | 22620   |  49970284 |
+        | party3 | USD   | ETH/DEC19 | 0        |  0        |
 
     # And the insurance pool balance should be "22826" for the market "ETH/DEC19" 
 
