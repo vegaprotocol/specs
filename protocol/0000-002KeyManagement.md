@@ -132,7 +132,7 @@ An alarm should be raised if
 
 The exact measures and meaning of 'frequently' are still to be done.
 
-The Tenderint key is the only performance critical signing key in the Vega system. This is
+The Tendermint key is the only performance critical signing key in the Vega system. This is
 because the key needs to be used several times per block, and a slow access to the key -
 for example through remote signing or a slow HSM - can thus become the dominant perfomance
 factor for a validator. 
