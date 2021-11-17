@@ -8,9 +8,10 @@ It must have the following features:
 ## Time forwarding commands / transactions
 
 The blockchain can be started with time set (different from wall time) so e.g. `1st January 2010 00:00:00`. 
-User can submit a transaction saying: move time forward by `1h:10m` or move time to `1st January 2010 01:10:00`. 
-The user can submit a command to start a new block and end a current block.
-Alternatively the user can set the block time length and move forward by a fixed number of blocks. 
+The length in time of each block is defined at startup (default is 1 second).
+The maximum number of transactions in a block is defined at startup (default 10). The null blockchain system will automatically end a block and create a new one if the transaction count is met/exceeded.
+User can submit a transaction saying: move time forward by `1h:10m` or move time to `1st January 2010 01:10:00`. Moving time will automatically end the current block if it contains transactions and will create all the required empty blocks needed to get us to the new time.
+User can move time forward by a fixed number of blocks. 
 Upon receiving this transaction Vega must carry out all the protocol actions that happen with passage of time (e.g. ending auctions, closing / enacting governance proposals, updating price monitoring bounds changing due to passage of time, etc.). 
 
 ## Parties and balances
