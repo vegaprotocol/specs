@@ -11,7 +11,7 @@ Feature: Test closeout type 1: margin >= cost of closeout
       | 2             | 3              | 5              | 
 
     And the markets:
-      | id        | quote name | asset | risk model                  | margin calculator   | auction duration | fees         | price monitoring | oracle config          |
+      | id        | quote name | asset | risk model          | margin calculator   | auction duration | fees         | price monitoring | oracle config          |
       | ETH/DEC19 | USD        | USD   | simple-risk-model-1 | margin-calculator-1 | 1                | default-none | default-none     | default-eth-for-future |
     And the following network parameters are set:
       | name                           | value |
@@ -88,9 +88,36 @@ Feature: Test closeout type 1: margin >= cost of closeout
     When the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
       | party2 | ETH/DEC19 | buy  | 1      | 126   | 0                | TYPE_LIMIT | TIF_GTC | ref-1-xxx |
-      | party3 | ETH/DEC19 | sell | 1      | 126   | 1                | TYPE_LIMIT | TIF_GTC | ref-1-xxx |
+  
+    # New margin level calculated after placing an order
+    Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release  |
+      | party2 | ETH/DEC19 | 12100       | 24200  | 36300   | 60500    |
+
+    # Margin account balance brought up to new initial level as order is placed (despite all balance being above search level)
+    And the parties should have the following account balances:
+      | party  | asset | market id | margin | general   |
+      | party2 | USD   | ETH/DEC19 | 36300  |  49963700 |
+  
+    When the parties place the following orders:
+     | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
+     | party3 | ETH/DEC19 | sell | 1      | 126   | 1                | TYPE_LIMIT | TIF_GTC | ref-1-xxx |
     Then the mark price should be "126" for the market "ETH/DEC19"    
     And the insurance pool balance should be "25000" for the market "ETH/DEC19" 
+
+    # Margin account balance not updated following a trade (above search)
+    Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release  |
+      | party2 | ETH/DEC19 | 17372       | 34744  | 52116   | 86860    |
+
+    # MTM win transfer
+    Then the following transfers should happen:
+      | from   | to     | from account            | to account          | market id | amount | asset |
+      | market | party2 | ACCOUNT_TYPE_SETTLEMENT | ACCOUNT_TYPE_MARGIN | ETH/DEC19 | 2600   | USD   |
+ 
+    And the parties should have the following account balances:
+      | party  | asset | market id | margin | general   |
+      | party2 | USD   | ETH/DEC19 | 38900  |  49963700 |
 
     Then the parties should have the following margin levels:
     #check margin account and margin level
@@ -148,13 +175,17 @@ Feature: Test closeout type 1: margin >= cost of closeout
       | party3 | USD   | ETH/DEC19 | 600      |  29400    |
 
      Then the parties should have the following margin levels:
-      | party  | market id | maintenance | search | initial | release  |
-      | party2 | ETH/DEC19 | 17372         | 34744    | 52116     | 86860     |
-      | party3 | ETH/DEC19  | 276         | 552    | 828     | 1380     |
+      | party  | market id | maintenance | search | initial | release |
+      | party2 | ETH/DEC19 | 17372       | 34744  | 52116   | 86860   |
+      | party3 | ETH/DEC19 | 276         | 552    | 828     | 1380    |
 
     When the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
       | party2 | ETH/DEC19 | buy  | 50     | 30    | 0                | TYPE_LIMIT | TIF_GTC | ref-2-xxx |
+
+     Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release |
+      | party2 | ETH/DEC19 | 29732       | 59464  | 89196   | 148660  |
 
     #check margin account and margin level
     And the parties should have the following account balances:
