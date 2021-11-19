@@ -16,6 +16,10 @@ This is done before the delegator part is substracted, i.e., delegators are puni
 Currently, PM1 does a linear reduction of payment - maybe an s-curve would be better so that small violations are punished less, 
 while a validator that is offline half the time gets more than 50% substraction. For example, 1/(1+2^((3*x-1)*10)) would punish
 small failures less, and bigger failures pretty radically.
+#Weight reduction
+In addition, for every epoch for which a node was offline, we can decrease its tendermint weight by 10%. Permanently absent nodes thus are
+automatically reduced in influence, even if they have a lot of delegation. Note that this may increase the discrepancy between the voting weight on 
+tendermint and the voting weight on the multisig contract.
 
 # PM2: Validator does not verify signatures
 To detect this, validators need to issue tagged signatures from time to time.
