@@ -49,9 +49,7 @@ Of course one signature isn't enough to transfer the assets.
 3) Now they have n-t signatures and at this point they can withdraw all Ethereum assets controlled by the 
 MultiSig contract.
 
-Hence, a resonably frequent key update would constitute good practice. 
-Adding and removing an ethereum key from the MultiSig contract incurs gas costs to all the validators,
-not just the one switching the key.(*) 
+Hence, a resonably frequent key update would constitute good practice.  
 
 The local management of the ETH key is done using CLEF. Details of this are specified elsewhere.
 
@@ -76,21 +74,27 @@ master key. The Vega identity hot key is needed to retrieve the rewards.
 
 The hot key needs to be signing many transactions with low latency. Hence storing it on a hardware security module and/or on a remote site is problematic; the exact implementation of this is out of scope for this. 
 
+##Future Features
+We expect that a key change can be done through a transaction on the chain and a form of restarting a single validator once ceckpoints
+are fully implemented.
+
 ### Vega Key [Event-Forwarder]
 This key (which may be the same of the above one) is used by the event forwarder to authorize events seen on  Vega bridge contracts (at this 
 point, only Ethereum, ERC20, staking and vesting contracts). 
-This key is a hot key, and is constantly used in operations. 
-However, as events signed with this key come in at Ethereum speed, the latency in accessing this key is of little relevance, and it can easily stay in a remote signer or an HSM.
+This key is a hot key, and is constantly used in operations, though in a not very esposed way. 
+As events signed with this key come in at Ethereum speed, the latency in accessing this key is of little relevance, and it can easily stay in a remote signer or an HSM.
 
 
 
 Compromise of this key is only critical if a significant number of keys are compromised (i.e., 2/3); in this case, it is possible to authorize non-existing events on the Vega chain. 
 
 ## Future Features
-THough is not done yet, the authorisatiojn on non-events is easy to detect, and validators are recommended to stop the chain to recover if that happens. 
+Though is not done yet, the authorisation on non-events is easy to detect, and validators are recommended to stop the chain to recover if that happens. 
 In the future (i.e., before serious trading happens), this key should be stored in an HSM, and it should be a good policy to frequently update it. The mechanism to this end is the same as for the other vega key specified in the document above.
 
 Loss of this key is (in principle) easy to mitigate, though this functionality is not implemented yet; the same master key that is used for the Vega Identity key could also authorize a new event forwarder key.
+
+Eventually, the event forwarder will be reimplemented in a way that this key will not be required anymore.
 
 ### Tendermint Key
 The Tendermint key is used to sign block and Tendermint internal messages. This is thus
