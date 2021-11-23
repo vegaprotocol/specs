@@ -47,9 +47,8 @@ If risk factors have been updated, the margin levels for all market participants
 
 Recalculate all margins for when any of the following are met:
 
-1. Order book changes (subject to a threshold being exceeded)
-1. If mark price changes
-1. When market observable used in the [margin calculation](./0019-margin-calculator.md) changes
+1. After a new trade
+2. upon leaving an auction
 
 #### 3. Updating margins when positions have changed
 
