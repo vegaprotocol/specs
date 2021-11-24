@@ -276,7 +276,7 @@ Feature: Staking & Delegation - scenarios focusing on initial epoch
       |  node13 |      0.00000     |     0.00000      | 
 
     # node 1 and its delegators receive 10k
-    # delegators to node1 receive 0.883 * 260 / 360 * 10000 = 6377
+    # delegators to node1 receive 0.883 * 260 / 360 * 10000 = 6377
     # party1 gets 10/260 * 6377 = 245
     # party1 gets 50/260 * 6377 = 1126
     # party1 gets 200/260 * 6377 = 4905 
@@ -416,7 +416,7 @@ Feature: Staking & Delegation - scenarios focusing on initial epoch
       | party1 | VEGA  | 3528   | 
       | party2 | VEGA  | 4958   | 
       | party3 | VEGA  | 8486   | 
-      | party4 | VEGA  | 14290  | 
+      | party4 | VEGA  | 14289  | 
       | node1  | VEGA  | 2266   | 
       | node2  | VEGA  | 1409   | 
       | node3  | VEGA  | 1441   |  
