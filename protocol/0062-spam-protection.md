@@ -68,7 +68,9 @@ For Sweetwater, the policies we enforce are relatively simple:
 parameter per transaction type (which will be a lot eventually), it would be better to have a table with
 transactions/parameters that forms one network parameter]
 
-
+- For delegation transactions, we also count associated vega tokens that have been associated in the same epoch (provided the
+  number of tokens passes a threshold). Though this increases the dependency on Ethereum speed/cost, this is necessary for
+  useability.
 - Any tokenholder with more than <min_voting_tokens> tokens has <num_votes> voting attempts per epoch
  and issue, i.e., they can change their mind <num_votes>-1 times in one epoch. This means, a transaction is
  pre_block rejected, if there are <num_votes> or more votes on the same issue in the blockchain in this epoch, and
