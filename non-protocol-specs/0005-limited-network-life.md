@@ -25,13 +25,12 @@ Point two requires that at load time, each node calculates the hash of the check
 
 # Creating a checkpoint
 Information to store:
-- All [network parameters](../protocol/0054-network-parameters.md)
-- Including those defined [below](#network-parameters).
+- All [network parameters](../protocol/0054-network-parameters.md), including those defined [below](#network-parameters).
 - All [asset definitions](../protocol/0040-asset-framework.md#asset-definition). Insurance pool balance from the markets will be summed up per asset and balance per asset stored.
 - All market proposals ([creation](../protocol/0028-governance.md#1-create-market) and [update](../protocol/0028-governance.md#2-change-market-parameters)) that have been *accepted*.
 - All [asset proposals](../protocol/0028-governance.md) that have been *accepted*.
 - All delegation info.
-- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the network params that govern [Staking and delegation](../protocol/0057-reward-functions.md) ).
+- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the staking and delegation reward account balance and network params that govern [Staking and delegation](../protocol/0057-reward-functions.md) ).
 - All reward balances accrued by all parties but not yet transferred to their general account due to payout delays.
 - [Account balances](../protocol/0013-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below about signed-for-withdrawal. Does *not* include the "staking" account balance.
 - Fee pools: Fees are paid into per market or per asset pools and distributed periodically. 
