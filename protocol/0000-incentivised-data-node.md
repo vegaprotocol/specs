@@ -74,6 +74,7 @@ vega blocks.
 - As the tests are done auotmatically through the system, we do not have an auutomated function that triggers a validator to perform this test;
   rather, the validators get an API call through which they can do a test is they so desire.
 
+The values of 40000 for the testing frequency, 105% for the sensitivite and 3 for the number of allowed failures in a row are network paramaeters (see below). 
 
 ### Is the node up and responding (Needed for MVP / Sweetwater++)
 - Additionally validators will randomly query the APIs to confirm that the node is up and serving the data
@@ -118,8 +119,19 @@ A data node receiving a zero score for 3 consecutive epochs will be unregistered
 - only measure API challenge response time
 - only build Merkle tree but don't bother with the rest of the challenge 
 
+### Network Parameters
+data_node_statistical_sensitivity
+	Initial: 1.05
+         If a data node requires <value> times the expected number of blocks, this marks an irregularity
+data_node_allowed failures
+	Initial value 3
+	If a data node needs more than the exepcted number of blocks <number> times in a row, then
+	this marks an irregularity.
+	
+data_node_measurement frequency
+	Initially 40000.
 
-
-
+The sensitivite values (1.05 and 3) should be tested for appropriateness before being finalized.
+    
 ### Acceptance criteria (test case stories)
 - TODO: QA team
