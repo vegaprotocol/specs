@@ -23,6 +23,13 @@ This spec isn't about what functionality data-nodes should have. It is about how
 
 ## Measuring performance 
 
+There are two kinds of measurements: responsiveness, and completeness of the dataset.
+
+The completeness of the dataset needs to be only measiured spradicaly, e.g., once per epoch. This is done automatically.
+To this end, there is a condition based on the hash of the last vega block that triggers the response,  Validators can additionally send out requests to datanodes, though in a limited manner.
+
+For responsiveness, a more active approach must be taken. Here, the validators send a challenge to the datanode and measure the time
+it takes for the datanode to answer.
 - is the node up and is it responding to to all API endpoints?
 - is the node carrying the full set of data? 
 - is it reasonably responsive? 
@@ -41,11 +48,31 @@ Who does the measuring? Validators as part of their day-to-day job?
 
 ### Is the node carrying the full set of data (NOT needed for MVP / Sweetwater++)
 - Validators can send a datanode a challenge at any time consisting of a random seed value S and a start event bundle number; the datanode then needs to find the first event bundle B in the data set after the start bundle such that HASH(pubkey, S, B) ends with N zeros (e.g. N = 4).
-- The validator request is signed to prevent a DoS
-- If datanodes consistently get statistical oddities (e.g., searching 50000 blocks to find the hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full chain. 
-Expected number of blocks is `(1/2) x 10^N`. 
+In addition (to lower the load for validators), datanodes need to answer challenges randomly generated from the
+vega blocks. 
+    Details: To prevent Datanodes from being overwhelmed by overactive Validators, the answers to the challenge
+    (together with the signed challenge itself) is sent to all validators. Furthermore, a validator can only
+    send 1 challenge to a datanode, and then must wait for t other validators to challenge it before it can challenge it
+    again.
+    The validator request is signed to prevent a DoS attack and to prevent datanodes from simply forwarding the 
+    challenge to another datanode. The signature uses the Vega identity key of the validator, and signs the message
+    {"vega_challenge_datanode", chain_id, epoch, validator_id, data_node_id, challenge}
+    
+    
+    For the randomization, every datanode has a 'suspicion factor' s (initiallt 1). Ff the hash of the latest block modulo 40000/s equals the datanodes ID (padded with zeros), then
+    thet block forms a challenge. Similarly, the start bundle S is calculated pseudorandomly from the hash of that block.
+    The challenge frequency can be changed by governance vote (which changes the modulus. The value of 40000 will result in
+    roughly one challenge per epoch.
+- If datanodes consistently get statistical oddities (e.g., searching 50000 blocks to find the hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full chain. The expected number of blocks is `(1/2) x 10^N`. 
+- A small statistical irregularity occurs if a datanode lies above the expected number of blocks three times in a row, or one measurement exceeds
+  105% of the expected value. If a datanode shows a small statiscical irregularity, then its factor s is multiplied by 1.2. Any measurement that
+  does not show a small statisticall irregularity multiplies the factor s by 1/1.2, to a minimum of s=0.1.
+- A large statistical irregularity occurs if a datanode lies 800% above the expected value, or lies above the expectation 36 times in a row.
+  A datanode that shows a large statistical irregularity is automatically unregistered.
 - The Merkle tree stored by both valdiators and data nodes (described above) is used by the validator to verify that the data returned in response to the challenge is correct, i.e. the answer is the actual data that existed at block B. This does not verify that the node is storing it, hence the expensive search challenge above.
-- This challenge/response to prove data storage can be done fairly irregularly
+- This challenge/response to prove data storage can be done fairly irregularly.
+- As the tests are done auotmatically through the system, we do not have an auutomated function that triggers a validator to perform this test;
+  rather, the validators get an API call through which they can do a test is they so desire.
 
 
 ### Is the node up and responding (Needed for MVP / Sweetwater++)
@@ -53,8 +80,13 @@ Expected number of blocks is `(1/2) x 10^N`.
 - The reponse must be verified against the Merkle tree
 - The response time must be recorded
 - These queries should be done regularly to ensure and measure liveness
-- TODO: exact details
-
+- Details:
+        Validators choose the datan_node they test randomly.
+        The number of tests per epoch is a governance parameter <data_node_test_frequency> set to 100 initially. The tests are spread out evenly over the
+        epoch, i.e., a test is done every <epoch_length>/<data_node_test_frequency>
+        Validators keep statistical information of reponses concerning the last 100*<number_of_data_nodes> requests (median, average
+        and standard derivation). 
+        The response score of a datanode is computed as follows:
 ### Reward score formula
 
 Inputs: 
