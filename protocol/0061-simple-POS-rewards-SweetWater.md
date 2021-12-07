@@ -31,6 +31,7 @@ At the end of an [epoch](./0050-epochs.md), payments are calculated. First we de
 1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is  both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`. 
 Here `allDelegatedTokens` is the count of the tokes delegated to this validator. 
 Note `validatorScore` also depends on the other network parameters, see below where the exact `validatorScore` function is defined.  
+1. Obtain the performance score as per [validator performance specification](0064-validator-performance-based-rewards.md). Update `validatorScore <- validatorScore x performance_score`. 
 1. The fraction of the total available reward that goes to a node (some of this will be for the validator , some is for their delegators) is then `nodeAmount := stakingRewardAmtForEpoch x validatorScore / sumAllValidatorScores` where `sumAllValidatorScores` is the sum of all scores achieved by the validators. Note that this is subject to `min_own_stake` and to `reward.staking.delegation.maxPayoutPerParticipant` (see below).
 1. The amount that is for the validator to keep (subject to delay and max payout per participant) is
 `valAmt = nodeAmount x (1 - delegatorShare)`. 
