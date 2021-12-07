@@ -19,16 +19,16 @@ The reasons outlined above imply that any intermediate computation results which
 
 We will call each such value a **"state variable"**. Currently state variables exist on market level, however in the future some of them could be moved to risk-universe level. State variable value nominated by a single node will be called a **"candidate value"**, whereas a state variable value that has successfully gone through the consensus mechanism and is to be used by each of the nodes will be called a **"consensus value"**.
 
-Each state variable will be represented as a key-value pair where key will be a `string` and value will either be a single `floating-point` value. Variables will be bundled together by the event that triggers their update.
+Each state variable will be represented as a key-value pair where key will be a `string` and value will be a single `floating-point` value. Variables will be bundled together by the event that triggered their update.
 
 ### Default values & initialisation
 
-Each state variable must have a default value specified as a network parameter. Furthermore, each node should send it's state variable candidate as soon as possible (e.g. at market initialisation) so that defaults can be replaced with consensus values as soon as possible.
+Each state variable must have a default value specified (can be hardcoded for now). Furthermore, each node should send it's state variable candidate as soon as possible (e.g. at market initialisation) so that defaults can be replaced with consensus values as soon as possible.
 
 Default risk factors are to be `1.0` for futures (so until a value has been calculated and agreed all trades are over-collateralised).  
 Risk factor calculation should be triggered as soon as market is proposed.
 
-Default probability of trading should be `100` ticks on either side of best bid and best ask with `0.005` probability of trading. As soon as there is an indicative uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input.
+Default probability of trading should be `100` ticks on either side of best bid and best ask with `0.005` probability of trading each. As soon as there is the auction uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input.
 
 Default price monitoring bounds should be calculated (as a decimal point calc directly in core) as 10% on either side of the indicative uncrossing price and used as default. As soon as an indicative uncrossing price is available calculate the real bounds using the full risk model + consensus mechanism.
 
@@ -38,18 +38,18 @@ The market should *not* leave the opening auction if any of the the risk factors
 
 It must be possible to prescribe to each bundle of state variables how the consensus value should be chosen from the candidates gathered from the nodes.
 
-Each calculation will be triggered by an event (value change or time passing); the event will have a unique identifier (hash). Any candidate values should be submitted along with that hash.
+Each calculation will be triggered by the specified [event](#update-events). Each event will have a unique identifier (hash). Any candidate values should be submitted along with that hash.
 We wait for 2/3 (rounded up) answers with mathcing identifier to be submitted.
 If all candidate values for a given variable are equal to each other then just accept that value.
 
 If at least one value differs then:
 
-1) Emit an event announcing this (indicates either an unstable risk calculation or malicious nodes)
+1) Emit an event announcing this (indicates either an unstable risk calculation or malicious nodes).
 1) A node is chosen at random to propose a value, submit as candidate and to be voted upon (whether within tolerance or not) by other nodes. This is repeated until a value has been accepted.
 1) This may continue indefinitely. It will be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit a different event because we either have a really really unstable calculation or malicious nodes.
-1) If update hasn't been achieved after some predefined (network parameter) number of update events an appropriate event should be emitted to indicate that market is operating with stale state variables.
+1) If update hasn't been achieved after some predefined number of update events an appropriate event should be emitted to indicate that market is operating with stale state variables.
 
-Note that the inputs need to be gathered when the event triggering the re-calculation has been announced (this is determinstic) so that all calculations are done with the same inputs for the same event.
+Note that the state variable calculation inputs need to be gathered when the event triggering the re-calculation has been announced (this is determinstic) so that all calculations are done with the same inputs for the same event.
 
 ### Update events
 
