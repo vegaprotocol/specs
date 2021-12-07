@@ -1,4 +1,4 @@
-# Floating-point (non-)determinism
+# Floating-point consensus
 
 ## Summary
 
