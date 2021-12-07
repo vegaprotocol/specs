@@ -67,8 +67,10 @@ Note every time a state variable is marked a stale an appropriate event should b
 
 ## Current floating-point dependencies
 
+TODO: Not sure if we need to leave this section in, but should be useful as we write the spec
+
 This section outlines floating-point quantities `vega` currently relies on:
 
 - [`CalculateRiskFactors(current *types.RiskResult) (bool, *types.RiskResult)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L24) - calculates risk factors (short and long), called each time time within the application is updated ([`OnChainTimeUpdate(...)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/execution/market.go#L624)) static for log-normal model.
-- [`PriceRange(price, yearFraction, probability num.Decimal) (minPrice, maxPrice num.Decimal)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L25) - calculates risk minimum and maximum price at specified probability level and projection horizon given current price, called from 
-- [`ProbabilityOfTrading(currentP, orderP *num.Uint, minP, maxP, yFrac num.Decimal, isBid, applyMinMax bool) num.Decimal`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L26) - calculates probability of trading at a specified projection horizon of the specified order given current price and min/max bracket, called from 
+- [`PriceRange(price, yearFraction, probability num.Decimal) (minPrice, maxPrice num.Decimal)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L25) - calculates risk minimum and maximum price at specified probability level and projection horizon given current price, called from [price montiroing engine](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/monitor/price/pricemonitoring.go#L80) each time bounds are updated.
+- [`ProbabilityOfTrading(currentP, orderP *num.Uint, minP, maxP, yFrac num.Decimal, isBid, applyMinMax bool) num.Decimal`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L26) - calculates probability of trading at a specified projection horizon of the specified order given current price and min/max bracket, called from [supplied liquidity engine](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/liquidity/engine.go#L34) each time new liquidity provision orders are deployed.
