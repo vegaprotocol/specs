@@ -19,35 +19,43 @@ The reasons outlined above imply that any intermediate computation results which
 
 We will call each such value a **"state variable"**. Currently state variables exist on market level, however in the future some of them could be moved to risk-universe level. State variable value nominated by a single node will be called a **"candidate value"**, whereas a state variable value that has successfully gone through the consensus mechanism and is to be used by each of the nodes will be called a **"consensus value"**.
 
-Each state variable will be represented as a key-value pair where key will be a `string` and value will be a single `floating-point` value. Variables will be bundled together by the event that triggered their update.
+Each state variable will be represented as a key-tolerance-value triple. 
+The key will be a `string`. 
+The tolerance will be a `decimal` which will be provided by the quant library producing this and must be *deterministic* (ie it is either hard coded in the library or produced without floating point arithmentic).
+The value will be a single `floating-point`, this will be provided by the quant library as a result of some floating point calculation.  
+State variables will be bundled together by the event that triggered their update.
 
 ### Default values & initialisation
 
-Each state variable must have a default value specified (can be hardcoded for now). Furthermore, each node should send it's state variable candidate as soon as possible (e.g. at market initialisation) so that defaults can be replaced with consensus values as soon as possible.
+Each state variable must have a default value specified (can be hardcoded for now). 
 
 Default risk factors are to be `1.0` for futures (so until a value has been calculated and agreed all trades are over-collateralised).  
 Risk factor calculation should be triggered as soon as market is proposed.
 
 Default probability of trading should be `100` ticks on either side of best bid and best ask with `0.005` probability of trading each. As soon as there is the auction uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input.
 
-Default price monitoring bounds should be calculated (as a decimal point calc directly in core) as 10% on either side of the indicative uncrossing price and used as default. As soon as an indicative uncrossing price is available calculate the real bounds using the full risk model + consensus mechanism.
+Default price monitoring bounds should be calculated (as a decimal point calc directly in core) as `10%` on either side of the indicative uncrossing price and used as default. As soon as an indicative uncrossing price is available calculate the real bounds using the full risk model + consensus mechanism.
 
 The market should *not* leave the opening auction if any of the the risk factors, probabilities of trading or price monitoring bounds haven't passed at least one round of resolution as this would indicate a badly specified market. 
 
 ### Resolution strategy
 
-It must be possible to prescribe to each bundle of state variables how the consensus value should be chosen from the candidates gathered from the nodes.
+Here we describe how the consensus value should be chosen from the candidates gathered from the nodes.
 
-Each calculation will be triggered by the specified [event](#update-events). Each event will have a unique identifier (hash). Any candidate values should be submitted along with that hash.
-We wait for 2/3 (rounded up) answers with mathcing identifier to be submitted.
-If all candidate values for a given variable are equal to each other then just accept that value.
+Each calculation will be triggered by the specified [event](#update-events). Each event will have a unique identifier (hash). Any candidate key-tolerance-value triples should be submitted along with that hash as part of a bundle.
+We wait for 2/3 (rounded up) answers with matching identifier to be submitted.
+If all candidate values for a given variable are equal to each other then just accept that value. 
+If all values in a bundle are accepted then the whole bundle is accepted and the values in core are updated with the appropriate decimal represenations.
 
 If at least one value differs then:
 
-1) Emit an event announcing this (indicates either an unstable risk calculation or malicious nodes).
-1) A node is chosen at random to propose a value, submit as candidate and to be voted upon (whether within tolerance or not) by other nodes. This is repeated until a value has been accepted.
-1) This may continue indefinitely. It will be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit a different event because we either have a really really unstable calculation or malicious nodes.
-1) If update hasn't been achieved after some predefined number of update events an appropriate event should be emitted to indicate that market is operating with stale state variables.
+1) Emit an event announcing this (if there are many such events this indicates either an unstable risk calculation or malicious nodes).
+1) A node is chosen at random with probability equal to tendermint weight to propose a bundle of values, submit as candidate and to be voted upon by other nodes. Each node should vote with their tendermint weight. A node will vote `yes` to the proposed bundle if all the values are within the prescribed tolerance and `no` otherwise. 
+The bundle is accepted if `(2/3)` of nodes by tendermint weight vote to accept the bundle. 
+If the bundle is rejected go back to selecting a node at random by tendermint weight and repeat.
+This is repeated until a value has been accepted.
+1) This may continue indefinitely. It will only be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit an event annoucing this (we either have a really badly unstable calculation or malicious nodes).
+1) If update hasn't been achieved after `3` update events an appropriate event should be emitted to indicate that market is operating with stale state variables.
 
 Note that the state variable calculation inputs need to be gathered when the event triggering the re-calculation has been announced (this is determinstic) so that all calculations are done with the same inputs for the same event.
 
