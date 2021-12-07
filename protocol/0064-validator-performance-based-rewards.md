@@ -1,17 +1,66 @@
+# Adjusting Validator Rewards Based on Performance
 
-Perfomance Measurement 1 (PM1): Offline Validator
+The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury. 
+The rewards are based on their own stake and the amount of stake delegated to them, 
+see [validator rewards](./0061-simple-pos-rewards-sweetwater.md).
+The purpose of the specification is to define how will the validator rewards will be additionally scaled based on their performance. 
+
+## Perfomance Measurement 1 (PM1): Offline Validator (sufficient for Oregon Trail)
 Goal: Detect how long a validator is offline and punish them 
 Detection: Validator does not act as a leader
 
 Tendermint provides a statistic on failed blocks, i.e., validators that did not act properly as a leader.
-Over an epoch, the number of such faiulures (f) is counted, as well as the number of times the validator 
-was elected leader (l).
+Over an epoch, the number of such failures `f` is counted, as well as the number of times the validator 
+was elected leader `l` and carried out the job.
 
-During the payout, the paymenty is reduced by multipling it with (l-f)/l
-This is done before the delegator part is substracted, i.e., delegators are punished for bad validator behavior.
+To be more precise: Tendermint emits an event for every round of proposal at a given height, so we know who the proposer should have been. It also emits an event with a timeout for the height of the round so we can tell that the node wasn't available. 
+This counts need to be stored, per validator node, in vega core. 
+
+Define the performance score to be `performance_score := (l-f)/l`. 
 
 
-##Future Stuff (in here for discussion purposes, not yet to be implemented)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Future Stuff (in here for discussion purposes, not yet to be implemented)
+
 # Non Linear punishment
 Currently, PM1 does a linear reduction of payment - maybe an s-curve would be better so that small violations are punished less, 
 while a validator that is offline half the time gets more than 50% substraction. For example, 1/(1+2^((3*x-1)*10)) would punish
@@ -31,7 +80,7 @@ To detect this, validators need to issue tagged signatures from time to time.
       The signature pool contains a tagged signature and which one it is.
       Failure to do so provably shows that the signature was not verified properly.
       
- # PM3: Va;lidator does not run event forwarder
+ # PM3: Validator does not run event forwarder
  This is difficult to detect, as a validator may legitimatelly see Ethereum events a few seconds after other validators
  and thus never get an event to forward. Also, eventually EEF will be integrated into core, and thus it will be more
  effort to not run that part of the code.
@@ -43,13 +92,16 @@ A validator that forwards no event in an epoch gets a bigger punishment, given t
 Median is chosen so that a single validator can’t frame the others by shortening the Ethereum
 Block confirmation times.
 
-#PM5: Validator only acts as a Tenderint leader.
-Finding this requires a statistic we don't have at this point (as we would like to also include messages that where sent but don't 
-contribute to consensus anymore to avoid discriminating against geographically far away servers. Once we figured out how to do
-this, we can build a formular for the reward
+Should we instead have additional rewards for forwarding events from Ethereum? For each validator we could keep a count of how many events they forwarded first (and that got approved by the others), call this `f` and we also know the total number `n` for an epoch. 
+If we had another reward pool we could share it according to `f/n`. 
 
-#PM6: Validator doesn't execute the Vega app, just signs everything the others do.
-THis needs further investigation; it is probably possible to solve this either the
+
+# PM5: Validator only acts as a Tenderint leader.
+Finding this requires a statistic we don't have at this point (as we would like to also include messages that were sent but don't contribute to consensus anymore to avoid discriminating against geographically far away servers. Once we figured out how to do
+this, we can build a formula for the reward. 
+
+# PM6: Validator doesn't run the Vega app, just signs everything the others do.
+This needs further investigation; it is probably possible to solve this either the
 same way we detect signature verification, or along the lines of the data-node 
 (i.e., Validators are required to post some internal state information from time to
 time that they only have if they run the protocol)
