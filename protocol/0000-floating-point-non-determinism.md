@@ -17,57 +17,49 @@ While `vega` relies on `integer` and `decimal` data types the same cannot be eas
 The reasons outlined above imply that any intermediate computation results which rely on floating-point arithmetic need to be agreed upon by all the nodes and stored as decimals before they can be used for downstream calculations. The latency requirements mean that such synchronisation cannot be carried out on the fly and since such strategy implies treating certain variables as constants until the next update is carried out the mechanism needs to allow flexibility in specifying time- or state-change based events triggering an update for different quantities and to allow to specify fallback behaviour in case update cannot be carried out in time.
 [This section](#current-floating-point-dependencies) lists intermediate floating-point results `vega` currently relies on, however it should be assumed that more may appear in the future, hence the implementation of this mechanism should allow to easily add new values to it and to easily retrieve them in various parts of the `vega` codebase.
 
-We will call each such value a **"state variable"**. Currently state variables exist on market level, however in the future some of them could be moved to risk-universe level. State variable value nominated by a single node will be called a **"candidate value"**, whereas a state variable value that has successfully gone through the consensus mechanism and is to be used by each of the nodes will be called a **"consensus value".**
+We will call each such value a **"state variable"**. Currently state variables exist on market level, however in the future some of them could be moved to risk-universe level. State variable value nominated by a single node will be called a **"candidate value"**, whereas a state variable value that has successfully gone through the consensus mechanism and is to be used by each of the nodes will be called a **"consensus value"**.
 
-### Types of state variables
-
-Each state variable will be represented as a key-value pair where key will be a `string` and value will either be a single `floating-point` value (scalar) or an array of integer-labelled `floats` (vector). It must be possible to bundle together any number of state variable of any of those types. Each bundle should share:
-
-- [resolution strategy](#resolution-strategy)
-- [update strategy](#update-strategy)
-- [retirement strategy](#retirement-strategy).
-
-TODO: Do we need to deal with differing integer-labels in vector candidate variables or can we assure they are always constructed in the same way?
+Each state variable will be represented as a key-value pair where key will be a `string` and value will either be a single `floating-point` value. Variables will be bundled together by the event that triggers their update.
 
 ### Default values & initialisation
 
-Each state variable must have a default value specified (TODO: Should we have both market and network level default values?). Furthermore, each node should send it's state variable candidate as soon as possible (e.g. at market initialisation) so that defaults can be replaced with consensus values as soon as possible.
+Each state variable must have a default value specified as a network parameter. Furthermore, each node should send it's state variable candidate as soon as possible (e.g. at market initialisation) so that defaults can be replaced with consensus values as soon as possible.
+
+Default risk factors are to be `1.0` for futures (so until a value has been calculated and agreed all trades are over-collateralised).  
+Risk factor calculation should be triggered as soon as market is proposed.
+
+Default probability of trading should be `100` ticks on either side of best bid and best ask with `0.005` probability of trading. As soon as there is an indicative uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input.
+
+Default price monitoring bounds should be calculated (as a decimal point calc directly in core) as 10% on either side of the indicative uncrossing price and used as default. As soon as an indicative uncrossing price is available calculate the real bounds using the full risk model + consensus mechanism.
+
+The market should *not* leave the opening auction if any of the the risk factors, probabilities of trading or price monitoring bounds haven't passed at least one round of resolution as this would indicate a badly specified market. 
 
 ### Resolution strategy
 
-It must be possible to prescribe to each bundle of state variables how the consensus value should be chosen from the candidates gathered from the nodes. We should support:
+It must be possible to prescribe to each bundle of state variables how the consensus value should be chosen from the candidates gathered from the nodes.
 
-- median,
-- average.
+Each calculation will be triggered by an event (value change or time passing); the event will have a unique identifier (hash). Any candidate values should be submitted along with that hash.
+We wait for 2/3 (rounded up) answers with mathcing identifier to be submitted.
+If all candidate values for a given variable are equal to each other then just accept that value.
 
-It is important to apply the same strategy to all state variables that form a bundle as there may be certain relationships that they need to maintain (e.g. their sum needs to be 1). Furthermore, it should be possible to specify the **quorum** - a minimum number of candidate values from which a new consensus value can be chosen. If quorum is not met the current value should be left as is without updating.
+If at least one value differs then:
 
-### Update strategy
+1) Emit an event announcing this (indicates either an unstable risk calculation or malicious nodes)
+1) A node is chosen at random to propose a value, submit as candidate and to be voted upon (whether within tolerance or not) by other nodes. This is repeated until a value has been accepted.
+1) This may continue indefinitely. It will be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit a different event because we either have a really really unstable calculation or malicious nodes.
+1) If update hasn't been achieved after some predefined (network parameter) number of update events an appropriate event should be emitted to indicate that market is operating with stale state variables.
 
-Update strategy consists of:
+Note that the inputs need to be gathered when the event triggering the re-calculation has been announced (this is determinstic) so that all calculations are done with the same inputs for the same event.
 
-- `update trigger` -  either time-based (once every `updateFrequency` seconds, `updateFrequency` of `0` should be interpreted as state variable only being updated at [initialisation](#default-values-initialisation)) or time and state-change based (e.g. `markPrice` changed by more than 10% over last hour) TODO: Maybe we can just make it event based and recycle price monitoring bound breach somehow (note breach doesn't imply the price will actually change),
-- `polling time` (TODO: better name?) - period of time expressed in seconds from `update trigger` during which candidate values can be submitted (to avoid using stale values), it should always be less than `update frequency` (TODO: doesn't really have to be, just thought it will make things easier).
+### Update events
 
-Please note that the first update (from default value to first consensus value) should be attempted at initialisation (e.g. market creation). Once an update attempt is finished any candidate variables that have been received should be cleared to avoid mixing stale and more up-to-date candidate values of the same variable. (TODO: DO WE NEED TO CONSIDER MULTIPLE CANDIDATES? DO WE NEED TO CONSIDER TIMESTAMPS IN CASE THINGS START GETTING OUT OF WHACK?) The last time a state variable was successfully updated must be recorded so that retirement strategies can work.
+Implement the following state variable update events:
 
-### Retirement strategy
-
-Retirement strategy consists of:
-
-- retirement age - period of time in seconds since last update beyond which a state variable is considered stale,
-- **retirement action** to be carried out once a state variable is marked as stale.
-
-Following actions must be implemented:
-
-- null: leave the lastest value,
-- revert to default: revert back to default value (TODO: market or network if we have both??)
-
-Note every time a state variable is marked a stale an appropriate event should be emitted. Marking a variable as stale should NOT stop further update attempts in the future.
+- market's risk model parameter change,
+- time-based trigger,
+- auction (of any type) ending.
 
 ## Current floating-point dependencies
-
-TODO: Not sure if we need to leave this section in, but should be useful as we write the spec
 
 This section outlines floating-point quantities `vega` currently relies on:
 
