@@ -16,9 +16,20 @@ was elected leader `l` and carried out the job.
 To be more precise: Tendermint emits an event for every round of proposal at a given height, so we know who the proposer should have been. It also emits an event with a timeout for the height of the round so we can tell that the node wasn't available. 
 This counts need to be stored, per validator node, in vega core. 
 
-Define the performance score to be `performance_score := (l-f)/l`. 
+Define the performance score to be `performance_score := (l-f)/l` if `l > 0` and `performance_score = 0` if `l = 0`. 
 
+The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-simple-pos-rewards-sweetwater.md). 
 
+### Acceptance criteria 
+
+1. Configure and launch a network with 5 validators
+1. Give each validator self-stake of 10 000 VEGA. Set epoch lenght to 10 minutes. 
+1. Deposit a 1000 VEGA into the validator reward pool. 
+1. After epoch ends (epoch 0), observe that the 1000 VEGA are split accordingly to the `performance_score` reported (should be roughly 200 VEGA each but not necessarily exactly). Anything between 180 and 220 per validator would be considered acceptable. 
+1. Bring one node down. 
+1. Wait for another epoch to end (epoch 1). 
+1. Deposit another 1000 VEGA into the validator reward pool. 
+1. After epoch ends (epoch 2), observe that the 1000 VEGA are split accordingly to the `performance_score` reported. This should be roughly 250 VEGA for each of the running validators, anything between 225 and 275 VEGA is acceptable. It should be exactly 0 for the validator that was brought down. 
 
 
 
