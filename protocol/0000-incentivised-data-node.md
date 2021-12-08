@@ -59,19 +59,19 @@ vega blocks.
     {"vega_challenge_datanode", chain_id, epoch, validator_id, data_node_id, challenge}
     
     
-    For the randomization, every datanode has a 'suspicion factor' s (initiallt 1). Ff the hash of the latest block modulo 40000/s equals the datanodes ID (padded with zeros), then
+    For the randomization, every datanode has a 'suspicion factor' s (initially 1). Ff the hash of the latest block modulo 40000/s equals the datanodes ID (padded with zeros), then
     thet block forms a challenge. Similarly, the start bundle S is calculated pseudorandomly from the hash of that block.
     The challenge frequency can be changed by governance vote (which changes the modulus. The value of 40000 will result in
     roughly one challenge per epoch.
-- If datanodes consistently get statistical oddities (e.g., searching 50000 blocks to find the hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full chain. The expected number of blocks is `(1/2) x 10^N`. 
-- A small statistical irregularity occurs if a datanode lies above the expected number of blocks three times in a row, or one measurement exceeds
+- If datanodes consistently get statistical oddities (e.g., searching 50000 data units (i.e., events) to find the hash rather than the expected 5000 as appropriate for the difficulty/number of zeroes search for), they probably didn't store the full dataset. The expected number of untis is `(1/2) x 10^N`. 
+- A small statistical irregularity occurs if a datanode lies above the expected number of dataunits three times in a row, or one measurement exceeds
   105% of the expected value. If a datanode shows a small statiscical irregularity, then its factor s is multiplied by 1.2. Any measurement that
   does not show a small statisticall irregularity multiplies the factor s by 1/1.2, to a minimum of s=0.1.
 - A large statistical irregularity occurs if a datanode lies 800% above the expected value, or lies above the expectation 36 times in a row.
   A datanode that shows a large statistical irregularity is automatically unregistered.
 - The Merkle tree stored by both valdiators and data nodes (described above) is used by the validator to verify that the data returned in response to the challenge is correct, i.e. the answer is the actual data that existed at block B. This does not verify that the node is storing it, hence the expensive search challenge above.
 - This challenge/response to prove data storage can be done fairly irregularly.
-- As the tests are done auotmatically through the system, we do not have an auutomated function that triggers a validator to perform this test;
+- As the tests are done auotmatically through the system, we do not have an automated function that triggers a validator to perform this test;
   rather, the validators get an API call through which they can do a test is they so desire.
 
 The values of 40000 for the testing frequency, 105% for the sensitivite and 3 for the number of allowed failures in a row are network paramaeters (see below). 
@@ -82,7 +82,7 @@ The values of 40000 for the testing frequency, 105% for the sensitivite and 3 fo
 - The response time must be recorded
 - These queries should be done regularly to ensure and measure liveness
 - Details:
-        Validators choose the datan_node they test randomly.
+        Validators choose the data_node they test randomly.
         The number of tests per epoch is a governance parameter <data_node_test_frequency> set to 100 initially. The tests are spread out evenly over the
         epoch, i.e., a test is done every <epoch_length>/<data_node_test_frequency>
         Validators keep statistical information of reponses concerning the last 100*<number_of_data_nodes> requests (median, average
@@ -123,10 +123,14 @@ A data node receiving a zero score for 3 consecutive epochs will be unregistered
 data_node_statistical_sensitivity
 	Initial: 1.05
          If a data node requires <value> times the expected number of blocks, this marks an irregularity
+data_node_sttistical_sensitivity_this_is_bad
+	Initial: 8
 data_node_allowed failures
 	Initial value 3
 	If a data node needs more than the exepcted number of blocks <number> times in a row, then
 	this marks an irregularity.
+data_node_allowed_failures_this_is_bad
+	Initial value 36
 	
 data_node_measurement frequency
 	Initially 40000.
