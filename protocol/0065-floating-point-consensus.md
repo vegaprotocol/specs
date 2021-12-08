@@ -61,11 +61,18 @@ Note that the state variable calculation inputs need to be gathered when the eve
 
 ### Update events
 
-Implement the following state variable update events:
+When we say a trigger should trigger calculation of all we currently mean: 
+1) risk factors
+2) price monitoring bounds
+3) probabilities of trading
+but as Vega evolves there may be more things.
 
-- market's risk model parameter change,
-- time-based trigger,
-- auction (of any type) ending.
+Implement the following state variable update events:
+- market's risk model parameter change, this should trigger calculation of all.
+- market enactment, this should trigger risk factor calculation. 
+- time-based trigger, governed by network parameter `network.floatingPointUpdates.delay` set by default to `5m`. For each market the clock should start ticking at the end of the opening auction and then reset by any event that "recalculates all". This event should recalculate all.      
+- opening auction sees uncrossing price for first time: probabilities of trading and price monitoring should be calculated.  
+- auction (of any type) ending: probabilities of trading and price monitoring should be calculated.  
 
 ## Current floating-point dependencies
 
