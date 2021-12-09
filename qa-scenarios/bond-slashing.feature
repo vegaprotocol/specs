@@ -52,7 +52,7 @@ Feature: Test margin for lp near price monitoring boundaries
     Then the auction ends with a traded volume of "10" at a price of "220000"
 
     And the traders should have the following profit and loss:
-      | trader           | volume | unrealised pnl | realised pnl |
+      | trader           | volume | unrealised pnl | realised pnl | 
       | trader1          |  10    | 0              | 0            |
       | trader2          | -10    | 0              | 0            |
 
@@ -69,14 +69,16 @@ Feature: Test margin for lp near price monitoring boundaries
     And the traders should have the following account balances:
       | trader    | asset | market id | margin      | general    | bond     |
       | lp1       | USD   | ETH/MAR22 | 33937710    | 2290       | 20000000 |
+      | trader1   | USD   | ETH/MAR22 | 33937710    | 290        | 20000000 |
+      | trader2   | USD   | ETH/MAR22 | 33937710    | 2290       | 20000000 |
 
 
-    And the order book should have the following volumes for market "ETH/MAR22":
-       | side | price      | volume |
-       | buy  | 209900     | 0      |
-       | buy  | 210000     | 191    |
-       | sell | 230000     | 174    |
-       | sell | 230100     | 0      |
+    # And the order book should have the following volumes for market "ETH/MAR22":
+    #    | side | price      | volume |
+    #    | buy  | 209900     | 0      |
+    #    | buy  | 210000     | 191    |
+    #    | sell | 230000     | 174    |
+    #    | sell | 230100     | 0      |
 
     # # The initial setup is done. 
     
