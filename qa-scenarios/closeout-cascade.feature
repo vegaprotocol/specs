@@ -1,15 +1,15 @@
-Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/files)
-# This is a test case to demonstrate that closeout cascase does NOT happen. In this test case, trader3 gets closed
-# out first after buying volumn 50 at price 100, and then trader3's position is sold to the network while trader2 got the position 
-# for volumne 50 price 50 (which is what availabe on the order book)
+Feature: Closeout-cascades
+# This is a test case to demonstrate that closeout cascade does NOT happen. In this test case, trader3 gets closed
+# out first after buying volume 50 at price 100, and then trader3's position is sold (via the network counterparty) to trader2 whose order is first in the order book 
+# (volume 50 price 50)
 # At this moment, trader2 is under margin but the fuse breaks (if the mark price is actually updated from 100 to 50)
 # however, the design of the system is like a fuse and circuit breaker, the mark price will NOT update, so trader2 will not be closed out
-# Till a new trade happens, and new mark price is set
+# till a new trade happens, and new mark price is set.
   Background:
 
     And the margin calculator named "margin-calculator-1":
       | search factor | initial factor | release factor |
-      | 1.5             | 2              | 3              | 
+      | 1.5           | 2              | 3              | 
     And the markets:
       | id        | quote name | asset | risk model                  | margin calculator   | auction duration | fees         | price monitoring | oracle config          |
       | ETH/DEC19 | BTC        | BTC   | default-simple-risk-model-4 | margin-calculator-1 | 1                | default-none | default-none     | default-eth-for-future |
@@ -17,7 +17,7 @@ Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/file
       | name                           | value |
       | market.auction.minimumDuration | 1     |
 
-  Scenario: Distressed position gets taken over by another party whose margin level is insufficient to support it 
+  Scenario: Distressed position gets taken over by another party whose margin level is insufficient to support it (however mark price doesn't get updated on closeout trade and hence no further closeouts are carried out) 
    # setup accounts, we are trying to closeout trader3 first and then trader2
     
     Given the insurance pool balance should be "0" for the market "ETH/DEC19"
@@ -44,15 +44,9 @@ Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/file
     Then the auction ends with a traded volume of "10" at a price of "10"
     And the mark price should be "10" for the market "ETH/DEC19"
 
-    #check margin/general account 
-    Then the parties should have the following account balances:
-      | party      | asset | market id | margin   | general |
-      | auxiliary1 | BTC   | ETH/DEC19 | 19840   | 999999980160     |
-      | auxiliary2 | BTC   | ETH/DEC19 | 130      | 999999999870     |
-      
     And the cumulated balance for all accounts should be worth "2000000000250"
 
-    # setup trader2 position to be ready to takevoer trader3's position once trader3 is closed out
+    # setup trader2 position to be ready to takeover trader3's position once trader3 is closed out
     When the parties place the following orders: 
       | party     | market id | side | volume| price | resulting trades | type       | tif     | reference      |
       | trader2   | ETH/DEC19 | buy  | 50    | 50    | 0                | TYPE_LIMIT | TIF_GTC | buy-position-3 |
@@ -62,22 +56,20 @@ Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/file
       | trader2   | ETH/DEC19  | 50          | 75     | 100     | 150     |
 
     Then the parties should have the following account balances:
-      | party  | asset | market id | margin   | general |
-      | trader2| BTC   | ETH/DEC19 | 100      | 50      |
-      | auxiliary1 | BTC   | ETH/DEC19 | 19840    | 999999980160     |
-      | auxiliary2 | BTC   | ETH/DEC19 | 130      | 999999999870     |
-     
+      | party   | asset | market id | margin   | general |
+      | trader2 | BTC   | ETH/DEC19 | 100      | 50      |
+    
     And the cumulated balance for all accounts should be worth "2000000000250"
 
-     # setup trader3 position and close it out
+    # setup trader3 position and close it out
     When the parties place the following orders: 
-      | party     | market id | side | volume| price | resulting trades | type       | tif     | reference      |
-      | trader3   | ETH/DEC19 | buy  | 50    | 100   | 0                | TYPE_LIMIT | TIF_GTC | buy-position-3 |
-      | auxiliary1| ETH/DEC19 | sell | 50    | 100   | 1                | TYPE_LIMIT | TIF_GTC | sell-provider-1|
-      | auxiliary2| ETH/DEC19 | buy  | 50    | 10    | 0                | TYPE_LIMIT | TIF_GTC | sell-provider-1|
+      | party      | market id | side | volume| price | resulting trades | type       | tif     | reference      |
+      | trader3    | ETH/DEC19 | buy  | 50    | 100   | 0                | TYPE_LIMIT | TIF_GTC | buy-position-3 |
+      | auxiliary1 | ETH/DEC19 | sell | 50    | 100   | 1                | TYPE_LIMIT | TIF_GTC | sell-provider-1|
+      | auxiliary2 | ETH/DEC19 | buy  | 50    | 10    | 0                | TYPE_LIMIT | TIF_GTC | sell-provider-1|
 
     And the mark price should be "100" for the market "ETH/DEC19"
-
+       Then debug transfers
     # trader3 got close-out, trader3's order has been sold to network, and then trader2 bought the order from the network 
     # as it had the highest buy price 
     And the following trades should be executed:
@@ -89,25 +81,24 @@ Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/file
 
     And the cumulated balance for all accounts should be worth "2000000000250"
 
-    # check that trader3 is close-out but trader2 is not 
+    # check that trader3 is closed-out but trader2 is not 
     And the parties should have the following margin levels:
       | party   | market id | maintenance | search | initial | release |
-      | trader3 | ETH/DEC19 | 0           | 0      | 0       | 0       |
       | trader2 | ETH/DEC19 | 50          | 75     | 100     | 150     |
+      | trader3 | ETH/DEC19 | 0           | 0      | 0       | 0       |
      Then the parties should have the following profit and loss: 
       | party   | volume | unrealised pnl | realised pnl |
       | trader2 | 50     | 2500           | -2400        |
       | trader3 | 0      | 0              | -100         |
 
-    # check trader2 margin level, trader2 is not close-out yet since new mark price is not updated
+    # check trader2 margin level, trader2 is not closed-out yet since new mark price is not updated
     # eventhough  trader2 does not have enough margin 
-
     Then the parties should have the following account balances:
-      | party  | asset | market id | margin   | general |
-      | trader2| BTC   | ETH/DEC19 | 200      | 50      |
-      | trader3| BTC   | ETH/DEC19 | 0        | 0      |
-      | auxiliary1 | BTC   | ETH/DEC19 | 109400    | 999999889700     |
-      | auxiliary2 | BTC   | ETH/DEC19 | 3200      | 999999997700     |
+      | party      | asset | market id | margin    | general      |
+      | trader2    | BTC   | ETH/DEC19 | 200       | 50           |
+      | trader3    | BTC   | ETH/DEC19 | 0         | 0            |
+      | auxiliary1 | BTC   | ETH/DEC19 | 109400    | 999999889700 |
+      | auxiliary2 | BTC   | ETH/DEC19 | 3200      | 999999997700 |
      
     # setup new mark price, which is the same as when trader2 traded with network
     Then the parties place the following orders:
@@ -130,11 +121,10 @@ Feature: closeout-cascases & https://github.com/vegaprotocol/vega/pull/4138/file
 
     Then the parties should have the following profit and loss:
       | party           | volume | unrealised pnl | realised pnl |
-      | auxiliary1      | -70    |  2100          | -2250        |
-      | auxiliary2      |  70    |  2400          | -2000        |
       | trader2         | 0      |     0          | -150         |
       | trader3         | 0      |     0          | -100         | 
-
+      | auxiliary1      | -70    |  2100          | -2250        |
+      | auxiliary2      |  70    |  2400          | -2000        |
 
     Then the order book should have the following volumes for market "ETH/DEC19":
       | side | price    | volume |
