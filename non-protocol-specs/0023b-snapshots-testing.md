@@ -8,7 +8,7 @@ type Config struct {
 	RetryLimit  int                // How many times should we try to load a snapshot when we get block checksum errors
 	Storage     string             // What type of storage are we using (GoLevelDB)
 	DBPath      string             // Where do the database files live
-  StartHeight int                // What block height do we want to load a snapshot for (0 by default, -1 means the latest)
+    StartHeight int                // What block height do we want to load a snapshot for (0 by default, -1 means the latest)
 }
 ```
 
@@ -21,7 +21,7 @@ We can divide the testing into two sections, one for creating snapshots and the 
 ### Creating Snapshots
 Dockerisedvega.sh can be used to start up a system to test the creation of snapshots.
 
-`vegatools snapshotdb -d<snapshot folder>` will display all the currently held snapshots in the goleveldb database. This tool can be used to verify that new snapshots are being created and that old ones are being deleted to stay within the versions limit.
+`vegatools snapshotdb -d<snapshot folder>` will display all the currently held snapshots in the goleveldb database. This tool can be used to verify that new snapshots are being created and that old ones are being deleted to stay within the versions limit. The tool can only access the database folder correctly when vega core is not running. This is because the vega core maintains a lock on the the database to prevent other processes from changing the data.
 
 ```
 vegatools snapshotdb -d=<snapshot folder>
@@ -40,12 +40,23 @@ vegatools snapshotdb -d=<snapshot folder>
 }
 ```
 
-Adding the command line option `-v` will cause the tool to only output the 
+Adding the command line option `-v` will cause the tool to only output the number of versions stored
 
 ```
 vegatools snapshotdb -d=<snapshot folder> -v
 { Versions: 10 }
 ```
+
+
+#### Test Scenarios
+
+### Validating snapshots
+
+Snapshots store the state of every changeable engine in the Vega core. Therefore to gain confidence that each engine is saving and restoring correctly we need to exercise each core for those functions.
+
+
+
+
 
 We need to be able to stop and restart nodes as part of DV so we can test it.
 
