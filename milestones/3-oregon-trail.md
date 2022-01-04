@@ -35,6 +35,8 @@
 
 
 ### Refactors
+| Priority | Feature | Because | Details | Owner </br>(Spec Lead) | Sub-Function |
+|:---------:|---------|---------|:------:|:------:|:------:|
 | **1** | Internalize ethereum-event-forwarder | To simplify the deployment of vega and minimize the interaction with external softwares | [Issue](https://github.com/vegaprotocol/vega/issues/4553) | @core | Core |
 | **2** | Rewrite Dockerised Vega | Dockerised Vega is hard to maintain and is slowing us down | [Issue](https://github.com/orgs/vegaprotocol/projects/95#card-68976394) | @core | Devops</br>Core |
 
