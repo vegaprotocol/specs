@@ -7,13 +7,6 @@
 * **Target timings**: 6-8 weeks (late Feb to coinside with Eth Denver)
 
 
-### Original Feature Listings (do we still need?):
-| Priority | Feature | Because | Owner |
-|:---------:|---------|---------|:------:|
-| **1** | [Data Sourcing](https://github.com/orgs/vegaprotocol/projects/19) Oracle Data bot |  Markets need settlement data | @barnabee  |
-| **2** | [Fractional order sizes](https://github.com/orgs/vegaprotocol/projects/69) |  We need to support more prevision. | @barnabee  |
-
-
 ## Key Requirements
 | Priority | Feature | Because | Details | Owner </br>(Spec Lead) | Sub-Function |
 |:---------:|---------|---------|:------:|:------:|:------:|
