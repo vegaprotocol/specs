@@ -61,7 +61,7 @@ Note that the state variable calculation inputs need to be gathered when the eve
 
 ### Update events
 
-When we say a trigger should trigger calculation of all we currently mean:
+The following quantities should be recalculated each time an update event gets emitted:
 
 1) risk factors
 2) price monitoring bounds
@@ -70,10 +70,10 @@ but as Vega evolves there may be more things.
 
 Implement the following state variable update events:
 
-- market enactment, this should trigger risk factor calculation,
-- time-based trigger, governed by network parameter `network.floatingPointUpdates.delay` set by default to `5m`. For each market the clock should start ticking at the end of the opening auction and then reset by any event that "recalculates all". This event should recalculate all,
-- opening auction sees uncrossing price for first time: probabilities of trading and price monitoring should be calculated,
-- auction (of any type) ending: probabilities of trading and price monitoring should be calculated.  
+- market enactment
+- time-based trigger, governed by network parameter `network.floatingPointUpdates.delay` set by default to `5m` - for each market the clock should start ticking at the end of the opening auction and then reset by any update event,
+- opening auction sees uncrossing price for first time,
+- auction (of any type) ending.
 
 ## Current floating-point dependencies
 
@@ -82,3 +82,7 @@ This section outlines floating-point quantities `vega` currently relies on:
 - [`CalculateRiskFactors(current *types.RiskResult) (bool, *types.RiskResult)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L24) - calculates risk factors (short and long), called each time time within the application is updated ([`OnChainTimeUpdate(...)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/execution/market.go#L624)) static for log-normal model.
 - [`PriceRange(price, yearFraction, probability num.Decimal) (minPrice, maxPrice num.Decimal)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L25) - calculates risk minimum and maximum price at specified probability level and projection horizon given current price, called from [price montiroing engine](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/monitor/price/pricemonitoring.go#L80) each time bounds are updated.
 - [`ProbabilityOfTrading(currentP, orderP *num.Uint, minP, maxP, yFrac num.Decimal, isBid, applyMinMax bool) num.Decimal`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L26) - calculates probability of trading at a specified projection horizon of the specified order given current price and min/max bracket, called from [supplied liquidity engine](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/liquidity/engine.go#L34) each time new liquidity provision orders are deployed.
+
+## Acceptance criteria
+
+- 
