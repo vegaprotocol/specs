@@ -47,16 +47,15 @@ If risk factors have been updated, the margin levels for all market participants
 
 Recalculate all margins for when any of the following are met:
 
-1. Order book changes (subject to a threshold being exceeded)
-1. If mark price changes
-1. When market observable used in the [margin calculation](./0019-margin-calculator.md) changes
+1. when market observable used in the [margin calculation](0019-margin-calculator.md) changes,
+2. when risk factors are [updated](0065-floating-point-consensus.md).
 
 #### 3. Updating margins when positions have changed
 
 If already re-calculating all margins, don’t need to check for this. Otherwise, recalculate one participant's margins if any of the conditions below are met:
 
 1. If a trader’s net open position changes
-1. If either or both of a traders net potential long or short position (e.g. the sum of all buy order volume and sum of all sell order volume) has changed
+2. If either or both of a traders net potential long or short position (e.g. the sum of all buy order volume and sum of all sell order volume) has changed
 
 
 ### **Utilising margins to evaluate solvency**
