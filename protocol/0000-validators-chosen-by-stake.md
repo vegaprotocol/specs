@@ -46,7 +46,7 @@ From now we assume that the transaction has been submitted and the node started.
 
 Basic vega chain liveness criteria is covered in their [performance score](0064-validator-performance-based-rewards.md). 
 
-Verifying Ethereum (and later other chain) integration
+## Verifying Ethereum (and later other chain) integration
 1) They will be the first node to forward a subsequently accepted ethereum event at least `validator.minimumEthereumEventsForNewValidator` with a default of `3`. 
 1) They are the first one to vote for any ethereum event at least `validator.minimumEthereumEventsForNewValidator` times. 
 
@@ -56,22 +56,22 @@ This section might make more sense in 0061-simple-POS-rewards-SweetWater.md - TB
 
 Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing. Thus for each validator that is on the multisig contract it will know the validator score (weight) the ethereum multisig is using. 
 
-We will have `number_multig_signers` represented on the multisig (currently `13`) but this could change. 
+We will have `number_multisig_signers` represented on the multisig (currently `13`) but this could change. 
 
-In the reward calculation for the top `number_multig_signers` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_val_score)` when calculating the final reward with `0` for those who are in the top `number_multig_signers` by score but *not* on the multisig contract. 
+In the reward calculation for the top `number_multisig_signers` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_val_score)` when calculating the final reward with `0` for those who are in the top `number_multisig_signers` by score but *not* on the multisig contract. 
 
 Thus a validator who is not there but should be has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well. 
 
-Note that this could become obsolete if we go to threshold signatures. 
+Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions. 
 
 
 # Acceptance criteria
 
 ## Joining / leaving VEGA chain
 1) A running non-validator node can submit a transaction to become a validator. 
-2) Their perfomance score will be calculated.
-3) If they meet the Ethereum verification criteria and have enough stake they will become part of the validator set at the start of next epoch. 
-4) The node that got "pushed out" will no longer be a validator node for Tendermint. 
+2) Their perfomance score will be calculated. See [performance score](0064-validator-performance-based-rewards.md).
+3) If they meet the Ethereum verification criteria and have enough stake they will become part of the validator set at the start of next epoch. See about [verifying ethereum integration](#VerifyingEthereum).
+4) Hence after the end of the current epoch the node that got "pushed out" will no longer be a validator node for Tendermint. 
 
 ## Multisig update
 1) Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). 
