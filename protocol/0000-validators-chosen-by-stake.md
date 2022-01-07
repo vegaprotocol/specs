@@ -8,7 +8,8 @@ At a high level a participant that wishes to become a validator will:
 1) self-stake to their validator Vega key at least `reward.staking.delegation.minimumValidatorStake`. 
 1) wait for others to delegate to them. 
 
-At the end of each epoch Vega will choose the validators with the `validator_score`, see [rewards spec](0061-simple-POS-rewards-SweetWater.md) up to `network.numberOfValidators`. Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance. A completely dead node will have `performance_score = 0` and will thus get automaticaly excluded, regardless of their stake.
+At the end of each epoch Vega will choose the validators with the `validator_score`, see [rewards spec](0061-simple-POS-rewards-SweetWater.md) up to `network.numberOfValidators` with the highest score. Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance. A completely dead node will have `performance_score = 0` and will thus get automaticaly excluded, regardless of their stake.
+If two validators have the same score then the one that is currently a validator is placed higher in the list. 
 
 These will be the validating nodes for the next epoch. Note that to be eligible certain criteria need to be met: 
 1) Own stake >= `reward.staking.delegation.minimumValidatorStake`. 
