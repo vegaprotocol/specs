@@ -54,7 +54,7 @@ If at least one value differs then:
 The bundle is accepted if `(2/3)` of nodes by tendermint weight vote to accept the bundle.
 If the bundle is rejected go back to selecting a node at random by tendermint weight and repeat.
 This is repeated until a value has been accepted.
-1) This may continue indefinitely. It will only be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit an event annoucing this (we either have a really badly unstable calculation or malicious nodes).
+1) This may continue indefinitely. It will only be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit an event announcing this (we either have a really badly unstable calculation or malicious nodes).
 1) If update hasn't been achieved after `3` update events an appropriate event should be emitted to indicate that market is operating with stale state variables.
 
 Note that the state variable calculation inputs need to be gathered when the event triggering the re-calculation has been announced (this is determinstic) so that all calculations are done with the same inputs for the same event.
@@ -91,3 +91,5 @@ This section outlines floating-point quantities `vega` currently relies on:
 - When uncrossing price is available for the first time price monitoring bounds and probability of trading get recalculated.
 - When auction of each type ends price monitoring bounds and probability of trading get recalculated.
 - Time-based trigger updates price montiroing bounds and probability of trading.
+- An appropriate event is emitted when at least one of the values submitted by the nodes differs by more than a tolerance (conversely differences within the tolerance should not trigger an event).
+- Event informing of market running with stale values is emitted after update isn't achieved 3 times (nodes can't agree on value to be used).
