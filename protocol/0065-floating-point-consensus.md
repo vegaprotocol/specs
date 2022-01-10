@@ -92,4 +92,4 @@ This section outlines floating-point quantities `vega` currently relies on:
 - When auction of each type ends price monitoring bounds and probability of trading get recalculated.
 - Time-based trigger updates price montiroing bounds and probability of trading.
 - An appropriate event is emitted when at least one of the values submitted by the nodes differs by more than a tolerance (conversely differences within the tolerance should not trigger an event).
-- Event informing of market running with stale values is emitted after update isn't achieved 3 times (nodes can't agree on value to be used).
+- Event informing of market running with stale values is emitted after update isn't achieved after 3 consecutive update events (nodes can't agree on value to be used).
