@@ -61,19 +61,18 @@ Note that the state variable calculation inputs need to be gathered when the eve
 
 ### Update events
 
-The following quantities should be recalculated each time an update event gets emitted:
-
-1) risk factors
-2) price monitoring bounds
-3) probabilities of trading
-but as Vega evolves there may be more things.
-
 Implement the following state variable update events:
 
-- market enactment
-- time-based trigger, governed by network parameter `network.floatingPointUpdates.delay` set by default to `5m` - for each market the clock should start ticking at the end of the opening auction and then reset by any update event,
+- market enactment,
+- time-based trigger, governed by network parameter `network.floatingPointUpdates.delay` set by default to `5m` - for each market the clock should start ticking at the end of the opening auction and then be reset by any other update event following it
 - opening auction sees uncrossing price for first time,
 - auction (of any type) ending.
+
+The following quantities should be recalculated by the associated triggers:
+
+1) risk factors: market enactment
+2) price monitoring bounds: all triggers except market enactment
+3) probabilities of trading: all triggers except market enactment
 
 ## Current floating-point dependencies
 
@@ -85,4 +84,10 @@ This section outlines floating-point quantities `vega` currently relies on:
 
 ## Acceptance criteria
 
-- 
+- Default risk-factors are both equal to 1.
+- Default probability of trading is 0.005.
+- Default price monitoring bounds are 10% up and 10% down.
+- Market enactment triggers state variable recalculation (verify that default values are no longer used).
+- When uncrossing price is available for the first time price monitoring bounds and probability of trading get recalculated.
+- When auction of each type ends price monitoring bounds and probability of trading get recalculated.
+- Time-based trigger updates price montiroing bounds and probability of trading.
