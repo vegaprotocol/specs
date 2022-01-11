@@ -26,9 +26,12 @@ The system should be able to delay transfer. Such feature would be useful in the
 In order to do this the request for transfer should contain a field indicating when the destination account should be credited. The funds should be taken straight away from the origin account, but distributed to the destination only once the time is reached.
 
 ## Spam protection
-In order to prevent the abuse of user-initiated transfers as spam attack, the system will be configurabled with a [network parameter](./0054-network-parameters.md) that will limit the number of transfers that a user can initiate within a set period of time.
+In order to prevent the abuse of user-initiated transfers as spam attack, the system will be configurabled with a [network parameter](#network-parameters) that will limit the number of transfers that a user can initiate within a set period of time.
 
 ## Fees
+A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](./0059-simple-POS-rewards.md).
+
+The fee is set by a [network parameter](#network-parameter) that defines the proportion of each transfer taken as a fee. The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred. It is [paid in to the infrastructure fee pool](./0029-fees.md#collecting-and-distributing-fees). Fees are charged in the asset that is being transferred.
 
 ## Proposed command
 This new functionality requires the introduction of a new command in the transaction API. The payload is as follows:
@@ -51,6 +54,13 @@ message TransferFunds {
 }
 ```
 
+## Network Parameters
+| Property         | Type   | Example value | Description |
+|------------------|--------| ------------|--------------|
+| `spam.protection.maxUserTransfersPerMinute`       | String (integer) |  `"1"`        | The most transfers a use can initiate per minute | 
+| `transfer.fee`       | String (float) |  `"0.0001"`        | The percentage of the transfer charged as a fee | 
+
+
 ## Acceptance criteria
 - [ ] As a user I can transfer funds from a general account to an other general account
   - [ ] I can do a delayed transfer in the same conditions
@@ -63,6 +73,7 @@ message TransferFunds {
 - [ ] As a user I cannot transfer funds from accounts that I do not own
 - [ ] As a user I cannot transfer funds from accounts I own but from the type is not supported
 - [ ] As a user I can do a transfer from a correct account, and fees are taken from my account to execute the transfer
+  - [ ] The fee cost is correctly calculated using the network parameter
   - [ ] If I have enough funds to pay transfer and fees, the transfer happen
   - [ ] If I do not have enough funds to pay transfer and fees, the transfer is stopped.
   - [ ] The fees are being paid into the infrastructure pool
