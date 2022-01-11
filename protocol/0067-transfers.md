@@ -54,17 +54,17 @@ message TransferFunds {
 
 ### Acceptance criteria
 - [ ] As a user I can transfer funds from a general account to an other general account
- - [ ] I can do a delayed transfer in the same conditions
+  - [ ] I can do a delayed transfer in the same conditions
 - [ ] As a user I can transfer funds from a general account to reward account
- - [ ] I can do a delayed transfer in the same conditions
+  - [ ] I can do a delayed transfer in the same conditions
 - [ ] As a user I can transfer funds from a general account to an locked_for_staking
- - [ ] I can do a delayed transfer in the same conditions
+  - [ ] I can do a delayed transfer in the same conditions
 - [ ] As a user I can transfer funds from a locked_from_staking account to a general_account
- - [ ] I can do a delayed transfer in the same conditions
+  - [ ] I can do a delayed transfer in the same conditions
 - [ ] As a user I cannot transfer funds from accounts that I do not own
 - [ ] As a user I cannot transfer funds from accounts I own but from the type is not supported
 - [ ] As a user I can do a transfer from a correct account, and fees are taken from my account to execute the transfer
- - [ ] If I have enough funds to pay transfer and fees, the transfer happen
- - [ ] If I do not have enough funds to pay transfer and fees, the transfer is stopped.
- - [ ] The fees are being paid into the infrastructure pool
+  - [ ] If I have enough funds to pay transfer and fees, the transfer happen
+  - [ ] If I do not have enough funds to pay transfer and fees, the transfer is stopped.
+  - [ ] The fees are being paid into the infrastructure pool
 - [ ] The spam protection mecanics prevent me to do more than X transfers per epoch.
