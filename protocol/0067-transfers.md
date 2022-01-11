@@ -32,7 +32,7 @@ origin account, but distributed to the destination only once the time is reached
 ### Fees
 
 ### Proposed command
-This new functionnality requires the introduction of a new command in the transaction API. Here's a propose payloda for it, using protobuf syntax:
+This new functionality requires the introduction of a new command in the transaction API. The payload is as follows:
 ```
 message TransferFunds {
   // Support GENERAL and LOCKED_FOR_STAKING at first
