@@ -2,7 +2,7 @@
 
 The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury. 
 The rewards are based on their own stake and the amount of stake delegated to them, 
-see [validator rewards](./0061-simple-pos-rewards-sweetwater.md).
+see [validator rewards](./0061-simple-POS-rewards-SweetWater.md).
 The purpose of the specification is to define how will the validator rewards will be additionally scaled based on their performance. 
 
 ## Perfomance Measurement 1 (PM1): Offline Validator (sufficient for Oregon Trail)
@@ -18,7 +18,7 @@ This counts need to be stored, per validator node, in vega core.
 
 Define the performance score to be `performance_score := (l-f)/l` if `l > 0` and `performance_score = 0` if `l = 0`. 
 
-The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-simple-pos-rewards-sweetwater.md). 
+The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-simple-POS-rewards-SweetWater.md). 
 
 ### Acceptance criteria 
 
