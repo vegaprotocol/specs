@@ -1,7 +1,7 @@
 Transfers
 =========
 
-We introduce here a mechanism to transfer fund from an account to another, and this iniated explicitly by an user of the vega network.
+This spec introduces a mechanism to transfer funds from one account to another, initiated explicitly by a user of the Vega network.
 These transfers are not to be confused with the internal concept of transfers which results from event happening inside the protocol.
 
 This feature would allow a couple of scenario:
