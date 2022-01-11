@@ -15,7 +15,7 @@ Transfer can only be initiated by a party using their own funds from [accounts](
 
 Here's the list of accounts types from which a user send funds from:
 - GENERAL
-- LOCKED_FOR_STAKING (note: this is an account to be introduce in the future, where the funds would be locked, and will be accounted for staking during the epoch).
+- LOCKED_FOR_STAKING (note: this account does not yet exist, but will hold funds that are locked for staking during an epoch).
 
 Here's the list of accounts types into which funds can be sent:
 - GENERAL
