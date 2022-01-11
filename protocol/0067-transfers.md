@@ -11,7 +11,7 @@ Allowing users to initiate transfers allows for the following capabilities:
 - etc..
 
 ### Limits
-Transfer can only be iniated by a user using their own funds from their own account, directed to a limited set of accounts types.
+Transfer can only be initiated by a party using their own funds from [accounts](./0013-accounts.md) that they are in control of:
 
 Here's the list of accounts types from which a user send funds from:
 - GENERAL
