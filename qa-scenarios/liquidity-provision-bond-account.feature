@@ -5,7 +5,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
       | name                                          | value |
       | market.stake.target.timeWindow                | 24h   |
       | market.stake.target.scalingFactor             | 1     |
-      | market.liquidity.bondPenaltyParameter         | 1     |
+      | market.liquidity.bondPenaltyParameter         | 0     |
       | market.liquidity.targetstake.triggering.ratio | 0.1   |
     And the average block duration is "1"
     # And the simple risk model named "simple-risk-model-1":
@@ -106,7 +106,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
 
     And the market data for the market "ETH/MAR22" should be:
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
-      | 1010       | TRADING_MODE_CONTINUOUS | 1       | 1000      | 1000      | 213414       | 50000          | 60            |
+      | 1000       | TRADING_MODE_CONTINUOUS | 1       | 1000      | 1000      | 213414       | 50000          | 60            |
     # target_stake = mark_price x max_oi x target_stake_scaling_factor x rf = 1010 x 13 x 1 x 0.1
     # target stake 1313 with target trigger on 0.6 -> ~788 triggers liquidity auction
 
@@ -131,26 +131,32 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
 
    When the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference      |
-      | party0 | ETH/MAR22 | sell | 15     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party3-buy-1   |
+      | party0 | ETH/MAR22 | sell | 40     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party3-buy-1   |
 
-    # #check the volume on the order book
-    # Then the order book should have the following volumes for market "ETH/MAR22":
-    #   | side | price    | volume |
-    #   | sell | 1100     | 1      |
-    #   | sell | 1010     | 101    |
-    #   | buy  | 1000     | 130    |
-    #   | buy  | 990      | 1      |
-    #   | buy  | 900      | 1      |
-      # check the requried balances 
+  And the market data for the market "ETH/MAR22" should be:
+      | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
+      | 1000       | TRADING_MODE_CONTINUOUS | 1       | 1000      | 1000      | 213414       | 50000          | 60            |
+
+    #check the volume on the order book
+    Then the order book should have the following volumes for market "ETH/MAR22":
+      | side | price    | volume |
+      | sell | 1100     | 1      |
+      | sell | 1010     | 1      |
+      | sell | 1000     | 100    |
+      | buy  | 1000     | 0      |
+      | buy  | 990      | 103    |
+      | buy  | 900      | 1      |
+
+  #check the requried balances 
    And the parties should have the following account balances:
       | party  | asset | market id | margin | general  | bond |
-      | party0 | USD   | ETH/MAR22 | 459308 | 0        | 0    |
+      | party0 | USD   | ETH/MAR22 | 500080 | 0        | 0    |
       | party1 | USD   | ETH/MAR22 | 12190  | 99987810 |  0   |
       | party2 | USD   | ETH/MAR22 | 264754 | 99734946 |  0   |
 
     #check the margin levels----why its changed for Pary0?????????
-  #  Then the parties should have the following margin levels: 
-  #     | party  | market id | maintenance | search | initial | release  |
-  #     | party0 | ETH/MAR22 | 106708      | 117378 | 128049  | 149391   |
-  #     | party1 | ETH/MAR22 | 10159       | 11174  | 12190   | 14222    |
-  #     | party2 | ETH/MAR22 | 221129      | 243241 | 265354  | 309580   |
+   Then the parties should have the following margin levels: 
+      | party  | market id | maintenance | search | initial | release  |
+      | party0 | ETH/MAR22 | 355691      | 391260 | 426829  | 497967   |
+      | party1 | ETH/MAR22 | 10159       | 11174  | 12190   | 14222    |
+      | party2 | ETH/MAR22 | 221129      | 243241 | 265354  | 309580   |
