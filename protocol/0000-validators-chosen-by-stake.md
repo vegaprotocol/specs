@@ -1,6 +1,8 @@
 # Validators chosen by stake
 
 New network parameter `network.numberOfValidators`. 
+New network parameter `network.validatorIncumbentBonus`.
+New network parameter `network.numberMultisigSigners`
 
 At a high level a participant that wishes to become a validator will:
 1) start a Vega node as non-validating node + associated infra 
@@ -8,12 +10,21 @@ At a high level a participant that wishes to become a validator will:
 1) self-stake to their validator Vega key at least `reward.staking.delegation.minimumValidatorStake`. 
 1) wait for others to delegate to them. 
 
-At the end of each epoch Vega will choose the validators with the `validator_score`, see [rewards spec](0061-simple-POS-rewards-SweetWater.md) up to `network.numberOfValidators` with the highest score. Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance. A completely dead node will have `performance_score = 0` and will thus get automaticaly excluded, regardless of their stake.
-If two validators have the same score then the one that is currently a validator is placed higher in the list. 
-
-These will be the validating nodes for the next epoch. Note that to be eligible certain criteria need to be met: 
+Note that to be eligible as a potential validator certain criteria need to be met: 
 1) Own stake >= `reward.staking.delegation.minimumValidatorStake`. 
 1) Network has verified key ownership (see below).
+
+
+At the end of each epoch Vega will calculate `validator_score`, see [rewards spec]. 
+For validators currently in the Vega validator set it will scale the `validator_score` by `(1+see [rewards spec])`. 
+Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance togther whether the multisig contract carries the correct information [multisig](0030-multisig_control_spec.md); more on this later.
+
+Vega will sort all current validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score. 
+If `v_l = v_m` then we place higher the one who's been validator for longer.
+Vega will sort all those who submitted a transaction wishing to be validators using `validator_score` as `[w_1, ..., w_k]`. 
+If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a Tendermint validator. If `w_l = w_m` then we resolve this by giving priority to the one who submitted the transaction to become validator earlier.  
+A completely dead node that's proposing to become a validator will have `performance_score = 0` and will thus get automaticaly excluded, regardless of their stake.
+
 
 ## Becoming validator transaction 
 All keys mentioned here are understood to match the node configuration.
@@ -51,17 +62,20 @@ Basic vega chain liveness criteria is covered in their [performance score](0064-
 1) They will be the first node to forward a subsequently accepted ethereum event at least `validator.minimumEthereumEventsForNewValidator` with a default of `3`. 
 1) They are the first one to vote for any ethereum event at least `validator.minimumEthereumEventsForNewValidator` times. 
 
-## Multisig weight updates WIP
+## Multisig updates (and multisig weight updates if those are used)
 
-This section might make more sense in 0061-simple-POS-rewards-SweetWater.md - TBD.
+Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing. 
+Thus for each validator that is on the multisig contract it will know the validator score (weight) the ethereum multisig is using. 
+Vega node will watch for multisig signer changes. 
 
-Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing. Thus for each validator that is on the multisig contract it will know the validator score (weight) the ethereum multisig is using. 
+We will have `network.numberMultisigSigners` represented on the multisig (currently `13`) but this could change. 
 
-We will have `number_multisig_signers` represented on the multisig (currently `13`) but this could change. 
-
-In the reward calculation for the top `number_multisig_signers` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_val_score)` when calculating the final reward with `0` for those who are in the top `number_multisig_signers` by score but *not* on the multisig contract. 
+In the reward calculation for the top `network.numberMultisigSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_val_score)` when calculating the final reward with `0` for those who are in the top `network.numberMultisigSigners` by score but *not* on the multisig contract. 
 
 Thus a validator who is not there but should be has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well. 
+
+As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) then at the end of the epoch their score will be `0`. 
+They will not get any rewards and at the start of the next epoch they will be removed from the validator set. 
 
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions. 
 

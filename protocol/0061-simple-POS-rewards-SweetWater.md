@@ -18,10 +18,15 @@ This applies both the rewards coming from the [on-chain-treasury](0055-on-chain-
 - `reward.staking.delegation.maxPayoutPerParticipant` - the maximum (applies only to on-chain tresaury rewards in the form of thestaking and governance asset) that each participant may receive as a payout from single epoch. 
 - `reward.staking.delegation.maxPayoutPerEpoch` - the maximum (applies only to on-chain tresaury rewards in the form of thestaking and governance asset) that may be paid out for a given epoch.
 
+
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
 
 # Calculation
 This applies to the on-chain-treasury for each asset as well as network infrastructure fee pool for each asset. 
+
+As step *zero*: if the number of validators on the Vega chain is lower than the number of signers on the [multisig ethereum contract](0030-multisig_control_spec.md) then the reward is zero. 
+The reason is that if there are signatures the multisig is expecting that Vega chain isn't providing there is a danger that control of the multisig is lost. 
+This is to ensure that validators (all validators) have incentive to pay Etherum gas to update the multisig signer list.  
 
 At the end of an [epoch](./0050-epochs.md), payments are calculated. First we determine the amount to pay out during that epoch: 
 1. multiply the amount in the reward pool by `reward.staking.delegation.payoutFraction`; this is the amount going into next step, call it `stakingRewardAmtForEpoch`.
