@@ -1,6 +1,8 @@
+---
+
 name: Auto Assign New Pull Requests to Project(s)
 
-on:
+"on":
   pull_request:
     types: [opened]
 
@@ -14,4 +16,3 @@ jobs:
           project: Protocol Design (Team Board)
           column: In progress
           repo-token: ${{ secrets.GH_NEW_CARD_TO_PROJECT }}
-

@@ -14,23 +14,27 @@ This is especially important early on when rapid iteration is desirable, as the 
 - Bugs, security breaches, or other issues during alpha could either take out the chain OR make it desirable to halt block production. It's important to consider what happens next if this occurs.
 
 # Overview
-There are really two main features:
+There are four main features:
 1. Create checkpoints with relevant (but minimal) information at regular intervals, and on every deposit and every withdrawal request.
-2. Ability to load a checkpoint file as part of genesis.
+2. Ability to specify a checkpoint hash as part of genesis.
+3. A new 'Restore' transaction that contains the full checkpoint file and triggers state restoration
+4. A new 'checkpoint hash' transaction is broadcast by all validators
 
-Point two requires that at load time, each node calculates the hash of the checkpoint file. It then sends this through consensus to make sure that all the nodes in the new network are agreeing on the state.
+Point two requires that at load time, each node calculates the hash of the checkpoint file. It then sends this through consensus to make sure that all the nodes in the new network agree on the state. 
 
 
 # Creating a checkpoint
 Information to store:
-- All [network parameters](../protocol/0054-network-parameters.md)
-- Including those defined [below](#network-parameters).
+- All [network parameters](../protocol/0054-network-parameters.md), including those defined [below](#network-parameters).
 - All [asset definitions](../protocol/0040-asset-framework.md#asset-definition). Insurance pool balance from the markets will be summed up per asset and balance per asset stored.
 - All market proposals ([creation](../protocol/0028-governance.md#1-create-market) and [update](../protocol/0028-governance.md#2-change-market-parameters)) that have been *accepted*.
 - All [asset proposals](../protocol/0028-governance.md) that have been *accepted*.
 - All delegation info.
-- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the network params that govern [Staking and delegation](0000-reward-functions.md) ).
+- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the staking and delegation reward account balance and network params that govern [Staking and delegation](../protocol/0057-reward-functions.md) ).
+- All reward balances accrued by all parties but not yet transferred to their general account due to payout delays.
 - [Account balances](../protocol/0013-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below about signed-for-withdrawal. Does *not* include the "staking" account balance.
+- Fee pools: Fees are paid into per market or per asset pools and distributed periodically. 
+- Event ID of the last processed deposit event for all bridged chains
 - Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
 - hash of the previous block, block number and transaction id of the block from which the snapshot is derived
 When a checkpoint is created, each validator should calculate its hash and submit this as a transaction to the chain(*).
@@ -46,10 +50,11 @@ Information we explicitly don't try to checkpoint:
 - Balances in the "signed for withdrawal" account.
 - Market and asset proposals where the voting period hasn't ended.
 
-When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain(*).
-(*) This is so that non-validating parties can trust the hash being restored represents truly the balances.
+When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain, so that non-validating parties can trust the hash being restored represents truly the balances.
 
 The checkpoint file should either be human-readable OR there should be a command line tool to convert into human readable form.
+
+# Specifying the checkpoint hash in genesis
 
 # Restoring a checkpoint
 The hash of the state file to be restored must be specified in genesis.
@@ -57,7 +62,7 @@ Any validator will submit a transaction containing the checkpoint file. Nodes ve
 - If the hash matches, it will be restored.
 - If it does not, the hash transaction will have no effect.
 
-If the genesis file has a previous state hash no transactions will be processed until the restore transaction arrives and is processed.
+If the genesis file has a previous state hash, all transactions will be rejected until the restore transaction arrives and is processed.
 
 The state will be restored in this order:
 
@@ -71,9 +76,9 @@ The state will be restored in this order:
     - If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
     - In case `now + net_param_min_enact >= trading_terminated` set the status to cancelled.
 4. Replay events from bridged chains
-   - Concerning bridges used to depost collateral for trading, replay from the last event id stored in the checkpoint.
+   - Concerning bridges used to deposit collateral for trading, replay from the last event id stored in the checkpoint.
    - Concerning the staking bridges, the balances are not stored in the checkpoints, only delegations to validators is kept track of.
-	 When being restarted, the node will load all events emitted by the staking bridges (from the creationg of the staking bridge contracts),
+	 When being restarted, the node will load all events emitted by the staking bridges (from the creation of the staking bridge contracts),
 	 and reconcile the accounts balances, then apply again the delegations to the validators.
 
 There should be a tool to extract all assets from the restore file so that they can be added to genesis block manually, should the validators so desire.
@@ -124,7 +129,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The other party has general balance of `other_gen_bal`, margin balance `other_margin_bal` and bond account balance of `0`, all in `tUSD`.
 1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset tUSD.
 1. The party LP has a `tUSD` general account balance equal to `LP_gen_bal + LP_margin_bal + LP_bond_bal`.
 1. The other party has a `tUSD` general account balance equal to `other_gen_bal + other_margin_bal`.
@@ -144,7 +149,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Another party places a limit sell order on the market and has `other_gen_bal`, margin balance `other_margin_bal`.
 1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset tUSD.
 1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
 1. The LP party has general account balance in tUSD of `9000` and bond account balance `1000` on the market `id_xxx`.
@@ -157,7 +162,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD. The voting period ends 1 year in the future. The enactment date is 2 years in the future.
 1. Enough time passes (but less than 1 year) so a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset tUSD.
 1. There is no market and there are no market proposals.
 
@@ -169,7 +174,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. More than 1 minute has passed and the minimum participation threshold hasn't been met. The market proposal status is `rejected`.
 1. Enough time passes after the market has been rejected so a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset tUSD.
 1. There is no market and there are no market proposals.
 1. The LP party has general account balance in tUSD of `10 000`.
@@ -181,7 +186,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD.
 2. Checkpoint is taken during voting period
 1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset tUSD.
 1. There is no market and there are no market proposals.
 1. The LP party has general account balance in tUSD of `10 000`.
@@ -193,7 +198,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD.
 2. Checkpoint is taken during voting period
 1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset tUSD.
 1. There is no market and there are no market proposals.
 1. The LP party has general account balance in tUSD of `10 000`.
@@ -202,10 +207,10 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. A party has general account balance of 100 tUSD.
 2. The party submits a withdrawal transaction for 100 tUSD. A checkpoint is immediately created.
 3. The network is shut down.
-4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 5. A new market is proposed
 6. The network is shut down.
-7. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+7. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is no market and there are no market proposals.
 1. The party has general account balance in tUSD of `0` and The party has "signed for withdrawal" `100`.
 
@@ -215,18 +220,17 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 3. Traded market falls into Suspended status by either Price monitoring or liquidity monitoring trigger, or product lifecycle trigger
 2. Checkpoint is taken
 1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. Market can be seen to be still Suspended.
 
 ## 💧 Test case 4: Party's Margin Account balance is put in to a General Account balance for that asset after a reset
 1. A party has tUSD general account balance of 100 tUSD.
 2. That party has tUSD margin account balance of 100 tUSD.
 3. The network is shut down.
-4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 5. That party has a tUSD general account balance of 200 tUSD
 
-
-## 💧 Test case 5: Delegation (test with N=5, 10, 20000)
+## 💧 Test case 6: Delegation (test with N=5, 10, 20000)
 1. There is a Vega token asset.
 1. There are `5` validators on the network.
 1. Each validator party `validator_party_1`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
@@ -238,7 +242,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Enough time passes after the 5 hour period so that a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
 1. Validator `1` has freed `500` tokens from the Vega Ethereum staking contract.
-1. The network is restarted with the same `5` validators and checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The network is restarted with the same `5` validators and checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is a Vega token asset.
 1. Validator parties `validator_party_2`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
 1. Validator party `validator_party_1` has `500` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
@@ -246,17 +250,46 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
 
-## 💧 Test case 6: Network Parameters / Exceptional case handling
-### 💧 Test case 6.1: timeElapsedBetweenCheckpoints not set ?
-### 💧 Test case 6.2: timeElapsedBetweenCheckpoints set to value outside acceptable range ?
+## 💧 Test case 7: Network Parameters / Exceptional case handling
+### 💧 Test case 7.1: timeElapsedBetweenCheckpoints not set ?
+### 💧 Test case 7.2: timeElapsedBetweenCheckpoints set to value outside acceptable range ?
 
+## 💧 Test case 8 (probably untestable): After network restart, stake balances are recovered by replaying all events
+1. A party deposits 100 tUSD
+1. And A party stakes 100 VEGA on Ethereum
+1. And A checkpoint is taken
+1. And that party has a staking account balance of 100 VEGA.
+1. And that party has delegated 60 VEGA to validator 1
+1. And that party has delegated 30 VEGA to validator 2
+1. And that party has 10 VEGA undelegated
+1. And the network is shut down.
+1. And the network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted .
+1. When the state is restored, but before the EthereumEventListener replays all events
+1. Then that party has 100 tUSD restored to their tUSD general account
+1. And that party has delegated 60 VEGA to validator 1
+1. And that party has delegated 30 VEGA to validator 2
+1. And that party has 0 VEGA undelegated
+1. And that party has staking account balance of 0
+1. When the EthereumEventListener has replayed all staking events
+1. Then that party has a staking account balance of 100
+1. And that party has 10 VEGA undelegated
 
-### 💧 Test case 6.3: Restore from same checkpoint run twice
-1. A party has general account balance of 100 tUSD.
-2. The party submits a withdrawal transaction for 50 tUSD. A checkpoint is immediately created.
-3. The ethereum replay says withrawal completed
-4. The network is shut down.
-5. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
-6. Party has a balance of 50 tUSD
-7. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
-8. Party has a balance of 50 tUSD
+## 💧 Test case 9: Transactions submitted before the restore transaction on a chain with a checkpoint hash specified are rejected 
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash in genesis, but the replay transaction is not submitted.
+1. Any transaction other than replay is submitted
+1. Then that transaction is rejected
+
+## 💧 Test case 10: A replay transaction is submitted with a checkpoint that does not match the hash
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from a checkpoint in genesis
+1. A restore transaction is submitted
+1. And the checkpoint data in the restore transaction does not match the hash specified in genesis
+1. Then the restore transaction is rejected
+1. And the state is not restored
+
+## 💧 Test case 11: Only one valid replay transaction can ever occur
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. Another validator submits a replay transaction
+1. That transaction is rejected

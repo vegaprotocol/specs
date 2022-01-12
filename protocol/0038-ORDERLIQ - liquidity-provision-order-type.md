@@ -25,7 +25,7 @@ Each entry must specify:
 
 1. **Liquidity proportion:** the relative proportion of the commitment to be allocated at a price level. Note, the network will normalise the liquidity proportions of the refined order set (see below). This must be a strictly positive number.
 
-2. A **price peg:** , as per normal [pegged orders](), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. 
+2. A **price peg:** , as per normal [pegged orders](./0037-pegged-orders.md), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. 
 
 ```
 # Example 1:

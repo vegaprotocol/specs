@@ -3,8 +3,7 @@ Feature name: market-insurance-pool
 # Acceptance Criteria
 - [ ] When a market opens for trading, there an insurance account that is able to be used by that market for every settlement asset of that market.
 - [ ] Only transfer requests move money in or out of the insurance account.
-- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds distributed to other same-currency insurance pools. Divide the amount to be distributed by one plus the number of markets using the same settlement asset.
-Then transfer the resulting amount to each of the markets and the final amount to the per-asset insurance pool. 
+- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the on-chain treasury.
 
 
 # Summary

@@ -2,7 +2,7 @@
 Application Binary Interface - A JSON representation list of a smart contract's functions and arguments. It is used by wallets or clients to produce a transaction that interacts with a contract that exists on the the Ethereum chain - mapping function calls and parameters in to a bytecode form that the [EVM](#EVM) will execute.
 
 ## Algorithm
-A generally understood set of rules and calculations for solving a particular problem.
+A generally understood set of rules and calculations for solving a particular problem. An algorithm that runs on several different nodes is called a protocol.
 
 ## Authentication
 The process of verifying that an actor (person or machine) is who they claim they are.
@@ -18,7 +18,7 @@ The process of verifying that an actor (person or machine) is allowed to take an
 ...
 
 ## Byzantine Fault Tolerance
-The ability for a distributed computer program to [continue processing correctly](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance) even if 1/3 of its nodes are attackers. 
+The ability for a distributed computer program to [continue processing correctly](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance) as long as less than  if 1/3 of its nodes (or, is a proof-of-stake system, less than 1/3 of the stake) are attackers. 
 
 ## Consensus
 The manner in which a distributed system with no central authority agrees upon a specific order of input transactions for distribution to clients.
@@ -70,7 +70,7 @@ Working code for an [algorithm](#algorithm). There are usually many implementati
 The amount of time before a system can achieve both consensus and finality; it's measured in time (milliseconds, seconds, or minutes usually). Latency interacts with the concepts of "consensus" and "finality". We can for instance say that the consensus latency of Bitcoin is ten minutes, but its finality latency (e.g. after 5 additional blocks are written) is 60 minutes. Because most consensus systems need to communicate multiple times to get to agreement, latency in high-speed blockchain systems will be fundamentally dictated by the speed of light and the geographical distance separating nodes.
 
 ## Longest Chain
-...
+The longes chain approach is one way to solve consensus. It consists of a mechanism that (not necessarily uniquely) determinas a leader that can propose the next block in the blockchain. If a node sees a longer chain than the one it knows, it uses that one as its new chain. Longest chain protocols do not offer finallity, i.e., every block can (theoretically) be undone. 
 
 ## MainNet
 ...
@@ -79,7 +79,7 @@ The amount of time before a system can achieve both consensus and finality; it's
 ...
 
 ## Nothing At Stake
-A theoretical problem in [Proof of Stake](#proof-of-stake) blockchains: validators can effectively break safety by voting for multiple conflicting blocks at a given block height without incurring cost for doing so. 
+A theoretical problem in [Proof of Stake](#proof-of-stake) blockchains using a longest chain protocol: validators can effectively break safety by voting for multiple conflicting blocks at a given block height without incurring cost for doing so. 
 
 ## Oracles
 An oracle is a system that allows external data to be represented on a blockchain. If a market on Vega were to be based on the amount of rainfall in Gibraltar on a specific day, the Oracle would be the system through which the volume of rain that fell on that day was logged to Vega in a way that could be used to settle the market. This would require a trusted source of rainfall data in Gibraltar to publish the data.
@@ -102,7 +102,8 @@ There are entire protocols ([Band](https://bandprotocol.com/), [Chainlink](https
 ...
 
 ## Reliable Broadcast
-... see [here](https://arxiv.org/pdf/1510.06882.pdf).
+A reliable broadcast assures that all receiving of a broadcasr nodes receive the same set of messages, and that a message sent by an honest sender is received. ... see [here](https://www.semanticscholar.org/paper/Asynchronous-consensus-and-broadcast-protocols-Bracha-Toueg/130ce1bcd496a7b9192f5f53dd8d7ef626e40675), 
+[here](https://www.shoup.net/papers/ckps.pdf) or [here](https://arxiv.org/pdf/1510.06882.pdf).
 
 ## State Channels
 ...
@@ -111,7 +112,7 @@ There are entire protocols ([Band](https://bandprotocol.com/), [Chainlink](https
 SVTs are an improved way of using signed [Vector clocks](https://en.wikipedia.org/wiki/Vector_clock) to implement byzantine fault tolerant logical clocks. The key innovation is the use of public key signatures and incrementing vectors to detect dishonest nodes. The canonical research paper is [here](http://www.cs.cmu.edu/~smith/papers/signed.pdf).
 
 ## Tendermint
-A software library, written in Go, which is an [implementation](#implementation) of [Practical Byzantine Fault Tolerance](#practical-byzantine-fault-tolerance). Multiple participating Tendermint validator nodes provide a guaranteed order of transactions to application code. 
+A software library, written in Go, which is an [implementation](#implementation) of a variation of [Practical Byzantine Fault Tolerance](#practical-byzantine-fault-tolerance). Multiple participating Tendermint validator nodes provide a guaranteed order of transactions to application code. 
 
 ## TestNet
 ...

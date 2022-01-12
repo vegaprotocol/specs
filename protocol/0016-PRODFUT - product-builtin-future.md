@@ -48,6 +48,7 @@ cash_settled_future.settlement_data(event) {
 
 	// Suspend the market if we receive settlement data before trading termination
 	// this would require investigation and governance action
+	// MVP version: If settlement data was received prior to trading termination use the last value received, otherwise use the first value received after trading is terminated 
 	if market.status != TRADING_TERMINATED {
 		setMarketStatus(SUSPENDED)
 		return

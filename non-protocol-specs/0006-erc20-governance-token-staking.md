@@ -1,8 +1,7 @@
 # ERC20 Governance Token Staking
+Vega makes uses of a ERC20 token on the Ethereum blockchain as a [governance asset](../protocol/0028-governance.md) for [delegation](../protocol/0059-simple-staking-and-delegating.md) to validators and creation and voting of [governance proposals](../protocol/0028-governance.md). A party's governance tokens must first be recognised against a Vega public key before they can be used on the Vega network for governance and delegation.
 
-Vega makes uses of a ERC20 token on the Ethereum blockchain as a governance token for delegation to validators and creation and voting of governance proposals. A user's governance tokens must first be recognised against a Vega public key before they can be used on the Vega network for governance and delegation.
-
-Although it would be possible to use the standard ERC20 bridge to deposit governance tokens and put them in full control of the Vega network, the system will not do this for governance tokens. Instead there will be a separate system that allows governance tokens (only) to be "staked" to a Vega public key (and "unstaked" when done) without any action on the Vega network, and without putting the tokens under the control of the Vega network. This approach has been chosen for two primary reasons:
+Although it would be possible to use the standard ERC20 bridge to deposit governance tokens and put them in full control of the Vega network, the system will not do this for the governance asset. Instead there will be a separate system that allows governance tokens (only) to be "staked" to a Vega public key (and "unstaked" when done) without any action on the Vega network, and without putting the tokens under the control of the Vega network. This approach has been chosen for two primary reasons:
 
 1. Any attacker who gains control of or is able to exploit the Vega network will be unable to steal staked Vega tokens. This means that even if an attacker was able to take over the network, the tokenholders would remain unchanged and could fix the issue and relaunch the network by delegating to new validators.
 2. This method allows unvested (locked) tokens to be staked. Both staking and unstaking are controlled entirely on the Ethereum side, and staked balances are recognised on the Vega network by listening for `Stake_*` events which can be emitted by any contract that's recognised by the network, which makes it possible to implement stake/unstake functionality into the token vesting contract in additional to the normal "staking bridge" contract. 
@@ -25,7 +24,16 @@ Staked assets will appear in a user's [staking account](../protocol/0013-account
 - There will be APIs to query `Stake_Deposited` and `Stake_Removed` events that have been processed by the network
 - Both governance and delegation will need to handle the fact that the stake account balance can be reduced without warning if a user unstakes tokens.
 
-Note: the behaviour of delegation is covered in [staking and delegation]() TODO: link, and the use of stake to determine a party's weight in governance votes is covered in [governance](../protocol/0028-governance.md).
+Note: the behaviour of delegation is covered in [staking and delegation](../protocol/0059-simple-staking-and-delegation.md), and the use of stake to determine a party's weight in governance votes is covered in [governance](../protocol/0028-governance.md).
+
+### Bootstraping of a network / of the staking accounts balances
+
+When a vega network is bootstraping it's necessary for each validators nodes to recompute the current balance of all the parties which ever locked tokens on the staking or vesting bridge.
+This is required, so when the network is finally starting or if a snapshot is loaded, then no delegation request would become incorrect either because of token being locked, or unlocked during the shutdown of the network.
+
+We introduce a new network parameter `staking_balances_bootstrap_block_count`, which in number of blocks to be executed, from the genesis block. During this time the network will accept no new transaction from any parties, and only transaction from the validators used to validate staking accounts balances will be accepted.
+
+Transaction to restore a snapshot would also be allowed during this time.
 
 
 ## Ethereum network (Solidity contracts)
@@ -81,3 +89,5 @@ Other functionality:
 
 * Attempts to redeem vested tokens will fail if there are not sufficient tokens held on behalf of the sender address that are not staked. Sender must first unstake tokens before they can be redeemed.
 * This functionality does not interact in any way with the staking bridge contract. They are effectively completely separate staking mechanisms, so to unstake all an address's tokens when some are staked on each contract will require calls to both contracts.
+
+
