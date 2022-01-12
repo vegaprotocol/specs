@@ -135,44 +135,4 @@ Feature: Closeout-cascades
       | buy  | 10       | 0      |
       | buy  | 5        | 5      |
       
-    Then the parties place the following orders:
-      | party     | market id | side | volume | price  | resulting trades| type       | tif     | reference |
-      | auxiliary2| ETH/DEC19 | sell | 70     | 50     | 0               | TYPE_LIMIT | TIF_GTC | aux-b-111 |
-      | auxiliary1| ETH/DEC19 | buy  | 70     | 50     | 1               | TYPE_LIMIT | TIF_GTC | aux-s-111 |
-      
-    And the mark price should be "50" for the market "ETH/DEC19"
-
-    Then the parties should have the following profit and loss:
-      | party           | volume | unrealised pnl | realised pnl |
-      | auxiliary1      | 0      |     0          | -150         |
-      | auxiliary2      | 0      |     0          | 400          |
-      | trader2         | 0      |     0          | -150         |
-      | trader3         | 0      |     0          | -100         | 
-
-    Then the parties cancel the following orders:
-      | party          | reference      |
-      | auxiliary1     | aux-s-1000     |
-      | auxiliary2     | aux-b-5        |
-
-    Then the order book should have the following volumes for market "ETH/DEC19":
-      | side | price    | volume |
-      | sell | 1000     | 0      |
-      | sell | 100      | 0      |
-      | sell | 50       | 0      |
-      | buy  | 50       | 0      |
-      | buy  | 10       | 0      |
-      | buy  | 5        | 0      |
-
-    And the trading mode should be "TRADING_MODE_MONITORING_AUCTION" for the market "ETH/DEC19"
-      
-    # Since we're in an auction the margins didn't get released.
-    Then the parties should have the following account balances:
-      | party      | asset | market id | margin  | general       |
-      | auxiliary1 | BTC   | ETH/DEC19 | 100     | 999999999750  |
-      | auxiliary2 | BTC   | ETH/DEC19 | 50      | 1000000000350 |
-      | trader2    | BTC   | ETH/DEC19 | 0       | 0             |
-      | trader3    | BTC   | ETH/DEC19 | 0       | 0             |
-
-    And the insurance pool balance should be "0" for the market "ETH/DEC19"
-
-    And the cumulated balance for all accounts should be worth "2000000000250"
+    
