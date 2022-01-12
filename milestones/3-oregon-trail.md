@@ -31,7 +31,7 @@
 ### Refactors
 | Priority | Feature | Because | Details | Owner </br>(Spec Lead) | Sub-Function |
 |:---------:|---------|---------|:------:|:------:|:------:|
-| **1** | Fractional order sizes  | We need to support more prevision | [Spec](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0052-fractional-orders-positions.md) | @davidsiska-vega | Core</br>Front-End |
+| **1** | Fractional order sizes  | We need to support more precision | [Spec](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0052-fractional-orders-positions.md) | @davidsiska-vega | Core</br>Front-End |
 | **2** | Internalize ethereum-event-forwarder | To simplify the deployment of vega and minimize the interaction with external softwares | [Issue](https://github.com/vegaprotocol/vega/issues/4553) | @core | Core |
 | **3** | Rewrite Dockerised Vega | Dockerised Vega is hard to maintain and is slowing us down | [Issue](https://github.com/orgs/vegaprotocol/projects/95#card-68976394) | @core | Devops</br>Core |
 | **TBC** | Internalize the wallet | ?? - needs to have the core open source first: To simplify the deployment of vega and minimize the interaction with external softwares | [Issue](https://github.com/vegaprotocol/vega/issues/4562) | @core | Core |
