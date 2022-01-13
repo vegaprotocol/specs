@@ -6,7 +6,7 @@ Feature name: collateral
 * [ ] If a transfer request does not contain an equal amount of debit assets to credit assets it is malformed and should be outright rejected by the collateral engine  
 * [ ] One transfer request may result in multiple ledger entries. 
 * [ ] Each ledger entry will specify one debit account, one credit account and one amount of a single asset.
-* [ ] Creation and deletion of accounts - see [accounts](./0013-accounts.md).
+* [ ] Creation and deletion of accounts - see [accounts](./0013-ACCT-accounts.md).
 
 # Summary
 
@@ -27,7 +27,7 @@ Note, this also includes when an account is initialised. All accounts that are i
 1. The trading core (e.g. if a trader has deposited collateral into the Vega Smart Contract).
 2. The settlement engine (e.g. during settlement)
 
-Accounts may be created and deleted by transfer requests. Deleted account transfer requests must specify which account should receive any outstanding funds in the account that's being deleted (see [accounts](./0013-accounts.md))
+Accounts may be created and deleted by transfer requests. Deleted account transfer requests must specify which account should receive any outstanding funds in the account that's being deleted (see [accounts](./0013-ACCT-accounts.md))
 
 
 # Pseudo-code / Examples

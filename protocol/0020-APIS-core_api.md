@@ -45,7 +45,7 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 
 ### Market data
 
-- Retrieve and stream market data (all fields described in [0021-market-data-spec.md](./0021-market-data-spec.md)) for a market
+- Retrieve and stream market data (all fields described in [0021-market-data-spec.md](./0021-MDAT-market_data_spec.md)) for a market
  
 ### Party
 

@@ -20,7 +20,7 @@ The types of governance action are:
 1. Create a new market
 1. Change an existing market's parameters
 1. Change network parameters
-1. Add an external asset to Vega (covered in a [separate spec - see 0027](./0027-asset-proposal.md))
+1. Add an external asset to Vega (covered in a [separate spec - see 0027](./0027-ASSP-asset_proposal.md))
 1. Authorise a transfer to or from the [Network Treasury](TODO: LINK)
 
 ## Lifecycle of a proposal
@@ -39,11 +39,11 @@ Note: there are some differences/additional points for market creation proposals
 Any actions that result from the outcome of the vote are covered in other spec files.
 
 ## Governance Asset
-The Governance Asset is the on-chain [asset](./0040-asset-framework.md) representing the [token configured in the staking bridge](./../non-protocol-specs/0006-erc20-governance-token-staking.md). Users with a staking account balance in the governance asset can:
+The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) representing the [token configured in the staking bridge](../non-protocol-specs/0006-erc20-governance-token-staking.md). Users with a staking account balance in the governance asset can:
 
 - [Create proposals](#restriction-on-who-can-create-a-proposal)
 - [Vote on proposals](#voting-for-a-proposal)
-- [Delegate to validators](./0059-simple-staking-and-delegating.md)
+- [Delegate to validators](./0059-STKG-simple_staking_and_delegating.md)
 
 ## Governance weighting
 A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. 
@@ -155,7 +155,7 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 
 ## 1. Create market
 
-This action differs from from other governance actions in that the market is created and some transactions (namely around liquidity provision) may be accepted for the market before the proposal has successfully passed. The lifecycle of a market and its triggers are covered in the [market lifecycle](./0043-market-lifecycle.md) spec.
+This action differs from from other governance actions in that the market is created and some transactions (namely around liquidity provision) may be accepted for the market before the proposal has successfully passed. The lifecycle of a market and its triggers are covered in the [market lifecycle](./0043-MKTL-market_lifecycle.md) spec.
 
 Note the following key points from the market lifecycle spec:
 * A market is created in Proposed status as soon as the proposal is accepted
@@ -164,29 +164,29 @@ Note the following key points from the market lifecycle spec:
 
 A proposal to create a market contains 
 1. a complete market specification as per the Market Framework (see spec) that describes the market to be created. 
-1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](0044-lp-mechanics.md). The proposal must be rejected if the liquidity provision commitment is invalid or the proposer does not have the required collateral for the stake.
+1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](./0044-LIQM-lp_mechanics.md). The proposal must be rejected if the liquidity provision commitment is invalid or the proposer does not have the required collateral for the stake.
 The stake commitment must exceed the `minimum_proposal_stake_amount` which is a per-asset parameter.
-1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-auctions.md))
+1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
 
 All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
 
 ## 2. Change market parameters
 
-[Market parameters](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0001-market-framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. See the [Market Framework spec](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0001-market-framework.md#market) for details on these parameters, including those that cannot be changed and the category of the parameters.
+[Market parameters](./0001-MKTF-market_framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. See the [Market Framework spec](./0001-MKTF-market_framework.md#market) for details on these parameters, including those that cannot be changed and the category of the parameters.
 
 All **change market parameter proposals** have their validation configured by the network parameters `Governance.UpdateMarket.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Market Framework spec.
 
 
 ## 3. Change network parameters
 
-[Network parameters](./0054-network-parameters.md) that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters. New network parameters require a code change, so there is no support for adding new network parameters.
+[Network parameters](./0054-NETP-network_parameters.md) that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters. New network parameters require a code change, so there is no support for adding new network parameters.
 
 All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
 
 ## 4. Add a new asset
 
-New [assets](./0040-asset-framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-asset-proposal.md)). Unlike markets, assets cannot be updated after they have been added.
+New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)). Unlike markets, assets cannot be updated after they have been added.
 
 ## 5. Transfers initiated by Governance
 

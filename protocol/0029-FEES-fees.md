@@ -30,7 +30,7 @@ Note that maker_fee = 0 if there is no maker, taker relationship between the tra
 
 The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[maker] = 0.0005 = 0.05%`. 
 The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`. 
-The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions commited to the market, see [setting LP fees](0042-setting-fees-and-rewarding-lps.md).
+The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions commited to the market, see [setting LP fees](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 trade_value_for_fee_purposes:
 * refers to the amount from which we calculate fee, (e.g. for futures, the trade's notional value = size_of_trade * price_of_trade)
@@ -38,7 +38,7 @@ trade_value_for_fee_purposes:
 
 Initially, for futures, the trade_value_for_fee_purposes = notional value of the trade = size_of_trade * price_of_trade. For other product types, we may want to use something other than the notional value. This is determined by the Product.
 
-NB: size of trade needs to take into account Position Decimal Places specified in the [Market Framework](0001-market-framework.md), and if trade/position sizes are stored as ints will need to divide by `10^PDP` where PDP is the configured number of Position Decimal Places for the market (or this division will need to be abstracted and done global by the position management component of Vega which may expose both a true and an integer position size, or something).
+NB: size of trade needs to take into account Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md), and if trade/position sizes are stored as ints will need to divide by `10^PDP` where PDP is the configured number of Position Decimal Places for the market (or this division will need to be abstracted and done global by the position management component of Vega which may expose both a true and an integer position size, or something).
 
 ### Collecting and Distributing Fees
 
@@ -49,15 +49,15 @@ The margin account should have enough left after paying the fees to cover mainte
 If the transfer fails: 
 1) If we are in continuous trading mode, than trades should be discarded, any orders on the book that would have been hit should remain in place with previous remaining size intact and the incoming order should be rejected (not enough fees error). 
 This functionality requires to match orders and create trades without changing the state of the order book or passing trades downstream so that the execution of the transaction can be discarded with no impact on the order book if needed. 
-Other than the criteria whether to proceed or discard, this is exactly the same functionality required to implement [price monitoring](0032-price-monitoring.md). 
+Other than the criteria whether to proceed or discard, this is exactly the same functionality required to implement [price monitoring](./0032-PRIM-price_monitoring.md). 
 1) If we are in auction mode, ignore the shortfall (and see more details below). 
 
 The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the three components. 
 
 Now distribute funds from the "temporary fee bucket" as follows:
-1) Infrastructure_fee is transferred to infrastructure fee pool for that asset. Its distribution is described in [0059 - Simple Proof of Stake rewards](./0059-simple-POS-rewards.md) and [0061 - simple POS rewards SweetWater](0061-simple-POS-rewards - SweetWater.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to 
+1) Infrastructure_fee is transferred to infrastructure fee pool for that asset. Its distribution is described in [0059 - Simple Proof of Stake rewards](./0059-STKG-simple_staking_and_delegating.md) and [0061 - simple POS rewards SweetWater](./0061-REWP-simple_pos_rewards_sweetwater.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to 
 1) The maker_fee is transferred to the relevant party. 
-1) The liquidity_fee is distributed as described in [this spec](./0042-setting-fees-and-rewarding-lps.md). Note that `reward.staking.delegation.payoutDelay` is applied as well as `reward.staking.delegation.payoutFraction`. 
+1) The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md). Note that `reward.staking.delegation.payoutDelay` is applied as well as `reward.staking.delegation.payoutFraction`. 
 
 ### During Continuous Trading
 

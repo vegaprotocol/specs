@@ -13,7 +13,7 @@
 
 ## Summary
 
-A market using a limit order book will permit orders of various types to be submitted depending on the market's current *trading mode* (see [Market Framework](0001-market-framework.md)). This specification encompasses multiple configurable aspects of an order including: triggering, time in force, price type, and execution constraints. It defines the allowable values for each, valid combinations of these, and their behaviour.
+A market using a limit order book will permit orders of various types to be submitted depending on the market's current *trading mode* (see [Market Framework](./0001-MKTF-market_framework.md)). This specification encompasses multiple configurable aspects of an order including: triggering, time in force, price type, and execution constraints. It defines the allowable values for each, valid combinations of these, and their behaviour.
 
 Notes on scope of current version of this spec:
 - Includes only detailed specification for orders valid for *continuous trading*, does not specify behaviour of these order types in an auction.
@@ -32,7 +32,7 @@ Notes on scope of current version of this spec:
 *Price type and associated data if required (i.e. limit price, peg reference and offset) must be explicitly provided as one of the below three options and required data, there is no default.*
 
 1. **Limit (+ limit price):** the order is priced with a static limit price, which is the worst price (i.e. highest buy price / lowest sell price) at which the order can trade. If the order has a persistent validity type it will remain on the order book until it fully executes, expires (as defined by the specific validity type), or is cancelled. 
-1. **Pegged (+ reference, price offset):** the order is priced relative to a reference price in the market (i.e. best bid, mid, or best offer price) and is automatically repriced (losing time priority) when the reference price changes. Execution is as for a limit order at that price, including on entry and repricing. The order is removed from the book and 'parked' (in entry time priority) if the reference price is undefined, including during an auction. See the [0037 - Pegged Orders](./0037-pegged-orders.md) spec for more detail.
+1. **Pegged (+ reference, price offset):** the order is priced relative to a reference price in the market (i.e. best bid, mid, or best offer price) and is automatically repriced (losing time priority) when the reference price changes. Execution is as for a limit order at that price, including on entry and repricing. The order is removed from the book and 'parked' (in entry time priority) if the reference price is undefined, including during an auction. See the [Pegged Orders](./0037-OPEG-pegged_orders.md) spec for more detail.
 1. **Market:** the order is not priced and will take volume at any price (i.e. equivalent to a zero priced sell order or an infinitely priced buy order). Only valid on non-persistent validity types.
 
 ### Time in Force / validity:
@@ -69,13 +69,13 @@ Notes on scope of current version of this spec:
 | Pegged         | Y*  | Y*  | N   | N   | Y*  | N   |
 | Market         | N   | N   | N   | N   | N   | N   |
 
-\* Pegged orders will be parked during [an auction](./0026-auctions.md), with time priority preserved<br>
+\* Pegged orders will be parked during [an auction](./0026-AUCT-auctions.md), with time priority preserved<br>
 
 Further details can be found here:
 https://docs.google.com/spreadsheets/d/1kTkE7frlsVtS1YE4m4AdZjACO-mmNOZrTQj4gXGQW0I
 
 ### Network orders
-Network orders are used during [position resolution](./0012-position-resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders. 
+Network orders are used during [position resolution](./0012-POSR-position_resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders. 
 * Network orders have a counterparty of `Network`
 * Network orders are a Fill Or Kill, Market orders
 * Network orders cannot be submitted by any party, they are created during transaction processing.

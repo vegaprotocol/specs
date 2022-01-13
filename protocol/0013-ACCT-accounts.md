@@ -18,7 +18,7 @@ Feature name: accounts
 - [ ] Each party should only have one margin account per market.
 - [ ] Cannot have a non-zero balance on a margin account where there's no position / position size = 0 and no active orders.
 - [ ] Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders.
-- [ ] [Fees earned from liquidity provision](./0044-lp-mechanics.md#fees) are paid in to this account.
+- [ ] [Fees earned from liquidity provision](./0044-LIQM-lp_mechanics.md#fees) are paid in to this account.
 
 ## Party staking accounts
 - [ ] Every party that deposits staked asset on Vega will have a stake account created for that asset.
@@ -30,14 +30,14 @@ Feature name: accounts
 One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol/0006-erc20-governance-token-staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
 ## Liquidity Provider bond accounts
-- [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-lp-mechanics.md).
-- [ ] Each party that has placed a [Liquidity Provision order](./0038-liquidity-provision-order-type.md) will have one bond account per market they have provided liquidity to
-- [ ] [Fees earned from liquidity provision](./0044-lp-mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](./0042-setting-fees-and-rewarding-lps.md#distributing-fees)
+- [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIQM-lp_mechanics.md).
+- [ ] Each party that has placed a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md) will have one bond account per market they have provided liquidity to
+- [ ] [Fees earned from liquidity provision](./0044-LIQM-lp_mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees)
 
 ## Insurance pool accounts
 - [ ] When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market.
 - [ ] Only transfer requests move money in or out of the insurance account.
-- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the [network treasury](./0055-on-chain-treasury.md) account for the appropriate asset (if it doesn't exist create it). 
+- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the [network treasury](./0055-TREA-on_chain_treasury.md) account for the appropriate asset (if it doesn't exist create it). 
 
 
 # Summary
@@ -76,7 +76,7 @@ The core protocol does not require these general asset accounts if they have a b
 
 ## Margin accounts
 
-Margin accounts are used by the protocol to maintain [margin requirements](./0010-margin-orchestration.md) and collect and distribute [mark to market settlement](./0003-mark-to-market-settlement.md). Each party only needs a margin account created for a market they've ever put an order on.
+Margin accounts are used by the protocol to maintain [margin requirements](./0010-MARG-margin_orchestration.md) and collect and distribute [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). Each party only needs a margin account created for a market they've ever put an order on.
 
 Moreover, margin accounts are conceptually connected to open positions and given there no such thing as a zero open position a margin account may therefore be transient (i.e. there would be no such thing as a margin account that has a balance of zero).
 
@@ -99,7 +99,7 @@ Every market will have at least one insurance pool account that holds collateral
 
 **Creation:**
 
-When a market launches, an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-margin-orchestration.md) and the collection of [mark to market settlement](./0003-mark-to-market-settlement.md). 
+When a market launches, an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). 
 
 **Deletion:**
 

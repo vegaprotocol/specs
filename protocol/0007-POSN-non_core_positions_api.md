@@ -25,7 +25,7 @@ The Positions API requires additional position data for each trader, on top of t
 * The portion of profit/loss (P&L) that continuously changes when the _mark price_ changes, i.e. "Open P&L".
 * The per trade realised P&L for the buyer and seller 
 
-Note: A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](0001-market-framework.md).
+Note: A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md).
 
 Note: it is possible to calculate valuation / P&L using various methodologies (e.g. Average cost, FIFO, LIFO) when a position has been only partially closed out. These are well known alternative accounting methods that can be used when account for profit/loss on selling 'inventory' of a product. In this case, we can consider a trader's open position as their inventory. We will be outlining the average cost methodology in this API as described at https://www.investopedia.com/terms/a/averagecostmethod.asp, however we may also add others in future and the API should be designed to allow for multiple such approaches to be used simultaneously.
 

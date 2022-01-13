@@ -22,15 +22,15 @@ Note that a mark price may not be a true "price" in the financial sense of the w
 
 # Reference-level explanation
 
-The mark price is instantiated at a non-zero level when a market opens, for instance via the [opening auction](./0026-auctions.md).
+The mark price is instantiated at a non-zero level when a market opens, for instance via the [opening auction](./0026-AUCT-auctions.md).
 
 It will subsequently be calculated according to a methodology selected from a suite of algorithms. The selection of the algorithm for calculating the *Mark Price* is specified at the "market" level as a market parameter.
 
-Mark price can also be adjusted by [product lifecycle events](0051-product.md), in which case the mark price set by the product remains the mark price until it is next recalculated (e.g. if the methodology is last traded price, until there is a new trade).
+Mark price can also be adjusted by [product lifecycle events](./0051-PROD-product.md), in which case the mark price set by the product remains the mark price until it is next recalculated (e.g. if the methodology is last traded price, until there is a new trade).
 
 
 ## Usage of the *Mark Price*:
-The most recently calculated *Mark Price* is used in the [mark-to-market settlement](./0003-mark-to-market-settlement.md).  A change in the *Mark Price* is one of the triggers for the mark-to-market settlement to run.
+The most recently calculated *Mark Price* is used in the [mark-to-market settlement](./0003-MTMK-mark_to_market_settlement.md).  A change in the *Mark Price* is one of the triggers for the mark-to-market settlement to run.
 
 
 ## Algorithms for calculating the *Mark Price*:
@@ -48,7 +48,7 @@ The mark price is set to the higher / lower of the last traded price, bid/offer.
 >*Example b):* consider the last traded price was $1000 and the current best bid in the market is $999. The last traded price is higher than the bid price so the new Mark Price is $1,000. 
 
  ### 3. Oracle 
- An oracle source external to the market provides updates to the Mark Price. See the [data sourcing spec](./0045-data-sourcing.md).
+ An oracle source external to the market provides updates to the Mark Price. See the [data sourcing spec](./0045-DSRC-data_sourcing.md).
 
  ### 4. Model 
  The *Mark Price* may be calculated using a built in model.  

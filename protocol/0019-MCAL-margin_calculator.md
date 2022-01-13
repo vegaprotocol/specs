@@ -31,12 +31,12 @@ In future there can be multiple margin calculator implementations that would be 
 
 The calculator takes as inputs:
 
-* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_volume``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side (+ve is long, -ve is short).  See [positions core specification](./0006-positions-core.md).
+* position record = [```open_volume```, ```buy_orders```, ```sell_orders```] where ```open_volume``` refers to size of open position (+ve is long, -ve is short), ```buy_orders``` / ```sell_orders``` refer to size of all orders on the buy / sell side (+ve is long, -ve is short).  See [positions core specification](./0006-POSI-positions_core.md).
 - ```mark price```
 - ```scaling levels``` defined in the risk parameters for a market
 - ```quantitative risk factors```
 
-Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](0001-market-framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as ints (i.e. int64). In this case, **care must be taken** to ensure that the acutal fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actualy 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable becuae outside of margin calculations, and display to end users, the integer values can generally be used as-is.
+Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as ints (i.e. int64). In this case, **care must be taken** to ensure that the acutal fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actualy 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable becuae outside of margin calculations, and display to end users, the integer values can generally be used as-is.
 
 and returns 4 margin requirement levels
 
@@ -64,13 +64,13 @@ The protocol calculates the margin requirements for the ```riskiest long``` and 
 
 ## Limit order book linearised calculation
 
-In this simple methodology, a linearised margin formula is used to return the margin requirement levels, using risk factors returned by the [quantitative model](./0018-quant-risk-models.ipynb).
+In this simple methodology, a linearised margin formula is used to return the margin requirement levels, using risk factors returned by the [quantitative model](./0018-RSKM-quant_risk_models.ipynb).
 
 **Step 1** 
 
 If ```riskiest long == 0``` then ```maintenance_margin_long = 0```.
 
-In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-quant-risk-models.ipynb).
+In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-RSKM-quant_risk_models.ipynb).
 
 ```maintenance_margin_long = maintenance_margin_long_open_position + maintenance_margin_long_open_orders```
 
@@ -97,7 +97,7 @@ where
 
 ```market_observable``` = ```settlement_mark_price``` if in continuous trading and ```indicative_uncrossing_price``` if in an auction
 
-```settlement_mark_price``` refers to the mark price most recently utilised in [mark to market settlement](./0003-mark-to-market-settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.
+```settlement_mark_price``` refers to the mark price most recently utilised in [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.
 
 ```exit_price``` is the price that would be achieved on the order book if the trader's position size on market were exited. Specifically:
 
@@ -159,7 +159,7 @@ The other three margin levels are scaled relative to the maintenance margin leve
 
 ```collateral_release_level = margin_maintenance * collateral_release_scaling_factor```
 
-where the scaling factors are set as risk parameters ( see [market framework](./0001-market-framework.md) ).
+where the scaling factors are set as risk parameters ( see [market framework](./0001-MKTF-market_framework.md) ).
 
 ## Positive and Negative numbers
 

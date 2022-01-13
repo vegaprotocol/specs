@@ -1,4 +1,4 @@
-# Built-in [Product](0051-product.md): Cash Settled Futures (CSF)
+# Built-in [Product](./0051-PROD-product.md): Cash Settled Futures (CSF)
 
 This built-in product provides "direct" futures (i.e. opposite of inverse futures) that are cash-settled, i.e. they are margined and settled in a single asset.
 
@@ -8,7 +8,7 @@ Futures are a simple "delta one" product and the first product supported by Vega
 
 ## 1. Product parameters
 
-1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status ahead of settlement at expiry (required to ensure no trading can occur after the settlement result may be known by participants). (This would usally be a date/time based trigger but may also use an oracle.)
+1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status ahead of settlement at expiry (required to ensure no trading can occur after the settlement result may be known by participants). (This would usually be a date/time based trigger but may also use an oracle.)
 1. `settlement_data (Data Source: number)`: this data is used by the product to calculate the final settlement cashflows. The receipt of this data triggers this calculation and therefore also moving the product to the `settled` status.
 1. `settlement_asset (Settlement Asset)`: this is used to specify the single asset that an instrument using this product settles in.
 
@@ -67,7 +67,7 @@ cash_settled_future.settlement_data(event) {
 1. Create a Cash Settled Future with trading termination triggered by a date/time based data source
 1. Create a Cash Settled Future with trading termination triggered by an external data source
 1. Create a Cash Settled Future with the settlement data provided by an external data source
-1. Create a Cash Settled Future for any settlement asset that's configureed in Vega
+1. Create a Cash Settled Future for any settlement asset that's configured in Vega
 1. Either data source can be changed via governance
 1. It is not possible to change settlement asset via governance
 1. Mark to market settlement works correctly

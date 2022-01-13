@@ -23,13 +23,13 @@ To give an example: get the price distribution in an hour as implied by the risk
 
 As mentioned above, price monitoring is meant to stop large market movements that are not "real" from occurring, rather than just detect them after the fact. To that end, it is necessary to pre-process every transaction and check if it triggers the price monitoring action. If pre-processing the transaction doesn't result in the trigger being activated then it should be "committed" by generating the associated events and modifying the order book accordingly (e.g. generate a trade and take the orders that matched off the book). On the other hand if the trigger is activated and the submitted transaction is valid for auction mode, the entire order book **along with that transaction** needs to be processed via price protection auction. If the transaction which activate the trigger is not valid for auction, then it should get rejected and market should continue in the current trading mode. Auction period associated with a given distribution projection horizon and probability level will be specified as part of market setup. Once the auction period finishes the trading should resume in regular fashion (unless other triggers are active, more on that in [reference-level explanation](#reference-level-explanation)).
 
-Please see the [auction spec](https://github.com/vegaprotocol/product/blob/187-auction-spec/specs/0026-auctions.md) for auction details.
+Please see the [auction spec](./0026-AUCT-auctions.md) for auction details.
 
 ## Note
 
-Price monitoring likely won't be the only possible trigger of auction period ([liquidity monitoring](0035-liquidity-monitoring.md) or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
+Price monitoring likely won't be the only possible trigger of auction period ([liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
 
-Likewise, pre-processing transactions will be needed as part of the [fees spec](https://github.com/vegaprotocol/product/blob/WIP-fees-spec/specs/0029-fees.md), hence it should be implemented in such a way that it's easy to repurpose it.
+Likewise, pre-processing transactions will be needed as part of the [fees spec](./0029-FEES-fees.md), hence it should be implemented in such a way that it's easy to repurpose it.
 
 # Guide-level explanation
 
@@ -93,7 +93,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
   - \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins).
 - At the market start time and after each price-monitoring auction period the bounds will reset
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
-- The resulting auction length should be at least `min_auction_length` (see the [auctions](./0026-auctions.md#auction-config) spec). If the auction length implied by the triggers is less than that it should be extended.
+- The resulting auction length should be at least `min_auction_length` (see the [auctions](./0026-AUCT-auctions.md#auction-config) spec). If the auction length implied by the triggers is less than that it should be extended.
 
 ## View from [quant](https://github.com/vegaprotocol/quant) library side
 

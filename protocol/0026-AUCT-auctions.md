@@ -30,11 +30,11 @@ All auctions have a `min_auction_length` (which is a single network parameter fo
 
 ## Opening auctions (at creation of the market)
 
-A market that has passed the governance vote and is in Pending state will be in an auction period. The auction will never uncross while the market is in a Pending state, and only does so when it moves to another state (i.e. becomes Active, see [Market Lifecycle](./0043-market-lifecycle.md) for criteria for transition out of Pending state).
+A market that has passed the governance vote and is in Pending state will be in an auction period. The auction will never uncross while the market is in a Pending state, and only does so when it moves to another state (i.e. becomes Active, see [Market Lifecycle](./0043-MKTL-market_lifecycle.md) for criteria for transition out of Pending state).
 
 A market cannot be in multiple trading modes at the same time so if it is in an opening auction that will be the trading mode.
 
-The enactment period of the governance proposal refers to the time between the proposal being accepted and active trading commencing, therefore inclusive of the Pending state of the market (see [market lifecycle spec](./0043-market-lifecycle.md)). A governance network parameter will set the minimum allowable enactment period for new market proposals.
+The enactment period of the governance proposal refers to the time between the proposal being accepted and active trading commencing, therefore inclusive of the Pending state of the market (see [market lifecycle spec](./0043-MKTL-market_lifecycle.md)). A governance network parameter will set the minimum allowable enactment period for new market proposals.
 
 
 ## Frequent batch auction
@@ -73,7 +73,7 @@ The Indicative Uncrossing Price is the price at which all trades would occur if 
 
 ### Existing APIs
 
-Unlike in traditional centralised trading venues, we will continue to calculate and emit Market Depth events which will contain the shape of the entire book, as it normally does during [continuous trading](https://github.com/vegaprotocol/product/blob/master/specs/0001-market-framework.md#trading-mode---continuous-trading). This is because the orders are already public, and calculating the Market Depth based on already-available orders would be trivial.
+Unlike in traditional centralised trading venues, we will continue to calculate and emit Market Depth events which will contain the shape of the entire book, as it normally does during [continuous trading](./0001-MKTF-market_framework.md#trading-mode---continuous-trading). This is because the orders are already public, and calculating the Market Depth based on already-available orders would be trivial.
 
 
 ## Restriction on orders in auction mode
@@ -106,7 +106,7 @@ Auction periods may be ended with an uncrossing and the creation of any resultin
 - the auction call period end time being reached (if such a time is set); or 
 - other functionality (related to the type of auction period) that triggers the end of auction.
 
-Auction periods do not end if the resulting state would immediately cause another auction to occur. Instead the current auction gets extended. For example, if a liquidity monitoring auction would be triggered at the end of an opening auction, then the opening auction continues and the _auction extension trigger_ field in the [market data API](./0021-market-data-spec.md) is updated to account for the fact that the opening auction has been extended due to insufficent liquidity.
+Auction periods do not end if the resulting state would immediately cause another auction to occur. Instead the current auction gets extended. For example, if a liquidity monitoring auction would be triggered at the end of an opening auction, then the opening auction continues and the _auction extension trigger_ field in the [market data API](./0021-MDAT-market_data_spec.md) is updated to account for the fact that the opening auction has been extended due to insufficent liquidity.
 
 ### Ending when a market is going to enter Trading Terminated status
 
@@ -117,9 +117,9 @@ If the auction period specifies an end time and the market is about to transitio
 
 Functionality that either triggers the end of an auction or delays the auction ending until conditions are met, even if the end time is otherwise met is defined in the relevant specs that detail the various period types that use auctions, and how their entry/exit is triggered:
 
-- opening auction (market creation): [governance](./0028-governance.md)
-- [price monitoring](./0032-price-monitoring.md)
-- [liquidity monitoring](./0035-liquidity-monitoring.md)
+- opening auction (market creation): [governance](./0028-GOVE-governance.md)
+- [price monitoring](./0032-PRIM-price_monitoring.md)
+- [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)
 
 
 ## First/Naive implementation
@@ -174,7 +174,7 @@ message Market {
 - [] As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period.
 - [] As a user, I can place an order when the market is in auction mode, but it will not trade immediately.
 - [] As a user, I can cancel an order that it either live on the order book or parked.
-- [] As a user, I can amend orders that are on the order book. Specifics can be found in the [amends](https://github.com/vegaprotocol/product/blob/master/specs/0026-amends.md) spec
+- [] As a user, I can amend orders that are on the order book. Specifics can be found in the [amends](./0026-AUCT-auctions.md) spec
 - [] As a user, I cannot place a Market order, or and order using FOK or IOC time in force.
 - [] As a user, I can get information about the trading mode of the market (through the market framework)
 - [] As a user, I can get real time information through the API about a market in auction mode: indicative crossing price, indicative crossing volume.

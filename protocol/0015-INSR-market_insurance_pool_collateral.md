@@ -13,7 +13,7 @@ Every market will have at least one insurance pool account that holds collateral
 
 # Reference-level explanation
 
-Every [tradeable instrument](./0001-market-framework.md) has one or more settlement assets defined for that market. The market requires an insurance pool account for every settlement asset of the market.
+Every [tradeable instrument](./0001-MKTF-market_framework.md) has one or more settlement assets defined for that market. The market requires an insurance pool account for every settlement asset of the market.
 
 If no insurance pool account already exists in the risk universe that the tradeable instrument sits within, then an insurance pool account needs to be created for all settlement assets of the market. These new insurance pool accounts will be instantiated in the settlement asset/s of the market, with a balance of zero (across all asset/s).
 

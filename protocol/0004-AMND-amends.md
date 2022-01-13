@@ -6,7 +6,7 @@ Specification PR: https://github.com/vegaprotocol/product/pulls <br>
 - Only LIMIT orders can be amended, any attempt to amend a non LIMIT order is rejected
 - Price change amends remove the order from the book and insert the order at the back of the queue at the new price level
 - Reducing the quantity leaves the order in its current spot but reduces the remaining amount accordingly
-- Quantity after amendment must be a multiple of the smallest increment possible given the `Position Decimal Places` (PDP) specified in the [Market Framework](0001-market-framework.md), i.e. is PDP = 2 then quantity must be a whole multiple of 0.01.
+- Quantity after amendment must be a multiple of the smallest increment possible given the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then quantity must be a whole multiple of 0.01.
 - Increasing the quantity causes the order to be removed from the book and inserted at the back of the price level queue with the updated quantity
 - Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag is rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.
 - Any attempt to amend to or from the `TIF` values `GFA` and `GFN` will result in a rejected amend.
@@ -70,7 +70,7 @@ The fields which can be altered are:
 - `Price`
   * Amending the price causes the order to be removed from the book and re-inserted at the new price level. This can result in the order being filled if the price is moved to a level that would cross.
 - `SizeDelta`
-  * A size change is specified as a delta to the current amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](0001-market-framework.md), i.e. is PDP = 2 then SizeDelta must be a whole multiple of 0.01. (NB: SizeDelta may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp)
+  * A size change is specified as a delta to the current amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then SizeDelta must be a whole multiple of 0.01. (NB: SizeDelta may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp)
 - `TimeInForce`
   * The `TIF` enumeration can only be toggled between `GTT` and `GTC`. Amending to `GTT` requires an `expiryTime` value to be set. Amending to `GTC` removes the `expiryTime` value.
 - `ExpiryTime`
