@@ -66,7 +66,7 @@ delegation-message on the chain. However, the delegation only becomes valid
 towards the next epoch, though it can be undone through undelegate.
 
 To avoid fragmentation or spam, there is a system parameter "Minimum delegateable stake"
-that defines the smallest unit of (fractions of) tokens that can be used for delegation - see [Simple staking & delegating](./0059-simple-staking-and-delegating.md#network-parameters).
+that defines the smallest unit of (fractions of) tokens that can be used for delegation - see [Simple staking & delegating](./0059-STKG-simple_staking_and_delegating.md#network-parameters).
 
 To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
@@ -178,7 +178,7 @@ In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow.
 |------------------|--------| ------------|--------------|
 | `validators.epoch.length`       | String (period) |  `"1"` | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  |
 
-See the [network parameters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
+See the [network parameters spec](./0054-NETP-network_parameters.md#current-network-parameters) for a full list of parameters.
 
 ## Parameter changes
 All parameters that are changed through a governance vote are valid starting the epoch following the one the block is in that finalized the vote.

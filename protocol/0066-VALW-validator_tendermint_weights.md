@@ -4,7 +4,7 @@ Vega is running a delegated proof of stake blockchain based on Tendermint.
 
 For each validator node Tendermint keeps the "weight" of the node for consensus purposes. This spec clarifies how such weight is calculated on Vega. 
 
-On Vega the weight should be the `validatorScore` defined in the  [validator reward calculation](0061-simple-POS-rewards-SweetWater.md).
+On Vega the weight should be the `validatorScore` defined in the  [validator reward calculation](./0061-REWP-simple_pos_rewards_sweetwater.md).
 
 The weights should be updated every `1000` blocks and every epoch (whichever passes first).
 

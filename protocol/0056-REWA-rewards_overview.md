@@ -11,7 +11,7 @@ Terminology:
 - **Reward Scheme**: a reward scheme is an instance of a reward type that includes all the parameters needed to calculate the reward. Multiple reward schemes may instantiated for each reward type, even with duplicate parameters.
 - **Reward Pool Accounts**: each active reward scheme has one reward pool account for each asset that has been transferred to it (these would be created as needed)
 
-Vega will initially provide built-in reward types for key types of incentives related to staking/delegation, liqudiity provision, and trading (note: only a single staking/delegation reward type is required for Sweetwater).
+Vega will initially provide built-in reward types for key types of incentives related to staking/delegation, liquidity provision, and trading (note: only a single staking/delegation reward type is required for Sweetwater).
 
 💧 see section at bottom of file on Sweetwater scope
 🤠 see section at bottom on Oregon Train scope
@@ -35,14 +35,14 @@ A reward type may have one or more parameters that can be defined for each rewar
 
 The calculation method defines the logic that is used to determine which participants are eligible for a reward and how to calculate the relative amount distributed to each participant.
 
-The calculation method should provide a list of parties and scaling relative amounts. The relative amounts will be used to calculate the amount actuallly distributed as a share of the available pot for each reward scheme, taking into account the parameters.
+The calculation method should provide a list of parties and scaling relative amounts. The relative amounts will be used to calculate the amount actually distributed as a share of the available pot for each reward scheme, taking into account the parameters.
 
 For example, if the parties and relative amounts are: Party A, 60; Party B, 100; Party C, 40 (total=200). And if the rewards to be distributed are 500 VEGA. Then the amounts distributed will be:
 - Party A = (60 / 200) * 500 = 150 VEGA
 - Party B = (100 / 200) * 500 = 250 VEGA
 - Party C = (40 / 200) * 500 = 100 VEGA
 
-Care must be taken when defining calculation methods to create reward calculations that can be efficiently calulated taking into account both storage and computational resources. Principles for good reward calculations include:
+Care must be taken when defining calculation methods to create reward calculations that can be efficiently calculated taking into account both storage and computational resources. Principles for good reward calculations include:
 - Should calculate, store and maintain single values rather than arbitrarily long lists (i.e. a reward calculation that maintains a running total traded volume by asset for each party over a period, rather than one that requires a list of all of a party's trades)
 - Should only need to store a maximum of one set of metrics for the reward type, as opposed to needing to store separate running metrics for each instance (therefore, differences in parameterisation or scope should take effect when using the metrics in the calculation of the rewards at period end)
 - Should try to use simple logic and maths and avoid complex calculations and logic involving looping, etc.
@@ -84,7 +84,7 @@ Once reward is created it is assigned a reward ID, which is also used to identif
 
 ### Spam protection
 
-Creating a reward scheme outside of governance must be accomanpanied by an amount of funding for the reward pool in at least one asset. At least one asset included in this funding must have an amount included greater than or equal to `reward_funding_multiple * asset.min_lp_stake` where `reward_funding_multiple` is a network parameter and `asset.min_lp_stake` is the minimum LP stake amount configured for the asset.
+Creating a reward scheme outside of governance must be accompanied by an amount of funding for the reward pool in at least one asset. At least one asset included in this funding must have an amount included greater than or equal to `reward_funding_multiple * asset.min_lp_stake` where `reward_funding_multiple` is a network parameter and `asset.min_lp_stake` is the minimum LP stake amount configured for the asset.
 
 
 ### Updating reward scheme parameters
@@ -116,7 +116,7 @@ For each reward pool account for the reward scheme with a non-zero balance:
 1. Calculate the payout per eligible account by: `account_payout = total_payout * (account_scaling_factor / sum(scaling_factors)`
 1. If a per asset max amount per recipient is specified for the asset, then cap each eligible account's payout to the `max_amount` specified. The remaining funds will not be distributed and so remain in reward scheme account.
 1. If a non-zero payout delay is specified, wait for the required time before continuing to the next step
-1. Transfer the capped `account_payout` amounts calulated in the previous step to each eligible account.
+1. Transfer the capped `account_payout` amounts calculated in the previous step to each eligible account.
 
 
 ## Sweetwater
@@ -130,7 +130,7 @@ It is therefore not necessary to build any of the transactions or control logic 
 
 ### 💧 Sweetwater
 
-- There is a single reward scheme of type [staking and delegation rewards](./0057-reward-functions.md)
+- There is a single reward scheme of type [staking and delegation rewards](./0057-REWF-reward_functions.md)
   - It has a reward scheme ID
   - Its parameters can be updated by governance vote
   - It cannot be cancelled entirely (though the payout amount can be set to 0)
@@ -158,4 +158,4 @@ It is therefore not necessary to build any of the transactions or control logic 
 - New reward scehemes can be created, including multiple of the same type
 - Reward schemes owned and controlled by individual parties can be created as well as network owned ones created through governance
 - Funds can be sent directly to a reward pool account
-- Funds cannot be allocated to a party controlled reward scheme via periodic allocation from [the on-chain treasury](./0058-on-chain-treasury.md).
+- Funds cannot be allocated to a party controlled reward scheme via periodic allocation from [the on-chain treasury](./0058-REWS-simple_pos_rewards.md).

@@ -1,6 +1,6 @@
 # Reward Types
 
-Below is a list of reward types that will be built in to Vega and available when proposing or creating a new [Reward](0056-rewards-overview.md).
+Below is a list of reward types that will be built in to Vega and available when proposing or creating a new [Reward](./0056-REWA-rewards_overview.md).
 
 
 
@@ -60,7 +60,7 @@ Scope: this reward type is always scoped as network-wide
 
 Parameters: none 
 
-Reward calculation: the total payout amount for the period is treated in the same way as the infrastructure fee pool, and the relative payout scaling factors are calculated as per the staking and delegation specification for distributing infrastructure fees to token holders and validators, currently [simple POS rewards](0058-simple-POS-rewards.md). (Payout delay and max amount per recipient are still respected).
+Reward calculation: the total payout amount for the period is treated in the same way as the infrastructure fee pool, and the relative payout scaling factors are calculated as per the staking and delegation specification for distributing infrastructure fees to token holders and validators, currently [simple POS rewards](./0058-REWS-simple_pos_rewards.md). (Payout delay and max amount per recipient are still respected).
 
 ## Acceptance criteria
 

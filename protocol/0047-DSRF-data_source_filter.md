@@ -1,11 +1,11 @@
-# [Data Source](./0045-data-sourcing.md): Filtered data
+# [Data Source](./0045-DSRC-data_sourcing.md): Filtered data
 
 
 # Overview
 
 Filtered data defines a type of data source that is a compound data source. That is, they include another data source definition in their definition and output a modified stream of data. Specifically, a filtered data source contains one or more conditions that are applied to data from the input data source to determine whether that data is output by the compound (filtered) data source.
 
-For example, a [signed message](./0046-data-source-signed-message.md) data source may submit a stream of transactions providing hourly data for several tickers, like this:
+For example, a [signed message](./0046-DSRM-data_source_signed_message.md) data source may submit a stream of transactions providing hourly data for several tickers, like this:
 
 ```
 DATA_SOURCE = SignedMessage{ pubkey=0xA45e...d6 }, gives:
@@ -25,7 +25,7 @@ DATA_SOURCE = SignedMessage{ pubkey=0xA45e...d6 }, gives:
 ```
 
 
-In order to use messages from this signer as, for example, the settlement trigger and data for a [futures](./0016-product-builtin-future.md) market, Vega needs a way to define a data source that will trigger settlement when a price is received for the correct underlying and the right expiry timestamp. For example:
+In order to use messages from this signer as, for example, the settlement trigger and data for a [futures](./0016-PFUT-product_builtin_future.md) market, Vega needs a way to define a data source that will trigger settlement when a price is received for the correct underlying and the right expiry timestamp. For example:
 
 ```
 DATA_SOURCE = Filter { data=SignedMessage{ pubkey=0xA45e...d6 }, filters=[
@@ -39,7 +39,7 @@ gives:
 
 Unlike the first example, this would be useful for trigger final settlement of a futures market. 
 
-Note that to extract the price value, this would need to be wrapped in a 'select' data source (see [Data Sourcing main spec](./0045-data-sourcing.md)) that specifies the field of interest ('price', here), i.e.:
+Note that to extract the price value, this would need to be wrapped in a 'select' data source (see [Data Sourcing main spec](./0045-DSRC-data_sourcing.md)) that specifies the field of interest ('price', here), i.e.:
 
 ```
 DATA_SOURCE = select {

@@ -1,5 +1,5 @@
 # Network Treasury
-The Network Treasury is a set of accounts (up to 1 per asset supported by the network via ther asset framework) that are funded by parties, deposits, or by direct transfers (e.g. a portion of fees, or from insurance pools at market closure). 
+The Network Treasury is a set of accounts (up to 1 per asset supported by the network via the asset framework) that are funded by parties, deposits, or by direct transfers (e.g. a portion of fees, or from insurance pools at market closure). 
 The purpose of the Network Treasury is to allow funding to be allocated to rewards, grants, etc. by token holder governance.
 
 The funds in the network treasury are spent by being transferred to another account, either by direct governance action (i.e. voting on a specific proposed transfer) or by mechanisms controlled by governance, such as a periodic transfer, which may have network parameters that control the frequency of transfers, calculation of the amount, etc.. 
@@ -16,11 +16,11 @@ Funding is how the on-chain treasury account receives collateral to be allocated
 A transfer may specify the network treasury as the destination of the transfer. 
 The funds, if available would be transferred instantly and irrevocably to the network treasury account for the asset in question (the treasury account for the asset will be created if it doesn’t exist).
 
-- Transfer from protocol mechanics: there may be a protocol feature such as the charging of fees or handling of expired insurance pool balances that specifies the Netwok Treasury as destination in a transfer. (Charging of fees is placeholder, currently not to be implemented.)
+- Transfer from protocol mechanics: there may be a protocol feature such as the charging of fees or handling of expired insurance pool balances that specifies the Network Treasury as destination in a transfer. (Charging of fees is placeholder, currently not to be implemented.)
 
-- Transfer by governance: a [governance proposal](./0028-governance.md) can be submitted to transfer funds from a market's insurance pool into the on chain treasury account for the asset. (required for Oregon Trail)
+- Transfer by governance: a [governance proposal](./0028-GOVE-governance.md) can be submitted to transfer funds from a market's insurance pool into the on chain treasury account for the asset. (required for Oregon Trail)
 
-- Transfer transaction: a transaction submitted to the network may request to transfer funds from the generel account for an asset, controlled by the owner’s private key, to the Network Treasury. (required only for Oregon Trail)
+- Transfer transaction: a transaction submitted to the network may request to transfer funds from the general account for an asset, controlled by the owner’s private key, to the Network Treasury. (required only for Oregon Trail)
 
 
 ### Funding by deposit
@@ -51,7 +51,7 @@ There are two network parameters that control transfers from the treasury:
 
 ### Direct allocation by governance
 
-A governance proposal may be submitted to transfer funds on enactment from the on-chain treasury to certain account types. Please see [the governance spec]() for a description of this.
+A governance proposal may be submitted to transfer funds on enactment from the on-chain treasury to certain account types. Please see [the governance spec](./0028-GOVE-governance.md) for a description of this.
 
 
 ### Periodic automated allocation to reward pool account
@@ -65,7 +65,7 @@ For each on chain reward pool account (i.e. each combination of reward scheme an
 
 This parameter must be defaulted as empty for each reward scheme that's created, which ensures that periodic automated allocation will not happen for any reward scheme unless explicitly enabled through a separate governance process. That is, it should not be possible to configure periodic allocation in the same proposal that creates the reward scheme itself.
 
-For each period of duration `period_length` a transfer is made from the on-chain treasury to the reward pool account in question as described in the governance initiated transfers spec (including network wide amount limits, etc.) asset [see governance spec](./0028-governance.md#Transfers-initiated-by-Governance), where the following are used for the transfer details:
+For each period of duration `period_length` a transfer is made from the on-chain treasury to the reward pool account in question as described in the governance initiated transfers spec (including network wide amount limits, etc.) asset [see governance spec](./0028-GOVE-governance.md), where the following are used for the transfer details:
 - `source_type` =  network treasury
 - `source` = blank (only one per asset)
 - `type` =  "best effort"
@@ -83,12 +83,12 @@ The transfer occurs immediately and then once every `period_length` and does not
 
 ### 💧 Sweetwater
 
-- Depositing funds via the [ERC20 bridge](./0031-ethereum-bridge-spec.md) directly to the Validators Rewards account (i.e. xxx address). There will be no more  on-chain-treasury on sweetwater.
+- Depositing funds via the [ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) directly to the Validators Rewards account (i.e. xxx address). There will be no more  on-chain-treasury on sweetwater.
 
 ### 🤠 Oregon Trail WIP
 
 - TBD for a lot of this
-- Depositing funds via the [ERC20 bridge](./0031-ethereum-bridge-spec.md) to the Network Treasury account (i.e. zero address) when there is no Network Treasury account for the asset being deposited:
+- Depositing funds via the [ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) to the Network Treasury account (i.e. zero address) when there is no Network Treasury account for the asset being deposited:
 	- Creates a Network Treasury account for that asset 
 	- Results in the balance of the Network Treasury account for the asset being equal to the amount of the asset that was deposited
 	- The Network Treasury accounts API includes the new account 
@@ -99,7 +99,7 @@ The transfer occurs immediately and then once every `period_length` and does not
 - No party can withdraw assets from the Network Treasury account via the ERC20 bridge
 - No party can use assets in the Network Treasury account as margin or transfer them to another account on Vega
 - The network treasury account balances [are restored after a network restart](../non-protocol-specs/0005-limited-network-life.md)
-- It is possible to set a network parameter for periodic allocation to the [staking and delegation reward scheme](./0057-reward-functions.md) **for any valid asset ID** in the asset framework:
+- It is possible to set a network parameter for periodic allocation to the [staking and delegation reward scheme](./0057-REWF-reward_functions.md) **for any valid asset ID** in the asset framework:
 	- The parameter can be set/changed via governance
 	- The parameter defaults to an empty/null/false state (or doesn't exist by default)
 	- The parameter is a structure that includes values for `max fraction per period`, `max amount per period`, and `period length`

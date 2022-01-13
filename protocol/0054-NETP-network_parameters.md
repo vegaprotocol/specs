@@ -1,6 +1,6 @@
 # Network Parameters
 
-There are certain parameters within Vega that influence the behaviour of the system and must be able to be changed by on-chain governance. These parameters are called "network parameters" throughout the specs. This spec describes features of these parameters and how they may be changed by [governance](./0028-governance.md).
+There are certain parameters within Vega that influence the behaviour of the system and must be able to be changed by on-chain governance. These parameters are called "network parameters" throughout the specs. This spec describes features of these parameters and how they may be changed by [governance](./0028-GOVE-governance.md).
 
 ## What is a network parameter?
 
@@ -40,7 +40,7 @@ Network parameters are only added and removed with code releases.
 
 ## Amending a network parameter's value
 
-Network parameters are able to be changed by [governance](./0028-governance.md), however some network parameters need to be more difficult than others to change than others.
+Network parameters are able to be changed by [governance](./0028-GOVE-governance.md), however some network parameters need to be more difficult than others to change than others.
 
 Therefore, Vega needs to know for each network parameter what governance thresholds should be applied for ascertaining a proposal to change the parameter's value. Specifically, these thresholds:
 

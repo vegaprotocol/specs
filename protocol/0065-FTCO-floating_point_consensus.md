@@ -21,7 +21,7 @@ We will call each such value a **"state variable"**. Currently state variables e
 
 Each state variable will be represented as a key-tolerance-value triple. 
 The key will be a `string`. 
-The tolerance will be a `decimal` which will be provided by the quant library producing this and must be *deterministic* (ie it is either hard coded in the library or produced without floating point arithmentic).
+The tolerance will be a `decimal` which will be provided by the quant library producing this and must be *deterministic* (ie it is either hard coded in the library or produced without floating point arithmetic).
 The value will be a single `floating-point`, this will be provided by the quant library as a result of some floating point calculation.  
 State variables will be bundled together by the event that triggered their update.
 
@@ -45,7 +45,7 @@ Here we describe how the consensus value should be chosen from the candidates ga
 Each calculation will be triggered by the specified [event](#update-events). Each event will have a unique identifier (hash). Any candidate key-tolerance-value triples should be submitted along with that hash as part of a bundle.
 We wait for 2/3 (rounded up) answers with matching identifier to be submitted.
 If all candidate values for a given variable are equal to each other then just accept that value. 
-If all values in a bundle are accepted then the whole bundle is accepted and the values in core are updated with the appropriate decimal represenations.
+If all values in a bundle are accepted then the whole bundle is accepted and the values in core are updated with the appropriate decimal representations.
 
 If at least one value differs then:
 
@@ -54,10 +54,10 @@ If at least one value differs then:
 The bundle is accepted if `(2/3)` of nodes by tendermint weight vote to accept the bundle. 
 If the bundle is rejected go back to selecting a node at random by tendermint weight and repeat.
 This is repeated until a value has been accepted.
-1) This may continue indefinitely. It will only be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit an event annoucing this (we either have a really badly unstable calculation or malicious nodes).
+1) This may continue indefinitely. It will only be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit an event announcing this (we either have a really badly unstable calculation or malicious nodes).
 1) If update hasn't been achieved after `3` update events an appropriate event should be emitted to indicate that market is operating with stale state variables.
 
-Note that the state variable calculation inputs need to be gathered when the event triggering the re-calculation has been announced (this is determinstic) so that all calculations are done with the same inputs for the same event.
+Note that the state variable calculation inputs need to be gathered when the event triggering the re-calculation has been announced (this is deterministic) so that all calculations are done with the same inputs for the same event.
 
 ### Update events
 

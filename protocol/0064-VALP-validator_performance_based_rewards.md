@@ -2,7 +2,7 @@
 
 The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury. 
 The rewards are based on their own stake and the amount of stake delegated to them, 
-see [validator rewards](./0061-simple-POS-rewards-SweetWater.md).
+see [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
 The purpose of the specification is to define how will the validator rewards will be additionally scaled based on their performance. 
 
 ## Perfomance Measurement 1 (PM1): Offline Validator (sufficient for Oregon Trail)
@@ -18,22 +18,18 @@ This counts need to be stored, per validator node, in vega core.
 
 Define the performance score to be `performance_score := (l-f)/l` if `l > 0` and `performance_score = 0` if `l = 0`. 
 
-The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-simple-POS-rewards-SweetWater.md). 
+The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
 
 ### Acceptance criteria 
 
 1. Configure and launch a network with 5 validators
-1. Give each validator self-stake of 10 000 VEGA. Set epoch lenght to 10 minutes. 
-1. Deposit a 1000 VEGA into the validator reward pool. 
+1. Give each validator self-stake of 10 000 VEGA. Set epoch length to 10 minutes.
+1. Deposit a 1000 VEGA into the validator reward pool.
 1. After epoch ends (epoch 0), observe that the 1000 VEGA are split accordingly to the `performance_score` reported (should be roughly 200 VEGA each but not necessarily exactly). Anything between 180 and 220 per validator would be considered acceptable. 
-1. Bring one node down. 
-1. Wait for another epoch to end (epoch 1). 
-1. Deposit another 1000 VEGA into the validator reward pool. 
-1. After epoch ends (epoch 2), observe that the 1000 VEGA are split accordingly to the `performance_score` reported. This should be roughly 250 VEGA for each of the running validators, anything between 225 and 275 VEGA is acceptable. It should be exactly 0 for the validator that was brought down. 
-
-
-
-
+1. Bring one node down.
+1. Wait for another epoch to end (epoch 1).
+1. Deposit another 1000 VEGA into the validator reward pool.
+1. After epoch ends (epoch 2), observe that the 1000 VEGA are split accordingly to the `performance_score` reported. This should be roughly 250 VEGA for each of the running validators, anything between 225 and 275 VEGA is acceptable. It should be exactly 0 for the validator that was brought down.
 
 
 

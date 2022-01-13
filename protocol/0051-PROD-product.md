@@ -7,7 +7,7 @@ A Product in Vega is the entity that determines how buyers and sellers in a mark
 
 A product may have many parameters if they are required to value and trade it, however every product will have at least one *Settlement asset* parameter as at a minimum the valuation function will need to know the asset being used.
 
-Every piece of data that is not provided by the Vega core and is not part of the [Market Framework](./0001-market-framework.md) definition of the market or instrument must be a product parameter as the various functions described below do not have any other source of data.
+Every piece of data that is not provided by the Vega core and is not part of the [Market Framework](./0001-MKTF-market_framework.md) definition of the market or instrument must be a product parameter as the various functions described below do not have any other source of data.
 
 
 ### Types of Product parameter
@@ -16,9 +16,9 @@ Product parameters my be one of two types:
 
 * **Explicit value:** for example a number (0.1, 500, ...), date, duration, string, list of values, etc. that is specified when the Product is created along with the Instrument and Market.
 
-* **Data source reference:** this is a reference as defined in the [Data Sourcing Framework](./0045-data-sourcing.md) for a value or stream of values which will be used by the Product logic.
+* **Data source reference:** this is a reference as defined in the [Data Sourcing Framework](./0045-DSRC-data_sourcing.md) for a value or stream of values which will be used by the Product logic.
 
-* **Settlement asset:** settlement asset parameters may either be one of more single [asset references](./0040-asset-framework.md), e.g. ("base_asset" and "quote_asset" or "settlement_asset" if there's just one), or in the case of a more advanced product could be a single parameter that holds a list of assets, which may or may not have a required length.
+* **Settlement asset:** settlement asset parameters may either be one of more single [asset references](./0040-ASSF-asset_framework.md), e.g. ("base_asset" and "quote_asset" or "settlement_asset" if there's just one), or in the case of a more advanced product could be a single parameter that holds a list of assets, which may or may not have a required length.
 
 
 ### Changing product parameters
@@ -56,7 +56,7 @@ Note that we are assuming tacitly in all specs that `product.value` scales linea
 
 The valuation function has access to the state of the market including the current Vega time, product parameters, and any values received on data sources defined as product parameters. It does not have access to other markets' data unless these are defined as data source parameters.
 
-See the [built-in Futures spec](./0016-product-builtin-future.md) for an example.
+See the [built-in Futures spec](./0016-PFUT-product_builtin_future.md) for an example.
 
 ### Example: call options market quoted in Black-Scholes implied volatility
 ```javascript
@@ -75,7 +75,7 @@ callOption.value(quote) {
 ```
 ## Quote-to-value function 
 
-See [Fees spec](./0029-fees.md) for context. Fees are calculated based on `trade_value_for_fee_purposes`. Any product *may* provide `product.valueForFeePurposes(quote)` function which returns the value of the product for size of `1` which will be used in calculating fees: 
+See [Fees spec](./0029-FEES-fees.md) for context. Fees are calculated based on `trade_value_for_fee_purposes`. Any product *may* provide `product.valueForFeePurposes(quote)` function which returns the value of the product for size of `1` which will be used in calculating fees: 
 For many products this will simply be
 ```javascript
 trade_value_for_fee_purposes = math.Abs(size) * product.valueForFeePurposes(quote)
@@ -87,7 +87,7 @@ For products which do *not* define this, `product.value(quote)` will be used by 
 
 Some products can expire and be settled or create interim settlement cashflows that are triggered by certain events such as the passage of time and/or the receipt of data from a data source (oracle, another Vega market, etc.).
 
-Lifecycle events are triggered by receipt of data from a data source defined as a product parameter. Data sources can include internal Vega data feeds, including the time and data from other markets, as well as external (oracle) data source, see the [data sourcing framework spec](./0045-data-sourcing.md) for more details.
+Lifecycle events are triggered by receipt of data from a data source defined as a product parameter. Data sources can include internal Vega data feeds, including the time and data from other markets, as well as external (oracle) data source, see the [data sourcing framework spec](./0045-DSRC-data_sourcing.md) for more details.
 
 A lifecycle trigger looks like this, in pseudocode:
 
@@ -106,12 +106,12 @@ where:
 
 - `product.<data_source>(data) { ... }` defines a function to executed when data is received from the `<data_source>` by Vega. The `<data_source>` must be one of the product parameters that defines a data source used by the product, and `data` will contain the received data.
 - `settle(ASSET, amount)` means that a long position of size +1 will receive `amount` of `ASSET` (and a short position, size = -1) will similarly lose the same amount. `ASSET` must be one of the *settlement assets* defined on the product.
-- `setMarkPrice(value)` means that the market's mark price is updated to `value`. This _always_ implies that after the event is processed positions will be marked to market, using the [mark to market settlement](./0003-mark-to-market-settlement.md) logic.
-- `setMarketStatus(XXXX)` means that the market status is changed. Currently the only valid status changes are to `SUSPENDED`, `TRADING_TERMINATED`, and `SETTLED` (see [./0043-market-lifecycle.md] for details of the statuses and their meaning). If a market is set to `SUSPENDED` this way, it can *only* exit this state via a governance vote to return it to normal trading or close it.
+- `setMarkPrice(value)` means that the market's mark price is updated to `value`. This _always_ implies that after the event is processed positions will be marked to market, using the [mark to market settlement](../protocol/0003-MTMK-mark_to_market_settlement.md) logic.
+- `setMarketStatus(XXXX)` means that the market status is changed. Currently the only valid status changes are to `SUSPENDED`, `TRADING_TERMINATED`, and `SETTLED` (see [Market Lifecycle spec](./0043-MKTL-market_lifecycle.md) for details of the statuses and their meaning). If a market is set to `SUSPENDED` this way, it can *only* exit this state via a governance vote to return it to normal trading or close it.
 
 Generally the function might use conditional logic to apply tests to the data/market state and then if certain conditions are matched do one or both of emitting settlement cashflows and changing market status.
 
-See the [built-in Futures spec](./0016-product-builtin-future.md) for an example. 
+See the [built-in Futures spec](../protocol/0016-PFUT-product_builtin_future.md) for an example. 
 
 
 ## APIs

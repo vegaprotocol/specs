@@ -3,7 +3,7 @@ This describes the Alpha Mainnet requirements for calculation and distribution o
 
 ## Calculation
 
-At the end of an [epoch](./0050-epochs.md), payments are calculated. This is done per active validator:
+At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. This is done per active validator:
 
 * First, `score_val(stake_val)` calculates the relative weight of the validator given the stake it represents.
 * For each delegator that delegated to that validator, `score_del` is computed: `score_del(stake_del, stake_val)` where `stake_del` is the stake of that delegator, delegated to the validator, and `stake_val` is the stake that validator represents.
@@ -35,11 +35,11 @@ Functions:
 
 ## Distribution of Rewards
 
-A component of the trading fees that are collected from price takers of a market are reserved for rewarding validators and stakers. These fees are denominated in the settlement currencies of the markets and are collected into an [infrastructure fee](./0029-feeds.md) [account](./0013-accounts.md) for that asset. These fees are "held" in this pool account for a length of time, determined by a network parameter (`infra-fee-hold-time`). 
+A component of the trading fees that are collected from price takers of a market are reserved for rewarding validators and stakers. These fees are denominated in the settlement currencies of the markets and are collected into an [infrastructure fee](./0029-FEES-fees.md) [account](./0013-ACCT-accounts.md) for that asset. These fees are "held" in this pool account for a length of time, determined by a network parameter (`infra-fee-hold-time`). 
 
 They are then distributed to the general accounts of eligible recipients; that is, the validators and delegators, in amounts as per above calculation.
 
-Once the reward for all delegators has been calculated, we end up with a slice of `Transfer`'s, transferring an amount from the infrastructure fee account (see [fees](./0029-fees.md)) into the corresponding general balances for all of the delegators. For example:
+Once the reward for all delegators has been calculated, we end up with a slice of `Transfer`'s, transferring an amount from the infrastructure fee account (see [fees](./0029-FEES-fees.md)) into the corresponding general balances for all of the delegators. For example:
 
 ```go
 rewards := make([]*types.Transfer, 0, len(delegators))
@@ -57,10 +57,6 @@ for _, d := range delegators {
 
 ```
 
-Sample code for the full distribution (slightly unclean, but fully functional) [here](0060-simple-POS-rewards.samplecode.go).
-
-
-
 The transfer type informs the collateral engine that the `FromAccount` ought to be the infrastructure fee account, and the `ToAccount` is the general account for the party for the given asset. The delegator can then withdraw the amount much like they would any other asset/balance. Note, the transfers should only be made when the `infra-fee-hold-time` has elapsed. 
 
 
@@ -70,6 +66,6 @@ The transfer type informs the collateral engine that the `FromAccount` ought to 
 `delegator_share` - The proportion of the total validator reward that go to its delegators. Likely to be lower than 0.1.
 
 ## Payment of rewards
-- [Infrastructure fees](./0029-fees.md) are collected into an infrastructure fee account for the asset
+- [Infrastructure fees](./0029-FEES-fees.md) are collected into an infrastructure fee account for the asset
 - These fees are distributed to the general accounts of the validators and delegators after `infra-fee-hold-time` in amounts calculated according to the above calculation.
 - There may also be additional rewards for participating in stake delegation from the rewards function. These are accumulated and distributed separately.

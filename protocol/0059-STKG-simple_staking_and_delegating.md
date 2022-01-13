@@ -33,7 +33,7 @@ This provides the information the core needs to keep track of:
 * Total Delegatable Stake
 * Undelegated Stake
 * Stake delegated per validator
-* Stake marked for delegation per validator in the next [epoch](./0050-epochs.md).
+* Stake marked for delegation per validator in the next [epoch](./0050-EPOC-epochs.md).
 * Total stake (should be the sum of all those listed immediately above).
 
 There is no interaction with the smart contract that is initiated by Vega.
@@ -70,7 +70,7 @@ message Undelegate {
 }
 ```
 
-Where `Delegate` adds the `Amount` to the delegation of validator `Val` at the biginning of the next epoch (if still available to them), and `Undelegate` subtracts the amount from the delegation of `Val` by the next epoch if available.
+Where `Delegate` adds the `Amount` to the delegation of validator `Val` at the beginning of the next epoch (if still available to them), and `Undelegate` subtracts the amount from the delegation of `Val` by the next epoch if available.
 
 To avoid fragmentation or spam, there is a network parameter `minimum delegateable stake` that defines the smallest unit of (fractions of) tokens that can be used for delegation.
 
@@ -113,7 +113,7 @@ _Undelegate towards the end of the epoch_
 _Undelegate Now_
 `UndelegateNow`:
 The action can be announced at any time and is executed immediately following the block it is announced in.
-The user is marked to not receive any reward from the validator in that epoch. The reward should instead go into the [on-chain treasury account for that asset](). The stake is marked as free for the delegator, but is not yet removed from the validator stake (this happens at the end of the epoch).
+The user is marked to not receive any reward from the validator in that epoch. The reward should instead go into the [on-chain treasury account for that asset](./0055-TREA-on_chain_treasury.md). The stake is marked as free for the delegator, but is not yet removed from the validator stake (this happens at the end of the epoch).
 
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring any interaction between the smart contract and the details of the delegation system. This also allows the delegator to change their mind about a delegation before it is activated.
 
@@ -133,7 +133,7 @@ As this is not required for first mainnet, and involves more subtleties (weights
 - Auto undelegation - whenever the party dissociates tokens, their nomination must be updated such that their maximum nomination reflects the association. 
 
 ## Fringe Cases:
-A delegator can delegate some stake, and immediatelly undelegate it before the next
+A delegator can delegate some stake, and immediately undelegate it before the next
 epoch starts. This is fine with us.
 
 If the value of `minimum_delegateable_stake` changes in a bad way, stakers might be stuck with
@@ -146,41 +146,41 @@ If several delegators change the delegation within the same block, some of them 
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
 block creator has the responsibility to filter out these transactions.
 
-It is possible in Sweetwater that a Delegator gets removed (e.g., due to non-paritcipation) between re-runs. 
+It is possible in Sweetwater that a Delegator gets removed (e.g., due to non-participation) between re-runs. 
 In this case, it must be assured that the rewards are distributed only to the remaining active validators.
 This will also leave some delegators that have delegated to a non-existing validator; the easiest solution
 is to simply declare all their stake undelegated (if they delegated to a bad validators, their problem).
 This means we also need to test how the formulars react to changing numbers of validators.
 
-Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted propotionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calcualte first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is gurarnteed to be less than or equal to the available un-nominated association. 
+Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted proportionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calcualte first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is guaranteed to be less than or equal to the available un-nominated association. 
 
 # Network Parameters
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `validators.delegation.minAmount`       | String (float) |  `"0.001"`        | The smallest fraction of the [governance token](./0028-governance.md) that can be [delegated to a validator](#delegation-transaction). | 
+| `validators.delegation.minAmount`       | String (float) |  `"0.001"`        | The smallest fraction of the [governance token](./0028-GOVE-governance.md) that can be [delegated to a validator](#delegation-transaction). | 
 
 Actual validator score calculation is in [simple scheme for Sweetwater](0061-simple-POS-rewards\ -\ SweetWater.md) and it introduces its own network parameters.
 
-See the [network paramters spec](./0054-network-parameters.md#current-network-parameters) for a full list of parameters.
+See the [network paramters spec](./0054-NETP-network_parameters.md#current-network-parameters) for a full list of parameters.
 
 ## Acceptance Criteria
 
 ### Staking for the first time
 - To lock tokens, a participant must:
-  - Have some balance of vested or unvested governance asset in an Ethereum wallet. These assets must not be locked to another smart contract (including the [Vega collateral bridge]()).
+  - Have some balance of vested or unvested governance asset in an Ethereum wallet. These assets must not be locked to another smart contract (including the [Vega collateral bridge](./0031-ETHB-ethereum_bridge_spec.md)).
   - Have a Vega wallet
   - Lock the tokens on the [Vega staking bridge contract](../non-protocol-specs/0004-staking-bridge.md)
 - To delegate the locked tokens, a participant must:
   - Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" 
   - Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).
 - These accounts will be created:
-  - A [staking account](./0013-accounts.md#party-staking-accounts) denominated in the governance asset is created
+  - A [staking account](./0013-ACCT-accounts.md#party-staking-accounts) denominated in the governance asset is created
   - When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards)
-  - It is possible that a [separate reward function](./0057-reward-functions.md) will cause an account to be created for the user as a result of rewards.
+  - It is possible that a [separate reward function](./0057-REWF-reward_functions.md) will cause an account to be created for the user as a result of rewards.
 - Timings
   - Any locked (but undelegated) tokens can be delegated at any time. 
-  - The delegation only becomes valid at the next [episode](./0050-epochs.md), though it can be undone through undelegate.
+  - The delegation only becomes valid at the next [epoch](./0050-EPOC-epochs.md), though it can be undone through undelegate.
   - The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next epoch) 
 
 ### Adding more stake
@@ -233,7 +233,7 @@ See the [network paramters spec](./0054-network-parameters.md#current-network-pa
 - epoch 1: party associated 200 VEGA
 - epoch 1: party requests to delegate 100 VEGA to validator1
 - end of epoch1: party1 has 300 delegated to validator1, 200 delegated to validators 2-5 and 100 remain undelegated.
-- end of epoch2: the remaining associated undelegated 100 VEGA get auto-delegated and distrubuted such that validator1 gets 27 (100 * 300/1100) and validators 2-5 get each 18 - and 1 token remains undelegated
+- end of epoch2: the remaining associated undelegated 100 VEGA get auto-delegated and distributed such that validator1 gets 27 (100 * 300/1100) and validators 2-5 get each 18 - and 1 token remains undelegated
 
 ### Edge case 2: manual undelegation for party eligible for auto delegation:
 - epoch 0: party associated 1000 VEGA

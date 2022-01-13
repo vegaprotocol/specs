@@ -76,7 +76,7 @@ In future there will likely be other types.
 
 The context in which the data source is used can determine the type of data required to be received. Data sources that emit data of an incorrect type to a defined data source should trigger an event or log of some sort (the type may depend if this is detected within processing of a block or before accepting a tx). If the error is detected synchronously on submission, the error message returned by the node should explicitly detail the issue (i.e. what mismatched, how, and in what part of what data source definition it occurred).
 
-For [futures](./0016-product-builtin-future.md) the data type expected will  be a number ("price"/quote) for settlement, and any event for the trading terminated trigger. For filtered data, the input data source can be any type and the output must be the type required by the part of the system using the data source.
+For [futures](./0016-PFUT-product_builtin_future.md) the data type expected will  be a number ("price"/quote) for settlement, and any event for the trading terminated trigger. For filtered data, the input data source can be any type and the output must be the type required by the part of the system using the data source.
 
 
 ## 5. Selecting a field 
@@ -102,9 +102,9 @@ The above JSON gives output of `27.2`.
 ## 6. Types of data source
 
 The following data sources have been defined:
-1. [Internal basic data sources](./0048-data-source-internal.md)
-1. [signed message](./0046-data-source-signed-message.md)
-1. [Filters](./0047-data-source-filter.md) (exclude certain events based on conditions and boolean logic against the fields on the data such as equals, simple comparisons). An MVP of this functionality is needed to allow signed message data sources to be practical, more complex filters are included in the "future work" section below.
+1. [Internal basic data sources](./0048-DSRI-data_source_internal.md)
+1. [signed message](./0046-DSRM-data_source_signed_message.md)
+1. [Filters](./0047-DSRF-data_source_filter.md) (exclude certain events based on conditions and boolean logic against the fields on the data such as equals, simple comparisons). An MVP of this functionality is needed to allow signed message data sources to be practical, more complex filters are included in the "future work" section below.
 
 Future (needed sooner than the others listed in 9 below)
 1. Ethereum oracles (events, contract read methods)
@@ -114,7 +114,7 @@ Future (needed sooner than the others listed in 9 below)
 
 ## 7. Tracking active data sources
 
-Vega will need to keep track of all "active" defined data sources that are referenced either by markets that are still being managed by the core (i.e. excluding Closed/Settled/Cancelled/other "end state" markets) or by other data source definitions (see each individual data source definition spec, such as [signed message](./0046-data-source-signed-message.md) for this specific information).
+Vega will need to keep track of all "active" defined data sources that are referenced either by markets that are still being managed by the core (i.e. excluding Closed/Settled/Cancelled/other "end state" markets) or by other data source definitions (see each individual data source definition spec, such as [signed message](./0046-DSRM-data_source_signed_message.md) for this specific information).
 
 Vega should consider the specific definition including filters, combinations etc. not just the primary source. So, for example, if two markets use the same public key(s) but different filters or aggregations etc. then these constitute two different data sources and each transaction that arrives signed by these public keys should only be accepted if one or more of these specific active data sources "wants" the data.
 
