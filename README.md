@@ -15,7 +15,6 @@ limited mainnet.
 
 ## [Milestones](./milestones/)
 The canonical source for what feature bundles represent major milestones in our product roadmap. Progress against these milestones is tracked on 
-[🎱 Roadmap Board](https://github.com/orgs/vegaprotocol/projects/12).
 
 ## [Glossaries](./glossaries/)
 These are quick reference points for general terminology we use. Some of the specs are really dense with trading terms 

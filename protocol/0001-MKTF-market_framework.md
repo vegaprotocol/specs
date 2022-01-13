@@ -31,10 +31,10 @@ The market data structure collects all of the information required for Vega to o
 
 Data:
   - **Identifier:** this should unambiguously identify a market
-  - **Status:** Proposed | Pending | Cancelled | Active | Suspended | Closed | Trading Terminated | Settled (see [market lifecycle spec](./0043-market-lifecycle.md))
+  - **Status:** Proposed | Pending | Cancelled | Active | Suspended | Closed | Trading Terminated | Settled (see [market lifecycle spec](./0043-MKTL-market_lifecycle.md))
   - **Trading mode:** this defines the trading mode (e.g. [continuous trading](#trading-mode---continuous-trading), [auction](#trading-mode---auctions)) and any required configuration for the trading mode. Note also that each trading mode in future will have very different sets of applicable parameters.
   - **Tradable instrument:** an instance of or reference to a tradable instrument.
-  - **Mark price methodology:** reference to which [mark price](./0009-mark-price.md) calculation methodology will be used.
+  - **Mark price methodology:** reference to which [mark price](./0009-MRKP-mark_price.md) calculation methodology will be used.
   - **Mark price methodology parameters:**
     - Algorithm 1 / Last Traded Price: initial mark price
   - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
@@ -44,15 +44,10 @@ Data:
   - **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a BTSUSD market. (Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. this also means that, for instance, it would not be possible to create a BTCUSD market that allows order/position sizes equivalent to 1 sat.) 
 Note that Vega has hard limit maximum of MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS as a "compile-time" parameter. Typical value be MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS=6. 
 
-
-
-
-
 ### Trading mode - continuous trading
 
 Params:
   - None currently
-
 
 ### Trading mode - Auctions
 
@@ -60,11 +55,11 @@ Params:
   - **Call period end:** when the call period ends (date/time), may be empty if indefinite
 
 A market can be in Auction Mode for a number of reasons:
-- At market creation, markets will start in an [opening auction](./0026-auctions.md#opening-auctions-at-creation-of-the-market), as a price discovery mechanism
-- A market can be a [Frequent Batch Auction](./0026-auctions.md#frequent-batch-auction), rather than continuous trading
-- Due to [price monitoring](./0032-price-monitoring.md) triggering a price discovery auction.
+- At market creation, markets will start in an [opening auction](./0026-AUCT-auctions.md#opening-auctions-at-creation-of-the-market), as a price discovery mechanism
+- A market can be a [Frequent Batch Auction](./0026-AUCT-auctions.md#frequent-batch-auction), rather than continuous trading
+- Due to [price monitoring](./0032-PRIM-price_monitoring.md) triggering a price discovery auction.
 
-How markets operate during auction mode is a separate specification: [0026 - Auctions](./0026-auctions.md)
+How markets operate during auction mode is a separate specification: [0026 - Auctions](./0026-AUCT-auctions.md)
 
 
 ## Tradable instrument
@@ -73,9 +68,8 @@ A tradable instrument is a combination of an instrument and a risk model. An ins
 
 Data:
 
- - **Instrument:** an instance of or reference to a fully specified instrument.
- - **Risk model:** a reference to a risk model *that is valid for the instrument* (NB: risk models may therefore be expected to expose a mechanism by which to test whether or not it can calculate risk/margins for a given instrument)
-
+- **Instrument:** an instance of or reference to a fully specified instrument.
+- **Risk model:** a reference to a risk model *that is valid for the instrument* (NB: risk models may therefore be expected to expose a mechanism by which to test whether or not it can calculate risk/margins for a given instrument)
 
 ## Instrument
 
@@ -99,13 +93,13 @@ Products define the behaviour of a position throughout the trade lifecycle. They
 Products will be of two types:
 
 - **Built-ins:** products that are hard coded as part of Vega (built in futures and then options will be our first products).
-- **Smart Products:** products that are defined in Vega's Smart Product language (future functionality, not part of Nicenet or the first Testnet or Mainnet releases.)
+- **Smart Products:** products that are defined in Vega's Smart Product language (future functionality)
 
 Product lifecycle events:
 
 - **Cash/asset flows:** these are consumed by the settlement engine and describe a movement of a number of some asset from (-ve value) or to (+ve value) the holder of a (long position), with the size of the flow specify the quantity of the asset per unit of long volume.
-- **Trading Terminated:** this event moves a market to 'Trading Terminated' state, means that further trading is not possible (see [market lifecycle spec](./0043-market-lifecycle.md)).
-- **Settlement:** this event triggers final settlement of positions and release of margin, e.g. once settlement data is received from a data source/oracle and final settlement cashflows are calculated (see [market lifecycle spec](./0043-market-lifecycle.md)).
+- **Trading Terminated:** this event moves a market to 'Trading Terminated' state, means that further trading is not possible (see [market lifecycle spec](./0043-MKTL-market_lifecycle.md)).
+- **Settlement:** this event triggers final settlement of positions and release of margin, e.g. once settlement data is received from a data source/oracle and final settlement cashflows are calculated (see [market lifecycle spec](../protocol/0043-MKTL-market_lifecycle.md)).
 
 Products must expose certain data to Vega WHEN they are instantiated as an instrument by providing parameters:
 - **Settlement assets:** one or more assets that can be involved in settlement
@@ -127,7 +121,7 @@ Note: product definition for futures is out of scope for this ticket.
 
 ## Price monitoring parameters**
 
-[Price monitoring (spec)](./0032-price-monitoring.md) parameters specify an array of price monitoring triggers and the associated auction durations. Each parameter contains the following fields:
+[Price monitoring (spec)](./0032-PRIM-price_monitoring.md) parameters specify an array of price monitoring triggers and the associated auction durations. Each parameter contains the following fields:
 
 - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
 - `probability` - probability level used in price monitoring. Must be in the (0,1) range.

@@ -1,10 +1,3 @@
-Feature name: feature-name
-Start date: YYYY-MM-DD
-Specification PR: https://github.com/vegaprotocol/product/pull/PRNUMBER
-
-# Acceptance Criteria
-Check list of statements that need to met for the feature to be considered correctly implemented.
-
 # Summary
 One paragraph explanation of this specification
 
@@ -22,3 +15,7 @@ If you have some data types, or sample code to show interactions, put it here
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
+
+# Acceptance Criteria
+Check list of statements that need to met for the feature to be considered correctly implemented.
+
