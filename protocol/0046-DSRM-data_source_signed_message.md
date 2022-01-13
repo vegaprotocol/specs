@@ -93,7 +93,7 @@ Where possible, this should be done before the transaction is included in a bloc
 
 ### Criteria
 
-1. An [instrument can be created](./0028-governance.md) to rely on a signed message data source
+1. An [instrument can be created](./0028-GOVE-governance.md) to rely on a signed message data source
     1. The instrument must specify a valid signed message data source
     1. A market proposal specifying an invalid data source will be rejected
         1. This rejection will happen at *the [creation of the proposal](./0028-GOVE-governance.md)*

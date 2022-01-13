@@ -63,10 +63,10 @@
 - [Internals](./0048-DSRI-data_source_internal.md)
 
 # Validators & bridges
-- [Validating transactions preconsensus](./0049-validate-transaction-preconsensus.md)
-- [Epochs](./0050-epochs.md)
-- [Ethereum multisig control](./0030-multisig_control_spec.md)
-- [Ethereum bridge spec](./0031-ethereum-bridge-spec.md)
+- [Validating transactions preconsensus](./0049-TVAL-validate_transaction_preconsensus.md)
+- [Epochs](./0050-EPOC-epochs.md)
+- [Ethereum multisig control](./0030-ETHM-multisig_control_spec.md)
+- [Ethereum bridge spec](./0031-ETHB-ethereum_bridge_spec.md)
 
 ## Delegation, staking and rewards
 - [Staking & Delegating](./0059-STKG-simple-staking-and-delegating.md)

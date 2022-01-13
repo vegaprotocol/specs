@@ -1,6 +1,6 @@
 Feature: Test margin calculation
 
-  # Spec file: 0019-margin-calculator.md
+  # Spec file: 0019-MCAL-margin_calculator.md
   # Reference spreadsheet: https://drive.google.com/open?id=1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak
   
   Scenario: Case 1: Trader submits long order that will trade - new formula & high exit price

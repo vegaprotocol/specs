@@ -6,7 +6,7 @@ Specification PR: https://github.com/vegaprotocol/product/pull/322
 
 Liquidity in the market is not only a desirable feature from a trader's point of view, but also an important consideration from the risk-management standpoint. Position of a distressed trader can only be liquidated if there's enough volume on the order book to offload it, otherwise a potentially insolvent party remains part of the market.
 
-Similarly to [price monitoring](0032-price-monitoring.md), we need to be able to detect when the market liquidity drops below the safe level, launch a "liquidity seeking" auction (in which, due to the [liquidity mechanics](./0044-LIQM-lp_mechanics.md), there is an incentive through the ability to set fees, to provide the missing liquidity) and terminate it when the market liquidity level is back at a sufficiently high level.
+Similarly to [price monitoring](./0032-PRIM-price_monitoring.md), we need to be able to detect when the market liquidity drops below the safe level, launch a "liquidity seeking" auction (in which, due to the [liquidity mechanics](./0044-LIQM-lp_mechanics.md), there is an incentive through the ability to set fees, to provide the missing liquidity) and terminate it when the market liquidity level is back at a sufficiently high level.
 
 Note that as long as all pegs that LP batch orders can peg to exists on the book there is one-to-one correspondence between the total stake committed by liquidity providers (LPs), see [LP mechanics](./0044-LIQM-lp_mechanics.md) spec, and the total supplied liquidity. 
 Indeed 
@@ -14,7 +14,7 @@ Indeed
 lp_liquidity_obligation_in_ccy_siskas = stake_to_ccy_siskas ⨉ stake.
 ```
 Thus it is sufficient to compare `target_stake` with `total_stake` while also ensuring that `best_bid` and `best_offer` are present on the book (*).
-Note that [target stake](0041-target-stake.md) is defined in a separate spec.
+Note that [target stake](./0041-TSTK-target_stake.md) is defined in a separate spec.
 
 (*) Having `best_bid` and `best_offer` implies that `mid` also exists. If, in the future, [LP batch orders](./0038-OLIQ-liquidity_provision_order_type.md) are updated to allow other pegs then the protocol must enforce that they are also on the book.
 

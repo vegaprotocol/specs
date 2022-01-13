@@ -85,20 +85,20 @@ message NewAsset {
   AssetSource changes = 1 [(validator.field) = {msg_exists: true}];
 }
 ```
-See: https://github.com/vegaprotocol/product/blob/master/specs/0028-governance.md
+See: [Governance spec](./0028-GOVE-governance.md).
 
 ### Signature Aggregation
 All new asset listing is first accepted through governance as describe before. In order to reflect the approval / the decision of the network of accepting a new asset, all validators are required to sign a specific message using a private key to which the signature can be verified by the foreign chain owning the asset.
 The public key counterpart of the private key must have previously been added to the set of allowed signer for the smart contract of the bridge hosted in the foreign chain.
 All vega node will aggregate the signature emitted by the validators, the clients could request at anytime the list of generated signature, and apply verification using the public keys of the validators.
 
-See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md
+See: [Multisig Control spec](./0030-ETHM-multisig_control_spec.md) 
 
 ### Vega Asset Bridges
 Before an asset can be accepted for deposit by a bridge, it needs to be whitelisted on that bridge.
 
 #### Ethereum-based assets
-Once an asset is listed, the submitter of the listing will request an aggregated multisig signature bundle from Vega validator nodes. See: https://github.com/vegaprotocol/product/blob/Multisig_Control_Spec/specs/0030-multisig_control_spec.md#signature-bundles
+Once an asset is listed, the submitter of the listing will request an aggregated multisig signature bundle from Vega validator nodes. See: [multisig control spec](./0030-ETHM-multisig_control_spec.md).
 
 All Ethereum assets are managed by a smart contract that supports the IVega_Bridge interface. The interface defines a function to whitelist new assets:
 

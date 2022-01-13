@@ -15,7 +15,7 @@
 1. [ ] The mark price changes causing the trader’s margin to move in to the release level. Margin should be released back to the trader. 
 
 ## Summary
-This ticket encapsulates the orchestration of business logic which interfaces with the specified [risk model](./0018-quant-risk-models.ipynb) (specified at the instrument level) to ensure that margin levels are calculated whenever certain conditions are met.
+This ticket encapsulates the orchestration of business logic which interfaces with the specified [risk model](./0018-RSKM-quant_risk_models.ipynb) (specified at the instrument level) to ensure that margin levels are calculated whenever certain conditions are met.
 
 ## Reference-level explanation
 
@@ -25,14 +25,14 @@ This specification outlines:
 
 ### **Background - how margin levels are calculated**
 
-The [margin calculator](./0019-margin-calculator.md) will calculate the margin levels when instructed to do so. It will return four margin levels for each trader:
+The [margin calculator](./0019-MCAL-margin_calculator.md) will calculate the margin levels when instructed to do so. It will return four margin levels for each trader:
 
 1. maintenance margin
 1. collateral search level
 1. initial margin
 1. collateral release level
 
-The [margin calculator](./0019-margin-calculator.md) utilises risk factors which are updated by the [quant risk model](./0018-quant-risk-models.ipynb).  
+The [margin calculator](./0019-MCAL-margin_calculator.md) utilises risk factors which are updated by the [quant risk model](./0018-RSKM-quant_risk_models.ipynb).  
 
 
 ###  **Conditions for recalculating margins**
@@ -47,8 +47,8 @@ If risk factors have been updated, the margin levels for all market participants
 
 Recalculate all margins for when any of the following are met:
 
-1. when market observable used in the [margin calculation](0019-margin-calculator.md) changes,
-2. when risk factors are [updated](0065-floating-point-consensus.md).
+1. when market observable used in the [margin calculation](./0019-MCAL-margin_calculator.md) changes,
+2. when risk factors are [updated](./0018-RSKM-quant_risk_models.ipynb).
 
 #### 3. Updating margins when positions have changed
 
@@ -60,7 +60,7 @@ If already re-calculating all margins, don’t need to check for this. Otherwise
 
 ### **Utilising margins to evaluate solvency**
 
-The [margin calculator](./0019-margin-calculator.md) returns four margin levels per position; the _collateral release level_, _initial margin_, _collateral search level_ and _maintenance margin_.
+The [margin calculator](./0019-MCAL-margin_calculator.md) returns four margin levels per position; the _collateral release level_, _initial margin_, _collateral search level_ and _maintenance margin_.
 
 The protocol compares these levels to the balance in the trader's margin account for a market.
 
@@ -76,9 +76,9 @@ When a trader's balance in their margin account (for a market) is less than thei
 
 #### Close outs
 
-After a collateral search, if the amount in the margin account is below the closeout level AFTER the collateral transfer request completes (whether successful or not) OR in an async (sharded) environment if the latest view of the trader’s available collateral suggests this will be the case, the trader is considered to be _distressed_ and is added to list of traders that will then undergo [position resolution](./0012-position-resolution.md).
+After a collateral search, if the amount in the margin account is below the closeout level AFTER the collateral transfer request completes (whether successful or not) OR in an async (sharded) environment if the latest view of the trader’s available collateral suggests this will be the case, the trader is considered to be _distressed_ and is added to list of traders that will then undergo [position resolution](./0012-POSR-position_resolution.md).
 
-[Position resolution](./0012-position-resolution.md) is executed simultaneously for ALL traders on a market that have been determined to require it during a single event. That is, the orchestrator ‘batches up’ the traders and runs [position resolution](./0012-position-resolution.md) once the full set of traders is known for this event. Sometimes that will only be for one trader, sometimes it will be for many.
+[Position resolution](./0012-POSR-position_resolution.md) is executed simultaneously for ALL traders on a market that have been determined to require it during a single event. That is, the orchestrator ‘batches up’ the traders and runs [position resolution](./0012-POSR-position_resolution.md) once the full set of traders is known for this event. Sometimes that will only be for one trader, sometimes it will be for many.
 
 #### Releasing collateral
 Traders who have a margin account balance greater than the  _release level_ should have the excess margin released to their general collateral account, to the point where their new margin level is equal to the _initial margin_.

@@ -1,6 +1,6 @@
 Feature: Test loss socialization
 
-  # Spec file: 0002-settlement.md
+  # Spec file: 0002-STTL-settlement.md
   # Reference spreadsheet: https://docs.google.com/spreadsheets/d/1CIPH0aQmIKj6YeFW9ApP_l-jwB4OcsNQ/edit#gid=1555964910
 
   Background:

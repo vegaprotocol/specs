@@ -12,7 +12,7 @@ The aim of this specification is to set out how fees on Vega are set based on co
 
 ## CALCULATING LIQUIDITY FEE FACTOR
 
-The [liquidity fee factor](0029-fees.md) is an input to the total taker fee that a price taker of a trade pays:
+The [liquidity fee factor](./0029-FEES-fees.md) is an input to the total taker fee that a price taker of a trade pays:
 
 `total_fee = infrastructure_fee + maker_fee + liquidity_fee`
 
