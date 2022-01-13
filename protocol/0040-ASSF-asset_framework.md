@@ -11,7 +11,7 @@ In the case of an ERC20 token for example, only the contract address of the toke
 
 The asset specific part is represented by the source field, which can be one of the different source of assets supported by vega.
 
-Note that the `minLPstake` field sets the minimum liquidity commitment required for any market using the asset as settlement asset, see [LP mechanics spec](0044-lp-mechanics.md).
+Note that the `minLPstake` field sets the minimum liquidity commitment required for any market using the asset as settlement asset, see [LP mechanics spec](./0044-LIQM-lp_mechanics.md).
 
 ```protobuf
 syntax = "proto3";
@@ -106,7 +106,7 @@ All Ethereum assets are managed by a smart contract that supports the IVega_Brid
 
 Once a successful whitelist_asset transaction has occurred, the `Asset_Whitelisted` event will be emitted for later use by the Vega Event Queue.
 
-See: https://github.com/vegaprotocol/product/blob/master/specs/0031-ethereum-bridge-spec.md
+See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
 ##### Ether (ETH)
 Since Ether is the only asset type in it's asset class, the ETH bridge smart contract automatically whitelists this asset. That being the case, both `whitelist_asset` and `blacklist_asset` are inoperable on this bridge smart contract.
@@ -144,13 +144,13 @@ Same process than for listing an asset here.
 ### Signature Aggregation
 Same process than for listing an asset here.
 
-See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md
+See: [Multisig Control spec](./0030-ETHM-multisig_control_spec.md).
 
 ### Vega Asset Bridges
 Once a whitelisted asset is voted out as a valid asset by the governance process, the asset needs to be removed from that bridge.
 
 #### Ethereum-based assets
-Once an asset is delisted, the submitter of the delisting will request an aggregated multisig signature bundle from Vega validator nodes. See: https://github.com/vegaprotocol/product/blob/Multisig_Control_Spec/specs/0030-multisig_control_spec.md#signature-bundles
+Once an asset is delisted, the submitter of the delisting will request an aggregated [multisig signature bundle](./0030-ETHM-multisig_control_spec.md#signature-bundles) from Vega validator nodes. See: 
 
 All Ethereum assets are managed by a smart contract that supports the IVega_Bridge interface. The interface defines a function to blacklist assets:
 
@@ -158,7 +158,7 @@ All Ethereum assets are managed by a smart contract that supports the IVega_Brid
 
 Once a successful blacklist_asset transaction has occurred, the `Asset_Blacklisted` event will be emitted for later use by the Vega Event Queue.
 
-See: https://github.com/vegaprotocol/product/blob/master/specs/0031-ethereum-bridge-spec.md
+See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
 ##### Ether (ETH)
 Since Ether is the only asset type in it's asset class, the ETH bridge smart contract automatically whitelists this asset. That being the case, both `whitelist_asset` and `blacklist_asset` are inoperable on this bridge smart contract.
@@ -198,7 +198,7 @@ The interface defines a function to deposit assets:
 
 Once a successful deposit transaction has occurred, the `Asset_Deposited` event will be emitted for later use by the Vega Event Queue.
 
-See: https://github.com/vegaprotocol/product/blob/master/specs/0031-ethereum-bridge-spec.md
+See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
 ##### Ether
 In the Vega Ether Bridge smart contract, Ether is the only asset available so users run `deposit_asset` with 0 as the `asset_source`, 0 as the `asset_id`, and the `amount` being the same `msg.value` of the Ether being sent with the transaction.
@@ -266,7 +266,7 @@ All withdrawal request contains a common part, in order to identify a party on t
 ### Validator Signature Aggregation
 Same process than AssetList.
 
-See: https://github.com/vegaprotocol/product/blob/master/specs/0030-multisig_control_spec.md
+See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
 ### Vega Asset Bridges
 After signatures are aggregated a user is ready to make the withdrawal transaction. Each asset has a different withdrawal process, but they will primarily be managed by Vega Bridges, a CQRS pattern Vega uses to integrate the various blockchains and asset management APIs.
@@ -280,7 +280,7 @@ The interface defines a function to withdrawal assets:
 
 Once a successful withdrawal transaction has occurred, the `Asset_Withdrawn` event will be emitted for later use by the Vega Event Queue.
 
-See: https://github.com/vegaprotocol/product/blob/master/specs/0031-ethereum-bridge-spec.md
+See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
 ##### Ether
 In the Vega Ether Bridge smart contract, Ether is the only asset available so users run `deposit_asset` with 0 as the `asset_source`, 0 as the `asset_id`.

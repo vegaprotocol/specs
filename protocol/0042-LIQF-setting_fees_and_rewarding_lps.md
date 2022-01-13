@@ -2,12 +2,12 @@
 
 ## Summary
 
-The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](./0041-target-stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special liquidity provider pegged order type [liquidity provider order spec](./0038-liquidity-provision-order-type.md). 
+The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](../protocol/0041-TSTK-target_stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special liquidity provider pegged order type [liquidity provider order spec](./0038-OLIQ-liquidity_provision_order_type.md).
 
 ## Definitions / Glossary of terms used
 - **Market value proxy window length `t_market_value_window_length`**: sets the length of the window over which we estimate the market value. This is a network parameter.  
-- **Target stake**: as defined in [target stake spec](./0041-target-stake.md). The amount of stake we would like LPs to commit to this market.
-- `min_LP_stake`: There is an minimum LP stake specified per asset, see [asset framework spec](0040-asset-framework.md).
+- **Target stake**: as defined in [target stake spec](./0041-TSTK-target_stake.md). The amount of stake we would like LPs to commit to this market.
+- `min_LP_stake`: There is an minimum LP stake specified per asset, see [asset framework spec](../protocol/0040-ASSF-asset_framework.md).
 
 
 ## CALCULATING LIQUIDITY FEE FACTOR
@@ -18,7 +18,7 @@ The [liquidity fee factor](0029-fees.md) is an input to the total taker fee that
 
 `liquidity_fee = fee_factor[liquidity] x trade_value_for_fee_purposes`
 
-As part of the [commit liquidity network transaction](./0044-lp-mechanics.md), the liquidity provider submits their desired level for the [liquidity fee factor](./0029-fees.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market. 
+As part of the [commit liquidity network transaction](./0038-OLIQ-liquidity_provision_order_type.md), the liquidity provider submits their desired level for the [liquidity fee factor](./0042-LIQF-setting_fees_and_rewarding_lps.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market. 
 First, we produce a list of pairs which capture committed liquidity of each LP together with their desired liquidity fee factor and arrange this list in an increasing order by fee amount. Thus we have 
 ```
 [LP-1-stake, LP-1-liquidity-fee-factor]
@@ -45,14 +45,14 @@ Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liq
 
 ### Timing market's liquidity-fee-factor changes
 
-Once the market opens (opening auction starts) a clock starts ticking. We calculate the `[target stake]` using [target stake](????-target-stake.md). The fee is continuously re-evaluated using the mechanism above. 
+Once the market opens (opening auction starts) a clock starts ticking. We calculate the `[target stake]` using [target stake](./0041-TSTK-target_stake.md). The fee is continuously re-evaluated using the mechanism above. 
 
 ### APIs for fee factor calculations - what should core be exposing?
 
 At time of call:
 * The `liquidity-fee-factor` for the market.
 * Current liquidity provider commitments and their individually nominated fee factors
-* [Target stake](./0041-target-stake.md)
+* [Target stake](./0041-TSTK-target_stake.md)
 
 ## SPLITTING FEES BETWEEN LIQUIDITY PROVIDERS
 
@@ -73,7 +73,7 @@ else
     market_value_proxy = total_stake
 ```
 
-Note that trade value for fee purposes is provided by each instrument, see [fees](./0024-fees.md). For futures it's just the notional and in the examples below we will only think of futures. 
+Note that trade value for fee purposes is provided by each instrument, see [fees](./0029-FEES-fees.md). For futures it's just the notional and in the examples below we will only think of futures. 
 
 #### Example 
 Let's say `total_stake = 100`. The network parameter `t_market_value_window_length = 60s` (though in practice a more sensible value is e.g. one week).
@@ -108,7 +108,7 @@ From these stored quantities we can calculate, at time step `n` the following:
 - `(LP i equity_share)(n) = (LP i equity)(n) / (sum over j from 1 to N of (LP j equity)(n))`
 Here `market_value_proxy(n)` is calculated as per Section "Calculating market value proxy".
 
-If at time step `n` liquidity provider `i` submits an order of type [0038-liquidity-provision-order-type.md](./0038-liquidity-provision-order-type.md) that requests its stake to be changed to `new_stake` then update the above values as follows:
+If at time step `n` liquidity provider `i` submits an order of type [Liquidity Provision](./0038-OLIQ-liquidity_provision_order_type.md) that requests its stake to be changed to `new_stake` then update the above values as follows:
 
 ```
 if new_stake < min_LP_stake then
@@ -140,7 +140,7 @@ In this example we assume that that `market_value_proxy` derives purely from com
 ```
 LP 1 stake = 100, LP 1 avg_entry_valuation = 100
 ```
-LP 1 submits a transaction with `new_stake = 200`. (see [0038-liquidity-provision-order-type.md](./0038-liquidity-provision-order-type.md)).
+LP 1 submits a transaction with `new_stake = 200`. (see [Liquidity Provision order type spec](./0038-OLIQ-liquidity_provision_order_type.md)).
 We have `(LP 1 equity)(0) = (LP 1 stake)(0) x market_value_proxy(n) / (LP 1 avg_entry_valuation)(n) = 100 x 100 / 100 = 100` and clearly `(LP 1 equity_share)(0) = 1`. Moreover `market_value_proxy(0) = 100`. 
 We will be in the case `new_stake = 200 > (LP 1 stake)(0) = 100`. So then `delta = 100` and then `(LP i avg_entry_valuation)(1) = (100 x 100 + 100 x 100) / (100 + 100) = 20000 / 200 = 100`. 
 So at `n=1` we have the following state:
@@ -214,7 +214,7 @@ When the time defined by ``liquidity_providers_fee_distribution_time_step` elaps
 
 ### SPLITTING FEES BETWEEN liquidity providers
 - [ ] The examples provided result in the given outcomes. 
-- [ ] The examples provided in a Python notebook give the same outcomes. See [0034 Liquidity measuring](./0034-prob-weighted-liquidity-measure.ipynb)
+- [ ] The examples provided in a Python notebook give the same outcomes. See [Liquidity measuring](./0034-PROB-prob_weighted_liquidity_measure.ipynb)
 - [ ] All liquidity providers in the market receive a greater than zero amount of liquidity fee.
 - [ ] The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-the-trade`
 - [x] Liquidity providers with a commitment of 0 will not receive a share ot the fees

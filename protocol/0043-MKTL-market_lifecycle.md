@@ -5,13 +5,12 @@ This spec describes the lifecycle of a market. The market lifecycle begins at ac
 
 
 ## Market proposal and creation
-
-Markets on Vega are permissionlessly proposed using the [governance mechanism](./0028-governance.md#1-create-market). If a market passes the governance vote, it undergoes various state changes throughout its lifecycle. Aspects of the state that change include:
+Markets on Vega are permissionlessly proposed using the [governance mechanism](./0028-GOVE-governance.md#1-create-market). If a market passes the governance vote, it undergoes various state changes throughout its lifecycle. Aspects of the state that change include:
 - trading mode
 - whether the market is open for trading
 - status of settlement
 
-Markets proposed via [governance proposals](./0028-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close). [TODO: check vs governance]
+Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close). [TODO: check vs governance]
 
 
 ## Market lifecycle statuses
@@ -32,7 +31,7 @@ A market can progress through a number of statuses through its life. The overall
 | Settled            |   No           | No trading          | Settlement triggered and completed as defined by product                                      | N/A                                            
 
 
-[1] Accepting LPs: it is possible to make or amend [Liquidity Provision Commitments](protocol/https://github.com/vegaprotocol/product/blob/master/specs/0044-lp-mechanics.md)
+[1] Accepting LPs: it is possible to make or amend [Liquidity Provision Commitments](./0038-OLIQ-liquidity_provision_order_type.md)
 
 ![Life cycle flow diagram](./0043-market-lifecycle-flow-diagram.svg)
 
@@ -40,11 +39,11 @@ A market can progress through a number of statuses through its life. The overall
 
 ### Proposed
 
-All Markets are first [proposed via the governance mechanism](./0028-governance.md#1-create-market). Once the valid Market Proposal is accepted *the Market (see [market framework](./0001-market-framework.md)) is created* and can accept [Liquidity Provision Commitments](protocol/https://github.com/vegaprotocol/product/blob/master/specs/0044-lp-mechanics.md), voting begins and its state is `proposed`.
+All Markets are first [proposed via the governance mechanism](./0028-GOVE-governance.md#1-create-market). Once the valid Market Proposal is accepted *the Market (see [market framework](./0001-MKTF-market_framework.md)) is created* and can accept [Liquidity Provision Commitments](./0038-OLIQ-liquidity_provision_order_type.md), voting begins and its state is `proposed`.
 
 **Entry:**
 
-- Valid [governance proposal](./0028-governance.md#1-create-market) submitted and accepted. For the avoidance of doubt, this Proposal must include a (valid) specification of the Market and a Liquidity Commitment for at least the *minimum liquidity commitment (stake)*, which is a per asset Network Parameter.
+- Valid [governance proposal](./0028-GOVE-governance.md#1-create-market) submitted and accepted. For the avoidance of doubt, this Proposal must include a (valid) specification of the Market and a Liquidity Commitment for at least the *minimum liquidity commitment (stake)*, which is a per asset Network Parameter.
 
 **Exit:**
 
@@ -63,7 +62,7 @@ All Markets are first [proposed via the governance mechanism](./0028-governance.
 
 ### Rejected
 
-When a Market Proposal is not successful, see [governance proposal](./0028-governance.md#outcome), Market state is Rejected.
+When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-governance.md#outcome), Market state is Rejected.
 
 **Entry:**
 
@@ -81,19 +80,19 @@ When a Market Proposal is not successful, see [governance proposal](./0028-gover
 
 ### Pending
 
-When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-auctions.md) that ends at the enactment date as specified in the Market Proposal. 
+When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal. 
 
 Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. In reasonably near future there will be automated market creation e.g. for a series of markets that is voted on once, market creation from an data source (oracle), etc. so market creation and the market lifecycle should be implemented independently of the governance framework and the lifecycle of a proposal. 
 
 **Entry:**
 
-- Valid [Market Proposal](./0028-governance.md#1-create-market) was successful (yes votes win & thresholds met)
+- Valid [Market Proposal](./0028-GOVE-governance.md#1-create-market) was successful (yes votes win & thresholds met)
 
 **Exit:**
 
 - Auction period ends when any of the following occur:
 
-  - Enactment date is reached and the [conditions for exiting an auction](./0026-auctions.md) are met and at least one trade will be generated when uncrossing the auction → Active (the auction is uncrossed during this transition)
+  - Enactment date is reached and the [conditions for exiting an auction](./0026-AUCT-auctions.md) are met and at least one trade will be generated when uncrossing the auction → Active (the auction is uncrossed during this transition)
   - Enactment date is passed and the product would trigger the Trading Terminated status  →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
   - Enactment date is passed by more than the *maximum opening auction extension duration* Network Parameter →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
   - Market change governance vote approves closure of market → Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
@@ -101,8 +100,8 @@ Note: this state represents any market that will be created, which currently mea
 **Behaviour:**
 
 - Liquidity providers can make, change, or exit commitments (proposer cannot exit their liquidity commitment)
-- Auction orders are accepted as per [any regular auction period](./0026-auctions.md).
-- Margins on orders as per auction margin instructions in [margin calculator spec](./0019-margin-calculator.md).
+- Auction orders are accepted as per [any regular auction period](./0026-AUCT-auctions.md).
+- Margins on orders as per auction margin instructions in [margin calculator spec](./0019-MCAL-margin_calculator.md).
 
 
 ### Cancelled
@@ -132,12 +131,12 @@ In future, it's expected that we will implement the functionality described in t
 
 ### Active
 
-Once the enactment date is reached and the other conditions specified to exit the Pending state are met, the market becomes Active on conclusion of uncrossing of the opening auction. This status indicates it is trading via its normally configured trading mode according to the market framework (continuous trading, frequent batch auction, RFQ, block only, etc.). The specification for the trading mode should describe which orders are accepted and how trading proceeds. The market will terminate trading according to a product trigger (for futures, if the trading termination date is reached) and can be temporarily suspended automatically by various monitoring systems ([price monitoring](./0032-price-monitoring.md), [liquidity monitoring](./0035-liquidity-monitoring.md)). The market can also be closed via a governance vote (market parameter update) to change the status to closed [TODO: spec.].
+Once the enactment date is reached and the other conditions specified to exit the Pending state are met, the market becomes Active on conclusion of uncrossing of the opening auction. This status indicates it is trading via its normally configured trading mode according to the market framework (continuous trading, frequent batch auction, RFQ, block only, etc.). The specification for the trading mode should describe which orders are accepted and how trading proceeds. The market will terminate trading according to a product trigger (for futures, if the trading termination date is reached) and can be temporarily suspended automatically by various monitoring systems ([price monitoring](./0032-PRIM-price_monitoring.md), [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)). The market can also be closed via a governance vote (market parameter update) to change the status to closed [TODO: spec.].
 
 **Entry:**
 
 - From Pending: enactment date reached and conditions to transition from Pending state to Active as detailed above are met
-- From Suspended: conditions specified in [price monitoring](./0032-price-monitoring.md) and [liquidity monitoring](./0035-liquidity-monitoring.md) are met for the market to exit the suspended status back to Active.
+- From Suspended: conditions specified in [price monitoring](./0032-PRIM-price_monitoring.md) and [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) are met for the market to exit the suspended status back to Active.
 
 **Exit:**
 
@@ -147,7 +146,7 @@ Once the enactment date is reached and the other conditions specified to exit th
 
 **Behaviour:**
 
-- Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-lp-mechanics.md). Market Proposer is not committed to continue to provide a commitment as long as the reduction meets other conditions to reduce/exit Liquidity Commitments.
+- Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-LIQM-lp_mechanics.md). Market Proposer is not committed to continue to provide a commitment as long as the reduction meets other conditions to reduce/exit Liquidity Commitments.
 - Orders can be placed into the market, trading occurs according to normal trading mode rules
 - Market data are emitted
 - Positions and margins are managed as per the specs
@@ -165,15 +164,15 @@ Suspension currently always operates as an auction call period. Depending on the
 
 **Exit:**
 
-- Conditions specified in [price monitoring](./0032-price-monitoring.md) and [liquidity monitoring](./0035-liquidity-monitoring.md) and the usual [ending of auction checks](./0026-auctions.md) pass → Active 
+- Conditions specified in [price monitoring](./0032-PRIM-price_monitoring.md) and [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) and the usual [ending of auction checks](./0026-AUCT-auctions.md) pass → Active 
 - Governance vote to close a market passes → Closed
 - Market was suspended by governance vote of product lifecycle trigger and a governance vote passes to set the status to ACTIVE → Active
 
 **Behaviour:**
 
 - Liquidity providers can make, change, or exit commitments. Market Proposer is not committed to provide at least the *market proposer minimum stake* as long as the reduction meets other conditions to reduce/exit Liquidity Commitments.
-- Auction orders are accepted as per [any regular auction period](./0026-auctions.md).
-- Margins on orders as per auction based instructions in [margin calculator spec](./0019-margin-calculator.md).
+- Auction orders are accepted as per [any regular auction period](./0026-AUCT-auctions.md).
+- Margins on orders as per auction based instructions in [margin calculator spec](./0019-MCAL-margin_calculator.md).
 
 
 ### Closed
@@ -221,7 +220,7 @@ A market moves from this termination state to Settled when enough information ex
 
 ### Settled
 
-Once the required data to calculate the settlement cashflows is available for an market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). The positions are then closed and all orders cleared. All money held in margin accounts after final settlement is returned to traders' general accounts. The market can be deleted entirely at this point, from a core perspective. Any insurance pool funds are distributed as per the [insurance pool spec](./0015-market-insurance-pool-collateral.md).
+Once the required data to calculate the settlement cashflows is available for an market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). The positions are then closed and all orders cleared. All money held in margin accounts after final settlement is returned to traders' general accounts. The market can be deleted entirely at this point, from a core perspective. Any insurance pool funds are distributed as per the [insurance pool spec](./0015-INSR-market_insurance_pool_collateral.md).
 
 **Entry:**
 
