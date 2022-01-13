@@ -18,7 +18,7 @@ Any Vega participant can apply to become a liquidity provider (LP) on a market b
 
 1. Market ID
 1. COMMITMENT AMOUNT: liquidity commitment amount (specified as a unitless number that represents the amount of settlement asset of the market)
-1. FEES: nominated [liquidity fee factor](./0029-fees.md), which is an input to the calculation of taker fees on the market, as per [setting fees and rewarding lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
+1. FEES: nominated [liquidity fee factor](./0029-FEES-fees.md), which is an input to the calculation of taker fees on the market, as per [setting fees and rewarding lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
 1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ ("buy shape" and "sell shape") to meet the liquidity provision obligation, see [MM orders spec](./0038-OLIQ-liquidity_provision_order_type.md).
 
 Accepted if all of the following are true:
