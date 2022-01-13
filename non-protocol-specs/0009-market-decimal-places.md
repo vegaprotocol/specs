@@ -68,3 +68,10 @@ The market data returns the same min/max prices mentioned above. As the name imp
 ### Trades
 
 Trades of course result in transfers. The amounts transferred (for the trade as well as the MTM) happen at asset precision. The trade events the core sends out, however, are once again market related data. The prices on these trade events will be represented as a value in market precision.
+
+## Acceptance criteria
+
+- When a market specifies a different precision than its settlement assets, any and all orders created (whether it be through LP's, pegged orders, or direct order submissions), their prices should match the market precision. The order and trade events should specify the prices using market precision. Transfer events (e.g. margin top-ups, MTM settlements, fee transfers) should specify the correct amounts using asset precision
+- Market data should show the min/max price bounds in market precision. Any orders outside the price bounds specified in these fields should be rejected for triggering auctions
+- LP orders and pegged orders should be created at the correct price point (offsets of 1 should be handled as offset of 1 * priceExponent, not +/- 1 <smallest asset unit>)
+- Effectively, from the end users' perspective, the market should still behave exactly the same, the market events should still look the same, but transfers will be expressed as amounts in asset precision, regardless of the market precision.
