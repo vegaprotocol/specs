@@ -84,7 +84,8 @@ Once reward is created it is assigned a reward ID, which is also used to identif
 
 ### Spam protection
 
-Creating a reward scheme outside of governance must be accompanied by an amount of funding for the reward pool in at least one asset. At least one asset included in this funding must have an amount included greater than or equal to `reward_funding_multiple * asset.min_lp_stake` where `reward_funding_multiple` is a network parameter and `asset.min_lp_stake` is the minimum LP stake amount configured for the asset.
+Creating a reward scheme outside of governance must be accompanied by an amount of funding for the reward pool in at least one asset. 
+Every asset included in this funding must have an amount included greater than or equal to `reward_funding_multiple * quantum` where `reward_funding_multiple` is a network parameter and `quantum` is the minimum economically meaningful amount configured for the asset.
 
 
 ### Updating reward scheme parameters

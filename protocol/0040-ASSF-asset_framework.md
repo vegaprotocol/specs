@@ -26,7 +26,7 @@ message Asset {
   string symbol = 3;
   string totalSupply = 4;
   uint64 decimals = 5;
-  string minLPstake = 6; 
+  string quantum = 1000000000000000000; 
 
   oneof source {
     BuiltinAsset builtinAsset = 101;
