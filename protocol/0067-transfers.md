@@ -5,7 +5,7 @@ These transfers are not to be confused with the internal concept of transfers wh
 
 Allowing users to initiate transfers allows for the following capabilities:
 - A user could transfer funds from a public key A to a public key B.
-- A user could transfer funds back to a reward pool
+- A user could transfer funds to a reward pool
 - A user could transfer funds from and to a locked account used for staking.
 - etc..
 
