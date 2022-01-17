@@ -4,14 +4,14 @@
 
 The Position API stores a net position for each trader who has ever traded in a market. Specifically, 
 
-- [ ] Stores all traders’ net open volume by market in which they have an open position.
-- [ ] Updates the open volumes after a new trade
-- [ ] Stores all traders’ volume weighted average entry prices for the net open volume for every market.
-- [ ] Uses VW methodology to adjust the volume weighted average entry prices for open position.
-- [ ] Stores all traders’ realised PnL for every market.
-- [ ] Uses VW methodology to adjust the realised PnL resulting from any trade that caused volume to have been closed out.
-- [ ] Stores all traders’ realised PnL for every trade that caused volume to have been closed out. 
-- [ ] Stores all traders' total realised PnL
+- [ ] Stores all traders’ net open volume by market in which they have an open position. (<a name="0007-POSN-001" href="#0007-POSN-001">0007-POSN-001</a>)
+- [ ] Updates the open volumes after a new trade (<a name="0007-POSN-002" href="#0007-POSN-002">0007-POSN-002</a>)
+- [ ] Stores all traders’ volume weighted average entry prices for the net open volume for every market. (<a name="0007-POSN-003" href="#0007-POSN-003">0007-POSN-003</a>)
+- [ ] Uses VW methodology to adjust the volume weighted average entry prices for open position. (<a name="0007-POSN-004" href="#0007-POSN-004">0007-POSN-004</a>)
+- [ ] Stores all traders’ realised PnL for every market. (<a name="0007-POSN-005" href="#0007-POSN-005">0007-POSN-005</a>)
+- [ ] Uses VW methodology to adjust the realised PnL resulting from any trade that caused volume to have been closed out. (<a name="0007-POSN-006" href="#0007-POSN-006">0007-POSN-006</a>)
+- [ ] Stores all traders’ realised PnL for every trade that caused volume to have been closed out.  (<a name="0007-POSN-007" href="#0007-POSN-007">0007-POSN-007</a>)
+- [ ] Stores all traders' total realised PnL (<a name="0007-POSN-008" href="#0007-POSN-008">0007-POSN-008</a>)
 
 ## Summary
 
