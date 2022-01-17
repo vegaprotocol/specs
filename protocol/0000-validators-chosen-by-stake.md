@@ -92,3 +92,34 @@ Note that this could become obsolete if a future version of the protocol impleme
 1) Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). 
 2) For validators up to `number_multig_signers` the `validator_score` is capped by the value on `ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `number_multig_signers` by `validator_score` on VEGA). 
 3) It is possible to submit a transaction to update the weights. 
+
+## Ersatzvalidators
+New Network Parameter: NumberOfErsatzValidators
+New Network Parameter: MinmumStakeForErsatzValidator
+In addition to the normal validators, theres an additional set of Ersatzvalidators as defined by
+the corresponding network parameter. These are vlidators that do not contribute to the 
+chain, but are on standby to jump in if normal validator drops off. 
+
+As the other validators, Ersatzvalidators are defined through delegated stake, being the validators
+with the scores below the normal ones; is NumberOfValidators ia n and NumberOfErsatzValdators is n', 
+then these are the validators with scores n+1 to n+n'.
+
+If n'=0, then all Validators that have more than MinimumStakeForErsatzValidator are treated
+as Ersatzvalidators. 
+
+#Performance
+Ersatzvalidators are required to monitor the primary chain and keep an upded state of
+Vega at all times. Any performance measurements that relate to Validators
+being required to keep an accurate stake also apply to Ersatzvalidators.
+
+As Ersatzvalidators are not part of the Tendermint chain, their network performance
+on that chain cannot be measured. For this reason, Ersatzvalidators are supposed to
+participate in a separate chain (an exact copy of Vega with run only by the Ersatzvalidators
+that does not contain any trading), which generates the applicble performance
+numbers.
+
+#Payment
+Ersatzvalidators are paied through the same formulars as normal validators.
+
+#Multisig
+At this point, Ersatzvalidators are not part of the Multisig.
