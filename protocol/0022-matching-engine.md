@@ -26,6 +26,27 @@ New orders arrive at the engine and no matching is performed. Instead the order 
 # Reference-level explanation
 This is the main portion of the specification. Break it up as required.
 
+
+## Order books construction
+
+An order book is made up of two halves, the buy and the sell side. Each side contains all the persistent orders which have not yet been fully matched. They are sorted in price and then time first order. This ensures that when we are looking for matches we can search through the opposite side of the book and know that the closest match will be top of the list and if there are multiple orders at that price level they will be ordered in the time that they arrived.
+
+Given an order book that looks like this in the market display:
+
+| Ask Quantity | Price | Bid Quantity |
+|--------------|-------|--------------|
+| 10 | 120 | |
+| 20 | 110 | |
+| 5  | 100 | |
+| | 90 | 10 |
+| | 80 | 15 |
+
+
+
+
+## 
+
+
 # Pseudo-code / Examples
 If you have some data types, or sample code to show interactions, put it here
 
