@@ -115,7 +115,7 @@ being required to keep an accurate stake also apply to Ersatzvalidators.
 As Ersatzvalidators are not part of the Tendermint chain, their network performance
 on that chain cannot be measured. For this reason, Ersatzvalidators are supposed to
 participate in a separate chain (an exact copy of Vega with run only by the Ersatzvalidators
-that does not contain any trading), which generates the applicble performance
+that does not contain any trading), which generates the applicable performance
 numbers.
 
 #Payment
