@@ -1,9 +1,9 @@
 # Acceptance Criteria
-- The market depth builder must be able to handle all available order types
-- The construction of the market depth structure must not impact the core performance.
-- Entering and leaving auctions must be handled correctly
-- All subscribed clients must receive all the data necessary to build their own view of the market depth
-- There should be no batching in sending out market depth updates
+- The market depth builder must be able to handle all available order types (<a name="0039-MKTD-001" href="#0039-MKTD-001">0039-MKTD-001</a>)
+- The construction of the market depth structure must not impact the core performance. (<a name="0039-MKTD-002" href="#0039-MKTD-002">0039-MKTD-002</a>)
+- Entering and leaving auctions must be handled correctly (<a name="0039-MKTD-003" href="#0039-MKTD-003">0039-MKTD-003</a>)
+- All subscribed clients must receive all the data necessary to build their own view of the market depth (<a name="0039-MKTD-004" href="#0039-MKTD-004">0039-MKTD-004</a>)
+- There should be no batching in sending out market depth updates (<a name="0039-MKTD-005" href="#0039-MKTD-005">0039-MKTD-005</a>)
 
 
 # Summary

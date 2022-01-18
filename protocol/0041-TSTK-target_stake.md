@@ -54,6 +54,6 @@ Example 3: if `target_stake_scaling_factor = 10`, `rf = 0.004` and `max_oi = 120
   * return theoretical (based on idicative uncrossing volume) target stake when market is in auction mode.
 
 ### Acceptance Criteria
-* examples showing a growing list (before we hit t-window)
-* examples showing a list that drops off values
-* if new value that isn't a maximum, the liquidity demand doesn't change.
+* examples showing a growing list (before we hit t-window) (<a name="0041-TSTK-001" href="#0041-TSTK-001">0041-TSTK-001</a>)
+* examples showing a list that drops off values (<a name="0041-TSTK-002" href="#0041-TSTK-002">0041-TSTK-002</a>)
+* if new value that isn't a maximum, the liquidity demand doesn't change. (<a name="0041-TSTK-003" href="#0041-TSTK-003">0041-TSTK-003</a>)

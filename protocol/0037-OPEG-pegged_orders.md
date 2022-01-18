@@ -5,19 +5,19 @@ Specification PR: https://github.com/vegaprotocol/product/pull/262
 # Pegged and Market Maker orders
 
 ## Acceptance Criteria
-- [ ] Pegged orders can only be LIMIT orders, all other types are rejected.
-- [ ] Pegged orders can only be GTT and GTC orders. IOC and FOK will be added in the second phase of pegged orders.
-- [ ] All markets must be able to handle pegged orders.
-- [ ] Pegged orders are removed from the order book when going into an auction and are parked.
-- [ ] Parked orders are returned to the order book in entry order once continuous trading is resumed.
-- [ ] Pegged orders are repriced when their reference price moves.
-- [ ] Cancelling a pegged order removes it from the book and the pegged/parked slice.
-- [ ] An expired pegged order is removed from the book and the pegged/parked slice.
-- [ ] A filled pegged order is removed from the book and the pegged/parked slice.
-- [ ] Pegged orders are not repriced and do not lose time priority when their specific reference price is unchanged, even if other peg reference prices move.
-- [ ] If the midprice is calculated to be a fraction (e.g. 102.5), it should be rounded up for a buy and rounded down for a sell.
-- [ ] The order version is not updated during a repricing
-- [ ] Pegged orders are excluded from the calculation of the BEST_BID, BEST_ASK and MID prices
+- [ ] Pegged orders can only be LIMIT orders, all other types are rejected. (<a name="0037-OPEG-001" href="#0037-OPEG-001">0037-OPEG-001</a>)
+- [ ] Pegged orders can only be GTT and GTC orders. IOC and FOK will be added in the second phase of pegged orders. (<a name="0037-OPEG-002" href="#0037-OPEG-002">0037-OPEG-002</a>)
+- [ ] All markets must be able to handle pegged orders. (<a name="0037-OPEG-003" href="#0037-OPEG-003">0037-OPEG-003</a>)
+- [ ] Pegged orders are removed from the order book when going into an auction and are parked. (<a name="0037-OPEG-004" href="#0037-OPEG-004">0037-OPEG-004</a>)
+- [ ] Parked orders are returned to the order book in entry order once continuous trading is resumed. (<a name="0037-OPEG-005" href="#0037-OPEG-005">0037-OPEG-005</a>)
+- [ ] Pegged orders are repriced when their reference price moves. (<a name="0037-OPEG-006" href="#0037-OPEG-006">0037-OPEG-006</a>)
+- [ ] Cancelling a pegged order removes it from the book and the pegged/parked slice. (<a name="0037-OPEG-007" href="#0037-OPEG-007">0037-OPEG-007</a>)
+- [ ] An expired pegged order is removed from the book and the pegged/parked slice. (<a name="0037-OPEG-008" href="#0037-OPEG-008">0037-OPEG-008</a>)
+- [ ] A filled pegged order is removed from the book and the pegged/parked slice. (<a name="0037-OPEG-009" href="#0037-OPEG-009">0037-OPEG-009</a>)
+- [ ] Pegged orders are not repriced and do not lose time priority when their specific reference price is unchanged, even if other peg reference prices move. (<a name="0037-OPEG-010" href="#0037-OPEG-010">0037-OPEG-010</a>)
+- [ ] If the midprice is calculated to be a fraction (e.g. 102.5), it should be rounded up for a buy and rounded down for a sell. (<a name="0037-OPEG-011" href="#0037-OPEG-011">0037-OPEG-011</a>)
+- [ ] The order version is not updated during a repricing (<a name="0037-OPEG-012" href="#0037-OPEG-012">0037-OPEG-012</a>)
+- [ ] Pegged orders are excluded from the calculation of the BEST_BID, BEST_ASK and MID prices (<a name="0037-OPEG-013" href="#0037-OPEG-013">0037-OPEG-013</a>)
 
 ## Summary
 

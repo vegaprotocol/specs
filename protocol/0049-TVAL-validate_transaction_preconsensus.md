@@ -28,8 +28,8 @@ Future enhancemments: for each root transaction message type (e.g. SubmitOrder, 
 
 #### `1.1.2` Acceptance criteria 
 
-1. [ ] Transaction is included in the block if signed with a validator's key
-1. [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset
-1. [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that has never had a balance
-1. [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that previously had a balance > 0
-1. [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset, where the transaction was rejected from a previous block where the party had no balance
+1. [ ] Transaction is included in the block if signed with a validator's key (<a name="0049-TVAL-001" href="#0049-TVAL-001">0049-TVAL-001</a>)
+1. [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset (<a name="0049-TVAL-002" href="#0049-TVAL-002">0049-TVAL-002</a>)
+1. [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that has never had a balance (<a name="0049-TVAL-003" href="#0049-TVAL-003">0049-TVAL-003</a>)
+1. [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that previously had a balance `> 0` (<a name="0049-TVAL-004" href="#0049-TVAL-004">0049-TVAL-004</a>)
+1. [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset, where the transaction was rejected from a previous block where the party had no balance (<a name="0049-TVAL-005" href="#0049-TVAL-005">0049-TVAL-005</a>)
