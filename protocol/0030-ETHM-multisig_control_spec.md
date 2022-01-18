@@ -99,33 +99,33 @@ contract MultisigControl {
 
 # Acceptance Criteria
 ### MultisigControl Smart Contract 
-* MultisigControl smart contract is deployed to Ethereum testnet (Ropsten)
+* MultisigControl smart contract is deployed to Ethereum testnet (Ropsten) (<a name="0030-ETHM-001" href="#0030-ETHM-001">0030-ETHM-001</a>)
 * Set Threshold
-  * A valid signature bundle, threshold (in tenths of %), and unused nonce can be passed to `set_threshold` function to set the approval threshold in hundredths of a percent (`TODO: check this mechanism/math`)
-  * A successful call to `set_threshold` emits `ThresholdSet` event
-  * Subsequent calls to `get_current_threshold()` returns updated threshold value
-  * An invalid signature passed to `set_threshold` function is rejected 
-  * A threshold passed to `set_threshold` outside of sane range is rejected
-  * A nonce passed to `set_threshold` that has already been used is rejected
+  * A valid signature bundle, threshold (in tenths of %), and unused nonce can be passed to `set_threshold` function to set the approval threshold in hundredths of a percent (`TODO: check this mechanism/math`) (<a name="0030-ETHM-002" href="#0030-ETHM-002">0030-ETHM-002</a>)
+  * A successful call to `set_threshold` emits `ThresholdSet` event (<a name="0030-ETHM-003" href="#0030-ETHM-003">0030-ETHM-003</a>)
+  * Subsequent calls to `get_current_threshold()` returns updated threshold value (<a name="0030-ETHM-004" href="#0030-ETHM-004">0030-ETHM-004</a>)
+  * An invalid signature passed to `set_threshold` function is rejected  (<a name="0030-ETHM-005" href="#0030-ETHM-005">0030-ETHM-005</a>)
+  * A threshold passed to `set_threshold` outside of sane range is rejected (<a name="0030-ETHM-006" href="#0030-ETHM-006">0030-ETHM-006</a>)
+  * A nonce passed to `set_threshold` that has already been used is rejected (<a name="0030-ETHM-007" href="#0030-ETHM-007">0030-ETHM-007</a>)
 * Add Signer 
-  * A valid signature bundle, non-signer ethereum address, and unused nonce can be passed to `add_signer` function to add an Ethereum address of a new signer to the list of approved signers
-  * A successful call to `add_signer` increments signer count
-  * A successful call to `add_signer` emits `SignerAdded` event
-  * Subsequent calls to `is_valid_signer()` with added Ethereum address returns true until that signer is removed 
-  * An invalid signature bundle, currently approved signer address, or used nonce passed to `add_signer` is rejected
+  * A valid signature bundle, non-signer ethereum address, and unused nonce can be passed to `add_signer` function to add an Ethereum address of a new signer to the list of approved signers (<a name="0030-ETHM-008" href="#0030-ETHM-008">0030-ETHM-008</a>)
+  * A successful call to `add_signer` increments signer count (<a name="0030-ETHM-009" href="#0030-ETHM-009">0030-ETHM-009</a>)
+  * A successful call to `add_signer` emits `SignerAdded` event (<a name="0030-ETHM-010" href="#0030-ETHM-010">0030-ETHM-010</a>)
+  * Subsequent calls to `is_valid_signer()` with added Ethereum address returns true until that signer is removed  (<a name="0030-ETHM-011" href="#0030-ETHM-011">0030-ETHM-011</a>)
+  * An invalid signature bundle, currently approved signer address, or used nonce passed to `add_signer` is rejected (<a name="0030-ETHM-012" href="#0030-ETHM-012">0030-ETHM-012</a>)
 * Remove Signer
-  * A valid signature bundle, current signer Ethereum address, and unused nonce can be passed to `remove_signer` to remove a currently valid signer from the list of signers
-  * A successful call to `remove_signer` decrements signer count
-  * A successful call to `remove_signer` emits `SignerRemoved` event
-  * Subsequent calls to `is_valid_signer()` with removed Ethereum address returns false unless that signer is re-added
-  * An invalid signature bundle, non current signer Ethereum address, or used nonce passed to `remove_signer` is rejected
+  * A valid signature bundle, current signer Ethereum address, and unused nonce can be passed to `remove_signer` to remove a currently valid signer from the list of signers (<a name="0030-ETHM-013" href="#0030-ETHM-013">0030-ETHM-013</a>)
+  * A successful call to `remove_signer` decrements signer count (<a name="0030-ETHM-014" href="#0030-ETHM-014">0030-ETHM-014</a>)
+  * A successful call to `remove_signer` emits `SignerRemoved` event (<a name="0030-ETHM-015" href="#0030-ETHM-015">0030-ETHM-015</a>)
+  * Subsequent calls to `is_valid_signer()` with removed Ethereum address returns false unless that signer is re-added (<a name="0030-ETHM-016" href="#0030-ETHM-016">0030-ETHM-016</a>)
+  * An invalid signature bundle, non current signer Ethereum address, or used nonce passed to `remove_signer` is rejected (<a name="0030-ETHM-017" href="#0030-ETHM-017">0030-ETHM-017</a>)
 * Getters
-  * `get_valid_signer_count()` returns current count of valid signers
-  * `get_current_threshold()` returns current threshold
-  * `is_valid_signer()` returns true is signer is valid
-  * `is_nonce_used()` returns true if nonce has been used to successfully sign something previously
+  * `get_valid_signer_count()` returns current count of valid signers (<a name="0030-ETHM-018" href="#0030-ETHM-018">0030-ETHM-018</a>)
+  * `get_current_threshold()` returns current threshold (<a name="0030-ETHM-019" href="#0030-ETHM-019">0030-ETHM-019</a>)
+  * `is_valid_signer()` returns true is signer is valid (<a name="0030-ETHM-020" href="#0030-ETHM-020">0030-ETHM-020</a>)
+  * `is_nonce_used()` returns true if nonce has been used to successfully sign something previously (<a name="0030-ETHM-021" href="#0030-ETHM-021">0030-ETHM-021</a>)
 
 ### MultisigControl Consuming Smart Contract
-* MultisigControl consuming smart contract (such as bridge) is deployed to Ethereum testnet (Ropsten)
-* Consuming smart contract calls `verify_signatures` with valid signature bundle and message hash is returned true if the valid signature count is over threshold % of total signers 
+* MultisigControl consuming smart contract (such as bridge) is deployed to Ethereum testnet (Ropsten) (<a name="0030-ETHM-022" href="#0030-ETHM-022">0030-ETHM-022</a>)
+* Consuming smart contract calls `verify_signatures` with valid signature bundle and message hash is returned true if the valid signature count is over threshold % of total signers  (<a name="0030-ETHM-023" href="#0030-ETHM-023">0030-ETHM-023</a>)
  

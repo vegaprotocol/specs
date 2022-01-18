@@ -1,12 +1,13 @@
 # Acceptance Criteria
 
-- An order cancelled by orderID+marketID+partyID will be removed from the order book and an order update message will be emitted
-- All orders for a given partyID will be removed from a single market if a cancel all party orders per market message is sent
-- All orders for a given party across all markets will be removed from the vega system when a cancel all orders message is sent
-- Orders which are not currently on the orderbook but are being held `offline` due to being in auction should also be affected by cancels.
-- A cancellation for a party that does not match the party on the order will be rejected
-- A cancellation without a partyID will be rejected
-- Margins should be recalculated after a cancel event
+- An order cancelled by orderID+marketID+partyID will be removed from the order book and an order update message will be emitted (<a name="0033-OCAN-001" href="#0033-OCAN-001">0033-OCAN-001</a>)
+- All orders for a given partyID will be removed from a single market if a cancel all party orders per market message is sent (<a name="0033-OCAN-002" href="#0033-OCAN-002">0033-OCAN-002</a>)
+- All orders for a given party across all markets will be removed from the vega system when a cancel all orders message is sent (<a name="0033-OCAN-003" href="#0033-OCAN-003">0033-OCAN-003</a>)
+- Orders which are not currently on the orderbook but are being held `offline` due to being in auction should also be affected by cancels. (<a name="0033-OCAN-004" href="#0033-OCAN-004">0033-OCAN-004</a>)
+- A cancellation for a party that does not match the party on the order will be rejected (<a name="0033-OCAN-005" href="#0033-OCAN-005">0033-OCAN-005</a>)
+- A cancellation without a partyID will be rejected (<a name="0033-OCAN-006" href="#0033-OCAN-006">0033-OCAN-006</a>)
+- Margins must be recalculated after a cancel event (<a name="0033-OCAN-007" href="#0033-OCAN-007">0033-OCAN-007</a>)
+
 # Summary
 
 Orders stay on the order book until they are filled, expired or cancelled. A client can cancel orders in 3 ways, either directly given an orderID+marketID+partyID, cancel all orders for the partyID in a given market, or cancel all orders in the vega system for a given partyID. Each of these ways will remove the orders from the order book, and push out order update messages via the eventbus

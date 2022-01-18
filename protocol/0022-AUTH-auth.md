@@ -114,27 +114,27 @@ messge TransactionBundle {
 # Acceptance Criteria
 ## Wallet service acceptance criteria
 
-- [ ] As a user, I can create a new account on the Wallet service (account creation requirement to be implementation details)
-- [ ] As a user, I can login to the Wallet service with my wallet name and password
-- [ ] As a user, I can logout of the Wallet service with a token given to me at login
-- [ ] As a user, if I'm logged in, I can create a new party (with a key pair) for for my account on the Wallet service.
-- [ ] As a user, if I'm logged in, I can list all my parties (and their key pairs) on the Wallet service
-- [ ] As a user, if I'm logged in, I can delete a existing party (and its key pair) from the Wallet service
-- [ ] As a user, if I'm logged in, I can create a signature for a blob of data, using one of my parties (and its key pair).
+- [ ] As a user, I can create a new account on the Wallet service (account creation requirement to be implementation details)  (<a name="0022-AUTH-001" href="#0022-AUTH-001">0022-AUTH-001</a>)
+- [ ] As a user, I can login to the Wallet service with my wallet name and password (<a name="0022-AUTH-002" href="#0022-AUTH-002">0022-AUTH-002</a>)
+- [ ] As a user, I can logout of the Wallet service with a token given to me at login (<a name="0022-AUTH-003" href="#0022-AUTH-003">0022-AUTH-003</a>)
+- [ ] As a user, if I'm logged in, I can create a new party (with a key pair) for for my account on the Wallet service. (<a name="0022-AUTH-004" href="#0022-AUTH-004">0022-AUTH-004</a>)
+- [ ] As a user, if I'm logged in, I can list all my parties (and their key pairs) on the Wallet service (<a name="0022-AUTH-005" href="#0022-AUTH-005">0022-AUTH-005</a>)
+- [ ] As a user, if I'm logged in, I can delete a existing party (and its key pair) from the Wallet service (<a name="0022-AUTH-006" href="#0022-AUTH-006">0022-AUTH-006</a>)
+- [ ] As a user, if I'm logged in, I can create a signature for a blob of data, using one of my parties (and its key pair). (<a name="0022-AUTH-007" href="#0022-AUTH-007">0022-AUTH-007</a>)
 
 ## Vega network acceptance criteria
 
-- [ ] As a user, I can send a transaction to the vega network with a signature for it.
-- [ ] As a vega node, I ensure that all transaction are paired with a signature.
+- [ ] As a user, I can send a transaction to the vega network with a signature for it. (<a name="0022-AUTH-008" href="#0022-AUTH-008">0022-AUTH-008</a>)
+- [ ] As a vega node, I ensure that all transaction are paired with a signature. (<a name="0022-AUTH-009" href="#0022-AUTH-009">0022-AUTH-009</a>)
   - [ ] A signature is verified before the transaction is sent to the chain.
-	- [ ] If a signature is valid, the transaction is sent to the chain
-	- [ ] If a signature is invalid, the transaction is not sent to the chain, an error is returned
+	- [ ] If a signature is valid, the transaction is sent to the chain (<a name="0022-AUTH-010" href="#0022-AUTH-010">0022-AUTH-010</a>)
+	- [ ] If a signature is invalid, the transaction is not sent to the chain, an error is returned (<a name="0022-AUTH-011" href="#0022-AUTH-011">0022-AUTH-011</a>)
   - [ ] A signature is verified after the transaction is added to the chain.
-	- [ ] If a signature is valid the transaction is processed
-	- [ ] If a signature is invalid the transaction is discarded.
-  - [ ] A transaction with no signature is rejected
-- [ ] The current free-text partyId will be replaced with a string derived from the public key
-
+	- [ ] If a signature is valid the transaction is processed (<a name="0022-AUTH-012" href="#0022-AUTH-012">0022-AUTH-012</a>)
+	- [ ] If a signature is invalid the transaction is discarded. (<a name="0022-AUTH-013" href="#0022-AUTH-013">0022-AUTH-013</a>)
+  - [ ] A transaction with no signature is rejected (<a name="0022-AUTH-014" href="#0022-AUTH-014">0022-AUTH-014</a>)
+- [ ] A `partyId` that is not a valid public key is inherently invalid, and should be rejected (<a name="0022-AUTH-015" href="#0022-AUTH-015">0022-AUTH-015</a>)
+	- _Note:_ In early versions of Vega, the `partyId` was an arbitrary string. This is no longer valid, and should be rejected 
 
 # Future work
 

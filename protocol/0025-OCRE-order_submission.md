@@ -30,8 +30,10 @@ To allow traders to interact with the market, they must be able to enter an orde
 - Order 3 is partially filled, then set to status PARTIALLY_FILLED
 
 # Acceptance Criteria
-- [ ] An order's size must be valid according to the [Fractional Order Size spec](./0052-FPOS-fractional_orders_positions.md) 
-- [ ] Margin will taken before the order is entered in to the book
-  - [ ] If sufficient margin cannot be reserved, the order will have a status of `REJECTED`
+- [ ] An order's size must be valid according to the [Fractional Order Size spec](./0052-FPOS-fractional_orders_positions.md)  (<a name="0025-OCRE-001" href="#0025-OCRE-001">0025-OCRE-001</a>)
+- [ ] Margin will taken before the order is entered in to the book (<a name="0025-OCRE-002" href="#0025-OCRE-002">0025-OCRE-002</a>)
+  - [ ] If sufficient margin cannot be reserved, the order will have a status of `REJECTED` (<a name="0025-OCRE-003" href="#0025-OCRE-003">0025-OCRE-003</a>)
+- [ ] Fees are charged as per [0029-FEES](./0020-FEES-fees.md).
+
 # Future Work
 This spec currently covers how we deal with orders that could trade between a single trader. This spec will be expanded in future merge requests to cover more aspects of order submission and updating.

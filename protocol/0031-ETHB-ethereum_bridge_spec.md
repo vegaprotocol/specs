@@ -106,50 +106,50 @@ This example connects the network to Ropsten:
 # Acceptance Criteria
 
 ## Deposit
-* A bridge smart contract for Ethereum is deployed to Ethereum Testnet (tbd - ropsten?)
-* A bridge smart contract for ERC20 is deployed to Ethereum Testnet (tbd - ropsten?)
+* A bridge smart contract for Ethereum is deployed to Ropsten (<a name="0031-ETHM-001" href="#0031-ETHM-001">0031-ETHM-001</a>)
+* A bridge smart contract for ERC20 is deployed to Ropsten  (<a name="0031-ETHM-002" href="#0031-ETHM-002">0031-ETHM-002</a>)
 * ETH smart contract specific requirements:
-  * A multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size
-  * An Ethereum Address can call the deposit function and successfully deposit Ethereum, as long as it is above the minimum size deposit
-  * A request to deposit any non-Ethereum asset is rejected
-  * A deposit call that is below the minimum size is rejected
+  * A multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size (<a name="0031-ETHM-002" href="#0031-ETHM-002">0031-ETHM-002</a>)
+  * An Ethereum Address can call the deposit function and successfully deposit Ethereum, as long as it is above the minimum size deposit (<a name="0031-ETHM-003" href="#0031-ETHM-003">0031-ETHM-003</a>)
+  * A request to deposit any non-Ethereum asset is rejected (<a name="0031-ETHM-004" href="#0031-ETHM-004">0031-ETHM-004</a>)
+  * A deposit call that is below the minimum size is rejected (<a name="0031-ETHM-005" href="#0031-ETHM-005">0031-ETHM-005</a>)
 
 * ERC20 smart contract (This can be repeated for many token standards - NFTs and crypto items will be more complex):
-  * A valid multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size for a whitelisted token
-  * A valid multisig bundle can not be passed to the setMinimum function for a token that is not whitelisted
-  * An Ethereum Address can call the deposit function and successfully deposit any whitelisted token, as long as it is above the minimum size deposit
-  * A deposit call with a blacklisted token is rejected
-  * A deposit call with a whitelisted token that is below the minimum size is rejected
+  * A valid multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size for a whitelisted token (<a name="0031-ETHM-006" href="#0031-ETHM-006">0031-ETHM-006</a>)
+  * A valid multisig bundle can not be passed to the setMinimum function for a token that is not whitelisted (<a name="0031-ETHM-007" href="#0031-ETHM-007">0031-ETHM-007</a>)
+  * An Ethereum Address can call the deposit function and successfully deposit any whitelisted token, as long as it is above the minimum size deposit (<a name="0031-ETHM-008" href="#0031-ETHM-008">0031-ETHM-008</a>)
+  * A deposit call with a blacklisted token is rejected (<a name="0031-ETHM-009" href="#0031-ETHM-009">0031-ETHM-009</a>)
+  * A deposit call with a whitelisted token that is below the minimum size is rejected(<a name="0031-ETHM-010" href="#0031-ETHM-010">0031-ETHM-010</a>)
 
 ## Withdraw
 * ETH smart contract specific requirements:
-  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
-  * An  invalid multisig bundle will be rejected from withdraw
+  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH (<a name="0031-ETHM-011" href="#0031-ETHM-011">0031-ETHM-011</a>)
+  * An  invalid multisig bundle will be rejected from withdraw (<a name="0031-ETHM-012" href="#0031-ETHM-012">0031-ETHM-012</a>)
 * ERC20 smart contract specific requirements:
-  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH
-  * An invalid multisig bundle will be rejected from withdraw
+  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH (<a name="0031-ETHM-013" href="#0031-ETHM-013">0031-ETHM-013</a>)
+  * An invalid multisig bundle will be rejected from withdraw (<a name="0031-ETHM-014" href="#0031-ETHM-014">0031-ETHM-014</a>)
 
 ## Allowlist a token (by eth address)
-* A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten)
+* A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten) (<a name="0031-ETHM-015" href="#0031-ETHM-015">0031-ETHM-015</a>)
 * ERC20 smart contract specific requirements:
-  * A valid multisig bundle can be passed to the whitelistToken function to successfully add a token to the whitelist
-  * An invalid multisig bundle is rejected by the whitelistToken function
+  * A valid multisig bundle can be passed to the whitelistToken function to successfully add a token to the whitelist (<a name="0031-ETHM-016" href="#0031-ETHM-016">0031-ETHM-016</a>)
+  * An invalid multisig bundle is rejected by the whitelistToken function (<a name="0031-ETHM-017" href="#0031-ETHM-017">0031-ETHM-017</a>)
 
 ## Blocklist a token (by eth address)
-* A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten)
+* A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten) (<a name="0031-ETHM-018" href="#0031-ETHM-018">0031-ETHM-018</a>)
 * ERC20 smart contract specific requirements:
-  * A valid multisig bundle can be passed to the blacklistToken function to successfully remove a previously whitelisted token
-  * An invalid multisig bundle is rejected by the blacklistToken function
+  * A valid multisig bundle can be passed to the blacklistToken function to successfully remove a previously whitelisted token (<a name="0031-ETHM-019" href="#0031-ETHM-019">0031-ETHM-019</a>)
+  * An invalid multisig bundle is rejected by the blacklistToken function (<a name="0031-ETHM-020" href="#0031-ETHM-020">0031-ETHM-020</a>)
 
 ## Set deposit minimum
-*  A bridge smart contract for Ethereum is deployed to Ethereum Testnet (Ropsten)
-*  A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten)
-*  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset
-*  an invalid multisig bundle is rejected by the setDepositMinimum function
+*  A bridge smart contract for Ethereum is deployed to Ethereum Testnet (Ropsten) (<a name="0031-ETHM-021" href="#0031-ETHM-021">0031-ETHM-021</a>)
+*  A bridge smart contract for ERC20 is deployed to Ethereum Testnet (Ropsten) (<a name="0031-ETHM-022" href="#0031-ETHM-022">0031-ETHM-022</a>)
+*  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset (<a name="0031-ETHM-023" href="#0031-ETHM-023">0031-ETHM-023</a>)
+*  an invalid multisig bundle is rejected by the setDepositMinimum function (<a name="0031-ETHM-024" href="#0031-ETHM-024">0031-ETHM-024</a>)
 
 ## Block confirmations
-* Block confirmations must be configurable per-asset, and changeable via governance
-* A deposit from chain X does not as deposited until Y blocks have passed since the deposit event:
+* Block confirmations must be configurable per-asset, and changeable via governance (<a name="0031-ETHM-025" href="#0031-ETHM-025">0031-ETHM-025</a>)
+* A deposit from chain X does not as deposited until Y blocks have passed since the deposit event: (<a name="0031-ETHM-026" href="#0031-ETHM-026">0031-ETHM-026</a>)
 
 | Bridged currency | Confirmations | Estimated time |
 |------------------|:-------------:|:--------------:|

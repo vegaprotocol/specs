@@ -326,34 +326,34 @@ APIs should also exist for clients to:
 
 # Acceptance Criteria
 
-- [x] As a user, I can create a new proposal to affect the vega network
-- [x] As a user, I can list the open proposal on the network
-- [ ] As a user, I can get a list of all proposals I voted for
-- [x] As a user, I can receive notification when a new proposal is created and may require attention.
-- [x] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open
-- [x] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected*
-- [x] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it.
-- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied
-- [ ] As the vega network, proposals that close less than 2 days from enactment are rejected as invalid
-- [ ] As the vega network, proposals that close more/less than 1 year from enactment are rejected as invalid
+- [x] As a user, I can create a new proposal to affect the vega network (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)
+- [x] As a user, I can list the open proposal on the network (<a name="0028-GOVE-002" href="#0028-GOVE-002">0028-GOVE-002</a>)
+- [ ] As a user, I can get a list of all proposals I voted for (<a name="0028-GOVE-003" href="#0028-GOVE-003">0028-GOVE-003</a>)
+- [x] As a user, I can receive notification when a new proposal is created and may require attention. (<a name="0028-GOVE-004" href="#0028-GOVE-004">0028-GOVE-004</a>)
+- [x] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)
+- [x] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected* (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)
+- [x] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it. (<a name="0028-GOVE-007" href="#0028-GOVE-007">0028-GOVE-007</a>)
+- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [ ] As the vega network, proposals that close less than 2 days from enactment are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
+- [ ] As the vega network, proposals that close more/less than 1 year from enactment are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
 
 ## Governance proposal types
 ### New Market proposals
-- [x] New market proposals must contain a Liquidity Commitment
+- [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
 
 ### Market change proposals
-- [ ] Market change proposals can only propose a change to a single parameter
+- [ ] Market change proposals can only propose a change to a single parameter (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
 
 ### Network parameter change proposals
-- [x] Network parameter change proposals can only propose a change to a single parameter
+- [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
 
 ## Using Vega governance tokens as voting weight:
-- [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens in my staking account
-- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account
-- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account even if I have more than 0 governance tokens in my general or margin accounts
+- [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens in my staking account (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
+- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account (<a name="0028-GOVE-015" href="#0028-GOVE-015">0028-GOVE-015</a>)
+- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account even if I have more than 0 governance tokens in my general or margin accounts (<a name="0028-GOVE-016" href="#0028-GOVE-016">0028-GOVE-016</a>)
 - [ ] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens in my staking account
-  - [x] Only my most recent vote is counted
-- [ ] When calculating the participation rate of an auction, the participation rate of the votes takes in to account the total supply of the governance asset.
+  - [x] Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)
+- [ ] When calculating the participation rate of an auction, the participation rate of the votes takes in to account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
 
 # Test cases
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.

@@ -108,13 +108,13 @@ Note that the `minLPstake` field sets the minimum liquidity commitment required 
 
 ## user actions
 
-- [ ] As a user I can submit a new proposal asset to be used in vega
-- [ ] As a user I can vote for an asset proposal.
-- [ ] As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset.
-- [ ] `minLPstake` is a required parameter 
+- [ ] As a user I can submit a new proposal asset to be used in vega (<a name="0027-ASSP-001" href="#0027-ASSP-001">0027-ASSP-001</a>)
+- [ ] As a user I can vote for an asset proposal. (<a name="0027-ASSP-002" href="#0027-ASSP-002">0027-ASSP-002</a>)
+- [ ] As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset. (<a name="0027-ASSP-003" href="#0027-ASSP-003">0027-ASSP-003</a>)
+- [ ] `minLPstake` is a required parameter  (<a name="0027-ASSP-004" href="#0027-ASSP-004">0027-ASSP-004</a>)
  
 ## node actions
 
-- [ ] As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal)
-- [ ] As a node, when a new asset is accepted through governance, I can sign a payload to the user so they can whitelist the asset with the bridge
-- [ ] AS a node, I receive events from the external blockchain queue, that's confirm the asset is enabled in the bridge.
+- [ ] As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal) (<a name="0027-ASSP-005" href="#0027-ASSP-005">0027-ASSP-005</a>)
+- [ ] As a node, when a new asset is accepted through governance, I can sign a payload to the user so they can whitelist the asset with the bridge (<a name="0027-ASSP-006" href="#0027-ASSP-006">0027-ASSP-006</a>)
+- [ ] AS a node, I receive events from the external blockchain queue, that's confirm the asset is enabled in the bridge. (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
