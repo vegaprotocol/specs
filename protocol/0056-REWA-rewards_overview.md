@@ -130,32 +130,32 @@ It is therefore not necessary to build any of the transactions or control logic 
 
 ### 💧 Sweetwater
 
-- There is a single reward scheme of type [staking and delegation rewards](./0057-REWF-reward_functions.md)
-  - It has a reward scheme ID
-  - Its parameters can be updated by governance vote
-  - It cannot be cancelled entirely (though the payout amount can be set to 0)
-  - Rewards are paid out correctly at the frequency specified by the current parameters
-  - Rewards are capped to the max payout per recipient correctly
-  - Payout is delayed by the correct amount of time if a payout delay is specified
-  - The reward scheme doesn't and cannot have an end time specified (as we do not allow creation of new schemes, this one cannot end)
-  - Fractional payout type is available
-  - The reward scheme scope is network-wide
-- When funds in a given asset are allocated to the reward scheme ID (for 💧 this only needs to be via automated allocation controlled by governance) a reward pool account is created for the asset:
-  - Funds in all reward pool accounts for the scheme are paid out when rewards are paid
-  - Each account's balance is used when calculating the amount based on the configured payout fraction
-  - Funds cannot be transferred out of the reward pool accounts other than when they are paid out as rewards
-  - Funds cannot be transferred directly to a reward pool account
-- APIs allow the reward scheme and its parameters to be queried
-- APIs allow a party to see how much was paid out to them (ideally this would just use the generalised transfers API filtered by type, but that may not exist for 💧 and this is needed)
-- Updated to the reward scheme parameters are applied correctly for all future distributions
-- No reward schemes can be created
-- Only staking and delegation reward types are available
+- There is a single reward scheme of type [staking and delegation rewards](./0057-REWF-reward_functions.md) (<a name="0056-REWA-001" href="#0056-REWA-001">0056-REWA-001</a>)
+  - It has a reward scheme ID (<a name="0056-REWA-002" href="#0056-REWA-002">0056-REWA-002</a>)
+  - Its parameters can be updated by governance vote (<a name="0056-REWA-003" href="#0056-REWA-003">0056-REWA-003</a>)
+  - It cannot be cancelled entirely (though the payout amount can be set to 0) (<a name="0056-REWA-004" href="#0056-REWA-004">0056-REWA-004</a>)
+  - Rewards are paid out correctly at the frequency specified by the current parameters (<a name="0056-REWA-005" href="#0056-REWA-005">0056-REWA-005</a>)
+  - Rewards are capped to the max payout per recipient correctly (<a name="0056-REWA-006" href="#0056-REWA-006">0056-REWA-006</a>)
+  - Payout is delayed by the correct amount of time if a payout delay is specified (<a name="0056-REWA-007" href="#0056-REWA-007">0056-REWA-007</a>)
+  - The reward scheme doesn't and cannot have an end time specified (as we do not allow creation of new schemes, this one cannot end) (<a name="0056-REWA-008" href="#0056-REWA-008">0056-REWA-008</a>)
+  - Fractional payout type is available (<a name="0056-REWA-009" href="#0056-REWA-009">0056-REWA-009</a>)
+  - The reward scheme scope is network-wide (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
+- When funds in a given asset are allocated to the reward scheme ID (for 💧 this only needs to be via automated allocation controlled by governance) a reward pool account is created for the asset: (<a name="0056-REWA-011" href="#0056-REWA-011">0056-REWA-011</a>)
+  - Funds in all reward pool accounts for the scheme are paid out when rewards are paid (<a name="0056-REWA-012" href="#0056-REWA-012">0056-REWA-012</a>)
+  - Each account's balance is used when calculating the amount based on the configured payout fraction (<a name="0056-REWA-013" href="#0056-REWA-013">0056-REWA-013</a>)
+  - Funds cannot be transferred out of the reward pool accounts other than when they are paid out as rewards (<a name="0056-REWA-014" href="#0056-REWA-014">0056-REWA-014</a>)
+  - Funds cannot be transferred directly to a reward pool account (<a name="0056-REWA-015" href="#0056-REWA-015">0056-REWA-015</a>)
+- APIs allow the reward scheme and its parameters to be queried (<a name="0056-REWA-016" href="#0056-REWA-016">0056-REWA-016</a>)
+- APIs allow a party to see how much was paid out to them (ideally this would just use the generalised transfers API filtered by type, but that may not exist for 💧 and this is needed) (<a name="0056-REWA-017" href="#0056-REWA-017">0056-REWA-017</a>)
+- Updated to the reward scheme parameters are applied correctly for all future distributions (<a name="0056-REWA-018" href="#0056-REWA-018">0056-REWA-018</a>)
+- No reward schemes can be created (<a name="0056-REWA-019" href="#0056-REWA-019">0056-REWA-019</a>)
+- Only staking and delegation reward types are available (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>)
 
 
 ### 🤠 Oregon Trail (WIP)
 
-- The are more reward types: staking and delegation, liquidity provision, trading, market creation TODO: individual specs 
-- New reward scehemes can be created, including multiple of the same type
-- Reward schemes owned and controlled by individual parties can be created as well as network owned ones created through governance
-- Funds can be sent directly to a reward pool account
-- Funds cannot be allocated to a party controlled reward scheme via periodic allocation from [the on-chain treasury](./0058-REWS-simple_pos_rewards.md).
+- The are more reward types: staking and delegation, liquidity provision, trading, market creation TODO: individual specs  (<a name="0056-REWA-021" href="#0056-REWA-021">0056-REWA-021</a>)
+- New reward scehemes can be created, including multiple of the same type (<a name="0056-REWA-022" href="#0056-REWA-022">0056-REWA-022</a>)
+- Reward schemes owned and controlled by individual parties can be created as well as network owned ones created through governance (<a name="0056-REWA-023" href="#0056-REWA-023">0056-REWA-023</a>)
+- Funds can be sent directly to a reward pool account (<a name="0056-REWA-024" href="#0056-REWA-024">0056-REWA-024</a>)
+- Funds cannot be allocated to a party controlled reward scheme via periodic allocation from [the on-chain treasury](./0058-REWS-simple_pos_rewards.md).  (<a name="0056-REWA-025" href="#0056-REWA-025">0056-REWA-025</a>)

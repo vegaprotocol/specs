@@ -68,14 +68,14 @@ Reward calculation: the total payout amount for the period is treated in the sam
 ### 💧 Sweetwater
 
 
-- There is a network parameter specifying the maximum balance to be payed out by "simple-POS-reward" per epoch. 
-- Staking and delegation reward type is available and used for the single, "hard coded" (i.e. not changeable through transactions on chain in this release) reward scheme
-- The reward amounts are calculated using the same formula and code as the staking and delegation reward calculation described in that spec, subject to the application of the max payout amount per participant (public key) if one is specified in the reward parameters (which are controllable by governance)
-- Both stakers (identified by being self-delegators AND being in the active validator set) and delegators are rewarded, as per the calculation
-- The calculation respects the rules around epochs and timing of delegation and undelegation when calculating rewards for a period
+- There is a network parameter specifying the maximum balance to be payed out by "simple-POS-reward" per epoch.  (<a name="0057-REWF-001" href="#0057-REWF-001">0057-REWF-001</a>) 
+- Staking and delegation reward type is available and used for the single, "hard coded" (i.e. not changeable through transactions on chain in this release) reward scheme (<a name="0057-REWF-002" href="#0057-REWF-002">0057-REWF-002</a>)
+- The reward amounts are calculated using the same formula and code as the staking and delegation reward calculation described in that spec, subject to the application of the max payout amount per participant (public key) if one is specified in the reward parameters (which are controllable by governance) (<a name="0057-REWF-003" href="#0057-REWF-003">0057-REWF-003</a>)
+- Both stakers (identified by being self-delegators AND being in the active validator set) and delegators are rewarded, as per the calculation (<a name="0057-REWF-004" href="#0057-REWF-004">0057-REWF-004</a>)
+- The calculation respects the rules around epochs and timing of delegation and undelegation when calculating rewards for a period (<a name="0057-REWF-005" href="#0057-REWF-005">0057-REWF-005</a>)
 
 
 ### 🤠 Oregon Trail
 
-- [ ] Built in Reward Functions are discoverable to participants 
-- [ ] For each reward function create scenario where the reward is created, funded, pays out rewards to eligible participants during the correct period and doesn't outside...  
+- [ ] Built in Reward Functions are discoverable to participants  (<a name="0057-REWF-006" href="#0057-REWF-006">0057-REWF-006</a>)
+- [ ] For each reward function create scenario where the reward is created, funded, pays out rewards to eligible participants during the correct period and doesn't outside...   (<a name="0057-REWF-007" href="#0057-REWF-007">0057-REWF-007</a>)
