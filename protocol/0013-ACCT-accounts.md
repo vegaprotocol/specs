@@ -23,7 +23,7 @@ Feature name: accounts
 ## Party staking accounts
 - [ ] Every party that deposits staked asset on Vega will have a stake account created for that asset. (<a name="0013-ACCT-012" href="#0013-ACCT-012">0013-ACCT-012</a>)
   - [ ] Only one staked asset account exists per party per asset. (<a name="0013-ACCT-013" href="#0013-ACCT-013">0013-ACCT-013</a>)
-  - [ ] The balance can only be delegated to Validators (<a name="0013-ACCT-011" href="#0013-ACCT-014">0013-ACCT-014</a>)
+  - [ ] The balance can only be delegated to Validators (<a name="0013-ACCT-014" href="#0013-ACCT-014">0013-ACCT-014</a>)
   - [ ] The balance cannot be traded, or used as margin, or transferred, or withdrawn (<a name="0013-ACCT-015" href="#0013-ACCT-015">0013-ACCT-015</a>)
   - [ ] Delegated stake remains in the trader's staking account (<a name="0013-ACCT-016" href="#0013-ACCT-016">0013-ACCT-016</a>)
 

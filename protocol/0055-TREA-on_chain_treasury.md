@@ -108,7 +108,7 @@ The transfer occurs immediately and then once every `period_length` and does not
 - The allocation network parameter can be set for an asset in order to distribute funds to the staking and delegation reward pool for the asset:
   - If `period_length` is non-zero, the amount to be transferred to the reward pool is calculated and the distribution occurs. This happens `period_length` after the last attempt to calculate and distribute funds, if no attempt has ever been made then the first distribution is calculated immediately. (<a name="0055-TREA-017" href="#0055-TREA-017">0055-TREA-017</a>)
 	- The amount sent to the reward pool account is equal to the smaller of `max_amount_per_period` and `max_fraction_per_period * network_treasury_balance[assset]` (<a name="0055-TREA-018" href="#0055-TREA-018">0055-TREA-018</a>)
-	- The balance of the treasury account for the asset is reduced by the amount sent (<a name="0055-TREA-019" href="#0055-TREA-019">0055-TREA--19</a>)
+	- The balance of the treasury account for the asset is reduced by the amount sent (<a name="0055-TREA-019" href="#0055-TREA-019">0055-TREA-019</a>)
 	- The balance of the target reward pool account for the asset is increased by the amount sent (<a name="0055-TREA-020" href="#0055-TREA-020">0055-TREA-020</a>)
 
 NOTE: for Sweetwater the allocation logic and reward pools can be simplified to work only for the governance asset (i.e. VEGA tokens) if needed.

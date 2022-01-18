@@ -7,7 +7,7 @@
   - [ ] Open long position, trades occur increasing long position (<a name="0006-POSI-001" href="#0006-POSI-001">0006-POSI-001</a>)
   - [ ] Open long position, trades occur decreasing long position (<a name="0006-POSI-002" href="#0006-POSI-002">0006-POSI-002</a>)
   - [ ] Open short position, trades occur increasing (greater abs(size)) short position(<a name="0006-POSI-003" href="#0006-POSI-003">0006-POSI-003</a>)
-  - [ ] Open short position, trades occur decreasing (smaller abs(size)) short position (<a name="0006-POSI-004" href="#0006-POSI-006">0006-POSI-006</a>)
+  - [ ] Open short position, trades occur decreasing (smaller abs(size)) short position (<a name="0006-POSI-004" href="#0006-POSI-004">0006-POSI-004</a>)
   - [ ] Open short position, trades occur taking position to zero (closing it) (<a name="0006-POSI-005" href="#0006-POSI-005">0006-POSI-005</a>)
   - [ ] Open long position, trades occur taking position to zero (closing it) (<a name="0006-POSI-007" href="#0006-POSI-007">0006-POSI-007</a>)
   - [ ] Open short position, trades occur closing the short position and opening a long position(<a name="0006-POSI-008" href="#0006-POSI-008">0006-POSI-008</a>)
