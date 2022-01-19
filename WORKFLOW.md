@@ -18,7 +18,7 @@ Analysis tasks should be prioritised by those taking the lead on specifying the 
 1. Fill in the details, including the acceptance criteria.
 1. Submit a merge request to start soliciting feedback. Ensure that the appropriate team members are notified.
 1. Build consensus and integrate feedback.
-1. Assign a sequence number to your feature, (e.g. `specs/0001-example-manager.md`)
+1. Assign a sequence number and make up a 4 letter code for your feature, (e.g. `specs/0001-EXMP-example-manager.md`)
 1. Merge to master - this will automatically close the associated ticket.
 
 ## The process for changes to existing component
@@ -54,47 +54,6 @@ Issues should be created in the Product issue list to define a particular scope 
 - Any changes to the specification should be done in new merge requests.
 
 [![](https://mermaid.ink/img/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG5cbkltcGxlbWVudCB0YXNrLT4-RGV2ZWxvcG1lbnQ6IEVuZ2luZWVycyBsaW5rIHRvIHRoZWlyIG93biB0aWNrZXRzXG5EZXZlbG9wbWVudC0tPj5EZXZlbG9wbWVudDogIEVuZ2luZWVycyBjcmVhdGUgb3duIHRpY2tldHNcbkltcGxlbWVudCB0YXNrLT4-RGV2ZWxvcG1lbnQ6IFJldmlldyBhY2NlcHRhbmNlIGNyaXRlcmlhIGFnYWluc3QgdGVzdHNcbkltcGxlbWVudCB0YXNrLT4-RGV2ZWxvcG1lbnQ6IFFBXG5JbXBsZW1lbnQgdGFzay0-PkRldmVsb3BtZW50OiBSZWxlYXNlIiwibWVybWFpZCI6e30sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG5cbkltcGxlbWVudCB0YXNrLT4-RGV2ZWxvcG1lbnQ6IEVuZ2luZWVycyBsaW5rIHRvIHRoZWlyIG93biB0aWNrZXRzXG5EZXZlbG9wbWVudC0tPj5EZXZlbG9wbWVudDogIEVuZ2luZWVycyBjcmVhdGUgb3duIHRpY2tldHNcbkltcGxlbWVudCB0YXNrLT4-RGV2ZWxvcG1lbnQ6IFJldmlldyBhY2NlcHRhbmNlIGNyaXRlcmlhIGFnYWluc3QgdGVzdHNcbkltcGxlbWVudCB0YXNrLT4-RGV2ZWxvcG1lbnQ6IFFBXG5JbXBsZW1lbnQgdGFzay0-PkRldmVsb3BtZW50OiBSZWxlYXNlIiwibWVybWFpZCI6e30sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)
-
-# Prioritisation and ticket organisation
-
-* All tickets in [the product repo](https://github.com/vegaprotocol/specs-internal/issues) must  be labelled as either a _TASK::analysis_ or _TASK::spec-design_ or _TASK::implement_. A ticket cannot be labelled as more than one of these.
-* New tickets should typically not be prioritised unless agreement is met by those doing the task (i.e. spec writing or implementation), with input from Barney and Tamlyn regarding overall product prioritisation.
-* LABELS:
-    * **Analysis**
-        * _TASK::analysis_
-        * _workflow::prioritised_
-        * _workflow::task-in-progress_
-        * _network_
-        * _trading-core_
-        * _trading-ui_
-    * **Spec-writing**
-        * _TASK::spec-writing_
-        * _workflow::prioritised_
-        * _workflow::task-in-progress_
-        * _spec-bug_
-        * _blocking-code_
-        * _blocking-review_
-        * _network_
-        * _trading-core_
-        * _trading-ui_
-    * **Implement**
-        * _TASK::analysis_
-        * _workflow::prioritised_
-        * _workflow::task-in-progress_
-        * _workflow::review_
-        * _workflow::qa_
-        * _blocked-by-spec_
-        * _network_
-        * _trading-core_
-        * _trading-ui_
-
-* Creation of new labels should only happen through a merge request to this file.
-* Asynchronous (via Slack) weekly meetings at the start of each week will be initiated by Tamlyn and will provide a chance to discuss ticket prioritisation and current work in progress across all three task sets.
-
-# RFCs
-When the core specification is more stable and existing functionality needs to be changed, we will start using an RFC process rather than the specification update outlined above. This will likely mean creating an RFC document in the RFC folder, discussing the merge and then integrating that in to the specifications.
-
-While the specifications are still in major flux. we will make merge requests directly to the specification files for the near future.
 
 # Notes
 The workflow for this is partially based on the Rust RFC process: https://github.com/rust-lang/rfcs, adapted for an earlier stage software design process.

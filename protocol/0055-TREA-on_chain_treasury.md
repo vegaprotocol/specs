@@ -83,34 +83,33 @@ The transfer occurs immediately and then once every `period_length` and does not
 
 ### 💧 Sweetwater
 
-- Depositing funds via the [ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) directly to the Validators Rewards account (i.e. xxx address). There will be no more  on-chain-treasury on sweetwater.
+- Depositing funds via the [ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) directly to the Validators Rewards account (i.e. xxx address). There will be no more  on-chain-treasury on sweetwater. (<a name="0055-TREA-001" href="#0055-TREA-001">0055-TREA-001</a>)
 
 ### 🤠 Oregon Trail WIP
 
-- TBD for a lot of this
 - Depositing funds via the [ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) to the Network Treasury account (i.e. zero address) when there is no Network Treasury account for the asset being deposited:
-	- Creates a Network Treasury account for that asset 
-	- Results in the balance of the Network Treasury account for the asset being equal to the amount of the asset that was deposited
-	- The Network Treasury accounts API includes the new account 
-	- The Network Treasury accounts API returns the correct balance for the new account
+	- Creates a Network Treasury account for that asset  (<a name="0055-TREA-002" href="#0055-TREA-002">0055-TREA-002</a>)
+	- Results in the balance of the Network Treasury account for the asset being equal to the amount of the asset that was deposited (<a name="0055-TREA-003" href="#0055-TREA-003">0055-TREA-003</a>)
+	- The Network Treasury accounts API includes the new account  (<a name="0055-TREA-004" href="#0055-TREA-004">0055-TREA-004</a>)
+	- The Network Treasury accounts API returns the correct balance for the new account (<a name="0055-TREA-005" href="#0055-TREA-005">0055-TREA-005</a>)
 - Depositing funds via the ERC20 bridge to the Network Treasury account (i.e. zero address) when there is already a Network Treasury account for the asset being deposited:
-	- Increments the balance of the Network Treasury account for the asset by the amount of the asset that was deposited
-	- The Network Treasury accounts API returns the correct balance for the new account
-- No party can withdraw assets from the Network Treasury account via the ERC20 bridge
-- No party can use assets in the Network Treasury account as margin or transfer them to another account on Vega
-- The network treasury account balances [are restored after a network restart](../non-protocol-specs/0005-limited-network-life.md)
+	- Increments the balance of the Network Treasury account for the asset by the amount of the asset that was deposited (<a name="0055-TREA-006" href="#0055-TREA-006">0055-TREA-006</a>)
+	- The Network Treasury accounts API returns the correct balance for the new account (<a name="0055-TREA-007" href="#0055-TREA-007">0055-TREA-007</a>)
+- No party can withdraw assets from the Network Treasury account via the ERC20 bridge (<a name="0055-TREA-008" href="#0055-TREA-008">0055-TREA-008</a>)
+- No party can use assets in the Network Treasury account as margin or transfer them to another account on Vega (<a name="0055-TREA-009" href="#0055-TREA-009">0055-TREA-009</a>)
+- The network treasury account balances [are restored after a network restart](../non-protocol-specs/0005-limited-network-life.md)  (<a name="0055-TREA-010" href="#0055-TREA-010">0055-TREA-010</a>)
 - It is possible to set a network parameter for periodic allocation to the [staking and delegation reward scheme](./0057-REWF-reward_functions.md) **for any valid asset ID** in the asset framework:
-	- The parameter can be set/changed via governance
-	- The parameter defaults to an empty/null/false state (or doesn't exist by default)
-	- The parameter is a structure that includes values for `max fraction per period`, `max amount per period`, and `period length`
-	- If `max_fraction_per_period` is zero, no funds are allocated 
-	- If `max_amount_per_period` is zero, no funds are allocated 
-	- If `period_length` is zero or blank/empty, no attempt to allocate funds occurs
+	- The parameter can be set/changed via governance (<a name="0055-TREA-011" href="#0055-TREA-011">0055-TREA-011</a>)
+	- The parameter defaults to an empty/null/false state (or doesn't exist by default) (<a name="0055-TREA-012" href="#0055-TREA-012">0055-TREA-012</a>)
+	- The parameter is a structure that includes values for `max fraction per period`, `max amount per period`, and `period length` (<a name="0055-TREA-013" href="#0055-TREA-013">0055-TREA-013</a>)
+	- If `max_fraction_per_period` is zero, no funds are allocated  (<a name="0055-TREA-014" href="#0055-TREA-014">0055-TREA-014</a>)
+	- If `max_amount_per_period` is zero, no funds are allocated  (<a name="0055-TREA-015" href="#0055-TREA-015">0055-TREA-015</a>)
+	- If `period_length` is zero or blank/empty, no attempt to allocate funds occurs (<a name="0055-TREA-016" href="#0055-TREA-016">0055-TREA-016</a>)
 - The allocation network parameter can be set for an asset in order to distribute funds to the staking and delegation reward pool for the asset:
-  - If `period_length` is non-zero, the amount to be transferred to the reward pool is calculated and the distribution occurs. This happens `period_length` after the last attempt to calculate and distribute funds, if no attempt has ever been made then the first distribution is calculated immediately.
-	- The amount sent to the reward pool account is equal to the smaller of `max_amount_per_period` and `max_fraction_per_period * network_treasury_balance[assset]`
-	- The balance of the treasury account for the asset is reduced by the amount sent
-	- The balance of the target reward pool account for the asset is increased by the amount sent
+  - If `period_length` is non-zero, the amount to be transferred to the reward pool is calculated and the distribution occurs. This happens `period_length` after the last attempt to calculate and distribute funds, if no attempt has ever been made then the first distribution is calculated immediately. (<a name="0055-TREA-017" href="#0055-TREA-017">0055-TREA-017</a>)
+	- The amount sent to the reward pool account is equal to the smaller of `max_amount_per_period` and `max_fraction_per_period * network_treasury_balance[assset]` (<a name="0055-TREA-018" href="#0055-TREA-018">0055-TREA-018</a>)
+	- The balance of the treasury account for the asset is reduced by the amount sent (<a name="0055-TREA-019" href="#0055-TREA-019">0055-TREA-019</a>)
+	- The balance of the target reward pool account for the asset is increased by the amount sent (<a name="0055-TREA-020" href="#0055-TREA-020">0055-TREA-020</a>)
 
 NOTE: for Sweetwater the allocation logic and reward pools can be simplified to work only for the governance asset (i.e. VEGA tokens) if needed.
 

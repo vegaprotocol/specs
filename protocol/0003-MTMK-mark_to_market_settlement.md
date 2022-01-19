@@ -3,28 +3,28 @@ Feature name: mark-to-market-settlement
 # Acceptance Criteria
 
 - For a position with a negative settlement amount:
-  - [ ] If settlement amount <= the trader’s margin account balance: 
-    - entire settlement amount is transferred from trader’s margin account to the market’s temporary settlement account
-  - [ ] If settlement amount > trader’s margin account balance  and <= trader's margin account balance + general account balance for the asset: 
+  - [ ] If settlement amount <= the trader’s margin account balance (<a name="0003-MTMK-001" href="#0003-MTMK-001">0003-MTMK-001</a>): 
+    - entire settlement amount is transferred from trader’s margin account to the market’s temporary settlement account 
+  - [ ] If settlement amount > trader’s margin account balance  and <= trader's margin account balance + general account balance for the asset (<a name="0003-MTMK-002" href="#0003-MTMK-002">0003-MTMK-002</a>): 
     - the full balance of the trader’s margin account is transferred to the market’s temporary settlement account
     - the remainder, i.e. difference between the amount transferred from the margin account and the settlement amount, is transferred from the trader’s general account for the asset to the market’s temporary settlement account
-  - [ ] If settlement amount > trader’s margin account balance + trader’s general account balance for the asset: 
+  - [ ] If settlement amount > trader’s margin account balance + trader’s general account balance for the asset (<a name="0003-MTMK-003" href="#0003-MTMK-003">0003-MTMK-003</a>): 
     - the full balance of the trader’s margin account is transferred to the market’s temporary settlement account
     - the full balance of the trader’s general account for the assets are transferred to the market’s temporary settlement account
     - the minimum insurance pool account balance for the market & asset, and the remainder, i.e. the difference between the total amount transferred from the trader’s margin + general accounts and the settlement amount, is transferred from the insurance pool account for the market to the temporary settlement account for the market
 
-- [ ] The total market's positive mark-to-market moves are equal in size to the negative mark-to-market moves.
-- [ ] The total amount *collected* by the network should be less than  or equal to the sum of all of the negative settlement amounts (in absolute size)
-- [ ] If a trader's settlement amount is positive and the amount collected, i.e. the balance of the temporary settlement account, equals the sum of all negative settlement amounts (in absolute size), every trader with a positive settlement amount receives that amount transferred to their margin account from the temporary settlement account.
--  [ ] If the total amount *collected* by the network, as determined by the balance of the market’s margin account, is less than the sum of all of the negative settlement amount amounts (in absolute size), for all traders with a positive settlement amount, an amount  is transferred from the market’s margin account to each trader’s margin account that is less than or equal to their settlement amount amount.
-- [ ] The total amount of *collected* collateral equals the total amount of *distributed* collateral.
+- [ ] The total market's positive mark-to-market moves are equal in size to the negative mark-to-market moves. (<a name="0003-MTMK-005" href="#0003-MTMK-005">0003-MTMK-005</a>)
+- [ ] The total amount *collected* by the network should be less than  or equal to the sum of all of the negative settlement amounts (in absolute size)(<a name="0003-MTMK-006" href="#0003-MTMK-006">0003-MTMK-006</a>)
+- [ ] If a trader's settlement amount is positive and the amount collected, i.e. the balance of the temporary settlement account, equals the sum of all negative settlement amounts (in absolute size), every trader with a positive settlement amount receives that amount transferred to their margin account from the temporary settlement account.(<a name="0003-MTMK-007" href="#0003-MTMK-007">0003-MTMK-007</a>)
+-  [ ] If the total amount *collected* by the network, as determined by the balance of the market’s margin account, is less than the sum of all of the negative settlement amount amounts (in absolute size), for all traders with a positive settlement amount, an amount  is transferred from the market’s margin account to each trader’s margin account that is less than or equal to their settlement amount amount.(<a name="0003-MTMK-008" href="#0003-MTMK-008">0003-MTMK-008</a>)
+- [ ] The total amount of *collected* collateral equals the total amount of *distributed* collateral. (<a name="0003-MTMK-009" href="#0003-MTMK-009">0003-MTMK-009</a>)
 
-- [ ] The market's settlement account balance is zero at the start of the market-to-market settlement process
-- [ ] After completing the mark-to-market settlement process, the market’s settlement account balance is zero
+- [ ] The market's settlement account balance is zero at the start of the market-to-market settlement process (<a name="0003-MTMK-010" href="#0003-MTMK-010">0003-MTMK-010</a>)
+- [ ] After completing the mark-to-market settlement process, the market’s settlement account balance is zero (<a name="0003-MTMK-011" href="#0003-MTMK-011">0003-MTMK-011</a>)
 - If the mark price hasn't changed:
-  - [ ] A trader with no change in open position size has no transfers in or out of their margin account
+  - [ ] A trader with no change in open position size has no transfers in or out of their margin account (<a name="0003-MTMK-012" href="#0003-MTMK-012">0003-MTMK-012</a>)
   - [ ] A trader with no change in open volume:
-- [ ] Not sure if this is testable now, but previous mark price should be the one a stored with the position not at the market level to ensure we are capturing move since last MTM settlement regardless of ‘out of band’ mark price updates
+- [ ] Not sure if this is testable now, but previous mark price should be the one a stored with the position not at the market level to ensure we are capturing move since last MTM settlement regardless of ‘out of band’ mark price updates  (<a name="0003-MTMK-013" href="#0003-MTMK-013">0003-MTMK-013</a>)
 
 
 

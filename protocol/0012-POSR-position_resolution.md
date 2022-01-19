@@ -2,11 +2,11 @@ Feature name: position-resolution
 
 # Acceptance Criteria
 
-* [ ] All orders of "distressed traders" are cancelled
-* [ ] Open positions of distressed traders are closed
-* [ ] One market order is submitted for the net liability
-* [ ] Mark Price is never updated during position resolution
-* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly.
+* [ ] All orders of "distressed traders" are cancelled (<a name="0012-POSR-001" href="#0012-POSR-001">0012-POSR-001</a>)
+* [ ] Open positions of distressed traders are closed (<a name="0012-POSR-002" href="#0012-POSR-002">0012-POSR-002</a>)
+* [ ] One market order is submitted for the net liability (<a name="0012-POSR-003" href="#0012-POSR-003">0012-POSR-003</a>)
+* [ ] Mark Price is never updated during position resolution (<a name="0012-POSR-004" href="#0012-POSR-004">0012-POSR-004</a>)
+* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly. (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
 
 # Summary
 

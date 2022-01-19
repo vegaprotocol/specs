@@ -1,11 +1,11 @@
 Feature name: collateral
 
 # Acceptance Criteria
-* [ ] Transfer requests are the only way the collateral engine will change the amounts of assets
-* [ ] A transfer request will always only instruct one asset to be transferred.
-* [ ] If a transfer request does not contain an equal amount of debit assets to credit assets it is malformed and should be outright rejected by the collateral engine  
-* [ ] One transfer request may result in multiple ledger entries. 
-* [ ] Each ledger entry will specify one debit account, one credit account and one amount of a single asset.
+* [ ] Transfer requests are the only way the collateral engine will change the amounts of assets (<a name="0005-COLL-001" href="#0005-COLL-001">0005-COLL-001</a>)
+* [ ] A transfer request will always only instruct one asset to be transferred. (<a name="0005-COLL-002" href="#0005-COLL-002">0005-COLL-002</a>)
+* [ ] If a transfer request does not contain an equal amount of debit assets to credit assets it is malformed and should be outright rejected by the collateral engine  (<a name="0005-COLL-003" href="#0005-COLL-003">0005-COLL-003</a>)
+* [ ] One transfer request may result in multiple ledger entries.  (<a name="0005-COLL-004" href="#0005-COLL-004">0005-COLL-004</a>)
+* [ ] Each ledger entry will specify one debit account, one credit account and one amount of a single asset. (<a name="0005-COLL-005" href="#0005-COLL-005">0005-COLL-005</a>)
 * [ ] Creation and deletion of accounts - see [accounts](./0013-ACCT-accounts.md).
 
 # Summary

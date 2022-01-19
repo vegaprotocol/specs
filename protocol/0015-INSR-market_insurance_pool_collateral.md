@@ -1,9 +1,9 @@
 Feature name: market-insurance-pool
 
 # Acceptance Criteria
-- [ ] When a market opens for trading, there an insurance account that is able to be used by that market for every settlement asset of that market.
-- [ ] Only transfer requests move money in or out of the insurance account.
-- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the on-chain treasury.
+- [ ] When a market opens for trading, there an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0015-INSR-001" href="#0015-INSR-001">0015-INSR-001</a>)
+- [ ] Only transfer requests move money in or out of the insurance account. (<a name="0015-INSR-002" href="#0015-INSR-002">0015-INSR-002</a>)
+- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the on-chain treasury. (<a name="0015-INSR-003" href="#0015-INSR-003">0015-INSR-003</a>)
 
 
 # Summary

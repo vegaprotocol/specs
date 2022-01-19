@@ -4,15 +4,15 @@ A *Mark Price* is a concept derived from traditional markets.  It is a calculate
 
 # Acceptance criteria
 
-- [ ] The algorithm used to calculate the mark price is specified by a market parameter.
-- [ ] The mark price must be non zero when the market opens
+- [ ] The algorithm used to calculate the mark price is specified by a market parameter.  (<a name="0009-MRKP-001" href="#0009-MRKP-001">0009-MRKP-001</a>)
+- [ ] The mark price must be non zero when the market opens  (<a name="0009-MRKP-002" href="#0009-MRKP-002">0009-MRKP-002</a>)
 
 
 Algorithm 1:
 
-- [ ] Any transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade.
-- [ ] A transaction that doesn't result in a trade does not cause the mark price to change.
-- [ ] The initial mark price for a market is specified by a market parameter.
+- [ ] Any transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade. (<a name="0009-MRKP-003" href="#0009-MRKP-003">0009-MRKP-003</a>)
+- [ ] A transaction that doesn't result in a trade does not cause the mark price to change.  (<a name="0009-MRKP-004" href="#0009-MRKP-004">0009-MRKP-004</a>)
+- [ ] The initial mark price for a market is specified by a market parameter.  (<a name="0009-MRKP-005" href="#0009-MRKP-005">0009-MRKP-005</a>)
 
 # Guide-level explanation
 The *Mark Price* represents the "current" market value for an instrument that is being traded on a market on Vega. It is a calculated value primarily used to value trader's open portfolios against the prices they executed their trades at. Specifically, it is used to calculate the cash flows for [mark-to-market settlement](./0003-MTMK-mark_to_market_settlement.md).

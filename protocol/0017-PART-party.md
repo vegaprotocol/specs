@@ -31,9 +31,9 @@ There is currently one 'special' party in Vega. They are controlled by the Vega 
 The `network` party is a pseudoparty. It is used in [position resolution](./0012-POSR-position_resolution.md) to close distressed [positions](./0006-POSI-positions_core.md) or [orders](./0024-OSTA-order_status.md). See [Order Types: Network Orders](./0014-ORDT-order_types.md#network-orders) for more detail on how these orders are used.
 
 # Acceptance Criteria
-1. [x] When a [standard party](#standard-party) must be uniquely identified, it must be identified by the public key of an ed25519 keypair
-    1. [x] The exception to this rule is [special parties](#special-parties), which are unique strings
-        1. [x] A special party must not have a public/private keypair
-1. [ ] A transaction recieved through the blockchain as any [special party](#special-parties) must be rejected.
-1. [ ] A [party](#standard-party) with no balance in any account must have their transactions rejected.
-1. [ ] Any transaction submitted to `submitTx` with a party of `network` should be rejected.
+1. [x] When a [standard party](#standard-party) must be uniquely identified, it must be identified by the public key of an ed25519 keypair (<a name="0017-PART-001" href="#0017-PART-001">0017-PART-001</a>)
+    1. [x] The exception to this rule is [special parties](#special-parties), which are unique strings (<a name="0017-PART-002" href="#0017-PART-002">0017-PART-002</a>)
+        1. [x] A special party must not have a public/private keypair (<a name="0017-PART-003" href="#0017-PART-003">0017-PART-003</a>)
+1. [ ] A transaction recieved through the blockchain as any [special party](#special-parties) must be rejected. (<a name="0017-PART-004" href="#0017-PART-004">0017-PART-004</a>)
+1. [ ] A [party](#standard-party) with no balance in any account must have their transactions rejected. (<a name="0017-PART-005" href="#0017-PART-005">0017-PART-005</a>)
+1. [ ] Any transaction submitted to `submitTx` with a party of `network` should be rejected. (<a name="0017-PART-006" href="#0017-PART-006">0017-PART-006</a>)

@@ -6,13 +6,13 @@ Specification PR: [275](https://github.com/vegaprotocol/product/pull/275)
 
 # Acceptance Criteria
 
-- [ ] Price monitoring engine exists, holds all the horizon, confidence level, auction extension triplets configured for the market and exposes a function that takes as input the arrival price of the next transaction and returns the signal instructing the matching engine if a price protection auction should commence, and if so, what should its period be.
-- [ ] Risk model prescribes maximum probability level which it can support.
-- [ ] `vega` refuses to create a market if the specified probability level for price monitoring exceeds what the risk model specifies - to avoid spurious accuracy and runtime errors.
-- [ ] The matching engine triggers price protection auction period based on the price monitoring signal.
-- [ ] The market continues in regular fashion once price protection auction period ends.
-- [ ] Transactions are processed atomically so that the transaction which directly moved the price beyond allowed band gets processed again via price protection auction period (and no associated trades are generated prior to that period).
-- [ ] A maximum of 4 price monitoring triggers can be added per market
+- [ ] Price monitoring engine exists, holds all the horizon, confidence level, auction extension triplets configured for the market and exposes a function that takes as input the arrival price of the next transaction and returns the signal instructing the matching engine if a price protection auction should commence, and if so, what should its period be. (<a name="0032-PRIM-001" href="#0032-PRIM-001">0032-PRIM-001</a>)
+- [ ] Risk model prescribes maximum probability level which it can support. (<a name="0032-PRIM-002" href="#0032-PRIM-002">0032-PRIM-002</a>)
+- [ ] `vega` refuses to create a market if the specified probability level for price monitoring exceeds what the risk model specifies - to avoid spurious accuracy and runtime errors. (<a name="0032-PRIM-003" href="#0032-PRIM-003">0032-PRIM-003</a>)
+- [ ] The matching engine triggers price protection auction period based on the price monitoring signal. (<a name="0032-PRIM-004" href="#0032-PRIM-004">0032-PRIM-004</a>)
+- [ ] The market continues in regular fashion once price protection auction period ends. (<a name="0032-PRIM-005" href="#0032-PRIM-005">0032-PRIM-005</a>)
+- [ ] Transactions are processed atomically so that the transaction which directly moved the price beyond allowed band gets processed again via price protection auction period (and no associated trades are generated prior to that period). (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>)
+- [ ] A maximum of 4 price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
 
 # Summary
 

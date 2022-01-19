@@ -148,23 +148,22 @@ message GetEventAcceptanceStatusResponse {
 
 # Acceptance Criteria
 ## Event Queue
-* Event Queue calls `GetSubscribedEventSources` and successfully parses the response
-* Event Queue connects to a configured local or hosted external blockchain node
-* Event Queue gathers and filters applicable events from configured external blockchain node
-* Event Queue calls `GetEventAcceptanceStatus` and marks accepted events internally as complete
-* Event Queue propagates unaccepted events to Vega node via `PropagateEvent`
-* Event Queue retries sending events that have gone too long without being accepted 
+* Event Queue calls `GetSubscribedEventSources` and successfully parses the response (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)
+* Event Queue connects to a configured local or hosted external blockchain node (<a name="0036-BRIE-002" href="#0036-BRIE-002">0036-BRIE-002</a>)
+* Event Queue gathers and filters applicable events from configured external blockchain node (<a name="0036-BRIE-003" href="#0036-BRIE-003">0036-BRIE-003</a>)
+* Event Queue calls `GetEventAcceptanceStatus` and marks accepted events internally as complete (<a name="0036-BRIE-004" href="#0036-BRIE-004">0036-BRIE-004</a>)
+* Event Queue propagates unaccepted events to Vega node via `PropagateEvent` (<a name="0036-BRIE-005" href="#0036-BRIE-005">0036-BRIE-005</a>)
+* Event Queue retries sending events that have gone too long without being accepted  (<a name="0036-BRIE-006" href="#0036-BRIE-006">0036-BRIE-006</a>)
 
 ## Vega Nodes
-* Vega nodes respond to `GetSubscribedEventSources` with a list of valid smart contract events
-* Vega nodes accept events submitted to `PropagateEvent` and verifies them against configured external blockchain node
-* Vega nodes write events to chain once verified
-* Vega nodes respond appropriately to `GetEventAcceptanceStatus`
+* Vega nodes respond to `GetSubscribedEventSources` with a list of valid smart contract events (<a name="0036-BRIE-007" href="#0036-BRIE-007">0036-BRIE-007</a>)
+* Vega nodes accept events submitted to `PropagateEvent` and verifies them against configured external blockchain node (<a name="0036-BRIE-008" href="#0036-BRIE-008">0036-BRIE-008</a>)
+* Vega nodes write events to chain once verified (<a name="0036-BRIE-009" href="#0036-BRIE-009">0036-BRIE-009</a>)
+* Vega nodes respond appropriately to `GetEventAcceptanceStatus` (<a name="0036-BRIE-010" href="#0036-BRIE-010">0036-BRIE-010</a>)
 * Vega nodes verify Event existance and outcomes using local Ethereum node
-  * Verify balance changes
-  * Verify account identities
-  * Verify transaction hashes
-* Vega nodes reject invalid events that fail verification in the previous step
+  * Verify balance changes (<a name="0036-BRIE-011" href="#0036-BRIE-011">0036-BRIE-011</a>)
+  * Verify account identities (<a name="0036-BRIE-012" href="#0036-BRIE-012">0036-BRIE-012</a>)
+  * Verify transaction hashes (<a name="0036-BRIE-013" href="#0036-BRIE-013">0036-BRIE-013</a>)
+* Vega nodes reject invalid events that fail verification in the previous step (<a name="0036-BRIE-014" href="#0036-BRIE-014">0036-BRIE-014</a>)
 * Vega nodes responds appropriately to event triggers
-  * Users are credited on deposit
-  * Expandable as triggers are identified
+  * Users are credited on deposit (see also [0013-ACCT](./0013-ACCT-accounts.md))  (<a name="0036-BRIE-015" href="#0036-BRIE-015">0036-BRIE-015</a>)

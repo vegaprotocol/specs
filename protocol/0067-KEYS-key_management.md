@@ -121,7 +121,7 @@ counted against that validator in the performance measurements). This allows val
 to have a less strict double signing protection (and as seen in the testnet, too strict
 double-signing protection can cause a validator failure due to wrongly blocking key access). 
 
-##Future Features
+## Future Features
 An alarm should be raised if
 - a validator frequently double-signs (this is likely not malicious behehaviour of 
    that validator, but a misconfiguration or a leaked key; in either case, it is something

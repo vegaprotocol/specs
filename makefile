@@ -6,3 +6,6 @@ show-duplicate-numbers:
 
 numbers:
 	find protocol/*.md protocol/*.ipynb ! '(' -name 'README.md' ')' | grep -oE '[0-9]{4}*' | sort -uC && echo "All numbers are unique" || echo "Duplicate numbers"
+
+codes:
+	node scripts/check-codes.js 	

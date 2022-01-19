@@ -4,42 +4,41 @@
 
 ## Open position data
 - Given the following scenarios, applies the rules described in functionality to update the open position size (check new open position size is as expected given the rules and the old open position size):
-  - [ ] Open long position, trades occur increasing long position
-  - [ ] Open long position, trades occur decreasing long position
-  - [ ] Open short position, trades occur increasing (greater abs(size)) short position
-  - [ ] Open short position, trades occur decreasing (smaller abs(size)) short position
-  - [ ] Open short position, trades occur taking position to zero (closing it)
-  - [ ] Open long position, trades occur taking position to zero (closing it)
-  - [ ] Open short position, trades occur closing the short position and opening a long position
-  - [ ] Open long position, trades occur closing the long position and opening a short position
-  - [ ] No open position, trades occur opening a long position
-  - [ ] No open position, trades occur opening a short position
-  - [ ] Open position, trades occur that close it (take it to zero), in a separate transaction, trades occur that open a new position
-- [ ] Opening and closing positions for multiple traders, maintains position size for all open (non-zero) positions
-
-- [ ] Does not change position size for a wash trade (buyer = seller)
+  - [ ] Open long position, trades occur increasing long position (<a name="0006-POSI-001" href="#0006-POSI-001">0006-POSI-001</a>)
+  - [ ] Open long position, trades occur decreasing long position (<a name="0006-POSI-002" href="#0006-POSI-002">0006-POSI-002</a>)
+  - [ ] Open short position, trades occur increasing (greater abs(size)) short position(<a name="0006-POSI-003" href="#0006-POSI-003">0006-POSI-003</a>)
+  - [ ] Open short position, trades occur decreasing (smaller abs(size)) short position (<a name="0006-POSI-004" href="#0006-POSI-004">0006-POSI-004</a>)
+  - [ ] Open short position, trades occur taking position to zero (closing it) (<a name="0006-POSI-005" href="#0006-POSI-005">0006-POSI-005</a>)
+  - [ ] Open long position, trades occur taking position to zero (closing it) (<a name="0006-POSI-007" href="#0006-POSI-007">0006-POSI-007</a>)
+  - [ ] Open short position, trades occur closing the short position and opening a long position(<a name="0006-POSI-008" href="#0006-POSI-008">0006-POSI-008</a>)
+  - [ ] Open long position, trades occur closing the long position and opening a short position (<a name="0006-POSI-009" href="#0006-POSI-009">0006-POSI-009</a>)
+  - [ ] No open position, trades occur opening a long position (<a name="0006-POSI-010" href="#0006-POSI-010">0006-POSI-010</a>)
+  - [ ] No open position, trades occur opening a short position (<a name="0006-POSI-011" href="#0006-POSI-011">0006-POSI-011</a>)
+  - [ ] Open position, trades occur that close it (take it to zero), in a separate transaction, trades occur that open a new position (<a name="0006-POSI-012" href="#0006-POSI-012">0006-POSI-012</a>)
+- [ ] Opening and closing positions for multiple traders, maintains position size for all open (non-zero) positions (<a name="0006-POSI-013" href="#0006-POSI-013">0006-POSI-013</a>)
+- [ ] Does not change position size for a wash trade (buyer = seller) (<a name="0006-POSI-014" href="#0006-POSI-014">0006-POSI-014</a>)
 
 ## Open orders data
 - Given the following scenarios, applies the rules described in functionality to update the net buy order amounts (check new size is as expected given the rules and the old size).
-  - [ ] No active buy orders, a new buy order is added to the order book
-  - [ ] Active buy orders, a new buy order is added to the order book
-  - [ ] Active buy orders, an existing buy order is amended which increases its size.
-  - [ ] Active buy orders, an existing buy order is amended which decreases its size.
-  - [ ] Active buy orders, an existing buy order's price is amended such that it trades a partial amount.
-  - [ ] Active buy orders, an existing buy order's price is amended such that it trades in full.
-  - [ ] Active buy order, an order initiated by another trader causes a partial amount of the existing buy order to trade.
-  - [ ] Active buy order, an order initiated by another trader causes the full amount of the existing buy order to trade.
-  - [ ] Active buy orders, an existing order is cancelled
-  - [ ] Active buy orders, an existing order expires
+  - [ ] No active buy orders, a new buy order is added to the order book (<a name="0006-POSI-016" href="#0006-POSI-016">0006-POSI-016</a>)
+  - [ ] Active buy orders, a new buy order is added to the order book (<a name="0006-POSI-017" href="#0006-POSI-017">0006-POSI-017</a>)
+  - [ ] Active buy orders, an existing buy order is amended which increases its size. (<a name="0006-POSI-018" href="#0006-POSI-018">0006-POSI-018</a>)
+  - [ ] Active buy orders, an existing buy order is amended which decreases its size.  (<a name="0006-POSI-019" href="#0006-POSI-019">0006-POSI-019</a>)
+  - [ ] Active buy orders, an existing buy order's price is amended such that it trades a partial amount. (<a name="0006-POSI-020" href="#0006-POSI-020">0006-POSI-020</a>)
+  - [ ] Active buy orders, an existing buy order's price is amended such that it trades in full. (<a name="0006-POSI-021" href="#0006-POSI-021">0006-POSI-021</a>)
+  - [ ] Active buy order, an order initiated by another trader causes a partial amount of the existing buy order to trade. (<a name="0006-POSI-022" href="#0006-POSI-022">0006-POSI-022</a>)
+  - [ ] Active buy order, an order initiated by another trader causes the full amount of the existing buy order to trade. (<a name="0006-POSI-023" href="#0006-POSI-023">0006-POSI-023</a>)
+  - [ ] Active buy orders, an existing order is cancelled (<a name="0006-POSI-024" href="#0006-POSI-024">0006-POSI-024</a>)
+  - [ ] Active buy orders, an existing order expires (<a name="0006-POSI-025" href="#0006-POSI-025">0006-POSI-025</a>)
 
 - Repeat the above but for sell orders.
 
 ## General
 
-- [ ] Maintains separate position data for each market a trader is active in
-- [ ] If there is either one or more of the position record's fields is non zero (i.e. open position size, active buy order size, active sell order size), the position record exists.
-- [ ] Does not store data for positions that are reduced to size == 0 for all 3 data components (i.e. open position, active buy orders and active sell orders)
-- [ ] All of a trader's orders are cancelled
+- [ ] Maintains separate position data for each market a trader is active in (<a name="0006-POSI-026" href="#0006-POSI-026">0006-POSI-026</a>)
+- [ ] If there is either one or more of the position record's fields is non zero (i.e. open position size, active buy order size, active sell order size), the position record exists. (<a name="0006-POSI-027" href="#0006-POSI-027">0006-POSI-027</a>)
+- [ ] Does not store data for positions that are reduced to size == 0 for all 3 data components (i.e. open position, active buy orders and active sell orders)  (<a name="0006-POSI-028" href="#0006-POSI-028">0006-POSI-028</a>)
+- [ ] All of a trader's orders are cancelled  (<a name="0006-POSI-029" href="#0006-POSI-029">0006-POSI-029</a>)
 
 # Summary
 
