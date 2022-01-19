@@ -50,7 +50,8 @@ let countEmptyFiles = 0;
 let countErrorFiles = 0;
 // The number of files that appear to have enough detail
 let countAcceptableFiles = 0;
-
+// Total acceptance criteria across all files
+let countAcceptanceCriteria = 0;
 
 fs.readdirSync(path).forEach(file => {
   if (file.match(/md$/) && file !== 'README.md') {
@@ -78,6 +79,9 @@ fs.readdirSync(path).forEach(file => {
       // If all of the arrays aren't 1, there's probably a mistake. Output all chunks to 
       // point to where the error is
       const unbalancedChunks = totalAcceptanceCriteria.filter(i => i !== 1);
+
+      countAcceptanceCriteria += totalAcceptanceCriteria.length;
+
       if (unbalancedChunks.length > 0) {
         console.group(file);
         console.log(`${totalAcceptanceCriteria.length} acceptance criteria`);
@@ -104,6 +108,7 @@ fs.readdirSync(path).forEach(file => {
 });
 
 console.log('\r\n--------------------------------------------------');
-console.log(`Acceptable   ${countAcceptableFiles} (files with more than ${minimumAcceptableCount} ACs)`);
-console.log(`Need work    ${countEmptyFiles}`);
-console.log(`With errors  ${countErrorFiles}`);
+console.log(`Acceptable         ${countAcceptableFiles} (files with more than ${minimumAcceptableCount} ACs)`);
+console.log(`Need work          ${countEmptyFiles}`);
+console.log(`Files with errors  ${countErrorFiles}`);
+console.log(`Total ACs          ${countAcceptanceCriteria}`);
