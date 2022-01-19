@@ -54,7 +54,7 @@ let countAcceptableFiles = 0;
 let countAcceptanceCriteria = 0;
 
 fs.readdirSync(path).forEach(file => {
-  if (file.match(/md$/) && file !== 'README.md') {
+  if (file.match(/md|ipynb$/) && file !== 'README.md') {
     let content = fs.readFileSync(`${path}${file}`, `ascii`);
     let codeStart = file.match(/^([0-9]{4}-[A-Z]{4})/);
 
