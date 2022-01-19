@@ -1,6 +1,6 @@
 Feature: Test position resolution
 
-  # Spec file: 0012-position-resolution.md
+  # Spec file: 0012-POSR-position-resolution.md
   # Reference spreadsheet: https://drive.google.com/open?id=1aenM_1mqruGDmU9coBxF49_zbHTlEWrj
 
   Background:

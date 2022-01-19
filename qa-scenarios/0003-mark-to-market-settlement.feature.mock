@@ -1,6 +1,6 @@
 Feature: Test MTM settlement
 
-  # Spec file: 0003-mark-to-market-settlement.md
+  # Spec file: 0003-MTMK-mark-to-market-settlement.md
   # Reference spreadsheet: https://drive.google.com/open?id=1q5gE2yBA1SnA2V4Yu6XwQo3ytBzhk61M
 
   Background:

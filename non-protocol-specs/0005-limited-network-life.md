@@ -6,7 +6,7 @@ Vega networks will at least initially and perhaps always run for a limited time 
 
 Networks will have a finite lifetime because:
 
-- It is efficient to upgrade the protocol by starting again as it avoids the need to deal with multiple versions of the code (upgrades to a running chain need to respect and be able to recalculate the pre-upgrade deterministic state for earlier blocks, so all versions of criticial code must remain in the system).
+- It is efficient to upgrade the protocol by starting again as it avoids the need to deal with multiple versions of the code (upgrades to a running chain need to respect and be able to recalculate the pre-upgrade deterministic state for earlier blocks, so all versions of critical code must remain in the system).
 This is especially important early on when rapid iteration is desirable, as the assumption that new chains can be started for new features simplifies things considerably.
 
 - Trading at 1000s of tx/sec generates a lot of data. Given that most instruments are non-perpetual (they expire), this gives the ability to create new markets on a new chain and naturally let the old one come to an end rather than dragging around its history forever.
@@ -25,14 +25,14 @@ Point two requires that at load time, each node calculates the hash of the check
 
 # Creating a checkpoint
 Information to store:
-- All [network parameters](../protocol/0054-network-parameters.md), including those defined [below](#network-parameters).
-- All [asset definitions](../protocol/0040-asset-framework.md#asset-definition). Insurance pool balance from the markets will be summed up per asset and balance per asset stored.
-- All market proposals ([creation](../protocol/0028-governance.md#1-create-market) and [update](../protocol/0028-governance.md#2-change-market-parameters)) that have been *accepted*.
-- All [asset proposals](../protocol/0028-governance.md) that have been *accepted*.
+- All [network parameters](../protocol/0054-NETP-network_parameters.md), including those defined [below](#network-parameters).
+- All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition). Insurance pool balance from the markets will be summed up per asset and balance per asset stored.
+- All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted*.
+- All [asset proposals](../protocol/0028-GOVE-governance.md) that have been *accepted*.
 - All delegation info.
-- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the staking and delegation reward account balance and network params that govern [Staking and delegation](../protocol/0057-reward-functions.md) ).
+- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the staking and delegation reward account balance and network params that govern [Staking and delegation](../protocol/0057-REWF-reward_functions.md) ).
 - All reward balances accrued by all parties but not yet transferred to their general account due to payout delays.
-- [Account balances](../protocol/0013-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below about signed-for-withdrawal. Does *not* include the "staking" account balance.
+- [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below about signed-for-withdrawal. Does *not* include the "staking" account balance.
 - Fee pools: Fees are paid into per market or per asset pools and distributed periodically. 
 - Event ID of the last processed deposit event for all bridged chains
 - Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
@@ -145,7 +145,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
 1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD and has enactment date 1 year in the future. The market has id `id_xxx`.
 1. Other parties vote on the market and the proposal is accepted (passes rules for vote majority and participation). The market has id `id_xxx`.
-1. The market is in `pending` state, see [market lifecycle](0043-market-lifecycle.md).
+1. The market is in `pending` state, see [market lifecycle](../protocol/0043-MKTL-market_lifecycle.md).
 1. Another party places a limit sell order on the market and has `other_gen_bal`, margin balance `other_margin_bal`.
 1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.

@@ -1,5 +1,5 @@
 # ERC20 Governance Token Staking
-Vega makes uses of a ERC20 token on the Ethereum blockchain as a [governance asset](../protocol/0028-governance.md) for [delegation](../protocol/0059-simple-staking-and-delegating.md) to validators and creation and voting of [governance proposals](../protocol/0028-governance.md). A party's governance tokens must first be recognised against a Vega public key before they can be used on the Vega network for governance and delegation.
+Vega makes uses of a ERC20 token on the Ethereum blockchain as a [governance asset](./../protocol/0028-GOVE-governance.md) for [delegation](../protocol/0059-STKG-simple_staking_and_delegating.md) to validators and creation and voting of [governance proposals](./../protocol/0028-GOVE-governance.md). A party's governance tokens must first be recognised against a Vega public key before they can be used on the Vega network for governance and delegation.
 
 Although it would be possible to use the standard ERC20 bridge to deposit governance tokens and put them in full control of the Vega network, the system will not do this for the governance asset. Instead there will be a separate system that allows governance tokens (only) to be "staked" to a Vega public key (and "unstaked" when done) without any action on the Vega network, and without putting the tokens under the control of the Vega network. This approach has been chosen for two primary reasons:
 
@@ -7,7 +7,7 @@ Although it would be possible to use the standard ERC20 bridge to deposit govern
 2. This method allows unvested (locked) tokens to be staked. Both staking and unstaking are controlled entirely on the Ethereum side, and staked balances are recognised on the Vega network by listening for `Stake_*` events which can be emitted by any contract that's recognised by the network, which makes it possible to implement stake/unstake functionality into the token vesting contract in additional to the normal "staking bridge" contract. 
 
 In order to manage the staking of Vega tokens from mainnet Ethereum to Vega mainnet, events need to be raised on ETH that can then be consumed by Vega.
-Much like [the Ethereum bridge](../protocol/0031-ethereum-bridge-spec.md), a bridge smart contract will be used.
+Much like [the Ethereum bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md), a bridge smart contract will be used.
 Unlike the ERC20 or ETH bridges however, the Staking Bridge does not rely on any sort of multisignature control and deposits/withdrawals are entirely at the discretion of the depositor.
 
 
@@ -15,7 +15,7 @@ Unlike the ERC20 or ETH bridges however, the Staking Bridge does not rely on any
 
 ### Vega network
 
-Staked assets will appear in a user's [staking account](../protocol/0013-accounts.md) once the Vega network sees the relevant `Stake_Deposited` event(s) with enough confirmations (defined by a network parameter). As the staked tokens will be used for [governance](../protocol/0028-governance.md), the governance will weight votes based on the staking account balance instead of the general account balance. Delegation functionality will also use the staking account balance as the source of truth for the maximum number of delegated tokens.
+Staked assets will appear in a user's [staking account](./../protocol/0013-ACCT-accounts.md) once the Vega network sees the relevant `Stake_Deposited` event(s) with enough confirmations (defined by a network parameter). As the staked tokens will be used for [governance](./../protocol/0028-GOVE-governance.md), the governance will weight votes based on the staking account balance instead of the general account balance. Delegation functionality will also use the staking account balance as the source of truth for the maximum number of delegated tokens.
 
 - Vega will have a new `stake account` account type to track the balance of staked tokens for each public key
 - Vega  will listen for `Stake_Deposited` events from the staking bridge and ERC20 vesting contracts (see below) and increase the balance in the appropriate party's stake account by the amount deposited each time new stake is deposited
@@ -24,7 +24,7 @@ Staked assets will appear in a user's [staking account](../protocol/0013-account
 - There will be APIs to query `Stake_Deposited` and `Stake_Removed` events that have been processed by the network
 - Both governance and delegation will need to handle the fact that the stake account balance can be reduced without warning if a user unstakes tokens.
 
-Note: the behaviour of delegation is covered in [staking and delegation](../protocol/0059-simple-staking-and-delegation.md), and the use of stake to determine a party's weight in governance votes is covered in [governance](../protocol/0028-governance.md).
+Note: the behaviour of delegation is covered in [staking and delegation](./../protocol/0059-STKG-simple_staking_and_delegating.md), and the use of stake to determine a party's weight in governance votes is covered in [governance](./../protocol/0028-GOVE-governance.md).
 
 ### Bootstraping of a network / of the staking accounts balances
 
@@ -74,7 +74,7 @@ Functions:
 
 ### ERC20 vesting contract (ERC20_Vesting.sol)
 
-The ERC20 vesting contract implements the [Token V2](../non-protocol-specs/0002-token-v2.md) specification and must also support the staking of tokens it holds as specified here. It will [ERC20_Vesting.sol](https://github.com/vegaprotocol/Vega_Token_V2/blob/main/contracts/ERC20_Vesting.sol) emit the `Stake_Deposited` and `Stake_Removed` events.
+The ERC20 vesting contract implements the [Token V2](./0002-token-v2.md) specification and must also support the staking of tokens it holds as specified here. It will [ERC20_Vesting.sol](https://github.com/vegaprotocol/Vega_Token_V2/blob/main/contracts/ERC20_Vesting.sol) emit the `Stake_Deposited` and `Stake_Removed` events.
 
 Functions:
 * `stake_tokens(uint256 amount, bytes32 vega_public_key)` allows staking of tokens held by the contract on behalf of an address
