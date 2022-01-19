@@ -204,17 +204,17 @@ When the time defined by ``liquidity_providers_fee_distribution_time_step` elaps
 ## Acceptance Criteria
 
 ### CALCULATING LIQUIDITY FEE FACTOR
-- [ ] The examples provided result in the given outcomes
-- [ ] The resulting liquidity-fee-factor is always equal to one of the liquidity provider's individually nominated fee factors
-- [ ] The resulting liquidity-fee-factor is never less than zero
-- [ ] Liquidity fee factors are recalculated every time a liquidity provider nominates a new fee factor (using the commit liquidity network transaction).
-- [ ] Liquidity fee factors are recalculated every time the liquidity demand estimate changes.
-- [ ] If a change in the open interest causes the liquidity demand estimate to change, then fee factor is correctly recalculated. 
-- [ ] If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated. 
+- [ ] The examples provided result in the given outcomes (<a name="0042-LIQF-001" href="#0042-LIQF-001">0042-LIQF-001</a>)
+- [ ] The resulting liquidity-fee-factor is always equal to one of the liquidity provider's individually nominated fee factors (<a name="0042-LIQF-002" href="#0042-LIQF-002">0042-LIQF-002</a>)
+- [ ] The resulting liquidity-fee-factor is never less than zero (<a name="0042-LIQF-003" href="#0042-LIQF-003">0042-LIQF-003</a>)
+- [ ] Liquidity fee factors are recalculated every time a liquidity provider nominates a new fee factor (using the commit liquidity network transaction). (<a name="0042-LIQF-004" href="#0042-LIQF-004">0042-LIQF-004</a>)
+- [ ] Liquidity fee factors are recalculated every time the liquidity demand estimate changes. (<a name="0042-LIQF-005" href="#0042-LIQF-005">0042-LIQF-005</a>)
+- [ ] If a change in the open interest causes the liquidity demand estimate to change, then fee factor is correctly recalculated.  (<a name="0042-LIQF-006" href="#0042-LIQF-006">0042-LIQF-006</a>)
+- [ ] If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated.  (<a name="0042-LIQF-007" href="#0042-LIQF-007">0042-LIQF-007</a>)
 
 ### SPLITTING FEES BETWEEN liquidity providers
-- [ ] The examples provided result in the given outcomes. 
-- [ ] The examples provided in a Python notebook give the same outcomes. See [Liquidity measuring](./0034-PROB-prob_weighted_liquidity_measure.ipynb)
-- [ ] All liquidity providers in the market receive a greater than zero amount of liquidity fee.
-- [ ] The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-the-trade`
-- [x] Liquidity providers with a commitment of 0 will not receive a share ot the fees
+- [ ] The examples provided result in the given outcomes.  (<a name="0042-LIQF-008" href="#0042-LIQF-008">0042-LIQF-008</a>)
+- [ ] The examples provided in a Python notebook give the same outcomes. See [Liquidity measuring](./0034-PROB-prob_weighted_liquidity_measure.ipynb)  (<a name="0042-LIQF-009" href="#0042-LIQF-009">0042-LIQF-009</a>)
+- [ ] All liquidity providers in the market receive a greater than zero amount of liquidity fee. (<a name="0042-LIQF-010" href="#0042-LIQF-010">0042-LIQF-010</a>)
+- [ ] The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-the-trade` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
+- [x] Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)

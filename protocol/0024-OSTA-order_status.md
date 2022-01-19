@@ -1,7 +1,7 @@
 Feature name: order-status
 
 # Acceptance Criteria
-- Status table below is replicated and each is tested by at least one scenario
+- Status table below is replicated and each is tested by at least one scenario (<a name="0024-OSTA-001" href="#0024-OSTA-001">0024-OSTA-001</a>)
 
 # Summary
 Orders have a status field. This specification details a set of situations and the expected status for an order.

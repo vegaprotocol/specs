@@ -164,18 +164,18 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 * Order datatype for LP orders. Any order APIs should contain these orders.
 
 ## Acceptance Criteria:
-- [ ] The volume generated on the book matches examples produced from https://github.com/vegaprotocol/sim/notebooks/fee_margin_examples.ipynb
+- [ ] The volume generated on the book matches examples produced from https://github.com/vegaprotocol/sim/notebooks/fee_margin_examples.ipynb (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>)
 
 ### LP commitment order creation
-- [ ] A liquidity provisioning order must specify orders for both sides of the book
-- [x] All orders created by an LP commitment must be pegged orders
-- [x] Filled orders are replaced immediately to confirm to the LP commitment shapes
+- [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>)
+- [x] All orders created by an LP commitment must be pegged orders (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
+- [x] Filled orders are replaced immediately to confirm to the LP commitment shapes (<a name="0038-OLIQ-004" href="#0038-OLIQ-004">0038-OLIQ-004</a>)
 
 ### LP commitment amendment
-- [x] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake))
+- [x] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-005</a>)
 
 ### LP commitment fees
-See [Setting fees and rewarding LPs](./0042-LIQF-setting_fees_and_rewarding_lps.md)
+See [Setting fees and rewarding LPs](./0042-LIQF-setting_fees_and_rewarding_lps.md) (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
 
 ### LP commitment at market creation
-See [Governance spec](./0028-GOVE-governance.md)
+See [Governance spec](./0028-GOVE-governance.md) (<a name="0038-OLIQ-007" href="#0038-OLIQ-007">0038-OLIQ-007</a>)

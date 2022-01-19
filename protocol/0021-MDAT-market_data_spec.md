@@ -1,17 +1,17 @@
 Feature name: market-data
 
 # Acceptance Criteria
-- [ ] If there are no buy orders on the order book, the best bid price is empty / nothing.
-- [ ] If there are no sell orders on the order book, the best offer price is empty / nothing.
-- [ ] If there are multiple buy orders on the order book with a price equal to the best bid price, the best bid volume equals the sum of the sizes of these orders.
-- [ ] If there are multiple sell orders on the order book with a price equal to the best bid price, the best offer volume equals the sum of the sizes of these orders.
-- [ ] The mid price is empty / nothing if there is either no buy order or no sell orders.
-- [ ] The mid price is the arithmetic average of the best bid price and best offer price.
-- [ ] The mark price calculation uses the methodology specified in the market framework.
-- [ ] The Open interest returns the sum of the size for all open positions where positions size is greater than 0. 
-- [ ] The Open interest returns 0 if there are no positions on the market
-- [ ] Pegged orders are excluded from the best price and volume calculations.
-- [ ] Dynamic orders should be ignored when calculating the static values
+- [ ] If there are no buy orders on the order book, the best bid price is empty / nothing. (<a name="0021-MDAT-001" href="#0021-MDAT-001">0021-MDAT-001</a>)
+- [ ] If there are no sell orders on the order book, the best offer price is empty / nothing. (<a name="0021-MDAT-002" href="#0021-MDAT-002">0021-MDAT-002</a>)
+- [ ] If there are multiple buy orders on the order book with a price equal to the best bid price, the best bid volume equals the sum of the sizes of these orders. (<a name="0021-MDAT-003" href="#0021-MDAT-003">0021-MDAT-003</a>)
+- [ ] If there are multiple sell orders on the order book with a price equal to the best bid price, the best offer volume equals the sum of the sizes of these orders. (<a name="0021-MDAT-004" href="#0021-MDAT-004">0021-MDAT-004</a>)
+- [ ] The mid price is empty / nothing if there is either no buy order or no sell orders. (<a name="0021-MDAT-005" href="#0021-MDAT-005">0021-MDAT-005</a>)
+- [ ] The mid price is the arithmetic average of the best bid price and best offer price. (<a name="0021-MDAT-006" href="#0021-MDAT-006">0021-MDAT-006</a>)
+- [ ] The mark price calculation uses the methodology specified in the market framework. (<a name="0021-MDAT-007" href="#0021-MDAT-007">0021-MDAT-007</a>)
+- [ ] The Open interest returns the sum of the size for all open positions where positions size is greater than 0. (<a name="0021-MDAT-008" href="#0021-MDAT-008">0021-MDAT-008</a>) 
+- [ ] The Open interest returns 0 if there are no positions on the market (<a name="0021-MDAT-009" href="#0021-MDAT-009">0021-MDAT-009</a>)
+- [ ] Pegged orders are excluded from the best price and volume calculations. (<a name="0021-MDAT-010" href="#0021-MDAT-010">0021-MDAT-010</a>)
+- [ ] Dynamic orders should be ignored when calculating the static values (<a name="0021-MDAT-011" href="#0021-MDAT-011">0021-MDAT-011</a>)
 
 # Summary
 This data is a snapshot of the state of the market at a point in time.

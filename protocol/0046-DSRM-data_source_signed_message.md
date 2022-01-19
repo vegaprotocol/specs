@@ -94,25 +94,25 @@ Where possible, this should be done before the transaction is included in a bloc
 ### Criteria
 
 1. An [instrument can be created](./0028-GOVE-governance.md) to rely on a signed message data source
-    1. The instrument must specify a valid signed message data source
-    1. A market proposal specifying an invalid data source will be rejected
-        1. This rejection will happen at *the [creation of the proposal](./0028-GOVE-governance.md)*
-    1. Multiple instruments can rely on the same data source, 
-        1. Multiple instruments can settle based on the same `SubmitData` message.
-        1. Multiple products can [filtering](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.
-        1. Multiple products can [filtering](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.
+    1. The instrument must specify a valid signed message data source (<a name="0046-DSRM-001" href="#0046-DSRM-001">0046-DSRM-001</a>)
+    1. A market proposal specifying an invalid data source will be rejected (<a name="0046-DSRM-002" href="#0046-DSRM-002">0046-DSRM-002</a>)
+        1. This rejection will happen at *the [creation of the proposal](./0028-GOVE-governance.md)*  (<a name="0046-DSRM-003" href="#0046-DSRM-003">0046-DSRM-003</a>)
+    1. Multiple instruments can rely on the same data source:
+        1. Multiple instruments can settle based on the same `SubmitData` message.  (<a name="0046-DSRM-004" href="#0046-DSRM-004">0046-DSRM-004</a>)
+        1. Multiple products can [filtering](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
+        1. Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
 1. `SubmitData` transactions can be submitted by any public key included in a signed message data source definition
-    1. `SubmitData` transactions by active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted.
-    1. `SubmitData` transactions by inactive sata sources will be rejected.
-    1. `SubmitData` transactions that are invalid will be rejected.
+    1. `SubmitData` transactions by active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)
+    1. `SubmitData` transactions by inactive sata sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
+    1. `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)
 1. To be valid, a `SubmitData` transaction must:
-    1. Be from an active signed message data source,
-    1. Invalid `SubmitData` transactions must be rejected.
-1. Must work with Coinbase oracle
+    1. Be from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)
+    1. Invalid `SubmitData` transactions must be rejected.  (<a name="0046-DSRM-011" href="#0046-DSRM-011">0046-DSRM-011</a>)
+1. Must work with Coinbase oracle  (<a name="0046-DSRM-012" href="#0046-DSRM-012">0046-DSRM-012</a>)
 1. Reject any data source tx that is not explicitly required, so this would include a tx:
-    - For a pubkey never used in a data source
-    - For a data source where a filter rejects the message based on its contents
-    - For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal
+    - For a pubkey never used in a data source  (<a name="0046-DSRM-013" href="#0046-DSRM-013">0046-DSRM-013</a>)
+    - For a data source where a filter rejects the message based on its contents  (<a name="0046-DSRM-014" href="#0046-DSRM-014">0046-DSRM-014</a>)
+    - For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal (<a name="0046-DSRM-015" href="#0046-DSRM-015">0046-DSRM-015</a>)
 
 
 ## Notes

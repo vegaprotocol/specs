@@ -31,13 +31,13 @@ The public master key has to be added to validators' identities in the genesis c
 ## Acceptance Criteria:
 
 ### Sweetwater++:
-- There is a function (not necessarily inside core) that takes the master key and an index and computes the corresponding hot key
-- The key-rotate transaction is supported and recognized in the core
-- There is a function that validates if a hot-key is valid 
-- The keys are replaced at the correct time (block number) inside core if a valid key change has occured
+- There is a function (not necessarily inside core) that takes the master key and an index and computes the corresponding hot key  (<a name="0063-VALK-001" href="#0063-VALK-001">0063-VALK-001</a>)
+- The key-rotate transaction is supported and recognized in the core  (<a name="0063-VALK-002" href="#0063-VALK-002">0063-VALK-002</a>)
+- There is a function that validates if a hot-key is valid  (<a name="0063-VALK-003" href="#0063-VALK-003">0063-VALK-003</a>) 
+- The keys are replaced at the correct time (block number) inside core if a valid key change has occured  (<a name="0063-VALK-004" href="#0063-VALK-004">0063-VALK-004</a>)
 
 ### Oregon Trail:
-- Any malformed/wrongly signed key-exchange attempt causes a log entry and if possible a security event.
+- Any malformed/wrongly signed key-exchange attempt causes a log entry and if possible a security event.  (<a name="0063-VALK-005" href="#0063-VALK-005">0063-VALK-005</a>)
 
 
 

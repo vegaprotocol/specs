@@ -22,6 +22,7 @@ The performance score should be available on all the same API enpoints as the `v
 
 ### Acceptance criteria 
 
+# Scenario 1: (<a name="0064-valp-001" href="#0064-valp-001">0064-valp-001</a>)
 1. Configure and launch a network with 5 validators
 1. Give each validator self-stake of 10 000 VEGA. Set epoch length to 10 minutes.
 1. Deposit a 1000 VEGA into the validator reward pool.

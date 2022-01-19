@@ -2,17 +2,17 @@
 
 ## Acceptance criteria
 
-1. [ ] If risk factors have been updated, the margin levels for all market participants are recalculated.
-1. [ ] There is no threshold for significant order book changes, and a new order adds or removes volume to the order book, margins are recalculated for all participants.
-1. [ ] There is a threshold for significant order book changes, and a new order adds or removes volume to the order book that makes a change that doesn't exceed the threshold, margins are not recalculated for any participants. 
-1. [ ] If the mark price changes, margins are recalculated for all participants
-1. [ ] If a trader's open position changes their margins are recalculated.
-1. [ ] If a trader's open orders change their margins are recalculated
-1. [ ] The mark price changes causing the trader’s margin to move into the search zone. A collateral search is initiated and the margin is topped back up above the search zone.
-1. [ ] The mark price changes causing the trader’s margin to move into the search zone. A collateral search is initiated and the margin is topped back up to a level which results in the trader still being in the search zone. No further actions are taken.
-1. [ ] The mark price changes causing the trader’s margin to move into the close-out zone. A collateral search is initiated and the margin is topped back up to the search zone. No further actions are taken.
-1. [ ] The mark price changes causing the trader’s margin to move into the close-out zone. A collateral search is initiated and the margin is topped back up to a level which results in the trader still being in the close-out zone.
-1. [ ] The mark price changes causing the trader’s margin to move in to the release level. Margin should be released back to the trader. 
+1. [ ] If risk factors have been updated, the margin levels for all market participants are recalculated. (<a name="0010-MARG-001" href="#0010-MARG-001">0010-MARG-001</a>)
+1. [ ] There is no threshold for significant order book changes, and a new order adds or removes volume to the order book, margins are recalculated for all participants. (<a name="0010-MARG-002" href="#0010-MARG-002">0010-MARG-002</a>)
+1. [ ] There is a threshold for significant order book changes, and a new order adds or removes volume to the order book that makes a change that doesn't exceed the threshold, margins are not recalculated for any participants. (<a name="0010-MARG-003" href="#0010-MARG-003">0010-MARG-003</a>) 
+1. [ ] If the mark price changes, margins are recalculated for all participants (<a name="0010-MARG-004" href="#0010-MARG-004">0010-MARG-004</a>)
+1. [ ] If a trader's open position changes their margins are recalculated.  (<a name="0010-MARG-005" href="#0010-MARG-005">0010-MARG-005</a>)
+1. [ ] If a trader's open orders change their margins are recalculated  (<a name="0010-MARG-006" href="#0010-MARG-006">0010-MARG-006</a>)
+1. [ ] The mark price changes causing the trader’s margin to move into the search zone. A collateral search is initiated and the margin is topped back up above the search zone. (<a name="0010-MARG-007" href="#0010-MARG-007">0010-MARG-007</a>)
+1. [ ] The mark price changes causing the trader’s margin to move into the search zone. A collateral search is initiated and the margin is topped back up to a level which results in the trader still being in the search zone. No further actions are taken. (<a name="0010-MARG-008" href="#0010-MARG-008">0010-MARG-008</a>)
+1. [ ] The mark price changes causing the trader’s margin to move into the close-out zone. A collateral search is initiated and the margin is topped back up to the search zone. No further actions are taken. (<a name="0010-MARG-009" href="#0010-MARG-009">0010-MARG-009</a>)
+1. [ ] The mark price changes causing the trader’s margin to move into the close-out zone. A collateral search is initiated and the margin is topped back up to a level which results in the trader still being in the close-out zone.  (<a name="0010-MARG-010" href="#0010-MARG-010">0010-MARG-010</a>)
+1. [ ] The mark price changes causing the trader’s margin to move in to the release level. Margin should be released back to the trader. (<a name="0010-MARG-011" href="#0010-MARG-011">0010-MARG-011</a>) 
 
 ## Summary
 This ticket encapsulates the orchestration of business logic which interfaces with the specified [risk model](./0018-RSKM-quant_risk_models.ipynb) (specified at the instrument level) to ensure that margin levels are calculated whenever certain conditions are met.

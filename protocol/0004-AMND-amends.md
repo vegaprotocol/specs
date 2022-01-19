@@ -3,22 +3,22 @@ Start date: `2020-03-12` <br>
 Specification PR: https://github.com/vegaprotocol/product/pulls <br>
 
 # Acceptance Criteria
-- Only LIMIT orders can be amended, any attempt to amend a non LIMIT order is rejected
-- Price change amends remove the order from the book and insert the order at the back of the queue at the new price level
-- Reducing the quantity leaves the order in its current spot but reduces the remaining amount accordingly
-- Quantity after amendment must be a multiple of the smallest increment possible given the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then quantity must be a whole multiple of 0.01.
-- Increasing the quantity causes the order to be removed from the book and inserted at the back of the price level queue with the updated quantity
-- Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag is rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.
-- Any attempt to amend to or from the `TIF` values `GFA` and `GFN` will result in a rejected amend.
-- All updates to an existing order update the `UpdatedAt` time stamp field in the order
-- The `orderID` remains the same after an amend
-- Amends can occur in continuous trading or in an auction
-- All historic alteration to an order can be viewed from the order storage system
-- All amendable fields can be amended in the same amend message
-- Fields left with default values (0) are not handled as part of the amend action
-- An amend with only the same values as the order still cause the `UpdateAt` field to update but nothing else
-- Amending a pegged orders offset or reference will force a reprice
-- Attempting to alter pegged details on a non pegged or will cause the amend to be rejected
+- Only LIMIT orders can be amended, any attempt to amend a non LIMIT order is rejected (<a name="0004-AMND-001" href="#0004-AMND-001">0004-AMND-001</a>)
+- Price change amends remove the order from the book and insert the order at the back of the queue at the new price level (<a name="0004-AMND-002" href="#0004-AMND-002">0004-AMND-002</a>)
+- Reducing the quantity leaves the order in its current spot but reduces the remaining amount accordingly (<a name="0004-AMND-003" href="#0004-AMND-003">0004-AMND-003</a>)
+- Quantity after amendment must be a multiple of the smallest increment possible given the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then quantity must be a whole multiple of 0.01. (<a name="0004-AMND-004" href="#0004-AMND-004">0004-AMND-004</a>)
+- Increasing the quantity causes the order to be removed from the book and inserted at the back of the price level queue with the updated quantity (<a name="0004-AMND-005" href="#0004-AMND-005">0004-AMND-005</a>)
+- Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag is rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.  (<a name="0004-AMND-006" href="#0004-AMND-006">0004-AMND-006</a>)
+- Any attempt to amend to or from the `TIF` values `GFA` and `GFN` will result in a rejected amend. (<a name="0004-AMND-007" href="#0004-AMND-007">0004-AMND-007</a>)
+- All updates to an existing order update the `UpdatedAt` time stamp field in the order (<a name="0004-AMND-008" href="#0004-AMND-008">0004-AMND-008</a>)
+- The `orderID` remains the same after an amend (<a name="0004-AMND-009" href="#0004-AMND-009">0004-AMND-009</a>)
+- Amends can occur in continuous trading or in an auction (<a name="0004-AMND-010" href="#0004-AMND-010">0004-AMND-010</a>)
+- All historic alteration to an order can be viewed from the order storage system (<a name="0004-AMND-011" href="#0004-AMND-011">0004-AMND-011</a>)
+- All amendable fields can be amended in the same amend message (<a name="0004-AMND-012" href="#0004-AMND-012">0004-AMND-012</a>)
+- Fields left with default values (0) are not handled as part of the amend action (<a name="0004-AMND-013" href="#0004-AMND-013">0004-AMND-013</a>)
+- An amend with only the same values as the order still cause the `UpdateAt` field to update but nothing else (<a name="0004-AMND-014" href="#0004-AMND-014">0004-AMND-014</a>)
+- Amending a pegged orders offset or reference will force a reprice (<a name="0004-AMND-015" href="#0004-AMND-015">0004-AMND-015</a>)
+- Attempting to alter pegged details on a non pegged or will cause the amend to be rejected (<a name="0004-AMND-016" href="#0004-AMND-016">0004-AMND-016</a>)
 
 
 # Summary
