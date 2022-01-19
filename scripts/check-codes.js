@@ -66,7 +66,6 @@ fs.readdirSync(path).forEach(file => {
       countEmptyFiles++;
       console.group(file);
       console.error(`no acceptance criteria`);
-      console.groupEnd(file);
     } else {
       // Acceptance code links are self referential, and have a name property, which makes
       // 3 instances of each code. So a basic check for this is to split the matches in to 
@@ -83,18 +82,19 @@ fs.readdirSync(path).forEach(file => {
       countAcceptanceCriteria += totalAcceptanceCriteria.length;
 
       if (unbalancedChunks.length > 0) {
+        // Something is wrong, dump out the array as a starting point for working out what
+        countErrorFiles++;
         console.group(file);
         console.log(`${totalAcceptanceCriteria.length} acceptance criteria`);
         console.error(`Found something odd:`);
-        console.dir(chunkedMatches)
-        countErrorFiles++;
+        console.dir(chunkedMatches);
       } else {
+        // The files are *valid*, at least. But do they have enough ACs?
         if (totalAcceptanceCriteria.length >= minimumAcceptableCount) {
           countAcceptableFiles++;
           if (isVerbose) {
             console.log(`${totalAcceptanceCriteria.length} acceptance criteria`);
           }
-
         } else {
           countErrorFiles++;
           console.error(`${totalAcceptanceCriteria.length} acceptance criteria`);
@@ -112,3 +112,4 @@ console.log(`Acceptable         ${countAcceptableFiles} (files with more than ${
 console.log(`Need work          ${countEmptyFiles}`);
 console.log(`Files with errors  ${countErrorFiles}`);
 console.log(`Total ACs          ${countAcceptanceCriteria}`);
+console.log('\r\n\r\n');
