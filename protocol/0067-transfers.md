@@ -1,7 +1,7 @@
 # Transfers
 
 This spec introduces a mechanism to transfer funds from one account to another, initiated explicitly by a user of the Vega network.
-These transfers are not to be confused with the internal concept of transfers which results from event happening inside the protocol.
+These transfers are not to be confused with the internal concept of transfers which results from event happening inside the protocol, which are covered in spec [0005-COLL](./0005-COLL-collateral.md).
 
 Allowing users to initiate transfers allows for the following capabilities:
 - A user could transfer funds from a public key A to a public key B.
