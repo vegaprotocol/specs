@@ -112,7 +112,7 @@ Ersatzvalidators are required to monitor the primary chain and keep an upded sta
 Vega at all times. Any performance measurements that relate to Validators
 being required to keep an accurate stake also apply to Ersatzvalidators. 
 
-#Payment
+#Rewards
 In terms of rewards, Ersatzvalidators are treated exactly like other validators (see https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0064-VALP-validator_performance_based_rewards.md and https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0058-REWS-simple_pos_rewards.md). Where the necessary measurements are not available,
 the average of the measurements of the real validators is used. 
 The only missing measurement should be the failure to be a leader, but others may come up during implementation.
