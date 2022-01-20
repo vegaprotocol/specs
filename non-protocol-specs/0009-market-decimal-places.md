@@ -75,3 +75,5 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
 - Market data should show the min/max price bounds in market precision. Any orders outside the price bounds specified in these fields should be rejected for triggering auctions
 - LP orders and pegged orders should be created at the correct price point (offsets of 1 should be handled as offset of 1 * priceExponent, not +/- 1 <smallest asset unit>)
 - Effectively, from the end users' perspective, the market should still behave exactly the same, the market events should still look the same, but transfers will be expressed as amounts in asset precision, regardless of the market precision.
+- When proposing a market with decimal places > the decimal places of the settlement asset, the market proposal is not valid, and gets rejected.
+- Trade and order events show prices in market precision. Transfers (fees and margin) are calculated to the smalles precision supported by the settlement asset, thus transfer amounts are expressed in asset precision.

@@ -40,7 +40,7 @@ Data:
   - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
   - **Market activation time**: Read only, set by system when market opens. The date/time at which the opening auction uncrossed and the market first entered it's normal trading mode (empty if this had not happened)
   - **Tick size**: (size of an increment in price in terms of the quote unit)
-  - **Quoted Decimal places**: number of decimals places for quote unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
+  - **Quoted Decimal places**: number of decimals places for quote unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents. This value is mandatory (though 0 values are accepted). A market cannot be valid if the quoted decimal places > decimal places of the settlement asset. If the market settles in ETH, then the max valid quoted decimal places is 18.Events related to this market (trades, orders, market data) will be expressed with the market decimal places. Transfers are expressed in asset decimal places. A market settling in ETH, but with 10 decimal places will represent 1 ETH as `10,000,000,000`, but transfers resulting from things like MTM settlement will represent 1 ETH as `1,000,000,000,000,000,000`.
   - **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a BTSUSD market. (Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. this also means that, for instance, it would not be possible to create a BTCUSD market that allows order/position sizes equivalent to 1 sat.) 
 Note that Vega has hard limit maximum of MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS as a "compile-time" parameter. Typical value be MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS=6. 
 
@@ -198,6 +198,7 @@ enum RiskModel {
 ```rust
 Market {
     id: "BTC/DEC18",
+    decimal_places: 18, // must be <= settlement asset decimal places
     status: "Active",
     trading_mode: ContinuousTrading { ... },
     tradable_instrument: TradableInstrument {

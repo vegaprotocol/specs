@@ -35,6 +35,9 @@ Notes on scope of current version of this spec:
 1. **Pegged (+ reference, price offset):** the order is priced relative to a reference price in the market (i.e. best bid, mid, or best offer price) and is automatically repriced (losing time priority) when the reference price changes. Execution is as for a limit order at that price, including on entry and repricing. The order is removed from the book and 'parked' (in entry time priority) if the reference price is undefined, including during an auction. See the [0037 - Pegged Orders](./0037-pegged-orders.md) spec for more detail.
 1. **Market:** the order is not priced and will take volume at any price (i.e. equivalent to a zero priced sell order or an infinitely priced buy order). Only valid on non-persistent validity types.
 
+
+Note that, as specified in [0001 - Market framework](./0001-market-framework.md), order prices will be expressed using the decimal places specified by the market, not the asset itself.
+
 ### Time in Force / validity:
 
 *Time in force must be explicitly provided, there is no default.*
