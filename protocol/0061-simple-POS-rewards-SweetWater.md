@@ -38,7 +38,7 @@ At the end of an [epoch](./0050-epochs.md), payments are calculated. First we de
  In Vega, we have two sets of Validtors, the primary validators (which run tendermint) and the [ersatz validators](0000-validators-chosen-by-stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
  Both these validators get rewards following the method above:
  1. The reward pool is split into two parts, propotional to the total own+delegated stake the primary- and ersatzvalidators have. 
- Thus, if `t` is the total amount of own +delegated stake to both sets, `s_p` the total stake delegated to the primary / tendermint validators and `s_e` the total stake delegated to the ersatz validators, then the primary / tendermint pool has a fraction of `s_p/t` of the total reward, while the ersatz pool has `s_e/t` (both rounded down appropriately).
+ Thus, if `s_t` is the total amount of own+delegated stake to both sets, `s_p` the total stake delegated to the primary / tendermint validators and `s_e` the total stake delegated to the ersatz validators, then the primary / tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `s_e/s_t` (both rounded down appropriately).
 
  The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively). 
 
