@@ -104,7 +104,7 @@ Ersatz validators are required non-validator Vega node with all the related infr
 ### Rewards for Ersatz validators
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators see details in [validator rewards spec](0064-validator-performance-based-rewards) and [perfomance measurement](0064-validator-performance-based-rewards).
 
-# Multisig for Ersatz validators
+### Multisig for Ersatz validators
 At this point, Ersatz validators are not part of the Multisig.
 
 
