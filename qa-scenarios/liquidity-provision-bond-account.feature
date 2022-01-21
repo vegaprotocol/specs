@@ -148,7 +148,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
       | 1000       | TRADING_MODE_CONTINUOUS | 1       | 1000      | 1000      | 213414       | 50000          | 60            |
 
-  And the insurance pool balance should be "98130" for the market "ETH/MAR22"
+  And the insurance pool balance should be "81544" for the market "ETH/MAR22"
     #check the volume on the order book
     Then the order book should have the following volumes for market "ETH/MAR22":
       | side | price    | volume |
