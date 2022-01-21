@@ -27,6 +27,10 @@ If `empty_slots := network.numberOfTendermintValidators - n > 0` (we have empty 
 If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a Tendermint validator. If `w_l = w_m` then we resolve this by giving priority to the one who submitted the transaction to become validator earlier.  Note that we only do this check once per epoch so at most one validator can be changed per epoch in case `empty_slots == 0`.
 A completely dead node that's proposing to become a validator will have `performance_score = 0` and will thus get automaticaly excluded, regardless of their stake.
 
+The same way, if there are free slots for ersatz validators and nodes that have submitted the transaction to join and satisfy all joining conditions, they are added as ersatzvalidators in the next round.
+If a node that submitted the transaction to join and satisfies all other conditions and there and has a higher score than the lowest scoring ersatz validator (scaled up by the incubent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is kicked out. As thoe nodes have not have hte opportunity to get a performance record, their performance valued as the average of the performance scores of all ersatzvalidators.
+[Comment (kku): I'm not happy with this, as it meansthat someone with a near zero performance can make the request to join, get in, perform poorly, be kicked out, wait an epoch, get in again etc. This still seems a better way than doing something really complicated here.]
+[Comment (kku): Didn't we want the optional mechanism that one can become ersatzvalidator based on a minimum amount of stake and have an open number ?]
 
 ## Becoming validator transaction 
 All keys mentioned here are understood to match the node configuration.
