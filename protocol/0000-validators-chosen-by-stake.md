@@ -80,6 +80,35 @@ They will not get any rewards and at the start of the next epoch they will be re
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions. 
 
 
+## Ersatz validators
+New Network Parameter: `MultipleOfTendermintValidatorsForEtsatzSet`
+In addition to the normal validators, there is an additional set of Ersatz validators as defined by
+the corresponding network parameter. 
+These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. 
+The network will reward 
+```
+n' := ceil(MultipleOfTendermintValidatorsForEtsatzSet x NumberOfTendermintValidators)
+```
+ersatz validators. 
+The value range for this decimal is `0.0` to `infinity`. 
+Reasonable values may be e.g. `0.5`, `1.0` or `2.0`.
+
+As the other validators, Ersatz validators are defined through own + delegated stake, being the validators
+with the scores below the tendermint ones; is `NumberOfTendermintValidators` is `n` and NumberOfErsatzValdators is `n'`, 
+then these are the validators with scores `n+1` to `n+n'`.
+
+
+### Performance of Ersatz validators
+Ersatz validators are required non-validator Vega node with all the related infrastructure (etheremum forwarder, data node etc.) at all times, see [the section on performance for non-validator nodes in](0064-validator-performance-based-rewards).
+
+### Rewards for Ersatz validators
+In terms of rewards, Ersatz validators are treated in line with Tendermint validators see details in [validator rewards spec](0064-validator-performance-based-rewards) and [perfomance measurement](0064-validator-performance-based-rewards).
+
+# Multisig for Ersatz validators
+At this point, Ersatz validators are not part of the Multisig.
+
+
+
 # Acceptance criteria
 
 ## Joining / leaving VEGA chain
@@ -93,29 +122,3 @@ Note that this could become obsolete if a future version of the protocol impleme
 2) For validators up to `number_multig_signers` the `validator_score` is capped by the value on `ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `number_multig_signers` by `validator_score` on VEGA). 
 3) It is possible to submit a transaction to update the weights. 
 
-## Ersatzvalidators
-New Network Parameter: NumberOfErsatzValidators
-New Network Parameter: MinmumStakeForErsatzValidator
-In addition to the normal validators, theres an additional set of Ersatzvalidators as defined by
-the corresponding network parameter. These are vlidators that do not contribute to the 
-chain, but are on standby to jump in if normal validator drops off. 
-
-As the other validators, Ersatzvalidators are defined through delegated stake, being the validators
-with the scores below the normal ones; is NumberOfValidators ia n and NumberOfErsatzValdators is n', 
-then these are the validators with scores n+1 to n+n'.
-
-If n'=0, then all Validators that have more than MinimumStakeForErsatzValidator are treated
-as Ersatzvalidators. 
-
-#Performance
-Ersatzvalidators are required to monitor the primary chain and keep an upded state of
-Vega at all times. Any performance measurements that relate to Validators
-being required to keep an accurate stake also apply to Ersatzvalidators. 
-
-#Rewards
-In terms of rewards, Ersatzvalidators are treated exactly like other validators (see https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0064-VALP-validator_performance_based_rewards.md and https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0058-REWS-simple_pos_rewards.md). Where the necessary measurements are not available,
-the average of the measurements of the real validators is used. 
-The only missing measurement should be the failure to be a leader, but others may come up during implementation.
-
-#Multisig
-At this point, Ersatzvalidators are not part of the Multisig.
