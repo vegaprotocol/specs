@@ -190,11 +190,11 @@ All parameters that are changed through a governance vote are valid starting the
    - Given an epoch length of `1d`, with a block time of `1h`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
    - Given an epoch length of `1d`, with a block time of `1h`, at end of block 23 the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
    - Given an epoch length of `1d`, with a block time of `1h`, at end of block 24 the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
-2. Edge case: Multiple epochs can pass within the same block
-   - Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1` (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>)
-   - Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61` (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)
+2. Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>) 
+   - Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1`
+   - Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61`
 3. Delegation happens at epoch changeover
-   - During epoch 1, `party 1` stakes to `validator 1`
-     - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
-     - `validator 1`s staked balance is not increased in epoch 1 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
-     - `validator 1`s staked balance is increased in the first block of epoch 2 (<a name="0050-EPOC-008" href="#0050-EPOC-008">0050-EPOC-008</a>)
+   - During epoch 1, `party 1` stakes any valid amount to `validator 1`
+     - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)
+     - `validator 1`s staked balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
+     - `validator 1`s staked balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
