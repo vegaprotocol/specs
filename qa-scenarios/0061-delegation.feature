@@ -137,7 +137,7 @@ Feature: Staking & Delegation
     | party1 |  node2   |    0   |       
     | party1 |  node3   |    0   |        
 
-  Scenario: A party cannot delegate more than it has in staking account (0059-STKG-additional_tests)
+  Scenario: A party cannot delegate more than it has in staking account (0059-STKG-additional-tests)
     Description: A party attempts to delegate more than it has in its staking account to a validator
 
     When the parties submit the following delegations:
@@ -159,7 +159,7 @@ Feature: Staking & Delegation
     | party1 |  node2   |    0   |       
     | party1 |  node3   |    0   |        
 
-  Scenario: A party cannot cumulatively delegate more than it has in staking account (0059-STKG-additional_tests)
+  Scenario: A party cannot cumulatively delegate more than it has in staking account (0059-STKG-additional-tests)
     
     When the parties submit the following delegations:
     | party  | node id  |   amount   | reference | error                               |
@@ -227,7 +227,7 @@ Feature: Staking & Delegation
     | party1 |  node2   | 20     |       
     | party1 |  node3   | 10     | 
 
-  Scenario: A party cannot delegate to an unknown node (0059-STKG-additional_tests)
+  Scenario: A party cannot delegate to an unknown node (0059-STKG-additional-tests)
     Description: A party should fail in trying to delegate to a non existing node
 
     When the parties submit the following delegations:
@@ -235,7 +235,7 @@ Feature: Staking & Delegation
     | party1 |  unknown1 |    100   |      a    | invalid node ID |
     | party1 |  unknonw2 |    200   |      b    | invalid node ID |    
 
-  Scenario: A party cannot undelegate from an unknown node (0059-STKG-additional_tests)
+  Scenario: A party cannot undelegate from an unknown node (0059-STKG-additional-tests)
     Description: A party should fail in trying to undelegate from a non existing node
 
     When the parties submit the following undelegations:
@@ -328,7 +328,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   | 100    | 
 
-  Scenario: A party cannot undelegate more than the delegated balance (0059-STKG-additional_tests)
+  Scenario: A party cannot undelegate more than the delegated balance (0059-STKG-additional-tests)
     Description: A party trying to undeleagte from a node more than the amount that was delegated to it should fail 
 
     And the parties submit the following delegations:
@@ -349,7 +349,7 @@ Feature: Staking & Delegation
     | party1 |  node2    |    200   | end of epoch |           |                                          |    
     | party1 |  node3    |    300   | end of epoch |           |                                          |  
 
-  Scenario: A node can self delegate to itself and undelegate at the end of an epoch (0059-STKG-additional_tests)
+  Scenario: A node can self delegate to itself and undelegate at the end of an epoch (0059-STKG-additional-tests)
     Description: A node with a balance in the staking account can delegate to itself
 
     When the parties submit the following delegations:
@@ -635,7 +635,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |    100 |    
 
-  Scenario: A validator gets past maximum stake by changing network parameter (0059-STKG-additional_tests)
+  Scenario: A validator gets past maximum stake by changing network parameter (0059-STKG-additional-tests)
     Description: A party attempts to delegate token stake which exceed maximum stake for a validator
 
     When the parties submit the following delegations:
