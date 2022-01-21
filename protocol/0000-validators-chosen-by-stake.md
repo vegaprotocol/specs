@@ -17,7 +17,7 @@ Note that to be eligible as a potential validator certain criteria need to be me
 
 At the end of each epoch Vega will calculate the unnormalised `validator_score`, see [rewards spec](0061-simple-POS-rewards-SweetWater.md). 
 For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validatorIncumbentBonus)`. 
-Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance togther whether the multisig contract carries the correct information [multisig](0030-multisig_control_spec.md); more on this later.
+Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance together whether the multisig contract carries the correct information [multisig](0030-multisig_control_spec.md); more on this later.
 
 Vega will sort all current Tendermint validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score. 
 If `v_l = v_m` then we place higher the one who's been validator for longer.
