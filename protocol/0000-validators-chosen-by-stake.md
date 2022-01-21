@@ -108,6 +108,14 @@ In terms of rewards, Ersatz validators are treated in line with Tendermint valid
 At this point, Ersatz validators are not part of the Multisig.
 
 
+## Restarts from LNL checkpoint:
+
+See [limited network life spec](../non-protocol-specs/0005-limited-network-life.md).
+1. At each checkpoint we include node IDs of validators and their scores (meaning all the ones participating in consensus and those who submitted a transaction to become a validator and thus are eligible to be a validator or ersatz validator).
+1. When initiating the restart all the nodes participating have the same Tendermint weight in genesis (or whatever they set / agree). This is used until the LNL file has finished processing. 
+1. When loading LNL file we have to run the same algorithm that selects the "correct" validators; after this is done Tendermint weights are updated.
+1. If the validators arising from LNL weight updates are missing from the chain because they haven't started nodes then the chain will stop. The restart needs better coordination so the relevant nodes are present. 
+
 
 # Acceptance criteria
 
