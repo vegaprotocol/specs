@@ -198,3 +198,9 @@ All parameters that are changed through a governance vote are valid starting the
      - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)
      - `validator 1`s staked balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
      - `validator 1`s staked balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
+4. Delegation can be 'undone' by undelegating within the same epoch
+   - During epoch 1, `party 1` stakes any valid amount to `validator 1`
+   - Subsequently, but during the same epoch, `party 1` unstakes the same amount from `validator 1`
+     - `validator 1`s staked balance is not increased in epoch 2 (<a name="0050-EPOC-008" href="#0050-EPOC-008">0050-EPOC-008</a>)
+     - `party 1`s staked-then-unstaked balance is returned in epoch 2 (<a name="0050-EPOC-009" href="#0050-EPOC-009">0050-EPOC-009</a>)
+4
