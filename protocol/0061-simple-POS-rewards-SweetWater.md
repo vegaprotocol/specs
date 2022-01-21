@@ -32,6 +32,14 @@ At the end of an [epoch](./0050-epochs.md), payments are calculated. First we de
 1. multiply the amount in the reward pool by `reward.staking.delegation.payoutFraction`; this is the amount going into next step, call it `stakingRewardAmtForEpoch`.
 1. If the reward pool in question is the on-chain treasury for the staking and governance asset then `stakingRewardAmtForEpoch` is updated to `min(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
 
+## Primary Validators and Ersatzvalidators
+ In Vega, we have two sets of Validtors, the primary validators (which run tendermint) and the ersatz validators (which are running a validator node on standby and can jump inj if needed). Both these validators get reards following the method above:
+ 1. The reward pool is split into two parts, propotional to the total delegated stake the primary- and ersatzvalidators have. Thus, if d is the total amount of stake delegated to both sets, d_p the total stake delegated to the primariy cvalidators and d_t the total stake delegated to the ersatz validators, then the primary pool has a fraction of d_p/d of the total reward, while the ersatz pool has d_t/d (both runded down appropriately).
+
+ The following formulars then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation' or s_total refer to the corresponding reward pool and the total delegatoin to the corresponding set of validators (i.e., d_p or d_t, respectively). 
+
+Note that punishments that hit all validators (i.e., for not updating the multisig) hit both sets of validators.
+
 ## For each validator we then do:
 1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is  both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`. 
 Here `allDelegatedTokens` is the count of the tokes delegated to this validator. 
@@ -74,4 +82,7 @@ function validatorScore(valStake) {
   return linearScore
 ```
 
-
+For ersatz validators, the formular changes slightly:
+ linearScore = (valStake)/s_total
+ linearScore = Math.min(1.0, Math.max(0.0,linearScore))
+ i.e., there is no anti-whaling function applied here (the penaltys are removed)
