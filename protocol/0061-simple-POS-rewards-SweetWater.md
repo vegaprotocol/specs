@@ -96,7 +96,7 @@ i.e., there is no anti-whaling function applied here (the penaltys are removed)
 # Acceptance criteria
 
 ## Spare key on multisig
-1. `t` tendermint validators and `e` ersatz validators running.
+1. Four or more tendermint validators with equal own+delegated stake and some ersatz validators are running.
 1. Reward pool is funded.
 1. There is a one-to-one correspondence between tendermint validators' ethereum keys and keys on multisig.
 1. One of the tendermint validators goes offline forever but their key still stays on multisig (no-one updated).
