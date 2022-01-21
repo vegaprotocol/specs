@@ -27,9 +27,9 @@ At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. First 
 1. multiply the amount in the reward pool by `reward.staking.delegation.payoutFraction`; this is the amount going into next step, call it `stakingRewardAmtForEpoch`.
 1. If the reward pool in question is the on-chain treasury for the staking and governance asset then `stakingRewardAmtForEpoch` is updated to `min(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
 
-## Primary Validators and Ersatzvalidators
-In Vega, we have two sets of Validtors, the primary validators (which run tendermint) and the ersatz validators (which are running a validator node on standby and can jump inj if needed). Both these validators get reards following the method above:
-1. The reward pool is split into two parts, propotional to the total delegated stake the primary- and ersatzvalidators have. Thus, if d is the total amount of stake delegated to both sets, d_p the total stake delegated to the primariy cvalidators and d_t the total stake delegated to the ersatz validators, then the primary pool has a fraction of d_p/d of the total reward, while the ersatz pool has d_t/d (both runded down appropriately).
+## Primary validators and ersatz validators
+In Vega, we have two sets of validtors, the primary validators (which run tendermint) and the ersatz validators (which are running a validator node on standby and can jump in if needed). Both these validators get rewards following the method above:
+1. The reward pool is split into two parts, propotional to the total delegated stake the primary- and ersatzvalidators have. Thus, if d is the total amount of stake delegated to both sets, d_p the total stake delegated to the primary calidators and d_t the total stake delegated to the ersatz validators, then the primary pool has a fraction of d_p/d of the total reward, while the ersatz pool has d_t/d (both runded down appropriately).
 
 The following formulars then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation' or s_total refer to the corresponding reward pool and the total delegatoin to the corresponding set of validators (i.e., d_p or d_t, respectively). 
 
