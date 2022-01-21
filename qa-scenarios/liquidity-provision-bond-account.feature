@@ -5,7 +5,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
       | name                                          | value |
       | market.stake.target.timeWindow                | 24h   |
       | market.stake.target.scalingFactor             | 1     |
-      | market.liquidity.bondPenaltyParameter         | 0     |
+      | market.liquidity.bondPenaltyParameter         | 2     |
       | market.liquidity.targetstake.triggering.ratio | 0.1   |
     And the average block duration is "1"
     # And the simple risk model named "simple-risk-model-1":
@@ -13,7 +13,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
     #   | 0.1  | 0.1   | 10          | 10           | 0.2                    |
     And the log normal risk model named "log-normal-risk-model-1":
       | risk aversion | tau | mu | r   | sigma |
-      | 0.000001      | 0.1 | 0  | 0.  | 1.0    |
+      | 0.000001      | 0.1 | 0  | 0  | 1.0    |
     And the fees configuration named "fees-config-1":
       | maker fee | infrastructure fee |
       | 0.004     | 0.001              |
@@ -29,8 +29,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
       | party1 | USD   | 100000000  |
       | party2 | USD   | 100000000  |
       | party3 | USD   | 100000000  |
-      | party4 | USD   | 1000000000 |
-      | party5 | USD   | 1000000000 |
+  
 
   Scenario: LP gets distressed during continuous trading
 
@@ -129,14 +128,27 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
       | buy  | 990      | 103    |
       | buy  | 900      | 1      |
 
+    And the parties should have the following account balances:
+      | party  | asset | market id | margin | general  | bond |
+      | party0 | USD   | ETH/MAR22 | 426829 | 23251    | 50000|
+      | party1 | USD   | ETH/MAR22 | 12190  | 99987810 |  0   |
+      | party2 | USD   | ETH/MAR22 | 264754 | 99734946 |  0   |
+      | party3 | USD   | ETH/MAR22 | 28826  | 99971294 |  0   |
+      
+   And the insurance pool balance should be "0" for the market "ETH/MAR22"
+
    When the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference      |
-      | party0 | ETH/MAR22 | sell | 40     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party3-buy-1   |
+      | party0 | ETH/MAR22 | sell | 15     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party0-sell-3   |
+
+  Then debug transfers  
+  Then debug orders
 
   And the market data for the market "ETH/MAR22" should be:
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
       | 1000       | TRADING_MODE_CONTINUOUS | 1       | 1000      | 1000      | 213414       | 50000          | 60            |
 
+  And the insurance pool balance should be "98130" for the market "ETH/MAR22"
     #check the volume on the order book
     Then the order book should have the following volumes for market "ETH/MAR22":
       | side | price    | volume |
@@ -150,11 +162,11 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
   #check the requried balances 
    And the parties should have the following account balances:
       | party  | asset | market id | margin | general  | bond |
-      | party0 | USD   | ETH/MAR22 | 500080 | 0        | 0    |
+      | party0 | USD   | ETH/MAR22 | 418536 | 0        | 0    |
       | party1 | USD   | ETH/MAR22 | 12190  | 99987810 |  0   |
       | party2 | USD   | ETH/MAR22 | 264754 | 99734946 |  0   |
+      | party3 | USD   | ETH/MAR22 | 28826  | 99971294 |  0   |
 
-    #check the margin levels----why its changed for Pary0?????????
    Then the parties should have the following margin levels: 
       | party  | market id | maintenance | search | initial | release  |
       | party0 | ETH/MAR22 | 355691      | 391260 | 426829  | 497967   |
