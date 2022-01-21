@@ -7,8 +7,8 @@ until the next epoch (with some rare exceptions).
 # Epoch Transition
 
 The trigger to start a new epoch is blocktime. To this end, there is a
-defined time when an epoch ends; the first block after the block that
-exceeds this time is the last block of its epoch.
+defined time when an epoch ends; the *first block after the block that
+exceeds this time is the last block of its epoch*.
 
 The length of an epoch is a [network parameter](#network-parameters). To make the chain understandable
 without having to trace all system parameters, the time an epoch ends is added
@@ -27,7 +27,7 @@ next epoch into that block.
 Correction: As we cannot (at this point) control the block into which a particular transaction
 goes, for Sweetwater the epoch changes will be done as described in the
 beginning without a synchronizing block: There is a time (determined by the 
-network parameter epoch_length), when a new epoch starts. The last block in every epoch is the
+[network parameter](#network-parameters) `epoch_length`), when a new epoch starts. The last block in every epoch is the
 first block that has a blocktime exceeding the length of its epoch, i.e., the later blocks
 then go into the next epoch. In a later version we will have better control of the mempool,
 and then can add a synchronizing block.
@@ -52,10 +52,10 @@ and then can add a synchronizing block.
 
 A delegator can lock a token in the smart contract, which is then available for
 staking. To this end, an Vega token
-(or a frction thereof) can be
+(or a fraction thereof) can be
 - Unlocked: The tokenholder is free to do with the token as they
 	want, but cannot delegate it
-- Locked: The token is locked in the smart contract, and cen be used
+- Locked: The token is locked in the smart contract, and can be used
 	inside the delegation system
 - Delegated: The (locked) token is delegated to a validator
 - Undelegated: The token is not delegated to a validator, and can be either
@@ -65,7 +65,7 @@ Any locked and undelegated stake can be delegated at any time by putting a
 delegation-message on the chain. However, the delegation only becomes valid 
 towards the next epoch, though it can be undone through undelegate.
 
-To avoid fragmentation or spam, there is a system parameter "Minimum delegateable stake"
+> **Note:** To avoid fragmentation or spam, there is a network parameter "Minimum delegateable stake"
 that defines the smallest unit of (fractions of) tokens that can be used for delegation - see [Simple staking & delegating](./0059-STKG-simple_staking_and_delegating.md#network-parameters).
 
 To delegate stake, a delegator simply puts a command "delegate x stake to y" on
@@ -108,7 +108,7 @@ There are three ways a delegator can undelegate:
 
 Furthermore, the validators watch the smart contract, and observe the following actions:
 
-- A token gets locked: This token is now available doe delegation
+- A token gets locked: This token is now available for delegation
 - A token gets unlocked: If the token holder has sufficient undelegated tokens, this stake is
 	used to cover the now unlocked tokens (i.e., the available amount of delegatable 
 	tokens is reduced to match the locking status. This could mean that the token-
@@ -121,12 +121,13 @@ Furthermore, the validators watch the smart contract, and observe the following 
 	uses those tokens to cover the unlocking. If this is insufficient, the
 	Undelegate-now command is automatically triggered, undelegating evenly from
 	all validators to cover the needs.
-Validator commands
-	Change wanted stake: Define a new parameter of wanted_stake[validator], valid at the epoch
-	following the one in which the command is put into a block.
+
+## Validator commands
+Change wanted stake: Define a new parameter of `wanted_stake[validator]`, valid at the epoch
+following the one in which the command is put into a block.
 
 ## Fringe Cases:
-A delegator can delegate some stake, and immediatelly undelegate it before the next
+A delegator can delegate some stake, and immediately undelegate it before the next
 epoch starts. This is fine with us.
 
 If the value of `minimum_delegateable_stake` changes in a bad way, stakers might be stuck with
@@ -176,9 +177,24 @@ In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow.
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `validators.epoch.length`       | String (period) |  `"1"` | The length, in milliseconds, of each Epoch. The block after this time will be the first block of the next epoch  |
+| `validators.epoch.length`       | String (period) |  `"1h"` | The length of each Epoch. The block after this time will be the first block of the next epoch  |
 
 See the [network parameters spec](./0054-NETP-network_parameters.md#current-network-parameters) for a full list of parameters.
 
 ## Parameter changes
 All parameters that are changed through a governance vote are valid starting the epoch following the one the block is in that finalized the vote.
+
+## Acceptance Criteria
+
+1. Epochs change at the start of the first block that is after the epoch length has passed
+   - Given an epoch length of `1d`, with a block time of `1h`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
+   - Given an epoch length of `1d`, with a block time of `1h`, at end of block 23 the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
+   - Given an epoch length of `1d`, with a block time of `1h`, at end of block 24 the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
+2. Edge case: Multiple epochs can pass within the same block
+   - Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1` (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>)
+   - Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61` (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)
+3. Delegation happens at epoch changeover
+   - During epoch 1, `party 1` stakes to `validator 1`
+     - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
+     - `validator 1`s staked balance is not increased in epoch 1 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
+     - `validator 1`s staked balance is increased in the first block of epoch 2 (<a name="0050-EPOC-008" href="#0050-EPOC-008">0050-EPOC-008</a>)
