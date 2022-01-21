@@ -25,6 +25,7 @@
  */
 const fs = require('fs')
 const { protocolSpecificationsPath, validSpecificationPrefix } = require('./lib')
+const { minimumAcceptableACsPerSpec } = require('./config')
 
 /**
  * Generator to chunk array by defined size, defaulting to 3
@@ -41,8 +42,6 @@ function * chunks (arr, n = 3) {
 // Outputs acceptance criteria count if it's acceptable
 const isVerbose = false
 
-// How many acceptance criteria are enough?
-const minimumAcceptableCount = 5
 // The number of files that appear to have 0 acceptance criteria
 let countEmptyFiles = 0
 // The number of files that appear to have errors
@@ -89,7 +88,7 @@ fs.readdirSync(protocolSpecificationsPath).forEach(file => {
         console.dir(chunkedMatches)
       } else {
         // The files are *valid*, at least. But do they have enough ACs?
-        if (totalAcceptanceCriteria.length >= minimumAcceptableCount) {
+        if (totalAcceptanceCriteria.length >= minimumAcceptableACsPerSpec) {
           countAcceptableFiles++
           if (isVerbose) {
             console.group(file)
@@ -108,7 +107,7 @@ fs.readdirSync(protocolSpecificationsPath).forEach(file => {
 })
 
 console.log('\r\n--------------------------------------------------')
-console.log(`Acceptable         ${countAcceptableFiles} (files with more than ${minimumAcceptableCount} ACs)`)
+console.log(`Acceptable         ${countAcceptableFiles} (files with more than ${minimumAcceptableACsPerSpec} ACs)`)
 console.log(`Need work          ${countEmptyFiles}`)
 console.log(`Files with errors  ${countErrorFiles}`)
 console.log(`Total ACs          ${countAcceptanceCriteria}`)
