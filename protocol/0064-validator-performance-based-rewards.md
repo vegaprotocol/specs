@@ -24,7 +24,7 @@ Every `1000` blocks the candidate validator node is to send a hash of block numb
 Here `b` is defined as:
 First time it is the the block number in which the joining transaction was included. Then it's incremented by `1000`. 
 The network will keep track of the last `10` times this was supposed to happen and the `performance_score` is the number of times this has been verified divided by `10`.  
-
+Initially the performance score is set to `0`.
 
 
 
