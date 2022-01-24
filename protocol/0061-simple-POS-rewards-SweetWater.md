@@ -91,7 +91,7 @@ For ersatz validators, the formular changes slightly:
  linearScore = (valStake)/s_total
  linearScore = Math.min(1.0, Math.max(0.0,linearScore))
 ```
-i.e., there is no anti-whaling function applied here (the penaltys are removed)
+i.e., there is no anti-whaling function applied here (the penalties are removed)
 
 
 # Acceptance criteria
