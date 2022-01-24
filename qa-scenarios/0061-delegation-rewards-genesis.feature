@@ -115,7 +115,7 @@ Feature: Staking & Delegation - scenarios focusing on initial epoch
     # node4 score = max(0, (111099 - 98652.16154 - 48,864.80769) / 147099) = 0
     Then the validators should have the following val scores for epoch 4:
       | node id | validator score  | normalised score |
-      |  node1  |      0.07478     |     0.31032      |    
+      |  node1  |      0.07478     |     0.41032      |    
       |  node2  |      0.08158     |     0.33854      |
       |  node3  |      0.08462     |     0.35114      | 
       |  node4  |      0.00000     |     0.00000      | 
