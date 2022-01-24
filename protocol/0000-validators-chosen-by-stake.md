@@ -2,7 +2,8 @@
 
 New network parameter `network.numberOfTendermintValidators`. 
 New network parameter `network.validatorIncumbentBonus`.
-New network parameter `network.numberEthMultisigSigners`
+New network parameter `network.numberEthMultisigSigners`.
+New network parameter `network.ersatzvalidators.reward.factor`.
 
 At a high level a participant that wishes to become a validator will:
 1) start a Vega node as non-validating node + associated infra 
@@ -111,7 +112,8 @@ then these are the validators with scores `n+1` to `n+n'`.
 Ersatz validators are required non-validator Vega node with all the related infrastructure (etheremum forwarder, data node etc.) at all times, see [the section on performance for non-validator nodes in](0064-validator-performance-based-rewards).
 
 ### Rewards for Ersatz validators
-In terms of rewards, Ersatz validators are treated in line with Tendermint validators see details in [validator rewards spec](0064-validator-performance-based-rewards) and [perfomance measurement](0064-validator-performance-based-rewards).
+In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](0064-validator-performance-based-rewards) and [perfomance measurement](0064-validator-performance-based-rewards).
+However `network.ersatzvalidators.reward.factor` in `[0,1]` is taken into account to scale their rewards.
 
 ### Multisig for Ersatz validators
 At this point, Ersatz validators are not part of the Multisig.

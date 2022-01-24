@@ -9,6 +9,7 @@ This applies both the rewards coming from the [on-chain-treasury](0055-on-chain-
 1. `totalStake` - the total number of units of the staking and governance asset (VEGA) associated to the Vega chain (but not necessarily delegated to a specific validator).
 1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake. 
+1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes. 
 
 ### Other network parameters: 
 - `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
@@ -38,7 +39,7 @@ At the end of an [epoch](./0050-epochs.md), payments are calculated. First we de
  In Vega, we have two sets of Validtors, the primary validators (which run tendermint) and the [ersatz validators](0000-validators-chosen-by-stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
  Both these validators get rewards following the method above:
  1. The reward pool is split into two parts, propotional to the total own+delegated stake the primary- and ersatzvalidators have. 
- Thus, if `s_t` is the total amount of own+delegated stake to both sets, `s_p` the total stake delegated to the primary / tendermint validators and `s_e` the total stake delegated to the ersatz validators, then the primary / tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `s_e/s_t` (both rounded down appropriately).
+ Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_t` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `s_e/s_t` (both rounded down appropriately).
 
  The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively). 
 
