@@ -55,8 +55,6 @@ for example:
         "avatar_url": "https://www.greenfield.one/avatar.png"
 ```
 
-[Comment (kku): What would happen if I send a different id with an existing public key, or resubmit the same id & public key with a different ethereum adress ?  ? Do we need to catch this, and should we add proof of knowledge of the private key ? ]
-
 ## Running a candidate non-validator node
 Start [node as a validator node](https://github.com/vegaprotocol/networks/blob/master/README.md).
 
