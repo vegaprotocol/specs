@@ -54,6 +54,12 @@ for example:
         "name": "Greenfield One",
         "avatar_url": "https://www.greenfield.one/avatar.png"
 ```
+## Removing non-performing candidate validators
+
+- Any party with fewer than `reward.staking.delegation.minimumValidatorStake` at the start of an epoch is removed. (the aim is to remove parties who don't delegate to self, however we achieve it is not too important)
+- Any party with performance score == `0` at the end of an epoch is removed. 
+
+
 
 ## Running a candidate non-validator node
 Start [node as a validator node](https://github.com/vegaprotocol/networks/blob/master/README.md).
