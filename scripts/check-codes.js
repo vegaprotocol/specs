@@ -50,10 +50,11 @@ let countEmptyFiles = 0;
 let countErrorFiles = 0;
 // The number of files that appear to have enough detail
 let countAcceptableFiles = 0;
-
+// Total acceptance criteria across all files
+let countAcceptanceCriteria = 0;
 
 fs.readdirSync(path).forEach(file => {
-  if (file.match(/md$/) && file !== 'README.md') {
+  if (file.match(/md|ipynb$/) && file !== 'README.md') {
     let content = fs.readFileSync(`${path}${file}`, `ascii`);
     let codeStart = file.match(/^([0-9]{4}-[A-Z]{4})/);
 
@@ -65,7 +66,6 @@ fs.readdirSync(path).forEach(file => {
       countEmptyFiles++;
       console.group(file);
       console.error(`no acceptance criteria`);
-      console.groupEnd(file);
     } else {
       // Acceptance code links are self referential, and have a name property, which makes
       // 3 instances of each code. So a basic check for this is to split the matches in to 
@@ -78,19 +78,23 @@ fs.readdirSync(path).forEach(file => {
       // If all of the arrays aren't 1, there's probably a mistake. Output all chunks to 
       // point to where the error is
       const unbalancedChunks = totalAcceptanceCriteria.filter(i => i !== 1);
+
+      countAcceptanceCriteria += totalAcceptanceCriteria.length;
+
       if (unbalancedChunks.length > 0) {
+        // Something is wrong, dump out the array as a starting point for working out what
+        countErrorFiles++;
         console.group(file);
         console.log(`${totalAcceptanceCriteria.length} acceptance criteria`);
         console.error(`Found something odd:`);
-        console.dir(chunkedMatches)
-        countErrorFiles++;
+        console.dir(chunkedMatches);
       } else {
+        // The files are *valid*, at least. But do they have enough ACs?
         if (totalAcceptanceCriteria.length >= minimumAcceptableCount) {
           countAcceptableFiles++;
           if (isVerbose) {
             console.log(`${totalAcceptanceCriteria.length} acceptance criteria`);
           }
-
         } else {
           countErrorFiles++;
           console.error(`${totalAcceptanceCriteria.length} acceptance criteria`);
@@ -104,6 +108,8 @@ fs.readdirSync(path).forEach(file => {
 });
 
 console.log('\r\n--------------------------------------------------');
-console.log(`Acceptable   ${countAcceptableFiles} (files with more than ${minimumAcceptableCount} ACs)`);
-console.log(`Need work    ${countEmptyFiles}`);
-console.log(`With errors  ${countErrorFiles}`);
+console.log(`Acceptable         ${countAcceptableFiles} (files with more than ${minimumAcceptableCount} ACs)`);
+console.log(`Need work          ${countEmptyFiles}`);
+console.log(`Files with errors  ${countErrorFiles}`);
+console.log(`Total ACs          ${countAcceptanceCriteria}`);
+console.log('\r\n\r\n');
