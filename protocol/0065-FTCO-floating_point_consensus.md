@@ -84,12 +84,30 @@ This section outlines floating-point quantities `vega` currently relies on:
 
 ## Acceptance criteria
 
-- Default risk-factors are both equal to 1.
-- Default probability of trading is 0.005.
-- Default price monitoring bounds are 10% up and 10% down.
-- Market enactment triggers state variable recalculation (verify that default values are no longer used).
-- When uncrossing price is available for the first time price monitoring bounds and probability of trading get recalculated.
-- When auction of each type ends price monitoring bounds and probability of trading get recalculated.
-- Time-based trigger updates price montiroing bounds and probability of trading.
+1. Floating-point values get initialised and updated correctly:
+    - A market is proposed and initially it has the following default values:
+        - Risk factors:
+            - Short: 1.0
+            - Long: 1.0
+        - Probability of trading: 0.005.
+        - Price monitoring bounds:
+            - Up: 10%,
+            - Down: 10%.
+    - Upon market enactment risk factors get calculated (their values change from defaults).
+    - When the opening auction sees uncrossing price for the first time price montiroing bounds and probability of trading get calculated (their values change from defaults).
+    - When the opening auction ends (choose uncrossing price that's different from first indicative uncrossing price) price monitoring bounds and probability of trading get recalculated.
+    - When the market goes into price monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
+    - When the time-based trigger elapses price monitoring bounds and probability of trading get recalculated.
+    - When the market goes into liquidity monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
+
+2. Consensus failure event gets sent:
+   - A market is proposed and initally has default values specified in the scenario above.
+   - Upon market enactment risk factors get submitted by nodes, one of the nodes submitts a value that is higher than tolerance
+
+
+TODO: Specify tolerances in spec
+
+
+
 - An appropriate event is emitted when at least one of the values submitted by the nodes differs by more than a tolerance (conversely differences within the tolerance should not trigger an event).
 - Event informing of market running with stale values is emitted after update isn't achieved after 3 consecutive update events (nodes can't agree on value to be used).
