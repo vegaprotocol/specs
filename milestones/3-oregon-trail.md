@@ -21,15 +21,15 @@
 
 
 ## Stretch Tasks
-| Priority | Feature | Because | Details | Owner </br>(Spec Lead) | Sub-Function |
-|:---------:|---------|---------|:------:|:------:|:------:|
+| Priority | Feature | Because | Details | Owner </br>(Spec Lead) | Sub-Function | Feature Label |
+|:---------:|---------|---------|:------:|:------:|:------:|:------:|
 | **1** | Transfers between Vega pubkeys | Because we dont like the Eth gas fees | [Open Issue](https://github.com/vegaprotocol/specs-internal/issues/800) | @davidsiska-vega | Core | ↔️ Transfer between wallets |
 | **2** | Incentivised data-node implementation | Because we want to incentivise other parties to run instances of the data node. Stretch because we need datanode-v2 first | [Open PR](https://github.com/vegaprotocol/specs-internal/pull/684)| @davidsiska-vega | Core | 🤑 Incentivised data-node |
 
 
 ### Refactors
-| Priority | Feature | Because | Details | Owner </br>(Spec Lead) | Sub-Function |
-|:---------:|---------|---------|:------:|:------:|:------:|
+| Priority | Feature | Because | Details | Owner </br>(Spec Lead) | Sub-Function | Feature Label |
+|:---------:|---------|---------|:------:|:------:|:------:|:------:|
 | **1** | Fractional order sizes  | We need to support more precision | [FPOS](0052-FPOS-fractional_orders_positions.md) | @davidsiska-vega | Core</br>Front-End | ➗ Fractional Orders |
 | **2** | Internalize ethereum-event-forwarder | To simplify the deployment of vega and minimize the interaction with external softwares | [Core Issue](https://github.com/vegaprotocol/vega/issues/4553) | @core | Core | ethereum |
 | **3** | Rewrite Dockerised Vega | Dockerised Vega is hard to maintain and is slowing us down | [Core Issue](https://github.com/orgs/vegaprotocol/projects/95#card-68976394) | @core | Devops</br>Core | 🐉 vegacapsule |
