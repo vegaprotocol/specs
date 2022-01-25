@@ -72,7 +72,7 @@ message NewAsset {
   // an minimal amount of stake to be committed 
   // by liquidity providers.
   // use the number of decimals defined by the asset.
-  string minLPstake = 2;
+  string quantum = 1000000000000000000;
 }
 
 message ProposalTerms {
@@ -96,13 +96,15 @@ message ProposalTerms {
 		"changes": {
 			"contractAddress": "0xsomething"
 		},
-		"minLPStake": "10000000" // if tge asset supports 5 decimals = 100.00000
+		"quantum": "10000000" // if the asset supports 5 decimals = 100.00000
 	}
 }
 ```
 
 
-Note that the `minLPstake` field sets the minimum liquidity commitment required for any market using the asset as settlement asset, see [LP mechanics spec](./0044-LIQM-lp_mechanics.md).
+Note that the `quantum` field sets the minimum economically meaningful amount in the asset. 
+For example for USD this may be 1 USD or perhaps 0.01 USD. 
+
 
 # Acceptance Criteria
 
@@ -111,7 +113,7 @@ Note that the `minLPstake` field sets the minimum liquidity commitment required 
 - [ ] As a user I can submit a new proposal asset to be used in vega (<a name="0027-ASSP-001" href="#0027-ASSP-001">0027-ASSP-001</a>)
 - [ ] As a user I can vote for an asset proposal. (<a name="0027-ASSP-002" href="#0027-ASSP-002">0027-ASSP-002</a>)
 - [ ] As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset. (<a name="0027-ASSP-003" href="#0027-ASSP-003">0027-ASSP-003</a>)
-- [ ] `minLPstake` is a required parameter  (<a name="0027-ASSP-004" href="#0027-ASSP-004">0027-ASSP-004</a>)
+- [ ] `quantum` is a required parameter  (<a name="0027-ASSP-004" href="#0027-ASSP-004">0027-ASSP-004</a>)
  
 ## node actions
 
