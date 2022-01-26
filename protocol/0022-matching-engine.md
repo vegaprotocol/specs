@@ -27,27 +27,29 @@ Start date: 2021-12-14
          * otherwise they are parked.
      * Entering auction is possible if the volume on either side of the book is empty.
      * Entering auction is possible if the mark price moves by a larger amount than the price monitoring settings allow.
-     * All attempts to [self trade](#self-trading) are prevented and any partially filled orders are STOPPED
+     * All attempts to [self trade](./0024-ORDS-order-status.md#wash-trading) are prevented and any partially filled orders are STOPPED
    * In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md)
      * [IOC/FOK/GFN](./0014-ORDT-order-types.md#time-in-force---validity)  
        * Incoming orders are all rejected
-     * GTC/GTT/GFA
-       * All MARKET orders are rejected
-       * LIMIT orders are placed into the book and no matching takes place.
+     * [GTC/GTT/GFA](./0014-ORDT-order-types.md#time-in-force---validity)
+       * All [MARKET](./0014-ORDT-order_types.md#order-pricing-methods)  orders are rejected
+       * [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders are placed into the book
+         * and no matching takes place.
        * The indicative price and volume values are updated after every change to the order book.
-       * PEGGED orders are parked.
+       * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked.
    * When a [market moves in to an auction](./0026-auctions.md#upon-entering-auction-mode):
      * All [GFN](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled
      * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked
-   * Moving out of auction
+   * When a market [market exits an auction](./0026-auctions.md#upon-exiting-auction-mode):
      * The book is uncrossed.
-     * Self trading is allowed.
-     * All GFA orders are cancelled.
-     * Pegged orders are repriced where possible.
-  * Any persistent order can be deleted.
+       * Self trading is allowed during uncrossing.
+     * All [GFA](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled.
+     * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced where possible.
+  * Any persistent order that is currently [ACTIVE](./0024-order-status.md) can be [deleted](./0033-CANC-cancel-orders.md).
   * The price of any persistent order can be updated
   * The size of any persistent order can be updated
   * The TIF of any persistent order can be updated
+  * An update to an order that is not ACTIVE (Stopped, Cancelled, Expired, Filled) will be rejected
 
 # Summary
 The matching engine is responsible for updating and maintaining the state of the order book. The order book contains two lists of orders in price and time order, one for the buy side and one for the sell side. As new orders come into the matching engine, they are analysed to see if they will match against current orders to create trades or will be placed in the order book if they are persistent order types. If the matching engine is running in continuous trading mode, the matching will take place as the orders arrive. If it is running in auction mode, all the orders are placed on the order book and are only matched when we attempt to leave the auction. Indicative price and volume details are generated during an auction after each new order is added.
@@ -60,11 +62,6 @@ New orders arrive at the engine and are checked for validity including if they a
 
 ## Auction Mode
 New orders arrive at the engine and no matching is performed. Instead the order is checked for validity (GFA) and then placed directly onto the order book in price and time priority. When the auction is uncrossed, orders which are in the crossed range are matched until there are no further orders crossed.
-
-# Reference-level explanation
-
-## Self-trading
-Self-trading is when two orders placed by the same [party](./0017-PART-party.md) are matched against each other. In Vega this is prohibited - instead of trading, the aggressive order will desist matching and have its status set to `STOPPED`.
 
 ## Order books construction
 

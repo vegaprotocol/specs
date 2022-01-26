@@ -59,7 +59,7 @@ For the definition of each Time In Force option, see [the Order Types spec](./00
 Note: The last row in the table above is added for clarity. If the order was filled, it is marked as Filled and it is removed from the book, so it can't expire after being filled.
 
 ## Wash trading
-If an order would be filled or partially filled with an existing order from the same traderID, the order is rejected. Any existing fills that happen before the wash trade is identified will be kept. FOK rules still apply for wash trading so if a wash trade is identified before the full amount of the order is complete, the order will be stopped and nothing filled.
+If an order would be filled or partially filled with an existing order from the same [party](./0017-PART-party.md), the order is rejected. Any existing fills that happen before the wash trade is identified will be kept. FOK rules still apply for wash trading so if a wash trade is identified before the full amount of the order is complete, the order will be stopped and nothing filled.
 
 | Filled State | Resulting status | Reason |
 |--------------|------------------|--------|
