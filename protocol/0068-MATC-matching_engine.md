@@ -11,7 +11,7 @@ Start date: 2021-12-14
          * If there is no match the order will be cancelled.
          * If there is a partial match then the remaining will be cancelled.
        * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be repriced and placed on the book if possible.
-         * If the price is invalid it will be parked.
+         * If the price is invalid it will be parked (and have it's status set to PARKED).
      * A [Fill or KILL (FOK)](./0014-ORDT-order-types.md#time-in-force---validity) order:
        * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) MARKET orders will be matched fully if the volume is available, otherwise the order is cancelled.
        * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will either be:
@@ -20,36 +20,35 @@ Start date: 2021-12-14
        * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be repriced and placed on the book if possible.
          * If the price is invalid it will be parked.
      * For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order-types.md#time-in-force---validity) orders:
-       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected.
-       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders match if possible,
-         * any remaining is placed on the book.
+       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are marked as rejected.
+       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders match if possible, any remaining is placed on the book.
        * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced and placed on the book if the price is valid,
          * otherwise they are parked.
-     * Entering auction is possible if the volume on either side of the book is empty.
-     * Entering auction is possible if the mark price moves by a larger amount than the price monitoring settings allow.
-     * All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and any partially filled orders are STOPPED
+     * A market will enter auction if the volume on either side of the book is empty.
+     * A market will enter auction if the mark price moves by a larger amount than the price monitoring settings allow.
+     * All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and the aggressive side is STOPPED even if partially filled. The passive side is left untouched.
    * In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md)
      * [IOC/FOK/GFN](./0014-ORDT-order-types.md#time-in-force---validity)  
-       * Incoming orders are all rejected
+       * Incoming orders have their status set to REJECTED and are not processed further.
      * [GTC/GTT/GFA](./0014-ORDT-order-types.md#time-in-force---validity)
-       * All [MARKET](./0014-ORDT-order_types.md#order-pricing-methods)  orders are rejected
-       * [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders are placed into the book
-         * and no matching takes place.
+       * All [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected.
+       * [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders are placed into the book and no matching takes place.
        * The indicative price and volume values are updated after every change to the order book.
-       * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked.
-   * When a [market moves in to an auction](./0026-auctions.md#upon-entering-auction-mode):
-     * All [GFN](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled
-     * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked
+       * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked (and have their status set to PARKED).
+   * When a [market moves into an auction](./0026-auctions.md#upon-entering-auction-mode):
+     * All [PEGGED](./0014-ORDT-order_types.md#auction) orders are parked (and have their status set to PARKED).
+     * All [GFN](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled.
+     * All [GTC/GTT](./0014-ORDT-order-types.md#time-in-force---validity) orders remain on the book untouched.
    * When a market [market exits an auction](./0026-auctions.md#upon-exiting-auction-mode):
      * The book is uncrossed.
        * Self trading is allowed during uncrossing.
      * All [GFA](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled.
      * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced where possible.
-  * Any persistent order that is currently [ACTIVE](./0024-order-status.md) can be [deleted](./0033-CANC-cancel-orders.md).
+  * Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [canceled](./0033-CANC-cancel-orders.md).
   * The price of any persistent order can be updated
   * The size of any persistent order can be updated
   * The TIF of any persistent order can be updated
-  * An update to an order that is not ACTIVE (Stopped, Cancelled, Expired, Filled) will be rejected
+  * An update to an order that is not [ACTIVE or PARKED](./0024-OSTA-order_status.md) (Stopped, Cancelled, Expired, Filled) will be rejected
 
 # Summary
 The matching engine is responsible for updating and maintaining the state of the order book. The order book contains two lists of orders in price and time order, one for the buy side and one for the sell side. As new orders come into the matching engine, they are analysed to see if they will match against current orders to create trades or will be placed in the order book if they are persistent order types. If the matching engine is running in continuous trading mode, the matching will take place as the orders arrive. If it is running in auction mode, all the orders are placed on the order book and are only matched when we attempt to leave the auction. Indicative price and volume details are generated during an auction after each new order is added.
