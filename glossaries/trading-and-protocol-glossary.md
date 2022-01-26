@@ -67,7 +67,7 @@ Fees are incurred on trades in Vega. There are three categories of fee, each of 
 - Maker fee: paid to the price maker,
 - Liquidity fee: paid to [Liquidity Providers](#liquidity-providers)
 
-See [the fees specification](../protocol/0029-fees.md) for more detail.
+See [the fees specification](../protocol/0029-FEES-fees.md) for more detail.
 
 ### FIFO (First In, First Out)
 A matching methodology which prioritises older volume as an offset when counter volume is added to the ledger.  The ledger may be a market order book (used for matching orders into trades), or a record of an individual trader's trades (used for calculating their open and closed positions).
@@ -121,7 +121,7 @@ The market in which currencies are traded. The largest and most liquid market.
 
 ## G
 ### Governance Asset
-A running Vega network will have an asset specified as the Governance Asset. This can be any asset that has been proposed and accepted through governance. See the [governance spec](./../protocol/0028-governance.md) for more detail.
+A running Vega network will have an asset specified as the Governance Asset. This can be any asset that has been proposed and accepted through governance. See the [governance spec](../protocol/0028-GOVE-governance.md) for more detail.
 
 ### GTC - Good 'til close
 An order that trades any amount and as much as possible and remains on the book until it either trades completely or is cancelled
@@ -151,7 +151,7 @@ A store of capital instantiated with the order book into which fines are contrib
 The net riskiest composition of a trader's open positions and live orders.  For example if a trader holds +10 contracts and has buy orders of +10 and sell orders of +10, the liable position would be +20 contracts for margin calculation purposes.
 
 ### Liquidity Providers
-Liquidity providers commit a bond and place a special Liquidity Commitment that automatically maintains orders on the book for a specific market. In return, liquidity providers earn a [fee](#fee) for ensuring that markets always have open volume. See [the liquidity provision spec](../protocol/0044-lp-mechanics.md) for more detail.
+Liquidity providers commit a bond and place a special Liquidity Commitment that automatically maintains orders on the book for a specific market. In return, liquidity providers earn a [fee](#fee) for ensuring that markets always have open volume. See [the liquidity provision spec](./../protocol/0044-LIQM-lp_mechanics.md) for more detail.
 
 ## M
 ### Margin

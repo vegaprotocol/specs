@@ -48,9 +48,9 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 This is only relevant if the option to submit a market proposal is enabled. 
 
 The bot will read the required market proposal from a file (configuration option), decide if it has minimum LP stake in the right asset, check it's got enough vote tokens and then submit the proposal and vote for it. They will also need to submit [liquidity shapes](../protocol/0038-liquidity-provision-order-type.md) but that will be treated below. 
-To decide that it will ask Vega for `assetBalance` and `minimumLpStakeForAsset` and proceed if 
+To decide that it will ask Vega for `assetBalance`, `quantum` for asset and `min_LP_stake_quantum_multiple` and proceed if 
 ```
-assetBalance * stakeFraction > minimumLpStakeForAsset
+assetBalance x stakeFraction > min_LP_stake_quantum_multiple x quantum
 ```
 It will then check whether it has enough collateral for maintaining the commitment but that will be described below as it applies below too. 
 
