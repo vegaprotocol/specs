@@ -20,7 +20,7 @@ The reasons outlined above imply that any intermediate computation results which
 We will call each such value a **"state variable"**. Currently state variables exist on market level, however in the future some of them could be moved to risk-universe level. State variable value nominated by a single node will be called a **"candidate value"**, whereas a state variable value that has successfully gone through the consensus mechanism and is to be used by each of the nodes will be called a **"consensus value"**.
 
 Each state variable will be represented as a key-tolerance-value triple. 
-The key will be a `string`. 
+The key will be a `string`.
 The tolerance will be a `decimal` which will be provided by the quant library producing this and must be *deterministic* (ie it is either hard coded in the library or produced without floating point arithmetic).
 The value will be a single `floating-point`, this will be provided by the quant library as a result of some floating point calculation.  
 State variables will be bundled together by the event that triggered their update.
@@ -84,7 +84,7 @@ This section outlines floating-point quantities `vega` currently relies on:
 
 ## Acceptance criteria
 
-1. Floating-point values get initialised and updated correctly:
+1. Floating-point values get initialised and updated correctly (<a name="0065-FTCO-001" href="#0065-FTCO-001">0065-FTCO-001</a>)
     - A market is proposed and initially it has the following default values:
         - Risk factors:
             - Short: 1.0
@@ -94,20 +94,26 @@ This section outlines floating-point quantities `vega` currently relies on:
             - Up: 10%,
             - Down: 10%.
     - Upon market enactment risk factors get calculated (their values change from defaults).
-    - When the opening auction sees uncrossing price for the first time price montiroing bounds and probability of trading get calculated (their values change from defaults).
+    - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price montiroing bounds and probability of trading get calculated (their values change from defaults).
     - When the opening auction ends (choose uncrossing price that's different from first indicative uncrossing price) price monitoring bounds and probability of trading get recalculated.
     - When the market goes into price monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
     - When the time-based trigger elapses price monitoring bounds and probability of trading get recalculated.
     - When the market goes into liquidity monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
 
-2. Consensus failure event gets sent:
+2. Consensus failure event gets sent (<a name="0065-FTCO-002" href="#0065-FTCO-002">0065-FTCO-002</a>)
    - A market is proposed and initally has default values specified in the scenario above.
-   - Upon market enactment risk factors get submitted by nodes, one of the nodes submitts a value that is higher than tolerance
+   - Upon market enactment risk factors get submitted by nodes, one of the nodes submitts a value that is higher than tolerance.
+   - An appropriate event is sent to signal that at least one of the values differed.
+   - Consensus still works, value submitted by other nodes gets used.
+   - Opening auction concludes, risk factor values submitted by all the nodes differ by more than tolerance between each other.
+   - None of the values submitted by nodes gets accepted, market is running with previously calculated risk factors.
+   - Situtation continues for 2 more risk factor update attempts (can be time-based or auction).
+   - Market still runs with previously calculated risk factors, but an event informing that the market is using stale values gets emitted.
 
-
-TODO: Specify tolerances in spec
-
-
-
-- An appropriate event is emitted when at least one of the values submitted by the nodes differs by more than a tolerance (conversely differences within the tolerance should not trigger an event).
-- Event informing of market running with stale values is emitted after update isn't achieved after 3 consecutive update events (nodes can't agree on value to be used).
+3. Market cannot leave opening auction with default values (<a name="0065-FTCO-003" href="#0065-FTCO-003">0065-FTCO-002</a>)
+   - A market is proposed and initally has default values specified in the scenario above.
+   - Upon market enactment risk factors get calculated (their values change from defaults).
+   - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price montiroing bounds get calculated, but probability of trading get doesn't pass consensus (all nodes submitt conflicting values)
+   - An appropriate event is sent to signal that at least one of the values differed.
+   - Time-based trigger attempts another update, but that one doesn't succeed either.
+   - The market never goes into continuous trading mode.
