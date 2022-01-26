@@ -6,7 +6,13 @@ Note that we are currently mirroring `glossaries`, `protocol` and `qa-scenarios`
 
 ## [Protocol](./protocol/)
 This folder contains the protocol specifications. The goal of this folder is to specify how anyone could write an
-implementation of Vega that is compatible with [vegaprotocol/vega](https://github.com/vegaprotocol/vega).
+implementation of Vega that is compatible with [vegaprotocol/vega](https://github.com/vegaprotocol/vega). 
+
+### Protocol spec IDs
+repository are assigned a numerical ID based on merge order, and then a 4 letter code, which results in a unique identifier
+for each specification (e.g. the first merged spec is [0001-MKTF](./protocol/0001-MKTF-market_framework.md). These codes 
+are then used to assign a unique Acceptance Criteria ID to each Acceptance Criteria, which can be used to cross reference
+detailed requirements to test implementations.
 
 ## [Non-protocol specs](./non-protocol-specs)
 For peripheral things that need to be hashed out through pull requests, we have `non-protocol-specs`. An example of
@@ -15,7 +21,6 @@ limited mainnet.
 
 ## [Milestones](./milestones/)
 The canonical source for what feature bundles represent major milestones in our product roadmap. Progress against these milestones is tracked on 
-[🎱 Roadmap Board](https://github.com/orgs/vegaprotocol/projects/12).
 
 ## [Glossaries](./glossaries/)
 These are quick reference points for general terminology we use. Some of the specs are really dense with trading terms 

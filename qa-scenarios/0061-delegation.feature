@@ -6,13 +6,10 @@ Feature: Staking & Delegation
       | reward.asset                                      | VEGA   |
       | validators.epoch.length                           | 10s    |
       | validators.delegation.minAmount                   | 10     |
-      | reward.staking.delegation.payoutDelay             |  0s    |
       | reward.staking.delegation.delegatorShare          |  0.883 |
       | reward.staking.delegation.minimumValidatorStake   |  100   |
-      | reward.staking.delegation.payoutFraction          |  0.5   |
       | reward.staking.delegation.maxPayoutPerParticipant | 100000 |
       | reward.staking.delegation.competitionLevel        |  1.1   |
-      | reward.staking.delegation.maxPayoutPerEpoch       |  50000 |
       | reward.staking.delegation.minValidators           |  5     |
       | reward.staking.delegation.optimalStakeMultiplier  |  5.0   |
 
@@ -60,7 +57,7 @@ Feature: Staking & Delegation
     #complete the first epoch for the self delegation to take effect
     Then the network moves ahead "7" blocks
 
-  Scenario: A party can delegate to a validator and undelegate at the end of an epoch
+  Scenario: A party can delegate to a validator and undelegate at the end of an epoch (0059-STKG-002, 0059-STKG-013, 0059-STKG-014)
     Description: A party with a balance in the staking account can delegate to a validator
 
     When the parties submit the following delegations:
@@ -115,7 +112,7 @@ Feature: Staking & Delegation
     | party1 |  node2   |   0    |       
     | party1 |  node3   |   0    |   
 
-  Scenario: A party cannot delegate less than minimum delegateable stake  
+  Scenario: A party cannot delegate less than minimum delegateable stake (0059-STKG-001)
     Description: A party attempts to delegate less than minimum delegateable stake from its staking account to a validator minimum delegateable stake
 
     When the parties submit the following delegations:
@@ -137,7 +134,7 @@ Feature: Staking & Delegation
     | party1 |  node2   |    0   |       
     | party1 |  node3   |    0   |        
 
-  Scenario: A party cannot delegate more than it has in staking account
+  Scenario: A party cannot delegate more than it has in staking account (0059-STKG-additional-tests)
     Description: A party attempts to delegate more than it has in its staking account to a validator
 
     When the parties submit the following delegations:
@@ -159,7 +156,7 @@ Feature: Staking & Delegation
     | party1 |  node2   |    0   |       
     | party1 |  node3   |    0   |        
 
-  Scenario: A party cannot cumulatively delegate more than it has in staking account
+  Scenario: A party cannot cumulatively delegate more than it has in staking account (0059-STKG-additional-tests)
     
     When the parties submit the following delegations:
     | party  | node id  |   amount   | reference | error                               |
@@ -178,7 +175,7 @@ Feature: Staking & Delegation
     | party1 |  node2   |    0   |       
     | party1 |  node3   |    0   |        
   
-  Scenario: A party changes delegation from one validator to another in the same epoch
+  Scenario: A party changes delegation from one validator to another in the same epoch (0059-STKG-014)
     Description: A party can change delegatation from one Validator to another
 
     When the parties submit the following delegations:
@@ -227,7 +224,7 @@ Feature: Staking & Delegation
     | party1 |  node2   | 20     |       
     | party1 |  node3   | 10     | 
 
-  Scenario: A party cannot delegate to an unknown node 
+  Scenario: A party cannot delegate to an unknown node (0059-STKG-additional-tests)
     Description: A party should fail in trying to delegate to a non existing node
 
     When the parties submit the following delegations:
@@ -235,7 +232,7 @@ Feature: Staking & Delegation
     | party1 |  unknown1 |    100   |      a    | invalid node ID |
     | party1 |  unknonw2 |    200   |      b    | invalid node ID |    
 
-  Scenario: A party cannot undelegate from an unknown node
+  Scenario: A party cannot undelegate from an unknown node (0059-STKG-additional-tests)
     Description: A party should fail in trying to undelegate from a non existing node
 
     When the parties submit the following undelegations:
@@ -263,7 +260,7 @@ Feature: Staking & Delegation
     | party1 |  node2   |   1000  |           |                                     |    
     | party1 |  node2   |   7578  |     a     | insufficient balance for delegation |     
 
-  Scenario: A party cannot delegate more than their staking account balance considering all active and pending undelegation 
+  Scenario: A party cannot delegate more than their staking account balance considering all active and pending undelegation (0059-STKG-007)
     Description: A party has pending delegations and undelegations and is trying to exceed their stake account balance delegation, 
     i.e. the balance of their pending delegation + requested delegation exceeds stake account balance
     
@@ -287,7 +284,8 @@ Feature: Staking & Delegation
     | party1 |  node2   |   1000  |           |                                     |    
     | party1 |  node2   |   8578  |     a     | insufficient balance for delegation |    
 
-  Scenario: A party can request delegate and undelegate from the same node at the same epoch such that the request can balance each other without affecting the actual delegate balance    Description: party requests to delegate to node1 at the end of the epoch and regrets it and undelegate the whole amount to delegate it to node2
+  Scenario: A party can request delegate and undelegate from the same node at the same epoch such that the request can balance each other without affecting the actual delegate balance (0059-STKG-0013)
+    Description: party requests to delegate to node1 at the end of the epoch and regrets it and undelegate the whole amount to delegate it to node2
   
     When the parties submit the following delegations:
     | party  | node id  |  amount | 
@@ -306,7 +304,7 @@ Feature: Staking & Delegation
     | party1 |  node1   | 0      | 
     | party1 |  node2   | 1000   | 
     
-    Scenario: A party has active delegations and submits an undelegate request followed by a delegation request that covers only part of the undelegation such that the undelegation still takes place
+  Scenario: A party has active delegations and submits an undelegate request followed by a delegation request that covers only part of the undelegation such that the undelegation still takes place (0059-STKG-013)
     Description: A party delegated tokens to node1 at previous epoch such that the delegations is now active and is requesting to undelegate some of the tokens at the end of the current epoch. Then regret some of it and submit a delegation request that undoes some of the undelegation but still some of it remains. 
 
     When the parties submit the following delegations:
@@ -327,7 +325,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   | 100    | 
 
-  Scenario: A party cannot undelegate more than the delegated balance 
+  Scenario: A party cannot undelegate more than the delegated balance (0059-STKG-additional-tests)
     Description: A party trying to undeleagte from a node more than the amount that was delegated to it should fail 
 
     And the parties submit the following delegations:
@@ -348,7 +346,7 @@ Feature: Staking & Delegation
     | party1 |  node2    |    200   | end of epoch |           |                                          |    
     | party1 |  node3    |    300   | end of epoch |           |                                          |  
 
-  Scenario: A node can self delegate to itself and undelegate at the end of an epoch
+  Scenario: A node can self delegate to itself and undelegate at the end of an epoch (0059-STKG-additional-tests)
     Description: A node with a balance in the staking account can delegate to itself
 
     When the parties submit the following delegations:
@@ -387,7 +385,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | node1  |  node1   |  6000  | 
       
-  Scenario: A party can undelegate all of their stake at the end of the epoch
+  Scenario: A party can undelegate all of their stake at the end of the epoch (0059-STKG-0014)
     Description: A with delegated stake and pending delegation can request to undelegate all. This will be translated to undelegating all the stake they have at the time and will be executed at the end of the epoch
 
     When the parties submit the following delegations:
@@ -423,7 +421,7 @@ Feature: Staking & Delegation
     | party1 |  node1   |   0    | 
     | party1 |  node2   |   123  |    
 
-  Scenario: A party can request to undelegate their stake or part of it right now
+  Scenario: A party can request to undelegate their stake or part of it right now (0059-STKG-015)
     Description: A party with delegated stake and/or pending delegation can request to undelegate all or part of it immediately as opposed to at the end of the epoch
 
     When the parties submit the following delegations:
@@ -466,7 +464,7 @@ Feature: Staking & Delegation
     | party1 |  node1   |   0    | 
     | party1 |  node2   |   123  |  
   
-  Scenario: A party withdraws from their staking account during an epoch - their stake is being undelegated automatically to match the difference
+  Scenario: A party withdraws from their staking account during an epoch - their stake is being undelegated automatically to match the difference (0059-STKG-011, 0059-STKG-012)
     Description: A party with delegated stake withdraws from their staking account during an epoch - at the end of the epoch when delegations are processed the party will be forced to undelegate the difference between the stake they have delegated and their staking account balance. 
 
     When the parties submit the following delegations:
@@ -494,7 +492,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |  500   |
 
-  Scenario: Undelegate now followed by withdraw - same behaviour as either underlegate now or withdraw
+  Scenario: Undelegate now followed by withdraw - same behaviour as either undelegate now or withdraw (0059-STKG-011, 0059-STKG-014, 0059-STKG-015)
 
     When the parties submit the following delegations:
     | party  | node id  | amount |
@@ -525,7 +523,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |  400   |     
 
-  Scenario: Withdrawal followed by undelegate now (same epoch) - same behaviour as either underlegate now or withdraw
+  Scenario: Withdrawal followed by undelegate now (same epoch) - same behaviour as either undelegate now or withdraw (0059-STKG-011, 0059-STKG-014, 0059-STKG-015)
 
     When the parties submit the following delegations:
     | party  | node id  | amount |
@@ -556,7 +554,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |    500 |    
 
-  Scenario: Withdrawal followed by undelegate now (next epoch) - results in additional undelegation
+  Scenario: Withdrawal followed by undelegate now (next epoch) - results in additional undelegation (0059-STKG-011, 0059-STKG-014, 0059-STKG-015)
 
     When the parties submit the following delegations:
     | party  | node id  | amount |
@@ -600,7 +598,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |    100 |    
 
-  Scenario: Mix undelegate now & end of epoch
+  Scenario: Mix undelegate now & end of epoch (0059-STKG-013, 0059-STKG-014)
 
     When the parties submit the following delegations:
     | party  | node id  | amount |
@@ -634,7 +632,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |    100 |    
 
-  Scenario: A validator gets past maximum stake by changing network parameter
+  Scenario: A validator gets past maximum stake by changing network parameter (0059-STKG-additional-tests)
     Description: A party attempts to delegate token stake which exceed maximum stake for a validator
 
     When the parties submit the following delegations:
@@ -713,7 +711,7 @@ Feature: Staking & Delegation
       | party1 |  node2   | 2500   |       
       | party1 |  node3   | 4700   |
 
-  Scenario: A party undelegates now and then withdraws from their staking account during an epoch - their stake is being undelegated automatically to match the difference
+  Scenario: A party undelegates now and then withdraws from their staking account during an epoch - their stake is undelegated automatically to match the difference (0059-STKG-011)
     Description: A party undelegates now and then withdraws from their staking account during an epoch - then immediately delegations are processed the party will be forced to undelegate the difference between the stake they have delegated and their staking account balance. 
 
     When the parties submit the following delegations:
@@ -749,7 +747,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |  400   |     
 
-  Scenario: A party delegates and then withdraws from their staking account during the same epoch such that delegation is a successful
+  Scenario: A party delegates and then withdraws from their staking account during the same epoch such that delegation is a successful ( (0059-STKG-002, 0059-STKG-005, 0059-STKG-006, 0059-STKG-007, 0059-STKG-011)
     Description: A party delegates now and then withdraws from their staking account during the same epoch such that delegation is a successful
 
     When the parties submit the following delegations:
@@ -781,7 +779,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |  1000  |     
 
-  Scenario: A party delegates and then withdraws from their staking account during the same epoch such that delegation fails
+  Scenario: A party delegates and then withdraws from their staking account during the same epoch such that delegation fails (0059-STKG-002, 0059-STKG-005)
     Description: A party delegates now and then withdraws from their staking account during the same epoch such that delegation fails
 
     When the parties submit the following delegations:
@@ -813,14 +811,14 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |  500   |    
 
-  Scenario: A party withdraws from their staking account during an epoch - their stake is being undelegated automatically to match the difference
+  Scenario: A party withdraws from their staking account during an epoch - their stake is undelegated automatically to match the difference (0059-STKG-012)
     Description: A party with delegated stake withdraws from their staking account during an epoch - at the end of the epoch when delegations are processed the party will be forced to undelegate the difference between the stake they have delegated and their staking account balance. 
 
     When the parties submit the following delegations:
     | party  | node id  | amount |
     | party1 |  node1   |  1000  | 
 
-    #end epoch 1 for the delegation to take effect   
+    #end epoch 2 for the delegation to take effect   
     When the network moves ahead "7" blocks      
     Then the parties should have the following delegation balances for epoch 2:
     | party  | node id  | amount |
@@ -838,10 +836,10 @@ Feature: Staking & Delegation
     | party  | node id  | amount | when |
     | party1 |  node1   |  1000  | now  |    
 
-    # advance to the end of epoch2
+    # advance to the end of epoch3
     When the network moves ahead "7" blocks   
-    # we expect the actual balance of epoch 2 for party1 has changed retrospectively to 0 to reflect that the 500 tokens have undelegated too
-    Then the parties should have the following delegation balances for epoch 2:
+    # we expect the actual balance of epoch 3 for party1 has changed retrospectively to 0 to reflect that the 500 tokens have undelegated too
+    Then the parties should have the following delegation balances for epoch 3:
     | party  | node id  | amount |
     | party1 |  node1   |  0     |  
 
