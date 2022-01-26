@@ -3,11 +3,42 @@ Start date: 2021-12-14
 
 # Acceptance Criteria
  * The matching engine co-ordinates the trading of incoming orders with existing orders already on an order book.
- * The matching engine will place orders onto the order book if they are persistent and do not match an existing order.
- * The matching engine can be run in either auction mode or continuous trading mode.
- * The matching engine allows orders on the book to be removed.
- * The matching engine allows orders on the book to be amended.
- * The matching engine can supply information about best prices/volumes and indicative uncrossing prices/volumes.
+   * Continuous Trading 
+     * IOC
+       * Incoming MARKET orders will be matched against the opposite side of the book, if not enough volume is available to fully fill the order, the remaining will be cancelled.
+       * Incoming LIMIT orders will be matched against the opposite side of the book, if there is no match the order will be cancelled. If there is a partial match then the remaining will be cancelled.
+       * Incoming PEGGED orders will be repriced and placed on the book if possible. If the price is invalid it will be parked.
+     * FOK
+       * Incoming MARKET orders will be matched fully if the volume is available, otherwise the order is cancelled.
+       * Incoming LIMIT orders will be matched if possible to the other side of the book, if a complete fill is not possible the order is cancelled.
+       * Incoming PEGGED orders will be repriced and placed on the book if possible. If the price is invalid it will be parked.
+     * GTC/GTT/GFN
+       * Incoming MARKET orders are rejected.
+       * Incoming LIMIT orders match if possible, any remaining is placed on the book.
+       * Incoming PEGGED orders are repriced and placed on the book if the price is valid, otherwise they are parked.
+     * Entering auction is possible if the volume on either side of the book is empty.
+     * Entering auction is possible if the mark price moves by a larger amount than the price monitoring settings allow.
+     * All attempts to self trade are prevented and any partially filled orders are STOPPED
+   * Auction Trading
+     * IOC/FOK/GFN
+       * Incoming orders are all rejected
+     * GTC/GTT/GFA
+       * All MARKET orders are rejected
+       * LIMIT orders are placed into the book and no matching takes place.
+       * The indicative price and volume values are updated after every change to the order book.
+       * PEGGED orders are parked.
+   * Moving to auction
+     * All GFN orders are cancelled
+     * Pegged orders are parked
+   * Moving out of auction
+     * The book is uncrossed.
+     * Self trading is allowed.
+     * All GFA orders are cancelled.
+     * Pegged orders are repriced where possible.
+  * Any persistent order can be deleted.
+  * The price of any persistent order can be updated
+  * The size of any persistent order can be updated
+  * The TIF of any persistent order can be updated
 
 # Summary
 The matching engine is responsible for updating and maintaining the state of the order book. The order book contains two lists of orders in price and time order, one for the buy side and one for the sell side. As new orders come into the matching engine, they are analysed to see if they will match against current orders to create trades or will be placed in the order book if they are persistent order types. If the matching engine is running in continuous trading mode, the matching will take place as the orders arrive. If it is running in auction mode, all the orders are placed on the order book and are only matched when we attempt to leave the auction. Indicative price and volume details are generated during an auction after each new order is added.
@@ -20,7 +51,6 @@ New orders arrive at the engine and are checked for validity including if they a
 
 ## Auction Mode
 New orders arrive at the engine and no matching is performed. Instead the order is checked for validity (GFA) and then placed directly onto the order book in price and time priority. When the auction is uncrossed, orders which are in the crossed range are matched until there are no further orders crossed.
-
 
 
 # Reference-level explanation
@@ -41,10 +71,6 @@ Given an order book that looks like this in the market display:
 | | 90 | 10 |
 | | 80 | 15 |
 
-
-
-
-## 
 
 
 # Pseudo-code / Examples
