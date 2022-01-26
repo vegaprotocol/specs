@@ -1,16 +1,13 @@
-Feature: Replicate LP getting distressed during continuous trading, and after leaving an auction
+Feature: Replicate LP getting distressed during continuous trading, check if penalty is implemented correctly
 
   Background:
     Given the following network parameters are set:
       | name                                          | value |
       | market.stake.target.timeWindow                | 24h   |
       | market.stake.target.scalingFactor             | 1     |
-      | market.liquidity.bondPenaltyParameter         | 2     |
+      | market.liquidity.bondPenaltyParameter         | 0.2   |
       | market.liquidity.targetstake.triggering.ratio | 0.1   |
     And the average block duration is "1"
-    # And the simple risk model named "simple-risk-model-1":
-    #   | long | short | max move up | min move down | probability of trading |
-    #   | 0.1  | 0.1   | 10          | 10           | 0.2                    |
     And the log normal risk model named "log-normal-risk-model-1":
       | risk aversion | tau | mu | r   | sigma |
       | 0.000001      | 0.1 | 0  | 0  | 1.0    |
@@ -139,7 +136,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
 
    When the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference      |
-      | party0 | ETH/MAR22 | sell | 15     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party0-sell-3   |
+      | party0 | ETH/MAR22 | sell | 15     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party0-sell-3  |
 
   Then debug transfers  
   Then debug orders
@@ -148,7 +145,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
       | 1000       | TRADING_MODE_CONTINUOUS | 1       | 1000      | 1000      | 213414       | 50000          | 60            |
 
-  And the insurance pool balance should be "81544" for the market "ETH/MAR22"
+  And the insurance pool balance should be "8154" for the market "ETH/MAR22"
     #check the volume on the order book
     Then the order book should have the following volumes for market "ETH/MAR22":
       | side | price    | volume |
@@ -162,7 +159,7 @@ Feature: Replicate LP getting distressed during continuous trading, and after le
   #check the requried balances 
    And the parties should have the following account balances:
       | party  | asset | market id | margin | general  | bond |
-      | party0 | USD   | ETH/MAR22 | 418536 | 0        | 0    |
+      | party0 | USD   | ETH/MAR22 | 490852 | 0        | 1074 |
       | party1 | USD   | ETH/MAR22 | 12190  | 99987810 |  0   |
       | party2 | USD   | ETH/MAR22 | 264754 | 99734946 |  0   |
       | party3 | USD   | ETH/MAR22 | 28826  | 99971294 |  0   |
