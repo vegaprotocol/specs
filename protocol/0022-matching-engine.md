@@ -3,18 +3,25 @@ Start date: 2021-12-14
 
 # Acceptance Criteria
  * The matching engine co-ordinates the trading of incoming orders with existing orders already on an order book.
-   * Continuous Trading 
-     * IOC
-       * Incoming MARKET orders will be matched against the opposite side of the book, if not enough volume is available to fully fill the order, the remaining will be cancelled.
-       * Incoming LIMIT orders will be matched against the opposite side of the book, if there is no match the order will be cancelled. If there is a partial match then the remaining will be cancelled.
-       * Incoming PEGGED orders will be repriced and placed on the book if possible. If the price is invalid it will be parked.
-     * FOK
-       * Incoming MARKET orders will be matched fully if the volume is available, otherwise the order is cancelled.
-       * Incoming LIMIT orders will be matched if possible to the other side of the book, if a complete fill is not possible the order is cancelled.
-       * Incoming PEGGED orders will be repriced and placed on the book if possible. If the price is invalid it will be parked.
-     * GTC/GTT/GFN
-       * Incoming MARKET orders are rejected.
-       * Incoming LIMIT orders match if possible, any remaining is placed on the book.
+   * In a market that is in [Continuous Trading](./0001-MKTF-market-framework.md#trading-mode---continuous-trading) 
+     * An [Immediate or Cancel (IOC)](./0014-ORDT-order-types.md#time-in-force---validity) order:
+       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book
+         * If not enough volume is available to **fully** fill the order, the remaining will be cancelled.
+       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book,
+         * If there is no match the order will be cancelled.
+         * If there is a partial match then the remaining will be cancelled.
+       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be repriced and placed on the book if possible.
+         * If the price is invalid it will be parked.
+     * A [Fill or KILL (FOK)](./0014-ORDT-order-types.md#time-in-force---validity) order:
+       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) MARKET orders will be matched fully if the volume is available, otherwise the order is cancelled.
+       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will either be:
+         * fully matched if possible to the other side of the book
+         * if a complete fill is not possible the order is cancelled without trading at all.
+       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be repriced and placed on the book if possible.
+         * If the price is invalid it will be parked.
+     * For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order-types.md#time-in-force---validity) orders:
+       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected.
+       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders match if possible, any remaining is placed on the book.
        * Incoming PEGGED orders are repriced and placed on the book if the price is valid, otherwise they are parked.
      * Entering auction is possible if the volume on either side of the book is empty.
      * Entering auction is possible if the mark price moves by a larger amount than the price monitoring settings allow.
