@@ -818,7 +818,7 @@ Feature: Staking & Delegation
     | party  | node id  | amount |
     | party1 |  node1   |  1000  | 
 
-    #end epoch 1 for the delegation to take effect   
+    #end epoch 2 for the delegation to take effect   
     When the network moves ahead "7" blocks      
     Then the parties should have the following delegation balances for epoch 2:
     | party  | node id  | amount |
@@ -836,10 +836,10 @@ Feature: Staking & Delegation
     | party  | node id  | amount | when |
     | party1 |  node1   |  1000  | now  |    
 
-    # advance to the end of epoch2
+    # advance to the end of epoch3
     When the network moves ahead "7" blocks   
-    # we expect the actual balance of epoch 2 for party1 has changed retrospectively to 0 to reflect that the 500 tokens have undelegated too
-    Then the parties should have the following delegation balances for epoch 2:
+    # we expect the actual balance of epoch 3 for party1 has changed retrospectively to 0 to reflect that the 500 tokens have undelegated too
+    Then the parties should have the following delegation balances for epoch 3:
     | party  | node id  | amount |
     | party1 |  node1   |  0     |  
 
