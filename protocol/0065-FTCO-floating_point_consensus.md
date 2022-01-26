@@ -20,23 +20,23 @@ The reasons outlined above imply that any intermediate computation results which
 We will call each such value a **"state variable"**. Currently state variables exist on market level, however in the future some of them could be moved to risk-universe level. State variable value nominated by a single node will be called a **"candidate value"**, whereas a state variable value that has successfully gone through the consensus mechanism and is to be used by each of the nodes will be called a **"consensus value"**.
 
 Each state variable will be represented as a key-tolerance-value triple. 
-The key will be a `string`. 
+The key will be a `string`.
 The tolerance will be a `decimal` which will be provided by the quant library producing this and must be *deterministic* (ie it is either hard coded in the library or produced without floating point arithmetic).
 The value will be a single `floating-point`, this will be provided by the quant library as a result of some floating point calculation.  
 State variables will be bundled together by the event that triggered their update.
 
 ### Default values & initialisation
 
-Each state variable must have a default value specified (can be hardcoded for now). 
+Each state variable must have a default value specified (can be hardcoded for now).
 
-Default risk factors are to be `1.0` for futures (so until a value has been calculated and agreed all trades are over-collateralised).  
+Default risk factors are to be `1.0` for futures (so until a value has been calculated and agreed all trades are over-collateralised) with a tolerance of `1e-6`.  
 Risk factor calculation should be triggered as soon as market is proposed.
 
-Default probability of trading should be `100` ticks on either side of best bid and best ask with `0.005` probability of trading each. As soon as there is the auction uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input.
+Default probability of trading should be `100` ticks on either side of best bid and best ask with `0.005` probability of trading each. As soon as there is the auction uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input. Tolerance should be set to `1e-6`.
 
-Default price monitoring bounds should be calculated (as a decimal point calc directly in core) as `10%` on either side of the indicative uncrossing price and used as default. As soon as an indicative uncrossing price is available calculate the real bounds using the full risk model + consensus mechanism.
+Default price monitoring bounds should be calculated (as a decimal point calc directly in core) as `10%` on either side of the indicative uncrossing price and used as default. As soon as an indicative uncrossing price is available calculate the real bounds using the full risk model + consensus mechanism. Tolerance should be set to `1e-6`.
 
-The market should *not* leave the opening auction if any of the the risk factors, probabilities of trading or price monitoring bounds haven't passed at least one round of resolution as this would indicate a badly specified market. 
+The market should *not* leave the opening auction if any of the the risk factors, probabilities of trading or price monitoring bounds haven't passed at least one round of resolution as this would indicate a badly specified market.
 
 ### Resolution strategy
 
@@ -50,8 +50,8 @@ If all values in a bundle are accepted then the whole bundle is accepted and the
 If at least one value differs then:
 
 1) Emit an event announcing this (if there are many such events this indicates either an unstable risk calculation or malicious nodes).
-1) A node is chosen at random with probability equal to tendermint weight to propose a bundle of values, submit as candidate and to be voted upon by other nodes. Each node should vote with their tendermint weight. A node will vote `yes` to the proposed bundle if all the values are within the prescribed tolerance and `no` otherwise. 
-The bundle is accepted if `(2/3)` of nodes by tendermint weight vote to accept the bundle. 
+1) A node is chosen at random with probability equal to tendermint weight to propose a bundle of values, submit as candidate and to be voted upon by other nodes. Each node should vote with their tendermint weight. A node will vote `yes` to the proposed bundle if all the values are within the prescribed tolerance and `no` otherwise.
+The bundle is accepted if `(2/3)` of nodes by tendermint weight vote to accept the bundle.
 If the bundle is rejected go back to selecting a node at random by tendermint weight and repeat.
 This is repeated until a value has been accepted.
 1) This may continue indefinitely. It will only be terminated when a new event arrives asking for a calculation with new inputs. If we got here emit an event announcing this (we either have a really badly unstable calculation or malicious nodes).
@@ -61,17 +61,18 @@ Note that the state variable calculation inputs need to be gathered when the eve
 
 ### Update events
 
-When we say a trigger should trigger calculation of all we currently mean: 
-1) risk factors
-2) price monitoring bounds
-3) probabilities of trading
-but as Vega evolves there may be more things.
-
 Implement the following state variable update events:
-- market enactment, this should trigger risk factor calculation. 
-- time-based trigger, governed by network parameter `network.floatingPointUpdates.delay` set by default to `5m`. For each market the clock should start ticking at the end of the opening auction and then reset by any event that "recalculates all". This event should recalculate all.      
-- opening auction sees uncrossing price for first time: probabilities of trading and price monitoring should be calculated.  
-- auction (of any type) ending: probabilities of trading and price monitoring should be calculated.  
+
+- market enactment,
+- time-based trigger, governed by network parameter `network.floatingPointUpdates.delay` set by default to `5m` - for each market the clock should start ticking at the end of the opening auction and then be reset by any other update event following it
+- opening auction sees uncrossing price for first time,
+- auction (of any type) ending.
+
+The following quantities should be recalculated by the associated triggers:
+
+1) risk factors: market enactment
+2) price monitoring bounds: all triggers except market enactment
+3) probabilities of trading: all triggers except market enactment
 
 ## Current floating-point dependencies
 
@@ -80,3 +81,39 @@ This section outlines floating-point quantities `vega` currently relies on:
 - [`CalculateRiskFactors(current *types.RiskResult) (bool, *types.RiskResult)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L24) - calculates risk factors (short and long), called each time time within the application is updated ([`OnChainTimeUpdate(...)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/execution/market.go#L624)) static for log-normal model.
 - [`PriceRange(price, yearFraction, probability num.Decimal) (minPrice, maxPrice num.Decimal)`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L25) - calculates risk minimum and maximum price at specified probability level and projection horizon given current price, called from [price montiroing engine](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/monitor/price/pricemonitoring.go#L80) each time bounds are updated.
 - [`ProbabilityOfTrading(currentP, orderP *num.Uint, minP, maxP, yFrac num.Decimal, isBid, applyMinMax bool) num.Decimal`](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/risk/model.go#L26) - calculates probability of trading at a specified projection horizon of the specified order given current price and min/max bracket, called from [supplied liquidity engine](https://github.com/vegaprotocol/vega/blob/4be994751b0012b0904e37ad2b0d1540d24abb5e/liquidity/engine.go#L34) each time new liquidity provision orders are deployed.
+
+## Acceptance criteria
+
+1. Floating-point values get initialised and updated correctly (<a name="0065-FTCO-001" href="#0065-FTCO-001">0065-FTCO-001</a>)
+    - A market is proposed and initially it has the following default values:
+        - Risk factors:
+            - Short: 1.0
+            - Long: 1.0
+        - Probability of trading: 0.005.
+        - Price monitoring bounds:
+            - Up: 10%,
+            - Down: 10%.
+    - Upon market enactment risk factors get calculated (their values change from defaults).
+    - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price montiroing bounds and probability of trading get calculated (their values change from defaults).
+    - When the opening auction ends (choose uncrossing price that's different from first indicative uncrossing price) price monitoring bounds and probability of trading get recalculated.
+    - When the market goes into price monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
+    - When the time-based trigger elapses price monitoring bounds and probability of trading get recalculated.
+    - When the market goes into liquidity monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
+
+2. Consensus failure event gets sent (<a name="0065-FTCO-002" href="#0065-FTCO-002">0065-FTCO-002</a>)
+   - A market is proposed and initally has default values specified in the scenario above.
+   - Upon market enactment risk factors get submitted by nodes, one of the nodes submitts a value that is higher than tolerance.
+   - An appropriate event is sent to signal that at least one of the values differed.
+   - Consensus still works, value submitted by other nodes gets used.
+   - Opening auction concludes, risk factor values submitted by all the nodes differ by more than tolerance between each other.
+   - None of the values submitted by nodes gets accepted, market is running with previously calculated risk factors.
+   - Situtation continues for 2 more risk factor update attempts (can be time-based or auction).
+   - Market still runs with previously calculated risk factors, but an event informing that the market is using stale values gets emitted.
+
+3. Market cannot leave opening auction with default values (<a name="0065-FTCO-003" href="#0065-FTCO-003">0065-FTCO-003</a>)
+   - A market is proposed and initally has default values specified in the scenario above.
+   - Upon market enactment risk factors get calculated (their values change from defaults).
+   - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price montiroing bounds get calculated, but probability of trading get doesn't pass consensus (all nodes submitt conflicting values)
+   - An appropriate event is sent to signal that at least one of the values differed.
+   - Time-based trigger attempts another update, but that one doesn't succeed either.
+   - The market never goes into continuous trading mode.
