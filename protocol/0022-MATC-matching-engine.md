@@ -27,7 +27,7 @@ Start date: 2021-12-14
          * otherwise they are parked.
      * Entering auction is possible if the volume on either side of the book is empty.
      * Entering auction is possible if the mark price moves by a larger amount than the price monitoring settings allow.
-     * All attempts to [self trade](./0024-ORDS-order-status.md#wash-trading) are prevented and any partially filled orders are STOPPED
+     * All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and any partially filled orders are STOPPED
    * In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md)
      * [IOC/FOK/GFN](./0014-ORDT-order-types.md#time-in-force---validity)  
        * Incoming orders are all rejected
