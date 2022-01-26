@@ -21,22 +21,24 @@ Start date: 2021-12-14
          * If the price is invalid it will be parked.
      * For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order-types.md#time-in-force---validity) orders:
        * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected.
-       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders match if possible, any remaining is placed on the book.
-       * Incoming PEGGED orders are repriced and placed on the book if the price is valid, otherwise they are parked.
+       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders match if possible,
+         * any remaining is placed on the book.
+       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced and placed on the book if the price is valid,
+         * otherwise they are parked.
      * Entering auction is possible if the volume on either side of the book is empty.
      * Entering auction is possible if the mark price moves by a larger amount than the price monitoring settings allow.
-     * All attempts to self trade are prevented and any partially filled orders are STOPPED
-   * Auction Trading
-     * IOC/FOK/GFN
+     * All attempts to [self trade](#self-trading) are prevented and any partially filled orders are STOPPED
+   * In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md)
+     * [IOC/FOK/GFN](./0014-ORDT-order-types.md#time-in-force---validity)  
        * Incoming orders are all rejected
      * GTC/GTT/GFA
        * All MARKET orders are rejected
        * LIMIT orders are placed into the book and no matching takes place.
        * The indicative price and volume values are updated after every change to the order book.
        * PEGGED orders are parked.
-   * Moving to auction
-     * All GFN orders are cancelled
-     * Pegged orders are parked
+   * When a [market moves in to an auction](./0026-auctions.md#upon-entering-auction-mode):
+     * All [GFN](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled
+     * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked
    * Moving out of auction
      * The book is uncrossed.
      * Self trading is allowed.
@@ -59,10 +61,10 @@ New orders arrive at the engine and are checked for validity including if they a
 ## Auction Mode
 New orders arrive at the engine and no matching is performed. Instead the order is checked for validity (GFA) and then placed directly onto the order book in price and time priority. When the auction is uncrossed, orders which are in the crossed range are matched until there are no further orders crossed.
 
-
 # Reference-level explanation
-This is the main portion of the specification. Break it up as required.
 
+## Self-trading
+Self-trading is when two orders placed by the same [party](./0017-PART-party.md) are matched against each other. In Vega this is prohibited - instead of trading, the aggressive order will desist matching and have its status set to `STOPPED`.
 
 ## Order books construction
 
