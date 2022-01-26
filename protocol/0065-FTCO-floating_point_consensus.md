@@ -110,7 +110,7 @@ This section outlines floating-point quantities `vega` currently relies on:
    - Situtation continues for 2 more risk factor update attempts (can be time-based or auction).
    - Market still runs with previously calculated risk factors, but an event informing that the market is using stale values gets emitted.
 
-3. Market cannot leave opening auction with default values (<a name="0065-FTCO-003" href="#0065-FTCO-003">0065-FTCO-002</a>)
+3. Market cannot leave opening auction with default values (<a name="0065-FTCO-003" href="#0065-FTCO-003">0065-FTCO-003</a>)
    - A market is proposed and initally has default values specified in the scenario above.
    - Upon market enactment risk factors get calculated (their values change from defaults).
    - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price montiroing bounds get calculated, but probability of trading get doesn't pass consensus (all nodes submitt conflicting values)
