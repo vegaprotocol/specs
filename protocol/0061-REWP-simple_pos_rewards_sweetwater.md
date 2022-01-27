@@ -42,7 +42,7 @@ At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. First 
  1. The reward pool is split into two parts, propotional to the total own+delegated stake the primary- and ersatzvalidators have. 
  Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_t` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
 
- The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively). 
+ The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively). 
 
 
 ## For each validator we then do:
