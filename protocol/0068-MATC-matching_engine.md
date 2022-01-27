@@ -5,13 +5,14 @@ Start date: 2021-12-14
  * The matching engine co-ordinates the trading of incoming orders with existing orders already on an order book.
    * In a market that is in [Continuous Trading](./0001-MKTF-market-framework.md#trading-mode---continuous-trading) 
      * An [Immediate or Cancel (IOC)](./0014-ORDT-order-types.md#time-in-force---validity) order:
-       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book
-         * If not enough volume is available to **fully** fill the order, the remaining will be cancelled.
-       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book,
-         * If there is no match the order will be cancelled.
-         * If there is a partial match then the remaining will be cancelled.
-       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be repriced and placed on the book if possible.
-         * If the price is invalid it will be parked (and have it's status set to PARKED).
+       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book (<a name="0068-MATC-001" href="#0068-MATC-001">0068-MATC-001</a>) 
+         * If not enough volume is available to **fully** fill the order, the remaining will be cancelled (<a name="0068-MATC-002" href="#0068-MATC-002">0068-MATC-002</a>) 
+       * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book, (<a name="0068-MATC-002" href="#0068-MATC-003">0068-MATC-003</a>) 
+         * If there is no match the order will be cancelled. (<a name="0068-MATC-004" href="#0068-MATC-004">0068-MATC-004</a>) 
+         * If there is a partial match then the remaining will be cancelled. (<a name="0068-MATC-005" href="#0068-MATC-005">0068-MATC-005</a>) 
+ 
+       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be repriced and placed on the book if possible. (<a name="0068-MATC-006" href="#0068-MATC-006">0068-MATC-006</a>) 
+         * If the price is invalid it will be parked (and have it's status set to PARKED). (<a name="0068-MATC-007" href="#0068-MATC-007">0068-MATC-007</a>) 
      * A [Fill or KILL (FOK)](./0014-ORDT-order-types.md#time-in-force---validity) order:
        * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) MARKET orders will be matched fully if the volume is available, otherwise the order is cancelled.
        * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will either be:
