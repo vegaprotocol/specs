@@ -193,7 +193,7 @@ Scenario: A party enters auto delegation mode by nominating all of its associate
     | party1 |  node9   | 1150   | 
     | party1 |  node10  | 1150   |
 
-Scenario: A party qualifies to auto delegation by delegating all of their associated tokens however by manually undelegation they exit auto delegation mode (0059-STKG-021)
+Scenario: A party qualifies to auto delegation by delegating all of their associated tokens however by manually undelegation they exit auto delegation mode (0059-STKG-013, STKG-0014, 0059-STKG-021)
     Description: Once a party dissociates VEGA tokens their delegation is adjusted automatically to reflect that in the same proportion as the delegation with respect to the amount withdrawn
 
     When the parties submit the following delegations:
