@@ -1,6 +1,6 @@
 # Market decimal places
 
-This document aims to outline how we are to handle the decimal places of a given market, if said market is configured with fewer decimal places than its settlement asset. For example: a market settling in ETH can be configured to use only 9 decimal places (GWei) compared to ETH's 18. A market cannot specify _more_ decimal places than its settlement asset supports. This means that a market that settles in GBP can have anywhere between 0 and 2 decimal places, but no more. A market settling in Japanese yen can have no decimal places. Common sense.
+This document aims to outline how we are to handle the decimal places of a given market, if said market is configured with fewer decimal places than its settlement asset. For example: a market settling in ETH can be configured to use only 9 decimal places (GWei) compared to ETH's 18. A market cannot specify _more_ decimal places than its settlement asset supports.
 
 ## Terminology
 
