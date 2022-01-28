@@ -92,7 +92,7 @@ The primary purpose of spam protection is to protect the blockchain from overloa
 also does to some extend protect the core (as transactions that never make it onto the chain
 also don't bother the core), but that is a secondary goal.
 
-Thus, spam protetion defines a set of rules that allow transafctions to be processed by
+Thus, spam protection defines a set of rules that allow transactions to be processed by
 the blockchain (or not). Due to current mempool limitations, the only input the spam
 protection is allowed to use is any data derived from comitted blocks on the chain. Thus,
 if a party is allowed 3 votes on an issue but sends 4 in one block, the fourth vote is 
