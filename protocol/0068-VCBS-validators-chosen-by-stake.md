@@ -75,11 +75,11 @@ From now we assume that the transaction has been submitted and the node started.
 
 Basic vega chain liveness criteria is covered in their [performance score](./0064-VALP-validator_performance_based_rewards.md). 
 
-## Verifying Ethereum (and later other chain) integration
+## Verifying Ethereum (and later other chain) integration
 1) They will be the first node to forward a subsequently accepted ethereum event at least `validator.minimumEthereumEventsForNewValidator` with a default of `3`. 
 1) They are the first one to vote for any ethereum event at least `validator.minimumEthereumEventsForNewValidator` times. 
 
-## Multisig updates (and multisig weight updates if those are used)
+## Multisig updates (and multisig weight updates if those are used)
 
 Vega will know initial multisig signer list (and weights) and watch for `signer added` and `signer removed` events to track which ethereum keys are present on multisig.
 Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing. 
