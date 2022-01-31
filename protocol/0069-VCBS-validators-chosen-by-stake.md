@@ -1,9 +1,9 @@
 # Validators chosen by stake
 
-New network parameter `network.numberOfTendermintValidators`. 
-New network parameter `network.validatorIncumbentBonus`.
-New network parameter `network.numberEthMultisigSigners`.
-New network parameter `network.ersatzvalidators.reward.factor`.
+- New network parameter `network.numberOfTendermintValidators`. 
+- New network parameter `network.validatorIncumbentBonus`.
+- New network parameter `network.numberEthMultisigSigners`.
+- New network parameter `network.ersatzvalidators.reward.factor`.
 
 At a high level a participant that wishes to become a validator will:
 1) start a Vega node as non-validating node + associated infra 
