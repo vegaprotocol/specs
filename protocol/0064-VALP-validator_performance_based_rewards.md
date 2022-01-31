@@ -26,7 +26,7 @@ First time it is the the block number in which the joining transaction was inclu
 The network will keep track of the last `10` times this was supposed to happen and the `performance_score` is the number of times this has been verified divided by `10`.  
 The message with the signed block hash must be in blocks `b+1000` to `b+1010` to count as sucessfully delivered.  
 Initially the performance score is set to `0`.
-Both Tendermint validators and candidate validators should be signing and sending these messages but only for the candidate validators does this impat their score.
+Both Tendermint validators and candidate validators should be signing and sending these messages but only for the candidate validators does this impact their score.
 
 
 The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
