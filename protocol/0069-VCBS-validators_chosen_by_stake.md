@@ -92,14 +92,12 @@ Note that this could become obsolete if a future version of the protocol impleme
 
 
 ## Ersatz validators
-New Network Parameter: `MultipleOfTendermintValidatorsForErsatzSet`
 In addition to the normal validators, there is an additional set of Ersatz validators as defined by
-the corresponding network parameter. 
-These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. 
-The network will reward 
+the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will reward:
 ```
-n' := ceil(MultipleOfTendermintValidatorsForErsatzSet x NumberOfTendermintValidators)
+n' := ceil(network.validators.multipleOfTendermintValidators x network.validators.tendermint.number)
 ```
+
 ersatz validators. 
 The value range for this decimal is `0.0` to `infinity`. 
 Reasonable values may be e.g. `0.5`, `1.0` or `2.0`.
@@ -145,15 +143,15 @@ See [limited network life spec](../non-protocol-specs/0005-limited-network-life.
 
 # Acceptance criteria
 
-## Joining / leaving VEGA chain (<a name="0068-VCBS-001" href="#0068-VCBS-001">0068-VCBS-001</a>)
+## Joining / leaving VEGA chain (<a name="0069-VCBS-001" href="#0069-VCBS-001">0069-VCBS-001</a>)
 1. A running non-validator node can submit a transaction to become a validator. 
 2. Their perfomance score will be calculated. See [performance score](./0064-VALP-validator_performance_based_rewards.md).
 3. If they meet the Ethereum verification criteria and have enough stake they will become part of the validator set at the start of next epoch. See about [verifying ethereum integration](#verifying-ethereum-and-later-other-chain-integration).
 4. Hence after the end of the current epoch the node that got "pushed out" will no longer be a validator node for Tendermint. 
 
 ## Multisig update 
-1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0068-VCBS-002" href="#0068-VCBS-002">0068-VCBS-002</a>)
-2. For validators up to `number_multig_signers` the `validator_score` is capped by the value on `ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `number_multig_signers` by `validator_score` on VEGA). (<a name="0068-VCBS-003" href="#0068-VCBS-003">0068-VCBS-003</a>)
-3. It is possible to submit a transaction to update the weights. (<a name="0068-VCBS-004" href="#0068-VCBS-004">0068-VCBS-004</a>)
+1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-VCBS-002" href="#0069-VCBS-002">0069-VCBS-002</a>)
+2. For validators up to `number_multig_signers` the `validator_score` is capped by the value on `ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `number_multig_signers` by `validator_score` on VEGA). (<a name="0069-VCBS-003" href="#0069-VCBS-003">0069-VCBS-003</a>)
+3. It is possible to submit a transaction to update the weights. (<a name="0069-VCBS-004" href="#0069-VCBS-004">0069-VCBS-004</a>)
  
 

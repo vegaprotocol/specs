@@ -19,7 +19,7 @@ This counts need to be stored, per validator node, in vega core.
 For validators participating in consensus (Tendermint validators) define the performance score to be `performance_score := max[(l-f)/l, 0.05]` if `l > 0` and `performance_score = 1` if `l = 0`. 
 Flooring the score at `0.05` is there to make sure that every validator with non-zero own+delegated gets a chance to be a leader at least occasionally, even if they were poorly performing recently. 
 
-For validators who [have submitted a transaction to become validators](./0068-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
+For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
 Every `1000` blocks the candidate validator node is to send a hash of block number `b` separetely signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
 Here `b` is defined as:
 First time it is the the block number in which the joining transaction was included. Then it's incremented by `1000`. 
