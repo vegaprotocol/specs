@@ -43,7 +43,7 @@ From `max_oi` we calculate
 
 `target_stake = reference_price x max_oi x target_stake_scaling_factor x rf`,
 
-where `reference_price` is `mark_price` when market is in continuous trading mode and `indicative_uncrossing_price` during auctions, and `rf = max(risk_factor_short, risk_factor_long)`. Note that currently we always have that `risk_factor_short >= risk_factor_long` but this could change once we go beyond futures... so safer to take a `max`.
+where `reference_price` is `mark_price` when market is in continuous trading mode and `indicative_uncrossing_price` during auctions (if it's available, otherwise use `mark_price` which may be 0 in case of an opening auction), and `rf = max(risk_factor_short, risk_factor_long)`. Note that currently we always have that `risk_factor_short >= risk_factor_long` but this could change once we go beyond futures... so safer to take a `max`.
 Note that the units of `target_stake` are the settlement currency of the market as those are the units of the `reference_price`.
 
 Example 3: if `target_stake_scaling_factor = 10`, `rf = 0.004` and `max_oi = 120` then `target_stake = 4.8`.
