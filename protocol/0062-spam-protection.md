@@ -134,6 +134,8 @@ Thus, we assume that spam protection has a function
 	float normalized_assets(account)
 
 which returns the value of assets this account owns in some normalized and compareable form.
+(if it is easier to use a different data type here to make floating point consensus easier,
+this is an option as well).
 
 We also need an attack detection that gives a guess if there is a spam attack going on.
 	bool is_attacked()
@@ -159,9 +161,21 @@ that transaction type:
 	float y_exponential
 
 	A vega account with assets a is allowed round(b+xa+y^a) transactions of this type.
+	As everywhere else where floats are used, floating point determinism/consenus is
+	required to make this work; if this is a problem, a different solution could
+	be applied to.
 <spam_multiplier>: If the vega network is suubject to overload, all the results from the
 	previous variables are multiplied with this. This can happen repeatedly, until
 <spam_maximum>   :  ... the combined multiplier reaches this value.
 
 
 Notes: For all parameters, what counts is the number valid at the beginning of the epoch.
+
+## Ongoing activity
+For any new transaction type added to Vega, the potential for spam should be analysed. There
+is, for example, an ongoing discussion on how long to store unfinished transactions with the
+Ethereum bridge; if there is no limit, it would be possible to create a huge amount of
+never-executed transactions on 10^-18 Vega. Ideally, most of those issues can be handeled
+by adding a table entry to above table (essentially, there should be an entry for every possible
+transaction made in Vega).
+
