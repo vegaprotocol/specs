@@ -21,11 +21,13 @@ For validators currently in the Vega validator set it will scale the `validator_
 Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance together whether the multisig contract carries the correct information [multisig](0030-multisig_control_spec.md); more on this later.
 
 Vega will sort all current Tendermint validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score. 
-If `v_l = v_m` then we place higher the one who's been validator for longer.
+If for any `l,m=1,...,n` we have  `v_l == v_m` then we place higher the one who's been validator for longer (so this is a mechanism for resolving ties).
 Vega will sort all those who submitted a transaction wishing to be validators using `validator_score` as `[w_1, ..., w_k]`. 
 These may be ersatz validators (ie getting rewards) or others who just submitted the transaction to join.
 If `empty_slots := network.numberOfTendermintValidators - n > 0` (we have empty tendermint validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to tendermint validators. 
-If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a Tendermint validator, and the lowest scoring incubent becomes an ersatz validator. If `w_l = w_m` then we resolve this by giving priority to the one who submitted the transaction to become validator earlier.  Note that we only do this check once per epoch so at most one validator can be changed per epoch in case `empty_slots == 0`.
+If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a Tendermint validator, and the lowest scoring incubent becomes an ersatz validator. 
+If for any `l,m=1,...,k` we have `w_l == w_m` then we resolve this by giving priority to the one who submitted the transaction to become validator earlier (so this is a mechanism for resolving ties).  
+Note that we only do this check once per epoch so at most one validator can be changed per epoch in the case `empty_slots == 0`.
 A completely dead node that's proposing to become a validator will have `performance_score = 0` and will thus get automaticaly excluded, regardless of their stake.
 
 The same way, if there are free slots for ersatz validators and nodes that have submitted the transaction to join and satisfy all joining conditions, they are added as ersatzvalidators in the next round.
