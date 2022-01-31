@@ -145,7 +145,7 @@ The full list of network parameters must be available to the governance communit
 |`network.validators.incumbentBonus`                       | String (integer) | [0068 - Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md#network-parameters) | ?
 |`network.validators.miniumEthereumEventsForNewValidator`  | String (integer) | [0068 - Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md#network-parameters) | ?
 |`network.validators.multisig.numberOfSigners`             | String (integer) | [0068 - Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md#network-parameters) | ?
-|`network.validators.ersatz.rewardFactor`                   | String (integer) | [0068 - Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md#network-parameters) | ?
-|`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) | [0068 - Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md#network-parameters) | Used to [calculate the number](./0069-VCBS-validators_chosen_by_stake.md) of Ersatz Validators that will earn rewards |  
+|`network.validators.ersatz.rewardFactor`                   | String (float) | [0068 - Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md#network-parameters) | Scales down [the rewards](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz validators relative to actual validators |  
+|`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) | [0068 - Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md#network-parameters) | Used to [calculate the number](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of Ersatz Validators that will earn rewards |  
 
 * A `-` in the *Version added* column indicates that the network parameter existed before `0.38.0`, when this table was added. 
