@@ -19,7 +19,7 @@ This counts need to be stored, per validator node, in vega core.
 For validators participating in consensus (Tendermint validators) define the performance score to be `performance_score := max[(l-f)/l, 0.05]` if `l > 0` and `performance_score = 1` if `l = 0`. 
 Flooring the score at `0.05` is there to make sure that every validator with non-zero own+delegated gets a chance to be a leader at least occasionally, even if they were poorly performing recently. 
 
-For validators who [have submitted a transaction to become validators](./0068-VCBS-validators-chosen-by-stake.md) the `performance_score` is defined as follows: during each epoch
+For validators who [have submitted a transaction to become validators](./0068-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
 Every `1000` blocks the candidate validator node is to send a hash of block number `b` separetely signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
 Here `b` is defined as:
 First time it is the the block number in which the joining transaction was included. Then it's incremented by `1000`. 
@@ -33,7 +33,7 @@ The performance score should be available on all the same API enpoints as the `v
 
 ### Acceptance criteria 
 
-# Scenario 1: (<a name="0064-valp-001" href="#0064-valp-001">0064-valp-001</a>)
+# Scenario 1: (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>)
 1. Configure and launch a network with 5 validators
 1. Give each validator self-stake of 10 000 VEGA. Set epoch length to 10 minutes.
 1. Deposit a 1000 VEGA into the validator reward pool.
