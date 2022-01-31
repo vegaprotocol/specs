@@ -2,7 +2,9 @@
 
 The reward framework provides for a standardised transaction API, funding approach, and execution methodology through which to calculate and distribute financial rewards to participants in the network based on performance in a number of metrics.
 
-These rewards operate in addition to the main protocol economic incentives as they can be created and funded arbitrarily by users of the network and will be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
+These rewards operate in addition to the main protocol economic incentives.
+They can be funded arbitrarily by users of the network and will be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
+Note that transfers via governance is post-Oregon trail feature.
 
 Terminology:
 - **Reward Type**: a reward type is a class of reward, for instance "simple staking rewards". This specifies:
