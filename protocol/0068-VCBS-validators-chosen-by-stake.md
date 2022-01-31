@@ -98,25 +98,25 @@ Note that this could become obsolete if a future version of the protocol impleme
 
 
 ## Ersatz validators
-New Network Parameter: `MultipleOfTendermintValidatorsForEtsatzSet`
+New Network Parameter: `MultipleOfTendermintValidatorsForErsatzSet`
 In addition to the normal validators, there is an additional set of Ersatz validators as defined by
 the corresponding network parameter. 
 These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. 
 The network will reward 
 ```
-n' := ceil(MultipleOfTendermintValidatorsForEtsatzSet x NumberOfTendermintValidators)
+n' := ceil(MultipleOfTendermintValidatorsForErsatzSet x NumberOfTendermintValidators)
 ```
 ersatz validators. 
 The value range for this decimal is `0.0` to `infinity`. 
 Reasonable values may be e.g. `0.5`, `1.0` or `2.0`.
 
 As the other validators, Ersatz validators are defined through own + delegated stake, being the validators
-with the scores below the Tendermint ones; is `NumberOfTendermintValidators` is `n` and NumberOfErsatzValdators is `n'`, 
+with the scores below the Tendermint ones; is `NumberOfTendermintValidators` is `n` and NumberOfErsatzValidators is `n'`, 
 then these are the validators with scores `n+1` to `n+n'`.
 
 
 ### Performance of Ersatz validators
-Ersatz validators are required non-validator Vega node with all the related infrastructure (etheremum forwarder, data node etc.) at all times, see [the section on performance for non-validator nodes in](./0064-VALP-validator_performance_based_rewards.md).
+Ersatz validators are required non-validator Vega node with all the related infrastructure (Ethereum forwarder, data node etc.) at all times, see [the section on performance for non-validator nodes in](./0064-VALP-validator_performance_based_rewards.md).
 
 ### Rewards for Ersatz validators
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](./0064-VALP-validator_performance_based_rewards.md) and [performance measurement](./0064-VALP-validator_performance_based_rewards.md).
