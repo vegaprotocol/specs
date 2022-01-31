@@ -25,11 +25,11 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 # Calculation
 This applies to the on-chain-treasury for each asset as well as network infrastructure fee pool for each asset. 
 
-As step *zero*: Vega keeps track of validators currently on the Ethereum multisig contract by knowing the initial state and by observing `validator added` and `validator removed` events emmitted by the contract, see [multisig ethereum contract](0030-multisig_control_spec.md).
+As step *zero*: Vega keeps track of validators currently on the Ethereum multisig contract by knowing the initial state and by observing `validator added` and `validator removed` events emmitted by the contract, see [multisig ethereum contract](./0033-OCAN-cancel_orders.md).
 If there are ethereum public keys on the multisig that do not belong to any of the current Tendermint validator nodes then the reward is zero. 
-The obverse case where a Tendermint validator doesn't have their signature on the multisig is dealt with in [validators joining and leaving](0000-validators-chosen-by-stake.md).
+The obverse case where a Tendermint validator doesn't have their signature on the multisig is dealt with in [validators joining and leaving](./0068-VCBS-validators-chosen-by-stake.md).
 The reason for this drastic reduction to rewards is that if there are signatures the multisig is expecting that Vega chain isn't providing there is a danger that control of the multisig is lost. 
-This is to ensure that validators (all validators) have incentive to pay Etherum gas to update the multisig signer list.  
+This is to ensure that validators (all validators) have incentive to pay Ethereum gas to update the multisig signer list.  
 
 At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. First we determine the amount to pay out during that epoch: 
 
@@ -37,10 +37,10 @@ At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. First 
 1. If the reward pool in question is the on-chain treasury for the staking and governance asset then `stakingRewardAmtForEpoch` is updated to `min(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
 
 ## Tendermint Validators and Ersatz validators
- In Vega, we have two sets of Validtors, the primary validators (which run tendermint) and the [ersatz validators](0000-validators-chosen-by-stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
- Both tendermint validators and ersatz get rewards (both from fees and additional from on chain treasury) following the method above:
+ In Vega, we have two sets of Validtors, the primary validators (which run Tendermint) and the [ersatz validators](./0068-VCBS-validators-chosen-by-stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
+ Both Tendermint validators and ersatz get rewards (both from fees and additional from on chain treasury) following the method above:
  1. The reward pool is split into two parts, propotional to the total own+delegated stake the primary- and ersatzvalidators have. 
- Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
+ Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
 
  The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively). 
 
@@ -87,7 +87,7 @@ function validatorScore(valStake) {
   return linearScore
 ```
 
-For ersatz validators, the formular changes slightly:
+For ersatz validators, the formula changes slightly:
 ```
  linearScore = (valStake)/s_total
  linearScore = Math.min(1.0, Math.max(0.0,linearScore))
@@ -98,9 +98,9 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 # Acceptance criteria
 
 ## Spare key on multisig
-1. Four or more tendermint validators with equal own+delegated stake and some ersatz validators are running.
+1. Four or more Tendermint validators with equal own+delegated stake and some ersatz validators are running.
 1. Reward pool is funded.
-1. There is a one-to-one correspondence between tendermint validators' ethereum keys and keys on multisig.
-1. One of the tendermint validators goes offline forever but their key still stays on multisig (no-one updated).
+1. There is a one-to-one correspondence between Tendermint validators' ethereum keys and keys on multisig.
+1. One of the Tendermint validators goes offline forever but their key still stays on multisig (no-one updated).
 1. Epoch ends and multisig hasn't been updated.
 1. No validators get any rewards.
