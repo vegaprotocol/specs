@@ -140,7 +140,7 @@ See [limited network life spec](../non-protocol-specs/0005-limited-network-life.
 ## Joining / leaving VEGA chain (<a name="0068-VCBS-001" href="#0068-VCBS-001">0068-VCBS-001</a>)
 1. A running non-validator node can submit a transaction to become a validator. 
 2. Their perfomance score will be calculated. See [performance score](./0064-VALP-validator_performance_based_rewards.md).
-3. If they meet the Ethereum verification criteria and have enough stake they will become part of the validator set at the start of next epoch. See about [verifying ethereum integration](#VerifyingEthereum).
+3. If they meet the Ethereum verification criteria and have enough stake they will become part of the validator set at the start of next epoch. See about [verifying ethereum integration](#verifying-ethereum-and-later-other-chain-integration).
 4. Hence after the end of the current epoch the node that got "pushed out" will no longer be a validator node for Tendermint. 
 
 ## Multisig update 
