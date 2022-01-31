@@ -1,10 +1,4 @@
 # Validators chosen by stake
-
-- New network parameter `network.validators.tendermint.number`. 
-- New network parameter `network.validators.incumbentBonus`.
-- New network parameter `network.numberEthMultisigSigners`.
-- New network parameter `network.ersatzvalidators.reward.factor`.
-
 At a high level a participant that wishes to become a validator will:
 1) start a Vega node as non-validating node + associated infra 
 1) submit a transaction, see below for details, with their keys, saying they want to validate.
@@ -17,7 +11,7 @@ Note that to be eligible as a potential validator certain criteria need to be me
 
 
 At the end of each epoch Vega will calculate the unnormalised `validator_score`, see [rewards spec](./0061-REWP-simple_pos_rewards_sweetwater.md). 
-For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validatorIncumbentBonus)`. 
+For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validators.incumbentBonus)`. 
 Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance together whether the multisig contract carries the correct information [multisig](./0030-ETHM-multisig_control_spec.md); more on this later.
 
 Vega will sort all current Tendermint validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score. 
@@ -76,8 +70,8 @@ From now we assume that the transaction has been submitted and the node started.
 Basic vega chain liveness criteria is covered in their [performance score](./0064-VALP-validator_performance_based_rewards.md). 
 
 ## Verifying Ethereum (and later other chain) integration
-1) They will be the first node to forward a subsequently accepted ethereum event at least `validator.minimumEthereumEventsForNewValidator` with a default of `3`. 
-1) They are the first one to vote for any ethereum event at least `validator.minimumEthereumEventsForNewValidator` times. 
+1) They will be the first node to forward a subsequently accepted ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` with a default of `3`. 
+1) They are the first one to vote for any ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times. 
 
 ## Multisig updates (and multisig weight updates if those are used)
 
@@ -85,7 +79,7 @@ Vega will know initial multisig signer list (and weights) and watch for `signer 
 Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing. 
 Thus for each validator that is on the multisig contract it will know the validator score (weight) the ethereum multisig is using. 
 
-We will have `network.numberEthMultisigSigners` represented on the multisig (currently `13`) but this could change. 
+We will have `network.validators.multisig.numberOfSigners` represented on the multisig (currently `13`) but this could change. 
 
 In the reward calculation for the top `network.numberMultisigSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.numberMultisigSigners` by score but *not* on the multisig contract. 
 
@@ -120,7 +114,7 @@ Ersatz validators are required non-validator Vega node with all the related infr
 
 ### Rewards for Ersatz validators
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](./0064-VALP-validator_performance_based_rewards.md) and [performance measurement](./0064-VALP-validator_performance_based_rewards.md).
-However `network.ersatzvalidators.reward.factor` in `[0,1]` is taken into account to scale their rewards.
+However `network.validators.ersatz.rewardFactor` in `[0,1]` is taken into account to scale their rewards.
 
 ### Multisig for Ersatz validators
 At this point, Ersatz validators are not part of the Multisig.
@@ -134,6 +128,20 @@ See [limited network life spec](../non-protocol-specs/0005-limited-network-life.
 1. When loading LNL file we have to run the same algorithm that selects the "correct" validators; after this is done Tendermint weights are updated.
 1. If the validators arising from LNL weight updates are missing from the chain because they haven't started nodes then the chain will stop. The restart needs better coordination so the relevant nodes are present. 
 
+# Network Parameters
+
+| Property                                                  | Type             | Example value | Description |
+|-----------------------------------------------------------|------------------|:-------------:|-------------|
+|`network.validators.tendermint.number`                     | String (integer) |       13      |  |
+|`network.validators.incumbentBonus`                        | String (float)   |      0.1      |  |
+|`network.validators.miniumEthereumEventsForNewValidator`   | String (integer) |      100      |  |
+|`network.validators.multisig.numberOfSigners`              | String (integer) |       9       |  |
+|`network.validators.ersatz.rewardFactor`                   | String (float)   |      0.2      |  |
+|`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) |       2       |  |
+
+- New network parameter `network.validators.tendermint.number`. 
+- New network parameter `network.validators.incumbentBonus`.
+- New network parameter `network.numberEthMultisigSigners`.
 
 # Acceptance criteria
 
