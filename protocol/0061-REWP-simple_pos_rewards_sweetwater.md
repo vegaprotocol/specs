@@ -38,7 +38,7 @@ At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. First 
 
 ## Tendermint Validators and Ersatz validators
  In Vega, we have two sets of Validtors, the primary validators (which run tendermint) and the [ersatz validators](0000-validators-chosen-by-stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
- Both these validators get rewards following the method above:
+ Both tendermint validators and ersatz get rewards (both from fees and additional from on chain treasury) following the method above:
  1. The reward pool is split into two parts, propotional to the total own+delegated stake the primary- and ersatzvalidators have. 
  Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
 
