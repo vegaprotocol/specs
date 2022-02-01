@@ -24,10 +24,10 @@ If for any `l,m=1,...,k` we have `w_l == w_m` then we resolve this by giving pri
 Note that we only do this check once per epoch so at most one validator can be changed per epoch in the case `empty_slots == 0`.
 A completely dead node that's proposing to become a validator will have `performance_score = 0` and will thus get automatically excluded, regardless of their stake.
 
-The same way, if there are free slots for ersatz validators and nodes that have submitted the transaction to join and satisfy all joining conditions, they are added as ersatzvalidators in the next round.
-If a node that submitted the transaction to join and satisfies all other conditions and there and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is kicked out. The 'transaction to join' of a validator kicked out this way remains active until the delegated stake drops below the required minimum. As the nodes have not have the opportunity to get a performance record, their performance valued as the average of the performance scores of all ersatzvalidators.
+The same way, if there are free slots for ersatz validators and nodes that have submitted the transaction to join and satisfy all joining conditions, they are added as ersatz validators in the next round.
+If a node that submitted the transaction to join and satisfies all other conditions and there and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is kicked out. The 'transaction to join' of a validator kicked out this way remains active until the delegated stake drops below the required minimum. As the nodes have not have the opportunity to get a performance record, their performance valued as the average of the performance scores of all ersatz validators.
 
-As both these checks are done between epochs, it is possible for a validator to be demoted first from Tendermint validator to ersatzvalidator, and then from ersatzvalidator to nothing.
+As both these checks are done between epochs, it is possible for a validator to be demoted first from Tendermint validator to ersatz validator, and then from ersatz validator to nothing.
 
 ## Becoming validator transaction 
 All keys mentioned here are understood to match the node configuration.
@@ -70,7 +70,11 @@ From now we assume that the transaction has been submitted and the node started.
 Basic vega chain liveness criteria is covered in their [performance score](./0064-VALP-validator_performance_based_rewards.md). 
 
 ## Verifying Ethereum (and later other chain) integration
-1) They will be the first node to forward a subsequently accepted ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` with a default of `3`. 
+In order to be considered for promotion from ersatz validator to Tendermint validator, an ersatz validator must prove itself to be reliable. This is measured by ensuring their
+reliability in forwarding [Ethereum events](./0036-BRIE-event_queue.md). A new network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to 
+set the acceptable minimum count of times that an ersatz validator has either:
+
+1) They will be the first node to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times, or
 1) They are the first one to vote for any ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times. 
 
 ## Multisig updates (and multisig weight updates if those are used)
@@ -108,7 +112,7 @@ then these are the validators with scores `n+1` to `n+n'`.
 
 
 ### Performance of Ersatz validators
-Ersatz validators are required non-validator Vega node with all the related infrastructure (Ethereum forwarder, data node etc.) at all times, see [the section on performance for non-validator nodes in](./0064-VALP-validator_performance_based_rewards.md).
+Ersatz validators are required to run a non-validator Vega node with all the related infrastructure (Ethereum forwarder, data node etc.) at all times, see [the section on performance for non-validator nodes in 0064-VALP](./0064-VALP-validator_performance_based_rewards.md).
 
 ### Rewards for Ersatz validators
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](./0064-VALP-validator_performance_based_rewards.md) and [performance measurement](./0064-VALP-validator_performance_based_rewards.md).
@@ -130,12 +134,12 @@ See [limited network life spec](../non-protocol-specs/0005-limited-network-life.
 
 | Property                                                  | Type             | Example value | Description |
 |-----------------------------------------------------------|------------------|:-------------:|-------------|
-|`network.validators.tendermint.number`                     | String (integer) |       13      |  |
-|`network.validators.incumbentBonus`                        | String (float)   |      0.1      |  |
-|`network.validators.miniumEthereumEventsForNewValidator`   | String (integer) |      100      |  |
-|`network.validators.multisig.numberOfSigners`              | String (integer) |       9       |  |
-|`network.validators.ersatz.rewardFactor`                   | String (float)   |      0.2      |  |
-|`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) |       2       |  |
+|`network.validators.tendermint.number`                     | String (integer) |       13      | The optimal number of validators that should be in the Tendermint validator set    |
+|`network.validators.incumbentBonus`                        | String (float)   |      0.1      | When comparing the stake of existing validators to ersatz validators, this is the bonus that existing validators earn   |
+|`network.validators.miniumEthereumEventsForNewValidator`   | String (integer) |      100      | Ersatz validators must have reported or confirmed this many Ethereum events to be considered for promotion  |
+|`network.validators.multisig.numberOfSigners`              | String (integer) |       9       | Currently set to the number of validators on the network. In future will be used to scale multisig Validator participation.  |
+|`network.validators.ersatz.rewardFactor`                   | String (float)   |      0.2      | Scales down [the rewards](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz validators relative to actual validators  |
+|`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) |       2       | Used to [calculate the number](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz Validators that will earn rewards |
 
 # Acceptance criteria
 

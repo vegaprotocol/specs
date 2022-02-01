@@ -12,7 +12,7 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes. 
 
 ### Other network parameters: 
-- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
+- `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
 - `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
 - `reward.staking.delegation.payoutDelay` - the time between the end of epoch (when the rewards are calculated)  
 - `reward.staking.delegation.payoutFraction` - the fraction of a reward pool / infrastructure fee pool (in any asset) that is to be used for rewards for a single epoch.
@@ -36,10 +36,10 @@ At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. First 
 1. multiply the amount in the reward pool by `reward.staking.delegation.payoutFraction`; this is the amount going into next step, call it `stakingRewardAmtForEpoch`.
 1. If the reward pool in question is the on-chain treasury for the staking and governance asset then `stakingRewardAmtForEpoch` is updated to `min(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
 
-## Tendermint Validators and Ersatz validators
- In Vega, we have two sets of Validtors, the primary validators (which run Tendermint) and the [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
- Both Tendermint validators and ersatz get rewards (both from fees and additional from on chain treasury) following the method above:
- 1. The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatzvalidators have. 
+## Tendermint Validators and ersatz validators
+ In Vega, we have two sets of Validators, the primary validators (which run Tendermint) and the [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
+ Both Tendermint validators and ersatz validators get rewards (both from fees and additional from on chain treasury) following the method above:
+ 1. The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatz validators have. 
  Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
 
  The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively).  
