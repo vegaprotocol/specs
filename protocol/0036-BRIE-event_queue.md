@@ -160,7 +160,7 @@ message GetEventAcceptanceStatusResponse {
 * Vega nodes accept events submitted to `PropagateEvent` and verifies them against configured external blockchain node (<a name="0036-BRIE-008" href="#0036-BRIE-008">0036-BRIE-008</a>)
 * Vega nodes write events to chain once verified (<a name="0036-BRIE-009" href="#0036-BRIE-009">0036-BRIE-009</a>)
 * Vega nodes respond appropriately to `GetEventAcceptanceStatus` (<a name="0036-BRIE-010" href="#0036-BRIE-010">0036-BRIE-010</a>)
-* Vega nodes verify Event existance and outcomes using local Ethereum node
+* Vega nodes verify Event existence and outcomes using local Ethereum node
   * Verify balance changes (<a name="0036-BRIE-011" href="#0036-BRIE-011">0036-BRIE-011</a>)
   * Verify account identities (<a name="0036-BRIE-012" href="#0036-BRIE-012">0036-BRIE-012</a>)
   * Verify transaction hashes (<a name="0036-BRIE-013" href="#0036-BRIE-013">0036-BRIE-013</a>)

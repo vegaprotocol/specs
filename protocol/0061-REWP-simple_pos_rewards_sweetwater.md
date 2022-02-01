@@ -9,23 +9,41 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `totalStake` - the total number of units of the staking and governance asset (VEGA) associated to the Vega chain (but not necessarily delegated to a specific validator).
 1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake. 
+1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes. 
 
 ### Other network parameters: 
-- `delegator_share`: propotion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
+- `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
 - `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
 - `reward.staking.delegation.payoutDelay` - the time between the end of epoch (when the rewards are calculated)  
 - `reward.staking.delegation.payoutFraction` - the fraction of a reward pool / infrastructure fee pool (in any asset) that is to be used for rewards for a single epoch.
 - `reward.staking.delegation.maxPayoutPerParticipant` - the maximum (applies only to on-chain treasury rewards in the form of the staking and governance asset) that each participant may receive as a payout from single epoch. 
 - `reward.staking.delegation.maxPayoutPerEpoch` - the maximum (applies only to on-chain treasury rewards in the form of the staking and governance asset) that may be paid out for a given epoch.
 
+
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
 
 # Calculation
 This applies to the on-chain-treasury for each asset as well as network infrastructure fee pool for each asset. 
 
+As step *zero*: Vega keeps track of validators currently on the Ethereum multisig contract by knowing the initial state and by observing `validator added` and `validator removed` events emitted by the contract, see [multisig ethereum contract](./0033-OCAN-cancel_orders.md).
+If there are ethereum public keys on the multisig that do not belong to any of the current Tendermint validator nodes then the reward is zero. 
+The obverse case where a Tendermint validator doesn't have their signature on the multisig is dealt with in [validators joining and leaving](./0069-VCBS-validators_chosen_by_stake.md).
+The reason for this drastic reduction to rewards is that if there are signatures the multisig is expecting that Vega chain isn't providing there is a danger that control of the multisig is lost. 
+This is to ensure that validators (all validators) have incentive to pay Ethereum gas to update the multisig signer list.  
+
 At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. First we determine the amount to pay out during that epoch: 
+
 1. multiply the amount in the reward pool by `reward.staking.delegation.payoutFraction`; this is the amount going into next step, call it `stakingRewardAmtForEpoch`.
 1. If the reward pool in question is the on-chain treasury for the staking and governance asset then `stakingRewardAmtForEpoch` is updated to `min(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
+
+## Tendermint Validators and ersatz validators
+ In Vega, we have two sets of Validators, the primary validators (which run Tendermint) and the [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
+ Both Tendermint validators and ersatz validators get rewards (both from fees and additional from on chain treasury) following the method above:
+ 1. The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatz validators have. 
+ Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
+
+ The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively).  
+
 
 ## For each validator we then do:
 1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is  both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`. 
@@ -38,7 +56,7 @@ Note `validatorScore` also depends on the other network parameters, see below wh
 1. The amount to be distributed among all the parties that delegated to this validator is `allDelegatorsAmt := nodeAmount x delegatorShare x score_val / total_score`.  
 
 ### For each delegator that delegated to this validator
-Each delegator should now recieve `delegatorTokens / (allDelegatedTokens + validatorsOwnTokens)`. 
+Each delegator should now receive `delegatorTokens / (allDelegatedTokens + validatorsOwnTokens)`. 
 Note that this is subject to `reward.staking.delegation.maxPayoutPerParticipant`, see below. 
 
 ### Minimum validator stake 
@@ -55,7 +73,7 @@ Rewards are distributed after the end of an epoch with a delay set by `reward.st
 ## validatorScore functions:
 
 This is defined as follows: 
-```
+```javascript
 function validatorScore(valStake) { 
   a = Math.max(s_minVal, s_numVal/s_compLevel)
   optStake = s_total / a
@@ -67,6 +85,23 @@ function validatorScore(valStake) {
   // make sure we're between 0 and 1.
   linearScore = Math.min(1.0, Math.max(0.0,linearScore))
   return linearScore
+}
 ```
 
+For ersatz validators, the formula changes slightly:
+```go
+ linearScore = (valStake)/s_total
+ linearScore = Math.min(1.0, Math.max(0.0,linearScore))
+```
+i.e., there is no anti-whaling function applied here (the penalties are removed)
 
+
+# Acceptance criteria
+
+## Spare key on multisig (<a name="0061-REWP-001" href="#0061-REWP-001">0061-REWP-001</a>) 
+1. Four or more Tendermint validators with equal own+delegated stake and some ersatz validators are running.
+1. Reward pool is funded.
+1. There is a one-to-one correspondence between Tendermint validators' ethereum keys and keys on multisig.
+1. One of the Tendermint validators goes offline forever but their key still stays on multisig (no-one updated).
+1. Epoch ends and multisig hasn't been updated.
+1. No validators get any rewards.
