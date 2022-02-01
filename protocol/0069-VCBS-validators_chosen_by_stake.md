@@ -9,6 +9,8 @@ Note that to be eligible as a potential validator certain criteria need to be me
 1) Own stake >= `reward.staking.delegation.minimumValidatorStake`. 
 1) Network has verified key ownership (see below).
 
+![Untitled-2022-02-01-1439](https://user-images.githubusercontent.com/6678/151998972-b7cd2a28-b5de-4ae6-b200-f1c0908a36ab.png)
+
 
 At the end of each epoch Vega will calculate the unnormalised `validator_score`, see [rewards spec](./0061-REWP-simple_pos_rewards_sweetwater.md). 
 For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validators.incumbentBonus)`. 
