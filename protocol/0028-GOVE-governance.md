@@ -21,7 +21,7 @@ The types of governance action are:
 2. Change an existing market's parameters
 3. Change network parameters
 4. Add an external asset to Vega (covered in a [separate spec - see 0027](./0027-ASSP-asset_proposal.md))
-5. Authorise a transfer to or from the [Network Treasury](TODO: LINK)
+5. Authorise a transfer to or from the [Network Treasury](./0055-TREA-on_chain_treasury.md)
 6. Freeform proposals
 ## Lifecycle of a proposal
 
