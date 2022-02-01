@@ -81,7 +81,7 @@ Thus for each validator that is on the multisig contract it will know the valida
 
 We will have `network.validators.multisig.numberOfSigners` represented on the multisig (currently `13`) but this could change. 
 
-In the reward calculation for the top `network.numberMultisigSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.numberMultisigSigners` by score but *not* on the multisig contract. 
+In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *not* on the multisig contract. 
 
 Thus a validator who is not there but should be has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well. 
 
@@ -137,10 +137,6 @@ See [limited network life spec](../non-protocol-specs/0005-limited-network-life.
 |`network.validators.ersatz.rewardFactor`                   | String (float)   |      0.2      |  |
 |`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) |       2       |  |
 
-- New network parameter `network.validators.tendermint.number`. 
-- New network parameter `network.validators.incumbentBonus`.
-- New network parameter `network.numberEthMultisigSigners`.
-
 # Acceptance criteria
 
 ## Joining / leaving VEGA chain (<a name="0069-VCBS-001" href="#0069-VCBS-001">0069-VCBS-001</a>)
@@ -151,7 +147,7 @@ See [limited network life spec](../non-protocol-specs/0005-limited-network-life.
 
 ## Multisig update 
 1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-VCBS-002" href="#0069-VCBS-002">0069-VCBS-002</a>)
-2. For validators up to `number_multig_signers` the `validator_score` is capped by the value on `ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `number_multig_signers` by `validator_score` on VEGA). (<a name="0069-VCBS-003" href="#0069-VCBS-003">0069-VCBS-003</a>)
+2. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-VCBS-003" href="#0069-VCBS-003">0069-VCBS-003</a>)
 3. It is possible to submit a transaction to update the weights. (<a name="0069-VCBS-004" href="#0069-VCBS-004">0069-VCBS-004</a>)
  
 
