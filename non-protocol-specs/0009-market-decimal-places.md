@@ -22,7 +22,7 @@ priceExponent = 10 ** (2 - 0) == 100
 priceExponent = 10 ** (18 -9) == 1,000,000,000
 ```
 
-When an order is submitted, amended, or otherwise updated, the core emits an event for the data-node (and any other interested parties). The price in this order event should still be represented as a value in market precision. Updating the price on the order internally, for reasonse we shall elaborate on later, should not effect the market data on the event bus. To clarify:
+When an order is submitted, amended, or otherwise updated, the core emits an event for the data-node (and any other interested parties). The price in this order event should still be represented as a value in market precision. Updating the price on the order internally, for reasons we shall elaborate on later, should not effect the market data on the event bus. To clarify:
 
 ```
 // given market decimal places == 0, settlement precision == 2
@@ -40,7 +40,7 @@ In short, market related events should specify prices in the _"unit"_ the market
 
 ### Benefits
 
-By allowing markets to specify their own precision, the price levels can be more closely controlled, and any changes in the mark price could be made as _"significant"_ as we want. By converting the prices internally to asset precision, we are able to accurately calculate fees and margin levels based on the asset precision. Fees and margins are, after all, a percentage of a value. By operating a market with a lower precision than the asset itself, fees and margin requirements can be calculated with a higher level of precision.
+By allowing markets to specify their own precision, the price levels can be more closely controlled, and any changes in the mark price could be made as _"significant"_ as we want. By converting the prices internally to asset precision, we are able to accurately calculate fees and margin levels based on the asset precision. By operating a market with a lower precision than the asset itself, fees and margin requirements can be calculated with a higher level of precision.
 
 ## Changes required
 
@@ -57,7 +57,7 @@ When (re-)pricing pegged orders, the offset values are multiplied by the same pr
 
 ### Liquidity provisions
 
-Orders created for an LP work pretty much exactly the same as pegged orders. The offsets will, again, be multiplied when the price is calculated, but the LP shape object is not updated.
+Orders created for an LP work pretty much exactly the same as pegged orders. The offsets will, again, be multiplied by the price exponent when the price is calculated, but the LP shape object is not updated.
 When repricing LP orders, we ensure the price of the orders fall inside the upper and lower price bounds. These values are going to be calculated based on the prices used internally (in asset precision). So as to not create orders at a price point that is more precise than the market is configured to support, we floor the max price bound, and ceil the minimum price, as those values will effectively be the max and min prices that are allowed without trades resulting in an auction being triggered.
 
 ### Market data
