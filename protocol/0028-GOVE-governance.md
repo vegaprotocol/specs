@@ -18,11 +18,11 @@ Governance actions can be the end result of a passed proposal. The allowable typ
 The types of governance action are:
 
 1. Create a new market
-1. Change an existing market's parameters
-1. Change network parameters
-1. Add an external asset to Vega (covered in a [separate spec - see 0027](./0027-ASSP-asset_proposal.md))
-1. Authorise a transfer to or from the [Network Treasury](TODO: LINK)
-
+2. Change an existing market's parameters
+3. Change network parameters
+4. Add an external asset to Vega (covered in a [separate spec - see 0027](./0027-ASSP-asset_proposal.md))
+5. Authorise a transfer to or from the [Network Treasury](./0055-TREA-on_chain_treasury.md)
+6. Freeform proposals
 ## Lifecycle of a proposal
 
 Note: there are some differences/additional points for market creation proposals, see the section on market creation below.
@@ -98,7 +98,7 @@ The network's _minimum proposal duration_ - as specified by a network parameter 
 
 ### When a proposal is enacted
 
-Note: market creation proposals are handled slightly differently, see below
+Note: market creation proposals are handled slightly differently, see below. Freeform proposals are never enacted.
 
 A new proposal that contains a governance action can specify when any changes resulting from a successful vote would start to be applied. e.g: A new proposal is created in order to create a new market with an enactment date 1 week after vote closing. After 3 weeks the proposal is closed (the duration of the proposal), and if there are enough votes to accept the new proposal, then the changes will be applied in the network 1 week later.
 
@@ -189,7 +189,6 @@ All **change network parameter proposals** have their validation configured by t
 New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)). Unlike markets, assets cannot be updated after they have been added.
 
 ## 5. Transfers initiated by Governance
-
 ### Permitted source and destination account types
 
 The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal. 
@@ -268,7 +267,7 @@ transfer_amount == min(
 
 ## 6. Freeform governance proposal
 
-The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. Instead the proposals will contain an link to text describing the required actions. The proposal will contain 
+The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. Freeform proposals contain a URL to text describing the proposal in full. The proposal will contain:
 - a link to a text file in markdown format and 
 - a cryptographically secure hash of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
 - a description field to show a short title / something in case the link goes offline. This is to be between `0` and `255` unicode characters.
@@ -326,37 +325,42 @@ APIs should also exist for clients to:
 
 # Acceptance Criteria
 
-- [x] As a user, I can create a new proposal to affect the vega network (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)
-- [x] As a user, I can list the open proposal on the network (<a name="0028-GOVE-002" href="#0028-GOVE-002">0028-GOVE-002</a>)
+- [x] As a user, I can create a new proposal, assuming my staking balance matches or exceeds `minProposerBalance` network param for my proposal type (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)
+- [x] As a user, I can list the open proposals on the network (<a name="0028-GOVE-002" href="#0028-GOVE-002">0028-GOVE-002</a>)
 - [ ] As a user, I can get a list of all proposals I voted for (<a name="0028-GOVE-003" href="#0028-GOVE-003">0028-GOVE-003</a>)
 - [x] As a user, I can receive notification when a new proposal is created and may require attention. (<a name="0028-GOVE-004" href="#0028-GOVE-004">0028-GOVE-004</a>)
-- [x] As the vega network, all the votes for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)
+- [x] As the vega network, all votes from eligible users for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)
 - [x] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected* (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)
 - [x] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it. (<a name="0028-GOVE-007" href="#0028-GOVE-007">0028-GOVE-007</a>)
-- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - [ ] As the vega network, proposals that close less than 2 days from enactment are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
 - [ ] As the vega network, proposals that close more/less than 1 year from enactment are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
-
-## Governance proposal types
-### New Market proposals
-- [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
-
-### Market change proposals
-- [ ] Market change proposals can only propose a change to a single parameter (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
-
-### Network parameter change proposals
-- [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
-
-## Using Vega governance tokens as voting weight:
-- [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens in my staking account (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
+- [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens in my staking account, assuming it matches or exceeds the `minVoterBalance` network parameter for the proposal type (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
 - [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account (<a name="0028-GOVE-015" href="#0028-GOVE-015">0028-GOVE-015</a>)
 - [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account even if I have more than 0 governance tokens in my general or margin accounts (<a name="0028-GOVE-016" href="#0028-GOVE-016">0028-GOVE-016</a>)
 - [ ] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens in my staking account
   - [x] Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)
 - [ ] When calculating the participation rate of an auction, the participation rate of the votes takes in to account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
 
-# Test cases
-Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
+
+## Governance proposal types
+### New Market proposals
+- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
+
+### Market change proposals
+- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [ ] Market change proposals can only propose a change to a single parameter (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
+
+### Network parameter change proposals
+- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
+
+### Freeform governance proposals
+- [ ] A freeform governance proposal with a description field that is empty, or not between 0 and 255 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
+- [ ] A freeform governance must contain a hash field and it must not be null, but no other check is done to verify it (<a name="0028-GOVE-020" href="#0028-GOVE-020">0028-GOVE-020</a>)
+- [ ] A freeform governance must contain a link field and it must not be null, but no other check is done to verify it (<a name="0028-GOVE-021" href="#0028-GOVE-021">0028-GOVE-021</a>)
+- [ ] A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
+- [ ] Closed freeform governance proposals can be retrieved from the API along with details of how tokenholders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
 
 ## 💧 Sweetwater
 

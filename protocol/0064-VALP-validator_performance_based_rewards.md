@@ -5,7 +5,7 @@ The rewards are based on their own stake and the amount of stake delegated to th
 see [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
 The purpose of the specification is to define how will the validator rewards will be additionally scaled based on their performance. 
 
-## Perfomance Measurement 1 (PM1): Offline Validator (sufficient for Oregon Trail)
+## Performance Measurement 1 (PM1): Offline Validator (sufficient for Oregon Trail)
 Goal: Detect how long a validator is offline and punish them 
 Detection: Validator does not act as a leader
 
@@ -16,13 +16,24 @@ was elected leader `l` and carried out the job.
 To be more precise: Tendermint emits an event for every round of proposal at a given height, so we know who the proposer should have been. It also emits an event with a timeout for the height of the round so we can tell that the node wasn't available. 
 This counts need to be stored, per validator node, in vega core. 
 
-Define the performance score to be `performance_score := (l-f)/l` if `l > 0` and `performance_score = 0` if `l = 0`. 
+For validators participating in consensus (Tendermint validators) define the performance score to be `performance_score := max[(l-f)/l, 0.05]` if `l > 0` and `performance_score = 1` if `l = 0`. 
+Flooring the score at `0.05` is there to make sure that every validator with non-zero own+delegated gets a chance to be a leader at least occasionally, even if they were poorly performing recently. 
+
+For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
+Every `1000` blocks the candidate validator node is to send a hash of block number `b` separetely signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
+Here `b` is defined as:
+First time it is the the block number in which the joining transaction was included. Then it's incremented by `1000`. 
+The network will keep track of the last `10` times this was supposed to happen and the `performance_score` is the number of times this has been verified divided by `10`.  
+The message with the signed block hash must be in blocks `b+1000` to `b+1010` to count as successfully delivered.  
+Initially the performance score is set to `0`.
+Both Tendermint validators and candidate validators should be signing and sending these messages but only for the candidate validators does this impact their score.
+
 
 The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
 
 ### Acceptance criteria 
 
-# Scenario 1: (<a name="0064-valp-001" href="#0064-valp-001">0064-valp-001</a>)
+# Scenario 1: (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>)
 1. Configure and launch a network with 5 validators
 1. Give each validator self-stake of 10 000 VEGA. Set epoch length to 10 minutes.
 1. Deposit a 1000 VEGA into the validator reward pool.
