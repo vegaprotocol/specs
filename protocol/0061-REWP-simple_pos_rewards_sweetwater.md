@@ -14,27 +14,20 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 ### Other network parameters: 
 - `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
 - `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
-- `reward.staking.delegation.payoutDelay` - the time between the end of epoch (when the rewards are calculated)  
-- `reward.staking.delegation.payoutFraction` - the fraction of a reward pool / infrastructure fee pool (in any asset) that is to be used for rewards for a single epoch.
 - `reward.staking.delegation.maxPayoutPerParticipant` - the maximum (applies only to on-chain treasury rewards in the form of the staking and governance asset) that each participant may receive as a payout from single epoch. 
-- `reward.staking.delegation.maxPayoutPerEpoch` - the maximum (applies only to on-chain treasury rewards in the form of the staking and governance asset) that may be paid out for a given epoch.
 
 
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
 
 # Calculation
 This applies to the on-chain-treasury for each asset as well as network infrastructure fee pool for each asset. 
+At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. 
 
 As step *zero*: Vega keeps track of validators currently on the Ethereum multisig contract by knowing the initial state and by observing `validator added` and `validator removed` events emitted by the contract, see [multisig ethereum contract](./0033-OCAN-cancel_orders.md).
 If there are ethereum public keys on the multisig that do not belong to any of the current Tendermint validator nodes then the reward is zero. 
 The obverse case where a Tendermint validator doesn't have their signature on the multisig is dealt with in [validators joining and leaving](./0069-VCBS-validators_chosen_by_stake.md).
 The reason for this drastic reduction to rewards is that if there are signatures the multisig is expecting that Vega chain isn't providing there is a danger that control of the multisig is lost. 
 This is to ensure that validators (all validators) have incentive to pay Ethereum gas to update the multisig signer list.  
-
-At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. First we determine the amount to pay out during that epoch: 
-
-1. multiply the amount in the reward pool by `reward.staking.delegation.payoutFraction`; this is the amount going into next step, call it `stakingRewardAmtForEpoch`.
-1. If the reward pool in question is the on-chain treasury for the staking and governance asset then `stakingRewardAmtForEpoch` is updated to `min(stakingRewardAmtForEpoch, reward.staking.delegation.maxPayoutPerEpoch)`. 
 
 ## Tendermint Validators and ersatz validators
  In Vega, we have two sets of Validators, the primary validators (which run Tendermint) and the [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
@@ -67,8 +60,6 @@ If the reward pool in question is the on-chain treasury for the staking and gove
 The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant receives their due, capped by the max. The unpaid amount remain in the treasury.
 Setting this to `0` means no cap.
 
-### Payout delay
-Rewards are distributed after the end of an epoch with a delay set by `reward.staking.delegation.payoutDelay` 
 
 ## validatorScore functions:
 

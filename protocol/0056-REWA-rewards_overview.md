@@ -1,161 +1,168 @@
 # Reward framework
 
-The reward framework provides for a standardised transaction API, funding approach, and execution methodology through which to calculate and distribute financial rewards to participants in the network based on performance in a number of metrics.
-
-These rewards operate in addition to the main protocol economic incentives as they can be created and funded arbitrarily by users of the network and will be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
-
-Terminology:
-- **Reward Type**: a reward type is a class of reward, for instance "simple staking rewards". This specifies:
-  - the parameters that control reward calculation and dissemination including the applicable scope(s) of the reward type (i.e. network wide, per asset, per market)
-  - the logic that defines how to calculate and distribute the reward
-- **Reward Scheme**: a reward scheme is an instance of a reward type that includes all the parameters needed to calculate the reward. Multiple reward schemes may instantiated for each reward type, even with duplicate parameters.
-- **Reward Pool Accounts**: each active reward scheme has one reward pool account for each asset that has been transferred to it (these would be created as needed)
-
-Vega will initially provide built-in reward types for key types of incentives related to staking/delegation, liquidity provision, and trading (note: only a single staking/delegation reward type is required for Sweetwater).
-
-💧 see section at bottom of file on Sweetwater scope
-🤠 see section at bottom on Oregon Train scope
-
-## Reward Types
-
-Reward types will be specified in separate spec files, with each reward type specifying its applicable scope requirements, parameters, and calculation method.
-
-### Applicable scope
-
-Scope defines the constraints on a reward calculation. For example, a reward type that looks at total governance token holdings may always apply network-wide (i.e. to all participants), whereas a reward looking at traded notional might be restricted to trading in a single asset (because values in two or more assets are not comparable/convertable), but could also operate on narrower scopes, for instance trades on a specific market.
-
-When defining a reward type, the specification should state the allowable scopes for rewards schemes of that type.
-
-### Paraemters
-
-A reward type may have one or more parameters that can be defined for each reward scheme of that type. These parameters may be used by the calculation logic to control how the split of rewards is decided between eligible participants.
+## New network parameter
+- `rewards.marketCreationQuantumMultiple` will be used to asses market size together with [quantum](0040-ASSF-asset_framework.md) when deciding whether to pay market creation reward or not. 
+It is reasonable to assume that `quantum` is set to be about `1 USD` so if we want to reward futures markets with traded notional over 1 mil USD then set this to `1000000`. Any decimal value strictly greater than `0` is valid. 
 
 
-### Calculation method
+The reward framework provides a mechanism for measuring and rewarding a number of trading activties on the Vega network. 
+These rewards operate in addition to the main protocol economic incentives which come from 
+[fees](0029-FEES-fees.md) on every trade. 
+Said fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](0061-REWP-simple_pos_rewards_sweetwater.md). 
 
-The calculation method defines the logic that is used to determine which participants are eligible for a reward and how to calculate the relative amount distributed to each participant.
+The additional trading rewards described here can be funded arbitrarily by users of the network and will be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
+Note that transfers via governance is post-Oregon trail feature.
 
-The calculation method should provide a list of parties and scaling relative amounts. The relative amounts will be used to calculate the amount actually distributed as a share of the available pot for each reward scheme, taking into account the parameters.
+Note that validator rewards (and the reward account for those) is covered in [validator rewards](0061-REWP-simple_pos_rewards_sweetwater.md) and is separate from the trading reward framework described here. 
 
-For example, if the parties and relative amounts are: Party A, 60; Party B, 100; Party C, 40 (total=200). And if the rewards to be distributed are 500 VEGA. Then the amounts distributed will be:
-- Party A = (60 / 200) * 500 = 150 VEGA
-- Party B = (100 / 200) * 500 = 250 VEGA
-- Party C = (40 / 200) * 500 = 100 VEGA
+## Reward metrics
 
-Care must be taken when defining calculation methods to create reward calculations that can be efficiently calculated taking into account both storage and computational resources. Principles for good reward calculations include:
-- Should calculate, store and maintain single values rather than arbitrarily long lists (i.e. a reward calculation that maintains a running total traded volume by asset for each party over a period, rather than one that requires a list of all of a party's trades)
-- Should only need to store a maximum of one set of metrics for the reward type, as opposed to needing to store separate running metrics for each instance (therefore, differences in parameterisation or scope should take effect when using the metrics in the calculation of the rewards at period end)
-- Should try to use simple logic and maths and avoid complex calculations and logic involving looping, etc.
-- All calculations must work in the decimal data type (no floats allowed)
-- Should reuse data and metrics that are already known to the core protocol due to being used elsewhere, examples of [nearly] "free" data like this include:
-  - fees collected or paid
-  - cumulative order book or trading volumes
-  - liquidity provider data including LP shares, market value proxy, etc.
-  - balances of accounts
-  - staking and delegation information
+Reward metrics need to be calculated for every relevant Vega [party](0017-PART-party.md). By relevant we mean that the metric is `> 0`. 
 
+There will be the following fee metrics:
+1. Sum of fees paid (accross all markets for an asset).
+1. Sum of maker fees received (accross all markets for an asset).
+1. Sum of LP fees received (accross all markets for an asset).
 
-## Reward Schemes
+There will be the following market creation metrics:
+1. Market total [trade value for fee purposes](0029-FEES-fees.md) since market creation multiplied by either `1` if the market creation reward for this market has never been paid or by `0` if the reward has already been paid.
 
-A reward scheme is defined as a reward type plus parameters. Each reward scheme that is created can have up to one reward pool account per asset (see below). 
+Reward metrics are not stored in [LNL checkpoints](../non-protocol-specs/0005-limited-network-life.md). 
 
+## Rewards accounts
 
-### Creating reward schemes
+There will be *one* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). 
+Any asset on Vega can be either settlement asset or reward asset or both. 
 
-Reward schemes are created by a transaction that specifies the information described below:
-- Reward type
-- Scope of reward scheme, e.g. a specific market, asset, or network wide (must be a scope compatible with the reward type)
-- Reward scheme parameters (as required for the reward type)
-- Frequency of calculation (specified as interval between payouts)
-- Reward scheme start date/time
-- Reward scheme end date/time (blank for never)
-- Payout type and parameters, either:
-  - Fractional: try to pay a specified fraction of reward pool account balance(s) each period expressed as a decimal (`0.0 < fraction <= 1.0`).
-  - Balanced: pay `X/n` out each period where `X` is the balance of the reward pool account and `n` is the number of period remaining until the end date, including the current period (only valid where the scheme has an end date)
-- Max payout per asset per recipient: optionally a list of `{asset, max_amount}` pairs. Where provided, `max_amount` limits the amount of `asset` that will be paid out to any one account during a period.
-- Payout delay: time period between reward calculation and payout (may be zero)
+It must be possible for any party to run a one off [transfer](????-????-transfers.md) or create a [periodic transfer](????-????-transfers.md) to any of these reward accounts. 
+Note that saying "per every Vega asset" twice above isn't a typo. We want to be able to pay rewards e.g. in $VEGA for markets settling in e.g. $USDT. 
 
-The transaction to create a reward scheme must either be:
-- a governance proposal including the above information; OR
-- a standard transaction accompanied by a transfer of initial funds to the reward pool subject to per-asset minimum (based off minimum LP stake amount)
-
-Once reward is created it is assigned a reward ID, which is also used to identify the reward pool account(s) for the scheme in transfers.
+Reward accounts and balances are to be saved in [LNL checkpoint](../non-protocol-specs/0005-limited-network-life.md). 
 
 
-### Spam protection
+## Reward distribution
 
-Creating a reward scheme outside of governance must be accompanied by an amount of funding for the reward pool in at least one asset. At least one asset included in this funding must have an amount included greater than or equal to `reward_funding_multiple * asset.min_lp_stake` where `reward_funding_multiple` is a network parameter and `asset.min_lp_stake` is the minimum LP stake amount configured for the asset.
+All rewards are paid out at the end of any epoch. There are no fractional payouts and no delays. 
 
+### For fee based metrics
+Every epoch the entire reward account for every asset and *fee* metric type will be distributed pro-rata to the parties that have the metric `>0`. 
+That is if we have reward account balance `R`
+```
+[p_1,m_1]
+[p_2,m_2]
+...
+[p_n,m_n]
+```
+then calculate `M:= m_1+m_2+...+m_n` and transfer `R x m_i / M` to party `p_i` at the end of each epoch. 
+If `M = 0` (no-one incurred / received fees for a given reward account)  then nothing is paid out of the reward account and the balance rolls into next epoch. 
 
-### Updating reward scheme parameters
+Metrics will be calculated using the [decimal precision of the settlement asset](????-????-market-decimal-places.md).
 
-A Reward Scheme may only be updated by governance proposal. Updates work like network parameter changes where the parameter name is an identifier and the reward scheme ID (i.e. something like `rewards.<SCHEME_ID>`) and the values are stored as a single structured network parameter. The following may be changed: 
-- scheme parameters
-- scheme end date/time
-- payout type and parameters
-- max payout per asset per recipient
-- payout delay
+### For market creation metrics
 
-
-### Cancelling reward schemes
-
-A Reward Scheme may only be cancelled by a governance proposal. On cancellation, any undistributed funds in the reward pool account will be transferred to the network treasury for the asset.
-
-
-## Reward Pool Accounts
-
-A Reward Pool is account created for a `{reward scheme, asset}` combination when funds are transferred to the reward scheme ID. 
-
-## Reward Execution:
-
-For each active reward scheme, the reward calculation will be run at the end of each period. This calculation will create a list of account IDs (generally party IDs) and `scaling_factors` (implying an `account_scaling_factor` for each eligible account) — see calculation method above.
-
-For each reward pool account for the reward scheme with a non-zero balance:
-
-1. Calculate the `total_payout` either as a fixed fraction of the balance (if payout type = fraction) or as the fraction of the balance resulting from dividing the balance equally by the number of remaining periods (if payout type = balanced).
-1. Calculate the payout per eligible account by: `account_payout = total_payout * (account_scaling_factor / sum(scaling_factors)`
-1. If a per asset max amount per recipient is specified for the asset, then cap each eligible account's payout to the `max_amount` specified. The remaining funds will not be distributed and so remain in reward scheme account.
-1. If a non-zero payout delay is specified, wait for the required time before continuing to the next step
-1. Transfer the capped `account_payout` amounts calculated in the previous step to each eligible account.
-
-
-## Sweetwater
-
-Sweetwater scope only requires that a single instance of the single reward function for staking and delegation is active and can accept and payout funds from [the on-chain treasury](./0058-on-chain-treasury.md).
-It is therefore not necessary to build any of the transactions or control logic that will be needed for the reward framework once trading and liquidity provision rewards exist (required for Oregon Trail). Max payout per recipient and payout delay are required for 💧.
+In any epoch when for any asset and for any markets settling in the asset, if market total [trade value for fee purposes](0029-FEES-fees.md) since market creation exceeds `quantum x rewards.marketCreationQuantumMultiple` then split the reward pool (for market creation in said asset) equally between all markets. 
 
 
 ## Acceptance criteria
 
 
-### 💧 Sweetwater
+### Funding reward accounts (<a name="0056-rewa-001" href="#0056-rewa-001">0056-rewa-001</a>)
 
-- There is a single reward scheme of type [staking and delegation rewards](./0057-REWF-reward_functions.md) (<a name="0056-REWA-001" href="#0056-REWA-001">0056-REWA-001</a>)
-  - It has a reward scheme ID (<a name="0056-REWA-002" href="#0056-REWA-002">0056-REWA-002</a>)
-  - Its parameters can be updated by governance vote (<a name="0056-REWA-003" href="#0056-REWA-003">0056-REWA-003</a>)
-  - It cannot be cancelled entirely (though the payout amount can be set to 0) (<a name="0056-REWA-004" href="#0056-REWA-004">0056-REWA-004</a>)
-  - Rewards are paid out correctly at the frequency specified by the current parameters (<a name="0056-REWA-005" href="#0056-REWA-005">0056-REWA-005</a>)
-  - Rewards are capped to the max payout per recipient correctly (<a name="0056-REWA-006" href="#0056-REWA-006">0056-REWA-006</a>)
-  - Payout is delayed by the correct amount of time if a payout delay is specified (<a name="0056-REWA-007" href="#0056-REWA-007">0056-REWA-007</a>)
-  - The reward scheme doesn't and cannot have an end time specified (as we do not allow creation of new schemes, this one cannot end) (<a name="0056-REWA-008" href="#0056-REWA-008">0056-REWA-008</a>)
-  - Fractional payout type is available (<a name="0056-REWA-009" href="#0056-REWA-009">0056-REWA-009</a>)
-  - The reward scheme scope is network-wide (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
-- When funds in a given asset are allocated to the reward scheme ID (for 💧 this only needs to be via automated allocation controlled by governance) a reward pool account is created for the asset: (<a name="0056-REWA-011" href="#0056-REWA-011">0056-REWA-011</a>)
-  - Funds in all reward pool accounts for the scheme are paid out when rewards are paid (<a name="0056-REWA-012" href="#0056-REWA-012">0056-REWA-012</a>)
-  - Each account's balance is used when calculating the amount based on the configured payout fraction (<a name="0056-REWA-013" href="#0056-REWA-013">0056-REWA-013</a>)
-  - Funds cannot be transferred out of the reward pool accounts other than when they are paid out as rewards (<a name="0056-REWA-014" href="#0056-REWA-014">0056-REWA-014</a>)
-  - Funds cannot be transferred directly to a reward pool account (<a name="0056-REWA-015" href="#0056-REWA-015">0056-REWA-015</a>)
-- APIs allow the reward scheme and its parameters to be queried (<a name="0056-REWA-016" href="#0056-REWA-016">0056-REWA-016</a>)
-- APIs allow a party to see how much was paid out to them (ideally this would just use the generalised transfers API filtered by type, but that may not exist for 💧 and this is needed) (<a name="0056-REWA-017" href="#0056-REWA-017">0056-REWA-017</a>)
-- Updated to the reward scheme parameters are applied correctly for all future distributions (<a name="0056-REWA-018" href="#0056-REWA-018">0056-REWA-018</a>)
-- No reward schemes can be created (<a name="0056-REWA-019" href="#0056-REWA-019">0056-REWA-019</a>)
-- Only staking and delegation reward types are available (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>)
+There are two assets configured on the Vega chain: $VEGA and USDT. There are `4` reward metrics. Then there will be `2 x 4 x 2 = 16` reward accounts. 
+More specifically, for each metric `i=1,2,3,4` there will be
+```
+settlement asset | metric   | reward asset 
+-----------------|----------|--------------
+USDT             | metric i | USDT
+USDT             | metric i | $VEGA
+$VEGA            | metric i | USDT 
+$VEGA            | metric i | $VEGA
+```
+
+A party with USDT balance can do one-off transfers to `USDT  | metric i | USDT` and `$VEGA | metric i | USDT` for `i=1,2,3,4`. 
+
+A party with VEGA balance can set up a periodic tranfers to `USDT  | metric i | $VEGA` and `$VEGA  | metric i | $VEGA` for `i=1,2,3,4`. 
+
+### Distributing fees paid rewards (<a name="0056-rewa-010" href="#0056-rewa-010">0056-rewa-010</a>)
+
+There are two assets configured on the Vega chain: $VEGA and USDT. There are no markets.
+The fees are as follows: `maker_fee = 0.0001`, `infrastructure_fee = 0.0002`.  
+`ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`; `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = `2700` and and best offer = `2800` are supplied by `party_0` each with volume `10`. 
+Moreover `party_0` provides liquidiity with `liquidity_fee = 0.0003` and offset + 10 (so their LP volume lands on `2690` and `2810`). 
+
+A `party_0` makes a transfer of `90` `$VEGA` to `USDT | Sum of fees paid | VEGA` in epoch `2`.
+During epoch `2` we have `party_1` make one buy market order with volume `2` USDT. 
+During epoch `2` we have `party_2` make one sell market order each with notional `1` USDT.  
+Verify that at the end of epoch `2` the metric `sum of fees paid` for `party_1` is:
+```
+2 x 2800 x (0.0001 + 0.0002 + 0.0003) = 3.36
+```
+and for `party_2` it is 
+```
+1 x 2700 x (0.0001 + 0.0002 + 0.0003) = 1.62
+```
+At the end of epoch `2` `party_1` is paid `90 x 3.36 / 4.98 = 60.72..` $VEGA from the reward account into its general account. 
+
+At the end of epoch `2` `party_2` is paid `90 x 1.62 / 4.98 = 29.28..` $VEGA from the reward account into its general account. 
+
+### Distributing maker fees received rewards (<a name="0056-rewa-011" href="#0056-rewa-011">0056-rewa-011</a>)
+
+There are two assets configured on the Vega chain: $VEGA and USDT. There are no markets.
+The fees are as follows: `maker_fee = 0.0001`, `infrastructure_fee = 0.0002`.  
+`ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`; `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = `2700` and and best offer = `2800` are supplied by `party_0` each with volume `10`. Moreover `party_0` provides liquidiity with `liquidity_fee = 0.0003` and offset + 10 (so their LP volume lands on `2690` and `2810`). 
+
+During epoch 2 `party_R` makes a transfer of `120` `$VEGA` to `USDT | Sum of maker fees received | VEGA`. 
+During epoch 2 `party_1` puts a limit buy order of vol `10` at `2710` and a limit sell order of vol `10` at `2790`. 
+After that, during epoch 2 `party_2` puts in a market buy order of volume `20`. 
+
+Verify that at the end of epoch `2` the metric `sum of maker fees received` for `party_1` is:
+```
+10 x 2790 x 0.0001 = 2.79
+```
+and for `party_0` it is 
+```
+10 x 2800 x 0.0001 = 2.8
+```
+
+At the end of epoch `2` `party_1` is paid `90 x 2.79 / (2.79+2.8)` $VEGA from the reward account into its general account. 
+
+At the end of epoch `2` `party_0` is paid `90 x 2.8 / (2.79+2.8)` $VEGA from the reward account into its general account. 
+
+### Distributing LP fees received rewards (<a name="0056-rewa-012" href="#0056-rewa-012">0056-rewa-012</a>)
+
+There are two assets configured on the Vega chain: $VEGA and USDT. There are no markets.
+The fees are as follows: `maker_fee = 0.0001`, `infrastructure_fee = 0.0002`.  
+`ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`; `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = `2700` and and best offer = `2800` are supplied by `party_0` each with volume `10`. Moreover `party_0` provides liquidiity with `liquidity_fee = 0.0003` and offset + 10 (so their LP volume lands on `2690` and `2810`). 
+
+During epoch 2 `party_R` makes a transfer of `120` `$VEGA` to `USDT | Sum of maker fees received | VEGA`. 
+During epoch 2 `party_1` puts a limit buy order of vol `10` at `2710` and a limit sell order of vol `10` at `2790`. 
+After that, during epoch 2 `party_2` puts in a market buy order of volume `20`. 
+
+Verify that at the end of epoch `2` the metric `sum of maker fees received` for `party_0` is:
+```
+10 x 2790 x 0.0003 + 10 x 2800 x 0.0003 = 16.77
+```
+
+At the end of epoch `2` `party_0` is paid `90` $VEGA from the reward account into its general account. 
 
 
-### 🤠 Oregon Trail (WIP)
+### Distributing market creation rewards (<a name="0056-rewa-013" href="#0056-rewa-013">0056-rewa-013</a>)
 
-- The are more reward types: staking and delegation, liquidity provision, trading, market creation TODO: individual specs  (<a name="0056-REWA-021" href="#0056-REWA-021">0056-REWA-021</a>)
-- New reward scehemes can be created, including multiple of the same type (<a name="0056-REWA-022" href="#0056-REWA-022">0056-REWA-022</a>)
-- Reward schemes owned and controlled by individual parties can be created as well as network owned ones created through governance (<a name="0056-REWA-023" href="#0056-REWA-023">0056-REWA-023</a>)
-- Funds can be sent directly to a reward pool account (<a name="0056-REWA-024" href="#0056-REWA-024">0056-REWA-024</a>)
-- Funds cannot be allocated to a party controlled reward scheme via periodic allocation from [the on-chain treasury](./0058-REWS-simple_pos_rewards.md).  (<a name="0056-REWA-025" href="#0056-REWA-025">0056-REWA-025</a>)
+
+There are two markets settling in USDT: BTCUSDT futures and ETHUSDT futures.  
+For BTCUSDT opening auction end during Epoch 105 and for ETHUSDT opening auction ends in Epoch 107 (this is in fact irrelevant). 
+The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. The reward account balance for `USDT| market creation | $VEGA` market creation is `10^4 $VEGA`.
+
+##### Case a) 
+In epoch `110` the total trade value for fee purposes on BTCUSDT is `10^5` and on ETHUSDT it is `2x10^5`. No reward is paid from this reward account. 
+In epoch `120` the total trade value for fee purposes on BTCUSDT is `10^6+1` and on ETHUSDT it is `9x10^5`. 
+The entire balance of the `USDT| market creation | $VEGA` is transferred to the party that proposed the `BTCUSD` market. 
+The balance of `USDT| market creation | $VEGA` is now `0`. 
+In epoch `121` the total trade value for fee purposes on BTCUSDT metric is `0` (reward paid already). 
+On ETHUSDT it is `10^6+1`. The entire balance of the `USDT| market creation | $VEGA` is transferred to the party that proposed the `ETHUSD` market (the party that created `ETHUSD` market gets nothing). 
+In epoch `122` the `USDT| market creation | $VEGA` is funded by transfer with  `10^4 $VEGA`. 
+The total trade value for fee purposes on BTCUSDT and ETHUSD metric is `0` (reward paid already). 
+
+##### Case b) 
+In epoch `110` the total trade value for fee purposes on BTCUSDT is `10^5` and on ETHUSDT it is `2x10^5`. No reward is paid from this reward account. 
+In epoch `120` the total trade value for fee purposes on BTCUSDT is `10^6+1` and on ETHUSDT it is `10^7`. The balance of the `USDT| market creation | $VEGA` is split equally (up to arbitrarily applied roundin) and transferred to the party that proposed the `BTCUSD` market and the party that proposed the `ETHUSD` market.
