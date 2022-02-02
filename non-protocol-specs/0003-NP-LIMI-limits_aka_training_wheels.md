@@ -122,3 +122,13 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
      - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
      - A single deposit transaction that is more than `max lifetime deposit` rejected 
      - `lifetime deposit` is tracked across [checkpoints](./0005-limited-network-life.md)
+5. `max lifetime deposit` can be overridden for specific Ethereum addresses by a Vega transaction and subsequent Ethereum transaction
+   - An ETH address
+6. `max lifetime deposit` can be updated via a Vega transaction and a subsequent Ethereum transaction
+7. Validators can, via multisig, stop and recommence processing bridge transactions
+   - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
+   - All withdrawals that have been submitted but are currently delayed due to [withdrawal delay limit](#withdrawal-limits) are cancelled do not occur when the delay time passes
+     - As they are cancelled, if the validators re-enable withdrawals before the delay limit time passes, the withdrawal still does not occur
+   - A representative set of validators can produce a multisig transaction that allows the bridge to resume processing future deposits and withdrawals
+   - All withdrawals that are submitted while the bridge is 'stopped' are rejected 
+   - All deposits that are submitted while the bridge is 'stopped' are rejected 
