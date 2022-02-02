@@ -123,6 +123,8 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
    - The smart contract can be updated to add or remove ETH addresses from the exemption list
    - Only one ETH address at a time has permission to update the exemption list
      - An ETH tx attempting to update the exemption list from a different address is rejected
+     - That ETH address is not itself exempt from `max lifetime deposit` unless explicitly listed
+     - That ETH address can only be changed by a multisig bundle from the validators
 5. `max lifetime deposit` can be updated per asset via an Ethereum transaction
 6. Validators can, via multisig, stop and recommence processing bridge transactions
    - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
