@@ -23,6 +23,7 @@ The types of governance action are:
 4. Add an external asset to Vega (covered in a [separate spec - see 0027](./0027-ASSP-asset_proposal.md))
 5. Authorise a transfer to or from the [Network Treasury](./0055-TREA-on_chain_treasury.md)
 6. Freeform proposals
+
 ## Lifecycle of a proposal
 
 Note: there are some differences/additional points for market creation proposals, see the section on market creation below.
@@ -81,6 +82,8 @@ Anyone can create a proposal if the weighting of their vote on the proposal woul
 
 In a future iteration of the governance system we may restrict proposal submission by type of proposal based on a minimum weighting. e.g: only user with a certain number or percentage of the governance asset are allowed to open a "network parameter change" proposal.
 
+Market change proposals additionally require certain minimum [equity like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minEquityLikeShare`.
+
 
 ## Configuration of a proposal
 
@@ -132,7 +135,7 @@ At the conclusion of the voting period the network will calculate two values:
 1. The participation rate: `participation_rate = SUM ( weightings of ALL valid votes cast ) / max total weighting possible` (e.g. sum of token balances of all votes cast / total supply of governance asset, this implies that for this version it is only possible to use an asset with **fixed supply** as the governance asset)
 1. The "for" rate: `for_rate = SUM ( weightings of votes cast for ) / SUM ( weightings of all votes cast )`
 
-The proposal is considered successful and will be enacted (where necessary) if:
+Any proposal that is not market parameter change proposal is considered successful and will be enacted (where necessary) if:
 
 - The `participation_rate` is greater than or equal to the minimum participation rate for the proposal
 - The `for_rate` is greater than or equal to the minimum required majority for the proposal
@@ -141,6 +144,18 @@ The proposal is considered successful and will be enacted (where necessary) if:
 Note: see below for details on minimum participation rate and minimum required majority, which are defined by type of governance action, and in some cases a category or sub-type.
 
 Not in scope: minimum participation of active users, i.e. 90% of the _active_ users of the vega network have to take part in the vote. Minimum participation is currently always measured against the total possible participation.
+
+For market change proposals the network will additionally calculate 
+1. `LP participation rate = SUM (equity like share of all LPs who cast a vote)` (no need to divide by anything as equity like share sums up to `1`).
+1. `LP for rate = SUM (all who voted for) / LP participation rate`. 
+
+A market parameter change is passed only when:
+- either the governance token holder vote is successful i.e. `participation_rate >= governance.proposal.updateMarketParam.requiredParticipation` AND `for_rate > governance.proposal.updateMarketParam.requiredMajority` (in this case the LPs were overridden by governance token holders)
+- or the governance token holder vote `participation_rate < governance.proposal.updateMarketParam.requiredParticipation` AND `LP participation rate >= governance.proposal.updateMarketParam.requiredParticipationLP` AND `LP for rate >= governance.proposal.updateMarketParam.requiredMajorityLP`.
+
+In all other cases the proposal is rejected.
+
+In other words: LPs vote with their equity like share and can make changes to a market without requiring a governance token holder vote. However a governance token vote is running in parallel and if participation and majority rules for this vote are met then the governance token vote can overrule the LPs vote.  
 
 
 # Reference-level explanation
@@ -173,9 +188,18 @@ All **new market proposals** initially have their validation configured by the n
 
 ## 2. Change market parameters
 
-[Market parameters](./0001-MKTF-market_framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. See the [Market Framework spec](./0001-MKTF-market_framework.md#market) for details on these parameters, including those that cannot be changed and the category of the parameters.
+[Market parameters](./0001-MKTF-market_framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. 
+See the [Market Framework spec](./0001-MKTF-market_framework.md#market) for details on these parameters, including those that cannot be changed and the category of the parameters.
 
-All **change market parameter proposals** have their validation configured by the network parameters `Governance.UpdateMarket.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Market Framework spec.
+To change any market parameter the proposer submits the same data as to create a market with the desired updates to the fields / structures that should change. 
+Ideally, it should be possible to not repeat things that are not changing or are immutable but we leave this to implementation detail.
+
+The following are immutable and cannot be changed:
+- marketID
+- tickSize (will be removed I believe so it's not relevant)
+- decimalPlaces
+- settlementAsset
+- name
 
 
 ## 3. Change network parameters
@@ -188,7 +212,7 @@ All **change network parameter proposals** have their validation configured by t
 
 New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)). Unlike markets, assets cannot be updated after they have been added.
 
-## 5. Transfers initiated by Governance
+## 5. Transfers initiated by Governance (post Oregon trail)
 ### Permitted source and destination account types
 
 The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal. 
@@ -196,7 +220,7 @@ The below table shows the allowable combinations of source and destination accou
 | Source type | Destination type | Governance transfer permitted |
 | --- | --- | --- |
 | Party account (any type) | Any | No |
-| Network treasury | Reward pool account | Yes [1] |
+| Network treasury | Reward pool account | Yes  |
 | Network treasury | Party general account(s) | Yes |
 | Network treasury | Party other account types | No |
 | Network treasury | Network insurance pool account | Yes |
@@ -205,15 +229,11 @@ The below table shows the allowable combinations of source and destination accou
 | Network insurance pool account | Network treasury | Yes |
 | Network insurance pool account | Market insurance pool account | Yes |
 | Network insurance pool account | Any other account | No |
-| Market insurance pool account | Party account(s) | Yes [2] |
-| Market insurance pool account | Network treasury | Yes [2] |
-| Market insurance pool account | Network insurance pool account | Yes [2] |
+| Market insurance pool account | Party account(s) | Yes  |
+| Market insurance pool account | Network treasury | Yes  |
+| Market insurance pool account | Network insurance pool account | Yes |
 | Market insurance pool account | Any other account | No |
 | Any other account | Any | No | 
-
-[1] This is **the only type of this functionality required for Sweetwater/MVP**
-
-[2] In future, by market governance vote (i.e. weighted by LP shares)
 
 
 ### Transfer proposal details
@@ -348,8 +368,16 @@ APIs should also exist for clients to:
 - [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
 
 ### Market change proposals
-- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
-- [ ] Market change proposals can only propose a change to a single parameter (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
+- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [ ] Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
+- [ ] Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
+- [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
+- [ ] Verify that an enacted market change proposal that changes trading terminated oracle and price settlement oracle can be settled using transactions from the new oracle keys. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
+- [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
+- [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
+
+
+
 
 ### Network parameter change proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
@@ -362,6 +390,3 @@ APIs should also exist for clients to:
 - [ ] A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
 - [ ] Closed freeform governance proposals can be retrieved from the API along with details of how tokenholders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
 
-## 💧 Sweetwater
-
-- Transfers created by the period allocation of funds from the Network Treasury to a reward pool account are executed correctly as defined here (though they are initiated by governance setting the parameters not by a direct governance proposal)
