@@ -92,3 +92,33 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 - These features do not protect against a malicious validator set.
 - No attempt is made to prevent sybils with these features, although the ratio between gas fees for deposites and withdrawals and the limits per public key will affect the attractiveness of **any** money making scheme whether by intended or unintended behaviour of the protocol, therefore low limits can provide some level of mitigation here.
 - Users could submit multiple small withdrawals to get around the size limits for delays. To mitigate this, sizes can be set such that gas costs of such an approach would be significant, or to zero so that all withdrawals are delayed. 
+
+# Acceptance Criteria
+1. Market Creation can be restricted using a new network parameter
+    - With market creation enabled in the codebase;
+    - With `` set to the future
+      - Any market creation proposal is rejected
+      - After a network parameter update is voted, accepted and enacted to set this parameter to enable market creation
+        - Any valid market creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
+    - With `` set to the past
+      - Any valid market creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
+2. Asset creation can be restricted using a new network parameter
+    - With asset creation enabled in the codebase
+    - With `` set to the future
+      - Any asset creation proposal is rejected
+      - After a network parameter update is voted, accepted and enacted to set this parameter to enable asset creation
+        - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
+    - With `` set to the past
+      - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
+3. All assets will have a `max lifetime deposit` property, which is 
+   - Any asset creation proposal that does not have a max lifetime deposit property is rejected
+   - Any asset creation proposal that has a max lifetime deposit property is rejected
+4. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
+   - This does not apply to the [governance staking contract](./../glossaries/staking-and-governance.md)
+   - With an Ethereum address that has never deposited to Vega before:
+     - A valid deposit transaction that is less than `max lifetime deposit` is not rejected 
+       - A valid second deposit transaction that, in addition to the first TX exceeds `max lifetime deposit` is rejected 
+         - This is true even if both TXs target different [Vega public keys](./../protocol/0017-PART-party.md)
+     - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
+     - A single deposit transaction that is more than `max lifetime deposit` rejected 
+     - `lifetime deposit` is tracked across [checkpoints](./0005-limited-network-life.md)
