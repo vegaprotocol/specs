@@ -150,8 +150,8 @@ For market change proposals the network will additionally calculate
 1. `LP for rate = SUM (all who voted for) / LP participation rate`. 
 
 A market parameter change is passed only when:
-- either the governance token holder vote is successful i.e. `participation_rate >= governance.proposal.updateNetParam.requiredParticipation` AND `for_rate > governance.proposal.updateNetParam.requiredMajority` (in this case the LPs were overridden by governance token holders)
-- or the governance token holder vote `participation_rate < governance.proposal.updateNetParam.requiredParticipation` AND `LP participation rate >= governance.proposal.updateNetParam.requiredParticipationLP` AND `LP for rate >= governance.proposal.updateNetParam.requiredMajorityLP`.
+- either the governance token holder vote is successful i.e. `participation_rate >= governance.proposal.updateMarketParam.requiredParticipation` AND `for_rate > governance.proposal.updateMarketParam.requiredMajority` (in this case the LPs were overridden by governance token holders)
+- or the governance token holder vote `participation_rate < governance.proposal.updateMarketParam.requiredParticipation` AND `LP participation rate >= governance.proposal.updateMarketParam.requiredParticipationLP` AND `LP for rate >= governance.proposal.updateMarketParam.requiredMajorityLP`.
 
 In all other cases the proposal is rejected.
 
