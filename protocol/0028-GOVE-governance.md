@@ -155,7 +155,7 @@ A market parameter change is passed only when:
 
 In all other cases the proposal is rejected.
 
-In other words: LPs vote with their equity like share and can make changes to a market without requiring a governance token holde vote. However a governance token vote is running in parallel and if participation and majority rules for this vote are met then the governance token vote can overrule the LPs vote.  
+In other words: LPs vote with their equity like share and can make changes to a market without requiring a governance token holder vote. However a governance token vote is running in parallel and if participation and majority rules for this vote are met then the governance token vote can overrule the LPs vote.  
 
 
 # Reference-level explanation
