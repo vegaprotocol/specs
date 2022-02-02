@@ -191,7 +191,7 @@ All **new market proposals** initially have their validation configured by the n
 [Market parameters](./0001-MKTF-market_framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. 
 See the [Market Framework spec](./0001-MKTF-market_framework.md#market) for details on these parameters, including those that cannot be changed and the category of the parameters.
 
-To change any market paramter the proposer submits the same data as to create a market with the desired updates to the fields / structures that should change. 
+To change any market parameter the proposer submits the same data as to create a market with the desired updates to the fields / structures that should change. 
 Ideally, it should be possible to not repeat things that are not changing or are immutable but we leave this to implementation detail.
 
 The following are immutable and cannot be changed:
