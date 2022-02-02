@@ -37,10 +37,12 @@ Any asset on Vega can be either settlement asset or reward asset or both.
 It must be possible for any party to run a one off [transfer](????-????-transfers.md) or create a [periodic transfer](????-????-transfers.md) to any of these reward accounts. 
 Note that saying "per every Vega asset" twice above isn't a typo. We want to be able to pay rewards e.g. in $VEGA for markets settling in e.g. $USDT. 
 
-Reward account balances are to be summed per reward asset and added to the network treasury account for the asset when a [LNL checkpoint](../non-protocol-specs/0005-limited-network-life.md) is made. 
-Reward accounts themselves are not part of LNL checkpoints.
+Reward accounts and balances are to be saved in [LNL checkpoint](../non-protocol-specs/0005-limited-network-life.md). 
+
 
 ## Reward distribution
+
+All rewards are paid out at the end of any epoch. There are no fractional payouts and no delays. 
 
 ### For fee based metrics
 Every epoch the entire reward account for every asset and *fee* metric type will be distributed pro-rata to the parties that have the metric `>0`. 
@@ -52,6 +54,7 @@ That is if we have reward account balance `R`
 [p_n,m_n]
 ```
 then calculate `M:= m_1+m_2+...+m_n` and transfer `R x m_i / M` to party `p_i` at the end of each epoch. 
+If `M = 0` (no-one incurred / received fees for a given reward account)  then nothing is paid out of the reward account and the balance rolls into next epoch. 
 
 Metrics will be calculated using the [decimal precision of the settlement asset](????-????-market-decimal-places.md).
 
