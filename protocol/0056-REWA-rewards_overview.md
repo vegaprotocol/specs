@@ -27,6 +27,7 @@ There will be the following fee metrics:
 There will be the following market creation metrics:
 1. Market total [trade value for fee purposes](0029-FEES-fees.md) since market creation multiplied by either `1` if the market creation reward for this market has never been paid or by `0` if the reward has already been paid.
 
+Reward metrics are not stored in [LNL checkpoints](../non-protocol-specs/0005-limited-network-life.md). 
 
 ## Rewards accounts
 
@@ -35,6 +36,9 @@ Any asset on Vega can be either settlement asset or reward asset or both.
 
 It must be possible for any party to run a one off [transfer](????-????-transfers.md) or create a [periodic transfer](????-????-transfers.md) to any of these reward accounts. 
 Note that saying "per every Vega asset" twice above isn't a typo. We want to be able to pay rewards e.g. in $VEGA for markets settling in e.g. $USDT. 
+
+Reward account balances are to be summed per reward asset and added to the network treasury account for the asset when a [LNL checkpoint](../non-protocol-specs/0005-limited-network-life.md) is made. 
+Reward accounts themselves are not part of LNL checkpoints.
 
 ## Reward distribution
 
