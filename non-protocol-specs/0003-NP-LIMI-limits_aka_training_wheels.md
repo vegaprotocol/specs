@@ -39,7 +39,7 @@ We have identified three types of limit/control that will together achieve these
 - A system wide deposit/withdrawal stop provides the ability to buy extra time to investigate or fix any issues 
 
 
-### Deposit limits
+#### Deposit limits
 
 These limits restrict the risk that can be easily taken by each participant. They can be overcome by creating multiple keypairs on Vega and the host chain, but per the principles above and given the impact of gas costs, this is not a problem.  
 
@@ -48,7 +48,7 @@ These limits restrict the risk that can be easily taken by each participant. The
 - Any attempt to deposit funds where `total funds deposited by sender address > maximum lifetime deposit` must be rejected (by the Ethereum bridge contract).
 - Any attempt to deposit funds where `total funds deposited to receiver address > maximum lifetime deposit` must be rejected (by the Ethereum bridge contract).
 
-### Withdrawal limits
+#### Withdrawal limits
 
 These limits reduce the risk that someone who is able to exploit implementation bugs or protocol design issues is able to acquire and withdraw funds that are not intended for them. 
 
@@ -58,7 +58,7 @@ These limits reduce the risk that someone who is able to exploit implementation 
 - Any withdrawal bundle created where `withdrawal amount > withdrawal delay threshold` will be rejected by the bridge if `time since bundle creation <= withdrawal delay period` (the bundle must therefore contain a timestamp of its creation, which must be validated by nodes before they sign the bundle)
 - An API is required to list all pending withdrawals (i.e. those that have not been executed on the bridge) on the Vega chain across all public keys. This is required to allow the community to identify transactiosn that require withdrawals to stopped pending investigation
 
-### Global bridge stop
+#### Global bridge stop
 
 This allows the stoppage of all deposits and withdrawals after the discovery of an issue or potential issue that requires investigation and/or deployment of a fix. Deposits and withdrawals would be reinstated once the situation is resolved.
 
@@ -86,7 +86,6 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 
 - Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](0005-NP-LIMN-limited_network_life.md).
 
-
 ## Limitations
 
 - These features do not protect against a malicious validator set.
@@ -110,10 +109,7 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
         - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
     - With `` set to the past
       - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
-3. All assets will have a `max lifetime deposit` property, which is 
-   - Any asset creation proposal that does not have a max lifetime deposit property is rejected
-   - Any asset creation proposal that has a max lifetime deposit property is rejected
-4. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
+3. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
    - This does not apply to the [governance staking contract](./../glossaries/staking-and-governance.md)
    - With an Ethereum address that has never deposited to Vega before:
      - A valid deposit transaction that is less than `max lifetime deposit` is not rejected 
@@ -122,13 +118,16 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
      - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
      - A single deposit transaction that is more than `max lifetime deposit` rejected 
      - `lifetime deposit` is tracked across [checkpoints](./0005-limited-network-life.md)
-5. `max lifetime deposit` can be overridden for specific Ethereum addresses by a Vega transaction and subsequent Ethereum transaction
-   - An ETH address
-6. `max lifetime deposit` can be updated via a Vega transaction and a subsequent Ethereum transaction
-7. Validators can, via multisig, stop and recommence processing bridge transactions
+4. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction
+   - An ETH address that is listed on the smart contract as exempt can deposit more than `max lifetime deposit`
+   - The smart contract can be updated to add or remove ETH addresses from the exemption list
+   - Only one ETH address at a time has permission to update the exemption list
+     - An ETH tx attempting to update the exemption list from a different address is rejected
+5. `max lifetime deposit` can be updated per asset via an Ethereum transaction
+6. Validators can, via multisig, stop and recommence processing bridge transactions
    - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
-   - All withdrawals that have been submitted but are currently delayed due to [withdrawal delay limit](#withdrawal-limits) are cancelled do not occur when the delay time passes
-     - As they are cancelled, if the validators re-enable withdrawals before the delay limit time passes, the withdrawal still does not occur
+   - All withdrawals that have been submitted but are currently delayed due to [withdrawal delay limit](#withdrawal-limits) do not occur when the delay time passes if the bridge has been stopped
+     - If the validators re-enable withdrawals before the delay limit time passes, the withdrawal occurs
    - A representative set of validators can produce a multisig transaction that allows the bridge to resume processing future deposits and withdrawals
    - All withdrawals that are submitted while the bridge is 'stopped' are rejected 
    - All deposits that are submitted while the bridge is 'stopped' are rejected 
