@@ -93,22 +93,25 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 - Users could submit multiple small withdrawals to get around the size limits for delays. To mitigate this, sizes can be set such that gas costs of such an approach would be significant, or to zero so that all withdrawals are delayed. 
 
 # Acceptance Criteria
-1. Market Creation can be restricted using a new network parameter
-    - With market creation enabled in the codebase;
-    - With `` set to the future
+## Vega criteria
+1. Market Creation can be restricted using a genesis configuration
+    - With `propose_market_enabled` set to true in the genesis configuration;
+    - With `propose_market_enabled_from` set to the future
       - Any market creation proposal is rejected
-      - After a network parameter update is voted, accepted and enacted to set this parameter to enable market creation
+      - After a the date set in `propose_market_enabled_from`
         - Any valid market creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
-    - With `` set to the past
+    - With `propose_market_enabled_from` set to the past
       - Any valid market creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
-2. Asset creation can be restricted using a new network parameter
-    - With asset creation enabled in the codebase
-    - With `` set to the future
+2. Asset creation can be restricted using genesis configuration
+    - With `propose_asset_enabled` set to true in the genesis configuration
+    - With `propose_asset_enabled_from` set to the future:
       - Any asset creation proposal is rejected
-      - After a network parameter update is voted, accepted and enacted to set this parameter to enable asset creation
+      - After the date set in `propose_asset_enabled_from`
         - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
-    - With `` set to the past
+    - With `propose_asset_enabled_from` set to the past:
       - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
+
+## Smart contract criteria
 3. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
    - This does not apply to the [governance staking contract](./../glossaries/staking-and-governance.md)
    - With an Ethereum address that has never deposited to Vega before:
@@ -128,8 +131,6 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 5. `max lifetime deposit` can be updated per asset via an Ethereum transaction
 6. Validators can, via multisig, stop and recommence processing bridge transactions
    - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
-   - All withdrawals that have been submitted but are currently delayed due to [withdrawal delay limit](#withdrawal-limits) do not occur when the delay time passes if the bridge has been stopped
-     - If the validators re-enable withdrawals before the delay limit time passes, the withdrawal occurs
    - A representative set of validators can produce a multisig transaction that allows the bridge to resume processing future deposits and withdrawals
    - All withdrawals that are submitted while the bridge is 'stopped' are rejected 
    - All deposits that are submitted while the bridge is 'stopped' are rejected 
