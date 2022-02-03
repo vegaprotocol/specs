@@ -23,8 +23,8 @@ These features:
 
 For Sweetwater, we only require the ability to:
 
-1. Prevent the submission of market creation proposals until a validator initiated and agreed change (i.e. a genesis/config/code change required rather than a network parameter)
-2. Prevent the submission of asset addition proposals until a validator initiated and agreed change (i.e. a genesis/config/code change required rather than a network parameter)
+1. Prevent the submission of market creation proposals until a validator initiated and agreed change to the genesis configuration 
+2. Prevent the submission of asset addition proposals until a validator initiated and agreed change to the genesis configuration
 3. Set a date/time before which no market creation proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
 4. Set a date/time before which no asset addition proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
 
@@ -110,6 +110,8 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
         - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
     - With `propose_asset_enabled_from` set to the past:
       - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
+3. `propose_market_enabled_from` can be changed through a network parameter update proposal
+4. `propose_asset_enabled_from` can be changed through a network parameter update proposal
 
 ## Smart contract criteria
 3. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
