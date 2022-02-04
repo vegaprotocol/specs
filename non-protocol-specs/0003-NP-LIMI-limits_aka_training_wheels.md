@@ -53,10 +53,10 @@ These limits restrict the risk that can be easily taken by each participant. The
 These limits reduce the risk that someone who is able to exploit implementation bugs or protocol design issues is able to acquire and withdraw funds that are not intended for them. 
 
 - A single `withdrawal delay period` to apply for all assets will be stored in the bridge contract system. This will default to 120 hours (5 days) and may be changed via multisig control.
-- There will be a `withdrawal delay threshold` configured for each asset. This amount will be stored in the host chain's bridge contract system and set during the whitelisting process for adding a new asset to Vega.
+- There will be a `withdrawal delay threshold` configured for each asset. This sets a threshold amount above which the withdrawal is subject to an additional delay. This amount will be stored in the host chain's bridge contract system and set during the whitelisting process for adding a new asset to Vega.
 - It should be possible to amend the `withdrawal delay threshold` via a Vega governance transaction (update asset). This should cause Vega to create a signed bundle when the governance transaction is enacted. Someone would be expected to submit this transaction to the Ethereum chain for it to take effect.  
-- Any withdrawal bundle created where `withdrawal amount > withdrawal delay threshold` will be rejected by the bridge if `time since bundle creation <= withdrawal delay period` (the bundle must therefore contain a timestamp of its creation, which must be validated by nodes before they sign the bundle)
-- An API is required to list all pending withdrawals (i.e. those that have not been executed on the bridge) on the Vega chain across all public keys. This is required to allow the community to identify transactiosn that require withdrawals to stopped pending investigation
+- Any withdrawal bundle created where `withdrawal amount > withdrawal delay threshold` will be rejected by the bridge if `time since bundle creation <= withdrawal delay period` (the bundle must therefore contain a timestamp of its creation, which must be validated by nodes before they sign the bundle).
+- An API is required to list all pending withdrawals (i.e. those that have not been executed on the bridge) on the Vega chain across all public keys. This is required to allow the community to identify transactions that require withdrawals to stopped pending investigation.
 
 #### Global bridge stop
 
@@ -114,7 +114,7 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 4. `propose_asset_enabled_from` can be changed through a network parameter update proposal
 
 ## Smart contract criteria
-3. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
+5. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
    - This does not apply to the [governance staking contract](./../glossaries/staking-and-governance.md)
    - With an Ethereum address that has never deposited to Vega before:
      - A valid deposit transaction that is less than `max lifetime deposit` is not rejected 
@@ -123,16 +123,24 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
      - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
      - A single deposit transaction that is more than `max lifetime deposit` rejected 
      - `lifetime deposit` is tracked across [checkpoints](./0005-limited-network-life.md)
-4. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction
+6. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction
    - An ETH address that is listed on the smart contract as exempt can deposit more than `max lifetime deposit`
    - The smart contract can be updated to add or remove ETH addresses from the exemption list
    - Only one ETH address at a time has permission to update the exemption list
      - An ETH tx attempting to update the exemption list from a different address is rejected
      - That ETH address is not itself exempt from `max lifetime deposit` unless explicitly listed
      - That ETH address can only be changed by a multisig bundle from the validators
-5. `max lifetime deposit` can be updated per asset via an Ethereum transaction
-6. Validators can, via multisig, stop and recommence processing bridge transactions
+7. `max lifetime deposit` can be updated per asset via an Ethereum transaction
+8. Validators can, via multisig, stop and recommence processing bridge transactions
    - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
    - A representative set of validators can produce a multisig transaction that allows the bridge to resume processing future deposits and withdrawals
    - All withdrawals that are submitted while the bridge is 'stopped' are rejected 
    - All deposits that are submitted while the bridge is 'stopped' are rejected 
+9. Withdrawal delay network parameter requires a wait between withdrawals creation & submission if it meets or exceeds a threshold
+  - For valid withdrawals that have been approved by validators, when the user submits the TX to the bridge smart contract:
+    - If the withdrawal amount is below or equal to `withdrawal delay threshold`, the withdrawal is accepted by the bridge smart contract
+    - If the withdrawal amount is above `withdrawal delay threshold` for the asset,
+      - If it is submitted before `withdrawal delay period`, it is rejected by the bridge smart contract 
+      - If it is submitted after `withdrawal delay period`, it is accepted by the bridge smart contract 
+    - `withdrawal delay threshold` can be changed, per asset, by multisig control on the bridge contract
+10. A withdrawal that is subject to delay can be cancelled by a validator
