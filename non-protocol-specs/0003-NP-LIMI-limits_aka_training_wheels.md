@@ -91,6 +91,13 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 - These features do not protect against a malicious validator set.
 - No attempt is made to prevent sybils with these features, although the ratio between gas fees for deposites and withdrawals and the limits per public key will affect the attractiveness of **any** money making scheme whether by intended or unintended behaviour of the protocol, therefore low limits can provide some level of mitigation here.
 - Users could submit multiple small withdrawals to get around the size limits for delays. To mitigate this, sizes can be set such that gas costs of such an approach would be significant, or to zero so that all withdrawals are delayed. 
+# Network Parameters
+
+| Property         | Type   | Example value | Description |
+|------------------|--------| ------------|--------------|
+| `governance.proposal.asset.createFrom`       | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which asset creation is allowed.  | 
+| `governance.proposal.market.createFrom`      | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which market creation is allowed.  | 
+
 
 # Acceptance Criteria
 ## Vega criteria
