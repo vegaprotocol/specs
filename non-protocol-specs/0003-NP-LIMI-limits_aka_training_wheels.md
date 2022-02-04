@@ -101,7 +101,7 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 
 # Acceptance Criteria
 ## Vega criteria
-1. Market Creation can be restricted using a genesis configuration
+1. Market Creation can be restricted using a genesis configuration (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-024">0028-GOVE-024</a>)
     - With `propose_market_enabled` set to true in the genesis configuration;
     - With `propose_market_enabled_from` set to the future
       - Any market creation proposal is rejected
@@ -109,7 +109,7 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
         - Any valid market creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
     - With `propose_market_enabled_from` set to the past
       - Any valid market creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
-2. Asset creation can be restricted using genesis configuration
+2. Asset creation can be restricted using genesis configuration  (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-025">0028-GOVE-025</a>)
     - With `propose_asset_enabled` set to true in the genesis configuration
     - With `propose_asset_enabled_from` set to the future:
       - Any asset creation proposal is rejected
@@ -117,8 +117,8 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
         - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
     - With `propose_asset_enabled_from` set to the past:
       - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
-3. `propose_market_enabled_from` can be changed through a network parameter update proposal
-4. `propose_asset_enabled_from` can be changed through a network parameter update proposal
+3. `propose_market_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
+4. `propose_asset_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
 
 ## Smart contract criteria
 5. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
