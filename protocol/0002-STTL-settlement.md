@@ -95,3 +95,9 @@ For settlement at expiry scenarios, transfers should attempt to access
 1. the trader's margin account for the market, 
 1. the trader's general collateral account for that asset, 
 1. the insurance pool.
+
+# Acceptance Criteria
+
+## The typical "Happy Path" case
+- [ ] With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market. (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>)
+
