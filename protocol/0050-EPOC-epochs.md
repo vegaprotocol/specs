@@ -36,7 +36,7 @@ and then can add a synchronizing block.
  at the same time (say, we have 5 second epochs, and one block takes 20 seconds, thus  pushing the
  blocktime past several deadlines. While this really shouldn't happen, it can be resolved by the 
  last epoch winning. This would cause issues with delay factors (e.g., a validator staying on for
- another 5 epochs after loosing delegation), but as it indicates that something already is very
+ another 5 epochs after losing delegation), but as it indicates that something already is very
  wrong this should not be an issue. 
 
  If we have an integer overflow of the epoch number, nothing overly bad should happen; even
@@ -78,34 +78,36 @@ a block.
 As validators (will) have an optimum amount of stake they don't want to exceed, 
 There are three ways a delegator can undelegate:
 
-- Undelegate towards the end of the episode
-	The action is announced in the next available block, but the delegator keeps
-	the delegation alive till the last block of the epoch. The delegator can then
-	re-delegate the stake, which then be valid once the next epoch starts.
-	The delegator cannot move the tokens before the epoch ends, they remain locked.
-- Undelegate now
-	The action can be announced at any time and is executed immediately following the block
-	it is announced in. However, the stake is still counted as delegated to the validator until
-	the last block of the epoch, though the delegator rewards are not paid to the delegator, but
-	into an appropriate vega pool (the insurance pool, for example). The tokens are
-	released though, and the delegator can transfer their tokens in the smart contract.
+## Undelegate towards the end of the episode
+The action is announced in the next available block, but the delegator keeps
+the delegation alive till the last block of the epoch. The delegator can then
+re-delegate the stake, which then be valid once the next epoch starts.
+The delegator cannot move the tokens before the epoch ends, they remain locked.
 
-	Rationale: This allows a delegator to sell their tokens in a rush, without requiring
-	any interaction between the smart contract and the details of the delegation system.
-	This also allows the delegator to change their mind about a delegation before it is
-	activated.
+## Undelegate now
+The action can be announced at any time and is executed immediately following the block
+it is announced in. However, the stake is still counted as delegated to the validator until
+the last block of the epoch, though the delegator rewards are not paid to the delegator, but
+into an appropriate vega pool (the insurance pool, for example). The tokens are
+released though, and the delegator can transfer their tokens in the smart contract.
+
+Rationale: This allows a delegator to sell their tokens in a rush, without requiring
+any interaction between the smart contract and the details of the delegation system.
+This also allows the delegator to change their mind about a delegation before it is
+activated.
   
-- Undelegate in anger
-	This action is announced at any time and is executed immediately following the block it
-	is announced in. The delegator looses the delegated stake and the income with it, as well
-	as their voting weight. As this is not required for first mainnet, and involves more subtleties
-	(weights need to be recalculated on the fly, there may be a mixture of normal undelegated
-	and undelegate in anger, ...), this feature does not need to be implemented right away for
-	Mainnet alpha.
-	
-	Rationale: A validator is found to have done something outrageous, and needs to be removed
-	right away. 
+## Undelegate in anger
+This action is announced at any time and is executed immediately following the block it
+is announced in. The delegator loses the delegated stake and the income with it, as well
+as their voting weight. As this is not required for first mainnet, and involves more subtleties
+(weights need to be recalculated on the fly, there may be a mixture of normal undelegated
+and undelegate in anger, ...), this feature does not need to be implemented right away for
+Mainnet alpha.
 
+Rationale: A validator is found to have done something outrageous, and needs to be removed
+right away. 
+
+## Undelegation of locked stake
 Furthermore, the validators watch the smart contract, and observe the following actions:
 
 - A token gets locked: This token is now available for delegation
@@ -193,7 +195,7 @@ All parameters that are changed through a governance vote are valid starting the
 2. Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>) 
    - Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1`
    - Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61`
-3. Delegation happens at epoch changeover
+3. Delegation takes effect at epoch changeover
    - During epoch 1, `party 1` stakes any valid amount to `validator 1`
      - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)
      - `validator 1`s staked balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
@@ -203,4 +205,17 @@ All parameters that are changed through a governance vote are valid starting the
    - Subsequently, but during the same epoch, `party 1` unstakes the same amount from `validator 1`
      - `validator 1`s staked balance is not increased in epoch 2 (<a name="0050-EPOC-008" href="#0050-EPOC-008">0050-EPOC-008</a>)
      - `party 1`s staked-then-unstaked balance is returned in epoch 2 (<a name="0050-EPOC-009" href="#0050-EPOC-009">0050-EPOC-009</a>)
-4
+5. [Undelegate now](#undelegate-now) does not return the balance to the delegator immediately
+   - During epoch 1, `party 1` stakes any valid amount to `validator 1`
+   - At the end of epoch 2, `validator 1` earns rewards based on a delegation count that includes `party 1`s stake
+   - During epoch 3, `party 1` uses Undelegate Now
+   - During epoch 3, `party 1` does not receive their staked amount back in their unstaked balance (<a name="0050-EPOC-010" href="#0050-EPOC-010">0050-EPOC-010</a>)
+   - During epoch 3, `validator 1`s voting weight remains unchanged (<a name="0050-EPOC-010" href="#0050-EPOC-010">0050-EPOC-010</a>)
+   - At the end of epoch 3, `validator 1` earns rewards based on a delegation count that *does not include* `party 1`s stake (<a name="0050-EPOC-012" href="#0050-EPOC-012">0050-EPOC-012</a>)
+   - At the end of epoch 3, `party 1` does not earn rewards for the stake that was undelegated (<a name="0050-EPOC-013" href="#0050-EPOC-013">0050-EPOC-013</a>)
+   - At the start of epoch 4, `party 1`s unstaked balance includes the undelegated amount (<a name="0050-EPOC-014" href="#0050-EPOC-014">0050-EPOC-014</a>)
+5. [Undelegate in anger](#undelegate-in-anger) acceptance TBC
+
+### Smart contract verification
+See [0059-STKG Simple Staking and Delegation](./0059-STKG-simple_staking_and_delegating.md#removing-stake) for how undelegation interacts with tokens in the staking bridge 
+
