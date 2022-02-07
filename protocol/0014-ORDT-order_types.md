@@ -56,9 +56,11 @@ Notes on scope of current version of this spec:
 
 | Pricing method | GTT | GTC | IOC | FOK | GFA | GFN |
 | -------------- |:---:|:---:|:---:|:---:|:---:|:---:|
-| Limit          | Y   | Y   | Y   | Y   | N   | Y   |
-| Pegged         | Y   | Y   | Y   | Y   | N   | Y   |
+| Limit          | Y   | Y   | Y*  | Y*  | N   | Y   |
+| Pegged         | Y   | Y   | Y*  | Y*  | N   | Y   |
 | Market         | N   | N   | Y   | Y   | N   | N   |
+
+\* IOC/FOK LIMIT/PEGGED orders never rest on the book, if they do not match immediately they are cancelled/stopped.
 
 
 ##### Auction
