@@ -45,8 +45,6 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
       | lp1 | lp1   | ETH/MAR22 | 10000             | 0.001 | sell | ASK              | 1          | 2      | amendment|
       | lp1 | lp1   | ETH/MAR22 | 10000             | 0.001 | sell | MID              | 2          | 1      | amendment|
 
-      
-
     Then the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     |
       | party1 | ETH/MAR22 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC |
@@ -69,21 +67,30 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
 
     Then the order book should have the following volumes for market "ETH/MAR22":
       | side | price    | volume |
-      | buy  | 897      | 0     |
-      | buy  | 898      | 75    |
+      | buy  | 898      | 75     |
       | buy  | 900      | 1      |
       | buy  | 999      | 14     |
       | sell | 1102     | 61     |
       | sell | 1100     | 1      |
       | sell | 1001     | 14     |
 
-    #volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)=10000*(1/3)/0.1/898=37
-    #10000*(2/3)/0.5/999=13.34
-
+    #volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)
+    #for any price better than the bid price or better than the ask price it returns 0.5
+    #for any price in within 500 price ticks from the best bid/ask (i.e. worse than) it returns the probability as returned by the risk model (in this case 0.1 scaled by 0.5.
+    #priceLvel at 898:10000*(1/3)/0.05/898=74.23
+    #priceLvel at 999:10000*(2/3)/0.5/999=13.34
+    #priceLvel at 1102:10000*(1/3)/0.05/1102=60.49
+    #priceLvel at 1001:10000*(2/3)/0.5/1001=13.32
  
     And the liquidity provider fee shares for the market "ETH/MAR22" should be:
       | party | equity like share | average entry valuation |
       | lp1   | 1                 | 10000                   |
+
+    And the parties should have the following account balances:
+      | party  | asset | market id | margin    | general   | bond  | 
+      | lp1    | USD   | ETH/MAR22 | 10680     | 999979320 | 10000 |
+      | party1 | USD   | ETH/MAR22 | 2758      | 99997242  | 0     |
+      | party2 | USD   | ETH/MAR22 | 2652      | 99997348  | 0     |
 
     Then the network moves ahead "1" blocks
 
@@ -98,13 +105,22 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
       | party1 | ETH/MAR22 | sell | 20     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party1-sell |
       | party2 | ETH/MAR22 | buy  | 20     | 1000  | 2                | TYPE_LIMIT | TIF_GTC | party2-buy  |
 
-    Then the order book should have the following volumes for market "ETH/MAR22":
-      | side | price    | volume |
-      | buy  | 900      | 1      | 
-      | buy  | 1000     | 0      |
-      | sell | 1000     | 15     |
-      | sell | 1100     | 1      |
+    And the parties should have the following account balances:
+      | party  | asset | market id | margin    | general   | bond  | 
+      | lp1    | USD   | ETH/MAR22 | 11640     | 999977631 | 10000 |
+      | party1 | USD   | ETH/MAR22 | 1800      | 99998202  | 0     |
+      | party2 | USD   | ETH/MAR22 | 1812      | 99998875  | 0     |
 
+    Then the order book should have the following volumes for market "ETH/MAR22"
+      | side | price    | volume |
+      | buy  | 898      | 75    |
+      | buy  | 900      | 1     | 
+      | buy  | 1000     | 0     |
+      | sell | 1000     | 15    |
+      | sell | 1001     | 0     |
+      | sell | 1102     | 0     |
+      | sell | 1100     | 1     |
+     
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
     And the accumulated liquidity fees should be "20" for the market "ETH/MAR22"
 
@@ -180,7 +196,7 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
 
     And the following trades should be executed:
       | buyer   | price | size | seller  |
-      | party1 | 1000  | 90   | party2 |
+      | party1  | 1000  | 90   | party2 |
 
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
     And the mark price should be "1000" for the market "ETH/MAR22"
