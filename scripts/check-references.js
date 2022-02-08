@@ -6,32 +6,40 @@
  * This script is pretty ugly. Sorry.
  */
 const fs = require('fs')
-const { protocolSpecificationsPath, validSpecificationPrefix, validAcceptanceCriteriaCode, featurePath } = require('./lib')
+const { protocolSpecificationsPath, validSpecificationPrefix, validAcceptanceCriteriaCode, featurePath, nonProtocolSpecificationsPath } = require('./lib')
 
 // Step 1: Gather all the initial details
 const specFiles = new Map()
-fs.readdirSync(protocolSpecificationsPath).forEach(file => {
-  if (file.match(/md|ipynb$/) && file !== 'README.md') {
-    const content = fs.readFileSync(`${protocolSpecificationsPath}${file}`, 'ascii')
-    const codeStart = file.match(validSpecificationPrefix)
 
-    // Gather the AC codes in this file
-    const regex = new RegExp(`${codeStart[0]}-([0-9]{3})`, 'g')
-    const labelledAcceptanceCriteria = content.match(regex)
-    let criteria = []
+function checkPath(path) {
+  fs.readdirSync(path).forEach(file => {
+    if (file.match(/md|ipynb$/) && file !== 'README.md') {
+      const content = fs.readFileSync(`${path}${file}`, 'ascii')
+      const codeStart = file.match(validSpecificationPrefix)
 
-    if (labelledAcceptanceCriteria !== null) {
-      // Dedupe labelled acceptance criteria
-      criteria = [...new Set(labelledAcceptanceCriteria)]
+      // Gather the AC codes in this file
+      const regex = new RegExp(`${codeStart[0]}-([0-9]{3})`, 'g')
+      const labelledAcceptanceCriteria = content.match(regex)
+      let criteria = []
+
+      if (labelledAcceptanceCriteria !== null) {
+        // Dedupe labelled acceptance criteria
+        criteria = [...new Set(labelledAcceptanceCriteria)]
+      }
+
+      specFiles.set(file, {
+        name: `${path}${file}`,
+        code: codeStart[0],
+        file,
+        path,
+        criteria
+      })
     }
+  })
+}
 
-    specFiles.set(file, {
-      name: file,
-      code: codeStart[0],
-      criteria
-    })
-  }
-})
+checkPath(protocolSpecificationsPath)
+checkPath(nonProtocolSpecificationsPath)
 
 // Step 2: Gather all the features
 const linksInFeatures = new Map()
@@ -56,10 +64,15 @@ fs.readdirSync(featurePath).forEach(file => {
   }
 })
 
+let criteriaTotal = 0;
+let criteriaReferencedTotal = 0;
+let criteriaUnreferencedTotal = 0;
 // Step 3: Output the data
 specFiles.forEach((value, key) => {
   console.group(key)
+  console.log(`File:          ${value.path}${value.file}`)
   console.log(`Criteria:      ${value.criteria.length}`)
+  criteriaTotal += value.criteria.length
 
   // Tally Criteria
   if (value.criteria && value.criteria.length > 0) {
@@ -70,6 +83,7 @@ specFiles.forEach((value, key) => {
       if (linksForAC) {
         refOutput += `${c}:  ${linksForAC.length} (${linksForAC.toString()})\r\n`
         criteriaWithRefs.push(c)
+        criteriaReferencedTotal++
       }
     })
 
@@ -84,12 +98,16 @@ specFiles.forEach((value, key) => {
       value.criteria.forEach(v => {
         if (!criteriaWithRefs.includes(v)) {
           console.log(v)
+          criteriaUnreferencedTotal++
         }
       })
       console.groupEnd('Feature references')
     }
   }
   console.groupEnd(key)
+  console.log('\r\n')
 })
 
-console.log('\r\n\r\n')
+console.log(`Total criteria:       ${criteriaTotal}`)
+console.log(`With references:      ${criteriaReferencedTotal}`)
+console.log(`Without references:   ${criteriaUnreferencedTotal}`)
