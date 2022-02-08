@@ -28,7 +28,7 @@ The aim of this spec is bots that
 The bot needs to be able to query Vega to know it's balances, orders and positions. 
 The bot needs to be able to query Vega to know the risk model and parameters for the market. 
 
-### Configuration 
+### Configuration
 - vega Wallet credentials 
 - market proposal file
 - market ID (the market to engage with), can come from proposal above
@@ -97,7 +97,7 @@ if (positionManagementTimer > positionManagementSleep) then
 fi
 ```
 
-### Participate in an opening auction 
+### Participate in an opening auction
 This section is only relevant if the option to participate in an opening auction is selected and the relevant market given by the market ID is still in an opening auction.
 
 If the bot has `currentPrice` then it should place  buy / sell limit orders (good till time with duration a bit longer than opening auction length) in the auction at random distance and volume away from `currentPrice` up to total `auctionVolume`. 
@@ -200,10 +200,10 @@ Don't use any of the pseudocode above!
 
 ### Acceptance criteria
 
-- [ ] Bot can submit a market proposal (optional), commit liquidity and then manage it's position as described above, see also [LP order type](../protocol/0038-liquidity-provision-order-type.md).
-- [ ] Bot can connect to an existing market, submit an [LP order type](../protocol/0038-liquidity-provision-order-type.md) and then manage it's position as described above.  
-- [ ] Bot can participate in an opening auction placing orders around target price (set via params, see above).
-- [ ] Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).
-- [ ] Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached. 
-- [ ] The repository is public from the start. 
-- [ ] Bot is not called Bot Mc BotFace. 
+- [ ] Bot can submit a market proposal (optional), commit liquidity and then manage it's position as described above, see also [LP order type](../protocol/0038-liquidity-provision-order-type.md). (<a name="0001-NP-LIQB-001" href="#0001-NP-LIQB-001">0001-NP-LIQB-001</a>) 
+- [ ] Bot can connect to an existing market, submit an [LP order type](../protocol/0038-liquidity-provision-order-type.md) and then manage it's position as described above. (<a name="0001-NP-LIQB-002" href="#0001-NP-LIQB-002">0001-NP-LIQB-002</a>)  
+- [ ] Bot can participate in an opening auction placing orders around target price (set via params, see above).(<a name="0001-NP-LIQB-003" href="#0001-NP-LIQB-003">0001-NP-LIQB-003</a>)  
+- [ ] Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).(<a name="0001-NP-LIQB-004" href="#0001-NP-LIQB-004">0001-NP-LIQB-004</a>)  
+- [ ] Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached.(<a name="0001-NP-LIQB-005" href="#0001-NP-LIQB-005">0001-NP-LIQB-005</a>)  
+- [ ] The repository is public from the start.
+- [ ] Bot is not called Bot Mc BotFace.
