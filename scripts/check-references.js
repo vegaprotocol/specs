@@ -94,18 +94,19 @@ specFiles.forEach((value, key) => {
     }
 
     if (criteriaWithRefs.length !== value.criteria.length) {
-      console.group('Unreferenced ACs')
+      let unreferencedCriteria = []
+
       value.criteria.forEach(v => {
         if (!criteriaWithRefs.includes(v)) {
-          console.log(v)
+          unreferencedCriteria.push(v)
           criteriaUnreferencedTotal++
         }
       })
-      console.groupEnd('Feature references')
+      console.log(`Unreferenced ACs: ${unreferencedCriteria.join(', ')}`)
     }
   }
   console.groupEnd(key)
-  console.log('\r\n')
+  console.log(' ')
 })
 
 console.log(`Total criteria:       ${criteriaTotal}`)

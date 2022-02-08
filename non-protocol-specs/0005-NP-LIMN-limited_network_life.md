@@ -100,12 +100,12 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 # Acceptance criteria
 
-- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧
-- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧
-- [ ] We can launch a network with any valid checkpoint file. 💧
-- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧
-- [ ] Hash of the checkpoint file is agreed via consensus. 💧
-- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧
+- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧 (<a name="0005-NP-LIMN-001" href="#0005-NP-LIMN-001">0005-NP-LIMN-001</a>) 
+- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧 (<a name="0005-NP-LIMN-002" href="#0005-NP-LIMN-002">0005-NP-LIMN-002</a>) 
+- [ ] We can launch a network with any valid checkpoint file. 💧 (<a name="0005-NP-LIMN-003" href="#0005-NP-LIMN-003">0005-NP-LIMN-003</a>) 
+- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧 (<a name="0005-NP-LIMN-004" href="#0005-NP-LIMN-004">0005-NP-LIMN-004</a>) 
+- [ ] Hash of the checkpoint file is agreed via consensus. 💧 (<a name="0005-NP-LIMN-005" href="#0005-NP-LIMN-005">0005-NP-LIMN-005</a>) 
+- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧 (<a name="0005-NP-LIMN-006" href="#0005-NP-LIMN-006">0005-NP-LIMN-006</a>) 
 
 ## 💧 Test case 1: Withdrawal status is correctly tracked across resets
 1. A party has general account balance of 100 tUSD.
@@ -274,7 +274,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Then that party has a staking account balance of 100
 1. And that party has 10 VEGA undelegated
 
-## 💧 Test case 9: Transactions submitted before the restore transaction on a chain with a checkpoint hash specified are rejected 
+## 💧 Test case 9: Transactions submitted before the restore transaction on a chain with a checkpoint hash specified are rejected
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash in genesis, but the replay transaction is not submitted.
 1. Any transaction other than replay is submitted

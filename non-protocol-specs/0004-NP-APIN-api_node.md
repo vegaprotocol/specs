@@ -40,18 +40,18 @@ We may develop the Validator Node code and the DataNode code independently which
 
 ## Acceptance Criteria
 ### Stage 1: [💧 Sweetwater](../milestones/2.5-sweetwater.md)
-* The DataNode must be a separate executable in it's own source code repository
-* No API related code must be left in the Core Node
-* The DataNode must be started within a few seconds of a newly started stream node
-* The DataNode must be able to handle brief network outages and disconnects
-* All API functionality currently in the Core node must be available from the DataNode
-* All information available from the DataNode must be retrievable via all of the 3 connections types (gRPC, GraphQL and REST)
-* The validator node will only accept requests for event bus subscriptions. All other API requests will be invalid.
-* The event bus stream is only available from the stream node and not the validator or DataNode
-* All information that is emitted from the stream node is processed by the DataNode (no data is lost)
-* If a DataNode loses connection to a streaming node if will attempt to reconnect and if the cached data received from the streaming node is enough to continue working it can resume being a DataNode.
-* If the DataNode loses connection to a streaming node and it is unable to reconnect in time to see all the missing data, it will shutdown.
-* A DataNode will be able to detect a frozen streaming node by the lack of block time updates and will shutdown.
+* The DataNode must be a separate executable in it's own source code repository. (<a name="0004-NP-APIN-001" href="#0004-NP-APIN-001">0004-NP-APIN-001</a>) 
+* No API related code must be left in the Core Node. (<a name="0004-NP-APIN-002" href="#0004-NP-APIN-002">0004-NP-APIN-002</a>) 
+* The DataNode must be started within a few seconds of a newly started stream node. (<a name="0004-NP-APIN-003" href="#0004-NP-APIN-003">0004-NP-APIN-003</a>) 
+* The DataNode must be able to handle brief network outages and disconnects (<a name="0004-NP-APIN-004" href="#0004-NP-APIN-004">0004-NP-APIN-004</a>) 
+* All API functionality currently in the Core node must be available from the DataNode (<a name="0004-NP-APIN-005" href="#0004-NP-APIN-005">0004-NP-APIN-005</a>) 
+* All information available from the DataNode must be retrievable via all of the 3 connections types (gRPC, GraphQL and REST) (<a name="0004-NP-APIN-006" href="#0004-NP-APIN-006">0004-NP-APIN-006</a>)  
+* The validator node will only accept requests for event bus subscriptions. All other API requests will be invalid. (<a name="0004-NP-APIN-007" href="#0004-NP-APIN-007">0004-NP-APIN-007</a>)  
+* The event bus stream is only available from the stream node and not the validator or DataNode (<a name="0004-NP-APIN-008" href="#0004-NP-APIN-008">0004-NP-APIN-008</a>)  
+* All information that is emitted from the stream node is processed by the DataNode (no data is lost) (<a name="0004-NP-APIN-009" href="#0004-NP-APIN-009">0004-NP-APIN-009</a>)  
+* If a DataNode loses connection to a streaming node if will attempt to reconnect and if the cached data received from the streaming node is enough to continue working it can resume being a DataNode. (<a name="0004-NP-APIN-010" href="#0004-NP-APIN-010">0004-NP-APIN-010</a>)  
+* If the DataNode loses connection to a streaming node and it is unable to reconnect in time to see all the missing data, it will shutdown. (<a name="0004-NP-APIN-011" href="#0004-NP-APIN-011">0004-NP-APIN-011</a>)  
+* A DataNode will be able to detect a frozen streaming node by the lack of block time updates and will shutdown. (<a name="0004-NP-APIN-012" href="#0004-NP-APIN-012">0004-NP-APIN-012</a>)  
 
 ### Stage 2 (for further discussion)
 * The DataNode will be split into different services to allow data types to be handled more optimally using better suited tools and technologies.
