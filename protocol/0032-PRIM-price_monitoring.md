@@ -2,7 +2,7 @@ Feature name: price-monitoring
 
 Start date: 2020-04-29
 
-Specification PR: [275](https://github.com/vegaprotocol/product/pull/275)
+Specification PR: [275](https://github.com/vegaprotocol/specs-internal/pull/275)
 
 # Acceptance Criteria
 
@@ -64,7 +64,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 - `PriceMonitoringDefaultParameters`: Specifies default market parameters outlined in the previous paragraph. These will be used if market parameters don't get explicitly specified.
 - `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
 
-## View from the [vega](https://github.com/vegaprotocol/vega) side
+## View from the Vega side
 
 - Per each transaction:
   - the matching engine sends the **price monitoring engine** the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`

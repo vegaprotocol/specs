@@ -12,12 +12,12 @@ This achieves the following: the price on the market looks "real" and there is v
 
 The downside is that if the bot is "unlucky" they can run out of even large amount of collateral and their orders / positions are liquidated. To avoid this they need regular collateral top-ups.  
 
-From Flamenco Tavern onvards any market on Vega will need a committed liquidity provider, see [LP mechanics spec](../protocol/0044-lp-mechanics.md) to function. See also [LP order type spec](../protocol/0038-liquidity-provision-order-type.md). 
+From Flamenco Tavern onvards any market on Vega will need a committed liquidity provider, see [LP mechanics spec](../protocol/0044-LIQM-lp_mechanics.md) to function. See also [LP order type spec](../protocol/0038-OLIQ-liquidity_provision_order_type.md). 
 
 If a feature is marked as "optional" then the bot can be configured in such a way that it is not providing this functionality but still doing other tasks.
 The aim of this spec is bots that
 1. submit a market proposal (optional) or connects to an existing market
-1. serve as a liquidity provider for the market by submitting the [LP order type](../protocol/0038-liquidity-provision-order-type.md) (optional).
+1. serve as a liquidity provider for the market by submitting the [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md) (optional).
 1. participate in an opening auction (optional)
 1. create markets that look real with more-or-less correct price by placing limit orders that "steer" the price up-or-down as appropriate (optional)
 1. manage their position in such a way so as to not require ever growing amount of collateral. This will mean changing the "shape" in the liquidity provision order and also being strategic about placing limit orders to steer the price. The bot can have an optional position limit.  
@@ -47,7 +47,7 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 ### Submitting a market proposal
 This is only relevant if the option to submit a market proposal is enabled. 
 
-The bot will read the required market proposal from a file (configuration option), decide if it has minimum LP stake in the right asset, check it's got enough vote tokens and then submit the proposal and vote for it. They will also need to submit [liquidity shapes](../protocol/0038-liquidity-provision-order-type.md) but that will be treated below. 
+The bot will read the required market proposal from a file (configuration option), decide if it has minimum LP stake in the right asset, check it's got enough vote tokens and then submit the proposal and vote for it. They will also need to submit [liquidity shapes](../protocol/0038-OLIQ-liquidity_provision_order_type.md) but that will be treated below. 
 To decide that it will ask Vega for `assetBalance`, `quantum` for asset and `min_LP_stake_quantum_multiple` and proceed if 
 ```
 assetBalance x stakeFraction > min_LP_stake_quantum_multiple x quantum
@@ -55,7 +55,7 @@ assetBalance x stakeFraction > min_LP_stake_quantum_multiple x quantum
 It will then check whether it has enough collateral for maintaining the commitment but that will be described below as it applies below too. 
 
 ### Serving as a liquidity provider for a market
-This section is only relevant if: a) the option to act as a liquidity provider is selected or b) the bot submitted a new market proposal as this needs a minimum liquidity commitment [LP mechanics](../protocol/0044-lp-mechanics.md ). 
+This section is only relevant if: a) the option to act as a liquidity provider is selected or b) the bot submitted a new market proposal as this needs a minimum liquidity commitment [LP mechanics](../protocol/0044-LIQM-lp_mechanics.md ). 
 
 Step 1. decide what current price is. 
 ``` 
@@ -120,7 +120,7 @@ limitOrderDistributionParams = {
     numIdenticalBots = 3
 }
 ```
-With the above example you can generate the correct orders using the method in the [notebook](./BotParameterCalcAndTest.ipynb) with `delta=tickSize x numTicksFromMid` and `N = 3600 x 2 / 3`.
+With the above example you can generate the correct orders using the method in the [notebook](./0010-NP-BOTC-bot_parameter_calc_and_test.ipynb) with `delta=tickSize x numTicksFromMid` and `N = 3600 x 2 / 3`.
 
 Another Example:
 ```
@@ -200,8 +200,8 @@ Don't use any of the pseudocode above!
 
 ### Acceptance criteria
 
-- [ ] Bot can submit a market proposal (optional), commit liquidity and then manage it's position as described above, see also [LP order type](../protocol/0038-liquidity-provision-order-type.md). (<a name="0001-NP-LIQB-001" href="#0001-NP-LIQB-001">0001-NP-LIQB-001</a>) 
-- [ ] Bot can connect to an existing market, submit an [LP order type](../protocol/0038-liquidity-provision-order-type.md) and then manage it's position as described above. (<a name="0001-NP-LIQB-002" href="#0001-NP-LIQB-002">0001-NP-LIQB-002</a>)  
+- [ ] Bot can submit a market proposal (optional), commit liquidity and then manage it's position as described above, see also [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md). (<a name="0001-NP-LIQB-001" href="#0001-NP-LIQB-001">0001-NP-LIQB-001</a>) 
+- [ ] Bot can connect to an existing market, submit an [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and then manage it's position as described above. (<a name="0001-NP-LIQB-002" href="#0001-NP-LIQB-002">0001-NP-LIQB-002</a>)  
 - [ ] Bot can participate in an opening auction placing orders around target price (set via params, see above).(<a name="0001-NP-LIQB-003" href="#0001-NP-LIQB-003">0001-NP-LIQB-003</a>)  
 - [ ] Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).(<a name="0001-NP-LIQB-004" href="#0001-NP-LIQB-004">0001-NP-LIQB-004</a>)  
 - [ ] Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached.(<a name="0001-NP-LIQB-005" href="#0001-NP-LIQB-005">0001-NP-LIQB-005</a>)  

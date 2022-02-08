@@ -37,7 +37,7 @@ Any asset on Vega can be either settlement asset or reward asset or both.
 It must be possible for any party to run a one off [transfer](????-????-transfers.md) or create a [periodic transfer](????-????-transfers.md) to any of these reward accounts. 
 Note that saying "per every Vega asset" twice above isn't a typo. We want to be able to pay rewards e.g. in $VEGA for markets settling in e.g. $USDT. 
 
-Reward accounts and balances are to be saved in [LNL checkpoint](../non-protocol-specs/0005-LIMN-limited_network_life.md). 
+Reward accounts and balances are to be saved in [LNL checkpoint](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md). 
 
 
 ## Reward distribution

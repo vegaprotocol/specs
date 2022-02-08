@@ -2,7 +2,7 @@ Feature name: Event Queue
 
 Start date: 2020-04-09
 
-Specification PR: https://github.com/vegaprotocol/product/pull/271
+Specification PR: https://github.com/vegaprotocol/specs-internal/pull/271
 
 
 # Summary

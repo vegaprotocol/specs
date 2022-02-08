@@ -2,9 +2,9 @@
 
 There are parameters within Vega that influence the behaviour of the system:
 - some are set in genesis block but fixed once network is running, 
-- while others are changeable by on-chain [governance](./0028-governance.md) but initialised to genesis values during network launch. For more info see [network paramters](../protocol/0054-network-parameters.md)
+- while others are changeable by on-chain [governance](../protocol/0028-GOVE-governance.md) but initialised to genesis values during network launch. For more info see [network paramters](../protocol/0054-NETP-network_parameters.md)
 
-On [Sweetwater Release](./milestones/2.5-Sweetwater.md) Vega Team wishes to control how certain parameters are initialised while letting validators change others as they see fit. 
+On [Sweetwater Release](../milestones/2.5-Sweetwater.md) Vega Team wishes to control how certain parameters are initialised while letting validators change others as they see fit. 
 As the process of decentalisation progresses Vega Team the number of such parameters will be reduced.
 
 ## Signing
@@ -12,7 +12,7 @@ As the process of decentalisation progresses Vega Team the number of such parame
 The Vega binary will include a public key that Vega team controls. 
 The configuration of the network parameters defined here will be signed and verified as part of the Vega network initialisation for Sweetwater. 
 
-## Parameters to be signed 
+## Parameters to be signed
 
 The values to be specified as a PR against ??? repo. 
 
@@ -21,8 +21,8 @@ TODO: find where `validator min balance` is defined and reference correctly.
 
 | Name                                                        | Comment                                                            | Suggested value (optional) |
 |-------------------------------------------------------------|:------------------------------------------------------------------:| :-------------------------:|
-| `min number of validators` (not in sweetwater)              | Not in [network paramters](../protocol/0054-network-parameters.md) |                            |
-| `validator min balance`                                     | Not in [network paramters](../protocol/0054-network-parameters.md) | 3000 VEGA                  |                                                
+| `min number of validators` (not in sweetwater)              | Not in [network paramters](../protocol/0054-NETP-network_parameters.md) |                            |
+| `validator min balance`                                     | Not in [network paramters](../protocol/0054-NETP-network_parameters.md) | 3000 VEGA                  |                                                
 | `governance.proposal.updateNetParam.requiredMajority`       | So that what is set in genesis cannot be changed too easily        | 0.5                        |
 | `governance.proposal.updateNetParam.requiredParticipation`  | So that what is set in genesis cannot be changed too easily        | 0.5                        |
 | `validators.epoch.length`                                   | Rewards currently make an assumption on epoch lenght, best fix it. | 1 day                      | 
@@ -33,7 +33,7 @@ TODO: find where `validator min balance` is defined and reference correctly.
 
 
 
-## Notes 
+## Notes
 
 The `governance.proposal.updateNetParam.requiredMajority` and `governance.proposal.updateNetParam.requiredParticipation`  
 are a fraction of the total number of VEGA tokens which is 64 999 723. 

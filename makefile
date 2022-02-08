@@ -12,3 +12,7 @@ codes:
 references:
 	node scripts/check-references.js 	
 
+# Imperfect, but useful - hence not included in ALL
+links:
+	npx markdown-link-check protocol/*.md
+	npx markdown-link-check non-protocol-specs/*.md

@@ -1,6 +1,6 @@
-Feature name: liquidity-monitoring\
-Start date: 2020-07-14\
-Specification PR: https://github.com/vegaprotocol/product/pull/322
+Feature name: liquidity-monitoring
+Start date: 2020-07-14
+Specification PR: https://github.com/vegaprotocol/specs-internal/pull/322
 
 ## Summary
 

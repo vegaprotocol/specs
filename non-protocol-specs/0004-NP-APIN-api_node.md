@@ -39,7 +39,7 @@ The DataNode may consist of one or more executables that subscribe to some or al
 We may develop the Validator Node code and the DataNode code independently which could result in one having a different version of the event-bus API than the other. We should add some validation at startup time to prevent mismatches occurring.
 
 ## Acceptance Criteria
-### Stage 1: [💧 Sweetwater](../milestones/2.5-sweetwater.md)
+### Stage 1: [💧 Sweetwater](../milestones/2.5-Sweetwater.md)
 * The DataNode must be a separate executable in it's own source code repository. (<a name="0004-NP-APIN-001" href="#0004-NP-APIN-001">0004-NP-APIN-001</a>) 
 * No API related code must be left in the Core Node. (<a name="0004-NP-APIN-002" href="#0004-NP-APIN-002">0004-NP-APIN-002</a>) 
 * The DataNode must be started within a few seconds of a newly started stream node. (<a name="0004-NP-APIN-003" href="#0004-NP-APIN-003">0004-NP-APIN-003</a>) 
