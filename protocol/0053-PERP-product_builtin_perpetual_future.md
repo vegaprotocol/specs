@@ -1,4 +1,4 @@
-# Built-in [Product](0051-product.md): Cash Settled Perpetual Futures (CSF)
+# Built-in [Product](./0051-PROD-product.md): Cash Settled Perpetual Futures (CSF)
 
 This built-in product provides perpetual futures that are cash-settled, i.e. they are margined and settled in a single asset.
 

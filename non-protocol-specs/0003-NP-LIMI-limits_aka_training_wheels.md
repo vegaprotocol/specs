@@ -84,7 +84,7 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 
 ## Out of scope
 
-- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](0005-limited-network-life.md).
+- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](0005-NP-LIMN-limited_network_life.md).
 
 
 ## Limitations

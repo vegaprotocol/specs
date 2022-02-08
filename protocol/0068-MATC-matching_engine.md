@@ -3,8 +3,8 @@ Start date: 2021-12-14
 
 # Acceptance Criteria
  * The matching engine co-ordinates the trading of incoming orders with existing orders already on an order book.
-   * In a market that is in [Continuous Trading](./0001-MKTF-market-framework.md#trading-mode---continuous-trading) 
-     * An [Immediate or Cancel (IOC)](./0014-ORDT-order-types.md#time-in-force---validity) order:
+   * In a market that is in [Continuous Trading](./0001-MKTF-market_framework.md#trading-mode---continuous-trading) 
+     * An [Immediate or Cancel (IOC)](./0014-ORDT_order_types.md#time-in-force---validity) order:
        * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book (<a name="0068-MATC-001" href="#0068-MATC-001">0068-MATC-001</a>) 
          * If not enough volume is available to **fully** fill the order, the remaining will be cancelled (<a name="0068-MATC-002" href="#0068-MATC-002">0068-MATC-002</a>) 
        * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book, (<a name="0068-MATC-003" href="#0068-MATC-003">0068-MATC-003</a>) 
@@ -36,16 +36,16 @@ Start date: 2021-12-14
        * [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders are placed into the book and no matching takes place. (<a name="0068-MATC-023" href="#0068-MATC-023">0068-MATC-023</a>) 
        * The indicative price and volume values are updated after every change to the order book. (<a name="0068-MATC-024" href="#0068-MATC-024">0068-MATC-024</a>) 
        * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-025" href="#0068-MATC-025">0068-MATC-025</a>) 
-   * When a [market moves into an auction](./0026-auctions.md#upon-entering-auction-mode):
+   * When a [market moves into an auction](./0026-AUCT-auctions.md#upon-entering-auction-mode):
      * All [PEGGED](./0014-ORDT-order_types.md#auction) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-026" href="#0068-MATC-026">0068-MATC-026</a>) 
      * All [GFN](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-027" href="#0068-MATC-027">0068-MATC-027</a>) 
      * All [GTC/GTT](./0014-ORDT-order-types.md#time-in-force---validity) orders remain on the book untouched. (<a name="0068-MATC-028" href="#0068-MATC-028">0068-MATC-028</a>) 
-   * When a market [market exits an auction](./0026-auctions.md#upon-exiting-auction-mode):
+   * When a market [market exits an auction](./0026-AUCT-auctions.md#upon-exiting-auction-mode):
      * The book is uncrossed. (<a name="0068-MATC-029" href="#0068-MATC-029">0068-MATC-029</a>) 
        * Self trading is allowed during uncrossing. (<a name="0068-MATC-030" href="#0068-MATC-030">0068-MATC-030</a>) 
      * All [GFA](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-031" href="#0068-MATC-031">0068-MATC-031</a>) 
      * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced where possible. (<a name="0068-MATC-032" href="#0068-MATC-032">0068-MATC-032</a>) 
-  * Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [canceled](./0033-CANC-cancel-orders.md). (<a name="0068-MATC-033" href="#0068-MATC-033">0068-MATC-033</a>) 
+  * Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [canceled](./0033-OCAN-cancel_orders.md). (<a name="0068-MATC-033" href="#0068-MATC-033">0068-MATC-033</a>) 
   * The price of any persistent order can be updated (<a name="0068-MATC-034" href="#0068-MATC-034">0068-MATC-034</a>) 
   * The size of any persistent order can be updated (<a name="0068-MATC-035" href="#0068-MATC-035">0068-MATC-035</a>) 
   * The TIF of any persistent order can be updated (<a name="0068-MATC-036" href="#0068-MATC-036">0068-MATC-036</a>) 

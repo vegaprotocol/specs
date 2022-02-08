@@ -31,7 +31,7 @@ Both Tendermint validators and candidate validators should be signing and sendin
 
 The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
 
-### Acceptance criteria 
+### Acceptance criteria
 
 # Scenario 1: (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>)
 1. Configure and launch a network with 5 validators

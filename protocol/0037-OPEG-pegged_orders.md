@@ -1,6 +1,6 @@
 Feature name: Pegged and Market Maker Orders
 Start date: 2020-02-10
-Specification PR: https://github.com/vegaprotocol/product/pull/262
+Specification PR: https://github.com/vegaprotocol/specs-internal/pull/262
 
 # Pegged and Market Maker orders
 

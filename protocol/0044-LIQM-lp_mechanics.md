@@ -129,7 +129,7 @@ The [liquidity_fee](./0029-FEES-fees.md) of a market on Vega takes as an input, 
 
 ### Distributing fees between liquidity providers
 
-When calculating fees for a trade, the size of a liquidity provider’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between liquidity providers. See [setting fees and rewarding lps](./0042-setting-fees-and-rewarding-lps.md) for the calculation of the split.
+When calculating fees for a trade, the size of a liquidity provider’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between liquidity providers. See [setting fees and rewarding lps](./0042-LIQF-setting_fees_and_rewarding_lps.md) for the calculation of the split.
 
 
 ## Orders (buy shape/sell shape)

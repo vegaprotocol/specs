@@ -40,7 +40,7 @@ Note: there are some differences/additional points for market creation proposals
 Any actions that result from the outcome of the vote are covered in other spec files.
 
 ## Governance Asset
-The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) representing the [token configured in the staking bridge](../non-protocol-specs/0006-erc20-governance-token-staking.md). Users with a staking account balance in the governance asset can:
+The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) representing the [token configured in the staking bridge](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md). Users with a staking account balance in the governance asset can:
 
 - [Create proposals](#restriction-on-who-can-create-a-proposal)
 - [Vote on proposals](#voting-for-a-proposal)
@@ -51,7 +51,7 @@ A party on the Vega network will have a weighting for each type of proposal that
 
 To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`. 
 
-Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-staking-bridge.md).
+Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-NP-APIN-api_node.md).
 
 In future, governance weighting for some proposal types will be based on alternative measures, such as:
 

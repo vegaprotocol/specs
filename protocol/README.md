@@ -33,7 +33,7 @@
 - [Liquidity provisioning fees and rewards](./0042-LIQF-setting_fees_and_rewarding_lps.md)
 - [Probability weighted liquidity measurement (Python notebook)](./0034-PROB-prob_weighted_liquidity_measure.ipynb)
 
-## Governance 
+## Governance
 - [Overview](./0028-GOVE-governance.md)
 - [Asset proposals](./0027-ASSP-asset_proposal.md)
 
@@ -69,9 +69,8 @@
 - [Ethereum bridge spec](./0031-ETHB-ethereum_bridge_spec.md)
 
 ## Delegation, staking and rewards
-- [Staking & Delegating](./0059-STKG-simple-staking-and-delegating.md)
+- [Staking & Delegating](./0059-STKG-simple_staking_and_delegating.md)
 - [Rewards Overview](./0056-REWA-rewards_overview.md)
-- [Rewards functions](./0057-REWF-reward_functions.md)
 - [Simple Proof Of Stake rewards](./0058-REWS-simple_pos_rewards.md)
 - [On chain treasury](./0055-TREA-on_chain_treasury.md)
 

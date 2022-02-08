@@ -30,7 +30,7 @@ Information to store:
 - All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted*.
 - All [asset proposals](../protocol/0028-GOVE-governance.md) that have been *accepted*.
 - All delegation info.
-- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the staking and delegation reward account balance and network params that govern [Staking and delegation](../protocol/0057-REWF-reward_functions.md) ).
+- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the staking and delegation reward account balance and network params that govern [Staking and delegation](../protocol/0056-REWA-rewards_overview.md) ).
 - All reward balances accrued by all parties but not yet transferred to their general account due to payout delays.
 - [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below about signed-for-withdrawal. Does *not* include the "staking" account balance.
 - Fee pools: Fees are paid into per market or per asset pools and distributed periodically. 
@@ -100,12 +100,12 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 # Acceptance criteria
 
-- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧
-- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧
-- [ ] We can launch a network with any valid checkpoint file. 💧
-- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧
-- [ ] Hash of the checkpoint file is agreed via consensus. 💧
-- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧
+- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧 (<a name="0005-NP-LIMN-001" href="#0005-NP-LIMN-001">0005-NP-LIMN-001</a>) 
+- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧 (<a name="0005-NP-LIMN-002" href="#0005-NP-LIMN-002">0005-NP-LIMN-002</a>) 
+- [ ] We can launch a network with any valid checkpoint file. 💧 (<a name="0005-NP-LIMN-003" href="#0005-NP-LIMN-003">0005-NP-LIMN-003</a>) 
+- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧 (<a name="0005-NP-LIMN-004" href="#0005-NP-LIMN-004">0005-NP-LIMN-004</a>) 
+- [ ] Hash of the checkpoint file is agreed via consensus. 💧 (<a name="0005-NP-LIMN-005" href="#0005-NP-LIMN-005">0005-NP-LIMN-005</a>) 
+- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧 (<a name="0005-NP-LIMN-006" href="#0005-NP-LIMN-006">0005-NP-LIMN-006</a>) 
 
 ## 💧 Test case 1: Withdrawal status is correctly tracked across resets
 1. A party has general account balance of 100 tUSD.
@@ -274,7 +274,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Then that party has a staking account balance of 100
 1. And that party has 10 VEGA undelegated
 
-## 💧 Test case 9: Transactions submitted before the restore transaction on a chain with a checkpoint hash specified are rejected 
+## 💧 Test case 9: Transactions submitted before the restore transaction on a chain with a checkpoint hash specified are rejected
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash in genesis, but the replay transaction is not submitted.
 1. Any transaction other than replay is submitted

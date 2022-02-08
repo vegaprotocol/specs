@@ -1,6 +1,5 @@
 Feature name: amends <br>
 Start date: `2020-03-12` <br>
-Specification PR: https://github.com/vegaprotocol/product/pulls <br>
 
 # Acceptance Criteria
 - Only LIMIT orders can be amended, any attempt to amend a non LIMIT order is rejected (<a name="0004-AMND-001" href="#0004-AMND-001">0004-AMND-001</a>)
