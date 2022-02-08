@@ -188,28 +188,25 @@ All parameters that are changed through a governance vote are valid starting the
 
 ## Acceptance Criteria
 
-1. Epochs change at the start of the first block that is after the epoch length has passed
+1. Epochs change at the end of the first block that is after the epoch expiry has passed
    - Given an epoch length of `1d`, with a block time of `1h`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
    - Given an epoch length of `1d`, with a block time of `1h`, at end of block 23 the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
    - Given an epoch length of `1d`, with a block time of `1h`, at end of block 24 the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
 2. Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>) 
    - Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1`
    - Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61`
-3. Delegation takes effect at epoch changeover
-   - During epoch 1, `party 1` stakes any valid amount to `validator 1`
-     - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)
-     - `validator 1`s staked balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
-     - `validator 1`s staked balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
-4. Delegation can be 'undone' by undelegating within the same epoch
-   - During epoch 1, `party 1` stakes any valid amount to `validator 1`
-   - Subsequently, but during the same epoch, `party 1` unstakes the same amount from `validator 1`
-     - `validator 1`s staked balance is not increased in epoch 2 (<a name="0050-EPOC-008" href="#0050-EPOC-008">0050-EPOC-008</a>)
-     - `party 1`s staked-then-unstaked balance is returned in epoch 2 (<a name="0050-EPOC-009" href="#0050-EPOC-009">0050-EPOC-009</a>)
+3. Nomination takes effect at epoch changeover
+   - During epoch 1, `party 1` nominates any valid amount to `validator 1`
+     - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>) (note: this can be tested by trying to delegate again, which will be rejected)
+     - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
+     - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
+4. Delegation can be 'undone' by undelegating within the same epoch (<a name="0050-EPOC-008" href="#0050-EPOC-008">0050-EPOC-008</a>)
+   - If this occurs in the same epoch, rewards for the validator and delegator will not change due to the delegation (<a name="0050-EPOC-009" href="#0050-EPOC-009">0050-EPOC-009</a>)
 5. [Undelegate now](#undelegate-now) does not return the balance to the delegator immediately
    - During epoch 1, `party 1` stakes any valid amount to `validator 1`
    - At the end of epoch 2, `validator 1` earns rewards based on a delegation count that includes `party 1`s stake
    - During epoch 3, `party 1` uses Undelegate Now
-   - During epoch 3, `party 1` does not receive their staked amount back in their unstaked balance (<a name="0050-EPOC-010" href="#0050-EPOC-010">0050-EPOC-010</a>)
+   - During epoch 3, `party 1` can use the undelegated balance as soon as the transaction is executed (<a name="0050-EPOC-010" href="#0050-EPOC-010">0050-EPOC-010</a>)
    - During epoch 3, `validator 1`s voting weight remains unchanged (<a name="0050-EPOC-010" href="#0050-EPOC-010">0050-EPOC-010</a>)
    - At the end of epoch 3, `validator 1` earns rewards based on a delegation count that *does not include* `party 1`s stake (<a name="0050-EPOC-012" href="#0050-EPOC-012">0050-EPOC-012</a>)
    - At the end of epoch 3, `party 1` does not earn rewards for the stake that was undelegated (<a name="0050-EPOC-013" href="#0050-EPOC-013">0050-EPOC-013</a>)
