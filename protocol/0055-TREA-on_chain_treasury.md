@@ -50,7 +50,7 @@ A governance proposal may be submitted to transfer funds on enactment from the o
 
 - Depositing funds via the [ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) directly to the Validators Rewards account (i.e. xxx address). There will be no more  on-chain-treasury on sweetwater. (<a name="0055-TREA-001" href="#0055-TREA-001">0055-TREA-001</a>)
 
-### 🤠 Oregon Trail 
+### 🤠 Oregon Trail
 
 - Depositing funds via the [ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) to the Network Treasury account (i.e. zero address) when there is no Network Treasury account for the asset being deposited:
 	- Creates a Network Treasury account for that asset  (<a name="0055-TREA-002" href="#0055-TREA-002">0055-TREA-002</a>)
@@ -62,7 +62,7 @@ A governance proposal may be submitted to transfer funds on enactment from the o
 	- The Network Treasury accounts API returns the correct balance for the new account (<a name="0055-TREA-007" href="#0055-TREA-007">0055-TREA-007</a>)
 - No party can withdraw assets from the Network Treasury account via the ERC20 bridge (<a name="0055-TREA-008" href="#0055-TREA-008">0055-TREA-008</a>)
 - No party can use assets in the Network Treasury account as margin or transfer them to another account on Vega (<a name="0055-TREA-009" href="#0055-TREA-009">0055-TREA-009</a>)
-- The network treasury account balances [are restored after a network restart](../non-protocol-specs/0005-limited-network-life.md)  (<a name="0055-TREA-010" href="#0055-TREA-010">0055-TREA-010</a>)
+- The network treasury account balances [are restored after a network restart](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md)  (<a name="0055-TREA-010" href="#0055-TREA-010">0055-TREA-010</a>)
 
 ### Post Oregon Trail
 
