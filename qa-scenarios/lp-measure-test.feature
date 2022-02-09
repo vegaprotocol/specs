@@ -10,7 +10,7 @@ Feature: Verify the order size is correctly cumulated (0034-PROB-001); Probabili
       | market.liquidity.targetstake.triggering.ratio       | 0     |
       | market.liquidity.providers.fee.distributionTimeStep | 10m   |
 
-  Scenario: Order from liquidity provision and from normal order submission are correctly cumulated in order book's total size.
+  Scenario: Order from liquidity provision and from normal order submission are correctly cumulated in order book's total size(0034-PROB-001); Probability of trading decreases away from the mid-price (0034-PROB-005).
 
     And the log normal risk model named "my-log-normal-risk-model":
       | risk aversion | tau                    | mu | r     | sigma |
