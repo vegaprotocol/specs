@@ -21,9 +21,9 @@ Start date: 2021-12-14
        * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be repriced and placed on the book if possible. (<a name="0068-MATC-011" href="#0068-MATC-011">0068-MATC-011</a>) 
          * If the price is invalid it will be parked. (<a name="0068-MATC-012" href="#0068-MATC-012">0068-MATC-012</a>) 
      * For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order-types.md#time-in-force---validity) orders:
-       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are marked as rejected. (<a name="0068-MATC-013" href="#0068-MATC-013">0068-MATC-013</a>) 
+       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected by the wallet validation layer. (<a name="0068-MATC-013" href="#0068-MATC-013">0068-MATC-013</a>) 
        * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders match if possible, any remaining is placed on the book. (<a name="0068-MATC-014" href="#0068-MATC-014">0068-MATC-014</a>) 
-       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced and placed on the book if the price is valid, (<a name="0068-MATC-015" href="#0068-MATC-015">0068-MATC-015</a>) 
+       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced and placed on the book if the price is valid, except GFN which are rejected by the wallet validation layer. (<a name="0068-MATC-015" href="#0068-MATC-015">0068-MATC-015</a>) 
          * otherwise they are parked. (<a name="0068-MATC-016" href="#0068-MATC-016">0068-MATC-016</a>) 
      * A market will enter auction if the volume on either side of the book is empty. (<a name="0068-MATC-017" href="#0068-MATC-017">0068-MATC-017</a>) 
      * A market will enter auction if the mark price moves by a larger amount than the price monitoring settings allow. (<a name="0068-MATC-018" href="#0068-MATC-018">0068-MATC-018</a>) 
@@ -48,7 +48,7 @@ Start date: 2021-12-14
   * Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [canceled](./0033-OCAN-cancel_orders.md). (<a name="0068-MATC-033" href="#0068-MATC-033">0068-MATC-033</a>) 
   * The price of any persistent order can be updated (<a name="0068-MATC-034" href="#0068-MATC-034">0068-MATC-034</a>) 
   * The size of any persistent order can be updated (<a name="0068-MATC-035" href="#0068-MATC-035">0068-MATC-035</a>) 
-  * The TIF of any persistent order can be updated (<a name="0068-MATC-036" href="#0068-MATC-036">0068-MATC-036</a>) 
+  * The TIF of any persistent order can be updated to and from GTC and GTT only. Expiry time is required if amending to GTT and must not be given if amending to GTC. (<a name="0068-MATC-036" href="#0068-MATC-036">0068-MATC-036</a>) 
   * An update to an order that is not [ACTIVE or PARKED](./0024-OSTA-order_status.md) (Stopped, Cancelled, Expired, Filled) will be rejected (<a name="0068-MATC-037" href="#0068-MATC-037">0068-MATC-037</a>) 
 
 # Summary
