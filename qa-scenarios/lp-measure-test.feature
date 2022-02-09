@@ -1,4 +1,4 @@
-Feature: Verify the order size is correctly cumulated (0034-PROB-001); Probability of trading decreases away from the mid-price (0034-PROB-005)
+Feature: Tests confirming probability of trading acceptance criteria
 
   Background:
 
