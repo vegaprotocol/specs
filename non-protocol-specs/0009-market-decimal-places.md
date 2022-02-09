@@ -5,12 +5,12 @@ This document aims to outline how we are to handle the decimal places of a given
 ## Terminology
 
 * Settlement asset: the asset in which transactions for a given market are made (margin balances, fees, settlements, etc...).
-* Market precision: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a GWei has a 9 decimal places, so the market precision is 9)
+* Market precision: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a GWei has a 9 decimal places, so the market precision is 9). Synonymous with _market tick_.
 * Asset precision: the number of decimal places for a given asset. Again, a market with precision 9 that settles in ETH will have a market precision of 9, whereas the asset precision is 18.
 
 ## Mechanics
 
-It is possible to configure a market where orders can only be priced in increments of a specific size. This is done by specifying a different (smaller) number of decimal places than its settlement asset supports. Simply put: a market that settles in GBP can be configured to have 0 decimal places, in which case the price levels on the orderbook will be at least separated by £1, rather than the default penny (as GBP is an asset with 2 decimal places).
+It is possible to configure a market where orders can only be priced in increments of a specific size. This is done by specifying a different (smaller) number of decimal places than its settlement asset supports. Simply put: a market that settles in GBP can be configured to have 0 decimal places, in which case the price levels on the orderbook will be at least separated by £1, rather than the default penny.
 
 This effectively means that prices of submitted orders should be treated as a value that is an order of magnitude greater than what the user will submit. This is trivial to calculate, and is done when the market is created by passing in the asset details (which specify how many decimal places any given asset supports):
 
