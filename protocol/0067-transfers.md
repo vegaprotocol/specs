@@ -20,6 +20,7 @@ Here's the list of accounts types into which funds can be sent:
 - [GENERAL](./0013-accounts.md)
 - [LOCKED_FOR_STAKING](./0059-simple-staking-and-delegating.md)
 - [REWARD_POOL](./0056-rewards-overview.md)
+- [ON_CHAIN_TREASURY](./0055-on-chain-treasury.md)
 
 ## Delayed transfer
 The system should be able to delay transfer. Such feature would be useful in the context of distributing token related to incentives for example.
