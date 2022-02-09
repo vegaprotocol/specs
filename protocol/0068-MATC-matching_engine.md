@@ -21,9 +21,9 @@ Start date: 2021-12-14
        * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be repriced and placed on the book if possible. (<a name="0068-MATC-011" href="#0068-MATC-011">0068-MATC-011</a>) 
          * If the price is invalid it will be parked. (<a name="0068-MATC-012" href="#0068-MATC-012">0068-MATC-012</a>) 
      * For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order-types.md#time-in-force---validity) orders:
-       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are marked as rejected. (<a name="0068-MATC-013" href="#0068-MATC-013">0068-MATC-013</a>) 
+       * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected by the wallet validation layer. (<a name="0068-MATC-013" href="#0068-MATC-013">0068-MATC-013</a>) 
        * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders match if possible, any remaining is placed on the book. (<a name="0068-MATC-014" href="#0068-MATC-014">0068-MATC-014</a>) 
-       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced and placed on the book if the price is valid, (<a name="0068-MATC-015" href="#0068-MATC-015">0068-MATC-015</a>) 
+       * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced and placed on the book if the price is valid, except GFN which are rejected by the wallet validation layer. (<a name="0068-MATC-015" href="#0068-MATC-015">0068-MATC-015</a>) 
          * otherwise they are parked. (<a name="0068-MATC-016" href="#0068-MATC-016">0068-MATC-016</a>) 
      * A market will enter auction if the volume on either side of the book is empty. (<a name="0068-MATC-017" href="#0068-MATC-017">0068-MATC-017</a>) 
      * A market will enter auction if the mark price moves by a larger amount than the price monitoring settings allow. (<a name="0068-MATC-018" href="#0068-MATC-018">0068-MATC-018</a>) 
