@@ -28,6 +28,23 @@ In order to do this the request for transfer should contain a field indicating w
 ## Spam protection
 In order to prevent the abuse of user-initiated transfers as spam attack, the system will be configurabled with a [network parameter](#network-parameters) that will limit the number of transfers that a user can initiate within a set period of time.
 
+## Recurring transfers
+A party can also setup recurring transfers which will happen every epochs. These transfers will happen at the end of the epoch, and before the next one can happen.
+A party is limited to a maximum of 1 transfer to another count per epoch (e.g: we have parties A, B, C. A is allowed to one recurring transfer to B AND to C per epochs).
+
+A recurring transfers needs to contain these specific informations:
+- start epoch (the epoch at which the network will start transfering funds from the source account)
+- end epoch (the last epoch at which the network will transfer funds from the source account), optional, if not specified the transfer run until cancelled.
+- factor (a factor used with the amount specified for the transfer).
+
+It's possible to cancel an transfer.
+It's not possible to amend a transfer, a party will need to cancel the transfer and submit a new one in this case.
+
+The amount paid at each epoch is calculated using the following fomula:
+- amount = start amount * factor ^ (current epoch - start epoch)
+
+If not enough funds are present in the source account at the time a transfer is initied by the network, the whole recurring transfer is cancelled.
+
 ## Fees
 A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](./0059-simple-POS-rewards.md).
 
@@ -36,32 +53,60 @@ The fee is set by a [network parameter](#network-parameter) that defines the pro
 ## Proposed command
 This new functionality requires the introduction of a new command in the transaction API. The payload is as follows:
 ```
-message TransferFunds {
-  // Support GENERAL and LOCKED_FOR_STAKING at first
+message Transfer {
+  // The account type from which the funds of the party
+  // should be taken
   vega.AccountType from_account_type = 1;
-  // pubkey of the destination
+  // The public key of the destination account
   string to = 2;
-  // shall support GENERAL, REWARD, LOCKED_FOR_STAKING types at first.
+  // The type of the destination account
   vega.AccountType to_account_type = 3;
-  // the asset to be transfered, must exists in the network
+  // The asset
   string asset = 4;
-  // the amount to be transfered, must be > 0
+  // The amount to be taken from the source account
   string amount = 5;
-  // a unix timestamp, anything < time.now means pay now.
-  int64 deliver_on = 6;
-  // an arbitrary reference, 100 chars max
-  string reference = 7;
+  // The reference to be attached to the transfer
+  string reference = 6;
+
+  // Specific details of the transfer
+  oneof kind {
+    OneOffTransfer one_off = 101;
+    RecurringTransfer recurring = 102;
+  }
+}
+
+// Specific details for a one off transfer
+message OneOffTransfer {
+  // A unix timestamp in second. Time at which the
+  // transfer should be delivered in the to account
+  int64 deliver_on = 1;
+}
+
+// Specific details for a recurring transfer
+message RecurringTransfer {
+  // The first epoch from which this transfer shall be paid
+  uint64 start_epoch = 1;
+  // The last epoch at which this transfer shall be paid
+  vega.Uint64Value end_epoch = 2;
+  // factor needs to be > 0
+  string factor = 3;
+}
+
+message CancelTransfer {
+  // The ID of the transfer to cancel
+  string transfer_id = 1;
 }
 ```
 
 ## Network Parameters
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `spam.protection.maxUserTransfersPerMinute`       | String (integer) |  `"1"`        | The most transfers a use can initiate per minute | 
-| `transfer.fee`       | String (float) |  `"0.0001"`        | The percentage of the transfer charged as a fee | 
+| `spam.protection.maxUserTransfersPerMinute`       | String (integer) |  `"1"`        | The most transfers a use can initiate per minute |
+| `transfer.fee`       | String (float) |  `"0.0001"`        | The percentage of the transfer charged as a fee |
 
 
 ## Acceptance criteria
+### One off transfers
 - [ ] As a user I can transfer funds from a general account to an other general account
   - [ ] I can do a delayed transfer in the same conditions
 - [ ] As a user I can transfer funds from a general account to reward account
@@ -83,3 +128,38 @@ message TransferFunds {
 - [ ] The spam protection mechanics prevent me to do more than X transfers per epoch.
 - [ ] As a user, I cannot transfer from my margin accounts
 - [ ] As a user, I cannot transfer from my staking accounts
+
+### Recurring transfers
+- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+  - [ ] I specify a start and end epoch, and a factor of 1
+  - [ ] Until the epoch is reached not transfers are executed
+  - [ ] Once I reach the start epoch transfers happens.
+  - [ ] The same amount is transfered every epoch
+  - [ ] After I reach the epoch after the end epoch, no transfers are executed anymore
+- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+  - [ ] I specify a start and end epoch, and a factor of 0.7
+  - [ ] Until the epoch is reached not transfers are executed
+  - [ ] Once I reach the start epoch transfers happens.
+  - [ ] The amount transfered every epoch decrease
+  - [ ] After I reach the epoch after the end epoch, no transfers are executed anymore
+- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+  - [ ] I specify a start and no end epoch, and a factor of 1
+  - [ ] Until the epoch is reached not transfers are executed
+  - [ ] Once I reach the start epoch transfers happens.
+  - [ ] The amount transfered every epoch stay the same
+  - [ ] The transfers happen forever
+- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+  - [ ] I specify a start and no end epoch, and a factor of 1
+  - [ ] Until the epoch is reached not transfers are executed
+  - [ ] Once I reach the start epoch transfers happens.
+  - [ ] I cancel the transfer after the start epoch, before the end epoch
+  - [ ] No transfer are executed anymore
+- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+  - [ ] I specify a start and no end epoch, and a factor of 1
+  - [ ] I cancel the transfer after the start epoch, before the end epoch
+  - [ ] No transfer are executed at all
+- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+  - [ ] I specify a start and no end epoch, and a factor of 1
+  - [ ] Until the epoch is reached not transfers are executed
+  - [ ] Once I reach the start epoch transfers happens.
+  - [ ] The account runs out of funds, the transfer is stopped, no more transfers are executed.
