@@ -103,7 +103,7 @@ message CancelTransfer {
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
 | `spam.protection.maxUserTransfersPerMinute`       | String (integer) |  `"1"`        | The most transfers a use can initiate per minute |
-| `transfer.fee`       | String (float) |  `"0.0001"`        | The percentage of the transfer charged as a fee |
+| `transfer.fee.factor`       | String (float) |  `"0.0001"`        | The percentage of the transfer charged as a fee |
 
 
 ## Acceptance criteria
@@ -131,7 +131,7 @@ message CancelTransfer {
 - [ ] As a user, I cannot transfer from my staking accounts
 
 ### Recurring transfers
-- [ ] As a user I can create a recurring transfer _which expires after a specified epoch_ 
+- [ ] As a user I can create a recurring transfer _which expires after a specified epoch_
   - [ ] I specify a start and end epoch, and a factor of `1`
   - [ ] Until the epoch is reached not transfers are executed
   - [ ] Once I reach the start epoch transfers happens.
