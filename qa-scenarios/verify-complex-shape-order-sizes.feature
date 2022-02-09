@@ -353,7 +353,7 @@ Scenario:  Test LP Volume being pushed by limit of Probability of Trading (cappe
 
     And the order book should have the following volumes for market "ETH2/MAR22":
       | side | price | volume         |
-      | sell | 1709  | 3107520198882  |
+      | sell | 1709  | 2925687536572  |
       | sell | 1109  | 1              |
-      | buy  | 300   | 12500000000000 |
+      | buy  | 300   | 16666666666667 |
       | buy  | 900   | 1              |
