@@ -1,4 +1,4 @@
-Feature: CASE-1: Trader submits long order that will trade - new formula & high exit price
+Feature: CASE-1: Trader submits long order that will trade - new formula & high exit price (0019-MCAL-001, 0019-MCAL-003, 0019-MCAL-005)
   # https://drive.google.com/drive/folders/1BCOKaEb7LZYAKoiPfXfaqwM4BNicPpF-
 
   Background:
@@ -58,12 +58,12 @@ Feature: CASE-1: Trader submits long order that will trade - new formula & high 
       | party1 | ETH/DEC19 | buy  | 13     | 15000000 | 2                | TYPE_LIMIT | TIF_GTC | ref-1     |
     And "party1" should have general account balance of "611199968" for asset "ETH"
     And the following trades should be executed:
-      | buyer   | price    | size | seller     |
+      | buyer  | price    | size | seller     |
       | party1 | 11200000 | 2    | sellSideMM |
       | party1 | 14000000 | 11   | sellSideMM |
 
     Then the following transfers should happen:
-      | from   | to      | from account            | to account          | market id | amount  | asset |
+      | from   | to     | from account            | to account          | market id | amount  | asset |
       | market | party1 | ACCOUNT_TYPE_SETTLEMENT | ACCOUNT_TYPE_MARGIN | ETH/DEC19 | 5600000 | ETH   |
 
     Then the parties should have the following account balances:
@@ -78,12 +78,12 @@ Feature: CASE-1: Trader submits long order that will trade - new formula & high 
 
     # NEW ORDERS ADDED WITHOUT ANOTHER TRADE HAPPENING
     Then the parties cancel the following orders:
-      | party    | reference |
+      | party     | reference |
       | buySideMM | buy1      |
       | buySideMM | buy2      |
       | buySideMM | buy3      |
     When the parties place the following orders:
-      | party    | market id | side | volume | price    | resulting trades | type       | tif     | reference |
+      | party     | market id | side | volume | price    | resulting trades | type       | tif     | reference |
       | buySideMM | ETH/DEC19 | buy  | 1      | 19000000 | 0                | TYPE_LIMIT | TIF_GTC | ref-1     |
       | buySideMM | ETH/DEC19 | buy  | 3      | 18000000 | 0                | TYPE_LIMIT | TIF_GTC | ref-2     |
       | buySideMM | ETH/DEC19 | buy  | 15     | 17000000 | 0                | TYPE_LIMIT | TIF_GTC | ref-3     |
@@ -101,12 +101,12 @@ Feature: CASE-1: Trader submits long order that will trade - new formula & high 
     # ANOTHER TRADE HAPPENING (BY A DIFFERENT PARTY)
     # updating mark price to 200
     When the parties place the following orders:
-      | party     | market id | side | volume | price    | resulting trades | type       | tif     | reference |
+      | party      | market id | side | volume | price    | resulting trades | type       | tif     | reference |
       | sellSideMM | ETH/DEC19 | sell | 1      | 20000000 | 0                | TYPE_LIMIT | TIF_GTC | ref-1     |
       | buySideMM  | ETH/DEC19 | buy  | 1      | 20000000 | 1                | TYPE_LIMIT | TIF_GTC | ref-2     |
 
     And the following transfers should happen:
-      | from   | to      | from account            | to account          | market id | amount   | asset |
+      | from   | to     | from account            | to account          | market id | amount   | asset |
       | market | party1 | ACCOUNT_TYPE_SETTLEMENT | ACCOUNT_TYPE_MARGIN | ETH/DEC19 | 78000000 | ETH   |
 
     Then the parties should have the following account balances:

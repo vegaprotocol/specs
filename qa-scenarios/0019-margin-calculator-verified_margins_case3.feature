@@ -1,4 +1,4 @@
-Feature: CASE-3: Trader submits long order that will trade - new formula & zero side of order book
+Feature: CASE-3: Trader submits long order that will trade - new formula & zero side of order book (0019-MCAL-001, 0019-MCAL-004)
   # https://drive.google.com/drive/folders/1BCOKaEb7LZYAKoiPfXfaqwM4BNicPpF-
 
   Background:
@@ -43,7 +43,7 @@ Feature: CASE-3: Trader submits long order that will trade - new formula & zero 
 
     Then the parties cancel the following orders:
       | party | reference      |
-      | aux    | cancel-me-sell |
+      | aux   | cancel-me-sell |
 
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/DEC19"
 
