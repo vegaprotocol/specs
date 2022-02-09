@@ -131,36 +131,37 @@ message CancelTransfer {
 - [ ] As a user, I cannot transfer from my staking accounts
 
 ### Recurring transfers
-- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
-  - [ ] I specify a start and end epoch, and a factor of 1
+- [ ] As a user I can create a recurring transfer _which expires after a specified epoch_ 
+  - [ ] I specify a start and end epoch, and a factor of `1`
   - [ ] Until the epoch is reached not transfers are executed
   - [ ] Once I reach the start epoch transfers happens.
   - [ ] The same amount is transfered every epoch
-  - [ ] After I reach the epoch after the end epoch, no transfers are executed anymore
-- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
-  - [ ] I specify a start and end epoch, and a factor of 0.7
+  - [ ] After I reach the epoch after the `end epoch`, no transfers are executed anymore
+- [ ] As a user I can create a recurring transfer _that decreases over time_
+  - [ ] I specify a start and end epoch, and a factor of `0.7`
   - [ ] Until the epoch is reached not transfers are executed
   - [ ] Once I reach the start epoch transfers happens.
-  - [ ] The amount transfered every epoch decrease
-  - [ ] After I reach the epoch after the end epoch, no transfers are executed anymore
-- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
-  - [ ] I specify a start and no end epoch, and a factor of 1
+  - [ ] The amount transfered every epoch decreases
+  - [ ] After I reach the epoch `?`, no transfers are executed anymore
+- [ ] As a user I can create a recurring transfer that recurs forever, with the same balance transferred each time
+  - [ ] I specify a start and no end epoch, and a factor of `1`
   - [ ] Until the epoch is reached not transfers are executed
   - [ ] Once I reach the start epoch transfers happens.
-  - [ ] The amount transfered every epoch stay the same
+  - [ ] The amount transfered every epoch is the same
   - [ ] The transfers happen forever
-- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+- [ ] As a user I can cancel a recurring transfer
   - [ ] I specify a start and no end epoch, and a factor of 1
-  - [ ] Until the epoch is reached not transfers are executed
   - [ ] Once I reach the start epoch transfers happens.
-  - [ ] I cancel the transfer after the start epoch, before the end epoch
+  - [ ] I cancel the recurring transfer after the start epoch, before the end epoch
   - [ ] No transfer are executed anymore
-- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+- [ ] As a user I can cancel a recurring transfer before any transfers have executed
   - [ ] I specify a start and no end epoch, and a factor of 1
   - [ ] I cancel the transfer after the start epoch, before the end epoch
   - [ ] No transfer are executed at all
-- [ ] As a user I can transfer create a recurring funds from a general account to an other supported account
+- [ ] A user's recurring transfer is cancelled if any transfer fails due to insufficient funds
   - [ ] I specify a start and no end epoch, and a factor of 1
   - [ ] Until the epoch is reached not transfers are executed
   - [ ] Once I reach the start epoch transfers happens.
-  - [ ] The account runs out of funds, the transfer is stopped, no more transfers are executed.
+  - [ ] The account runs out of funds
+  - [ ] The transfer is cancelled
+  - [ ] No more transfers are executed.
