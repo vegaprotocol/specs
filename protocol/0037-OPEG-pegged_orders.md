@@ -9,7 +9,7 @@ Specification PR: https://github.com/vegaprotocol/specs-internal/pull/262
 - [ ] Pegged orders can only be GTT and GTC orders. IOC and FOK will be added in the second phase of pegged orders. (<a name="0037-OPEG-002" href="#0037-OPEG-002">0037-OPEG-002</a>)
   - [ ] Until phase 2, FOK or IOC pegged orders are invalid (<a name="0037-OPEG-015" href="#0037-OPEG-015">0037-OPEG-015</a>)
 - [ ] All markets must be able to handle pegged orders. (<a name="0037-OPEG-003" href="#0037-OPEG-003">0037-OPEG-003</a>)
-- [ ] Pegged orders are removed from the order book when going into an auction and are parked. (<a name="0037-OPEG-004" href="#0037-OPEG-004">0037-OPEG-004</a>)
+- [ ] Pegged orders are removed from the order book when going into an auction and are parked. (<a href="./0068-MATC-matching_engine.md#0068-MATC-026">0068-MATC-026</a>)
 - [ ] Parked orders are returned to the order book in entry order once continuous trading is resumed. (<a name="0037-OPEG-005" href="#0037-OPEG-005">0037-OPEG-005</a>)
 - [ ] Pegged orders are repriced when their reference price moves. (<a name="0037-OPEG-006" href="#0037-OPEG-006">0037-OPEG-006</a>)
 - [ ] Cancelling a pegged order removes it from the book and the pegged/parked slice. (<a name="0037-OPEG-007" href="#0037-OPEG-007">0037-OPEG-007</a>)

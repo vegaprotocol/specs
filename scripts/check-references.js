@@ -109,6 +109,9 @@ specFiles.forEach((value, key) => {
   console.log(' ')
 })
 
+const criteriaReferencedPercent = Math.round(criteriaReferencedTotal / criteriaTotal * 100)
+const criteriaUnreferencedPercent = Math.round(criteriaUnreferencedTotal / criteriaTotal * 100)
+
 console.log(`Total criteria:       ${criteriaTotal}`)
-console.log(`With references:      ${criteriaReferencedTotal}`)
-console.log(`Without references:   ${criteriaUnreferencedTotal}`)
+console.log(`With references:      ${criteriaReferencedTotal} (${criteriaReferencedPercent}%)`)
+console.log(`Without references:   ${criteriaUnreferencedTotal} (${criteriaUnreferencedPercent}%)`)
