@@ -43,7 +43,7 @@ Start date: 2021-12-14
        * Self trading is allowed during uncrossing. (<a name="0068-MATC-030" href="#0068-MATC-030">0068-MATC-030</a>) 
      * All [GFA](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-031" href="#0068-MATC-031">0068-MATC-031</a>) 
      * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced where possible. (<a name="0068-MATC-032" href="#0068-MATC-032">0068-MATC-032</a>) 
-  * Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [canceled](./0033-OCAN-cancel_orders.md). (<a name="0068-MATC-033" href="#0068-MATC-033">0068-MATC-033</a>) 
+  * Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [cancelled](./0033-OCAN-cancel_orders.md). (<a name="0068-MATC-033" href="#0068-MATC-033">0068-MATC-033</a>) 
   * The price of any persistent order can be updated (<a name="0068-MATC-034" href="#0068-MATC-034">0068-MATC-034</a>) 
   * The size of any persistent order can be updated (<a name="0068-MATC-035" href="#0068-MATC-035">0068-MATC-035</a>) 
   * The TIF of any persistent order can be updated to and from GTC and GTT only. Expiry time is required if amending to GTT and must not be given if amending to GTC. (<a name="0068-MATC-036" href="#0068-MATC-036">0068-MATC-036</a>) 
