@@ -10,12 +10,18 @@ Orders have a status field. This specification details a set of situations and t
 For the definition of each Time In Force option, see [the Order Types spec](./0014-ORDT-order_types.md#time-in-force--validity)
 
 ## Parked orders
-When a market moves in to an auction phase, orders that are currently on the book can be dealt with in a number of ways - see [0026 - AUCT - Auctions](./0026-AUCT-auctions.md#upon-entering-auction-mode)
+Pegged orders can be parked under certain circumstances:
+- When a market moves in to an auction
+- When a pegged orders need to be repriced and can't be
+- When a reference for a pegged order does not exist
+
+For a full outline of these behaviours, see [0037-OPEG-pegged_orders](./0037-OPEG-pegged_orders.md#guide-level-explanation). When an order has a status of parked:
 
 - Only pegged orders can be parked
 - Parked pegged orders are inactive - i.e. are not on the book and will never match.
 - Parked pegged orders can be [amended](./0004-AMND-amends.md) as normal
 - Parked pegged orders can [cancelled](./0033-OCAN-cancel_orders.md) as normal (see [0068-MATC](./0068-MATC-matching_engine.md#0068-MATC-033))
+- If the market is in continuous trading, pegged orders are repriced as normal
 
 ## All order types
 * Orders can have a status of REJECTED if there is insufficient margin to place the order

@@ -172,14 +172,12 @@ message Market {
   - [] I can define a market to operate as Frequent Batch Auction, and the duration of the call period. (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>)
   - [] I can choose what algorithm is used to decided the pricing at the end of the auction period. (<a name="0026-AUCT-004" href="#0026-AUCT-004">0026-AUCT-004</a>)
 - [] As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period. (<a name="0026-AUCT-005" href="#0026-AUCT-005">0026-AUCT-005</a>)
-- [] As a user, I can place an order when the market is in auction mode, but it will not trade immediately. (<a name="0026-AUCT-006" href="#0026-AUCT-006">0026-AUCT-006</a>)
-- [] As a user, I can cancel an order that it either live on the order book or parked. (<a name="0026-AUCT-007" href="#0026-AUCT-007">0026-AUCT-007</a>)
-- [] As a user, I can amend orders that are on the order book. Specifics can be found in the [amends](./0004-AMND-amends.md) spec 
-- [] As a user, I cannot place a Market order, or and order using FOK or IOC time in force. (<a name="0026-AUCT-008" href="#0026-AUCT-008">0026-AUCT-008</a>)
+- [] As a user, I can place an order when the market is in auction mode, but it will not trade immediately. (<a href="./0068-MATC-matching_engine.md#0068-MATC-020">0068-MATC-020</a>)
+- [] As a user, I can cancel an order that it either live on the order book or parked. (<a href="./0068-MATC-matching_engine.md#0068-MATC-033">0068-MATC-033</a>)
 - [] As a user, I can get information about the trading mode of the market (through the [market framework](./0001-MKTF-market_framework.md))
-- [] As a user, I can get real time information through the API about a market in auction mode: indicative crossing price, indicative crossing volume.  (<a name="0026-AUCT-009" href="#0026-AUCT-009">0026-AUCT-009</a>)
-- [] As a user, the market depth API provides the same data that would be sent during continuous trading (<a name="0026-AUCT-010" href="#0026-AUCT-010">0026-AUCT-010</a>)
-- [] As an API user, I can identify: (<a name="0026-AUCT-011" href="#0026-AUCT-011">0026-AUCT-011</a>)
+- [] As a user, I can get real time information through the API about a market in auction mode: indicative crossing price, indicative crossing volume.  (<a name="0026-AUCT-006" href="#0026-AUCT-006">0026-AUCT-006</a>)
+- [] As a user, the market depth API provides the same data that would be sent during continuous trading (<a name="0026-AUCT-007" href="#0026-AUCT-007">0026-AUCT-007</a>)
+- [] As an API user, I can identify: (<a name="0026-AUCT-008" href="#0026-AUCT-008">0026-AUCT-008</a>)
   - If a market is temporarily in an auction period
   - Why it is in that period (e.g. Auction at open, liquidity sourcing)
   - What price mode that auction will use when the auction is over

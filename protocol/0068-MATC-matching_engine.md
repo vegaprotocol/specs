@@ -56,9 +56,9 @@ The matching engine is responsible for updating and maintaining the state of the
 The machine engine consists of an order book and the logic to handle new orders arriving into the engine. The matching engine can be in one of two possible states, continuous trading or auction trading. In continuous trading the incoming orders are processed immediately. In auction mode incoming orders are placed on the order book and are not processed for matching until we attempt to uncross. 
 
 ## Continuous Mode
-New orders arrive at the engine and are checked for validity including if they are of the right type (not GFA). If the order can be matched to an order already on the book, that matching will take place. If the order does not match against an existing order and the order type is persistent, we place the order into the correct side of the order book at the price level given by the order. If there are already orders in the book at the same price level, the new order will be added after all existing orders at that price to keep the time ordering correct. If a cancel order is received, we remove the existing order from the order book. If an amend order is received we remove the existing order and re-insert the amended version.
+New orders arrive at the engine and are checked for validity including if they are of the right type (not GFA). If the order can be matched to an order already on the book, that matching will take place. If the order does not match against an existing order and the order type is persistent, we place the order into the correct side of the order book at the price level given by the order. If there are already orders in the book at the same price level, the new order will be added after all existing orders at that price to keep the time ordering correct. If a cancel order is received, we remove the existing order from the order book. If an [amend order](./0004-AMND-amends.md) is received we remove the existing order and re-insert the amended version.
 
-## Auction Mode
+## [Auction](./0026-AUCT-auctions.md) Mode
 New orders arrive at the engine and no matching is performed. Instead the order is checked for validity (GFA) and then placed directly onto the order book in price and time priority. When the auction is uncrossed, orders which are in the crossed range are matched until there are no further orders crossed.
 
 ## Order books construction
@@ -75,10 +75,6 @@ Given an order book that looks like this in the market display:
 | | 90 | 10 |
 | | 80 | 15 |
 
-
-
-# Pseudo-code / Examples
-If you have some data types, or sample code to show interactions, put it here
-
-# Test cases
-Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
+# See also
+- [0008-TRAD-Trading Workflow](./0008-TRAD-trading_workflow.md)
+- [0029-FEES-Fees](./0029-FEES-fees.md)

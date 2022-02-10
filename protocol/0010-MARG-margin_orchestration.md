@@ -35,7 +35,7 @@ The [margin calculator](./0019-MCAL-margin_calculator.md) will calculate the mar
 The [margin calculator](./0019-MCAL-margin_calculator.md) utilises risk factors which are updated by the [quant risk model](./0018-RSKM-quant_risk_models.ipynb).  
 
 
-###  **Conditions for recalculating margins**
+### **Conditions for recalculating margins**
 
 #### 1. Updating margins when risk factors have been updated
 
