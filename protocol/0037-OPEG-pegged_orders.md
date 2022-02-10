@@ -7,6 +7,7 @@ Specification PR: https://github.com/vegaprotocol/specs-internal/pull/262
 ## Acceptance Criteria
 - [ ] Pegged orders can only be LIMIT orders, all other types are rejected. (<a name="0037-OPEG-001" href="#0037-OPEG-001">0037-OPEG-001</a>)
 - [ ] Pegged orders can only be GTT and GTC orders. IOC and FOK will be added in the second phase of pegged orders. (<a name="0037-OPEG-002" href="#0037-OPEG-002">0037-OPEG-002</a>)
+  - [ ] Until phase 2, FOK or IOC pegged orders are invalid (<a name="0037-OPEG-015" href="#0037-OPEG-015">0037-OPEG-015</a>)
 - [ ] All markets must be able to handle pegged orders. (<a name="0037-OPEG-003" href="#0037-OPEG-003">0037-OPEG-003</a>)
 - [ ] Pegged orders are removed from the order book when going into an auction and are parked. (<a name="0037-OPEG-004" href="#0037-OPEG-004">0037-OPEG-004</a>)
 - [ ] Parked orders are returned to the order book in entry order once continuous trading is resumed. (<a name="0037-OPEG-005" href="#0037-OPEG-005">0037-OPEG-005</a>)
@@ -18,6 +19,7 @@ Specification PR: https://github.com/vegaprotocol/specs-internal/pull/262
 - [ ] If the midprice is calculated to be a fraction (e.g. 102.5), it should be rounded up for a buy and rounded down for a sell. (<a name="0037-OPEG-011" href="#0037-OPEG-011">0037-OPEG-011</a>)
 - [ ] The order version is not updated during a repricing (<a name="0037-OPEG-012" href="#0037-OPEG-012">0037-OPEG-012</a>)
 - [ ] Pegged orders are excluded from the calculation of the BEST_BID, BEST_ASK and MID prices (<a name="0037-OPEG-013" href="#0037-OPEG-013">0037-OPEG-013</a>)
+- [ ] A parked pegged order can be amended. (<a name="0037-OPEG-014" href="#0037-OPEG-014">0037-OPEG-014</a>)
 
 ## Summary
 
@@ -142,3 +144,5 @@ Some plain text walkthroughs of some scenarios that would prove that the impleme
 * Try to insert non LIMIT orders and make sure they are rejected.
 * Test where both buy and sell orders are pegged against a mid which is not a whole number.
 * Check that a repriced pegged order does not have the version value incremented.
+* Amend a pegged order
+* Amend a parked pegged order
