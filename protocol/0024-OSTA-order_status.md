@@ -9,6 +9,12 @@ Orders have a status field. This specification details a set of situations and t
 # Reference-level explanation
 For the definition of each Time In Force option, see [the Order Types spec](./0014-ORDT-order_types.md#time-in-force--validity)
 
+## Parked orders
+When a market moves in to an auction phase, orders that are currently on the book can be dealt with in a number of ways - see [0026 - AUCT - Auctions](./0026-AUCT-auctions.md#upon-entering-auction-mode)
+
+- 
+
+
 ## All order types
 * Orders can have a status of REJECTED if there is insufficient margin to place the order
 * [Order Pricing methods](./0014-ORDT-order_types.md) are not listed below as they don't change the status outcome

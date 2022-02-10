@@ -61,7 +61,7 @@ Notes on scope of current version of this spec:
 | Pegged         | Y*  | Y*  | N   | N   | Y*  | N   |
 | Market         | N   | N   | N   | N   | N   | N   |
 
-\* Pegged orders will be parked during [an auction](./0026-AUCT-auctions.md), with time priority preserved<br>
+\* Pegged orders will be parked if placed during [an auction](./0026-AUCT-auctions.md), with time priority preserved. See also [0024-OSTA](./0024-OSTA-order_status.md#parked-orders)<br>
 
 Further details can be found here:
 https://docs.google.com/spreadsheets/d/1kTkE7frlsVtS1YE4m4AdZjACO-mmNOZrTQj4gXGQW0I

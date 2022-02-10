@@ -87,7 +87,7 @@ Good for normal trading (GFN) orders are rejected during an auction.
 
 ### Upon entering auction mode
 
-- Pegged orders get parked (see pegged orders spec for details).
+- Pegged orders get parked (see [pegged orders spec](./0037-OPEG-pegged_orders.md) for details).
 - Limit orders stay on the book (unless they have a TIF:GFN only good for normal trading, in this case they get cancelled).
 - Cannot accept non-persistent orders (Fill Or Kill and Immediate Or Cancel)
 - Any auction that would be less than (network parameter) `min_auction_length` seconds should not be started.
@@ -95,7 +95,7 @@ Good for normal trading (GFN) orders are rejected during an auction.
 
 ### Upon exiting auction mode
 
-- Pegged orders (all kinds, including MM ones) get reinstated in the order book they were originally submitted in.
+- [Pegged orders](./0037-OPEG-pegged_orders.md) (all kinds, including the ones placed by [Liquidity Provision](./0038-OLIQ-liquidity_provision_order_type.md)) get reinstated in the order book they were originally submitted in.
 - Limit orders stay on the book (unless they have a TIF:GFA only good for auction, in this case they are cancelled).
 
 
