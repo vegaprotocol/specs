@@ -30,7 +30,7 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
 
   Given the average block duration is "2"
 
-  Scenario: 1 LP joining at start, checking liquidity rewards over 3 periods, 1 period with no trades
+  Scenario: 1 LP joining at start, checking liquidity rewards over 3 periods, 1 period with no trades (0042-LP-Fees-001)
     # setup accounts
     Given the parties deposit on asset's general account the following amount:
       | party  | asset | amount     |
@@ -64,6 +64,7 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest | 
       | 1000       | TRADING_MODE_CONTINUOUS | 1       | 500       | 1500      | 1000         | 10000          | 10            |
     # target_stake = mark_price x max_oi x target_stake_scaling_factor x rf = 1000 x 10 x 1 x 0.1
+    # max_oi: max open interest
 
     Then the order book should have the following volumes for market "ETH/MAR22":
       | side | price    | volume |
@@ -111,7 +112,7 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
       | party1 | USD   | ETH/MAR22 | 1800      | 99998202  | 0     |
       | party2 | USD   | ETH/MAR22 | 1812      | 99998875  | 0     |
 
-    Then the order book should have the following volumes for market "ETH/MAR22"
+    Then the order book should have the following volumes for market "ETH/MAR22":
       | side | price    | volume |
       | buy  | 898      | 75    |
       | buy  | 900      | 1     | 
@@ -162,127 +163,126 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
 
     And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
 
+  # Scenario: 2 LPs joining at start, equal commitments (0042-LP-Fees-002)
 
-  Scenario: 2 LPs joining at start, equal commitments
+  #   Given the parties deposit on asset's general account the following amount:
+  #     | party  | asset | amount     |
+  #     | lp1    | USD   | 1000000000 |
+  #     | lp2    | USD   | 1000000000 |
+  #     | party1 | USD   | 100000000  |
+  #     | party2 | USD   | 100000000  |
 
-    Given the parties deposit on asset's general account the following amount:
-      | party  | asset | amount     |
-      | lp1     | USD   | 1000000000 |
-      | lp2     | USD   | 1000000000 |
-      | party1 | USD   | 100000000  |
-      | party2 | USD   | 100000000  |
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset |  lp type |
+  #     | lp1 | lp1   | ETH/MAR22 | 5000              | 0.001 | buy  | BID              | 1          | 2      | submission|
+  #     | lp1 | lp1   | ETH/MAR22 | 5000              | 0.001 | buy  | MID              | 2          | 1      | amendment|
+  #     | lp1 | lp1   | ETH/MAR22 | 5000              | 0.001 | sell | ASK              | 1          | 2      | amendment|
+  #     | lp1 | lp1   | ETH/MAR22 | 5000              | 0.001 | sell | MID              | 2          | 1      | amendment|
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+  #     | lp2 | lp2   | ETH/MAR22 | 5000              | 0.002 | buy  | BID              | 1          | 2      | submission|
+  #     | lp2 | lp2   | ETH/MAR22 | 5000              | 0.002 | buy  | MID              | 2          | 1      | amendment|
+  #     | lp2 | lp2   | ETH/MAR22 | 5000              | 0.002 | sell | ASK              | 1          | 2      | amendment|
+  #     | lp2 | lp2   | ETH/MAR22 | 5000              | 0.002 | sell | MID              | 2          | 1      | amendment|
 
-    And the parties submit the following liquidity provision:
-      | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset |  lp type |
-      | lp1 | lp1   | ETH/MAR22 | 5000              | 0.001 | buy  | BID              | 1          | 2      | submission|
-      | lp1 | lp1   | ETH/MAR22 | 5000              | 0.001 | buy  | MID              | 2          | 1      | amendment|
-      | lp1 | lp1   | ETH/MAR22 | 5000              | 0.001 | sell | ASK              | 1          | 2      | amendment|
-      | lp1 | lp1   | ETH/MAR22 | 5000              | 0.001 | sell | MID              | 2          | 1      | amendment|
-    And the parties submit the following liquidity provision:
-      | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
-      | lp2 | lp2   | ETH/MAR22 | 5000              | 0.002 | buy  | BID              | 1          | 2      | submission|
-      | lp2 | lp2   | ETH/MAR22 | 5000              | 0.002 | buy  | MID              | 2          | 1      | amendment|
-      | lp2 | lp2   | ETH/MAR22 | 5000              | 0.002 | sell | ASK              | 1          | 2      | amendment|
-      | lp2 | lp2   | ETH/MAR22 | 5000              | 0.002 | sell | MID              | 2          | 1      | amendment|
+  #   Then the parties place the following orders:  
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     |
+  #     | party1 | ETH/MAR22 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party1 | ETH/MAR22 | buy  | 90     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party2 | ETH/MAR22 | sell | 1      | 1100  | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party2 | ETH/MAR22 | sell | 90     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
 
-    Then the parties place the following orders:  
-      | party  | market id | side | volume | price | resulting trades | type       | tif     |
-      | party1 | ETH/MAR22 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC |
-      | party1 | ETH/MAR22 | buy  | 90     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
-      | party2 | ETH/MAR22 | sell | 1      | 1100  | 0                | TYPE_LIMIT | TIF_GTC |
-      | party2 | ETH/MAR22 | sell | 90     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+  #   Then the opening auction period ends for market "ETH/MAR22"
 
-    Then the opening auction period ends for market "ETH/MAR22"
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller  |
+  #     | party1  | 1000  | 90   | party2 |
 
-    And the following trades should be executed:
-      | buyer   | price | size | seller  |
-      | party1  | 1000  | 90   | party2 |
+  #   And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
+  #   And the mark price should be "1000" for the market "ETH/MAR22"
+  #   And the open interest should be "90" for the market "ETH/MAR22"
+  #   And the target stake should be "9000" for the market "ETH/MAR22"
+  #   And the supplied stake should be "10000" for the market "ETH/MAR22"
 
-    And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
-    And the mark price should be "1000" for the market "ETH/MAR22"
-    And the open interest should be "90" for the market "ETH/MAR22"
-    And the target stake should be "9000" for the market "ETH/MAR22"
-    And the supplied stake should be "10000" for the market "ETH/MAR22"
+  #   And the liquidity provider fee shares for the market "ETH/MAR22" should be:
+  #     | party | equity like share | average entry valuation |
+  #     | lp1   | 0.5               | 10000                   |
+  #     | lp2   | 0.5               | 10000                   |
 
-    And the liquidity provider fee shares for the market "ETH/MAR22" should be:
-      | party | equity like share | average entry valuation |
-      | lp1   | 0.5               | 10000                   |
-      | lp2   | 0.5               | 10000                   |
+  #   And the price monitoring bounds for the market "ETH/MAR22" should be:
+  #     | min bound | max bound |
+  #     | 500       | 1500      |
 
-    And the price monitoring bounds for the market "ETH/MAR22" should be:
-      | min bound | max bound |
-      | 500       | 1500      |
+  #   And the liquidity fee factor should "0.002" for the market "ETH/MAR22"
 
-    And the liquidity fee factor should "0.002" for the market "ETH/MAR22"
+  #   # no fees in auction
+  #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
 
-    # no fees in auction
-    And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+  #   Then the parties place the following orders:
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
+  #     | party1 | ETH/MAR22 | sell | 20     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party1-sell |
+  #     | party2 | ETH/MAR22 | buy  | 20     | 1000  | 3                | TYPE_LIMIT | TIF_GTC | party2-buy  |
 
-    Then the parties place the following orders:
-      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
-      | party1 | ETH/MAR22 | sell | 20     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party1-sell |
-      | party2 | ETH/MAR22 | buy  | 20     | 1000  | 3                | TYPE_LIMIT | TIF_GTC | party2-buy  |
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller  |
+  #     | party2  | 951   | 8    | lp1     |
+  #     | party2  | 951   | 8    | lp2     |
+  #     | party2  | 1000  | 4    | party1 |
 
-    And the following trades should be executed:
-      | buyer   | price | size | seller  |
-      | party2 | 951   | 8    | lp1     |
-      | party2 | 951   | 8    | lp2     |
-      | party2 | 1000  | 4    | party1 |
+  #   And the accumulated liquidity fees should be "40" for the market "ETH/MAR22"
 
-    And the accumulated liquidity fees should be "40" for the market "ETH/MAR22"
+  #   # opening auction + time window
+  #   Then time is updated to "2019-11-30T00:10:05Z"
 
-    # opening auction + time window
-    Then time is updated to "2019-11-30T00:10:05Z"
-
-    # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
-    Then the following transfers should happen:
-      | from   | to  | from account                | to account           | market id | amount | asset |
-      | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 20     | USD   |
-      | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 20     | USD   |
+  #   # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+  #   Then the following transfers should happen:
+  #     | from   | to  | from account                | to account           | market id | amount | asset |
+  #     | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 20     | USD   |
+  #     | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 20     | USD   |
 
 
-    Then the parties place the following orders:
-      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
-      | party1 | ETH/MAR22 | buy  | 40     | 1100  | 2                | TYPE_LIMIT | TIF_GTC | party1-buy  |
-      | party2 | ETH/MAR22 | sell | 40     | 1100  | 0                | TYPE_LIMIT | TIF_GTC | party2-sell |
+  #   Then the parties place the following orders:
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
+  #     | party1 | ETH/MAR22 | buy  | 40     | 1100  | 2                | TYPE_LIMIT | TIF_GTC | party1-buy  |
+  #     | party2 | ETH/MAR22 | sell | 40     | 1100  | 0                | TYPE_LIMIT | TIF_GTC | party2-sell |
 
-    And the following trades should be executed:
-      | buyer   | price | size | seller |
-      | party1 | 951   | 8    | lp1    |
-      | party1 | 951   | 8    | lp2    |
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller |
+  #     | party1 | 951   | 8    | lp1    |
+  #     | party1 | 951   | 8    | lp2    |
 
-    And the accumulated liquidity fees should be "32" for the market "ETH/MAR22"
+  #   And the accumulated liquidity fees should be "32" for the market "ETH/MAR22"
 
-    # opening auction + time window
-    Then time is updated to "2019-11-30T00:20:08Z"
+  #   # opening auction + time window
+  #   Then time is updated to "2019-11-30T00:20:08Z"
 
-    # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
-    Then the following transfers should happen:
-      | from   | to  | from account                | to account           | market id | amount | asset |
-      | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
-      | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
+  #   # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+  #   Then the following transfers should happen:
+  #     | from   | to  | from account                | to account           | market id | amount | asset |
+  #     | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
+  #     | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
 
-  Scenario: 2 LPs joining at start, unequal commitments
+  # Scenario: 2 LPs joining at start, unequal commitments (0042-LP-Fees-003)
 
-    Given the parties deposit on asset's general account the following amount:
-      | party  | asset | amount     |
-      | lp1     | USD   | 1000000000 |
-      | lp2     | USD   | 1000000000 |
-      | party1 | USD   | 100000000  |
-      | party2 | USD   | 100000000  |
+  #   Given the parties deposit on asset's general account the following amount:
+  #     | party  | asset | amount     |
+  #     | lp1     | USD   | 1000000000 |
+  #     | lp2     | USD   | 1000000000 |
+  #     | party1 | USD   | 100000000  |
+  #     | party2 | USD   | 100000000  |
 
-    And the parties submit the following liquidity provision:
-      | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
-      | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | BID              | 1          | 2      | submission|
-      | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | MID              | 2          | 1      | amendment|
-      | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | ASK              | 1          | 2      | amendment|
-      | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | MID              | 2          | 1      | amendment|
-    And the parties submit the following liquidity provision:
-      | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
-      | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | BID              | 1          | 2      | submission|
-      | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | MID              | 2          | 1      | amendment|
-      | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | ASK              | 1          | 2      | amendment|
-      | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | MID              | 2          | 1      | amendment|
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | BID              | 1          | 2      | submission|
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | MID              | 2          | 1      | amendment|
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | ASK              | 1          | 2      | amendment|
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | MID              | 2          | 1      | amendment|
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | BID              | 1          | 2      | submission|
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | MID              | 2          | 1      | amendment|
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | ASK              | 1          | 2      | amendment|
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | MID              | 2          | 1      | amendment|
 
   #   Then the parties place the following orders:
   #     | party  | market id | side | volume | price | resulting trades | type       | tif     |
@@ -366,7 +366,7 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
 
   #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
 
-  # Scenario: 2 LPs joining at start, unequal commitments, 1 LP joining later
+  # Scenario: 2 LPs joining at start, unequal commitments, 1 LP joining later (0042-LP-Fees-004)
 
   #   Given the parties deposit on asset's general account the following amount:
   #     | party  | asset | amount     |
@@ -483,3 +483,327 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
   #     | market | lp3 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 3      | USD   |
 
   #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+
+
+  # Scenario: 2 LPs joining at start, unequal commitments (0042-LP-Fees-003)
+
+  #   Given the parties deposit on asset's general account the following amount:
+  #     | party  | asset | amount     |
+  #     | lp1     | USD   | 1000000000 |
+  #     | lp2     | USD   | 1000000000 |
+  #     | party1 | USD   | 100000000  |
+  #     | party2 | USD   | 100000000  |
+
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | BID              | 1          | 2      | submission|
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | MID              | 2          | 1      | amendment|
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | ASK              | 1          | 2      | amendment|
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | MID              | 2          | 1      | amendment|
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | BID              | 1          | 2      | submission|
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | MID              | 2          | 1      | amendment|
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | ASK              | 1          | 2      | amendment|
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | MID              | 2          | 1      | amendment|
+  #   Then the parties place the following orders:
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     |
+  #     | party1 | ETH/MAR22 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party1 | ETH/MAR22 | buy  | 60     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party2 | ETH/MAR22 | sell | 1      | 1100  | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party2 | ETH/MAR22 | sell | 60     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+
+  #   Then the opening auction period ends for market "ETH/MAR22"
+
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller  |
+  #     | party1 | 1000  | 60   | party2 |
+
+  #   And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
+  #   And the mark price should be "1000" for the market "ETH/MAR22"
+  #   And the open interest should be "60" for the market "ETH/MAR22"
+  #   And the target stake should be "6000" for the market "ETH/MAR22"
+  #   And the supplied stake should be "10000" for the market "ETH/MAR22"
+
+  #   And the liquidity provider fee shares for the market "ETH/MAR22" should be:
+  #     | party | equity like share | average entry valuation |
+  #     | lp1   | 0.8               | 10000                   |
+  #     | lp2   | 0.2               | 10000                   |
+
+  #   And the price monitoring bounds for the market "ETH/MAR22" should be:
+  #     | min bound | max bound |
+  #     | 500       | 1500      |
+
+  #   And the liquidity fee factor should "0.001" for the market "ETH/MAR22"
+
+  #   # no fees in auction
+  #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+  #   Then the parties place the following orders:
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
+  #     | party1 | ETH/MAR22 | sell | 20     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party1-sell |
+  #     | party2 | ETH/MAR22 | buy  | 20     | 1000  | 2                | TYPE_LIMIT | TIF_GTC | party2-buy  |
+
+  #   And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
+
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller  |
+  #     | party2 | 951   | 12   | lp1     |
+  #     | party2 | 1000  | 8    | party1 |
+
+  #   And the accumulated liquidity fees should be "20" for the market "ETH/MAR22"
+
+  #   # opening auction + time window
+  #   Then time is updated to "2019-11-30T00:10:05Z"
+
+  #   # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+  #   Then the following transfers should happen:
+  #     | from   | to  | from account                | to account           | market id | amount | asset |
+  #     | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
+  #     | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 4      | USD   |
+
+
+  #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+  #   Then the parties place the following orders:
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
+  #     | party1 | ETH/MAR22 | buy  | 40     | 1000  | 2                | TYPE_LIMIT | TIF_GTC | party1-buy  |
+  #     | party2 | ETH/MAR22 | sell | 40     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party2-sell |
+
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller |
+  #     | party1 | 951   | 12   | lp1    |
+  #     | party1 | 951   | 3    | lp2    |
+
+  #   And the accumulated liquidity fees should be "15" for the market "ETH/MAR22"
+  #   # opening auction + time window
+  #   Then time is updated to "2019-11-30T00:20:06Z"
+
+  #   # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+  #   Then the following transfers should happen:
+  #     | from   | to  | from account                | to account           | market id | amount | asset |
+  #     | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 12     | USD   |
+  #     | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 3      | USD   |
+
+  #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+  # Scenario: 2 LPs joining at start, unequal commitments, 1 LP joining later (0042-LP-Fees-004)
+
+  #   Given the parties deposit on asset's general account the following amount:
+  #     | party  | asset | amount     |
+  #     | lp1     | USD   | 1000000000 |
+  #     | lp2     | USD   | 1000000000 |
+  #     | lp3     | USD   | 1000000000 |
+  #     | party1 | USD   | 100000000  |
+  #     | party2 | USD   | 100000000  |
+
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | BID              | 1          | 2      | submission |
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | MID              | 2          | 1      | amendment |
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | ASK              | 1          | 2      | amendment |
+  #     | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | MID              | 2          | 1      | amendment |
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | BID              | 1          | 2      | submission |
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | MID              | 2          | 1      | amendment |
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | ASK              | 1          | 2      | amendment |
+  #     | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | MID              | 2          | 1      | amendment |
+
+  #   Then the parties place the following orders:
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     |
+  #     | party1 | ETH/MAR22 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party1 | ETH/MAR22 | buy  | 60     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party2 | ETH/MAR22 | sell | 1      | 1100  | 0                | TYPE_LIMIT | TIF_GTC |
+  #     | party2 | ETH/MAR22 | sell | 60     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+
+  #   Then the opening auction period ends for market "ETH/MAR22"
+
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller  |
+  #     | party1 | 1000  | 60   | party2 |
+
+  #   And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
+  #   And the mark price should be "1000" for the market "ETH/MAR22"
+  #   And the open interest should be "60" for the market "ETH/MAR22"
+  #   And the target stake should be "6000" for the market "ETH/MAR22"
+  #   And the supplied stake should be "10000" for the market "ETH/MAR22"
+
+  #   And the liquidity provider fee shares for the market "ETH/MAR22" should be:
+  #     | party | equity like share | average entry valuation |
+  #     | lp1   | 0.8               | 10000                   |
+  #     | lp2   | 0.2               | 10000                   |
+
+  #   And the price monitoring bounds for the market "ETH/MAR22" should be:
+  #     | min bound | max bound |
+  #     | 500       | 1500      |
+
+  #   And the liquidity fee factor should "0.001" for the market "ETH/MAR22"
+
+  #   # no fees in auction
+  #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+
+  #   Then the parties place the following orders:
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
+  #     | party1 | ETH/MAR22 | sell | 20     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party1-sell |
+  #     | party2 | ETH/MAR22 | buy  | 20     | 1000  | 2                | TYPE_LIMIT | TIF_GTC | party2-buy  |
+
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller  |
+  #     | party2 | 951   | 12   | lp1     |
+  #     | party2 | 1000  | 8    | party1 |
+
+  #   And the accumulated liquidity fees should be "20" for the market "ETH/MAR22"
+
+  #   # opening auction + time window
+  #   Then time is updated to "2019-11-30T00:10:05Z"
+
+  #   # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+  #   Then the following transfers should happen:
+  #     | from   | to  | from account                | to account           | market id | amount | asset |
+  #     | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
+  #     | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 4      | USD   |
+
+  #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+  #   And the parties submit the following liquidity provision:
+  #     | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+  #     | lp3 | lp3   | ETH/MAR22 | 10000             | 0.001 | buy  | BID              | 1          | 2      | submission|
+  #     | lp3 | lp3   | ETH/MAR22 | 10000             | 0.001 | buy  | MID              | 2          | 1      | amendment |
+  #     | lp3 | lp3   | ETH/MAR22 | 10000             | 0.001 | sell | ASK              | 1          | 2      | amendment |
+  #     | lp3 | lp3   | ETH/MAR22 | 10000             | 0.001 | sell | MID              | 2          | 1      | amendment |
+
+  #   And the liquidity provider fee shares for the market "ETH/MAR22" should be:
+  #     | party | equity like share | average entry valuation |
+  #     | lp1   | 0.7366            | 10000                   |
+  #     | lp2   | 0.1841            | 10000                   |
+  #     | lp3   | 0.0791            | 116278                  |
+
+  #   Then the parties place the following orders:
+  #     | party  | market id | side | volume | price | resulting trades | type       | tif     |
+  #     | party1 | ETH/MAR22 | buy  | 40     | 1000  | 3                | TYPE_LIMIT | TIF_GTC |
+  #     | party2 | ETH/MAR22 | sell | 40     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+
+  #   And the following trades should be executed:
+  #     | buyer   | price | size | seller |
+  #     | party1 | 951   | 12   | lp1    |
+  #     | party1 | 951   | 3    | lp2    |
+  #     | party1 | 951   | 15   | lp3    |
+
+  #   And the accumulated liquidity fees should be "30" for the market "ETH/MAR22"
+
+  #   # opening auction + time window
+  #   Then time is updated to "2019-11-30T00:20:06Z"
+
+  #   # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+  #   Then the following transfers should happen:
+  #     | from   | to  | from account                | to account           | market id | amount | asset |
+  #     | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 22     | USD   |
+  #     | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 5      | USD   |
+  #     | market | lp3 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 3      | USD   |
+
+  #   And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+    Scenario: 2 LPs joining at start, unequal commitments, lp1 has very high commitment, lp2 has very low commitment (0042-LP-Fees-005)
+
+    Given the parties deposit on asset's general account the following amount:
+      | party  | asset | amount     |
+      | lp1     | USD   | 1000000000 |
+      | lp2     | USD   | 1000000000 |
+      | party1 | USD   | 100000000  |
+      | party2 | USD   | 100000000  |
+
+    And the parties submit the following liquidity provision:
+      | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+      | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | BID              | 1          | 2      | submission|
+      | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | buy  | MID              | 2          | 1      | amendment|
+      | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | ASK              | 1          | 2      | amendment|
+      | lp1 | lp1   | ETH/MAR22 | 8000              | 0.001 | sell | MID              | 2          | 1      | amendment|
+    And the parties submit the following liquidity provision:
+      | id  | party | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+      | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | BID              | 1          | 2      | submission|
+      | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | buy  | MID              | 2          | 1      | amendment|
+      | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | ASK              | 1          | 2      | amendment|
+      | lp2 | lp2   | ETH/MAR22 | 2000              | 0.002 | sell | MID              | 2          | 1      | amendment|
+    Then the parties place the following orders:
+      | party  | market id | side | volume | price | resulting trades | type       | tif     |
+      | party1 | ETH/MAR22 | buy  | 1      | 900   | 0                | TYPE_LIMIT | TIF_GTC |
+      | party1 | ETH/MAR22 | buy  | 60     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+      | party2 | ETH/MAR22 | sell | 1      | 1100  | 0                | TYPE_LIMIT | TIF_GTC |
+      | party2 | ETH/MAR22 | sell | 60     | 1000  | 0                | TYPE_LIMIT | TIF_GTC |
+
+    Then the opening auction period ends for market "ETH/MAR22"
+
+    And the following trades should be executed:
+      | buyer   | price | size | seller  |
+      | party1 | 1000  | 60   | party2 |
+
+    And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
+    And the mark price should be "1000" for the market "ETH/MAR22"
+    And the open interest should be "60" for the market "ETH/MAR22"
+    And the target stake should be "6000" for the market "ETH/MAR22"
+    And the supplied stake should be "10000" for the market "ETH/MAR22"
+
+    And the liquidity provider fee shares for the market "ETH/MAR22" should be:
+      | party | equity like share | average entry valuation |
+      | lp1   | 0.8               | 10000                   |
+      | lp2   | 0.2               | 10000                   |
+
+    And the price monitoring bounds for the market "ETH/MAR22" should be:
+      | min bound | max bound |
+      | 500       | 1500      |
+
+    And the liquidity fee factor should "0.001" for the market "ETH/MAR22"
+
+    # no fees in auction
+    And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+    Then the parties place the following orders:
+      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
+      | party1 | ETH/MAR22 | sell | 20     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party1-sell |
+      | party2 | ETH/MAR22 | buy  | 20     | 1000  | 2                | TYPE_LIMIT | TIF_GTC | party2-buy  |
+
+    And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
+
+    And the following trades should be executed:
+      | buyer   | price | size | seller  |
+      | party2 | 951   | 12   | lp1     |
+      | party2 | 1000  | 8    | party1 |
+
+    And the accumulated liquidity fees should be "20" for the market "ETH/MAR22"
+
+    # opening auction + time window
+    Then time is updated to "2019-11-30T00:10:05Z"
+
+    # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+    Then the following transfers should happen:
+      | from   | to  | from account                | to account           | market id | amount | asset |
+      | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
+      | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 4      | USD   |
+
+
+    And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+    Then the parties place the following orders:
+      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
+      | party1 | ETH/MAR22 | buy  | 40     | 1000  | 2                | TYPE_LIMIT | TIF_GTC | party1-buy  |
+      | party2 | ETH/MAR22 | sell | 40     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party2-sell |
+
+    And the following trades should be executed:
+      | buyer   | price | size | seller |
+      | party1 | 951   | 12   | lp1    |
+      | party1 | 951   | 3    | lp2    |
+
+    And the accumulated liquidity fees should be "15" for the market "ETH/MAR22"
+    # opening auction + time window
+    Then time is updated to "2019-11-30T00:20:06Z"
+
+    # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+    Then the following transfers should happen:
+      | from   | to  | from account                | to account           | market id | amount | asset |
+      | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 12     | USD   |
+      | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 3      | USD   |
+
+    And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
