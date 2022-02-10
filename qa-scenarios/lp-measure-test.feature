@@ -321,3 +321,67 @@ Scenario:  LP Volume being pushed by limit of Probability of Trading (capped at 
       | sell | 1109  | 1              |
       | buy  | 300   | 16666666666667 |
       | buy  | 900   | 1              |
+
+
+  Scenario:  Create LP shape that pegs to mid and deploys volumes and price between best ask and best bid (0034-PROB-005).
+
+    Given the fees configuration named "fees-config-1":
+      | maker fee | infrastructure fee |
+      | 0.004     | 0.001              |
+
+    And the markets:
+      | id         | quote name | asset | risk model              | margin calculator         | auction duration | fees          | price monitoring   | oracle config          | maturity date        |
+      | ETH2/MAR22 | ETH2       | ETH2  | default-simple-risk-model  | default-margin-calculator | 1                | fees-config-1 | default-none       | default-eth-for-future | 2022-03-31T23:59:59Z |
+    And the parties deposit on asset's general account the following amount:
+      | party  | asset | amount    |
+      | lp1    | ETH2  | 1000000000000000000 |
+      | party1 | ETH2  | 10000000  |
+      | party2 | ETH2  | 10000000  |
+
+    And the parties submit the following liquidity provision:
+       | id          | party | market id  | commitment amount | fee   | side | pegged reference | proportion| offset | lp type   |
+       | commitment1 | lp1   | ETH2/MAR22 | 50000000          | 0.001 | buy  | MID              | 20        | 5      | submission|
+       | commitment1 | lp1   | ETH2/MAR22 | 50000000          | 0.001 | buy  | MID              | 30        | 10     | amendment|
+       | commitment1 | lp1   | ETH2/MAR22 | 50000000          | 0.001 | buy  | MID              | 40        | 15     | amendment|
+       | commitment1 | lp1   | ETH2/MAR22 | 50000000          | 0.001 | buy  | MID              | 5         | 20     | amendment|
+       | commitment1 | lp1   | ETH2/MAR22 | 50000000          | 0.001 | sell | MID              | 5         | 20     | amendment |
+       | commitment1 | lp1   | ETH2/MAR22 | 50000000          | 0.001 | sell | MID              | 40        | 15     | amendment |
+       | commitment1 | lp1   | ETH2/MAR22 | 50000000          | 0.001 | sell | MID              | 30        | 10     | amendment |
+       | commitment1 | lp1   | ETH2/MAR22 | 50000000          | 0.001 | sell | MID              | 20        | 5      | amendment |
+
+       And the parties place the following orders:
+      | party  | market id  | side | volume | price | resulting trades | type       | tif     | reference  |
+      | party1 | ETH2/MAR22 | buy  | 1      | 50   | 0                | TYPE_LIMIT | TIF_GTC | buy-ref-1  |
+      | party1 | ETH2/MAR22 | buy  | 10     | 100  | 0                | TYPE_LIMIT | TIF_GTC | buy-ref-2  |
+      | party2 | ETH2/MAR22 | sell | 1      | 150  | 0                | TYPE_LIMIT | TIF_GTC | sell-ref-1 |
+      | party2 | ETH2/MAR22 | sell | 10     | 100  | 0                | TYPE_LIMIT | TIF_GTC | sell-ref-2 |
+
+    When the opening auction period ends for market "ETH2/MAR22"
+    Then the auction ends with a traded volume of "10" at a price of "100"
+
+    And the parties should have the following profit and loss:
+      | party  | volume | unrealised pnl | realised pnl |
+      | party1 | 10     | 0              | 0            |
+      | party2 | -10    | 0              | 0            |
+
+  # checking the pegged price and pegged volume
+  #volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)
+
+    And the order book should have the following volumes for market "ETH2/MAR22":
+      | side | price | volume  |
+      | buy  | 95   | 221607   | 
+      #50000000*(20/95)/0.5/95
+      | buy  | 90   | 350878   |
+      #50000000*(30/95)/0.5/90
+      | buy  | 85   | 495357   |
+      #50000000*(40/95)/0.5/85
+      | buy  | 80   | 65790    |
+      #50000000*(5/95)/0.5/80
+      | sell | 105  | 200502   |
+      #50000000*(20/95)/0.5/105
+      | sell | 110  | 287082   |
+      #50000000*(30/95)/0.5/110
+      | sell | 115  | 366133   |
+      #50000000*(40/95)/0.5/115
+      | sell | 120  | 43860    |
+      #50000000*(5/95)/0.5/120
