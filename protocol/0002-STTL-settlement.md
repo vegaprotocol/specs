@@ -61,9 +61,15 @@ Some markets on Vega will be trading instruments that "expire" (i.e. they are in
 ### When does a market settle at instrument expiry
 The expiry of a market happens when an oracle publishes data that meets the filter requirements as defined on the Product (see [Market Framework](./0001-MKTF-market_framework.md)).
 
-The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on all the potential paths of a market nearing expiry and should be consulted as the source of truth. The below example is illustrative of market for a cash settled future where default trading is continuous.
+The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on all the potential paths of a market nearing expiry and should be consulted as the source of truth. 
 
-### Example - a typical path of a cash settled futures market nearing expiry
+# Acceptance Criteria
+
+## The typical "Happy Path" case
+- [ ] With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market. (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>)
+
+
+### Example 1 - A typical path of a cash settled futures market nearing expiry when market is trading in continuous session (<a name="0002-STTL-002" href="#0002-STTL-002">0002-STTL-002</a>)
 
 1. Market has a status of ACTIVE and is trading in default trading mode
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
@@ -77,27 +83,28 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
+1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>)
 
-Note, this mechanism does not incur fees to traders that have open positions that are settled at expiry.
-
-### Example 2 - a less typical path of such a futures market nearing expiry
+### Example 2 - A less typical path of such a futures market nearing expiry when market is suspended (<a name="0002-STTL-004" href="#0002-STTL-004">0002-STTL-004</a>)
 
 1. Market has a status of SUSPENDED and in a protective auction
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
 1. The market's status is set to [TRADING TERMINATED](./0043-MKTL-market_lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs. No uncrossing of the auction.
-
-Example 2 follows the remaining path (from the TRADING TERMINATED step) described in Example 1.
+1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md))
+1. Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-PFUT-product_builtin_future.md#42-final-settlement-expiry))
+1. Accounts are settled as per collection and distribution methods described above.
+1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
+1. The margin accounts and LP bond accounts for these markets are no longer required.
+1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
+1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
+1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
+1. Now the market can be deleted.
+1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-005" href="#0002-STTL-005">0002-STTL-005</a>)
 
 
 ### Collateral movements
 
-For settlement at expiry scenarios, transfers should attempt to access 
-1. the trader's margin account for the market, 
-1. the trader's general collateral account for that asset, 
-1. the insurance pool.
-
-# Acceptance Criteria
-
-## The typical "Happy Path" case
-- [ ] With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market. (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>)
-
+- [ ] For settlement at expiry scenarios, transfers for collateral should be attempted by accessing the trader's margin account first and foremost. (<a name="0002-STTL-006" href="#0002-STTL-006">0002-STTL-006</a>)
+- [ ] If margin account of trader is insuffcient to cover collateral transfers, then trade's general account is accessed next. (<a name="0002-STTL-006" href="#0002-STTL-006">0002-STTL-006</a>)
+- [ ] If margin and general account of trader are insuffcient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-007" href="#0002-STTL-007">0002-STTL-007</a>)
+- [ ] If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
