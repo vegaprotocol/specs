@@ -26,7 +26,7 @@ Start date: 2021-12-14
      * A market will enter auction if the volume on either side of the book is empty. (<a name="0068-MATC-017" href="#0068-MATC-017">0068-MATC-017</a>) 
      * A market will enter auction if the mark price moves by a larger amount than the price monitoring settings allow. (<a name="0068-MATC-018" href="#0068-MATC-018">0068-MATC-018</a>) 
      * All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and the aggressive side is STOPPED even if partially filled. The passive side is left untouched. (<a name="0068-MATC-019" href="#0068-MATC-019">0068-MATC-019</a>) 
-   * In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md) (<a name="0068-MATC-020" href="#0068-MATC-020">0068-MATC-020</a>) 
+   * In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md) 
      * [IOC/FOK/GFN](./0014-ORDT-order-types.md#time-in-force---validity)  
        * Incoming orders have their status set to REJECTED and are not processed further. (<a name="0068-MATC-021" href="#0068-MATC-021">0068-MATC-021</a>) 
      * [GTC/GTT/GFA](./0014-ORDT-order-types.md#time-in-force---validity)
