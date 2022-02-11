@@ -115,7 +115,7 @@ Should we instead have additional rewards for forwarding events from Ethereum? F
 If we had another reward pool we could share it according to `f/n`. 
 
 
-# PM5: Validator only acts as a Tenderint leader.
+# PM5: Validator only acts as a Tendermint leader.
 Finding this requires a statistic we don't have at this point (as we would like to also include messages that were sent but don't contribute to consensus anymore to avoid discriminating against geographically far away servers. Once we figured out how to do
 this, we can build a formula for the reward. 
 
