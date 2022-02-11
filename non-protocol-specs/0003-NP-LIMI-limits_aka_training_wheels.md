@@ -84,7 +84,7 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 
 ## Out of scope
 
-- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](0005-NP-LIMN-limited_network_life.md).
+- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](./0005-NP-LIMN-limited_network_life.md).
 
 ## Limitations
 
@@ -121,7 +121,7 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
 4. `propose_asset_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
 
 ## Smart contract criteria
-5. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md)
+5. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md) (<a name="0003-NP-LIMI-001" href="#0003-NP-LIMI-001">0003-NP-LIMI-001</a>)
    - This does not apply to the [governance staking contract](./../glossaries/staking-and-governance.md)
    - With an Ethereum address that has never deposited to Vega before:
      - A valid deposit transaction that is less than `max lifetime deposit` is not rejected 
@@ -129,25 +129,25 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
          - This is true even if both TXs target different [Vega public keys](./../protocol/0017-PART-party.md)
      - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
      - A single deposit transaction that is more than `max lifetime deposit` rejected 
-     - `lifetime deposit` is tracked across [checkpoints](./0005-limited-network-life.md)
-6. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction
+     - `lifetime deposit` is tracked across [checkpoints](./0005-NP-LIMN-limited_network_life.md)
+6. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction (<a name="0003-NP-LIMI-002" href="#0003-NP-LIMI-001">0003-NP-LIMI-002</a>)
    - An ETH address that is listed on the smart contract as exempt can deposit more than `max lifetime deposit`
    - The smart contract can be updated to add or remove ETH addresses from the exemption list
    - Only one ETH address at a time has permission to update the exemption list
      - An ETH tx attempting to update the exemption list from a different address is rejected
      - That ETH address is not itself exempt from `max lifetime deposit` unless explicitly listed
      - That ETH address can only be changed by a multisig bundle from the validators
-7. `max lifetime deposit` can be updated per asset via an Ethereum transaction
-8. Validators can, via multisig, stop and recommence processing bridge transactions
+7. `max lifetime deposit` can be updated per asset via an Ethereum transaction (<a name="0003-NP-LIMI-003" href="#0003-NP-LIMI-003">0003-NP-LIMI-003</a>)
+8. Validators can, via multisig, stop and recommence processing bridge transactions (<a name="0003-NP-LIMI-004" href="#0003-NP-LIMI-004">0003-NP-LIMI-004</a>)
    - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
    - A representative set of validators can produce a multisig transaction that allows the bridge to resume processing future deposits and withdrawals
    - All withdrawals that are submitted while the bridge is 'stopped' are rejected 
    - All deposits that are submitted while the bridge is 'stopped' are rejected 
-9. Withdrawal delay network parameter requires a wait between withdrawals creation & submission if it meets or exceeds a threshold
+9. Withdrawal delay network parameter requires a wait between withdrawals creation & submission if it meets or exceeds a threshold (<a name="0003-NP-LIMI-005" href="#0003-NP-LIMI-005">0003-NP-LIMI-005</a>)
   - For valid withdrawals that have been approved by validators, when the user submits the TX to the bridge smart contract:
     - If the withdrawal amount is below or equal to `withdrawal delay threshold`, the withdrawal is accepted by the bridge smart contract
     - If the withdrawal amount is above `withdrawal delay threshold` for the asset,
       - If it is submitted before `withdrawal delay period`, it is rejected by the bridge smart contract 
       - If it is submitted after `withdrawal delay period`, it is accepted by the bridge smart contract 
     - `withdrawal delay threshold` can be changed, per asset, by multisig control on the bridge contract
-10. A withdrawal that is subject to delay can be cancelled by a validator
+10. A withdrawal that is subject to delay can be cancelled by a validator (<a name="0003-NP-LIMI-006" href="#0003-NP-LIMI-006">0003-NP-LIMI-006</a>)
