@@ -57,11 +57,11 @@ Notes on scope of current version of this spec:
 | Pricing method | GTT | GTC | IOC | FOK | GFA | GFN |
 | -------------- |:---:|:---:|:---:|:---:|:---:|:---:|
 | Limit          | Y   | Y   | Y*  | Y*  | N   | Y   |
-| Pegged         | Y   | Y   | Y*  | Y*  | N   | N&  |
+| Pegged         | Y   | Y   | N** | N** | N   | Y   |
 | Market         | N   | N   | Y   | Y   | N   | N   |
 
-\* IOC/FOK LIMIT/PEGGED orders never rest on the book, if they do not match immediately they are cancelled/stopped.<br>
-\& As PEGGED orders can only be live in continuous trading, using the GFN flag is redundant (use GTC instead).
+\* IOC/FOK LIMIT orders never rest on the book, if they do not match immediately they are cancelled/stopped.<br>
+\** IOC/FOK PEGGED orders are not currently supported as they will always result in the cancelled/stopped state. This may change in the future if pegged orders are allowed to have negative offsets that can result in an immediate match.
 
 
 ##### Auction
