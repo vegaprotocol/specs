@@ -77,7 +77,7 @@ During an opening auction of a market, no fees are collected.
 
 Order that entered the book in the current batch are considered aggressive orders. This means that in some cases both sides of a trade will be aggressors in which case the fee calculation for normal auctions applies. Otherwise, the fee calculation for continuous trading applies.
 
-### Position Resolution 
+### Position Resolution
 
 The trades that were netted off against each other during position resolution incur no fees. 
 During position resolution all of the parties being liquidated share the total fee for the network order, pro-rated by the size of position. 
