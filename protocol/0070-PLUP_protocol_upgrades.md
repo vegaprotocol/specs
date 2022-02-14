@@ -102,6 +102,7 @@ These are important changes in the protocol, possibly breaking the previously kn
 and bringing also new important feature. Due to the nature of the upgrade, a governance vote will be required
 so token holders show of their support for the upgrade.
 
+> note: the major upgrade will need refinment, and are not planned at first.
 
 ## Framework / data structures
 
@@ -125,3 +126,35 @@ message UpgradeAccepted {
 ```
 
 ## Acceptance criteria
+- [ ] A new patch upgrade is made available
+  - [ ] Enough validator have upgraded their node
+  - [ ] At least `validators.vote.required` message have been sent by the validators
+  - [ ] The block time for the upgrade is reached
+  - [ ] The network is switching to the new version of the protocol (can be checked with APIs)
+- [ ] A new patch upgrade is made available
+  - [ ] Not enough validator have upgraded their node
+  - [ ] At least `validators.vote.required` message have been sent by the validators nodes
+  - [ ] The block time for the upgrade is reached
+  - [ ] The network haven't change version (can be checked with APIs)
+- [ ] A new minor upgrade is made available
+  - [ ] Enough validator have upgraded their node
+  - [ ] At least `validators.vote.required` validators sent a command to accept the upgrade
+  - [ ] The block time for the upgrade is reached
+  - [ ] The network is switching to the new version of the protocol (can be checked with APIs)
+- [ ] A new minor upgrade is made available
+  - [ ] Enough validator have upgraded their node
+  - [ ] Less then `validators.vote.required` validators sent a command to accept the upgrade
+  - [ ] The block time for the upgrade is reached
+  - [ ] The network haven't change the protocol version (can be checked with APIs)
+- [ ] A new minor upgrade is made available
+  - [ ] Enough validator have upgraded their node
+  - [ ] A governance proposal have been created to propose the upgrade
+  - [ ] The proposal have been accepted
+  - [ ] The block time for the upgrade is reached
+  - [ ] The network is switching to the new version of the protocol (can be checked with APIs)
+- [ ] A new minor upgrade is made available
+  - [ ] Enough validator have upgraded their node
+  - [ ] A governance proposal have been created to propose the upgrade
+  - [ ] The proposal have been rejected
+  - [ ] The block time for the upgrade is reached
+  - [ ] The network haven't changed the protocol version (can be checked with APIs)
