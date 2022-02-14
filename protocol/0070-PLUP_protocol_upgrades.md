@@ -31,7 +31,7 @@ The solution employed at the time was to:
 This upgrade went quite smoothly without any incident, although it was possible as the fix was located in a single place, and wasn't impacting much of the state
 (meaning no changes in the protobuf files were required for example.)
 
-## Asynchronous upgrades mecanism
+## Asynchronous upgrades mechanism
 
 One of the main challenge with upgrading the network both asynchronously and without a restart / downtime is
 the management of the state, and possible incompatible changes between the state of two version of the protocol.
@@ -67,6 +67,17 @@ Fortunately we already have such feature which should work out of the box with m
 From now on we will need to version the protocol, this can be the current version of the node, and the previous
 version. This should probably use a versioning system like semantic versioning (this will be useful in a later
 part of this document).
+
+### Edge cases
+With the upgrade process outlined below, it's possible for an upgrade to be proposed and rejected by validators. This happens independently of the *protocol development* and could lead to a situation in which an upgrade is rejected, and subsequent versions need to be reworked to take this in to account.
+
+For example:
+- In a network of 3 nodes, all running v`0.1.1`
+- v`0.2.0` is released with block height of 100
+- 0 nodes update before block 100, so the new version is not deployed on the network
+- Meanwhile v`0.3.0` is released
+
+The network is now in a situation where `v0.3.0` expects the network to be upgrading from v`0.2.0`, while it would actually be upgrading from v`0.1.0`. This is expected, and upgrades must take this in to account. 
 
 
 ## Types of upgrade
@@ -108,7 +119,7 @@ so token holders show of their support for the upgrade.
 ## Framework / data structures
 
 As protobuf:
-```
+```go
 message Upgrade {
 	enum Type {
 		Patch = 1;
@@ -127,35 +138,50 @@ message UpgradeAccepted {
 ```
 
 ## Acceptance criteria
-- [ ] A new patch upgrade is made available
+### Patch version updates (`0.0.x`)
+- [ ] A new patch upgrade is made available, and is successfully deployed (<a name="0070-PLUP-001" href="#0070-PLUP-001">0070-PLUP-001</a>)
   - [ ] Enough validators have upgraded their node
   - [ ] At least `validators.vote.required` message have been sent by the validators
   - [ ] The block time for the upgrade is reached
-  - [ ] The network is switching to the new version of the protocol (can be checked with APIs)
-- [ ] A new patch upgrade is made available
+  - [ ] The network changes to the new version of the protocol (can be checked with APIs)
+- [ ] A new patch upgrade is made available, but not enough validators update before the deadline (<a name="0070-PLUP-002" href="#0070-PLUP-002">0070-PLUP-002</a>)
   - [ ] Not enough validator have upgraded their node
   - [ ] At least `validators.vote.required` message have been sent by the validators nodes
   - [ ] The block time for the upgrade is reached
-  - [ ] The network haven't change version (can be checked with APIs)
-- [ ] A new minor upgrade is made available
-  - [ ] Enough validator have upgraded their node
+  - [ ] The network does not change version (can be checked with APIs)
+ 
+### Minor version updates (`0.x.x`)
+- [ ] A new minor upgrade is made available, validators vote to update, and the update is succesfully deployed (<a name="0070-PLUP-003" href="#0070-PLUP-003">0070-PLUP-003</a>)
+  - [ ] Enough validators have upgraded their node
   - [ ] At least `validators.vote.required` validators sent a command to accept the upgrade
   - [ ] The block time for the upgrade is reached
-  - [ ] The network is switching to the new version of the protocol (can be checked with APIs)
-- [ ] A new minor upgrade is made available
-  - [ ] Enough validator have upgraded their node
+  - [ ] The network has switched to the new version of the protocol (can be checked with APIs)
+- [ ] A new minor upgrade is made available, validators update but not enough votes to upgrade are received (<a name="0070-PLUP-004" href="#0070-PLUP-004">0070-PLUP-004</a>)
+  - [ ] Enough validators have upgraded their node
   - [ ] Less then `validators.vote.required` validators sent a command to accept the upgrade
   - [ ] The block time for the upgrade is reached
-  - [ ] The network haven't change the protocol version (can be checked with APIs)
-- [ ] A new minor upgrade is made available
-  - [ ] Enough validator have upgraded their node
+  - [ ] The network does not change version (can be checked with APIs)
+- [ ] A new minor upgrade is made available, but not enough validators update by the block height (<a name="0070-PLUP-005" href="#0070-PLUP-005">0070-PLUP-005</a>)
+  - [ ] Not enough validators have upgraded their node
+  - [ ] The block time for the upgrade is reached
+  - [ ] The network does not change version (can be checked with APIs)
+ 
+### Major version updates (`x.x.x`)
+ > Note: These acceptance criteria are *incomplete*. There will likely be a governance vote from users, as well as the validator vote. For now these Acceptance Criteria test a major version in the same was a minor version upgrade.
+- [ ] A new major upgrade is made available, validators vote to update, and the update is successfully deployed (<a name="0070-PLUP-006" href="#0070-PLUP-006">0070-PLUP-006</a>)
+  - [ ] Enough validators have upgraded their node
   - [ ] A governance proposal have been created to propose the upgrade
   - [ ] The proposal have been accepted
   - [ ] The block time for the upgrade is reached
-  - [ ] The network is switching to the new version of the protocol (can be checked with APIs)
-- [ ] A new minor upgrade is made available
-  - [ ] Enough validator have upgraded their node
+  - [ ] The network has switched to the new version of the protocol (can be checked with APIs)
+- [ ] A new major upgrade is made available, but the validator vote does not pass (<a name="0070-PLUP-007" href="#0070-PLUP-007">0070-PLUP-007</a>)
+  - [ ] Enough validators have upgraded their node
   - [ ] A governance proposal have been created to propose the upgrade
   - [ ] The proposal have been rejected
   - [ ] The block time for the upgrade is reached
-  - [ ] The network haven't changed the protocol version (can be checked with APIs)
+  - [ ] The network does not change version (can be checked with APIs)
+- [ ] A new major upgrade is made available, but not enough validators update by the block height (<a name="0070-PLUP-008" href="#0070-PLUP-008">0070-PLUP-008</a>)
+  - [ ] Not enough validators have upgraded their node
+  - [ ] The block time for the upgrade is reached
+  - [ ] The network does not change version (can be checked with APIs)
+ 
