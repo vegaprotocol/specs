@@ -103,8 +103,6 @@ There should be a tool to extract all assets from the restore file so that they 
 # Network parameters
 | Name                                                     | Type     | Description                                                       | Version added  |
 |----------------------------------------------------------|:--------:|-------------------------------------------------------------------|:--------:|
-|`network.checkpoint.marketFreezeDate` | String (date)| Sets the date before which all markets are expected to settle and after which no deposits or trading / governance transactions will be accepted. This can be +infinity or another way of indicating "never". | 💧 Sweetwater |
-|`network.checkpoint.networkEndOfLifeDate`| String (date) | This must be `>` `markets_freeze_date`. At this time the chain will be shutdown.  |  💧 Sweetwater |
 |`network.checkpoint.timeElapsedBetweenCheckpoints` | String (duration) |  sets the minimum time elapsed between checkpoints|  💧 Sweetwater |
 
 If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0` or the parameter is undefined then no checkpoints are created. Otherwise any time-length value `>0` is valid e.g. `1min`, `2h30min10s`, `1month`. If the value is invalid Vega should not start e.g. if set to `3 fish`.
