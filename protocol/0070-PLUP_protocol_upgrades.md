@@ -5,12 +5,13 @@ Start date: 2022-02-09
 
 ### Current state of upgrading the vega network
 
-As of today, upgrading the protocol is near impossible when a major changes to the step are possible without proceeding with an LNL restore.
-Using LNL have the following unconvenient side effect:
+As of today, upgrading the protocol is near impossible when a major changes to the step are possible without proceeding with a [Limited Network Life checkpoint restore](./non-protocol-specs/0005-NP-LIMN-limited_network_life.md). This functionality has the following significant issues:
 - A synchronous restart is required
 - All node need to be restarted in a very short time so all state can be restore from ethereum, and the network can start properly with a checkpoint.
 
-### How different protocol proceed
+Limited Network Life is not the end goal. This spec outlines how the protocol evolves from LNL checkpoints to rolling software updates, controlled by a reasonable set of governance and user controls.
+
+### How other protocols proceed
 
 Other protocol e.g Ethereum carry out updates in an asynchronous manner. Usually a new version of the protocol is made available, a hardcoded block height is set
 at which a new code path will be enabled. If enough node runners have deployed the updated code, then the network will continue with the new code path. Others nodes
