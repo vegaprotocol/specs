@@ -20,7 +20,7 @@ There are four main features:
 3. A new 'Restore' transaction that contains the full checkpoint file and triggers state restoration
 4. A new 'checkpoint hash' transaction is broadcast by all validators
 
-Point two requires that at load time, each node calculates the hash of the checkpoint file. It then sends this through consensus to make sure that all the nodes in the new network agree on the state. 
+Point two requires that at load time, each node calculates the hash of the checkpoint file. It then sends this through consensus to make sure that all the nodes in the new network agree on the state.
 
 
 # Creating a checkpoint
@@ -33,12 +33,23 @@ Information to store:
 - On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the staking and delegation reward account balance and network params that govern [Staking and delegation](../protocol/0056-REWA-rewards_overview.md) ).
 - All reward balances accrued by all parties but not yet transferred to their general account due to payout delays.
 - [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below about signed-for-withdrawal. Does *not* include the "staking" account balance.
-- Fee pools: Fees are paid into per market or per asset pools and distributed periodically. 
+- Fee pools: Fees are paid into per market or per asset pools and distributed periodically.
 - Event ID of the last processed deposit event for all bridged chains
 - Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
 - hash of the previous block, block number and transaction id of the block from which the snapshot is derived
+- ERC20 collateral:
+  - last block height of a confirmed erc20 deposit on the ethereum chain with `number_of_confirmations`.
+  - all pending erc20 deposits (not confirmed before this block)
+- Staking:
+  - last block of a confirmed stake_deposit on the staking contract on the ethereum chain with `number_of_confirmations`.
+  - last block of a confirmed stake_deposit on the vesting contract on the ethereum chain with `number_of_confirmations`.
+  - all the staking events from both contracts
+  - all the pending staking events
+
+
+
 When a checkpoint is created, each validator should calculate its hash and submit this as a transaction to the chain(*).
-- last block height and hash and event ID of all bridged chains (e.g. Ethereum) that the core has seen `number_of_confirmations` of the event.
+
 
 When to create a checkpoint:
 - if `current_time - network.checkpoint.timeElapsedBetweenCheckpoints > time_of_last_full_checkpoint`
@@ -76,10 +87,10 @@ The state will be restored in this order:
     - If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
     - In case `now + net_param_min_enact >= trading_terminated` set the status to cancelled.
 4. Replay events from bridged chains
-   - Concerning bridges used to deposit collateral for trading, replay from the last event id stored in the checkpoint.
-   - Concerning the staking bridges, the balances are not stored in the checkpoints, only delegations to validators is kept track of.
-	 When being restarted, the node will load all events emitted by the staking bridges (from the creation of the staking bridge contracts),
-	 and reconcile the accounts balances, then apply again the delegations to the validators.
+   - Concerning bridges used to deposit collateral for trading, replay from the last block specified in the checkpoint and reload the
+     pending deposits from the checkpoint so the network can start again to confirm these events.
+   - Concerning the staking bridges, all balances will be reconcilied using the staking events from the checkpoint, up to the last seen block
+     store as part of the checkpoint, then apply again the delegations to the validators.
 
 There should be a tool to extract all assets from the restore file so that they can be added to genesis block manually, should the validators so desire.
 
@@ -100,12 +111,12 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 # Acceptance criteria
 
-- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧 (<a name="0005-NP-LIMN-001" href="#0005-NP-LIMN-001">0005-NP-LIMN-001</a>) 
-- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧 (<a name="0005-NP-LIMN-002" href="#0005-NP-LIMN-002">0005-NP-LIMN-002</a>) 
-- [ ] We can launch a network with any valid checkpoint file. 💧 (<a name="0005-NP-LIMN-003" href="#0005-NP-LIMN-003">0005-NP-LIMN-003</a>) 
-- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧 (<a name="0005-NP-LIMN-004" href="#0005-NP-LIMN-004">0005-NP-LIMN-004</a>) 
-- [ ] Hash of the checkpoint file is agreed via consensus. 💧 (<a name="0005-NP-LIMN-005" href="#0005-NP-LIMN-005">0005-NP-LIMN-005</a>) 
-- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧 (<a name="0005-NP-LIMN-006" href="#0005-NP-LIMN-006">0005-NP-LIMN-006</a>) 
+- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧 (<a name="0005-NP-LIMN-001" href="#0005-NP-LIMN-001">0005-NP-LIMN-001</a>)
+- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧 (<a name="0005-NP-LIMN-002" href="#0005-NP-LIMN-002">0005-NP-LIMN-002</a>)
+- [ ] We can launch a network with any valid checkpoint file. 💧 (<a name="0005-NP-LIMN-003" href="#0005-NP-LIMN-003">0005-NP-LIMN-003</a>)
+- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧 (<a name="0005-NP-LIMN-004" href="#0005-NP-LIMN-004">0005-NP-LIMN-004</a>)
+- [ ] Hash of the checkpoint file is agreed via consensus. 💧 (<a name="0005-NP-LIMN-005" href="#0005-NP-LIMN-005">0005-NP-LIMN-005</a>)
+- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧 (<a name="0005-NP-LIMN-006" href="#0005-NP-LIMN-006">0005-NP-LIMN-006</a>)
 
 ## 💧 Test case 1: Withdrawal status is correctly tracked across resets (<a name="0005-NP-LIMN-007" href="#0005-NP-LIMN-007">0005-NP-LIMN-007</a>)
 1. A party has general account balance of 100 tUSD.
