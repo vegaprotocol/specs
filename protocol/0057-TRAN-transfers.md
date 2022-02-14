@@ -118,9 +118,9 @@ message CancelTransfer {
 ## Network Parameters
 | Property                                     | Type             | Example value | Description                                      |
 |----------------------------------------------|------------------| --------------|--------------------------------------------------|
-| `spam.protection.maxUserTransfersPerEpoch`   | String (integer) |  `"1"`        | The most transfers a use can initiate per minute |
-| `transfer.minTransferQuantumMultiple`        | String (integer) |  `"1"`        | The most transfers a use can initiate per minute |
-| `transfer.fee.factor`                        | String (decimal) |  `"0.0001"`   | The percentage of the transfer charged as a fee  |
+| `spam.protection.maxUserTransfersPerEpoch`   | String (integer) |  `"20"`       | The most transfers a use can initiate per minute |
+| `transfer.minTransferQuantumMultiple`        | String (integer) |  `"0.1"`      | The most transfers a use can initiate per minute |
+| `transfer.fee.factor`                        | String (decimal) |  `"0.001"`    | The percentage of the transfer charged as a fee  |
 
 
 ## Acceptance criteria
