@@ -15,7 +15,7 @@ Note that transfers via governance is post-Oregon trail feature.
 
 Note that validator rewards (and the reward account for those) is covered in [validator rewards](0061-REWP-simple_pos_rewards_sweetwater.md) and is separate from the trading reward framework described here. 
 
-## Reward metrics
+## Reward metrics
 
 Reward metrics need to be calculated for every relevant Vega [party](0017-PART-party.md). By relevant we mean that the metric is `> 0`. 
 
@@ -34,17 +34,19 @@ Reward metrics are not stored in [LNL checkpoints](../non-protocol-specs/0005-NP
 There will be *one* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). 
 Any asset on Vega can be either settlement asset or reward asset or both. 
 
-It must be possible for any party to run a one off [transfer](????-????-transfers.md) or create a [periodic transfer](????-????-transfers.md) to any of these reward accounts. 
+It must be possible for any party to run a one off [transfer](0057-TRAN-transfers.md) or create a [periodic transfer](0057-TRAN-transfers.md) to any of these reward accounts. 
 Note that saying "per every Vega asset" twice above isn't a typo. We want to be able to pay rewards e.g. in $VEGA for markets settling in e.g. $USDT. 
 
 Reward accounts and balances are to be saved in [LNL checkpoint](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md). 
 
 
-## Reward distribution
+## Reward distribution
 
-All rewards are paid out at the end of any epoch. There are no fractional payouts and no delays. 
+All rewards are paid out at the end of any epoch *after* [recurring transfers](0057-TRAN-Transfers.md) have been executed. 
+There are no fractional payouts and no delays. 
 
-### For fee based metrics
+### For fee based metrics
+
 Every epoch the entire reward account for every asset and *fee* metric type will be distributed pro-rata to the parties that have the metric `>0`. 
 That is if we have reward account balance `R`
 ```
