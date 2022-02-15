@@ -321,7 +321,7 @@ Scenario: case 2 using lognomal risk model
     And the mark price should be "100" for the market "ETH/DEC19"
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/DEC19"
 
-   # party1 maintenance margin: position*(mark_price*risk_factor_short+slippage_per_unit) + OrderVolume x Order_price x risk_factor_short = 100 x 120 x 0.4878731 is about 6000
+   # party1 maintenance margin: position*(mark_price*risk_factor_short+slippage_per_unit) + OrderVolume x Order_price x risk_factor_short = 100 x 120 x 0.4878731 is about 5854
 
     Then debug transfers  
     Then debug orders
