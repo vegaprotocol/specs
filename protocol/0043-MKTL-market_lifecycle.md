@@ -281,6 +281,6 @@ Parties with open positions still have non-zero margin account balances.
 The market state is `trading terminated`.
 1. The settlement price oracle transaction is sent and it is  *not* equal to `p`. 
 Parties that had open positions see settlement cash-flows happen. 
-Maring account balances are transferred to the general account. 
+Margin account balances are transferred to the general account. 
 Any insurance pool balance is transferred to the network treasury account for the asset. 
 The market state is `settled`. 
