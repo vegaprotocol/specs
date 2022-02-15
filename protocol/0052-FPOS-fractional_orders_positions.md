@@ -23,3 +23,8 @@ Specs affected by this change (NB: in many cases the implementation may not chan
 - [0025 - Order Submission](./0025-OCRE-order_submission.md)
 - [0029 - Fees](./0029-FEES-fees.md)
 - [0038 - Liquidity Provision order type](./0038-OLIQ-liquidity_provision_order_type.md)
+
+
+# Acceptance Criteria
+- All proposed markets will have a decimal places property available via the API (<a name="0052-FPOS-0001" href="#0052-FPOS-0001">0052-FPOS-0001</a>)
+- An order created on the client with a price of `1` results in an order being created with a price of `1 * 10^[Market.DecimalPlaces]` (<a name="0052-FPOS-0002" href="#0052-FPOS-0002">0052-FPOS-0002</a>)
