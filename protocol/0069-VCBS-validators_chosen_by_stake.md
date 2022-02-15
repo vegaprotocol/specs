@@ -71,11 +71,10 @@ Basic vega chain liveness criteria is covered in their [performance score](./006
 
 ## Verifying Ethereum (and later other chain) integration
 In order to be considered for promotion from ersatz validator to Tendermint validator, an ersatz validator must prove itself to be reliable. This is measured by ensuring their
-reliability in forwarding [Ethereum events](./0036-BRIE-event_queue.md). A new network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to 
-set the acceptable minimum count of times that an ersatz validator has either:
+reliability in forwarding [Ethereum events](./0036-BRIE-event_queue.md). 
+A new network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to 
+set the acceptable minimum count of times that an ersatz validator was the first to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times.
 
-1) They will be the first node to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times, or
-1) They are the first one to vote for any ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times. 
 
 ## Multisig updates (and multisig weight updates if those are used)
 
