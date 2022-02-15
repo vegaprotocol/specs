@@ -31,9 +31,9 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
   Scenario: LP gets distressed during continuous trading
 
     Given the parties submit the following liquidity provision:
-      | id  | party   | market id | commitment amount | fee   | side | pegged reference | proportion | offset |
-      | lp1 | party0 | ETH/MAR22 | 50000              | 0.001 | sell | ASK              | 500        | 20      |
-      | lp1 | party0 | ETH/MAR22 | 50000              | 0.001 | buy  | BID              | 500        | -20     |
+      | id  | party   | market id | commitment amount | fee   | side | pegged reference | proportion | offset | lp type |
+      | lp1 | party0 | ETH/MAR22 | 50000              | 0.001 | sell | ASK              | 500        | 20      | submission|
+      | lp1 | party0 | ETH/MAR22 | 50000              | 0.001 | buy  | BID              | 500        | -20     | amendment |
       
     And the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference  |
