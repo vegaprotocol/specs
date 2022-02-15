@@ -1,5 +1,3 @@
-Feature name: market-framework
-
 # Summary
 The market framework is a set of concepts that define the markets available on a Vega network in terms of the product and instrument being traded on each, the trading mode and related parameters, and the risk model being used for margin calculations.
 
@@ -217,3 +215,8 @@ Market {
     }
 }
 ```
+
+## Acceptance criteria
+- Details of a market's instrument must be available for each market through the API (<a name="0001-MKTF-001" href="#0001-MKTF-001">0001-MKTF-001</a>)
+- Details of a market's product must be available for each market through the API (<a name="0001-MKTF-002" href="#0001-MKTF-002">0001-MKTF-002</a>)
+- Details of a market's tradable instrument must be available for each market through the API (<a name="0001-MKTF-003" href="#0001-MKTF-003">0001-MKTF-003</a>)
