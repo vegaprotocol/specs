@@ -245,7 +245,7 @@ need to be hashed individually).
 
 ### Ethereum key - multisig (<a name="0067-KEYS-001" href="#0067-KEYS-001">0067-KEYS-001</a>)
 
-1. A Vega network is running with 5 validators, `v1,v2,v3` with Ethereum keys `k1, k2, k3_old`; each with equal tendermint and multisig weight.
+1. A Vega network is running with 3 validators, `v1,v2,v3` with Ethereum keys `k1, k2, k3_old`; each with equal tendermint and multisig weight.
 2. Validator `v3` has ethereum multisig public key `k3_old`. They submit a transaction to replace by ethereum multisig public key `k3_new`.
 3. The network issues a signature bundle to update that can be submitted to the ethereum multisig contract to update the key there. 
 4. This is submitted to ethereum; the multisig contract is updated.
@@ -257,7 +257,7 @@ need to be hashed individually).
 ### Vega hot key (<a name="0067-KEYS-002" href="#0067-KEYS-002">0067-KEYS-002</a>)
 
 1. There is a vega validator `v3` with master key `M` and hot key `h3_old`. See [master and hot vega keys](0063-VALK-validator_vega_master_keys.md).
-1. A Vega network is running with 5 validators, `v1,v2,v3` using Vega hot keys `h1,h2,h3_old`.
+1. A Vega network is running with 3 validators, `v1,v2,v3` using Vega hot keys `h1,h2,h3_old`.
 1. Validator `v3` generates a new hot key `h3_new` using the master key `M`.
 1. Validator `v3` submits a transaction to vega chain announcing that they'll be using `h3_new` instead of `h3_old`. 
 1. Validator `v3` stops their node, restarts with the new key and replays the chain or restore from snapshot. 
