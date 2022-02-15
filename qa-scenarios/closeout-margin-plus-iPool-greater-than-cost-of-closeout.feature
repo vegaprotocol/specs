@@ -311,7 +311,7 @@ Scenario: case 2 using lognomal risk model
     When the parties place the following orders:
       | party            | market id | side | volume | price | resulting trades | type       | tif     | reference       |
       | sellSideProvider | ETH/DEC19 | sell | 1000   | 150   | 0                | TYPE_LIMIT | TIF_GTC | sell-provider-1 |
-      | party1           | ETH/DEC19 | sell | 100    | 120   | 0                | TYPE_LIMIT | TIF_GTC | party1-s-1      |
+     # | party1           | ETH/DEC19 | sell | 100    | 120   | 0                | TYPE_LIMIT | TIF_GTC | party1-s-1      |
       | aux1             | ETH/DEC19 | sell | 1      | 100   | 0                | TYPE_LIMIT | TIF_GTC | aux-s-2         |
       | aux2             | ETH/DEC19 | buy  | 1      | 100   | 0                | TYPE_LIMIT | TIF_GTC | aux-b-2         |
       | party2           | ETH/DEC19 | buy  | 100    | 80    | 0                | TYPE_LIMIT | TIF_GTC | party2-b-1      |
@@ -321,26 +321,48 @@ Scenario: case 2 using lognomal risk model
     And the mark price should be "100" for the market "ETH/DEC19"
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/DEC19"
 
-   # party1 maintenance margin: position*(mark_price*risk_factor_short+slippage_per_unit) + OrderVolume x Order_price x risk_factor_short = 100 x 120 x 0.4878731 is about 5854
+   # party1 maintenance margin: position*(mark_price*risk_factor_short+slippage_per_unit) + OrderVolume x Order_price x risk_factor_short  = 100 x 100 x 0.4878731  is about 4879
 
-    Then debug transfers  
-    Then debug orders
+   # Then debug transfers  
+   # Then debug orders
+ 
+    When the parties place the following orders:
+      | party            | market id | side | volume | price | resulting trades | type       | tif     | reference       |
+      | party1           | ETH/DEC19 | sell | 100    | 120   | 0                | TYPE_LIMIT | TIF_GTC | party1-s-1      |
+
+ # party1 margin account: MarginInitialFactor x MaintenanceMarginLevel = 4879*1.5
+    Then the parties should have the following account balances:
+      | party   | asset | market id | margin | general  |
+      | party1  | USD   | ETH/DEC19 | 7318   |  22682   |
+
+ # party1 maintenance margin level: position*(mark_price*risk_factor_short+slippage_per_unit) + OrderVolume x Mark_price x risk_factor_short  = 100 x 100 x 0.4878731  is about 4879
+    Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release  |
+      | party1 | ETH/DEC19 | 4879        | 5854   | 7318    | 9758     |
+
+    When the parties place the following orders:
+      | party            | market id | side | volume | price | resulting trades | type       | tif     | reference       |
+      | party1           | ETH/DEC19 | sell | 400    | 120   | 0                | TYPE_LIMIT | TIF_GTC | party1-s-1      |
 
     Then the parties should have the following account balances:
       | party   | asset | market id | margin | general  |
-      | party1  | USD   | ETH/DEC19 | 17564  |  12436   |
+      | party1  | USD   | ETH/DEC19 | 30000  |  0       |
+
+    #MTM closeout party1
+    When the parties place the following orders:    
+      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
+      | aux1   | ETH/DEC19 | sell  | 1      | 80   | 1                | TYPE_LIMIT | TIF_GTC | ref-4     |
+      #| aux2   | ETH/DEC19 | sell | 1      | 100   | 1                | TYPE_LIMIT | TIF_GTC | ref-4     |
+
+    And the mark price should be "80" for the market "ETH/DEC19"
+
+    When the parties place the following orders:
+      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
+      | aux2   | ETH/DEC19 | buy  | 10     | 120   | 1                | TYPE_LIMIT | TIF_GTC | ref-2     |
 
     Then the parties should have the following margin levels:
       | party  | market id | maintenance | search | initial | release  |
-      | party1 | ETH/DEC19 | 10734       | 12880  | 16100   | 39032    |
-
-    # When the parties place the following orders:
-    #   | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
-    #   | aux2   | ETH/DEC19 | buy  | 50     | 120   | 1                | TYPE_LIMIT | TIF_GTC | ref-2     |
-
-    # Then the parties should have the following margin levels:
-    #   | party  | market id | maintenance | search | initial | release  |
-    #   | party1 | ETH/DEC19 | 5855        | 7026   | 8782    | 11710    |
+      | party1 | ETH/DEC19 | 5855        | 7026   | 8782    | 11710    |
 
     # # party 1 place an order + we check margins
     # When the parties place the following orders:
