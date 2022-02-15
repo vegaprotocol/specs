@@ -326,6 +326,10 @@ Scenario: case 2 using lognomal risk model
     Then debug transfers  
     Then debug orders
 
+    Then the parties should have the following account balances:
+      | party   | asset | market id | margin | general  |
+      | party1  | USD   | ETH/DEC19 | 17564  |  12436   |
+
     Then the parties should have the following margin levels:
       | party  | market id | maintenance | search | initial | release  |
       | party1 | ETH/DEC19 | 10734       | 12880  | 16100   | 39032    |
