@@ -1,9 +1,9 @@
 Feature name: market-insurance-pool
 
 # Acceptance Criteria
-- [ ] When a market opens for trading, there an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0015-INSR-001" href="#0015-INSR-001">0015-INSR-001</a>)
-- [ ] Only transfer requests move money in or out of the insurance account. (<a name="0015-INSR-002" href="#0015-INSR-002">0015-INSR-002</a>)
-- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the on-chain treasury. (<a name="0015-INSR-003" href="#0015-INSR-003">0015-INSR-003</a>)
+- When a market proposal gets accepted and the opening auction commences, there an insurance account that is available for use by that market for the settlement asset of that market and its balance is zero. (<a name="0015-INSR-001" href="#0015-INSR-001">0015-INSR-001</a>)
+- When the market enters transitions from "trading terminated state" to "settled" state (see [market lifecyle](0043-MKTL-market_lifecycle.md)), the insurance pool account has its balance transferred to the on-chain treasury for the asset. (<a name="0015-INSR-002" href="#0015-INSR-002">0015-INSR-002</a>)
+- The feature test []() is verified. (<a name="0015-INSR-003" href="#0015-INSR-003">0015-INSR-003</a>) 
 
 
 # Summary
