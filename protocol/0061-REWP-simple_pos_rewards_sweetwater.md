@@ -11,7 +11,7 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake. 
 1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes. 
 
-### Other network parameters: 
+### Other network parameters: 
 - `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
 - `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
 - `reward.staking.delegation.maxPayoutPerParticipant` - the maximum (applies only to on-chain treasury rewards in the form of the staking and governance asset) that each participant may receive as a payout from single epoch. 
@@ -48,7 +48,7 @@ Note `validatorScore` also depends on the other network parameters, see below wh
 `valAmt = nodeAmount x (1 - delegatorShare)`. 
 1. The amount to be distributed among all the parties that delegated to this validator is `allDelegatorsAmt := nodeAmount x delegatorShare x score_val / total_score`.  
 
-### For each delegator that delegated to this validator
+### For each delegator that delegated to this validator
 Each delegator should now receive `delegatorTokens / (allDelegatedTokens + validatorsOwnTokens)`. 
 Note that this is subject to `reward.staking.delegation.maxPayoutPerParticipant`, see below. 
 
@@ -96,3 +96,9 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 1. One of the Tendermint validators goes offline forever but their key still stays on multisig (no-one updated).
 1. Epoch ends and multisig hasn't been updated.
 1. No validators get any rewards.
+
+- A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)
+- With `delegator_share` set to `0`, a validator keeps 100% of their own rewards, and a delegator receives no reward (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>) 
+- With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proprotional amount of the remaining 50% (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>) 
+- With `delegator_share` set to `1`, a validator receives no reward, and their delegators receive a proprotional amount of 100% (<a name="0061-REWP-004" href="#0061-REWP-004">0061-REWP-004</a>) 
+- For the above three scenarios, the reward payout per public key does not exceed `maxPayoutPerRecipient` (<a name="0061-REWP-005" href="#0061-REWP-005">0061-REWP-005</a>) 
