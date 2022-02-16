@@ -104,6 +104,6 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 ### Collateral movements
 
 - [ ] For settlement at expiry scenarios, transfers for collateral should be attempted by accessing the trader's margin account first and foremost. (<a name="0002-STTL-006" href="#0002-STTL-006">0002-STTL-006</a>)
-- [ ] If margin account of trader is insuffcient to cover collateral transfers, then trade's general account is accessed next. (<a name="0002-STTL-006" href="#0002-STTL-007">0002-STTL-007</a>)
-- [ ] If margin and general account of trader are insuffcient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-007</a>)
-- [ ] If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-009" href="#0002-STTL-009">0002-STTL-008</a>)
+- [ ] If margin account of trader is insuffcient to cover collateral transfers, then trade's general account is accessed next. (<a name="0002-STTL-007" href="#0002-STTL-007">0002-STTL-007</a>)
+- [ ] If margin and general account of trader are insuffcient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
+- [ ] If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-009" href="#0002-STTL-009">0002-STTL-009</a>)
