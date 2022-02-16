@@ -289,7 +289,7 @@ Scenario: case 2 using lognomal risk model
 
     And the markets:
       | id        | quote name | asset | risk model                | margin calculator   | auction duration | fees         | price monitoring  | oracle config          |
-      | ETH/DEC19 | ETH        | USD   | lognormal-risk-model-fish | margin-calculator-1 | 1                | default-none | price-monitoring-1| default-eth-for-future |
+      | ETH/DEC19 | ETH        | USD   | lognormal-risk-model-fish | margin-calculator-1 | 1                | default-none | default-none | default-eth-for-future |
 
     And the following network parameters are set:
       | name                           | value |
@@ -306,7 +306,7 @@ Scenario: case 2 using lognomal risk model
       | party3           | USD   | 30000      |
       | aux1             | USD   | 1000000000 |
       | aux2             | USD   | 1000000000 |
-     And the cumulated balance for all accounts should be worth "4050075000"
+     #And the cumulated balance for all accounts should be worth "4050075000"
 # setup order book
     When the parties place the following orders:
       | party            | market id | side | volume | price | resulting trades | type       | tif     | reference       |
@@ -322,9 +322,6 @@ Scenario: case 2 using lognomal risk model
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/DEC19"
 
    # party1 maintenance margin: position*(mark_price*risk_factor_short+slippage_per_unit) + OrderVolume x Order_price x risk_factor_short  = 100 x 100 x 0.4878731  is about 4879
-
-   # Then debug transfers  
-   # Then debug orders
  
     When the parties place the following orders:
       | party            | market id | side | volume | price | resulting trades | type       | tif     | reference       |
@@ -340,29 +337,77 @@ Scenario: case 2 using lognomal risk model
       | party  | market id | maintenance | search | initial | release  |
       | party1 | ETH/DEC19 | 4879        | 5854   | 7318    | 9758     |
 
+  # party1 place more order volume 300
     When the parties place the following orders:
       | party            | market id | side | volume | price | resulting trades | type       | tif     | reference       |
-      | party1           | ETH/DEC19 | sell | 400    | 120   | 0                | TYPE_LIMIT | TIF_GTC | party1-s-1      |
+      | party1           | ETH/DEC19 | sell | 300    | 120   | 0                | TYPE_LIMIT | TIF_GTC | party1-s-1      |
 
     Then the parties should have the following account balances:
       | party   | asset | market id | margin | general  |
-      | party1  | USD   | ETH/DEC19 | 30000  |  0       |
-
-    #MTM closeout party1
-    When the parties place the following orders:    
-      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
-      | aux1   | ETH/DEC19 | sell  | 1      | 80   | 1                | TYPE_LIMIT | TIF_GTC | ref-4     |
-      #| aux2   | ETH/DEC19 | sell | 1      | 100   | 1                | TYPE_LIMIT | TIF_GTC | ref-4     |
-
-    And the mark price should be "80" for the market "ETH/DEC19"
-
-    When the parties place the following orders:
-      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
-      | aux2   | ETH/DEC19 | buy  | 10     | 120   | 1                | TYPE_LIMIT | TIF_GTC | ref-2     |
+      | party1  | USD   | ETH/DEC19 | 29272  |  728     |
 
     Then the parties should have the following margin levels:
       | party  | market id | maintenance | search | initial | release  |
-      | party1 | ETH/DEC19 | 5855        | 7026   | 8782    | 11710    |
+      | party1 | ETH/DEC19 | 19515       | 23418  | 29272   | 39030    |
+
+    And the order book should have the following volumes for market "ETH/DEC19":
+      | side | price | volume |
+      | sell | 150   | 1000   |
+      | sell | 120   | 400    |
+      | buy  | 80    | 100    |
+      | buy  | 70    | 1000   |
+      
+    And the mark price should be "100" for the market "ETH/DEC19"
+    And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/DEC19"
+
+    #########################################
+    #MTM closeout party1
+    When the parties place the following orders:    
+      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
+      | aux1   | ETH/DEC19 | sell | 1      | 110   | 0                | TYPE_LIMIT | TIF_GTC | ref-4     |
+      | aux2   | ETH/DEC19 | buy  | 1      | 110   | 1                | TYPE_LIMIT | TIF_GTC | ref-5     |
+
+    # margin on order should be mark_price x volume x rf = 110 x 400 x 0.4878731 = 21466
+    # party1 should be close out from MTM with new Mark Price
+    # which is not what we see below; the number below corresponds to mark price of 100
+
+    Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release  |
+      | party1 | ETH/DEC19 | 19515       | 23418  | 29272   | 39030    |
+
+    Then the parties should have the following account balances:
+      | party   | asset | market id | margin | general  |
+      | party1  | USD   | ETH/DEC19 | 29272  |  728     |
+
+    And the mark price should be "110" for the market "ETH/DEC19"
+    And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/DEC19"
+
+    When the parties place the following orders:    
+      | party  | market id | side | volume | price | resulting trades | type       | tif     | reference |
+      | aux1   | ETH/DEC19 | buy  | 1      | 119   | 0                | TYPE_LIMIT | TIF_GTC | ref-4     |
+      | aux2   | ETH/DEC19 | sell | 1      | 119   | 1                | TYPE_LIMIT | TIF_GTC | ref-2     |
+ 
+    And the mark price should be "119" for the market "ETH/DEC19"
+    And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/DEC19"
+
+    And the order book should have the following volumes for market "ETH/DEC19":
+      | side | price | volume |
+      | sell | 150   | 1000   |
+      | sell | 120   | 400    |
+      | buy  | 80    | 100    |
+      | buy  | 70    | 1000   |
+
+    Then the parties should have the following account balances:
+      | party   | asset | market id | margin | general  |
+      | party1  | USD   | ETH/DEC19 | 29272  |  728     |
+
+    Then the parties should have the following margin levels:
+      | party  | market id | maintenance | search | initial | release  |
+      | party1 | ETH/DEC19 | 23223       | 27867  | 34834   | 46446    |
+
+    Then the parties should have the following profit and loss:
+      | party           | volume | unrealised pnl | realised pnl |
+      | party1          | 0      | 0              | 0            |
 
     # # party 1 place an order + we check margins
     # When the parties place the following orders:
