@@ -223,6 +223,4 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 ## Acceptance Criteria
 - Through the API, I can list all active liquidity providers for a market (<a name="0044-LIQM-001" href="#0044-LIQM-001">0044-LIQM-001</a>)
-- If a liquidity
-- If a liquidity provider does not have enough in their general account to top up their margin & bond accounts:
-    - If there is sufficient collateral to top up the margin account, the margin account is topped up and the LP commitment is set to 0 
+- The [bond slashing](./qa-scenarios/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-001" href="#0044-LIQM-002">0044-LIQM-002</a>).
