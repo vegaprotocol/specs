@@ -254,7 +254,7 @@ No parties have margin account balances that are non-zero for the market.
 Market state is `rejected`.
 
 ### Lifecycle happy path (<a name="0043-MKTL-002" href="#0043-MKTL-002">0043-MKTL-002</a>)
-This one is best run with null-blockchain setup so it's possible to fast forward time and use realistic values for vote and auction durations. 
+
 1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`). 
 Market state is `proposed`. 
 The LP bond of the party that proposed the market is transferred from general to bond account. 
