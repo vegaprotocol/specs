@@ -28,3 +28,4 @@ Specs affected by this change (NB: in many cases the implementation may not chan
 # Acceptance Criteria
 - All proposed markets will have a decimal places property available via the API (<a name="0052-FPOS-0001" href="#0052-FPOS-0001">0052-FPOS-0001</a>)
 - An order created on the client with a price of `1` results in an order being created with a price of `1 * 10^[Market.DecimalPlaces]` (<a name="0052-FPOS-0002" href="#0052-FPOS-0002">0052-FPOS-0002</a>)
+- Fees are calculated as per ([0029-FEES-013](./0029-FEES-fees.md#0029-FEES-013))
