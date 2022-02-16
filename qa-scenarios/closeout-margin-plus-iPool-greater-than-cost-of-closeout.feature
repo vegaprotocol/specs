@@ -368,7 +368,6 @@ Scenario: case 2 using lognomal risk model
       | aux2   | ETH/DEC19 | buy  | 1      | 110   | 1                | TYPE_LIMIT | TIF_GTC | ref-5     |
 
     # margin on order should be mark_price x volume x rf = 110 x 400 x 0.4878731 = 21466
-    # party1 should be close out from MTM with new Mark Price
     # which is not what we see below; the number below corresponds to mark price of 100
 
     Then the parties should have the following margin levels:
