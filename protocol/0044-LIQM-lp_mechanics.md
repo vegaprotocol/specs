@@ -223,4 +223,4 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 ## Acceptance Criteria
 - Through the API, I can list all active liquidity providers for a market (<a name="0044-LIQM-001" href="#0044-LIQM-001">0044-LIQM-001</a>)
-- The [bond slashing](../qa-scenarios/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-002" href="#0044-LIQM-002">0044-LIQM-002</a>).
+- The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-002" href="#0044-LIQM-002">0044-LIQM-002</a>).
