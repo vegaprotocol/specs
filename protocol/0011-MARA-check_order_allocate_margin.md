@@ -6,6 +6,11 @@ When an order or other market instruction (amend, cancel, etc.) is submitted we 
 
 Orders should be rejected if we can’t allocate sufficient margin.
 
+## Acceptance criteria
+
+1. [ ] Amend an order such that margin requriement is increased and user has enough to top up their margin account so that their order gets submitted successfully. (<a name="0011-MARA-001" href="#0011-MARA-001">0011-MARA-001</a>)
+1. [ ] Amend an order such that margin requriement is increased and user doesn't have enough to top up their margin account so their order gets rejected. (<a name="0011-MARA-002" href="#0011-MARA-002">0011-MARA-002</a>)
+1. [ ] Cancelling an order releases the margin amount back to user's account (<a name="0011-MARA-003" href="#0011-MARA-003">0011-MARA-003</a>) 
 
 ## Pseudocode
 
