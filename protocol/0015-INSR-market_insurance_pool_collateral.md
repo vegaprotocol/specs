@@ -21,5 +21,5 @@ When a market is finalised / closed remaining funds are distributed to other sam
 # Acceptance Criteria
 - When a market proposal gets accepted and the opening auction commences, there an insurance account that is available for use by that market for the settlement asset of that market and its balance is zero. (<a name="0015-INSR-001" href="#0015-INSR-001">0015-INSR-001</a>)
 - When the market enters transitions from "trading terminated state" to "settled" state (see [market lifecyle](0043-MKTL-market_lifecycle.md)), the insurance pool account has its balance transferred to the on-chain treasury for the asset. (<a name="0015-INSR-002" href="#0015-INSR-002">0015-INSR-002</a>)
-- The [insurance pool feature test](../../vega/integration/features/verified/insurance-pool-balance-test.feature) is passing. (<a name="0015-INSR-003" href="#0015-INSR-003">0015-INSR-003</a>) 
+- The [insurance pool feature test](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/insurance-pool-balance-test.feature) is passing. (<a name="0015-INSR-003" href="#0015-INSR-003">0015-INSR-003</a>) 
 

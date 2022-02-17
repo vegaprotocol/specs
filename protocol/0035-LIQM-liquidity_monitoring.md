@@ -65,4 +65,4 @@ The auction proceeds as usual. Please see the auction spec for details.
 
 ## Acceptance Criteria
 
-The scenarios in the feature test `509-auction-interaction.feature` in [vega/integration/features/auctions/](https://github.com/vegaprotocol/vega/tree/develop/integration/features/auctions) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
+The scenarios in the feature test [509-auction-interaction.feature] (https://github.com/vegaprotocol/vega/tree/develop/integration/features/auctions) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
