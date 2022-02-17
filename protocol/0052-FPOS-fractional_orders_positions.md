@@ -14,13 +14,8 @@ The solution to this is to:
 Specs affected by this change (NB: in many cases the implementation may not change):
 
 - [0001 - Market Framework](./0001-MKTF-market_framework.md)
-- [0003 - Mark to mark settlement](../protocol/0003-MTMK-mark_to_market_settlement.md)
-- [0004 - Amends](./0004-AMND-amends.md)
-- [0006 - Positions](./0006-POSI-positions_core.md)
-- [0007 - Non-core positions API](./0007-POSN-non_core_positions_api.md)
+- [0003 - Mark to mark settlement](./0003-MTMK-mark_to_market_settlement.md)
 - [0019 - Margin Caculator](./0019-MCAL-margin_calculator.md)
-- [0021 - Market Data](./0021-MDAT-market_data_spec.md)
-- [0025 - Order Submission](./0025-OCRE-order_submission.md)
 - [0029 - Fees](./0029-FEES-fees.md)
 - [0038 - Liquidity Provision order type](./0038-OLIQ-liquidity_provision_order_type.md)
 
@@ -29,3 +24,9 @@ Specs affected by this change (NB: in many cases the implementation may not chan
 - All proposed markets will have a decimal places property available via the API (<a name="0052-FPOS-0001" href="#0052-FPOS-0001">0052-FPOS-0001</a>)
 - An order created on the client with a price of `1` results in an order being created with a price of `1 * 10^[Market.DecimalPlaces]` (<a name="0052-FPOS-0002" href="#0052-FPOS-0002">0052-FPOS-0002</a>)
 - Fees are calculated as per ([0029-FEES-013](./0029-FEES-fees.md#0029-FEES-013))
+- LP order volume is implied correctly using fractional volume amounts as per ([0038-OLIQ-006](./0038-OLIQ-liquidity_provision_order_type.md#0038-OLIQ-006))
+- Mark-to-market settlement happens correctly with PDP > 0 ([0003-MTMK-0013](./0003-MTMK-mark_to_market_settlement.md#0003-MTMK-013))
+- Margins are correctly calculated for markets with PDP > 0 ([0019-MCAL-008](./0019-MCAL-margin_calculator.md#0019-MCAL-008)).
+- Market framework reports position decimal places ([0001-MKTF-001](./0001-MKTF-market_framework.md#0001-MTMF-001)).
+
+

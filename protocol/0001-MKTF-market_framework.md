@@ -217,3 +217,8 @@ Market {
     }
 }
 ```
+
+
+# Acceptance criteria
+
+[ ] Market framework can report position decimal places <a name="0001-MTMF-001" href="#0001-MTMF-001">0001-MTMF-001</a>
