@@ -23,9 +23,13 @@ Feature name: mark-to-market-settlement
 - [ ] After completing the mark-to-market settlement process, the market’s settlement account balance is zero (<a name="0003-MTMK-011" href="#0003-MTMK-011">0003-MTMK-011</a>)
 - If the mark price hasn't changed:
   - [ ] A trader with no change in open position size has no transfers in or out of their margin account (<a name="0003-MTMK-012" href="#0003-MTMK-012">0003-MTMK-012</a>)
-  - [ ] A trader with no change in open volume:
-- [ ] Not sure if this is testable now, but previous mark price should be the one a stored with the position not at the market level to ensure we are capturing move since last MTM settlement regardless of ‘out of band’ mark price updates  (<a name="0003-MTMK-013" href="#0003-MTMK-013">0003-MTMK-013</a>)
+  
 
+## Market with position decimal places > 0 scenario
+1. Set up a market with PDP > 0, say PDP = 2
+1. Set up party1 long postion 0.02 and party2 short position 0.02; and the trade which created these positions being at price 100. 
+1. Set up party3 and party4 which trade volume 0.12 at price 120. 
+1. Observe the following mark-to-market cash-flows: party1 receives `0.02 x (120-100) = 0.4`. Party2 pays `0.4`. 
 
 
 # Summary
@@ -43,11 +47,11 @@ The steps followed are:
 1. When the [mark price](./0009-MRKP-mark_price.md) changes, the network calculates settlement cash flows for each party according to the following formula.
 
 ```
-SETTLEMENT_AMT( party ) =  party.PREV_OPEN_VOLUME * (product.value(current_price) - product.value(prev_mark_price)) + SUM(from i=1 to new_trades.length)( new_trade(i).volume(party) * (product.value(current_price) - new_trade(i).price ) )
+SETTLEMENT_AMT( party ) =  PDPscaling x party.PREV_OPEN_VOLUME x (product.value(current_price) - product.value(prev_mark_price)) + SUM(from i=1 to new_trades.length)( PDPscaling x new_trade(i).volume(party) x (product.value(current_price) - new_trade(i).price ) )
 ```
 
 *where*
-
+```PDPscaling := 10^(-PDP)``` with ```PDP``` being the number decimals we support for position / order. So if PDP = 2 then smallest volume is 0.01.
 ```product.value(current_price)``` uses for ```current_price``` the latest calculation of the [mark price](./0009-MRKP-mark_price.md)
 ```party.PREV_OPEN_VOLUME``` refers to the party's open volume at the last MTM calculation (NB: this may be less than 1 is the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md) are greater than 0, i.e. fractional positions are allowed on the market).
 ```new_trades``` refers to any trades that the party has been involved in since the last MTM calculation.

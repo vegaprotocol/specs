@@ -201,7 +201,11 @@ Market {
 }
 ```
 
+
+
 ## Acceptance criteria
 - Details of a market's instrument must be available for each market through the API (<a name="0001-MKTF-001" href="#0001-MKTF-001">0001-MKTF-001</a>)
 - Details of a market's product must be available for each market through the API (<a name="0001-MKTF-002" href="#0001-MKTF-002">0001-MKTF-002</a>)
 - Details of a market's tradable instrument must be available for each market through the API (<a name="0001-MKTF-003" href="#0001-MKTF-003">0001-MKTF-003</a>)
+- Market framework can report position decimal places <a name="0001-MTMF-004" href="#0001-MTMF-004">0001-MTMF-004</a>
+
