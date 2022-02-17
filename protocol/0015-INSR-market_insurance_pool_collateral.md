@@ -17,9 +17,6 @@ Only transfer requests can move collateral to or from the insurance account.
 
 When a market is finalised / closed remaining funds are distributed to other same-currency insurance pools as per white paper section 6.4.  This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
 
-# Pseudo-code / Examples
-
-# Test cases
 
 # Acceptance Criteria
 - When a market proposal gets accepted and the opening auction commences, there an insurance account that is available for use by that market for the settlement asset of that market and its balance is zero. (<a name="0015-INSR-001" href="#0015-INSR-001">0015-INSR-001</a>)
