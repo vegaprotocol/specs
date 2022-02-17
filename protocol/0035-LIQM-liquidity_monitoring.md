@@ -63,8 +63,6 @@ During the liquidity monitoring auction new or existing LPs can commit more stak
 
 The auction proceeds as usual. Please see the auction spec for details.
 
-## Test cases
+## Acceptance Criteria
 
-* Market with no market makers enters liquidity auction immediately.
-* Opening auction or price monitoring auction that would end with an uncrossing trade but no `best_bid` or no `best_offer` will enter liquidity monitoring auction.
-
+The scenarios in the feature test [509-auction-interaction.feature] (https://github.com/vegaprotocol/vega/tree/develop/integration/features/auctions) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)

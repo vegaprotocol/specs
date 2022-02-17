@@ -11,7 +11,8 @@ point we will have a total weight of n with up to t weight being tolerated to be
 
 ## Keys
 
-### Ethereum Key [Staking]
+### Ethereum Key [Staking]
+
 The staking Ethereum Key is the key to which the Vega ERC20 tokens are tied. This key is no different
 to the key held by any other tokenholder or indeed any participant on the Ethereum blockchain. 
 It is only required to move the vega tokens to another Ethereum address (public key) or to associate the tokens 
@@ -25,7 +26,7 @@ then they keep generating staking income. The Vega key can be used on the Vega n
 from the Vega general account to any Ethereum address (specified during submission of the withdrawal transaction). 
 
 ### Ethereum Key [MultiSig]
-The Ethereum key is the key used to communicate with the multisig contract. 
+The Ethereum key is the key used to communicate with the [multisig contract](0030-ETHM-multisig_control_spec.md). 
 This is *the most critical key*, as a compromise of n-t keys allows full access to the ERC20 tokens 
 held by the Vega multisig contract (network treasury, all parties staking rewards, all collateral assets). 
 The loss of t+1 keys stops the ability of the validators (multisig signers) to use the smart contract (add / remove signers, approve withdrawals). 
@@ -53,12 +54,15 @@ Hence, a reasonably frequent key update would constitute good practice.
 
 The local management of the ETH key is done using CLEF. Details of this are specified elsewhere.
 
+There will be a transaction whereby a vega node can let the vega chain know that they wish to use a new Ethereum multisig key. 
+This transaction should make available a [multisig contract](0030-ETHM-multisig_control_spec.md) signature bundle that anyone can submit (but it should be the party changing their key really should) to update the keys held by multisig.
+After this signature bundle has been issued Vega should start using the new ethereum key for issuing all future signature bundles and multisig update bundles. 
+
 ## Future Features
 Better disaster management procedures in case this key gets lost are currently in the works. Especially, we're
 currently looking into integrating threshold signatures, which can allow Validators to be removed, added
 or change their keys without any interaction with the smart contract - the main issue here is the asynchrony
 and assuring we generate a Ethereum native signature.
-
 
 
 ### Vega Key [Identity]
@@ -74,7 +78,7 @@ master key. The Vega identity hot key is needed to retrieve the rewards.
 
 The hot key needs to be signing many transactions with low latency. Hence storing it on a hardware security module and/or on a remote site is problematic; the exact implementation of this is out of scope for this. 
 
-##Future Features
+## Future Features
 We expect that a key change can be done through a transaction on the chain and a form of restarting a single validator once checkpoints
 are fully implemented.
 
@@ -236,3 +240,24 @@ the last ETH block, and the block number used for the different components of th
 must be 'close to each other'; this would also prevent a pre-singing attack. This, however,
 would add $10+ of gas cost for each validator, as now each signature would be different and
 need to be hashed individually).
+
+## Acceptance Criteria 
+
+### Ethereum key - multisig (<a name="0067-KEYS-001" href="#0067-KEYS-001">0067-KEYS-001</a>)
+
+1. A Vega network is running with 3 validators, `v1,v2,v3` with Ethereum keys `k1, k2, k3_old`; each with equal tendermint and multisig weight.
+2. Validator `v3` has ethereum multisig public key `k3_old`. They submit a transaction to replace by ethereum multisig public key `k3_new`.
+3. The network issues a signature bundle to update that can be submitted to the ethereum multisig contract to update the key there. 
+4. This is submitted to ethereum; the multisig contract is updated.
+5. Vega nodes receive the event confirming the key has been updated. 
+6. Party `p` now issues a withdrawal transaction. A withdrawal bundle is created utilizing `k1,k2,k3_new`. 
+7. Party `p` submits the withdrawal bundle to ethereum; multisig contract accepts it and transfers the funds on the ethereum chain. 
+
+
+### Vega hot key (<a name="0067-KEYS-002" href="#0067-KEYS-002">0067-KEYS-002</a>)
+
+1. There is a vega validator `v3` with master key `M` and hot key `h3_old`. See [master and hot vega keys](0063-VALK-validator_vega_master_keys.md).
+1. A Vega network is running with 3 validators, `v1,v2,v3` using Vega hot keys `h1,h2,h3_old`.
+1. Validator `v3` generates a new hot key `h3_new` using the master key `M`.
+1. Validator `v3` submits a transaction to vega chain announcing that they'll be using `h3_new` instead of `h3_old`. 
+1. Validator `v3` stops their node, restarts with the new key and replays the chain or restore from snapshot. 

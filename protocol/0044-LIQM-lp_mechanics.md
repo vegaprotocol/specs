@@ -22,20 +22,9 @@ Any Vega participant can apply to become a liquidity provider (LP) on a market b
 1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ ("buy shape" and "sell shape") to meet the liquidity provision obligation, see [MM orders spec](./0038-OLIQ-liquidity_provision_order_type.md).
 
 Accepted if all of the following are true:
-- [ ] The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount, as specified in the transaction.
-- [ ] The participant has sufficient collateral in their general account to also meet the margins required to support the orders generated from their commitment.
-- [ ] The market is in a state that accepts new liquidity provision [market lifecycle spec](./0043-MKTL-market_lifecycle.md).
-- [ ] The nominated fee amount is greater than or equal to zero and less than the maximum level set by a network parameter (`maximum-liquidity-fee-factor-level`)
-- [ ] There is a set of valid buy/sell liquidity provision orders aka "buy shape" and "sell shape" (see [MM orders spec](./0038-OLIQ-liquidity_provision_order_type.md)).
-
-Invalid if any of the following are true:
-- [ ] Commitment amount is less than zero (zero is considered to be nominating to cease liquidity provision)
-- [ ] Nominated liquidity fee factor is less than zero
-- [ ] Acceptance criteria from [MM orders spec](./0038-OLIQ-liquidity_provision_order_type.md) is not met.
-
-Engineering notes:
-- check transaction, allocation margin could replace "check order, allocate margin"
-- some of these checks can happen pre consensus
+- The order is valid - see [0038-OLIQ-Liquidity provision order type spec](./0038-OLIQ-liquidity_provision_order_type.md) for full details
+- The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount as well as the margin requirements 
+- The market is in a state that accepts new liquidity provision [market lifecycle spec](./0043-MKTL-market_lifecycle.md).
 
 General notes:
 - If market is in auction mode it won't be possible to check the margin requirements for orders generated from LP commitment. If on transition from auction the funds in margin and general accounts are insufficient to cover the margin requirements associated with those orders funds in bond account should be used to cover the shortfall (with no penalty applied as outlined in the [Penalties](#penalties) section). If even the entire bond account balance is insufficient to cover those margin requirement the liquidity commitment transaction should get cancelled.
@@ -58,7 +47,7 @@ When a commitment is made the liquidity commitment amount is assumed to be speci
 
 If the participant has sufficient collateral to cover their commitment and margins for the orders generated from their proposed commitment, the commitment amount (stake) is transferred from the participant's general account to their (maybe newly created) [liquidity provision bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts) (new account type, 1 per liquidity provider per market and asset where they are commitment liquidity, created as needed). For clarity, liquidity providers will have a separate [margin account](./0013-ACCT-accounts.md#trader-margin-accounts) and [bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts).
 
-- liquidity provider bond account:
+- Liquidity provider bond account:
     - [ ] Each active market has one bond account per liquidity provider, per settlement asset for that market.
     - [ ] When a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
     - [ ] A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment). 
@@ -232,13 +221,6 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - It should be possible to query all details of liquidity providers via an API
 
 
-## Further Acceptance Criteria
-
-- Becoming a liquidity provider:
-    - [ ] A network transaction exists that acts as an application for a participant to become a liquidity provider for a specified market.
-    - [ ] The application is accepted by the network if both of following are true:
-       - [ ] The participant has sufficient collateral in their general account to meet the size of staked bond, specified in their transaction.
-       - [ ] The market is active
-    - [ ] Any Vega participant can apply to provide liquidity on any market.
-    	- When a user has submitted a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md), a Bond account is created for that user and for that market
-	- Collateral required to maintain the Liquidity Provision Order will be held in the Bond account.
+## Acceptance Criteria
+- Through the API, I can list all active liquidity providers for a market (<a name="0044-LIQM-001" href="#0044-LIQM-001">0044-LIQM-001</a>)
+- The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-002" href="#0044-LIQM-002">0044-LIQM-002</a>).
