@@ -25,19 +25,27 @@ Each entry must specify:
 
 1. **Liquidity proportion:** the relative proportion of the commitment to be allocated at a price level. Note, the network will normalise the liquidity proportions of the refined order set (see below). This must be a strictly positive number.
 
-2. A **price peg:** , as per normal [pegged orders](../protocol/0037-OPEG-pegged_orders.md), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. 
+2. A **price peg:** , as per normal [pegged orders](../protocol/0037-OPEG-pegged_orders.md), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. The amount is always positive and is subtracted for buy orders and added for sell orders to the reference price.
 
 ```
 # Example 1:
 Buy-shape: {
-  buy-entry-1: [liquidity-proportion-1, [price-peg-reference-1, number-of-units-from-reference-1]],
-  buy-entry-2: [liquidity-proportion-2, [price-peg-reference-2, number-of-units-from-reference-2]],
+  buy-entry-1: [buy-liquidity-proportion-1, [buy-price-peg-reference-1, buy-number-of-units-from-reference-1]],
+  buy-entry-2: [buy-liquidity-proportion-2, [buy-price-peg-reference-2, buy-number-of-units-from-reference-2]],
+}
+Sell-shape: {
+  sell-entry-1: [sell-liquidity-proportion-1, [sell-price-peg-reference-1, sell-number-of-units-from-reference-1]],
+  sell-entry-2: [sell-liquidity-proportion-2, [sell-price-peg-reference-2, sell-number-of-units-from-reference-2]],
 }
 
 # Example 1 with values
 Buy-shape: {
-  buy-entry-1: [2, [best-bid, -10]],
-  buy-entry-2: [13, [best-bid, -11]],
+  buy-entry-1: [2, [best-bid, 10]],
+  buy-entry-2: [13, [best-bid, 11]],
+}
+Sell-shape: {
+  sell-entry-1: [5, [best-ask, 8]],
+  sell-entry-2: [5, [best-ask, 9]],
 }
 
 ```
@@ -69,10 +77,12 @@ Calculate the `liquidity-normalised-proportion` for all entries, where:
 `liquidity-normalised-proportion = liquidity-proportion-for-entry / sum-all-buy/sell-entries(liquidity-proportion-for-order)`
 
 ```
-Example 1 (from above) where refined-buy-order-list = [buy-entry-1, buy-entry-2]:
+Example 1 (from above) where refined-buy-order-list = [buy-entry-1, buy-entry-2, sell-entry-1, sell-entry-2]:
 
-liquidity-normalised-proportion-order-1 = 2 / (2 + 13) = 0.133333
-liquidity-normalised-proportion-order-2 = 13 / (2 + 13) = 0.866666
+liquidity-normalised-proportion-buy-order-1 = 2 / (2 + 13 + 5 + 5) = 0.08
+liquidity-normalised-proportion-buy-order-2 = 13 / (2 + 13 + 5 + 5) = 0.52
+liquidity-normalised-proportion-sell-order-1 = 5 / (2 + 13 + 5 + 5) = 0.2
+liquidity-normalised-proportion-sell-order-2 = 5 / (2 + 13 + 5 + 5) = 0.2
 
 ```
 The sum of all normalised proportions must = 1 for all refined buy / sell order list.
@@ -102,7 +112,7 @@ Example:
 best-static-bid-on-order-book = 103
 
 shape-entry = {
-  peg: {reference: 'best-bid', units-from-ref: -2}, 
+  peg: {reference: 'best-bid', units-from-ref: 2}, 
   liquidity-normalised-proportion-order: 0.32
 }
 
