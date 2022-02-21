@@ -82,7 +82,8 @@ Anyone can create a proposal if the weighting of their vote on the proposal woul
 
 In a future iteration of the governance system we may restrict proposal submission by type of proposal based on a minimum weighting. e.g: only user with a certain number or percentage of the governance asset are allowed to open a "network parameter change" proposal.
 
-Market change proposals additionally require certain minimum [equity like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minEquityLikeShare`.
+Market change proposals additionally require certain minimum [equity like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minEquityLikeShare`. 
+So, for example, if `governance.proposal.market.minEquityLikeShare = 0.05` and a party has `equity-like-share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like-share` of `0.03` then they cannot submit a market change proposal.
 
 
 ## Configuration of a proposal
