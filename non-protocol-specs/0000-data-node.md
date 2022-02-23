@@ -103,14 +103,15 @@ All of these should be available at various time resolutions: on every change, o
 - If in auction, indicative uncrossing price and volume 
 - Open interest 
 
-### Liquidity provision data
+### Liquidity provision data
+
 - LP order submissions
 - Equity like share changes
 - Market value proxy 
 - Target stake
 - Supplied stake
 
-### Risk data
+### Risk data
 
 - Margin level events
 - Model parameter changes
@@ -125,11 +126,18 @@ All of these should be available at various time resolutions: on every change, o
 - Loss socialisation event
 - Position mark-to-market events
 
-
-### Candle data
+### Candle data
 
 Whatever the candle data are, store them at the resolution of every blockchain time change and build up lower resolution series from that as you see fit. 
 
-### Orders
+### Orders
 
 Store the orders at the configured resolution. 
+
+### APIs for historical data in a shape that is suitable for clients 
+
+It must be possible to augment APIs so data returned is in a shape and size that is approapriate for clients. The exact changes to APIs to be worked out as part of an on going process, and it wont be specified here.
+
+### APIs for server side calculations 
+
+It must be possible to add to the data node APIs that return the result of calculations on the data node (in addition ot historical data). These calculations may use historical or real time core data but are not avalilble in the core API as they would hinder performance. e.g. Estimates / Margin / risk caclulations
