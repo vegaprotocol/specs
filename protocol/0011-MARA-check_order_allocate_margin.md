@@ -8,9 +8,9 @@ Orders should be rejected if we can’t allocate sufficient margin.
 
 ## Acceptance criteria
 
-1. [ ] Amend an order such that margin requriement is increased and user has enough to top up their margin account so that their order gets submitted successfully. (<a name="0011-MARA-001" href="#0011-MARA-001">0011-MARA-001</a>)
-1. [ ] Amend an order such that margin requriement is increased and user doesn't have enough to top up their margin account so their order gets rejected. (<a name="0011-MARA-002" href="#0011-MARA-002">0011-MARA-002</a>)
-1. [ ] Cancelling an order releases the margin amount back to user's account (<a name="0011-MARA-003" href="#0011-MARA-003">0011-MARA-003</a>) 
+1. [ ] If an order is amended such that margin requirement is increased and user has sufficient balance in the general account to top up their margin account then the amendment is executed successfully. (<a name="0011-MARA-001" href="#0011-MARA-001">0011-MARA-001</a>)
+1. [ ] If an order is amended such that margin requirement is increased and user doesn't have sufficient balance in the general account to top up their margin account then their amend is not executed but the unamended order stays on the book. (<a name="0011-MARA-002" href="#0011-MARA-002">0011-MARA-002</a>)
+1. [ ] Cancelling an order releases the margin amount back to user's general account, provided the user has no other orders or positions (<a name="0011-MARA-003" href="#0011-MARA-003">0011-MARA-003</a>) 
 
 ## Pseudocode
 
