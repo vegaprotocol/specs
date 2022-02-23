@@ -18,8 +18,10 @@ Specification PR: https://github.com/vegaprotocol/specs-internal/pull/262
 - [ ] Pegged orders are not repriced and do not lose time priority when their specific reference price is unchanged, even if other peg reference prices move. (<a name="0037-OPEG-010" href="#0037-OPEG-010">0037-OPEG-010</a>)
 - [ ] If the midprice is calculated to be a fraction (e.g. 102.5), it should be rounded up for a buy and rounded down for a sell. (<a name="0037-OPEG-011" href="#0037-OPEG-011">0037-OPEG-011</a>)
 - [ ] The order version is not updated during a repricing (<a name="0037-OPEG-012" href="#0037-OPEG-012">0037-OPEG-012</a>)
-- [ ] Pegged orders are excluded from the calculation of the BEST_BID, BEST_ASK and MID prices (<a name="0037-OPEG-013" href="#0037-OPEG-013">0037-OPEG-013</a>)
+- [ ] Pegged orders are included in the calculation of the BEST_BID, BEST_ASK and MID prices but excluded from BEST_STATIC_BID, BEST_STATIC_ASK and STATIC_MID (<a name="0037-OPEG-013" href="#0037-OPEG-013">0037-OPEG-013</a>)
 - [ ] A parked pegged order can be amended. (<a name="0037-OPEG-014" href="#0037-OPEG-014">0037-OPEG-014</a>)
+- [ ] A pegged order with an offset which would cause it to be priced <= 0 is parked. (<a name="0037-OPEG-015" href="#0037-OPEG-015">0037-OPEG-015</a>)
+- [ ] An active pegged order can be amended. (<a name="0037-OPEG-016" href="#0037-OPEG-016">0037-OPEG-016</a>)
 
 ## Summary
 
