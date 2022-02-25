@@ -141,14 +141,3 @@ This example connects the network to Ropsten:
 *  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset (<a name="0031-ETHM-023" href="#0031-ETHM-023">0031-ETHM-023</a>)
 *  an invalid multisig bundle is rejected by the setDepositMinimum function (<a name="0031-ETHM-024" href="#0031-ETHM-024">0031-ETHM-024</a>)
 
-## Block confirmations
-* Block confirmations must be configurable per-asset, and changeable via governance (<a name="0031-ETHM-025" href="#0031-ETHM-025">0031-ETHM-025</a>)
-* A deposit from chain X does not as deposited until Y blocks have passed since the deposit event: (<a name="0031-ETHM-026" href="#0031-ETHM-026">0031-ETHM-026</a>)
-
-| Bridged currency | Confirmations | Estimated time |
-|------------------|:-------------:|:--------------:|
-| Bitcoin          |       6       |   60 mintues   |
-| Ether            |       30      |    6 minutes   |
-| --ERC20          |       30      |    6 minutes   |
-
-
