@@ -1,4 +1,4 @@
-Feature: Test liquidity provider reward distribution; Check what happens when distribution period is large(both in genesis and mid-market)
+Feature: Test liquidity provider reward distribution; Check what happens when distribution period is large(both in genesis)
 
 # Spec file: ../spec/0042-setting-fees-and-rewarding-lps.md
 # Spec file: ../protocol/0042-LIQF-setting_fees_and_rewarding_lps.md
@@ -55,8 +55,6 @@ Feature: Test liquidity provider reward distribution; Check what happens when di
     And the following trades should be executed:
       | buyer   | price | size | seller |
       | party1  | 1000  | 10   | party2 |
-
-    Then debug transfers  
 
     And the market data for the market "ETH/MAR22" should be:
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest | 
@@ -120,6 +118,11 @@ Feature: Test liquidity provider reward distribution; Check what happens when di
       | sell | 1102     | 0     |
       | sell | 1100     | 1     |
      
+      Then the parties should have the following account balances:
+      | party | asset | market id | margin | general   |
+      | lp1   | USD   | ETH/MAR22 | 11640  | 999977631 |
+   
+
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
     And the accumulated liquidity fees should be "20" for the market "ETH/MAR22"
 
@@ -143,12 +146,24 @@ Feature: Test liquidity provider reward distribution; Check what happens when di
       | buyer   | price | size | seller |
       | party1  | 951   | 15   | lp1    |
 
+   Then the parties should have the following account balances:
+      | party | asset | market id | margin | general   |
+      | lp1   | USD   | ETH/MAR22 | 14634  | 999975378 |
+
     # lp fee got cumulated since the distribution period is large
     And the accumulated liquidity fees should be "35" for the market "ETH/MAR22"
 
-    # lp fee got cumulated since the distribution period is large
-    Then time is updated to "2020-11-30T00:30:05Z"
+    # lp fee got paid to lp1 when time is over the "fee.distributionTimeStep" 
+    Then time is updated to "2024-12-30T00:30:05Z"
 
-    And the accumulated liquidity fees should be "35" for the market "ETH/MAR22"
+    And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
+
+    Then the following transfers should happen:
+      | from   | to  | from account                | to account           | market id | amount | asset |
+      | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 35     | USD   |
+
+     Then the parties should have the following account balances:
+      | party | asset | market id | margin | general   |
+      | lp1   | USD   | ETH/MAR22 | 14634  | 999975413 |
 
   
