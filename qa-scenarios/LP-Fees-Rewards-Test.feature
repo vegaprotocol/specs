@@ -319,21 +319,16 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
     Then the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
       | party1 | ETH/MAR22 | sell | 20     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party1-sell |
-      | party2 | ETH/MAR22 | buy  | 20     | 1000  | 2                | TYPE_LIMIT | TIF_GTC | party2-buy  |
+      | party2 | ETH/MAR22 | buy  | 20     | 1000  | 3                | TYPE_LIMIT | TIF_GTC | party2-buy  |
 
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
-
-    And the following trades should be executed:
-      | buyer   | price | size | seller  |
-      | party2 | 951   | 12   | lp1     |
-      | party2 | 1000  | 8    | party1 |
 
     And the accumulated liquidity fees should be "20" for the market "ETH/MAR22"
 
     # opening auction + time window
     Then time is updated to "2019-11-30T00:10:05Z"
 
-    # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+    # these are different from the tests, but again, we end up with a 0.8 vs 0.2 fee share here.
     Then the following transfers should happen:
       | from   | to  | from account                | to account           | market id | amount | asset |
       | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
@@ -357,7 +352,7 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
     # opening auction + time window
     Then time is updated to "2019-11-30T00:20:06Z"
 
-    # these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+    # these are different from the tests, but again, we end up with a 0.8 vs 0.2 fee share here.
     Then the following transfers should happen:
       | from   | to  | from account                | to account           | market id | amount | asset |
       | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 12     | USD   |
@@ -428,7 +423,17 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
 
     And the accumulated liquidity fees should be "20" for the market "ETH/MAR22"
 
-  Scenario: 2 LPs joining at start, unequal commitments, Check what happens when distribution period gets set to a larger value (0042-LP-Fees-005)
+    # check lp fee distribution
+
+    Then time is updated to "2019-11-30T00:10:05Z"
+
+    Then the following transfers should happen:
+      | from   | to  | from account                | to account           | market id | amount | asset |
+      | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 19     | USD   |
+      | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 1      | USD   |
+
+
+  Scenario: 2 LPs joining at start, unequal commitments, Check what happens on lp fee distribution when time is moving (0042-LP-Fees-005)
 
     Given the parties deposit on asset's general account the following amount:
       | party  | asset | amount     |
@@ -481,14 +486,9 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
     Then the parties place the following orders:
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference    |
       | party1 | ETH/MAR22 | sell | 20     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party1-sell |
-      | party2 | ETH/MAR22 | buy  | 20     | 1000  | 2                | TYPE_LIMIT | TIF_GTC | party2-buy  |
+      | party2 | ETH/MAR22 | buy  | 20     | 1000  | 3                | TYPE_LIMIT | TIF_GTC | party2-buy  |
 
     And the trading mode should be "TRADING_MODE_CONTINUOUS" for the market "ETH/MAR22"
-
-    And the following trades should be executed:
-      | buyer   | price | size | seller  |
-      | party2  | 951   | 12   | lp1     |
-      | party2  | 1000  | 8    | party1 |
 
     And the accumulated liquidity fees should be "20" for the market "ETH/MAR22" 
 
@@ -510,7 +510,7 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
     # lp fee is cumulated since its not time to distribute lp fee yet (from 10:05 to 15:06 is not 10 mins yet)
     Then time is updated to "2019-11-30T00:15:06Z"
 
-    #these are different from the tests, but again, we end up with a 2/3 vs 1/3 fee share here.
+    #these are different from the tests, but again, we end up with a 0.8 vs 0.2 fee share here.
     Then the following transfers should happen:
       | from   | to  | from account                | to account           | market id | amount | asset |
       | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 16     | USD   |
@@ -538,6 +538,12 @@ Feature: Test liquidity provider reward distribution; Should also cover liquidit
 
      #lp fee is distributed after 40:05
       Then time is updated to "2019-12-01T00:40:08Z"
+
+    #check lp fee distribution
+     Then the following transfers should happen:
+      | from   | to  | from account                | to account           | market id | amount | asset |
+      | market | lp1 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 12     | USD   |
+      | market | lp2 | ACCOUNT_TYPE_FEES_LIQUIDITY | ACCOUNT_TYPE_GENERAL | ETH/MAR22 | 3      | USD   |
 
       And the accumulated liquidity fees should be "0" for the market "ETH/MAR22"
 
