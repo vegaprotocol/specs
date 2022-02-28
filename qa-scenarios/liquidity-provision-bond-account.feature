@@ -152,6 +152,10 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
       #initial margin =412601*1.2=495121
       #shortfall = 495121-450000=45121
 
+      # or with additional order, and party0 repeg: vol 15 on price 1000, vol 86 on price 1004
+      #maintenance_margin_short = 101*1000*3.5569036=359247
+      #then margin for party0 should stay the same
+
   # Then debug transfers  
   # Then debug orders
 
