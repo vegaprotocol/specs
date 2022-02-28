@@ -269,7 +269,7 @@ Feature: Test interactions between different auction types
 
   Scenario: Once market is in continuous trading mode: enter price monitoring auction -> extend with liquidity monitoring auction -> leave auction mode
 
-  Given the network parameter "market.liquidity.targetstake.triggering.ratio" is "0.8"
+   Given the network parameter "market.liquidity.targetstake.triggering.ratio" is "0.8"
 
     Then traders place following liquidity provisions:
       | trader  | market id | commitment amount | fee bid | buy shape object | sell shape object |
