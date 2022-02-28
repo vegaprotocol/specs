@@ -5,7 +5,7 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
       | name                                          | value |
       | market.stake.target.timeWindow                | 24h   |
       | market.stake.target.scalingFactor             | 1     |
-      | market.liquidity.bondPenaltyParameter         | 0.2   |
+      | market.liquidity.bondPenaltyParameter         | 0   |
       | market.liquidity.targetstake.triggering.ratio | 0.1   |
     And the average block duration is "1"
     And the log normal risk model named "log-normal-risk-model-1":
@@ -150,6 +150,7 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
       #with additional order, party0 margin level:
       #maintenance_margin_short = (101+15)*1000*3.5569036=412601
       #initial margin =412601*1.2=495121
+      #shortfall = 495121-450000=45121
 
   # Then debug transfers  
   # Then debug orders
@@ -158,7 +159,7 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
       | 1000       | TRADING_MODE_CONTINUOUS | 100       | 996      | 1004      | 142276       | 50000          | 40            |
 
-  And the insurance pool balance should be "9024" for the market "ETH/MAR22"
+  And the insurance pool balance should be "0" for the market "ETH/MAR22"
     #check the volume on the order book
     Then the order book should have the following volumes for market "ETH/MAR22":
       | side | price    | volume |
@@ -174,7 +175,7 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
   #check the requried balances 
    And the parties should have the following account balances:
       | party  | asset | market id | margin | general  | bond |
-      | party0 | USD   | ETH/MAR22 | 490976 | 0        | 0    |
+      | party0 | USD   | ETH/MAR22 | 495121 | 0        | 4879 |
       | party1 | USD   | ETH/MAR22 | 12190  | 99987810 |  0   |
       | party2 | USD   | ETH/MAR22 | 264754 | 99735066 |  0   |
       | party3 | USD   | ETH/MAR22 | 28826  | 99971294 |  0   |
