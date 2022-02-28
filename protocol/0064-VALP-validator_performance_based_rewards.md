@@ -31,9 +31,9 @@ Both Tendermint validators and candidate validators should be signing and sendin
 
 The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
 
-### Acceptance criteria 
+## Acceptance criteria
 
-# Scenario 1: (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>)
+### Scenario 1: (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>)
 1. Configure and launch a network with 5 validators
 1. Give each validator self-stake of 10 000 VEGA. Set epoch length to 10 minutes.
 1. Deposit a 1000 VEGA into the validator reward pool.
@@ -45,11 +45,42 @@ The performance score should be available on all the same API enpoints as the `v
 
 
 
+### Scenario 2: (<a name="0064-VALP-002" href="#0064-VALP-002">0064-VALP-002</a>)
+1. Configure and launch a network with 5 validators. Set `network.validators.tendermint.number = 5`. Set `network.ersatzvalidators.reward.factor = 0.5`. 
+1. Give each validator self-stake of `10000` VEGA. Set epoch length to 50 minutes (assuming 1 second block this gives ~ 3000 blocks per second). 
+1. Set `reward.staking.delegation.minimumValidatorStake = 10000`.
+1. Launch a non-validator node with self stake of `10000` which submits a transaction to be eligible to become a validator. 
+1. Deposit a 1100 VEGA into the validator reward pool. 
+1. Epoch 0 ends. After the epoch end: Observe that the 1100 VEGA are split accordingly to the `performance_score` reported. 
+a) The non-validator should get roughly 100 VEGA (say 90-110). 
+b) Each validator should get roughly 200 VEGA each (say 180-220).
+1. Now bring the non-validator node down.
+1. Deposit 1000 VEGA into the validator reward pool.
+1. Epoch 1 ends. After the epoch end: Observe that the 1000 VEGA are split accordingly to the `performance_score` reported. 
+a) The non-validator node should have performance score of `0`. The non-validator node should be removed from the list of candidate tendremint validators.
+b) The non-validator should get roughly 0 VEGA.
+c) Each validator should get roughly 200 VEGA each (say 180-220).
+1. Near start of Epoch 2 bring the non-validator node back online (let it replay the chain or restor from snapshot).
+1. The non-validator node again submits a transaction to become a validator. 
+1. Epoch 2 ends. There are no rewards to distribute. 
+1. Deposit 1100 VEGA into the validator reward pool. 
+1. Epoch 3 ends. After the epoch end: Observe that the 1100 VEGA are split accordingly to the `performance_score` reported. 
+a) The non-validator should get roughly 100 VEGA (say 90-110). 
+b) Each validator should get roughly 200 VEGA each (say 180-220).
 
+|
 
+|
 
+|
 
+|
 
+|
+
+|
+
+|
 
 
 
@@ -115,7 +146,7 @@ Should we instead have additional rewards for forwarding events from Ethereum? F
 If we had another reward pool we could share it according to `f/n`. 
 
 
-# PM5: Validator only acts as a Tenderint leader.
+# PM5: Validator only acts as a Tendermint leader.
 Finding this requires a statistic we don't have at this point (as we would like to also include messages that were sent but don't contribute to consensus anymore to avoid discriminating against geographically far away servers. Once we figured out how to do
 this, we can build a formula for the reward. 
 

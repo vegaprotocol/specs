@@ -27,7 +27,7 @@ Feature name: accounts
   - [ ] The balance cannot be traded, or used as margin, or transferred, or withdrawn (<a name="0013-ACCT-015" href="#0013-ACCT-015">0013-ACCT-015</a>)
   - [ ] Delegated stake remains in the trader's staking account (<a name="0013-ACCT-016" href="#0013-ACCT-016">0013-ACCT-016</a>)
 
-One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol/0006-erc20-governance-token-staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
+One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
 ## Liquidity Provider bond accounts
 - [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIQM-lp_mechanics.md). (<a name="0013-ACCT-017" href="#0013-ACCT-017">0013-ACCT-017</a>)
@@ -93,19 +93,19 @@ When a trader no longer has collateral requirements for a  market (because they 
 
 If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (which for margin accounts will typically be the insurance pool of the market).
 
+## Bond accounts
+Bond accounts are opened when a party opens a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md). The bond is held by the network to ensure that the Liquidity PRovider maintains enough collateral to cover their commitment. [0044-LIQM - LP Mechanics](./0044-LIQM-lp_mechanics.md) contains more detail on bond management. 
+
 ## Insurance pools
 
 Every market will have at least one insurance pool account that holds collateral that can be used to cover losses in case of unreasonable market events.
 
 **Creation:**
 
-When a market launches, an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). 
+When a [market launches](./0043-MKTL_market_livecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). 
 
 **Deletion:**
 
 When a market is finalised / closed remaining funds are distributed to the on chain treasury.  This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
 
-# Pseudo-code / Examples
-
-# Test cases
 

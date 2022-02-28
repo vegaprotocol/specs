@@ -31,6 +31,6 @@ The act of removing your stake of Vega tokens from a given node at the end of an
 ## Epoch
 A window of time, In which tokens that are staked on a are due a reward. If tokens are dissociated before an epoch they loose any reward that is due.
 
-## Self Staking 
+## Self Staking
 That act of putting Vega tokens on a Validator node that you are running, as apposed to having tokens staked on a node via [Nomination](#Nominate).
  

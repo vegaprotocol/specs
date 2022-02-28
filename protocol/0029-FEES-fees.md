@@ -77,7 +77,7 @@ During an opening auction of a market, no fees are collected.
 
 Order that entered the book in the current batch are considered aggressive orders. This means that in some cases both sides of a trade will be aggressors in which case the fee calculation for normal auctions applies. Otherwise, the fee calculation for continuous trading applies.
 
-### Position Resolution 
+### Position Resolution
 
 The trades that were netted off against each other during position resolution incur no fees. 
 During position resolution all of the parties being liquidated share the total fee for the network order, pro-rated by the size of position. 
@@ -102,3 +102,4 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 - [ ] A "buyer_fee" and "seller_fee" are exposed in APIs for every trade, split into the three components (after the trade definitely happened) (<a name="0029-FEES-010" href="#0029-FEES-010">0029-FEES-010</a>)
 - [ ] Users should be able to understand the breakdown of the fee to the three components (by querying for fee payment transfers by trade ID, this requires enough metadata in the transfer API to see the transfer type and the associated trade.) (<a name="0029-FEES-011" href="#0029-FEES-011">0029-FEES-011</a>)
 - [ ] The three component fee rates (fee_factor[infrastructure, fee_factor[maker], fee_factor[liquidity] are available via an API such as the market data API or market framework. (<a name="0029-FEES-012" href="#0029-FEES-012">0029-FEES-012</a>)
+- [ ] A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to 2. A market order of size 1.23 is placed which is filled at VWAP of 100. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `1.23 x 100 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-013" href="#0029-FEES-013">0029-FEES-013</a>)   

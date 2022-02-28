@@ -240,3 +240,47 @@ Once the required data to calculate the settlement cashflows is available for an
   - All insurance pool funds are redistributed or moved to a network wide insurance fund account
   - All fees are distributed (after a delay/at the next relevant epoch if needed - this means the market may continue to need to be "tracked" by the core until this step is complete)
 - Market is over and can be removed from core data, nothing happens after the final settlement above is complete.
+
+
+## Acceptance Criteria
+
+### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)
+1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`). 
+Market state is `proposed`. 
+1. Parties vote against the market proposal. 
+The LP bond of the party that proposed the market is transferred to the general account. 
+It is not possible to submit orders to the market. 
+No parties have margin account balances that are non-zero for the market. 
+Market state is `rejected`.
+
+### Lifecycle happy path (<a name="0043-MKTL-002" href="#0043-MKTL-002">0043-MKTL-002</a>)
+
+1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`). 
+Market state is `proposed`. 
+The LP bond of the party that proposed the market is transferred from general to bond account. 
+1. Market `m1` is accepted and enters opening auction. 
+Market state is `pending`. 
+1. Parties place orders and at least one trade happens in continuous trading mode. 
+Market state is `active`.
+1. Parties place orders so that a [price monitoring auction is triggered](0032-PRIM-price_monitoring.md). 
+Market state is `suspended`. 
+1. Price monitoring auction ends and the market is in continous trading again. 
+The market state is `active`. 
+1. Parties cancel orders so that there is no "best static bid" on the order book. 
+The market enters [liquidity monitoring auction](0035-LIQM-liquidity_monitoring.md). 
+The market state is `suspended`. 
+1. A party place bid; this becomes a best static bid. 
+After the specified time the liquidity auction ends. 
+The market state is `active`. 
+1. Make sure that trades happen so that at least two parties have open positions. 
+The mark price is `p`. 
+1. The time specified at market proposal by the interal time oracle is reached. 
+Any orders that parties submit get rejected. 
+The parties with open position in the immediately preceding step still have open positions. 
+Parties with open positions still have non-zero margin account balances. 
+The market state is `trading terminated`.
+1. The settlement price oracle transaction is sent and it is  *not* equal to `p`. 
+Parties that had open positions see settlement cash-flows happen. 
+Margin account balances are transferred to the general account. 
+Any insurance pool balance is transferred to the network treasury account for the asset. 
+The market state is `settled`. 

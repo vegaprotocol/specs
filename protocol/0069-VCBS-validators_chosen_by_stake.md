@@ -29,7 +29,7 @@ If a node that submitted the transaction to join and satisfies all other conditi
 
 As both these checks are done between epochs, it is possible for a validator to be demoted first from Tendermint validator to ersatz validator, and then from ersatz validator to nothing.
 
-## Becoming validator transaction 
+## Becoming validator transaction
 All keys mentioned here are understood to match the node configuration.
 
 This will include (all as strings):
@@ -71,11 +71,10 @@ Basic vega chain liveness criteria is covered in their [performance score](./006
 
 ## Verifying Ethereum (and later other chain) integration
 In order to be considered for promotion from ersatz validator to Tendermint validator, an ersatz validator must prove itself to be reliable. This is measured by ensuring their
-reliability in forwarding [Ethereum events](./0036-BRIE-event_queue.md). A new network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to 
-set the acceptable minimum count of times that an ersatz validator has either:
+reliability in forwarding [Ethereum events](./0036-BRIE-event_queue.md). 
+A new network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to 
+set the acceptable minimum count of times that an ersatz validator was the first to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times.
 
-1) They will be the first node to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times, or
-1) They are the first one to vote for any ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times. 
 
 ## Multisig updates (and multisig weight updates if those are used)
 
@@ -124,7 +123,7 @@ At this point, Ersatz validators are not part of the Multisig.
 
 ## Restarts from LNL checkpoint:
 
-See [limited network life spec](../non-protocol-specs/0005-limited-network-life.md).
+See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md).
 1. At each checkpoint we include node IDs of validators and their scores (meaning all the ones participating in consensus and those who submitted a transaction to become a validator and thus are eligible to be a validator or ersatz validator).
 1. When initiating the restart all the nodes participating have the same Tendermint weight in genesis (or whatever they set / agree). This is used until the LNL file has finished processing. 
 1. When loading LNL file we have to run the same algorithm that selects the "correct" validators; after this is done Tendermint weights are updated.
@@ -149,7 +148,7 @@ See [limited network life spec](../non-protocol-specs/0005-limited-network-life.
 3. If they meet the Ethereum verification criteria and have enough stake they will become part of the validator set at the start of next epoch. See about [verifying ethereum integration](#verifying-ethereum-and-later-other-chain-integration).
 4. Hence after the end of the current epoch the node that got "pushed out" will no longer be a validator node for Tendermint. 
 
-## Multisig update 
+## Multisig update
 1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-VCBS-002" href="#0069-VCBS-002">0069-VCBS-002</a>)
 2. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-VCBS-003" href="#0069-VCBS-003">0069-VCBS-003</a>)
 3. It is possible to submit a transaction to update the weights. (<a name="0069-VCBS-004" href="#0069-VCBS-004">0069-VCBS-004</a>)
