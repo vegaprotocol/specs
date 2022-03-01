@@ -376,10 +376,10 @@ APIs should also exist for clients to:
 - [ ] New market proposals cannot be created before [`governance.proposal.market.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
 
 ### Market change proposals
-- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
 - [ ] Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)
-- [ ] Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
-- [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
+- [ ] Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
+- [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
 - [ ] Verify that an enacted market change proposal that changes trading terminated oracle and price settlement oracle can be settled using transactions from the new oracle keys. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
 - [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
 - [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
