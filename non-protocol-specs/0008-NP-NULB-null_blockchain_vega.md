@@ -39,3 +39,6 @@ An extra API is added to allow the user to control the time and block start/end 
 - It is possible to take a functioning sample API script, change the config so it points at a null blockchain vega node, add some time passage commands and run it.
 
 - There is golang example which creates three parties, gives them assets, one party proposes a market and acts as LP, the remaining two parties trade, placing one trade per day for "365 days".  The LP party submits a trading terminated transaction after "365 days" and a subsequent settlement price transaction and the market settles. All of this executes within 0.1 second on a Raspberry PI.
+- Time can only move forward
+  - I submit `{ forward: "-10s" }` to the time fast forward endpoint. Time does not move and I receive an error. (<a name="0008-NP-NULB-001" href="#0008-NP-NULB-001">0008-NP-NULB-001</a>)
+  - I submit `{ forward: "<a date in the past>" }` to the time fast forward endpoint. Time does not move and I receive an error. (<a name="0008-NP-NULB-002" href="#0008-NP-NULB-002">0008-NP-NULB-002</a>)
