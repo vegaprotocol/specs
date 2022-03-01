@@ -356,14 +356,14 @@ APIs should also exist for clients to:
 - [x] As the vega network, all votes from eligible users for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)
 - [x] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected* (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)
 - [x] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it. (<a name="0028-GOVE-007" href="#0028-GOVE-007">0028-GOVE-007</a>)
-- [ ] As the vega network, proposals that close less than 2 days from enactment are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
-- [ ] As the vega network, proposals that close more/less than 1 year from enactment are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
-- [ ] As a user, I can vote for an existing proposal if I have more than 0 governance tokens in my staking account, assuming it matches or exceeds the `minVoterBalance` network parameter for the proposal type (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
-- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account (<a name="0028-GOVE-015" href="#0028-GOVE-015">0028-GOVE-015</a>)
-- [ ] As a user, my vote for an existing proposal is rejected if I have 0 governance tokens in my staking account even if I have more than 0 governance tokens in my general or margin accounts (<a name="0028-GOVE-016" href="#0028-GOVE-016">0028-GOVE-016</a>)
-- [ ] As a user, I can vote multiple times for the same proposal if I have more than 0 governance tokens in my staking account
+- [ ] As the vega network, proposals that set enactment time before closing time are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
+- [ ] As the vega network, proposals that set closing time beyond the relevant `maxClose` parameter are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
+- [ ] As a user, I can vote for an existing proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
+- [ ] As a user, my vote for an existing proposal is rejected if I have less the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-015" href="#0028-GOVE-015">0028-GOVE-015</a>)
+- [ ] As a user, my vote for an existing proposal is rejected if I have less than the relevant `minVoterBalance` governance tokens in my staking account even if I have more than `minVoterBalance` governance tokens in my general or margin accounts (<a name="0028-GOVE-016" href="#0028-GOVE-016">0028-GOVE-016</a>)
+- [ ] As a user, I can vote multiple times for the same proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account
   - [x] Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)
-- [ ] When calculating the participation rate of an auction, the participation rate of the votes takes in to account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
+- [ ] When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
 
 
 ## Governance proposal types
@@ -376,10 +376,10 @@ APIs should also exist for clients to:
 - [ ] New market proposals cannot be created before [`governance.proposal.market.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
 
 ### Market change proposals
-- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
-- [ ] Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-028" href="#0028-GOVE-028">0028-GOVE-028</a>)
-- [ ] Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-030" href="#0028-GOVE-030">0028-GOVE-030</a>)
-- [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
+- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [ ] Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)
+- [ ] Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
+- [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
 - [ ] Verify that an enacted market change proposal that changes trading terminated oracle and price settlement oracle can be settled using transactions from the new oracle keys. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
 - [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
 - [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
