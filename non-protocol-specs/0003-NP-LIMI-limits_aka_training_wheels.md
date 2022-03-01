@@ -130,7 +130,7 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
      - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
      - A single deposit transaction that is more than `max lifetime deposit` rejected 
      - `lifetime deposit` is tracked across [checkpoints](./0005-NP-LIMN-limited_network_life.md)
-6. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction (<a name="0003-NP-LIMI-002" href="#0003-NP-LIMI-001">0003-NP-LIMI-002</a>)
+6. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction (<a name="0003-NP-LIMI-002" href="#0003-NP-LIMI-002">0003-NP-LIMI-002</a>)
    - An ETH address that is listed on the smart contract as exempt can deposit more than `max lifetime deposit`
    - The smart contract can be updated to add or remove ETH addresses from the exemption list
    - Only one ETH address at a time has permission to update the exemption list
