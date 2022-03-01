@@ -33,8 +33,8 @@ Note: there are some differences/additional points for market creation proposals
 1. If valid, the proposal is considered "active" for a proposal period. This period is defined on the proposal and must be at least as long as the minimum duration for the proposal type/subtype (specified by a network parameter)
 1. During the proposal period, network participants who are eligible to vote on the proposal may submit votes for or against the proposal.
 1. When the proposal period closes, the network calculates the outcome by:
-    - comparing the total number of votes cast as a percentage of the number eligible to be cast to the minimum participation requirement (if the minimum is not reached, the proposal is rejected)
-		- comparing the number of positive votes as a percentage of all votes cast (maximum one vote counted per party) to the required majority. 
+  - comparing the total number of votes cast as a percentage of the number eligible to be cast to the minimum participation requirement (if the minimum is not reached, the proposal is rejected)
+  - comparing the number of positive votes as a percentage of all votes cast (maximum one vote counted per party) to the required majority.
 1. If the required majority of "for" votes was met and the proposal has a governance action defined with it, the action described in the proposal will be taken (proposal is enacted) on the enactment date, which is defined by the proposal and must be at least the minimum enactment period for the proposal type/subtype (which is specified by a network parameter) _after_ voting on the proposal closes.
 
 Any actions that result from the outcome of the vote are covered in other spec files.
@@ -47,9 +47,9 @@ The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) rep
 - [Delegate to validators](./0059-STKG-simple_staking_and_delegating.md)
 
 ## Governance weighting
-A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result. 
+A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result.
 
-To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`. 
+To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`.
 
 Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-NP-APIN-api_node.md).
 
@@ -82,20 +82,20 @@ Anyone can create a proposal if the weighting of their vote on the proposal woul
 
 In a future iteration of the governance system we may restrict proposal submission by type of proposal based on a minimum weighting. e.g: only user with a certain number or percentage of the governance asset are allowed to open a "network parameter change" proposal.
 
-Market change proposals additionally require certain minimum [equity like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minEquityLikeShare`. 
+Market change proposals additionally require certain minimum [equity like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minEquityLikeShare`.
 So, for example, if `governance.proposal.market.minEquityLikeShare = 0.05` and a party has `equity-like-share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like-share` of `0.03` then they cannot submit a market change proposal.
 
 
 ## Configuration of a proposal
 
-When a proposal is created, it can be configured in multiple ways. 
+When a proposal is created, it can be configured in multiple ways.
 
 
 ### Duration of the proposal
 
 A new proposal will have a close date specified as a timestamp. After the proposal is created in the system and before the close date, the proposal is open for votes. e.g: A proposal is created and people have 3 weeks from the day it is sent to the network in order to submit votes for it.
 
-The proposal's close date may optionally be set by the proposer and must be greater than or equal to a minimum duration time that is set by the network. Minimum duration times will be specified as network parameters depending on the type of proposal. 
+The proposal's close date may optionally be set by the proposer and must be greater than or equal to a minimum duration time that is set by the network. Minimum duration times will be specified as network parameters depending on the type of proposal.
 
 The network's _minimum proposal duration_ - as specified by a network parameter specific to each proposal type - is used as the default when the new proposal does not include a proposal duration. If a proposal is submitted with a close date would fail to meet the network's minimum proposal duration time constraint, the proposal must be rejected.
 
@@ -110,16 +110,16 @@ This allows time for users to be ready for changes that may effect them financia
 
 Proposals are enacted by timestamp, earliest first, as soon as the enactment time is reached by the network (i.e. "Vega time"). Proposals sharing the same exact enactment time are enacted in the order they were created. This means that in the case that two proposals change the same parameter with the same timestamp, the oldest proposal will be applied first and the newest will be applied last, overwriting the change made by the older proposal. There is no attempt to resolve differences between the two.
 
-The network's `governance.proposal.*.minEnact` network parameter specific to each proposal type is used to validate whether the enactment date is acceptable. 
-Here `*` stands for any of `asset, market, updateMarket, updateNetParam`. 
-Note that this is validation is in units of time from current time i.e. if the proposal is received 
-at e.g. `09:00:00 on 1st Jan 2021` and `governance.proposal.asset.minEnact` is `72h` then the proposal must contain enactment date/time that after `09:00:00 on 4th Jan 2021`. 
+The network's `governance.proposal.*.minEnact` network parameter specific to each proposal type is used to validate whether the enactment date is acceptable.
+Here `*` stands for any of `asset, market, updateMarket, updateNetParam`.
+Note that this is validation is in units of time from current time i.e. if the proposal is received
+at e.g. `09:00:00 on 1st Jan 2021` and `governance.proposal.asset.minEnact` is `72h` then the proposal must contain enactment date/time that after `09:00:00 on 4th Jan 2021`.
 If there is `governance.proposal.asset.maxEnact` of e.g. `360h` then the proposed enactment date / time must be before `09:00:00 on 16th Jan 2021`.
 
 
 ## Editing and/or cancelling a proposal is not possible
 
-A proposal cannot be edited, once created. The only possible action is to vote for or against a proposal, or submit a new proposal. 
+A proposal cannot be edited, once created. The only possible action is to vote for or against a proposal, or submit a new proposal.
 
 If a proposal is created and later a different outcome is preferred by network participants, two courses of action are possible:
 
@@ -146,9 +146,9 @@ Note: see below for details on minimum participation rate and minimum required m
 
 Not in scope: minimum participation of active users, i.e. 90% of the _active_ users of the vega network have to take part in the vote. Minimum participation is currently always measured against the total possible participation.
 
-For market change proposals the network will additionally calculate 
+For market change proposals the network will additionally calculate
 1. `LP participation rate = SUM (equity like share of all LPs who cast a vote)` (no need to divide by anything as equity like share sums up to `1`).
-1. `LP for rate = SUM (all who voted for) / LP participation rate`. 
+1. `LP for rate = SUM (all who voted for) / LP participation rate`.
 
 A market parameter change is passed only when:
 - either the governance token holder vote is successful i.e. `participation_rate >= governance.proposal.updateMarketParam.requiredParticipation` AND `for_rate > governance.proposal.updateMarketParam.requiredMajority` (in this case the LPs were overridden by governance token holders)
@@ -159,7 +159,7 @@ The logic is
 
 In all other cases the proposal is rejected.
 
-In other words: LPs vote with their equity like share and can make changes to a market without requiring a governance token holder vote. However a governance token vote is running in parallel and if participation and majority rules for this vote are met then the governance token vote can overrule the LPs vote.  
+In other words: LPs vote with their equity like share and can make changes to a market without requiring a governance token holder vote. However a governance token vote is running in parallel and if participation and majority rules for this vote are met then the governance token vote can overrule the LPs vote.
 
 
 # Reference-level explanation
@@ -181,8 +181,8 @@ Note the following key points from the market lifecycle spec:
 * A market enters a Pending status as soon as the proposal is Successful (before enactment)
 * A market usually enters Active status at the proposal's enactment date/time, but some conditions may delay this or cause the market to be Cancelled instead
 
-A proposal to create a market contains 
-1. a complete market specification as per the Market Framework (see spec) that describes the market to be created. 
+A proposal to create a market contains
+1. a complete market specification as per the Market Framework (see spec) that describes the market to be created.
 1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](./0044-LIQM-lp_mechanics.md). The proposal must be rejected if the liquidity provision commitment is invalid or the proposer does not have the required collateral for the stake.
 The stake commitment must exceed the `minimum_proposal_stake_amount` which is a per-asset parameter.
 1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
@@ -192,10 +192,10 @@ All **new market proposals** initially have their validation configured by the n
 
 ## 2. Change market parameters
 
-[Market parameters](./0001-MKTF-market_framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market. 
+[Market parameters](./0001-MKTF-market_framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market.
 See the [Market Framework spec](./0001-MKTF-market_framework.md#market) for details on these parameters, including those that cannot be changed and the category of the parameters.
 
-To change any market parameter the proposer submits the same data as to create a market with the desired updates to the fields / structures that should change. 
+To change any market parameter the proposer submits the same data as to create a market with the desired updates to the fields / structures that should change.
 Ideally, it should be possible to not repeat things that are not changing or are immutable but we leave this to implementation detail.
 
 The following are immutable and cannot be changed:
@@ -219,7 +219,7 @@ New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governa
 ## 5. Transfers initiated by Governance (post Oregon trail)
 ### Permitted source and destination account types
 
-The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal. 
+The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal.
 
 | Source type | Destination type | Governance transfer permitted |
 | --- | --- | --- |
@@ -237,7 +237,7 @@ The below table shows the allowable combinations of source and destination accou
 | Market insurance pool account | Network treasury | Yes  |
 | Market insurance pool account | Network insurance pool account | Yes |
 | Market insurance pool account | Any other account | No |
-| Any other account | Any | No | 
+| Any other account | Any | No |
 
 
 ### Transfer proposal details
@@ -250,7 +250,7 @@ The proposal specifies:
   - network insurance pool: leave blank (only one per asset)
   - market insurance pool: market ID
 - `type`, which can be either "all or nothing" or "best effort":
-	- all or nothing: either transfers the specified amount or does not transfer anything
+  - all or nothing: either transfers the specified amount or does not transfer anything
   - best effort: transfers the specified amount or the max allowable amount if this is less than the specified amount
 - `amount`: the maximum amount to transfer
 - `asset`: the asset to transfer
@@ -270,9 +270,9 @@ If the proposal is successful and enacted, the amount will be transferred from t
 
 The amount is calculated by
 ```
-  transfer_amount = min( 
-    proposal.fraction_of_balance * source.balance, 
-    proposal.amount, 
+  transfer_amount = min(
+    proposal.fraction_of_balance * source.balance,
+    proposal.amount,
     NETWORK_MAX_AMOUNT,
     NETWORK_MAX_FRACTION * source.balance )
 ```
@@ -284,28 +284,28 @@ Where:
 If `type` is "all or nothing" then the transfer will only proceed if:
 
 ```
-transfer_amount == min( 
-    proposal.fraction_of_balance * source.balance, 
+transfer_amount == min(
+    proposal.fraction_of_balance * source.balance,
     proposal.amount )
 ```
 
 ## 6. Freeform governance proposal
 
 The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. Freeform proposals contain a URL to text describing the proposal in full. The proposal will contain:
-- a link to a text file in markdown format and 
+- a link to a text file in markdown format and
 - a cryptographically secure hash of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
 - a description field to show a short title / something in case the link goes offline. This is to be between `0` and `255` unicode characters.
 
-The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level. 
+The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level.
 
-The following network parameters will decide how these proposals are treated: 
+The following network parameters will decide how these proposals are treated:
 `governance.proposal.freeform.maxClose` e.g. `720h`,
 `governance.proposal.freeform.minClose` e,g. `72h`,
 `governance.proposal.freeform.minProposerBalance` e.g. `1000000000000000000` i.e. 1 VEGA,
 `governance.proposal.freeform.minVoterBalance`   e.g. `1000000000000000000` i.e. 1 VEGA,
 `governance.proposal.freeform.requiredMajority`  e.g. `0.66`,
 `governance.proposal.freeform.requiredParticipation` e.g. `0.20`.
-      
+
 There is no `minEnact` and `maxEnact` because there is no on-chain enactment (no governance action).
 
 ## Proposal validation parameters
@@ -316,7 +316,7 @@ These sets of parameters are named in the form `Governance.<ActionType>.<Categor
 
 * `Governance.<ActionType>.<Category>.MinimumProposalPeriod`
 * `Governance.<ActionType>.<Category>.MinimumPreEnactmentPeriod`
-* `Governance.<ActionType>.<Category>.MinimumRequiredParticipation` 
+* `Governance.<ActionType>.<Category>.MinimumRequiredParticipation`
 * `Governance.<ActionType>.<Category>.MinimumRequiredMajority`
 
 
@@ -324,7 +324,7 @@ See the details in 1-3 above for the action type and category (or references to 
 
 * `Governance.CreateMarket.All.MinimumProposalPeriod`
 * `Governance.CreateMarket.All.MinimumPreEnactmentPeriod`
-* `Governance.CreateMarket.All.MinimumRequiredParticipation` 
+* `Governance.CreateMarket.All.MinimumRequiredParticipation`
 * `Governance.CreateMarket.All.MinimumRequiredMajority`
 
 
@@ -369,26 +369,26 @@ APIs should also exist for clients to:
 ## Governance proposal types
 ### New Asset proposals
 - [ ] New asset proposals cannot be created before [`governance.proposal.asset.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
- 
+
 ### New Market proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
 - [ ] New market proposals cannot be created before [`governance.proposal.market.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
 
 ### Market change proposals
-- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
-- [ ] Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
-- [ ] Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
-- [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
+- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
+- [ ] Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-028" href="#0028-GOVE-028">0028-GOVE-028</a>)
+- [ ] Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-030" href="#0028-GOVE-030">0028-GOVE-030</a>)
+- [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
 - [ ] Verify that an enacted market change proposal that changes trading terminated oracle and price settlement oracle can be settled using transactions from the new oracle keys. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
-- [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
-- [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
+- [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
+- [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
 
 
 
 
 ### Network parameter change proposals
-- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
 - [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
 
 ### Freeform governance proposals
