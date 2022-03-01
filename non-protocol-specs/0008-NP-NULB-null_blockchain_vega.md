@@ -42,3 +42,9 @@ An extra API is added to allow the user to control the time and block start/end 
 - Time can only move forward
   - I submit `{ forward: "-10s" }` to the time fast forward endpoint. Time does not move and I receive an error. (<a name="0008-NP-NULB-001" href="#0008-NP-NULB-001">0008-NP-NULB-001</a>)
   - I submit `{ forward: "<a date in the past>" }` to the time fast forward endpoint. Time does not move and I receive an error. (<a name="0008-NP-NULB-002" href="#0008-NP-NULB-002">0008-NP-NULB-002</a>)
+- The null blockchain block time does not control the automatic creation of blocks
+  - With the block time set to `1 second`, if at block height 1 I perform no actions for 5 seconds, the block height will still be 1 (<a name="0008-NP-NULB-003" href="#0008-NP-NULB-003">0008-NP-NULB-003</a>)
+  - With the transactions-per-block configuration set to `2`
+   - If at block height 1 I submit 3 transactions, the block height will have increased to 2 (<a name="0008-NP-NULB-004" href="#0008-NP-NULB-004">0008-NP-NULB-004</a>)
+   - If at block height 1 I submit 1 transaction, the block height will still be 1 ( (<a name="0008-NP-NULB-005" href="#0008-NP-NULB-005">0008-NP-NULB-005</a>))
+  - If at block height 1 I move time forward by 1s, the block height will have increased to 2 ( (<a name="0008-NP-NULB-006" href="#0008-NP-NULB-006">0008-NP-NULB-006</a>))
