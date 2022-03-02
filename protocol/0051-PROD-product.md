@@ -73,7 +73,7 @@ callOption.value(quote) {
 	return BlackScholesCallPrice(underlying, strike, timeToMaturity, rfRate, bsVol)
 }
 ```
-## Quote-to-value function 
+## Quote-to-value function
 
 See [Fees spec](./0029-FEES-fees.md) for context. Fees are calculated based on `trade_value_for_fee_purposes`. Any product *may* provide `product.valueForFeePurposes(quote)` function which returns the value of the product for size of `1` which will be used in calculating fees: 
 For many products this will simply be
@@ -124,4 +124,14 @@ APIS should be available to:
 
 # Acceptance criteria
 
-1. 
+1. Settlement assets
+  1. A product of any type cannot be created without specifying at least one settlement asset (<a name="0051-PROD-001" href="#0051-PROD-001">0051-PROD-001</a>)
+  2. Some product types can have more than one settlement asset (<a name="0051-PROD-002" href="#0051-PROD-002">0051-PROD-002</a>)
+  3. The settlement asset or assets must exist at the time when the product is created (<a name="0051-PROD-003" href="#0051-PROD-003">0051-PROD-003</a>)
+2. Product updates via governance
+  1. Any product parameter that is not a settlement can be updated via a governance market proposal (<a name="0051-PROD-004" href="#0051-PROD-004">0051-PROD-004</a>)
+  2. The settlement asset / settlement assets cannot be changed on a product via governance  (<a name="0051-PROD-005" href="#0051-PROD-005">0051-PROD-005</a>)
+  
+# See also
+- [Product: Built In Futures](./016-PFUT-product_builtin_future.md) 
+- [Product: Cash settled Perpetual Future](./0053-PERP-product_builtin_perpetual_future.md)
