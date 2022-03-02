@@ -33,9 +33,10 @@ Note: there are some differences/additional points for market creation proposals
 1. If valid, the proposal is considered "active" for a proposal period. This period is defined on the proposal and must be at least as long as the minimum duration for the proposal type/subtype (specified by a network parameter)
 1. During the proposal period, network participants who are eligible to vote on the proposal may submit votes for or against the proposal.
 1. When the proposal period closes, the network calculates the outcome by:
-  - comparing the total number of votes cast as a percentage of the number eligible to be cast to the minimum participation requirement (if the minimum is not reached, the proposal is rejected)
-  - comparing the number of positive votes as a percentage of all votes cast (maximum one vote counted per party) to the required majority.
-1. If the required majority of "for" votes was met and the proposal has a governance action defined with it, the action described in the proposal will be taken (proposal is enacted) on the enactment date, which is defined by the proposal and must be at least the minimum enactment period for the proposal type/subtype (which is specified by a network parameter) _after_ voting on the proposal closes.
+    - comparing the total number of votes cast as a percentage of the number eligible to be cast to the minimum participation requirement (if the minimum is not reached, the proposal is rejected)
+		- comparing the number of positive votes as a percentage of all votes cast (maximum one vote counted per party) to the required majority.
+1. If the required majority and participation criteria have been met at voting period closing time then the proposal "passed".
+If the proposal has a governance action defined with it, the action described in the proposal will be taken (proposal is enacted) on the enactment date, which is defined by the proposal and must be at least the minimum enactment period for the proposal type/subtype (which is specified by a network parameter) _after_ voting on the proposal closes.
 
 Any actions that result from the outcome of the vote are covered in other spec files.
 
