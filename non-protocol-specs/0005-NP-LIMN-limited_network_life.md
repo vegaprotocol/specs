@@ -38,14 +38,13 @@ Information to store:
 - Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
 - hash of the previous block, block number and transaction id of the block from which the snapshot is derived
 - ERC20 collateral:
-  - last block height of a confirmed erc20 deposit on the ethereum chain with `number_of_confirmations`.
-  - all pending erc20 deposits (not confirmed before this block)
+  - last block height of a confirmed erc20 deposit on the ethereum chain with `number_of_confirmations`. [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
+  - all pending erc20 deposits (not confirmed before this block) [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#deposits)
 - Staking:
-  - last block of a confirmed stake_deposit on the staking contract on the ethereum chain with `number_of_confirmations`.
-  - last block of a confirmed stake_deposit on the vesting contract on the ethereum chain with `number_of_confirmations`.
-  - all the staking events from both contracts
-  - all the pending staking events
-
+  - last block of a confirmed stake_deposit on the staking contract on the ethereum chain with `number_of_confirmations`. [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
+  - last block of a confirmed stake_deposit on the vesting contract on the ethereum chain with `number_of_confirmations`. [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
+  - all the staking events from both contracts [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
+  - all the pending staking events [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
 
 
 When a checkpoint is created, each validator should calculate its hash and submit this as a transaction to the chain(*).

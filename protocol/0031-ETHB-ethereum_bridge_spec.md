@@ -32,7 +32,7 @@ For each asset class, there is a bridge smart contract. Currently all contracts 
 ### Deposits
 Deposits happen when a user runs the deposit function of a bridge contract for a given asset. Once this is executed on-chain, an event is raised from the Ethereum protocol. This event is processed by the event queue (covered in another spec) which passes the event to Vega Consensus. Each node recieves notice of the event either from the Event Queue or through inter-node gossip and validates the transaction for itself on its local external blockchain node (such as Geth, Parity, etc). This necessitates each node to either run a given blockchain node locally or have a trusted source to the node.
 
-### Withdrawals 
+### Withdrawals
 Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides release an asset to a user. When this happens, the client aggregates signatures from the validator nodes (covered elsewhere). Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorized signatures.
 
 
@@ -66,7 +66,7 @@ contract IVega_Bridge {
 
 ```
 
-### Whitelisting and Blacklisting 
+### Whitelisting and Blacklisting
 The ERC20 contract, and any other contract that represents an asset class rather than an individual asset, will maintain a whitelist of assets that can and cannot be deposited. Only whitelisted assets can be deposited.
 * An asset that is on the whitelist can be withdrawn and deposited
 * An asset that is not on the whitelist can be withdrawn but not deposited
@@ -85,10 +85,12 @@ The Ethereum Bridge uses 1 network parameter, `blockchains.ethereumConfig`, a JS
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `chain_id`       | String |  `"3"`        | Ethereum [Chain ID](https://eips.ethereum.org/EIPS/eip-155) to connect to 
+| `chain_id`       | String |  `"3"`        | Ethereum [Chain ID](https://eips.ethereum.org/EIPS/eip-155) to connect to
 | `network_id`     | String |  `"3"`        | Ethereum [Network ID](https://eips.ethereum.org/EIPS/eip-155) to connect to     |
-| `collateral_bridge_address` | String | `"0xCcB517899f714BD1B2f32931fF429aDEdDd02A93"`            | The address for a deployed instance of the bridge contract |
-| `staking_bridge_address` | Array(strings) | `["0xCcB517899f714BD1B2f32931fF429aDEdDd02A93"]`            | The addresses to listen to for [staking events](./0059-STKG-simple_staking_and_delegating.md). |
+| `collateral_bridge_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The address for a deployed instance of the bridge contract |
+| `staking_bridge_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The addresses to listen to for [staking events](./0059-STKG-simple_staking_and_delegating.md). |
+| `token_vesting_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The addresses to listen to for [vesting contract events](./0059-STKG-simple_staking_and_delegating.md). |
+| `multisig_control_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The addresses to listen to for multisig control event |
 | `confirmations`  | Integer |  `3`           | Block confirmations to wait for before confirming an action   |
 
 ### Full example
@@ -98,7 +100,10 @@ This example connects the network to Ropsten:
 {
   "network_id": "3",
   "chain_id": "3",
-  "bridge_address": "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", 
+  "collateral_bridge_contract": {address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1},
+  "staking_bridge_contract": {address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1},
+  "token_vesting_contract": {address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1},
+  "multisig_control_contract": {address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1},
   "confirmations": 3
 }
 ```
@@ -140,4 +145,3 @@ This example connects the network to Ropsten:
 ## Set deposit minimum
 *  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset (<a name="0031-ETHM-023" href="#0031-ETHM-023">0031-ETHM-023</a>)
 *  an invalid multisig bundle is rejected by the setDepositMinimum function (<a name="0031-ETHM-024" href="#0031-ETHM-024">0031-ETHM-024</a>)
-
