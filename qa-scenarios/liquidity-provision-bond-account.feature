@@ -5,7 +5,7 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
       | name                                          | value |
       | market.stake.target.timeWindow                | 24h   |
       | market.stake.target.scalingFactor             | 1     |
-      | market.liquidity.bondPenaltyParameter         | 0     |
+      | market.liquidity.bondPenaltyParameter         | 0    |
       | market.liquidity.targetstake.triggering.ratio | 0.1   |
     And the average block duration is "1"
     And the log normal risk model named "log-normal-risk-model-1":
@@ -155,6 +155,7 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
       | party  | market id | side | volume | price | resulting trades | type       | tif     | reference      |
       | party0 | ETH/MAR22 | sell | 15     | 1000  | 0                | TYPE_LIMIT | TIF_GTC | party0-sell-3  |
 
+
   And the market data for the market "ETH/MAR22" should be:
       | mark price | trading mode            | horizon | min bound | max bound | target stake | supplied stake | open interest |
       | 1000       | TRADING_MODE_CONTINUOUS | 2000000 | 507       | 1852      | 142276       | 50000          | 40            |
@@ -164,19 +165,22 @@ Feature: Replicate LP getting distressed during continuous trading, check if pen
     Then the order book should have the following volumes for market "ETH/MAR22":
       | side | price    | volume |
       | sell | 1100     | 1      |
+      | sell | 1020     | 90     |
       | sell | 1010     | 1      |
       | sell | 1000     | 35     |
-      | sell | 1020     | 90     |
       | buy  | 1000     | 0      |
       | buy  | 990      | 1      |
       | buy  | 970      | 109    |
       | buy  | 900      | 1      |
 
-   # With additional order at line 154, and party0 repeg the lp order: vol 15 on price 1000, vol 90 on price 1020
-   # party0 margin should be mark_price x order_size x rf_short = 1000 x (90 + 15) x 3.5569036 = 373475
+   # once new order is added by party0 (LP provider), network will bump up margin for party0 1000 x 15 x 3.5569036 *1.2 + 452438=516462, 
+   # so bond account will be emptied out, all the asset will be moved to margin account;
+   # then party0 will have repegged order, but since margin account is 50,000 under the release level 522865, so margin account stays at 50,000
 
-   # initial margin level is 373475*1.2=448170, 
-   # so party0 should have 448170 in margin account, and 450000-448170=1830 in general account, and 50000 in bond account
+   # With additional order at line 154, and party0 repeg the lp order: vol 15 on price 1000, vol 90 on price 1020
+   # party0 margin should be mark_price x order_size x rf_short = 1000 x (90 + 15) x 3.5569036 = 37347
+   # initial margin level is 373475*1.2=448170; release level is 522865
+  
 
    And the parties should have the following account balances:
       | party  | asset | market id | margin | general  | bond |
