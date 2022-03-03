@@ -23,6 +23,7 @@ Best bid/ask pairs should be generated for all orders and for all orders excludi
 
 `Cumulative volume` is the total volume in the book between the current price level and top of the book. The market depth service will not build this information, instead we will rely on the client building it.
 
+Updates should be sent as soon as they are ready and not batched up. This increases the data rate for clients, but ensures the updates are sent as quickly as possible.
 
 # Reference-level explanation
 
