@@ -46,6 +46,7 @@ two different ways:
 	offending transaction has already taken up space in the blockchain.
 
 
+### Sweetwater
 For Sweetwater, the policies we enforce are relatively simple:
 <num_votes> = 3
 <min_voting_tokens>  = 1
@@ -69,7 +70,54 @@ For Sweetwater, the policies we enforce are relatively simple:
    There also is a separate parameter to the same end that is enforced in the core. For SW, both these parameters have the same value. 
    In the future, we can set the spam protection value lower, as the amplification effect of a proposal (i.e., a proposal resulting in
    a very large number of votes) would also be covered by the core then.
-   
+
+### Minimum Functionallity for Trading
+
+For trading, the first check is if the user has any ressources in the first place:
+
+- If the ressources available to the account (at this point only ETH) are zero, then all trading transactions are considered spam and rejected.
+
+In addition, for all transactions, there is a link between revenue generated, ressources, 
+
+To this end, we need a normalisation function that can compute the revenue/ressources of all assets a user
+has. At this point, this is only ETH, so this is easy. This specification assumes that once more bridges/
+assets exist, there will be an internal spot market and thus an internal API that can give us the exchange rates
+between the different assets, and thus allows us to compute the overall value of all assets/trades an account holds.
+The end result are the following functions
+
+revenue_generated_in_epoch(e)
+	Normallised fees payed by transactions the trader was involved in in the current epoch
+assets_held
+	Normalised assets the user holds at the moment
+	
+revenue_score (in epoch e) =
+	revenue_score_in_epoch(e-1)*.9+revenue_generated_in_epoch(e)
+	if e=1, then the score is the score of the last epoch before the last chain restart
+	if e=1, and we are in the first chain, then revenue_score_in_epoch(e)=0
+	
+asset_score (in_epoch e) =
+	max(asset_score_in_epoch(e-1)*0.9, assets_held_in_epoch(e)
+	if e=1, then asset_score_in_epoch(e-1) refers to the last epoch in the last chain restart, or
+	0 if that does not exist.
+	
+The link between the number of allowed transaction per epoch and above scores is
+
+number_of_allowed_transactions = free_transactions+ (a* revenue_score + b*revenue_score^2) * c^(revenue_score)
+						  + (d* asset_score + e*asset_score^2) * f^(asset_score)
+
+Thus,  we keep a table with all possible transactions. This table has the form
+
+<transaction type>, <free_transactions_per_epoch>, <a>, <b>, <c>, <d>, <e>, <f>).
+	
+The initial values are
+	free_transactions = 5
+	a = 100.000
+	b = 0
+	c = 1
+	d = 10.000
+	e = 0
+	f = 1
+
 ### Notes
 - What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
  and ETH speed) that the same token is moved around to different entities, this explicitly doesn't work.
@@ -88,3 +136,71 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
   banning policy this is not doable from one account, but with a sybil attack it can be done. If this ends up being a
   problem, we can address it by increasing the ban-time.
   
+### Minimum Functionallity for Trading
+
+For trading, the first check is if the user has any ressources in the first place:
+
+- If the ressources available to the account (at this point only ETH) are zero, then all trading transactions are considered spam and rejected.
+
+In addition, for all transactions, there is a link between revenue generated, ressources, 
+
+To this end, we need a normalisation function that can compute the revenue/ressources of all assets a user
+has. At this point, this is only ETH, so this is easy. This specification assumes that once more bridges/
+assets exist, there will be an internal spot market and thus an internal API that can give us the exchange rates
+between the different assets, and thus allows us to compute the overall value of all assets/trades an account holds.
+The end result are the following functions
+
+revenue_generated_in_epoch(e)
+	Normallised fees payed by transactions the trader was involved in in the current epoch
+assets_held
+	Normalised assets the user holds at the moment
+	
+revenue_score (in epoch e) =
+	revenue_score_in_epoch(e-1)*.9+revenue_generated_in_epoch(e)
+	if e=1, then the score is the score of the last epoch before the last chain restart
+	if e=1, and we are in the first chain, then revenue_score_in_epoch(e)=0
+	
+asset_score (in_epoch e) =
+	max(asset_score_in_epoch(e-1)*0.9, assets_held_in_epoch(e)
+	if e=1, then asset_score_in_epoch(e-1) refers to the last epoch in the last chain restart, or
+	0 if that does not exist.
+	
+The link between the number of allowed transaction per epoch and above scores is
+
+number_of_allowed_transactions = free_transactions+ (a* revenue_score + b*revenue_score^2) * c^(revenue_score)
+						  + (d* asset_score + e*asset_score^2) * f^(asset_score)
+
+Once the number of transactions is exceeded, 
+Thus,  we keep a table with all possible transactions. This table has the form
+
+<transaction type>, <free_transactions_per_epoch>, <a>, <b>, <c>, <d>, <e>, <f>, pow_factor).
+	
+The initial values are
+	free_transactions = 5
+	a = 100.000
+	b = 0
+	c = 1
+	d = 10.000
+	e = 0
+	f = 1
+	
+<pow_factor> is ignored for now as including a proof_of_work is not minimum finctiuonallity)
+	    
+If a trader exceeds their quota of messages, they cannot send any transactions anymore in the given epoch.
+If a trader exceeds their quota for 4 consecutive epochs, they are banned for 10 further epochs.
+	   
+### Note: We need to verify that the numbers make sense.
+	    
+### Acceptance Criteria
+	
+- A spam attack using votes/governance proposals is detected and the votes transactions are rejected, i.e.,
+  a party that issues too many votes/governance proposals gets the follow on transactions rejected.
+- If a party keeps trying to vote, it is blocked for 4 Epochs and unblocked afterwards again
+- The normalisation function outputs normalised assets/revenues for all traders 
+- On all possible transactions and combinations thereof, a spam is detected and transactions are blocked before 
+  being put on the blockchain
+- Parties that continue spamming are blocked and eventually unblocked again
+- The values of asset_score and recenue_score are computed correctly over chain restarts
+- On normal trading behaviour, no transaction gets blocked 
+	 
+
