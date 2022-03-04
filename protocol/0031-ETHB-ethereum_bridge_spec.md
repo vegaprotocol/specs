@@ -107,37 +107,37 @@ This example connects the network to Ropsten:
 
 ## Deposit
 * ETH smart contract specific requirements:
-  * A multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size (<a name="0031-ETHM-002" href="#0031-ETHM-002">0031-ETHM-002</a>)
-  * An Ethereum Address can call the deposit function and successfully deposit Ethereum, as long as it is above the minimum size deposit (<a name="0031-ETHM-003" href="#0031-ETHM-003">0031-ETHM-003</a>)
-  * A request to deposit any non-Ethereum asset is rejected (<a name="0031-ETHM-004" href="#0031-ETHM-004">0031-ETHM-004</a>)
-  * A deposit call that is below the minimum size is rejected (<a name="0031-ETHM-005" href="#0031-ETHM-005">0031-ETHM-005</a>)
+  * A multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size (<a name="0031-ETHB-002" href="#0031-ETHB-002">0031-ETHB-002</a>)
+  * An Ethereum Address can call the deposit function and successfully deposit Ethereum, as long as it is above the minimum size deposit (<a name="0031-ETHB-003" href="#0031-ETHB-003">0031-ETHB-003</a>)
+  * A request to deposit any non-Ethereum asset is rejected (<a name="0031-ETHB-004" href="#0031-ETHB-004">0031-ETHB-004</a>)
+  * A deposit call that is below the minimum size is rejected (<a name="0031-ETHB-005" href="#0031-ETHB-005">0031-ETHB-005</a>)
 
 * ERC20 smart contract (This can be repeated for many token standards - NFTs and crypto items will be more complex):
-  * A valid multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size for a whitelisted token (<a name="0031-ETHM-006" href="#0031-ETHM-006">0031-ETHM-006</a>)
-  * A valid multisig bundle can not be passed to the setMinimum function for a token that is not whitelisted (<a name="0031-ETHM-007" href="#0031-ETHM-007">0031-ETHM-007</a>)
-  * An Ethereum Address can call the deposit function and successfully deposit any whitelisted token, as long as it is above the minimum size deposit (<a name="0031-ETHM-008" href="#0031-ETHM-008">0031-ETHM-008</a>)
-  * A deposit call with a blacklisted token is rejected (<a name="0031-ETHM-009" href="#0031-ETHM-009">0031-ETHM-009</a>)
-  * A deposit call with a whitelisted token that is below the minimum size is rejected(<a name="0031-ETHM-010" href="#0031-ETHM-010">0031-ETHM-010</a>)
+  * A valid multisig bundle can be passed to the setMinimum function to successfully update the minimum deposit size for a whitelisted token (<a name="0031-ETHB-006" href="#0031-ETHB-006">0031-ETHB-006</a>)
+  * A valid multisig bundle can not be passed to the setMinimum function for a token that is not whitelisted (<a name="0031-ETHB-007" href="#0031-ETHB-007">0031-ETHB-007</a>)
+  * An Ethereum Address can call the deposit function and successfully deposit any whitelisted token, as long as it is above the minimum size deposit (<a name="0031-ETHB-008" href="#0031-ETHB-008">0031-ETHB-008</a>)
+  * A deposit call with a blacklisted token is rejected (<a name="0031-ETHB-009" href="#0031-ETHB-009">0031-ETHB-009</a>)
+  * A deposit call with a whitelisted token that is below the minimum size is rejected(<a name="0031-ETHB-010" href="#0031-ETHB-010">0031-ETHB-010</a>)
 
 ## Withdraw
 * ETH smart contract specific requirements:
-  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH (<a name="0031-ETHM-011" href="#0031-ETHM-011">0031-ETHM-011</a>)
-  * An  invalid multisig bundle will be rejected from withdraw (<a name="0031-ETHM-012" href="#0031-ETHM-012">0031-ETHM-012</a>)
+  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH (<a name="0031-ETHB-011" href="#0031-ETHB-011">0031-ETHB-011</a>)
+  * An  invalid multisig bundle will be rejected from withdraw (<a name="0031-ETHB-012" href="#0031-ETHB-012">0031-ETHB-012</a>)
 * ERC20 smart contract specific requirements:
-  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH (<a name="0031-ETHM-013" href="#0031-ETHM-013">0031-ETHM-013</a>)
-  * An invalid multisig bundle will be rejected from withdraw (<a name="0031-ETHM-014" href="#0031-ETHM-014">0031-ETHM-014</a>)
+  * A valid multisig bundle can be passed to the withdraw function to successfully withdraw ETH (<a name="0031-ETHB-013" href="#0031-ETHB-013">0031-ETHB-013</a>)
+  * An invalid multisig bundle will be rejected from withdraw (<a name="0031-ETHB-014" href="#0031-ETHB-014">0031-ETHB-014</a>)
 
 ## Allowlist a token (by eth address)
 * ERC20 smart contract specific requirements:
-  * A valid multisig bundle can be passed to the whitelistToken function to successfully add a token to the whitelist (<a name="0031-ETHM-016" href="#0031-ETHM-016">0031-ETHM-016</a>)
-  * An invalid multisig bundle is rejected by the whitelistToken function (<a name="0031-ETHM-017" href="#0031-ETHM-017">0031-ETHM-017</a>)
+  * A valid multisig bundle can be passed to the whitelistToken function to successfully add a token to the whitelist (<a name="0031-ETHB-016" href="#0031-ETHB-016">0031-ETHB-016</a>)
+  * An invalid multisig bundle is rejected by the whitelistToken function (<a name="0031-ETHB-017" href="#0031-ETHB-017">0031-ETHB-017</a>)
 
 ## Blocklist a token (by eth address)
 * ERC20 smart contract specific requirements:
-  * A valid multisig bundle can be passed to the blacklistToken function to successfully remove a previously whitelisted token (<a name="0031-ETHM-019" href="#0031-ETHM-019">0031-ETHM-019</a>)
-  * An invalid multisig bundle is rejected by the blacklistToken function (<a name="0031-ETHM-020" href="#0031-ETHM-020">0031-ETHM-020</a>)
+  * A valid multisig bundle can be passed to the blacklistToken function to successfully remove a previously whitelisted token (<a name="0031-ETHB-019" href="#0031-ETHB-019">0031-ETHB-019</a>)
+  * An invalid multisig bundle is rejected by the blacklistToken function (<a name="0031-ETHB-020" href="#0031-ETHB-020">0031-ETHB-020</a>)
 
 ## Set deposit minimum
-*  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset (<a name="0031-ETHM-023" href="#0031-ETHM-023">0031-ETHM-023</a>)
-*  an invalid multisig bundle is rejected by the setDepositMinimum function (<a name="0031-ETHM-024" href="#0031-ETHM-024">0031-ETHM-024</a>)
+*  A valid multisig bundle can be passed to the setDepositMinimum function to successfully set a deposit minimum for a given asset (<a name="0031-ETHB-023" href="#0031-ETHB-023">0031-ETHB-023</a>)
+*  an invalid multisig bundle is rejected by the setDepositMinimum function (<a name="0031-ETHB-024" href="#0031-ETHB-024">0031-ETHB-024</a>)
 
