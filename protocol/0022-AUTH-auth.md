@@ -141,6 +141,3 @@ messge TransactionBundle {
 The implementation outline explicitly ties the party performing the action to the public key. We may in future want to allow
 a key to sign actions on behalf of another party. This would probably involve some sort of new chain-based announcement of the
 delegation.
-
-# Test cases
-TBD
