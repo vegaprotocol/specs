@@ -244,7 +244,7 @@ Once the required data to calculate the settlement cashflows is available for an
 
 ## Acceptance Criteria
 
-### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)
+### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)
 1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`). 
 Market state is `proposed`. 
 1. Parties vote against the market proposal. 
@@ -253,7 +253,7 @@ It is not possible to submit orders to the market.
 No parties have margin account balances that are non-zero for the market. 
 Market state is `rejected`.
 
-### Lifecycle happy path (<a name="0043-MKTL-002" href="#0043-MKTL-002">0043-MKTL-002</a>)
+### Lifecycle happy path (<a name="0043-MKTL-002" href="#0043-MKTL-002">0043-MKTL-002</a>)
 
 1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`). 
 Market state is `proposed`. 
