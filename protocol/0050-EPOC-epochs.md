@@ -207,7 +207,7 @@ All parameters that are changed through a governance vote are valid starting the
    - At the end of epoch 2, `validator 1` earns rewards based on a delegation count that includes `party 1`s stake
    - During epoch 3, `party 1` uses Undelegate Now
    - During epoch 3, `party 1` can use the undelegated balance as soon as the transaction is executed (<a name="0050-EPOC-010" href="#0050-EPOC-010">0050-EPOC-010</a>)
-   - During epoch 3, `validator 1`s voting weight remains unchanged (<a name="0050-EPOC-010" href="#0050-EPOC-010">0050-EPOC-010</a>)
+   - During epoch 3, `validator 1`s voting weight remains unchanged (<a name="0050-EPOC-011" href="#0050-EPOC-011">0050-EPOC-011</a>)
    - At the end of epoch 3, `validator 1` earns rewards based on a delegation count that *does not include* `party 1`s stake (<a name="0050-EPOC-012" href="#0050-EPOC-012">0050-EPOC-012</a>)
    - At the end of epoch 3, `party 1` does not earn rewards for the stake that was undelegated (<a name="0050-EPOC-013" href="#0050-EPOC-013">0050-EPOC-013</a>)
    - At the start of epoch 4, `party 1`s unstaked balance includes the undelegated amount (<a name="0050-EPOC-014" href="#0050-EPOC-014">0050-EPOC-014</a>)

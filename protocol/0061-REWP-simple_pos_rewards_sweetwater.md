@@ -99,6 +99,6 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 
 - A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)
 - With `delegator_share` set to `0`, a validator keeps 100% of their own rewards, and a delegator receives no reward (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>) 
-- With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proprotional amount of the remaining 50% (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>) 
 - With `delegator_share` set to `1`, a validator receives no reward, and their delegators receive a proprotional amount of 100% (<a name="0061-REWP-004" href="#0061-REWP-004">0061-REWP-004</a>) 
 - For the above three scenarios, the reward payout per public key does not exceed `maxPayoutPerRecipient` (<a name="0061-REWP-005" href="#0061-REWP-005">0061-REWP-005</a>) 
+- With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proprotional amount of the remaining 50% (<a name="0061-REWP-006" href="#0061-REWP-006">0061-REWP-006</a>) 

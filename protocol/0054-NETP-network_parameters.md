@@ -161,9 +161,9 @@ The full list of network parameters must be available to the governance communit
 
 ## Acceptance criteria
 
-[ ] All network parameter set in `genesis.json` can be queried and the values returned are the correct ones (unless overridden by [LNL checkpoint](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md) value). (<a name="0054-NETP-001" href="#0054-NETP-001">0054-NETP-001</a>) 
-[ ] For `blockchains.ethereumConfig` set in `genesis.json` or in a governance proposal we validate the format and the ethereum addresses; if these are invalid a useful error is returned. (<a name="0054-NETP-002" href="#0054-NETP-002">0054-NETP-002</a>) 
-[ ] For `market.margin.scalingFactors` set in `genesis.json` or in a governance proposal we validate the format and the fact that "1.0 <= search <= initial <= release"; if these are invalid a useful error is returned. (<a name="0054-NETP-003" href="#0054-NETP-003">0054-NETP-003</a>)  
-[ ] For `market.monitor.price.defaultParameters` set in `genesis.json` or in a governance proposal we validate the format; if these are invalid a useful error is returned. (<a name="0054-NETP-004" href="#0054-NETP-004">0054-NETP-004</a>)  
-[ ] For each of the remaining parameter whether set in `genesis.json` or in a governance proposal we validate the data type, reject invalid and validate the range of allowable values; if these are invalid a useful error is returned. (<a name="0054-NETP-005" href="#0054-NETP-005">0054-NETP-005</a>) 
+- [ ] All network parameter set in `genesis.json` can be queried and the values returned are the correct ones (unless overridden by [LNL checkpoint](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md) value). (<a name="0054-NETP-001" href="#0054-NETP-001">0054-NETP-001</a>) 
+- [ ] For `blockchains.ethereumConfig` set in `genesis.json` or in a governance proposal we validate the format and the ethereum addresses; if these are invalid a useful error is returned. (<a name="0054-NETP-002" href="#0054-NETP-002">0054-NETP-002</a>) 
+- [ ] For `market.margin.scalingFactors` set in `genesis.json` or in a governance proposal we validate the format and the fact that "1.0 <= search <= initial <= release"; if these are invalid a useful error is returned. (<a name="0054-NETP-003" href="#0054-NETP-003">0054-NETP-003</a>)  
+- [ ] For `market.monitor.price.defaultParameters` set in `genesis.json` or in a governance proposal we validate the format; if these are invalid a useful error is returned. (<a name="0054-NETP-004" href="#0054-NETP-004">0054-NETP-004</a>)  
+- [ ] For each of the remaining parameter whether set in `genesis.json` or in a governance proposal we validate the data type, reject invalid and validate the range of allowable values; if these are invalid a useful error is returned. (<a name="0054-NETP-005" href="#0054-NETP-005">0054-NETP-005</a>) 
 

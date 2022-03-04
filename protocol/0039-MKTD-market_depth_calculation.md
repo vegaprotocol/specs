@@ -3,7 +3,6 @@
 - The construction of the market depth structure must not impact the core performance. (<a name="0039-MKTD-002" href="#0039-MKTD-002">0039-MKTD-002</a>)
 - Entering and leaving auctions must be handled correctly (<a name="0039-MKTD-003" href="#0039-MKTD-003">0039-MKTD-003</a>)
 - All subscribed clients must receive all the data necessary to build their own view of the market depth (<a name="0039-MKTD-004" href="#0039-MKTD-004">0039-MKTD-004</a>)
-- There should be no batching in sending out market depth updates (<a name="0039-MKTD-005" href="#0039-MKTD-005">0039-MKTD-005</a>)
 
 
 # Summary
@@ -24,6 +23,7 @@ Best bid/ask pairs should be generated for all orders and for all orders excludi
 
 `Cumulative volume` is the total volume in the book between the current price level and top of the book. The market depth service will not build this information, instead we will rely on the client building it.
 
+Updates should be sent as soon as they are ready and not batched up. This increases the data rate for clients, but ensures the updates are sent as quickly as possible.
 
 # Reference-level explanation
 
