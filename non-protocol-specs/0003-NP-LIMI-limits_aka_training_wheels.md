@@ -58,6 +58,31 @@ These limits reduce the risk that someone who is able to exploit implementation 
 - Any withdrawal bundle created where `withdrawal amount > withdrawal delay threshold` will be rejected by the bridge if `time since bundle creation <= withdrawal delay period` (the bundle must therefore contain a timestamp of its creation, which must be validated by nodes before they sign the bundle).
 - An API is required to list all pending withdrawals (i.e. those that have not been executed on the bridge) on the Vega chain across all public keys. This is required to allow the community to identify transactions that require withdrawals to stopped pending investigation.
 
+#### Stopping an individual transaction
+A withdrawal bundle contains the following fields ([taken from the protos](https://github.com/vegaprotocol/protos/blob/c025976cc7e20b91ae33a78f5b1de83d006246aa/sources/data-node/api/v1/trading_data.proto#L1156-L1172)):
+
+```proto
+// The response with all information required to bundle the call to finalise the withdrawal on the erc20 bridge
+// function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures)
+message ERC20WithdrawalApprovalResponse {
+  // The address of asset on ethereum
+  string asset_source = 1;
+  // The amount to be withdrawn
+  string amount = 2;
+  // The expiry / until what time the request is valid
+  int64 expiry = 3;
+  // The nonce, which is actually the internal reference for the withdrawal
+  string nonce = 4;
+  // The signatures bundle as hex encoded data, forward by 0x
+  // e.g: 0x + sig1 + sig2 + ... + sixN
+  string signatures = 5;
+  // The ethereum address to withdraw the funds to, 0x prefixed
+  string target_address = 6;
+}
+```
+
+The nonce field ensures that a withdrawal transaction can only be submitted once. This property can be used to block a withdrawal - by producing a second bundle that reuses the `nonce` field of the withdrawal that should be cancelled.
+
 #### Global bridge stop
 
 This allows the stoppage of all deposits and withdrawals after the discovery of an issue or potential issue that requires investigation and/or deployment of a fix. Deposits and withdrawals would be reinstated once the situation is resolved.
@@ -150,4 +175,4 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
       - If it is submitted before `withdrawal delay period`, it is rejected by the bridge smart contract 
       - If it is submitted after `withdrawal delay period`, it is accepted by the bridge smart contract 
     - `withdrawal delay threshold` can be changed, per asset, by multisig control on the bridge contract
-10. A withdrawal that is subject to delay can be cancelled by a validator (<a name="0003-NP-LIMI-006" href="#0003-NP-LIMI-006">0003-NP-LIMI-006</a>)
+10. A withdrawal that is subject to delay can be cancelled by a validator by producing another bundle with the same withdrawal nonce (<a name="0003-NP-LIMI-006" href="#0003-NP-LIMI-006">0003-NP-LIMI-006</a>)
