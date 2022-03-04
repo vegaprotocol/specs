@@ -164,7 +164,8 @@ asset_score (in_epoch e) =
 All trade related transactions are regarded equal. We have five network parameters b a1,a2,r1,r2. The number
 of transaction a trader is allowed per epoch is b+ (asset_score * a1)^a2 + (revenue_score * r1)^r2.
 
-The values of the variables that make sense need to still be determined based on fairground data.
+The values of the variables that make sense need to still be determined based on fairground data; they also may be different between 
+trading with training wheels and real rtrading, as the former isn't generating the kind of revenue needed to authorize transactions.
 
 ##### End goal:
 Spam protection has a table as a network parameter that defines its behaviour for all types of
