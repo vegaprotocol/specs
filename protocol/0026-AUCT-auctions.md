@@ -169,8 +169,6 @@ message Market {
 - As a user, I can configure a market through the market configuration to use auction mode
   - I can define an opening auction for a continuous trading market, and the duration of the call period. (<a name="0026-AUCT-001" href="#0026-AUCT-001">0026-AUCT-001</a>)
   - The duration of the auction period at market creation cannot be below the minimum auction period defined within the network (<a name="0026-AUCT-002" href="#0026-AUCT-002">0026-AUCT-002</a>)
-  - I can define a market to operate as Frequent Batch Auction, and the duration of the call period. (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>)
-  - I can choose what algorithm is used to decided the pricing at the end of the auction period. (<a name="0026-AUCT-004" href="#0026-AUCT-004">0026-AUCT-004</a>)
 - As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period. (<a name="0026-AUCT-005" href="#0026-AUCT-005">0026-AUCT-005</a>)
 - As a user, I can cancel an order that it either live on the order book or parked. (<a href="./0068-MATC-matching_engine.md#0068-MATC-033">0068-MATC-033</a>)
 - As a user, I can get information about the trading mode of the market (through the [market framework](./0001-MKTF-market_framework.md))
