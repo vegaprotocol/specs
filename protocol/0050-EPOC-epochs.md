@@ -200,19 +200,6 @@ All parameters that are changed through a governance vote are valid starting the
      - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>) (note: this can be tested by trying to delegate again, which will be rejected)
      - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
      - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
-4. Delegation can be 'undone' by undelegating within the same epoch (<a name="0050-EPOC-008" href="#0050-EPOC-008">0050-EPOC-008</a>)
-   - If this occurs in the same epoch, rewards for the validator and delegator will not change due to the delegation (<a name="0050-EPOC-009" href="#0050-EPOC-009">0050-EPOC-009</a>)
-5. [Undelegate now](#undelegate-now) does not return the balance to the delegator immediately
-   - During epoch 1, `party 1` stakes any valid amount to `validator 1`
-   - At the end of epoch 2, `validator 1` earns rewards based on a delegation count that includes `party 1`s stake
-   - During epoch 3, `party 1` uses Undelegate Now
-   - During epoch 3, `party 1` can use the undelegated balance as soon as the transaction is executed (<a name="0050-EPOC-010" href="#0050-EPOC-010">0050-EPOC-010</a>)
-   - During epoch 3, `validator 1`s voting weight remains unchanged (<a name="0050-EPOC-011" href="#0050-EPOC-011">0050-EPOC-011</a>)
-   - At the end of epoch 3, `validator 1` earns rewards based on a delegation count that *does not include* `party 1`s stake (<a name="0050-EPOC-012" href="#0050-EPOC-012">0050-EPOC-012</a>)
-   - At the end of epoch 3, `party 1` does not earn rewards for the stake that was undelegated (<a name="0050-EPOC-013" href="#0050-EPOC-013">0050-EPOC-013</a>)
-   - At the start of epoch 4, `party 1`s unstaked balance includes the undelegated amount (<a name="0050-EPOC-014" href="#0050-EPOC-014">0050-EPOC-014</a>)
-5. [Undelegate in anger](#undelegate-in-anger) acceptance TBC
 
-### Smart contract verification
-See [0059-STKG Simple Staking and Delegation](./0059-STKG-simple_staking_and_delegating.md#removing-stake) for how undelegation interacts with tokens in the staking bridge 
-
+# See also
+- [0059 - STKG - Simple staking and delegating](./0059-STKG-simple_staking_and_delegating) - staking and delegation are both calculated in terms of epochs.
