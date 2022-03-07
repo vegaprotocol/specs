@@ -28,3 +28,7 @@ or blockchain specifics. If something comes up that you don't understand and hav
 to someone else - add it to the glossary so we have a shared reference point. The advantage of adding it here rather than
 letting people go off and search on their own is that we can point out if a specific feature/term is applied differently
 due to Vega's design.
+
+# Test codes & coverage
+Specifications should contain _Acceptance Criteria_ - testable scenarios that can be used to demonstrate that the feature is implemented as designed.
+The criteria are then labelled with a code in the form `0000-CODE-000`, where the first two segments are the [unique identifier for the specification](#protocol-spec-ids) and the last segment is an integer for the criteria. Using [vegaprotocol/approbation](https://github.com/vegaprotocol/approbation) we produce a coverage matrix.
