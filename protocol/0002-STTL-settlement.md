@@ -71,34 +71,36 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 ### Example 1 - A typical path of a cash settled futures market nearing expiry when market is trading in continuous session (<a name="0002-STTL-002" href="#0002-STTL-002">0002-STTL-002</a>)
 
 1. Market has a status of ACTIVE and is trading in default trading mode
-1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
-1. The market's status is set to [TRADING TERMINATED](./0043-MKTL-market_lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs.
-1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md))
-1. Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-PFUT-product_builtin_future.md#42-final-settlement-expiry))
-1. Accounts are settled as per collection and distribution methods described above.
-1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
-1. The margin accounts and LP bond accounts for these markets are no longer required.
-1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
-1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
-1. Now the market can be deleted.
-1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>)
+2. There is at least one party that has non-zero position
+3. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
+4. The market's status is set to [TRADING TERMINATED](./0043-MKTL-market_lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs.
+5. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md))
+6. Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-PFUT-product_builtin_future.md#42-final-settlement-expiry))
+7. Accounts are settled as per collection and distribution methods described above.
+8. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
+9. The margin accounts and LP bond accounts for these markets are no longer required.
+10. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
+11. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
+12. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
+13. Now the market can be deleted.
+14. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>)
 
 ### Example 2 - A less typical path of such a futures market nearing expiry when market is suspended (<a name="0002-STTL-004" href="#0002-STTL-004">0002-STTL-004</a>)
 
-1. Market has a status of SUSPENDED and in a protective auction
-1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
-1. The market's status is set to [TRADING TERMINATED](./0043-MKTL-market_lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs. No uncrossing of the auction.
-1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md))
-1. Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-PFUT-product_builtin_future.md#42-final-settlement-expiry))
-1. Accounts are settled as per collection and distribution methods described above.
-1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
-1. The margin accounts and LP bond accounts for these markets are no longer required.
-1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
-1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
-1. Now the market can be deleted.
-1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-005" href="#0002-STTL-005">0002-STTL-005</a>)
+1. There is at least one party that has non-zero position
+2. Market has a status of SUSPENDED and in a protective auction
+3. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
+4. The market's status is set to [TRADING TERMINATED](./0043-MKTL-market_lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs. No uncrossing of the auction.
+5. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md))
+6. Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-PFUT-product_builtin_future.md#42-final-settlement-expiry))
+7. Accounts are settled as per collection and distribution methods described above.
+8. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
+9. The margin accounts and LP bond accounts for these markets are no longer required.
+10. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
+11. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
+12. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
+13. Now the market can be deleted.
+14. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-005" href="#0002-STTL-005">0002-STTL-005</a>)
 
 
 ### Collateral movements
@@ -112,7 +114,8 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 ### Example 3 - Settlement data is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)
 
 1. Market has a status of ACTIVE and is trading in default trading mode (continuous trading)
-1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated. 
+2. There is at least one party that has non-zero position
+3. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated. 
 This oracle input is ignored and market is in the default trading mode (continous trading).
 1. At least one party places an order that triggers a trade (just to prove that we can).
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
