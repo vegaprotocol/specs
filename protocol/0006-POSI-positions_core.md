@@ -3,7 +3,7 @@
 # Acceptance Criteria
 
 ## Open position data
-- Given the following scenarios, applies the rules described in functionality to update the open position size (check new open position size is as expected given the rules and the old open position size):
+- Given the following scenarios, applies the rules described in functionality to update the open position size (check new open position size is as expected given the rules and the old open position size): (E.G. REWORK)
   - [ ] Open long position, trades occur increasing long position (<a name="0006-POSI-001" href="#0006-POSI-001">0006-POSI-001</a>)
   - [ ] Open long position, trades occur decreasing long position (<a name="0006-POSI-002" href="#0006-POSI-002">0006-POSI-002</a>)
   - [ ] Open short position, trades occur increasing (greater abs(size)) short position(<a name="0006-POSI-003" href="#0006-POSI-003">0006-POSI-003</a>)
