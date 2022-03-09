@@ -125,17 +125,17 @@ message CancelTransfer {
 
 ## Acceptance criteria
 ### One off transfers
-- As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate (end of current epoch) or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
+- As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
 
-- As a user I can transfer funds from a general account I control to reward account.  Such transfer can be immediate (end of current epoch) or delayed. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
+- As a user I can transfer funds from a general account I control to reward account.  Such transfer can be immediate or delayed. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
 
-- As a user I can transfer funds from a general account I control to an locked_for_staking. Such transfer can be immediate (end of current epoch) or delayed. (<a name="0057-TRAN-003" href="#0057-TRAN-003">0057-TRAN-003</a>)
+- As a user I can transfer funds from a general account I control to an locked_for_staking. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-TRAN-003" href="#0057-TRAN-003">0057-TRAN-003</a>).
 
-- As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate (end of current epoch) or delayed. (<a name="0057-TRAN-004" href="#0057-TRAN-004">0057-TRAN-004</a>)
+- As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-TRAN-004" href="#0057-TRAN-004">0057-TRAN-004</a>)
 
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
 
-- As a user I cannot transfer funds from accounts I own but from the type is not supported (e.g. margin, staking). (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
+- As a user I cannot transfer funds from accounts I own but from the type is not supported (e.g. margin, staking). (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>) 
 
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed. (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
   - [ ] The fee cost is correctly calculated using the network parameter
@@ -144,12 +144,12 @@ message CancelTransfer {
   - [ ] The fees are being paid into the infrastructure pool
 
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
-  - [ ] The funds arrive in the target account when the transaction is processed, which is not before the timestamp occurs
+  - [ ] The funds arrive in the target account when the transaction is processed (i.e. with the correct delay), which is not before the timestamp occurs
   - [ ] A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.
 
 - The spam protection mechanics prevent me to do more than `spam.protection.maxUserTransfersPerEpoch` transfers per epoch. (<a name="0057-TRAN-009" href="#0057-TRAN-009">0057-TRAN-009</a>)
 
-- A delayed one of transfer cannot be cancelled. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
+- A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
 
 ### Recurring transfers
 As a user I can create a recurring transfer _which expires after a specified epoch_ (<a name="0057-TRAN-050" href="#0057-TRAN-050">0057-TRAN-050</a>)
