@@ -88,3 +88,31 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
   banning policy this is not doable from one account, but with a sybil attack it can be done. If this ends up being a
   problem, we can address it by increasing the ban-time.
   
+### Acceptance Criteria
+
+ - A spam attack using votes/governance proposals is detected and the votes transactions are rejected, i.e.,
+This conversation was marked as resolved by Vegaklaus
+ Show conversation
+   a party that issues too many votes/governance proposals gets the follow on transactions rejected. This means
+   (given the original parameters parameters from https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0054-NETP-network_parameters.md
+   )
+   - More than 360 delegation changes in one epoch (or, respectively, the value of spam.protection.max.delegation)
+   - Delegating while having less than one vega (10^18 of our smallest unit) (spam.protection.delegation.min.tokens)
+   - Making a proposal when having less than 100.000 vega (spam.protection.proposal.min.tokens)
+   - Making more than 3 proposals in one epoch (spam.protection.max.proposals)
+   - Voting with less than 100 vega (spam.protection.voting.min.tokens)
+   - Voting more than 3 times on one proposal (spam.protection.max.votes)
+
+ - If the corresponding governance parameters are changed, the so are above thresholds
+ - Above thresholds are exceeded in one block, leading to a post-block-reject
+ - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again
+ - The normalisation function outputs normalised assets/revenues for all traders 
+ - On all possible transactions and combinations thereof, a spam is detected and transactions are blocked before 
+   being put on the blockchain
+ - Parties that continue spamming are blocked and eventually unblocked again
+ - The values of asset_score and recenue_score are computed correctly over chain restarts
+ - On normal trading behaviour, no transaction gets blocked 
+
+ Note: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the
+ spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow
+ up version.
