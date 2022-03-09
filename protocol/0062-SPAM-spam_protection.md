@@ -47,25 +47,27 @@ two different ways:
 
 
 For Sweetwater, the policies we enforce are relatively simple:
+
+```
 <num_votes> = 3
 <min_voting_tokens>  = 1
 <num_proposals> = 3
 <min_proposing_tokens> = 200000
+```
 
-
-- Any tokenholder with more than <min_voting_tokens> tokens has <num_votes> voting attempts per epoch
- and proposal, i.e., they can change their mind <num_votes>-1 times in one epoch. This means, a transaction is
- pre_block rejected, if there are <num_votes> or more votes on the same proposal in the blockchain in this epoch, and
- post_block rejected, if there are <num_votes> or more on the same proposal in the blockchain plus earlier in the current block.
+- Any tokenholder with more than `<min_voting_tokens>` tokens has `<num_votes>` voting attempts per epoch
+ and proposal, i.e., they can change their mind `<num_votes>-1` times in one epoch. This means, a transaction is
+ pre_block rejected, if there are `<num_votes>` or more votes on the same proposal in the blockchain in this epoch, and
+ post_block rejected, if there are `<num_votes>` or more on the same proposal in the blockchain plus earlier in the current block.
 
 - Any tokenholder that had more than 50% if its votes post-rejected is banned for 4 epochs, and all its votes are immediately 
   rejected. 
   
-- A proposal can only be issued by a tokenholder owning more than <min_proposing_tokens> at the start of the epoch. Also
-   (like above), only <num_proposals> proposals can be made per tokenholder per epoch, i.e., every proposal past <num_proposals> in an epoch is
+- A proposal can only be issued by a tokenholder owning more than `<min_proposing_tokens>` at the start of the epoch. Also
+   (like above), only `<num_proposals>` proposals can be made per tokenholder per epoch, i.e., every proposal past `<num_proposals>` in an epoch is
    rejected by post-block-reject (if there sum of proposals in past blocks and the ones in the current block exceed
-   <num_proposals>) or pre-block reject (if the sum of proposals already in the blockchain for that epoch equals or exceeds 
-   <num_proposals>. This parameter is the same for all proposals (also market-creation related ones). 
+   `<num_proposals>`) or pre-block reject (if the sum of proposals already in the blockchain for that epoch equals or exceeds 
+   `<num_proposals>`. This parameter is the same for all proposals (also market-creation related ones). 
    There also is a separate parameter to the same end that is enforced in the core. For SW, both these parameters have the same value. 
    In the future, we can set the spam protection value lower, as the amplification effect of a proposal (i.e., a proposal resulting in
    a very large number of votes) would also be covered by the core then.
@@ -73,15 +75,15 @@ For Sweetwater, the policies we enforce are relatively simple:
 ### Notes
 - What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
  and ETH speed) that the same token is moved around to different entities, this explicitly doesn't work.
-- This means that every tokenholder with more than <min_voting_tokens> can spam exactly one block on SW.
+- This means that every tokenholder with more than `<min_voting_tokens>` can spam exactly one block on SW.
 - There is some likelihood that policies will change. It would thus be good to have a clean separation of
  policy definition and enforcement, so a change in the policies can be implemented and tested independently of
  the enforcement code.
 
 ### Increasing thresholds:
 If on average for the last 10 blocks, more than 30% of all voting and proposal transactions need to be post-rejected, then the network is
-under Spam attack. In this case, the <min_voting_tokens> value is doubled, until it reaches 1600. The threshold
-is then not increased for another 10 blocks. At the beginning of every epoch, the value of <min_voting_tokens> is reset to its original.
+under Spam attack. In this case, the `<min_voting_tokens>` value is doubled, until it reaches 1600. The threshold
+is then not increased for another 10 blocks. At the beginning of every epoch, the value of `<min_voting_tokens>` is reset to its original.
 
 
 ### Issues: It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting. Due to the
@@ -91,28 +93,21 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
 ### Acceptance Criteria
 
  - A spam attack using votes/governance proposals is detected and the votes transactions are rejected, i.e.,
-This conversation was marked as resolved by Vegaklaus
- Show conversation
    a party that issues too many votes/governance proposals gets the follow on transactions rejected. This means
    (given the original parameters parameters from https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0054-NETP-network_parameters.md
    )
-   - More than 360 delegation changes in one epoch (or, respectively, the value of spam.protection.max.delegation)
-   - Delegating while having less than one vega (10^18 of our smallest unit) (spam.protection.delegation.min.tokens)
-   - Making a proposal when having less than 100.000 vega (spam.protection.proposal.min.tokens)
-   - Making more than 3 proposals in one epoch (spam.protection.max.proposals)
-   - Voting with less than 100 vega (spam.protection.voting.min.tokens)
-   - Voting more than 3 times on one proposal (spam.protection.max.votes)
-
- - If the corresponding governance parameters are changed, the so are above thresholds
- - Above thresholds are exceeded in one block, leading to a post-block-reject
- - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again
- - The normalisation function outputs normalised assets/revenues for all traders 
+   - More than 360 delegation changes in one epoch (or, respectively, the value of `spam.protection.max.delegation`) (<a name="0062-SPAM-001" href="#0062-SPAM-001">0062-SPAM-001</a>)
+   - Delegating while having less than one vega (`10^18` of our smallest unit) (`spam.protection.delegation.min.tokens`)  (<a name="0062-SPAM-002" href="#0062-SPAM-002">0062-SPAM-002</a>)
+   - Making a proposal when having less than 100.000 vega (`spam.protection.proposal.min.tokens`)  (<a name="0062-SPAM-003" href="#0062-SPAM-003">0062-SPAM-003</a>)
+   - Making more than 3 proposals in one epoch (`spam.protection.max.proposals`) (<a name="0062-SPAM-004" href="#0062-SPAM-004">0062-SPAM-004</a>)
+   - Voting with less than 100 vega (`spam.protection.voting.min.tokens`)  (<a name="0062-SPAM-005" href="#0062-SPAM-005">0062-SPAM-005</a>)
+   - Voting more than 3 times on one proposal (`spam.protection.max.votes`) (<a name="0062-SPAM-006" href="#0062-SPAM-006">0062-SPAM-006</a>)
+ - Above thresholds are exceeded in one block, leading to a post-block-reject  (<a name="0062-SPAM-007" href="#0062-SPAM-007">0062-SPAM-007</a>)
+ - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again  (<a name="0062-SPAM-008" href="#0062-SPAM-008">0062-SPAM-008</a>)
+ - The normalisation function outputs normalised assets/revenues for all traders   (<a name="0062-SPAM-009" href="#0062-SPAM-009">0062-SPAM-009</a>)
  - On all possible transactions and combinations thereof, a spam is detected and transactions are blocked before 
-   being put on the blockchain
- - Parties that continue spamming are blocked and eventually unblocked again
- - The values of asset_score and recenue_score are computed correctly over chain restarts
- - On normal trading behaviour, no transaction gets blocked 
+   being put on the blockchain  (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)
+ - Parties that continue spamming are blocked and eventually unblocked again  (<a name="0062-SPAM-011" href="#0062-SPAM-011">0062-SPAM-011</a>)
+ - The values of asset_score and revenue_score are computed correctly over chain restarts  (<a name="0062-SPAM-012" href="#0062-SPAM-012">0062-SPAM-012</a>)
 
- Note: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the
- spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow
- up version.
+> **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
