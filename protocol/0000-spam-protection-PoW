@@ -27,7 +27,8 @@ Thus, the flow is as follows:
    The hash is computed correctly and begins with <spam_PoW_difficulty> zeroes
    
 Furthermore, the validators check than
-  The same identifyer has not been used for another transaction
+  The same identifyer has not been used for another transaction from a previously comitted block. If the same identifyer is used for several transactions in the same block, these transactions need to be removed during post-processing, and the initiator blocked as a spammer.
+  
   The same block has not been used for more than <spam_PoW_number_of_tx_per_block> transactions
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on 
