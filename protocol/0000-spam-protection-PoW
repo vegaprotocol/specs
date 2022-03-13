@@ -44,8 +44,9 @@ latency transactions.
   weight and take the highest block hash.
 
 
-If increasing difficulty is set to 1, then more trnasactions can be tired to one block by increasing the difficulty; 
-e.g., if transactions_per_block is 5 and difficulty is 7, then a 6. transaction can be tied to the same block
+If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tired to one block by increasing the difficulty. 
+This happens in batches of <transactions_per_block>, 
+e.g., if transactions_per_block is 5 and difficulty is 7, then the 6th to 10th transaction can be tied to the same block
 with difficulty 8, the 11th would have difficulty 9, etc.
 
 
@@ -61,5 +62,7 @@ have been made available by then) should this prove necessary.
 Acceptance Criteria:
 A message with a missing/wrong PoW is rejected
 Reusing the same PoW for several messages is detected and leads to a blocking of the account
-Linking too many transactions to the same block is detected and leads to a blocking of that account
+Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned of)
+Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on)
+Reusing a transaction identifyer in a way that dseveral transactions with the same ID end up in the same block si detected and leads to a blocking of the account
 A blocked account is unblocked after 4 epochs.
