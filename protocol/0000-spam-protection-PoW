@@ -1,10 +1,10 @@
 
 
-Parameters: <spam_PoW_number_of_past_blocks>
-            <spam_PoW_difficulty>
-            <spam_PoW_hash_version>
-            <spam_PoW_number_of_tx_per_block>
-            <spam_PoW_increasing difficulty>
+Parameters: <spam_PoW_number_of_past_blocks>                = 100
+            <spam_PoW_difficulty>                           = 20   <should correspond to ca. 15 seconds on a PC>
+            <spam_PoW_hash_version>                                
+            <spam_PoW_number_of_tx_per_block>               = 2
+            <spam_PoW_increasing difficulty>                = 0
             
 To authorize a transaction, it needs to be tied to a past block using a proof of work.
 To this end, the hash of the block, a transaction identifyer, are fed into a hash 
@@ -57,6 +57,10 @@ latency transactions.
   4. put the transaction on the blockchain
   5. if the signed transactions violate the conditions, issue the banishment 
   6. if the signed trnsactions in a block violate the conditions, remove the offending ones from the block before calling vega [May need discussion]
+  
+- Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to
+  have a large parameter of <PoW_number_of_past_blocks>, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
+  
   
 If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tired to one block by increasing the difficulty. 
 This happens in batches of <transactions_per_block>, 
