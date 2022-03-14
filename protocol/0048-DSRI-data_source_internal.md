@@ -50,3 +50,17 @@ on: {
 }
 
 ```
+
+## Acceptance criteria
+
+1. A simple value data source can be provided
+	1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a Value source. The market settles immediately with the value provided as the settlement data.
+	1. Change a cash settled futures market's trading terminatred trigger source to a blank Value data source (or one with any value, to be discarded) and ensure the market state changes 
+1. A timne triggered value data source can be provided
+	1. Create a cash settled futures market with a time triggered value data source for the settlement data. Trigger trading terminated before the time speicifed in the trigger for the settlement data source. The market settles at the time specified in the trigger.
+	1. Create a cash settled futures market with a time triggered value data source  for the settlkement data. Trigger trading terminated after the time speicifed in the trigger for the settlement data source. The market settles immediately once trading terminated is triggered.
+	1. Create a cash settled futures market with the trading terminated trigger source beig a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the future. The market state changes to trading terminated at the time of the trigger.  
+	1. Change a cash settled futures market so the trading terminated trigger source becomes a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the future. The market state changes to trading terminated at the time of the trigger.
+	1. Change a cash settled futures market so the trading terminated trigger source becomes a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the past. The market state changes to trading terminated immediately.
+	1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a time triggered Value source with the trigger time in the past. The market settles immediately with the value provided as the settlement data.
+	1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a time triggered Value source with the trigger time in the future. The market settles at the trigger time with the value provided as the settlement data.
