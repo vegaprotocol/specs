@@ -37,8 +37,6 @@
 
 - [ ] Maintains separate position data for each market a trader is active in (<a name="0006-POSI-026" href="#0006-POSI-026">0006-POSI-026</a>)
 - [ ] If there is either one or more of the position record's fields is non zero (i.e. open position size, active buy order size, active sell order size), the position record exists. (<a name="0006-POSI-027" href="#0006-POSI-027">0006-POSI-027</a>)
-- [ ] Does not store data for positions that are reduced to size == 0 for all 3 data components (i.e. open position, active buy orders and active sell orders)  (<a name="0006-POSI-028" href="#0006-POSI-028">0006-POSI-028</a>)
-- [ ] All of a trader's orders are cancelled  (<a name="0006-POSI-029" href="#0006-POSI-029">0006-POSI-029</a>)
 
 # Summary
 
