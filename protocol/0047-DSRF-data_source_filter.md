@@ -96,7 +96,7 @@ To be clear, this also means that if the input data is the wrong "shape" or type
 	1. Create a filter for each type of source provider and ensure that only data matching the filter gets through. (<a name="0047-DSRF-001" href="#0047-DSRF-001">0047-DSRF-001</a>)
 	1. Create the same filter for multiple types of provider and ensure that with the same input data, the output is the same. (<a name="0047-DSRF-002" href="#0047-DSRF-002">0047-DSRF-002</a>)
 1. All filter conditions are applied
-	1. Create a filter with multiple (AND) conditions and ensure that data is only passed through if all conditions are met
+	1. Create a filter with multiple (AND) conditions and ensure that data is only passed through if all conditions are met. (<a name="0047-DSRF-003" href="#0047-DSRF-003">0047-DSRF-003</a>)
 	1. Create a filter using an "OR" subfilter (if implemented) and ensure that data is passed through if any of the OR condiitons are met
 1. Data that is filtered out does not result in a data event but is recorded
 	1. No data source event is emitted for a data source if the triggering event (SubmitData transaction, internal source, etc.) does not pass through the filter for that source
