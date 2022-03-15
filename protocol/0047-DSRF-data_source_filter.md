@@ -111,7 +111,7 @@ To be clear, this also means that if the input data is the wrong "shape" or type
 	1. Text fields can be filtered by equality (text matches filter data exactly). (<a name="0047-DSRF-012" href="#0047-DSRF-012">0047-DSRF-012</a>)
 	1. Number fields can be filtered by equality (number matches filter data exactly). (<a name="0047-DSRF-013" href="#0047-DSRF-013">0047-DSRF-013</a>)
 	1. Date + time fields can be filtered by equality (datetime matches filter data exactly). (<a name="0047-DSRF-014" href="#0047-DSRF-014">0047-DSRF-014</a>)
-	1. Number fields can be filtered by less than (number is less than filter data)
+	1. Number fields can be filtered by less than (number is less than filter data). (<a name="0047-DSRF-015" href="#0047-DSRF-015">0047-DSRF-015</a>)
 	1. Date + time fields can be filtered by less than (datetime is less than filter data))
 	1. Number fields can be filtered by less than (number is less than or equal to filter data)
 	1. Date + time fields can be filtered by less than (datetime is less than or equal to filter data))
