@@ -108,7 +108,7 @@ To be clear, this also means that if the input data is the wrong "shape" or type
 	1. If two data sources originate from the same data point (transaction, event, etc.) and provider (SignedMessage signer group, internal market/object, etc.) but have different filters or other properties (i.e. they are not exactly the same definition) then any data that is filtered out by both data sources results in a separate log/event for each that references the appropriate source in each case. (<a name="0047-DSRF-010" href="#0047-DSRF-010">0047-DSRF-010</a>)
 	1. If two data sources originate from the same data point (transaction, event, etc.) and provider (SignedMessage signer group, internal market/object, etc.) but have different filters or other properties (i.e. they are not exactly the same definition) and the data is filtered out by one and emitted/passes through the other, then both the filtering out and the emission of the data are recorded in logs/events that reference the appropriate source. (<a name="0047-DSRF-011" href="#0047-DSRF-011">0047-DSRF-011</a>)
 1. Data types and condition types
-	1. Text fields can be filtered by equality (text matches filter data exactly)
+	1. Text fields can be filtered by equality (text matches filter data exactly). (<a name="0047-DSRF-012" href="#0047-DSRF-012">0047-DSRF-012</a>)
 	1. Number fields can be filtered by equality (number matches filter data exactly)
 	1. Date + time fields can be filtered by equality (datetime matches filter data exactly)
 	1. Number fields can be filtered by less than (number is less than filter data)
