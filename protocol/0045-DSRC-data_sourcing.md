@@ -225,5 +225,5 @@ Vega should reject any data source tx that is not explicitly required, so this w
 1. It's possible to query an API and see all active data sources. (<a name="0045-DSRC-012" href="#0045-DSRC-012">0045-DSRC-012</a>)
 1. It's possible to listen to events or view logs and see all rejections and data source processing. (<a name="0045-DSRC-013" href="#0045-DSRC-013">0045-DSRC-013</a>)
 1. It's possible to listen to events and see all data that is supplied across all data sources or for any specific source
-1. Data node carries historic data of at least all valid data that was supplied for each data source
+1. Data node carries historic data of at least all valid data that was supplied for each data source. (<a name="0045-DSRC-015" href="#0045-DSRC-015">0045-DSRC-015</a>)
 1. Data sources can be composed/nested arbitrarily (as long as the definition is valid), for example selecting a field on filtered data that itself was sourced by selecting a field on a message sent by a signed data source (for example this might be processing a complex object in the source data
