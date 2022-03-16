@@ -46,12 +46,9 @@ cash_settled_future.trading_termination_trigger(event) {
 ```javascript
 cash_settled_future.settlement_data(event) {
 
-	// Suspend the market if we receive settlement data before trading termination
-	// this would require investigation and governance action
-	// MVP version: If settlement data was received prior to trading termination use the last value received, otherwise use the first value received after trading is terminated 
-	if market.status != TRADING_TERMINATED {
-		setMarketStatus(SUSPENDED)
-		return
+	// If settlement data was received prior to trading termination use the last value received, otherwise use the first value received after trading is terminated 
+	while market.status != TRADING_TERMINATED {
+		waitForMarketStatus(TRADING_TERMINATED)
 	}
 
 	final_cashflow = cash_settled_future.value(event.data) - cash_settled_future.value(market.mark_price)
