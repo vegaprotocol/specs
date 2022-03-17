@@ -1,3 +1,7 @@
+@Library('vega-shared-library') _
+
+def commitHash = 'UNKNOWN'
+
 pipeline {
     agent { label 'general' }
     options {
@@ -23,6 +27,7 @@ pipeline {
                         retry(3) {
                             dir('specs-internal') {
                                 checkout scm
+                                commitHash = getCommitHash()
                             }
                         }
                     }
@@ -47,6 +52,14 @@ pipeline {
                             dir('specs-internal') {
                                 sh 'yamllint -s -d "{extends: default, rules: {line-length: {max: 160}}}" .'
                             }
+                        }
+                    }
+                }
+                stage('approbation') {
+                    steps {
+                        script {
+                            runApprobation ignoreFailure: !isPRBuild(),
+                                specsInternal: commitHash
                         }
                     }
                 }
