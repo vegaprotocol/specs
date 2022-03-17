@@ -27,7 +27,9 @@ pipeline {
                         retry(3) {
                             dir('specs-internal') {
                                 checkout scm
-                                commitHash = getCommitHash()
+                                script {
+                                    commitHash = getCommitHash()
+                                }
                             }
                         }
                     }
