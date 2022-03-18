@@ -58,6 +58,13 @@ pipeline {
                     }
                 }
                 stage('approbation') {
+                    when {
+                        anyOf {
+                            branch 'develop'
+                            branch 'main'
+                            branch 'master'
+                        }
+                    }
                     steps {
                         script {
                             runApprobation ignoreFailure: !isPRBuild(),
