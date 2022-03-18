@@ -103,7 +103,7 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 - With `delegator_share` set to `1`, a validator receives no reward, and their delegators receive a proprotional amount of 100% (<a name="0061-REWP-004" href="#0061-REWP-004">0061-REWP-004</a>) 
 - With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proprotional amount of the remaining 50% (<a name="0061-REWP-006" href="#0061-REWP-006">0061-REWP-006</a>) 
 
-## Missing key on multisig (<a name="0061-REWP-007" href="#0061-REWP-007">0061-REWP-007</a>) 
+## Rewards distribution corresponds to the signers on the multisig contract in the case that it hasn’t been updated after a validator set change (<a name="0061-REWP-007" href="#0061-REWP-007">0061-REWP-007</a>) 
 1. Four or more Tendermint validators with equal own+delegated stake and some ersatz validators are running.
 1. There is a one-to-one correspondence between Tendermint validators' ethereum keys and keys on multisig.
 1. Reward pool is funded.
