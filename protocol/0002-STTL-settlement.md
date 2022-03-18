@@ -123,6 +123,35 @@ This oracle input is ignored and market is in the default trading mode (continou
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
+1. The market's insurance pool is [transferred](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
+
+
+### Example 4 - Trading is terminated during opening auction (<a name="0002-STTL-011" href="#0002-STTL-011">0002-STTL-011</a>)
+
+1. A market has been proposed and the proposal enacted, the market is in the opening auction period. 
+1. There are orders on the book (so at least one party has posted orders). At least one party has non-zero margin account balance. 
+1. There are no positions (there cannot be any in the opening auction). 
+1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
+1. Margin balances are transferred into the general accounts of the relevant parties.
+1. The proposer's (and any other LPs) bond account balances are transferred into the general accounts of the relevant parties.
+1. The market's insurance pool is [transferred](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
+1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
+1. Now the market can be deleted.
+
+
+
+### Example 5 - Trading is terminated on a market with no open positions (<a name="0002-STTL-012" href="#0002-STTL-012">0002-STTL-012</a>)
+
+1. Market has a status of ACTIVE and is trading in default trading mode.
+1. There are orders on the book (so at least one party has posted orders). At least one party has non-zero margin account balance. 
+1. There are no positions. There must have been at least one trade (to leave opening auction) and then at least one trade in the opposite direction to ensure no-one has any open positions. 
+1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
+1. Margin balances are transferred into the general accounts of the relevant parties.
+1. The proposer's (and any other LPs) bond account balances are transferred into the general accounts of the relevant parties.
+1. The market's insurance pool is [transferred](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market.
+1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
+1. Now the market can be deleted.
+
+
