@@ -1,10 +1,10 @@
 
 
-Parameters: <spam_PoW_number_of_past_blocks>                = 100
-            <spam_PoW_difficulty>                           = 20   <should correspond to ca. 15 seconds on a PC>
+Parameters: <spam_PoW_number_of_past_blocks>                = 100  (range: 10-500)
+            <spam_PoW_difficulty>                           = 15   <should correspond to ca. 15 seconds on a normal PC> (range:0-50)
             <spam_PoW_hash_version>                                
-            <spam_PoW_number_of_tx_per_block>               = 2
-            <spam_PoW_increasing difficulty>                = 0
+            <spam_PoW_number_of_tx_per_block>               = 2 (range: 1-1000)
+            <spam_PoW_increasing difficulty>                = 0 (range: 0/1)
             
 To authorize a transaction, it needs to be tied to a past block using a proof of work.
 To this end, the hash of the block, a transaction identifyer, are fed into a hash 
@@ -15,9 +15,9 @@ zeroes.
 Thus, the flow is as follows:
  The user generates a unique transaction identifyer tid
  The user downloads the hash H(b) of the latest block it has seen, and computes
- brute forces valuies of x so that hash("Vega_SPAM_PoW", H(b),tid, x) starts with
+ brute forces values of x so that hash("Vega_SPAM_PoW", H(b),tid, x) starts with
  <difficulty> zeros.
- The user then attaches the PoW to a transaction, and sends it of together with x and H9b).
+ The user then attaches the PoW to a transaction, and sends it of together with x and H(b).
  
  The validators verify that
    H(b) is the correct hash of a past block
@@ -27,7 +27,9 @@ Thus, the flow is as follows:
    The hash is computed correctly and begins with <spam_PoW_difficulty> zeroes
    
 Furthermore, the validators check than
-  The same identifyer has not been used for another transaction from a previously comitted block. If the same identifyer is used for several transactions in the same block, these transactions need to be removed during post-processing, and the initiator blocked as a spammer.
+  The same identifyer has not been used for another transaction from a previously comitted block. If the same identifyer is used for 
+  several transactions in the same block, these transactions need to be removed during post-processing, and the initiator blocked as a 
+  spammer.
   
   The same block has not been used for more than <spam_PoW_number_of_tx_per_block> transactions
  
@@ -48,7 +50,7 @@ latency transactions.
   does not execute the increased difficulty properly, we can not stop this pre-agreement, only detect it post-agreement.
   This is the reason why some violations are punished with banishment rather than prevented.
 - As some violations could come through missconfigurations, we may consider a less strict way of banishment, e.g.,
-  only to a long term banishemnt for repeat/high volume offenders.
+  only to a long term banishment for repeat/high volume offenders.
 - In the original spam protection, we want to do anti-spam before verifying signatures; this order, however, cannot be done
   if the consequence of spam is banishment. Thus, here the order is
   1. check if the account is banished and (if so) ignore the transaction
@@ -60,7 +62,8 @@ latency transactions.
   
 - Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to
   have a large parameter of <PoW_number_of_past_blocks>, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
-  
+- The PoW is currently valid for all trransactions; a consideration is to use it only for trading related transactions, so even if
+   something goes wrong here delegators can still vote.
   
 If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tired to one block by increasing the difficulty. 
 This happens in batches of <transactions_per_block>, 
