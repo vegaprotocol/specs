@@ -201,8 +201,8 @@ Ideally, it should be possible to not repeat things that are not changing or are
 
 The following are immutable and cannot be changed:
 - marketID
-- tickSize (will be removed I believe so it's not relevant)
-- decimalPlaces
+- market decimal places 
+- position decimal places
 - settlementAsset
 - name
 
