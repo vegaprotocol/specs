@@ -175,7 +175,7 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 
 ## Acceptance Criteria:
 - [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
-- [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">003-OLIQ-002</a>);
+- [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>);
 
 ### LP commitment order creation
 - [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
