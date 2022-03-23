@@ -174,15 +174,13 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 * Order datatype for LP orders. Any order APIs should contain these orders.
 
 ## Acceptance Criteria:
-- [ ] Volume implied by the liquidity provision order is that given by [lp-measure-test.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/lp-measure-test.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>)
-- [ ] Volume implied by the liquidity provision order is that given by [lp-measure-test-with-fractional-orders.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/lp-measure-test.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
-
-
+- [ ] Volume implied by the liquidity provision order is that given by [l0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
+- [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">003-OLIQ-002</a>);
 
 ### LP commitment order creation
-- [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>)
-- [x] All orders created by an LP commitment must be pegged orders (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
-- [x] Filled orders are replaced immediately to confirm to the LP commitment shapes (<a name="0038-OLIQ-004" href="#0038-OLIQ-004">0038-OLIQ-004</a>)
+- [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
+- [x] All orders created by an LP commitment must be pegged orders (<a name="0038-OLIQ-004" href="#0038-OLIQ-004">0038-OLIQ-004</a>)
+- [x] Filled orders are replaced immediately to confirm to the LP commitment shapes (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-004</a>)
 
 ### LP commitment amendment
-- [x] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-005</a>)
+- [x] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
