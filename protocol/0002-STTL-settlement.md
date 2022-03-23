@@ -113,12 +113,14 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 
 1. Market has a status of ACTIVE and is trading in default trading mode (continuous trading)
 1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated. 
-This oracle input is ignored and market is in the default trading mode (continous trading).
-1. At least one party places an order that triggers a trade (just to prove that we can).
+This oracle input retained and market is in the default trading mode (continous trading).
+1. At least one party places an order that triggers a trade (just to prove that we can). 
+1. An [oracle event occurs *again*](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated. 
+This oracle input retained and market is in the default trading mode (continous trading).
+1. At least one party places an order that triggers a trade (just to prove that we can again). 
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
 1. The market's status is set to [TRADING TERMINATED](./0043-MKTL-market_lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs.
-1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md))
-1. Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-PFUT-product_builtin_future.md#42-final-settlement-expiry))
+1. Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-PFUT-product_builtin_future.md#42-final-settlement-expiry)) using the *most recent* retained settlement price input. 
 1. Accounts are settled as per collection and distribution methods described above.
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
