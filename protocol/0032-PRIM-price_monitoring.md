@@ -50,6 +50,16 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 - `PriceMonitoringDefaultParameters`: Specifies default market parameters outlined in the previous paragraph. These will be used if market parameters don't get explicitly specified.
 - `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
 
+### Hard-coded
+- Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market. 
+
+There are several reasons why this maximum is enforced. 
+
+1. anything more than `5` triplets makes reasoning about what and when will trigger an auction more difficult and could lead to markets that behave in unexpected ways.
+1. allowing high number of triplets could have performance impact
+1. testing everything works correctly is more manageable if the number is capped. 
+
+
 ## View from the Vega side
 
 - Per each transaction:
@@ -102,7 +112,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - Persistent order results in an auction (both triggers breached), orders placed during auction result in a trade with indicative price within the price monitoring bounds, hence auction concludes once the trigger time elapses. (<a name="0032-PRIM-004" href="#0032-PRIM-004">0032-PRIM-004</a>)
 - The market continues in regular fashion once price protection auction period ends and price monitoring bounds get reset based on last traded price (which may come from the auction itself if it resulted in trades)  (<a name="0032-PRIM-005" href="#0032-PRIM-005">0032-PRIM-005</a>)
 - Persistent order results in an auction (one trigger breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>)
-- A maximum of 4 price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
+- A maximum of `5` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
 - Persistent order results in an auction (one trigger breached), orders placed during auction result in trade with indicative price outside the price monitoring bounds, hence auction get extended, additional orders resulting in more trades placed, auction concludes. (<a name="0032-PRIM-008" href="#0032-PRIM-008">0032-PRIM-008</a>)
 - If the cumulative extentions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>)   
 
