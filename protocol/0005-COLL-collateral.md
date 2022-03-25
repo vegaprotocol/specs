@@ -1,12 +1,5 @@
 Feature name: collateral
 
-# Acceptance Criteria
-* [ ] Transfer requests are the only way the collateral engine will change the amounts of assets (<a name="0005-COLL-001" href="#0005-COLL-001">0005-COLL-001</a>)
-* [ ] A transfer request will always only instruct one asset to be transferred. (<a name="0005-COLL-002" href="#0005-COLL-002">0005-COLL-002</a>)
-* [ ] If a transfer request does not contain an equal amount of debit assets to credit assets it is malformed and should be outright rejected by the collateral engine  (<a name="0005-COLL-003" href="#0005-COLL-003">0005-COLL-003</a>)
-* [ ] One transfer request may result in multiple ledger entries.  (<a name="0005-COLL-004" href="#0005-COLL-004">0005-COLL-004</a>)
-* [ ] Each ledger entry will specify one debit account, one credit account and one amount of a single asset. (<a name="0005-COLL-005" href="#0005-COLL-005">0005-COLL-005</a>)
-* [ ] Creation and deletion of accounts - see [accounts](./0013-ACCT-accounts.md).
 
 # Summary
 
@@ -69,3 +62,9 @@ LedgerEntry: {
 
 # APIs
 At a minimum on the front end, a trader should know how much money is in each of their "main accounts" and each of their "margin account".  They will typically also want to know how much their Unrealised PnL / Mark to market is for each market, so that they understand the composition of the "margin account".  
+
+
+# Acceptance Criteria
+* [ ] Collateral engine emits an event on each transfer with source account, destination account and amount (<a name="0005-COLL-001" href="#0005-COLL-001">0005-COLL-001</a>)
+* [ ] In absence of deposits or withdrawals via a bridge the total amount of any asset across all the accounts for the asset remains constant. (<a name="0005-COLL-002" href="#0005-COLL-002">0005-COLL-002</a>)
+
