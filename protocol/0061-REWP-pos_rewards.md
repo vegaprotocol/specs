@@ -93,12 +93,29 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 1. Four or more Tendermint validators with equal own+delegated stake and some ersatz validators are running.
 1. Reward pool is funded.
 1. There is a one-to-one correspondence between Tendermint validators' ethereum keys and keys on multisig.
-1. One of the Tendermint validators goes offline forever but their key still stays on multisig (no-one updated).
+1. One of the Tendermint validators goes offline forever and is removed from the set of Tendermint validators but their key still stays on multisig (no-one updated).
 1. Epoch ends and multisig hasn't been updated.
 1. No validators get any rewards.
 
+
 - A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)
 - With `delegator_share` set to `0`, a validator keeps 100% of their own rewards, and a delegator receives no reward (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>) 
-- With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proprotional amount of the remaining 50% (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>) 
 - With `delegator_share` set to `1`, a validator receives no reward, and their delegators receive a proprotional amount of 100% (<a name="0061-REWP-004" href="#0061-REWP-004">0061-REWP-004</a>) 
-- For the above three scenarios, the reward payout per public key does not exceed `maxPayoutPerRecipient` (<a name="0061-REWP-005" href="#0061-REWP-005">0061-REWP-005</a>) 
+- With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proprotional amount of the remaining 50% (<a name="0061-REWP-006" href="#0061-REWP-006">0061-REWP-006</a>) 
+
+## Rewards distribution corresponds to the signers on the multisig contract in the case that it hasn’t been updated after a validator set change (<a name="0061-REWP-007" href="#0061-REWP-007">0061-REWP-007</a>) 
+1. Four or more Tendermint validators with equal own+delegated stake and some ersatz validators are running.
+1. There is a one-to-one correspondence between Tendermint validators' ethereum keys and keys on multisig.
+1. Reward pool is funded.
+1. A validator called Bob leaves the set of tendermint validators (for example, reduce own plus delegated tokens so that their score is pushed down). A validator called Alice is promoted to tendermint validator set. 
+1. No-one updated multisig validators so we still have Bob's key on the list of multisig signer. 
+1. Epoch ends and multisig hasn't been updated.
+1. All validators and ersatz validators, apart from Alice get rewards.
+
+
+## Rewards from trading fees are calculated and distributed (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
+1. Run Vega with at least 3 tendermint validator nodes and at least 5 ersatz validator nodes each with different self-stake and delegation.
+1. A market is launched with settlement asset A, infrastructure fee of `0.01 = 1%`. Market leaves opening auction and at least 10 trades occur with a total traded notial for fee purposes of at least 10000000 A. 
+1. Epoch ends. 
+1. The reward pool from trading in asset A is at least `0.01 x 10000000 = 100000`. 
+1. Each validator and delegator receives appropriate share of the `100000`. 

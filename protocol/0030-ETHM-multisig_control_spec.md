@@ -99,7 +99,6 @@ contract MultisigControl {
 
 # Acceptance Criteria
 ### MultisigControl Smart Contract 
-* MultisigControl smart contract is deployed to Ethereum testnet (Ropsten) (<a name="0030-ETHM-001" href="#0030-ETHM-001">0030-ETHM-001</a>)
 * Set Threshold
   * A valid signature bundle, threshold (in tenths of %), and unused nonce can be passed to `set_threshold` function to set the approval threshold in hundredths of a percent (`TODO: check this mechanism/math`) (<a name="0030-ETHM-002" href="#0030-ETHM-002">0030-ETHM-002</a>)
   * A successful call to `set_threshold` emits `ThresholdSet` event (<a name="0030-ETHM-003" href="#0030-ETHM-003">0030-ETHM-003</a>)
@@ -126,6 +125,5 @@ contract MultisigControl {
   * `is_nonce_used()` returns true if nonce has been used to successfully sign something previously (<a name="0030-ETHM-021" href="#0030-ETHM-021">0030-ETHM-021</a>)
 
 ### MultisigControl Consuming Smart Contract
-* MultisigControl consuming smart contract (such as bridge) is deployed to Ethereum testnet (Ropsten) (<a name="0030-ETHM-022" href="#0030-ETHM-022">0030-ETHM-022</a>)
 * Consuming smart contract calls `verify_signatures` with valid signature bundle and message hash is returned true if the valid signature count is over threshold % of total signers  (<a name="0030-ETHM-023" href="#0030-ETHM-023">0030-ETHM-023</a>)
  

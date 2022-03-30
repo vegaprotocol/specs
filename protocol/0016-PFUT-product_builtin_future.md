@@ -46,15 +46,12 @@ cash_settled_future.trading_termination_trigger(event) {
 ```javascript
 cash_settled_future.settlement_data(event) {
 
-	// Suspend the market if we receive settlement data before trading termination
-	// this would require investigation and governance action
-	// MVP version: If settlement data was received prior to trading termination use the last value received, otherwise use the first value received after trading is terminated 
-	if market.status != TRADING_TERMINATED {
-		setMarketStatus(SUSPENDED)
-		return
+	// If settlement data was received prior to trading termination use the last value received, otherwise use the first value received after trading is terminated 
+	while market.status != TRADING_TERMINATED {
+		waitForMarketStatus(TRADING_TERMINATED)
 	}
 
-	final_cashflow = cash_settled_future.value(event.data) - cash_settled_future.value(market.mark_price)) 
+	final_cashflow = cash_settled_future.value(event.data) - cash_settled_future.value(market.mark_price)
 	settle(cash_settled_future.settlement_asset, final_cashflow)
 	setMarkPrice(event.data)
 	setMarketStatus(SETTLED)
@@ -69,14 +66,11 @@ cash_settled_future.settlement_data(event) {
 3. Create a Cash Settled Future with the settlement data provided by an external data source (<a name="0016-PFUT-003" href="#0016-PFUT-003">0016-PFUT-003</a>)
 4. Create a Cash Settled Future for any settlement asset that's configured in Vega
   1. Either data source can be changed via governance (<a name="0016-PFUT-004" href="#0016-PFUT-004">0016-PFUT-004</a>)
-  2. It is not possible to change settlement asset via governance (<a name="0016-PFUT-005" href="#0016-PFUT-005">0016-PFUT-005</a>)
+  2. It is not possible to change settlement asset via governance (<a href="./0051-PROD-product.md#0051-PROD-005">0051-PFUT-005</a>)
   3. Mark to market settlement works correctly (<a name="0016-PFUT-006" href="#0016-PFUT-006">0016-PFUT-006</a>)
   4. Settlement at expiry works correctly (<a name="0016-PFUT-007" href="#0016-PFUT-007">0016-PFUT-007</a>)
-1. A market that receives settlement data before trading termination is suspended (<a name="0016-PFUT-008" href="#0016-PFUT-008">0016-PFUT-008</a>)
-1. A market that was suspended for receiving settlement data before trading termination remains suspended until a governance vote changes the status (<a name="0016-PFUT-009" href="#0016-PFUT-009">0016-PFUT-009</a>) 
-1. A market that was suspended for receiving settlement data before trading termination can be closed by governance vote (<a name="0016-PFUT-010" href="#0016-PFUT-010">0016-PFUT-010</a>)
-1. A market that was suspended for receiving settlement data before trading termination can be settled by governance vote if the trading_termination_trigger and settlement_data source are changed and the status is set to `ACTIVE` by governance vote (<a name="0016-PFUT-011" href="#0016-PFUT-011">0016-PFUT-011</a>)
-1. A market that has already settled and is in trading terminated status never processes any more lifecycle events even if the data source sends more valid data (<a name="0016-PFUT-012" href="#0016-PFUT-012">0016-PFUT-012</a>)
-1. Lifecycle events are processed atomically as soon as they are triggered, i.e. the above condition always holds even for two or more transactions arriving at effectively the same time - only the transaction that is sequenced first triggers final settlement (<a name="0016-PFUT-013" href="#0016-PFUT-013">0016-PFUT-013</a>)
-1. Once a market is finally settled, the mark price is equal to the settlement data and this is exposed on event bus and market data APIs (<a name="0016-PFUT-014" href="#0016-PFUT-014">0016-PFUT-014</a>)
-1. Assure [settment-at-expiry.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0002-settlement_at_expiry.feature) executes correctly (<a name="0016-PFUT-015" href="#0016-PFUT-015">0016-PFUT-015</a>)
+1. A market that receives settlement data before trading termination always stores the newest one and upon receiving the trading termination trigger settles the market (<a name="0016-PFUT-008" href="#0016-PFUT-008">0016-PFUT-008</a>)
+1. A market that has already settled and is in trading terminated status never processes any more lifecycle events even if the data source sends more valid data (<a name="0016-PFUT-012" href="#0016-PFUT-009">0016-PFUT-009</a>)
+1. Lifecycle events are processed atomically as soon as they are triggered, i.e. the above condition always holds even for two or more transactions arriving at effectively the same time - only the transaction that is sequenced first triggers final settlement (<a name="0016-PFUT-010" href="#0016-PFUT-010">0016-PFUT-010</a>)
+1. Once a market is finally settled, the mark price is equal to the settlement data and this is exposed on event bus and market data APIs (<a name="0016-PFUT-011" href="#0016-PFUT-011">0016-PFUT-011</a>)
+1. Assure [settment-at-expiry.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0002-STTL-settlement_at_expiry.feature) executes correctly (<a name="0016-PFUT-012" href="#0016-PFUT-012">0016-PFUT-012</a>)

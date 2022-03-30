@@ -1,20 +1,6 @@
-Feature name: price-monitoring
+# Price-monitoring
 
-Start date: 2020-04-29
-
-Specification PR: [275](https://github.com/vegaprotocol/specs-internal/pull/275)
-
-# Acceptance Criteria
-
-- [ ] Price monitoring engine exists, holds all the horizon, confidence level, auction extension triplets configured for the market and exposes a function that takes as input the arrival price of the next transaction and returns the signal instructing the matching engine if a price protection auction should commence, and if so, what should its period be. (<a name="0032-PRIM-001" href="#0032-PRIM-001">0032-PRIM-001</a>)
-- [ ] Risk model prescribes maximum probability level which it can support. (<a name="0032-PRIM-002" href="#0032-PRIM-002">0032-PRIM-002</a>)
-- [ ] `vega` refuses to create a market if the specified probability level for price monitoring exceeds what the risk model specifies - to avoid spurious accuracy and runtime errors. (<a name="0032-PRIM-003" href="#0032-PRIM-003">0032-PRIM-003</a>)
-- [ ] The matching engine triggers price protection auction period based on the price monitoring signal. (<a name="0032-PRIM-004" href="#0032-PRIM-004">0032-PRIM-004</a>)
-- [ ] The market continues in regular fashion once price protection auction period ends. (<a name="0032-PRIM-005" href="#0032-PRIM-005">0032-PRIM-005</a>)
-- [ ] Transactions are processed atomically so that the transaction which directly moved the price beyond allowed band gets processed again via price protection auction period (and no associated trades are generated prior to that period). (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>)
-- [ ] A maximum of 4 price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
-
-# Summary
+## Summary
 
 The dynamics of market price movements are such that prices don't always represent the participants' true average view of the price, but are instead artefacts of the market microstructure: sometimes low liquidity and/or a large quantity of order volume can cause the price to diverge from the true market price. It is impossible to tell at any point in time if this has happened or not.
 
@@ -25,13 +11,13 @@ As mentioned above, price monitoring is meant to stop large market movements tha
 
 Please see the [auction spec](./0026-AUCT-auctions.md) for auction details.
 
-## Note
+### Note
 
 Price monitoring likely won't be the only possible trigger of auction period ([liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
 
 Likewise, pre-processing transactions will be needed as part of the [fees spec](./0029-FEES-fees.md), hence it should be implemented in such a way that it's easy to repurpose it.
 
-# Guide-level explanation
+## Guide-level explanation
 
 - We need to emit a "significant price change" event if price move over the horizon τ turned out to be more than what the risk model implied at a probability level α.
   - Take **arrival price of the next transaction** (the value that will be the last traded price if we process the next transaction): V<sub>t</sub>,
@@ -63,6 +49,16 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 - `PriceMonitoringDefaultParameters`: Specifies default market parameters outlined in the previous paragraph. These will be used if market parameters don't get explicitly specified.
 - `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
+
+### Hard-coded
+- Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market. 
+
+There are several reasons why this maximum is enforced. 
+
+1. anything more than `5` triplets makes reasoning about what and when will trigger an auction more difficult and could lead to markets that behave in unexpected ways.
+1. allowing high number of triplets could have performance impact
+1. testing everything works correctly is more manageable if the number is capped. 
+
 
 ## View from the Vega side
 
@@ -106,6 +102,17 @@ to the risk model and obtains the range of valid up/down price moves per each of
 
   so that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α.
 
-# Test cases
 
-See acceptance criteria.
+## Acceptance Criteria
+
+- Market's price monitoring parameters and triggers (horizon, confidence level, auction extension triplet) can be queried via APIs. (<a name="0032-PRIM-001" href="#0032-PRIM-001">0032-PRIM-001</a>)
+- Persistent order results in an auction (both triggers breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-002" href="#0032-PRIM-002">0032-PRIM-002</a>)
+- Non-persistent order do not result in an auction (one trigger breached), order gets cancelled (never makes it to the order book)
+(<a name="0032-PRIM-003" href="#0032-PRIM-003">0032-PRIM-003</a>)
+- Persistent order results in an auction (both triggers breached), orders placed during auction result in a trade with indicative price within the price monitoring bounds, hence auction concludes once the trigger time elapses. (<a name="0032-PRIM-004" href="#0032-PRIM-004">0032-PRIM-004</a>)
+- The market continues in regular fashion once price protection auction period ends and price monitoring bounds get reset based on last traded price (which may come from the auction itself if it resulted in trades)  (<a name="0032-PRIM-005" href="#0032-PRIM-005">0032-PRIM-005</a>)
+- Persistent order results in an auction (one trigger breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>)
+- A maximum of `5` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
+- Persistent order results in an auction (one trigger breached), orders placed during auction result in trade with indicative price outside the price monitoring bounds, hence auction get extended, additional orders resulting in more trades placed, auction concludes. (<a name="0032-PRIM-008" href="#0032-PRIM-008">0032-PRIM-008</a>)
+- If the cumulative extentions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>)   
+
