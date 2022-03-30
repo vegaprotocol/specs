@@ -49,4 +49,4 @@ If the network has no stake at all, then all validators would have equal voting 
 1. check that Tendermint weights for the validators are `2000`
 1. now every validator removes (via undelegate now) their stake and there are no delegations from other parties
 1. wait for 1000 blocks to pass
-1. the Tendermint weights for each validator are `1` each. 
+1. the Tendermint weights for each validator are `10` each as there is no stake in the network. 
