@@ -4,7 +4,7 @@ Vega is running a delegated proof of stake blockchain based on Tendermint.
 
 For each validator node Tendermint keeps the "weight" of the node for consensus purposes. This spec clarifies how such weight is calculated on Vega. 
 
-On Vega the voting power is calcualted as follows: `stakeScore` x `performanceScore` where `stakeScore` is defined as the anti-whaling stake score of tendermint validators and performance score is the proportion of successful proposals of the validator normalised to their voting power. 
+On Vega the voting power is calcualted as follows: `stakeScore x performanceScore` where `stakeScore` is defined as the anti-whaling stake score of tendermint validators and performance score is the proportion of successful proposals of the validator normalised to their voting power. 
 
 The weights should be updated every `1000` blocks and every epoch (whichever passes first).
 
