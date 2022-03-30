@@ -31,7 +31,8 @@ Furthermore, the validators check than
   several transactions in the same block, these transactions need to be removed during post-processing, and the initiator blocked as a 
   spammer.
   
-  The same block has not been used for more than <spam_PoW_number_of_tx_per_block> transactions
+  The same block has not been used for more than <spam_PoW_number_of_tx_per_block> transactions per spam difficulty level 
+  (i.e., if increase_difficulty is > 1, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on 
  this; however, they can be verified post-agreement, and the offending vega-key can be banished for 4 epochs.
