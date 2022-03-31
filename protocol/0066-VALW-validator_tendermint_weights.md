@@ -4,7 +4,7 @@ Vega is running a delegated proof of stake blockchain based on Tendermint.
 
 For each validator node Tendermint keeps the "weight" of the node for consensus purposes. This spec clarifies how such weight is calculated on Vega. 
 
-On Vega the voting power is calcualted as follows: `stakeScore x performanceScore` where `stakeScore` is defined as the anti-whaling stake score of tendermint validators and performance score is the proportion of successful proposals of the validator normalised to their voting power. 
+On Vega the voting power is calcualted as follows: `stakeScore x performanceScore` normalised by the sum of those scores. Where `stakeScore` is defined as the anti-whaling stake score of tendermint validators and performance score is the proportion of successful proposals of the validator normalised to their voting power. 
 
 The weights should be updated every `1000` blocks and every epoch (whichever passes first).
 
@@ -49,4 +49,4 @@ If the network has no stake at all, then all validators would have equal voting 
 1. check that Tendermint weights for the validators are `2000`
 1. now every validator removes (via undelegate now) their stake and there are no delegations from other parties
 1. wait for 1000 blocks to pass
-1. the Tendermint weights for each validator are `1` each. 
+1. the Tendermint weights for each validator are `10` each as there is no stake in the network. 
