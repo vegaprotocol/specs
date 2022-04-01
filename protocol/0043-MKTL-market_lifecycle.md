@@ -220,7 +220,12 @@ A market moves from this termination state to Settled when enough information ex
 
 ### Settled
 
-Once the required data to calculate the settlement cashflows is available for an market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). The positions are then closed and all orders cleared. All money held in margin accounts after final settlement is returned to traders' general accounts. The market can be deleted entirely at this point, from a core perspective. Any insurance pool funds are distributed as per the [insurance pool spec](./0015-INSR-market_insurance_pool_collateral.md).
+Once the required data to calculate the settlement cashflows is provided by oracle input for an market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). 
+The positions are then closed and all orders cleared. 
+All money held in margin accounts after final settlement is returned to traders' general accounts. 
+[Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset. 
+[LP fees](0042-LIQF-setting_fees_and_rewarding_lps.md) that have been cumulated but not yet paid out are distributed to the market LPs as per the LP spec. 
+The market can be deleted entirely at this point, from a core perspective. 
 
 **Entry:**
 
@@ -284,3 +289,4 @@ Parties that had open positions see settlement cash-flows happen.
 Margin account balances are transferred to the general account. 
 Any insurance pool balance is transferred to the network treasury account for the asset. 
 The market state is `settled`. 
+
