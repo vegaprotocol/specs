@@ -109,5 +109,6 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
    being put on the blockchain  (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)
  - Parties that continue spamming are blocked and eventually unblocked again  (<a name="0062-SPAM-011" href="#0062-SPAM-011">0062-SPAM-011</a>)
  - The values of asset_score and revenue_score are computed correctly over chain restarts  (<a name="0062-SPAM-012" href="#0062-SPAM-012">0062-SPAM-012</a>)
+ - Any rejection due to spam protection is reported to the user upon transaction submission detailing which criteria the key exceeded / not met  (<a name="0062-SPAM-013" href="#0062-SPAM-013">0062-SPAM-013</a>)  
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
