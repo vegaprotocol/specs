@@ -222,30 +222,32 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
   problem, we can address it by increasing the ban-time.
   
 	    
-### Acceptance Criteria
-	
-- A spam attack using votes/governance proposals is detected and the votes transactions are rejected, i.e.,
-  a party that issues too many votes/governance proposals gets the follow on transactions rejected. This means
-  (given the original parameters parameters from https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0054-NETP-network_parameters.md
-  )
-  - More than 360 delegation changes in one epoch (or, respectively, the value of spam.protection.max.delegation)
-  - Delegating while having less than one vega (10^18 of our smallest unit) (spam.protection.delegation.min.tokens)
-  - Making a proposal when having less than 100.000 vega (spam.protection.proposal.min.tokens)
-  - Making more than 3 proposals in one epoch (spam.protection.max.proposals)
-  - Voting with less than 100 vega (spam.protection.voting.min.tokens)
-  - Voting more than 3 times on one proposal (spam.protection.max.votes)
-  
-- If the corresponding governance parameters are changed, the so are above thresholds
-- Above thresholds are exceeded in one block, leading to a post-block-reject
-- If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again
-- The normalisation function outputs normalised assets/revenues for all traders 
-- On all possible transactions and combinations thereof, a spam is detected and transactions are blocked before 
-  being put on the blockchain
-- Parties that continue spamming are blocked and eventually unblocked again
-- The values of asset_score and recenue_score are computed correctly over chain restarts
-- On normal trading behaviour, no transaction gets blocked 
-	 
-Note: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the
-spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow
-up version.
 
+### Acceptance Criteria
+
+ - A spam attack using within one epoch more than #spam.protection.max.proposals (3) proposal transactions is detected and the superfluous proposals 
+   are not allowed in any block later than the first proposal transaction exceeding the threshold. (<a name="0062-SPAM-001” href="#0062-SPAM-001”>0062-SPAM-001</a>)
+ - A spam attack using within one epoch more than #spam.protection.max.votes (3) vote transactions on one proposal is detected and the superfluous proposals 
+   are not allowed in any block later than the first proposal transaction exceeding the threshold. (<a name="0062-SPAM-002” href="#0062-SPAM-002”>0062-SPAM-002</a>)
+
+- A spam attack using within one epoch more than #spam.delegations.max.votes (360) vote transactions on one proposal is detected and the superfluous proposals 
+   Are not allowed in any block later than the first proposal transaction exceeding the threshold.(<a name="0062-SPAM-003” href="#0062-SPAM-003”>0062-SPAM-003</a>)
+
+
+- Any vote issued by a delegator owning less than #spam.protection.voting.min.tokens (100 Full tokens / 100*10^18 units)  is rejected and does not enter a block (<a name="0062-SPAM-004” href="#0062-SPAM-004”>0062-SPAM-004</a>)
+
+- Any proposal issued by a delegator owning less than #spam.protection.proposal.min.tokens (100000 Full tokens / 100000*10^18 units)  is rejected and does not enter a block. (<a name="0062-SPAM-005” href="#0062-SPAM-005”>0062-SPAM-005</a>)
+
+- Any delegation issued by a delegator owning less than #spam.delegation.proposal.min.tokens (1 unit)  is rejected and does not enter a block. (<a name="0062-SPAM-006” href="#0062-SPAM-006”>0062-SPAM-006</a>)
+
+- All transactions that are rejected are also deleted from the mempools of all validators. (<a name="0062-SPAM-007” href="#0062-SPAM-007”>0062-SPAM-007</a>)
+
+- It is detected if any of above thresholds (#spam.protection.max.votes/proposals/delegations) is exceeded by a delegator within one block. This validator is then blacklisted for 4 epochs. (<a name="0062-SPAM-008” href="#0062-SPAM-008”>0062-SPAM-008</a>)
+
+- After 4 epochs, the blacklisting of a blacklisted party is lifted again. (<a name="0062-SPAM-009” href="#0062-SPAM-009”>0062-SPAM-009</a>)
+
+- Any governance transaction (vote/delegation/proposal) by any party owning zero Vega tokens is rejected independently of the thresholds. (<a name="0062-SPAM-010” href="#0062-SPAM-010”>0062-SPAM-010</a>)
+
+- No transaction of an unblocked party that did not fail the minimum token thresholds or exceed the limits within one epoch is rejected as spam. (<a name="0062-SPAM-011” href="#0062-SPAM-011”>0062-SPAM-011</a>)
+
+- No party that does not exceed the thresholds within one block is banned through the anti-spam mechanism. (<a name="0062-SPAM-012” href="#0062-SPAM-012”>0062-SPAM-012</a>)
