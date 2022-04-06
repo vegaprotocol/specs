@@ -67,6 +67,12 @@ Data sources must be able to emit the following data types:
 
 Note that for number types the system should convert appropriately when these are used in a situation that requires Vega's internal price/quote type using the configured decimal places, etc. for the market.
 
+Additionally, for number types where the data source value cannot be interpreted without decimal place conversion (e.g. it is a number from Ethereum represented as a very large integer, perhaps as a string, with 18 or some other number of implicit decimals), it must be possible to specify the number of implicit decimals, when specifying the oracle (e.g. in a market proposal or wherever the oracle is to be used). Strings and numbers with decimal points and numbers after them should be interpreted correctly. 
+
+For example: this means that if an oracle with specified 18 decimal places is used to settle a market with 4 market decimals then:
+* Oracle data with a value of `103500000000000000000` implies an actual value of `103.5`
+* This value would end up being represented on Vega as `1035000`
+
 Vega should support sufficient number types to enable processing of any reasonably expected message for each format. For instance if we are building JSON we might expect both Number and String fields to be allowable.
 
 In future there will likely be other types.
@@ -227,3 +233,4 @@ Vega should reject any data source tx that is not explicitly required, so this w
 1. It's possible to listen to events and see all data that is supplied across all data sources or for any specific source. (<a name="0045-DSRC-014" href="#0045-DSRC-014">0045-DSRC-014</a>)
 1. Data node carries historic data of at least all valid data that was supplied for each data source. (<a name="0045-DSRC-015" href="#0045-DSRC-015">0045-DSRC-015</a>)
 1. Data sources can be composed/nested arbitrarily (as long as the definition is valid), for example selecting a field on filtered data that itself was sourced by selecting a field on a message sent by a signed data source (for example this might be processing a complex object in the source data. (<a name="0045-DSRC-016" href="#0045-DSRC-016">0045-DSRC-016</a>)
+1. TODO AC. (<a name="0045-DSRC-016" href="#0045-DSRC-016">0045-DSRC-016</a>)
