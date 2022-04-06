@@ -27,7 +27,7 @@ Feature name: accounts
   - [ ] The balance cannot be traded, or used as margin, or transferred, or withdrawn (<a name="0013-ACCT-015" href="#0013-ACCT-015">0013-ACCT-015</a>)
   - [ ] Delegated stake remains in the trader's staking account (<a name="0013-ACCT-016" href="#0013-ACCT-016">0013-ACCT-016</a>)
 
-One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
+One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
 ## Liquidity Provider bond accounts
 - [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIQM-lp_mechanics.md). (<a name="0013-ACCT-017" href="#0013-ACCT-017">0013-ACCT-017</a>)
