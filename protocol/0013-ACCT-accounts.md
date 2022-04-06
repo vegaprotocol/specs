@@ -1,4 +1,27 @@
-Feature name: accounts
+# Accounts 
+
+## Accounts controlled by parties 
+A party only has control over balances in the "general" account for each asset. 
+[Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account for the relevant [asset](./0040-ASSF-asset_framework.md) created. 
+In order to submit [orders](./0014-ORDT-order_types.md a non-zero general account balance is needed; Vega will transfer appropriate amount to the [margin account](./0011-MARA-check_order_allocate_margin.md) for the party and the market.  
+
+Any party can submit a withdrawal transaction to withdraw assets from the general account to a specified address on another chain, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md). 
+
+Any party can set up a transfer from their general account to other Vega accounts as described by the [transfer spec](./0057-TRAN-transfers.md).
+
+Note that a party can also associate the governance / staking asset via the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) but this number is *not* an account balance because it *cannot* be used as [collateral](./0005-COLL-collateral.md) for trading and it cannot be transferred. 
+
+## Accounts controlled by Vega
+
+1. Mark-to-market settlement account per market: this is used for collecting and distributing mark-to-market settlement cashflows and is *zero* at the end of each mark-to-market settlement run.
+1. Margin accounts for each party with open orders or positions on any [market](./0043-MKTL-market_lifecycle.md).
+1. Bond account for any party that's an [LP on any market](0038-OLIQ-liquidity_provision_order_type.md). 
+1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md) for any market. 
+1. [Liquidity fee pool](0042-LIQF-setting_fees_and_rewarding_lps.md) for any market. 
+1. [Infrastructure fee pool](0029-FEES-fees.md) for any asset. 
+1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [staking rewards](0061-REWP-pos_rewards.md) account. 
+1. [Vega trasury accounts](0055-TREA-on_chain_treasury.md) per Vega asset. 
+
 
 # Acceptance Criteria
 
