@@ -103,7 +103,7 @@ Where possible, this should be done before the transaction is included in a bloc
         1. Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
 1. `SubmitData` transactions can be submitted by any public key as long as the data included in the transaction is signed by at least one of the keys included in an active signed message data source definition
     1. `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)
-    1. `SubmitData` transactions by inactive sata sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
+    1. `SubmitData` transactions by inactive data sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
     1. `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)
 1. To be valid, a `SubmitData` transaction must:
     1. Contain correctly signed data from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)
