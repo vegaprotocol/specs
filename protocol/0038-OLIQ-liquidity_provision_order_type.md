@@ -25,7 +25,14 @@ Each entry must specify:
 
 1. **Liquidity proportion:** the relative proportion of the commitment to be allocated at a price level. Note, the network will normalise the liquidity proportions of the refined order set (see below). This must be a strictly positive number.
 
-2. A **price peg:** , as per normal [pegged orders](../protocol/0037-OPEG-pegged_orders.md), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. The amount is always positive and is subtracted for buy orders and added for sell orders to the reference price.
+2. A **price peg:**, similar to [pegged orders](../protocol/0037-OPEG-pegged_orders.md), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. The amount is always positive and is subtracted for buy orders and added for sell orders to the reference price.
+If either the last remaining best static ask / best static bid volume are removed (due to cancellation / trade) then the liquidity provision remains pegged using the "ghost" of the best static ask / bid for a `market.liquidity.ghostPegDuration` of time. 
+The ghost of best static bid (ask) is the price level at which the last best static bid (ask) has been seen. 
+Thus 
+1. either a new best static bid / ask are posted while `ghost_peg_timer <= market.liquidity.ghostPegDuration`, in which case the LP order volume gets re-pegged and the `ghost_peg_timer` is set to `0` or 
+1. the "ghost peg timer" exceeds `market.liquidity.ghostPegDuration`, the ghost pegs are removed and we enter [liquidity auction](./0035-LIQM-liquidity_monitoring.md) as we can no longer post LP volume. 
+
+
 
 ```
 # Example 1:
@@ -55,6 +62,9 @@ Sell-shape: {
 Input data:
 1. The commitment, buy-shape, sell-shape (as submitted in the [liquidity provision network transaction](./0038-OLIQ-liquidity_provision_order_type.md).) 
 1. Any persistent orders that the liquidity provider has on the book at a point in time.
+1. Best static bid, best static ask OR their ghost of best static bid and best static ask.
+
+In what follows we use the best static bid (ask) interchangeably with the ghost of best static bid (ask).
 
 ### Refining list of orders
 
