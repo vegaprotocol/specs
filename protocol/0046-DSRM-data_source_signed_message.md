@@ -2,11 +2,11 @@
 
 Signed message data sources are the first external data source to be support by Vega. See the [Data Sourcing spec](./0045-DSRC-data_sourcing.md) for more information on data sources in general and the data source framework.
 
-Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by one of a set of public keys provided as part of the data source definition. Note the data supplied by can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
+Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by a set of public keys provided as part of the data source definition. Note the data supplied by the data source can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
 
 This spec adds:
 - a transaction that allows arbitrary signed data to be submitted to the Vega blockchain (creating a stream of data that can be matched against a data source definition or discarded if not matched)
-- a way to define a data source that that validates these messages against the predefined set of allowable public keys and emits the data received by such a stream 
+- a way to define a data source that validates these messages against the predefined set of allowable public keys and emits the data received by such a stream 
 
 Data can be submitted at any time. Not all data provided by the source needs to be used by a given consumer as the stream can be an input to a [filter data source definition](./0047-DSRF-data_source_filter.md) that will emit only wanted values, allowing a single stream of data from a signer to supply, for example, many markets.
 
@@ -33,7 +33,7 @@ Note: that as a public key may provide many messages, a [filter](./0047-DSRF-dat
 
 ### Examples:
 
-Data source for a public key that will only send one transaction containing a prices for several markets and therefore doesn't need to be filtered, but the correct value does need to be extracted:
+Data source for a public key that will only send one transaction containing prices for several markets and therefore doesn't need to be filtered, but the correct value does need to be extracted:
 
 ```
 // emits 1503.42 if 0xBLAHBLAH submits { ETHUSD: 1503.42, BTCUSD: 80123.45 } 
@@ -99,11 +99,11 @@ Where possible, this should be done before the transaction is included in a bloc
         1. This rejection will happen at *the [creation of the proposal](./0028-GOVE-governance.md)*  (<a name="0046-DSRM-003" href="#0046-DSRM-003">0046-DSRM-003</a>)
     1. Multiple instruments can rely on the same data source:
         1. Multiple instruments can settle based on the same `SubmitData` message.  (<a name="0046-DSRM-004" href="#0046-DSRM-004">0046-DSRM-004</a>)
-        1. Multiple products can [filtering](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
+        1. Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
         1. Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
 1. `SubmitData` transactions can be submitted by any public key as long as the data included in the transaction is signed by at least one of the keys included in an active signed message data source definition
     1. `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)
-    1. `SubmitData` transactions by inactive sata sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
+    1. `SubmitData` transactions by inactive data sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
     1. `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)
 1. To be valid, a `SubmitData` transaction must:
     1. Contain correctly signed data from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)

@@ -6,8 +6,8 @@ The aim of this specification is to set out how fees on Vega are set based on co
 
 ## Definitions / Glossary of terms used
 - **Market value proxy window length `t_market_value_window_length`**: sets the length of the window over which we estimate the market value. This is a network parameter.  
-- **Target stake**: as defined in [target stake spec](./0041-TSTK-target_stake.md). The amount of stake we would like LPs to commit to this market.
-- `min_LP_stake_quantum_multiple`: There is a netowrk wide parameter specifing the minimum LP stake as the `quantum` specified per asset, see [asset framework spec](../protocol/0040-ASSF-asset_framework.md).
+- **Target stake**: as defined in [target stake spec](./0041-TSTK-target_stake.md). The ideal amount of stake LPs would commit to a market.
+- `market.liquidityProvision.minLpStakeQuantumMultiple`: There is a network wide parameter specifying the minimum LP stake as the `quantum` specified per asset, see [asset framework spec](../protocol/0040-ASSF-asset_framework.md).
 
 
 ## CALCULATING LIQUIDITY FEE FACTOR
@@ -28,7 +28,7 @@ First, we produce a list of pairs which capture committed liquidity of each LP t
 ```
 where `N` is the number of liquidity providers who have committed to supply liquidity to this market. Note that `LP-1-liquidity-fee-factor <= LP-2-liquidity-fee-factor <= ... <= LP-N-liquidity-fee-factor` because we demand this list of pairs to be sorted in this way. 
 
-We now find smallest integer `k` such that `[target stake] < sum from i=1 to k of [LP-stake-i]`. In other words we want in this ordered list to find the liquidity providers that supply the liquidity that's required. If no such `k` exists we set `k=N`.
+We now find the smallest integer `k` such that `[target stake] < sum from i=1 to k of [LP-stake-i]`. In other words we want in this ordered list to find the liquidity providers that supply the liquidity that's required. If no such `k` exists we set `k=N`.
 
 Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liquidity-fee-factor`. 
 
@@ -101,7 +101,7 @@ At any time let's say we have `market_value_proxy` calculated above and existing
 [LP N stake, LP N avg_entry_valuation]
 ```
 
-These have to all be greater or equal to `zero` at all times. At market creation all these are set `zero` except at least one LP that commits stake at market creation. So the initial configuration is the `LP i stake = their commitment before market proposal gets enacted` and `LP i avg_entry_valuation = sum of total commited before market proposal is enacted`. We then update these as per the description below.   
+These have to all be greater or equal to `zero` at all times. At market creation all these are set `zero` except at least one LP that commits stake at market creation. So the initial configuration is the `LP i stake = their commitment before market proposal gets enacted` and `LP i avg_entry_valuation = sum of total committed before market proposal is enacted`. We then update these as per the description below.   
 
 From these stored quantities we can calculate, at time step `n` the following:
 - `(LP i equity)(n) = (LP i stake)(n) x market_value_proxy(n) / (LP i avg_entry_valuation)(n)`
@@ -111,7 +111,7 @@ Here `market_value_proxy(n)` is calculated as per Section "Calculating market va
 If at time step `n` liquidity provider `i` submits an order of type [Liquidity Provision](./0038-OLIQ-liquidity_provision_order_type.md) that requests its stake to be changed to `new_stake` then update the above values as follows:
 
 ```
-if new_stake < min_LP_stake_quantum_multiple x quantum then
+if new_stake < market.liquidityProvision.minLpStakeQuantumMultiple x quantum then
     reject transaction and stop. 
 fi
 ```

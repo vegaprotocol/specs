@@ -3,7 +3,7 @@
 
 # Overview
 
-Filtered data defines a type of data source that is a compound data source. That is, they include another data source definition in their definition and output a modified stream of data. Specifically, a filtered data source contains one or more conditions that are applied to data from the input data source to determine whether that data is output by the compound (filtered) data source.
+Filtered data defines a type of data source that is a compound data source. That is, it includes another data source definition in its definition and outputs a modified stream of data. Specifically, a filtered data source contains one or more conditions that are applied to data from the input data source to determine whether that data is output by the compound (filtered) data source.
 
 For example, a [signed message](./0046-DSRM-data_source_signed_message.md) data source may submit a stream of transactions providing hourly data for several tickers, like this:
 
@@ -98,11 +98,12 @@ To be clear, this also means that if the input data is the wrong "shape" or type
 1. All filter conditions are applied
 	1. Create a filter with multiple (AND) conditions and ensure that data is only passed through if all conditions are met. (<a name="0047-DSRF-003" href="#0047-DSRF-003">0047-DSRF-003</a>)
 	1. Create a filter using an "OR" sub-filter (if implemented) and ensure that data is passed through if any of the OR conditions are met. (<a name="0047-DSRF-004" href="#0047-DSRF-004">0047-DSRF-004</a>)
+	1. Create a "greater than or equal" filter on the "timestamp" field of the signed message (*not* on the timestamp when oracle transaction is  submitted) (e.g. greater than or equal "2022-04-01" *and* on "equal" filter on the "asset" field (e.g. equals ETH) of the signed message from Coinbase oracle. Ensure these are applied correctly (<a name="0047-DSRF-0041" href="#0047-DSRF-0041">0047-DSRF-0041</a>).   
 1. Data that is filtered out does not result in a data event but is recorded
 	1. No data source event is emitted for a data source if the triggering event (SubmitData transaction, internal source, etc.) does not pass through the filter for that source. (<a name="0047-DSRF-005" href="#0047-DSRF-005">0047-DSRF-005</a>)
 	1. No product/market processings is triggered by a data source when the event does not pass through the filters. (<a name="0047-DSRF-006" href="#0047-DSRF-006">0047-DSRF-006</a>)
 	1. When data is filtered out and no event is emitted this is recorded either in logs or on the event bus (this may only happen on the receiving node if the event is a transaction that is rejected prior to being sequenced in a block). (<a name="0047-DSRF-007" href="#0047-DSRF-007">0047-DSRF-007</a>)
-1. Data sources are defined by the FULL defnition including filters
+1. Data sources are defined by the FULL definition including filters
 	1. If two data sources originate from the same data point (transaction, event, etc.) and provider (SignedMessage signer group, internal market/object, etc.) but have different filters then data filtered out by one source can still be received by another, and vice versa. (<a name="0047-DSRF-008" href="#0047-DSRF-008">0047-DSRF-008</a>)
 	1. If two data sources originate from the same data point (transaction, event, etc.) and provider (SignedMessage signer group, internal market/object, etc.) but have different filters or other properties (i.e. they are not exactly the same definition) then any data that passes through and is emitted by both data sources results in a separate event/emission for each that references the appropriate source in each case. (<a name="0047-DSRF-009" href="#0047-DSRF-009">0047-DSRF-009</a>)
 	1. If two data sources originate from the same data point (transaction, event, etc.) and provider (SignedMessage signer group, internal market/object, etc.) but have different filters or other properties (i.e. they are not exactly the same definition) then any data that is filtered out by both data sources results in a separate log/event for each that references the appropriate source in each case. (<a name="0047-DSRF-010" href="#0047-DSRF-010">0047-DSRF-010</a>)

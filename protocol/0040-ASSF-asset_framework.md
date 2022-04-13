@@ -124,8 +124,7 @@ Deposits that are made to the contract will raise the `Asset_Deposited` event wh
 This section will be expanded as new token standards are supported by Vega. New bridges will be expected to implement `IVega_Bridge`.
 
 #### BTC
-Bitcoin doesn't support smart contracts natively, so we've developed a virtual bridge that uses an aggregated multisig mechanism. As such, it cannot be added or removed from the bridge
-See: [insert BTC spec here]
+Bitcoin doesn't support smart contracts natively, so in order to support BTC a virtual bridge that uses an aggregated multisig mechanism will need to be implemented.
 
 #### Other Asset Classes
 This section will be expanded as new asset classes are supported by Vega. Since each asset class is different, each section will be unique but follow the multisig management pattern used by the other bridges.
@@ -167,11 +166,6 @@ To remove an ERC20, the signature bundle and token address is submitted to the a
 Upon successful execution of the `blacklist_asset` function, that token will no longer be available for on-chain deposits via the `deposit_asset` function on the smart contract.
 Deposits that are made to the contract via the `deposit_asset` function will be rejected.
 
-##### ERC1155
-The signature bundle, token address, and token ID are submitted to the appropriate Vega ERC1155 bridge by way of the `blacklist_asset` function.
-Upon successful execution of the `blacklist_asset` function, that token will no longer be available for on-chain deposits via the `deposit_asset` function on the smart contract.
-Deposits that are made to the `deposit_asset` function will be rejected.
-
 ##### Other Ethereum Token Standards
 This section will be expanded as new token standards are supported by Vega. New bridges will be expected to implement `IVega_Bridge`.
 
@@ -211,20 +205,8 @@ NOTE 1: This function expects that the token being used has been whitelisted.
 
 NOTE 2: Before running this function, the user must run the ERC20-standard `approve` function to authorize the bridge smart contract as a spender of the user's target token. This will only allow a specific amount of that specific token to be spent by the bridge. See: https://eips.ethereum.org/EIPS/eip-20
 
-##### ERC1155
-ERC1155 tokens are semi-fungible item tokens where one token smart contract manages multiple tokens, each with their own token ID. The Vega ERC1155 Bridge takes the ERC1155 token smart contract address as the `asset_source` and the token ID as the `asset_id`.
-
-Note 1: This function expects that the token being deposited has been whitelisted
-
-Note 2: Before running this function, the user must run the ERC1155-standard `setApprovalForAll` function to authorize the bridge smart contract as a mover of the user's tokens. This will authorize the bridge to move all of the users tokens, but the function specifically limits deposit to the specific token the owner specifies, and the bridge smart contract has no other means of moving a user's tokens.  See: https://eips.ethereum.org/EIPS/eip-1155
-
 ##### Other Ethereum Token Standards
 This section will be expanded as new token standards are supported by Vega. New bridges will be expected to implement `IVega_Bridge`.
-
-#### BTC
-For deposit, the BTC virtual bridge generates a deposit address that is presented to the user. This address is a secure, multisignature wallet, controlled in a decentralised manner by the validators of the Vega network, similar to the MultisigControl pattern used for Ethereum.
-The user will provide their Vega public key along with a standard bitcoin transfer transaction. This public key will be picked up by the Vega Event Queue for later processing.
-See: [insert BTC spec here]
 
 #### Other Asset Classes
 This section will be expanded as new asset classes are supported by Vega. Since each asset class is different, each section will be unique but follow the multisig management pattern used by the other bridges.

@@ -56,7 +56,7 @@ Any locked and undelegated stake can be delegated at any time by putting a
 delegation-message on the chain. However, the delegation only becomes valid 
 towards the next epoch, though it can be undone through undelegate.
 
-Once Vega is aware of locked tokens, the users will have an account with the balance reflecting how many tokens were locked. At this point, the user can submit a transaction to stake (delegate) their tokens. The amount they stake must be `<= balance`, naturally. 
+Once Vega is aware of locked tokens, the users will have an [account](./0013-ACCT-accounts.md#staking-accounts) with the balance reflecting how many tokens were locked. At this point, the user can submit a transaction to stake (delegate) their tokens. The amount they stake must be `<= balance`, naturally. 
 
 ```proto
 message Delegate {
@@ -175,7 +175,7 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
   - Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" (<a name="0059-STKG-001" href="#0059-STKG-001">0059-STKG-001</a>)
   - Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).(<a name="0059-STKG-002" href="#0059-STKG-002">0059-STKG-002</a>)
 - These accounts will be created:
-  - A [staking account](./0013-ACCT-accounts.md#party-staking-accounts) denominated in the governance asset is created(<a name="0059-STKG-003" href="#0059-STKG-003">0059-STKG-003</a>)
+  - A [staking account](./0013-ACCT-accounts.md#staking-accounts) denominated in the governance asset is created(<a name="0059-STKG-003" href="#0059-STKG-003">0059-STKG-003</a>)
   - When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards) (<a name="0059-STKG-004" href="#0059-STKG-004">0059-STKG-004</a>)
   - It is possible that a separate reward function will cause an account to be created for the user as a result of rewards.
 - Timings
@@ -252,3 +252,9 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 - epoch 1: party associated 300 VEGA
 - end of epoch 1: according to the proportion of nomination, validators need to get 20,40,60,80,100 respectively - however max per validator implies availale balances of 100, 80, 60, 40, 20 for validators 1,2,3,4,5 respectively
 - meaning that at the following delegation will apply: 120, 240, 360, 440, 520. There will be no attempt to top up validators against the proportion implied by the nomination.
+
+# See also
+- [0013-ACCT Acccounts](./0013-ACCT-accounts.md) - staking accounts are not like other account types, but the differences are covered here.
+- [0028-GOVE Governance](./0028-GOVE-governance.md) - a party's stake controls their ability to participate in governance.
+- [0069-VALW Validators chosen by stake](./0069-VALW-validators_chosen_by_stake.md) - staking and delegation is used to pick validators.
+- [0050-EPOC Epochs](./0050-EPOC-epochs.md) - epochs control how frequently validator sets can change as a result of staking and delegation.
