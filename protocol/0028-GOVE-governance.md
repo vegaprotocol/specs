@@ -87,11 +87,6 @@ Market change proposals additionally require certain minimum [equity like share]
 So, for example, if `governance.proposal.market.minEquityLikeShare = 0.05` and a party has `equity-like-share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like-share` of `0.03` then they cannot submit a market change proposal.
 
 
-## Configuration of a proposal
-
-When a proposal is created, it can be configured in multiple ways.
-
-
 ### Duration of the proposal
 
 A new proposal will have a close date specified as a timestamp. After the proposal is created in the system and before the close date, the proposal is open for votes. e.g: A proposal is created and people have 3 weeks from the day it is sent to the network in order to submit votes for it.
@@ -172,6 +167,13 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 
 
 ## Types of proposals
+
+Every proposal transaction contains the following common fields:
+- a link to a text file in markdown format and
+- a cryptographically secure hash (SHA3-512) of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
+- a description field to show a short title / something in case the link goes offline. This is to be between `0` and `255` unicode characters.
+
+The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level.
 
 ## 1. Create market
 
@@ -292,12 +294,10 @@ transfer_amount == min(
 
 ## 6. Freeform governance proposal
 
-The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. Freeform proposals contain a URL to text describing the proposal in full. The proposal will contain:
+The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. Freeform proposals contain a URL to text describing the proposal in full. The proposal will contain only the fields common to all proposals i.e. 
 - a link to a text file in markdown format and
 - a cryptographically secure hash of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
 - a description field to show a short title / something in case the link goes offline. This is to be between `0` and `255` unicode characters.
-
-The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level.
 
 The following network parameters will decide how these proposals are treated:
 `governance.proposal.freeform.maxClose` e.g. `720h`,
