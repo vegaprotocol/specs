@@ -41,7 +41,7 @@ If the proposal has a governance action defined with it, the action described in
 Any actions that result from the outcome of the vote are covered in other spec files.
 
 ## Governance Asset
-The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) representing the [token configured in the staking bridge](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md). Users with a staking account balance in the governance asset can:
+The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) representing the [token configured in the staking bridge](./0071-STAK-erc20_governance_token_staking.md). Users with a staking account balance in the governance asset can:
 
 - [Create proposals](#restriction-on-who-can-create-a-proposal)
 - [Vote on proposals](#voting-for-a-proposal)

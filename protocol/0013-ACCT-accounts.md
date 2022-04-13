@@ -22,7 +22,17 @@ Note that a party can also associate the governance / staking asset via the [Veg
 1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [staking rewards](0061-REWP-pos_rewards.md) account. 
 1. [Vega trasury accounts](0055-TREA-on_chain_treasury.md) per Vega asset. 
 
+One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
+## Liquidity Provider bond accounts
+- [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIQM-lp_mechanics.md). (<a name="0013-ACCT-017" href="#0013-ACCT-017">0013-ACCT-017</a>)
+- [ ] Each party that has placed a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md) will have one bond account per market they have provided liquidity to (<a name="0013-ACCT-018" href="#0013-ACCT-018">0013-ACCT-018</a>)
+- [ ] [Fees earned from liquidity provision](./0044-LIQM-lp_mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees) (<a name="0013-ACCT-019" href="#0013-ACCT-019">0013-ACCT-019</a>)
+
+## Insurance pool accounts
+- [ ] When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0013-ACCT-020" href="#0013-ACCT-020">0013-ACCT-020</a>)
+- [ ] Only transfer requests move money in or out of the insurance account. (<a name="0013-ACCT-021" href="#0013-ACCT-021">0013-ACCT-021</a>)
+- [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the [network treasury](./0055-TREA-on_chain_treasury.md) account for the appropriate asset (if it doesn't exist create it).  (<a name="0013-ACCT-022" href="#0013-ACCT-022">0013-ACCT-022</a>)
 
 # Summary
 
