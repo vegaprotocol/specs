@@ -30,7 +30,7 @@ If either the last remaining best static ask / best static bid volume are remove
 The ghost of best static bid (ask) is the price level at which the last best static bid (ask) has been seen. 
 Thus 
 1. either a new best static bid / ask are posted while `ghost_peg_timer <= market.liquidity.ghostPegDuration`, in which case the LP order volume gets re-pegged and the `ghost_peg_timer` is set to `0` or 
-1. the "ghost peg timer" exceeds `market.liquidity.ghostPegDuration`, the ghost pegs are removed and we enter [liquidity auction](./0035-LIQM-liquidity_monitoring.md) as we can no longer post LP volume. 
+1. the `ghost_peg_timer` exceeds `market.liquidity.ghostPegDuration`, the ghost pegs are removed and we enter [liquidity auction](./0035-LIQM-liquidity_monitoring.md) as we can no longer post LP volume. 
 
 
 
