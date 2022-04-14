@@ -225,3 +225,8 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 ## Acceptance Criteria
 - Through the API, I can list all active liquidity providers for a market (<a name="0044-LIQM-001" href="#0044-LIQM-001">0044-LIQM-001</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-002" href="#0044-LIQM-002">0044-LIQM-002</a>).
+- Change of "market.liquidity.bondPenaltyParameter" will have immediate impact on bond account, general account, and potentially bond holder will be closed out (when bond penalty is implied). (<a name="0044-LIQM-003" href="#0044-LIQM-003">0044-LIQM-003</a>)
+- Change of "market.liquidity.stakeToCcySiskas" will impact bond account when a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account. (<a name="0044-LIQM-004" href="#0044-LIQM-004">0044-LIQM-004</a>)
+- Change of "market.liquidityProvision.shapes.maxSize" will impact LP order shape when the LP order is far from the mark price and LP pegged volume is large. Since liquidity provider orders automatically refresh, the change of LP order shape gets changed when LP order is automatically refreshed. (<a name="0044-LIQM-005" href="#0044-LIQM-005">0044-LIQM-005</a>)
+
+
