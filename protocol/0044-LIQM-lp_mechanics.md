@@ -90,6 +90,7 @@ where:
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
 - `actual-reduction-amount = min(-proposed-commitment-variation, maximum-reduction-amount)`
 - `new-actual-commitment-amount =  old-commitment-amount - actual-reduction-amount`
+- `max_size` is the maximum number of commitments a liquidity provider can make when making liquidity commitment. 
 
 
 i.e. liquidity providers are allowed to decrease the liquidity commitment subject to there being sufficient stake committed to the market so that it stays above the market's required stake threshold. The above formulae result in the fact that if `maximum-reduction-amount = 0`, then `actual-reduction-amount = 0` and therefore the liquidity provider is unable to reduce their commitment amount.
@@ -225,8 +226,8 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 ## Acceptance Criteria
 - Through the API, I can list all active liquidity providers for a market (<a name="0044-LIQM-001" href="#0044-LIQM-001">0044-LIQM-001</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-002" href="#0044-LIQM-002">0044-LIQM-002</a>).
-- Change of "market.liquidity.bondPenaltyParameter" will have immediate impact on bond account, general account, and potentially bond holder will be closed out (when bond penalty is implied). (<a name="0044-LIQM-003" href="#0044-LIQM-003">0044-LIQM-003</a>)
-- Change of "market.liquidity.stakeToCcySiskas" will impact bond account when a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account. (<a name="0044-LIQM-004" href="#0044-LIQM-004">0044-LIQM-004</a>)
-- Change of "market.liquidityProvision.shapes.maxSize" will impact LP order shape when the LP order is far from the mark price and LP pegged volume is large. Since liquidity provider orders automatically refresh, the change of LP order shape gets changed when LP order is automatically refreshed. (<a name="0044-LIQM-005" href="#0044-LIQM-005">0044-LIQM-005</a>)
+- Change of network parameter `bond-penalty-parameter` will not have immediate impact on bond account and general account. It will only happen when bond penalty is implied when a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIQM-003" href="#0044-LIQM-003">0044-LIQM-003</a>)
+- Change of `stake_to_ccy_siskas` will impact size of the orders on the order book immediately. (<a name="0044-LIQM-004" href="#0044-LIQM-004">0044-LIQM-004</a>)
+- Change of `max_size` will not impact LP commintment immediately, but will limit the LP commitment numbers into this `max_size` when a new LP commitment is made. (<a name="0044-LIQM-005" href="#0044-LIQM-005">0044-LIQM-005</a>)
 
 
