@@ -90,7 +90,7 @@ where:
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
 - `actual-reduction-amount = min(-proposed-commitment-variation, maximum-reduction-amount)`
 - `new-actual-commitment-amount =  old-commitment-amount - actual-reduction-amount`
-- `max_size` is the maximum number of commitments a liquidity provider can make when making liquidity commitment. 
+- `market.liquidityProvision.shapes.maxSize` is the maximum entry of the LP order shape on liquidity commitment. 
 
 
 i.e. liquidity providers are allowed to decrease the liquidity commitment subject to there being sufficient stake committed to the market so that it stays above the market's required stake threshold. The above formulae result in the fact that if `maximum-reduction-amount = 0`, then `actual-reduction-amount = 0` and therefore the liquidity provider is unable to reduce their commitment amount.
@@ -139,10 +139,10 @@ As pegged orders are parked during an auction are parked and not placed on the b
 
 ### Calculating liquidity from commitment
 
-Each liquidity provider supplies an amount of liquidity which is calculated from their commitment (stake) and measured in 'currency siskas' (i.e. USD siskas, ETH siskas, etc.).This is calculated by multiplying the stake by the network parameter `stake_to_ccy_siskas` as follows:
+Each liquidity provider supplies an amount of liquidity which is calculated from their commitment (stake) and measured in 'currency siskas' (i.e. USD siskas, ETH siskas, etc.).This is calculated by multiplying the stake by the network parameter `market.liquidity.stakeToCcySiskas` as follows:
 
 ```
-lp_liquidity_obligation_in_ccy_siskas = stake_to_ccy_siskas ⨉ stake.
+lp_liquidity_obligation_in_ccy_siskas = market.liquidity.stakeToCcySiskas ⨉ stake.
 ```
 
 Note here "ccy" stands for "currency". Liquidity measure units are 'currency siskas', e.g. ETH or USD siskas. This is because the calculation is basically `volume ⨉ probability of trading ⨉ price of the volume` and the price of the volume is in the said currency.
@@ -167,12 +167,12 @@ If at any point in time, a liquidity provider has insufficient capital to make t
 Calculating the penalty:
 
 ```
-market-maker-bond-penalty = bond-penalty-parameter ⨉ shortfall`
+market-maker-bond-penalty = market.liquidity.bondPenaltyParameter ⨉ shortfall`
 ```
 
 The above simple formula defines the amount by which the bond account will be 'slashed', where:
 
--  `bond-penalty-parameter` is a network parameter
+-  `market.liquidity.bondPenaltyParameter` is a network parameter
 -  `shortfall` refers to the absolute value of the funds that the liquidity provider was unable to cover through their margin and general accounts, that are needed for settlement (mark to market or [product](./0051-PROD-product.md) driven) or to meet their margin requirements.
 
 **Auctions:** if this occurs at the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will not be applied / will always be set to zero.
@@ -202,10 +202,10 @@ This should happen every time the network is performing a margin calculation and
 
 ## Network parameters
 
-- `bond-penalty-parameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations. 
+- `market.liquidity.bondPenaltyParameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations. 
 Valid values: any decimal number `>= 0` with a default value of `0.1`.  
 - `maximum-liquidity-fee-factor-level` - used in validating fee amounts that are submitted as part of [lp order type](./0038-OLIQ-liquidity_provision_order_type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
-- `stake_to_ccy_siskas` - used to translate a commitment to an obligation (in siskas). Any decimal number `>0` with default value `1`.
+- `market.liquidity.stakeToCcySiskas` - used to translate a commitment to an obligation (in siskas). Any decimal number `>0` with default value `1`.
 
 
 ## What data do we keep relating to liquidity provision?
@@ -226,8 +226,8 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 ## Acceptance Criteria
 - Through the API, I can list all active liquidity providers for a market (<a name="0044-LIQM-001" href="#0044-LIQM-001">0044-LIQM-001</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-002" href="#0044-LIQM-002">0044-LIQM-002</a>).
-- Change of network parameter `bond-penalty-parameter` will not have immediate impact on bond account and general account. It will only happen when bond penalty is implied when a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIQM-003" href="#0044-LIQM-003">0044-LIQM-003</a>)
-- Change of `stake_to_ccy_siskas` will impact size of the orders on the order book immediately. (<a name="0044-LIQM-004" href="#0044-LIQM-004">0044-LIQM-004</a>)
-- Change of `max_size` will not impact LP commintment immediately, but will limit the LP commitment numbers into this `max_size` when a new LP commitment is made. (<a name="0044-LIQM-005" href="#0044-LIQM-005">0044-LIQM-005</a>)
+- Change of network parameter `market.liquidity.bondPenaltyParameter` will change the amount by which the bond account will be 'slashed' (which is defined as `market-maker-bond-penalty`) when a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIQM-003" href="#0044-LIQM-003">0044-LIQM-003</a>)
+- Change of `market.liquidity.stakeToCcySiskas` will change the liquidity obligation hence change the size of the LP orders on the order book. (<a name="0044-LIQM-004" href="#0044-LIQM-004">0044-LIQM-004</a>)
+- Change of `market.liquidityProvision.shapes.maxSize` will limit of the maximum entries of the order shape on the LP commitment. (<a name="0044-LIQM-005" href="#0044-LIQM-005">0044-LIQM-005</a>)
 
 
