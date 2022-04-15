@@ -68,11 +68,11 @@ This allows the stoppage of all deposits and withdrawals after the discovery of 
 
 ### Deposit Limit Exemptions
 
-This allows for the listing of specific Ethereum addresses to be able to deposit more than the lifetime limit for the asset. This is primarily for liquidity providers and rewards.
+This allows for the listing of specific Ethereum addresses to be able to deposit more than the lifetime limit for the asset also ignoring the limit introduced per vega key. This is primarily for liquidity providers and other sophisticated participants and for depositing rewards.
 
-- A single ETH address (not validators) can list/delist liquidity and reward provider Ethereum addresses.
-- Validators, through MultisigControl can change the address that can list/delist liquidity/rewards providers.
-- A listed liquidity/rewards provider can deposit as normal, bypassing deposit limits.
+- Any ETH address can add/remove *itself* from the list of exempt addresses.
+- Any ETH address on the deposit allowlist can deposit as normal, bypassing deposit both on ETH key and destination Vega key.
+- Withdrawal limits *are still in place for everyone*. 
 
 ### Tooling/UI support
 
@@ -129,14 +129,11 @@ This allows for the listing of specific Ethereum addresses to be able to deposit
          - This is true even if both TXs target different [Vega public keys](./../protocol/0017-PART-party.md)
      - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
      - A single deposit transaction that is more than `max lifetime deposit` rejected 
-     - `lifetime deposit` is tracked across [checkpoints](./0005-NP-LIMN-limited_network_life.md)
+     
 6. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction (<a name="0003-NP-LIMI-002" href="#0003-NP-LIMI-002">0003-NP-LIMI-002</a>)
    - An ETH address that is listed on the smart contract as exempt can deposit more than `max lifetime deposit`
-   - The smart contract can be updated to add or remove ETH addresses from the exemption list
-   - Only one ETH address at a time has permission to update the exemption list
-     - An ETH tx attempting to update the exemption list from a different address is rejected
-     - That ETH address is not itself exempt from `max lifetime deposit` unless explicitly listed
-     - That ETH address can only be changed by a multisig bundle from the validators
+   - Any ETH address can use a method on the smart contract to add or remove itself (own ETH address) from the exemption list
+   
 7. `max lifetime deposit` can be updated per asset via an Ethereum transaction (<a name="0003-NP-LIMI-003" href="#0003-NP-LIMI-003">0003-NP-LIMI-003</a>)
 8. Validators can, via multisig, stop and recommence processing bridge transactions (<a name="0003-NP-LIMI-004" href="#0003-NP-LIMI-004">0003-NP-LIMI-004</a>)
    - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
