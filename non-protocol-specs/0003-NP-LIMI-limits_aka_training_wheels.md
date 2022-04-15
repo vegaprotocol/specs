@@ -68,7 +68,7 @@ This allows the stoppage of all deposits and withdrawals after the discovery of 
 
 ### Deposit Limit Exemptions
 
-This allows for the listing of specific Ethereum addresses to be able to deposit more than the lifetime limits for the asset
+This allows for the listing of specific Ethereum addresses to be able to deposit more than the lifetime limits for the asset.
 This is primarily for liquidity providers and other sophisticated participants and for depositing rewards.
 
 - Any ETH address can add/remove *itself* from the list of exempt addresses.
