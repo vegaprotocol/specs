@@ -204,7 +204,7 @@ This should happen every time the network is performing a margin calculation and
 
 - `market.liquidity.bondPenaltyParameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations. 
 Valid values: any decimal number `>= 0` with a default value of `0.1`.  
-- `maximum-liquidity-fee-factor-level` - used in validating fee amounts that are submitted as part of [lp order type](./0038-OLIQ-liquidity_provision_order_type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
+- `market.liquidity.maximumLiquidityFeeFactorLevel` - used in validating fee amounts that are submitted as part of [lp order type](./0038-OLIQ-liquidity_provision_order_type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
 - `market.liquidity.stakeToCcySiskas` - used to translate a commitment to an obligation (in siskas). Any decimal number `>0` with default value `1`.
 
 
