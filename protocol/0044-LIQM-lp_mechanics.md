@@ -228,6 +228,8 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-002" href="#0044-LIQM-002">0044-LIQM-002</a>).
 - Change of network parameter `market.liquidity.bondPenaltyParameter` will change the amount by which the bond account will be 'slashed' (which is defined as `market-maker-bond-penalty`) when a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIQM-003" href="#0044-LIQM-003">0044-LIQM-003</a>)
 - Change of `market.liquidity.stakeToCcySiskas` will change the liquidity obligation hence change the size of the LP orders on the order book. (<a name="0044-LIQM-004" href="#0044-LIQM-004">0044-LIQM-004</a>)
-- Change of `market.liquidityProvision.shapes.maxSize` will limit of the maximum entries of the order shape on the LP commitment. (<a name="0044-LIQM-005" href="#0044-LIQM-005">0044-LIQM-005</a>)
+- Change of `market.liquidityProvision.shapes.maxSize` will change the limit of the maximum entries of the order shape on the LP commitment. (<a name="0044-LIQM-005" href="#0044-LIQM-005">0044-LIQM-005</a>)
+- Change of `market.liquidity.maximumLiquidityFeeFactorLevel` will change the limit on the liquidity fee factor which is an input to the total taker fee that a price taker of a trade pays. (<a name="0044-LIQM-006" href="#0044-LIQM-006">0044-LIQM-006</a>)
+
 
 
