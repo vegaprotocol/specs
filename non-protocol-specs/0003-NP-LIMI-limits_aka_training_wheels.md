@@ -68,10 +68,11 @@ This allows the stoppage of all deposits and withdrawals after the discovery of 
 
 ### Deposit Limit Exemptions
 
-This allows for the listing of specific Ethereum addresses to be able to deposit more than the lifetime limit for the asset also ignoring the limit introduced per vega key. This is primarily for liquidity providers and other sophisticated participants and for depositing rewards.
+This allows for the listing of specific Ethereum addresses to be able to deposit more than the lifetime limits for the asset
+This is primarily for liquidity providers and other sophisticated participants and for depositing rewards.
 
 - Any ETH address can add/remove *itself* from the list of exempt addresses.
-- Any ETH address on the deposit allowlist can deposit as normal, bypassing deposit both on ETH key and destination Vega key.
+- Any ETH address on the deposit allowlist can deposit as normal, bypassing deposit limits both on ETH key and destination Vega key.
 - Withdrawal limits *are still in place for everyone*. 
 
 ### Tooling/UI support
