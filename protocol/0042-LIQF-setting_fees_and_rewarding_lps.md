@@ -62,7 +62,7 @@ The guiding principle of this section is that by committing stake a liquidity pr
 
 
 The parameter which determines the period over which market value and hence growth is `t_market_value_window_length` which could be e.g. a week. 
-From the end of the opening auction, which we will refer to as `t0` until `t0+t_market_value_window_length` is the `0th` or "bootsrap period". Then from  `t0+t_market_value_window_length` until `t0 + 2 x t_market_value_window_length` is the `1st` period and so on. 
+From the end of the opening auction, which we will refer to as `t0` until `t0+t_market_value_window_length` is the `0th` or "bootstrap period". Then from  `t0+t_market_value_window_length` until `t0 + 2 x t_market_value_window_length` is the `1st` period and so on. 
 For each LP we track the stake they have and also their virtual stake. 
 Before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake. 
 
