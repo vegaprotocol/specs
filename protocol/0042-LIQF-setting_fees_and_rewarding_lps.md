@@ -60,7 +60,6 @@ The guiding principle of this section is that by committing stake a liquidity pr
 
 ### Calculating liquidity provider equity-like share
 
-
 The parameter which determines the period over which market value and hence growth is `t_market_value_window_length` which could be e.g. a week. 
 From the end of the opening auction, which we will refer to as `t0` until `t0+t_market_value_window_length` is the `0th` or "bootstrap period". Then from  `t0+t_market_value_window_length` until `t0 + 2 x t_market_value_window_length` is the `1st` period and so on. 
 For each LP we track the stake they have and also their virtual stake. 
@@ -80,16 +79,20 @@ LP i virtual stake <- LP i virtual stake x (LP i stake + delta)/(LP i stake).
 
 Independently of the above we also update all virtual stakes at start of each new period. 
 To that end "total value for fee purposes" is cumulated over the period. For a period `n` call this `T(n)`. 
-It is possible that there have been no trades. To avoid division by `0`, at start of each period add `trade value for fee purposes of size 1` to `T(n)` to avoid possible divisions by `0`.
-For `T(0)` i.e. set `T(0) = trade value for fee purposes of resolving opening auction`.  
+Set `T(0) = trade value for fee purposes of resolving opening auction`.  
+From this we calculate the running average trade value for fee purposes:
+```
+A(n) <- A(n-1) x (n-1)/n + T(n)/n.
+```
 The g`r`owth of the market is then 
 ```
-r =  (T(n)-T(n-1))/T(n-1)
+r =  (A(n)-A(n-1))/A(n-1)
 ```
 Thus at the end of period `n` update
 ```
-LP i virtual stake <- (1 + r) x (LP i virtual stake).
+LP i virtual stake <- max(LP i physical stake, (1 + r) x (LP i virtual stake)).
 ```
+Thus the virtual stake of an LP will always be at least their physical stake.
 
 The equity like share for each LP is then
 ```
