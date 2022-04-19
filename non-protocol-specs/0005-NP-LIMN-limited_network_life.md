@@ -307,7 +307,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The parties delegate stake to the validators
 1. Setup the rewards:
    - A party deposits VEGA funds to their Vega general account
-   - The party creates a continuing recuring transfer (for e.g: 1 token) from their general account to the reward pool
+   - The party creates a continuing recurring transfer (for e.g: 1 token) from their general account to the reward pool
 1. Assert that every end of epoch, the funds are distributed, over the parties delegating stake, at end of every epoch
 1. Wait for the next checkpoint, then stop the network
 1. Load the checkpoint into a new network
