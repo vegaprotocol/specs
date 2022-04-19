@@ -167,7 +167,7 @@ If at any point in time, a liquidity provider has insufficient capital to make t
 Calculating the penalty:
 
 ```
-market-maker-bond-penalty = market.liquidity.bondPenaltyParameter ⨉ shortfall`
+market.liquidity.bondPenaltyParameter = market.liquidity.bondPenaltyParameter ⨉ shortfall`
 ```
 
 The above simple formula defines the amount by which the bond account will be 'slashed', where:
@@ -175,13 +175,13 @@ The above simple formula defines the amount by which the bond account will be 's
 -  `market.liquidity.bondPenaltyParameter` is a network parameter
 -  `shortfall` refers to the absolute value of the funds that the liquidity provider was unable to cover through their margin and general accounts, that are needed for settlement (mark to market or [product](./0051-PROD-product.md) driven) or to meet their margin requirements.
 
-**Auctions:** if this occurs at the transition from auction mode to continuous trading, the `market-maker-bond-penalty` will not be applied / will always be set to zero.
+**Auctions:** if this occurs at the transition from auction mode to continuous trading, the `market.liquidity.bondPenaltyParameter` will not be applied / will always be set to zero.
 
 The network will:
 
 1. **As part of the normal collateral "search" process:** Access the liquidity provider's bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of the bond account will be used. Note that this means that the transfer request should include the liquidity provider's bond account in the list of accounts to search, and that the bond account would always be emptied before any insurance pool funds are used or loss socialisation occurs.
 
-1. **If there was a shortfall and the bond account was accessed:** Transfer an amount equal to the `market-maker-bond-penalty` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
+1. **If there was a shortfall and the bond account was accessed:** Transfer an amount equal to the `market.liquidity.bondPenaltyParameter` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
 
 1. Initiate closeout of the LPs order and/or positions as normal if their margin does not meet the minimum maintenance margin level required. (NB: this should involve no change)
 
@@ -226,7 +226,7 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 ## Acceptance Criteria
 - Through the API, I can list all active liquidity providers for a market (<a name="0044-LIQM-001" href="#0044-LIQM-001">0044-LIQM-001</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIQM-002" href="#0044-LIQM-002">0044-LIQM-002</a>).
-- Change of network parameter `market.liquidity.bondPenaltyParameter` will change the amount by which the bond account will be 'slashed' (which is defined as `market-maker-bond-penalty`) when a liquidity provider has insufficient capital for Vega to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIQM-003" href="#0044-LIQM-003">0044-LIQM-003</a>)
+- Change of network parameter `market.liquidity.bondPenaltyParameter` will immediately change the amount by which the bond account will be 'slashed' when a liquidity provider has insufficient capital for Vega to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIQM-003" href="#0044-LIQM-003">0044-LIQM-003</a>)
 - Change of `market.liquidity.stakeToCcySiskas` will change the liquidity obligation hence change the size of the LP orders on the order book. (<a name="0044-LIQM-004" href="#0044-LIQM-004">0044-LIQM-004</a>)
 - Change of `market.liquidityProvision.shapes.maxSize` will change the maximum number of entries in the order shape of the LP commitment. If `market.liquidityProvision.shapes.maxSize` is decreased all the LP orders that have already been submitted are unaffected. However any new submissions or amendments must respect the new (lower) maximum. (<a name="0044-LIQM-005" href="#0044-LIQM-005">0044-LIQM-005</a>) 
 - Change of `market.liquidity.maximumLiquidityFeeFactorLevel` will change the maximum liquidity fee factor. Any LP orders that have already been submitted are unaffected but any new submission or amendments must respect the new maximum (those that don't get rejected). (<a name="0044-LIQM-006" href="#0044-LIQM-006">0044-LIQM-006</a>)
