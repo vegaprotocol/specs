@@ -188,7 +188,7 @@ LP 1 eq share = 0.65
 LP 2 eq share = 0.25
 LP 3 eq share = 0.1
 ```
-When the time defined by ``liquidity_providers_fee_distribution_time_step` elapses we do transfers:
+When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 ```
 0.65 x 103.5 = 67.275 ETH to LP 1's margin account
 0.25 x 103.5 = 25.875 ETH to LP 2's margin account
@@ -218,4 +218,9 @@ When the time defined by ``liquidity_providers_fee_distribution_time_step` elaps
 - [ ] All liquidity providers in the market receive a greater than zero amount of liquidity fee. (<a name="0042-LIQF-010" href="#0042-LIQF-010">0042-LIQF-010</a>)
 - [ ] The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-the-trade` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
 - [ ] Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
-- [ ] If a market has `liquidity_providers_fee_distribution_time_step` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balance in the pool used to cumulate LP fees. (<a name="0042-LIQF-013" href="#0042-LIQF-013">0042-LIQF-013</a>)
+- [ ] If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balance in the pool used to cumulate LP fees. (<a name="0042-LIQF-013" href="#0042-LIQF-013">0042-LIQF-013</a>)
+- [ ] Change of `market.liquidity.providers.fee.distributionTimeStep` will change how frequently fees are distributed to a liquidity provider's general account for the market. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
+
+market.liquidityProvision.minLpStakeQuantumMultiple: Multiplier of the asset quantum that sets the minimum LP commitment amount
+
+market.value.windowLength: Length of time window over which market value is estimated
