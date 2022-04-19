@@ -220,7 +220,9 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - [ ] Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
 - [ ] If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balance in the pool used to cumulate LP fees. (<a name="0042-LIQF-013" href="#0042-LIQF-013">0042-LIQF-013</a>)
 - [ ] Change of `market.liquidity.providers.fee.distributionTimeStep` will change how frequently fees are distributed to a liquidity provider's general account for the market. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
+- [ ] Change of `market.liquidityProvision.minLpStakeQuantumMultiple` will change the multiplier of the asset quantum that sets the minimum LP commitment amount. If `market.liquidityProvision.minLpStakeQuantumMultiple` is decreased all the LP orders that have already been submitted are unaffected. However any new submissions or amendments must respect the new (lower) minimum. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
 
-market.liquidityProvision.minLpStakeQuantumMultiple: Multiplier of the asset quantum that sets the minimum LP commitment amount
 
-market.value.windowLength: Length of time window over which market value is estimated
+
+
+
