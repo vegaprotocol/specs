@@ -153,76 +153,76 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
 ### Stake score
 **Setup a network for each test** with 5 Tendermint validators and 2 ersatz validators. Verify the value of the min.validators network parameter is 5. Delegate 1000 tokens to each Tendermint validator and 500 to each ersatz validator (where minimum is defined as 500). Transfer 1000 tokens to the reward account. The test assumes that the validators are already in their state (i.e. 5 are Tendermint, 2 are ersatz). 
 1. Base case for Tendermint validators (<a name="0069-VCBS-005" href="#0069-VCBS-005">0069-VCBS-005</a>): 
-        - Verify that the stakeScore for each of the Tendermint validators is 0.2 
+  * Verify that the stakeScore for each of the Tendermint validators is 0.2 
 2. Base case for ersatz validators (<a name="0069-VCBS-006" href="#0069-VCBS-006">0069-VCBS-006</a>): 
-        - Verify that the stakeScore for each of the ersatz validator is 0.5 
+  * Verify that the stakeScore for each of the ersatz validator is 0.5 
 3. No antiwhaling for ersatz stake score (<a name="0069-VCBS-007" href="#0069-VCBS-007">0069-VCBS-007</a>):
-        - Delegate to one of the ersatz validators 4000 more tokens. 
-        - Run for an epoch with the new delegation (i.e. one ersatz with 500 one with 4500) and transfer 1000 tokens to the reward account. 
-        - Verify that at the end of the epoch the stake score of the validator with 4500 tokens is 0.9 and the one with 500 
+  * Delegate to one of the ersatz validators 4000 more tokens. 
+  * Run for an epoch with the new delegation (i.e. one ersatz with 500 one with 4500) and transfer 1000 tokens to the reward account. 
+  * Verify that at the end of the epoch the stake score of the validator with 4500 tokens is 0.9 and the one with 500 
 4. Antiwhaling for Tendermint validators (<a name="0069-VCBS-008" href="#0069-VCBS-008">0069-VCBS-008</a>): 
-        - **Additional setup:** in addition to the 1000 delegated for each node, delegate 500 more to node 1. 
-        - Once it becomes active let it run for a full epoch during which transfer 1000 tokens to the reward account. 
-        - Verify that at the end of the epoch node 1 should have a stake score of 0.2 where all other nodes get stake score of 0.1818181818
+  * **Additional setup:** in addition to the 1000 delegated for each node, delegate 500 more to node 1. 
+  * Once it becomes active let it run for a full epoch during which transfer 1000 tokens to the reward account. 
+  * Verify that at the end of the epoch node 1 should have a stake score of 0.2 where all other nodes get stake score of 0.1818181818
 5. Full antiwhaling for Tendermint validators (<a name="0069-VCBS-009" href="#0069-VCBS-009">0069-VCBS-009</a>):
-        - **Additional setup:** ensure that the network parameter for reward.staking.delegation.optimalStakeMultiplier is set to 3 
-        - **Additional setup:** in addition to the 1000 tokens delegated to each node, delegate 10000 tokens to node1 to get a total delegation of 11000 to it. 
-        - Once it becomes active let it run for a full epoch during which transfer 1000 tokens to the reward account. 
-        - Verify that at the end of the epoch node 1 should have a stake score of 0 where all other nodes get stake score of 0.06
+  * **Additional setup:** ensure that the network parameter for reward.staking.delegation.optimalStakeMultiplier is set to 3 
+  * **Additional setup:** in addition to the 1000 tokens delegated to each node, delegate 10000 tokens to node1 to get a total delegation of 11000 to it. 
+  * Once it becomes active let it run for a full epoch during which transfer 1000 tokens to the reward account. 
+  * Verify that at the end of the epoch node 1 should have a stake score of 0 where all other nodes get stake score of 0.06
 
 ### Performance score (related to [0064-VALP-validator_performance_based_rewards.md](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0064-VALP-validator_performance_based_rewards.md))
 1. Tendermint validator with insufficient self-delegation (<a name="0069-VCBS-018" href="#0069-VCBS-018">0069-VCBS-018</a>):
-        - Setup a network with 5 validators 
-        - Self-delegate to 4 of the nodes **more** than the minimum amount set in `reward.staking.delegation.minimumValidatorStake`. 
-        - Self-delegate to the 5th node **less** than the minimum amount.
-        - Verify that at the beginning of the next epoch the performance score of the 5th validator is 0. 
+  * Setup a network with 5 validators 
+  * Self-delegate to 4 of the nodes **more** than the minimum amount set in `reward.staking.delegation.minimumValidatorStake`. 
+  * Self-delegate to the 5th node **less** than the minimum amount.
+  * Verify that at the beginning of the next epoch the performance score of the 5th validator is 0. 
 2. Tendermint validator with sufficient self-delegation (<a name="0069-VCBS-019" href="#0069-VCBS-019">0069-VCBS-019</a>):
-        - Setup a network with 5 validators. 
-        - Self-delegate to all of them more than the minimum required. 
-        -  Verify that after an epoch has past, the performance score of all of them is close to 1. 
+  * Setup a network with 5 validators. 
+  * Self-delegate to all of them more than the minimum required. 
+  *  Verify that after an epoch has past, the performance score of all of them is close to 1. 
 3. Tendermint validator down (<a name="0069-VCBS-020" href="#0069-VCBS-020">0069-VCBS-020</a>):
-        - Setup a network with 5 validators. 
-        - Self-delegate to all of them more than the minimum required in `reward.staking.delegation.minimumValidatorStake` and ensure the validators self-stake is an equal amount across all. 
-        - Run the network for one epoch.
-        - Verify the performance score is close to 1 for all validators. 
-        - Run the network for half an epoch then shut down validator 5. 
-        - Verify that at the beginning of the next epoch the performance score for validator 5 is close to 0.5. 
-        - Verify that, with validator 5 still down for the next epoch, at the beginning of the following epoch the performance score for validator 5 is 0. 
+  * Setup a network with 5 validators. 
+  * Self-delegate to all of them more than the minimum required in `reward.staking.delegation.minimumValidatorStake` and ensure the validators self-stake is an equal amount across all. 
+  * Run the network for one epoch.
+  * Verify the performance score is close to 1 for all validators. 
+  * Run the network for half an epoch then shut down validator 5. 
+  * Verify that at the beginning of the next epoch the performance score for validator 5 is close to 0.5. 
+  * Verify that, with validator 5 still down for the next epoch, at the beginning of the following epoch the performance score for validator 5 is 0. 
 4. Non Tendermint validator (<a name="0069-VCBS-021" href="#0069-VCBS-021">0069-VCBS-021</a>): 
-        - Set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0. 
-        - Setup a network with 5 validators and self-delegate to them. 
-        - Announce a new node to the network and self-delegate to them. 
-        - Every 1000 blocks the performance score of the new validator should go up by 0.1 as long as it’s up with a maximum of 1. 
-        - Verify that after enough epochs to represent at least 1000 blocks, the performance score of the joining validator is 0.1. 
-        - Let the network run for 1000 blocks more and at the following epoch check that score is up to 0.2. Keep it running until it performance score of the joining validator reaches 1, then stop it. 
-        - Verify that for every 1000 blocks, the performance score should go down by 0.1 until it reaches zero. 
+  * Set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0. 
+  * Setup a network with 5 validators and self-delegate to them. 
+  * Announce a new node to the network and self-delegate to them. 
+  * Every 1000 blocks the performance score of the new validator should go up by 0.1 as long as it’s up with a maximum of 1. 
+  * Verify that after enough epochs to represent at least 1000 blocks, the performance score of the joining validator is 0.1. 
+  * Let the network run for 1000 blocks more and at the following epoch check that score is up to 0.2. Keep it running until it performance score of the joining validator reaches 1, then stop it. 
+  * Verify that for every 1000 blocks, the performance score should go down by 0.1 until it reaches zero. 
 5. Insufficient stake (<a name="0069-VCBS-022" href="#0069-VCBS-022">0069-VCBS-022</a>):  
-        - Setup a network with 5 validators, self-delegate to each more than the required minimum as set out in `reward.staking.delegation.minimumValidatorStake`. 
-        - Verify that at the beginning of the next epoch the validator has non 0 performance score, and voting power is greater than 10. 
-        - Update the network parameter `reward.staking.delegation.minimumValidatorStake` for minimum self-stake to be more than is self-delegated. 
-        - Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes was removed from Tendermint.
+  * Setup a network with 5 validators, self-delegate to each more than the required minimum as set out in `reward.staking.delegation.minimumValidatorStake`. 
+  * Verify that at the beginning of the next epoch the validator has non 0 performance score, and voting power is greater than 10. 
+  * Update the network parameter `reward.staking.delegation.minimumValidatorStake` for minimum self-stake to be more than is self-delegated. 
+  * Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes was removed from Tendermint.
 
 ### Multisig score
 1. Verfiy that for all erstaz validators their multisig score is 1 (<a name="0069-VCBS-010" href="#0069-VCBS-010">0069-VCBS-010</a>)
 2. Tendermint validators excess signature (<a name="0069-VCBS-011" href="#0069-VCBS-011">0069-VCBS-011</a>): 
-        - Setup a network with 5 Tendermint validators with 4 validators with self-delegation. 
-        - Announce a new node and self-delegate to them, allow some time to replace the validator with no self-delegation as a Tendermint validator. Note: At this point the signature from the removed validator IS still on the multisig contract. 
-        - Transfer 1000 tokens to the VEGA reward account. 
-        - Verify that at the end of the epoch all of the validators should have a multisig score = 0 and none shall get a reward because we have a signature on the smart contract that doesn’t belong to any of the 5 Tendermint validators.
+  * Setup a network with 5 Tendermint validators with 4 validators with self-delegation. 
+  * Announce a new node and self-delegate to them, allow some time to replace the validator with no self-delegation as a Tendermint validator. Note: At this point the signature from the removed validator IS still on the multisig contract. 
+  * Transfer 1000 tokens to the VEGA reward account. 
+  * Verify that at the end of the epoch all of the validators should have a multisig score = 0 and none shall get a reward because we have a signature on the smart contract that doesn’t belong to any of the 5 Tendermint validators.
 3. Tendermint validators missing signature test 1 (<a name="0069-VCBS-012" href="#0069-VCBS-012">0069-VCBS-012</a>): 
-        - Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5. 
-        - **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to **5**.
-        - Announce a new node and self-delegate to it 1000 tokens.
-        - Allow some time for the performance score to be greater than 0. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch. 
-        - When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account. 
-        - Verify that the joining validator would has a multisig score of 0 and therefore would not get a reward. 
+  * Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5. 
+  * **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to **5**.
+  * Announce a new node and self-delegate to it 1000 tokens.
+  * Allow some time for the performance score to be greater than 0. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch. 
+  * When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account. 
+  * Verify that the joining validator would has a multisig score of 0 and therefore would not get a reward. 
 4. Tendermint validators missing signature test 2 (<a name="0069-VCBS-013" href="#0069-VCBS-013">0069-VCBS-013</a>): 
-        - Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5. 
-        - **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to **4**.
-        - Announce a new node and self-delegate to it 1000 tokens.
-        - Allow some time for the performance score to be greater than 0. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch. 
-        - When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account. 
-        - Verify that the joining validator would has a multisig score of 0 and therefore would not get a reward.
+  * Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5. 
+  * **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to **4**.
+  * Announce a new node and self-delegate to it 1000 tokens.
+  * Allow some time for the performance score to be greater than 0. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch. 
+  * When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account. 
+  * Verify that the joining validator would has a multisig score of 0 and therefore would not get a reward.
 
 ### Validator Score
 1. Verify that the validator score is always equal to the `stakeScore` x `perfScore` x `multisigScore` when the validator is a Tendermint validator (<a name="0069-VCBS-014" href="#0069-VCBS-014">0069-VCBS-014</a>)
@@ -235,36 +235,36 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
 ## Rewards split between tendermint and ersatz validators
 
 1. Base scenario (<a name="0069-VCBS-023" href="#0069-VCBS-023">0069-VCBS-023</a>):
-        - There are no ersatz validators in the network. regardless of ersatzRewardFactor, 
-        - Verify that, regardless of `ersatzRewardFactor` value, all rewards are being paid out to the validators as expected given the reward scores.
+  * There are no ersatz validators in the network. regardless of ersatzRewardFactor, 
+  * Verify that, regardless of `ersatzRewardFactor` value, all rewards are being paid out to the validators as expected given the reward scores.
 2. Ersatz validators where ersatz reward factor equals 0 (<a name="0069-VCBS-024" href="#0069-VCBS-024">0069-VCBS-024</a>): 
-        - Ensure that the `ersatzRewardFactor` is set to 0 
-        - Setup an ersatz validator with delegation greater than the minimum. The delegation can be equal to the delegation of the other Tendermint validators
-        - Verify the ersatz validators and their delegators get no rewards.
+  * Ensure that the `ersatzRewardFactor` is set to 0 
+  * Setup an ersatz validator with delegation greater than the minimum. The delegation can be equal to the delegation of the other Tendermint validators
+  * Verify the ersatz validators and their delegators get no rewards.
 3. Ersatz validators where reward factor equals 1 (<a name="0069-VCBS-025" href="#0069-VCBS-025">0069-VCBS-025</a>):
-        - Setup an ersatz validator with self and party delegation making them eligible for reward for a whole epoch. For example, such that the total delegation to each node is 1000 Vega. (3 Tendermint validators, 1 ersatz validator all having a delegation of 1000 Vega). 
-        - Make sure there is balance of 1000 Vega in the reward pool account for the epoch. 
-        - Verify the reward pool is distributed equally between the validators.
+  * Setup an ersatz validator with self and party delegation making them eligible for reward for a whole epoch. For example, such that the total delegation to each node is 1000 Vega. (3 Tendermint validators, 1 ersatz validator all having a delegation of 1000 Vega). 
+  * Make sure there is balance of 1000 Vega in the reward pool account for the epoch. 
+  * Verify the reward pool is distributed equally between the validators.
 4. Ersatz validators where reward factor equals 0.5 (<a name="0069-VCBS-026" href="#0069-VCBS-026">0069-VCBS-026</a>): 
-        - Setup an ersatz validator with self and party delegation making them eligible for reward for a whole epoch. For example, such that the total delegation to each node is 1000 Vega. (3 tendermint validators, 1 ersatz validator all having a delegation of 1000 Vega). 
-        - Make sure there is balance of 3500 Vega in the reward account for the epoch. 
-        - Verify that 3000 is distributed between the Tendermint validators and 500 is rewarded to the ersatz validator.
+  * Setup an ersatz validator with self and party delegation making them eligible for reward for a whole epoch. For example, such that the total delegation to each node is 1000 Vega. (3 tendermint validators, 1 ersatz validator all having a delegation of 1000 Vega). 
+  * Make sure there is balance of 3500 Vega in the reward account for the epoch. 
+  * Verify that 3000 is distributed between the Tendermint validators and 500 is rewarded to the ersatz validator.
 5. Multiple ersatz validators, reward factor equals 0.5 (<a name="0069-VCBS-027" href="#0069-VCBS-027">0069-VCBS-027</a>): 
-        - Setup a network with 3 ersatz validators, 3 Tendermint validators with arbitrary delegation, but ensuring the total delegation for each validator is greater than the minimum self-delegation. 
-        - Verify the total reward given to Tendermint validators is equal to the `total_delegation_from_tendermint_validators` * `reward_balance` / `total_delegation_from_all_validators`.
-        - Verify the total reward given to ersatz validators is equal to the `total_delegation_from_ersatz_validators` * `0.5` * `reward_balance` / `total_delegation_from_all_validators`.
+  * Setup a network with 3 ersatz validators, 3 Tendermint validators with arbitrary delegation, but ensuring the total delegation for each validator is greater than the minimum self-delegation. 
+  * Verify the total reward given to Tendermint validators is equal to the `total_delegation_from_tendermint_validators` * `reward_balance` / `total_delegation_from_all_validators`.
+  * Verify the total reward given to ersatz validators is equal to the `total_delegation_from_ersatz_validators` * `0.5` * `reward_balance` / `total_delegation_from_all_validators`.
 6. Pending validators get nothing (<a name="0069-VCBS-028" href="#0069-VCBS-028">0069-VCBS-028</a>):
-        - Setup a network with 5 tendermint validators, set number of ersatz validators (through factor) to 0. 
-        - Delegate to each node 1000 tokens (including self-delegation). 
-        - Announce 2 new nodes, verify that they are in pending state, delegate to them 1000 tokens each. 
-        - Run the network for a full epoch with the delegation, during which transfer 1000 tokens to the reward account. 
-        - Verify that, at the end of the epoch, none of the pending validators receive a reward. 
+  * Setup a network with 5 tendermint validators, set number of ersatz validators (through factor) to 0. 
+  * Delegate to each node 1000 tokens (including self-delegation). 
+  * Announce 2 new nodes, verify that they are in pending state, delegate to them 1000 tokens each. 
+  * Run the network for a full epoch with the delegation, during which transfer 1000 tokens to the reward account. 
+  * Verify that, at the end of the epoch, none of the pending validators receive a reward. 
 7. Pending validators do not get promoted (<a name="0069-VCBS-028" href="#0069-VCBS-028">0069-VCBS-028</a>):
-        - Setup a network with 5 tendermint validators, 2 ersatz validators and set number of ersatz validators (through factor) to 2. 
-        - Delegate to each node 1000 tokens (including self-delegation). 
-        - Announce 2 new nodes, verify that they are in pending state, delegate to them 1000 tokens each. 
-        - Run the network for a full epoch with the delegation, during which transfer 1000 tokens to the reward account. 
-        - Verify that, at the end of the epoch, none of the pending validators are promoted.
+  * Setup a network with 5 tendermint validators, 2 ersatz validators and set number of ersatz validators (through factor) to 2. 
+  * Delegate to each node 1000 tokens (including self-delegation). 
+  * Announce 2 new nodes, verify that they are in pending state, delegate to them 1000 tokens each. 
+  * Run the network for a full epoch with the delegation, during which transfer 1000 tokens to the reward account. 
+  * Verify that, at the end of the epoch, none of the pending validators are promoted.
 
 ## Ranking scores
 
