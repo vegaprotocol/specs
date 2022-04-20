@@ -192,7 +192,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0. 
   * Setup a network with 5 validators and self-delegate to them. 
   * Announce a new node to the network and self-delegate to them. 
-  * Every 1000 blocks the performance score of the new validator should go up by 0.1 as long as it’s up with a maximum of 1. 
+  * Every 1000 blocks the performance score of the new validator should go up by 0.1 until it reaches the maximum of 1. 
   * Verify that after enough epochs to represent at least 1000 blocks, the performance score of the joining validator is 0.1. 
   * Let the network run for 1000 blocks more and at the following epoch check that score is up to 0.2. Keep it running until it performance score of the joining validator reaches 1, then stop it. 
   * Verify that for every 1000 blocks, the performance score should go down by 0.1 until it reaches zero. 
