@@ -9,8 +9,8 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 
 ## Definitions / Parameters used
 - **Open interest**: the volume of all open positions in a given market.
-- `target_stake_time_window` is a market parameter (with network parameter `market.stake.target.timeWindow` giving a default value) defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds.
-- `target_stake_scaling_factor` is a market parameter (with network paramter `market.stake.target.scalingFactor` giving a default value) defining scaling between liquidity demand estimate based on open interest and target stake.
+- `market.stake.target.timeWindow` is a market parameter defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds.
+- `market.stake.target.scalingFactor` is a market parameter defining scaling between liquidity demand estimate based on open interest and target stake.
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see [the Quant Risk Models spec](./0018-RSKM-quant_risk_models.ipynb).
 - `mark_price`, see [mark price](./0009-MRKP-mark_price.md) spec.
 - `indicative_uncrossing_price`, see [auction](./0026-AUCT-auctions.md) spec.
@@ -19,10 +19,10 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 ### Current definitions
 
 First, `max_oi` is defined  maximum (open interest) measured over a time window, 
-`t_window = [max(t-target_stake_time_window,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction. Note that `max_oi` should be calculated recorded per transaction, so if there are multiple OI changes withing the same block (which implies the same timestamp), we should pick the max one, NOT the last one that was processed.
+`t_window = [max(t-market.stake.target.timeWindow,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction. Note that `max_oi` should be calculated recorded per transaction, so if there are multiple OI changes withing the same block (which implies the same timestamp), we should pick the max one, NOT the last one that was processed.
 
 Example 1:
-`t_window_for_target_stake = 1 hour`
+`t_market.stake.target.timeWindow = 1 hour`
 the market opened at `t_0 = 1:55`. 
 We have the following information about open interest over time:
 ```
@@ -41,12 +41,12 @@ Example 2: As above but the market opened at `t_0 = 4:15`. Then `t_window = [4:1
 
 From `max_oi` we calculate 
 
-`target_stake = reference_price x max_oi x target_stake_scaling_factor x rf`,
+`target_stake = reference_price x max_oi x market.stake.target.scalingFactor x rf`,
 
 where `reference_price` is `mark_price` when market is in continuous trading mode and `indicative_uncrossing_price` during auctions (if it's available, otherwise use `mark_price` which may be 0 in case of an opening auction), and `rf = max(risk_factor_short, risk_factor_long)`. Note that currently we always have that `risk_factor_short >= risk_factor_long` but this could change once we go beyond futures... so safer to take a `max`.
 Note that the units of `target_stake` are the settlement currency of the market as those are the units of the `reference_price`.
 
-Example 3: if `target_stake_scaling_factor = 10`, `rf = 0.004` and `max_oi = 120` then `target_stake = 4.8`.
+Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi = 120` then `target_stake = 4.8`.
 
 ### APIs
 * target stake
@@ -57,3 +57,8 @@ Example 3: if `target_stake_scaling_factor = 10`, `rf = 0.004` and `max_oi = 120
 * examples showing a growing list (before we hit t-window) (<a name="0041-TSTK-001" href="#0041-TSTK-001">0041-TSTK-001</a>)
 * examples showing a list that drops off values (<a name="0041-TSTK-002" href="#0041-TSTK-002">0041-TSTK-002</a>)
 * if new value that isn't a maximum, the liquidity demand doesn't change. (<a name="0041-TSTK-003" href="#0041-TSTK-003">0041-TSTK-003</a>)
+- Change of `market.stake.target.scalingFactor` will change the scaling between liquidity demand estimate based on open interest and target stake, hence change the target satke. (<a name="0041-TSTK-004" href="#0041-TSTK-004">0041-TSTK-004</a>)
+- Change of `market.stake.target.timeWindow` will change the length of time window over which open interest is measured, hence will change the value of `max_io`. (<a name="0041-TSTK-005" href="#0041-TSTK-005">0041-TSTK-005</a>)
+
+
+
