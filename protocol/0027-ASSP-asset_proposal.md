@@ -38,6 +38,9 @@ Once the asset as been whitelisted, the network will receive from the event queu
 
 Once this has been done, the new asset is ready to be used in the vega network to create new markets.
 
+## Modifying an existing asset
+
+If an asset modification that went through [governance](./0028-GOVE-governance.md) is enacted and it changes on of: `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited so that anyone can submit this to the bridge contract and cause the changes to be appropriately reflected there. 
 
 # Pseudo-code / Examples
 
@@ -120,3 +123,4 @@ For example for USD this may be 1 USD or perhaps 0.01 USD.
 - [ ] As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal) (<a name="0027-ASSP-005" href="#0027-ASSP-005">0027-ASSP-005</a>)
 - [ ] As a node, when a new asset is accepted through governance, I can sign a payload to the user so they can whitelist the asset with the bridge (<a name="0027-ASSP-006" href="#0027-ASSP-006">0027-ASSP-006</a>)
 - [ ] AS a node, I receive events from the external blockchain queue, that's confirm the asset is enabled in the bridge. (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
+- [ ] As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold`, I emit a signed a payload to the world so that they can update the corresponding parameters on the bridge (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)

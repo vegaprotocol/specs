@@ -20,17 +20,20 @@ option go_package = "code.vegaprotocol.io/vega/proto";
 
 message Asset {
 
-  string ID = 1;
-  string name = 2;
+  string ID = 1;          // immutable
+  string name = 2; 
   string symbol = 3;
   string totalSupply = 4;
-  uint64 decimals = 5;
+  uint64 decimals = 5;    // immutable 
   string quantum = 1000000000000000000; 
+  string maximumLifetimeDeposit = 100000; // note that this is effectively one as the asset has 5 decimals
+  string withdrawalDelayPeriod = 2d; // or 12h or some other string that's a valid time period
+  string withdrawalDelayThreshold = 1000000; // this is effectively 10 due to the 5 decimals 
 
   oneof source {
     BuiltinAsset builtinAsset = 101;
     ERC20 erc20 = 102;
-  }
+  } // immutable 
 }
 
 
@@ -59,6 +62,12 @@ message DevAssets {
 ```
 See: https://github.com/vegaprotocol/vega/blob/develop/proto/assets.proto
 And: https://github.com/vegaprotocol/vega/blob/develop/proto/governance.proto
+
+
+The `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave. 
+
+All the asset definition fields are immutable (cannot be changed even by governance) except: `name`, `symbol`, `quantum`, `totalSupply`, `maximumLifetimeDeposit`, `withdrawalDelayPeriod`, `withdrawalDelayThreshold` 
+These can be changed by asset modification [governance proposal](./0028-GOVE-governance.md). 
 
 
 ## Asset Listing Process
