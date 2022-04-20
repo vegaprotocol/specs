@@ -98,7 +98,7 @@ Note that this could become obsolete if a future version of the protocol impleme
 In addition to the normal validators, there is an additional set of Ersatz validators as defined by
 the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will reward:
 ```
-n' := ceil(network.validators.multipleOftendermintValidators x network.validators.Tendermint.number)
+n' := ceil(network.validators.multipleOftendermintValidators x network.validators.tendermint.number)
 ```
 
 ersatz validators. 
