@@ -40,7 +40,8 @@ Once this has been done, the new asset is ready to be used in the vega network t
 
 ## Modifying an existing asset
 
-If an asset modification that went through [governance](./0028-GOVE-governance.md) is enacted and it changes on of: `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited so that anyone can submit this to the bridge contract and cause the changes to be appropriately reflected there. 
+If an asset modification that went through [governance](./0028-GOVE-governance.md) is enacted and it changes on of: `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited (and that's all that happens) so that anyone can submit this to the bridge contract and cause the changes to be appropriately reflected there. 
+Vega will then update it's internal asset definition once the events are emmitted and confirmed the correct number of times by the bridge chain.
 
 # Pseudo-code / Examples
 
