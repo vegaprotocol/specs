@@ -60,15 +60,19 @@ Today, only the time-triggered one is implemented through the property name `veg
 ### Example
 
 ```proto
-{
-  “key”:{
-    “name”:“vegaprotocol.builtin.timestamp”,
-    “type”:“TYPE_TIMESTAMP”
-  },
-  “conditions”:[{
-    “operator”:“OPERATOR_GREATER_THAN_OR_EQUAL”,
-    “value”:“1650447351"
-  }]
+ “oracleSpecForTradingTermination”:{
+    filters”:[
+	 {
+	  “key”:{
+	    “name”:“vegaprotocol.builtin.timestamp”,
+	    “type”:“TYPE_TIMESTAMP”
+	  },
+	  “conditions”:[{
+	    “operator”:“OPERATOR_GREATER_THAN_OR_EQUAL”,
+	    “value”:“1650447351"
+	  }]
+	}
+    ]
 }
 ```
 
