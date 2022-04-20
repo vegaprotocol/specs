@@ -16,7 +16,7 @@ This requires a [governance proposal](./0028-GOVE-governance.md#new-asset-propos
 This proposal can be initiated by anyone with a sufficient number of vega tokens.
 The proposal vote for an asset is done in two steps, first by the validator nodes firsts, then by the token holders.
 
-First, When a new asset is proposed to the network, the asset validity's (see [asset framework](./0040-ASSF-asset_framework.md)) is verified against the origin blockchain, which allows the vega network to recover information about the asset (e.g: ticker symbol, name, decimal place, etc).
+First, when a new asset is proposed to the network, the asset validity's (see [asset framework](./0040-ASSF-asset_framework.md)) is verified against the origin blockchain, which allows the vega network to obtain information about the asset (e.g: ticker symbol, name, decimal place, etc).
 If the asset is accepted by the node, the node will then send it's own vote as a transaction to the chain, so the other validators can keep track of whom is accepting the new asset.
 This first phase may be configured through [network parameters](./0054-NETP-network_parameters.md) (e.g: duration of the phase, what proportion of validators are required to approve in order to validate the asset, etc.).
 In a first version it would be acceptable to hard code these value (e.g: 1 hours duration for the node to validate the asset, at least two thirds + one of the nodes needs to succeed.
@@ -42,10 +42,15 @@ Once this has been done, the new asset is ready to be used in the vega network t
 
 ## Modifying an existing asset
 
-If an asset modification that went through [governance](./0028-GOVE-governance.md) is enacted and it changes one of: `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited (and that's all that happens). 
+If an asset modification that went through [governance](./0028-GOVE-governance.md) is enacted then there are Vega chain part and bridged chain part. 
+
+### Bridged chain part
+If it changes one of: `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited. 
 Anyone willing to pay the transaction fee (gas) can submit this to the bridge contract via multisig control and cause the changes to be appropriately reflected there. 
 Vega will then update it's internal asset definition once the events are emmitted and confirmed the correct number of times by the bridge chain.
 
+### Vega chain part
+If it changes `quantum` then this new value becomes used immediately on enactement. 
 
 # Changes initiated on chain
 
@@ -73,19 +78,12 @@ message ERC20 {
 	string contractAddress = 1;
 }
 
-message BTC {
-	// some btc require fields
-	// e.g network to use etc.
-}
-
 message AssetSource {
   oneof source {
 	// vega internal assets
 	BuiltinAsset builtinAsset = 1;
 	// foreign chains assets
 	ERC20 erc20 = 2;
-	// more to be done, BTC, ETH, etc..
-	BTC btc = 3;
   }
    
 }
@@ -95,7 +93,11 @@ message NewAsset {
   // an minimal amount of stake to be committed 
   // by liquidity providers.
   // use the number of decimals defined by the asset.
-  string quantum = 1000000000000000000;
+  string quantum = 1000000000000000000; // note that 1000000000000000000 in here will be interpreted against the asset decimals 
+  string maximumLifetimeDeposit = 100000; // note that 100000 in here will be interpreted against the asset decimals
+  string withdrawalDelayPeriod = 2d;  // or 12h or some other string that's a valid time period
+  string withdrawalDelayThreshold = 1000000;  // this is will be interpreted against the asset decimals
+
 }
 
 message ProposalTerms {
