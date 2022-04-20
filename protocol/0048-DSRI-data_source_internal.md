@@ -51,6 +51,27 @@ on: {
 
 ```
 
+## Implementation
+
+Usage of internal oracle data are specified using properties prefixed with `vegaprotocol.builtin`, on the oracle spec.
+
+Today, only the time-triggered one is implemented through the property name `vegaprotocol.builtin.timestamp`.
+
+### Example
+
+```proto
+{
+  “key”:{
+    “name”:“vegaprotocol.builtin.timestamp”,
+    “type”:“TYPE_TIMESTAMP”
+  },
+  “conditions”:[{
+    “operator”:“OPERATOR_GREATER_THAN_OR_EQUAL”,
+    “value”:“1650447351"
+  }]
+}
+```
+
 ## Acceptance criteria
 
 1. A simple value data source can be provided
