@@ -407,6 +407,7 @@ APIs should also exist for clients to:
 ### New Asset proposals
 - [ ] New asset proposals cannot be created before [`governance.proposal.asset.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
 
+
 ### New Market proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
@@ -422,11 +423,19 @@ APIs should also exist for clients to:
 - [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
 
 
-
-
 ### Network parameter change proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
 - [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
+- Change of network's `governance.proposal.*.minEnact` will change the proposal enactment time which has to be after current time + minEact. (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
+- Change of network's `governance.proposal.*.maxEnact` will change the proposal enactment time which has to be before current time + maxEnact. (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
+- Change of network's `governance.proposal.*.maxClose` will change the proposal vote closing time which has to be before current time + maxClose. (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
+- Change of network's `governance.proposal.*.minClose` will change the proposal vote closing time which has to be after current time + minClose. (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
+- Change of network's `governance.proposal.*.requiredMajority` will change the required votes on governance proposal (A fraction of total token holders that must participate in a vote). (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
+- Change of network's `governance.proposal.*.minVoterBalance` will change minimum governance token balance required to vote on a market update proposal including the correct padding instead of possible decimal places. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
+- Change of network's `governance.proposal.*.minProposerBalance` will change minimum governance token balance required to submit the proposal including the correct padding instead of possible decimal places. (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
+- Change of network's `governance.proposal.*.requiredParticipation` will change minimum governance token balance required to create a market update proposal (A fraction of total token holders that must participate in a vote). (<a name="0028-GOVE-038" href="#0028-GOVE-038">0028-GOVE-038</a>)
+
+Here `*` stands for any of `asset, market, updateMarket, updateNetParam`. 
 
 ### Freeform governance proposals
 - [ ] A freeform governance proposal with a description field that is empty, or not between 0 and 255 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
@@ -434,4 +443,16 @@ APIs should also exist for clients to:
 - [ ] A freeform governance must contain a link field and it must not be null, but no other check is done to verify it (<a name="0028-GOVE-021" href="#0028-GOVE-021">0028-GOVE-021</a>)
 - [ ] A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
 - [ ] Closed freeform governance proposals can be retrieved from the API along with details of how tokenholders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
+- Change of network's `governance.proposal.FreeForm.minEnact` will change the proposal enactment time which has to be after current time + minEact. (<a name="0028-GOVE-041" href="#0028-GOVE-041">0028-GOVE-041</a>)
+- Change of network's `governance.proposal.FreeForm.maxEnact` will change the proposal enactment time which has to be before current time + maxEnact. (<a name="0028-GOVE-042" href="#0028-GOVE-042">0028-GOVE-042</a>)
+- Change of network's `governance.proposal.FreeForm.maxClose` will change the proposal vote closing time which has to be before current time + maxClose. (<a name="0028-GOVE-043" href="#0028-GOVE-043">0028-GOVE-043</a>)
+- Change of network's `governance.proposal.FreeForm.minClose` will change the proposal vote closing time which has to be after current time + minClose. (<a name="0028-GOVE-044" href="#0028-GOVE-044">0028-GOVE-044</a>)
+- Change of network's `governance.proposal.FreeForm.requiredMajority` will change the required votes on governance proposal (A fraction of total token holders that must participate in a vote). (<a name="0028-GOVE-045" href="#0028-GOVE-045">0028-GOVE-045</a>)
+- Change of network's `governance.proposal.FreeForm.minVoterBalance` will change minimum governance token balance required to vote on a market update proposal including the correct padding instead of possible decimal places. (<a name="0028-GOVE-046" href="#0028-GOVE-046">0028-GOVE-046</a>)
+- Change of network's `governance.proposal.FreeForm.minProposerBalance` will change minimum governance token balance required to submit the proposal including the correct padding instead of possible decimal places. (<a name="0028-GOVE-047" href="#0028-GOVE-047">0028-GOVE-047</a>)
+- Change of network's `governance.proposal.FreeForm.requiredParticipation` will change minimum governance token balance required to create a market update proposal (A fraction of total token holders that must participate in a vote). (<a name="0028-GOVE-048" href="#0028-GOVE-048">0028-GOVE-048</a>)
+
+
+
+
 
