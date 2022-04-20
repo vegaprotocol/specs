@@ -169,11 +169,47 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 ## Types of proposals
 
 Every proposal transaction contains the following common fields:
-- a link to a text file in markdown format and
+- a link to a text file in markdown format
 - a cryptographically secure hash (SHA3-512) of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
-- a description field to show a short title / something in case the link goes offline. This is to be between `0` and `255` unicode characters.
+- a description field to show a short title / something in case the link goes offline.
 
 The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level.
+
+### Constraint
+1. `url` and `hash` are optional, for all proposal, except FreeForm were it’s mandatory.
+2. `description` is mandatory, up to 1024 characters.
+3. `url` or `hash` form a pair, meaning if one of the property is set,  the other is required.
+
+### Example
+
+```diff
+message ProposalSubmission {
+  // Proposal reference
+  string reference = 1;
+  // Proposal configuration and the actual change that is meant to be executed when proposal is enacted
+  vega.ProposalTerms terms = 2;
++  // Proposal rational that summarises the change and link to the complete proposed changed.
++  vega.ProposalRationale rationale = 3;
+}
+```
+
+```proto
+message ProposalRationale {
+  // Description to show a short title / something in case the link goes offline.
+  // This is to be between 0 and 255 unicode characters.
+  // This is mandatory for all proposal.
+  string description = 1;
+  // Cryptographically secure hash (SHA3-512) of the text pointed by the `url` property
+  // so that viewers can check that the text hasn't been changed over time.
+  // Optional except for FreeFrom proposal where it's mandatory.
+  // If set, the `url` property must be set.
+  string hash = 2;
+  // Link to a text file describing the proposal in depth.
+  // Optional except for FreeFrom proposal where it's mandatory.
+  // If set, the `url` property must be set.
+  string url = 3;
+}
+```
 
 ## 1. Create market
 
