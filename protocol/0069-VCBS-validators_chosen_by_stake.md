@@ -205,7 +205,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
 ### Multisig score
 1. Verfiy that for all erstaz validators their multisig score is 1 (<a name="0069-VCBS-010" href="#0069-VCBS-010">0069-VCBS-010</a>)
 2. Tendermint validators excess signature (<a name="0069-VCBS-011" href="#0069-VCBS-011">0069-VCBS-011</a>): 
-  * Setup a network with 5 Tendermint validators with 4 validators with self-delegation. 
+  * Setup a network with 5 Tendermint validators but with only 4 validators that have sufficient self-delegation. 
   * Announce a new node and self-delegate to them, allow some time to replace the validator with no self-delegation as a Tendermint validator. Note: At this point the signature from the removed validator IS still on the multisig contract. 
   * Transfer 1000 tokens to the VEGA reward account. 
   * Verify that at the end of the epoch all of the validators should have a multisig score = 0 and none shall get a reward because we have a signature on the smart contract that doesn’t belong to any of the 5 Tendermint validators.
