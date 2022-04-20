@@ -254,7 +254,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Verify the total reward given to Tendermint validators is equal to the `total_delegation_from_tendermint_validators` * `reward_balance` / `total_delegation_from_all_validators`.
   * Verify the total reward given to ersatz validators is equal to the `total_delegation_from_ersatz_validators` * `0.5` * `reward_balance` / `total_delegation_from_all_validators`.
 6. Pending validators get nothing (<a name="0069-VCBS-028" href="#0069-VCBS-028">0069-VCBS-028</a>):
-  * Setup a network with 5 tendermint validators, set number of ersatz validators (through factor) to 0. 
+  * Setup a network with 5 tendermint validators, set number of ersatz validators (through network parameter) to 0. 
   * Delegate to each node 1000 tokens (including self-delegation). 
   * Announce 2 new nodes, verify that they are in pending state, delegate to them 1000 tokens each. 
   * Run the network for a full epoch with the delegation, during which transfer 1000 tokens to the reward account. 
