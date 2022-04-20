@@ -18,7 +18,7 @@ Vega will sort all current Tendermint validators as `[v_1, ..., v_n]` with `v_1`
 If for any `l,m=1,...,n` we have  `v_l == v_m` then we place higher the one who's been validator for longer (so this is a mechanism for resolving ties).
 Vega will sort all those who submitted a transaction wishing to be validators using `validator_score` as `[w_1, ..., w_k]`. 
 These may be ersatz validators (ie getting rewards) or others who just submitted the transaction to join.
-If `empty_slots := network.validators.Tendermint.number - n > 0` (we have empty Tendermint validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to Tendermint validators. 
+If `empty_slots := network.validators.tendermint.number - n > 0` (we have empty Tendermint validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to Tendermint validators. 
 If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a Tendermint validator, and the lowest scoring incumbent becomes an ersatz validator. 
 If for any `l,m=1,...,k` we have `w_l == w_m` then we resolve this by giving priority to the one who submitted the transaction to become validator earlier (so this is a mechanism for resolving ties).  
 Note that we only do this check once per epoch so at most one validator can be changed per epoch in the case `empty_slots == 0`.
@@ -98,7 +98,7 @@ Note that this could become obsolete if a future version of the protocol impleme
 In addition to the normal validators, there is an additional set of Ersatz validators as defined by
 the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will reward:
 ```
-n' := ceil(network.validators.multipleOfTendermintValidators x network.validators.Tendermint.number)
+n' := ceil(network.validators.multipleOftendermintValidators x network.validators.Tendermint.number)
 ```
 
 ersatz validators. 
@@ -133,7 +133,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
 
 | Property                                                  | Type             | Example value | Description |
 |-----------------------------------------------------------|------------------|:-------------:|-------------|
-|`network.validators.Tendermint.number`                     | String (integer) |       13      | The optimal number of validators that should be in the Tendermint validator set    |
+|`network.validators.tendermint.number`                     | String (integer) |       13      | The optimal number of validators that should be in the Tendermint validator set    |
 |`network.validators.incumbentBonus`                        | String (float)   |      0.1      | When comparing the stake of existing validators to ersatz validators, this is the bonus that existing validators earn   |
 |`network.validators.miniumEthereumEventsForNewValidator`   | String (integer) |      100      | Ersatz validators must have reported or confirmed this many Ethereum events to be considered for promotion  |
 |`network.validators.multisig.numberOfSigners`              | String (integer) |       9       | Currently set to the number of validators on the network. In future will be used to scale multisig Validator participation.  |
