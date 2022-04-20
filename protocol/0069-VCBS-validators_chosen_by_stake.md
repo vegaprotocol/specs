@@ -215,7 +215,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Announce a new node and self-delegate to it 1000 tokens.
   * Allow some time for the performance score to be greater than 0. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch. 
   * When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account. 
-  * Verify that the joining validator would has a multisig score of 0 and therefore would not get a reward. 
+  * Verify that the joining validator has a multisig score of 0 and therefore would not get a reward. 
 4. Tendermint validators missing signature test 2 (<a name="0069-VCBS-013" href="#0069-VCBS-013">0069-VCBS-013</a>): 
   * Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5. 
   * **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to **4**.
