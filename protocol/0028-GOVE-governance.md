@@ -222,13 +222,16 @@ All new asset proposals have their validation configured by the network paramete
 
 ## 4.2 Modify an existing asset
 
-Any existing [asset](./0040-ASSF-asset_framework.md) can be proposed through the governance system. 
+Any existing [asset](./0040-ASSF-asset_framework.md) can be modified through the governance system. 
 Only some properties of an asset may be modified, this is detailed in [asset framework spec](./0040-ASSF-asset_framework.md). 
 All modify asset proposals have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`. 
-Enactment of an asset proposal is *only* the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emmitted by the bridge chain. 
+Enactment of an asset modification proposal is:
+- For data that must be synchronised with the asset blockchain (e.g. Ehtereum): *only* the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emmitted by the bridge chain.
+- For any data that is stored only on the Vega chain: the data is updated once the proposal is enacted.
 
 
 ## 5. Transfers initiated by Governance (post Oregon trail)
+
 ### Permitted source and destination account types
 
 The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal.

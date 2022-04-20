@@ -3,7 +3,9 @@ Vega uses various digital assets (cryptocurrencies or tokens) to settlement posi
 In order to ensure the safety, security, and allocation of these assets, they must be managed in a fully decentralized and extensible way. Here, we lay out a framework for assets in Vega.
 This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, are not covered deposits and withdrawal for an asset.
 
+
 # Guide-level explanation
+
 ## Asset Definition
 The following code sample lays out the representation for assets being hosted in foreign network (e.g.: erc20 on ethereum).
 Common to all asset definitions are the basic fields from the Asset message, these are either retrieved from the foreign chain, or submitted through governance proposal.
