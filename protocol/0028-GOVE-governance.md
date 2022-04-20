@@ -426,14 +426,14 @@ APIs should also exist for clients to:
 ### Network parameter change proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
 - [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
-- Change of network's `governance.proposal.*.minEnact` will change the proposal enactment time which has to be after current time + minEact. (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
-- Change of network's `governance.proposal.*.maxEnact` will change the proposal enactment time which has to be before current time + maxEnact. (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
-- Change of network's `governance.proposal.*.maxClose` will change the proposal vote closing time which has to be before current time + maxClose. (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
-- Change of network's `governance.proposal.*.minClose` will change the proposal vote closing time which has to be after current time + minClose. (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
-- Change of network's `governance.proposal.*.requiredMajority` will change the required votes on governance proposal (A fraction of total token holders that must participate in a vote). (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
-- Change of network's `governance.proposal.*.minVoterBalance` will change minimum governance token balance required to vote on a market update proposal including the correct padding instead of possible decimal places. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
-- Change of network's `governance.proposal.*.minProposerBalance` will change minimum governance token balance required to submit the proposal including the correct padding instead of possible decimal places. (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
-- Change of network's `governance.proposal.*.requiredParticipation` will change minimum governance token balance required to create a market update proposal (A fraction of total token holders that must participate in a vote). (<a name="0028-GOVE-038" href="#0028-GOVE-038">0028-GOVE-038</a>)
+- Change of network's `governance.proposal.*.minEnact` will change the proposal enactment time which has to be after current time + minEact. (<a name="0028-GOVE-051" href="#0028-GOVE-051">0028-GOVE-051</a>)
+- Change of network's `governance.proposal.*.maxEnact` will change the proposal enactment time which has to be before current time + maxEnact. (<a name="0028-GOVE-052" href="#0028-GOVE-052">0028-GOVE-052</a>)
+- Change of network's `governance.proposal.*.maxClose` will change the proposal vote closing time which has to be before current time + maxClose. (<a name="0028-GOVE-053" href="#0028-GOVE-053">0028-GOVE-053</a>)
+- Change of network's `governance.proposal.*.minClose` will change the proposal vote closing time which has to be after current time + minClose. (<a name="0028-GOVE-054" href="#0028-GOVE-054">0028-GOVE-054</a>)
+- Change of network's `governance.proposal.*.requiredMajority` will change the required votes on governance proposal (A fraction of total token holders that must participate in a vote). (<a name="0028-GOVE-055" href="#0028-GOVE-055">0028-GOVE-055</a>)
+- Change of network's `governance.proposal.*.minVoterBalance` will change minimum governance token balance required to vote on a market update proposal including the correct padding instead of possible decimal places. (<a name="0028-GOVE-056" href="#0028-GOVE-056">0028-GOVE-056</a>)
+- Change of network's `governance.proposal.*.minProposerBalance` will change minimum governance token balance required to submit the proposal including the correct padding instead of possible decimal places. (<a name="0028-GOVE-057" href="#0028-GOVE-057">0028-GOVE-057</a>)
+- Change of network's `governance.proposal.*.requiredParticipation` will change minimum governance token balance required to create a market update proposal (A fraction of total token holders that must participate in a vote). (<a name="0028-GOVE-058" href="#0028-GOVE-058">0028-GOVE-058</a>)
 
 Here `*` stands for any of `asset, market, updateMarket, updateNetParam`. 
 
