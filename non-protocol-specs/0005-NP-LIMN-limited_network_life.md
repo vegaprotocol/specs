@@ -301,3 +301,14 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
 1. Another validator submits a replay transaction
 1. That transaction is rejected
+
+## Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0005-NP-LIMN-022" href="#0005-NP-LIMN-022">0005-NP-LIMN-022</a>)
+1. More than one party deposits stake onto Vega
+1. The parties delegate stake to the validators
+1. Setup the rewards:
+   - A party deposits VEGA funds to their Vega general account
+   - The party creates a continuing recurring transfer (for e.g: 1 token) from their general account to the reward pool
+1. Assert that every end of epoch, the funds are distributed, over the parties delegating stake, at end of every epoch
+1. Wait for the next checkpoint, then stop the network
+1. Load the checkpoint into a new network
+1. Assert that at every epoch, the recurring transfers to the reward pool continues to happen, and that the funds are properly being distributed to the delegator
