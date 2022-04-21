@@ -407,6 +407,7 @@ APIs should also exist for clients to:
 ### New Asset proposals
 - [ ] New asset proposals cannot be created before [`governance.proposal.asset.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
 
+
 ### New Market proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
@@ -422,11 +423,19 @@ APIs should also exist for clients to:
 - [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
 
 
-
-
 ### Network parameter change proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
 - [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
+
+Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeForm`. 
+- Change of the network parameter `governance.proposal.*.minEnact` will immediately change the minimum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-051" href="#0028-GOVE-051">0028-GOVE-051</a>)
+- Change of the network parameter `governance.proposal.*.maxEnact` will immediately change the maximum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-052" href="#0028-GOVE-052">0028-GOVE-052</a>)
+- Change of the network parameter `governance.proposal.*.maxClose` will immediately change the maximum vote closing time for all future proposals.  Proposals that have already been submitted are not affected.  (<a name="0028-GOVE-053" href="#0028-GOVE-053">0028-GOVE-053</a>)
+- Change of the network parameter `governance.proposal.*.minClose` will immediately change the minimum vote closing time for all future proposals.  Proposals that have already been submitted are not affected.  (<a name="0028-GOVE-054" href="#0028-GOVE-054">0028-GOVE-054</a>)
+- Change of the network parameter `governance.proposal.*.requiredMajority` or `governance.proposal.*.requiredParticipation` will immediately change the majority (or participation) required for the proposal to pass for all proposals submitted in the future. Proposals that have already been submitted are not affected as they have their own copy of this value.  (<a name="0028-GOVE-055" href="#0028-GOVE-055">0028-GOVE-055</a>)
+- Change of the network parameter `governance.proposal.*.minVoterBalance` will immediately change the minimum governance token balance required to vote on any proposal submitted in the future. Proposals that have already been submitted are unaffected as they have their own copy of this parameter. (<a name="0028-GOVE-056" href="#0028-GOVE-056">0028-GOVE-056</a>)
+- Change of the network parameter `governance.proposal.*.minProposerBalance` will immediately change minimum governance token balance required to submit any future proposal. Proposals that have already been submitted are unaffected . (<a name="0028-GOVE-057" href="#0028-GOVE-057">0028-GOVE-057</a>)
+
 
 ### Freeform governance proposals
 - [ ] A freeform governance proposal with a description field that is empty, or not between 0 and 255 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
@@ -434,4 +443,8 @@ APIs should also exist for clients to:
 - [ ] A freeform governance must contain a link field and it must not be null, but no other check is done to verify it (<a name="0028-GOVE-021" href="#0028-GOVE-021">0028-GOVE-021</a>)
 - [ ] A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
 - [ ] Closed freeform governance proposals can be retrieved from the API along with details of how tokenholders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
+
+
+
+
 
