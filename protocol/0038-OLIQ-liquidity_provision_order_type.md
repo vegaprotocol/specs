@@ -89,8 +89,8 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 
 #### Calculating volumes for a set of market making orders (step 6):
 
-From the network parameter `minimum-prob-of-trading-for-LP-orders` and from `best static bid-price` we get `minPrice` from the [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb): the smallest price level that has probability of trading greater than or equal to `minimum-prob-of-trading-for-LP-orders`. 
-Similarly from `best static ask-price` we get `maxPrice`: the largest price level that has probability of trading greater than or equal to `minimum-prob-of-trading-for-LP-orders`. 
+From the network parameter `market.liquidity.minimum.probabilityOfTrading.lpOrders` and from `best static bid-price` we get `minPrice` from the [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb): the smallest price level that has probability of trading greater than or equal to `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
+Similarly from `best static ask-price` we get `maxPrice`: the largest price level that has probability of trading greater than or equal to `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
 Any shape entry with a peg less than `minPrice` should have the resulting volume implied at `minPrice` (instead of what the level the peg would be) while any shape entry with peg greater than `maxPrice` should have the resulting volume implied at `maxPrice`. 
 
 Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb). 
@@ -175,7 +175,7 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 
 ## Network Parameters:
 * mm-time-horizon: market making time horizon to imply probability of trading.
-* minimum-prob-of-trading-for-LP-orders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the minimum-prob-of-trading-for-LP-orders. Reasonable value `1e-8`. For validation purposes the minimum value is `1e-15` and maximum value is `0.1`. 
+* market.liquidity.minimum.probabilityOfTrading.lpOrders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the `market.liquidity.minimum.probabilityOfTrading.lpOrders`. Reasonable value `1e-8`. For validation purposes the minimum value is `1e-15` and maximum value is `0.1`. 
 
 ## APIs:
 * Order datatype for LP orders. Any order APIs should contain these orders.
@@ -183,6 +183,8 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 ## Acceptance Criteria:
 - [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
 - [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>);
+- Change of the network parameter `market.liquidity.minimum.probabilityOfTrading.lpOrders` will immediately change the minimum probability of trading which affects placement of LP orders. If the parameter has been decreased then any LP order volume that may have been pushed "in" due to the price level having probability of trading smaller than the former value may now be placed at the price level specified by the LP order. 
+If the parameter has been increased then LP order volume that may have been placed at price levels that have lower probability of trading than this value will now be placed at the price corresponding to the new probability of trading.  (<a name="0038-OLIQ-007" href="#0038-OLIQ-007">0038-OLIQ-007</a>)
 
 ### LP commitment order creation
 - [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
