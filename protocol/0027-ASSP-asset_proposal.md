@@ -55,7 +55,7 @@ If it changes `quantum` then this new value becomes used immediately on enacteme
 # Changes initiated on chain
 
 In addition to changes initiated by governance on Vega, an asset's particulars can change on its originating chain. 
-The details that are sourced from the originating chain may vary by blockchain and aasset standard. 
+The details that are sourced from the originating chain may vary by blockchain and asset standard. 
 For ERC20 on Ethereum, this would be the asset's `name`, `symbol`, and `totalSupply`.
 
 Vega nodes will run nodes for all bridged chains. They will either listen to the relevant events or poll the current value of these data reguarly in order to ensure that the asset data on Vega reflects the current value (after the configured number of confirmations). 
