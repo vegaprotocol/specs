@@ -60,17 +60,15 @@ A governance proposal may be submitted to transfer funds on enactment from the o
 - Depositing funds via the ERC20 bridge to the Network Treasury account (i.e. zero address) when there is already a Network Treasury account for the asset being deposited:
 	- Increments the balance of the Network Treasury account for the asset by the amount of the asset that was deposited (<a name="0055-TREA-006" href="#0055-TREA-006">0055-TREA-006</a>)
 	- The Network Treasury accounts API returns the correct balance for the new account (<a name="0055-TREA-007" href="#0055-TREA-007">0055-TREA-007</a>)
-- No party can withdraw assets from the Network Treasury account via the ERC20 bridge (<a name="0055-TREA-008" href="#0055-TREA-008">0055-TREA-008</a>)
-- No party can use assets in the Network Treasury account as margin or transfer them to another account on Vega (<a name="0055-TREA-009" href="#0055-TREA-009">0055-TREA-009</a>)
 - The network treasury account balances [are restored after a network restart](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md)  (<a name="0055-TREA-010" href="#0055-TREA-010">0055-TREA-010</a>)
 
 ### Post Oregon Trail
 
 - If a governance proposal for a single transfer from a network treasury account to some other account is enacted then 
-	- if the amount in the proposal greater than or equal amount in network treasury for the asset then the entire balance of the net treasury account is transferred to the destinaiton account (party address). (<a name="0055-TREA-050" href="#0055-TREA-050">0055-TREA-050</a>)
-	- if the balance in the network treasury for the asset is greater than the amount specified in the transfer then the network treasury balance is decreased by the said amount and the destinaiton account (party address) account is incremented by the right amount. (<a name="0055-TREA-051" href="#0055-TREA-051">0055-TREA-051</a>)
+	- if the amount in the proposal greater than or equal amount in network treasury for the asset then the entire balance of the net treasury account is transferred to the destinaiton account (party address). (<a name="0055-COSMICELEVATOR-050" href="#0055-COSMICELEVATOR-050">0055-COSMICELEVATOR-050</a>)
+	- if the balance in the network treasury for the asset is greater than the amount specified in the transfer then the network treasury balance is decreased by the said amount and the destinaiton account (party address) account is incremented by the right amount. (<a name="0055-COSMICELEVATOR-051" href="#0055-COSMICELEVATOR-051">0055-COSMICELEVATOR-051</a>)
 
-- If a governance proposal for a single periodic transfer from a network treasury account to some other account is enacted then the transfers run as individual transfers as specified by the schedule / amounts until the schedule ends. (<a name="0055-TREA-060" href="#0055-TREA-060">0055-TREA-060</a>) 
+- If a governance proposal for a single periodic transfer from a network treasury account to some other account is enacted then the transfers run as individual transfers as specified by the schedule / amounts until the schedule ends. (<a name="0055-COSMICELEVATOR-060" href="#0055-COSMICELEVATOR-060">0055-COSMICELEVATOR-060</a>) 
 
 
 
