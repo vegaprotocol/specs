@@ -235,7 +235,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
 ## Rewards split between tendermint and ersatz validators
 
 1. Base scenario (<a name="0069-VCBS-023" href="#0069-VCBS-023">0069-VCBS-023</a>):
-  * There are no ersatz validators in the network. regardless of ersatzRewardFactor, 
+  * There are no ersatz validators in the network. 
   * Verify that, regardless of `ersatzRewardFactor` value, all rewards are being paid out to the validators as expected given the reward scores.
 2. Ersatz validators where ersatz reward factor equals 0 (<a name="0069-VCBS-024" href="#0069-VCBS-024">0069-VCBS-024</a>): 
   * Ensure that the `ersatzRewardFactor` is set to 0 
