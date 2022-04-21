@@ -47,8 +47,8 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 ### Network
 
-- `PriceMonitoringDefaultParameters`: Specifies default market parameters outlined in the previous paragraph. These will be used if market parameters don't get explicitly specified.
-- `PriceMonitoringUpdateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
+- `market.monitor.price.defaultParameters`: Specifies default market parameters outlined in the previous paragraph. These will be used if market parameters don't get explicitly specified.
+- `market.monitor.price.updateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
 
 ### Hard-coded
 - Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market. 
@@ -115,4 +115,5 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - A maximum of `5` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
 - Persistent order results in an auction (one trigger breached), orders placed during auction result in trade with indicative price outside the price monitoring bounds, hence auction get extended, additional orders resulting in more trades placed, auction concludes. (<a name="0032-PRIM-008" href="#0032-PRIM-008">0032-PRIM-008</a>)
 - If the cumulative extentions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>)   
-
+- Change of `market.monitor.price.defaultParameters` will change the default market parameters used in price monitoring when a new market is proposed and market parameters don't get explicitly specified. (<a name="0032-PRIM-010" href="#0032-PRIM-010">0032-PRIM-010</a>)   
+- Change of `market.monitor.price.updateFrequency` will immediately change how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model. (<a name="0032-PRIM-011" href="#0032-PRIM-011">0032-PRIM-011</a>)   
