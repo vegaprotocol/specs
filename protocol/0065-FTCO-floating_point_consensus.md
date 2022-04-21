@@ -94,7 +94,7 @@ This section outlines floating-point quantities `vega` currently relies on:
             - Up: 10%,
             - Down: 10%.
     - Upon market enactment risk factors get calculated (their values change from defaults).
-    - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price montiroing bounds and probability of trading get calculated (their values change from defaults).
+    - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price monitoring bounds and probability of trading get calculated (their values change from defaults).
     - When the opening auction ends (choose uncrossing price that's different from first indicative uncrossing price) price monitoring bounds and probability of trading get recalculated.
     - When the market goes into price monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
     - When the time-based trigger elapses price monitoring bounds and probability of trading get recalculated.
@@ -102,11 +102,11 @@ This section outlines floating-point quantities `vega` currently relies on:
 
 2. Consensus failure event gets sent (<a name="0065-FTCO-002" href="#0065-FTCO-002">0065-FTCO-002</a>)
    - A market is proposed and initally has default values specified in the scenario above.
-   - Upon market enactment risk factors get submitted by nodes, one of the nodes submitts a value that is higher than tolerance.
+   - Upon market enactment risk factors get submitted by nodes, one of the nodes submits a value that is higher than tolerance.
    - An appropriate event is sent to signal that at least one of the values differed.
    - Consensus still works, value submitted by other nodes gets used.
    - Opening auction concludes, risk factor values submitted by all the nodes differ by more than tolerance between each other.
-   - None of the values submitted by nodes gets accepted, market is running with previously calculated risk factors.
+   - None of the values submitted by nodes get accepted, market is running with previously calculated risk factors.
    - Situtation continues for 2 more risk factor update attempts (can be time-based or auction).
    - Market still runs with previously calculated risk factors, but an event informing that the market is using stale values gets emitted.
 

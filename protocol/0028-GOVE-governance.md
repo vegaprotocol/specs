@@ -41,7 +41,7 @@ If the proposal has a governance action defined with it, the action described in
 Any actions that result from the outcome of the vote are covered in other spec files.
 
 ## Governance Asset
-The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) representing the [token configured in the staking bridge](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md). Users with a staking account balance in the governance asset can:
+The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) representing the [token configured in the staking bridge](./0071-STAK-erc20_governance_token_staking.md). Users with a staking account balance in the governance asset can:
 
 - [Create proposals](#restriction-on-who-can-create-a-proposal)
 - [Vote on proposals](#voting-for-a-proposal)
@@ -85,11 +85,6 @@ In a future iteration of the governance system we may restrict proposal submissi
 
 Market change proposals additionally require certain minimum [equity like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minEquityLikeShare`.
 So, for example, if `governance.proposal.market.minEquityLikeShare = 0.05` and a party has `equity-like-share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like-share` of `0.03` then they cannot submit a market change proposal.
-
-
-## Configuration of a proposal
-
-When a proposal is created, it can be configured in multiple ways.
 
 
 ### Duration of the proposal
@@ -173,6 +168,49 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 
 ## Types of proposals
 
+Every proposal transaction contains the following common fields:
+- a link to a text file in markdown format
+- a cryptographically secure hash (SHA3-512) of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
+- a description field to show a short title / something in case the link goes offline.
+
+The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level.
+
+### Constraint
+1. `url` and `hash` are optional, for all proposal, except FreeForm were it’s mandatory.
+2. `description` is mandatory, up to 1024 characters.
+3. `url` or `hash` form a pair, meaning if one of the property is set,  the other is required.
+
+### Example
+
+```diff
+message ProposalSubmission {
+  // Proposal reference
+  string reference = 1;
+  // Proposal configuration and the actual change that is meant to be executed when proposal is enacted
+  vega.ProposalTerms terms = 2;
++  // Proposal rational that summarises the change and link to the complete proposed changed.
++  vega.ProposalRationale rationale = 3;
+}
+```
+
+```proto
+message ProposalRationale {
+  // Description to show a short title / something in case the link goes offline.
+  // This is to be between 0 and 255 unicode characters.
+  // This is mandatory for all proposal.
+  string description = 1;
+  // Cryptographically secure hash (SHA3-512) of the text pointed by the `url` property
+  // so that viewers can check that the text hasn't been changed over time.
+  // Optional except for FreeFrom proposal where it's mandatory.
+  // If set, the `url` property must be set.
+  string hash = 2;
+  // Link to a text file describing the proposal in depth.
+  // Optional except for FreeFrom proposal where it's mandatory.
+  // If set, the `url` property must be set.
+  string url = 3;
+}
+```
+
 ## 1. Create market
 
 This action differs from from other governance actions in that the market is created and some transactions (namely around liquidity provision) may be accepted for the market before the proposal has successfully passed. The lifecycle of a market and its triggers are covered in the [market lifecycle](./0043-MKTL-market_lifecycle.md) spec.
@@ -201,8 +239,8 @@ Ideally, it should be possible to not repeat things that are not changing or are
 
 The following are immutable and cannot be changed:
 - marketID
-- tickSize (will be removed I believe so it's not relevant)
-- decimalPlaces
+- market decimal places 
+- position decimal places
 - settlementAsset
 - name
 
@@ -292,12 +330,10 @@ transfer_amount == min(
 
 ## 6. Freeform governance proposal
 
-The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. Freeform proposals contain a URL to text describing the proposal in full. The proposal will contain:
+The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. Freeform proposals contain a URL to text describing the proposal in full. The proposal will contain only the fields common to all proposals i.e. 
 - a link to a text file in markdown format and
 - a cryptographically secure hash of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
 - a description field to show a short title / something in case the link goes offline. This is to be between `0` and `255` unicode characters.
-
-The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level.
 
 The following network parameters will decide how these proposals are treated:
 `governance.proposal.freeform.maxClose` e.g. `720h`,

@@ -6,20 +6,20 @@ Validators and delegators receive incentives from the network, depending on vari
 ## Note on terminology
 
 Staking requires the combined action of:
-- Associating tokens on the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md); and 
+- Associating tokens on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md); and 
 - Nominating these tokens to one or more validators
 - Delegation in some contexts is used to mean `associate + nominate`. For the purposes of this document, once it's clear from context that association has happened `delegate` and `nominate` may be used interchangeably. 
 
-Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can associate a token in the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md), which is then available for
+Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can associate a token in the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), which is then available for
 nomination. To this end, a Vega token (or a fraction thereof) can be:
 - Unassociated: The tokenholder is free to do with the token as they want, but cannot nominate it
 - Associated: The token is locked in the staking and delegation smart contract and associated to a Vega key. It can be used on the Vega chain for governance and it can be nominated to a validator.
 
 ## Smart Contract / Staking Bridge Interaction
-It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) through the validators; thus, all actions regarding associating 
-and dissociating of stake are initiated by the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md), not by the Vega chain.
+It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) through the validators; thus, all actions regarding associating 
+and dissociating of stake are initiated by the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), not by the Vega chain.
 
-In order to delegate, users require tokens that will be associated in a smart contract (see [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md)). Vega will be made aware of how many tokens a given party has associated through bridge events. When the same tokens are dissociated, a corresponding event will be emitted:
+In order to delegate, users require tokens that will be associated in a smart contract (see [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md)). Vega will be made aware of how many tokens a given party has associated through bridge events. When the same tokens are dissociated, a corresponding event will be emitted:
 
 Note that the bridge contract uses `deposited` and `removed` instead of `associated` and `dissociated`.
 
@@ -56,7 +56,7 @@ Any locked and undelegated stake can be delegated at any time by putting a
 delegation-message on the chain. However, the delegation only becomes valid 
 towards the next epoch, though it can be undone through undelegate.
 
-Once Vega is aware of locked tokens, the users will have an account with the balance reflecting how many tokens were locked. At this point, the user can submit a transaction to stake (delegate) their tokens. The amount they stake must be `<= balance`, naturally. 
+Once Vega is aware of locked tokens, the users will have an [account](./0013-ACCT-accounts.md#staking-accounts) with the balance reflecting how many tokens were locked. At this point, the user can submit a transaction to stake (delegate) their tokens. The amount they stake must be `<= balance`, naturally. 
 
 ```proto
 message Delegate {
@@ -170,12 +170,12 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 - To lock tokens, a participant must:
   - Have some balance of vested or unvested governance asset in an Ethereum wallet. These assets must not be locked to another smart contract (including the [Vega collateral bridge](./0031-ETHB-ethereum_bridge_spec.md)).
   - Have a Vega wallet
-  - Lock the tokens on the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md),
+  - Lock the tokens on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md),
 - To delegate the locked tokens, a participant must:
   - Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" (<a name="0059-STKG-001" href="#0059-STKG-001">0059-STKG-001</a>)
   - Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).(<a name="0059-STKG-002" href="#0059-STKG-002">0059-STKG-002</a>)
 - These accounts will be created:
-  - A [staking account](./0013-ACCT-accounts.md#party-staking-accounts) denominated in the governance asset is created(<a name="0059-STKG-003" href="#0059-STKG-003">0059-STKG-003</a>)
+  - A [staking account](./0013-ACCT-accounts.md#staking-accounts) denominated in the governance asset is created(<a name="0059-STKG-003" href="#0059-STKG-003">0059-STKG-003</a>)
   - When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards) (<a name="0059-STKG-004" href="#0059-STKG-004">0059-STKG-004</a>)
   - It is possible that a separate reward function will cause an account to be created for the user as a result of rewards.
 - Timings
@@ -184,14 +184,14 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
   - The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next epoch) (<a name="0059-STKG-007" href="#0059-STKG-007">0059-STKG-007</a>)
 
 ### Adding more stake
-- More tokens may be locked at any time on the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)
-- More stake may be delegated at any time (see [function: Stake](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) - amount refers to size by which to increment existing staked amount) (<a name="0059-STKG-009" href="#0059-STKG-009">0059-STKG-009</a>)
+- More tokens may be locked at any time on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)
+- More stake may be delegated at any time (see [function: Stake](./0071-STAK-erc20_governance_token_staking.md) - amount refers to size by which to increment existing staked amount) (<a name="0059-STKG-009" href="#0059-STKG-009">0059-STKG-009</a>)
 - Same timings apply as per staking for the first time (<a name="0059-STKG-010" href="#0059-STKG-010">0059-STKG-010</a>)
 
 ### Removing stake
-- Any stake may be withdrawn from the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) at any time (<a name="0059-STKG-011" href="#0059-STKG-011">0059-STKG-011</a>)
+- Any stake may be withdrawn from the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) at any time (<a name="0059-STKG-011" href="#0059-STKG-011">0059-STKG-011</a>)
  - Unlocking your tokens in the bridge contract will effectively "remove" them from any delegation they're doing (unless you have remaining undelegated tokens that could fulfil your delegation) (<a name="0059-STKG-012" href="#0059-STKG-012">0059-STKG-012</a>)
-- Delegation may be fully or partially removed. The amount specified in the [function: Remove](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) - is the size by which the existing staked amount will be decremented (<a name="0059-STKG-013" href="#0059-STKG-013">0059-STKG-013</a>)
+- Delegation may be fully or partially removed. The amount specified in the [function: Remove](./0071-STAK-erc20_governance_token_staking.md) - is the size by which the existing staked amount will be decremented (<a name="0059-STKG-013" href="#0059-STKG-013">0059-STKG-013</a>)
 - Removal of delegation may happen in the following 2 ways:
   - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator). (<a name="0059-STKG-014" href="#0059-STKG-014">0059-STKG-014</a>)
   - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the onchain treasury account for that asset. (<a name="0059-STKG-015" href="#0059-STKG-015">0059-STKG-015</a>)
@@ -252,3 +252,9 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 - epoch 1: party associated 300 VEGA
 - end of epoch 1: according to the proportion of nomination, validators need to get 20,40,60,80,100 respectively - however max per validator implies availale balances of 100, 80, 60, 40, 20 for validators 1,2,3,4,5 respectively
 - meaning that at the following delegation will apply: 120, 240, 360, 440, 520. There will be no attempt to top up validators against the proportion implied by the nomination.
+
+# See also
+- [0013-ACCT Acccounts](./0013-ACCT-accounts.md) - staking accounts are not like other account types, but the differences are covered here.
+- [0028-GOVE Governance](./0028-GOVE-governance.md) - a party's stake controls their ability to participate in governance.
+- [0069-VALW Validators chosen by stake](./0069-VALW-validators_chosen_by_stake.md) - staking and delegation is used to pick validators.
+- [0050-EPOC Epochs](./0050-EPOC-epochs.md) - epochs control how frequently validator sets can change as a result of staking and delegation.

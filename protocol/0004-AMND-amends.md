@@ -2,10 +2,10 @@ Feature name: amends <br>
 Start date: `2020-03-12` <br>
 
 # Acceptance Criteria
-- Only LIMIT orders can be amended, any attempt to amend a non LIMIT order is rejected (<a name="0004-AMND-001" href="#0004-AMND-001">0004-AMND-001</a>)
+- Only LIMIT or PEGGED orders can be amended. Any attempt to amend a MARKET order is rejected (<a name="0004-AMND-001" href="#0004-AMND-001">0004-AMND-001</a>)
 - Price change amends remove the order from the book and insert the order at the back of the queue at the new price level (<a name="0004-AMND-002" href="#0004-AMND-002">0004-AMND-002</a>)
 - Reducing the quantity leaves the order in its current spot but reduces the remaining amount accordingly (<a name="0004-AMND-003" href="#0004-AMND-003">0004-AMND-003</a>)
-- Quantity after amendment must be a multiple of the smallest increment possible given the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then quantity must be a whole multiple of 0.01. (<a name="0004-AMND-004" href="#0004-AMND-004">0004-AMND-004</a>)
+- ~~Quantity after amendment must be a multiple of the smallest increment possible given the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then quantity must be a whole multiple of 0.01. (<a name="0004-AMND-004" href="#0004-AMND-004">0004-AMND-004</a>)~~
 - Increasing the quantity causes the order to be removed from the book and inserted at the back of the price level queue with the updated quantity (<a name="0004-AMND-005" href="#0004-AMND-005">0004-AMND-005</a>)
 - Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag is rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.  (<a name="0004-AMND-006" href="#0004-AMND-006">0004-AMND-006</a>)
 - Any attempt to amend to or from the `TIF` values `GFA` and `GFN` will result in a rejected amend. (<a name="0004-AMND-007" href="#0004-AMND-007">0004-AMND-007</a>)
@@ -19,6 +19,10 @@ Start date: `2020-03-12` <br>
 - Amending a pegged orders offset or reference will force a reprice (<a name="0004-AMND-015" href="#0004-AMND-015">0004-AMND-015</a>)
 - Attempting to alter pegged details on a non pegged or will cause the amend to be rejected (<a name="0004-AMND-016" href="#0004-AMND-016">0004-AMND-016</a>)
 - [ ] A parked pegged order can be amended. (<a href="./0037-OPEG-pegged_orders.md#0037-OPEG-014">0037-OPEG-014</a>)
+- Attempting to alter details on a filled order will cause the amend to be rejected (<a name="0004-AMND-017" href="#0004-AMND-017">0004-AMND-017</a>)
+- Attempting to alter details on a cancelled order will cause the amend to be rejected (<a name="0004-AMND-018" href="#0004-AMND-018">0004-AMND-018</a>)
+- Attempting to alter details on an expired order will cause the amend to be rejected (<a name="0004-AMND-019" href="#0004-AMND-019">0004-AMND-019</a>)
+
 
 ## Summary
 
