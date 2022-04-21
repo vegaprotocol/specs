@@ -251,11 +251,23 @@ The following are immutable and cannot be changed:
 
 All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
 
-## 4. Add a new asset
+## 4.1 Add a new asset
 
-New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)). Unlike markets, assets cannot be updated after they have been added.
+New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)). 
+All new asset proposals have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`. 
+
+## 4.2 Modify an existing asset
+
+Any existing [asset](./0040-ASSF-asset_framework.md) can be modified through the governance system. 
+Only some properties of an asset may be modified, this is detailed in [asset framework spec](./0040-ASSF-asset_framework.md). 
+All proposals to modify an existing asset have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`. 
+Enactment of an asset modification proposal is:
+- For data that must be synchronised with the asset blockchain (e.g. Ehtereum): *only* the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emmitted by the bridge chain.
+- For any data that is stored only on the Vega chain: the data is updated once the proposal is enacted.
+
 
 ## 5. Transfers initiated by Governance (post Oregon trail)
+
 ### Permitted source and destination account types
 
 The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal.
@@ -401,9 +413,12 @@ APIs should also exist for clients to:
 - [ ] As a user, I can vote multiple times for the same proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account
   - [x] Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)
 - [ ] When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
+- [ ] If a new proposal is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal and can be queried via APIs separately from the general network parameters. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
+- [ ] If a new proposal "P" is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
 
 
 ## Governance proposal types
+
 ### New Asset proposals
 - [ ] New asset proposals cannot be created before [`governance.proposal.asset.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
 
