@@ -47,7 +47,10 @@ If an asset modification that went through [governance](./0028-GOVE-governance.m
 ### Bridged chain part
 If it changes one of: `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited. 
 Anyone willing to pay the transaction fee (gas) can submit this to the bridge contract via multisig control and cause the changes to be appropriately reflected there. 
-Vega will then update it's internal asset definition once the events are emmitted and confirmed the correct number of times by the bridge chain.
+Vega will then update it's internal asset definition once the events are emmitted and confirmed the correct number of times by the bridge chain.  
+
+**Note on asset bundles produced but not submitted to the bridge.** If an asset update `A` is produced and never submitted to bridged chain bridge contract and subsequently an asset update `B` is produced then out of order use is a possibility (someone can submit `A` after `B` has been submitted). 
+The onus is on the creator of proposal `B` to submit (and pay the gas for) for proposal `A` before their proposal `B`. (this means that `A` cannot be submitted again).
 
 ### Vega chain part
 If it changes `quantum` then this new value becomes used immediately on enactement. 
