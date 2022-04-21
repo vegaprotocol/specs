@@ -62,7 +62,7 @@ Vega nodes will run nodes for all bridged chains. They will either listen to the
 In the case of Ethereum ERC20 assets, in will be necessary to poll the contract's "read" functions (name, symbol, totalSupply) as specified in the ERC20 standard, because no events are standardised for changes to these values.
 This polling would ideally be done with each new Ethereum block, but if this is too expensive (in computational costs — there is no gas for read functions) then as long as it occurs at least once per epoch this is acceptable. 
 
-**Note on `decimals`.** The Vega ERC20 bridge does not support assets with a changing number of deicmals, and is unlikely ever to support such assets (due to both the added complexity and the lack of demonstrable use cases for this). 
+**Note on `decimals`.** The Vega ERC20 bridge does not support assets with a changing number of decimals, and is unlikely ever to support such assets (due to both the added complexity and the lack of demonstrable use cases for this). 
 Therefore, it is undefined how to proceed in the event that decimals does change, and the specific, immutable instance of the token smart contract on the Ethereum blockchain much be verified by community members when voting on each new asset that is proposed to ensure that the number of decimals used by the asset is guaranteed to be perpetually invariant for the lifetime of the asset.
 Contracts that do not meet this guarantee are not suitable as a basis for Vega bridge assets.
 
