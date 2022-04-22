@@ -57,9 +57,9 @@ If increasing difficulty is set to 1 (seen as a boolean flag), then more transac
 The initial hash-function used is SHA3 . To allow for a more fine-grained control over the difficulty of the PoW (the number of zeros only allows halving/doubling), the parameter `<spam_PoW_hash_function>` allows to increase the number of rounds of the hash function (currently 24), e.g., `<spam_PoW_hash_function> = "sha3_36_rounds"`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
             
 # Acceptance Criteria
-- A message with a missing/wrong PoW is rejected
-- Reusing the same PoW for several messages is detected and leads to a blocking of the account
-- Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned of)
-- Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on)
-- Reusing a transaction identifier in a way that dseveral transactions with the same ID end up in the same block si detected and leads to a blocking of the account
-- A blocked account is unblocked after 4 epochs.
+- A message with a missing/wrong PoW is rejected (<a name="0072-SPPW-001" href="#0072-SPPW-001">0072-SPPW-001</a>)
+- Reusing the same PoW for several messages is detected and leads to a blocking of the account (<a name="0072-SPPW-002" href="#0072-SPPW-002">0072-SPPW-002</a>)
+- Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned of) (<a name="0072-SPPW-003" href="#0072-SPPW-003">0072-SPPW-003</a>)
+- Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on) (<a name="0072-SPPW-004" href="#0072-SPPW-004">0072-SPPW-004</a>)
+- Reusing a transaction identifier in a way that dseveral transactions with the same ID end up in the same block si detected and leads to a blocking of the account (<a name="0072-SPPW-005" href="#0072-SPPW-005">0072-SPPW-005</a>)
+- A blocked account is unblocked after 4 epochs. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
