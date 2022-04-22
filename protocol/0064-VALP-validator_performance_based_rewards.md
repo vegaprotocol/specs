@@ -22,11 +22,11 @@ Then `validator_performance = max(0.05, min((p/expected, 1))`
 
 ### Pending/ersatz validators
 For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
-Every `1000` blocks the candidate validator node is to send a hash of block number `b` separetely signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
+Every `max(10,0.01 x epochDuration[InSeconds])` blocks the candidate validator node is to send a hash of block number `b` separetely signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
 Here `b` is defined as:
-First time it is the the block number in which the joining transaction was included. Then it's incremented by `1000`. 
+First time it is the the block number in which the joining transaction was included. Then it's incremented by `max(10,0.01 x epochDuration[InSeconds])`. 
 The network will keep track of the last `10` times this was supposed to happen and the `performance_score` is the number of times this has been verified divided by `10`.  
-The message with the signed block hash must be in blocks `b+1000` to `b+1010` to count as successfully delivered.  
+The message with the signed block hash must be in blocks `b + max(10,0.01 x epochDuration[InSeconds])` to `b + max(10,0.01 x epochDuration[InSeconds]) + 10` to count as successfully delivered.  
 Initially the performance score is set to `0`.
 Both Tendermint validators and candidate validators should be signing and sending these messages but only for the candidate validators does this impact their score.
 
