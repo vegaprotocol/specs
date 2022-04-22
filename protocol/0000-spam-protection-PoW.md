@@ -2,7 +2,7 @@
 
 ```
 Parameters: `<spam_PoW_number_of_past_blocks>`                = 100  (range: 10-500)
-            `<spam_PoW_difficulty>`                           = 15   <should correspond to ca. 15 seconds on a normal PC> (range:0-50)
+            `<spam_PoW_difficulty>`                           = 15   <should correspond to ca. 1 seconds on a normal PC> (range:0-50)
             `<spam_PoW_hash_version>`                               
             `<spam_PoW_number_of_tx_per_block>`               = 2 (range: 1-1000)
             `<spam_PoW_increasing difficulty>`                = 0 (range: 0/1)
@@ -17,7 +17,7 @@ Thus, the flow is as follows:
 3. The user then attaches the PoW to a transaction, and sends it of together with `x` and `H(b)`.
  
 The validators verify that
-- H(b) is the correct hash of a past block
+- `H(b)` is the correct hash of a past block
 - That block is no more than `<spam_PoW_number_of_past_blocks>` in the past.
   - This check is primarily done by the leader (i.e., block creator). On agreeing on a new block, all parties check their mempool for now outdated transactions and purge them.
 - The hash is computed correctly and begins with `<spam_PoW_difficulty>` zeroes
@@ -37,45 +37,25 @@ Notes:
 - We do not require to feed the hash of the actual transaction into to hash function;
 this allows users to pre-compute the PoW and thus allows them to perform low
 latency transactions.
-- As for replay protection, there is a danger that a trader communicates with a slow validator,
-  and thus gets a wrong block number. The safest is to check validators worth > 1/3 of the 
-  weight and take the highest block hash.
-- Due to Tendermint constraints, a decision if a transaction is to be rejected or not can only be done based on 
-  information that is either synchronized through the chain or contained in the transaction itself, but not based
-  on any other transactions in the mempool. Thus, if a client ties too many transactions to the same block or
-  does not execute the increased difficulty properly, we can not stop this pre-agreement, only detect it post-agreement.
-  This is the reason why some violations are punished with banishment rather than prevented.
-- As some violations could come through missconfigurations, we may consider a less strict way of banishment, e.g.,
-  only to a long term banishment for repeat/high volume offenders.
-- In the original spam protection, we want to do anti-spam before verifying signatures; this order, however, cannot be done
-  if the consequence of spam is banishment. Thus, here the order is
+- As for replay protection, there is a danger that a trader communicates with a slow validator, and thus gets a wrong block number. The safest is to check validators worth > 1/3 of the  weight and take the highest block hash.
+- Due to Tendermint constraints, a decision if a transaction is to be rejected or not can only be done based on information that is either synchronized through the chain or contained in the transaction itself, but not based on any other transactions in the mempool. Thus, if a client ties too many transactions to the same block or does not execute the increased difficulty properly, we can not stop this pre-agreement, only detect it post-agreement. This is the reason why some violations are punished with banishment rather than prevented.
+- As some violations could come through missconfigurations, we may consider a less strict way of banishment, e.g., only to a long term banishment for repeat/high volume offenders.
+- In the original spam protection, we want to do anti-spam before verifying signatures; this order, however, cannot be done if the consequence of spam is banishment. Thus, here the order is:
   1. check if the account is banished and (if so) ignore the transaction
   2. check if the basic PoW with lowest difficulty is done properly
   3. verify the signatures
   4. put the transaction on the blockchain
   5. if the signed transactions violate the conditions, issue the banishment 
-  6. if the signed trnsactions in a block violate the conditions, remove the offending ones from the block before calling vega [May need discussion]
+  6. if the signed transactions in a block violate the conditions, remove the offending ones from the block before calling vega [May need discussion]
+- Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to have a large parameter of `<PoW_number_of_past_blocks>`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
+- The PoW is currently valid for all trransactions; a consideration is to use it only for trading related transactions, so even if something goes wrong here delegators can still vote.
   
-- Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to
-  have a large parameter of `<PoW_number_of_past_blocks>`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
-- The PoW is currently valid for all trransactions; a consideration is to use it only for trading related transactions, so even if
-   something goes wrong here delegators can still vote.
-  
-If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tired to one block by increasing the difficulty. 
-This happens in batches of `<transactions_per_block>`, 
-e.g., if `transactions_per_block` is `5` and `difficulty` is `7`, then the 6th to 10th transaction can be tied to the same block
-with difficulty 8, the 11th would have difficulty 9, etc.
+If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tired to one block by increasing the difficulty. This happens in batches of `<transactions_per_block>`,  e.g., if `transactions_per_block` is `5` and `difficulty` is `7`, then the 6th to 10th transaction can be tied to the same block with difficulty 8, the 11th would have difficulty 9, etc.
 
 
 ## Hash function:
-The hash-function used is SHA3 <pending verification>. To allow for a more fine-grained control over the difficulty
-of the Pow (the number of zeros only allows halving/doubling), the parameter `<spam_PoW_hash_function>` allows to 
-increase the number of rounds of the hash function (currently 24), e.g., `<spam_PoW_hash_function> = "sha3_36_rounds"`.
-The parameter can in th future also be used to replace the SHA-3 through a governance vote (assuming other functions
-have been made available by then) should this prove necessary.
-
-
-
+The hash-function used is SHA3 <pending verification>. To allow for a more fine-grained control over the difficulty of the Pow (the number of zeros only allows halving/doubling), the parameter `<spam_PoW_hash_function>` allows to increase the number of rounds of the hash function (currently 24), e.g., `<spam_PoW_hash_function> = "sha3_36_rounds"`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
+            
 # Acceptance Criteria
 - A message with a missing/wrong PoW is rejected
 - Reusing the same PoW for several messages is detected and leads to a blocking of the account
