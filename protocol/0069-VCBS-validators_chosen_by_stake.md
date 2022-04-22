@@ -184,13 +184,24 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Allow some time for the performance score to be greater than 0. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch. 
   * When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account. 
   * Verify that the joining validator has a multisig score of 0 and therefore would not get a reward. 
-4. Tendermint validators missing signature test 2 (<a name="0069-VCBS-013" href="#0069-VCBS-013">0069-VCBS-013</a>): 
-  * Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5. 
-  * **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to **4**.
-  * Announce a new node and self-delegate to it 1000 tokens.
-  * Allow some time for the performance score to be greater than 0. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch. 
-  * When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account. 
+4. Tendermint validators missing signature test 2 (<a name="0069-VCBS-013" href="#0069-VCBS-013">0069-VCBS-013</a>):
+  * Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5.
+  * **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to 4.
+  * Announce a new node and self-delegate to it 10000 tokens.
+  * Allow some time for the performance score to become 1. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch.
+  * When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account.
+  * Assert that the new validator has a score (stake score x performance score) in the top 4 - this can be verified in data node with: `rewardScore.stakeScore` x `rewardScore.performanceScore`.
   * Verify that the joining validator would has a multisig score of 0 and therefore would not get a reward.
+5. Tendermint validators missing signature test 3 (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>):
+  * Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5.
+  * **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to 4.
+  * Delegate 10000 to the existing validators (can be self or party delegation)
+  * Announce a new node and self-delegate to it 1000 tokens.
+  * Do not wait for the performance of the node to improve, we actually want for this test the performance score to be as low as possible.
+  * When the validator has the the delegation setup it will be promoted to tendermint status.
+  * When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account.
+  * Assert that the new validator has a score (stake score x performance score) **NOT** in the top 4 - this can be verified in data node with: `rewardScore.stakeScore` x `rewardScore.performanceScore`.
+  * Verify that the joining validator would has a multisig score of 1 and therefore gets a reward.
 
 ### Validator Score
 1. Verify that the validator score is always equal to the `stakeScore` x `perfScore` x `multisigScore` when the validator is a Tendermint validator (<a name="0069-VCBS-014" href="#0069-VCBS-014">0069-VCBS-014</a>)
