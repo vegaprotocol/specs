@@ -1,11 +1,13 @@
 # Spam protection Proof of Work
 
+```
 Parameters: `<spam_PoW_number_of_past_blocks>`                = 100  (range: 10-500)
             `<spam_PoW_difficulty>`                           = 15   <should correspond to ca. 15 seconds on a normal PC> (range:0-50)
             `<spam_PoW_hash_version>`                               
             `<spam_PoW_number_of_tx_per_block>`               = 2 (range: 1-1000)
             `<spam_PoW_increasing difficulty>`                = 0 (range: 0/1)
-            
+```
+
 To authorize a transaction, it needs to be tied to a past block using a proof of work.
 To this end, the hash of the block, a transaction identifier, are fed into a hash  function together with a padding; the proof of work is to find a padding that results in a hash that ends on `<difficulty>` zeroes.
 
