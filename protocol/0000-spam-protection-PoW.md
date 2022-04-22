@@ -54,7 +54,7 @@ If increasing difficulty is set to 1 (seen as a boolean flag), then more transac
 
 
 ## Hash function:
-The hash-function used is SHA3 <pending verification>. To allow for a more fine-grained control over the difficulty of the Pow (the number of zeros only allows halving/doubling), the parameter `<spam_PoW_hash_function>` allows to increase the number of rounds of the hash function (currently 24), e.g., `<spam_PoW_hash_function> = "sha3_36_rounds"`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
+The initial hash-function used is SHA3 . To allow for a more fine-grained control over the difficulty of the PoW (the number of zeros only allows halving/doubling), the parameter `<spam_PoW_hash_function>` allows to increase the number of rounds of the hash function (currently 24), e.g., `<spam_PoW_hash_function> = "sha3_36_rounds"`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
             
 # Acceptance Criteria
 - A message with a missing/wrong PoW is rejected
