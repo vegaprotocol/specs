@@ -202,6 +202,10 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account.
   * Assert that the new validator has a score (stake score x performance score) **NOT** in the top 4 - this can be verified in data node with: `rewardScore.stakeScore` x `rewardScore.performanceScore`.
   * Verify that the joining validator would has a multisig score of 1 and therefore gets a reward.
+6. One of the top validators is not registered with the multisig contract (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>):
+  * Run a Vega network where a validator joins and gets a lot delegated in order for it to become one of the top `network.validators.multisig.numberOfSigners` 
+  * Ensure its ethereum key is **NOT** put on the multisig contract.
+  * Verify the validator has 0 for their multisig score and receives no staking reward.
 
 ### Validator Score
 1. Verify that the validator score is always equal to the `stakeScore` x `perfScore` x `multisigScore` when the validator is a Tendermint validator (<a name="0069-VCBS-014" href="#0069-VCBS-014">0069-VCBS-014</a>)
