@@ -40,7 +40,7 @@ latency transactions.
 - As for replay protection, there is a danger that a trader communicates with a slow validator, and thus gets a wrong block number. The safest is to check validators worth > 1/3 of the  weight and take the highest block hash.
 - Due to Tendermint constraints, a decision if a transaction is to be rejected or not can only be done based on information that is either synchronized through the chain or contained in the transaction itself, but not based on any other transactions in the mempool. Thus, if a client ties too many transactions to the same block or does not execute the increased difficulty properly, we can not stop this pre-agreement, only detect it post-agreement. This is the reason why some violations are punished with banishment rather than prevented.
 - As some violations could come through missconfigurations, we may consider a less strict way of banishment, e.g., only to a long term banishment for repeat/high volume offenders.
-- In the original spam protection, we want to do anti-spam before verifying signatures; this order, however, cannot be done if the consequence of spam is banishment. Thus, here the order is:
+- In the [0062 spam protection spec](./0062-SPAM-spam_protection.md), we want to do anti-spam before verifying signatures; this order, however, cannot be done if the consequence of spam is banishment. Thus, here the order is:
   1. check if the account is banished and (if so) ignore the transaction
   2. check if the basic PoW with lowest difficulty is done properly
   3. verify the signatures
