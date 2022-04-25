@@ -222,12 +222,11 @@ Note the following key points from the market lifecycle spec:
 
 A proposal to create a market contains
 1. a complete market specification as per the Market Framework (see spec) that describes the market to be created.
-1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](./0044-LIQM-lp_mechanics.md). The proposal must be rejected if the liquidity provision commitment is invalid or the proposer does not have the required collateral for the stake.
-The stake commitment must exceed the `minimum_proposal_stake_amount` which is a per-asset parameter.
 1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
 
 All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
+A market in Proposed state accepts [liquidity commitments](./0038-OLIQ-liquidity_provision_order_type.md) from any party. The LP commitments can be added / amended / removed.   
 
 ## 2. Change market parameters
 
@@ -424,9 +423,10 @@ APIs should also exist for clients to:
 
 
 ### New Market proposals
-- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
-- [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
+- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - [ ] New market proposals cannot be created before [`governance.proposal.market.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
+- [ ] A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>). 
+
 
 ### Market change proposals
 - [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
