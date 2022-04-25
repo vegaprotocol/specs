@@ -1,11 +1,14 @@
 # Spam protection Proof of Work
 Vega does not charge fees on transactions. Fees are only charged on trades that execute. The main reason for not charging transaction fees on transactions like limit order submissions or governance votes is that this is an activity that should be encouraged (limit orders provide price information and liquidity, governance votes are essential for smooth running of the system). Because of this Vega has a novel client-side-proof-of-work mechanism to prevent transaction spam. 
+
+### Parameters and their defaults:
+
 ```
-Parameters: `spam.pow.numberOfPastBlocks`                = 100  (range: 10-500)
-            `spam.pow.difficulty`                           = 15   <should correspond to ca. 1 seconds on a normal PC> (range:0-50)
-            `spam.pow.hashFunction`                               
-            `spam.pow.numberOfTxPerBlock`               = 2 (range: 1-1000)
-            `spam.pow.increaseDifficulty`                = 0 (range: 0/1)
+spam.pow.numberOfPastBlocks = 100  (range: 10-500)
+spam.pow.difficulty = 15 <should correspond to ca. 1 seconds on a normal PC> (range:0-50)
+spam.pow.hashFunction = sha3                               
+spam.pow.numberOfTxPerBlock = 2 (range: 1-1000)
+spam.pow.increaseDifficulty = 0 (range: 0/1)
 ```
 
 To authorize a transaction, it needs to be tied to a past block using a proof of work.
