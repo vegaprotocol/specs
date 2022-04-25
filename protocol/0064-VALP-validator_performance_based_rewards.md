@@ -58,10 +58,10 @@ The performance score should be available on all the same API enpoints as the `v
   * Set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0. 
   * Setup a network with 5 validators and self-delegate to them. 
   * Announce a new node to the network and self-delegate to them. 
-  * Every `numBlocks` blocks (*where `numBlocks` = max(min(50, `epochDurationSeconds`), `epochDurationSeconds` *0.01)*) the performance score of the new validator should go up by 0.1 until it reaches the maximum of 1. 
+  * Every `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) the performance score of the new validator should go up by 0.1 until it reaches the maximum of 1. 
   * Verify that after enough epochs to represent at least 1000 blocks, the performance score of the joining validator is 0.1. 
-  * Let the network run for `numBlocks` blocks (*where `numBlocks` = max(min(50, `epochDurationSeconds`), `epochDurationSeconds` *0.01)*) more and at the following epoch check that score is up to 0.2. Keep it running until it performance score of the joining validator reaches 1, then stop it. 
-  * Verify that for every `numBlocks` blocks (*where `numBlocks` = max(min(50, `epochDurationSeconds`), `epochDurationSeconds` *0.01)*), the performance score should go down by 0.1 until it reaches zero. 
+  * Let the network run for `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) more and at the following epoch check that score is up to 0.2. Keep it running until it performance score of the joining validator reaches 1, then stop it. 
+  * Verify that for every `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*), the performance score should go down by 0.1 until it reaches zero. 
   * **Note:** Every `numBlocks`  the performance score should go up by 0.1. Now the performance score is only visible every epoch so depending on the ratio between `numBlocks`  and epoch duration it may tick once or more per epoch. Guidance is that this test should either be parametrised or, preferably, written with a given epoch duration
 5. Insufficient stake (<a name="0064-VALP-005" href="#0064-VALP-005">0064-VALP-005</a>):  
   * Setup a network with 5 validators, self-delegate to each more than the required minimum as set out in `reward.staking.delegation.minimumValidatorStake`. 
