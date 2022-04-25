@@ -1,33 +1,33 @@
 # Spam protection Proof of Work
 
 ```
-Parameters: `<spam_PoW_number_of_past_blocks>`                = 100  (range: 10-500)
-            `<spam_PoW_difficulty>`                           = 15   <should correspond to ca. 1 seconds on a normal PC> (range:0-50)
-            `<spam_PoW_hash_version>`                               
-            `<spam_PoW_number_of_tx_per_block>`               = 2 (range: 1-1000)
-            `<spam_PoW_increasing difficulty>`                = 0 (range: 0/1)
+Parameters: `<spam.pow.numberOfPastBlocks>`                = 100  (range: 10-500)
+            `<spam.pow.difficulty>`                           = 15   <should correspond to ca. 1 seconds on a normal PC> (range:0-50)
+            `<spam.pow.hashFunction>`                               
+            `<spam.pow.numberOfTxPerBlock>`               = 2 (range: 1-1000)
+            `<spam.pow.increaseDifficulty>`                = 0 (range: 0/1)
 ```
 
 To authorize a transaction, it needs to be tied to a past block using a proof of work.
-To this end, the hash of the block, a transaction identifier, are fed into a hash  function together with a padding; the proof of work is to find a padding that results in a hash that ends on `<difficulty>` zeroes.
+To this end, the hash of the block, a transaction identifier, are fed into a hash  function together with a padding; the proof of work is to find a padding that results in a hash that ends on `<spam.pow.difficulty>` zeroes.
 
 Thus, the flow is as follows:
 1. The user generates a unique transaction identifier `tid`
-2. The user downloads the hash `H(b)` of the latest block it has seen, and computes brute forces values of `x` so that `hash("Vega_SPAM_PoW", H(b),tid, x)` starts with `<difficulty>` zeros.
+2. The user downloads the hash `H(b)` of the latest block it has seen, and computes brute forces values of `x` so that `hash("Vega_SPAM_PoW", H(b),tid, x)` starts with `<spam.pow.difficulty>` zeros.
 3. The user then attaches the PoW to a transaction, and sends it of together with `x` and `H(b)`.
  
 The validators verify that
 - `H(b)` is the correct hash of a past block
-- That block is no more than `<spam_PoW_number_of_past_blocks>` in the past.
+- That block is no more than `<spam.pow.numberOfPastBlocks>` in the past.
   - This check is primarily done by the leader (i.e., block creator). On agreeing on a new block, all parties check their mempool for now outdated transactions and purge them.
-- The hash is computed correctly and begins with `<spam_PoW_difficulty>` zeroes
+- The hash is computed correctly and begins with `<spam.pow.difficulty>` zeroes
    
 Furthermore, the validators check that:
 - The same identifier has not been used for another transaction from a previously committed block. If the same identifier is used for 
   several transactions in the same block, these transactions need to be removed during post-processing, and the initiator blocked as a 
   spammer.
-- The same block has not been used for more than `<spam_PoW_number_of_tx_per_block>` transactions per spam difficulty level 
-  (i.e., if `increase_difficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
+- The same block has not been used for more than `<spam.pow.numberOfTxPerBlock>` transactions per spam difficulty level 
+  (i.e., if `spam.pow.increaseDifficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on 
  this; however, they can be verified post-agreement, and the offending vega-key can be banished for 4 epochs.
@@ -47,14 +47,14 @@ latency transactions.
   4. put the transaction on the blockchain
   5. if the signed transactions violate the conditions, issue the banishment 
   6. if the signed transactions in a block violate the conditions, remove the offending ones from the block before calling vega [May need discussion]
-- Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to have a large parameter of `<PoW_number_of_past_blocks>`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
+- Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to have a large parameter of `<spam.pow.numberOfPastBlocks>`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
 - The PoW is currently valid for all trransactions; a consideration is to use it only for trading related transactions, so even if something goes wrong here delegators can still vote.
   
-If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tired to one block by increasing the difficulty. This happens in batches of `<transactions_per_block>`,  e.g., if `transactions_per_block` is `5` and `difficulty` is `7`, then the 6th to 10th transaction can be tied to the same block with difficulty 8, the 11th would have difficulty 9, etc.
+If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tired to one block by increasing the difficulty. This happens in batches of `<spam.pow.numberOfTxPerBlock>`,  e.g., if `spam.pow.numberOfTxPerBlock` is `5` and `spam.pow.difficulty` is `7`, then the 6th to 10th transaction can be tied to the same block with difficulty 8, the 11th would have difficulty 9, etc.
 
 
 ## Hash function:
-The initial hash-function used is SHA3 . To allow for a more fine-grained control over the difficulty of the PoW (the number of zeros only allows halving/doubling), the parameter `<spam_PoW_hash_function>` allows to increase the number of rounds of the hash function (currently 24), e.g., `<spam_PoW_hash_function> = "sha3_36_rounds"`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
+The initial hash-function used is SHA3 . To allow for a more fine-grained control over the difficulty of the PoW (the number of zeros only allows halving/doubling), the parameter `<spam.pow.hashFunction>` allows to increase the number of rounds of the hash function (currently 24), e.g., `<spam.pow.hashFunction> = "sha3_36_rounds"`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
             
 # Acceptance Criteria
 - A message with a missing/wrong PoW is rejected (<a name="0072-SPPW-001" href="#0072-SPPW-001">0072-SPPW-001</a>)
