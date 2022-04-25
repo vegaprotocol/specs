@@ -5,7 +5,7 @@
 The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](../protocol/0041-TSTK-target_stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special liquidity provider pegged order type [liquidity provider order spec](./0038-OLIQ-liquidity_provision_order_type.md).
 
 ## Definitions / Glossary of terms used
-- **Market value proxy window length `t_market_value_window_length`**: sets the length of the window over which we estimate the market value. This is a network parameter.  
+- **Market value proxy window length `market.value.windowLength`**: sets the length of the window over which we estimate the market value. This is a network parameter.  
 - **Target stake**: as defined in [target stake spec](./0041-TSTK-target_stake.md). The ideal amount of stake LPs would commit to a market.
 - `market.liquidityProvision.minLpStakeQuantumMultiple`: There is a network wide parameter specifying the minimum LP stake as the `quantum` specified per asset, see [asset framework spec](../protocol/0040-ASSF-asset_framework.md).
 
@@ -61,7 +61,7 @@ The guiding principle of this section is that by committing stake a liquidity pr
 ### Calculating liquidity provider equity-like share
 
 The parameter which determines the period over which market value and hence growth is `t_market_value_window_length` which could be e.g. a week. 
-From the end of the opening auction, which we will refer to as `t0` until `t0+t_market_value_window_length` is the `0th` or "bootstrap period". Then from  `t0+t_market_value_window_length` until `t0 + 2 x t_market_value_window_length` is the `1st` period and so on. 
+From the end of the opening auction, which we will refer to as `t0` until `t0+market.value.windowLength` is the `0th` or "bootstrap period". Then from  `t0+market.value.windowLength` until `t0 + 2 x market.value.windowLength` is the `1st` period and so on. 
 For each LP we track the stake they have and also their virtual stake. 
 Before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake. 
 
