@@ -12,7 +12,8 @@ Markets on Vega are permissionlessly proposed using the [governance mechanism](.
 
 Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close). 
 
-A market can be proposed without any [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md). If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date. 
+All markets are proposed without any [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md). 
+If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date. 
 However, the market may stay in an opening auction past the proposed `enactment` date until at least on party makes a liquidity commitment that meets criteria for exiting [liquidity auction](./0035-LIQM-liquidity_monitoring.md).
 
 ## Market lifecycle statuses
