@@ -22,11 +22,12 @@ Then `validator_performance = max(0.05, min((p/expected, 1))`
 
 ### Pending/ersatz validators
 For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
-Every `1000` blocks the candidate validator node is to send a hash of block number `b` separetely signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
+Let `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`. 
+Every `numBlocks` blocks the candidate validator node is to send a hash of block number `b` separetely signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
 Here `b` is defined as:
-First time it is the the block number in which the joining transaction was included. Then it's incremented by `1000`. 
+First time it is the the block number in which the joining transaction was included. Then it's incremented by `numBlocks`. 
 The network will keep track of the last `10` times this was supposed to happen and the `performance_score` is the number of times this has been verified divided by `10`.  
-The message with the signed block hash must be in blocks `b+1000` to `b+1010` to count as successfully delivered.  
+The message with the signed block hash must be in blocks `b + numBlocks` to `b + numBlocks + 10` to count as successfully delivered.  
 Initially the performance score is set to `0`.
 Both Tendermint validators and candidate validators should be signing and sending these messages but only for the candidate validators does this impact their score.
 
@@ -35,79 +36,42 @@ The performance score should be available on all the same API enpoints as the `v
 
 ## Acceptance criteria
 
-### Scenario 1: (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>)
-1. Configure and launch a network with 5 validators
-1. Give each validator self-stake of 10 000 VEGA. Set epoch length to 10 minutes.
-1. Deposit a 1000 VEGA into the validator reward pool.
-1. After epoch ends (epoch 0), observe that the 1000 VEGA are split accordingly to the `performance_score` reported (should be roughly 200 VEGA each but not necessarily exactly). Anything between 180 and 220 per validator would be considered acceptable. 
-1. Bring one node down.
-1. Wait for another epoch to end (epoch 1).
-1. Deposit another 1000 VEGA into the validator reward pool.
-1. After epoch ends (epoch 2), observe that the 1000 VEGA are split accordingly to the `performance_score` reported. This should be roughly 250 VEGA for each of the running validators, anything between 225 and 275 VEGA is acceptable. It should be exactly 0 for the validator that was brought down.
-
-### Scenario 2: (<a name="0064-VALP-002" href="#0064-VALP-002">0064-VALP-002</a>)
-1. Configure and launch a network with 5 validators. Set `network.validators.tendermint.number = 5`. Set `network.ersatzvalidators.reward.factor = 0.5`. 
-1. Give each validator self-stake of `10000` VEGA. Set epoch length to 50 minutes (assuming 1 second block this gives ~ 3000 blocks per second). 
-1. Set `reward.staking.delegation.minimumValidatorStake = 10000`.
-1. Launch a non-validator node with self stake of `10000` which submits a transaction to be eligible to become a validator. 
-1. Deposit a 1100 VEGA into the validator reward pool. 
-1. Epoch 0 ends. After the epoch end: Observe that the 1100 VEGA are split accordingly to the `performance_score` reported. 
-a) The non-validator should get roughly 100 VEGA (say 90-110). 
-b) Each validator should get roughly 200 VEGA each (say 180-220).
-1. Now bring the non-validator node down.
-1. Deposit 1000 VEGA into the validator reward pool.
-1. Epoch 1 ends. After the epoch end: Observe that the 1000 VEGA are split accordingly to the `performance_score` reported. 
-a) The non-validator node should have performance score of `0`. The non-validator node should be removed from the list of candidate tendremint validators.
-b) The non-validator should get roughly 0 VEGA.
-c) Each validator should get roughly 200 VEGA each (say 180-220).
-1. Near start of Epoch 2 bring the non-validator node back online (let it replay the chain or restor from snapshot).
-1. The non-validator node again submits a transaction to become a validator. 
-1. Epoch 2 ends. There are no rewards to distribute. 
-1. Deposit 1100 VEGA into the validator reward pool. 
-1. Epoch 3 ends. After the epoch end: Observe that the 1100 VEGA are split accordingly to the `performance_score` reported. 
-a) The non-validator should get roughly 100 VEGA (say 90-110). 
-b) Each validator should get roughly 200 VEGA each (say 180-220).
-
-|
+### Performance score
+1. Tendermint validator with insufficient self-delegation (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>):
+  * Setup a network with 5 validators 
+  * Self-delegate to 4 of the nodes **more** than the minimum amount set in `reward.staking.delegation.minimumValidatorStake`. 
+  * Self-delegate to the 5th node **less** than the minimum amount.
+  * Verify that at the beginning of the next epoch the performance score of the 5th validator is 0. 
+2. Tendermint validator with sufficient self-delegation (<a name="0064-VALP-002" href="#0064-VALP-002">0064-VALP-002</a>):
+  * Setup a network with 5 validators. 
+  * Self-delegate to all of them more than the minimum required. 
+  *  Verify that after an epoch has past, the performance score of all of them is close to 1. 
+3. Tendermint validator down (<a name="0064-VALP-003" href="#0064-VALP-003">0064-VALP-003</a>):
+  * Setup a network with 5 validators. 
+  * Self-delegate to all of them more than the minimum required in `reward.staking.delegation.minimumValidatorStake` and ensure the validators self-stake is an equal amount across all. 
+  * Run the network for one epoch.
+  * Verify the performance score is close to 1 for all validators. 
+  * Run the network for half an epoch then shut down validator 5. 
+  * Verify that at the beginning of the next epoch the performance score for validator 5 is close to 0.5. 
+  * Verify that, with validator 5 still down for the next epoch, at the beginning of the following epoch the performance score for validator 5 is 0. 
+4. Non Tendermint validator (<a name="0064-VALP-004" href="#0064-VALP-004">0064-VALP-004</a>): 
+  * Set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0. 
+  * Setup a network with 5 validators and self-delegate to them. 
+  * Announce a new node to the network and self-delegate to them. 
+  * Every `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) the performance score of the new validator should go up by 0.1 until it reaches the maximum of 1. 
+  * Verify that after enough epochs to represent at least 1000 blocks, the performance score of the joining validator is 0.1. 
+  * Let the network run for `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) more and at the following epoch check that score is up to 0.2. Keep it running until it performance score of the joining validator reaches 1, then stop it. 
+  * Verify that for every `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*), the performance score should go down by 0.1 until it reaches zero. 
+  * **Note:** Every `numBlocks`  the performance score should go up by 0.1. Now the performance score is only visible every epoch so depending on the ratio between `numBlocks`  and epoch duration it may tick once or more per epoch. Guidance is that this test should either be parametrised or, preferably, written with a given epoch duration
+5. Insufficient stake (<a name="0064-VALP-005" href="#0064-VALP-005">0064-VALP-005</a>):  
+  * Setup a network with 5 validators, self-delegate to each more than the required minimum as set out in `reward.staking.delegation.minimumValidatorStake`. 
+  * Verify that at the beginning of the next epoch the validator has non 0 performance score, and voting power is greater than 10. 
+  * Update the network parameter `reward.staking.delegation.minimumValidatorStake` for minimum self-stake to be more than is self-delegated. 
+  * Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes was removed from Tendermint.
 
 |
 
 |
-
-|
-
-|
-
-|
-
-|
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Future Stuff (in here for discussion purposes, not yet to be implemented)
 
