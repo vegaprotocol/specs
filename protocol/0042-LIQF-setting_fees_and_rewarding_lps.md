@@ -61,7 +61,7 @@ The guiding principle of this section is that by committing stake a liquidity pr
 ### Calculating liquidity provider equity-like share
 
 The parameter which determines the period over which market value and hence growth is `market.value.windowLength` which could be e.g. a week. 
-From the end of the opening auction, which we will refer to as `t0` until `t0+market.value.windowLength` is the `0th` or "bootstrap period". Then from  `t0+market.value.windowLength` until `t0 + 2 x market.value.windowLength` is the `1st` period and so on. 
+From the end of the opening auction, which we will refer to as `t0` until `t0+market.value.windowLength` is the `0th` or "bootstrap period". Then from `t0+market.value.windowLength` until `t0 + 2 x market.value.windowLength` is the `1st` period and so on. 
 For each LP we track the stake they have and also their virtual stake. 
 Before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake. 
 
@@ -145,9 +145,8 @@ When the time defined by ``liquidity_providers_fee_distribution_time_step` elaps
 - [ ] If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated.  (<a name="0042-LIQF-007" href="#0042-LIQF-007">0042-LIQF-007</a>)
 
 ### CHANGE OF NETWORK PARAMETERS
-- [ ]Change of "market.liquidityProvision.minLpStakeQuantumMultiple" network parameter will immediately change the virtual value of equity-like share. (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>)
-
-- [ ] Change of "market.value.windowLength" network parameter will change the liquidity provider equity-like share period, for example if `market.value.windowLength` is increased, then the `0th` period (`t0` until `t0+market.value.windowLength`) is increased, and the `1th` period (`t0+market.value.windowLength` until `t0+2*market.value.windowLength`) is also increased, etc.Hence change of "market.value.windowLength" will immediately change the equity-like share. (<a name="0042-LIQF-022" href="#0042-LIQF-022">0042-LIQF-022</a>)
+- [ ]Change of network parameter "market.liquidityProvision.minLpStakeQuantumMultiple" will change the multiplier of the asset quantum that sets the minimum LP commitment amount. If `market.liquidityProvision.minLpStakeQuantumMultiple` is decreased all the LP orders that have already been submitted are unaffected. However any new submissions or amendments must respect the new (lower) minimum. (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>)
+- [ ] Change of network parameter "market.value.windowLength" will change all the liquidity provider equity-like share period, for example if `market.value.windowLength` is increased, then the `0th` period (`t0` until `t0+market.value.windowLength`) is increased, and the `1th` period (`t0+market.value.windowLength` until `t0+2*market.value.windowLength`) is also increased, etc. Change can be obseved from start of next new period. (<a name="0042-LIQF-022" href="#0042-LIQF-022">0042-LIQF-022</a>)
 
 
 ### SPLITTING FEES BETWEEN liquidity providers
