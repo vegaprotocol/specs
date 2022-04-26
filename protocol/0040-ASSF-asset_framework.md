@@ -1,5 +1,5 @@
 # Summary
-Vega uses various digital assets (cryptocurrencies or tokens) to settlement positions in its markets. 
+Vega uses various digital assets (cryptocurrencies or tokens) to settlement positions in its markets.
 In order to ensure the safety, security, and allocation of these assets, they must be managed in a fully decentralized and extensible way. Here, we lay out a framework for assets in Vega.
 This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, are not covered deposits and withdrawal for an asset.
 
@@ -10,7 +10,7 @@ This specification covers how the new asset framework allow users of the vega ne
 The following code sample lays out the representation for assets being hosted in foreign network (e.g.: erc20 on ethereum).
 Common to all asset definitions are the basic fields from the Asset message, these are either retrieved from the foreign chain, or submitted through governance proposal.
 
-In the case of an ERC20 token for example, only the contract address of the token will be submitted via a new asset proposal. 
+In the case of an ERC20 token for example, only the contract address of the token will be submitted via a new asset proposal.
 From there the vega node will retrieve all other information for the token from and ethereum node (name, symbol, totalSupply and decimals).
 
 The asset specific details are contained within the source field, which can be one of the different source of assets supported by vega.
@@ -25,18 +25,16 @@ option go_package = "code.vegaprotocol.io/vega/proto";
 message Asset {
 
   string ID = 1;  // immutable
-  string name = 2; 
+  string name = 2;
   string symbol = 3;
   string totalSupply = 4;
-  uint64 decimals = 5;  // immutable 
-  string quantum = 1000000000000000000; 
-  string maximumLifetimeDeposit = 100000; // note that 100000 in this example is effectively 1, as the asset has 5 decimals
-  string withdrawalDelayThreshold = 1000000;  // this is effectively 10 due to the 5 decimals 
+  uint64 decimals = 5;  // immutable
+  string quantum = 1000000000000000000;
 
   oneof source {
     BuiltinAsset builtinAsset = 101;
     ERC20 erc20 = 102;
-  }  // immutable 
+  }  // immutable
 }
 
 
@@ -57,6 +55,8 @@ message BuiltinAsset {
 
 message ERC20 {
   string contractAddress = 1;
+  string maximumLifetimeDeposit = 100000; // note that 100000 in this example is effectively 1, as the asset has 5 decimals
+  string withdrawalDelayThreshold = 1000000;  // this is effectively 10 due to the 5 decimals
 }
 
 message DevAssets {
@@ -67,12 +67,12 @@ See: https://github.com/vegaprotocol/vega/blob/develop/proto/assets.proto
 And: https://github.com/vegaprotocol/vega/blob/develop/proto/governance.proto
 
 
-The `maximumLifetimeDeposit` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave. 
+The `maximumLifetimeDeposit` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave.
 
-All the asset definition fields are immutable (cannot be changed even by governance) except: 
+All the asset definition fields are immutable (cannot be changed even by governance) except:
 - `name`, `symbol`, `totalSupply` — refer to the asset proposal spec. for the relevant chain for whether or not these can be changed for assets on that chain, and if so, the mechanism by which they change
-- `quantum`, `maximumLifetimeDeposit`, `withdrawalDelayThreshold` — 
-These can be changed by asset modification [governance proposal](./0028-GOVE-governance.md). 
+- `quantum`, `maximumLifetimeDeposit`, `withdrawalDelayThreshold` —
+These can be changed by asset modification [governance proposal](./0028-GOVE-governance.md).
 
 
 ## Asset Listing Process
@@ -106,7 +106,7 @@ See: [Governance spec](./0028-GOVE-governance.md).
 All new asset listing is first accepted through governance as describe before. In order to reflect the approval / the decision of the network of accepting a new asset, all validators are required to sign a specific message using a private key to which the signature can be verified by the foreign chain owning the asset.
 The public key counterpart of the private key must have previously been added to the set of allowed signer for the smart contract of the bridge hosted in the foreign chain.
 All vega node will aggregate the signature emitted by the validators, the clients could request at anytime the list of generated signature, and apply verification using the public keys of the validators.
-See: [Multisig Control spec](./0030-ETHM-multisig_control_spec.md) 
+See: [Multisig Control spec](./0030-ETHM-multisig_control_spec.md)
 
 
 ### Vega Asset Bridges
@@ -123,7 +123,7 @@ All Ethereum assets are managed by a smart contract that supports the IVega_Brid
 function whitelist_asset(address asset_source, uint256 asset_id, uint256 vega_id, bytes memory signatures) public;
 ```
 
-Once a successful whitelist_asset transaction has occurred, the `Asset_Whitelisted` event will be emitted for later use by the Vega Event Queue. 
+Once a successful whitelist_asset transaction has occurred, the `Asset_Whitelisted` event will be emitted for later use by the Vega Event Queue.
 See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
 ##### Ether (ETH)
@@ -180,8 +180,8 @@ This section will be expanded when asset bridges to other blockchains are suppor
 
 ### Event Queue Path
 
-Once a deposit is complete and the appropriate events/transaction information is available on the respective chain, the transaction is recognized by the Vega Event Queue and packaged as an event. 
-This event is submitted to Vega consensus, which will verify the event contents against a trusted node of the appropriate blockchain. 
+Once a deposit is complete and the appropriate events/transaction information is available on the respective chain, the transaction is recognized by the Vega Event Queue and packaged as an event.
+This event is submitted to Vega consensus, which will verify the event contents against a trusted node of the appropriate blockchain.
 A consequence of the transaction being verified is the Vega public key submitted in the transaction will be credited with the deposited asset in their Vega account.
 
 
@@ -266,4 +266,3 @@ For each asset class to be considered "supported" by Vega, the following must ha
 5. A withdrawal can be requested and verified by Vega validator nodes (<a name="0040-ASSF-005" href="#0040-ASSF-005">0040-ASSF-005</a>)
 6. multisig withdrawal order signatures from Vega validator nodes can be aggregated at the request of the user (<a name="0040-ASSF-006" href="#0040-ASSF-006">0040-ASSF-006</a>)
 7. A user can submit the withdrawal order and receive their asset (<a name="0040-ASSF-007" href="#0040-ASSF-007">0040-ASSF-007</a>)
-
