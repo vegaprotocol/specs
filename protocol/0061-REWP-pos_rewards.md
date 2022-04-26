@@ -121,5 +121,5 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 1. Each validator and delegator receives appropriate share of the `100000`. 
 
 ## Change of network parameters
-1. change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of a new epoch. Default value 3.1. Minimum value 1 (inclusive). No maximum. 
+1. change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). No maximum. 
 
