@@ -31,7 +31,6 @@ message Asset {
   uint64 decimals = 5;  // immutable 
   string quantum = 1000000000000000000; 
   string maximumLifetimeDeposit = 100000; // note that 100000 in this example is effectively 1, as the asset has 5 decimals
-  string withdrawalDelayPeriod = 2d;  // or 12h or some other string that's a valid time period
   string withdrawalDelayThreshold = 1000000;  // this is effectively 10 due to the 5 decimals 
 
   oneof source {
@@ -68,11 +67,11 @@ See: https://github.com/vegaprotocol/vega/blob/develop/proto/assets.proto
 And: https://github.com/vegaprotocol/vega/blob/develop/proto/governance.proto
 
 
-The `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave. 
+The `maximumLifetimeDeposit` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave. 
 
 All the asset definition fields are immutable (cannot be changed even by governance) except: 
 - `name`, `symbol`, `totalSupply` — refer to the asset proposal spec. for the relevant chain for whether or not these can be changed for assets on that chain, and if so, the mechanism by which they change
-- `quantum`, `maximumLifetimeDeposit`, `withdrawalDelayPeriod`, `withdrawalDelayThreshold` — 
+- `quantum`, `maximumLifetimeDeposit`, `withdrawalDelayThreshold` — 
 These can be changed by asset modification [governance proposal](./0028-GOVE-governance.md). 
 
 

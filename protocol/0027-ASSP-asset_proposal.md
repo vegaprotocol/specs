@@ -45,7 +45,7 @@ Once this has been done, the new asset is ready to be used in the vega network t
 If an asset modification that went through [governance](./0028-GOVE-governance.md) is enacted then there are Vega chain part and bridged chain part. 
 
 ### Bridged chain part
-If it changes one of: `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited. 
+If it changes one of: `maximumLifetimeDeposit` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited. 
 Anyone willing to pay the transaction fee (gas) can submit this to the bridge contract via multisig control and cause the changes to be appropriately reflected there. 
 Vega will then update it's internal asset definition once the events are emmitted and confirmed the correct number of times by the bridge chain.  
 
@@ -148,4 +148,4 @@ For example for USD this may be 1 USD or perhaps 0.01 USD.
 - [ ] As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal) (<a name="0027-ASSP-005" href="#0027-ASSP-005">0027-ASSP-005</a>)
 - [ ] As a node, when a new asset is accepted through governance, I can sign a payload to the user so they can whitelist the asset with the bridge (<a name="0027-ASSP-006" href="#0027-ASSP-006">0027-ASSP-006</a>)
 - [ ] AS a node, I receive events from the external blockchain queue, that's confirm the asset is enabled in the bridge. (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
-- [ ] As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold`, emit a signed a payload to the world so that they can update the corresponding parameters on the bridge (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
+- [ ] As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit` or `withdrawalDelayThreshold`, emit a signed a payload to the world so that they can update the corresponding parameters on the bridge (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
