@@ -57,7 +57,7 @@ The transfer of fees must be completed before performing the normal post-trade c
 Now distribute funds from the "temporary fee bucket" as follows:
 1) Infrastructure_fee is transferred to infrastructure fee pool for that asset. Its distribution is described in [0059 - Simple Proof of Stake rewards](./0059-STKG-simple_staking_and_delegating.md) and [0061 - simple POS rewards SweetWater](./0061-REWP-simple_pos_rewards_sweetwater.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to 
 1) The maker_fee is transferred to the relevant party. 
-1) The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md). Note that `reward.staking.delegation.payoutDelay` is applied as well as `reward.staking.delegation.payoutFraction`. 
+1) The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md). 
 
 ### During Continuous Trading
 
