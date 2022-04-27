@@ -121,8 +121,8 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 1. Each validator and delegator receives appropriate share of the `100000`. 
 
 ## Change of network parameters
-1. change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). No maximum. 
+1. change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). No maximum. (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
 
 
-2. change of network parameter `reward.staking.delegation.minimumValidatorStake` will change minimum amount required of own stake a validator has. Minimum stake applies to all validators. it’s referred to as a prerequisite to being considered a validator. Validators not met with the minimum stake will not be all thrown, and in fact unless there’s someone who can replace them no one will be kicked out. If there is an ersatz ready to replace them only one will be replaced every epoch. (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
+2. change of network parameter `reward.staking.delegation.minimumValidatorStake` will change minimum amount required of own stake a validator has. Minimum stake applies to all validators. it’s referred to as a prerequisite to being considered a validator. Validators not met with the minimum stake will not be all thrown, and in fact unless there’s someone who can replace them no one will be kicked out. If there is an ersatz ready to replace them only one will be replaced every epoch. (<a name="0061-REWP-009" href="#0061-REWP-009">0061-REWP-009</a>) 
 
