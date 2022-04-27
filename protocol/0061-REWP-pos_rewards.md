@@ -14,7 +14,6 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 ### Other network parameters: 
 - `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
 - `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
-- `reward.staking.delegation.maxPayoutPerParticipant` - the maximum (applies only to on-chain treasury rewards in the form of the staking and governance asset) that each participant may receive as a payout from single epoch. 
 
 
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
@@ -43,22 +42,17 @@ This is to ensure that validators (all validators) have incentive to pay Ethereu
 Here `allDelegatedTokens` is the count of the tokes delegated to this validator. 
 Note `validatorScore` also depends on the other network parameters, see below where the exact `validatorScore` function is defined.  
 1. Obtain the performance score as per [validator performance specification](./0064-VALP-validator_performance_based_rewards.md). Update `validatorScore <- validatorScore x performance_score`. 
-1. The fraction of the total available reward that goes to a node (some of this will be for the validator , some is for their delegators) is then `nodeAmount := stakingRewardAmtForEpoch x validatorScore / sumAllValidatorScores` where `sumAllValidatorScores` is the sum of all scores achieved by the validators. Note that this is subject to `min_own_stake` and to `reward.staking.delegation.maxPayoutPerParticipant` (see below).
+1. The fraction of the total available reward that goes to a node (some of this will be for the validator , some is for their delegators) is then `nodeAmount := stakingRewardAmtForEpoch x validatorScore / sumAllValidatorScores` where `sumAllValidatorScores` is the sum of all scores achieved by the validators. Note that this is subject to `min_own_stake` criteria being met. (see below).
 1. The amount that is for the validator to keep (subject to delay and max payout per participant) is
 `valAmt = nodeAmount x (1 - delegatorShare)`. 
 1. The amount to be distributed among all the parties that delegated to this validator is `allDelegatorsAmt := nodeAmount x delegatorShare x score_val / total_score`.  
 
 ### For each delegator that delegated to this validator
 Each delegator should now receive `delegatorTokens / (allDelegatedTokens + validatorsOwnTokens)`. 
-Note that this is subject to `reward.staking.delegation.maxPayoutPerParticipant`, see below. 
 
 ### Minimum validator stake 
 If the validator (i.e. the associated key) does not have sufficient stake self-delegated (at least the network parameter `min_own_stake`), then the reward for the validator is set to zero. The corresponding amount is kept by the network, not distributed among the other validators. Note this only applies to the part of the reward attributable directly to such a validator, its delegators should still receive their rewards. If a Vega key which defines a validator delegates any amount to a different validator then the reward associated with that delegation will be paid out just like for any other delegator.
 
-### Maximum payout per participant
-If the reward pool in question is the on-chain treasury for the staking and governance asset then payments are subject to `reward.staking.delegation.maxPayoutPerParticipant`. 
-The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant receives their due, capped by the max. The unpaid amount remain in the treasury.
-Setting this to `0` means no cap.
 
 
 ## validatorScore functions:
