@@ -57,3 +57,9 @@ The mark price is set to the higher / lower of the last traded price, bid/offer.
 
  ### 5. Defined as part of the product
   The *Mark Price* may be calculated using an algorithm defined by the product -- and 'selected' by a market parameter.
+
+# Acceptance Criteria
+
+ 1. [ ] Following all of the matching of trades resulting from a single order or the acceptance of an order onto the order book, there may be a change to the Mark Price.  (<a name="0009-MKRP-001" href="#0009-MKRP-001">0009-MKRP-001</a>)
+ 2. [ ] Mark Price should be updated after end of open auction (<a name="0009-MKRP-002" href="#0009-MKRP-002">0009-MKRP-002</a>)
+ 3. [ ] Mark Price should reflect the right decimal place setting (market decimal) (<a name="0009-MKRP-003" href="#0009-MKRP-003">0009-MKRP-003</a>)
