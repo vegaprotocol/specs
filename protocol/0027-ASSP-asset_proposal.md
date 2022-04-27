@@ -42,30 +42,30 @@ Once this has been done, the new asset is ready to be used in the vega network t
 
 ## Modifying an existing asset
 
-If an asset modification that went through [governance](./0028-GOVE-governance.md) is enacted then there are Vega chain part and bridged chain part. 
+If an asset modification that went through [governance](./0028-GOVE-governance.md) is enacted then there are Vega chain part and bridged chain part.
 
 ### Bridged chain part
-If it changes one of: `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited. 
-Anyone willing to pay the transaction fee (gas) can submit this to the bridge contract via multisig control and cause the changes to be appropriately reflected there. 
-Vega will then update it's internal asset definition once the events are emmitted and confirmed the correct number of times by the bridge chain.  
+If it changes one of: `maximumLifetimeDeposit` and `withdrawalDelayThreshold` then a signed payload for the appropriate bridge is emmited.
+Anyone willing to pay the transaction fee (gas) can submit this to the bridge contract via multisig control and cause the changes to be appropriately reflected there.
+Vega will then update it's internal asset definition once the events are emmitted and confirmed the correct number of times by the bridge chain.
 
-**Note on asset bundles produced but not submitted to the bridge.** If an asset update `A` is produced and never submitted to bridged chain bridge contract and subsequently an asset update `B` is produced then out of order use is a possibility (someone can submit `A` after `B` has been submitted). 
+**Note on asset bundles produced but not submitted to the bridge.** If an asset update `A` is produced and never submitted to bridged chain bridge contract and subsequently an asset update `B` is produced then out of order use is a possibility (someone can submit `A` after `B` has been submitted).
 The onus is on the creator of proposal `B` to submit (and pay the gas for) for proposal `A` before their proposal `B`. (this means that `A` cannot be submitted again).
 
 ### Vega chain part
-If it changes `quantum` then this new value becomes used immediately on enactement. 
+If it changes `quantum` then this new value becomes used immediately on enactement.
 
 # Changes initiated on chain
 
-In addition to changes initiated by governance on Vega, an asset's particulars can change on its originating chain. 
-The details that are sourced from the originating chain may vary by blockchain and asset standard. 
+In addition to changes initiated by governance on Vega, an asset's particulars can change on its originating chain.
+The details that are sourced from the originating chain may vary by blockchain and asset standard.
 For ERC20 on Ethereum, this would be the asset's `name`, `symbol`, and `totalSupply`.
 
-Vega nodes will run nodes for all bridged chains. They will either listen to the relevant events or poll the current value of these data reguarly in order to ensure that the asset data on Vega reflects the current value (after the configured number of confirmations). 
+Vega nodes will run nodes for all bridged chains. They will either listen to the relevant events or poll the current value of these data reguarly in order to ensure that the asset data on Vega reflects the current value (after the configured number of confirmations).
 In the case of Ethereum ERC20 assets, in will be necessary to poll the contract's "read" functions (name, symbol, totalSupply) as specified in the ERC20 standard, because no events are standardised for changes to these values.
-This polling would ideally be done with each new Ethereum block, but if this is too expensive (in computational costs — there is no gas for read functions) then as long as it occurs at least once per epoch this is acceptable. 
+This polling would ideally be done with each new Ethereum block, but if this is too expensive (in computational costs — there is no gas for read functions) then as long as it occurs at least once per epoch this is acceptable.
 
-**Note on `decimals`.** The Vega ERC20 bridge does not support assets with a changing number of decimals, and is unlikely ever to support such assets (due to both the added complexity and the lack of demonstrable use cases for this). 
+**Note on `decimals`.** The Vega ERC20 bridge does not support assets with a changing number of decimals, and is unlikely ever to support such assets (due to both the added complexity and the lack of demonstrable use cases for this).
 Therefore, it is undefined how to proceed in the event that decimals does change, and the specific, immutable instance of the token smart contract on the Ethereum blockchain much be verified by community members when voting on each new asset that is proposed to ensure that the number of decimals used by the asset is guaranteed to be perpetually invariant for the lifetime of the asset.
 Contracts that do not meet this guarantee are not suitable as a basis for Vega bridge assets.
 
@@ -79,28 +79,56 @@ Changes to the voting:
 message ERC20 {
 	// contract address of an ERC20 token
 	string contractAddress = 1;
+	string maximumLifetimeDeposit = 2; // note that e.g: 100000 in here will be interpreted against the asset decimals
+    string withdrawalDelayThreshold = 3;  // this is will be interpreted against the asset decimals
 }
 
 message AssetSource {
+  string symbol = 1;
+  // an minimal amount of stake to be committed
+  // by liquidity providers.
+  // use the number of decimals defined by the asset.
+  string quantum = 2; // note that e.g: 1000000000000000000 in here will be interpreted against the asset decimals
+  string total_supply = 3;
+  uint64 decimals = 4;
+  string name = 5;
+
   oneof source {
 	// vega internal assets
-	BuiltinAsset builtinAsset = 1;
+	BuiltinAsset builtinAsset = 100;
 	// foreign chains assets
-	ERC20 erc20 = 2;
+	ERC20 erc20 = 200;
   }
-   
+
 }
 
 message NewAsset {
   AssetSource changes = 1 [(validator.field) = {msg_exists: true}];
-  // an minimal amount of stake to be committed 
+}
+
+message ERC20Update {
+	string maximumLifetimeDeposit = 2; // note that e.g: 100000 in here will be interpreted against the asset decimals
+    string withdrawalDelayThreshold = 3;  // this is will be interpreted against the asset decimals
+}
+
+message UpdateAssetSource {
+  string symbol = 1;
+  // an minimal amount of stake to be committed
   // by liquidity providers.
   // use the number of decimals defined by the asset.
-  string quantum = 1000000000000000000; // note that 1000000000000000000 in here will be interpreted against the asset decimals 
-  string maximumLifetimeDeposit = 100000; // note that 100000 in here will be interpreted against the asset decimals
-  string withdrawalDelayPeriod = 2d;  // or 12h or some other string that's a valid time period
-  string withdrawalDelayThreshold = 1000000;  // this is will be interpreted against the asset decimals
+  string quantum = 2; // note that e.g: 1000000000000000000 in here will be interpreted against the asset decimals
+  string total_supply = 3;
+  uint64 decimals = 4;
+  string name = 5;
 
+  oneof source {
+     ERC20Update erc20 = 100;
+  }
+}
+
+message UpdateAsset {
+  string asset_id = 1;
+  UpdateAssetSource changes = 2;
 }
 
 message ProposalTerms {
@@ -113,7 +141,8 @@ message ProposalTerms {
     UpdateNetwork updateNetwork = 103;
 	// new field:
 	NewAsset = newAsset = 104;
-  };
+	UpdateAsset = updateAsset = 105;
+};
 }
 ```
 
@@ -130,8 +159,8 @@ message ProposalTerms {
 ```
 
 
-Note that the `quantum` field sets the minimum economically meaningful amount in the asset. 
-For example for USD this may be 1 USD or perhaps 0.01 USD. 
+Note that the `quantum` field sets the minimum economically meaningful amount in the asset.
+For example for USD this may be 1 USD or perhaps 0.01 USD.
 
 
 # Acceptance Criteria
@@ -142,10 +171,10 @@ For example for USD this may be 1 USD or perhaps 0.01 USD.
 - [ ] As a user I can vote for an asset proposal. (<a name="0027-ASSP-002" href="#0027-ASSP-002">0027-ASSP-002</a>)
 - [ ] As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset. (<a name="0027-ASSP-003" href="#0027-ASSP-003">0027-ASSP-003</a>)
 - [ ] `quantum` is a required parameter  (<a name="0027-ASSP-004" href="#0027-ASSP-004">0027-ASSP-004</a>)
- 
+
 ## node actions
 
 - [ ] As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal) (<a name="0027-ASSP-005" href="#0027-ASSP-005">0027-ASSP-005</a>)
 - [ ] As a node, when a new asset is accepted through governance, I can sign a payload to the user so they can whitelist the asset with the bridge (<a name="0027-ASSP-006" href="#0027-ASSP-006">0027-ASSP-006</a>)
 - [ ] AS a node, I receive events from the external blockchain queue, that's confirm the asset is enabled in the bridge. (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
-- [ ] As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit`, `withdrawalDelayPeriod` and `withdrawalDelayThreshold`, emit a signed a payload to the world so that they can update the corresponding parameters on the bridge (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
+- [ ] As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit` or `withdrawalDelayThreshold`, emit a signed a payload to the world so that they can update the corresponding parameters on the bridge (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
