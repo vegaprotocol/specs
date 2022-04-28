@@ -33,7 +33,7 @@ We now find the smallest integer `k` such that `[target stake] < sum from i=1 to
 Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liquidity-fee-factor`. 
 
 ### Example for fee setting mechanism
-In the example below we have 3 liquidity providers all bidding for their chosen fee level. The LP orders they submit are sorted into increasing fee order so that the lowest fee bid is at the top and the highest is at the bottom. The fee level chosen for the market is derived from the liquidity commitment of the market (`target stake`) and the amount of commitment stake from each bidder. We process the LP orders by adding up the commitment stake until we reach a level greater than or equal to the `target stake`. When we reach that point the fee we use is the fee of the last liquidity order we processed.
+In the example below we have 3 liquidity providers all bidding for their chosen fee level. The LP orders they submit are sorted into increasing fee order so that the lowest fee bid is at the top and the highest is at the bottom. The fee level chosen for the market is derived from the liquidity commitment of the market (`target stake`) and the amount of commitment stake from each bidder. We process the LP orders from top to bottom by adding up the commitment stake as we go until we reach a level greater than or equal to the `target stake`. When we reach that point the fee we use is the fee of the last liquidity order we processed.
 ``` 
 [LP 1 stake = 120 ETH, LP 1 liquidity-fee-factor = 0.5%]
 [LP 2 stake = 20 ETH, LP 2 liquidity-fee-factor = 0.75%]
