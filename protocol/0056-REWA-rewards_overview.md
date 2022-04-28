@@ -59,7 +59,7 @@ If `M = 0` (no-one incurred / received fees for a given reward account)  then no
 
 Metrics are reset at the end of the epoch, so in the case where there is no reward account or no reward balance at the end of the epoch for the given market in scope, the participants contributing to the relevant metric will not be compensated for their contribution. Their contribution to fees is not being carried over to the next epoch. 
 
-Metrics will be calculated using the [decimal precision of the settlement asset](????-????-market-decimal-places.md).
+Metrics will be calculated using the [decimal precision of the settlement asset](0070-MKTD-market-decimal-places.md).
 
 ### For market creation metrics
 
@@ -109,14 +109,14 @@ There are no markets.
 * `infrastructure_fee` = 0.0002
 *  `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
 * `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10. 
-* Moreover `party_0` provides liquidiity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
+* Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
 * During epoch `2` we have `party_1` make one buy market order with volume `2`.
 * During epoch `2` we have `party_2` make one sell market order each with notional `1`.
 
 #### Funding reward accounts
 * `party_R` is funding multiple reward accounts for the same metric and same market to be paid in different assets (`$VEGA`, `USDC`)
-   * `party_R` makes a transfer of `90` `$VEGA` to `ETHUSD-MAR22 | Sum of fees paid | VEGA` in epoch `2`. (`ETHUSD-MAR22` is just brevity, this should be the market id not name).
-   * `party_R` makes a transfer of `120` `USDC` to `ETHUSD-MAR22 | Sum of fees paid | USDC` in epoch `2`. (`ETHUSD-MAR22` is just brevity, this should be the market id not name).
+   * `party_R` makes a transfer of `90` `$VEGA` to `ETHUSD-MAR22 | Sum of fees paid | VEGA` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
+   * `party_R` makes a transfer of `120` `USDC` to `ETHUSD-MAR22 | Sum of fees paid | USDC` in epoch `2`. (`ETHUSD-MAR22` is just for brevity here, the transfer is specified by market id not its name).
 
 
 #### Expectation
