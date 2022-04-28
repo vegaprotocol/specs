@@ -29,7 +29,7 @@ The reason for this drastic reduction to rewards is that if there are signatures
 This is to ensure that validators (all validators) have incentive to pay Ethereum gas to update the multisig signer list.  
 
 ## Tendermint Validators and ersatz validators
- In Vega, we have two sets of Validators, the primary validators (which run Tendermint) and the [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
+ In Vega, we have two sets of Validators, the primary validators (which run Tendermint) and the [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) (which are running a non-consensus validator node and can be promoted to a Tendermint validator node by the protocol if they meet the right criteria). 
  Both Tendermint validators and ersatz validators get rewards (both from fees and additional from on chain treasury) following the method above:
  1. The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatz validators have. 
  Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
