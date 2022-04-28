@@ -1,6 +1,6 @@
 # Validators chosen by stake
 At a high level a participant that wishes to become a validator will:
-1) start a Vega node as non-validating node + associated infra 
+1) start a Vega node as validating node + associated infra 
 1) submit a transaction, see below for details, with their keys, saying they want to validate.
 1) self-stake to their validator Vega key at least `reward.staking.delegation.minimumValidatorStake`. 
 1) wait for others to delegate to them. 
@@ -8,7 +8,6 @@ At a high level a participant that wishes to become a validator will:
 Note that to be eligible as a potential validator certain criteria need to be met: 
 1) Own stake >= `reward.staking.delegation.minimumValidatorStake`. 
 1) Network has verified key ownership (see below).
-
 
 At the end of each epoch Vega will calculate the unnormalised `validator_score`, see [rewards spec](./0061-REWP-simple_pos_rewards_sweetwater.md). 
 For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validators.incumbentBonus)`. 
@@ -25,7 +24,7 @@ Note that we only do this check once per epoch so at most one validator can be c
 
 The same way, if there are free slots for ersatz validators and nodes that have submitted the transaction to join and satisfy all joining conditions, they are added as ersatz validators in the next round.
 
-If a node that submitted the transaction to join and satisfies all other conditions and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is demoted to pending validator. The 'transaction to join' of a validator demoted this way remains active until the delegated stake drops below the required minimum. As the nodes have not had the opportunity to get a performance record, their performance is valued as the average of the performance scores of all ersatz validators.
+If a node that submitted the transaction to join and satisfies all other conditions and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is demoted to pending validator. The 'transaction to join' of a validator demoted this way remains active until the delegated stake drops below the required minimum
 
 As both these checks are done between epochs, it is possible for a validator to be demoted first from Tendermint validator to ersatz validator, and then from ersatz validator to pending validator.
 
@@ -53,13 +52,13 @@ for example:
         "avatar_url": "https://www.greenfield.one/avatar.png"
 }
 ```
-## Removing non-performing candidate validators
+## Removing non-performing pending validators
 
 - Any party with fewer than `reward.staking.delegation.minimumValidatorStake` at the start of an epoch is removed. (the aim is to remove parties who don't delegate to self, however we achieve it is not too important)
 - Any party with performance score == `0` at the end of an epoch is removed.
 
 
-## Running a candidate non-validator node
+## Running a pending validator node
 Start [node as a validator node](https://github.com/vegaprotocol/networks/blob/master/README.md).
 
 From now we assume that the transaction has been submitted and the node started. 
@@ -87,6 +86,7 @@ In the reward calculation for the top `network.validators.multisig.numberOfSigne
 Thus a validator who is not there but should be has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well. 
 
 As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) then at the end of the epoch their score will be `0`. 
+
 They will not get any rewards and at the start of the next epoch they will be removed from the validator set. 
 
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions. 
@@ -102,12 +102,14 @@ ersatz validators.
 The value range for this decimal is `0.0` to `infinity`. 
 Reasonable values may be e.g. `0.5`, `1.0` or `2.0`.
 
-As the other validators, Ersatz validators are defined through own + delegated stake, being the validators with the scores below the Tendermint ones; is `NumberOfTendermintValidators` is `n` and NumberOfErsatzValidators is `n'`, 
+Like the other validators, Ersatz validators are defined through own + delegated stake, being the validators with the scores below the Tendermint ones; is `NumberOfTendermintValidators` is `n` and NumberOfErsatzValidators is `n'`, 
 then these are the validators with scores `n+1` to `n+n'`.
 
 
 ### Performance of Ersatz validators
-Ersatz validators are required to run a non-validator Vega node with all the related infrastructure (Ethereum forwarder, data node etc.) at all times, see [the section on performance for non-validator nodes in 0064-VALP](./0064-VALP-validator_performance_based_rewards.md).
+Ersatz validators are required to run a validator Vega node with all the related infrastructure (Ethereum forwarder, data node etc.) at all times, see [the section on performance for validator nodes in 0064-VALP](./0064-VALP-validator_performance_based_rewards.md).
+
+Their performance is also defined by the number of heartbeats they sent out of the last 10 expected heartbeats.
 
 ### Rewards for Ersatz validators
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](./0064-VALP-validator_performance_based_rewards.md) and [performance measurement](./0064-VALP-validator_performance_based_rewards.md).
