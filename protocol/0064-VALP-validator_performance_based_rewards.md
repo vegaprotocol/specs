@@ -1,9 +1,11 @@
 # Adjusting Validator Rewards Based on Performance
 
-The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury. 
+The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury.
+
 The rewards are based on their own stake and the amount of stake delegated to them, 
-see [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
-The purpose of the specification is to define how will the validator rewards will be additionally scaled based on their performance. 
+see [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md), as well as their performance score.
+
+The purpose of the specification is to define how the validator rewards will be additionally scaled based on their performance. 
 
 ## Performance Measurement 1 (PM1): Offline Validator (sufficient for Oregon Trail)
 ### Tendermint validators
@@ -20,32 +22,31 @@ let `t` be the total voting power in the previous epoch
 let `expected = v*b/t` the number of blocks we expected the validator to propose. 
 Then `validator_performance = max(0.05, min((p/expected, 1))`
 
-### Pending/ersatz validators
+### Ersatz and pending validators
 For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
 Let `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`. 
-Every `numBlocks` blocks the candidate validator node is to send a hash of block number `b` separetely signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
+Every `numBlocks` blocks the candidate validator node is to send a hash of block number `b` separately signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
 Here `b` is defined as:
-First time it is the the block number in which the joining transaction was included. Then it's incremented by `numBlocks`. 
+First time it is the block number in which the joining transaction was included. Then it's incremented by `numBlocks`. 
 The network will keep track of the last `10` times this was supposed to happen and the `performance_score` is the number of times this has been verified divided by `10`.  
 The message with the signed block hash must be in blocks `b + numBlocks` to `b + numBlocks + 10` to count as successfully delivered.  
 Initially the performance score is set to `0`.
-Both Tendermint validators and candidate validators should be signing and sending these messages but only for the candidate validators does this impact their score.
+Both Tendermint validators and pending validators should be signing and sending these messages but only for the pending validators does this impact their score.
 
-
-The performance score should be available on all the same API enpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
+The performance score should be available on all the same API endpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
 
 ## Acceptance criteria
 
 ### Performance score
 1. Tendermint validator with insufficient self-delegation (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>):
-  * Setup a network with 5 validators 
+  * Set up a network with 5 validators 
   * Self-delegate to 4 of the nodes **more** than the minimum amount set in `reward.staking.delegation.minimumValidatorStake`. 
   * Self-delegate to the 5th node **less** than the minimum amount.
   * Verify that at the beginning of the next epoch the performance score of the 5th validator is 0. 
 2. Tendermint validator with sufficient self-delegation (<a name="0064-VALP-002" href="#0064-VALP-002">0064-VALP-002</a>):
   * Setup a network with 5 validators. 
   * Self-delegate to all of them more than the minimum required. 
-  *  Verify that after an epoch has past, the performance score of all of them is close to 1. 
+  *  Verify that after an epoch has passed, the performance score of all of them is close to 1. 
 3. Tendermint validator down (<a name="0064-VALP-003" href="#0064-VALP-003">0064-VALP-003</a>):
   * Setup a network with 5 validators. 
   * Self-delegate to all of them more than the minimum required in `reward.staking.delegation.minimumValidatorStake` and ensure the validators self-stake is an equal amount across all. 
@@ -60,14 +61,14 @@ The performance score should be available on all the same API enpoints as the `v
   * Announce a new node to the network and self-delegate to them. 
   * Every `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) the performance score of the new validator should go up by 0.1 until it reaches the maximum of 1. 
   * Verify that after enough epochs to represent at least 1000 blocks, the performance score of the joining validator is 0.1. 
-  * Let the network run for `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) more and at the following epoch check that score is up to 0.2. Keep it running until it performance score of the joining validator reaches 1, then stop it. 
+  * Let the network run for `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) more and at the following epoch check that score is up to 0.2. Keep it running until its performance score of the joining validator reaches 1, then stop it. 
   * Verify that for every `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*), the performance score should go down by 0.1 until it reaches zero. 
   * **Note:** Every `numBlocks`  the performance score should go up by 0.1. Now the performance score is only visible every epoch so depending on the ratio between `numBlocks`  and epoch duration it may tick once or more per epoch. Guidance is that this test should either be parametrised or, preferably, written with a given epoch duration
 5. Insufficient stake (<a name="0064-VALP-005" href="#0064-VALP-005">0064-VALP-005</a>):  
   * Setup a network with 5 validators, self-delegate to each more than the required minimum as set out in `reward.staking.delegation.minimumValidatorStake`. 
   * Verify that at the beginning of the next epoch the validator has non 0 performance score, and voting power is greater than 10. 
   * Update the network parameter `reward.staking.delegation.minimumValidatorStake` for minimum self-stake to be more than is self-delegated. 
-  * Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes was removed from Tendermint.
+  * Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes were removed from Tendermint.
 
 |
 
@@ -77,7 +78,7 @@ The performance score should be available on all the same API enpoints as the `v
 
 # Non Linear punishment
 Currently, PM1 does a linear reduction of payment - maybe an s-curve would be better so that small violations are punished less, 
-while a validator that is offline half the time gets more than 50% substraction. For example, 1/(1+2^((3*x-1)*10)) would punish
+while a validator that is offline half the time gets more than 50% subtraction. For example, 1/(1+2^((3*x-1)*10)) would punish
 small failures less, and bigger failures pretty radically.
 
 #Weight reduction
@@ -95,7 +96,7 @@ To detect this, validators need to issue tagged signatures from time to time.
       Failure to do so provably shows that the signature was not verified properly.
       
  # PM3: Validator does not run event forwarder
- This is difficult to detect, as a validator may legitimatelly see Ethereum events a few seconds after other validators
+ This is difficult to detect, as a validator may legitimately see Ethereum events a few seconds after other validators
  and thus never get an event to forward. Also, eventually EEF will be integrated into core, and thus it will be more
  effort to not run that part of the code.
 Idea: A validator that forwarded less than 50% of the events of the other validators

@@ -28,10 +28,14 @@ The obverse case where a Tendermint validator doesn't have their signature on th
 The reason for this drastic reduction to rewards is that if there are signatures the multisig is expecting that Vega chain isn't providing there is a danger that control of the multisig is lost. 
 This is to ensure that validators (all validators) have incentive to pay Ethereum gas to update the multisig signer list.  
 
-## Tendermint Validators and ersatz validators
- In Vega, we have two sets of Validators, the primary validators (which run Tendermint) and the [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) (which are running a non-validator node and can be promoted to a validator node by the protocol if they meet the right criteria). 
- Both Tendermint validators and ersatz validators get rewards (both from fees and additional from on chain treasury) following the method above:
- 1. The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatz validators have. 
+## Primary (consensus forming) Nodes, Ersatz Nodes, Non-validator nodes
+ From the point of view of proof of stake rewards three are three types of nodes: 
+ 1. Non-validator nodes that process transactions and can run the [data node](../non-protocol-specs/0011-NP-DANO-data-node.md) for client use but they don't determine which transactions go into blocks and they get no proof of stake rewards. Any such validator [can submit a transaction](./0069-VCBS-validators_chosen_by_stake.md) to join the ersatz nodes / validator nodes set. Once they submit such transaction they become [pending nodes](./0064-VALP-validator_performance_based_rewards.md) and their performance is measured to determine their suitability.  If they meet staking and performance criteria will get "promoted" to the next level. 
+ 1. The [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) who, from the point of view of consensus protocol are non-validator nodes but they have sufficient stake (own or delegated) and meet performance criteria. Their role is to be readily available if any of the primary (Tendermint) validators was to drop out in which case they become primary validators. They can also become primary validators if the stake composition [changes sufficiently](./0069-VCBS-validators_chosen_by_stake.md). They receive proof of stake rewards. If their performance score or amount of delegated stake drops they can be demoted to a pending non-validator node.
+ 1. The primary (Consensus forming / Tendermint) nodes (which propose and verify blocks based on delegated PoS using the Tendermint protocol). They receive proof of stake rewards. 
+
+ ### Proof of stake reward split between primary (tendermint) validators and ersatz validators
+ The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatz validators have. 
  Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
 
  The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively).  
@@ -106,17 +110,13 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 1. Epoch ends and multisig hasn't been updated.
 1. All validators and ersatz validators, apart from Alice get rewards.
 
-
-## Rewards from trading fees are calculated and distributed (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
+## Rewards from trading fees are calculated and distributed (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
 1. Run Vega with at least 3 tendermint validator nodes and at least 5 ersatz validator nodes each with different self-stake and delegation.
 1. A market is launched with settlement asset A, infrastructure fee of `0.01 = 1%`. Market leaves opening auction and at least 10 trades occur with a total traded notial for fee purposes of at least 10000000 A. 
 1. Epoch ends. 
 1. The reward pool from trading in asset A is at least `0.01 x 10000000 = 100000`. 
 1. Each validator and delegator receives appropriate share of the `100000`. 
 
-## Change of network parameters
-1. change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). No maximum. (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
-
-
-2. change of network parameter `reward.staking.delegation.minimumValidatorStake` will change minimum amount required of own stake a validator has. Minimum stake applies to all validators. it’s referred to as a prerequisite to being considered a validator. Validators not met with the minimum stake will not be all thrown, and in fact unless there’s someone who can replace them no one will be kicked out. If there is an ersatz ready to replace them only one will be replaced every epoch. (<a name="0061-REWP-009" href="#0061-REWP-009">0061-REWP-009</a>) 
-
+## Change of network parameters
+1. Change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). No maximum. (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
+1. Change of network parameter `reward.staking.delegation.minimumValidatorStake` will change minimum amount required of own stake a validator has. Minimum stake applies to all validators. it’s referred to as a prerequisite to being considered a validator. Validators not met with the minimum stake will not be all thrown, and in fact unless there’s someone who can replace them no one will be kicked out. If there is an ersatz ready to replace them only one will be replaced every epoch. (<a name="0061-REWP-009" href="#0061-REWP-009">0061-REWP-009</a>) 
