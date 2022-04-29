@@ -167,7 +167,7 @@ If at any point in time, a liquidity provider has insufficient capital to make t
 Calculating the penalty:
 
 ```
-market.liquidity.bondPenaltyParameter = market.liquidity.bondPenaltyParameter ⨉ shortfall`
+bondPenalty = market.liquidity.bondPenaltyParameter ⨉ shortfall
 ```
 
 The above simple formula defines the amount by which the bond account will be 'slashed', where:
