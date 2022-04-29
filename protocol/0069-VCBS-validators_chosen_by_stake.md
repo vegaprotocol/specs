@@ -54,8 +54,9 @@ for example:
 ```
 ## Removing non-performing pending validators
 
-- Any party with fewer than `reward.staking.delegation.minimumValidatorStake` at the start of an epoch is removed. (the aim is to remove parties who don't delegate to self, however we achieve it is not too important)
-- Any party with performance score == `0` at the end of an epoch is removed.
+Nodes that submitted the transaction to become "pending" nodes (with the aim of joining the ersatz or even the validator set) will be removed from the pending set if either:
+- They have fewer self-owned governance tokens than `reward.staking.delegation.minimumValidatorStake` at the start of an epoch
+- The node has performance performance score == `0` at the end of an epoch.
 
 
 ## Running a pending validator node
