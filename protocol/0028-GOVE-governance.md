@@ -435,7 +435,7 @@ APIs should also exist for clients to:
 - [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
 - [ ] Verify that an enacted market change proposal that changes trading terminated oracle and price settlement oracle can be settled using transactions from the new oracle keys. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
 - [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
-- [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
+- [ ] Verify that an enacted market change proposal that reduces `market.stake.target.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
 
 
 ### Network parameter change proposals
