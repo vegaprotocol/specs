@@ -1,35 +1,52 @@
-# Data sourcing (aka oracles)
+# Oracles (aka data sourcing)
 
 ## 1. Principles and summary
 
-The Vega network runs on data. Market settlement, risk models, and other features require a supplied price (or other data), which must come from somewhere, often completely external to Vega. This necessitates the use of both internal and external data sources for a variety of purposes.
+The Vega network runs on data. Market settlement, risk models, and other features require a supplied price (or other data), which must come from somewhere, often completely external to Vega. This necessitates the use of both internal and external data sources, called oracles, for a variety of purposes.
 
 
-a) The goals of Vega Protocol with regards to data sourcing are:
+a) The goals of Vega Protocol with regard to oracles are:
 
 1. To provide access to data internal to the Vega network in a standardised way, including data and triggers related to the "Vega Time" and market data (prices, etc.)
 1. To support a wide range of third party data sourcing solutions for external data rather than to implement a complete solution in-house.
 1. To be a source of definitive and final data to Products and Risk Models that can be trusted by market participants.
 1. To build simple, generic and anti-fragile data sourcing functionality, and not to introduce third party dependencies.
 
-b) Things that are explicitly NOT goals of the data sourcing framework at this time:
+b) Things that are explicitly NOT goals of the oracle framework at this time:
 
 1. Calculations or processing of data other than selecting the value of a specific field and filtering events in the data stream are out of scope.
-1. Processing arbitrary message formats is out-of-scope. Each required format should be specified explicitly. For instance we may specify that "Vega native protobuf message of key/value pairs" or "ABI encoded data in the OpenOracle format" must be valid data (and there may be more than one required format), but do not require general consumption of arbitrary data.
+1. Processing arbitrary message formats is out-of-scope. Each required format should be specified explicitly. For instance, we may specify that "Vega native protobuf message of key/value pairs" or "ABI encoded data in the OpenOracle format" must be valid data (and there may be more than one required format), but do not require general consumption of arbitrary data.
 1. Whilst we do need to build a framework that will be *extensible* with new sources and transformation/aggregation options, and *composable* by combining options, we are not aiming to build a large library of such features for unproven use cases initially. The MVP can be built and will be very useful with a small number of features.
 
 
 Note that this approach means:
 
 1. Vega will not integrate directly with specific oracle/data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles and standards (so that oracles implementing these standards will hopefully be compatible with little or no work).
-1. External data sources must be able to provide a measure of finality that is either definitive or a configurable threshold on a probabilistic measure (‘upstream finality’).
+1. External oracles must be able to provide a measure of finality that is either definitive or a configurable threshold on a probabilistic measure (‘upstream finality’).
 1. Once upstream finality is achieved, Vega may in future provide optional mechanisms for querying, verification or dispute resolution that are independent of the source. These would be composable steps that could be added to any source.
 1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each. 
 
+## 2. Terminology
+**Oracle:** A provider of `Oracle Data`.
 
-## 2. Data sourcing framework
+**Internal Oracle:** An `Oracle` that lives inside the node, and sends `Oracle Data` from the inside.
 
-Any part of Vega requiring a data source should be able to use any type of data source. **This means that there is a single common method for specifying a data source where one is required.**
+**External Oracle:** An `Oracle` that lives outside the node, and sends `Oracle Data` through the node API.
+
+**Oracle Data:** A signed message containing data, one or multiple signatures, and the public keys used to sign these data.
+
+**Matched Oracle Data:** Label given to `Oracle Data` that matched an `Oracle Spec`.
+
+**Unmatched Oracle Data:** Label given to `Oracle Data` that did not match an `Oracle Spec`.
+
+**Oracle Spec:** A market is only interested in very specific `Oracle Data`. To determine which `Oracle Data` are of interest, it needs to define filters, called `Oracle Spec`. These filters describe the expected origin of the data, as well as the properties, their types, and the conditions their values have to fulfil. It's a way to codify the following sentence:
+> I am interested in properties named `price.BTC.value` whose value is greater than `0`, and that has been signed by the public key `0xDEADBEEF`
+
+**Oracle Spec Binding:** When an `Oracle Data` is matched, the `Oracle Spec` extracts values out of it, and use them to set specific properties on the market. This requires mapping the `Oracle Data` properties onto the market. This is the `Oracle Spec Binding`.
+
+## 3. Oracle framework
+
+Any part of Vega requiring external data should be able to use any type of data source. **This means that there is a single common method for specifying a data source where one is required.**
 
 The types of data sources that are supported are listed towards the end of this spec. 
 
@@ -46,7 +63,7 @@ Data sources may refer to other data sources, for example:
 NB: the above could be composed, so filter the stream and then select a field. 
 
 
-## 3. Specifying a new data source
+## 4. Specifying a new data source
 
 When defining a data source, the specification for that data source must describe:
 1. What parameters (input data) are required to create a data source of that type
@@ -54,7 +71,7 @@ When defining a data source, the specification for that data source must describ
 1. Any additional requirements needed for the data source to work (such as external "bridge" infrastructure to other blockchains)
 
 
-## 4. Data types
+## 5. Data types
 
 
 ### Allowable types:
@@ -85,7 +102,7 @@ The context in which the data source is used can determine the type of data requ
 For [futures](./0016-PFUT-product_builtin_future.md) the data type expected will  be a number ("price"/quote) for settlement, and any event for the trading terminated trigger. For filtered data, the input data source can be any type and the output must be the type required by the part of the system using the data source.
 
 
-## 5. Selecting a field 
+## 6. Selecting a field
 
 Often, a data source will provide a set of key/value pairs when what is needed is a single value from the object. therefore a data source may be defined that takes another source as input and selects the value of one field.
 
@@ -105,7 +122,7 @@ This would emit just the value of the price field, i.e.
 ```
 The above JSON gives output of `27.2`.
 
-## 6. Types of data source
+## 7. Types of data source
 
 The following data sources have been defined:
 1. [Internal basic data sources](./0048-DSRI-data_source_internal.md)
@@ -118,7 +135,7 @@ Future (needed sooner than the others listed in 9 below)
 1. Vega market data (i.e. prices from other markets on Vega)
 
 
-## 7. Tracking active data sources
+## 8. Tracking active data sources
 
 Vega will need to keep track of all "active" defined data sources that are referenced either by markets that are still being managed by the core (i.e. excluding Closed/Settled/Cancelled/other "end state" markets) or by other data source definitions (see each individual data source definition spec, such as [signed message](./0046-DSRM-data_source_signed_message.md) for this specific information).
 
@@ -127,14 +144,14 @@ Vega should consider the specific definition including filters, combinations etc
 Data sources that are no longer active as defined above can be discarded. Incoming data that is not emitted by an active data source (i.e. passes all filters etc. as well as matching the public key, event name, or whatever) can be ignored. 
 
 
-## 8. APIs
+## 9. APIs
 
 APIs should be available to:
 1. List active data sources and their configuration
 1. Emit an event on the event bus when a data source value is emitted.
 
 
-## 9. Future work
+## 10. Future work
 
 The following are expected to be implemented in future.
 
