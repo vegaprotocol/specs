@@ -28,7 +28,7 @@ Note that this approach means:
 
 **Oracle:** A provider of `Oracle Data`.
 
-**Internal Oracle:** An `Oracle` that lives inside the node, and sends `Oracle Data` from the inside.
+**Internal Oracle:** An `Oracle` that provides data internally available within Vega core nodes (e.g. time, prices on other markets).
 
 **External Oracle:** An `Oracle` that lives outside the node, and sends `Oracle Data` from the outside.
 
