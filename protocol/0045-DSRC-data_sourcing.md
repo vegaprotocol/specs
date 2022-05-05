@@ -4,7 +4,6 @@
 
 The Vega network runs on data. Market settlement, risk models, and other features require a supplied price (or other data), which must come from somewhere, often completely external to Vega. This necessitates the use of both internal and external data sources, called oracles, for a variety of purposes.
 
-
 a) The goals of Vega Protocol with regard to oracles are:
 
 1. To provide access to data internal to the Vega network in a standardised way, including data and triggers related to the "Vega Time" and market data (prices, etc.)
@@ -18,65 +17,186 @@ b) Things that are explicitly NOT goals of the oracle framework at this time:
 1. Processing arbitrary message formats is out-of-scope. Each required format should be specified explicitly. For instance, we may specify that "Vega native protobuf message of key/value pairs" or "ABI encoded data in the OpenOracle format" must be valid data (and there may be more than one required format), but do not require general consumption of arbitrary data.
 1. Whilst we do need to build a framework that will be *extensible* with new sources and transformation/aggregation options, and *composable* by combining options, we are not aiming to build a large library of such features for unproven use cases initially. The MVP can be built and will be very useful with a small number of features.
 
-
 Note that this approach means:
 
 1. Vega will not integrate directly with specific oracle/data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles and standards (so that oracles implementing these standards will hopefully be compatible with little or no work).
 1. External oracles must be able to provide a measure of finality that is either definitive or a configurable threshold on a probabilistic measure (‘upstream finality’).
 1. Once upstream finality is achieved, Vega may in future provide optional mechanisms for querying, verification or dispute resolution that are independent of the source. These would be composable steps that could be added to any source.
-1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each. 
+1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each.
 
 ## 2. Terminology
+
 **Oracle:** A provider of `Oracle Data`.
 
 **Internal Oracle:** An `Oracle` that lives inside the node, and sends `Oracle Data` from the inside.
 
-**External Oracle:** An `Oracle` that lives outside the node, and sends `Oracle Data` through the node API.
+**External Oracle:** An `Oracle` that lives outside the node, and sends `Oracle Data` from the outside.
 
-**Oracle Data:** A signed message containing data, one or multiple signatures, and the public keys used to sign these data.
+**Ethereum Oracle:** An `Oracle` that lives on the Ethereum blockchain as a bridge, and sends `Oracle Data` from the outside.
 
-**Matched Oracle Data:** Label given to `Oracle Data` that matched an `Oracle Spec`.
+**Oracle Data:** All data emitted by an `Oracle`.
 
-**Unmatched Oracle Data:** Label given to `Oracle Data` that did not match an `Oracle Spec`.
+**Internal Oracle Data**: `Oracle Data` emitted by an `Internal Oracle`.
 
-**Oracle Spec:** A market is only interested in very specific `Oracle Data`. To determine which `Oracle Data` are of interest, it needs to define filters, called `Oracle Spec`. These filters describe the expected origin of the data, as well as the properties, their types, and the conditions their values have to fulfil. It's a way to codify the following sentence:
-> I am interested in properties named `price.BTC.value` whose value is greater than `0`, and that has been signed by the public key `0xDEADBEEF`
+**External Oracle Data**: `Oracle Data` emitted by an `External Oracle`.
 
-**Oracle Spec Binding:** When an `Oracle Data` is matched, the `Oracle Spec` extracts values out of it, and use them to set specific properties on the market. This requires mapping the `Oracle Data` properties onto the market. This is the `Oracle Spec Binding`.
+**Ethereum Oracle Data**: `Oracle Data` emitted by an `Ethereum Oracle`.
+
+**Matched Oracle Data:** Label given to `Oracle Data` that matched at least one `Oracle Spec`.
+
+**Unmatched Oracle Data:** Label given to `Oracle Data` that did not match any `Oracle Spec`.
+
+**Oracle Spec:** The filter that defines what is expected from an `Oracle Data` to be considered of interest.
+
+**Oracle Spec Binding:** When an `Oracle Data` is matched, the `Oracle Spec` extracts values out of it, and use them to set specific properties on the market. This is a role of the `Oracle Spec Binding` to know which `Oracle Data` properties are mapped onto the market properties.
 
 ## 3. Oracle framework
 
-Any part of Vega requiring external data should be able to use any type of data source. **This means that there is a single common method for specifying a data source where one is required.**
+Any part of Vega requiring external data should be able to consume any type of `Oracle Data`. It uses a single common method to describe what it expects from them by defining an `Oracle Spec`. Coupled to the `Oracle Spec Binding`, it knows which properties to extract and pass down.
 
-The types of data sources that are supported are listed towards the end of this spec. 
+### Anatomy of `Oracle Data`
 
-Data sources will be specified by providing:
+#### Definition of an `External Oracle Data`
 
-1. Type of data source (signed message, internal Vega market data, date/time, Ethereum, etc.)
-1. Data type (e.g. float for a price) - this must be compatible with the usage of the data source (if it is a settlement price, a numeric value would be required; for a trading termination trigger which consumes no data then any data type, etc.). Note that it is possible to have more than one "compatible" type, for instance it might be that a number could be a string or a raw numeric value in a JSON data source.
-1. Data source specific details (for signed message, public key of sender; for Ethereum, contract address, method name; etc.)
+```json
+{
+  "data": {
+    "price.BTC.value": "3500",
+    "price.BTC.updated_at": "123456790"
+  },
+  "signatures": [
+    "0xdeadbeef"
+  ],
+  "pubkeys": [
+    "0x1234567"
+  ]
+}
+```
+
+### Defining expectations with an `Oracle Spec`
+
+A market is only interested in very specific `Oracle Data`. To determine which `Oracle Data` are of interest, it needs to define a filter, called `Oracle Spec`.
+
+This filter defines a set of constraints the `Oracle Data` has to fulfil to be consumed. It's simply a way to express the following expectation:
+
+> I am interested in integers named `price.BTC.value` whose value is greater than `0`, emitted by an external oracle signing with the public key `0xDEADBEEF`
+
+An `Oracle Spec` defines:
+
+1. The origin of the `Oracle Data`.
+
+> * Where do they come from?
+> * Has it been emitted by an `Internal Oracle`, an `External Oracle`, or and `Ethereum Oracle`?
+> * If it comes from an `External Oracle`, which public key emitted it?
+> * If it comes from an `Ethereum Oracle`, which contract address emitted it?
+
+2. The properties of interest.
+
+> * Do the `Oracle Data` include a property named `price.BTC.value`?
+> * Do the `Oracle Data` include a property named `price.BTC.updated_at`?
+
+3. The type of these properties.
+
+> * Is the property `price.BTC.value` an integer?
+> * Is the property `price.BTC.updated_at` a timestamp?
+
+4. And optionally, the conditions the values may have to fulfil.
+
+> * Is the `price.BTC.value` value greater than `0`?
+> * Is the timestamp greater or equal to `123456789`?
+
+If the `Oracle Data` passes the filter, it is labeled as a `Matched Oracle Data`, and is forwarded to the `Oracle Spec Binding` for properties extraction.
+
+#### Definition of an `Oracle Spec`
+
+```json
+{
+  "oracle_spec_for_settlement_price": {
+    "filters": [
+      {
+        "key": {
+          "name": "price.BTC.value",
+          "type": "INTEGER"
+        },
+        "conditions": [
+          {
+            "operator": "GREATER_THAN",
+            "value": "0"
+          }
+        ]
+      },
+      {
+        "key": {
+          "name": "price.BTC.updated_at",
+          "type": "TIMESTAMP"
+        },
+        "conditions": [
+          {
+            "operator": "GREATER_THAN_OR_EQUAL",
+            "value": "123456789"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Extracting properties with `Oracle Spec Binding`
+
+Often, the `Matched Oracle Data` will provide multiple properties when what is needed is a single value. Therefore, we have to specify which property this value should come from. That's the role of the `Oracle Spec Binding` to define the properties to be extracted from the `Oracle Data` and the properties they should value on the market. These properties are called "bound properties".
+
+Note that the type of the bound properties must be compatible. For a settlement price, a numeric value would be required; for a trading termination trigger which consumes no data then any data type, etc.
+
+#### Definition of an `Oracle Spec Binding`
+
+If we were to bind the `price.BTC.value` value to the settlement price of a market, we would declare the following configuration, with the `Oracle Spec` and `Oracle Spec Binding`:
+
+```json
+{
+  "oracle_spec_for_settlement_price": {
+    "filters": [
+      {
+        "key": {
+          "name": "c",
+          "type": "INTEGER"
+        },
+        "conditions": [
+          {
+            "operator": "GREATER_THAN",
+            "value": "0"
+          }
+        ]
+      }
+    ]
+  },
+  "oracle_spec_binding": {
+    "settlement_price": "price.BTC.value"
+  }
+}
+```
+
+```
+TO REVIEW
+
+I need a concrete example to fully understand the following specification
+
+---------------------------------------------------------------------------
 
 Data sources may refer to other data sources, for example:
+
 1. A data source that takes a source of structured data records as input and emits only the value of a named field (e.g. to return "BTCUSD_PRICE" from a record containing many prices, for instance)
 1. A data source that takes another data source as input and emits only data that matches a set of defined filters (e.g. to return only records with specific values in the timestamp and ticket symbol fields)
 
-NB: the above could be composed, so filter the stream and then select a field. 
-
-
-## 4. Specifying a new data source
-
-When defining a data source, the specification for that data source must describe:
-1. What parameters (input data) are required to create a data source of that type
-1. How the data source interprets those parameters to emit one or more values
-1. Any additional requirements needed for the data source to work (such as external "bridge" infrastructure to other blockchains)
-
+NB: the above could be composed, so filter the stream and then select a field.
+```
 
 ## 5. Data types
 
+### Allowable types
 
-### Allowable types:
+The oracle framework supports the following data types:
 
-Data sources must be able to emit the following data types:
 1. Number (for MVP these can be used for prices or in filter comparisons)
 1. String (for MVP these would only be used to compare against in filters)
 1. Date/Time (for MVP these would only be used to compare against in filters)
@@ -84,56 +204,44 @@ Data sources must be able to emit the following data types:
 
 Note that for number types the system should convert appropriately when these are used in a situation that requires Vega's internal price/quote type using the configured decimal places, etc. for the market.
 
-Additionally, for number types where the data source value cannot be interpreted without decimal place conversion (e.g. it is a number from Ethereum represented as a very large integer, perhaps as a string, with 18 or some other number of implicit decimals), it must be possible to specify the number of implicit decimals, when specifying the oracle (e.g. in a market proposal or wherever the oracle is to be used). Strings and numbers with decimal points and numbers after them should be interpreted correctly. 
+Additionally, for number types where the data source value cannot be interpreted without decimal place conversion (e.g. it is a number from Ethereum represented as a very large integer, perhaps as a string, with 18 or some other number of implicit decimals), it must be possible to specify the number of implicit decimals, when specifying the oracle (e.g. in a market proposal or wherever the oracle is to be used). Strings and numbers with decimal points and numbers after them should be interpreted correctly.
 
-For example: this means that if an oracle with specified 18 decimal places is used to settle a market with 4 market decimals then:
-* Oracle data with a value of `103500000000000000000` implies an actual value of `103.5`
+For example, if an oracle with specified 18 decimal places is used to settle a market with 4 market decimals then:
+
+* The `Oracle Data` with a value of `103500000000000000000` implies an actual value of `103.5`
 * This value would end up being represented on Vega as `1035000`
 
-Vega should support sufficient number types to enable processing of any reasonably expected message for each format. For instance if we are building JSON we might expect both Number and String fields to be allowable.
+For Vega to support sufficient number types to enable processing of any reasonably expected message for each format,all values of an `Oracle Data` are defined as strings, and, then, converted into the requested type. This allows complex or big numbers to be express without hitting programming language limits.
 
 In future there will likely be other types.
 
-
 ### Type checking
 
-The context in which the data source is used can determine the type of data required to be received. Data sources that emit data of an incorrect type to a defined data source should trigger an event or log of some sort (the type may depend if this is detected within processing of a block or before accepting a tx). If the error is detected synchronously on submission, the error message returned by the node should explicitly detail the issue (i.e. what mismatched, how, and in what part of what data source definition it occurred).
-
-For [futures](./0016-PFUT-product_builtin_future.md) the data type expected will  be a number ("price"/quote) for settlement, and any event for the trading terminated trigger. For filtered data, the input data source can be any type and the output must be the type required by the part of the system using the data source.
-
-
-## 6. Selecting a field
-
-Often, a data source will provide a set of key/value pairs when what is needed is a single value from the object. therefore a data source may be defined that takes another source as input and selects the value of one field.
-
-The definition of such a source may look like:
-
-```rust
-select: {
-  field: 'price',
-  data: << input data source >>
-}
 ```
+TO REVIEW
 
-This would emit just the value of the price field, i.e. 
+Should we rethink the part in the light of the current wording and choosen components architecture ?
 
-```json
-{ "ticker": "GOLD", "price": 27.2 } 
+---------------------------------------------------------------------------
+
+The context in which the data source is used can determine the type of data required to be received. Data sources that emit data of an incorrect type to a defined data source should trigger an event or log of some sort (the type may depend on if this is detected within processing of a block or before accepting a tx). If the error is detected synchronously on submission, the error message returned by the node should explicitly detail the issue (i.e. what mismatched, how, and in what part of what data source definition it occurred).
+
+For [futures](./0016-PFUT-product_builtin_future.md), the data type expected will be a number ("price"/quote) for settlement, and any event for the trading terminated trigger. For filtered data, the input data source can be any type and the output must be the type required by the part of the system using the data source.
 ```
-The above JSON gives output of `27.2`.
 
 ## 7. Types of data source
 
 The following data sources have been defined:
+
 1. [Internal basic data sources](./0048-DSRI-data_source_internal.md)
 1. [signed message](./0046-DSRM-data_source_signed_message.md)
 1. [Filters](./0047-DSRF-data_source_filter.md) (exclude certain events based on conditions and boolean logic against the fields on the data such as equals, simple comparisons). An MVP of this functionality is needed to allow signed message data sources to be practical, more complex filters are included in the "future work" section below.
 
 Future (needed sooner than the others listed in 9 below)
+
 1. Ethereum oracles (events, contract read methods)
 1. Repeating time triggers
 1. Vega market data (i.e. prices from other markets on Vega)
-
 
 ## 8. Tracking active data sources
 
@@ -141,21 +249,21 @@ Vega will need to keep track of all "active" defined data sources that are refer
 
 Vega should consider the specific definition including filters, combinations etc. not just the primary source. So, for example, if two markets use the same public key(s) but different filters or aggregations etc. then these constitute two different data sources and each transaction that arrives signed by these public keys should only be accepted if one or more of these specific active data sources "wants" the data.
 
-Data sources that are no longer active as defined above can be discarded. Incoming data that is not emitted by an active data source (i.e. passes all filters etc. as well as matching the public key, event name, or whatever) can be ignored. 
-
+Data sources that are no longer active as defined above can be discarded. Incoming data that is not emitted by an active data source (i.e. passes all filters etc. as well as matching the public key, event name, or whatever) can be ignored.
 
 ## 9. APIs
 
 APIs should be available to:
+
 1. List active data sources and their configuration
 1. Emit an event on the event bus when a data source value is emitted.
 
-
 ## 10. Future work
 
-The following are expected to be implemented in future.
+The following are expected to be implemented in the future.
 
 a) New base data source types:
+
 1. Internal market parameters
 1. Internal market data (prices)
 1. Internal network parameters and metrics
@@ -164,6 +272,7 @@ a) New base data source types:
 1. Other formats for messages received via, e.g. signed data sources/HTTPS/... (e.g. JSON)
 
 b) Composable modifiers/combinators for data sources:
+
 1. Repeating time triggers (every n hours, every dat at 14:00, etc.)
 1. Aggregation (m of n and/or averaging, etc.) of multiple other data sources
 1. Verification of outputs of another data source by governance vote
@@ -174,14 +283,14 @@ In future, we would therefore expect arbitrary compositions of these features to
 
 ![dta source pipeline example](./data-sources.png)
 
-
 ## Examples
 
-Here are some examples of how a data source might be specified. 
+Here are some examples of how a data source might be specified.
 
-Note that these are examples *not actual specs*, please see specs for currently specified data types! 
+Note that these are examples *not actual specs*, please see specs for currently specified data types!
 
 Signed message stream filtered to return a single value:
+
 ```
 select: {
   field: 'price',
@@ -203,6 +312,7 @@ select: {
 ```
 
 Simple value, emitted at a date/time:
+
 ```
 on: { 
   timestamp: '2021-01-31T23:59:59Z', 
@@ -213,12 +323,13 @@ on: {
 ```
 
 Empty value, trigger only, i.e. trigger trading terminated at a date/time for futures:
+
 ```
 on: { timestamp: '2021-01-31T23:59:59Z' }
 ```
 
-
 In future: value from a read only call on Ethereum
+
 ```
 ethereumCall: {
   at: '2021-01-31T23:59:59Z',
@@ -228,7 +339,6 @@ ethereumCall: {
   params: []
 }
 ```
-
 
 # Acceptance criteria
 
