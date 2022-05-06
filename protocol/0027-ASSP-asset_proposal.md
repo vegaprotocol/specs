@@ -52,7 +52,7 @@ Vega will then update it's internal asset definition once the events are emmitte
 **Note on asset bundles produced but not submitted to the bridge.** If an asset update `A` is produced and never submitted to bridged chain bridge contract and subsequently an asset update `B` is produced then out of order use is a possibility (someone can submit `A` after `B` has been submitted).
 The onus is on the creator of proposal `B` to submit (and pay the gas for) for proposal `A` before their proposal `B`. (this means that `A` cannot be submitted again).
 
-### Vega chain part
+### Vega chain part
 If it changes `quantum` then this new value becomes used immediately on enactement.
 
 # Changes initiated on chain
