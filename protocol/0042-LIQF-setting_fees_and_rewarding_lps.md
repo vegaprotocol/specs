@@ -87,18 +87,30 @@ A(n) <- A(n-1) x (n-1)/n + T(n)/n.
 ```
 The g`r`owth of the market is then 
 ```
-r =  (A(n)-A(n-1))/A(n-1)
+r = 0
+if A(n) > 0 and A(n-1) > 0
+    r =  (A(n)-A(n-1))/A(n-1),
 ```
 Thus at the end of period `n` update
 ```
-LP i virtual stake <- max(LP i physical stake, (1 + r) x (LP i virtual stake)).
+if A(n) = 0 or A(n-1) = 0
+    LP i virtual stake <- LP i physical stake
+else
+    LP i virtual stake <- max(LP i physical stake, (1 + r) x (LP i virtual stake)).
 ```
 Thus the virtual stake of an LP will always be at least their physical stake.
+Moreover, in situations when trading volume was zero in the previous period or if it is zero in the current period then we don't define the growth `r` and so in such extreme situations the virtual stake reverts to the physical stake.
 
 The equity like share for each LP is then
 ```
 (LP i equity) = (LP i virtual stake) / (sum over j from 1 to N of (LP j virtual stake)).
 ```
+
+The average entry valuation (which should be reported by the APIs) is defined, at the time of change of an LP commitment as:
+```
+(Avg entry valuation i) = sum over j from 1 to N of (LP j virtual stake)
+```
+
 
 There is a [Google sheet - requiring Vega login](https://docs.google.com/spreadsheets/d/14AgZwa6gXVBUFBUUOmB7Y9PsG8D4zmYN/edit#gid=886563806) showing this.
 
