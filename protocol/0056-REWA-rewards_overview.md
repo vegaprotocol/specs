@@ -65,8 +65,6 @@ Metrics will be calculated using the [decimal precision of the settlement asset]
 
 In the *first* epoch during which the market total [trade value for fee purposes](0029-FEES-fees.md) since market creation exceeds `quantum x rewards.marketCreationQuantumMultiple` - if there is balance in the reward account for the corresponding reward type for the market, the proposer of the market gets paid in the reward payout asset. 
 
-If at the end of the epoch during the market total goes over the threshold there is no balance in the market creation reward account - the proposer will not get the reward - the window of opportunity for this reward requires that there is balance in the reward account at the epoch during which the threshold of trading has been crossed. 
-
 Similarly to the other metrics market creation may be paid in more than one asset if someone funds a reward account with the corresponding metric type and market in scope with an arbitrary payout asset. 
 
 NB: if a market is being recreated from checkpoint, and trading in it is restarted - the tracking of trading value restarts from 0, regardless of how much trading was done before and if a proposer bonus has been given before the checkpoint was taken. Therefore after the checkpoint reload, the proposer may be eligible to the market proposer bonus again once the market trading value goes above the threshold for the first time.
@@ -75,25 +73,24 @@ NB: if a market is being recreated from checkpoint, and trading in it is restart
 
 ### Funding reward accounts (<a name="0056-REWA-001" href="#0056-REWA-001">0056-REWA-001</a>)
 
-Trading reward accounts are defined by a triplet: [`payout_asset, market_in_scope, metric`].
+Trading reward accounts are defined by a pair: [`payout_asset, dispatch_strategy`].
 
-There are two assets configured on the Vega chain: $VEGA and USDT. There are `4` reward metrics. Given there are 2 markets trading in vega, there could be potentially `2 x 4 x 2 = 16` reward accounts. 
+There are two assets configured on the Vega chain: $VEGA and USDT. 
 
-More specifically, for each metric `i=1,2,3,4` there will be
-```
-Market  | metric   | reward asset 
---------|----------|--------------|
-market 1| metric i | USDT
-market 1| metric i | $VEGA
-market 2| metric i | USDT 
-market 2| metric i | $VEGA
-```
+Setup a recurring transfer of 1000 $VEGA with the following dispatch strategy: asset=USDT, metric=DISPATCH_METRIC_TAKER_FEES_PAID, markets=[].
+Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next epoch generate fees in the markets with the following distribution:
+Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transafer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 200, market2 is funded with 300 and market3 is funded with 500. 
 
-A party with USDT balance can do one-off transfers to `Market 1 | metric i | USDT` and `Market 2 | metric i | USDT` for `i=1,2,3,4`. 
+Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts. 
 
-Meaning a party is funding a USDT reward account paying a reward in the asset `USDT` for a market for the metric i=1,2,3,4.
+### Funding reward accounts - with markets in scope (<a name="0056-REWA-002" href="#0056-REWA-002">0056-REWA-002</a>)
+There are two assets configured on the Vega chain: $VEGA and USDT. 
 
-A party with $VEGA balance can set up a periodic tranfers to `Market 1 | metric i | $VEGA` and `Market 2 | metric i | $VEGA` for `i=1,2,3,4`. 
+Setup a recurring transfer of 1000 $VEGA with the following dispatch strategy: asset=USDT, metric=DISPATCH_METRIC_TAKER_FEES_PAID, markets=[market1, market2].
+Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next epoch generate fees in the markets with the following distribution:
+Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transafer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 400, market2 is funded with 600 and market3 is funded with 0. 
+
+Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts. 
 
 ### Distributing fees paid rewards (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
 
