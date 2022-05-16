@@ -28,7 +28,7 @@ First, we produce a list of pairs which capture committed liquidity of each LP t
 ```
 where `N` is the number of liquidity providers who have committed to supply liquidity to this market. Note that `LP-1-liquidity-fee-factor <= LP-2-liquidity-fee-factor <= ... <= LP-N-liquidity-fee-factor` because we demand this list of pairs to be sorted in this way. 
 
-We now find the smallest integer `k` such that `[target stake] < sum from i=1 to k of [LP-stake-i]`. In other words we want in this ordered list to find the liquidity providers that supply the liquidity that's required. If no such `k` exists we set `k=N`.
+We now find the smallest integer `k` such that `[target stake] < sum from i=1 to k of [LP-i-stake]`. In other words we want in this ordered list to find the liquidity providers that supply the liquidity that's required. If no such `k` exists we set `k=N`.
 
 Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liquidity-fee-factor`. 
 
