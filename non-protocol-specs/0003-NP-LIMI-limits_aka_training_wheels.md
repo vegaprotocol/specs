@@ -96,8 +96,8 @@ This is primarily for liquidity providers and other sophisticated participants a
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `governance.proposal.asset.createFrom`       | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which asset creation is allowed.  | 
-| `governance.proposal.market.createFrom`      | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which market creation is allowed.  | 
+| `limits.assets.proposeEnabledFrom`       | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which asset creation is allowed.  | 
+| `limits.markets.proposeEnabledFrom`      | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which market creation is allowed.  | 
 
 
 # Acceptance Criteria
