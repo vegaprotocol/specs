@@ -147,5 +147,4 @@ It must be possible to add to the data node APIs that return the result of calcu
 ## Data synchronisation
 
 1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0011-NP-DANO-001" href="#0011-NP-DANO-001">0011-NP-DANO-001</a>)
-1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data after a software upgrade  (<a name="0011-NP-DANO-002" href="#0011-NP-DANO-002">0011-NP-DANO-002</a>)
 1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network  (<a name="0011-NP-COSMICELEVATOR-003" href="#0011-NP-COSMICELEVATOR-003">0011-NP-COSMICELEVATOR-003</a>)
