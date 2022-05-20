@@ -3,7 +3,7 @@
 # Acceptance Criteria
 
 ## Open position data
-- Given the following scenarios, applies the rules described in functionality to update the open position size (check new open position size is as expected given the rules and the old open position size): (E.G. REWORK)
+- Verify that the open position is correct after the following changes:
   - [ ] Open long position, trades occur increasing long position (<a name="0006-POSI-001" href="#0006-POSI-001">0006-POSI-001</a>)
   - [ ] Open long position, trades occur decreasing long position (<a name="0006-POSI-002" href="#0006-POSI-002">0006-POSI-002</a>)
   - [ ] Open short position, trades occur increasing (greater abs(size)) short position(<a name="0006-POSI-003" href="#0006-POSI-003">0006-POSI-003</a>)
@@ -19,7 +19,7 @@
 - [ ] Does not change position size for a wash trade (buyer = seller) (<a name="0006-POSI-014" href="#0006-POSI-014">0006-POSI-014</a>)
 
 ## Open orders data
-- Given the following scenarios, applies the rules described in functionality to update the net buy order amounts (check new size is as expected given the rules and the old size).
+- Verify that the net buy order amounts are correct after the following changes:
   - [ ] No active buy orders, a new buy order is added to the order book (<a name="0006-POSI-016" href="#0006-POSI-016">0006-POSI-016</a>)
   - [ ] Active buy orders, a new buy order is added to the order book (<a name="0006-POSI-017" href="#0006-POSI-017">0006-POSI-017</a>)
   - [ ] Active buy orders, an existing buy order is amended which increases its size. (<a name="0006-POSI-018" href="#0006-POSI-018">0006-POSI-018</a>)
