@@ -55,6 +55,8 @@ For Sweetwater, the policies we enforce are relatively simple:
 <min_proposing_tokens> = 200000
 ```
 
+Any changes of the parameters are enforced in the next epoch. If a parameter is changed several times within an epoch, the last change is the one that counts.
+
 - Any tokenholder with more than `<min_voting_tokens>` tokens has `<num_votes>` voting attempts per epoch
  and proposal, i.e., they can change their mind `<num_votes>-1` times in one epoch. This means, a transaction is
  pre_block rejected, if there are `<num_votes>` or more votes on the same proposal in the blockchain in this epoch, and
