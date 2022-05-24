@@ -14,11 +14,11 @@ spam.pow.increaseDifficulty = 0 (range: 0/1)
 If there is a governance vote on parameter changes taking effect at blockheight h, then the parameter is valid for all PoWs that are tied to a block of height h or later; that is, old pre-computations remain valid, and only new ones need to respect the new parameters. If spam.pow.numberOfPastBlocks is changed at height h, the parameter is enforced starting at block h+spam.pow.numberOfPastBlocks (being the new value). 
 There is a (theoretical) possibility that a parameter is changed repeatedly so fast that the new parameter is not enforced before it is changed again. To avoid programming complexity, the intermediate parameter is ignored, i.e., we keep the current parameter until the new onw is valid.
 Example: Suppose, we have numberOfPastBlocks = 100, and difficulty =15
- If we change difficulty to 20 in blockheight 20.000, then all transactions tied to block 20.000 or later need to solve difficulty 20
- However, if we then change the difficulty to 25 at blockheight 20.005, and the current blockheight is 19990, then we keep difficulty
- 20 for all transactions tied to block 20004 or earlier, and require 25 for block 20.005 or later. 
+ If we change difficulty to 20 in blockheight 20 000, then all transactions tied to block 20 000 or later need to solve difficulty 20
+ However, if we then change the difficulty to 25 at blockheight 20 005, and the current blockheight is 19 990, then we keep difficulty
+ 20 for all transactions tied to block 20 004 or earlier, and require 25 for block 20 005 or later. 
  
- Note: The later is done to se don't need to do complext implementations for special cases that will never occur in reality; we need to store the current parameter, and a blockheight when it switches to a new one, and no intermediates. A way to avoid that would be to make parameter changes valid immediatelly; this however would cause special cases if users need to throw away transactions and recompute the PoW, which this approach avoids.
+ Note: The later is done to se don't need to do complex implementations for special cases that will never occur in reality; we need to store the current parameter, and a blockheight when it switches to a new one, and no intermediates. A way to avoid that would be to make parameter changes valid immediatelly; this however would cause special cases if users need to throw away transactions and recompute the PoW, which this approach avoids.
 
 To authorize a transaction, it needs to be tied to a past block using a proof of work.
 To this end, the hash of the block, a transaction identifier, are fed into a hash  function together with a padding; the proof of work is to find a padding that results in a hash that ends on `spam.pow.difficulty` zeroes.
