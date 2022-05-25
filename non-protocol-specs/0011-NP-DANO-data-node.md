@@ -24,7 +24,7 @@ It should be possible to configure the data node so that all data of certain typ
 
 There will be a "default" configuration for what's considered "minimal useful" data node. 
 
-## Balances and transfers 
+## Balances and transfers
 
 Store all
 ```
@@ -65,7 +65,7 @@ TransferResponse {
 Note that withdrawals and deposits (to / from other chains) are visible from the transfer and balance data. 
 
 
-## Stake / Delegations / Validator Score history 
+## Stake / Delegations / Validator Score history
 
 All changes to staking and delegation must be stored. From this, the state at any time can be provided. 
 
@@ -76,14 +76,14 @@ Validator performance metrics.
 Rewards per epoch per Vega ID (party, epoch, asset, amount, percentage of total, timestamp). 
 
 
-## Governance proposal history 
+## Governance proposal history
 
 All proposals ever submitted + votes (asset, network parameter change, market).
 
 
 ## Trading Related Data
 
-### Market Data 
+### Market Data
 - as [specified in](0021-market-data-spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this. 
 
 ### Market lifecycle events
@@ -134,10 +134,17 @@ Whatever the candle data are, store them at the resolution of every blockchain t
 
 Store the orders at the configured resolution. 
 
-### APIs for historical data in a shape that is suitable for clients 
+### APIs for historical data in a shape that is suitable for clients
 
 It must be possible to augment APIs so data returned is in a shape and size that is approapriate for clients. The exact changes to APIs to be worked out as part of an on going process, and it wont be specified here.
 
-### APIs for server side calculations 
+### APIs for server side calculations
 
 It must be possible to add to the data node APIs that return the result of calculations on the data node (in addition ot historical data). These calculations may use historical or real time core data but are not avalilble in the core API as they would hinder performance. e.g. Estimates / Margin / risk caclulations
+
+# Acceptance criteria
+
+## Data synchronisation
+
+1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0011-NP-DANO-001" href="#0011-NP-DANO-001">0011-NP-DANO-001</a>)
+1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network  (<a name="0011-NP-COSMICELEVATOR-003" href="#0011-NP-COSMICELEVATOR-003">0011-NP-COSMICELEVATOR-003</a>)
