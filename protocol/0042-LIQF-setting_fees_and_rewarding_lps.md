@@ -124,7 +124,7 @@ On every trade, liquidity fee should be collected immediately into an account fo
 
 This account is not accessible by liquidity providers until the fee is distributed to them according to the mechanism below.
 
-A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the fees are transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the fees are distributed either immediately upon collection or at then end of a block. 
+We will create a new network parameter (which can be 0 in which case fees are transferred at the end of next block) called `market.liquidity.providers.fee.distributionTimeStep` which will define how frequently fees are distributed to a liquidity provider's general account for the market. 
 
 The liquidity fees are distributed pro-rata depending on the `LP i equity_share` at a given time. 
 
@@ -151,7 +151,7 @@ LP 2 eq share = 0.17
 LP 3 eq share = 0.07
 LP 3 eq share = 0.33
 
-When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
+Trade happened, and the fee bucket contains `103.5 ETH`. Liquidity fee should be collected immediately into the following LP account:
 ```
 67.275 ETH from LP 1's LP account to LP 1's margin account 
 25.875 ETH from LP 2's LP account to LP 1's margin account 
