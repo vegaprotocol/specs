@@ -124,7 +124,7 @@ On every trade, liquidity fee should be collected immediately into an account fo
 
 This account is not accessible by liquidity providers until the fee is distributed to them according to the mechanism below.
 
-We will create a new network parameter (which can be 0 in which case fees are transferred at the end of next block) called `market.liquidity.providers.fee.distributionTimeStep` which will define how frequently fees are distributed to a liquidity provider's general account for the market. 
+A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the fees are transferred to the liquidity provider's general account for the relevant asset. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the fees are distributed either immediately upon collection or at then end of a block. 
 
 The liquidity fees are distributed pro-rata depending on the `LP i equity_share` at a given time. 
 
