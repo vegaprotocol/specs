@@ -120,7 +120,7 @@ There is a [Google sheet - requiring Vega login](https://docs.google.com/spreads
 
 ### Distributing fees
 
-On every trade, liquidity fee should be collected immediately into an account for each liquidity provider (call it LP fee account). Each party will have an LP fee account on every market on which they committed liquidity by providing LP stake. 
+Once there is a trade happens, liquidity fee should be collected immediately into an account for each liquidity provider (we call it LP account) according to their share of that fee; therefore any LP provider who commited later than that (delayed LP) will not get the liquidity fee if there is no trade happened after the liquidity commitment has been made till the next `market.liquidity.providers.fee.distributionTimeStep`
 
 This account is not accessible by liquidity providers until the fee is distributed to them according to the mechanism below.
 
@@ -136,7 +136,6 @@ LP 1 eq share = 0.65
 LP 2 eq share = 0.25
 LP 3 eq share = 0.1
 ```
-
 Trade happened, and the fee bucket contains `103.5 ETH`. Liquidity fee should be collected immediately into the following LP account:
 
 0.65 x 103.5 = 67.275 ETH to LP 1's LP account
@@ -151,11 +150,11 @@ LP 2 eq share = 0.17
 LP 3 eq share = 0.07
 LP 3 eq share = 0.33
 
-Trade happened, and the fee bucket contains `103.5 ETH`. Liquidity fee should be collected immediately into the following LP account:
+When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 ```
 67.275 ETH from LP 1's LP account to LP 1's margin account 
-25.875 ETH from LP 2's LP account to LP 1's margin account 
-10.350 ETH from LP 3's LP account to LP 1's margin account 
+25.875 ETH from LP 2's LP account to LP 2's margin account 
+10.350 ETH from LP 3's LP account to LP 3's margin account 
 ```
 
 ### APIs for fee splits and payments
