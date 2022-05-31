@@ -122,7 +122,7 @@ There is a [Google sheet - requiring Vega login](https://docs.google.com/spreads
 
 On every trade, liquidity fee should be collected immediately into an account for each liquidity provider (call it LP fee account). Each party will have an LP fee account on every market on which they committed liquidity by providing LP stake. 
 
-This account is not accessible by liquidity providers until the fee is distributed to them according to the below mechanism.
+This account is not accessible by liquidity providers until the fee is distributed to them according to the mechanism below.
 
 We will create a new network parameter (which can be 0 in which case fees are transferred at the end of next block) called `market.liquidity.providers.fee.distributionTimeStep` which will define how frequently fees are distributed to a liquidity provider's general account for the market. 
 
