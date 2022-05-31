@@ -26,17 +26,16 @@ Point two requires that at load time, each node calculates the hash of the check
 # Creating a checkpoint
 Information to store:
 - All [network parameters](../protocol/0054-NETP-network_parameters.md), including those defined [below](#network-parameters).
-- All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition). Insurance pool balance from the markets will be summed up per asset and balance per asset stored.
-- All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted*.
+- All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition). 
+Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_overview.md), [LP committed liquidity](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and [LP fee pool](../protocol/0029-FEES-fees.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market. 
+- All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted* but not those where the market already started trading and reached *trading terminated* state. 
 - All [asset proposals](../protocol/0028-GOVE-governance.md) that have been *accepted*.
 - All delegation info.
-- On chain treasury balances and on-chain reward functions / parameters (for 💧 Sweetwater this is only the staking and delegation reward account balance and network params that govern [Staking and delegation](../protocol/0056-REWA-rewards_overview.md) ).
-- All reward balances accrued by all parties but not yet transferred to their general account due to payout delays.
-- [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. See exception below about signed-for-withdrawal. Does *not* include the "staking" account balance.
-- Fee pools: Fees are paid into per market or per asset pools and distributed periodically.
+- On chain treasury balances and on-chain rewards for staking and delegation [Staking and delegation](../protocol/0056-REWA-rewards_overview.md).
+- [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. 
 - Event ID of the last processed deposit event for all bridged chains
-- Withdrawal transaction bundles for all bridged chains for all ongoing withdrawals (parties with non-zero "signed-for-withdrawal" balances)
-- hash of the previous block, block number and transaction id of the block from which the snapshot is derived
+- Withdrawal transaction bundles for all bridged chains.
+- Hash of the previous block, block number and transaction id of the block from which the snapshot is derived
 - ERC20 collateral:
   - last block height of a confirmed erc20 deposit on the ethereum chain with `number_of_confirmations`. [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
   - all pending erc20 deposits (not confirmed before this block) [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#deposits)
@@ -47,17 +46,11 @@ Information to store:
   - all the pending staking events [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
 
 
-When a checkpoint is created, each validator should calculate its hash and submit this as a transaction to the chain(*).
-
-
 When to create a checkpoint:
 - if `current_time - network.checkpoint.timeElapsedBetweenCheckpoints > time_of_last_full_checkpoint`
-- if there was withdrawal
-Withdrawal checkpoint can be just a delta containing the balance change + hash of previous checkpoint (either delta or full).
 
 Information we explicitly don't try to checkpoint:
-- Positions, limit orders, pegged orders or any order book data.
-- Balances in the "signed for withdrawal" account.
+- Positions, limit orders, pegged orders or any order book data. LP commitments. 
 - Market and asset proposals where the voting period hasn't ended.
 
 When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain, so that non-validating parties can trust the hash being restored represents truly the balances.
@@ -82,9 +75,7 @@ The state will be restored in this order:
       -  either the rest of the asset definition matches exactly in which case move to next asset coming from restore file.
       -  or any of the part of the definition differ, in which case ignore the entire restore transaction, the node should stop with an error.
     2. If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then restore the asset.
-3. Load the accepted market proposals.
-    - If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
-    - In case `now + net_param_min_enact >= trading_terminated` set the status to cancelled.
+3. Load the accepted market proposals. If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
 4. Replay events from bridged chains
    - Concerning bridges used to deposit collateral for trading, replay from the last block specified in the checkpoint and reload the
      pending deposits from the checkpoint so the network can start again to confirm these events.
@@ -125,9 +116,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 6. 2. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 tUSD. The party has "signed for withdrawal" 100.
 6. 3. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 tUSD.
 
-## 💧 Test case 2: Orders and positions are *not* maintained across resets, balances are (<a name="0005-NP-LIMN-008" href="#0005-NP-LIMN-008">0005-NP-LIMN-008</a>)
+## 💧 Test case 2: Orders and positions are *not* maintained across resets, balances are and *accepted* markets are (<a name="0005-NP-LIMN-008" href="#0005-NP-LIMN-008">0005-NP-LIMN-008</a>)
 1. There is an asset tUSD and no asset proposals.
-1. There is a market with status active, no other markets and no market proposals.
+1. There is a market `id_xxx` with status active, no other markets and no market proposals.
 1. There are two parties: one LP for the market and one party that is not an LP.
 1. The LP has a long position on `LP_long_pos`.
 1. The other party has a short position `other_short_pos = LP_long_pos`.
@@ -139,10 +130,11 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset tUSD.
-1. The party LP has a `tUSD` general account balance equal to `LP_gen_bal + LP_margin_bal + LP_bond_bal`.
+1. There is a market `id_xxx` in status "pending".
+1. The party LP has a `tUSD` general account balance equal to `LP_gen_bal + LP_margin_bal`.
+1. The party LP has `LP_bond_bal` committed to market `id_xxx`.
 1. The other party has a `tUSD` general account balance equal to `other_gen_bal + other_margin_bal`.
-1. There is no market in any state and hence neither party has any positions or orders.
-1. There are no market proposals.
+
 
 
 
@@ -151,7 +143,8 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
-1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD and has enactment date 1 year in the future. The market has id `id_xxx`.
+1. A market is proposed by a party called `LP party` and has enactment date 1 year in the future. The market has id `id_xxx`.
+1. `LP party` commits a stake of 1000 tUSD to `id_xxx`.
 1. Other parties vote on the market and the proposal is accepted (passes rules for vote majority and participation). The market has id `id_xxx`.
 1. The market is in `pending` state, see [market lifecycle](../protocol/0043-MKTL-market_lifecycle.md).
 1. Another party places a limit sell order on the market and has `other_gen_bal`, margin balance `other_margin_bal`.
@@ -167,7 +160,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
-1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD. The voting period ends 1 year in the future. The enactment date is 2 years in the future.
+1. A market is proposed by a party called `LP party`. 
+1. `LP party` commits a stake of 1000 tUSD. 
+1. The voting period ends 1 year in the future. The enactment date is 2 years in the future.
 1. Enough time passes (but less than 1 year) so a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
@@ -177,8 +172,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 ### 💧 Test case 3.3: Market is proposed, voting has closed, market rejected, proposal not restored (<a name="0005-NP-LIMN-011" href="#0005-NP-LIMN-011">0005-NP-LIMN-011</a>)
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
-1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
-1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD. The voting period ends 1 minute in the future. The enactment date is 2 years in the future.
+1. There is a party a party called `LP party` with general balance of `10 000` tUSD.
+1. A market is proposed by a party called `LP party`.
+1. The voting period ends 1 minute in the future. The enactment date is 2 years in the future.
 1. More than 1 minute has passed and the minimum participation threshold hasn't been met. The market proposal status is `rejected`.
 1. Enough time passes after the market has been rejected so a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
@@ -191,8 +187,8 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
-1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD.
-2. Checkpoint is taken during voting period
+1. A market is proposed by a party called `LP party`.
+2. Checkpoint is taken during voting period.
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset tUSD.
@@ -203,7 +199,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
-1. A market is proposed by a party called `LP party` that commits a stake of 1000 tUSD.
+1. A market is proposed by a party called `LP party`.
 2. Checkpoint is taken during voting period
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
@@ -221,15 +217,6 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 7. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is no market and there are no market proposals.
 1. The party has general account balance in tUSD of `0` and The party has "signed for withdrawal" `100`.
-
-### 💧 Test case 3.7: Suspended markets retain status after restore (<a name="0005-NP-LIMN-015" href="#0005-NP-LIMN-015">0005-NP-LIMN-015</a>)
-1. A market is proposed by a party that commits a stake.
-2. Market becomes Active as enactment date reached and vote successful
-3. Traded market falls into Suspended status by either Price monitoring or liquidity monitoring trigger, or product lifecycle trigger
-2. Checkpoint is taken
-1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
-1. Market can be seen to be still Suspended.
 
 ## 💧 Test case 4: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0005-NP-LIMN-016" href="#0005-NP-LIMN-016">0005-NP-LIMN-016</a>)
 1. A party has tUSD general account balance of 100 tUSD.

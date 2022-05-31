@@ -3,8 +3,6 @@
 ## Acceptance criteria
 
 1. [ ] If risk factors have been updated, the margin levels for all market participants are recalculated. (<a name="0010-MARG-001" href="#0010-MARG-001">0010-MARG-001</a>)
-1. [ ] There is no threshold for significant order book changes, and a new order adds or removes volume to the order book, margins are recalculated for all participants. (<a name="0010-MARG-002" href="#0010-MARG-002">0010-MARG-002</a>)
-1. [ ] There is a threshold for significant order book changes, and a new order adds or removes volume to the order book that makes a change that doesn't exceed the threshold, margins are not recalculated for any participants. (<a name="0010-MARG-003" href="#0010-MARG-003">0010-MARG-003</a>) 
 1. [ ] If the mark price changes, margins are recalculated for all participants (<a name="0010-MARG-004" href="#0010-MARG-004">0010-MARG-004</a>)
 1. [ ] If a trader's open position changes their margins are recalculated.  (<a name="0010-MARG-005" href="#0010-MARG-005">0010-MARG-005</a>)
 1. [ ] If a trader's open orders change their margins are recalculated  (<a name="0010-MARG-006" href="#0010-MARG-006">0010-MARG-006</a>)

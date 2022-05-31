@@ -13,6 +13,7 @@ Algorithm 1:
 - [ ] Any transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade. (<a name="0009-MRKP-003" href="#0009-MRKP-003">0009-MRKP-003</a>)
 - [ ] A transaction that doesn't result in a trade does not cause the mark price to change.  (<a name="0009-MRKP-004" href="#0009-MRKP-004">0009-MRKP-004</a>)
 - [ ] The initial mark price for a market is specified by a market parameter.  (<a name="0009-MRKP-005" href="#0009-MRKP-005">0009-MRKP-005</a>)
+- [ ] The mark price must be using market decimal place setting (<a name="0009-MRKP-006" href="#0009-MRKP-006">0009-MRKP-006</a>)
 
 # Guide-level explanation
 The *Mark Price* represents the "current" market value for an instrument that is being traded on a market on Vega. It is a calculated value primarily used to value trader's open portfolios against the prices they executed their trades at. Specifically, it is used to calculate the cash flows for [mark-to-market settlement](./0003-MTMK-mark_to_market_settlement.md).
@@ -57,3 +58,4 @@ The mark price is set to the higher / lower of the last traded price, bid/offer.
 
  ### 5. Defined as part of the product
   The *Mark Price* may be calculated using an algorithm defined by the product -- and 'selected' by a market parameter.
+
