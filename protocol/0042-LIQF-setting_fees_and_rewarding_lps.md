@@ -148,13 +148,13 @@ Then LP 4 made a delayed LP commitment, and updated share as below:
 LP 1 eq share = 0.43
 LP 2 eq share = 0.17
 LP 3 eq share = 0.07
-LP 3 eq share = 0.33
+LP 4 eq share = 0.33
 
 When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 ```
 67.275 ETH from LP 1's LP account to LP 1's margin account 
-25.875 ETH from LP 2's LP account to LP 1's margin account 
-10.350 ETH from LP 3's LP account to LP 1's margin account 
+25.875 ETH from LP 2's LP account to LP 2's margin account 
+10.350 ETH from LP 3's LP account to LP 3's margin account 
 ```
 
 ### APIs for fee splits and payments
