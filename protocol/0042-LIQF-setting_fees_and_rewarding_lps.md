@@ -32,12 +32,6 @@ We now find the smallest integer `k` such that `[target stake] < sum from i=1 to
 
 Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liquidity-fee-factor`. 
 
-## Delayed payout of LP fees
-
-For delayed payout of LP fees, the delayed LP fees go into a per LP per market account and are paid out from there.
-
-LPs with very small satkes will not get anything from rounding. 
-
 ### Example for fee setting mechanism
 In the example below there are 3 liquidity providers all bidding for their chosen fee level. The LP orders they submit are sorted into increasing fee order so that the lowest fee bid is at the top and the highest is at the bottom. The fee level chosen for the market is derived from the liquidity commitment of the market (`target stake`) and the amount of stake committed from each bidder. Vega processes the LP orders from top to bottom by adding up the commitment stake as it goes until it reaches a level greater than or equal to the `target stake`. When that point is reached the fee used is the fee of the last liquidity order processed.
 ``` 
@@ -125,25 +119,42 @@ There is a [Google sheet - requiring Vega login](https://docs.google.com/spreads
 **Warning** the above will be decimal calculations so the above checks will only be true up to a rounding errors.
 
 ### Distributing fees
-The liquidity fee is collected into either a per-market "bucket" belonging to liquidity providers for that market or into an account for each liquidity provider, according to their share of that fee. This account is not accessible by liquidity providers until the fee is distributed to them according to the below mechanism.
 
-We will create a new network parameter (which can be 0 in which case fees are transferred at the end of next block) called `liquidity_providers_fee_distribition_time_step` which will define how frequently fees are distributed to a liquidity provider's general account for the market. 
+Once there is a trade happens, liquidity fee should be collected immediately into an account for each liquidity provider (we call it LP account) according to their share of that fee; therefore any LP provider who commited later than that (delayed LP) will not get the liquidity fee if there is no trade happened after the liquidity commitment has been made till the next `market.liquidity.providers.fee.distributionTimeStep`
+
+This account is not accessible by liquidity providers until the fee is distributed to them according to the below mechanism.
+
+We will create a new network parameter (which can be 0 in which case fees are transferred at the end of next block) called `market.liquidity.providers.fee.distributionTimeStep` which will define how frequently fees are distributed to a liquidity provider's general account for the market. 
 
 The liquidity fees are distributed pro-rata depending on the `LP i equity_share` at a given time. 
 
 #### Example
-The fee bucket contains `103.5 ETH`. We have `3` LPs with equity shares:
+We have `4` LPs with equity shares:
 share as below
 ```
 LP 1 eq share = 0.65
 LP 2 eq share = 0.25
 LP 3 eq share = 0.1
 ```
-When the time defined by ``liquidity_providers_fee_distribution_time_step` elapses we do transfers:
+Trade happened, and the fee bucket contains `103.5 ETH`. Liquidity fee should be collected immediately into the following LP account:
+
+0.65 x 103.5 = 67.275 ETH to LP 1's LP account
+0.25 x 103.5 = 25.875 ETH to LP 2's LP account
+0.10 x 103.5 = 10.350 ETH to LP 3's LP account
+
 ```
-0.65 x 103.5 = 67.275 ETH to LP 1's margin account
-0.25 x 103.5 = 25.875 ETH to LP 2's margin account
-0.10 x 103.5 = 10.350 ETH to LP 3's margin account
+Then LP 4 made a delayed LP commitment, and updated share as below:
+
+LP 1 eq share = 0.43
+LP 2 eq share = 0.17
+LP 3 eq share = 0.07
+LP 3 eq share = 0.33
+
+When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
+```
+67.275 ETH from LP 1's LP account to LP 1's margin account 
+25.875 ETH from LP 2's LP account to LP 1's margin account 
+10.350 ETH from LP 3's LP account to LP 1's margin account 
 ```
 
 ### APIs for fee splits and payments
@@ -173,5 +184,6 @@ When the time defined by ``liquidity_providers_fee_distribution_time_step` elaps
 - [ ] All liquidity providers in the market receive a greater than zero amount of liquidity fee. (<a name="0042-LIQF-010" href="#0042-LIQF-010">0042-LIQF-010</a>)
 - [ ] The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-all-trades` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
 - [ ] Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
-- [ ] If a market has `liquidity_providers_fee_distribution_time_step` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balance in the pool used to cumulate LP fees. (<a name="0042-LIQF-013" href="#0042-LIQF-013">0042-LIQF-013</a>)
+- [ ] If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balance in the pool used to cumulate LP fees. (<a name="0042-LIQF-013" href="#0042-LIQF-013">0042-LIQF-013</a>)
+
 
