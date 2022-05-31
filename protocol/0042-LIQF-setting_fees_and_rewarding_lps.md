@@ -148,7 +148,7 @@ Then LP 4 made a delayed LP commitment, and updated share as below:
 LP 1 eq share = 0.43
 LP 2 eq share = 0.17
 LP 3 eq share = 0.07
-LP 3 eq share = 0.33
+LP 4 eq share = 0.33
 
 When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 ```
