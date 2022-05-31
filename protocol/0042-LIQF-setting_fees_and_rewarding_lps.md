@@ -136,7 +136,7 @@ LP 1 eq share = 0.65
 LP 2 eq share = 0.25
 LP 3 eq share = 0.1
 ```
-Trade happened, and the fee bucket contains `103.5 ETH`. Liquidity fee should be collected immediately into the following LP account:
+Trade happened, and the trade value for fee purposes multiplied by the liquidity fee factor is `103.5 ETH`. The following amounts be collected immediately into the LP fee accounts for the market:
 
 0.65 x 103.5 = 67.275 ETH to LP 1's LP account
 0.25 x 103.5 = 25.875 ETH to LP 2's LP account
