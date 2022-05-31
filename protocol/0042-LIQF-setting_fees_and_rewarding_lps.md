@@ -120,11 +120,11 @@ There is a [Google sheet - requiring Vega login](https://docs.google.com/spreads
 
 ### Distributing fees
 
-Once there is a trade happens, liquidity fee should be collected immediately into an account for each liquidity provider (we call it LP account) according to their share of that fee; therefore any LP provider who commited later than that (delayed LP) will not get the liquidity fee if there is no trade happened after the liquidity commitment has been made till the next `market.liquidity.providers.fee.distributionTimeStep`
+On every trade, liquidity fee should be collected immediately into an account for each liquidity provider (call it LP fee account). Each party will have an LP fee account on every market on which they committed liquidity by providing LP stake. 
 
 This account is not accessible by liquidity providers until the fee is distributed to them according to the mechanism below.
 
-We will create a new network parameter (which can be 0 in which case fees are transferred at the end of next block) called `market.liquidity.providers.fee.distributionTimeStep` which will define how frequently fees are distributed to a liquidity provider's general account for the market. 
+A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the fees are transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the fees are distributed either immediately upon collection or at then end of a block. 
 
 The liquidity fees are distributed pro-rata depending on the `LP i equity_share` at a given time. 
 
@@ -136,7 +136,7 @@ LP 1 eq share = 0.65
 LP 2 eq share = 0.25
 LP 3 eq share = 0.1
 ```
-Trade happened, and the fee bucket contains `103.5 ETH`. Liquidity fee should be collected immediately into the following LP account:
+Trade happened, and the trade value for fee purposes multiplied by the liquidity fee factor is `103.5 ETH`. The following amounts be collected immediately into the LP fee accounts for the market:
 
 0.65 x 103.5 = 67.275 ETH to LP 1's LP account
 0.25 x 103.5 = 25.875 ETH to LP 2's LP account
@@ -148,13 +148,13 @@ Then LP 4 made a delayed LP commitment, and updated share as below:
 LP 1 eq share = 0.43
 LP 2 eq share = 0.17
 LP 3 eq share = 0.07
-LP 4 eq share = 0.33
+LP 3 eq share = 0.33
 
 When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 ```
 67.275 ETH from LP 1's LP account to LP 1's margin account 
-25.875 ETH from LP 2's LP account to LP 2's margin account 
-10.350 ETH from LP 3's LP account to LP 3's margin account 
+25.875 ETH from LP 2's LP account to LP 1's margin account 
+10.350 ETH from LP 3's LP account to LP 1's margin account 
 ```
 
 ### APIs for fee splits and payments
@@ -184,7 +184,6 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - [ ] All liquidity providers in the market receive a greater than zero amount of liquidity fee. (<a name="0042-LIQF-010" href="#0042-LIQF-010">0042-LIQF-010</a>)
 - [ ] The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-all-trades` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
 - [ ] Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
-- [ ] If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balance in the pool used to cumulate LP fees. (<a name="0042-LIQF-013" href="#0042-LIQF-013">0042-LIQF-013</a>)
-
+- [ ] If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
 
 
