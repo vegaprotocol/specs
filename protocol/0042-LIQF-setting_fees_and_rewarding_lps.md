@@ -120,7 +120,7 @@ There is a [Google sheet - requiring Vega login](https://docs.google.com/spreads
 
 ### Distributing fees
 
-Once there is a trade happens, liquidity fee should be collected immediately into an account for each liquidity provider (we call it LP account) according to their share of that fee; therefore any LP provider who commited later than that (delayed LP) will not get the liquidity fee if there is no trade happened after the liquidity commitment has been made till the next `market.liquidity.providers.fee.distributionTimeStep`
+Once there is a trade happens, liquidity fee should be collected immediately into an account for each liquidity provider (call it LP fee account). Each party will have an LP fee account on every market on which they committed liquidity by providing LP stake. 
 
 This account is not accessible by liquidity providers until the fee is distributed to them according to the below mechanism.
 
