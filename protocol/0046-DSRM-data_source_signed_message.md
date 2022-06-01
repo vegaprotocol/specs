@@ -102,7 +102,7 @@ Where possible, this should be done before the transaction is included in a bloc
         1. Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
         1. Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
 1. `SubmitData` transactions can be submitted by any public key as long as the data included in the transaction is signed by at least one of the keys included in an active signed message data source definition
-    1. `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRC-007" href="#0046-DSRC-007">0046-DSRC-007</a>)
+    1. `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)
     1. `SubmitData` transactions by inactive data sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
     1. `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)
 1. To be valid, a `SubmitData` transaction must:
@@ -110,10 +110,11 @@ Where possible, this should be done before the transaction is included in a bloc
     1. Invalid `SubmitData` transactions must be rejected.  (<a name="0046-DSRM-011" href="#0046-DSRM-011">0046-DSRM-011</a>)
 1. Must work with Coinbase oracle  (<a name="0046-DSRM-012" href="#0046-DSRM-012">0046-DSRM-012</a>)
 1. Reject any data source tx that is not explicitly required, so this would include a tx:
-    - For a pubkey never used in a data source  (<a name="0046-COSMICELEVATOR-013" href="#0046-COSMICELEVATOR-013">0046-COSMICELEVATOR-013</a>)
+    - For a pubkey never used in a data source  (<a name="0046-DSRM-013" href="#0046-DSRM-013">0046-DSRM-013</a>)
     - For a data source where a filter rejects the message based on its contents  (<a name="0046-DSRM-014" href="#0046-DSRM-014">0046-DSRM-014</a>)
     - For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal (<a name="0046-DSRM-015" href="#0046-DSRM-015">0046-DSRM-015</a>)
-1. For each active oracle definition/spec we store the messages / hash of the messages that have been processed and "used" sucesssfully and will not pass a message on for that specific target/definition if it has already received it (by checking that hash). This info can be discarded along with the rest of the oracle spec/definition once the oracle is no longer active (market is settled, etc.) and the check would be done on a per market basis.. (<a name="0046-COSMICELEVATOR-016" href="#0046-COSMICELEVATOR-016">0046-COSMICELEVATOR-016</a>)
+1. For each active oracle definition/spec we store the messages / hash of the messages that have been processed and "used" sucesssfully and will not pass a message on for that specific target/definition if it has already received it (by checking that hash). This info can be discarded along with the rest of the oracle spec/definition once the oracle is no longer active (market is settled, etc.) and the check would be done on a per market basis.. (<a name="0046-DSRM-016" href="#0046-DSRM-016">0046-DSRM-016</a>)
+1. Data sources are accepted that conform to the Open Oracle specification (<a name="0046-COSMICELEVATOR-017" href="#0046-COSMICELEVATOR-017">0046-COSMICELEVATOR-017</a>)
 
 ## Notes
 

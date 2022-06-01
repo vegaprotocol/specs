@@ -56,6 +56,13 @@ on: {
 1. A simple value data source can be provided
 	1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a Value source. The market settles immediately with the value provided as the settlement data. (<a name="0048-COSMICELEVATOR-001" href="#0048-COSMICELEVATOR-001">0048-COSMICELEVATOR-001</a>)
 	1. Change a cash settled futures market's trading terminated trigger source with a market governance proposal to a blank Value data source (or one with any value, to be discarded) and ensure the market state changes to trading terminated. (<a name="0048-COSMICELEVATOR-002" href="#0048-COSMICELEVATOR-002">0048-COSMICELEVATOR-002</a>)
+1. Testing the workaround while value data source is not implemented
+	1. Equivalent to using a value source and the private key holder does not need to be trusted after step 1 is complete (<a name="0048-DSRI-002" href="#0048-DSRI-002">0048-DSRI-002</a>):
+		1. Someone pre-signs a message `M` with the agreed price `P` in the data and publishes the message, signature `S`, and public key `K`.
+		1. A proposal is made to set the oracle to a signed message oracle with:
+			a. public key: `K`
+			b. filter: `price == P`
+		1. Assert that once the proposal passes, anyone can submit the message `M` and signature `S` to the Vega network in a transaction and the market will settle.
 1. A time triggered value data source can be provided
 	1. Use a market governance proposal to change a cash settled futures market that is already in Trading Terminated state and has a signed message data source configured for settlement data (where no signed message is ever received) so that the settlement data source is a time triggered Value source with the trigger time in the future after the proposal is enacted. The market settles at the trigger time with the value provided as the settlement data (this allows governance to settle a market with a dead oracle). (<a name="0048-COSMICELEVATOR-009" href="#0048-COSMICELEVATOR-009">0048-COSMICELEVATOR-009</a>)
 	1. Create a cash settled futures market with a time triggered value data source for the settlement data. Trigger trading terminated before the time specified in the trigger for the settlement data source. The market settles at the time specified in the trigger. (<a name="0048-COSMICELEVATOR-003" href="#0048-COSMICELEVATOR-003">0048-COSMICELEVATOR-003</a>)
