@@ -13,8 +13,7 @@ a lot of identities and spams one block with each. Therefore, we have to enforce
 investment to be allowed to send anything to the Vega network.
 
 For governance votes, that means that there is a minimum amount of tokens required to be allowed
-to issue a proposal/vote. If the network detects successful spam in spite of this minimum,
-then the limit can be increased automatically.
+to issue a proposal/vote (`spam.protection.proposal.min.tokens`/`spam.protection.voting.min.tokens`). If the network detects successful spam in spite of this minimum, then the limit can be increased automatically.
 
 For SW, we only have governance, so the following two policies will do:
 
@@ -36,14 +35,14 @@ All parameters are up to discussion/governance vote.
 The policy enforcement mechanism rejects messages that do not follow the anti-spam rules. This can happen in
 two different ways:
 - pre-block reject: A transaction is rejected before it enters the validators mempool. For Tendermint-internal
-	reasons, this can only happen based on the global state coordinated through the previous block; especially,
-	it cannot be based on any other transactions received by the validator but not yet put into a block
-	(e.g., only three transactions per party per block).
-	Once a block is scheduled, all validators also test all transactions in their mempool if they are
-	still passing the test, and remove them otherwise.
+  reasons, this can only happen based on the global state coordinated through the previous block; especially,
+  it cannot be based on any other transactions received by the validator but not yet put into a block
+  (e.g., only three transactions per party per block).
+  Once a block is scheduled, all validators also test all transactions in their mempool if they are
+  still passing the test, and remove them otherwise.
 - post-block-reject: A transaction has made it into the block, but is rejected before it is passed to the application layer.
-	This mechanism allows for more fine-grained policies than the previous one, but at the price that the
-	offending transaction has already taken up space in the blockchain.
+  This mechanism allows for more fine-grained policies than the previous one, but at the price that the
+  offending transaction has already taken up space in the blockchain.
 
 
 For Sweetwater, the policies we enforce are relatively simple:
@@ -99,9 +98,11 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
    - More than 360 delegation changes in one epoch (or, respectively, the value of `spam.protection.max.delegation`) (<a name="0062-SPAM-001" href="#0062-SPAM-001">0062-SPAM-001</a>)
    - Delegating while having less than one vega (`10^18` of our smallest unit) (`spam.protection.delegation.min.tokens`)  (<a name="0062-SPAM-002" href="#0062-SPAM-002">0062-SPAM-002</a>)
    - Making a proposal when having less than 100.000 vega (`spam.protection.proposal.min.tokens`)  (<a name="0062-SPAM-003" href="#0062-SPAM-003">0062-SPAM-003</a>)
+   - Reducing the value of network parameter `spam.protection.proposal.min.tokens` will reduce the number of parties rejected in the next epoch.(<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-014</a>)
    - Making more than 3 proposals in one epoch (`spam.protection.max.proposals`) (<a name="0062-SPAM-004" href="#0062-SPAM-004">0062-SPAM-004</a>)
    - Voting with less than 100 vega (`spam.protection.voting.min.tokens`)  (<a name="0062-SPAM-005" href="#0062-SPAM-005">0062-SPAM-005</a>)
    - Voting more than 3 times on one proposal (`spam.protection.max.votes`) (<a name="0062-SPAM-006" href="#0062-SPAM-006">0062-SPAM-006</a>)
+   
  - Above thresholds are exceeded in one block, leading to a post-block-reject  (<a name="0062-SPAM-007" href="#0062-SPAM-007">0062-SPAM-007</a>)
  - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again  (<a name="0062-SPAM-008" href="#0062-SPAM-008">0062-SPAM-008</a>)
  - The normalisation function outputs normalised assets/revenues for all traders   (<a name="0062-SPAM-009" href="#0062-SPAM-009">0062-SPAM-009</a>)
@@ -112,3 +113,4 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
  - Any rejection due to spam protection is reported to the user upon transaction submission detailing which criteria the key exceeded / not met  (<a name="0062-SPAM-013" href="#0062-SPAM-013">0062-SPAM-013</a>)  
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
+
