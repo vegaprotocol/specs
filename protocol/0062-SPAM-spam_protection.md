@@ -98,7 +98,7 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
    - More than 360 delegation changes in one epoch (or, respectively, the value of `spam.protection.max.delegation`) (<a name="0062-SPAM-001" href="#0062-SPAM-001">0062-SPAM-001</a>)
    - Delegating while having less than one vega (`10^18` of our smallest unit) (`spam.protection.delegation.min.tokens`)  (<a name="0062-SPAM-002" href="#0062-SPAM-002">0062-SPAM-002</a>)
    - Making a proposal when having less than 100.000 vega (`spam.protection.proposal.min.tokens`)  (<a name="0062-SPAM-003" href="#0062-SPAM-003">0062-SPAM-003</a>)
-   - Reducing the value of network parameter `spam.protection.proposal.min.tokens` will increase the number of parties rejected in the next epoch.(<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-014</a>)
+   - Reducing the value of network parameter `spam.protection.proposal.min.tokens` will reduce the number of parties rejected in the next epoch.(<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-014</a>)
    - Making more than 3 proposals in one epoch (`spam.protection.max.proposals`) (<a name="0062-SPAM-004" href="#0062-SPAM-004">0062-SPAM-004</a>)
    - Voting with less than 100 vega (`spam.protection.voting.min.tokens`)  (<a name="0062-SPAM-005" href="#0062-SPAM-005">0062-SPAM-005</a>)
    - Voting more than 3 times on one proposal (`spam.protection.max.votes`) (<a name="0062-SPAM-006" href="#0062-SPAM-006">0062-SPAM-006</a>)
