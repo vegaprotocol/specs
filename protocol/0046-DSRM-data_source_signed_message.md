@@ -115,7 +115,6 @@ Where possible, this should be done before the transaction is included in a bloc
     - For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal (<a name="0046-DSRM-015" href="#0046-DSRM-015">0046-DSRM-015</a>)
 1. For each active oracle definition/spec we store the messages / hash of the messages that have been processed and "used" sucesssfully and will not pass a message on for that specific target/definition if it has already received it (by checking that hash). This info can be discarded along with the rest of the oracle spec/definition once the oracle is no longer active (market is settled, etc.) and the check would be done on a per market basis.. (<a name="0046-COSMICELEVATOR-016" href="#0046-COSMICELEVATOR-016">0046-COSMICELEVATOR-016</a>)
 
-
 ## Notes
 
 - There are no [rewards](./0056-REWA-rewards_overview.md) associated with being a signed message data source
