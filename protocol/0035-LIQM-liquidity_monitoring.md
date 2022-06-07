@@ -65,4 +65,6 @@ The auction proceeds as usual. Please see the auction spec for details.
 
 ## Acceptance Criteria
 
-The scenarios in the feature test [0026-AUCT-auction_interaction.feature](https://github.com/vegaprotocol/vega/tree/develop/integration/features/verified/0026-AUCT-auction_interaction.feature) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
+1. The scenarios in the feature test [0026-AUCT-auction_interaction.feature](https://github.com/vegaprotocol/vega/tree/develop/integration/features/verified/0026-AUCT-auction_interaction.feature) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
+
+2. An incoming order that would consume `best_bid` or `best_offer` gets executed (unless it will also trigger price monitoring auction at the same time), the trades are generated and only then the market goes into a liquidity auction (because there is a peg missing to deploy the liquidity provision volume). (<a name="0035-LIQM-002" href="#0035-LIQM-002">0035-LIQM-002</a>)
