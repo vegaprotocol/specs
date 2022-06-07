@@ -22,15 +22,19 @@ Note that [target stake](./0041-TSTK-target_stake.md) is defined in a separate s
 
 **c<sub>1</sub>** - constant multiple for [target stake](./0041-TSTK-target_stake.md) triggering the commencement of liquidity auction. In this spec it is referred to as `c_1` but in fact it's name is `market.liquidity.targetstake.triggering.ratio` and it's a market parameter (with a network parameter providing a default value for markets that don't specify it). 
 
+**ghost peg duration** is a network parameter called `market.liquidity.ghostPegDuration` which determines how long does [LP order volume](./0035-LIQM-liquidity_monitoring.md) stay on the book in absence of either best static ask OR best static bid.
+
 ## Total stake
 
 `total_stake` is the sum the stake amounts committed by all the LPs in the market (see [LP mechanics](./0044-LIQM-lp_mechanics.md)) for how LPs commit stake and what it obliges them to do. 
 
 ## Trigger for entering an auction
 
+When either best static ask or best static bid is removed from the book (either due to cancellation or trade) then we start the `ghost_peg_timer`. If a new order arrives creating best static bid / ask then we set `ghost_peg_timer = 0`.
+
 The auction is triggered when
 ```
-total_stake < c_1 x target_stake OR there is no best_bid OR there is no best offer.
+total_stake < c_1 x target_stake OR ( ( there is no best_bid OR there is no best offer) AND `ghost_peg_timer > market.liquidity.ghostPegDuration`).
 ```
 Here 0 < c<sub>1</sub> < 1, to reduce the chance of another auction getting triggered soon after e.g. c<sub>1</sub> = 0.7. The parameter c<sub>1</sub> is a network parameter.
 
@@ -65,4 +69,10 @@ The auction proceeds as usual. Please see the auction spec for details.
 
 ## Acceptance Criteria
 
-The scenarios in the feature test [0026-AUCT-auction_interaction.feature](https://github.com/vegaprotocol/vega/tree/develop/integration/features/verified/0026-AUCT-auction_interaction.feature) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
+- The scenarios in the feature test [0026-AUCT-auction_interaction.feature](https://github.com/vegaprotocol/vega/tree/develop/integration/features/verified/0026-AUCT-auction_interaction.feature) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
+
+- When we are in the default trading mode and either the best static bid or ask are not on the book and `ghost_peg_timer <= market.liquidity.ghostPegDuration` and `total_stake >= c_1 x target_stake` then we do not enter liquidity auction. (<a name="0035-LIQM-002" href="#0035-LIQM-002">0035-LIQM-002</a>). 
+
+- When we are in the default trading mode and either the best static bid or ask are not on the book and `ghost_peg_timer >= market.liquidity.ghostPegDuration` and `total_stake >= c_1 x target_stake` then we do enter liquidity auction. (<a name="0035-LIQM-003" href="#0035-LIQM-003">0035-LIQM-003</a>). 
+
+- It is possibly to query the `ghost_peg_timer`  for any market via APIs (<a name="0035-LIQM-004" href="#0035-LIQM-004">0035-LIQM-004</a>). 
