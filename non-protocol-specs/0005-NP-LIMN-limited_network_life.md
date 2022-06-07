@@ -15,7 +15,7 @@ This is especially important early on when rapid iteration is desirable, as the 
 
 # Overview
 There are four main features:
-1. Create checkpoints with relevant (but minimal) information at regular intervals, and on every deposit and every withdrawal request.
+1. Create checkpoints with relevant (but minimal) information at regular intervals, and on every withdrawal request.
 2. Ability to specify a checkpoint hash as part of genesis.
 3. A new 'Restore' transaction that contains the full checkpoint file and triggers state restoration
 4. A new 'checkpoint hash' transaction is broadcast by all validators
