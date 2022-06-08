@@ -105,11 +105,8 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
    
  - Above thresholds are exceeded in one block, leading to a post-block-reject  (<a name="0062-SPAM-007" href="#0062-SPAM-007">0062-SPAM-007</a>)
  - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again  (<a name="0062-SPAM-008" href="#0062-SPAM-008">0062-SPAM-008</a>)
- - The normalisation function outputs normalised assets/revenues for all traders   (<a name="0062-SPAM-009" href="#0062-SPAM-009">0062-SPAM-009</a>)
- - On all possible transactions and combinations thereof, a spam is detected and transactions are blocked before 
-   being put on the blockchain  (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)
+ - It is possible for spam transactions to fill a block (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)
  - Parties that continue spamming are blocked and eventually unblocked again  (<a name="0062-SPAM-011" href="#0062-SPAM-011">0062-SPAM-011</a>)
- - The values of asset_score and revenue_score are computed correctly over chain restarts  (<a name="0062-SPAM-012" href="#0062-SPAM-012">0062-SPAM-012</a>)
  - Any rejection due to spam protection is reported to the user upon transaction submission detailing which criteria the key exceeded / not met  (<a name="0062-SPAM-013" href="#0062-SPAM-013">0062-SPAM-013</a>)  
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
