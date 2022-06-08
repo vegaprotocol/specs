@@ -60,13 +60,13 @@ Once Vega is aware of locked tokens, the users will have an [account](./0013-ACC
 
 ```proto
 message Delegate {
-	uint256   Amount = 1;
-	Validator Val = 2;
+  uint256   Amount = 1;
+  Validator Val = 2;
 }
 
 message Undelegate {
-	uint256   Amount = 1;
-	Validator Val = 2;
+  uint256   Amount = 1;
+  Validator Val = 2;
 }
 ```
 
@@ -93,15 +93,15 @@ At the top level, `Stake_Deposited` simply adds `amount` of tokens to the accoun
 
 *Option-1*
 A first heuristic would be to take from the highest delegation first and then go down, e.g.
-	* If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we first take from the richest ones until they are no longer the richest:
-	* Free 10, delegation is 90, 90, 80, 70
-	* Free 30, delegation is 80, 80, 80, 70
+  * If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we first take from the richest ones until they are no longer the richest:
+  * Free 10, delegation is 90, 90, 80, 70
+  * Free 30, delegation is 80, 80, 80, 70
 This has the benefit of lowering the probability that a single withdrawal will leave any one validator with zero delegated stake.
 
 *Option-2*
 Another option would be to withdraw stake proportionally from the validators.
-	* If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we split the withdrawal across all validators proportionately:
-	* Free from delegator-1 (to whom the participant has delegated 100) an amount equal to 30 * (100/(100+90+80+70)) etc. Not sure how to deal with rounding.
+  * If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we split the withdrawal across all validators proportionately:
+  * Free from delegator-1 (to whom the participant has delegated 100) an amount equal to 30 * (100/(100+90+80+70)) etc. Not sure how to deal with rounding.
 
 
 #### Types of undelegations
@@ -140,7 +140,7 @@ If the value of `minimum_delegateable_stake` changes in a bad way, stakers might
 some fraction they can't modify anymore. To this end, the undelegate commands also should
 support a parameter "all".
 
-With this setup, a delegator can use a constant delegation/undelegate-now to spam the network.	
+With this setup, a delegator can use a constant delegation/undelegate-now to spam the network.  
 
 If several delegators change the delegation within the same block, some of them may not be allowed to 
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
@@ -160,7 +160,7 @@ Another edge case is the following: during the epoch the party had x tokens asso
 |------------------|--------| ------------|--------------|
 | `validators.delegation.minAmount`       | String (float) |  `"0.001"`        | The smallest fraction of the [governance token](./0028-GOVE-governance.md) that can be [delegated to a validator](#delegation-transaction). | 
 
-Actual validator score calculation is in [simple scheme for Sweetwater](0061-simple-POS-rewards\ -\ SweetWater.md) and it introduces its own network parameters.
+Actual validator_score calculation is in [simple scheme for Sweetwater](0061-simple-POS-rewards\ -\ SweetWater.md) and it introduces its own network parameters.
 
 See the [network paramters spec](./0054-NETP-network_parameters.md#current-network-parameters) for a full list of parameters.
 
@@ -206,8 +206,7 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 ### Changing network parameters
 - Change of network paramter `validators.delegation.minAmount` will change the smallest fraction of the governance token that can be delegated to a validator at the beginning of the next epoch; delegation with tokens less than this parameter will fail the verification at the beginning (when the command is issued and before it is put on the chain). (<a name="0059-STKG-031" href="#0059-STKG-031">0059-STKG-031</a>)
 - Change of network paramter `reward.staking.delegation.delegatorShare` will change the fraction of a validator’s rewards is distributed between its delegators in a new delegation and at the end of an epoch (Default value 0.883. Valid range is between 0 and 1 inclusive). (<a name="0059-STKG-033" href="#0059-STKG-033">0059-STKG-033</a>)
-- Change of network paramter `reward.staking.delegation.minValidators` will change the minimum number of validators in a new delegation. (Default value 5. Valid values are integers greater than or equal to 1.); 
-- Change of the 3 parameters above will also affects the stakescore on validators, so it needs to be tested that the next reward as well as the next tendermint weight is computed correctly (the name is a bit unfortunate now, as we settled for a fixed number of validators, so this really is only affecting the validator score. (<a name="0059-STKG-038" href="#0059-STKG-038">0059-STKG-038</a>)
+- Change of network paramter `reward.staking.delegation.minValidators` will change the minimum number of validators in a new delegation. (Default value 5. Valid values are integers greater than or equal to 1.); It will also affects the stake_score on validators, so it needs to be tested that the next reward as well as the next tendermint weight is computed correctly (the name is a bit unfortunate now, as we settled for a fixed number of validators, so this really is only affecting the validator_score. (<a name="0059-STKG-038" href="#0059-STKG-038">0059-STKG-038</a>)
 - For the range check, it should be verified that this value is not bigger than the actual number of validators. (<a name="0059-STKG-034" href="#0059-STKG-034">0059-STKG-034</a>)
 - Change of network paramter `reward.staking.delegation.maxPayoutPerParticipant` will change the maximum amount that can be distributed to a single participant from the reward pool at the end of a new epoch. Number must be including the correct padding with zeros instead of possible decimal places. (<a name="0059-STKG-036" href="#0059-STKG-036">0059-STKG-036</a>)
 - Change of network paramter `reward.staking.delegation.minimumValidatorStake` will change the minimum amount of staking asset that a validator needs to self-delegate to be eligible for validator rewards at a new delegation. Number must be including the correct padding with zeros instead of possible decimal places； 
