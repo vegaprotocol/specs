@@ -21,7 +21,7 @@ Reward metrics need to be calculated for every relevant Vega [party](0017-PART-p
 Reward metrics are scoped by market and measured per epoch hence are reset at the end of the epoch. 
 
 There will be the following fee metrics:
-1. Sum of fees paid (in a given market).
+1. Sum of maker fees paid (in a given market).
 1. Sum of maker fees received (in a given market).
 1. Sum of LP fees received (in a given market).
 
