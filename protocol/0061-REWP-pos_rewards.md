@@ -57,7 +57,10 @@ Each delegator should now receive `delegatorTokens / (allDelegatedTokens + valid
 ### Minimum validator stake 
 If the validator (i.e. the associated key) does not have sufficient stake self-delegated (at least the network parameter `min_own_stake`), then the reward for the validator is set to zero. The corresponding amount is kept by the network, not distributed among the other validators. Note this only applies to the part of the reward attributable directly to such a validator, its delegators should still receive their rewards. If a Vega key which defines a validator delegates any amount to a different validator then the reward associated with that delegation will be paid out just like for any other delegator.
 
-
+### Maximum payout per participant
+If the reward pool in question is the on-chain treasury for the staking and governance asset then payments are subject to `reward.staking.delegation.maxPayoutPerParticipant`. 
+The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant receives their due, capped by the max. The unpaid amount remain in the treasury.
+Setting this to `0` means no cap.
 
 ## validatorScore functions:
 
