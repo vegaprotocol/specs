@@ -1,0 +1,70 @@
+Resign Bundles
+
+Workflow:
+
+Signing:
+- Whenever a withdrawal is first created (i.e., the nonce has not been used yet), the entire transaction is stored in 
+  a permanent data structure that survives restarts, snapshots, etc. Entering and deleting entries from this datastructure
+  is synchronized through the Vega chain.
+  
+  The nonce comprises a hash of all relevant transaction data [Verify if its long enough]
+  
+  The recipient of the signature receives as many signatures as feasible (i.e., not just 2/3, but it waits a reasonalbe time
+  to obtain more signatures, e.g., twice the time it took to get to 2/3). This will prevent requiring a re-sign for minor weight-shifts.
+  
+  Transactions require a minimum value to be first created; thus, it is not possible to generfate 10^18 withdrawal requests using one Vega.
+
+Withdrawal:
+  If a transaction is executed on Ethereum, the nonce used in this transaction is permanently stored, and no transaction with
+  the same nonce will ever be executed again. If transactions are bundeled, it has to be assured all transaction in the bundle
+  are covered by this.
+  As we have no timeout mechanim, the used nonces need to be stored forever.
+  
+  Validators that observe a sufficiently confirmed withdrawal on Ethereum can delete the corresponding transaction from their
+  datstructure. This deletion should be coordinated via the Vega chain to maintain consistency.
+
+Resigning:
+  Any party can apply through a re-signing of their nonce through a re-sign transaction. The flow is as follows:
+ 
+  - The re-signing request needs to be authorized either by the Vega key of the corresponding wallet, or by the receiving Ethereum key.
+  - A party has at most 1 resigning request per Epoch; if the same Ethereum key/vega key was already used that epoch, the transaction is rejected.
+  - If the nonce is not present in the permanent datastructure, the re-signing transaction is rejected.
+  - If above tests p[ass, all validators reset the bundle form their permanent data structure, verify the nonce matches the data, and issue a new signature on exactly that bundle.
+  - All else is done just as for the signing request (apart from the check for minimum value).
+  
+ Question: What's the API currently ? Do we go via the chain or through direct communication ? 
+
+
+
+
+
+
+Post Trading: Garbage Collection and Timeout:
+Motivation: Avoid the 'non-executed transactions' datastructure to grow indefinitely
+
+- The transaction data also cointains a 'last Ethereum block'; The withdrawal is only executed if Ethereums blockheit is <= that value.
+- If a transaction has not been executed after tha blockheight has been safely confirmed, the value is restored to the corresponding
+  vega account, and the transaction is deleted from the permanent data structure.
+
+- There is a goverfnance vote to dispose of all transactions smaller than <x> issued before block <y>
+
+
+
+
+
+Original notes:
+
+The expiration solution would work (add an expiry block to all transactions, and move the asset back to Vega if that blockheit + safety margin is reached without the transaction being claimed; this would cause some delay (when the transaction is no longer claimable but also not moved back to Vega), but that is not an issue. As this needs a SC update, we don’t implement it yet though, but add compatibility (i.e., add the blockheight and other relevant date to the transaction block) if that’s possible without Smart Contract changes.
+Long term storage of unclaimed transactions (through checkpoints, restarts, solar storms and whatever else) is doable, to that will be done (data-structure etc to be specified, but of less relevance as long as it contains all transaction data (or a commitment to it; all data is likely better as that would allow a client to ask things like (‘Can I have a re-sign for all transactions in my wallet) if their computer burned down))
+Re-signing signs the same nonce, so the nonce doesn’t need to be burned
+To avoid overflow, transactions need a minimum amount of assets in them to be issued for the first time. Resigning is not affected by that (so if you signed your LUNA transaction, you can still have it re-signed if needed). Whether that is a separate parameter or we use the existing quantum amounts is t.b.d.
+Re-signing requests will have spam protection measures along the lines of governance messages (i.e., one re-signing per epoch max)
+The list of unfinished transactions will grow over time through dead transactions; we can cross that bridge later by adding the expiry option if that becomes an issue
+Corresponding APIs will be added
+
+Not in the call, but still:
+Re-sign requests are authorized with the Vega wallet key or the target Ethereum wallet key (or, respectively, whatever the target chain is). 
+Clients ideally collect more than the minimum number of signatures needed, so the re-signing will not be needed for minor changes
+As we are using the same nonce, re-signing is uncritical; the only atomic step is withdrawing the assets from vega and adding the withdrawal to the ‘unfinished’ list (this could be done in one single transaction (?)
+Ideally, the client only provides a handle of the transaction, and the validators sign whatever they have stored themselves.
+The update-old-transaction-list is a critical operation, so we need to be careful that that one cannot be messed with if a new validator comes in
