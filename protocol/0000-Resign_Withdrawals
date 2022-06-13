@@ -3,11 +3,12 @@ Resign Bundles
 Workflow:
 
 Signing:
-- Whenever a withdrawal is first created (i.e., the nonce has not been used yet), the entire transaction is stored in 
+- Whenever a withdrawal is first created, the entire transaction is stored in 
   a permanent data structure that survives restarts, snapshots, etc. Entering and deleting entries from this datastructure
-  is synchronized through the Vega chain.
+  is synchronized through the Vega chain. Furthermore, a unique nonce is created for that transaction.
   
-  The nonce comprises a hash of all relevant transaction data [Verify if its long enough]
+  The nonce comprises a hash of all relevant transaction data as well as a serial/random number [Verify if its long enough]
+  If a serial number is used, it has to be assured it is counted forward even through restarts.
   
   The recipient of the signature receives as many signatures as feasible (i.e., not just 2/3, but it waits a reasonalbe time
   to obtain more signatures, e.g., twice the time it took to get to 2/3). This will prevent requiring a re-sign for minor weight-shifts.
@@ -25,10 +26,11 @@ Withdrawal:
 
 Resigning:
   Any party can apply through a re-signing of their nonce through a re-sign transaction. The flow is as follows:
- 
-  - The re-signing request needs to be authorized either by the Vega key of the corresponding wallet, or by the receiving Ethereum key.
   - A party has at most 1 resigning request per Epoch; if the same Ethereum key/vega key was already used that epoch, the transaction is rejected.
-  - If the nonce is not present in the permanent datastructure, the re-signing transaction is rejected.
+  - The re-signing request needs to be authorized either by the Vega key of the corresponding wallet, or by the receiving Ethereum key. This is done by signing a
+    unique message of the form <VEGA_RESIGN_REQUEST, key_used, NONCE>
+  - If the nonce is not present in the permanent datastructure, the re-signing transaction is rejected (this should happen implicitely, as without
+    the data in the data-structure, it is not possible to verify the authorisation)
   - If above tests p[ass, all validators reset the bundle form their permanent data structure, verify the nonce matches the data, and issue a new signature on exactly that bundle.
   - All else is done just as for the signing request (apart from the check for minimum value).
   
