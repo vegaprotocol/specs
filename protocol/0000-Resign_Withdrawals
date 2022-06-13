@@ -5,7 +5,7 @@ Workflow:
 Signing:
 - Whenever a withdrawal is first created, the entire transaction is stored in 
   a permanent data structure that survives restarts, snapshots, etc. Entering and deleting entries from this datastructure
-  is synchronized through the Vega chain. Furthermore, a unique nonce is created for that transaction.
+  is synchronized through the Vega chain. A unique nonce is created for that transaction and stored with the transaction data.
   
   The nonce comprises a hash of all relevant transaction data as well as a serial/random number [Verify if its long enough]
   If a serial number is used, it has to be assured it is counted forward even through restarts.
