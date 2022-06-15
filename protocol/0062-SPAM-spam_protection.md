@@ -167,38 +167,6 @@ of transaction a trader is allowed per epoch is b+ (asset_score * a1)^a2 + (reve
 The values of the variables that make sense need to still be determined based on fairground data; they also may be different between 
 trading with training wheels and real rtrading, as the former isn't generating the kind of revenue needed to authorize transactions.
 
-##### End goal:
-Spam protection has a table as a network parameter that defines its behaviour for all types of
-transactions. The values in the table are generic enough that this also can be used for governance votes, 
-though this is not minimal functionality (as thatg part has already been implemented and tested)
-
-For every type of transaction, we have the following entries:
-
-<max_allowed_per_epoch>: A single vega account is allowed to do only this number
- 	of transaction of the type during an epoch. If this value is -1, then
-	there is no limit.
- <min_tokens_required>  : A vega account needs at least that many tokens to be allowed to
- 	perform a transaction of this type. 
- <min_assets_required>  : A vega account needs at least this amount of (normalised) assets to be allowed
- 	to perform this transaction
- <min_revenue_score>    : A vega account needs at least this revenue score to be allowed to perform a
- 	transaction
-<min_assets_plus_revenue>,<asset_multiplier>,<revenue_multiplyer>: asset_score * asset_multiplier+ revenue_score * revenue_multiplier has to be larger than <min_assets_plus_revenue>
- <asset_number_relation>: This is a six value parameter,consisting of
- 	float ab_asset_base
- 	float ax_asset_linear
- 	float ay_asset_squared
-	float rb_revenue_base
- 	float rx_revenue_linear
- 	float ry_revenue_squared
-
- A vega account with asset_score A and revenue_score R is allowed round(ab+ ax * A +ya * A^2 + rb+ rx * R + ry * R^2) transactions of this type.
- 	
- <spam_multiplier>: If the vega network is suubject to overload, all the results from the
- 	previous variables are multiplied with this. This can happen repeatedly, until
- <spam_maximum>   :  ... the combined multiplier reaches this value.
-
-
 
 
 
