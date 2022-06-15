@@ -85,7 +85,7 @@ When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-
 
 When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal. 
 
-Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. In reasonably near future there will be automated market creation e.g. for a series of markets that is voted on once, market creation from an data source (oracle), etc. so market creation and the market lifecycle should be implemented independently of the governance framework and the lifecycle of a proposal. 
+Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. In reasonably near future there will be automated market creation e.g. for a series of markets that is voted on once, market creation from a data source (oracle), etc. so market creation and the market lifecycle should be implemented independently of the governance framework and the lifecycle of a proposal. 
 
 **Entry:**
 
@@ -151,7 +151,7 @@ Once the enactment date is reached and the other conditions specified to exit th
 
 - Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-LIQM-lp_mechanics.md). 
 - Orders can be placed into the market, trading occurs according to normal trading mode rules
-- Market data are emitted
+- Market data is emitted
 - Positions and margins are managed as per the specs
 
 
@@ -197,9 +197,9 @@ No exit. This is a terminal state.
 
 ### Trading Terminated
 
-A market may terminate trading if the instrument is one that expires or if the market is otherwise configured to have a finite lifetime. In the case of futures, termination occurs at some point prior to, or at, the settlement of the product. Markets in this state accept no trading but retain the positions and margin balances that were in place after processing the expiry trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
+A market may terminate trading if the instrument is one that expires or if the market is otherwise configured to have a finite lifetime. In the case of futures, termination occurs at some point prior to, or at, the settlement of the product. Markets in this state accept no trading, but retain the positions and margin balances that were in place after processing the expiry trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
 
-A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading terminating, though usually there will be a delay, for instance to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
+A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading termination, though usually there will be a delay, for instance, to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
 
 **Entry:**
 
@@ -212,7 +212,7 @@ A market moves from this termination state to Settled when enough information ex
 **Behaviour:**
 
 - No trading occurs, no orders are accepted
-- Mark to market settlement is performed if required after termination is triggered then never again
+- Mark to market settlement is performed, if required, after termination is triggered, then never again
 - A single set of market data may be emitted for the final settlement data (e.g. settlement mark price), after which no market data are emitted.
 - During the transition out of this state:
   - All final settlement cashflows are calculated and applied (settled) 
@@ -223,7 +223,7 @@ A market moves from this termination state to Settled when enough information ex
 
 ### Settled
 
-Once the required data to calculate the settlement cashflows is provided by oracle input for an market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). 
+Once the required data to calculate the settlement cashflows is provided by oracle input for a market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). 
 The positions are then closed and all orders cleared. 
 All money held in margin accounts after final settlement is returned to traders' general accounts. 
 [Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset. 
