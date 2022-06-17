@@ -19,9 +19,6 @@ For peripheral things that need to be hashed out through pull requests, we have 
 where this could be useful is the design process for the Liquidity Bots, or the short-lived 'training wheels' for a
 limited mainnet.
 
-## [Milestones](./milestones/)
-The canonical source for what feature bundles represent major milestones in our product roadmap. Progress against these milestones is tracked on 
-
 ## [Glossaries](./glossaries/)
 These are quick reference points for general terminology we use. Some of the specs are really dense with trading terms 
 or blockchain specifics. If something comes up that you don't understand and have to look up, it's likely it will happen
