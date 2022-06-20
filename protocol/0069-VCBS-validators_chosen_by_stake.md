@@ -172,10 +172,10 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
 ### Multisig score
 1. Verify that for all ersatz validators their multisig score is 1 (<a name="0069-VCBS-010" href="#0069-VCBS-010">0069-VCBS-010</a>)
 2. Tendermint validators excess signature (<a name="0069-VCBS-011" href="#0069-VCBS-011">0069-VCBS-011</a>): 
-  * Setup a network with 5 Tendermint validators but with only 4 validators that have sufficient self-delegation. 
-  * Announce a new node and self-delegate to them, allow some time to replace the validator with no self-delegation as a Tendermint validator. Note: At this point the signature from the removed validator IS still on the multisig contract. 
+  * Setup a network with 5 Tendermint validators but with only 4 validators that have sufficient self-delegation. Call the one without enough self-delegation Bob.
+  * Announce a new node (Alice) and self-delegate to them, allow some time to replace the validator with no self-delegation (Bob) as a Tendermint validator by Alice. Note: At this point the signature of Bob IS still on the multisig contract. 
   * Transfer 1000 tokens to the VEGA reward account. 
-  * Verify that at the end of the epoch all of the validators should have a multisig score = 0 and none shall get a reward because we have a signature on the smart contract that doesn’t belong to any of the 5 Tendermint validators.
+  * Verify that at the end of the epoch all of the validators *apart from Alice* should have a multisig score = 1. Alice has multisig score = 0. Alice will get no reward because she has not updated the smart contract info adding her signature and removing Bob. See [multisig updates](clarification-of-rewards-in-multisig-mismatch-case).
 3. Tendermint validators missing signature test 1 (<a name="0069-VCBS-012" href="#0069-VCBS-012">0069-VCBS-012</a>): 
   * Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5. 
   * **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to **5**.
