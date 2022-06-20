@@ -111,7 +111,7 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 1. A validator called Bob leaves the set of tendermint validators (for example, reduce own plus delegated tokens so that their score is pushed down). A validator called Alice is promoted to tendermint validator set. 
 1. No-one updated multisig validators so we still have Bob's key on the list of multisig signer. 
 1. Epoch ends and multisig hasn't been updated.
-1. All validators and ersatz validators, apart from Alice get rewards.
+1. All validators and ersatz validators, apart from Alice get rewards, see [multisig-updates](0069-VCBS-validators_chosen_by_stake.md#multisig-updates-and-multisig-weight-updates-if-those-are-used).
 
 ## Rewards from trading fees are calculated and distributed (<a name="0061-REWP-007" href="#0061-REWP-007">0061-REWP-007</a>) 
 1. Run Vega with at least 3 tendermint validator nodes and at least 5 ersatz validator nodes each with different self-stake and delegation.
