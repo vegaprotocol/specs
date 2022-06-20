@@ -96,7 +96,7 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 1. There is a one-to-one correspondence between Tendermint validators' ethereum keys and keys on multisig.
 1. One of the Tendermint validators goes offline forever and is removed from the set of Tendermint validators but their key still stays on multisig (no-one updated).
 1. Epoch ends and multisig hasn't been updated.
-1. No validators get any rewards.
+1. Tendermint validators get no rewards. Ersatz validators still receive rewards.
 
 
 - A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)
