@@ -214,6 +214,8 @@ If the value is changed so that one or more validators do not have sufficient ow
 
 If the value is changed so that a validator that obtains sufficient own stake through the parameter change (and did not have it before) qualifies to become a validator/ersatzvalidator, they are promoted accordingly in the next epoch. (<a name="0059-STKG-037" href="#0059-STKG-037">0059-STKG-037</a>)
 
+All parameter changes that affect the reward payout are applied in the payout immediatelly following the block that accepted the change, which may be in the same epoch. 
+
 ### A delegation transaction that would cause a single validator's total delegated amount to exceed `validators.delegation.maxStakePerValidator` will be reduced to fit (<a name="0059-STKG-017" href="#0059-STKG-017">0059-STKG-017</a>)
 - A validator, Validator A exists
 - `validators.delegation.maxStakePerValidator` is set to `99.99`
