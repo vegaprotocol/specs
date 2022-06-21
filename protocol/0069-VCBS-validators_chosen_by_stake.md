@@ -86,11 +86,9 @@ In the reward calculation for the top `network.validators.multisig.numberOfSigne
 
 Thus a validator who is not there but should be has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well. 
 
-As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) then at the end of the epoch their score will be `0`. 
+As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) then at the end of the epoch their score will be `0`. They will not get any rewards. 
 
-They will not get any rewards and at the start of the next epoch they will be removed from the validator set. 
-
-In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from the Multisig contract. They are incentivised to do so by all receiving a `validator_score` of `0` until the excess member is removed.
+In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from the Multisig contract. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed.
 
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions. 
 
