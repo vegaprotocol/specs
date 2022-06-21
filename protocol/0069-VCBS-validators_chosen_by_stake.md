@@ -18,7 +18,8 @@ If for any `l,m=1,...,n` we have  `v_l == v_m` then we place higher the one who'
 Vega will sort all those who submitted a transaction wishing to be validators using `validator_score` as `[w_1, ..., w_k]`. 
 These may be ersatz validators (ie getting rewards) or others who just submitted the transaction to join.
 If `empty_slots := network.validators.tendermint.number - n > 0` (we have empty Tendermint validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to Tendermint validators. 
-If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a Tendermint validator, and the lowest scoring incumbent becomes an ersatz validator. 
+If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a Tendermint validator, and the lowest scoring incumbent becomes an ersatz validator. The exception to that rule is if one or more incumbent validators drop below the required ownstake (ownstake < reward.staking.delegation.minimumValidatorStake), either through changeing their self-delegation or due to a change of the network parameter. In that case, the validator with the smallest ownstake (which is smaller than reward.staking.delegation.minimumValidatorStake) is demoted, and the validator score is not used for demotion in that epoch. 
+
 If for any `l,m=1,...,k` we have `w_l == w_m` then we resolve this by giving priority to the one who submitted the transaction to become validator earlier (so this is a mechanism for resolving ties).  
 Note that we only do this check once per epoch so at most one validator can be changed per epoch in the case `empty_slots == 0`.
 
