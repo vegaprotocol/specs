@@ -335,7 +335,10 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Self-delegate to all of them. 
   * Announce 2 new nodes but self-delegate only to one of them. 
   * Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator. 
-
+11. Change ownstake requirement
+  * In the same epoch, change the network parameter <reward.staking.delegation.minimumValidatorStake> in a way that 3 validators and three Ersatzvalidators drop below the ownstake requirement, and change the delegation so that 4 (not affected) Ersatzvalidators have a higher score than two (not affected) Validators. Also, give one of the Ersatzvalidators with insufficient ownstake the highest ValidatorScore of all Ersatzvalidators.
+  * Verify that the the three Ersatzvalidators with now insufficient ownstake are removed at the end of the epoch, and that the three validators with insufficient ownstake are demoted within three epochs (and immediatelly demoted again from being Ersatzvalidators), and that in the fourth epoch the validator with the lowest ValidatorScore is demoted (and each time, the Ersatzvalidatror with the highest score is promoted). Also, verify that the Ersatzvalidator with the highest score and insufficient ownscore got demoted from being an Ersatzvalidator rather than promoted to be a Validator.
+  
 ## Announce Node
 1. Invalid announce node command (<a name="0069-VCBS-044" href="#0069-VCBS-044">0069-VCBS-044</a>):
   * Send an announce node command from a non validator node should fail
