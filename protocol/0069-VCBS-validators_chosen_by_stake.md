@@ -90,6 +90,8 @@ As a consequence, if a potential validator joined the Vega chain validators but 
 
 They will not get any rewards and at the start of the next epoch they will be removed from the validator set. 
 
+In the case where a node is removed due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from the Multisig contract. They are incentivised to do so by all receiving a `validator_score` of `0` until the excess member is removed.
+
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions. 
 
 
@@ -175,7 +177,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Setup a network with 5 Tendermint validators but with only 4 validators that have sufficient self-delegation. Call the one without enough self-delegation Bob.
   * Announce a new node (Alice) and self-delegate to them, allow some time to replace the validator with no self-delegation (Bob) as a Tendermint validator by Alice. Note: At this point the signature of Bob IS still on the multisig contract. 
   * Transfer 1000 tokens to the VEGA reward account. 
-  * Verify that at the end of the epoch all of the validators *apart from Alice* should have a multisig score = 1. Alice has multisig score = 0. Alice will get no reward because she has not updated the smart contract info adding her signature and removing Bob. See [multisig updates](clarification-of-rewards-in-multisig-mismatch-case).
+  * Verify that at the end of the epoch all of the Tendermint validators should have a multisig score = 0 since Bob is still on the contract.
 3. Tendermint validators missing signature test 1 (<a name="0069-VCBS-012" href="#0069-VCBS-012">0069-VCBS-012</a>): 
   * Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators net param set to 5. 
   * **Additional setup:** ensure that the network parameter network.validators.multisig.numberOfSigners is set to **5**.
