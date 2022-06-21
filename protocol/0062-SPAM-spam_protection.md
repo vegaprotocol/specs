@@ -26,7 +26,8 @@ If 3 blocks in a row for filled with spam i.e., parties sending substantially mo
 then the number of required tokens is doubled, up to a maximum of 1600 (if someone pays 1.5 million to spam us for 60 
 seconds so be it).
 
-All parameters are up to discussion/governance vote.
+All parameters are up to discussion/governance vote. A change of parameters is taking effect in the epoch following the acceptance of the 
+corresponding proposals. 
 
 ## More detailed description:
 
