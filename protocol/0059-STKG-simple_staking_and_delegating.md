@@ -210,7 +210,7 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 - Change of network paramter `reward.staking.delegation.maxPayoutPerParticipant` will change the maximum amount that can be distributed to a single participant from the reward pool at the end of a new epoch. Number must be including the correct padding with zeros instead of possible decimal places. (<a name="0059-STKG-036" href="#0059-STKG-036">0059-STKG-036</a>)
 - Change of network paramter `reward.staking.delegation.minimumValidatorStake` will change the minimum amount of staking asset that a validator needs to self-delegate to be eligible for validator rewards at a new delegation. Number must be including the correct padding with zeros instead of possible decimal places； 
 
-If the value is changed so that one or more validators do not have sufficient own stake anymore, they are removed (according to the removal policy). Also (this is an issue in 0069, but I add this here for now) it is not defined if an Ersatzvalidator needs to have sufficient ownstake.
+If the value is changed so that one or more validators do not have sufficient own stake anymore, they are removed (according to the removal policy as defined in 0069) one per epoch, starting with the one with lowest own stake.
 
 If the value is changed so that a validator that obtains sufficient own stake through the parameter change (and did not have it before) qualifies to become a validator/ersatzvalidator, they are promoted accordingly in the next epoch. (<a name="0059-STKG-037" href="#0059-STKG-037">0059-STKG-037</a>)
 
