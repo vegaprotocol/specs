@@ -99,14 +99,14 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 # Acceptance criteria
 
-- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧 (<a name="0005-NP-LIMN-001" href="#0005-NP-LIMN-001">0005-NP-LIMN-001</a>)
-- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧 (<a name="0005-NP-LIMN-002" href="#0005-NP-LIMN-002">0005-NP-LIMN-002</a>)
-- [ ] We can launch a network with any valid checkpoint file. 💧 (<a name="0005-NP-LIMN-003" href="#0005-NP-LIMN-003">0005-NP-LIMN-003</a>)
-- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧 (<a name="0005-NP-LIMN-004" href="#0005-NP-LIMN-004">0005-NP-LIMN-004</a>)
-- [ ] Hash of the checkpoint file is agreed via consensus. 💧 (<a name="0005-NP-LIMN-005" href="#0005-NP-LIMN-005">0005-NP-LIMN-005</a>)
-- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧 (<a name="0005-NP-LIMN-006" href="#0005-NP-LIMN-006">0005-NP-LIMN-006</a>)
+- [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧 (<a name="0073-LIMN-001" href="#0073-LIMN-001">0073-LIMN-001</a>)
+- [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧 (<a name="0073-LIMN-002" href="#0073-LIMN-002">0073-LIMN-002</a>)
+- [ ] We can launch a network with any valid checkpoint file. 💧 (<a name="0073-LIMN-003" href="#0073-LIMN-003">0073-LIMN-003</a>)
+- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧 (<a name="0073-LIMN-004" href="#0073-LIMN-004">0073-LIMN-004</a>)
+- [ ] Hash of the checkpoint file is agreed via consensus. 💧 (<a name="0073-LIMN-005" href="#0073-LIMN-005">0073-LIMN-005</a>)
+- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧 (<a name="0073-LIMN-006" href="#0073-LIMN-006">0073-LIMN-006</a>)
 
-## 💧 Test case 1: Withdrawal status is correctly tracked across resets (<a name="0005-NP-LIMN-007" href="#0005-NP-LIMN-007">0005-NP-LIMN-007</a>)
+## 💧 Test case 1: Withdrawal status is correctly tracked across resets (<a name="0073-LIMN-007" href="#0073-LIMN-007">0073-LIMN-007</a>)
 1. A party has general account balance of 100 tUSD.
 2. The party submits a withdrawal transaction for 100 tUSD. A checkpoint is immediately created.
 3. The network is shut down.
@@ -116,7 +116,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 6. 2. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 tUSD. The party has "signed for withdrawal" 100.
 6. 3. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 tUSD.
 
-## 💧 Test case 2: Orders and positions are *not* maintained across resets, balances are and *accepted* markets are (<a name="0005-NP-LIMN-008" href="#0005-NP-LIMN-008">0005-NP-LIMN-008</a>)
+## 💧 Test case 2: Orders and positions are *not* maintained across resets, balances are and *accepted* markets are (<a name="0073-LIMN-008" href="#0073-LIMN-008">0073-LIMN-008</a>)
 1. There is an asset tUSD and no asset proposals.
 1. There is a market `id_xxx` with status active, no other markets and no market proposals.
 1. There are two parties: one LP for the market and one party that is not an LP.
@@ -139,7 +139,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 
 ## 💧 Test case 3: Governance proposals are maintained across resets. Votes are not.
-### 💧 Test case 3.1: Market is proposed, accepted, restored (<a name="0005-NP-LIMN-009" href="#0005-NP-LIMN-009">0005-NP-LIMN-009</a>)
+### 💧 Test case 3.1: Market is proposed, accepted, restored (<a name="0073-LIMN-009" href="#0073-LIMN-009">0073-LIMN-009</a>)
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
@@ -156,7 +156,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The LP party has general account balance in tUSD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in tUSD of `other_gen_bal + other_margin_bal`.
 
-### 💧 Test case 3.2: Market is proposed, voting hasn't closed, not restored (<a name="0005-NP-LIMN-010" href="#0005-NP-LIMN-010">0005-NP-LIMN-010</a>)
+### 💧 Test case 3.2: Market is proposed, voting hasn't closed, not restored (<a name="0073-LIMN-010" href="#0073-LIMN-010">0073-LIMN-010</a>)
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
@@ -169,7 +169,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is an asset tUSD.
 1. There is no market and there are no market proposals.
 
-### 💧 Test case 3.3: Market is proposed, voting has closed, market rejected, proposal not restored (<a name="0005-NP-LIMN-011" href="#0005-NP-LIMN-011">0005-NP-LIMN-011</a>)
+### 💧 Test case 3.3: Market is proposed, voting has closed, market rejected, proposal not restored (<a name="0073-LIMN-011" href="#0073-LIMN-011">0073-LIMN-011</a>)
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of `10 000` tUSD.
@@ -183,7 +183,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is no market and there are no market proposals.
 1. The LP party has general account balance in tUSD of `10 000`.
 
-### 💧 Test case 3.4: Recovery from proposed Markets with no votes, voting is open, proposal not restored (<a name="0005-NP-LIMN-012" href="#0005-NP-LIMN-012">0005-NP-LIMN-012</a>)
+### 💧 Test case 3.4: Recovery from proposed Markets with no votes, voting is open, proposal not restored (<a name="0073-LIMN-012" href="#0073-LIMN-012">0073-LIMN-012</a>)
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
@@ -195,7 +195,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is no market and there are no market proposals.
 1. The LP party has general account balance in tUSD of `10 000`.
 
-### 💧 Test case 3.5: Recovery from proposed Markets with votes, voting is open, proposal not restored (<a name="0005-NP-LIMN-013" href="#0005-NP-LIMN-013">0005-NP-LIMN-013</a>)
+### 💧 Test case 3.5: Recovery from proposed Markets with votes, voting is open, proposal not restored (<a name="0073-LIMN-013" href="#0073-LIMN-013">0073-LIMN-013</a>)
 1. There is an asset tUSD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
@@ -207,7 +207,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is no market and there are no market proposals.
 1. The LP party has general account balance in tUSD of `10 000`.
 
-### 💧 Test case 3.6: Market proposals ignored when restoring twice from same checkpoint (<a name="0005-NP-LIMN-014" href="#0005-NP-LIMN-014">0005-NP-LIMN-014</a>)
+### 💧 Test case 3.6: Market proposals ignored when restoring twice from same checkpoint (<a name="0073-LIMN-014" href="#0073-LIMN-014">0073-LIMN-014</a>)
 1. A party has general account balance of 100 tUSD.
 2. The party submits a withdrawal transaction for 100 tUSD. A checkpoint is immediately created.
 3. The network is shut down.
@@ -218,14 +218,14 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is no market and there are no market proposals.
 1. The party has general account balance in tUSD of `0` and The party has "signed for withdrawal" `100`.
 
-## 💧 Test case 4: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0005-NP-LIMN-016" href="#0005-NP-LIMN-016">0005-NP-LIMN-016</a>)
+## 💧 Test case 4: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-016" href="#0073-LIMN-016">0073-LIMN-016</a>)
 1. A party has tUSD general account balance of 100 tUSD.
 2. That party has tUSD margin account balance of 100 tUSD.
 3. The network is shut down.
 4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 5. That party has a tUSD general account balance of 200 tUSD
 
-## 💧 Test case 5: Delegation (test with N=5, 10, 20000) (<a name="0005-NP-LIMN-017" href="#0005-NP-LIMN-017">0005-NP-LIMN-017</a>)
+## 💧 Test case 5: Delegation (test with N=5, 10, 20000) (<a name="0073-LIMN-017" href="#0073-LIMN-017">0073-LIMN-017</a>)
 1. There is a Vega token asset.
 1. There are `5` validators on the network.
 1. Each validator party `validator_party_1`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
@@ -249,7 +249,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 ### 💧 Test case 6.1: timeElapsedBetweenCheckpoints not set ?
 ### 💧 Test case 6.2: timeElapsedBetweenCheckpoints set to value outside acceptable range ?
 
-## 💧 Test case 7 (probably untestable): After network restart, stake balances are recovered by replaying all events (<a name="0005-NP-LIMN-018" href="#0005-NP-LIMN-018">0005-NP-LIMN-018</a>)
+## 💧 Test case 7 (probably untestable): After network restart, stake balances are recovered by replaying all events (<a name="0073-LIMN-018" href="#0073-LIMN-018">0073-LIMN-018</a>)
 1. A party deposits 100 tUSD
 1. And A party stakes 100 VEGA on Ethereum
 1. And A checkpoint is taken
@@ -269,13 +269,13 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Then that party has a staking account balance of 100
 1. And that party has 10 VEGA undelegated
 
-## 💧 Test case 8: Transactions submitted before the restore transaction on a chain with a checkpoint hash specified are rejected (<a name="0005-NP-LIMN-019" href="#0005-NP-LIMN-019">0005-NP-LIMN-019</a>)
+## 💧 Test case 8: Transactions submitted before the restore transaction on a chain with a checkpoint hash specified are rejected (<a name="0073-LIMN-019" href="#0073-LIMN-019">0073-LIMN-019</a>)
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash in genesis, but the replay transaction is not submitted.
 1. Any transaction other than replay is submitted
 1. Then that transaction is rejected
 
-## 💧 Test case 9: A replay transaction is submitted with a checkpoint that does not match the hash (<a name="0005-NP-LIMN-020" href="#0005-NP-LIMN-020">0005-NP-LIMN-020</a>)
+## 💧 Test case 9: A replay transaction is submitted with a checkpoint that does not match the hash (<a name="0073-LIMN-020" href="#0073-LIMN-020">0073-LIMN-020</a>)
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash from a checkpoint in genesis
 1. A restore transaction is submitted
@@ -283,13 +283,13 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Then the restore transaction is rejected
 1. And the state is not restored
 
-## 💧 Test case 10: Only one valid replay transaction can ever occur (<a name="0005-NP-LIMN-021" href="#0005-NP-LIMN-021">0005-NP-LIMN-021</a>)
+## 💧 Test case 10: Only one valid replay transaction can ever occur (<a name="0073-LIMN-021" href="#0073-LIMN-021">0073-LIMN-021</a>)
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
 1. Another validator submits a replay transaction
 1. That transaction is rejected
 
-## Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0005-NP-LIMN-022" href="#0005-NP-LIMN-022">0005-NP-LIMN-022</a>)
+## Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0073-LIMN-022" href="#0073-LIMN-022">0073-LIMN-022</a>)
 1. More than one party deposits stake onto Vega
 1. The parties delegate stake to the validators
 1. Setup the rewards:

@@ -28,7 +28,7 @@ There will be the following fee metrics:
 There will be the following market creation metrics:
 1. Market total [trade value for fee purposes](0029-FEES-fees.md) since market creation multiplied by either `1` if the market creation reward for this market has never been paid or by `0` if the reward has already been paid.
 
-Reward metrics are not stored in [LNL checkpoints](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md). 
+Reward metrics are not stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md). 
 
 ## Rewards accounts
 
@@ -37,7 +37,7 @@ Trading reward accounts are defined by the payment asset (the asset in which the
 It must be possible for any party to run a one off [transfer](0057-TRAN-transfers.md) or create a [recurring transfer](0057-TRAN-transfers.md) to any of these reward accounts. 
 Note that the market settlement asset has nothing to do in particular with the asset used to pay out a reward for the market for any of the relevant trading rewards. 
 
-Reward accounts and balances are to be saved in [LNL checkpoint](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md). 
+Reward accounts and balances are to be saved in [LNL checkpoint](./0073-LIMN-limited_network_life.md). 
 
 ## Reward distribution
 
