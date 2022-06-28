@@ -234,6 +234,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Verify that 3000 is distributed between the Tendermint validators and 500 is rewarded to the ersatz validator.
 5. Multiple ersatz validators, reward factor equals 0.5 (<a name="0069-VCBS-022" href="#0069-VCBS-022">0069-VCBS-022</a>): 
   * Setup a network with 3 ersatz validators, 3 Tendermint validators with arbitrary delegation, but ensuring the total delegation for each validator is greater than the minimum self-delegation. 
+  * With `total_delegations_from_all_validators = (0.5 * total_delegation_from_ersatz_validators) + total_delegation_from_tendermint_validators`
   * Verify the total reward given to Tendermint validators is equal to the `total_delegation_from_tendermint_validators` * `reward_balance` / `total_delegation_from_all_validators`.
   * Verify the total reward given to ersatz validators is equal to the `total_delegation_from_ersatz_validators` * `0.5` * `reward_balance` / `total_delegation_from_all_validators`.
 6. Pending validators get nothing (<a name="0069-VCBS-023" href="#0069-VCBS-023">0069-VCBS-023</a>):
