@@ -60,7 +60,7 @@ A governance proposal may be submitted to transfer funds on enactment from the o
 - Depositing funds via the ERC20 bridge to the Network Treasury account (i.e. zero address) when there is already a Network Treasury account for the asset being deposited:
 	- Increments the balance of the Network Treasury account for the asset by the amount of the asset that was deposited (<a name="0055-TREA-006" href="#0055-TREA-006">0055-TREA-006</a>)
 	- The Network Treasury accounts API returns the correct balance for the new account (<a name="0055-TREA-007" href="#0055-TREA-007">0055-TREA-007</a>)
-- The network treasury account balances [are restored after a network restart](../non-protocol-specs/0005-NP-LIMN-limited_network_life.md)  (<a name="0055-TREA-010" href="#0055-TREA-010">0055-TREA-010</a>)
+- The network treasury account balances [are restored after a network restart](./0073-LIMN-limited_network_life.md)  (<a name="0055-TREA-010" href="#0055-TREA-010">0055-TREA-010</a>)
 
 ### Post Oregon Trail
 

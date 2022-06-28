@@ -85,7 +85,7 @@ This is primarily for liquidity providers and other sophisticated participants a
 
 ## Out of scope
 
-- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](./0005-NP-LIMN-limited_network_life.md).
+- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](../protocol/0073-LIMN-limited_network_life.md).
 
 ## Limitations
 
