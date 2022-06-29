@@ -1,7 +1,7 @@
 # Acceptance Criteria
 - The market depth builder must be able to handle all available order types (<a name="0039-MKTD-001" href="#0039-MKTD-001">0039-MKTD-001</a>)
-- The construction of the market depth structure must not impact the core performance. (<a name="0039-MKTD-002" href="#0039-MKTD-002">0039-MKTD-002</a>)
-- Entering and leaving auctions must be handled correctly (<a name="0039-MKTD-003" href="#0039-MKTD-003">0039-MKTD-003</a>)
+_this item needs to be removed as MD happens in datanode_ The construction of the market depth structure must not impact the core performance. (<a name="0039-MKTD-002" href="#0039-MKTD-002">0039-MKTD-002</a>)
+- Entering and leaving auctions must be handled correctly (<a name="0039-MKTD-003" href="#0039-MKTD-003">0039-MKTD-003</a>) _there is overlap between what is qualified as AC and the couple of tests on the bottom of the page. maybe consolidating all into a list?_
 - All subscribed clients must receive all the data necessary to build their own view of the market depth (<a name="0039-MKTD-004" href="#0039-MKTD-004">0039-MKTD-004</a>)
 
 
@@ -17,9 +17,10 @@ Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or
 
 The market depth information should include pegged order volume.
 
-The volume at each level should be split into normal, pegged and market making order volumes to allow them to be drawn with different attributes in the console.
+_as per Pete B - the levels are not implemented:_
+The volume at each level should be split into normal, pegged and market making order volumes to allow them to be drawn with different attributes in the console. 
 
-Best bid/ask pairs should be generated for all orders and for all orders excluding pegged.
+Best bid/ask pairs should be generated for all orders and for all orders excluding pegged. _(is this actually **pair**, singular?)_
 
 `Cumulative volume` is the total volume in the book between the current price level and top of the book. The market depth service will not build this information, instead we will rely on the client building it.
 
@@ -56,7 +57,7 @@ Clients are able to subscribe to a market to receive the market depth informatio
 
 When a new event arrives at the market depth builder, we apply the change to our market depth structure and then send a copy of the price level details for the affected price level. The client is responsible for applying that update to their copy of market depth structure.
 
-## Cumulative Volume
+## Cumulative Volume _(if we dont have levels implemented, does this one stand?)_
 
 The cumulative volume at each level is a useful thing for clients to know but it is difficult for the service to keep up to date in a live system. Therefore this calculation will not be performed by the market depth system. The client will be responsible for generating this data if and when they need it.
 
@@ -74,7 +75,7 @@ The definition of the market depth structure is:
     type PriceLevel struct {
         Price             int64
         Volume            uint64
-        CumulativeVolume  uint64
+        CumulativeVolume  uint64 _is this up to date if we're delegating the aggregation to clients?_
         NumOfOrders       uint64
         Side              bool
     }
@@ -108,11 +109,11 @@ The client side will perform the following steps to build and keep an up to date
     Request current market depth structure
     Forever
         Receive market depth update
-        If update sequence number in one above current sequence number
+        If update sequence number is one above current sequence number
             Apply update to the market depth structure
             Increment the sequence number
         Else
-            If update sequence number > market depth sequence number+1
+            If update sequence number > market depth sequence number+1   _this one seems tricky, since block timestamp is also applied to the calculation_
                 We are missing an update, throw an error 
             Else
   	            Old update, ignore it
@@ -129,8 +130,11 @@ The client side will perform the following steps to build and keep an up to date
 * Cancel an order and replace it with the same order values, verify the MD sees an update
 * Enter into auction
 * Leave auction
+
+_these two are non-functional and deserve a separate testing task (tests, pipeline)_
 * Do nothing for many minutes, make sure subscribers do not timeout/fail
 * Send a large spike of order updates, make sure the system does not stall
-* Sequence number increments for each emitted book update
-* Updates that are not received/processed by the client are not buffered on their behalf
+
+* Sequence number increments for each emitted book update. _how do we test this reliably if block timestamp is added?_
+* Updates that are not received/processed by the client are not buffered on their behalf (how does the client receive a **skipped** trx?)
 
