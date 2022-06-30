@@ -177,5 +177,4 @@ message Market {
 - As an API user, I can identify: (<a name="0026-AUCT-008" href="#0026-AUCT-008">0026-AUCT-008</a>)
   - If a market is temporarily in an auction period
   - Why it is in that period (e.g. Auction at open, liquidity sourcing)
-  - What price mode that auction will use when the auction is over
   - When the auction mode ends
