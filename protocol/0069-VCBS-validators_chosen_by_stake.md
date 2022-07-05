@@ -371,8 +371,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 
 ## Multisig update
-1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-VCBS-002" href="#0069-VCBS-002">0069-VCBS-002</a>)
-2. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-VCBS-003" href="#0069-VCBS-003">0069-VCBS-003</a>)
-3. It is possible to submit a transaction to update the weights. (<a name="0069-VCBS-004" href="#0069-VCBS-004">0069-VCBS-004</a>)
+1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-COSMICELEVATOR-002" href="#0069-COSMICELEVATOR-002">0069-COSMICELEVATOR-002</a>)
+2. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-COSMICELEVATOR-003" href="#0069-COSMICELEVATOR-003">0069-COSMICELEVATOR-003</a>)
+3. It is possible to submit a transaction to update the weights. (<a name="0069-COSMICELEVATOR-004" href="#0069-COSMICELEVATOR-004">0069-COSMICELEVATOR-004</a>)
  
 
