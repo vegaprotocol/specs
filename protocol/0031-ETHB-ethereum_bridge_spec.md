@@ -129,7 +129,7 @@ This example connects the network to Ropsten:
 
 * ERC20 smart contract (This can be repeated for many token standards - NFTs and crypto items will be more complex):
   * An Ethereum Address can call the deposit function and successfully deposit any token that is listed via `list_asset` (<a name="0031-ETHB-008" href="#0031-ETHB-008">0031-ETHB-008</a>)
-  * A deposit call with a removed token `remove_asset` is rejected (<a name="0031-ETHB-009" href="#0031-ETHB-009">0031-ETHB-009</a>)
+  * A deposit call with a removed token `remove_asset` is rejected (<a name="0031-COSMICELEVATOR-009" href="#0031-COSMICELEVATOR-009">0031-COSMICELEVATOR-009</a>)
 
 ## Withdraw
 
@@ -146,5 +146,5 @@ This example connects the network to Ropsten:
 ## Blocklist a token (by eth address)
 
 * ERC20 smart contract specific requirements:
-  * A valid multisig bundle can be passed to the `remove_asset` function to successfully remove a previously  allow listed token (<a name="0031-ETHB-019" href="#0031-ETHB-019">0031-ETHB-019</a>)
-  * An invalid multisig bundle is rejected by the `remove_asset` function (<a name="0031-ETHB-020" href="#0031-ETHB-020">0031-ETHB-020</a>)
+  * A valid multisig bundle can be passed to the `remove_asset` function to successfully remove a previously  allow listed token (<a name="0031-COSMICELEVATOR-019" href="#0031-COSMICELEVATOR-019">0031-COSMICELEVATOR-019</a>)
+  * An invalid multisig bundle is rejected by the `remove_asset` function (<a name="0031-COSMICELEVATOR-020" href="#0031-COSMICELEVATOR-020">0031-COSMICELEVATOR-020</a>)
