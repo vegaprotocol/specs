@@ -1,20 +1,22 @@
 # Submit order
-As a user I want change my exposure on a market (e.g. open a position, increase or decrease exposure), I want to submit an order with instructions for how my order should be executed so that I can control the price that I get and whether my order should remain on the order book (e.g. wait to be filled, or canceled if not filled immediately).
+As a user I want change my exposure on a market (e.g. open a position, increase or decrease open volume), I want to submit an order with instructions for how my order should be executed so that I can control the price that I get and whether my order should remain on the order book (e.g. wait to be filled, or canceled if not filled immediately).
 
 When populating a deal ticket I...
 
-- Can see/select the market (name, code or ID) they are submitting the order on(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
+- Can see/select the market (**name**, code or ID) they are submitting the order on(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
+- Can see the current market **status** (Continuous, Auction etc) (<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
 
-- Select a side/direction (note: some implementations may do this with two submit buttons long/short)(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
-    - Long
-    - Short
 
-- Enter an order size (aka amount or contracts)
-    - is warned if input has too many decimal places for the market's "position" decimal places
-    - `TODO` On load, if the user has traded before: should be populated with the same value as the last one the user attempted to submit (for this market)
-    - `TODO` Hitting up/down on the keyboard should increase the size by the markets' min-contract size
-    - `TODO` If the field is empty hitting/up down should populate the input with the current mark price (if there is one)
-    - `TODO` input price as a % of X, given the current price field
+
+- Select a **side/direction** (note: some implementations may do this with two submit buttons long/short)(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
+
+## Order size
+- Enter an **order size** (aka amount or contracts)(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
+    - is warned if input has too many decimal places for the market's "position" decimal places(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
+    - `NOTYET` If the field is empty hitting/up down should populate the input with the current mark price (if there is one)
+    - `NOTYET` The price input should be pre-poulated with a saved previous value (Last submitted or last changed) if there is one
+    - `NOTYET` Hitting up/down on the keyboard should increase the size by the markets' min-contract size
+    
 
 ## Limit order
 - enter a price 
@@ -29,9 +31,10 @@ When populating a deal ticket I...
 ## Market order
 - TODO: no price input (can see and indication of fill price + slippage)
 
-## Populating a deal ticket with other data
+## Auto Populating a deal ticket non-manual menthods
 - TODO Populate by clicking on a size/price in the order book
 - TODO Populate by clicking on a size/price in the chart
+- `NOTYET` Input price as a % of account, given the current price field
 
 ## Submit an order
 * Submit the populated order
@@ -56,4 +59,10 @@ When populating a deal ticket I...
  - new VWAP
 
 
- keep track of my order in the book...
+After submitting orders I'll want to [manage them](6002-MORD-manage_orders.md).
+
+## Typical ordering scenarios
+- Limit order GTC, with a price that is lower than the current price
+- Limit order that crosses the book but only gets a partial fill
+- Market order
+- Attempted Market order in Auction mode
