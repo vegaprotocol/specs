@@ -4,18 +4,18 @@ As a user I want change my exposure on a market (e.g. open a position, increase 
 When populating a deal ticket I...
 
 - Can see/select the market (name, code or ID) they are submitting the order on(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
-----
+
 - Select a side/direction (note: some implementations may do this with two submit buttons long/short)(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
     - Long
     - Short
-----
+
 - Enter an order size (aka amount or contracts)
     - is warned if input has too many decimal places for the market's "position" decimal places
     - `TODO` On load, if the user has traded before: should be populated with the same value as the last one the user attempted to submit (for this market)
     - `TODO` Hitting up/down on the keyboard should increase the size by the markets' min-contract size
     - `TODO` If the field is empty hitting/up down should populate the input with the current mark price (if there is one)
     - `TODO` input price as a % of X, given the current price field
-----
+
 ## Limit order
 - enter a price 
 - See the price unit (as defined in market)
@@ -25,10 +25,10 @@ When populating a deal ticket I...
     - FOC
     - GFN
     - GFA
-----
+
 ## Market order
 - TODO: no price input (can see and indication of fill price + slippage)
-----
+
 ## Populating a deal ticket with other data
 - TODO Populate by clicking on a size/price in the order book
 - TODO Populate by clicking on a size/price in the chart

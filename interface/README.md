@@ -3,40 +3,47 @@ This folder contain descriptions of thing that users do when interacting with a 
 
 These have been listed with the most "upstream" being first.
 
-----
+0
 - Get a Vega wallet + create keys
-----
+  
+1
 - Associate governance token a Vega key
 - Selecting validator(s) to stake
 - Review staking income
 - See pending Governance changes
 - Propose changes
 - Vote on changes
-----
+
+2
 - Understand treasury rewards
-----
+
+3
 - Deposit 
 - Withdraw
 - View Collateral
 - Transfer
-----
+
+4
 - Understand return of liquidity provision
 - Provide liquidity
-----
+
+5
 - [Find markets](5000-MARK-find_markets.md)
 - View Market details
 - Analyze Order book
 - Analyze price history
 - Analyze trade history
-----
+
+6
 - [Submit an order](6001-SORD-submit_orders.md) (Market or Limit)
 - [Manage my orders](6002-MORD-manage_orders.md)
 - [View my positions](6003-POSI-positions.md)
 - View my trades
 - TODO: Get alerts (price, fills etc)
-----
+
+7
 - Analyze chain state and activity
-----
+
 
 # Events
 There are things that happen to users too
