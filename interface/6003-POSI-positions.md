@@ -8,7 +8,18 @@ TODO Deal with the fact that We do not have closed positions right now.
 When looking at a list of positions a user...
 - see the market 
 - See open volumne
-- see unfilled volume
-- see unrealised profit list
+- Avergage entry price
+- Mark price
+- see un-realised profit
+  - Wtih or without fees
 - See a margin balance
 - Follow a prompt to close a position 
+
+
+Closed positions 
+- market
+- last closed
+- Realised PnL
+    - choose to see this with or without fees
+
+- Position on a chart

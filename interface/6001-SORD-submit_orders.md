@@ -6,7 +6,7 @@ When populating a deal ticket I...
 - Can see/select the market (**name**, code or ID) they are submitting the order on(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
 - Can see the current market **status** (Continuous, Auction etc) (<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
 
-
+- If you do not have any of the settlement asset the deal ticket prompts to get some (but also allow you to pupulate ticekt becase I might wnat to try before I deposit)
 
 - Select a **side/direction** (note: some implementations may do this with two submit buttons long/short)(<a name="000-XXX-0000" href="#000-XXX-0000">000-XXX-0000</a>) 
 

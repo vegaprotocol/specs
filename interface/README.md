@@ -4,7 +4,7 @@ This folder contain descriptions of thing that users do when interacting with a 
 These have been listed with the most "upstream" being first.
 
 0
-- Get a Vega wallet + create keys
+- [Get and use a **Vega wallet**](0000-WALL-get_wallet.md)
   
 1
 - Associate governance token a Vega key
@@ -20,7 +20,6 @@ These have been listed with the most "upstream" being first.
 3
 - Deposit 
 - Withdraw
-- View Collateral
 - Transfer
 
 4
@@ -35,10 +34,11 @@ These have been listed with the most "upstream" being first.
 - Analyze trade history
 
 6
+- [View Collateral / accounts](6000-COLL-collateral.md)
 - [Submit an order](6001-SORD-submit_orders.md) (Market or Limit)
 - [Manage my orders](6002-MORD-manage_orders.md)
 - [View my positions](6003-POSI-positions.md)
-- View my trades
+- [View my trades/fills](6003-FILL-fills.md)
 - TODO: Get alerts (price, fills etc)
 
 7
