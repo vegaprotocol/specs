@@ -113,8 +113,7 @@ it requires a level of control on what honest parties communicate with each othe
 i.e., compromise of either the routing or some manipulation on the level of the gossip
 protocol.
 
-One additional risk (which holds for all keys) is that an attacker compromises a 
-idator,
+One additional risk (which holds for all keys) is that an attacker compromises a validator,
 obtains a copy of the key, and then silently goes after other validators until they get
 a critical number of keys. Thus, the lifetime of the key should be limited.
 
