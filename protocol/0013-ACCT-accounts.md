@@ -31,7 +31,7 @@ One key difference with staking accounts is that the collateral is not held in a
 
 ## Insurance pool accounts
 - [ ] When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0013-ACCT-020" href="#0013-ACCT-020">0013-ACCT-020</a>)
-- [ ] Only transfer requests move money in or out of the insurance account. (<a name="0013-ACCT-021" href="#0013-ACCT-021">0013-ACCT-021</a>)
+- [ ] Only protocol-initiated aka internal transfer requests move money in or out of the insurance account.  [User initiated tranfer requests](./0057-TRAN-transfers.md) cannot be used to move funds in or out of insurance pool. (<a name="0013-ACCT-021" href="#0013-ACCT-021">0013-ACCT-021</a>) 
 - [ ] When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the [network treasury](./0055-TREA-on_chain_treasury.md) account for the appropriate asset (if it doesn't exist create it).  (<a name="0013-ACCT-022" href="#0013-ACCT-022">0013-ACCT-022</a>)
 
 # Summary
