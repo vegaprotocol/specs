@@ -67,7 +67,7 @@ and assuring we generate a Ethereum native signature.
 
 ### Vega Key [Identity]
 
-This key is split into master and hot key as specified in [0064-VALK](./0064-VALK-validator_performance_based_rewards.md) . 
+This key is split into master and hot key as specified in [0064-VALK](./0063-VALK-validator_vega_master_keys.md) . 
 
 It is possible to update the hot key at network restarts. The master key can be kept in cold storage
 and only used to sign the update transaction. 
@@ -113,7 +113,8 @@ it requires a level of control on what honest parties communicate with each othe
 i.e., compromise of either the routing or some manipulation on the level of the gossip
 protocol.
 
-One additional risk (which holds for all keys) is that an attacker compromises a validator,
+One additional risk (which holds for all keys) is that an attacker compromises a 
+idator,
 obtains a copy of the key, and then silently goes after other validators until they get
 a critical number of keys. Thus, the lifetime of the key should be limited.
 
