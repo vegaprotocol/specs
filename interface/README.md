@@ -4,7 +4,7 @@ This folder contain descriptions of thing that users do when interacting with a 
 These have been listed with the most "upstream" being first.
 
 0
-- [Get and use a **Vega wallet**](0000-WALL-get_wallet.md)
+- [Get and use a **Vega wallet**](0000-WALL-wallet.md)
   
 1
 - Associate governance token a Vega key
