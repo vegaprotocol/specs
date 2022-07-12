@@ -48,7 +48,9 @@ When a dapp sends a transaction to the wallet for signing and broadcast, I..
 - am prompted to approve, reject or ignore the transaction (if auto approve is not on)
 - can see [single key transaction](#single-key-transaction) details)
 - can see any ignored/dismissed (not rejected or approved) in a transactions area (e.g. history)
+
 .. so that I can verify that the transaction being sent is the one I want
+
 - `NOTYET` only auto approve some transaction types?
 
 ## View keys balances + positions/accounts
@@ -69,6 +71,7 @@ When thinking about a recent or specific transaction, I ..
 - can see transactions that have recently been broadcast but not yet seen on the chain
 - can see transactions that were rejected by the wallet user (me)
 - (for tainted keys) there is a record of attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions)
+
 .. So that I can see what has happened and when
 
 ## Single key transaction
@@ -86,6 +89,7 @@ when looking at a specific transaction..
 - can see at what block and time it was confirmed
 - can see if there was a reported error/issue, and the details of the issue
 - can see if the transaction was rejected
+
 .. so that I might be able to find all the information about what has happened with mined and un-mind transactions
 
 ## Key management
@@ -103,10 +107,12 @@ When protecting myself from use of keys that may be compromised, I..
 - am prompted to enter wallet password to taint key
 - (tainted keys will not prompt a prompt to sign transaction)
 - can see tainted keys as flagged as tainted
+
 .. so that tainted keys can not be used
 
 When I have accidentally tainted a key I..
 - Can select a key to un-taint by entering wallet password
+
 ..so that I can use the key again
 
 ## Isolate keys
@@ -122,6 +128,7 @@ When wishing to use my wallet to sign arbitrary messages, I..
 - see an option to base64 encode content before signing
 - see option to broadcast that to the selected network
 - can sign the content and am given a hash of the signed content as well as the message (now encoded)
+
 .. so that I know and can control the details of the message being signed, and can use the message elsewhere (for example to prove I own a wallet)
 
 ## Deposit / withdraw / transfer
