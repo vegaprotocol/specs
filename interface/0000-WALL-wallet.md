@@ -38,6 +38,7 @@ When a dapp requests use of a wallet, I...
 - `NOTYET` am required to select what keys of a wallet to grant access too
   - can select whole wallet (so that new keys are automatically shared)
   - can select specific keys
+  - tainted keys are shown as tainted
 - am required to enter wallet passphrase before wallet details are shared
 - can retrospectively revoke Dapp's use to Wallet/keys
 ... so that I can control what public keys are shared with a dapp and what dapps can prompt me to sign transactions 
@@ -57,6 +58,7 @@ When looking for a specific balance or asset on a given wallet and network, I...
 - can see key balances when switching keys (to help me find the key I am looking for)
 - can search by market name, and see all keys with a margin or liquidity account in that market
 - can search by asset name or code, and see all keys with balance of matching assets
+- can search for keys my arbitrary metadata added by user
 - can see a total of all asset for all keys in a given wallet
 ... so that I can find the keys that I am looking for, see how much I have to consolidate (via transfers) or withdraw funds
 
@@ -66,9 +68,10 @@ When thinking about a recent or specific transaction, I ...
 - can see pending transactions (Transactions I have not yet approved/rejected)
 - can see transactions that have recently been broadcast but not yet seen on the chain
 - can see transactions that were rejected by the wallet user (me)
+- (for tainted keys) there is a record of attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions)
 ... So that I can see what has happened and when
 
-## single key transaction
+## Single key transaction
 when looking at a specific transaction...
 - can see the content of the transaction that is being shown
 - can see the time request was made
@@ -90,15 +93,28 @@ When using vega, I...
 - can create new keys (derived from the source of the first)
 - am prompted to give keys and alias (optional)
 - can see and/or copy to clipboard the full public key
-- can change alias
-- can amend arbitrary key meta data
+- can change key name/alias
+- can amend other arbitrary key meta data
 ... so that I can isolate risk to a given key (aka isolate margin), mitigate the risk of a key being comprised, or use multiple trading strategies 
 
 ## Taint keys
-TODO
+When protecting myself from use of keys that may be compromised, I...
+- can select a key I wish to taint
+- am prompted to enter wallet password to taint key
+- (tainted keys will not prompt a prompt to sign transaction)
+- can see tainted keys as flagged as tainted
+... so that tainted keys can not be used
+
+When I have accidentally tainted a key I...
+- Can select a key to un-taint by entering wallet password
+...so that I can use the key again
 
 ## Isolate keys
-TODO
+See [docs on key isolation](https://docs.vega.xyz/docs/mainnet/tools/vega-wallet/cli-wallet/latest/guides/isolate-keys)
+When I want to create an extra level of security for a given key, I...
+- `NOTYET` can select a key that I want to isolate
+- `NOTYET` am prompted for a password before isolation
+- `NOTYET` am instructed as to where the wallet file has been created
 
 ## Manually sign a message
 When wishing to use my wallet to sign arbitrary messages, I...
@@ -106,7 +122,7 @@ When wishing to use my wallet to sign arbitrary messages, I...
 - see an option to base64 encode content before signing
 - see option to broadcast that to the selected network
 - can sign the content and am given a hash of the signed content as well as the message (now encoded)
-... so that I know and can control the details of the message being signed, and can use the message elswhere (for example to prove I own a wallet)
+... so that I know and can control the details of the message being signed, and can use the message elsewhere (for example to prove I own a wallet)
 
 ## Deposit / withdraw / transfer
 - `TODO` See prompts to do these things, where do they go? Eth connection?
@@ -115,10 +131,10 @@ When wishing to use my wallet to sign arbitrary messages, I...
 When seeking to reduce risk of compromise I...
 - can create multiple wallets
 - can switch between wallets
-- can delete wallets
+- can delete a wallet
 - can change wallet name
 - can change wallet passphrase
-- can get the recovery phrase for a wallet (at any time not just creation)
+- `NOTYET` can get the recovery phrase for a wallet (at any time not just creation)
 
 ## App settings (Not sure if this needs AC?)
 - Link or lock a key to a given network
