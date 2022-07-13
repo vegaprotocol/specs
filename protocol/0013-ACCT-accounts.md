@@ -41,7 +41,7 @@ All accounts must:
 
 ## Accounts for assets
 
-**Creation:**
+**Creation/Deletion:**
 
 The first time an entity deposits an asset into Vega's collateral smart contract, an asset account is created for that party on Vega and credited with the equivalent amount. 
 
@@ -52,6 +52,8 @@ This account:
 * is used by all Vega markets with that settlement asset.
 * will have it's balance increased or decreased when a party deposits or withdraws that asset from Vega.
 
+The core protocol does not require these general asset accounts if they have a balance of zero.
+
 ## Margin accounts
 
 Margin accounts are used by the protocol to maintain [margin requirements](./0010-MARG-margin_orchestration.md) and collect and distribute [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). Each party only needs a margin account created for a market they've ever put an order on.
@@ -59,11 +61,16 @@ Margin accounts are used by the protocol to maintain [margin requirements](./001
 Moreover, margin accounts are conceptually connected to open positions and given there no such thing as a zero open position a margin account may therefore be transient (i.e. there would be no such thing as a margin account that has a balance of zero).
 
 
-**Creation:**
+**Creation/Deletion:**
 
 When a trader places an order on a market and they do not have a margin account for that market, a margin accounts is created for the trader for each settlement asset of that market. This may be due to either:
 * it's the first time a trader has placed an order or;
 * they've previously had a margin account but it was deleted for the reason listed below.
+
+When a trader no longer has collateral requirements for a  market (because they don't have open positions or active orders), these accounts no longer have utility in the core protocol and may be deleted. Accounts may also be deleted for other reasons (e.g. a system account at the conclusion of a set of [closeouts](./0012-POSR-position_resolution.md)).
+
+If there is a positive balance in an account that is being deleted, that balance should be transferred to the account specified in the transfer request (which for margin accounts will typically be the insurance pool of the market).
+
 
 ## Bond accounts
 Bond accounts are opened when a party opens a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md). The bond is held by the network to ensure that the Liquidity PRovider maintains enough collateral to cover their commitment. [0044-LIQM - LP Mechanics](./0044-LIQM-lp_mechanics.md) contains more detail on bond management. 
