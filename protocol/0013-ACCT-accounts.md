@@ -79,7 +79,7 @@ Bond accounts are opened when a party opens a [Liquidity Provision order](./0038
 
 Every market will have at least one insurance pool account that holds collateral that can be used to cover losses in case of unreasonable market events.
 
-**Creation:**
+**Creation/Deletion:**
 
 When a [market launches](./0043-MKTL_market_livecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). 
 
