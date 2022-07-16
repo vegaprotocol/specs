@@ -2,8 +2,6 @@
 This repository contains specifications and RFCs for future changes to the system. The process for writing, reviewing
 and merging specs is in [WORKFLOW.md](./WORKFLOW.md).
 
-Note that we are currently mirroring `glossaries`, `protocol` and `qa-scenarios` of this repo into a [public spec repo](https://github.com/vegaprotocol/specs).
-
 ## [Protocol](./protocol/)
 This folder contains the protocol specifications. The goal of this folder is to specify how anyone could write an
 implementation of Vega that is compatible with [vegaprotocol/vega](https://github.com/vegaprotocol/vega). 
