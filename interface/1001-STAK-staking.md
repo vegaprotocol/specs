@@ -25,18 +25,8 @@ Notes: There are many ways that "understanding the return" can be done, and this
 Income may come in a range of tokens, as markets can settle in different assets, and there may be rewards paid out by the treasury.
 
 ## Associate tokens
-Note: the word "associate" is used in user interfaces, the work stake is used on function names. Stake was avoided in an attempt to prevent people thinking they would get a return only after staking. On Vega `Staking = Association + Nomination`
+See [Associate tokens](./1000-ASSO-associate.md)
 
-Think of Associating tokens to a Vega key a little like depositing to a vega key, However, a deposit can only be released by the Vega network, where as an association can be revoked on ethereum.
-
-When looking to stake validators or participate in governance, I first need to associate Governance tokens with a Vega wallet, I...
-
-- can connect an Ethereum wallet to see tokens it may have in wallet or attributed to it in the vesting contract
-- can select a Vega key to associate to 
-- can submit the association
-- can see some feedback on the status of my association (typically 50 ethereum blocks need to pass before they can be used, but the user will need feedback that the process has started, not wait 50 blocks and hope)
-
-...so I can then use the wallet to 
 
 ## Select validator
 When selecting where to place my stake, I...
@@ -87,7 +77,7 @@ When checking if im getting the staking return that I was expecting, I...
 When removing stake from a validator, I...
 
 - can set an amount to remove from a validator (with a link to populate with the maximum amount)
-- warned if amount is greater than the amount left to un-nominate
+- warned if amount is greater than the amount that will be on that validator at the end of the epoch
 - have the option of withdrawing the nomination now or at the end of the epoch (so I get the full epoch reward)
 - can submit un-nomination
 - see feedback that the un-nomination has been registered
@@ -98,6 +88,10 @@ When removing stake from a validator, I...
 
 When wanting to remove governance tokens, I...
 
-- vesting or not
+- can (if i have any in vesting contract) select to return tokens to Vesting contract
+- can return tokens that are not held by the vesting contract to my ethereum wallet
+- can select and amount of tokens to disassociate 
+- can action the disassociation on ethereum
+- see feedback on the progress of the disassociation 
 
 ...so that I can transfer them to another eth wallet (e.g. sell them on an exchange)
