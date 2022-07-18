@@ -1,3 +1,4 @@
 # Propose
 
-see [associate tokens](1001-STAK-staking.md#associate-tokens)
+## Associate tokens
+See [Associate tokens](./1000-ASSO-associate.md)

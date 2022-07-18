@@ -27,7 +27,6 @@ Income may come in a range of tokens, as markets can settle in different assets,
 ## Associate tokens
 See [Associate tokens](./1000-ASSO-associate.md)
 
-
 ## Select validator
 When selecting where to place my stake, I...
 
