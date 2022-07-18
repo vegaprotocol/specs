@@ -72,7 +72,7 @@ When thinking about a recent or specific transaction, I ..
 - can see transactions that were rejected by the wallet user (me)
 - (for tainted keys) there is a record of attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions)
 
-.. So that I can see what has happened and when
+.. so that I can see what has happened and when
 
 ## Single key transaction
 when looking at a specific transaction..
@@ -99,6 +99,7 @@ When using vega, I..
 - can see and/or copy to clipboard the full public key
 - can change key name/alias
 - can amend other arbitrary key meta data
+
 .. so that I can isolate risk to a given key (aka isolate margin), mitigate the risk of a key being comprised, or use multiple trading strategies 
 
 ## Taint keys
