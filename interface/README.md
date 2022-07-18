@@ -8,7 +8,7 @@ These have been listed with the most "upstream" being first.
   
 1
 - Associate governance token a Vega key
-- Selecting validator(s) to stake
+- [Staking validators](1001-STAK-staking.md)
 - Review staking income
 - See pending Governance changes
 - Propose changes
