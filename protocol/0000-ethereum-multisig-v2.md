@@ -6,6 +6,8 @@ Our current ERC20 bridge with 13 validators uses ~167k gas for a withdrawal, for
 
 As we expand to have more validators, the costs grow ever so slightly exponentially per every new validator added (see chart). By 25 validators we are already at 292k gas. In our previous example of 200 gwei, this will cost $180 to do a single withdrawal. This problem applies to all multisig transactions.
 
+![Multisig V1 gas use](https://github.com/vegaprotocol/specs/blob/0000-ethereum-multisig-v2/protocol/V1%20gas%20usage.png)
+
 ## Epoch Details
 The first part of the solution is to place epoch details into the parameters of MC’d functions and do away with storing of the signers on-chain. This approach reduces the memory access that causes the exponential growth AND gives us access to validator weights.
 
@@ -18,7 +20,9 @@ If the hashes match, then the smart contract loops through the signer set and re
 Once complete, the total weight must be higher than the threshold. If this is the case, then the transaction is allowed to go through. 
 
 This solution comes with a higher initial overhead, but the cost of signers is steady. This means that up until 15 signers, MCV1 costs less gas. With each additional signer after 15, the gap between V1 and V2 expands exponentially.
+![Multisig V1 vs V2 gas use](https://github.com/vegaprotocol/specs/blob/0000-ethereum-multisig-v2/protocol/V1%20vs%20V2%20Gas%20Cost%20for%20Withdrawal(1).png)
 
+![Multisig V1 vs V2 gas per additional signer](https://github.com/vegaprotocol/specs/blob/0000-ethereum-multisig-v2/protocol/V1%20vs%20V2%20Gas%20Cost%20per%20Additional%20Signer(1).png)
 
 ### Epoch Check-In
 ![Epoch Check-In](https://github.com/vegaprotocol/specs/blob/0000-ethereum-multisig-v2/protocol/MCV2%20Epoch%20-%20Epoch%20Checkin.png)
@@ -39,6 +43,7 @@ Since this process is decoupled from the number of signers, the gas cost for ver
 
 A point worth noting: at the moment all of this is unoptimized for gas reduction, so the costs stated everywhere in this document are subject to change.
 
+![Batch Withdrawal Gas with V1 and V2](https://github.com/vegaprotocol/specs/blob/0000-ethereum-multisig-v2/protocol/V1%20vs%20V2%20with%20Batch%20and%20ZK.png)
 
 ### Batch Withdrawal
 ![Batch Withdrawal](https://github.com/vegaprotocol/specs/blob/0000-ethereum-multisig-v2/protocol/MCV2%20Epoch%20-%20Batch%20Withdrawal.png)
@@ -46,8 +51,12 @@ A point worth noting: at the moment all of this is unoptimized for gas reduction
 ## ZK Rollups
 ...
 
+![ZK Withdrawal Gas with V1 and V2](https://github.com/vegaprotocol/specs/blob/0000-ethereum-multisig-v2/protocol/V1%20vs%20V2%20with%20Batch%20and%20ZK.png)
+
 ### ZK Withdrawal
 ![ZK Withdrawal](https://github.com/vegaprotocol/specs/blob/0000-ethereum-multisig-v2/protocol/MCV2%20Epoch%20-%20ZK%20Withdrawal.png)
+
+
 
 ## Difficulties and Risks
 There are a couple difficulties bringing all the features of MCV2 into Vega, primarily integration and incentivisation, though there are a couple others.
