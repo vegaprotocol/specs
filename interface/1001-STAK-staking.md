@@ -25,13 +25,21 @@ Notes: There are many ways that "understanding the return" can be done, and this
 Income may come in a range of tokens, as markets can settle in different assets, and there may be rewards paid out by the treasury.
 
 ## Associate tokens
-See [Associate tokens](./1000-ASSO-associate.md)
+See [Associate tokens](./1000-ASSO-associate.md) with a Vega wallet/key.
 
 ## Select validator
 When selecting where to place my stake, I...
 
-- can see all the data that goes into a calculation of the staking return
-- can see the data for previous epochs
+current
+- can see the current status of each validator 
+
+previous 
+- can see the overall score for a validator for previous epoch 
+- can see a break down of all the scores for a each validator
+
+all
+- can see the the overall score for previous epochs for each validator
+- can see a breakdown of all the scores for previous epochs
 - can see information about the validator
   - name
   - Vega public key
@@ -39,7 +47,7 @@ When selecting where to place my stake, I...
 
 ...so I can select validators that should give me the biggest return (or secure/upgrade the network)
 
-## Nominate validator
+## Nominate a validator
 Note: Interfaces may use the term Nominate, technically the function is called delegate. Delegating tokens to a validator may imply that you also give that validator your vote on proposals, at time of writing, it does not. It only gives them the potential for more "voting power" in the production of blocks.
 
 Within a staking epoch (typically 24 hours) a user can change their nominations many times, however the changes are only effective at the end of the epoch. You will only get rewards for a full epoch staked.
@@ -94,3 +102,6 @@ When wanting to remove governance tokens, I...
 - see feedback on the progress of the disassociation 
 
 ...so that I can transfer them to another eth wallet (e.g. sell them on an exchange)
+
+## Batch changes to nominations
+- `TODO`
