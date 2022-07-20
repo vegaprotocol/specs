@@ -30,40 +30,37 @@ See [Associate tokens](./1000-ASSO-associate.md) with a Vega wallet/key.
 ## Select validator
 When selecting where to place my stake, I...
 
-current
-- can see the current status of each validator 
-
-previous 
-- can see the overall score for a validator for previous epoch 
-- can see a break down of all the scores for a each validator
-
-all
-- can see the the overall score for previous epochs for each validator
-- can see a breakdown of all the scores for previous epochs
-- can see information about the validator
-  - name
+- **must** see the current "status" of each validator [1001-STAK-0005](#1001-STAK-0005 "1001-STAK-0005")
+- **must** see information about the validator [1001-STAK-0006](#1001-STAK-0006 "1001-STAK-0006")
+  - name 
   - Vega public key
   - a URL where to find more information about the validator
+
+- **must** see the overall "score" for a validator for the previous epoch [1001-STAK-0007](#1001-STAK-0007 "1001-STAK-0007")
+- **must** see all the inputs to that "score" [1001-STAK-0008](#1001-STAK-0008 "1001-STAK-0008")
+
+- **must** see the the overall "score" for all previous epochs for each validator [1001-STAK-0009](#1001-STAK-0009 "1001-STAK-0009")
+- **must** see a breakdown of all the inputs to that "score" for all previous epochs [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
 
 ...so I can select validators that should give me the biggest return (or secure/upgrade the network)
 
 ## Nominate a validator
-Note: Interfaces may use the term Nominate, technically the function is called delegate. Delegating tokens to a validator may imply that you also give that validator your vote on proposals, at time of writing, it does not. It only gives them the potential for more "voting power" in the production of blocks.
+Note: User interfaces may use the term "Nominate", technically the function is called "delegate". Delegating tokens to a validator may imply that you also give that validator your vote on proposals, at time of writing, it does not. It only gives them the potential for more "voting power" in the production of blocks.
 
 Within a staking epoch (typically 24 hours) a user can change their nominations many times, however the changes are only effective at the end of the epoch. You will only get rewards for a full epoch staked.
 
 When attributing some (or all of my governance tokens to a given validator), I...
 
-- can select a validator I want to nominate
-- can select an amount of tokens (with a link to auto populate this with an un-delegated amount)
-  - Includes the amount that will be un-delegated this epoch
-- am warned if the amount I am about to nominate is invalid. e.g. is...
-  - below a minimum amount (spam protection)
-  - more than I have associated
-  - more than I have un-nominated
-- can submit the nomination
-- can see feedback that my nomination has been registered, and will be processed at the next epoch
-- can see all the pending nomination changes for the next epoch
+- **must** select a validator I want to nominate [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** select an amount of tokens (with a link to auto populate this with the un-delegated amount) [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+  - Includes the amount that will be un-delegated this epoch 
+- **must** be warned if the amount I am about to nominate is invalid. e.g. is... 
+  - below a minimum amount (spam protection) [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+  - more than I have associated [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+  - more than I have un-nominated [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** submit the nomination [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** see feedback that my nomination has been registered, and will be processed at the next epoch [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** see all the pending nomination changes for the next epoch [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
 
 ...so that I am rewarded for a share based on this validators performance
 
@@ -78,12 +75,13 @@ When checking if im getting the staking return that I was expecting, I...
 
 When removing stake from a validator, I...
 
-- can select a validator I want to un-nominate
-- can set an amount to remove from a validator (with a link to populate with the maximum amount)
-- warned if amount is greater than the amount that will be on that validator at the end of the epoch
-- have the option of withdrawing the nomination now or at the end of the epoch (so I get the full epoch reward)
-- can submit un-nomination
-- see feedback that the un-nomination has been registered
+- **must** select a validator I want to un-nominate [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** set an amount to remove from a validator (with a link to populate with the maximum amount) [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** be warned if amount is greater than the amount that will be on that validator at the end of the epoch [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** have the option of withdrawing nominated amount at the end of the epoch (and maintain the staking income for the current epoch) [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **should** have the option of withdrawing nomination amount now immediately (and forefit the staking income) [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** submit un-nomination [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** see feedback that the un-nomination has been registered, and that the un-nominated amount is now availible for re-nomination [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
 
 ... so that I can use this stake for another validator etc
 
@@ -91,13 +89,10 @@ When removing stake from a validator, I...
 
 When wanting to remove governance tokens, I...
 
-- can (if i have any in vesting contract) select to return tokens to Vesting contract
-- can return tokens that are not held by the vesting contract to my ethereum wallet
-- can select and amount of tokens to disassociate 
-- can action the disassociation on ethereum
-- see feedback on the progress of the disassociation 
+- If some of the tokens for the given eth key are held by the vesting contract: **must** select to return tokens to Vesting contract [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** return tokens that are not held by the vesting contract to my ethereum wallet [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** select and amount of tokens to disassociate [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** action the disassociation on ethereum [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
+- **must** feedback on the progress of the disassociation [1001-STAK-0010](#1001-STAK-0010 "1001-STAK-0010")
 
 ...so that I can transfer them to another eth wallet (e.g. sell them on an exchange)
-
-## Batch changes to nominations
-- `TODO`
