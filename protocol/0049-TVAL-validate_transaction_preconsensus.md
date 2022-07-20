@@ -28,8 +28,10 @@ Future enhancemments: for each root transaction message type (e.g. SubmitOrder, 
 
 #### `1.1.2` Acceptance criteria 
 
-1. [ ] Transaction is included in the block if signed with a validator's key (<a name="0049-TVAL-001" href="#0049-TVAL-001">0049-TVAL-001</a>)
-1. [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset (<a name="0049-TVAL-002" href="#0049-TVAL-002">0049-TVAL-002</a>)
-1. [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that has never had a balance (<a name="0049-TVAL-003" href="#0049-TVAL-003">0049-TVAL-003</a>)
-1. [ ] Transaction is not included in the block if signed with a key from a non-validator party with no balance of any asset, that previously had a balance `> 0` (<a name="0049-TVAL-004" href="#0049-TVAL-004">0049-TVAL-004</a>)
-1. [ ] Transaction is included in the block if signed with a key from a non-validator party with a balance > 0 of some asset, where the transaction was rejected from a previous block where the party had no balance (<a name="0049-TVAL-005" href="#0049-TVAL-005">0049-TVAL-005</a>)
+Note that separate pre-consensus validation is carried out as part of PoW anti-spam checks, see the ACs in [PoW spec](./0072-SPPW-spam-protection-PoW.md).
+
+1. [ ] Transaction is included in the block if signed with a validator's key, includes [correct PoW data](./0072-SPPW-spam-protection-PoW.md) and is not a governance transaction. (<a name="0049-TVAL-001" href="#0049-TVAL-001">0049-TVAL-001</a>)
+1. [ ] Transaction is with wrong / missing key is rejected. (<a name="0049-TVAL-002" href="#0049-TVAL-002">0049-TVAL-002</a>)
+1. [ ] Transaction is rejected (never included in a block) if it is interacting with a market and from a party with no balance of any asset (<a name="0049-COSMICELEVATOR-003" href="#0049-COSMICELEVATOR-003">0049-COSMICELEVATOR-003</a>)
+1. [ ] Transaction is rejected (never included in a block) if it is interacting with a market but the balance of the party in the settlement asset is < than the [quantum](./0041-TSTK-target_stake.md) for the asset.  (<a name="0049-COSMICELEVATOR-004" href="#0049-COSMICELEVATOR-004">0049-COSMICELEVATOR-004</a>)
+1. [ ] Transaction interacting in a market is included in a block if signed with a key from a non-validator party with a balance >= [quantum](./0041-TSTK-target_stake.md) of the settlement asset for the market, where an identical (apart from PoW proof and block data details) transaction was rejected from a previous block when the party had relevant balance < less than relevant [quantum](./0041-TSTK-target_stake.md) (<a name="0049-COSMICELEVATOR-005" href="#0049-COSMICELEVATOR-005">0049-COSMICELEVATOR-005</a>)
