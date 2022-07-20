@@ -47,11 +47,11 @@ For a full outline of these behaviours, see [0037-OPEG-pegged_orders](./0037-OPE
 | Time In Force | Filled  | Cancelled by user | Stopped by system | Resulting status |
 |---------------|---------|-------------------|-------------------|------------------|
 |      GTC      |    No   |         No        |         No        |      Active      |
-|      GTC      |    No   |         No        |        Yes        |      Stopped     |
+|      GTC      |    No   |         No        |        Yes        |      Rejected     |
 |      GTC      |    No   |        Yes        |         No        |     Cancelled    |
 |      GTC      | Partial |         No        |         No        |      Active      |
 |      GTC      | Partial |        Yes        |         No        |     Cancelled    |
-|      GTC      | Partial |         No        |        Yes        |      Stopped     |
+|      GTC      | Partial |         No        |        Yes        |      Rejected     |
 |      GTC      |   Yes   |         No        |         No        |      Filled      |
 
 ## Good ’Til Time (<a name="0024-OSTA-004" href="#0024-OSTA-004">0024-OSTA-004</a>)
