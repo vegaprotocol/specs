@@ -1,8 +1,8 @@
 # [Data Source](./0045-DSRC-data_sourcing.md): Signed message
 
-Signed message data sources are the first external data source to be support by Vega. See the [Data Sourcing spec](./0045-DSRC-data_sourcing.md) for more information on data sources in general and the data source framework.
+Signed messages are the first type of data from external data sources to be supported by Vega. See the [Data Sourcing spec](./0045-DSRC-data_sourcing.md) for more information on data sources in general and the data source framework.
 
-Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by a set of public keys provided as part of the data source definition. Note the data supplied by the data source can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
+Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by a set of public keys provided as part of the _data source definition_. Note the data supplied by the data source can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
 
 This spec adds:
 - a transaction that allows arbitrary signed data to be submitted to the Vega blockchain (creating a stream of data that can be matched against a data source definition or discarded if not matched)
@@ -23,10 +23,10 @@ Note: With this type of oracle there’s no incentive in the Vega data source sy
 
 A data source must define:
 
-- Public keys (and key algorithm to be used if required) that can sign and submit values for this oracle
+- Public keys (and key algorithm to be used if required) that can sign and submit values for this (external) source
 - Type of data to be supplied in the transaction. Initially we should support the following types:
-    - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main oracle spec (keys are strings) 
-    - ABI encoded encoded data. Specifically, we want to be able to support at least the OpenOracle standard by this method 
+    - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main data source spec (keys are strings)
+    - ABI encoded encoded data. Specifically for oracles, we want to be able to support at least the OpenOracle standard by this method
 
 Note: that as a public key may provide many messages, a [filter](./0047-DSRF-data_source_filter.md) is likely to be needed to extract the required message, and a field select would be used to extract the required field ('price' or 'temperature', etc.)
 

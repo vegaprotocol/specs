@@ -56,7 +56,7 @@
 - [Quant risk models (Python notebook)](./0018-RSKM-quant_risk_models.ipynb)
 - [Quant risk model Calibrators](./0023-CALI-calibrators.md)
 
-## Data Sourcing / Oracles
+## Data Sourcing
 - [Data Sourcing](./0045-DSRC-data_sourcing.md)
 - [Signed data source messages](./0046-DSRM-data_source_signed_message.md)
 - [Data source filters](./0047-DSRF-data_source_filter.md)

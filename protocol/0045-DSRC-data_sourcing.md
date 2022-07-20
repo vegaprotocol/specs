@@ -1,16 +1,25 @@
-# Data sourcing (aka oracles)
+# Data sourcing
 
 ## 1. Principles and summary
 
-The Vega network runs on data. Market settlement, risk models, and other features require a supplied price (or other data), which must come from somewhere, often completely external to Vega. This necessitates the use of both internal and external data sources for a variety of purposes.
+The Vega network runs on data. Market settlement, risk models, and other features require different types of data (e.g. a supplied price, timestamps). The data is received from sources that are external or internal from the perspective of Vega network, and a variety of purposes require usage of internal and external components.
 
+We consider `data` as _any_ type of submitted/delivered payload, examples including asset price, timestamp, orders, user data updates.
+
+External sources bring data from the outside world via trustless or minimal-trust relationships with the Vega blockchain network. They can be blockchain bridges connected to external blockchain systems, oracle bridges, or oracles - services that feed data to the Vega network from external sources (APIs, any type of messaging/queue systems or any closed/open permissioned/permissionless centralized/decentralized systems).
+
+The group of external data source entities comprises a separate _logical_ system layer, through which Vega network establishes a persistent inbound/outbound communication process with the outside world. Since the delivered data is external from the perspective of the Vega network, the relationship between the external data sources layer and Vega is trustless and is not related in any way to any type of consensus protocol used for internal Vega segments.
+
+Data sources could be distributed entities themselves and/or (especially external ones) participate in distributed networks. In that case, they would operate and produce data via some consensus agreement, but that is not a concern for Vega network. Vega system, in any case, would use its own step for data verification, that is [signed messages](./0046-DSRM-data_source_signed_message.md)
+
+Data sources, being external or internal, exist regardless of Vega internal engines operations. An internal engine would subscribe and unsubscribe to/from an external data source (bridge, oracle), but none of these actions would affect the existing and functioning of the data source entity.
 
 a) The goals of Vega Protocol with regards to data sourcing are:
 
-1. To provide access to data internal to the Vega network in a standardised way, including data and triggers related to the "Vega Time" and market data (prices, etc.)
+1. To provide access to data, being internal or external, to the Vega network in a standardised way, including data and triggers related to the "Vega Time" and market data (prices, etc.)
 1. To support a wide range of third party data sourcing solutions for external data rather than to implement a complete solution in-house.
-1. To be a source of definitive and final data to Products and Risk Models that can be trusted by market participants.
-1. To build simple, generic and anti-fragile data sourcing functionality, and not to introduce third party dependencies.
+1. To be a source of deterministic data for Products and Risk Models that can be trusted by market participants.
+1. To build simple, generic and anti-fragile data sourcing functionality without introducins third party dependencies.
 
 b) Things that are explicitly NOT goals of the data sourcing framework at this time:
 
@@ -21,15 +30,16 @@ b) Things that are explicitly NOT goals of the data sourcing framework at this t
 
 Note that this approach means:
 
-1. Vega will not integrate directly with specific oracle/data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles and standards (so that oracles implementing these standards will hopefully be compatible with little or no work).
+1. Vega will not integrate directly with data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles and standards (so that data sources that implement these standards will hopefully be compatible with little or no work).
 1. External data sources must be able to provide a measure of finality that is either definitive or a configurable threshold on a probabilistic measure (‘upstream finality’).
 1. Once upstream finality is achieved, Vega may in future provide optional mechanisms for querying, verification or dispute resolution that are independent of the source. These would be composable steps that could be added to any source.
-1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each. 
+// TODO: Discuss how is this related to any potential consensus agreement on external data sources level - it is not related.
+1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each. This takes into consideration the fact that external sources could be distributed entitites themselves.
 
 
 ## 2. Data sourcing framework
 
-Any part of Vega requiring a data source should be able to use any type of data source. **This means that there is a single common method for specifying a data source where one is required.**
+Any part of Vega requiring a an external or internal data source should be able to use any type of data source. **This means that there is a single common method for specifying a data source where one is required.**
 
 The types of data sources that are supported are listed towards the end of this spec. 
 
@@ -67,10 +77,10 @@ Data sources must be able to emit the following data types:
 
 Note that for number types the system should convert appropriately when these are used in a situation that requires Vega's internal price/quote type using the configured decimal places, etc. for the market.
 
-Additionally, for number types where the data source value cannot be interpreted without decimal place conversion (e.g. it is a number from Ethereum represented as a very large integer, perhaps as a string, with 18 or some other number of implicit decimals), it must be possible to specify the number of implicit decimals, when specifying the oracle (e.g. in a market proposal or wherever the oracle is to be used). Strings and numbers with decimal points and numbers after them should be interpreted correctly. 
+Additionally, for number types where the data source value cannot be interpreted without decimal place conversion (e.g. it is a number from Ethereum represented as a very large integer, perhaps as a string, with 18 or some other number of implicit decimals), it must be possible to specify the number of implicit decimals, when specifying the data source (e.g. in a market proposal or wherever the data source is to be used). Strings and numbers with decimal points and numbers after them should be interpreted correctly. 
 
-For example: this means that if an oracle with specified 18 decimal places is used to settle a market with 4 market decimals then:
-* Oracle data with a value of `103500000000000000000` implies an actual value of `103.5`
+For example: this means that if a data source with specified 18 decimal places is used to settle a market with 4 market decimals then:
+* Data with a value of `103500000000000000000` implies an actual value of `103.5`
 * This value would end up being represented on Vega as `1035000`
 
 Vega should support sufficient number types to enable processing of any reasonably expected message for each format. For instance if we are building JSON we might expect both Number and String fields to be allowable.
@@ -124,7 +134,7 @@ Vega will need to keep track of all "active" defined data sources that are refer
 
 Vega should consider the specific definition including filters, combinations etc. not just the primary source. So, for example, if two markets use the same public key(s) but different filters or aggregations etc. then these constitute two different data sources and each transaction that arrives signed by these public keys should only be accepted if one or more of these specific active data sources "wants" the data.
 
-Data sources that are no longer active as defined above can be discarded. Incoming data that is not emitted by an active data source (i.e. passes all filters etc. as well as matching the public key, event name, or whatever) can be ignored. 
+Data sources that are no longer active as defined above will be ignored, as well as any incoming data that is not emitted by an active data source (i.e. passes all filters etc. as well as matching the public key, event name, or whatever).
 
 
 ## 8. APIs
