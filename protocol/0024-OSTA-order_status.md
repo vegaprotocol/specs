@@ -1,8 +1,5 @@
 Feature name: order-status
 
-# Acceptance Criteria
-- Status table below is replicated and each is tested by at least one scenario (<a name="0024-OSTA-001" href="#0024-OSTA-001">0024-OSTA-001</a>)
-
 # Summary
 Orders have a status field. This specification details a set of situations and the expected status for an order.
 
@@ -29,14 +26,16 @@ For a full outline of these behaviours, see [0037-OPEG-pegged_orders](./0037-OPE
 * `Stopped` and `Cancelled` are used to determine whether an order was closed as a result of a user action (`Cancelled`) or by the system (`Stopped`) as a result of, for example, insufficient margin (see [Position Resolution](./0012-POSR-position_resolution.md#position-resolution-algorithm))
 * A pegged order that is unable to reprice or during an auction will have a status of PARKED. This indicates that the order in not on the order book but can re-enter it once the conditions change
 
-## Fill or Or Kill
+# Acceptance Criteria
+
+## Fill or Or Kill (<a name="0024-OSTA-001" href="#0024-OSTA-001">0024-OSTA-001</a>)
 | Time In Force | Filled | Resulting status |
 |---------------|--------|------------------|
 |      FOK      |   No   |      Stopped     |
 |      FOK      |   Yes  |      Filled      |
 
 
-## Immediate Or Cancel
+## Immediate Or Cancel (<a name="0024-OSTA-002" href="#0024-OSTA-002">0024-OSTA-002</a>)
 | Time In Force | Filled  | Resulting status |
 |---------------|---------|------------------|
 |      IOC      |    No   |      Stopped     |
@@ -44,7 +43,7 @@ For a full outline of these behaviours, see [0037-OPEG-pegged_orders](./0037-OPE
 |      IOC      |   Yes   |  Filled |
 
 
-## Good ’Til Cancelled
+## Good ’Til Cancelled (<a name="0024-OSTA-003" href="#0024-OSTA-003">0024-OSTA-003</a>)
 | Time In Force | Filled  | Cancelled by user | Stopped by system | Resulting status |
 |---------------|---------|-------------------|-------------------|------------------|
 |      GTC      |    No   |         No        |         No        |      Active      |
@@ -55,7 +54,7 @@ For a full outline of these behaviours, see [0037-OPEG-pegged_orders](./0037-OPE
 |      GTC      | Partial |         No        |        Yes        |      Stopped     |
 |      GTC      |   Yes   |         No        |         No        |      Filled      |
 
-## Good ’Til Time
+## Good ’Til Time (<a name="0024-OSTA-004" href="#0024-OSTA-004">0024-OSTA-004</a>)
 
 | Time In Force | Filled  | Expired | Cancelled by user | Stopped by system | Resulting status |
 |---------------|---------|---------|-------------------|-------------------|------------------|
