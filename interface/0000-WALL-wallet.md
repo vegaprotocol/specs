@@ -1,31 +1,32 @@
 # Wallet
-A Vega wallet is required for all actions on the Vega chain. See the [wallet docs](https://docs.vega.xyz/docs/mainnet/concepts/vega-wallet) for more on how Crypto wallets work. Wallet gives you multiple keys, each key has a public key that is also known as a [Party](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0017-PART-party.md). The primary job of a wallet app is to [authenticate a users actions](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0022-AUTH-auth.md).
+A Vega wallet is required to submit transaction on the Vega chain (place cancel orders etc). See the [wallet docs](https://docs.vega.xyz/docs/mainnet/concepts/vega-wallet) for more on how Crypto wallets work. 
+A wallet can contain many public/private key pairs, The public part of each key pair is known the [Party](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0017-PART-party.md) sometimes just refereed to as a key. The primary job of a wallet app is to [authenticate a users actions](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0022-AUTH-auth.md).
 
 ## Get wallet
 When on the wallet page of Vega.xyz I can...
 
-- See links to the latest version of the desktop AND command line wallets (as well as github pages)
-- See a primary download button is configured for the latest version and the operating system I am using
+- See links to the latest version of the desktop and command line wallets (inc github repos) <a name="0000-WALL-0001-should" href="#0000-WALL-0001-should">0000-WALL-0001-should</a>
+- See a primary download button is configured for the latest version and the operating system I am using <a name="0000-WALL-0002-should" href="#0000-WALL-0002-should">should-0000-WALL-0002</a>
 
-...so I can run the wallet app on my machine
+...so I can download and run the wallet app on my machine
 
 ## Set up wallet / Restore wallet
 When opening the wallet for the first time, I...
 
-- am prompted to opt into Analytics
-- can restore a wallet from a seed phrase
-- can create a new wallet
-  - shown back up phrase
-  - shown version number
-  - get the first key generated automatically
+- am prompted to opt into (or stay out of) analytics <a name="0000-WALL-0003" href="#0000-WALL-0003">0000-WALL-0003</a> `Must`
+- can restore a wallet from a seed phrase <a name="0000-WALL-0004" href="#0000-WALL-0004">0000-WALL-2004</a>
+- can create a new wallet <a name="0000-WALL-0005" href="#0000-WALL-2005">0000-WALL-2005</a>
+  - shown back up phrase <a name="0000-WALL-0006" href="#0000-WALL-0006">0000-WALL-0006</a>
+  - shown version number <a name="0000-WALL-0007" href="#0000-WALL-0007">0000-WALL-0007</a>
+  - get the first key generated automatically <a name="0000-WALL-0008" href="#0000-WALL-0008">0000-WALL-0008</a>
 
 ...so I can sign transactions
 
 ## Configure network
 When using the wallet on a network, I...
 
-- get Mainnet and fairground pre-configured (with Mainnet being the default network)
-- can create a new network configuration
+- get Mainnet and fairground pre-configured (with Mainnet being the default network) <a name="0000-WALL-0009" href="#0000-WALL-0009">0000-WALL-0009</a>
+- can create a new network configuration <a name="0000-WALL-0010" href="#0000-WALL-0010">0000-WALL-0010</a>
 - can refine the configuration for existing networks (including the ones that come pre-configured)
 - `TODO` Changes to the validator set on a given network prompt a change/update to network config
 - can remove networks

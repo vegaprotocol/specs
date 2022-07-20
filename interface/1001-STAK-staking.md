@@ -9,10 +9,10 @@ Governance tokens are standard ERC20 ethereum tokens, they may be attributed to 
 ## Understand staking on Vega
 When considering whether to stake on Vega, I...
 
-- can see information to help inform me on what return I might expect from staking (other protocols might show a typical APY)
-- can see that the governance token is an ethereum ERC20 token and needs to attributed (or associated to a Vega wallet for use on Vega)
-- can see the ETH address of the token contract
-- can see links to documentation on staking on Vega
+- **must** see information to help inform me on what return I might expect from staking (other protocols might show a typical APY) [1001-STAK-0001](#1001-STAK-0001 "1001-STAK-0001")
+- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or associated) to a Vega wallet for use on Vega [1001-STAK-0002](#1001-STAK-0002 "1001-STAK-0002")  
+- **must** see the ETH address of the token contract [0000-SORD-0003](#0000-SORD-0003 "0000-SORD-0003") 
+- **must** see links to documentation on staking on Vega [0000-SORD-0004](#0000-SORD-0004 "0000-SORD-0004") 
 
 ...so I can decide if I want to stake on Vega, and how to go about doing it
 
