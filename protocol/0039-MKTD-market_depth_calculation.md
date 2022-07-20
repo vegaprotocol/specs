@@ -133,4 +133,3 @@ The client side will perform the following steps to build and keep an up to date
 * Send a large spike of order updates, make sure the system does not stall
 * Sequence number increments for each emitted book update
 * Updates that are not received/processed by the client are not buffered on their behalf
-
