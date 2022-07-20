@@ -54,6 +54,7 @@ Within a staking epoch (typically 24 hours) a user can change their nominations 
 
 When attributing some (or all of my governance tokens to a given validator), I...
 
+- can select a validator I want to nominate
 - can select an amount of tokens (with a link to auto populate this with an un-delegated amount)
   - Includes the amount that will be un-delegated this epoch
 - am warned if the amount I am about to nominate is invalid. e.g. is...
@@ -69,20 +70,15 @@ When attributing some (or all of my governance tokens to a given validator), I..
 ## Monitor staking rewards
 When checking if im getting the staking return that I was expecting, I... 
 
-- can see a when the epoch started and should finish 
-- Can see the stake i have nominated to 
-- see the staking income I have received for each epoch, broken down by...
-  - asset
-  - validator staked
-  - market 
-- I can see where I did not receive full income because the validator suffered penalties 
+- See [Staking income](./1002-INCO-income.md)
 
-...so that I can make decisions about my staking
+...so that I can make decisions about my staking, e.g. whether to re-distribute my stake
 
 ## Un-nominate validator
 
 When removing stake from a validator, I...
 
+- can select a validator I want to un-nominate
 - can set an amount to remove from a validator (with a link to populate with the maximum amount)
 - warned if amount is greater than the amount that will be on that validator at the end of the epoch
 - have the option of withdrawing the nomination now or at the end of the epoch (so I get the full epoch reward)
