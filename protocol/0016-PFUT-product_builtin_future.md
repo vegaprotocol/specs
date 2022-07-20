@@ -66,7 +66,7 @@ cash_settled_future.settlement_data(event) {
 3. Create a Cash Settled Future with the settlement data provided by an external data source (<a name="0016-PFUT-003" href="#0016-PFUT-003">0016-PFUT-003</a>)
 4. Create a Cash Settled Future for any settlement asset that's configured in Vega
   1. Either data source can be changed via governance (<a name="0016-PFUT-004" href="#0016-PFUT-004">0016-PFUT-004</a>)
-  2. It is not possible to change settlement asset via governance (<a href="./0051-PROD-product.md#0051-PROD-005">0051-PFUT-005</a>)
+  2. It is not possible to change settlement asset via governance
   3. Mark to market settlement works correctly (<a name="0016-PFUT-006" href="#0016-PFUT-006">0016-PFUT-006</a>)
   4. Settlement at expiry works correctly (<a name="0016-PFUT-007" href="#0016-PFUT-007">0016-PFUT-007</a>)
 1. A market that receives settlement data before trading termination always stores the newest one and upon receiving the trading termination trigger settles the market (<a name="0016-PFUT-008" href="#0016-PFUT-008">0016-PFUT-008</a>)
