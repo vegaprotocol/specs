@@ -20,7 +20,7 @@ These have been listed with the most "upstream" being first.
 
 3
 - [Deposit](3000-DEPO-desposit.md) `Incomplete`
-- [Withdraw](interface/3001-WITH-withdraw.md) `Incomplete`
+- [Withdraw](3001-WITH-withdraw.md) `Incomplete`
 - Transfer
 
 4
