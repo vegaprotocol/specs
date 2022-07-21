@@ -109,7 +109,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - Persistent order results in an auction (2 out of 2 triggers breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-002" href="#0032-PRIM-002">0032-PRIM-002</a>)
 - Non-persistent order does not result in an auction (1 out of 2 triggers breached), order gets cancelled (never makes it to the order book)
 (<a name="0032-PRIM-003" href="#0032-PRIM-003">0032-PRIM-003</a>)
-- Persistent order results in an auction (2 out of 2 triggers breached), more orders placed during auction, auction concludes after the combined trigger time elapses. (<a name="0032-PRIM-004" href="#0032-PRIM-004">0032-PRIM-004</a>)
+- Persistent order results in an auction (2 out of 2 triggers breached), more orders placed during auction, auction concludes after the combined `auctionExtension` time from both triggers elapses. (<a name="0032-PRIM-004" href="#0032-PRIM-004">0032-PRIM-004</a>)
 - The market continues in regular fashion once price protection auction period ends and price monitoring bounds get reset based on last traded price (which may come from the auction itself if it resulted in trades)  (<a name="0032-PRIM-005" href="#0032-PRIM-005">0032-PRIM-005</a>)
 - Persistent order results in an auction (one trigger breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>)
 - A maximum of `5` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
