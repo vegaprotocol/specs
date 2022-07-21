@@ -32,11 +32,12 @@ When looking to stake validators or participate in governance, I first need to a
 - **must** be select the amount of tokens to associate [1000-ASSO-0008](#1000-ASSO-0008 "1000-ASSO-0008")
   - **must** be able to populate the input with the amount of un-associated tokens for the selected wallet/vesting contract [1000-ASSO-0009](#1000-ASSO-0009 "1000-ASSO-0009")
 - **must** be warned if the amount being associated is greater than the amount [1000-ASSO-0010](#1000-ASSO-0010 "1000-ASSO-0010")
-- **must** submit the association on [Ethereum transaction](#TBD) [1000-ASSO-0011](#1000-ASSO-0011 "1000-ASSO-0011")
+- **must** submit the association on [Ethereum transaction(s) inc ERC20 approval if required](#TBD) [1000-ASSO-0011](#1000-ASSO-0011 "1000-ASSO-0011")
 - **must** see feedback whether my association has been registered on Ethereum [1000-ASSO-0012](#1000-ASSO-0012 "1000-ASSO-0012")
 - **must** see feedback that the association has been registered by Vega and that it can be used after the number of Ethereum block confirmations required (typically 50) [1000-ASSO-0013](#1000-ASSO-0013 "1000-ASSO-0013")
   - **should** be able to see a balance for the number of tokens associated and ready for use [1000-ASSO-0014](#1000-ASSO-0014 "1000-ASSO-0014")
   - **should** be able to see a balance for the number of tokens that for each pending association [1000-ASSO-0015](#1000-ASSO-0016 "1000-ASSO-0017")
+- on completion: **should** be prompted to go on to [nominate](1002-STAK-staking.md) and/or participate in [Governance](1004-GOVE-governance_list.md) [1000-ASSO-0030](#1000-ASSO-0030 "1000-ASSO-0030")
 
 ...so I can then use the Vega wallet to use my tokens. 
 
@@ -58,5 +59,6 @@ When wanting to remove governance tokens, I...
 - **must** action the disassociation [Ethereum transaction](#TBD) [1000-ASSO-0027](#1000-ASSO-0027 "1000-ASSO-0027")
 - **must** feedback on the progress of the disassociation on ethereum [1000-ASSO-0028](#1000-ASSO-0028 "1000-ASSO-0028")
 - **must** see new associated balances in Vega (theses should be applied instantly) [1000-ASSO-0029](#1000-ASSO-0029 "1000-ASSO-0029")
+- on completion (if tokens were returned to vesting contract): **could** be prompted to go on to [redeem](1001-VEST-vesting.md).
 
-...so that I can transfer them to another Ethereum wallet (e.g. sell them on an exchange)
+...so that I can transfer them to another Ethereum wallet (e.g. sell them on an exchange).
