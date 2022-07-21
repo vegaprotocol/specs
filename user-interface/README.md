@@ -8,12 +8,12 @@ These have been listed with the most "upstream" being first.
   
 1
 - [Associate governance token a Vega key](1000-ASSO-associate.md)
-- Redeem vested tokens
-- [Staking validators](1001-STAK-staking.md)
-- [Review staking income](1002-INCO-income.md) `Incomplete`
-- [See proposed changes (new and old)](1004-PROP-propose.md) `Incomplete`
-- [Propose changes](1004-PROP-propose.md) `Incomplete`
-- [Vote on changes](1005-VOTE-vote.md) `Incomplete`
+- [View and Redeem vested tokens](1001-VEST-vesting.md) `Incomplete`
+- [Staking validators](1002-STAK-staking.md)
+- [Review staking income](1003-INCO-income.md) `Incomplete`
+- [See proposed changes (new and old)](1004-GOVE-governance_list.md) `Incomplete`
+- [Propose changes](1005-PROP-propose.md) `Incomplete`
+- [Vote on changes](1006-VOTE-vote.md) `Incomplete`
 
 2
 - Understand treasury rewards 
@@ -44,6 +44,8 @@ These have been listed with the most "upstream" being first.
 
 7
 - Analyze chain state and activity
+- Action transaction on Ethereum
+- Action transaction on Vega
 
 # Events
 There are things that happen to users too
