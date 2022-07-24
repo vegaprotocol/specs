@@ -11,9 +11,8 @@ These have been listed with the most "upstream" being first.
 - [View and Redeem vested tokens](1001-VEST-vesting.md) `Incomplete`
 - [Staking validators](1002-STAK-staking.md)
 - [Review staking income](1003-INCO-income.md) `Incomplete`
-- [See proposed changes (new and old)](1004-GOVE-governance_list.md) `Incomplete`
+- [Vote on changes](1004-VOTE-vote.md) `Incomplete`
 - [Propose changes](1005-PROP-propose.md) `Incomplete`
-- [Vote on changes](1006-VOTE-vote.md) `Incomplete`
 
 2
 - Understand treasury rewards 

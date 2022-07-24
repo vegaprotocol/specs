@@ -9,7 +9,7 @@ When considering whether to stake on Vega, I...
 
 - **must** see information to help inform me what return I might expect from staking (other protocols might show a typical APY) [1002-STAK-0001](#1002-STAK-0001 "1002-STAK-0001")
 - **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or associated) to a Vega wallet for use on Vega [1002-STAK-0002](#1002-STAK-0002 "1002-STAK-0002")  
-- **must** see detailed documentation on how staking works on Vega [0000-SORD-0003](#0000-SORD-0004 "0000-SORD-0003") 
+- **must** see detailed documentation on how staking works on Vega [0000-SORD-0003](#0000-SORD-0003 "0000-SORD-0003") 
 
 ...so I can decide if I want to stake on Vega, and how to go about doing it.
 
@@ -32,6 +32,7 @@ Before I stake, I need to [Associate tokens](./1000-ASSO-associate.md) with a Ve
 ## Select validator(s)
 When selecting what validators to nominate with my stake, I...
 
+- can see all validator information without having to connect Vega wallet [1002-STAK-0050](#1002-STAK-0050 "1002-STAK-0050")
 - can see "static" information about the validator 
   - name [1002-STAK-0005](#1002-STAK-0005 "1002-STAK-0006")
   - ID [1002-STAK-0007](#1002-STAK-0007 "1002-STAK-0007")

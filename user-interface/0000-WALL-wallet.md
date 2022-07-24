@@ -5,8 +5,8 @@ A wallet can contain many public/private key pairs, The public part of each key 
 ## Get wallet
 When on the wallet page of Vega.xyz I can...
 
-- See links to the latest version of the desktop and command line wallets (inc github repos) <a name="0000-WALL-0001-should" href="#0000-WALL-0001-should">0000-WALL-0001-should</a>
-- See a primary download button is configured for the latest version and the operating system I am using <a name="0000-WALL-0002-should" href="#0000-WALL-0002-should">should-0000-WALL-0002</a>
+- See links to the latest version of the desktop and command line wallets (inc github repos) <a name="0000-WALL-0001" href="#0000-WALL-0001">0000-WALL-0001</a>
+- See a primary download button is configured for the latest version and the operating system I am using <a name="0000-WALL-0002" href="#0000-WALL-0002">0000-WALL-0002</a>
 
 ...so I can download and run the wallet app on my machine
 
