@@ -71,7 +71,7 @@ When looking for a particular proposal or wanting to see what proposals are open
 When looking at a particular proposal, I...
 
 - see [above](#list-of-proposals)
-- 
+- **must** have option to see raw JSON of proposal
 
 ... so i can see what I am voting for and the status of the vote.
 
