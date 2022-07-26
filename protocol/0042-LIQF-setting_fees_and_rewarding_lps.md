@@ -83,7 +83,7 @@ To that end "total value for fee purposes" is cumulated over the period. For a p
 Set `T(0) = trade value for fee purposes of resolving opening auction`.  
 From this we calculate the running average trade value for fee purposes:
 ```
-A(n) <- A(n-1) x (n-1)/n + T(n)/n.
+A(n) <- A(n-1) x (n-1)/n + A(n)/n.
 ```
 The g`r`owth of the market is then 
 ```
