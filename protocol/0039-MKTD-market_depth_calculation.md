@@ -1,6 +1,5 @@
 # Acceptance Criteria
 - The market depth builder must be able to handle all available order types (<a name="0039-MKTD-001" href="#0039-MKTD-001">0039-MKTD-001</a>)
-- The construction of the market depth structure must not impact the core performance. (<a name="0039-MKTD-002" href="#0039-MKTD-002">0039-MKTD-002</a>)
 - Entering and leaving auctions must be handled correctly (<a name="0039-MKTD-003" href="#0039-MKTD-003">0039-MKTD-003</a>)
 - All subscribed clients must receive all the data necessary to build their own view of the market depth (<a name="0039-MKTD-004" href="#0039-MKTD-004">0039-MKTD-004</a>)
 
@@ -17,9 +16,7 @@ Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or
 
 The market depth information should include pegged order volume.
 
-The volume at each level should be split into normal, pegged and market making order volumes to allow them to be drawn with different attributes in the console.
-
-Best bid/ask pairs should be generated for all orders and for all orders excluding pegged.
+The volume at each level is the combined volume for all normal, pegged and market making orders. In the future they may be split up to allow clients to see a more detailed view of each level.
 
 `Cumulative volume` is the total volume in the book between the current price level and top of the book. The market depth service will not build this information, instead we will rely on the client building it.
 
@@ -74,7 +71,6 @@ The definition of the market depth structure is:
     type PriceLevel struct {
         Price             int64
         Volume            uint64
-        CumulativeVolume  uint64
         NumOfOrders       uint64
         Side              bool
     }
@@ -108,15 +104,10 @@ The client side will perform the following steps to build and keep an up to date
     Request current market depth structure
     Forever
         Receive market depth update
-        If update sequence number in one above current sequence number
+        If update sequence number is above current sequence number
             Apply update to the market depth structure
-            Increment the sequence number
         Else
-            If update sequence number > market depth sequence number+1
-                We are missing an update, throw an error 
-            Else
-  	            Old update, ignore it
-            End
+            Old update, ignore it
         End
     End
 
@@ -127,9 +118,6 @@ The client side will perform the following steps to build and keep an up to date
 * Cancel an existing order, verify MD
 * Amend an existing order for both price and quantity, verify MD
 * Cancel an order and replace it with the same order values, verify the MD sees an update
-* Enter into auction
-* Leave auction
 * Do nothing for many minutes, make sure subscribers do not timeout/fail
 * Send a large spike of order updates, make sure the system does not stall
-* Sequence number increments for each emitted book update
-* Updates that are not received/processed by the client are not buffered on their behalf
+* Sequence number increase for each emitted book update
