@@ -7,9 +7,9 @@ When staking a user may be motivated to select validators to maximize the reward
 ## Understand staking on Vega
 When considering whether to stake on Vega, I...
 
-- **must** see information to help inform me what return I might expect from staking (other protocols might show a typical APY) [1002-STAK-0001](#1002-STAK-0001 "1002-STAK-0001")
-- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or associated) to a Vega wallet for use on Vega [1002-STAK-0002](#1002-STAK-0002 "1002-STAK-0002")  
-- **must** see detailed documentation on how staking works on Vega [0000-STAK-0003](#0000-STAK-0003 "0000-STAK-0003") 
+- **must** see information to help inform me what return I might expect from staking (other protocols might show a typical APY) [1002-STAK-01](#1002-STAK-01 "1002-STAK-01")
+- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or associated) to a Vega wallet for use on Vega [1002-STAK-02](#1002-STAK-02 "1002-STAK-02")  
+- **must** see detailed documentation on how staking works on Vega [0000-STAK-03](#0000-STAK-03 "0000-STAK-03") 
 
 ...so I can decide if I want to stake on Vega, and how to go about doing it.
 
@@ -25,46 +25,46 @@ Note: Income may come in a range of different tokens, as markets can settle in d
 Before I stake, I need to [Associate tokens](./1000-ASSO-associate.md) with a Vega wallet/key...
 
 - See [Associate tokens](./1000-ASSO-associate.md)
-- **should** see that if no further action is taken, newly associated tokens will be nominated to validators based on existing distribution [1002-STAK-0004](#1002-STAK-0004 "1002-STAK-0004")
+- **should** see that if no further action is taken, newly associated tokens will be nominated to validators based on existing distribution [1002-STAK-04](#1002-STAK-04 "1002-STAK-04")
 
 ...so that I can nominate validators.
 
 ## Select validator(s)
 When selecting what validators to nominate with my stake, I...
 
-- can see all validator information without having to connect Vega wallet [1002-STAK-0050](#1002-STAK-0050 "1002-STAK-0050")
+- can see all validator information without having to connect Vega wallet [1002-STAK-050](#1002-STAK-050 "1002-STAK-050")
 - can see "static" information about the validator 
-  - name [1002-STAK-0005](#1002-STAK-0005 "1002-STAK-0006")
-  - ID [1002-STAK-0007](#1002-STAK-0007 "1002-STAK-0007")
-  - Vega public key [1002-STAK-0008](#1002-STAK-0008 "1002-STAK-0008")
-  - a URL where to find more information about the validator [1002-STAK-0009](#1002-STAK-0009 "1002-STAK-0009")
-  - Etherum address [1002-STAK-0010](#1002-STAK-0010 "1002-STAK-0010")
+  - name [1002-STAK-05](#1002-STAK-05 "1002-STAK-06")
+  - ID [1002-STAK-07](#1002-STAK-07 "1002-STAK-07")
+  - Vega public key [1002-STAK-08](#1002-STAK-08 "1002-STAK-08")
+  - a URL where to find more information about the validator [1002-STAK-09](#1002-STAK-09 "1002-STAK-09")
+  - Etherum address [1002-STAK-010](#1002-STAK-010 "1002-STAK-010")
 - can see data for the current/next epoch, for each validator
-  - **must** see the current "status" (consensus, Ersatz, New etc) [1002-STAK-0011](#1002-STAK-0011 "1002-STAK-0011") 
-  - **must** see a total stake (inc self stake) [1002-STAK-0012](#1002-STAK-0012 "1002-STAK-0012")
-    - **should** see self stake [1002-STAK-0013](#1002-STAK-0013 "1002-STAK-0013")
-    - **should** see nominated stake [1002-STAK-0014](#1002-STAK-0014 "1002-STAK-0014")
-    - **should** see total stake as a % of total staked across all nodes  [1002-STAK-0051](#1002-STAK-0051 "1002-STAK-0051")
-  - **must** see total stake change next epoch [1002-STAK-0015](#1002-STAK-0015 "1002-STAK-0015")
-    - **should** see self stake [1002-STAK-0016](#1002-STAK-0016 "1002-STAK-0016")
-    - **should** see nominated stake [1002-STAK-0017](#1002-STAK-0017 "1002-STAK-0017")
-    - **should** see total stake as a % change [1002-STAK-0052](#1002-STAK-0052 "1002-STAK-0052")
-  - **must** see the version of Vega they are currently running [1002-STAK-0018](#1002-STAK-0018 "1002-STAK-0018")
-  - **must** see the version of Vega they propose running [1002-STAK-0019](#1002-STAK-0019 "1002-STAK-0019")
+  - **must** see the current "status" (consensus, Ersatz, New etc) [1002-STAK-011](#1002-STAK-011 "1002-STAK-011") 
+  - **must** see a total stake (inc self stake) [1002-STAK-012](#1002-STAK-012 "1002-STAK-012")
+    - **should** see self stake [1002-STAK-013](#1002-STAK-013 "1002-STAK-013")
+    - **should** see nominated stake [1002-STAK-014](#1002-STAK-014 "1002-STAK-014")
+    - **should** see total stake as a % of total staked across all nodes  [1002-STAK-051](#1002-STAK-051 "1002-STAK-051")
+  - **must** see total stake change next epoch [1002-STAK-015](#1002-STAK-015 "1002-STAK-015")
+    - **should** see self stake [1002-STAK-016](#1002-STAK-016 "1002-STAK-016")
+    - **should** see nominated stake [1002-STAK-017](#1002-STAK-017 "1002-STAK-017")
+    - **should** see total stake as a % change [1002-STAK-052](#1002-STAK-052 "1002-STAK-052")
+  - **must** see the version of Vega they are currently running [1002-STAK-018](#1002-STAK-018 "1002-STAK-018")
+  - **must** see the version of Vega they propose running [1002-STAK-019](#1002-STAK-019 "1002-STAK-019")
 - can see data for the previous epoch
-  - **must** see the overall "score" for a validator for the previous epoch [1002-STAK-0020](#1002-STAK-0020 "1002-STAK-0020")
+  - **must** see the overall "score" for a validator for the previous epoch [1002-STAK-020](#1002-STAK-020 "1002-STAK-020")
   - can see all the inputs to that "score" 
-    - **must** see Ranking score [1002-STAK-0021](#1002-STAK-0021 "1002-STAK-0021")
-    - **must** see stake score [1002-STAK-0022](#1002-STAK-0022 "1002-STAK-0022")
-    - **must** see performance score [1002-STAK-0023](#1002-STAK-0023 "1002-STAK-0023")
-    - **must** see voting score [1002-STAK-0024](#1002-STAK-0024 "1002-STAK-0024")
+    - **must** see Ranking score [1002-STAK-021](#1002-STAK-021 "1002-STAK-021")
+    - **must** see stake score [1002-STAK-022](#1002-STAK-022 "1002-STAK-022")
+    - **must** see performance score [1002-STAK-023](#1002-STAK-023 "1002-STAK-023")
+    - **must** see voting score [1002-STAK-024](#1002-STAK-024 "1002-STAK-024")
 - can see data for previous epochs
-  - **should** see the the overall "score" for all previous epochs for each validator [1002-STAK-0025](#1002-STAK-0025 "1002-STAK-0025")
+  - **should** see the the overall "score" for all previous epochs for each validator [1002-STAK-025](#1002-STAK-025 "1002-STAK-025")
   - can see a breakdown of all the inputs to that "score" for all previous epochs 
-    - **should** see Ranking score [1002-STAK-0026](#1002-STAK-0026 "1002-STAK-0026")
-    - **should** see stake score [1002-STAK-0028](#1002-STAK-0028 "1002-STAK-0028")
-    - **should** see performance score [1002-STAK-0029](#1002-STAK-0029 "1002-STAK-0029")
-    - **should** see voting score [1002-STAK-0030](#1002-STAK-0030 "1002-STAK-0030")
+    - **should** see Ranking score [1002-STAK-026](#1002-STAK-026 "1002-STAK-026")
+    - **should** see stake score [1002-STAK-028](#1002-STAK-028 "1002-STAK-028")
+    - **should** see performance score [1002-STAK-029](#1002-STAK-029 "1002-STAK-029")
+    - **should** see voting score [1002-STAK-030](#1002-STAK-030 "1002-STAK-030")
 
 ...so I can select validators that should give me the biggest return.
 
@@ -75,15 +75,15 @@ Within a staking epoch (typically 24 hours) a user can change their nominations 
 
 When attributing some (or all of my governance tokens to a given validator), I...
 
-- **must** select a validator I want to nominate [1002-STAK-0031](#1002-STAK-0031 "1002-STAK-0031")
-- **must** be [connected to a Vega wallet/key](#TBD) that has associated Vega (or Pending association) [1002-STAK-0032](#1002-STAK-0032 "1002-STAK-0032")
-- **must** select an amount of tokens [1002-STAK-0033](#1002-STAK-0033 "1002-STAK-0033")
-  - **must** be able to populate this the the amount of governance tokens that will be associated but not nominated at the beginning of the next epoch [1002-STAK-0034](#1002-STAK-0034 "1002-STAK-0034")
-  - **must** be warned if the amount I am about to nominate is below a minimum amount (spam protection) [1002-STAK-0035](#1002-STAK-0035 "1002-STAK-0035")
-  - **must** be warned if the amount I am about to nominate is more than I have associated - nominated at the end of current epoch [1002-STAK-0036](#1002-STAK-0036 "1002-STAK-0036")
-- **must** submit the nomination [Vega transactions](#TBD) [1002-STAK-0037](#1002-STAK-0037 "1002-STAK-0037")
-- **must** see feedback that my nomination has been registered, and will be processed at the next epoch [1002-STAK-0038](#1002-STAK-0038 "1002-STAK-0038")
-- **must** see all my pending nomination changes for the next epoch [1002-STAK-0039](#1002-STAK-0039 "1002-STAK-0039")
+- **must** select a validator I want to nominate [1002-STAK-031](#1002-STAK-031 "1002-STAK-031")
+- **must** be [connected to a Vega wallet/key](#TBD) that has associated Vega (or Pending association) [1002-STAK-032](#1002-STAK-032 "1002-STAK-032")
+- **must** select an amount of tokens [1002-STAK-033](#1002-STAK-033 "1002-STAK-033")
+  - **must** be able to populate this the the amount of governance tokens that will be associated but not nominated at the beginning of the next epoch [1002-STAK-034](#1002-STAK-034 "1002-STAK-034")
+  - **must** be warned if the amount I am about to nominate is below a minimum amount (spam protection) [1002-STAK-035](#1002-STAK-035 "1002-STAK-035")
+  - **must** be warned if the amount I am about to nominate is more than I have associated - nominated at the end of current epoch [1002-STAK-036](#1002-STAK-036 "1002-STAK-036")
+- **must** submit the nomination [Vega transactions](#TBD) [1002-STAK-037](#1002-STAK-037 "1002-STAK-037")
+- **must** see feedback that my nomination has been registered, and will be processed at the next epoch [1002-STAK-038](#1002-STAK-038 "1002-STAK-038")
+- **must** see all my pending nomination changes for the next epoch [1002-STAK-039](#1002-STAK-039 "1002-STAK-039")
 
 ...so that I am rewarded for a share based on this validators performance.
 
@@ -97,16 +97,16 @@ When checking if im getting the staking return that I was expecting, I...
 ## Un-nominate validator
 When removing stake from a validator, I...
 
-- **must** select a validator I want to un-nominate [1002-STAK-0040](#1002-STAK-0040 "1002-STAK-0040")
-- **must** be [connected to a Vega wallet/key](#TBD) [1002-STAK-0041](#1002-STAK-0041 "1002-STAK-0041")
-- - **must** have the option of withdrawing nominated amount at the end of the epoch (and maintain the staking income for the current epoch) [1002-STAK-0043](#1002-STAK-0042 "1002-STAK-0042")
-- **should** have the option of withdrawing nomination amount now immediately (and forfeit the staking income) [1002-STAK-0043](#1002-STAK-0043 "1002-STAK-0043")
-- **must** set an amount to remove from a validator [1002-STAK-0044](#1002-STAK-0044 "1002-STAK-0044")
-  - **must** be able populate with the total delegated at the point where un-nominate will happen). [1002-STAK-0045](#1002-STAK-0045 "1002-STAK-0045")
-  - **must** be warned if amount is greater than the amount that will be on that validator at the end of the epoch [1002-STAK-0046](#1002-STAK-0046 "1002-STAK-0047")
-[1002-STAK-0047](#1002-STAK-0047 "1002-STAK-0047")
-- **must** submit un-nominate [Vega transaction](#TBD). [1002-STAK-0048](#1002-STAK-0048 "1002-STAK-0048")
-- **must** see feedback that the un-nomination has been registered, and that the un-nominated amount is now available for re-nomination [1002-STAK-0049](#1002-STAK-0049 "1002-STAK-0049")
+- **must** select a validator I want to un-nominate [1002-STAK-040](#1002-STAK-040 "1002-STAK-040")
+- **must** be [connected to a Vega wallet/key](#TBD) [1002-STAK-041](#1002-STAK-041 "1002-STAK-041")
+- - **must** have the option of withdrawing nominated amount at the end of the epoch (and maintain the staking income for the current epoch) [1002-STAK-053](#1002-STAK-053 "1002-STAK-053")
+- **should** have the option of withdrawing nomination amount now immediately (and forfeit the staking income) [1002-STAK-043](#1002-STAK-043 "1002-STAK-043")
+- **must** set an amount to remove from a validator [1002-STAK-044](#1002-STAK-044 "1002-STAK-044")
+  - **must** be able populate with the total delegated at the point where un-nominate will happen). [1002-STAK-045](#1002-STAK-045 "1002-STAK-045")
+  - **must** be warned if amount is greater than the amount that will be on that validator at the end of the epoch [1002-STAK-046](#1002-STAK-046 "1002-STAK-046")
+[1002-STAK-047](#1002-STAK-047 "1002-STAK-047")
+- **must** submit un-nominate [Vega transaction](#TBD). [1002-STAK-048](#1002-STAK-048 "1002-STAK-048")
+- **must** see feedback that the un-nomination has been registered, and that the un-nominated amount is now available for re-nomination [1002-STAK-049](#1002-STAK-049 "1002-STAK-049")
 
 ... so that I can use this stake for another validator etc.
 
