@@ -5,6 +5,8 @@ These have been listed with the most "upstream" being first.
 
 0
 - [Get and use a **Vega wallet**](0000-WALL-wallet.md)
+- Connect Vega wallet + select keys `Incomplete`
+- Connect Ethereum wallet `Incomplete`
   
 1
 - [Associate governance token a Vega key](1000-ASSO-associate.md)
@@ -13,6 +15,12 @@ These have been listed with the most "upstream" being first.
 - [Review staking income](1003-INCO-income.md) `Incomplete`
 - [Vote on changes](1004-VOTE-vote.md) `Incomplete`
 - [Propose changes](1005-PROP-propose.md) `Incomplete`
+  - [Propose new Market](./1006-PMARK-propose_new_market.md)
+  - [Propose change(s) to market](./1007-PMAC-propose_market_change.md)
+  - [Propose new asset](1008-PASN-propose_new_asset.md)
+  - [Propose change(s) to asset](1009-PASC-propose_asset_change.md)
+  - [Propose change to network parameter(s)](1010-PNEC-propose_network.md)
+  - [Propose something "Freeform"](1011-PFRO-propose_freeform.md)
 
 2
 - Understand treasury rewards 
