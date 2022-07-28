@@ -29,7 +29,7 @@
 - [Liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)
 
 ## Liquidity
-- [Liquidity provisioning mechanics](./0044-LIQM-lp_mechanics.md)
+- [Liquidity provisioning mechanics](./0044-LIME-lp_mechanics.md)
 - [Liquidity provisioning fees and rewards](./0042-LIQF-setting_fees_and_rewarding_lps.md)
 - [Probability weighted liquidity measurement (Python notebook)](./0034-PROB-prob_weighted_liquidity_measure.ipynb)
 

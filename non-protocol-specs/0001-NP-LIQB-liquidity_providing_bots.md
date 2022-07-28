@@ -12,7 +12,7 @@ This achieves the following: the price on the market looks "real" and there is v
 
 The downside is that if the bot is "unlucky" they can run out of even large amount of collateral and their orders / positions are liquidated. To avoid this they need regular collateral top-ups.  
 
-From Flamenco Tavern onvards any market on Vega will need a committed liquidity provider, see [LP mechanics spec](../protocol/0044-LIQM-lp_mechanics.md) to function. See also [LP order type spec](../protocol/0038-OLIQ-liquidity_provision_order_type.md). 
+From Flamenco Tavern onvards any market on Vega will need a committed liquidity provider, see [LP mechanics spec](../protocol/0044-LIME-lp_mechanics.md) to function. See also [LP order type spec](../protocol/0038-OLIQ-liquidity_provision_order_type.md). 
 
 If a feature is marked as "optional" then the bot can be configured in such a way that it is not providing this functionality but still doing other tasks.
 The aim of this spec is bots that
@@ -55,7 +55,7 @@ assetBalance x stakeFraction > min_LP_stake_quantum_multiple x quantum
 It will then check whether it has enough collateral for maintaining the commitment but that will be described below as it applies below too. 
 
 ### Serving as a liquidity provider for a market
-This section is only relevant if: a) the option to act as a liquidity provider is selected or b) the bot submitted a new market proposal as this needs a minimum liquidity commitment [LP mechanics](../protocol/0044-LIQM-lp_mechanics.md ). 
+This section is only relevant if: a) the option to act as a liquidity provider is selected or b) the bot submitted a new market proposal as this needs a minimum liquidity commitment [LP mechanics](../protocol/0044-LIME-lp_mechanics.md ). 
 
 Step 1. decide what current price is. 
 ``` 
