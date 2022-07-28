@@ -149,7 +149,7 @@ Once the enactment date is reached and the other conditions specified to exit th
 
 **Behaviour:**
 
-- Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-LIQM-lp_mechanics.md). 
+- Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-LIME-lp_mechanics.md). 
 - Orders can be placed into the market, trading occurs according to normal trading mode rules
 - Market data is emitted
 - Positions and margins are managed as per the specs

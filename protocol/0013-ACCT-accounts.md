@@ -1,6 +1,6 @@
-# Accounts 
+# Accounts
 
-## Accounts controlled by parties 
+## Accounts controlled by parties
 A party only has control over balances in the "general" account for each asset. 
 [Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account for the relevant [asset](./0040-ASSF-asset_framework.md) created. 
 In order to submit [orders](./0014-ORDT-order_types.md a non-zero general account balance is needed; Vega will transfer appropriate amount to the [margin account](./0011-MARA-check_order_allocate_margin.md) for the party and the market.  
@@ -73,7 +73,7 @@ If there is a positive balance in an account that is being deleted, that balance
 
 
 ## Bond accounts
-Bond accounts are opened when a party opens a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md). The bond is held by the network to ensure that the Liquidity PRovider maintains enough collateral to cover their commitment. [0044-LIQM - LP Mechanics](./0044-LIQM-lp_mechanics.md) contains more detail on bond management. 
+Bond accounts are opened when a party opens a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md). The bond is held by the network to ensure that the Liquidity PRovider maintains enough collateral to cover their commitment. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management. 
 
 ## Insurance pools
 
@@ -103,7 +103,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
   -  [ ] Only one general asset account exists per party per asset. (<a name="0013-ACCT-004" href="#0013-ACCT-004">0013-ACCT-004</a>)
   -  [ ] When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. (<a name="0013-ACCT-005" href="#0013-ACCT-005">0013-ACCT-005</a>)
   -  [ ] When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. (<a name="0013-ACCT-006" href="#0013-ACCT-006">0013-ACCT-006</a>) 
-  - [ ] [Fees earned from liquidity provision](./0044-LIQM-lp_mechanics.md#fees) are paid in to this account. (<a name="0013-ACCT-011" href="#0013-ACCT-011">0013-ACCT-011</a>)
+  - [ ] [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are paid in to this account. (<a name="0013-ACCT-011" href="#0013-ACCT-011">0013-ACCT-011</a>)
 
 ### Party margin accounts
 - [ ] Every party that submits an order on a market will have a margin account for that market created. (<a name="0013-ACCT-007" href="#0013-ACCT-007">0013-ACCT-007</a>)
@@ -112,9 +112,9 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 - [ ] Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders. (<a name="0013-ACCT-010" href="#0013-ACCT-010">0013-ACCT-010</a>)
 
 ### Liquidity Provider bond accounts
-- [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIQM-lp_mechanics.md). (<a name="0013-ACCT-017" href="#0013-ACCT-017">0013-ACCT-017</a>)
+- [ ] A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIME-lp_mechanics.md). (<a name="0013-ACCT-017" href="#0013-ACCT-017">0013-ACCT-017</a>)
 - [ ] Each party that has placed a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md) will have one bond account per market they have provided liquidity to (<a name="0013-ACCT-018" href="#0013-ACCT-018">0013-ACCT-018</a>)
-- [ ] [Fees earned from liquidity provision](./0044-LIQM-lp_mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees) (<a name="0013-ACCT-019" href="#0013-ACCT-019">0013-ACCT-019</a>)
+- [ ] [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees) (<a name="0013-ACCT-019" href="#0013-ACCT-019">0013-ACCT-019</a>)
 
 ### Insurance pool accounts
 - [ ] When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0013-ACCT-020" href="#0013-ACCT-020">0013-ACCT-020</a>)
