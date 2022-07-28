@@ -44,9 +44,11 @@ When selecting what validators to nominate with my stake, I...
   - **must** see a total stake (inc self stake) [1002-STAK-0012](#1002-STAK-0012 "1002-STAK-0012")
     - **should** see self stake [1002-STAK-0013](#1002-STAK-0013 "1002-STAK-0013")
     - **should** see nominated stake [1002-STAK-0014](#1002-STAK-0014 "1002-STAK-0014")
+    - **should** see total stake as a % of total staked across all nodes  [1002-STAK-0051](#1002-STAK-0051 "1002-STAK-0051")
   - **must** see total stake change next epoch [1002-STAK-0015](#1002-STAK-0015 "1002-STAK-0015")
     - **should** see self stake [1002-STAK-0016](#1002-STAK-0016 "1002-STAK-0016")
     - **should** see nominated stake [1002-STAK-0017](#1002-STAK-0017 "1002-STAK-0017")
+    - **should** see total stake as a % change [1002-STAK-0052](#1002-STAK-0052 "1002-STAK-0052")
   - **must** see the version of Vega they are currently running [1002-STAK-0018](#1002-STAK-0018 "1002-STAK-0018")
   - **must** see the version of Vega they propose running [1002-STAK-0019](#1002-STAK-0019 "1002-STAK-0019")
 - can see data for the previous epoch
