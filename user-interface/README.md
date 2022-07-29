@@ -4,7 +4,7 @@ This folder contain descriptions of thing that users do when interacting with a 
 These have been listed with the most "upstream" being first.
 
 0
-- [Get and use a **Vega wallet**](0000-WALL-wallet.md)
+- [Get and use a **Vega wallet**](0001-WALL-wallet.md)
 - Connect Vega wallet + select keys `Incomplete`
 - Connect Ethereum wallet `Incomplete`
   
