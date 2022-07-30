@@ -13,30 +13,35 @@ To make proposal: Parties will require an amount of the Governance token [associ
 
 To vote: a party will require [associated](1000-ASSO-associate.md) Governance tokens (with exceptions around market change proposals where liquidity providers can also vote). A vote is weighted by the number of governance tokens they have associated (or in the case of liquidity providers: their equity like share).
 
-Each type will have a majority figure that is required for the proposal to pass. As in a majority of tokens that 
- as well as a participation level. 
+Each type will have a majority figure that is required for the proposal to pass. As in a majority of tokens that  as well as a participation level. 
+
+A short hand is used in these ACs:
+- Open = Accepting votes
+- To enact = passed but not yet enacted
+- Closed = was accepting votes but deadline has passed (e.g. passed, rejected etc)
+- Failed = did not get to the point of accepting votes.
 
 ## list of proposals
 When looking for a particular proposal or wanting to see what proposals are open, soon to enact or closed, I...
 
-- **must** see open proposals or ones due for enactment distinct from others (e.g grouped by "open" or "closed") (note: freeform proposals do not enact)
-- **should** see proposals sorted with the ones closest to enactment first
-- **must** see a history of all other proposals
-- **must** see the type of proposal
-- **should** see a summary of what the type of proposed change is, without looking at details (network, new market etc)
-  - for network parameters: **should** see what parameter is being changed and new value
-  - for network parameters: **could** see what the current values are for that parameter
-  - for network parameters: **could** see if there are other open proposals for the same parameter
-  - for new markets: **should** see the type of market (e.g. Future)
-  - for new markets: **could** see the type trading mode of the market (e.g. auction, continuous)
-  - for new markets: **should** see the name of the new market
-  - for new markets: **should** see the code of the new market
-  - for new markets: **should** see the settlement asset of the new market (not just asset ID but asset Symbol)
-  - for new markets: **could** see a summary of the oracle used for settlement
-  - for market changes: **should** see the name of the market being changed
-  - for market changes: **should** see a summary of what parameters are being changed
-  - for market changes: **should** see a the proposed values for parameters
-  - for market changes: **should** see a the current values for that parameter
+- **must** see open proposals (and ones due for enactment) distinct from others (e.g grouped by "open", "to enact" "closed") (note: freeform proposals do not enact so should be shown as "closed" when "passed") [1004-VOTE-001](#1004-VOTE-001 "1004-VOTE-001")
+- **should** see proposals sorted with the ones closest to enactment first [1004-VOTE-002](#1004-VOTE-002 "1004-VOTE-002")
+- **must** see a history of all "closed" proposals [1004-VOTE-003](#1004-VOTE-003 "1004-VOTE-003")
+- **must** see the type of proposal [1004-VOTE-004](#1004-VOTE-004 "1004-VOTE-004")
+- **should** see a summary of what the type of proposed change is, without looking at details (network, new market etc) [1004-VOTE-005](#1004-VOTE-004 "1004-VOTE-004")
+  - for network parameters: **should** see what parameter is being changed and new value [1004-VOTE-005](#1004-VOTE-005 "1004-VOTE-005")
+  - for network parameters: **could** see what the current values are for that parameter [1004-VOTE-006](#1004-VOTE-006 "1004-VOTE-006")
+  - for network parameters: **could** see if there are other open proposals for the same parameter [1004-VOTE-007](#1004-VOTE-007 "1004-VOTE-007")
+  - for new markets: **should** see the type of market (e.g. Future) [1004-VOTE-008](#1004-VOTE-008 "1004-VOTE-008")
+  - for new markets: **could** see the type trading mode of the market (e.g. auction, continuous) [1004-VOTE-009](#1004-VOTE-009 "1004-VOTE-009")
+  - for new markets: **should** see the name of the new market [1004-VOTE-010](#1004-VOTE-010 "1004-VOTE-010")
+  - for new markets: **should** see the code of the new market [1004-VOTE-011](#1004-VOTE-011 "1004-VOTE-011")
+  - for new markets: **should** see the settlement asset of the new market (not just asset ID but asset Symbol) [1004-VOTE-012](#1004-VOTE-012 "1004-VOTE-012")
+  - for new markets: **could** see a summary of the oracle used for settlement [1004-VOTE-013](#1004-VOTE-013 "1004-VOTE-013")
+  - for market changes: **should** see the name of the market being changed [1004-VOTE-014](#1004-VOTE-014 "1004-VOTE-014")
+  - for market changes: **should** see a summary of what parameters are being changed [1004-VOTE-015](#1004-VOTE-015 "1004-VOTE-015")
+  - for market changes: **should** see a the proposed values for parameters [1004-VOTE-016](#1004-VOTE-016 "1004-VOTE-016")
+  - for market changes: **should** see a the current values for that parameter [1004-VOTE-017](#1004-VOTE-017 "1004-VOTE-017")
   - for market changes: **could** see if there are other open proposals for the same market
   - for new assets: **must** see the name of the new asset
   - for new assets: **must** see the name of the new asset
@@ -72,13 +77,58 @@ When looking at a particular proposal, I...
 
 - see [above](#list-of-proposals)
 - **must** have option to see raw JSON of proposal
+- **should** display the proposed change
 
-... so i can see what I am voting for and the status of the vote.
+- **must** show the rationale text
+- **must** show the rationale URL
+- **should** see that the Dapp has verified that the text on the rationale matches the hash
+
+For open proposals:
+
+- **must** show a summary of vote status (base on the current total amount associated tokens, note this could change before the vote ends)
+- **must** see if the Token vote has met the required participation threshold
+- **must** see the sum of tokens that have voted so far
+- **should** see sum of tokens that have voted as a percentage of total voted
+- **should** see what the participation threshold is for this proposal (note this is see per proposal, incase a proposal is set to enact that changes threshold)
+- **must** see if the Token vote has met the required majority threshold
+- **must** see the sum of tokens that have voted in favour of the proposal
+- **should** see sum of tokens that have votes in favour of proposal as percentage of total associated
+- **should** see what the majority threshold is for this proposal (note this is see per proposal, incase a proposal is set to enact that changes threshold)
+
+For open market change proposals, all of the above and:
+
+- **must** show a summary of vote status (base on the current equality like share, note this could change before the vote ends)
+- **must** see if the equality like share vote has met the required participation threshold
+- **must** see the equality like share % that has voted so far
+- **should** see what the equality like share threshold is for this proposal (note this is see per proposal, incase a proposal is set to enact that changes threshold)
+- **must** see if the equality like share vote has met the required majority threshold
+- **must** see the equality like share as percentage that has voted in favour of the proposal
+- **must** see what the majority threshold is for this proposal (note this is see per proposal, incase a proposal is set to enact that changes threshold)
+
+For **closed** market change proposals, all of the above and:
+
+- all of above but values at time of vote close
+
+... so I can see what I am voting for and the status of the vote.
 
 ## Can vote on an open proposals
+When looking to vote on the proposal, I...
 
-### Associate tokens so that I have some voting weight
-See [Associate tokens](./1000-ASSO-associate.md)
+- **must** see an option to [connect to a Vega wallet/key](#TBD)
+- **must** be [connected to a Vega wallet/key](#TBD)
+  - **must** see sum of tokens I have [associated](1000-ASSO-associate.md)
+  - **should** see what percentage of the total [associated](1000-ASSO-associate.md) tokens I hold
+    - **should**, if i have 0 tokens, see link to [associate](1000-ASSO-associate.md)
+  - **must** see my current vote for, against, or not voted
+  - **must** see option to vote for or against
+  - **must** see option to change my vote (vote again in same or different direction)
+
+For open market change proposals, all of the above and:
+
+- **must** be [connected to a Vega wallet/key](#TBD)
+  - **must** see your equity like share on the market you are voting on
+
+...so that I can cast my vote and see the impact it might have.
 
 ### All proposal types
 
