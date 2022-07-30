@@ -13,8 +13,8 @@ These have been listed with the most "upstream" being first.
 - [View and Redeem vested tokens](1001-VEST-vesting.md) `Incomplete`
 - [Staking validators](1002-STAK-staking.md)
 - [Review staking income](1003-INCO-income.md) `Incomplete`
-- [Vote on changes](1004-VOTE-vote.md) `Incomplete`
-- [Propose changes](1005-PROP-propose.md) `Incomplete`
+- [Vote on changes](1004-VOTE-vote.md)
+- [Propose changes](1005-PROP-propose.md)
   - [Propose new Market](./1006-PMARK-propose_new_market.md)
   - [Propose change(s) to market](./1007-PMAC-propose_market_change.md)
   - [Propose new asset](1008-PASN-propose_new_asset.md)
