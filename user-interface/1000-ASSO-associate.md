@@ -23,14 +23,14 @@ When looking to acquire governance tokens, I...
 ## Associate
 When looking to stake validators or participate in governance, I first need to associate governance tokens with a Vega wallet/key, I...
 
-- **must** [connect an Ethereum wallet/key](#TBD) to see tokens it may have in wallet or attributed to it in the vesting contract [1000-ASSO-02](#1000-ASSO-02 "1000-ASSO-02")
-- **must** select a Vega key to associate to [1000-ASSO-03](#1000-ASSO-03 "1000-ASSO-03")
-  - **must** be able to populate key field with the [connected Vega wallet](#TBD)  [1000-ASSO-04](#1000-ASSO-04 "1000-ASSO-04")
-  - **should** be able to populate field with a string [1000-ASSO-05](#1000-ASSO-05 "1000-ASSO-05")
-- if the connected ethereum wallet has vesting tokens: **must** be able to select to associate from either the vesting contract or the wallet  [1000-ASSO-06](#1000-ASSO-06 "1000-ASSO-06")
-- **must** see the number of un-associated tokens in the selected wallet/vesting contract [1000-ASSO-07](#1000-ASSO-07 "1000-ASSO-07")
-- **must** be select the amount of tokens to associate [1000-ASSO-08](#1000-ASSO-08 "1000-ASSO-08")
-  - **must** be able to populate the input with the amount of un-associated tokens for the selected wallet/vesting contract [1000-ASSO-09](#1000-ASSO-09 "1000-ASSO-09")
+- **must** [connect an Ethereum wallet/key](#TBD) to see tokens it may have in wallet or attributed to it in the vesting contract [1000-ASSO-002](#1000-ASSO-002 "1000-ASSO-002")
+- **must** select a Vega key to associate to [1000-ASSO-003](#1000-ASSO-003 "1000-ASSO-003")
+  - **must** be able to populate key field with the [connected Vega wallet](#TBD)  [1000-ASSO-004](#1000-ASSO-004 "1000-ASSO-004")
+  - **should** be able to populate field with a string [1000-ASSO-005](#1000-ASSO-005 "1000-ASSO-005")
+- if the connected ethereum wallet has vesting tokens: **must** be able to select to associate from either the vesting contract or the wallet  [1000-ASSO-006](#1000-ASSO-006 "1000-ASSO-006")
+- **must** see the number of un-associated tokens in the selected wallet/vesting contract [1000-ASSO-007](#1000-ASSO-007 "1000-ASSO-007")
+- **must** be select the amount of tokens to associate [1000-ASSO-008](#1000-ASSO-008 "1000-ASSO-008")
+  - **must** be able to populate the input with the amount of un-associated tokens for the selected wallet/vesting contract [1000-ASSO-009](#1000-ASSO-009 "1000-ASSO-009")
 - **must** be warned if the amount being associated is greater than the amount [1000-ASSO-010](#1000-ASSO-010 "1000-ASSO-010")
 - **must** submit the association on [Ethereum transaction(s) inc ERC20 approval if required](#TBD) [1000-ASSO-011](#1000-ASSO-011 "1000-ASSO-011")
 - **must** see feedback whether my association has been registered on Ethereum [1000-ASSO-012](#1000-ASSO-012 "1000-ASSO-012")

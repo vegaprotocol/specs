@@ -7,9 +7,9 @@ When staking a user may be motivated to select validators to maximize the reward
 ## Understand staking on Vega
 When considering whether to stake on Vega, I...
 
-- **must** see information to help inform me what return I might expect from staking (other protocols might show a typical APY) [1002-STAK-01](#1002-STAK-01 "1002-STAK-01")
-- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or associated) to a Vega wallet for use on Vega [1002-STAK-02](#1002-STAK-02 "1002-STAK-02")  
-- **must** see detailed documentation on how staking works on Vega [0000-STAK-03](#0000-STAK-03 "0000-STAK-03") 
+- **must** see information to help inform me what return I might expect from staking (other protocols might show a typical APY) [1002-STAK-001](#1002-STAK-01 "1002-STAK-001")
+- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or associated) to a Vega wallet for use on Vega [1002-STAK-002](#1002-STAK-02 "1002-STAK-002")  
+- **must** see detailed documentation on how staking works on Vega [0000-STAK-003](#0000-STAK-003 "0000-STAK-003") 
 
 ...so I can decide if I want to stake on Vega, and how to go about doing it.
 
@@ -25,7 +25,7 @@ Note: Income may come in a range of different tokens, as markets can settle in d
 Before I stake, I need to [Associate tokens](./1000-ASSO-associate.md) with a Vega wallet/key...
 
 - See [Associate tokens](./1000-ASSO-associate.md)
-- **should** see that if no further action is taken, newly associated tokens will be nominated to validators based on existing distribution [1002-STAK-04](#1002-STAK-04 "1002-STAK-04")
+- **should** see that if no further action is taken, newly associated tokens will be nominated to validators based on existing distribution [1002-STAK-004](#1002-STAK-004 "1002-STAK-004")
 
 ...so that I can nominate validators.
 
@@ -34,10 +34,10 @@ When selecting what validators to nominate with my stake, I...
 
 - can see all validator information without having to connect Vega wallet [1002-STAK-050](#1002-STAK-050 "1002-STAK-050")
 - can see "static" information about the validator 
-  - name [1002-STAK-05](#1002-STAK-05 "1002-STAK-06")
-  - ID [1002-STAK-07](#1002-STAK-07 "1002-STAK-07")
-  - Vega public key [1002-STAK-08](#1002-STAK-08 "1002-STAK-08")
-  - a URL where to find more information about the validator [1002-STAK-09](#1002-STAK-09 "1002-STAK-09")
+  - name [1002-STAK-005](#1002-STAK-005 "1002-STAK-006")
+  - ID [1002-STAK-007](#1002-STAK-007 "1002-STAK-007")
+  - Vega public key [1002-STAK-008](#1002-STAK-08 "1002-STAK-008")
+  - a URL where to find more information about the validator [1002-STAK-009](#1002-STAK-009 "1002-STAK-009")
   - Etherum address [1002-STAK-010](#1002-STAK-010 "1002-STAK-010")
 - can see data for the current/next epoch, for each validator
   - **must** see the current "status" (consensus, Ersatz, New etc) [1002-STAK-011](#1002-STAK-011 "1002-STAK-011") 
