@@ -10,5 +10,6 @@ When checking if im getting the staking return that I was expecting, I...
   - validator staked
   - market 
 - I can see where I did not receive full income because the validator suffered penalties 
+- See stake as a % of totals
 
 ...so that I can make decisions about my staking
