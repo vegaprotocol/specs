@@ -6,7 +6,10 @@ These have been listed with the most "upstream" being first.
 0
 - [Get and use a **Vega wallet**](0001-WALL-wallet.md)
 - Connect Vega wallet + select keys `Incomplete`
+- Submit Vega transaction `Incomplete`
 - Connect Ethereum wallet `Incomplete`
+- Submit Ethereum transaction `Incomplete`
+
   
 1
 - [Associate governance token a Vega key](1000-ASSO-associate.md)
