@@ -23,16 +23,16 @@ When looking to acquire governance tokens, I...
 ## Associate
 When looking to stake validators or participate in governance, I first need to associate governance tokens with a Vega wallet/key, I...
 
-- **must** [connect an Ethereum wallet/key](#TBD) to see tokens it may have in wallet or attributed to it in the vesting contract [1000-ASSO-002](#1000-ASSO-002 "1000-ASSO-002")
+- **must** [connect an Ethereum wallet/key](0004-EWAL-connect_ethereum_wallet.md) to see tokens it may have in wallet or attributed to it in the vesting contract [1000-ASSO-002](#1000-ASSO-002 "1000-ASSO-002")
 - **must** select a Vega key to associate to [1000-ASSO-003](#1000-ASSO-003 "1000-ASSO-003")
-  - **must** be able to populate key field with the [connected Vega wallet](#TBD)  [1000-ASSO-004](#1000-ASSO-004 "1000-ASSO-004")
+  - **must** be able to populate key field with the [connected Vega wallet](0002-WCON-connect_vega_wallet.md)  [1000-ASSO-004](#1000-ASSO-004 "1000-ASSO-004")
   - **should** be able to populate field with a string [1000-ASSO-005](#1000-ASSO-005 "1000-ASSO-005")
 - if the connected ethereum wallet has vesting tokens: **must** be able to select to associate from either the vesting contract or the wallet  [1000-ASSO-006](#1000-ASSO-006 "1000-ASSO-006")
 - **must** see the number of un-associated tokens in the selected wallet/vesting contract [1000-ASSO-007](#1000-ASSO-007 "1000-ASSO-007")
 - **must** be select the amount of tokens to associate [1000-ASSO-008](#1000-ASSO-008 "1000-ASSO-008")
   - **must** be able to populate the input with the amount of un-associated tokens for the selected wallet/vesting contract [1000-ASSO-009](#1000-ASSO-009 "1000-ASSO-009")
 - **must** be warned if the amount being associated is greater than the amount [1000-ASSO-010](#1000-ASSO-010 "1000-ASSO-010")
-- **must** submit the association on [Ethereum transaction(s) inc ERC20 approval if required](#TBD) [1000-ASSO-011](#1000-ASSO-011 "1000-ASSO-011")
+- **must** submit the association on [Ethereum transaction(s) inc ERC20 approval if required](0005-ETXN-submit_ethereum_transaction.md) [1000-ASSO-011](#1000-ASSO-011 "1000-ASSO-011")
 - **must** see feedback whether my association has been registered on Ethereum [1000-ASSO-012](#1000-ASSO-012 "1000-ASSO-012")
 - **must** see feedback that the association has been registered by Vega and that it can be used after the number of Ethereum block confirmations required (typically 50) [1000-ASSO-013](#1000-ASSO-013 "1000-ASSO-013")
   - **should** be able to see a balance for the number of tokens associated and ready for use [1000-ASSO-014](#1000-ASSO-014 "1000-ASSO-014")
@@ -45,7 +45,7 @@ When looking to stake validators or participate in governance, I first need to a
 ## Disassociate  
 When wanting to remove governance tokens, I...
 
-- **must** [connect an Ethereum wallet/key](#TBD) to see tokens it may have in wallet or attributed to it in the vesting contract [1000-ASSO-018](#1000-ASSO-018 "1000-ASSO-018")
+- **must** [connect an Ethereum wallet/key](0004-EWAL-connect_ethereum_wallet.md) to see tokens it may have in wallet or attributed to it in the vesting contract [1000-ASSO-018](#1000-ASSO-018 "1000-ASSO-018")
 - **must** see a list Vega keys that the connected Ethereum wallet has associated too [1000-ASSO-019](#1000-ASSO-019 "1000-ASSO-019")
   - **must** see an amount [1000-ASSO-020](#1000-ASSO-020 "1000-ASSO-020")
   - **must** see the full Vega public key associated too [1000-ASSO-021](#1000-ASSO-021 "1000-ASSO-021")
@@ -56,7 +56,7 @@ When wanting to remove governance tokens, I...
   - **must** be able to populate the input with the amount of associated tokens for the selected wallet/vesting contract [1000-ASSO-025](#1000-ASSO-025 "1000-ASSO-025")
 - **should** be warned that disassociating will forfeit and rewards for the current epoch and reduce the Vote weigh on any open proposals [1000-ASSO-032](#1000-ASSO-032 "1000-ASSO-032")
 - **must** be warned if the inputs on the form will result in an invalid withdraw [1000-ASSO-026](#1000-ASSO-026 "1000-ASSO-026")
-- **must** action the disassociation [Ethereum transaction](#TBD) [1000-ASSO-027](#1000-ASSO-027 "1000-ASSO-027")
+- **must** action the disassociation [Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) [1000-ASSO-027](#1000-ASSO-027 "1000-ASSO-027")
 - **must** feedback on the progress of the disassociation on ethereum [1000-ASSO-028](#1000-ASSO-028 "1000-ASSO-028")
 - **must** see new associated balances in Vega (theses should be applied instantly) [1000-ASSO-029](#1000-ASSO-029 "1000-ASSO-029")
 - on completion (if tokens were returned to vesting contract): **could** be prompted to go on to [redeem](1001-VEST-vesting.md).

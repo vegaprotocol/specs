@@ -42,7 +42,7 @@ for each ethereum wallet:
 
 When looking to see how many tokens I have in total, and how many I might be able to redeem, I...
 
-- **must** be able to [Connect and ethereum wallet](#TBD) [1001-VEST-018](#1001-VEST-018 "1001-VEST-018")
+- **must** be able to [Connect and ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) [1001-VEST-018](#1001-VEST-018 "1001-VEST-018")
 - **should** be able input an ethereum address [1001-VEST-019](#1001-VEST-019 "1001-VEST-019")
 
 for the a given Ethereum wallet/address/key:
@@ -64,10 +64,10 @@ Note: it is not possible to choose how many tokens you redeem from a tranche, in
 
 When looking to redeem tokens, I...
 
-- **must** [connect the ethereum wallet](#TBD) that holds tokens [1001-VEST-029](#1001-VEST-029 "1001-VEST-029")
+- **must** [connect the ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) that holds tokens [1001-VEST-029](#1001-VEST-029 "1001-VEST-029")
 - **must** select a tranche to redeem from [1001-VEST-030](#1001-VEST-030 "1001-VEST-030")
 - **must** see the number of tokens that can be redeemed [1001-VEST-031](#1001-VEST-031 "1001-VEST-031")
-- **must** submit the redeem from tranche [ethereum transaction](#TBD) [1001-VEST-032](#1001-VEST-032 "1001-VEST-032")
+- **must** submit the redeem from tranche [ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) [1001-VEST-032](#1001-VEST-032 "1001-VEST-032")
 - **must** get feedback on the progress of the Ethereum transaction [1001-VEST-033](#1001-VEST-033 "1001-VEST-033")
 - **must** see updated balances after redemption [1001-VEST-034](#1001-VEST-034 "1001-VEST-034")
 

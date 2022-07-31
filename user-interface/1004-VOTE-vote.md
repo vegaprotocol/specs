@@ -76,7 +76,7 @@ for each proposal:
 - for proposals that did not pass due to lack of participation: **must** see "Participation not reached" [1004-VOTE-048](#1004-VOTE-048 "1004-VOTE-048")
 - for proposals that did not pass due to lack of majority: **must** see "Majority not reached" [1004-VOTE-049](#1004-VOTE-049 "1004-VOTE-049")
 - for proposals that did not pass due to failure: **must** see "Failed"  [1004-VOTE-050](#1004-VOTE-050 "1004-VOTE-050")
-- for proposals that I ([connected Vega](#TBD) key) have voted on: **should** see my vote (for or against) [1004-VOTE-051](#1004-VOTE-051 "1004-VOTE-051")
+- for proposals that I ([connected Vega](0002-WCON-connect_vega_wallet.md) key) have voted on: **should** see my vote (for or against) [1004-VOTE-051](#1004-VOTE-051 "1004-VOTE-051")
 
 ...so I can see select one to view and vote, or view outcome.
 
@@ -122,8 +122,8 @@ For **closed** market change proposals, all of the above and:
 ## Can vote on an open proposals
 When looking to vote on the proposal, I...
 
-- **must** see an option to [connect to a Vega wallet/key](#TBD) [1004-VOTE-075](#1004-VOTE-075 "1004-VOTE-075")
-- **must** be [connected to a Vega wallet/key](#TBD) [1004-VOTE-076](#1004-VOTE-076 "1004-VOTE-076")
+- **must** see an option to [connect to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) [1004-VOTE-075](#1004-VOTE-075 "1004-VOTE-075")
+- **must** be [connected to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) [1004-VOTE-076](#1004-VOTE-076 "1004-VOTE-076")
   - **must** see sum of tokens I have [associated](1027-ASSO-associate.md) [1004-VOTE-076](#1004-VOTE-076 "1004-VOTE-076")
   - **should** see what percentage of the total [associated](1027-ASSO-associate.md) tokens I hold [1004-VOTE-077](#1004-VOTE-077 "1004-VOTE-077")
     - **should**, if i have 0 tokens, see link to [associate](1027-ASSO-associate.md) [1004-VOTE-078](#1004-VOTE-078 "1004-VOTE-078")
@@ -133,12 +133,12 @@ When looking to vote on the proposal, I...
 
 For open market change proposals, all of the above and:
 
-- **must** be [connected to a Vega wallet/key](#TBD) [1004-VOTE-091](#1004-VOTE-091 "1004-VOTE-091")
+- **must** be [connected to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) [1004-VOTE-091](#1004-VOTE-091 "1004-VOTE-091")
   - **must** see your equity like share on the market you are votin [1004-VOTE-092](#1004-VOTE-092 "1004-VOTE-092")g on [1004-VOTE-092](#1004-VOTE-092 "1004-VOTE-092")
 
 for both:
 
-- **must** see feedback of my vote [Vega transaction](#TBD) [1004-VOTE-093](#1004-VOTE-093 "1004-VOTE-093")
+- **must** see feedback of my vote [Vega transaction](0003-WTXN-submit_vega_transaction.md) [1004-VOTE-093](#1004-VOTE-093 "1004-VOTE-093")
 
 ...so that I can cast my vote and see the impact it might have. [1004-VOTE-094](#1004-VOTE-094 "1004-VOTE-094")
 

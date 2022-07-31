@@ -41,8 +41,8 @@ Go to the following for detail on each proposal type:
 
 ### Submit proposal
 
-- **must** submit the proposal [Vega transactions](#TBD) [1005-PROP-011](#1005-PROP-011 "1005-PROP-011")
-- **must** see the feedback on the [Vega transactions](#TBD) [1005-PROP-012](#1005-PROP-012 "1005-PROP-012")
+- **must** submit the proposal [Vega transaction](0003-WTXN-submit_vega_transaction.md) [1005-PROP-011](#1005-PROP-011 "1005-PROP-011")
+- **must** see the feedback on the [Vega transaction](0003-WTXN-submit_vega_transaction.md) [1005-PROP-012](#1005-PROP-012 "1005-PROP-012")
 - If there is an error on the proposal: 
   - **must** be shown an error message will all of the error details from the API [1005-PROP-013](#1005-PROP-013 "1005-PROP-013")
   - **must** see the proposal form populated with all the same values just submitted [1005-PROP-014](#1005-PROP-014 "1005-PROP-014")

@@ -3,7 +3,7 @@
 ## Monitor staking rewards
 When checking the staking rewards, I... 
 
-- must be [connected to a Vega wallet](#TBD)
+- must be [connected to a Vega wallet](0002-WCON-connect_vega_wallet.md)
 
 - **must** see when the current epoch ends [1003-INCO-001](#1003-INCO-001 "1003-INCO-001")
 - **should** see when the current epoch started [1003-INCO-002](#1003-INCO-002 "1003-INCO-002")

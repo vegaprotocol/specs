@@ -5,17 +5,17 @@ These have been listed with the most "upstream" being first.
 
 0
 - [Get and use a **Vega wallet**](0001-WALL-wallet.md)
-- Connect Vega wallet + select keys `Incomplete`
-- Submit Vega transaction `Incomplete`
-- Connect Ethereum wallet `Incomplete`
-- Submit Ethereum transaction `Incomplete`
+- [Connect Vega wallet + select keys](0002-WCON-connect_vega_wallet.md) `Incomplete`
+- [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) `Incomplete`
+- [Connect Ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) `Incomplete`
+- [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) `Incomplete`
 
   
 1
 - [Associate governance token a Vega key](1000-ASSO-associate.md)
-- [View and Redeem vested tokens](1001-VEST-vesting.md) `Incomplete`
+- [View and Redeem vested tokens](1001-VEST-vesting.md)
 - [Staking validators](1002-STAK-staking.md)
-- [Review staking income](1003-INCO-income.md) `Incomplete`
+- [Review staking income](1003-INCO-income.md)
 - [Vote on changes](1004-VOTE-vote.md)
 - [Propose changes](1005-PROP-propose.md)
   - [Propose new Market](./1006-PMARK-propose_new_market.md)
@@ -46,7 +46,7 @@ These have been listed with the most "upstream" being first.
 
 6
 - [View Collateral / accounts](6000-COLL-collateral.md) `Incomplete`
-- [Submit an order](6001-SORD-submit_orders.md) (Market or Limit)
+- [Submit an order](6001-SORD-submit_orders.md) (Market or Limit) `Incomplete`
 - [Manage my orders](6002-MORD-manage_orders.md) `Incomplete`
 - [View my positions](6003-POSI-positions.md) `Incomplete`
 - [View my trades/fills](6003-FILL-fills.md) `Incomplete`

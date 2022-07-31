@@ -76,12 +76,12 @@ Within a staking epoch (typically 24 hours) a user can change their nominations 
 When attributing some (or all of my governance tokens to a given validator), I...
 
 - **must** select a validator I want to nominate [1002-STAK-031](#1002-STAK-031 "1002-STAK-031")
-- **must** be [connected to a Vega wallet/key](#TBD) that has associated Vega (or Pending association) [1002-STAK-032](#1002-STAK-032 "1002-STAK-032")
+- **must** be [connected to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) that has associated Vega (or Pending association) [1002-STAK-032](#1002-STAK-032 "1002-STAK-032")
 - **must** select an amount of tokens [1002-STAK-033](#1002-STAK-033 "1002-STAK-033")
   - **must** be able to populate this the the amount of governance tokens that will be associated but not nominated at the beginning of the next epoch [1002-STAK-034](#1002-STAK-034 "1002-STAK-034")
   - **must** be warned if the amount I am about to nominate is below a minimum amount (spam protection) [1002-STAK-035](#1002-STAK-035 "1002-STAK-035")
   - **must** be warned if the amount I am about to nominate is more than I have associated - nominated at the end of current epoch [1002-STAK-036](#1002-STAK-036 "1002-STAK-036")
-- **must** submit the nomination [Vega transactions](#TBD) [1002-STAK-037](#1002-STAK-037 "1002-STAK-037")
+- **must** submit the nomination [Vega transactions](0003-WTXN-submit_vega_transaction.md) [1002-STAK-037](#1002-STAK-037 "1002-STAK-037")
 - **must** see feedback that my nomination has been registered, and will be processed at the next epoch [1002-STAK-038](#1002-STAK-038 "1002-STAK-038")
 - **must** see all my pending nomination changes for the next epoch [1002-STAK-039](#1002-STAK-039 "1002-STAK-039")
 
@@ -98,14 +98,14 @@ When checking if im getting the staking return that I was expecting, I...
 When removing stake from a validator, I...
 
 - **must** select a validator I want to un-nominate [1002-STAK-040](#1002-STAK-040 "1002-STAK-040")
-- **must** be [connected to a Vega wallet/key](#TBD) [1002-STAK-041](#1002-STAK-041 "1002-STAK-041")
+- **must** be [connected to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) [1002-STAK-041](#1002-STAK-041 "1002-STAK-041")
 - - **must** have the option of withdrawing nominated amount at the end of the epoch (and maintain the staking income for the current epoch) [1002-STAK-053](#1002-STAK-053 "1002-STAK-053")
 - **should** have the option of withdrawing nomination amount now immediately (and forfeit the staking income) [1002-STAK-043](#1002-STAK-043 "1002-STAK-043")
 - **must** set an amount to remove from a validator [1002-STAK-044](#1002-STAK-044 "1002-STAK-044")
   - **must** be able populate with the total delegated at the point where un-nominate will happen). [1002-STAK-045](#1002-STAK-045 "1002-STAK-045")
   - **must** be warned if amount is greater than the amount that will be on that validator at the end of the epoch [1002-STAK-046](#1002-STAK-046 "1002-STAK-046")
 [1002-STAK-047](#1002-STAK-047 "1002-STAK-047")
-- **must** submit un-nominate [Vega transaction](#TBD). [1002-STAK-048](#1002-STAK-048 "1002-STAK-048")
+- **must** submit un-nominate [Vega transaction](0003-WTXN-submit_vega_transaction.md). [1002-STAK-048](#1002-STAK-048 "1002-STAK-048")
 - **must** see feedback that the un-nomination has been registered, and that the un-nominated amount is now available for re-nomination [1002-STAK-049](#1002-STAK-049 "1002-STAK-049")
 
 ... so that I can use this stake for another validator etc.
