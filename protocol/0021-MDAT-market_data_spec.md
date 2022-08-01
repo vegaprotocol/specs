@@ -10,7 +10,7 @@ Feature name: market-data
 - [ ] The mark price calculation uses the methodology specified in the market framework. (<a name="0021-MDAT-007" href="#0021-MDAT-007">0021-MDAT-007</a>)
 - [ ] The Open interest returns the sum of the size for all open positions where positions size is greater than 0. (<a name="0021-MDAT-008" href="#0021-MDAT-008">0021-MDAT-008</a>) 
 - [ ] The Open interest returns 0 if there are no positions on the market (<a name="0021-MDAT-009" href="#0021-MDAT-009">0021-MDAT-009</a>)
-- [ ] Pegged orders are excluded from the best price and volume calculations. (<a name="0021-MDAT-010" href="#0021-MDAT-010">0021-MDAT-010</a>)
+- [ ] Pegged orders are excluded from the best static price and best static volume calculations. (<a name="0021-MDAT-010" href="#0021-MDAT-010">0021-MDAT-010</a>)
 - [ ] Dynamic orders should be ignored when calculating the static values (<a name="0021-MDAT-011" href="#0021-MDAT-011">0021-MDAT-011</a>)
 
 # Summary
