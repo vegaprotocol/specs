@@ -1,5 +1,7 @@
 # User interface acceptance criteria
-This folder contain descriptions of thing that users do when interacting with a Vega chain. These can be referenced in testing and used as input for building new interfaces.
+This folder contain descriptions of things that users do when interacting with a Vega chain. The things they need and some information about why they are dooing them. These can be referenced in testing and used as input for building new interfaces (e.g. User requirements).
+
+Each has a 
 
 These have been listed with the most "upstream" being first.
 
@@ -54,8 +56,6 @@ These have been listed with the most "upstream" being first.
 
 7
 - Analyze chain state and activity
-- Action transaction on Ethereum
-- Action transaction on Vega
 
 # Events
 There are things that happen to users too
