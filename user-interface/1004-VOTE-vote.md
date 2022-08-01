@@ -24,7 +24,7 @@ A short hand is used in these ACs:
 ## list of proposals
 When looking for a particular proposal or wanting to see what proposals are open, soon to enact or closed, I...
 
-- **must** see link to details on how governance works in s [1004-VOTE-001](#1004-VOTE-001 "1004-VOTE-001")
+- **must** see link to details on how governance works in docs [1004-VOTE-001](#1004-VOTE-001 "1004-VOTE-001")
 - **must** see link(s) to make proposals [1004-VOTE-002](#1004-VOTE-002 "1004-VOTE-002")
 - **must** if there are no proposals, see that there have been no proposals since the last chain checkpoint restore [1004-VOTE-003](#1004-VOTE-003 "1004-VOTE-003")
 - **must** see open proposals (and ones due for enactment) distinct from others (e.g grouped by "open", "to enact" "closed") (note: freeform proposals do not enact so should be shown as "closed" when "passed") [1004-VOTE-004](#1004-VOTE-004 "1004-VOTE-004")
