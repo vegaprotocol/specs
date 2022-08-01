@@ -9,9 +9,9 @@ There are a few things that can be governed on Vega...
 - "Freeform", which has no affect on the network but can be used to to measure token holders views
 These are governed through proposed changes, and then Votes for or against these proposal.
 
-To make proposal: Parties will require an amount of the Governance token [associated](1027-ASSO-associate.md) with their key.
+To make proposal: Parties will require an amount of the Governance token [associated](./1027-ASSO-associate.md) with their key.
 
-To vote: a party will require [associated](1027-ASSO-associate.md) Governance tokens (with exceptions around market change proposals where liquidity providers can also vote). A vote is weighted by the number of governance tokens they have associated (or in the case of liquidity providers: their equity like share).
+To vote: a party will require [associated](./1027-ASSO-associate.md) Governance tokens (with exceptions around market change proposals where liquidity providers can also vote). A vote is weighted by the number of governance tokens they have associated (or in the case of liquidity providers: their equity like share).
 
 Each type will have a majority figure that is required for the proposal to pass. As in a majority of tokens that  as well as a participation level. 
 
@@ -41,7 +41,7 @@ for each proposal:
   - for new markets: **should** see the type of market (e.g. Future) [1004-VOTE-013](#1004-VOTE-013 "1004-VOTE-013")
   - for new markets: **could** see the type trading mode of the market (e.g. auction, continuous) [1004-VOTE-014](#1004-VOTE-014 "1004-VOTE-014")
   - for new markets: **should** see the name of the new market [1004-VOTE-015](#1004-VOTE-015 "1004-VOTE-015")
-  - for new markets: **should** see the code of the new market [1004-VOTE-016](#1004-VOTE-016 "1004-VOTE-017")
+  - for new markets: **should** see the code of the new market [1004-VOTE-016](#1004-VOTE-016 "1004-VOTE-016")
   - for new markets: **should** see the settlement asset of the new market (not just asset ID but asset Symbol) [1004-VOTE-018](#1004-VOTE-018 "1004-VOTE-018")
   - for new markets: **could** see a summary of the oracle used for settlement [1004-VOTE-020](#1004-VOTE-020 "1004-VOTE-020")
   - for market changes: **should** see the name of the market being changed [1004-VOTE-021](#1004-VOTE-021 "1004-VOTE-021")
@@ -76,7 +76,7 @@ for each proposal:
 - for proposals that did not pass due to lack of participation: **must** see "Participation not reached" [1004-VOTE-048](#1004-VOTE-048 "1004-VOTE-048")
 - for proposals that did not pass due to lack of majority: **must** see "Majority not reached" [1004-VOTE-049](#1004-VOTE-049 "1004-VOTE-049")
 - for proposals that did not pass due to failure: **must** see "Failed"  [1004-VOTE-050](#1004-VOTE-050 "1004-VOTE-050")
-- for proposals that I ([connected Vega](0002-WCON-connect_vega_wallet.md) key) have voted on: **should** see my vote (for or against) [1004-VOTE-051](#1004-VOTE-051 "1004-VOTE-051")
+- for proposals that I ([connected Vega](./0002-WCON-connect_vega_wallet.md) key) have voted on: **should** see my vote (for or against) [1004-VOTE-051](#1004-VOTE-051 "1004-VOTE-051")
 
 ...so I can see select one to view and vote, or view outcome.
 
@@ -133,7 +133,7 @@ When looking to vote on the proposal, I...
 
 For open market change proposals, all of the above and:
 
-- **must** be [connected to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) [1004-VOTE-091](#1004-VOTE-091 "1004-VOTE-091")
+- **must** be [connected to a Vega wallet/key](./0002-WCON-connect_vega_wallet.md) [1004-VOTE-091](#1004-VOTE-091 "1004-VOTE-091")
   - **must** see your equity like share on the market you are voting on [1004-VOTE-092](#1004-VOTE-092 "1004-VOTE-092")
 
 for both:
