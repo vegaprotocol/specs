@@ -48,13 +48,21 @@ When using a given wallet, I...
 
 ... so that other users of my machine can not use my wallet, and I am not bothered frequently
 
-## Connecting to dApps
+## Connecting to Dapps
 When a dapp requests use of a wallet, I...
 
 - am prompted user to either select a wallet or dismiss the prompt 
 - `NOTYET` am required to select what keys of a wallet to grant access too
   - can select whole wallet (so that new keys are automatically shared)
-  - can select specific keys
+  - can select specific keys. for each key:
+    - **must** see the first and last 6 digits of the public key
+    - **should** be able to see the whole public key
+    - **must** be able to copy to clipboard the whole public key
+    - **must** see the key name/alias (meta data)
+    - **should** see what non-zero assets that kay has
+    - **could** see the Total asst balances (inc associated)
+    - **would like to see** a breakdown of the accounts. See [collateral / accounts](6000-COLL-collateral.md)
+    - **would like to** see any active orders or positions. See [collateral / accounts](6000-COLL-collateral.md)
   - tainted keys are shown as tainted
 - am required to enter wallet passphrase before wallet details are shared
 - can retrospectively revoke Dapp's use to Wallet/keys
