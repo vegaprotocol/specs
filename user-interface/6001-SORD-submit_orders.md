@@ -3,24 +3,24 @@ As a user I want change my exposure on a market (e.g. open a position, increase 
 
 When populating a deal ticket I...
 
-- Can see/select the market (**name**, code or ID) they are submitting the order on(<a name="6001-SORD-0000" href="#6001-SORD-0000">6001-SORD-0000</a>) 
-- Can see the current market **status** (Continuous, Auction etc) (<a name="6001-SORD-0000" href="#6001-SORD-0000">6001-SORD-0000</a>) 
+- Can see/select the market (**name**, code or ID) they are submitting the order on 
+- Can see the current market **status** (Continuous, Auction etc) 
 
 - If you do not have any of the settlement asset the deal ticket prompts to get some (but also allow you to pupulate ticekt becase I might wnat to try before I deposit)
 
-- Select a **side/direction** (note: some implementations may do this with two submit buttons long/short)(<a name="6001-SORD-0000" href="#6001-SORD-0000">6001-SORD-0000</a>) 
+- Select a **side/direction** (note: some implementations may do this with two submit buttons long/short)(
 
 ## Order size
 When selecting a size for my order, I...
 
-- can input an order size (aka amount or contracts) <a name="6001-SORD-0001-MUST" href="#6001-SORD-0001-MUST">6001-SORD-0001-MUST</a>
-- am warned (pre-submit) if input has too many decimal places for the market's "position" decimal places <a name="6001-SORD-0002-SHOULD" href="#6001-SORD-0002-SHOULD">6001-SORD-0002-SHOULD</a> 
-- can, if the field is empty, hit up/down to populate the input with the current mark price (if there is one) <a name="6001-SORD-00003-COULD" href="#6001-SORD-0003-COULD">6001-SORD-0003-COULD</a> 
-- get (pre-populated) the previously used value (Last submitted or last changed) if there is one <a name="6001-SORD-0004-SHOULD" href="#6001-SORD-0004-SHOULD">6001-SORD-0004-SHOULD</a>
-- Hitting up/down on the keyboard should increase the size by the markets' min-contract size <a name="6001-SORD-0005-SHOULD" href="#6001-SORD-0005-SHOULD">6001-SORD-0005-SHOULD</a>
-- can select a size in a order book to populate the size <a name="6001-SORD-0006-SHOULD" href="#6001-SORD-0006-SHOULD">6001-SORD-0006-SHOULD</a>
-- can select open volume in a positions table to populate the size <a name="6001-SORD-0007-SHOULD" href="#6001-SORD-0007-SHOULD">6001-SORD-0007-SHOULD</a>
-- can use a leverage slider to determine a size based on how much leverage I wish to use (given general balance, order type or price input) <a name="6001-SORD-0008-WOULD" href="#6001-SORD-0008-WOULD">6001-SORD-0008-WOULD</a>
+- can input an order size (aka amount or contracts) 
+- am warned (pre-submit) if input has too many decimal places for the market's "position" decimal places 
+- can, if the field is empty, hit up/down to populate the input with the current mark price (if there is one) 
+- get (pre-populated) the previously used value (Last submitted or last changed) if there is one 
+- Hitting up/down on the keyboard should increase the size by the markets' min-contract size 
+- can select a size in a order book to populate the size 
+- can select open volume in a positions table to populate the size 
+- can use a leverage slider to determine a size based on how much leverage I wish to use (given general balance, order type or price input) 
 
 ... so that I get the size of exposure (open volume that I want)
 

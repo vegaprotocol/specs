@@ -14,7 +14,7 @@ These have been listed with the most "upstream" being first.
 1
 - [Associate governance token a Vega key](1000-ASSO-associate.md)
 - [View and Redeem vested tokens](1001-VEST-vesting.md)
-- [Staking validators](1002-STAK-staking.md)
+- [Staking validators](1002-STKE-staking.md)
 - [Review staking income](1003-INCO-income.md)
 - [Vote on changes](1004-VOTE-vote.md)
 - [Propose changes](1005-PROP-propose.md)
