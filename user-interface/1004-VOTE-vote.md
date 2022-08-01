@@ -39,7 +39,7 @@ for each proposal:
   - for network parameters: **could** see what the current values are for that parameter [1004-VOTE-010](#1004-VOTE-010 "1004-VOTE-011")
   - for network parameters: **could** see if there are other open proposals for the same parameter [1004-VOTE-012](#1004-VOTE-012 "1004-VOTE-012")
   - for new markets: **should** see the type of market (e.g. Future) [1004-VOTE-013](#1004-VOTE-013 "1004-VOTE-013")
-  - for new markets: **could** see the type trading mode of the market (e.g. auction, continuous) [1004-VOTE-014](#1004-VOTE-015 "1004-VOTE-014")
+  - for new markets: **could** see the type trading mode of the market (e.g. auction, continuous) [1004-VOTE-014](#1004-VOTE-014 "1004-VOTE-014")
   - for new markets: **should** see the name of the new market [1004-VOTE-015](#1004-VOTE-015 "1004-VOTE-015")
   - for new markets: **should** see the code of the new market [1004-VOTE-016](#1004-VOTE-016 "1004-VOTE-017")
   - for new markets: **should** see the settlement asset of the new market (not just asset ID but asset Symbol) [1004-VOTE-018](#1004-VOTE-018 "1004-VOTE-019")
@@ -52,8 +52,8 @@ for each proposal:
   - for new assets: **must** see the name of the new asset [1004-VOTE-026](#1004-VOTE-026 "1004-VOTE-026")
   - for new assets: **must** see the code of the new asset [1004-VOTE-027](#1004-VOTE-027 "1004-VOTE-027")
   - for new assets: **must** see the source of the new asset (e.g. ERC20) [1004-VOTE-028](#1004-VOTE-028 "1004-VOTE-028")
-  - for new assets (if source is ERC20): **must** see contract address [1004-VOTE-027](#1004-VOTE-027 "1004-VOTE-027")
-  - for new assets (if source is ERC20): **must** see if the Asset has been whitelisted on the bridge [1004-VOTE-028](#1004-VOTE-028 "1004-VOTE-028")
+  - for new assets (if source is ERC20): **must** see contract address [1004-VOTE-095](#1004-VOTE-095 "1004-VOTE-095")
+  - for new assets (if source is ERC20): **must** see if the Asset has been whitelisted on the bridge [1004-VOTE-096](#1004-VOTE-096 "1004-VOTE-096")
   - for asset changes: **must** see name of asset being changed [1004-VOTE-029](#1004-VOTE-029 "1004-VOTE-029")
   - for asset changes: **must** see the parameter(s) being changed [1004-VOTE-030](#1004-VOTE-030 "1004-VOTE-030")
   - for asset changes; **must** see the new value for the parameters being changed [1004-VOTE-031](#1004-VOTE-031 "1004-VOTE-031")
@@ -124,7 +124,7 @@ When looking to vote on the proposal, I...
 
 - **must** see an option to [connect to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) [1004-VOTE-075](#1004-VOTE-075 "1004-VOTE-075")
 - **must** be [connected to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) [1004-VOTE-076](#1004-VOTE-076 "1004-VOTE-076")
-  - **must** see sum of tokens I have [associated](1027-ASSO-associate.md) [1004-VOTE-076](#1004-VOTE-076 "1004-VOTE-076")
+  - **must** see sum of tokens I have [associated](1027-ASSO-associate.md) [1004-VOTE-100](#1004-VOTE-100 "1004-VOTE-100")
   - **should** see what percentage of the total [associated](1027-ASSO-associate.md) tokens I hold [1004-VOTE-077](#1004-VOTE-077 "1004-VOTE-077")
     - **should**, if i have 0 tokens, see link to [associate](1027-ASSO-associate.md) [1004-VOTE-078](#1004-VOTE-078 "1004-VOTE-078")
   - **must** see my current vote for, against, or not voted [1004-VOTE-079](#1004-VOTE-079 "1004-VOTE-079")
@@ -134,7 +134,7 @@ When looking to vote on the proposal, I...
 For open market change proposals, all of the above and:
 
 - **must** be [connected to a Vega wallet/key](0002-WCON-connect_vega_wallet.md) [1004-VOTE-091](#1004-VOTE-091 "1004-VOTE-091")
-  - **must** see your equity like share on the market you are votin [1004-VOTE-092](#1004-VOTE-092 "1004-VOTE-092")g on [1004-VOTE-092](#1004-VOTE-092 "1004-VOTE-092")
+  - **must** see your equity like share on the market you are voting on [1004-VOTE-092](#1004-VOTE-092 "1004-VOTE-092")
 
 for both:
 

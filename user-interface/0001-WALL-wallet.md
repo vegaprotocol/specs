@@ -5,28 +5,28 @@ A wallet can contain many public/private key pairs, The public part of each key 
 ## Get wallet
 When on the wallet page of Vega.xyz I can...
 
-- See links to the latest version of the desktop and command line wallets (inc github repos) <a name="0001-WALL-001" href="#0001-WALL-001">0001-WALL-001</a>
-- See a primary download button is configured for the latest version and the operating system I am using <a name="0001-WALL-002" href="#0001-WALL-002">0001-WALL-002</a>
+- See links to the latest version of the desktop and command line wallets (inc github repos) 
+- See a primary download button is configured for the latest version and the operating system I am using 
 
 ...so I can download and run the wallet app on my machine
 
 ## Set up wallet / Restore wallet
 When opening the wallet for the first time, I...
 
-- am prompted to opt into (or stay out of) analytics <a name="0001-WALL-003" href="#0001-WALL-003">0001-WALL-003</a> `Must`
-- can restore a wallet from a seed phrase <a name="0001-WALL-004" href="#0001-WALL-004">0001-WALL-2004</a>
-- can create a new wallet <a name="0001-WALL-005" href="#0001-WALL-2005">0001-WALL-2005</a>
-  - shown back up phrase <a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>
-  - shown version number <a name="0001-WALL-007" href="#0001-WALL-007">0001-WALL-007</a>
-  - get the first key generated automatically <a name="0001-WALL-008" href="#0001-WALL-008">0001-WALL-008</a>
+- am prompted to opt into (or stay out of) analytics 
+- can restore a wallet from a seed phrase 
+- can create a new wallet
+  - shown back up phrase
+  - shown version number
+  - get the first key generated automatically
 
 ...so I can sign transactions
 
 ## Configure network
 When using the wallet on a network, I...
 
-- get Mainnet and fairground pre-configured (with Mainnet being the default network) <a name="0001-WALL-009" href="#0001-WALL-009">0001-WALL-009</a>
-- can create a new network configuration <a name="0001-WALL-0010" href="#0001-WALL-0010">0001-WALL-0010</a>
+- get Mainnet and fairground pre-configured (with Mainnet being the default network) 
+- can create a new network configuration 
 - can refine the configuration for existing networks (including the ones that come pre-configured)
 - `TODO` Changes to the validator set on a given network prompt a change/update to network config
 - can remove networks

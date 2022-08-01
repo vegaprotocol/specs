@@ -7,8 +7,8 @@ When staking a user may be motivated to select validators to maximize the reward
 ## Understand staking on Vega
 When considering whether to stake on Vega, I...
 
-- **must** see information to help inform me what return I might expect from staking (other protocols might show a typical APY) [1002-STAK-001](#1002-STAK-01 "1002-STAK-001")
-- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or associated) to a Vega wallet for use on Vega [1002-STAK-002](#1002-STAK-02 "1002-STAK-002")  
+- **must** see information to help inform me what return I might expect from staking (other protocols might show a typical APY) [1002-STAK-001](#1002-STAK-001 "1002-STAK-001")
+- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or associated) to a Vega wallet for use on Vega [1002-STAK-002](#1002-STAK-002 "1002-STAK-002")  
 - **must** see detailed documentation on how staking works on Vega [0000-STAK-003](#0000-STAK-003 "0000-STAK-003") 
 
 ...so I can decide if I want to stake on Vega, and how to go about doing it.
