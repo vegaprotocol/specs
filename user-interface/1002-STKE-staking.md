@@ -34,7 +34,7 @@ When selecting what validators to nominate with my stake, I...
 
 - can see all validator information without having to connect Vega wallet [1002-STKE-050](#1002-STKE-050 "1002-STKE-050")
 - can see "static" information about the validator 
-  - name [1002-STKE-005](#1002-STKE-005 "1002-STKE-006")
+  - name [1002-STKE-006](#1002-STKE-006 "1002-STKE-006")
   - ID [1002-STKE-007](#1002-STKE-007 "1002-STKE-007")
   - Vega public key [1002-STKE-008](#1002-STKE-008 "1002-STKE-008")
   - a URL where to find more information about the validator [1002-STKE-009](#1002-STKE-009 "1002-STKE-009")
