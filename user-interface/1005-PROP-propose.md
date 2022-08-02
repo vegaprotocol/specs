@@ -27,7 +27,7 @@ When making a proposal, I...
 - **must** input a rationale [1005-PROP-006](#1005-PROP-006 "1005-PROP-006")
 - **must** input a rationale URL  [1005-PROP-007](#1005-PROP-007 "1005-PROP-007")
 - **must** see the rules (min vote duration and enactment delay) for this proposal type [1005-PROP-008](#1005-PROP-008 "1005-PROP-008")
-- **must** be warned if the amount I have associated is less the the minimum required to propose [1005-PROP-009](#1005-PROP-009 "1005-PROP-009")
+- **must** be warned if the amount I have associated is less the the minimum required to propose for this proposal type [1005-PROP-009](#1005-PROP-009 "1005-PROP-009")
 - **should** see the balance of associated Governance tokens [1005-PROP-010](#1005-PROP-010 "1005-PROP-010")
 
 ### Detail on specific proposals
