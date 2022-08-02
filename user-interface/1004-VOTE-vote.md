@@ -30,6 +30,13 @@ When looking for a particular proposal or wanting to see what proposals are open
 - **must** see open proposals (and ones due for enactment) distinct from others (e.g grouped by "open", "to enact" "closed") (note: freeform proposals do not enact so should be shown as "closed" when "passed") [1004-VOTE-004](#1004-VOTE-004 "1004-VOTE-004")
 - **should** see proposals sorted with the ones closest to enactment first (within each group) [1004-VOTE-005](#1004-VOTE-005 "1004-VOTE-005")
 - **must** see a history of all "closed" proposals [1004-VOTE-006](#1004-VOTE-006 "1004-VOTE-006")
+- **should** have the option to search for a proposal. by:
+  - **should** be able to search by proposal ID 
+  - **should** be able to search by public key of the proposer
+  - **should** be abel to search by market ID/name/code (ID may be the same as proposal ID)
+  - **should** be able to search by asset name/symbol
+  - **should** be able to search by network parameter
+  - **should** be able to search by content of proposal description
 
 for each proposal:
 
