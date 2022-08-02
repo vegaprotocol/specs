@@ -25,7 +25,7 @@ When looking to stake validators or participate in governance, I first need to a
 
 - **must** [connect an Ethereum wallet/key](0004-EWAL-connect_ethereum_wallet.md) to see tokens it may have in wallet or attributed to it in the vesting contract [1000-ASSO-002](#1000-ASSO-002 "1000-ASSO-002")
 - **must** select a Vega key to associate to [1000-ASSO-003](#1000-ASSO-003 "1000-ASSO-003")
-  - **must** be able use the [connected Vega wallet](0002-WCON-connect_vega_wallet.md) as instead of manually inputting a public key [1000-ASSO-004](#1000-ASSO-004 "1000-ASSO-004")
+  - **must** be able use a [connected Vega wallet](0002-WCON-connect_vega_wallet.md) as instead of manually inputting a public key [1000-ASSO-004](#1000-ASSO-004 "1000-ASSO-004")
   - **should** be able to populate field with a string [1000-ASSO-005](#1000-ASSO-005 "1000-ASSO-005")
 - if the connected ethereum wallet has vesting tokens: **must** be able to select to associate from either the vesting contract or the wallet  [1000-ASSO-006](#1000-ASSO-006 "1000-ASSO-006")
 - **must** see the number of un-associated tokens in the selected wallet/vesting contract [1000-ASSO-007](#1000-ASSO-007 "1000-ASSO-007")
