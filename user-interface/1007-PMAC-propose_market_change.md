@@ -7,7 +7,7 @@
 - **must** link to existing details on block explorer [1007-PMAC-004](#1007-PMAC-004 "1007-PMAC-004")
 - **should** see any open or to be enacted changes on same market [1007-PMAC-005](#1007-PMAC-005 "1007-PMAC-005")
   
-TODO- find out if it is true that you have to re-submit the whole market definition or not
+TODO- find out if it is true that you have to re-submit the whole market definition or not... it is
 TODO- consider what validation to do on client
 TODO- consider data formatting and bespoke inputs, e.g. settlement asset as a drop down
 
