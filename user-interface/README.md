@@ -1,9 +1,17 @@
 # User interface acceptance criteria
-This folder contain descriptions of things that users do when interacting with a Vega chain. The things they need and some information about why they are dooing them. These can be referenced in testing and used as input for building new interfaces (e.g. User requirements).
-
-Each has a 
+This folder contain descriptions of things that users do when interacting with a Vega chain. The things they need and some information about why they are doing them. These can be referenced in testing and used as input for building new interfaces (e.g. User requirements).
 
 These have been listed with the most "upstream" being first.
+
+Each file contains blocks that relate to a user task. What the user is trying to do, a bullet for each thing the need, then why they are doing it...
+
+> When doing a thing, I...
+> 
+>  - **must** be able to see some particulat number [0000-CODE-000]
+> 
+> ...so I can decide if I want to continue.
+
+Each bullet is worded so that it contains a **must**, **should**, **could**, or **would like to**. This gives app developers some indication of the priority of user needs. The current ranking of these is a hypothesis that will improve as we do more user research and get more feedback. At the end of each bullet is a code that can be referenced in tests etc.
 
 0
 - [Get and use a **Vega wallet**](0001-WALL-wallet.md)`Incomplete`
@@ -56,6 +64,10 @@ These have been listed with the most "upstream" being first.
 
 7
 - Analyze chain state and activity
+
+## Appendixes
+
+- [Display display rules](7001-DATA-data_display.md)
 
 # Events
 There are things that happen to users too
