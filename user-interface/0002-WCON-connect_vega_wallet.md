@@ -2,10 +2,10 @@
 
 ## Connect wallet for the first time
 
-When looking to use Vega Via a user interface e.g. Dapp (Decentralized App), I...
+When looking to use Vega Via a user interface e.g. Dapp (Decentralized web App), I...
 
-- **should** see a link to get a Vega wallet (incase I don't already have one)
-- **must** see a link to connect
+- **should** see a link to get a Vega wallet (in case I don't already have one) [xxxx-WCON-000](#xxxx-WCON-000 "xxxx-WCON-000")
+- **should** see a link to connect that opens up connection options
 - **must** select a connection method / wallet type:
 - if Rest:
   - **must** have the option to input a non-default Wallet location
