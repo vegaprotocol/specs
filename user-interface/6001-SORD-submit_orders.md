@@ -1,12 +1,13 @@
 # Submit order
-As a user I want change my exposure on a market (e.g. open a position, increase or decrease open volume), I want to submit an order with instructions for how my order should be executed so that I can control the price that I get and whether my order should remain on the order book (e.g. wait to be filled, or canceled if not filled immediately).
+As a user I want change my exposure on a market (e.g. open a position, increase or decrease my open volume), I want to submit an order with instructions for how my order should be executed so that I can have some control over the price that I get and how my order should remain on the order book (e.g. wait to be filled, or canceled if not filled immediately).
 
 When populating a deal ticket I...
 
-- Can see/select the market (**name**, code or ID) they are submitting the order on 
-- Can see the current market **status** (Continuous, Auction etc) 
+- **must** see/select the [Market](./7001-DATA-data_display.md#market) I am are submitting the order for 
+- **must** see the current market **status** (Continuous, Auction etc)
+  -  
 
-- If you do not have any of the settlement asset the deal ticket prompts to get some (but also allow you to pupulate ticekt becase I might wnat to try before I deposit)
+- If you do not have any of the settlement asset the deal ticket prompts to get some (but also allow you to populate ticket because I might want to try before I deposit)
 
 - Select a **side/direction** (note: some implementations may do this with two submit buttons long/short)(
 
@@ -33,6 +34,7 @@ When selecting a size for my order, I...
     - FOC
     - GFN
     - GFA
+    - 
 
 ## Market order
 - TODO: no price input (can see and indication of fill price + slippage)
