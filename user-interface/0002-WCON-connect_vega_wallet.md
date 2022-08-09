@@ -19,7 +19,7 @@ When looking to use Vega Via a user interface e.g. Dapp (Decentralized web App),
   - if the wallet does not have an existing permission with the wallet: **must** prompt user to check wallet app to approve the request to connect wallet: See [Connecting to Dapps](0011-WCON-wallet.md#Connecting to dApps) for what should happen in wallet app <a name="0002-WCON-009" href="#0002-WCON-009">0002-WCON-009</a>
   
   - if new keys are given permission: **must** show the user the keys have been approved <a name="0002-WCON-010" href="#0002-WCON-010">0002-WCON-010</a>
-    - **should** see [public key(s)](7001-DATA-data_display.md#public-keys) <a name="0002-WCON-010" href="#0002-WCON-010">0002-WCON-010</a>
+    - **should** see [public key(s)](7001-DATA-data_display.md#public-keys) <a name="0002-WCON-037" href="#0002-WCON-037">0002-WCON-037</a>
     - **should** see alias(es) <a name="0002-WCON-011" href="#0002-WCON-011">0002-WCON-011</a>
     - **could** see assets on key(s) <a name="0002-WCON-012" href="#0002-WCON-012">0002-WCON-012</a>
     - **would like to** see positions on key(s) <!--<a name="0002-WCON-013" href="#0002-WCON-013">0002-WCON-013</a>-->
@@ -58,7 +58,7 @@ When wishing to disconnect my wallet, I...
 
 when looking to do something with a specific key (or set of keys) from my wallet, I...
 
-- **must** see what key is currently selected (if any) <a name="0002-WCON-0025" href="#0002-WCON-0025">0002-WCON-0025</a>
+- **must** see what key is currently selected (if any) <a name="0002-WCON-025" href="#0002-WCON-025">0002-WCON-025</a>
 - **must** see an option to switch keys, and a list of keys that are approved from the connected wallet <a name="0002-WCON-026" href="#0002-WCON-026">0002-WCON-026</a>
 
 - for each key:
