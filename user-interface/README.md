@@ -14,9 +14,9 @@ Each file contains blocks that relate to a user task. What the user is trying to
 Each bullet is worded so that it contains a **must**, **should**, **could**, or **would like to**. This gives app developers some indication of the priority of user needs. The current ranking of these is a hypothesis that will improve as we do more user research and get more feedback. At the end of each bullet is a code that can be referenced in tests etc.
 
 0
-- [Get and use a **Vega wallet**](0001-WALL-wallet.md)`Incomplete`
-- [Connect Vega wallet + select keys](0002-WCON-connect_vega_wallet.md) `Incomplete`
-- [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) `Incomplete`
+- [Get and use a Vega wallet](0001-WALL-wallet.md)
+- [Connect Vega wallet + select keys](0002-WCON-connect_vega_wallet.md)
+- [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
 - [Connect Ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) `Incomplete`
 - [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) `Incomplete`
 
@@ -56,14 +56,11 @@ Each bullet is worded so that it contains a **must**, **should**, **could**, or 
 
 6
 - [View Collateral / accounts](6000-COLL-collateral.md) `Incomplete`
-- [Submit an order](6001-SORD-submit_orders.md) (Market or Limit) `Incomplete`
+- [Submit an order](6001-SORD-submit_orders.md) 
 - [Manage my orders](6002-MORD-manage_orders.md) `Incomplete`
 - [View my positions](6003-POSI-positions.md) `Incomplete`
 - [View my trades/fills](6003-FILL-fills.md) `Incomplete`
 - [//]: # (Get alerts (price, fills etc))
-
-7
-- Analyze chain state and activity
 
 ## Appendixes
 

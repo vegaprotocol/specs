@@ -32,6 +32,10 @@ The is set per Asset and represents the amount of an asset that is held in the b
 `Asset.decimals` tells us where to put the decimal place. Ethereum assets often have 18 decimal places, but can have less.
 
 ## Market
+
 Markets do not have names, technically it is the instrument within a market that has the name. Theoretically the same instrument can be traded in multiple markets. if/when this happens a user needs to be able to disambiguate between markets. Each market does have a unique ID, Note: this is a hash of the definition of the market, so if the market has a [change enacted](./1007-PMAC-propose_market_change.md) it'll get a new ID.
 Instruments have both a Name and Code, see [market framework](../protocol/0001-MKTF-market_framework.md) for how these are used. Generally the Code can save space once a user is familiar with the market. The Name is more descriptive and should be the default when discovering markets. It remains to be seen how the community will use these exactly.
 Markets can have several statuses and it may be sensible when listing markets to highlight their status. e.g. if a market is usually in continuous trading mode, but is currently in an auction due to low liquidity. The market name field could be augmented to show the status (add an icon etc).
+
+## Public keys
+When looking at a public key it is important that use can get the full public key but it is often appropriate just to show an abbreviated form. the first 6 and last 6 characters are prefeable, with an indication that it is truncated e.g. `56d1e6739deac3c5c1ddc6fee876b3217e504a161b5b00fda96b40ed3e8f89b8` as `56d1e6...8f89b8`. Where the keys in question come from your connected wallet it should also show the name aka alias of the key. 
