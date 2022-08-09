@@ -63,26 +63,8 @@ During the liquidity monitoring auction new or existing LPs can commit more stak
 
 The auction proceeds as usual. Please see the auction spec for details.
 
-## Frequency of checking for auction entry triggers
-
-Through a series of actions which occur coincidently the market may be moved into a state in which a liquidity auction is expected and then back out of said state. Ideally, liquidity auctions should only be entered when the market truly requires one as once entered a minimum auction length must be observed. Even without a minimum auction length, a market flickering between two states is suboptimal. 
-
-To resolve this, the triggers should only be checked at the end of each batch of transactions occurring with an identical timestamp (in the current Tendermint implementation this is equivalent to once per block). At the end of each such period the auction conditions should be checked and the market moved into liquidity auction state if the triggers have been hit. Similarly, the criteria for exiting the auction should be checked on the same frequency, so that a market cannot leave a liquidity auction only to immediately re-enter it at the end of the block.
-
-A liquidity provider should still be unable to remove their stake if doing so would move the market into a liquidity auction at the end of the block even though the market would remain open between the removal and the end of the block.
-
 ## Acceptance Criteria
 
 1. The scenarios in the feature test [0026-AUCT-auction_interaction.feature](https://github.com/vegaprotocol/vega/tree/develop/integration/features/verified/0026-AUCT-auction_interaction.feature) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
 
 2. An incoming order that would consume `best_bid` or `best_offer` gets executed (unless it will also trigger price monitoring auction at the same time), the trades are generated and only then the market goes into a liquidity auction (because there is a peg missing to deploy the liquidity provision volume). (<a name="0035-LIQM-002" href="#0035-LIQM-002">0035-LIQM-002</a>)
-
-3. A market which is in a enters a state requiring liquidity auction at the end of a block remains in open trading between entering that state and the end of the block.
-   
-4. A market which is in a state requiring liquidity auction at the end of a block moves into or stays in liquidity auction.
-   
-5. A market which enters a state requiring liquidity auction through increased open interest during a block but then leaves state again prior to block completion never enters liquidity auction.
-   
-6. A market in liquidity auction which leaves a state requiring liquidity auction through decreased open interest during a block but then enters state again prior to block completion never leaves liquidity auction.
-   
-7. A liquidity provider should be unable to remove their liquidity at and point in the block if this would move the market into an auction at the end of the block.
