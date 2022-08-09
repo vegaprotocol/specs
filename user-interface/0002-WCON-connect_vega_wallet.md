@@ -4,7 +4,7 @@
 
 When looking to use Vega Via a user interface e.g. Dapp (Decentralized web App), I...
 
-- **should** see a link to get a Vega wallet (in case I don't already have one) <a name="0002-WCON-001" href="#0002-WCON-001">0002-WCON-001</a>
+- **should** see a link to get a Vega wallet (in case I don't already have one) <a name="0002-WCON-036" href="#0002-WCON-036">0002-WCON-036</a>
 - **should** see a link to connect that opens up connection options <a name="0002-WCON-001" href="#0002-WCON-001">0002-WCON-001</a>
 - **must** select a connection method / wallet type: <a name="0002-WCON-002" href="#0002-WCON-002">0002-WCON-002</a>
 - if Rest:
