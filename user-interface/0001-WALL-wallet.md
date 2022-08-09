@@ -3,172 +3,162 @@ A Vega wallet is required to submit transaction on the Vega chain (place cancel 
 A wallet can contain many public/private key pairs, The public part of each key pair is known the [Party](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0017-PART-party.md) sometimes just refereed to as a key. The primary job of a wallet app is to [authenticate a users actions](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0022-AUTH-auth.md).
 
 ## Get wallet
-When on the wallet page of Vega.xyz I can...
+When on the wallet page of Vega.xyz I...
 
-- See links to the latest version of the desktop and command line wallets (inc github repos) 
-- See a primary download button is configured for the latest version and the operating system I am using 
+- **must** see links to the latest version of the desktop and command line wallets (inc github repos) <a name="0001-WALL-001" href="#0001-WALL-001">0001-WALL-001</a>
+- **must** see a primary download button is configured for the latest version and the operating system I am using <a name="0001-WALL-002" href="#0001-WALL-002">0001-WALL-002</a>
 
 ...so I can download and run the wallet app on my machine
 
 ## Set up wallet / Restore wallet
 When opening the wallet for the first time, I...
 
-- am prompted to opt into (or stay out of) analytics 
-- can restore a wallet from a seed phrase 
-- can create a new wallet
-  - shown back up phrase
-  - shown version number
-  - get the first key generated automatically
+- **must** be prompted to opt into (or stay out of) analytics <a name="0001-WALL-003" href="#0001-WALL-003">0001-WALL-003</a>
+- **must** be able to restore a wallet from a seed phrase <a name="0001-WALL-004" href="#0001-WALL-004">0001-WALL-004</a>
+- **must** be able to create a new wallet <a name="0001-WALL-005" href="#0001-WALL-005">0001-WALL-005</a>
+  - **must** shown back up phrase <a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>
+  - **must** shown version number <a name="0001-WALL-007" href="#0001-WALL-007">0001-WALL-007</a>
+  - **must** see the first key without having to "add key" <a name="0001-WALL-008" href="#0001-WALL-008">0001-WALL-008</a>
 
-...so I can sign transactions
+...so I must sign transactions
 
 ## Configure network
 When using the wallet on a network, I...
 
-- get Mainnet and fairground pre-configured (with Mainnet being the default network) 
-- can create a new network configuration 
-- can refine the configuration for existing networks (including the ones that come pre-configured)
-- `TODO` Changes to the validator set on a given network prompt a change/update to network config
-- can remove networks
+- **must** have get Mainnet and fairground pre-configured (with Mainnet being the default network) <a name="0001-WALL-009" href="#0001-WALL-009">0001-WALL-009</a>
+- **must** be able to create a new network configuration  <a name="0001-WALL-010" href="#0001-WALL-010">0001-WALL-010</a>
+- **must** be able refine the configuration for existing networks (including the ones that come pre-configured) <a name="0001-WALL-011" href="#0001-WALL-011">0001-WALL-011</a>
+- TODO: **should** be prompted about Changes to the validator set on a given network prompt a change/update to network config <!--<a name="0001-WALL-012" href="#0001-WALL-012">0001-WALL-012</a>-->
+- **must** be able to remove networks <a name="0001-WALL-013" href="#0001-WALL-013">0001-WALL-013</a>
 
 ...so I can broadcast transactions to, and read information from a vega network in my app
 
 ## Update wallet
 When using an older version of a Vega wallet, I...
 
-- am prompted to download a newer version, and given a link to get latest on github
-- am warned if the version I am using is not compatible with the version of Vega on the selected network, and given a link to get latest on github
+- **must** be prompted to download a newer version, and given a link to get latest on github <a name="0001-WALL-014" href="#0001-WALL-014">0001-WALL-014</a>
+- **must** be warned if the version I am using is not compatible with the version of Vega on the selected network, and given a link to get latest on github <a name="0001-WALL-015" href="#0001-WALL-015">0001-WALL-015</a>
 
 ...So the version of the ap I am using works with the network I am using
 
 ## Log in to a wallet
 When using a given wallet, I...
 
-- am required to enter wallet name + passphrase only once per "session"
+- **must** enter wallet name + passphrase only once per "session" <a name="0001-WALL-016" href="#0001-WALL-016">0001-WALL-016</a>
 
 ... so that other users of my machine can not use my wallet, and I am not bothered frequently
 
 ## Connecting to Dapps
 When a dapp requests use of a wallet, I...
 
-- am prompted user to either select a wallet or dismiss the prompt 
-- `NOTYET` am required to select what keys of a wallet to grant access too
-  - can select whole wallet (so that new keys are automatically shared)
-  - can select specific keys. for each key:
-    - **must** see the first and last 6 digits of the public key
-    - **should** be able to see the whole public key
-    - **must** be able to copy to clipboard the whole public key
-    - **must** see the key name/alias (meta data)
-    - **should** see what non-zero assets that kay has
-    - **could** see the Total asst balances (inc associated)
-    - **would like to see** a breakdown of the accounts. See [collateral / accounts](6000-COLL-collateral.md)
-    - **would like to** see any active orders or positions. See [collateral / accounts](6000-COLL-collateral.md)
-  - tainted keys are shown as tainted
-- am required to enter wallet passphrase before wallet details are shared
-- can retrospectively revoke Dapp's use to Wallet/keys
+- **must** be prompted to either select a wallet or dismiss the prompt  <a name="0001-WALL-017" href="#0001-WALL-017">0001-WALL-017</a>
+- `TODO` am required to select what keys of a wallet to grant access too <!--<a name="0001-WALL-018" href="#0001-WALL-018">0001-WALL-018</a>-->
+  - TODO: **must** be able to select whole wallet (so that new keys are automatically shared)  <!--<a name="0001-WALL-019" href="#0001-WALL-019">0001-WALL-019</a>-->
+  - TODO: **must** select [specific keys](7001-DATA-data_display.md#public-keys). for each key: <!-- <a name="0001-WALL-020" href="#0001-WALL-020">0001-WALL-020</a> -->
+  - tainted keys **must** be shown as tainted <a name="0001-WALL-021" href="#0001-WALL-021">0001-WALL-021</a>
+- **must** enter wallet passphrase before wallet details are shared <a name="0001-WALL-022" href="#0001-WALL-022">0001-WALL-022</a>
+- **must** be able to retrospectively revoke Dapp's use to Wallet/keys <a name="0001-WALL-023" href="#0001-WALL-023">0001-WALL-023</a>
 
 ... so that I can control what public keys are shared with a dapp and what dapps can prompt me to sign transactions 
 
 ## Approving transactions
 When a dapp sends a transaction to the wallet for signing and broadcast, I...
 
-- am prompted to approve, reject or ignore the transaction (if auto approve is not on)
-- can see [single key transaction](#single-key-transaction) details)
-- can see any ignored/dismissed (not rejected or approved) in a transactions area (e.g. history)
+- **must** be prompted to approve, reject or ignore the transaction (if auto approve is not on) <a name="0001-WALL-024" href="#0001-WALL-024">0001-WALL-024</a>
+- **must** see [single key transaction](#single-key-transaction) details <a name="0001-WALL-025" href="#0001-WALL-025">0001-WALL-025</a>
+- **must** see any ignored/dismissed (not rejected or approved) in a transactions area (e.g. history) <a name="0001-WALL-026" href="#0001-WALL-026">0001-WALL-026</a>
 
-... so that I can verify that the transaction being sent is the one I want
-
-- `NOTYET` only auto approve some transaction types?
+... so that I must verify that the transaction being sent is the one I want
 
 ## View keys balances + positions/accounts
 When looking for a specific balance or asset on a given wallet and network, I...
 
-- can see key total balances of an asset on a given key
-- can see a breakdown of all accounts for an asset on a key
-- can see key balances when switching keys (to help me find the key I am looking for)
-- can search by market name, and see all keys with a margin or liquidity account in that market
-- can search by asset name or code, and see all keys with balance of matching assets
-- can search for keys my arbitrary metadata added by user
-- can see a total of all asset for all keys in a given wallet
+- **must** see key total balances of an asset on a given key <a name="0001-WALL-027" href="#0001-WALL-027">0001-WALL-027</a>
+- **must** see a breakdown of all accounts for an asset on a key <a name="0001-WALL-028" href="#0001-WALL-028">0001-WALL-028</a>
+- **must** see key balances when switching keys (to help me find the key I am looking for) <a name="0001-WALL-029" href="#0001-WALL-029">0001-WALL-029</a>
+- **should** be able to search by market name, and see all keys with a margin or liquidity account in that market <a name="0001-WALL-030" href="#0001-WALL-030">0001-WALL-030</a>
+- **should** be able to search by asset name or code, and see all keys with balance of matching assets <a name="0001-WALL-031" href="#0001-WALL-031">0001-WALL-031</a>
+- **should** be able to search for keys my arbitrary metadata added by user <a name="0001-WALL-032" href="#0001-WALL-032">0001-WALL-032</a>
+- **must** be able to see a total of all asset for all keys in a given wallet <a name="0001-WALL-033" href="#0001-WALL-033">0001-WALL-033</a>
  
 ... so that I can find the keys that I am looking for, see how much I have to consolidate (via transfers) or withdraw funds
 
 ## Key transactions
 When thinking about a recent or specific transaction, I ...
 
-- can see a history of transactions for a wallet and network
-- can see pending transactions (Transactions I have not yet approved/rejected)
-- can see transactions that have recently been broadcast but not yet seen on the chain
-- can see transactions that were rejected by the wallet user (me)
-- (for tainted keys) there is a record of attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions)
+- **must** see a history of transactions for a wallet and network <a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>
+- **must** see pending transactions (Transactions I have not yet approved/rejected) <a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>
+- **must** see transactions that have recently been broadcast but not yet seen on the chain <a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>
+- **must** see transactions that were rejected by the wallet user (me) <a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>
+- (for tainted keys) **should** see attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions) <a name="0001-WALL-038" href="#0001-WALL-038">0001-WALL-038</a>
 
 ... so that I can see what has happened and when
 
 ## Single key transaction
 when looking at a specific transaction...
 
-- can see the content of the transaction that is being shown
-- can see the time request was made
-- can see the dapp that made the request
-- can see what wallet / key is being used
-- can select auto approve for this app (aka don't ask me again)
-- am prompted to enter passphrase (if needed)
-- can see status of broadcast transactions
-- can follow a link to block explorer for broadcast transactions
-- can see what node it was broadcast to
-- can see what validator mined the block the transaction was included in
-- can see at what block and time it was confirmed
-- can see if there was a reported error/issue, and the details of the issue
-- can see if the transaction was rejected
+- **must** see the content of the transaction that is being shown <a name="0001-WALL-039" href="#0001-WALL-039">0001-WALL-039</a>
+- **must** see the time request was made <a name="0001-WALL-040" href="#0001-WALL-040">0001-WALL-040</a>
+- **should** see the dapp that made the request <a name="0001-WALL-041" href="#0001-WALL-041">0001-WALL-041</a>
+- **must** see what wallet / key is being used <a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>
+- **must** select auto approve for this app (aka don't ask me again) <a name="0001-WALL-043" href="#0001-WALL-043">0001-WALL-043</a>
+- **must** be prompted to enter passphrase (if needed) <a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>
+- **must** see status of broadcast transactions <a name="0001-WALL-045" href="#0001-WALL-045">0001-WALL-045</a>
+- **must** be able to follow a link to block explorer for broadcast transactions <a name="0001-WALL-046" href="#0001-WALL-046">0001-WALL-046</a>
+- **must** see what node it was broadcast to <a name="0001-WALL-047" href="#0001-WALL-047">0001-WALL-047</a>
+- **must** see what validator mined the block the transaction was included in <a name="0001-WALL-048" href="#0001-WALL-048">0001-WALL-048</a>
+- **must** see at what block and time it was confirmed <a name="0001-WALL-049" href="#0001-WALL-049">0001-WALL-049</a>
+- **must** see if there was a reported error/issue, and the details of the issue <a name="0001-WALL-050" href="#0001-WALL-050">0001-WALL-050</a>
+- **must** see if the transaction was rejected <a name="0001-WALL-051" href="#0001-WALL-051">0001-WALL-051</a>
 
 .. so that I might be able to find all the information about what has happened with mined and un-mind transactions
 
 ## Key management
 When using vega, I...
 
-- can create new keys (derived from the source of the first)
-- am prompted to give keys and alias (optional)
-- can see and/or copy to clipboard the full public key
-- can change key name/alias
-- can amend other arbitrary key meta data
+- **must** be able to create new keys (derived from the source of the first) <a name="0001-WALL-052" href="#0001-WALL-052">0001-WALL-052</a>
+- **should** be prompted to give keys and alias (this is optional for the user) <a name="0001-WALL-053" href="#0001-WALL-053">0001-WALL-053</a>
+- **must** see and/or copy to clipboard the full public key <a name="0001-WALL-054" href="#0001-WALL-054">0001-WALL-054</a>
+- **must** be able to change key name/alias <a name="0001-WALL-055" href="#0001-WALL-055">0001-WALL-055</a>
+- **must** be able to amend other arbitrary key meta data <a name="0001-WALL-056" href="#0001-WALL-056">0001-WALL-056</a>
 
-... so that I can isolate risk to a given key (aka isolate margin), mitigate the risk of a key being comprised, or use multiple trading strategies 
+... so I can isolate risk to a given key (aka isolate margin), mitigate the risk of a key being comprised, or use multiple trading strategies 
 
 ## Taint keys
 When protecting myself from use of keys that may be compromised, I..
 
-- can select a key I wish to taint
-- am prompted to enter wallet password to taint key
-- (tainted keys will not prompt a prompt to sign transaction)
-- can see tainted keys as flagged as tainted
+- **must** select a key I wish to taint <a name="0001-WALL-057" href="#0001-WALL-057">0001-WALL-057</a>
+- **must** be prompted am prompted to enter wallet password to taint key <a name="0001-WALL-058" href="#0001-WALL-058">0001-WALL-058</a>
+- (tainted keys **must** not prompt a prompt to sign transaction) <a name="0001-WALL-059" href="#0001-WALL-059">0001-WALL-059</a>
+- **must** see tainted keys as flagged as tainted <a name="0001-WALL-060" href="#0001-WALL-060">0001-WALL-060</a>
 
-... so that tainted keys can not be used
+... so that tainted keys must not be used
 
 When I have accidentally tainted a key I...
 
-- Can select a key to un-taint by entering wallet password
+- **must** select a key to un-taint by entering wallet password <a name="0001-WALL-061" href="#0001-WALL-061">0001-WALL-061</a>
 
-...so that I can use the key again
+...so that I must use the key again
 
 ## Isolate keys
 See [docs on key isolation](https://docs.vega.xyz/docs/mainnet/tools/vega-wallet/cli-wallet/latest/guides/isolate-keys)
 When I want to create an extra level of security for a given key, I...
 
-- `NOTYET` can select a key that I want to isolate
-- `NOTYET` am prompted for a password before isolation
-- `NOTYET` am instructed as to where the wallet file has been created
+- `TODO` must select a key that I want to isolate
+- `TODO` am prompted for a password before isolation
+- `TODO` am instructed as to where the wallet file has been created
 
-... so I can store some keys in an extra secure way
+... so I must store some keys in an extra secure way
 
 ## Manually sign a message
 When wishing to use my wallet to sign arbitrary messages, I...
 
-- can enter content to be signed with key
-- see an option to base64 encode content before signing
-- see option to broadcast that to the selected network
-- can sign the content and am given a hash of the signed content as well as the message (now encoded)
+- **must** enter content to be signed with key  <a name="0001-WALL-062" href="#0001-WALL-062">0001-WALL-062</a>
+- **must** see an option to base64 encode content before signing  <a name="0001-WALL-063" href="#0001-WALL-063">0001-WALL-063</a>
+- **must** see option to broadcast that to a selected network <a name="0001-WALL-064" href="#0001-WALL-064">0001-WALL-064</a>
+- **must** subit/sign the content and am given a hash of the signed content as well as the message (now encoded) <a name="0001-WALL-065" href="#0001-WALL-065">0001-WALL-065</a>
 
-.. so that I know and can control the details of the message being signed, and can use the message elsewhere (for example to prove I own a wallet)
+.. so that I know and must control the details of the message being signed, and must use the message elsewhere (for example to prove I own a wallet)
 
 ## Deposit / withdraw / transfer
 - `TODO` See prompts to do these things, where do they go? Eth connection?
@@ -176,14 +166,14 @@ When wishing to use my wallet to sign arbitrary messages, I...
 ## Wallet management
 When seeking to reduce risk of compromise I...
 
-- can create multiple wallets
-- can switch between wallets
-- can delete a wallet
-- can change wallet name
-- can change wallet passphrase
-- `NOTYET` can get the recovery phrase for a wallet (at any time not just creation)
+- **must** be able to create multiple wallets <a name="0001-WALL-066" href="#0001-WALL-066">0001-WALL-066</a>
+- **must** be able to switch between wallets <a name="0001-WALL-067" href="#0001-WALL-067">0001-WALL-067</a>
+- **must** be able to delete a wallet <a name="0001-WALL-068" href="#0001-WALL-068">0001-WALL-068</a>
+- **must** be able to change wallet name <a name="0001-WALL-069" href="#0001-WALL-069">0001-WALL-069</a>
+- **must** be able to change wallet passphrase <a name="0001-WALL-070" href="#0001-WALL-070">0001-WALL-070</a>
+- `NOTYET` must get the recovery phrase for a wallet (at any time not just creation)
 
-... so that I can administrate my wallets
+... so that I must administrate my wallets
 
 ## App settings (Not sure if this needs AC?)
-- Link or lock a key to a given network
+- TODO Link or lock a key to a given network
