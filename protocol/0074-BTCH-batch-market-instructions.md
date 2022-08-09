@@ -20,6 +20,8 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 # Functionality
 
+## New transaction: Batch Instruction
+
 1. There will be a new transaction type called a Batch Instruction.
 
 1. This transaction must be signed by a single valid Vega key, which should have the required resources to execute all instructions in the transaction (if it does not some instructions will fail in later steps, as they would if executed as standalone transactions). 
@@ -38,6 +40,9 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 1. The total number of instructions across all three lists (i.e. sum of the lengths of the lists) must be less than or equal to the current value of the network parameter `network.spam_protection.max_batch_size`.
 
+
+## Processing a batch
+
 1. The batches must be processed in the order **all cancellations, then all amendments, then all submissions**. This is to prevent gaming the system, and to prevent any order being modified by more than one action in the batch.
 
 1. When processing each list, the instructions within the list must be processed in the order they appear in the list (i.e. in the order prescribed by the submitter). (Notwithstanding that each list is processed in its entirety before moving onto the next list, in the order specified above). 
@@ -49,6 +54,17 @@ Overall, building the ability to handle batches of market instructions in a sing
 1. In addition to the usual validation and other errors that can occur in processing an instruction, the following also apply:
 
    - Any second or subsequent Amend Order instruction for the same order ID within a single Batch Instruction transaction is an error
+
+
+## Auction behaviour
+
+1. If processing an instruction would cause the end of an Opening auction, the auction must be ended and the uncrossing must occur immediately as it would if the instruction was processed as a standalone transaction.
+
+1. If processing an instruction would cause entry into a Price Monitoring auction, the auction must be entered immediately as it would be if the instruction was processed as a standalone transaction.
+
+1. If processing an instruction would cause entry into a Liquidity Monitoring auction, the auction **must not be entered immediately**. The conditions for entering a Liquidity Monitoring auction must be evaluated only after processing the entire batch instruction. This is to avoid the situation where order cancellation and/or amends cause a Liquidity Monitoring auction part way through the batch that would no longer be required once further amendments and/or new order submissions in the batch have been processed. If this condition were not in place, the auction would would be held for at least the minimum period, even though there would be no reason to do so.
+
+   - NB: This logic could also in future be applied to all transactions with the same time stamp — i.e. in the same block. However, there is specific benefit to doing this for batch transactions as they will often be placed by market makers managing their orders and prices. Particulalry, the procesing of cancels ahead of new submissions could place the book in a situation where it temporarily has not best bid/offer during the processing of the batch.
 
 
 # Acceptance criteria
