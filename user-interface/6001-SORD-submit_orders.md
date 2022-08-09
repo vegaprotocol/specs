@@ -34,7 +34,6 @@ When selecting a size for my order, I...
     - FOC
     - GFN
     - GFA
-    - 
 
 ## Market order
 - TODO: no price input (can see and indication of fill price + slippage)
