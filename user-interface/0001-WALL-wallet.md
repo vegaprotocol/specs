@@ -55,7 +55,7 @@ When a dapp requests use of a wallet, I...
 - **must** be prompted to either select a wallet or dismiss the prompt  <a name="0001-WALL-017" href="#0001-WALL-017">0001-WALL-017</a>
 - `TODO` am required to select what keys of a wallet to grant access to <!--<a name="0001-WALL-018" href="#0001-WALL-018">0001-WALL-018</a>-->
   - `TODO:` **must** be able to select whole wallet (so that new keys are automatically shared)  <!--<a name="0001-WALL-019" href="#0001-WALL-019">0001-WALL-019</a>-->
-  - `TODO:` **must** select specific [keys](7001-DATA-data_display.md#public-keys) <!-- <a name="0001-WALL-020" href="#0001-WALL-020">0001-WALL-020</a> -->
+  - `TODO:` **must** be able to select specific [keys](7001-DATA-data_display.md#public-keys)<!-- <a name="0001-WALL-020" href="#0001-WALL-020">0001-WALL-020</a> -->
   - `TODO` tainted keys **must** be shown as tainted <a name="0001-WALL-021" href="#0001-WALL-021">0001-WALL-021</a>
 - **must** enter wallet passphrase before wallet details are shared <a name="0001-WALL-022" href="#0001-WALL-022">0001-WALL-022</a>
 - **must** be able to retrospectively revoke Dapp's access to Wallet/keys <a name="0001-WALL-023" href="#0001-WALL-023">0001-WALL-023</a>
