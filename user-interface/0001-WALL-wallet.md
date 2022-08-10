@@ -37,7 +37,7 @@ When using the wallet on a network, I...
 ## Update wallet
 When using an older version of a Vega wallet, I...
 
-- **must** be prompted to download a newer version, and given a link to get latest on github <a name="0001-WALL-014" href="#0001-WALL-014">0001-WALL-014</a>
+- **must** be prompted to download a newer major release version, and given a link to get latest on github <a name="0001-WALL-014" href="#0001-WALL-014">0001-WALL-014</a>
 - **must** be warned if the version I am using is not compatible with the version of Vega on the selected network, and I am given a link to get latest on github <a name="0001-WALL-015" href="#0001-WALL-015">0001-WALL-015</a>
 
 ... so the version of the wallet app I am using works with the network I am using
