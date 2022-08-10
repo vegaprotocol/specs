@@ -123,7 +123,7 @@ When using a Vega wallet, I...
 - **must** be able to change key name/alias <a name="0001-WALL-055" href="#0001-WALL-055">0001-WALL-055</a>
 - **must** be able to amend other arbitrary key meta data <a name="0001-WALL-056" href="#0001-WALL-056">0001-WALL-056</a>
 
-... so I can manage risk (e.g. isolate margin), mitigate the damage of a key being comprised, or use multiple trading strategies 
+... so I can manage risk (e.g. isolate margin), mitigate the damage of a key being compromised, or use multiple trading strategies 
 
 ## Taint keys
 When protecting myself from use of keys that may be compromised, I..
