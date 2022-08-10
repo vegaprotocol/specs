@@ -137,7 +137,7 @@ When protecting myself from use of keys that may be compromised, I..
 
 When I have accidentally tainted a key I...
 
-- **must** select a key to un-taint by entering wallet password <a name="0001-WALL-061" href="#0001-WALL-061">0001-WALL-061</a>
+- **must** select a key to un-taint and be required to enter wallet password <a name="0001-WALL-061" href="#0001-WALL-061">0001-WALL-061</a>
 
 ...so that I must use the key again
 
