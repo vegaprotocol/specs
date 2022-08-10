@@ -1,7 +1,7 @@
 # Wallet
 A Vega wallet is required to prepare and submit transaction on Vega  (place, cancel, orders etc). See the [wallet docs](https://docs.vega.xyz/docs/mainnet/concepts/vega-wallet) for more on how "crypto" wallets work. 
 
-A wallet can contain many public/private key pairs, The public part of each key pair is known the [Party](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0017-PART-party.md) sometimes just referred to as a key. The primary job of a wallet app is to [authenticate a users actions](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0022-AUTH-auth.md).
+A wallet can contain many public/private key pairs. The public part of each key pair is known the [Party](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0017-PART-party.md) sometimes just referred to as a key or public key. The primary job of a wallet app is to [authenticate a user's actions](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0022-AUTH-auth.md).
 
 ## Get wallet
 When on the wallet page of Vega.xyz, I...
