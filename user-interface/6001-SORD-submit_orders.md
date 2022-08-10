@@ -120,7 +120,7 @@ When populating a deal ticket I...
 ... so I get the sort of order, and price, I wish.
 
 ## Manage positions and order
-After submitting orders I'll want to **manage orders** (TODO). If my my orders resulted in a position I may wish to **manage positions** (TODO).
+After submitting orders I'll want to **manage orders** (TODO). If my orders resulted in a position I may wish to **manage positions** (TODO).
 
 _____
 
