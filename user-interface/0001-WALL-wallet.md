@@ -17,7 +17,7 @@ When opening the wallet for the first time, I...
 - **must** be prompted to opt into (or stay out of) analytics <a name="0001-WALL-003" href="#0001-WALL-003">0001-WALL-003</a>
 - **must** be able to restore a wallet from a seed phrase <a name="0001-WALL-004" href="#0001-WALL-004">0001-WALL-004</a>
 - **must** be able to create a new wallet <a name="0001-WALL-005" href="#0001-WALL-005">0001-WALL-005</a>
-  - **must** shown back up phrase <a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>
+  - **must** be shown the back up phrase <a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>
   - **must** shown version number <a name="0001-WALL-007" href="#0001-WALL-007">0001-WALL-007</a>
   - **must** see the first key without having to "add key" <a name="0001-WALL-008" href="#0001-WALL-008">0001-WALL-008</a>
 
