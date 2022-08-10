@@ -74,7 +74,7 @@ When a dapp sends a transaction to the wallet for signing and broadcast, I...
 ## View keys balances + positions/accounts
 When looking for a specific balance or asset on a given wallet and network, I...
 
-- **must** see key total balances of an asset for each key <a name="0001-WALL-027" href="#0001-WALL-027">0001-WALL-027</a>
+- **must** see total balances of an asset for each key <a name="0001-WALL-027" href="#0001-WALL-027">0001-WALL-027</a>
 - **must** see a breakdown of all accounts for an asset on a key <a name="0001-WALL-028" href="#0001-WALL-028">0001-WALL-028</a>
 - **should** see key a summary of balances when switching keys (to help me find the key I am looking for) <a name="0001-WALL-029" href="#0001-WALL-029">0001-WALL-029</a>
 - **should** be able to search by market name, and see all keys with a margin or liquidity account in that market <a name="0001-WALL-030" href="#0001-WALL-030">0001-WALL-030</a>
