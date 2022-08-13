@@ -67,7 +67,7 @@ when looking to do something with a specific key (or set of keys) from my wallet
   - **must** be able to copy to clipboard the whole public key <a name="0002-WCON-029" href="#0002-WCON-029">0002-WCON-029</a>
   - **must** see the key name/alias (meta data) <a name="0002-WCON-030" href="#0002-WCON-030">0002-WCON-030</a>
   - **should** see what non-zero assets that key has <a name="0002-WCON-031" href="#0002-WCON-031">0002-WCON-031</a>
-  - **could** see the Total asst balances (inc associated) <a name="0002-WCON-032" href="#0002-WCON-032">0002-WCON-032</a>
+  - **could** see the total asset balances (including associated) <a name="0002-WCON-032" href="#0002-WCON-032">0002-WCON-032</a>
   - **would like to see** a breakdown of the accounts. See [collateral / accounts](6001-COLL-collateral.md) <!--<a name="0002-WCON-033" href="#0002-WCON-033">0002-WCON-033</a>-->
   - **would like to** see any active orders or positions. See [collateral / accounts](6001-COLL-collateral.md) <!--<a name="0002-WCON-034" href="#0002-WCON-034">0002-WCON-034</a>-->
 
