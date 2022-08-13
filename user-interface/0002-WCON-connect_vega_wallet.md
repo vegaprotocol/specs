@@ -37,7 +37,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
   - **must** input a password <a name="0002-WCON-018" href="#0002-WCON-018">0002-WCON-018</a>
   - if success: **must** see that the wallet is connected and details of connected key <a name="0002-WCON-019" href="#0002-WCON-019">0002-WCON-019</a>
   - if failure: **must** see reason for failure <a name="0002-WCON-020" href="#0002-WCON-020">0002-WCON-020</a>
-  - *note: the fairground hosted wallet is configured to automatically approve connections from dapps so there is no need to key selection.*
+  - *note: the fairground hosted wallet is configured to automatically approve connections from dapps so there is no need for key selection.*
   
 - **must** have the option to select a different method / wallet type if I change my mind <a name="0002-WCON-021" href="#0002-WCON-021">0002-WCON-021</a>
 
