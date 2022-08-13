@@ -1,6 +1,6 @@
 # Submit Vega transaction
 
-A dapp sends a transaction to a wallet, that wallet then broadcasts the transaction to a network.  Therefore the following is broken up into two steps. The transaction could fail at either. Generally: Once the transaction has gone to the network a use can use block explorer to track the transaction, but some tracking in Dapp or wallet will help.
+A dapp sends a transaction to a wallet, that wallet then broadcasts the transaction to a network.  Therefore the following is broken up into two steps. The transaction could fail at either. Generally: Once the transaction has gone to the network a user can use block explorer to track the transaction, but some tracking in Dapp or wallet will help.
 
 When submitting a Vega transaction of any kind, I...
 
