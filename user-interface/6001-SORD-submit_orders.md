@@ -65,7 +65,7 @@ When populating a deal ticket I...
 - **must** select a time in force
   - Good till canceled `GTC` - not applicable to Market orders <a name="6001-SORD-023" href="#6001-SORD-023">6001-SORD-023</a>
   - Good till time `GTT` - not applicable to Market orders <a name="6001-SORD-024" href="#6001-SORD-024">6001-SORD-024</a>
-  - Fill or kill `FOC` <a name="6001-SORD-025" href="#6001-SORD-025">6001-SORD-025</a>
+  - Fill or kill `FOK` <a name="6001-SORD-025" href="#6001-SORD-025">6001-SORD-025</a>
   - Immediate or cancel `IOC` <a name="6001-SORD-026" href="#6001-SORD-026">6001-SORD-026</a>
   - Good for normal trading only `GFN` - not applicable to Market orders <a name="6001-SORD-027" href="#6001-SORD-027">6001-SORD-027</a>
   - Good for auction only `GFA` - not applicable to Market orders <a name="6001-SORD-028" href="#6001-SORD-028">6001-SORD-028</a>
