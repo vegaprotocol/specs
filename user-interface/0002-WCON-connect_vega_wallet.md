@@ -41,7 +41,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
   
 - **must** have the option to select a different method / wallet type if I change my mind <a name="0002-WCON-021" href="#0002-WCON-021">0002-WCON-021</a>
 
-... so I can use the interface read data about my key/party or request my wallet to broadcast transactions to a Vega network.
+... so I can use the interface to read data about my key/party or request my wallet to broadcast transactions to a Vega network.
 
 ## Disconnect wallet
 
