@@ -44,4 +44,4 @@ if the wallet highlights an issue with the transaction:
 - **must** see the validator that processed the block the transaction was processed in <a name="0003-WTXN-016" href="#0003-WTXN-016">0003-WTXN-016</a>
 - **must** see the content of the transaction as seen by the network <a name="0003-WTXN-017" href="#0003-WTXN-017">0003-WTXN-017</a>
 
-... so I am aware of the transactions status interns of being sent to and processed by the network
+... so I am aware of the transactions status of the transactions my wallet is sending and that are being processed by the network
