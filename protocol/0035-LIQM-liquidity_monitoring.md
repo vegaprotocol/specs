@@ -68,7 +68,7 @@ The auction proceeds as usual. Please see the auction spec for details.
 
  To resolve this, the triggers should only be checked at the end of each batch of transactions occurring with an identical timestamp (in the current Tendermint implementation this is equivalent to once per block). At the end of each such period the auction conditions should be checked and the market moved into liquidity auction state if the triggers have been hit. Similarly, the criteria for exiting the auction should be checked on the same frequency, so that a market cannot leave a liquidity auction only to immediately re-enter it at the end of the block.
 
- A liquidity provider should still be unable to remove their stake if doing so would move the market into a liquidity auction at the end of the block even though the market would remain open between the removal and the end of the block.
+ A liquidity provider should still be unable to remove their stake if doing so would reduce the total stake below the target stake even though the market would remain open between the removal and the end of the block.
 
 ## Acceptance Criteria
 
@@ -76,12 +76,14 @@ The auction proceeds as usual. Please see the auction spec for details.
 
 2. An incoming order that would consume `best_bid` or `best_offer` gets executed (unless it will also trigger price monitoring auction at the same time), the trades are generated and only then the market goes into a liquidity auction (because there is a peg missing to deploy the liquidity provision volume). (<a name="0035-LIQM-002" href="#0035-LIQM-002">0035-LIQM-002</a>)
    
-3. A market which is in a enters a state requiring liquidity auction at the end of a block remains in open trading between entering that state and the end of the block.
+3. A market which enters a state requiring liquidity auction at the end of a block through increased open interest remains in open trading between entering that state and the end of the block. (<a name="0035-LIQM-003" href="#0035-LIQM-003">0035-LIQM-003</a>)
+   
+4. A market which enters a state requiring liquidity auction at the end of a block through decreased total stake (e.g. through LP bankruptcy) remains in open trading between entering that state and the end of the block. (<a name="0035-LIQM-004" href="#0035-LIQM-004">0035-LIQM-004</a>)
 
-4. A market which is in a state requiring liquidity auction at the end of a block moves into or stays in liquidity auction.
+5. A market which enters a state requiring liquidity auction through increased open interest during a block but then leaves state again prior to block completion never enters liquidity auction. (<a name="0035-LIQM-005" href="#0035-LIQM-005">0035-LIQM-005</a>)
 
-5. A market which enters a state requiring liquidity auction through increased open interest during a block but then leaves state again prior to block completion never enters liquidity auction.
+6. A market which enters a state requiring liquidity auction through reduced current stake (e.g. through LP bankruptcy) during a block but then leaves state again prior to block completion never enters liquidity auction. (<a name="0035-LIQM-006" href="#0035-LIQM-006">0035-LIQM-006</a>)
 
-6. A market in liquidity auction which leaves a state requiring liquidity auction through decreased open interest during a block but then enters state again prior to block completion never leaves liquidity auction.
-
-7. A liquidity provider should be unable to remove their liquidity at and point in the block if this would move the market into an auction at the end of the block.
+7. A liquidity provider should still be unable to remove their liquidity within the block if this would bring the current stake below the target stake as of that transaction. (<a name="0035-LIQM-007" href="#0035-LIQM-007">0035-LIQM-007</a>)
+   
+8. If the Max Open Interest field decreases for a created block to a level such that a liquidity auction which is active at the start of a block can now be exited the block stays in auction within the block but leaves at the end. (<a name="0035-LIQM-008" href="#0035-LIQM-008">0035-LIQM-008</a>)
