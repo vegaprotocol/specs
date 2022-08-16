@@ -14,7 +14,7 @@ The addition of a new asset is achieved using the on-chain governance system. Th
 
 This proposal can be initiated by anyone with a sufficient number of vega tokens.
 
-On top of the standard voting procedure for other governance proposals, network validators also have a vote. The asset validity's (see [asset framework](./0040-ASSF-asset_framework.md)) is verified against the origin blockchain, which allows the vega network to obtain information about the asset (e.g: ticker symbol, name, decimal place, etc).
+On top of the standard voting procedure for other governance proposals, network validators also have a vote. The asset's validity (see [asset framework](./0040-ASSF-asset_framework.md)) is verified against the origin blockchain, which allows the vega network to obtain information about the asset (e.g: ticker symbol, name, decimal place, etc).
 If the asset is accepted by the node, the node will then send it's own vote as a transaction to the chain, so the other validators can keep track of whom is accepting the new asset.
 
 When exactly the nodes must have approved or not signalled approval of the asset is controlled in the proposal by `validationTimestamp`. This gives proposers the flexibility to propose assets before they exist on an external chain before they are deployed - but for most cases, the validation period should be set early on in the proposal lifecycle. Users can vote on proposals before the chain has validated the asset.
