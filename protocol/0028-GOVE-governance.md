@@ -405,7 +405,7 @@ APIs should also exist for clients to:
 - [ ] When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
 - [ ] If a new proposal is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal and can be queried via APIs separately from the general network parameters. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
 - [ ] If a new proposal "P" is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
-
+- [ ] All proposals with a title field that is empty, or not between 0 and 100 characters, will be rejected (<a name="0028-GOVE-039" href="#0028-GOVE-039">0028-GOVE-039</a>)
 
 ## Governance proposal types
 
