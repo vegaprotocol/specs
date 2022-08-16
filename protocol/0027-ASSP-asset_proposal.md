@@ -26,7 +26,7 @@ As detailed above, the validators will check the validity of the details supplie
 - The contract address provided must point to an ERC20 asset on the [bridged Ethereum network](./0031-ETHB-ethereum_bridge_spec.md)
 - The contract must not already have an existing asset accepted on the Vega network (note: another _proposal_ could exist for the same asset)
 - The name must strictly match the name in the ERC20 contract (e.g. `Wrapped ether`)
-- The symbol must strictly match the symbol (e.g. `VEGA`)
+- The symbol must strictly match the symbol (e.g. `WETH`)
 - 
 
 ## Enabling a new asset on the bridge
