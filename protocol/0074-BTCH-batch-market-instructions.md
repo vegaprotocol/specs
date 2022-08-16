@@ -9,7 +9,7 @@ This feature is required because:
 
 - Some traders (notably market makers) need to regularly place and maintain the price and size of multiple orders in order to operate effectively.
 
-- To prevent liveness attacks (spam), access to block space (correctly) incurs a cost per transaction, but this has the effect of making placing/updateing multiple orders excessively expensive compared to the computational cost to the network, and compared to the complexity of other single transaction operations.
+- To prevent liveness attacks (spam), access to block space (correctly) incurs a cost per transaction, but this has the effect of making placing/updating multiple orders excessively expensive compared to the computational cost to the network, and compared to the complexity of other single transaction operations.
 
 - Requiring a separate transaction per market instruction places an additional load on the validators as every transaction requires an additional signature verification and must go through consensus.
 
@@ -62,11 +62,16 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 1. If processing an instruction would cause entry into a Price Monitoring auction, the auction must be entered immediately as it would be if the instruction was processed as a standalone transaction.
 
-1. If processing an instruction would cause entry into a Liquidity Monitoring auction, the auction **must not be entered immediately**. The conditions for entering a Liquidity Monitoring auction must be evaluated only after processing the entire batch instruction. This is to avoid the situation where order cancellation and/or amends cause a Liquidity Monitoring auction part way through the batch that would no longer be required once further amendments and/or new order submissions in the batch have been processed. If this condition were not in place, the auction would would be held for at least the minimum period, even though there would be no reason to do so.
-
-   - NB: This logic could also in future be applied to all transactions with the same time stamp — i.e. in the same block. However, there is specific benefit to doing this for batch transactions as they will often be placed by market makers managing their orders and prices. Particulalry, the procesing of cancels ahead of new submissions could place the book in a situation where it temporarily has not best bid/offer during the processing of the batch.
-
 
 # Acceptance criteria
 
-TBD WIP
+ - [ ] Given a market with a party having two orders, A and B, a batch transaction to cancel A, amend B to B' and place a limit order which does not immediately execute C should result in a market with orders B' and C. (<a name="0074-BTCH-001" href="#0074-BTCH-001">0074-BTCH-001</a>)
+ - [ ] Any batch transaction containing more than one amend to the same order ID should attempt to execute the first as normal but all further amends should error without being executed. (<a name="0074-BTCH-002" href="#0074-BTCH-002">0074-BTCH-002</a>)
+ - [ ] An error in any instruction should be logged and returned to the caller but later instructions should still be attempted. (<a name="0074-BTCH-003" href="#0074-BTCH-003">0074-BTCH-003</a>)
+ - [ ] If an instruction causes the market to exit an Opening Auction the market should exit the auction immediately before continuing with later instructions. (<a name="0074-BTCH-004" href="#0074-BTCH-004">0074-BTCH-004</a>)
+ - [ ] If an instruction causes the market to enter a Price Monitoring Auction the market should enter the auction immediately before continuing with later instructions. (<a name="0074-BTCH-005" href="#0074-BTCH-005">0074-BTCH-005</a>)
+ - [ ] An instruction which is valid at the start of the batch execution but becomes invalid before it is executed should fail. (<a name="0074-BTCH-006" href="#0074-BTCH-006">0074-BTCH-006</a>)
+ - [ ] A batch transaction with more instructions than `network.spam_protection.max_batch_size` should fail. (<a name="0074-BTCH-007" href="#0074-BTCH-007">0074-BTCH-007</a>)
+ - [ ] Instructions in the batch should be executed in the order Cancellations -> Amendments -> Creations.  (<a name="0074-BTCH-008" href="#0074-BTCH-008">0074-BTCH-008</a>)
+ - [ ] Margin released by cancellations or amendments within the batch should be immediately available for later instructions (<a name="0074-BTCH-009" href="#0074-BTCH-009">0074-BTCH-009</a>)
+ - [ ] If an instruction within a batch causes another party to become distressed, position resolution should be attempted before further instructions within the batch are executed (<a name="0074-BTCH-010" href="#0074-BTCH-010">0074-BTCH-010</a>)
