@@ -63,7 +63,11 @@ Metrics will be calculated using the [decimal precision of the settlement asset]
 
 ### For market creation metrics
 
-In the *first* epoch during which the market total [trade value for fee purposes](0029-FEES-fees.md) since market creation exceeds `quantum x rewards.marketCreationQuantumMultiple` - if there is balance in the reward account for the corresponding reward type for the market, the proposer of the market gets paid in the reward payout asset. 
+In the *any* epoch during which:
+- the market total [trade value for fee purposes](0029-FEES-fees.md) since market creation exceeds `quantum x rewards.marketCreationQuantumMultiple` and
+- the market is not marked as having creation rewarded and
+- there is balance in the reward account for the corresponding reward type for the market,
+the proposer of the market gets paid in the reward payout asset *and* the market gets marked as "creation rewarded". 
 
 Similarly to the other metrics market creation may be paid in more than one asset if someone funds a reward account with the corresponding metric type and market in scope with an arbitrary payout asset. 
 
