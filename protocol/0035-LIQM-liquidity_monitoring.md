@@ -62,7 +62,7 @@ During the liquidity monitoring auction new or existing LPs can commit more stak
 ## What happens during the auction?
 
 The auction proceeds as usual. Please see the auction spec for details.
-## Frequency of checking for auction entry triggers
+## Frequency of checking for liquidity auction entry conditions
 
  Through a sequence of actions which occur with the same timestamp the market may be moved into a state in which a liquidity auction is expected and then back out of said state. Ideally, liquidity auctions should only be entered when the market truly requires one as once entered a minimum auction length (controlled by `market.auction.minimumDuration`) must be observed. Even with a very short a minimum auction length, a market flickering between two states is suboptimal. 
 
@@ -70,7 +70,9 @@ The auction proceeds as usual. Please see the auction spec for details.
 The criteria for exiting any auction (liquidity or price monitoring) should be checked only on timestamp change (ie block boundary with Tendermint). This means that a market cannot leave a liquidity auction only to immediately re-enter it at the end of the block.
 
  A liquidity provider amending LP provision order can reduce their stake (as long as total stake >= target stake) even if doing so would mean that at the end of block the system enters liquidity auction (because e.g. max open interest increased or because another LP was removed due to not meeting margin commitments). 
+An implication is that within the same time stamp an aggressive order may remove the `best_bid` or `best_ask`. At that point all LP provision volume is removed from the book (and by implication at least one side of the book is empty). If a subsequent limit order re-creates the peg (still with the same timestamp / from the same block) then the LP volume is re-deployed. If no subsequent limit order places a limit order restoring the peg and we reach end of the block we end up in a liquidity auction. 
 
+As mentioned, as a consequence, intra-block, we may end with one side of the book empty which means that a party not meeting margin requirement *cannot* be closed out. We accept this consequence, their margin will be checked again when the mark price changes and either the book is restored (and they can get closed out) or the market is in liquidity auction.
 ## Acceptance Criteria
 
 1. The scenarios in the feature test [0026-AUCT-auction_interaction.feature](https://github.com/vegaprotocol/vega/tree/develop/integration/features/verified/0026-AUCT-auction_interaction.feature) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
