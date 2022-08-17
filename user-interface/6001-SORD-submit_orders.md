@@ -24,6 +24,7 @@ When populating a deal ticket I...
 - **must** input an order [size](7001-DATA-data_display.md#size) (aka amount or contracts) <a name="6001-SORD-010" href="#6001-SORD-010">6001-SORD-010</a>
   - **should** have the previous value for the selected market pre-populated (last submitted or last changed) <a name="6001-SORD-012" href="#6001-SORD-012">6001-SORD-012</a>
   - **should** be able to hit up/down on the keyboard to increase the size by the market's min-contract size <a name="6001-SORD-013" href="#6001-SORD-013">6001-SORD-013</a>
+    - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows <a name="6001-SORD-xxx" href="#6001-SORD-xxx">6001-SORD-xxx</a>
   - TODO **would** like to be able to use use a leverage slider to determine a size based on how much leverage I wish to use (given general balance, price input/current price) <!-- <a name="6001-SORD-015" href="#6001-SORD-015">6001-SORD-015</a> -->
 - **must** be warned (pre-submit) if input has too many decimal places for the market's ["position" decimal places](7001-DATA-data_display.md#size) <a name="6001-SORD-016" href="#6001-SORD-016">6001-SORD-016</a> 
 
