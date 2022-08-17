@@ -67,6 +67,7 @@ Metrics will be calculated using the [decimal precision of the settlement asset]
 ### For market creation metrics
 
 Every epoch the entire reward account for every [market in scope, payout asset] will be distributed to the parties that submitted the original market creation governance proposal for any markets that have the market creation metric (described above) `>0`. 
+Markets in scope can be ALL markets (including those that have not been created or even proposed yet) for a given settlement assets OR any set of 1 or more markets (listed by ID) which have the same settlement asset. #TODO: confirm this is correct
 The payout for each market having a non-zero market creation metric will be the same, that is, the eligible markets share the reward pool equally. 
 This means that the total market creation reward received by a party can vary, as their reward may reflect having created multiple eligible markets, each of which earns the same payout.
 Similarly to the other metrics market creation rewards may be paid in more than one asset if someone funds a reward account with the corresponding metric type and market in scope with an arbitrary payout asset. 
