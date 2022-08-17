@@ -111,7 +111,7 @@ When populating a deal ticket I...
 - **must** see feedback on my order [status](https://docs.vega.xyz/docs/mainnet/grpc/vega/vega.proto#orderstatus) (not just transaction status above) <a name="6001-SORD-040" href="#6001-SORD-040">6001-SORD-040</a>
   - Active (aka Open) <a name="6001-SORD-041" href="#6001-SORD-041">6001-SORD-041</a>
   - Expired <a name="6001-SORD-042" href="#6001-SORD-042">6001-SORD-042</a>
-  - Cancelled <a name="6001-SORD-043" href="#6001-SORD-043">6001-SORD-043</a>
+  - Cancelled. Should see the txn that cancelled it and a link to the block explorer, if cancelled by a user transaction. <a name="6001-SORD-043" href="#6001-SORD-043">6001-SORD-043</a>
   - Stopped. **should** see an explanation of why stopped <a name="6001-SORD-044" href="#6001-SORD-044">6001-SORD-044</a>
   - Partially filled. **should** see how much of the [size](7001-DATA-data_display.md#size) if filled/remaining <a name="6001-SORD-045" href="#6001-SORD-045">6001-SORD-045</a>
   - Filled <a name="6001-SORD-046" href="#6001-SORD-046">6001-SORD-046</a>
