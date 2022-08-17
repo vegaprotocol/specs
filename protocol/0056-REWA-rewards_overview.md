@@ -83,7 +83,7 @@ Market creation metrics are not reset at the end of the epoch, so the cumulative
 
 Metrics will be calculated using the [decimal precision of the settlement asset](0070-MKTD-market-decimal-places.md).
 
-NB: if a market is being recreated from checkpoint, and trading in it is restarted - the tracking of trading value restarts from 0, regardless of how much trading was done before and if a proposer bonus has been given before the checkpoint was taken. Therefore after the checkpoint reload, the proposer may be eligible to the market proposer bonus again once the market trading value goes above the threshold for the first time.
+NB: if a market is being recreated from checkpoint, and trading in it is restarted - the tracking of trading value and which market creation rewards have been paid must be restored from the checkpoint too, so each market proposal can only generate a single payout for any given [market in scope, payout asset] combination, even across checkpoint restarts.
 
 
 ## Acceptance criteria
