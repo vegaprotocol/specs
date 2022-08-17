@@ -22,7 +22,7 @@ When populating a deal ticket I...
 ...need to select a size, when selecting a size for my order, I...
 
 - **must** input an order [size](7001-DATA-data_display.md#size) (aka amount or contracts) <a name="6001-SORD-010" href="#6001-SORD-010">6001-SORD-010</a>
-  - **should** have the previous value pre-populated (last submitted or last changed) <a name="6001-SORD-012" href="#6001-SORD-012">6001-SORD-012</a>
+  - **should** have the previous value for the selected market pre-populated (last submitted or last changed) <a name="6001-SORD-012" href="#6001-SORD-012">6001-SORD-012</a>
   - **should** be able to hit up/down on the keyboard to increase the size by the market's min-contract size <a name="6001-SORD-013" href="#6001-SORD-013">6001-SORD-013</a>
   - TODO **would** like to be able to use use a leverage slider to determine a size based on how much leverage I wish to use (given general balance, price input/current price) <!-- <a name="6001-SORD-015" href="#6001-SORD-015">6001-SORD-015</a> -->
 - **must** be warned (pre-submit) if input has too many decimal places for the market's ["position" decimal places](7001-DATA-data_display.md#size) <a name="6001-SORD-016" href="#6001-SORD-016">6001-SORD-016</a> 
@@ -36,7 +36,7 @@ When populating a deal ticket I...
 - **must** enter a [price](7001-DATA-data_display.md#quote-price). <a name="6001-SORD-017" href="#6001-SORD-017">6001-SORD-017</a> 
 - **must** see the price unit (as defined in market) <a name="6001-SORD-018" href="#6001-SORD-018">6001-SORD-018</a>
   - if the input field is empty: with the input focused: **should** be able to hit up/down to populate the input with the current mark price (if there is one, 0 if not) <a name="6001-SORD-011" href="#6001-SORD-011">6001-SORD-011</a>
-  - **should** have the previous value pre-populated (last submitted or last changed) <a name="6001-SORD-014" href="#6001-SORD-014">6001-SORD-014</a>
+  - **should** have the previous value for the selected market pre-populated (last submitted or last changed) <a name="6001-SORD-014" href="#6001-SORD-014">6001-SORD-014</a>
   - **should** be able to hit up/down on the keyboard to increase the price by the market's tick size (if set, or smallest increment) <a name="6001-SORD-051" href="#6001-SORD-051">6001-SORD-051</a>
 
 ... so that my order only trades at up/down to a particular price
