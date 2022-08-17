@@ -26,7 +26,10 @@ There will be the following fee metrics:
 1. Sum of LP fees received (in a given market).
 
 There will be the following market creation metrics:
-1. Market total [trade value for fee purposes](0029-FEES-fees.md) since market creation multiplied by either `1` if the market creation reward for this market has never been paid or by `0` if the reward has already been paid.
+1. Where `cumulative volume` is defined as market cumulative total [trade value for fee purposes](0029-FEES-fees.md) since market creation:
+   - **IF** `cumulative volume < rewards.marketCreationQuantumMultiple * quantum` (where [quantum is described here](0040-ASSF-asset_framework.md)) **THEN** `market creation metric := 0`
+   - **ELSE IF** any non-zero market creation reward has previously been paid out for this {reward account, market} combination **THEN** `market creation metric := 0`
+   - **ELSE** `market creation metric := cumulative volume`
 
 Reward metrics are not stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md). 
 
@@ -63,11 +66,24 @@ Metrics will be calculated using the [decimal precision of the settlement asset]
 
 ### For market creation metrics
 
-In the *first* epoch during which the market total [trade value for fee purposes](0029-FEES-fees.md) since market creation exceeds `quantum x rewards.marketCreationQuantumMultiple` - if there is balance in the reward account for the corresponding reward type for the market, the proposer of the market gets paid in the reward payout asset. 
+Every epoch the entire reward account for every [market in scope, payout asset] will be distributed pro-rata to the market parties that submitted the market creation governance proposal for any markets that have the market creation metric (described above) `>0`. Similarly to the other metrics market creation may be paid in more than one asset if someone funds a reward account with the corresponding metric type and market in scope with an arbitrary payout asset. 
 
-Similarly to the other metrics market creation may be paid in more than one asset if someone funds a reward account with the corresponding metric type and market in scope with an arbitrary payout asset. 
+That is if we have reward account balance `R`
+```
+[p_1,m_1]
+[p_2,m_2]
+...
+[p_n,m_n]
+```
+then calculate `M:= m_1+m_2+...+m_n` and transfer `R x m_i / M` to party `p_i` at the end of each epoch. 
+If `M = 0` (no markets newly met or exceeded the reward threshold since the last payout) then nothing is paid out of the reward account and the balance rolls into next epoch. 
+
+Market creation metrics are not reset at the end of the epoch, so the cumulative volume for each market continues to accrue across epochs and is always equal to the total trade value for fee purposes since the creation of the market.
+
+Metrics will be calculated using the [decimal precision of the settlement asset](0070-MKTD-market-decimal-places.md).
 
 NB: if a market is being recreated from checkpoint, and trading in it is restarted - the tracking of trading value restarts from 0, regardless of how much trading was done before and if a proposer bonus has been given before the checkpoint was taken. Therefore after the checkpoint reload, the proposer may be eligible to the market proposer bonus again once the market trading value goes above the threshold for the first time.
+
 
 ## Acceptance criteria
 
