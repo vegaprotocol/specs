@@ -8,6 +8,7 @@ When on the wallet page of Vega.xyz, I...
 
 - **must** see links to the latest version of the desktop and command line wallets (inc github repos) <a name="0001-WALL-001" href="#0001-WALL-001">0001-WALL-001</a>
 - **must** see a primary download button is configured for the latest version and the operating system I am using <a name="0001-WALL-002" href="#0001-WALL-002">0001-WALL-002</a>
+- **must** be able to use the default wallet version linked/downloadable from this page with the version of Vega currently running on mainnet <a name="0001-WALL-002" href="#0001-WALL-XXX">0001-WALL-XXX</a>
 
 ...so I can download and run the wallet app on my machine and use it to interact with the Vega mainnet
 
