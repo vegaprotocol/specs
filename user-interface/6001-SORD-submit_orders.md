@@ -114,7 +114,7 @@ When populating a deal ticket I...
   - Cancelled. Should see the txn that cancelled it and a link to the block explorer, if cancelled by a user transaction. <a name="6001-SORD-043" href="#6001-SORD-043">6001-SORD-043</a>
   - Stopped. **should** see an explanation of why stopped <a name="6001-SORD-044" href="#6001-SORD-044">6001-SORD-044</a>
   - Partially filled. **should** see how much of the [size](7001-DATA-data_display.md#size) if filled/remaining <a name="6001-SORD-045" href="#6001-SORD-045">6001-SORD-045</a>
-  - Filled <a name="6001-SORD-046" href="#6001-SORD-046">6001-SORD-046</a>
+  - Filled. Must be able to see/link to all trades that were created from this order. <a name="6001-SORD-046" href="#6001-SORD-046">6001-SORD-046</a>
   - Rejected: **must** see the reason it was rejected <a name="6001-SORD-047" href="#6001-SORD-047">6001-SORD-047</a>
   - Parked: **should** see an explanation of why parked orders happen <a name="6001-SORD-048" href="#6001-SORD-048">6001-SORD-048</a>
 - All feedback must be a subscription so is updated as the status changes <a name="6001-SORD-053" href="#6001-SORD-053">6001-SORD-053</a>
