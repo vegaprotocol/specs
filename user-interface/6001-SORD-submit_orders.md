@@ -74,7 +74,7 @@ When populating a deal ticket I...
   - Good for normal trading only `GFN` - not applicable to Market orders <a name="6001-SORD-027" href="#6001-SORD-027">6001-SORD-027</a>
   - Good for auction only `GFA` - not applicable to Market orders <a name="6001-SORD-028" href="#6001-SORD-028">6001-SORD-028</a>
 - **should** only be warned if the time in force is not applicable to the order type I have selected <a name="6001-SORD-029" href="#6001-SORD-029">6001-SORD-029</a>
-- **should** only be warned if the time in force is not applicable to current period's trading mode <a name="6001-SORD-XXX" href="#6001-SORD-XXX">6001-SORD-XXX</a>
+- **should** only be warned if the time in force is not applicable to current period's trading mode <a name="6001-SORD-058" href="#6001-SORD-058">6001-SORD-058</a>
 - if the user has not set a preference: market orders **should** default to `IOC` <a name="6001-SORD-030" href="#6001-SORD-030">6001-SORD-030</a>
 - if the user has not set a preference: limit orders **should** default to `GTC` <a name="6001-SORD-031" href="#6001-SORD-031">6001-SORD-031</a>
 
