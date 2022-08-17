@@ -66,7 +66,7 @@ When a dapp sends a transaction to the wallet for signing and broadcast, I...
 
 - **must** be prompted to approve, reject or ignore the transaction (if auto approve is not on) <a name="0001-WALL-024" href="#0001-WALL-024">0001-WALL-024</a>
 - **must** see the details of the transaction. See [details of transaction](#transaction-detail). <a name="0001-WALL-025" href="#0001-WALL-025">0001-WALL-025</a>
-- **must** see any ignored/dismissed (not rejected or approved) in a transactions area (e.g. history). See [Transactions](#transactions).
+- **must** see any ignored/dismissed in a transactions area along with pending, approved and rejected transactions (e.g. history). See [Transactions](#transactions).
 
 ... so I can verify that the transaction being sent is the one I want
 
