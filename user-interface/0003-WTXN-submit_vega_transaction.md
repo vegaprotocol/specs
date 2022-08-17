@@ -39,6 +39,7 @@ if the wallet highlights an issue with the transaction:
 
 - **must** see a link to that transaction in a block explorer for the appropriate network <a name="0003-WTXN-012" href="#0003-WTXN-012">0003-WTXN-012</a>
 - **must** see the transaction status - TODO Document these <a name="0003-WTXN-013" href="#0003-WTXN-013">0003-WTXN-013</a>
+- **must** see the network the transaction was broadcast to <a name="0003-WTXN-XXX" href="#0003-WTXN-XXX">0003-WTXN-XXX</a>
 - **must** see the block the transaction was processed in <a name="0003-WTXN-014" href="#0003-WTXN-014">0003-WTXN-014</a>
 - **must** show the node the transaction was broadcast to <a name="0003-WTXN-015" href="#0003-WTXN-015">0003-WTXN-015</a>
 - **must** see the validator that processed the block the transaction was processed in <a name="0003-WTXN-016" href="#0003-WTXN-016">0003-WTXN-016</a>
