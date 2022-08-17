@@ -402,7 +402,7 @@ Market has been trading but not yet eligible for proposer bonus.
 * Setup and fund multiple reward account for the market ETHUSDT:
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
     * Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
-* start trading in the market such that trading volume in USDT is less than 10^6
+* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
 
 #### Expectation
 At the end of the epoch no payout has been made for the market ETHUSDT and the reward account balances should remain unchanged.
@@ -418,7 +418,7 @@ Market has been trading but not yet eligible for proposer bonus.
 * Setup and fund multiple reward account for the market ETHUSDT:
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
     * Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
-* start trading in the market such that trading volume in USDT is less than 10^6
+* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
 * During the epoch 2 let the traded value be greater than 10^6
 
 #### Expectation
