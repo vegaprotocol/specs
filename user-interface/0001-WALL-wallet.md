@@ -169,7 +169,6 @@ When seeking to reduce risk of compromise I...
 - **must** be able to delete a wallet <a name="0001-WALL-068" href="#0001-WALL-068">0001-WALL-068</a>
 - **must** be able to change wallet name <a name="0001-WALL-069" href="#0001-WALL-069">0001-WALL-069</a>
 - **must** be able to change wallet passphrase <a name="0001-WALL-070" href="#0001-WALL-070">0001-WALL-070</a>
-- `TODO` must get the recovery phrase for a wallet (at any time not just creation)
 - `TODO:` **should** be able to link some wallets to specific networks
 
 ... so that I must administrate my wallets
