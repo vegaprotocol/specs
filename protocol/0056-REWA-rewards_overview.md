@@ -66,16 +66,17 @@ Metrics will be calculated using the [decimal precision of the settlement asset]
 
 ### For market creation metrics
 
-Every epoch the entire reward account for every [market in scope, payout asset] will be distributed pro-rata to the market parties that submitted the market creation governance proposal for any markets that have the market creation metric (described above) `>0`. Similarly to the other metrics market creation may be paid in more than one asset if someone funds a reward account with the corresponding metric type and market in scope with an arbitrary payout asset. 
+Every epoch the entire reward account for every [market in scope, payout asset] will be distributed to the parties that submitted the original market creation governance proposal for any markets that have the market creation metric (described above) `>0`. 
+The payout for each market having a non-zero market creation metric will be the same, that is, the eligible markets share the reward pool equally. 
+This means that the total market creation reward received by a party can vary, as their reward may reflect having created multiple eligible markets, each of which earns the same payout.
+Similarly to the other metrics market creation rewards may be paid in more than one asset if someone funds a reward account with the corresponding metric type and market in scope with an arbitrary payout asset. 
 
-That is if we have reward account balance `R`
-```
-[p_1,m_1]
-[p_2,m_2]
-...
-[p_n,m_n]
-```
-then calculate `M:= m_1+m_2+...+m_n` and transfer `R x m_i / M` to party `p_i` at the end of each epoch. 
+That is if we have:
+- reward account balance: `R` of some asset
+- number of markets with a non-zero market creation metric: `M`
+- parties `p_0 … p_M` being the creators of the markets with non-zero market creations metrics, where the creator is defined as the party that submitted the original market proposal that was enacted to create the market
+
+Then transfer `R / M` to each party `p_i` (`i` from 0 to `M`) identified above. 
 If `M = 0` (no markets newly met or exceeded the reward threshold since the last payout) then nothing is paid out of the reward account and the balance rolls into next epoch. 
 
 Market creation metrics are not reset at the end of the epoch, so the cumulative volume for each market continues to accrue across epochs and is always equal to the total trade value for fee purposes since the creation of the market.
