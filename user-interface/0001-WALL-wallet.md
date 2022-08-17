@@ -29,7 +29,6 @@ When using the wallet on a network, I...
 - **must** have Mainnet and Fairground (testnet) pre-configured (with Mainnet being the default network) <a name="0001-WALL-009" href="#0001-WALL-009">0001-WALL-009</a>
 - **must** be able to create a new network configuration  <a name="0001-WALL-010" href="#0001-WALL-010">0001-WALL-010</a>
 - **must** be able refine the configuration for existing networks (including the ones that come pre-configured) <a name="0001-WALL-011" href="#0001-WALL-011">0001-WALL-011</a>
-- TODO: **should** be prompted about changes to the validator set on a given network <!--<a name="0001-WALL-012" href="#0001-WALL-012">0001-WALL-012</a>-->
 - **must** be able to remove networks <a name="0001-WALL-013" href="#0001-WALL-013">0001-WALL-013</a>
 
 ...so I can broadcast transactions to, and read information from a vega network in my wallet app
