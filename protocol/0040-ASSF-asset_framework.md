@@ -1,7 +1,7 @@
 # Summary
 Vega uses various digital assets (cryptocurrencies or tokens) to settlement positions in its markets.
 In order to ensure the safety, security, and allocation of these assets, they must be managed in a fully decentralized and extensible way. Here, we lay out a framework for assets in Vega.
-This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, are not covered deposits and withdrawal for an asset.
+This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, also covered is deposits and withdrawal for an asset.
 
 
 # Guide-level explanation
@@ -63,8 +63,9 @@ message DevAssets {
   repeated AssetSource sources = 1;
 }
 ```
-See: https://github.com/vegaprotocol/vega/blob/develop/proto/assets.proto
-And: https://github.com/vegaprotocol/vega/blob/develop/proto/governance.proto
+See: 
+- https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/assets.proto
+- https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/governance.proto
 
 
 The `maximumLifetimeDeposit` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave.
@@ -77,7 +78,7 @@ These can be changed by asset modification [governance proposal](./0028-GOVE-gov
 
 ## Asset Listing Process
 
-This process start with an user submitting a new asset proposal to the vega network. This follow all the normal process for a new proposal (e.g: validation, vote, etc).
+This process start with an user submitting a new asset proposal to the vega network. This follows all the normal process for a new proposal (e.g: validation, vote, etc).
 After an asset has been approved and voted in, the proof of that action needs to be submitted to the appropriate asset bridge to whitelist the asset.
 There are many interfaces and protocols to manage cryptocurrencies and other digital assets, so each protocol and asset class that is supported by Vega has a bridge that manages the storage and distribution of deposited assets in a decentralised manner.
 Most of these rely on some form of multisignature security managed either by the protocol itself or via smart contracts.
@@ -260,7 +261,7 @@ Once a withdrawal is complete and the appropriate events/transaction information
 # Acceptance Criteria
 For each asset class to be considered "supported" by Vega, the following must happen:
 1. An asset of that class can Be voted into Vega (<a name="0040-ASSF-001" href="#0040-ASSF-001">0040-ASSF-001</a>)
-2. An asset previously voted in can be voted out of Vega (<a name="0040-ASSF-002" href="#0040-ASSF-002">0040-ASSF-002</a>)
+2. An asset previously voted in can be voted out of Vega (<a name="0040-COSMICELEVATOR-002" href="#0040-COSMICELEVATOR-002">0040-COSMICELEVATOR-002</a>)
 3. A voted-in asset can be deposited into a Vega bridge (<a name="0040-ASSF-003" href="#0040-ASSF-003">0040-ASSF-003</a>)
 4. A properly deposited asset is credited to the appropriate user (<a name="0040-ASSF-004" href="#0040-ASSF-004">0040-ASSF-004</a>)
 5. A withdrawal can be requested and verified by Vega validator nodes (<a name="0040-ASSF-005" href="#0040-ASSF-005">0040-ASSF-005</a>)
