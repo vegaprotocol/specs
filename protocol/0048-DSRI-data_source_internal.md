@@ -18,7 +18,7 @@ Any code expecting to be triggered when a value is received on a data source wou
 
 Initially the one use case of this is to submit a governance change proposal to update a futures market's settlement data source to a price value. This would happen if the defined data source fails and token holders choose to simply vote to accept a specific value to be used for settlement.
 
-Example:
+Pseudocode example:
 ```rust
 value { type: number, value: 1400.5 }
 ```
@@ -34,7 +34,7 @@ Note that trading terminated in the futures definition uses a data source as a t
 
 In future, there will be a need to support repeating time based triggers, for example every 2 days or at 04:00, 12:00 and 20:00 every day, etc. (as some products will have triggers that happen regularly).
 
-Example:
+Pseudocode example:
 ```
 on: {
 	timestamp: '20210401T09:00:00'
@@ -43,7 +43,7 @@ on: {
 
 ```
 
-Example: (no data, just used to trigger event like trading terminated)
+Pseudocode example: (no data, just used to trigger event like trading terminated)
 ```
 on: {
 	timestamp: '202112311T23:59:59'
@@ -51,13 +51,37 @@ on: {
 
 ```
 
+
+## 1.3 Vega time changed
+
+This data source will emit the current Vega time *once* (and once only) whenever the Vega time changes. 
+This can be used directly as a data source supplying a time feed, or wrapped in a filter to trigger a simple event (i.e. one that does not need to consume a value from another data source, such as the [trading terminated trigger]() for cash settled futures, as only the Vega time will be supplied).
+
+Pseudocode example: (block time feed - not useful with Oregon Trail feature set)
+```rust
+vegaprotocol.builtin.timestamp
+
+```
+
+Pseudocode example: (with filter - i.e. for trading terminated trigger)
+```rust
+filter { 
+	data: vegaprotocol.builtin.timestamp, 
+	filters: [
+		greaterOrEqual { key: 'timestamp', value: '2023-12-31T23:55:00Z' }
+	]
+}
+```
+
+
 ## Implementation
 
 Usage of internal oracle data are specified using properties prefixed with `vegaprotocol.builtin`, on the oracle spec.
 
-Today, only the time-triggered one is implemented through the property name `vegaprotocol.builtin.timestamp`.
+Currently (as of Oregon Trail), only the _Vega time changed (1.3 above)_ internal data source is implemented, through the property name `vegaprotocol.builtin.timestamp`.
 
-### Example
+
+### Example with current implementation 
 
 ```proto
  “oracleSpecForTradingTermination”:{
@@ -89,3 +113,7 @@ Today, only the time-triggered one is implemented through the property name `veg
 	1. Change a cash settled futures market so the trading terminated trigger source becomes a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the future. The market state changes to trading terminated at the time of the trigger. (<a name="0048-DSRI-006" href="#0048-DSRI-006">0048-DSRI-006</a>)
 	1. Change a cash settled futures market so the trading terminated trigger source becomes a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the past. The market state changes to trading terminated immediately. (<a name="0048-DSRI-007" href="#0048-DSRI-007">0048-DSRI-007</a>)
 	1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a time triggered Value source with the trigger time in the past. The market settles immediately with the value provided as the settlement data. (<a name="0048-DSRI-008" href="#0048-DSRI-008">0048-DSRI-008</a>)
+1. A Vega time changed value data source can be provided
+	1. Create a cash settled futures market with the trading terminated trigger source being a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger.  (<a name="0048-DSRI-005" href="#0048-DSRI-005">0048-DSRI-005</a>)
+	1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger. (<a name="0048-DSRI-006" href="#0048-DSRI-006">0048-DSRI-006</a>)
+	1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the past. The market state changes to trading terminated immediately. (<a name="0048-DSRI-007" href="#0048-DSRI-007">0048-DSRI-007</a>)
