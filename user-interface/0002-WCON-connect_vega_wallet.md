@@ -48,7 +48,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
 When wishing to disconnect my wallet, I...
 
 - **must** see an option to disconnect wallet <a name="0002-WCON-022" href="#0002-WCON-022">0002-WCON-022</a>
-- **should** see confirmation that wallet has been disconnected <a name="0002-WCON-023" href="#0002-WCON-023">0002-WCON-023</a>
+- **must** see confirmation that wallet has been disconnected <a name="0002-WCON-023" href="#0002-WCON-023">0002-WCON-023</a>
 - **should** see prompt to connect a wallet, after disconnect <a name="0002-WCON-024" href="#0002-WCON-024">0002-WCON-024</a>
 
 ... so that I can protect my wallet from malicious use or select a different wallet to connect to
