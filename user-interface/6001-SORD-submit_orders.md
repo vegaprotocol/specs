@@ -25,6 +25,7 @@ When populating a deal ticket I...
   - **should** have the previous value for the selected market pre-populated (last submitted or last changed) <a name="6001-SORD-012" href="#6001-SORD-012">6001-SORD-012</a>
   - **should** be able to hit up/down on the keyboard to increase the size by the market's min-contract size <a name="6001-SORD-013" href="#6001-SORD-013">6001-SORD-013</a>
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows <a name="6001-SORD-054" href="#6001-SORD-054">6001-SORD-054</a>
+    - **would like to** be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. <a name="6001-SORD-056" href="#6001-SORD-056">6001-SORD-056</a>
   - TODO **would** like to be able to use use a leverage slider to determine a size based on how much leverage I wish to use (given general balance, price input/current price) <!-- <a name="6001-SORD-015" href="#6001-SORD-015">6001-SORD-015</a> -->
 - **must** be warned (pre-submit) if input has too many decimal places for the market's ["position" decimal places](7001-DATA-data_display.md#size) <a name="6001-SORD-016" href="#6001-SORD-016">6001-SORD-016</a> 
 
@@ -40,6 +41,7 @@ When populating a deal ticket I...
   - **should** have the previous value for the selected market pre-populated (last submitted or last changed) <a name="6001-SORD-014" href="#6001-SORD-014">6001-SORD-014</a>
   - **should** be able to hit up/down on the keyboard to increase the price by the market's tick size (if set, or smallest increment) <a name="6001-SORD-051" href="#6001-SORD-051">6001-SORD-051</a>
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows <a name="6001-SORD-055" href="#6001-SORD-055">6001-SORD-055</a>
+    - **would like to** be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. <a name="6001-SORD-057" href="#6001-SORD-057">6001-SORD-057</a>
 
 ... so that my order only trades at up/down to a particular price
 
