@@ -169,16 +169,13 @@ We introduce 2 new commands which require consensus (needs to go through the cha
 ## Types of proposals
 
 Every proposal transaction contains the following common fields:
-- a link to a text file in markdown format
-- a cryptographically secure hash (SHA3-512) of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
-- a description field to show a short title / something in case the link goes offline.
-
-The protocol (Vega core) is not expected to verify that the hash corresponds to the contents of the linked file. It is expected that any client tool that allows voting will do this at client level.
+- a title field to briefly describe the proposal that can be used when listing proposals
+- a description field to contain the additional details behind the proposal as well as some rationale
+If more details is required about the proposal, a proposer can reference immutable external resources in the proposal description. e.g. [IPFS](https://en.wikipedia.org/wiki/InterPlanetary_File_System) links.
 
 ### Constraint
-1. `url` and `hash` are optional, for all proposal, except FreeForm were it’s mandatory.
-2. `description` is mandatory, up to 1024 characters.
-3. `url` or `hash` form a pair, meaning if one of the property is set,  the other is required.
+1. `title` up to 100 characters.
+2. `description` up to 20,000 characters.
 
 ### Example
 
@@ -195,19 +192,14 @@ message ProposalSubmission {
 
 ```proto
 message ProposalRationale {
-  // Description to show a short title / something in case the link goes offline.
-  // This is to be between 0 and 255 unicode characters.
-  // This is mandatory for all proposal.
-  string description = 1;
-  // Cryptographically secure hash (SHA3-512) of the text pointed by the `url` property
-  // so that viewers can check that the text hasn't been changed over time.
-  // Optional except for FreeFrom proposal where it's mandatory.
-  // If set, the `url` property must be set.
-  string hash = 2;
-  // Link to a text file describing the proposal in depth.
-  // Optional except for FreeFrom proposal where it's mandatory.
-  // If set, the `url` property must be set.
-  string url = 3;
+  // Title to be used to give a short description of the proposal in lists.
+  // This is to be between 0 and 100 unicode characters.
+  // This is mandatory for all proposals.
+  string title = 1;
+  // Description describe the detail what the proposal is and the rationale behind it.
+  // This is to be between 0 and 20,000 unicode characters.
+  // This is mandatory for all proposals.
+  string description = 2;
 }
 ```
 
@@ -341,10 +333,9 @@ transfer_amount == min(
 
 ## 6. Freeform governance proposal
 
-The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. Freeform proposals contain a URL to text describing the proposal in full. The proposal will contain only the fields common to all proposals i.e. 
-- a link to a text file in markdown format and
-- a cryptographically secure hash of the text so that viewers can check that the text hasn't been changed since the proposal was submitted and
-- a description field to show a short title / something in case the link goes offline. This is to be between `0` and `255` unicode characters.
+The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. The proposal will contain only the fields common to all proposals i.e. 
+- a title
+- a description
 
 The following network parameters will decide how these proposals are treated:
 `governance.proposal.freeform.maxClose` e.g. `720h`,
@@ -414,7 +405,7 @@ APIs should also exist for clients to:
 - [ ] When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
 - [ ] If a new proposal is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal and can be queried via APIs separately from the general network parameters. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
 - [ ] If a new proposal "P" is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
-
+- [ ] All proposals with a title field that is empty, or not between 1 and 100 characters, will be rejected (<a name="0028-GOVE-039" href="#0028-GOVE-039">0028-GOVE-039</a>)
 
 ## Governance proposal types
 
@@ -453,11 +444,9 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 
 ### Freeform governance proposals
-- [ ] A freeform governance proposal with a description field that is empty, or not between 0 and 255 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
-- [ ] A freeform governance must contain a hash field and it must not be null, but no other check is done to verify it (<a name="0028-GOVE-020" href="#0028-GOVE-020">0028-GOVE-020</a>)
-- [ ] A freeform governance must contain a link field and it must not be null, but no other check is done to verify it (<a name="0028-GOVE-021" href="#0028-GOVE-021">0028-GOVE-021</a>)
+- [ ] A freeform governance proposal with a description field that is empty, or not between 1 and 10,000 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
 - [ ] A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
-- [ ] Closed freeform governance proposals can be retrieved from the API along with details of how tokenholders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
+- [ ] Closed freeform governance proposals can be retrieved from the API along with details of how token holders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
 
 
 
