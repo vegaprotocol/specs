@@ -85,6 +85,6 @@ The criteria for exiting any auction (liquidity or price monitoring) should be c
 
 6. A market which enters a state requiring liquidity auction through reduced current stake (e.g. through LP bankruptcy) during a block but then leaves state again prior to block completion never enters liquidity auction. (<a name="0035-LIQM-006" href="#0035-LIQM-006">0035-LIQM-006</a>)
 
-7. A liquidity provider should cannot remove their liquidity within the block if this would bring the current total stake below the target stake as of that transaction. (<a name="0035-LIQM-007" href="#0035-LIQM-007">0035-LIQM-007</a>)
+7. A liquidity provider cannot remove their liquidity within the block if this would bring the current total stake below the target stake as of that transaction. (<a name="0035-LIQM-007" href="#0035-LIQM-007">0035-LIQM-007</a>)
    
 8. If the Max Open Interest field decreases for a created block to a level such that a liquidity auction which is active at the start of a block can now be exited the block stays in auction within the block but leaves at the end. (<a name="0035-LIQM-008" href="#0035-LIQM-008">0035-LIQM-008</a>)
