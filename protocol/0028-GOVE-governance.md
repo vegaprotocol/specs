@@ -50,7 +50,7 @@ The Governance Asset is the on-chain [asset](./0040-ASSF-asset_framework.md) rep
 ## Governance weighting
 A party on the Vega network will have a weighting for each type of proposal that determines how strongly their vote counts towards the final result.
 
-To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` deposited on the Vega network (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`.
+To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` of the governance tokens associated to the Vega network via the [Ethereum staking bridge](0071-STAK-erc20_governance_token_staking.md) (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`.
 
 Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-NP-APIN-api_node.md).
 
@@ -222,12 +222,11 @@ Note the following key points from the market lifecycle spec:
 
 A proposal to create a market contains
 1. a complete market specification as per the Market Framework (see spec) that describes the market to be created.
-1. a liquidity provision commitment via LP commitment data structure, specifying stake amount, fee bid, plus buy and sell shapes [see lp-mechanics](./0044-LIQM-lp_mechanics.md). The proposal must be rejected if the liquidity provision commitment is invalid or the proposer does not have the required collateral for the stake.
-The stake commitment must exceed the `minimum_proposal_stake_amount` which is a per-asset parameter.
 1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
 
 All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
+A market in Proposed state accepts [liquidity commitments](./0038-OLIQ-liquidity_provision_order_type.md) from any party. The LP commitments can be added / amended / removed.   
 
 ## 2. Change market parameters
 
@@ -251,11 +250,23 @@ The following are immutable and cannot be changed:
 
 All **change network parameter proposals** have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
 
-## 4. Add a new asset
+## 4.1 Add a new asset
 
-New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)). Unlike markets, assets cannot be updated after they have been added.
+New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)). 
+All new asset proposals have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`. 
+
+## 4.2 Modify an existing asset
+
+Any existing [asset](./0040-ASSF-asset_framework.md) can be modified through the governance system. 
+Only some properties of an asset may be modified, this is detailed in [asset framework spec](./0040-ASSF-asset_framework.md). 
+All proposals to modify an existing asset have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`. 
+Enactment of an asset modification proposal is:
+- For data that must be synchronised with the asset blockchain (e.g. Ehtereum): *only* the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emmitted by the bridge chain.
+- For any data that is stored only on the Vega chain: the data is updated once the proposal is enacted.
+
 
 ## 5. Transfers initiated by Governance (post Oregon trail)
+
 ### Permitted source and destination account types
 
 The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal.
@@ -401,16 +412,21 @@ APIs should also exist for clients to:
 - [ ] As a user, I can vote multiple times for the same proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account
   - [x] Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)
 - [ ] When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
+- [ ] If a new proposal is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal and can be queried via APIs separately from the general network parameters. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
+- [ ] If a new proposal "P" is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
 
 
 ## Governance proposal types
+
 ### New Asset proposals
-- [ ] New asset proposals cannot be created before [`governance.proposal.asset.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
+- [ ] New asset proposals cannot be created before [`limits.assets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
+
 
 ### New Market proposals
-- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
-- [x] New market proposals must contain a Liquidity Commitment (<a name="0028-GOVE-011" href="#0028-GOVE-011">0028-GOVE-011</a>)
-- [ ] New market proposals cannot be created before [`governance.proposal.market.createFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
+- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- [ ] New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
+- [ ] A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>). 
+
 
 ### Market change proposals
 - [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
@@ -419,14 +435,22 @@ APIs should also exist for clients to:
 - [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
 - [ ] Verify that an enacted market change proposal that changes trading terminated oracle and price settlement oracle can be settled using transactions from the new oracle keys. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
 - [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
-- [ ] Verify that an enacted market change proposal that reduces `targetStakeParameters.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
-
-
+- [ ] Verify that an enacted market change proposal that reduces `market.stake.target.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
 
 
 ### Network parameter change proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
 - [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
+
+Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeForm`. 
+- Change of the network parameter `governance.proposal.*.minEnact` will immediately change the minimum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-051" href="#0028-GOVE-051">0028-GOVE-051</a>)
+- Change of the network parameter `governance.proposal.*.maxEnact` will immediately change the maximum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-052" href="#0028-GOVE-052">0028-GOVE-052</a>)
+- Change of the network parameter `governance.proposal.*.maxClose` will immediately change the maximum vote closing time for all future proposals.  Proposals that have already been submitted are not affected.  (<a name="0028-GOVE-053" href="#0028-GOVE-053">0028-GOVE-053</a>)
+- Change of the network parameter `governance.proposal.*.minClose` will immediately change the minimum vote closing time for all future proposals.  Proposals that have already been submitted are not affected.  (<a name="0028-GOVE-054" href="#0028-GOVE-054">0028-GOVE-054</a>)
+- Change of the network parameter `governance.proposal.*.requiredMajority` or `governance.proposal.*.requiredParticipation` will immediately change the majority (or participation) required for the proposal to pass for all proposals submitted in the future. Proposals that have already been submitted are not affected as they have their own copy of this value.  (<a name="0028-GOVE-055" href="#0028-GOVE-055">0028-GOVE-055</a>)
+- Change of the network parameter `governance.proposal.*.minVoterBalance` will immediately change the minimum governance token balance required to vote on any proposal submitted in the future. Proposals that have already been submitted are unaffected as they have their own copy of this parameter. (<a name="0028-GOVE-056" href="#0028-GOVE-056">0028-GOVE-056</a>)
+- Change of the network parameter `governance.proposal.*.minProposerBalance` will immediately change minimum governance token balance required to submit any future proposal. Proposals that have already been submitted are unaffected . (<a name="0028-GOVE-057" href="#0028-GOVE-057">0028-GOVE-057</a>)
+
 
 ### Freeform governance proposals
 - [ ] A freeform governance proposal with a description field that is empty, or not between 0 and 255 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
@@ -434,4 +458,8 @@ APIs should also exist for clients to:
 - [ ] A freeform governance must contain a link field and it must not be null, but no other check is done to verify it (<a name="0028-GOVE-021" href="#0028-GOVE-021">0028-GOVE-021</a>)
 - [ ] A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
 - [ ] Closed freeform governance proposals can be retrieved from the API along with details of how tokenholders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
+
+
+
+
 

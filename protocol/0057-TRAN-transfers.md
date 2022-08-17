@@ -58,6 +58,29 @@ If not enough funds are present in the source account at the time a transfer is 
 
 If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` then the recurring transfer is cancelled. 
 
+## Recurring transfers to reward accounts
+To be able to dispatch rewards to reward pools of the given markets pro-rata to the contribution of the reward metric (e.g. received maker fees) in the market to the total of the measured asset recurring transfers support auto dispatch in the following way:
+
+When transferring to a reward account, it is possible to define the reward metric, the reward metric asset, and a subset of markets. If the markets are not defined - it is taken as all the markets that settle in the reward metric asset. At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market (either out of all the markets that settle in the reward metric asset or only the ones in scope of the transfer) to the total reward metric and then distributes the transfer to the corresponding accounts of the markets pro-rata. For example: a transfer is defined as follows:
+
+```
+Reward asset: $VEGA
+Reward metric: taker paid fees
+Reward metric asset: USDT
+Reward markets: [market1, market2, market3]
+
+In market1 200 USDT taker fees were paid
+In market2 600 USDT taker fees were paid
+In market3 1200 USDT taker fees were paid
+In market4 5000 USDT taker fees were paid (note that this market is not defined in the scope of the transfer)
+
+If the transfer amount is 1000 $VEGA, then 
+100 $VEGA would be transferred to the reward account of market1 for $VEGA
+300 $VEGA would be transferred to the reward account of market2 for $VEGA, 
+600 $VEGA would be transferred to the reward account of market3 for $VEGA
+```
+
+NB: if there is no market with contribution to the reward metric - no transfer is made. 
 
 ## Fees
 A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0059-simple-POS-rewards.md).

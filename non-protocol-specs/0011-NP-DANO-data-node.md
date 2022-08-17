@@ -2,7 +2,7 @@
 
 Vega core node (consensus and non-consensus) nodes run the core protocol and only keep information required to do so. 
 
-Users of the protcol often need various data (price history / delegation history / transfers etc.). The core node doesn't store these but only *emits events* when things change.
+Users of the protocol often need various data (price history / delegation history / transfers etc.). The core node doesn't store these but only *emits events* when things change.
 
 The job of the data node is to collect and store the events and make those available. Since storing "everything forever" will take up too much data it must be possible to configure (and change at runtime) what the data node stores and for how long (retention policy). 
 
@@ -20,11 +20,11 @@ It should be possible to configure to store only "current state" and no history 
 
 It should be possible to configure the data node so that all data older than any time period (e.g. `1m`, `1h`, `1h:22m:32s`, `1 months`) is deleted. 
 
-It should be possible to configure the data node so that all data of certain type is deleted upon an event (and configurably with a delay) e.g. event: MarketID `xyz` settled + `1 week`. 
+It should be possible to configure the data node so that all data of certain type is deleted upon an event (and configurable with a delay) e.g. event: MarketID `xyz` settled + `1 week`. 
 
 There will be a "default" configuration for what's considered "minimal useful" data node. 
 
-## Balances and transfers 
+## Balances and transfers
 
 Store all
 ```
@@ -65,7 +65,7 @@ TransferResponse {
 Note that withdrawals and deposits (to / from other chains) are visible from the transfer and balance data. 
 
 
-## Stake / Delegations / Validator Score history 
+## Stake / Delegations / Validator Score history
 
 All changes to staking and delegation must be stored. From this, the state at any time can be provided. 
 
@@ -76,14 +76,14 @@ Validator performance metrics.
 Rewards per epoch per Vega ID (party, epoch, asset, amount, percentage of total, timestamp). 
 
 
-## Governance proposal history 
+## Governance proposal history
 
 All proposals ever submitted + votes (asset, network parameter change, market).
 
 
 ## Trading Related Data
 
-### Market Data 
+### Market Data
 - as [specified in](0021-market-data-spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this. 
 
 ### Market lifecycle events
@@ -134,10 +134,18 @@ Whatever the candle data are, store them at the resolution of every blockchain t
 
 Store the orders at the configured resolution. 
 
-### APIs for historical data in a shape that is suitable for clients 
+### APIs for historical data in a shape that is suitable for clients
 
-It must be possible to augment APIs so data returned is in a shape and size that is approapriate for clients. The exact changes to APIs to be worked out as part of an on going process, and it wont be specified here.
+It must be possible to augment APIs so data returned is in a shape and size that is appropriate for clients. The exact changes to APIs to be worked out as part of an on going process, and it wont be specified here.
 
-### APIs for server side calculations 
+### APIs for server side calculations
 
-It must be possible to add to the data node APIs that return the result of calculations on the data node (in addition ot historical data). These calculations may use historical or real time core data but are not avalilble in the core API as they would hinder performance. e.g. Estimates / Margin / risk caclulations
+It must be possible to add to the data node APIs that return the result of calculations on the data node (in addition ot historical data). These calculations may use historical or real time core data but are not available in the core API as they would hinder performance. e.g. Estimates / Margin / risk calculations
+
+# Acceptance criteria
+1. Market depth state must be processed and built in a timely manner so that the correct real time information is available to the users without unnecessary delays. Using the recommended hardware specs for validators, the data node should be able to handle a continuous order rate of 500 per second without falling behind.
+
+## Data synchronisation
+
+1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0011-NP-DANO-001" href="#0011-NP-DANO-001">0011-NP-DANO-001</a>)
+1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network  (<a name="0011-NP-COSMICELEVATOR-003" href="#0011-NP-COSMICELEVATOR-003">0011-NP-COSMICELEVATOR-003</a>)

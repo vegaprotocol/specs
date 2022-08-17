@@ -67,7 +67,7 @@ and assuring we generate a Ethereum native signature.
 
 ### Vega Key [Identity]
 
-This key is split into master and hot key as specified in [0064-VALK](./0064-VALK-validator_performance_based_rewards.md) . 
+This key is split into master and hot key as specified in [0063-VALK](./0063-VALK-validator_vega_master_keys.md) . 
 
 It is possible to update the hot key at network restarts. The master key can be kept in cold storage
 and only used to sign the update transaction. 

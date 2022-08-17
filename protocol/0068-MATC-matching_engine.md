@@ -34,6 +34,7 @@ Start date: 2021-12-14
        * [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders are placed into the book and no matching takes place. (<a name="0068-MATC-023" href="#0068-MATC-023">0068-MATC-023</a>) 
        * The indicative price and volume values are updated after every change to the order book. (<a name="0068-MATC-024" href="#0068-MATC-024">0068-MATC-024</a>) 
        * [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-025" href="#0068-MATC-025">0068-MATC-025</a>) 
+       * It is possible to [self trade](./0024-OSTA-order_status.md#wash-trading) to uncross an auction. (<a name="0068-MATC-038" href="#0068-MATC-038">0068-MATC-038</a>) 
    * When a [market moves into an auction](./0026-AUCT-auctions.md#upon-entering-auction-mode):
      * All [PEGGED](./0014-ORDT-order_types.md#auction) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-026" href="#0068-MATC-026">0068-MATC-026</a>) 
      * All [GFN](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-027" href="#0068-MATC-027">0068-MATC-027</a>) 

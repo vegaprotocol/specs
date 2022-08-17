@@ -85,7 +85,7 @@ This is primarily for liquidity providers and other sophisticated participants a
 
 ## Out of scope
 
-- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](./0005-NP-LIMN-limited_network_life.md).
+- Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](../protocol/0073-LIMN-limited_network_life.md).
 
 ## Limitations
 
@@ -96,8 +96,8 @@ This is primarily for liquidity providers and other sophisticated participants a
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `governance.proposal.asset.createFrom`       | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which asset creation is allowed.  | 
-| `governance.proposal.market.createFrom`      | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which market creation is allowed.  | 
+| `limits.assets.proposeEnabledFrom`       | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which asset creation is allowed.  | 
+| `limits.markets.proposeEnabledFrom`      | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which market creation is allowed.  | 
 
 
 # Acceptance Criteria

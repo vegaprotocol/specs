@@ -1,8 +1,8 @@
 # Liquidity Provisioning Order Type
 
-## Summary 
+## Summary
 
-When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [Liquidity Provisioning mechanics](./0044-LIQM-lp_mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [Liquidity Provisioning mechanics](./0044-LIME-lp_mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 
 ## Liquidity Provisioning order features
@@ -60,7 +60,7 @@ Input data:
 
 Steps:
 
-1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIQM-lp_mechanics.md).
+1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIME-lp_mechanics.md).
 
 1. Subtract from the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](../protocol/0034-PROB-prob_weighted_liquidity_measure.ipynb)). If you end up with 0 or a negative number, stop, you are done. 
 Note that the book `mid-price` must be used when calculating the probability weighted liquidity measure. 
@@ -89,8 +89,8 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 
 #### Calculating volumes for a set of market making orders (step 6):
 
-From the network parameter `minimum-prob-of-trading-for-LP-orders` and from `best static bid-price` we get `minPrice` from the [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb): the smallest price level that has probability of trading greater than or equal to `minimum-prob-of-trading-for-LP-orders`. 
-Similarly from `best static ask-price` we get `maxPrice`: the largest price level that has probability of trading greater than or equal to `minimum-prob-of-trading-for-LP-orders`. 
+From the network parameter `market.liquidity.minimum.probabilityOfTrading.lpOrders` and from `best static bid-price` we get `minPrice` from the [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb): the smallest price level that has probability of trading greater than or equal to `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
+Similarly from `best static ask-price` we get `maxPrice`: the largest price level that has probability of trading greater than or equal to `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
 Any shape entry with a peg less than `minPrice` should have the resulting volume implied at `minPrice` (instead of what the level the peg would be) while any shape entry with peg greater than `maxPrice` should have the resulting volume implied at `maxPrice`. 
 
 Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb). 
@@ -99,10 +99,12 @@ Note that for volume pegged between best static bid and best static ask the prob
 
 ``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)```. 
 
-where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-LIQM-lp_mechanics.md) and `price` is the price level at which the `volume` will be placed. 
+where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-LIME-lp_mechanics.md) and `price` is the price level at which the `volume` will be placed. 
 At this point `volume` may have decimal places. 
 
 Note: if the resulting price for any of the entries in the buy / sell shape is outside the valid price range as provided by the price monitoring module (the min/max price that would not trigger the price monitoring auction per triggers configured in the market, see [price monitoring](./0032-PRIM-price_monitoring.md#view-from-quanthttpsgithubcomvegaprotocolquant-library-side) spec for details) it should get shifted to the valid price that's furthest away from the mid for the given order-book side.
+
+Note: if the resulting quote price of any of the entries in the buy / sell shape leads to negative product value from the [product quote-to-value function](0051-PROD-product.md#quote-to-value-function) but strictly positive volume then the entire LP order for this LP is undeployed, their stake won't count towards target stake being met and they shall not receive any LP fees regardless of their equity-like-share. This can lead to a [liquidity auction](0035-LIQM-liquidity_monitoring.md) if the supplied stake for the market is below the required level due to this LP. 
 
 Note: calculating the order volumes needs take into account Position Decimal Places and create values (which may be int64s or similar) that are the correct size and precision given the number of Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md). 
 This means that the `integerVolume = ceil(volume x 10^(PDP))`. 
@@ -166,16 +168,16 @@ ________________________
 
 ## Amending the LP order:
 
-Liquidity providers are always allowed to amend their shape generated orders by submitting a new liquidity provider order with a set of revised order shapes (see [Liquidity Provisioning mechanics](./0044-LIQM-lp_mechanics.md)). They are not able to amend orders using "normal" amend orders.
+Liquidity providers are always allowed to amend their shape generated orders by submitting a new liquidity provider order with a set of revised order shapes (see [Liquidity Provisioning mechanics](./0044-LIME-lp_mechanics.md)). They are not able to amend orders using "normal" amend orders.
 
-No cancellation of orders that arise from this LP batch order type other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-LIQM-lp_mechanics.md).
+No cancellation of orders that arise from this LP batch order type other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-LIME-lp_mechanics.md).
 
 Note that any other orders that the LP has on the book (limit orders, other pegged orders) that are *not* part of this LP batch order (call them "normal" in this paragraph) can be cancelled and amended as normal. When volume is removed / added / pegs moved (on "normal" orders) then as part of the normal peg updates the LP batch order may add or remove volume as described in section "How they are constructed for the order book" above.
 
 
 ## Network Parameters:
 * mm-time-horizon: market making time horizon to imply probability of trading.
-* minimum-prob-of-trading-for-LP-orders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the minimum-prob-of-trading-for-LP-orders. Reasonable value `1e-8`. For validation purposes the minimum value is `1e-15` and maximum value is `0.1`. 
+* market.liquidity.minimum.probabilityOfTrading.lpOrders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the `market.liquidity.minimum.probabilityOfTrading.lpOrders`. Reasonable value `1e-8`. For validation purposes the minimum value is `1e-15` and maximum value is `0.1`. 
 
 ## APIs:
 * Order datatype for LP orders. Any order APIs should contain these orders.
@@ -183,6 +185,8 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 ## Acceptance Criteria:
 - [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
 - [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>);
+- Change of the network parameter `market.liquidity.minimum.probabilityOfTrading.lpOrders` will immediately change the minimum probability of trading which affects placement of LP orders. If the parameter has been decreased then any LP order volume that may have been pushed "in" due to the price level having probability of trading smaller than the former value may now be placed at the price level specified by the LP order. 
+If the parameter has been increased then LP order volume that may have been placed at price levels that have lower probability of trading than this value will now be placed at the price corresponding to the new probability of trading.  (<a name="0038-OLIQ-007" href="#0038-OLIQ-007">0038-OLIQ-007</a>)
 
 ### LP commitment order creation
 - [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)

@@ -10,8 +10,11 @@ Markets on Vega are permissionlessly proposed using the [governance mechanism](.
 - whether the market is open for trading
 - status of settlement
 
-Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close). [TODO: check vs governance]
+Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close). 
 
+All markets are proposed without any [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md). 
+If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date. 
+However, the market may stay in an opening auction past the proposed `enactment` date until at least on party makes a liquidity commitment that meets criteria for exiting [liquidity auction](./0035-LIQM-liquidity_monitoring.md).
 
 ## Market lifecycle statuses
 
@@ -43,7 +46,7 @@ All Markets are first [proposed via the governance mechanism](./0028-GOVE-govern
 
 **Entry:**
 
-- Valid [governance proposal](./0028-GOVE-governance.md#1-create-market) submitted and accepted. For the avoidance of doubt, this Proposal must include a (valid) specification of the Market and a Liquidity Commitment for at least the *minimum liquidity commitment (stake)*, which is a per asset Network Parameter.
+- Valid [governance proposal](./0028-GOVE-governance.md#1-create-market) submitted and accepted. 
 
 **Exit:**
 
@@ -55,7 +58,7 @@ All Markets are first [proposed via the governance mechanism](./0028-GOVE-govern
 **Behaviour:**
 
 - Participants can vote for or against the Market Proposal
-- Liquidity Providers can make, change, or exit Liquidity Commitments (proposer cannot exit their liquidity commitment)
+- Liquidity Providers can make, change, or exit Liquidity Commitments 
 - No trading is possible, no orders can be placed (except the buy/sell order shapes that form part of a Liquidity Commitment)
 - No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
 
@@ -75,14 +78,14 @@ When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-
 
 **Behaviour:**
 
-- Nothing can happen to the market with this status - it does not exist (Vega core has no need to keep any information about this market proposal). Any collateral locked to liquidity commitments is returned.
+- Nothing can happen to the market with this status - it does not exist (Vega core has no need to keep any information about this market proposal). Any collateral locked to liquidity commitments is returned to the general account of the party that submitted the liquidity commitment.
 
 
 ### Pending
 
 When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal. 
 
-Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. In reasonably near future there will be automated market creation e.g. for a series of markets that is voted on once, market creation from an data source (oracle), etc. so market creation and the market lifecycle should be implemented independently of the governance framework and the lifecycle of a proposal. 
+Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. In reasonably near future there will be automated market creation e.g. for a series of markets that is voted on once, market creation from a data source (oracle), etc. so market creation and the market lifecycle should be implemented independently of the governance framework and the lifecycle of a proposal. 
 
 **Entry:**
 
@@ -99,7 +102,7 @@ Note: this state represents any market that will be created, which currently mea
 
 **Behaviour:**
 
-- Liquidity providers can make, change, or exit commitments (proposer cannot exit their liquidity commitment)
+- Liquidity providers can make, change, or exit commitments 
 - Auction orders are accepted as per [any regular auction period](./0026-AUCT-auctions.md).
 - Margins on orders as per auction margin instructions in [margin calculator spec](./0019-MCAL-margin_calculator.md).
 
@@ -146,9 +149,9 @@ Once the enactment date is reached and the other conditions specified to exit th
 
 **Behaviour:**
 
-- Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-LIQM-lp_mechanics.md). Market Proposer is not committed to continue to provide a commitment as long as the reduction meets other conditions to reduce/exit Liquidity Commitments.
+- Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-LIME-lp_mechanics.md). 
 - Orders can be placed into the market, trading occurs according to normal trading mode rules
-- Market data are emitted
+- Market data is emitted
 - Positions and margins are managed as per the specs
 
 
@@ -170,7 +173,7 @@ Suspension currently always operates as an auction call period. Depending on the
 
 **Behaviour:**
 
-- Liquidity providers can make, change, or exit commitments. Market Proposer is not committed to provide at least the *market proposer minimum stake* as long as the reduction meets other conditions to reduce/exit Liquidity Commitments.
+- Liquidity providers can make, change, or exit commitments. 
 - Auction orders are accepted as per [any regular auction period](./0026-AUCT-auctions.md).
 - Margins on orders as per auction based instructions in [margin calculator spec](./0019-MCAL-margin_calculator.md).
 
@@ -194,9 +197,9 @@ No exit. This is a terminal state.
 
 ### Trading Terminated
 
-A market may terminate trading if the instrument is one that expires or if the market is otherwise configured to have a finite lifetime. In the case of futures, termination occurs at some point prior to, or at, the settlement of the product. Markets in this state accept no trading but retain the positions and margin balances that were in place after processing the expiry trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
+A market may terminate trading if the instrument is one that expires or if the market is otherwise configured to have a finite lifetime. In the case of futures, termination occurs at some point prior to, or at, the settlement of the product. Markets in this state accept no trading, but retain the positions and margin balances that were in place after processing the expiry trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
 
-A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading terminating, though usually there will be a delay, for instance to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
+A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading termination, though usually there will be a delay, for instance, to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
 
 **Entry:**
 
@@ -209,7 +212,7 @@ A market moves from this termination state to Settled when enough information ex
 **Behaviour:**
 
 - No trading occurs, no orders are accepted
-- Mark to market settlement is performed if required after termination is triggered then never again
+- Mark to market settlement is performed, if required, after termination is triggered, then never again
 - A single set of market data may be emitted for the final settlement data (e.g. settlement mark price), after which no market data are emitted.
 - During the transition out of this state:
   - All final settlement cashflows are calculated and applied (settled) 
@@ -220,7 +223,7 @@ A market moves from this termination state to Settled when enough information ex
 
 ### Settled
 
-Once the required data to calculate the settlement cashflows is provided by oracle input for an market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). 
+Once the required data to calculate the settlement cashflows is provided by oracle input for a market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). 
 The positions are then closed and all orders cleared. 
 All money held in margin accounts after final settlement is returned to traders' general accounts. 
 [Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset. 

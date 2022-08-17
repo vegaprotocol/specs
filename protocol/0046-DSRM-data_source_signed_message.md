@@ -1,8 +1,8 @@
 # [Data Source](./0045-DSRC-data_sourcing.md): Signed message
 
-Signed message data sources are the first external data source to be support by Vega. See the [Data Sourcing spec](./0045-DSRC-data_sourcing.md) for more information on data sources in general and the data source framework.
+Signed messages are the first type of data from external data sources to be supported by Vega. See the [Data Sourcing spec](./0045-DSRC-data_sourcing.md) for more information on data sources in general and the data source framework.
 
-Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by a set of public keys provided as part of the data source definition. Note the data supplied by the data source can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
+Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by a set of public keys provided as part of the _data source definition_. Note the data supplied by the data source can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
 
 This spec adds:
 - a transaction that allows arbitrary signed data to be submitted to the Vega blockchain (creating a stream of data that can be matched against a data source definition or discarded if not matched)
@@ -19,14 +19,14 @@ Note: With this type of oracle there’s no incentive in the Vega data source sy
 
 ## Defining the data source
 
-### Parameters 
+### Parameters
 
 A data source must define:
 
-- Public keys (and key algorithm to be used if required) that can sign and submit values for this oracle
+- Public keys (and key algorithm to be used if required) that can sign and submit values for this (external) source
 - Type of data to be supplied in the transaction. Initially we should support the following types:
-    - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main oracle spec (keys are strings) 
-    - ABI encoded encoded data. Specifically, we want to be able to support at least the OpenOracle standard by this method 
+    - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main data source spec (keys are strings)
+    - ABI encoded encoded data. Specifically for oracles, we want to be able to support at least the OpenOracle standard by this method
 
 Note: that as a public key may provide many messages, a [filter](./0047-DSRF-data_source_filter.md) is likely to be needed to extract the required message, and a field select would be used to extract the required field ('price' or 'temperature', etc.)
 
@@ -109,12 +109,12 @@ Where possible, this should be done before the transaction is included in a bloc
     1. Contain correctly signed data from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)
     1. Invalid `SubmitData` transactions must be rejected.  (<a name="0046-DSRM-011" href="#0046-DSRM-011">0046-DSRM-011</a>)
 1. Must work with Coinbase oracle  (<a name="0046-DSRM-012" href="#0046-DSRM-012">0046-DSRM-012</a>)
-1. Reject any data source tx that is not explicitly required, so this would include a tx:
+1. Ignore any data source tx that is not explicitly required, so this would include a tx:
     - For a pubkey never used in a data source  (<a name="0046-DSRM-013" href="#0046-DSRM-013">0046-DSRM-013</a>)
-    - For a data source where a filter rejects the message based on its contents  (<a name="0046-DSRM-014" href="#0046-DSRM-014">0046-DSRM-014</a>)
+    - For a data source where a filter ignores the message based on its contents  (<a name="0046-DSRM-014" href="#0046-DSRM-014">0046-DSRM-014</a>)
     - For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal (<a name="0046-DSRM-015" href="#0046-DSRM-015">0046-DSRM-015</a>)
-1. Reject any SubmitData tx that is a duplicate (i.e. contains exactly the same data payload and is for the same data source), even if it is signed by a different signer (assuming the source has multiple configured signers) or was submitted by a different Vega key. (<a name="0046-DSRM-016" href="#0046-DSRM-016">0046-DSRM-016</a>)
-
+1. Ignore any SubmitData tx that is a duplicate (i.e. contains exactly the same data payload and is for the same data source), even if it is signed by a different signer (assuming the source has multiple configured signers) or was submitted by a different Vega key. (<a name="0046-DSRM-016" href="#0046-DSRM-016">0046-DSRM-016</a>)
+1. Messages are accepted that contain the data and the signature (conforming to the Open Oracle specification) Note: do not support (or need to) direct connections to REST APIs, Ethereum smart contracts, etc. conforming to the open oracle spec. (<a name="0046-DSRM-017" href="#0046-DSRM-017">0046-DSRM-017</a>)
 
 ## Notes
 
