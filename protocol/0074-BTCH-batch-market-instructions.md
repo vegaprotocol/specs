@@ -43,6 +43,8 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 ## Processing a batch
 
+1. A batch is considered a single transaction, with a single transaction ID and a single timestamp applying to all instructions within it. Each instruction should be given a sub-identifier and index allowing it to be placed sequentially in the transaction (e.g. by consumers of the event stream). These identifiers must be sufficient for a user to determine which instruction within a batch any result (order updates, trades, errors, etc.) relates to.
+
 1. The batches must be processed in the order **all cancellations, then all amendments, then all submissions**. This is to prevent gaming the system, and to prevent any order being modified by more than one action in the batch.
 
 1. When processing each list, the instructions within the list must be processed in the order they appear in the list (i.e. in the order prescribed by the submitter). (Notwithstanding that each list is processed in its entirety before moving onto the next list, in the order specified above). 
@@ -58,9 +60,18 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 ## Auction behaviour
 
-1. If processing an instruction would cause the end of an Opening auction, the auction must be ended and the uncrossing must occur immediately as it would if the instruction was processed as a standalone transaction.
+1. Processing each instruction within a batch must behave the same way regarding auction triggers as if it were a standalone transaction: 
 
-1. If processing an instruction would cause entry into a Price Monitoring auction, the auction must be entered immediately as it would be if the instruction was processed as a standalone transaction.
+   - Entry to or exit from auctions must happen immediately **before continuing processing the rest of the batch** if that is what would happen were the transactions in the batch submitted individually outside of a batch.
+
+   - Under some cirucmstances many or all of the remaining instructons in the batch may fail validation / not be accepted or may behave differently when processed. 
+   This is normal and expected, and handling such failures is covered in the section "Processing a batch", above.
+
+   - Triggers, etc. that are only evaluated after some other condition is met, such as the completion of processing for all concurrently delivered  transactions with the same timestamp, should continue to obey these rules.
+   That is, the evaluation of such triggers should not occur part way through processing a batch, which is considered to be a single transaction, with a single timestamp.
+
+1. The batch is still treated as a single transaction and executed atomically, regardless of state changes such as entering an auction.
+After entering or exiting an auction mid-batch, the full batch must be processed as described above, even if every remaining instruction fails validation, before processing any other transactions.
 
 
 # Acceptance criteria
