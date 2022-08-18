@@ -29,7 +29,7 @@ This is set per-market and represent the "price" of an asset. It can have a 1-1 
 
 The is set per Asset and represents the amount of an asset that is held in the bridge. 
 
-`Asset.decimals` tells us where to put the decimal place. Ethereum assets often have 18 decimal places, but can have less. Forms where you deposit, withdraw or transfer assets must show all decimal places. It may be appropriate to truncate at a certain number of DP in many cases (e.g. 0.01 instead of 0.012345678912345678` event though `0.001 wBTC` may be worth as much as than `0.01 ETH`). At the moment Vega does not have a source of information that allows conversion of currencies or way of knowing that the significant value of an asset is.
+`Asset.decimals` tells us where to put the decimal place. Ethereum assets often have 18 decimal places, but can have less. Forms where you deposit, withdraw or transfer assets must show all decimal places. It may be appropriate to truncate at a certain number of DP in many cases (e.g. 0.01 instead of `0.012345678912345678` event though `0.001 wBTC` may be worth as much as than `0.01 ETH`). At the moment Vega does not have a source of information that allows conversion of currencies or way of knowing that the significant value of an asset is.
 
 ## Market
 
@@ -42,7 +42,7 @@ Markets can have several statuses and it may be sensible when listing markets to
 > aka Party
 
 When looking at a public key it is important that the user can get the full public key but it is often appropriate just to show an abbreviated form. The first 6 and last 6 characters are preferable, with an indication that it is truncated e.g. `56d1e6739deac3c5c1ddc6fee876b3217e504a161b5b00fda96b40ed3e8f89b8` as `56d1e6...8f89b8` or just `8f89b8` if enough of a convention has been established. In cases where the key being shows comes from your connected wallet it should also show the name (aka alias) of the key. 
-Vega public keys are Hexidecimal, but the convention is to display them without the receding `0x` as this is what the Vega APi returns.
+Vega public keys are hexadecimal, but the convention is to display them without the receding `0x` as this is what the Vega APi returns.
 
 ## Transaction hash
 
