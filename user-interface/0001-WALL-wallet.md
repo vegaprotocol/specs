@@ -58,7 +58,7 @@ When a dapp requests use of a wallet, I...
   - `TODO:` **must** be able to select specific [keys](7001-DATA-data_display.md#public-keys)<!-- <a name="0001-WALL-020" href="#0001-WALL-020">0001-WALL-020</a> -->
   - `TODO` tainted keys **must** be shown as tainted <a name="0001-WALL-021" href="#0001-WALL-021">0001-WALL-021</a>
   - `TODO` tainted keys **must** not be selectable <a name="0001-WALL-073" href="#0001-WALL-073">0001-WALL-073</a>**
-- **must** enter wallet passphrase before wallet details are shared <a name="0001-WALL-022" href="#0001-WALL-022">0001-WALL-022</a>
+- **must** enter wallet passphrase before wallet details are shared (assuming a password has not recently been entered)<a name="0001-WALL-022" href="#0001-WALL-022">0001-WALL-022</a>
 - **must** be able to retrospectively revoke Dapp's access to a Wallet <a name="0001-WALL-023" href="#0001-WALL-023">0001-WALL-023</a>
 - **must** be able to retrospectively revoke Dapp's access particular keys in a wallet <a name="0001-WALL-072" href="#0001-WALL-072">0001-WALL-072</a>
 
