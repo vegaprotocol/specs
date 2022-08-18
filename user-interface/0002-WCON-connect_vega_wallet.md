@@ -70,6 +70,7 @@ when looking to do something with a specific key (or set of keys) from my wallet
   - **could** see the total asset balances (including associated) <a name="0002-WCON-032" href="#0002-WCON-032">0002-WCON-032</a>
   - **would like to see** a breakdown of the accounts. See [collateral / accounts](6001-COLL-collateral.md) <!--<a name="0002-WCON-033" href="#0002-WCON-033">0002-WCON-033</a>-->
   - **would like to** see any active orders or positions. See [collateral / accounts](6001-COLL-collateral.md) <!--<a name="0002-WCON-034" href="#0002-WCON-034">0002-WCON-034</a>-->
+  - **would like to** see my nominations to validators for associated tokens <!--<a name="0002-WCON-038" href="#0002-WCON-038">0002-WCON-038</a>-->
 
 - **must** see the option to trigger a re-authenticate so I can use newly created keys <a name="0002-WCON-035" href="#0002-WCON-035">0002-WCON-035</a>
 
