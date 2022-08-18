@@ -75,7 +75,7 @@ When the `market creation metric` for a party is `>0` and the reward account bal
 - A flag is added for each of the recorded `funders` of the reward account paired with the market and reward asset.
 This flag is used to prevent a recurring transfer from funding a creation reward in the same asset more than once.
 See the [transfers](./0057-TRAN-transfers.md) spec.
-- The list of funders for the reward account is cleared after the account is emptied (i.e. after one or more parties are rewarded for market creation)
+- The list of funders for the reward account is cleared after the account is emptied (i.e. after one or more parties are rewarded for market creation).
 
 Market creation reward metrics (both each market's `cumulative volume` and the `payout record flags` to identify [market, payout asset, funder] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
 
