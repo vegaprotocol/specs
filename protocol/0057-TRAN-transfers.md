@@ -9,38 +9,51 @@ Allowing users to initiate transfers allows for the following capabilities:
 - A user can transfer funds from and to a locked account used for staking (yet to be specified) [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md).
 - A user can set up recurring transfer. 
 
+
 ## Limits
+
 Transfer can only be initiated by a party using their own funds from [accounts](./0013-accounts.md) that they are in control of:
 
 Here's the list of accounts types from which a user send funds from:
+
 - [GENERAL](0013-ACCT-accounts.md)
 - [LOCKED_FOR_STAKING](./0059-simple-staking-and-delegating.md)
 
 Here's the list of accounts types into which funds can be sent:
+
 - [GENERAL](0013-ACCT-accounts.md)
 - [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md)
 - [REWARD_POOL](0056-REWA-rewards_overview.md#rewards-accounts)
 - [ON_CHAIN_TREASURY](0055-TREA-on_chain_treasury.md#network-treasury)
 
+
 ## Delayed transfer
+
 The system should be able to delay transfer. Such feature would be useful in the context of distributing token related to incentives for example.
 In order to do this the request for transfer should contain a field indicating when the destination account should be credited. The funds should be taken straight away from the origin account, but distributed to the destination only once the time is reached.
 
+
 ## Spam protection
+
 In order to prevent the abuse of user-initiated transfers as spam attack there will be:
 - `spam.protection.maxUserTransfersPerEpoch` that will limit the number of transfers that a user can initiate within an epoch, see [network parameter](#network-parameters). 
 
+
 ## Minimum transfer amount
+
 This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-asset-framework.md)).
 The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`. 
 
+
 ## Recurring transfers
+
 A party can also setup recurring transfers which will happen at the end of every epoch. These transfers will happen at the end of the epoch, and before the next one can happen.
 A party is limited to a maximum of 1 running recurring transfer to between two given accounts. 
 E.g: say we have accounts A1, A2, A3 and party1 which controls A1. 
 Party1 can have a recurring transfer rt1 from A1 to A2 and another one (call it rt2) from A1 to A3. However it is not allowed to set up a recurring transfer rt3 from A1 to A2 with different amounts. 
 
 A recurring transfers needs to contain these specific informations:
+
 - start amount uint specifying the amount (interpreted according to the number of decimals specified by the [asset](0040-asset-framework.md)).
 - start epoch: at the end of this epoch the first recurring transfer will be made between
 - end epoch (optional): at the end of this epoch the first recurring transfer will be made between, optional. If not specified the transfer run until cancelled.
@@ -50,6 +63,7 @@ It's possible to cancel a recurring transfer.
 It's not possible to amend a transfer, a party will need to cancel the transfer and submit a new one in this case.
 
 The amount paid at the end of each epoch is calculated using the following formula:
+
 ```
 amount = start amount x factor ^ (current epoch - start epoch)
 ``` 
@@ -58,10 +72,25 @@ If not enough funds are present in the source account at the time a transfer is 
 
 If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` then the recurring transfer is cancelled. 
 
+
 ## Recurring transfers to reward accounts
+
+Read this section alongside the [rewards](./0056-REWA-rewards_overview.md) specification.
+
 To be able to dispatch rewards to reward pools of the given markets pro-rata to the contribution of the reward metric (e.g. received maker fees) in the market to the total of the measured asset recurring transfers support auto dispatch in the following way:
 
-When transferring to a reward account, it is possible to define the reward metric, the reward metric asset, and a subset of markets. If the markets are not defined - it is taken as all the markets that settle in the reward metric asset. At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market (either out of all the markets that settle in the reward metric asset or only the ones in scope of the transfer) to the total reward metric and then distributes the transfer to the corresponding accounts of the markets pro-rata. For example: a transfer is defined as follows:
+When transferring to a reward account, it is possible to define the reward metric, the reward metric asset, and a subset of reward markets. If the reward markets are not defined - it is taken as all the markets that settle in the reward metric asset. 
+
+At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market (either out of all the markets that settle in the reward metric asset or only the ones in scope of the transfer) to the total reward metric and then distributes the transfer to the corresponding accounts of the markets pro-rata. 
+
+Where the reward metric type is "market creation rewards", it is important that no market creator will receivemore than one market creation reward paid in the same asset from the same source account (reward funder). 
+Therefore: 
+
+- A list of [market, source account, reward asset] combinations that have already been rewarded is maintained.
+- Any markets in the "reward markets" list that are also in the above list as having been rewarded with funds paid in the same reward asset and transferred to the reward account from the same source account **are removed from the reward markets list**.
+
+
+For example, a transfer is defined as follows:
 
 ```
 Reward asset: $VEGA
@@ -82,7 +111,9 @@ If the transfer amount is 1000 $VEGA, then
 
 NB: if there is no market with contribution to the reward metric - no transfer is made. 
 
+
 ## Fees
+
 A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0059-simple-POS-rewards.md).
 
 The fee is set by the `transfer.fee.factor` [network parameter](#network-parameter) that defines the proportion of each transfer taken as a fee. 
@@ -90,8 +121,11 @@ The fee is taken from the transfer initiator's account immediately on execution,
 It is [paid in to the infrastructure fee pool](./0029-fees.md#collecting-and-distributing-fees). 
 Fees are charged in the asset that is being transferred.
 
+
 ## Proposed command
+
 This new functionality requires the introduction of a new command in the transaction API. The payload is as follows:
+
 ```
 message Transfer {
   // The account type from which the funds of the party
@@ -138,16 +172,20 @@ message CancelTransfer {
 }
 ```
 
+
 ## Network Parameters
-| Property                                     | Type             | Example value | Description                                      |
-|----------------------------------------------|------------------| --------------|--------------------------------------------------|
-| `spam.protection.maxUserTransfersPerEpoch`   | String (integer) |  `"20"`       | The most transfers a use can initiate per minute |
-| `transfer.minTransferQuantumMultiple`        | String (integer) |  `"0.1"`      | The most transfers a use can initiate per minute |
-| `transfer.fee.factor`                        | String (decimal) |  `"0.001"`    | The percentage of the transfer charged as a fee  |
+
+| Property                                   | Type             | Example value | Description                                      |
+| ------------------------------------------ | ---------------- | ------------- | ------------------------------------------------ |
+| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | `"20"`        | The most transfers a use can initiate per minute |
+| `transfer.minTransferQuantumMultiple`      | String (integer) | `"0.1"`       | The most transfers a use can initiate per minute |
+| `transfer.fee.factor`                      | String (decimal) | `"0.001"`     | The percentage of the transfer charged as a fee  |
 
 
 ## Acceptance criteria
+
 ### One off transfers
+
 - As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
 
 - As a user I can transfer funds from a general account I control to reward account.  Such transfer can be immediate or delayed. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
@@ -174,7 +212,9 @@ message CancelTransfer {
 
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
 
+
 ### Recurring transfers
+
 As a user I can create a recurring transfer _which expires after a specified epoch_ (<a name="0057-TRAN-050" href="#0057-TRAN-050">0057-TRAN-050</a>)
   - [ ] I specify a start and end epoch, and a factor of `1`, start epoch in the future, until the start epoch is reached no transfers are executed.
   - [ ] Once I reach the start epoch, the first transfer happens.

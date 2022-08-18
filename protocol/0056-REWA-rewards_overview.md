@@ -15,54 +15,81 @@ Note that validator rewards (and the reward account for those) is covered in [va
 
 The parameter `rewards.marketCreationQuantumMultiple` will be used together with [quantum](0040-ASSF-asset_framework.md) to asses market size when deciding whether a market qualifies for the payment of market creation rewards. 
 It is reasonable to assume that `quantum` will be set to a value around `1 USD` (though there will likely be quite significant variation from this for assets that are not well correlated with USD).
-Therefore, for example, to reward futures markets with traded notional over 1 mil USD, then this parameter should be set to around `1000000`. Any decimal value strictly greater than `0` is valid. 
+Therefore, for example, to reward futures markets when they reach a lifetime traded notional over 1 mil USD, then this parameter should be set to around `1000000`. Any decimal value strictly greater than `0` is valid. 
+
+
+## Reward process high level
+
+At a high level, rewards work as follows:
+
+- Reward metrics are calculated for each combination of [reward type, party, market].
+ The calculation used for the reward metric is specific to each reward type.
+-  A transfer is made to the reward account(s) for a specific reward type, for one or more markets. This is either a one-off transfer for a single market, or a recurring transfer for one, several, or all markets. (See [transfers](./0057-TRAN-transfers.md).)
+- At the end of the epoch, the entire balance of each reward account is distributed to the parties with a non-zero reward metric pro-rata by their reward metric.
+If the sum of all reward metrics is zero, the balance rolls over to the next epoch.
 
 
 ## Reward metrics
 
-For reward metrics we define a *market scope* as either:
-- a set comprising one or more markets (by ID); or
-- all markets sharing the same settlement asset, including markets proposed and created in future (as long as they exist by the time the applicable reward is paid out).
-
-Reward metrics are scoped by *market scope*, which for all scopes is guaranteed to be a superset of the value of the metric for one or more individual markets (i.e. a party's metrics for the individual markets comprising a scope may be summed to obtain the same party's metric for the scope).
-
-With the exception of the market creation reward metrics, reward metrics are reset at the end of each epoch.
-
-Reward metrics and payouts will be calculated at the end of every epoch for each [party, *market scope*] combination, where:
-- the party has accrued a reward metric `>0` for the *market scope*
-- there are non-zero rewards in the reward account for the *market scope* to be paid in at least one asset.
-
-Reward metrics in [LNL checkpoints](./0073-LIMN-limited_network_life.md):
-- Market activity reward metrics are not stored in LNL checkpoints and are reset after a checkpoint restart.
-- Market creation reward metrics (both each market's `cumulative volume` and the flags to identify when a market has already been rewarded for a given [*market scope*, payout asset] combination) are stored in LNL checkpointd and will be restored after a checkpoint restart.
+Reward metrics are scoped by [reward type, market, party] (this triplet can be thought of as a primary key for reward metrics).
+Therefore a party may be in scope for the same reward type multiple times but no more than once per market.
+Metrics will be calculated at the end of every epoch, for every eligible party, in each market for each reward type.
+Metrics only need to be calculated where the [market, reward type] reward account has a non-zero balance of at least one asset. 
 
 
 ### Market activity (fee based) reward metrics
 
-There will be the following market activity reward metrics calculated based on fees (as a proxy for activity):
-1. Sum of maker fees paid 
-1. Sum of maker fees received
-1. Sum of LP fees received
+There will be three market activity reward metrics calculated based on fees (as a proxy for activity). 
+Each of these represents a reward type with its own segregated reward accounts for each market.
+
+1. Sum of maker fees paid by the party on the market this epoch
+1. Sum of maker fees received by the party on the market this epoch
+1. Sum of LP fees received by the party on the market this epoch
+
+Theese metrics apply only to the sum of fees for the epoch in question.
+That is, the metrics are reset to zero for all parties at the end of the epoch.
+If the reward account balance is 0 at the end of the epoch for a given market, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
+
+Market activity (fee based) reward metrics are not stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are reset after a checkpoint restart.
 
 
 ### Market creation reward metrics
 
-There will be the following market creation reward metric calculated to reward creation of markets achieving at least a minimum lifetime trading volume, as a proxy for identifying the creation of useful markets:
-1. Where `cumulative volume` is defined as the cumulative total [trade value for fee purposes](0029-FEES-fees.md) generated by the market since its creation:
-   - **IF** `cumulative volume < rewards.marketCreationQuantumMultiple * quantum` (where `rewards.marketCreationQuantumMultiple` is a network parameter, and [quantum is described here](0040-ASSF-asset_framework.md)) **THEN** `market creation metric := 0`
-   - **ELSE IF** any non-zero market creation reward has previously been paid out for this [*market scope*, payout asset] combination **THEN** `market creation metric := 0`
-   - **ELSE** `market creation metric := cumulative volume`
+There will be a single creation reward metricand reward tyype. 
+This makes it possible to reward creation of markets achieving at least a minimum lifetime trading volume, as a proxy for identifying the creation of useful markets:
+
+Where:
+
+- there is a single eligible party for each market, which is the party that created the market by submitting the original new market governance proposal (**all other parties** have market creation metric = 0)
+- `cumulative volume` is defined as the cumulative total [trade value for fee purposes](0029-FEES-fees.md)
+- `rewards.marketCreationQuantumMultiple` is a network parameter described above
+-  `quantum` is an asset level field described in the [asset framework](0040-ASSF-asset_framework.md)
+
+The reward metric for the single *market creator* party is as follows:
+
+- **IF** `cumulative volume < rewards.marketCreationQuantumMultiple * quantum` **THEN** `market creation metric := 0`
+- **ELSE** `market creation metric := 1` (NB: this is 1 as market creation rewards are paid equally to all qualifying creators for *reaching* the volume threshold, not pro-rata based on cumulative volume)
+
+When the `market creation metric` for a party is `>0` and the reward account balance for a specific reward asset is also `>0` (i.e. when a creator is rewarded):
+
+- A flag is added for each of the recorded `funders` of the reward account paired with the market and reward asset.
+This flag is used to prevent a recurring transfer from funding a creation reward in the same asset more than once.
+See the [transfers](./0057-TRAN-transfers.md) spec.
+- The list of funders for the reward account is cleared after the account is emptied (i.e. after one or more parties are rewarded for market creation)
+
+Market creation reward metrics (both each market's `cumulative volume` and the `payout record flags` to identify [market, payout asset, funder] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
+
 
 
 ## Reward accounts
 
-Trading reward accounts are defined by the payment asset (the asset in which the reward is paid out), the *market scope*, and the reward type (metric). That is, there can be multiple rewards with the same type paid in different assets for the same *market scope*.
-Similarly, their may be separate reward accounts for the same payment asset for different *market scopes*, including where some markets may appear in two or more of these *market scopes*, and thus receive payouts in the same payout asset from multiple reward accounts.
+Trading reward accounts are defined by the reward asset (the asset in which the reward is paid out), the market, and the reward type (metric). 
+That is, there can be multiple rewards with the same type paid in different assets for the same market.
 
-It must be possible for any party to run a one off [transfer](0057-TRAN-transfers.md) or create a [recurring transfer](0057-TRAN-transfers.md) to any of these reward accounts. 
-
-Note that the market settlement asset has nothing to do in particular with the asset used to pay out a reward for the market for any of the relevant trading rewards. 
+Note that the market settlement asset has nothing to do in particular with the asset used to pay out a reward for a market. 
 That is, a participant might recieve rewards in the settlement asset of the market, in VEGA governance tokens, and in any number of other unrelated tokens (perhaps governance of "loyalty"/reward tokens issued by LPs or market creators, or stablecoins like DAI).
+
+Reward accounts can be individually funded by normal single transfers. They can also be funded on an ongoing (recurring) basis in groups, pro-rata by their relative total reward metrics for the given reward type. See [transfers](./0057-TRAN-transfers.md).
 
 Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for accross a restart.
 
@@ -73,47 +100,20 @@ All rewards are paid out at the end of any epoch *after* [recurring transfers](0
 The entire reward account balance is paid out every epoch unless the total value of the metric over all parties is zero (there are no fractional payouts). 
 There are no payout delays, rewards are paid out instantly at epoch end.
 
+Rewards will be distributed pro-rata by the party's reward metric value to all parties that have metric values `>0`. That is, if we have reward account balance `R` and parties `p_1 – p_n` with non-zero metrics on the market in question:
 
-### For fee based metrics
-
-Every epoch the entire reward account for every [*market scope*, metric type, payout asset] will be distributed pro-rata by the party's metric value to the parties that have metric values `>0`. 
-
-That is if we have reward account balance `R` and parties `p_1 – p_n` eligible for the metric and the *market scope* in question:
 ```
 [p_1,m_1]
 [p_2,m_2]
 ...
 [p_n,m_n]
 ```
-then calculate `M:= m_1+m_2+...+m_n` and transfer `R x m_i / M` to party `p_i` at the end of each epoch. 
+
+Then calculate `M:= m_1+m_2+...+m_n` and transfer `R x m_i / M` to party `p_i` (for each `p_i`) at the end of the epoch.
+
 If `M = 0` (no-one incurred or received fees as specified by the metric type for a given *market scope*) then nothing is paid out of the reward account for that *market scope* and the balance rolls into next epoch. 
 
-Metrics are reset to zero for all parties at the end of the epoch.
-In the case where the reward account balance for a given payout asset is 0 at the end of the epoch for a given *market scope*, the participants contributing to the relevant metric will not be compensated in that payout asset for their contribution during that epoch. 
-Their contribution to fees is not being carried over to the next epoch.
-If there is no reward account balance for any payout asset for a given metric and market (i.e. the market does not appear in any *market scopes* with a non-zero reward account balance) then participants in that market will receive no rewards at all for their contributions to the metric in question.
-
-Metrics will be calculated using the [decimal precision of the settlement asset](0070-MKTD-market-decimal-places.md).
-
-
-### For market creation metrics
-
-Every epoch the entire reward account for every [*market scope*, payout asset] will be distributed to the parties that submitted the original market creation governance proposal for any markets that have the market creation metric (described above) `>0`. 
-The payout for each market having a non-zero market creation metric will be the same, that is, the eligible markets share the reward account balance equally. 
-This means that the total market creation reward received by a party can vary, as their reward may reflect having created multiple eligible markets, each of which earns the same payout.
-
-That is, if we have:
-- reward account balance: `R` of some asset
-- number of markets with a non-zero market creation metric: `n`
-- parties `p_1 … p_n` being the creators of the markets with non-zero market creation metrics, where the creator is defined as the party that submitted the original market proposal that was enacted to create the market
-
-If `n > 0` then transfer `R / n` to each party `p_i` (`i` from `1 to n`) identified above. 
-If `n = 0` (i.e. no markets newly met or exceeded the reward threshold since the last payout) then nothing is paid out of the reward account and the balance rolls into next epoch. 
-
-Market creation metrics are **not reset** at the end of the epoch or during network restarts (including from LNL checkpoints), so the cumulative volume for each market continues to accrue across epochs and is always equal to the total trade value for fee purposes since the creation of the market.
-Tracking of which markets have received market creation rewards for each [*market scope*, payout asset] combination is **not reset** at the end of the epoch or during netowrk restarts (including from LNL checkpoints), so each market proposal can only ever generate a single reward payout for any given [*market scope*, payout asset combination].
-
-Metrics will be calculated using the [decimal precision of the settlement asset](0070-MKTD-market-decimal-places.md).
+Rewards will be calculated using the [decimal precision of the settlement asset](0070-MKTD-market-decimal-places.md).
 
 
 ## Acceptance criteria
