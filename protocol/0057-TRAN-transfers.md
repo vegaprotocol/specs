@@ -83,11 +83,13 @@ When transferring to a reward account, it is possible to define the reward metri
 
 At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market (either out of all the markets that settle in the reward metric asset or only the ones in scope of the transfer) to the total reward metric and then distributes the transfer to the corresponding accounts of the markets pro-rata. 
 
-Where the reward metric type is "market creation rewards", it is important that no market creator will receivemore than one market creation reward paid in the same asset from the same source account (reward funder). 
+Where the reward metric type is "market creation rewards", it is important that no market creator will receive more than one market creation reward paid in the same asset from the same source account (reward funder). 
 Therefore: 
 
 - A list of [market, source account, reward asset] combinations that have already been rewarded is maintained.
 - Any markets in the "reward markets" list that are also in the above list as having been rewarded with funds paid in the same reward asset and transferred to the reward account from the same source account **are removed from the reward markets list**.
+- A list of funders is maintained for all reward accounts with a non-zero balance to ensure the list above can be updated when a reward is paid.
+This list is cleared once at least one reward is paid and the balance again reaches zero.
 
 
 For example, a transfer is defined as follows:
