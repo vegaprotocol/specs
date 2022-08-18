@@ -107,7 +107,7 @@ That is, if we have:
 - number of markets with a non-zero market creation metric: `n`
 - parties `p_1 … p_n` being the creators of the markets with non-zero market creation metrics, where the creator is defined as the party that submitted the original market proposal that was enacted to create the market
 
-Then transfer `R / M` to each party `p_i` (`i` from `1 to n`) identified above. 
+If `n > 0` then transfer `R / n` to each party `p_i` (`i` from `1 to n`) identified above. 
 If `n = 0` (i.e. no markets newly met or exceeded the reward threshold since the last payout) then nothing is paid out of the reward account and the balance rolls into next epoch. 
 
 Market creation metrics are **not reset** at the end of the epoch or during network restarts (including from LNL checkpoints), so the cumulative volume for each market continues to accrue across epochs and is always equal to the total trade value for fee purposes since the creation of the market.
