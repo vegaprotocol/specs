@@ -21,7 +21,6 @@ This is set per-market and represent the "price" of an asset. It can have a 1-1 
 
 `Market...quoteName` is used to tell us what to display next to the quote price. For example the `quoteName` could be `USD` but the settlement asset = `DAI`. The Market framework allows for other types of quote (e.g. %, cm and ETC). When looking at a single market it may not be necessary to show the quote name each time you show the price.
 
-`Market....tickSize` tells us the steps between quote prices.
 
 ## Asset balances
 
