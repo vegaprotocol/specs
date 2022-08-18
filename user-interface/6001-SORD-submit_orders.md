@@ -91,7 +91,10 @@ When populating a deal ticket I...
 ... based on the current inputs I'd like an indication of the consequences of my order based on my position and the state of the market, I...
 
 - **could** see my resulting open volume <a name="6001-SORD-032" href="#6001-SORD-032">6001-SORD-032</a>
-- **could** see new volume weighted average entry price <a name="6001-SORD-033" href="#6001-SORD-033">6001-SORD-033</a>
+- **could** see the amount this order might move the market in percentage terms
+- **could** see what the new best prices of the market would be after placing this order (assuming my order moves the market)
+- **could** see new volume weighted average entry price if not 0<a name="6001-SORD-033" href="#6001-SORD-033">6001-SORD-033</a>
+- **could** see and indication the volume weighted price that this particular order 
 - **could** see a new liquidation level <a name="6001-SORD-034" href="#6001-SORD-034">6001-SORD-034</a>
 - **could** see an estimate of the fees that will be paid (if any) <a name="6001-SORD-035" href="#6001-SORD-035">6001-SORD-035</a>
 - **could** see my "position leverage" TODO - define this
