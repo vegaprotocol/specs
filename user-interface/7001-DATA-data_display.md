@@ -28,7 +28,7 @@ This is set per-market and represent the "price" of an asset. It can have a 1-1 
 
 The is set per Asset and represents the amount of an asset that is held in the bridge. 
 
-`Asset.decimals` tells us where to put the decimal place. Ethereum assets often have 18 decimal places, but can have less. Forms where you deposit, withdraw or transfer assets must show all decimal places. It may be appropriate to truncate at a certain number of DP in many cases (e.g. 0.01 instead of `0.012345678912345678` event though `0.001 wBTC` may be worth as much as than `0.01 ETH`). At the moment Vega does not have a source of information that allows conversion of currencies or way of knowing that the significant value of an asset is.
+`Asset.decimals` tells us where to put the decimal place. Ethereum assets often have 18 decimal places, but can have less. Forms where you deposit, withdraw or transfer assets must show all decimal places. It may be appropriate to truncate at a certain number of DP in many cases (e.g. `0.01` instead of `0.012345678912345678` event though `0.001 wBTC` may be worth as much as than `0.01 ETH`). At the moment Vega does not have a source of information that allows conversion of currencies or way of knowing that the significant value of an asset is.
 
 ## Market
 
