@@ -35,7 +35,7 @@ When looking to stake validators or participate in governance, I first need to a
 - **must** see the number of un-associated tokens in the selected wallet/vesting contract <a name="1000-ASSO-007" href="#1000-ASSO-007">1000-ASSO-007</a>
 - **must** be select the amount of tokens to associate <a name="1000-ASSO-008" href="#1000-ASSO-008">1000-ASSO-008</a>
   - **must** be able to populate the input with the amount of un-associated tokens for the selected wallet/vesting contract <a name="1000-ASSO-009" href="#1000-ASSO-009">1000-ASSO-009</a>
-- **must** be warned if the amount being associated is greater than the amount <a name="1000-ASSO-010" href="#1000-ASSO-010">1000-ASSO-010</a>
+- **must** be warned if the amount being associated is greater than the amount available in the connected ethereum wallet <a name="1000-ASSO-010" href="#1000-ASSO-010">1000-ASSO-010</a>
 - **must** submit the association on [Ethereum transaction(s) inc ERC20 approval if required](0005-ETXN-submit_ethereum_transaction.md) <a name="1000-ASSO-011" href="#1000-ASSO-011">1000-ASSO-011</a>
 - **must** see feedback whether my association has been registered on Ethereum <a name="1000-ASSO-012" href="#1000-ASSO-012">1000-ASSO-012</a>
 - **must** see feedback that the association has been registered by Vega and that it can be used after the number of Ethereum block confirmations required (typically 50) <a name="1000-ASSO-013" href="#1000-ASSO-013">1000-ASSO-013</a>
