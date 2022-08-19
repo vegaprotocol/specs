@@ -31,7 +31,7 @@ type candle struct {
 # When are messages sent
 
 A candle message is sent whenever the following is true:
-* A change to the market occurs
+* A trade occurs
 * A new time window interval is started
 
 # Acceptence Criteria
