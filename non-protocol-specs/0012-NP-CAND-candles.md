@@ -34,6 +34,10 @@ A candle message is sent whenever the following is true:
 * A trade occurs
 * A new time window interval is started
 
+# When do the intervals run
+
+The time windows are created starting from midnight UTC so the 1 day interval will run though each day and start again at midnight. All other intervals start at the same time and roll over when required. This is to ensure that candles recieved from any data node on the network will give very similar results.
+
 # Acceptence Criteria
 * Subscriptions can be set up for any of the intervals above (<a name="0012-NP-CAND-001" href="#0012-NP-CAND-001">0012-NP-CAND-001</a>)
 * When the mark price changes a candle update is sent (<a name="0012-NP-CAND-002" href="#0012-NP-CAND-002">0012-NP-CAND-002</a>)
