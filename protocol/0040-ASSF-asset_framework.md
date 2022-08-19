@@ -94,7 +94,7 @@ A consequence of this is that quantum should only ever be used to drive aspects 
 
 In general, quantum would be expected to be used with a multiplier, often specified as a network paramter for the specific use case, for example:
 
-- To reward market creators after a market they created does in the order of magnitude of $10m of lifetime volume, use a threshold of `quantum ✖️ 10^6`
+- To reward market creators after a market they created does in the order of magnitude of $10m of lifetime volume, use a threshold of `quantum ✖️ 10^7`
 
 - To prevent transferring value less than in the order of magnitude of $0.10, use `quantum ✖️ 10^-2`
 
