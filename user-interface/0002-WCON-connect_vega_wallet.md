@@ -59,7 +59,7 @@ When wishing to disconnect my wallet, I...
 when looking to do something with a specific key (or set of keys) from my wallet, I...
 
 - **must** see what key is currently selected (if any) <a name="0002-WCON-025" href="#0002-WCON-025">0002-WCON-025</a>
-- **must** see an option to switch keys, and a list of keys that are approved from the connected wallet <a name="0002-WCON-026" href="#0002-WCON-026">0002-WCON-026</a>
+- **must** see a list of keys that are approved from the connected wallet <a name="0002-WCON-026" href="#0002-WCON-026">0002-WCON-026</a>
 
 - for each key:
   - **must** see the first and last 6 digits of the [public key](7001-DATA-data_display.md#public-keys). <a name="0002-WCON-027" href="#0002-WCON-027">0002-WCON-027</a>
