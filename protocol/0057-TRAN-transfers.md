@@ -52,9 +52,8 @@ These transfers happen at the end of the epoch, but before processing any reward
 Trading or staking rewards to be received for that epoch will not be available to be used by a recurring transfer. 
 Recurring transfers to reward accounts will happen before rewards are paid out. 
 
-//TODO: did we change this?
-Recurring transfers (including to reward accounts) are processed in order by transaction ID. This means that for funds from recurring transfer A to have been transferred and be available to be used by recurring transfer B in the same epoch, transaction A would need to have a lower transaction ID. 
-It is not currently sufficient for A to have been created before B.
+Recurring transfers (including to reward accounts) are processed in order they were created.
+This means that in order for recurring transfer B to make use of funds that would received from recurring trasnfer A, A must have been created before B.
 
 It's possible to cancel a recurring transfer.
 It's not possible to amend a transfer, a party will need to cancel the transfer and submit a new one in this case.
@@ -86,20 +85,24 @@ Read this section alongside the [rewards](./0056-REWA-rewards_overview.md) speci
 
 To be able to dispatch rewards to reward pools of multiple markets pro-rata to the contribution of the reward metric (e.g. received maker fees) in the market vs the total of the measured metric across all in scope markets, recurring transfers support auto dispatch in the following way:
 
-- When transferring to a reward account, it is possible to define the reward metric, the reward metric asset, and a subset of reward markets. If the reward markets are not defined - it is taken as all the markets that settle in the reward metric asset which must be specified when creating the recurring transfer. 
+- When transferring to a reward account, the transaction must also include the following:
 
-- At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market (either out of all the markets that settle in the reward metric asset or only the ones in scope of the transfer) to the total reward metric and then distributes the transfer to the corresponding accounts of the markets pro-rata. 
+   - `reward metric` — the type of reward (see [rewards](./0056-REWA-rewards_overview.md))
+   
+   - `reward metric asset` — (the settlement asset of all markets that will be in scope for the transfer)
+  
+   - `market scope` — a subset of markets in which parties are eligible to be rewarded from this transfer.
+   If the market scope is not defined / an empty list, it is taken as all the markets that settle in the reward metric asset. 
+
+- At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market to the sum total reward metric for all markets in the `market scope` and then distributes the transfer amount to the corresponding accounts of the markets pro-rata by their contribution to the total. 
 
 Where the reward metric type is "market creation rewards", it is important that no market creator will receive more than one market creation reward paid in the same asset from the same source account (reward funder). 
 Therefore: 
 
-- A list of [market, source account, reward asset] combinations that have already been rewarded is maintained.
-- Any markets in the "reward markets" list that are also in the above list as having been rewarded with funds paid in the same reward asset and transferred to the reward account from the same source account **have their total metric set to zero** (so they will not be paid).
-- A list of funders is maintained for all reward accounts with a non-zero balance to ensure the list above can be updated when a reward is paid.
-This list is cleared once at least one reward is paid and the balance again reaches zero.
+- For each market (for which the proposed may be paid rewards), a list of [market scope, source account, reward asset] combinations that have already rewarded the proposer of that market for its creation is maintained.
+- Any markets in the market scope list for a recurring transfer that are also in the above list as having been rewarded with funds paid in the same reward asset, transferred to the reward account from the same source account, and for the same market scope, will **have their total metric set to zero** (so they will not be rewarded).
 
-
-For example, a transfer is defined as follows:
+For example, a recurring transfer is defined as follows:
 
 ```
 Reward asset: $VEGA
