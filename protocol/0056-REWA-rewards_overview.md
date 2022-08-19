@@ -39,6 +39,9 @@ Therefore a party may be in scope for the same reward type multiple times but no
 Metrics will be calculated at the end of every epoch, for every eligible party, in each market for each reward type.
 Metrics only need to be calculated where the [market, reward type] reward account has a non-zero balance of at least one asset. 
 
+Reward metrics will be calculated once for each party/market combination in the reward metric asseet which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market. 
+This is the original precision for the metric source data. 
+
 
 ### Market activity (fee based) reward metrics
 
@@ -122,7 +125,7 @@ Then calculate `M := m_1 + m_2 + … + m_n` and transfer `R ✖️ m_i / M` to p
 If `M=0` (no-one incurred or received fees as specified by the metric type for the given market) then no transfer will have been made to the reward account and therefore there are no rewards to pay out.
 The transfer will be retried the next epoch if it is still active. 
 
-Rewards will be calculated using the [decimal precision of the settlement asset](0070-MKTD-market-decimal-places.md).
+Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the rewward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward maetrics for any two parties. All funds will always be paid out.
 
 
 ## Acceptance criteria
