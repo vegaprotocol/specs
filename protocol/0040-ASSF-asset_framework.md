@@ -87,7 +87,7 @@ It exists to get around the fact that it is not always possible to guarantee a p
 By convention we intend this field to be set to the quantity of the asset valued at around the value of 1 USD.
 It is in fact allowed and expected to be sufficiently imprecise that it would be perfectly acceptable for quantum to be set at a value of around 1 of any of USD/EUR/GBP, at any time a decade or so either side of today. 
 
-This convention makes sense because many assets on Vega are expected to be stablecoins, so they can be created with quantum set to 1 and mostly ignored. 
+This convention makes sense because many assets on Vega are expected to be stablecoins, so they can be created with quantum set to 1 (or something around 1 USD if not close enough already) and mostly ignored. 
 More volatile assets will require occasional updates via governance, but again, as we can cope with significant variance, this should not need to happen too often, even for volatile assets.
 
 A consequence of this is that quantum should only ever be used to drive aspects of the protocol where an order of mangnitude variance from the $1 "standard" can be comfortably tolerated. For example, the minimum LP commitment on a market, minimum size of a user initiated transfer, or a threshold of significant trading required to be eligible for a market creation reward.
