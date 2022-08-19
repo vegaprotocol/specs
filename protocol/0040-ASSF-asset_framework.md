@@ -108,6 +108,8 @@ It is recommended that:
 
 - **`quantum` should be set to round values**, as it is an imprecise measure and represents an order of magnutude level approximation of value. For example, at the time of writing, BTC is $21,283.44. This implies setting quantum to `46984885901903` for a wBTC (wrapped BTC) asset with 18 decimals. *Don't do this!* A much more reasonable value would be `50000000000000` ($1 if BTC is $20,000) or `40000000000000` ($1 if BTC is $25,000).
 
+- If the Solana token is added, try to resist the temptation to set a quantum of SOL to `007`.
+
 
 ## Asset Listing Process
 
