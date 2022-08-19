@@ -96,7 +96,7 @@ In general, quantum would be expected to be used with a multiplier, often specif
 
 - To reward market creators after a market they created does in the order of magnitude of $10m of lifetime volume, use a threshold of `quantum ✖️ 10^7`
 
-- To prevent transferring value less than in the order of magnitude of $0.10, use `quantum ✖️ 10^-2`
+- To prevent transferring value less than in the order of magnitude of $0.01, use `quantum ✖️ 10^-2`
 
 - To require a minimum stake of in the order of magnitude of $1000, use `quantum ✖️ 10^3`
 
