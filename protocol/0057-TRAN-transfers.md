@@ -5,9 +5,9 @@ These transfers are not to be confused with the internal concept of transfers wh
 
 Allowing users to initiate transfers allows for the following capabilities:
 - A user can transfer funds from a public key A to a public key B.
-- A user cand transfer funds to a [reward account](0056-REWA-rewards_overview.md#rewards-accounts)
 - A user can transfer funds from and to a locked account used for staking (yet to be specified) [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md).
-- A user can set up recurring transfer. 
+- A user can set up a recurring transfer. 
+- A user can set up a recurring transfer to one or more [reward accounts](0056-REWA-rewards_overview.md#reward-accounts).
 
 
 ## Limits
@@ -17,13 +17,13 @@ Transfer can only be initiated by a party using their own funds from [accounts](
 Here's the list of accounts types from which a user send funds from:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](./0059-simple-staking-and-delegating.md)
+- [LOCKED_FOR_STAKING](./0059-simple-staking-and-delegating.md) (not in Oregon Trail)
 
 Here's the list of accounts types into which funds can be sent:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md)
-- [REWARD_POOL](0056-REWA-rewards_overview.md#rewards-accounts)
+- [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md) (not in Oregon Trail)
+- [REWARD_POOL](0056-REWA-rewards_overview.md#rewards-accounts) (only by the special recurring transfer to reward accounts transfer type)
 - [ON_CHAIN_TREASURY](0055-TREA-on_chain_treasury.md#network-treasury)
 
 
@@ -47,8 +47,19 @@ The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`.
 
 ## Recurring transfers
 
-A party can also setup recurring transfers which will happen at the end of every epoch. These transfers will happen at the end of the epoch, and before the next one can happen.
-A party is limited to a maximum of 1 running recurring transfer to between two given accounts. 
+A party can also setup recurring transfers which will happen at the end of every epoch, before the next epoch begins. 
+These transfers happen at the end of the epoch, but before processing any rewards. 
+Trading or staking rewards to be received for that epoch will not be available to be used by a recurring transfer. 
+Recurring transfers to reward accounts will happen before rewards are paid out. 
+
+//TODO: did we change this?
+Recurring transfers (including to reward accounts) are processed in order by transaction ID. This means that for funds from recurring transfer A to have been transferred and be available to be used by recurring transfer B in the same epoch, transaction A would need to have a lower transaction ID. 
+It is not currently sufficient for A to have been created before B.
+
+It's possible to cancel a recurring transfer.
+It's not possible to amend a transfer, a party will need to cancel the transfer and submit a new one in this case.
+
+A party is limited to a maximum of 1 running recurring transfer to any given account. 
 E.g: say we have accounts A1, A2, A3 and party1 which controls A1. 
 Party1 can have a recurring transfer rt1 from A1 to A2 and another one (call it rt2) from A1 to A3. However it is not allowed to set up a recurring transfer rt3 from A1 to A2 with different amounts. 
 
@@ -56,11 +67,8 @@ A recurring transfers needs to contain these specific informations:
 
 - start amount uint specifying the amount (interpreted according to the number of decimals specified by the [asset](0040-asset-framework.md)).
 - start epoch: at the end of this epoch the first recurring transfer will be made between
-- end epoch (optional): at the end of this epoch the first recurring transfer will be made between, optional. If not specified the transfer run until cancelled.
-- factor, decimal > 1.0 (a factor used with the amount specified for the transfer). 
-
-It's possible to cancel a recurring transfer.
-It's not possible to amend a transfer, a party will need to cancel the transfer and submit a new one in this case.
+- end epoch (optional): at the end of this epoch the last recurring transfer will be made between, optional. If not specified the transfer run until cancelled (by its creator or by the network as described below).
+- factor, decimal > 0.0 (a factor used with the amount specified for the transfer). 
 
 The amount paid at the end of each epoch is calculated using the following formula:
 
@@ -68,8 +76,7 @@ The amount paid at the end of each epoch is calculated using the following formu
 amount = start amount x factor ^ (current epoch - start epoch)
 ``` 
 
-If not enough funds are present in the source account at the time a transfer is initied by the network, the whole recurring transfer is cancelled.
-
+If insufficient funds are present in the source account at the time a transfer is initied by the network, the whole recurring transfer is cancelled.
 If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` then the recurring transfer is cancelled. 
 
 
@@ -77,17 +84,17 @@ If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` the
 
 Read this section alongside the [rewards](./0056-REWA-rewards_overview.md) specification.
 
-To be able to dispatch rewards to reward pools of the given markets pro-rata to the contribution of the reward metric (e.g. received maker fees) in the market to the total of the measured asset recurring transfers support auto dispatch in the following way:
+To be able to dispatch rewards to reward pools of multiple markets pro-rata to the contribution of the reward metric (e.g. received maker fees) in the market vs the total of the measured metric across all in scope markets, recurring transfers support auto dispatch in the following way:
 
-When transferring to a reward account, it is possible to define the reward metric, the reward metric asset, and a subset of reward markets. If the reward markets are not defined - it is taken as all the markets that settle in the reward metric asset. 
+- When transferring to a reward account, it is possible to define the reward metric, the reward metric asset, and a subset of reward markets. If the reward markets are not defined - it is taken as all the markets that settle in the reward metric asset which must be specified when creating the recurring transfer. 
 
-At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market (either out of all the markets that settle in the reward metric asset or only the ones in scope of the transfer) to the total reward metric and then distributes the transfer to the corresponding accounts of the markets pro-rata. 
+- At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market (either out of all the markets that settle in the reward metric asset or only the ones in scope of the transfer) to the total reward metric and then distributes the transfer to the corresponding accounts of the markets pro-rata. 
 
 Where the reward metric type is "market creation rewards", it is important that no market creator will receive more than one market creation reward paid in the same asset from the same source account (reward funder). 
 Therefore: 
 
 - A list of [market, source account, reward asset] combinations that have already been rewarded is maintained.
-- Any markets in the "reward markets" list that are also in the above list as having been rewarded with funds paid in the same reward asset and transferred to the reward account from the same source account **are removed from the reward markets list**.
+- Any markets in the "reward markets" list that are also in the above list as having been rewarded with funds paid in the same reward asset and transferred to the reward account from the same source account **have their total metric set to zero** (so they will not be paid).
 - A list of funders is maintained for all reward accounts with a non-zero balance to ensure the list above can be updated when a reward is paid.
 This list is cleared once at least one reward is paid and the balance again reaches zero.
 

@@ -24,9 +24,12 @@ At a high level, rewards work as follows:
 
 - Reward metrics are calculated for each combination of [reward type, party, market].
  The calculation used for the reward metric is specific to each reward type.
--  A transfer is made to the reward account(s) for a specific reward type, for one or more markets. This is either a one-off transfer for a single market, or a recurring transfer for one, several, or all markets. (See [transfers](./0057-TRAN-transfers.md).)
-- At the end of the epoch, the entire balance of each reward account is distributed to the parties with a non-zero reward metric pro-rata by their reward metric.
-If the sum of all reward metrics is zero, the balance rolls over to the next epoch.
+
+-  At the end of the epoch:
+
+   1. Recurring reward transfers (set up by the parties funding the rewards) are made to the reward account(s) for a specific reward type, for one or more markets in scope where the total reward metric is `>0`. See [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts).
+
+   2. Then the entire balance of each reward account is distributed to the parties with a non-zero reward metric for that reward type and market, pro-rata by their reward metric.
 
 
 ## Reward metrics
@@ -50,12 +53,12 @@ Theese metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
 If the reward account balance is 0 at the end of the epoch for a given market, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
-Market activity (fee based) reward metrics are not stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are reset after a checkpoint restart.
+Market activity (fee based) reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
 
 
 ### Market creation reward metrics
 
-There will be a single creation reward metricand reward tyype. 
+There will be a single market creation reward metric and reward type. 
 This makes it possible to reward creation of markets achieving at least a minimum lifetime trading volume, as a proxy for identifying the creation of useful markets:
 
 Where:
@@ -63,21 +66,24 @@ Where:
 - there is a single eligible party for each market, which is the party that created the market by submitting the original new market governance proposal (**all other parties** have market creation metric = 0)
 - `cumulative volume` is defined as the cumulative total [trade value for fee purposes](0029-FEES-fees.md)
 - `rewards.marketCreationQuantumMultiple` is a network parameter described above
--  `quantum` is an asset level field described in the [asset framework](0040-ASSF-asset_framework.md)
+- `quantum` is an asset level field described in the [asset framework](0040-ASSF-asset_framework.md)
 
-The reward metric for the single *market creator* party is as follows:
+The reward metric for the single *market creator* party is as follows (the metric is `0` for all other parties):
 
 - **IF** `cumulative volume < rewards.marketCreationQuantumMultiple * quantum` **THEN** `market creation metric := 0`
 - **ELSE** `market creation metric := 1` (NB: this is 1 as market creation rewards are paid equally to all qualifying creators for *reaching* the volume threshold, not pro-rata based on cumulative volume)
 
-When the `market creation metric` for a party is `>0` and the reward account balance for a specific reward asset is also `>0` (i.e. when a creator is rewarded):
+When the `market creation metric` for a party is `>0` and the reward account balance for a specific reward asset is also `>0` (i.e. when a market creator is rewarded):
 
-- A flag is added for each of the recorded `funders` of the reward account paired with the market and reward asset.
-This flag is used to prevent a recurring transfer from funding a creation reward in the same asset more than once.
+- The reward account will have been funded in that epoch from one or more source accounts (the `funders`) via recurring transfers.
 See the [transfers](./0057-TRAN-transfers.md) spec.
-- The list of funders for the reward account is cleared after the account is emptied (i.e. after one or more parties are rewarded for market creation).
 
-Market creation reward metrics (both each market's `cumulative volume` and the `payout record flags` to identify [market, payout asset, funder] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
+- These transfers will each have targeted, for a specific settlement asset (reward metric asset), either a specific list of markets, or an empty list meaning all markets with that settlement asset (the `market scopes`).
+
+- A flag is stored on each market for each combination of [`funder`, `market scope`, `reward asset`] that was included in the reward payout.
+This flag is used to prevent any given funder from funding a creation reward in the same reward asset more than once for any given *market scope*.
+
+Market creation reward metrics (both each market's `cumulative volume` and the payout record flags to identify [funder, market scope, reward asset] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
 
 
 
@@ -89,29 +95,32 @@ That is, there can be multiple rewards with the same type paid in different asse
 Note that the market settlement asset has nothing to do in particular with the asset used to pay out a reward for a market. 
 That is, a participant might recieve rewards in the settlement asset of the market, in VEGA governance tokens, and in any number of other unrelated tokens (perhaps governance of "loyalty"/reward tokens issued by LPs or market creators, or stablecoins like DAI).
 
-Reward accounts can be individually funded by normal single transfers. They can also be funded on an ongoing (recurring) basis in groups, pro-rata by their relative total reward metrics for the given reward type. See [transfers](./0057-TRAN-transfers.md).
+Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward.
+These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
+Recurring transfers can target groups of markets, or all markets for a settlement asset, in which case the amount paid to each market is determined pro-rata by the markets' relative total reward metrics for the given reward type. See [transfers](./0057-TRAN-transfers.md) for more detail.
 
 Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for accross a restart.
 
 
 ## Reward distribution
 
-All rewards are paid out at the end of any epoch *after* [recurring transfers](0057-TRAN-Transfers.md) have been executed. 
-The entire reward account balance is paid out every epoch unless the total value of the metric over all parties is zero (there are no fractional payouts). 
+All rewards are paid out at the end of each epoch *after* [recurring transfers](0057-TRAN-Transfers.md) have been executed. 
+The entire reward account balance is paid out every epoch unless the total value of the metric over all parties is zero, in which case the balance will also be zero anyway (there are no fractional payouts). 
 There are no payout delays, rewards are paid out instantly at epoch end.
 
-Rewards will be distributed pro-rata by the party's reward metric value to all parties that have metric values `>0`. That is, if we have reward account balance `R` and parties `p_1 – p_n` with non-zero metrics on the market in question:
+Rewards will be distributed pro-rata by the party's reward metric value to all parties that have metric values `>0`. Note that for the market creation reward, the metric is defined to either be `0` or `1`, which will lead to equal payments for each eligible market under the pro-rata calculation. If we have reward account balance `R` and parties `p_1 – p_n` with non-zero metrics `m_1 – m_n` on the market in question:
 
 ```
-[p_1,m_1]
-[p_2,m_2]
+[p_1, m_1]
+[p_2, m_2]
 ...
-[p_n,m_n]
+[p_n, m_n]
 ```
 
-Then calculate `M:= m_1+m_2+...+m_n` and transfer `R x m_i / M` to party `p_i` (for each `p_i`) at the end of the epoch.
+Then calculate `M := m_1 + m_2 + … + m_n` and transfer `R ✖️ m_i / M` to party `p_i` (for each `p_i`) at the end of the epoch.
 
-If `M = 0` (no-one incurred or received fees as specified by the metric type for a given *market scope*) then nothing is paid out of the reward account for that *market scope* and the balance rolls into next epoch. 
+If `M=0` (no-one incurred or received fees as specified by the metric type for the given market) then no transfer will have been made to the reward account and therefore there are no rewards to pay out.
+The transfer will be retried the next epoch if it is still active. 
 
 Rewards will be calculated using the [decimal precision of the settlement asset](0070-MKTD-market-decimal-places.md).
 
