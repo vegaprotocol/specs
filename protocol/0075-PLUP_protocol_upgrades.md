@@ -99,12 +99,12 @@ message ProtocolUpgradeEvent {
 ## Acceptance criteria
 
 ### Invalid proopsal
-- [ ] A network with 5 validators (<a name="0070-PLUP-001" href="#0070-PLUP-001">0070-PLUP-001</a>)
+- [ ] A network with 5 validators (<a name="0075-PLUP-001" href="#0075-PLUP-001">0075-PLUP-001</a>)
   - [ ] Validator 1 proposes a protocol upgrade to an invalid tag - should result in an error
   - [ ] Validator 2 proposes a protocol upgrade on a block height preceding the current block - should result in an error
   
 ### Proopsal doesn't win majority
-- [ ] A network with 5 validators, current block height x (<a name="0070-PLUP-002" href="#0070-PLUP-002">0070-PLUP-002</a>)
+- [ ] A network with 5 validators, current block height x (<a name="0075-PLUP-002" href="#0075-PLUP-002">0075-PLUP-002</a>)
   - [ ] Validator 1 proposes a protocol upgrade on block height x+50 to version y1
   - [ ] Validator 2 proposes a protocol upgrade on block height x+50 to version y2
   - [ ] Validator 3 proposes a protocol upgrade on block height x+50 to version y1
@@ -112,7 +112,7 @@ message ProtocolUpgradeEvent {
   - [ ] When bloxk x+50 passes an event is expected that the proposal has been rejected and the network continues with the current running version
 
 ### Successful upgrade
-- [ ] A new release is made available, and is successfully deployed (<a name="0070-PLUP-003" href="#0070-PLUP-003">0070-PLUP-003</a>) 
+- [ ] A new release is made available, and is successfully deployed (<a name="0075-PLUP-003" href="#0075-PLUP-003">0075-PLUP-003</a>) 
   - [ ] Setup a network with 5 validators running version x
   - [ ] Have 4 validator submit request to upgrade to release >x at block height 1000
   - [ ] At the end of block height 1000 a snapshot is taken and vega is stopped by the vegavisor
