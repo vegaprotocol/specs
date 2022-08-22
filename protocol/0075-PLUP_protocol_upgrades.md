@@ -98,7 +98,7 @@ message ProtocolUpgradeEvent {
 
 ## Acceptance criteria
 
-### Invalid proopsal
+### Invalid proposal
 - [ ] A network with 5 validators (<a name="0075-PLUP-001" href="#0075-PLUP-001">0075-PLUP-001</a>)
   - [ ] Validator 1 proposes a protocol upgrade to an invalid tag - should result in an error
   - [ ] Validator 2 proposes a protocol upgrade on a block height preceding the current block - should result in an error
