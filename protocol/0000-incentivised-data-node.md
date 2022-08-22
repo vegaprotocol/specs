@@ -28,6 +28,7 @@ There are two kinds of measurements: responsiveness, and completeness of the dat
 The completeness of the dataset needs to be only measiured spradicaly, e.g., once per epoch. This is done automatically.
 To this end, there is a condition based on the hash of the last vega block that triggers the response,  Validators can additionally send out requests to datanodes, though in a limited manner.
 
+
 For responsiveness, a more active approach must be taken. Here, the validators send a challenge to the datanode and measure the time
 it takes for the datanode to answer.
 - is the node up and is it responding to to all API endpoints?
@@ -38,12 +39,26 @@ it takes for the datanode to answer.
 
 Who does the measuring? Validators as part of their day-to-day job?
 
+### Limits
+The measurements we make can measure responsiveness and completeness; what we do not measure in this spec is:
+- the link between either; if someone responds junk to answer fast and only looks up the database for a completeness test, this is currently not caught
+- fraudulent falisfication: if someone answers strategic questions wrongly, this is not caught
+- updates: the completeness measurement measures at random points, not at the end. Thus, a data-node that is 2 days behind would likely not be caught at this point.
+
+
+### API for completeness measurements
+
+To measure completeness, we require the following from the database API:
+
+- There is some form of deterministic random access serialisation of the database. This means, the database supports splitting its entire content into blocks/bundles, which are then sequenced sequentially, i.e., there is a mapping from <int> to a bundle so that every integer between 0 and <database_size> points to a unique bundle and every bundle is indexed (in a deterministic way, so all validators end up with the same bundle for the same integer.
+- There is some way to verify the correctness of a bundle, i.e., quering another datanode about the content. If ther serialisation is not typed (i.e., uses well defined trading records), this may need a separate API.
+
 
 ### Data bucketing and Merkle tree (commmon, used by both checks below)
 - Data is divided into sequential event bundles which contain all events the included types related to a defined period, e.g. 1 block
 - Only defined event types are included: trades, positions, accounts [TODO: confirm types]
 - Validators and data nodes will build a Merkle tree from event bundles. Validators do not store the data, but data nodes must (and this is what we verify with this algorithm).
-- This merkle tree is exposed by APIs and also allows any user to verify an aPI response from the data node
+- This merkle tree is exposed by APIs and also allows any user to verify an API response from the data node
 
 
 ### Is the node carrying the full set of data (NOT needed for MVP / Sweetwater++)
