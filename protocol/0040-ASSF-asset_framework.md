@@ -76,6 +76,41 @@ All the asset definition fields are immutable (cannot be changed even by governa
 These can be changed by asset modification [governance proposal](./0028-GOVE-governance.md).
 
 
+## Asset framework fields
+
+### `quantum`
+
+This field defines an approximation of the smallest “meaningful” amount of an asset.
+
+It exists to get around the fact that it is not always possible to guarantee a precise exchange rate between assets and a common reference asset (such as USD), however an approximate assessment of the value of the asset is necessary for purposes such as spam protection, reward calculation, etc.
+
+By convention we intend this field to be set to the quantity of the asset valued at around the value of 1 USD.
+It is in fact allowed and expected to be sufficiently imprecise that it would be perfectly acceptable for quantum to be set at a value of around 1 of any of USD/EUR/GBP, at any time a decade or so either side of today. 
+
+This convention makes sense because many assets on Vega are expected to be stablecoins, so they can be created with quantum set to 1 (or something around 1 USD if not close enough already) and mostly ignored. 
+More volatile assets will require occasional updates via governance, but again, as we can cope with significant variance, this should not need to happen too often, even for volatile assets.
+
+A consequence of this is that quantum should only ever be used to drive aspects of the protocol where an order of mangnitude variance from the $1 "standard" can be comfortably tolerated. For example, the minimum LP commitment on a market, minimum size of a user initiated transfer, or a threshold of significant trading required to be eligible for a market creation reward.
+
+In general, quantum would be expected to be used with a multiplier, often specified as a network paramter for the specific use case, for example:
+
+- To reward market creators after a market they created does in the order of magnitude of $10m of lifetime volume, use a threshold of `quantum ✖️ 10^7`
+
+- To prevent transferring value less than in the order of magnitude of $0.01, use `quantum ✖️ 10^-2`
+
+- To require a minimum stake of in the order of magnitude of $1000, use `quantum ✖️ 10^3`
+
+It is recommended that:
+
+- `quantum` **should not be relied on directly without a configurable multiplier**, even if this is initially one, as many assets could experience a significant run-up or drop in value and it is both easier (and less likely to be controversial from a governance perspective) to change a multiplier affecting a specific feature quickly than to change quantum on many assets.
+
+- **`quantum` multipliers should not be shared between unrelated features**, as even if they seem to require roughly the same value initially, it may become apparent that the value implied by the multiplier is too high for one feature and simultaneously too low for another. If they do not have independent multipliers, this problem cannot be sattisfactorily resolved.
+
+- **`quantum` should be set to round values**, as it is an imprecise measure and represents an order of magnutude level approximation of value. For example, at the time of writing, BTC is $21,283.44. This implies setting quantum to `46984885901903` for a wBTC (wrapped BTC) asset with 18 decimals. *Don't do this!* A much more reasonable value would be `50000000000000` ($1 if BTC is $20,000) or `40000000000000` ($1 if BTC is $25,000).
+
+- If the Solana token is added, try to resist the temptation to set a quantum of SOL to `007`.
+
+
 ## Asset Listing Process
 
 This process start with an user submitting a new asset proposal to the vega network. This follows all the normal process for a new proposal (e.g: validation, vote, etc).
