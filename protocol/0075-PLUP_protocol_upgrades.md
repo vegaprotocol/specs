@@ -103,7 +103,7 @@ message ProtocolUpgradeEvent {
   - [ ] Validator 1 proposes a protocol upgrade to an invalid tag - should result in an error
   - [ ] Validator 2 proposes a protocol upgrade on a block height preceding the current block - should result in an error
   
-### Proopsal doesn't win majority
+### Proposal doesn't win majority
 - [ ] A network with 5 validators, current block height x (<a name="0075-PLUP-002" href="#0075-PLUP-002">0075-PLUP-002</a>)
   - [ ] Validator 1 proposes a protocol upgrade on block height x+50 to version y1
   - [ ] Validator 2 proposes a protocol upgrade on block height x+50 to version y2
