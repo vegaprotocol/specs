@@ -27,3 +27,8 @@ due to Vega's design.
 # Test codes & coverage
 Specifications should contain _Acceptance Criteria_ - testable scenarios that can be used to demonstrate that the feature is implemented as designed.
 The criteria are then labelled with a code in the form `0000-CODE-000`, where the first two segments are the [unique identifier for the specification](#protocol-spec-ids) and the last segment is an integer for the criteria. Using [vegaprotocol/approbation](https://github.com/vegaprotocol/approbation) we produce a coverage matrix.
+
+# Disclaimer 
+Throughout the `specs` repo we are using terms which in other contexts will have other meanings for example implying certain legal rights. Remember this is a blockchain project; entirely code based. Just as mathematics borrows terms from the real world (like "open" / "closed" when discussing topological properties of sets) in mathematics a set can be both open and closed at the same time which will not happen to a door in the meat-space. So: things in the `specs` repo mean what their assigned meaning within the spec repo is. Nothing more. 
+
+In particular we introduce a term `equity-like share`: please remember: this is a blockchain and is entirely code-based; there are no dividends and no legally enforceable rights; don't expect a pretty share certificate coming in the post.   
