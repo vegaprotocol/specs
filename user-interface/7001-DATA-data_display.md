@@ -41,7 +41,7 @@ Markets can have several statuses and it may be sensible when listing markets to
 > aka Party
 
 When looking at a public key it is important that the user can get the full public key but it is often appropriate just to show an abbreviated form. The first 6 and last 6 characters are preferable, with an indication that it is truncated e.g. `56d1e6739deac3c5c1ddc6fee876b3217e504a161b5b00fda96b40ed3e8f89b8` as `56d1e6...8f89b8` or just `8f89b8` if enough of a convention has been established. In cases where the key being shows comes from your connected wallet it should also show the name (aka alias) of the key. 
-Vega public keys are hexadecimal, but the convention is to display them without the receding `0x` as this is what the Vega APi returns.
+Vega public keys are hexadecimal, but the convention is to display them without the preceding `0x` as this is what the Vega API returns.
 
 ## Transaction hash
 
