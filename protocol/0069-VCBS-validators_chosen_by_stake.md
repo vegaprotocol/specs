@@ -340,36 +340,37 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * In the same epoch, change the network parameter <reward.staking.delegation.minimumValidatorStake> in a way that 3 validators and three Ersatzvalidators drop below the ownstake requirement, and change the delegation so that 4 (not affected) Ersatzvalidators have a higher score than two (not affected) Validators. Also, give one of the Ersatzvalidators with insufficient ownstake the highest ValidatorScore of all Ersatzvalidators. 
   * Verify that the the three Ersatzvalidators with now insufficient ownstake are removed at the end of the epoch, and that the three validators with insufficient ownstake are demoted within three epochs (and immediatelly demoted again from being Ersatzvalidators), and that in the fourth epoch the validator with the lowest ValidatorScore is demoted (and each time, the Ersatzvalidatror with the highest score is promoted). Also, verify that the Ersatzvalidator with the highest score and insufficient ownscore got demoted from being an Ersatzvalidator rather than promoted to be a Validator. 
   
- 11 (Alternative)
- 11.a Setup a network with 5 Tendermint validators. (3 validators, 2 ersatzvalidators). In one epoch,
+ 12 (Alternative until we can buiuld a large enough network for above AC )
+ 12.a Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - one ersatzvalidator gets the highest delegated stake, but insufficient ownstake (delegates: 10000)
 - 2 validators drop below ownstake, but have relative high delegated stake (7000)
 -1 validator drops to the lowest delegated stake (1000)
 - 1 ersatzvalidator has 6000 stake and sufficient ownstake
 
-Verify that the the first ersatzvalidator is removed in the epoch change, and one validator with insufficient ownstake is replaced
+Verify that the the first ersatzvalidator is removed (stops being listed as an ersatzvalidator entirely, not demoted to pending) in the epoch change, and one validator with insufficient ownstake is replaced by the other ersatzvalidator.
 
-11.b Setup a network with 5 Tendermint validators. (3 validators, 2 ersatzvalidators). In one epoch,
+12.b Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
-- 1 validator drops below ownstake, but have relative high delegated stake (7000)
+- 1 validator drops below ownstake, but has relative high delegated stake (7000)
 - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
 - 2 ersatzvalidators have 6000 stake and sufficient ownstake
 
-Verify that the the first ersatzvalidator is removed in the epoch change, and  thene validator with insufficient ownstake is replaced; in 
-The next epoch, the second validator with the lowest score is replaced.
+Verify that at the epoch change,  the validator with insufficient ownstake is replaced; in 
+the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatzvalidator due to insufficient ownstake is removed (stops being listed as an ersatzvalidator).
+Verify that the validator that dropped below ownstake is not demoted and removed at the same epoch change.
 
-11.c Setup a network with 5 Tendermint validators. (3 validators, 2 ersatzvalidators). In one epoch,
+12.c Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - All validators drop below ownstake
 - All erstazvalidators have sufficient ownstake, but lower stake than the validators
 
 Verify that 2 validators are replaced, one in each epoch
 
-11.d Setup a network with 5 Tendermint validators. (3 validators, 2 ersatzvalidators). In one epoch,
+12.d Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - All validators drop below ownstake
-- All erstazvalidators have sufficient ownstake,  and higher stake than the validators
+- All erstazvalidators have sufficient ownstake, and higher stake than the validators
 
 Verify that one validator is replaced the following epoch, one in the epoch after
 
