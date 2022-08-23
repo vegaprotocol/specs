@@ -210,7 +210,7 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 ## What data do we keep relating to liquidity provision?
 
-1. List of all liquidity providers and their commitment sizes and their “growth-adjusted-LP-share” for each market [see 0042-setting-fees-and-rewarding-lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
+1. List of all liquidity providers and their commitment sizes and their “equity-like share” for each market [see 0042-setting-fees-and-rewarding-lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
 1. Liquidity provision orders (probably need to be indexed somewhere in addition to the order book)
 1. New account per market holding all committed liquidity provider bonds
 1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb))

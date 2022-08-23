@@ -83,8 +83,8 @@ Anyone can create a proposal if the weighting of their vote on the proposal woul
 
 In a future iteration of the governance system we may restrict proposal submission by type of proposal based on a minimum weighting. e.g: only user with a certain number or percentage of the governance asset are allowed to open a "network parameter change" proposal.
 
-Market change proposals additionally require certain minimum [Growth Adjusted LP Share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minGrowthAdjustedLPShare`.
-So, for example, if `governance.proposal.market.minGrowthAdjustedLPShare = 0.05` and a party has `growth-adjusted-LP-share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `growth-adjusted-LP-share` of `0.03` then they cannot submit a market change proposal.
+Market change proposals additionally require certain minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minEquityLikeShare`.
+So, for example, if `governance.proposal.market.minEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` then they cannot submit a market change proposal.
 
 
 ### Duration of the proposal
@@ -143,7 +143,7 @@ Note: see below for details on minimum participation rate and minimum required m
 Not in scope: minimum participation of active users, i.e. 90% of the _active_ users of the vega network have to take part in the vote. Minimum participation is currently always measured against the total possible participation.
 
 For market change proposals the network will additionally calculate
-1. `LP participation rate = SUM (growth-adjusted-LP-share of all LPs who cast a vote)` (no need to divide by anything as growth-adjusted-LP-share sums up to `1`).
+1. `LP participation rate = SUM (equity-like share of all LPs who cast a vote)` (no need to divide by anything as equity-like share sums up to `1`).
 1. `LP for rate = SUM (all who voted for) / LP participation rate`.
 
 A market parameter change is passed only when:
@@ -155,7 +155,7 @@ The logic is
 
 In all other cases the proposal is rejected.
 
-In other words: LPs vote with their growth-adjusted-LP-share and can make changes to a market without requiring a governance token holder vote. However a governance token vote is running in parallel and if participation and majority rules for this vote are met then the governance token vote can overrule the LPs vote.
+In other words: LPs vote with their equity-like share and can make changes to a market without requiring a governance token holder vote. However a governance token vote is running in parallel and if participation and majority rules for this vote are met then the governance token vote can overrule the LPs vote.
 
 
 # Reference-level explanation

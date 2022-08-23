@@ -57,9 +57,9 @@ At time of call:
 
 ## Splitting Fees Between Liquidity Providers
 
-The guiding principle of this section is that by committing stake a liquidity provider gets virtual stake that depends on how trading has grown on the market. The virtual stake then determines growth-adjusted-LP-share as will be set out below. Growth adjusted LP share is then used to split fee revenue between LPs.
+The guiding principle of this section is that by committing stake a liquidity provider gets virtual stake that depends on how trading has grown on the market. The virtual stake then determines equity-like share as will be set out below. Equity-like share is then used to split fee revenue between LPs.
 
-### Calculating liquidity provider growth-adjusted-LP-share
+### Calculating liquidity provider equity-like share
 
 The parameter which determines the period over which market value and hence growth is `market.value.windowLength` which could be e.g. a week. 
 From the end of the opening auction, which we will refer to as `t0` until `t0+market.value.windowLength` is the `0th` or "bootstrap period". Then from `t0+market.value.windowLength` until `t0 + 2 x market.value.windowLength` is the `1st` period and so on. 
@@ -101,9 +101,9 @@ else
 Thus the virtual stake of an LP will always be at least their physical stake.
 Moreover, in situations when trading volume was zero in the previous period or if it is zero in the current period then we don't define the growth `r` and so in such extreme situations the virtual stake reverts to the physical stake.
 
-The growth-adjusted-LP-share for each LP is then
+The equity-like share for each LP is then
 ```
-(LP i growth-adjusted-LP-share) = (LP i virtual stake) / (sum over j from 1 to N of (LP j virtual stake)).
+(LP i equity-like share) = (LP i virtual stake) / (sum over j from 1 to N of (LP j virtual stake)).
 ```
 
 The average entry valuation (which should be reported by the APIs) is defined, at the time of change of an LP commitment as:
@@ -115,7 +115,7 @@ The average entry valuation (which should be reported by the APIs) is defined, a
 There is a [Google sheet - requiring Vega login](https://docs.google.com/spreadsheets/d/14AgZwa6gXVBUFBUUOmB7Y9PsG8D4zmYN/edit#gid=886563806) showing this.
 
 
-**Check** the sum from over `i` from `1` to `N` of `LP i growth-adjusted-LP-share` is equal to `1`.
+**Check** the sum from over `i` from `1` to `N` of `LP i equity-like share` is equal to `1`.
 **Warning** the above will be decimal calculations so the above checks will only be true up to a rounding errors.
 
 ### Distributing fees
@@ -126,15 +126,15 @@ This account is not under control of the LP party (they cannot initiate transfer
 
 A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block. 
 
-The liquidity fees are distributed pro-rata depending on the `LP i growth-adjusted-LP-share` at a given time. 
+The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` at a given time. 
 
 #### Example
-We have `4` LPs with growth-adjusted-LP-share shares:
+We have `4` LPs with equity-like share shares:
 share as below
 ```
-LP 1 galp share = 0.65
-LP 2 galp share = 0.25
-LP 3 galp share = 0.1
+LP 1 els = 0.65
+LP 2 els = 0.25
+LP 3 els = 0.1
 ```
 Trade happened, and the trade value for fee purposes multiplied by the liquidity fee factor is `103.5 ETH`. The following amounts be collected immediately into the LP fee accounts for the market:
 
@@ -146,10 +146,10 @@ Trade happened, and the trade value for fee purposes multiplied by the liquidity
 
 Then LP 4 made a delayed LP commitment, and updated share as below:
 
-LP 1 eq share = 0.43
-LP 2 eq share = 0.17
-LP 3 eq share = 0.07
-LP 4 eq share = 0.33
+LP 1 els = 0.43
+LP 2 els = 0.17
+LP 3 els = 0.07
+LP 4 els = 0.33
 
 When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 ```
@@ -159,7 +159,7 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 ```
 
 ### APIs for fee splits and payments
-* Each liquidity provider's growth-adjusted-LP-share
+* Each liquidity provider's equity-like share
 * Each liquidity provider's average entry valuation
 * The `market-value-proxy`
 
@@ -177,7 +177,7 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 
 ### CHANGE OF NETWORK PARAMETERS
 - [ ] Change of network parameter "market.liquidityProvision.minLpStakeQuantumMultiple" will change the multiplier of the asset quantum that sets the minimum LP commitment amount. If `market.liquidityProvision.minLpStakeQuantumMultiple` is changed then no LP orders that have already been submitted are affected. However any new submissions or amendments must respect the new amount and those not meeting the new minimum will be rejected. (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>)
-- [ ] Change of network parameter "market.value.windowLength" will affect growth-adjusted-LP-share calculations. It will not affect the currently running period but the next period that starts will use the new value (<a name="0042-LIQF-022" href="#0042-LIQF-022">0042-LIQF-022</a>).
+- [ ] Change of network parameter "market.value.windowLength" will affect equity-like share calculations. It will not affect the currently running period but the next period that starts will use the new value (<a name="0042-LIQF-022" href="#0042-LIQF-022">0042-LIQF-022</a>).
 
 
 ### SPLITTING FEES BETWEEN liquidity providers

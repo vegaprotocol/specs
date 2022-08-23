@@ -106,7 +106,7 @@ All of these should be available at various time resolutions: on every change, o
 ### Liquidity provision data
 
 - LP order submissions
-- Growth adjusted LP share changes
+- Equity-like share changes
 - Market value proxy 
 - Target stake
 - Supplied stake
