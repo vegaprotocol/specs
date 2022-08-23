@@ -33,6 +33,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
 - ~~Browser wallet~~ `not available yet`
   
 - Fairground hosted wallet
+  - **must** only be be shown this option if the dapp is connected to fairground <a name="0002-WCON-039" href="#0002-WCON-039">0002-WCON-039</a>
   - **must** input a wallet name <a name="0002-WCON-017" href="#0002-WCON-017">0002-WCON-017</a>
   - **must** input a password <a name="0002-WCON-018" href="#0002-WCON-018">0002-WCON-018</a>
   - if success: **must** see that the wallet is connected and details of connected key <a name="0002-WCON-019" href="#0002-WCON-019">0002-WCON-019</a>
