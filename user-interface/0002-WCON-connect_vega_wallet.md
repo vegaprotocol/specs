@@ -13,7 +13,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
   - **must** submit attempt to connect to wallet <a name="0002-WCON-005" href="#0002-WCON-005">0002-WCON-005</a>
   - **could** trigger the app to open on the user's machine with a `vegawallet://` prompt <!--<a name="0002-WCON-006" href="#0002-WCON-006">0002-WCON-006</a>-->
   
-  - if the dapp DOES already have a permission with the wallet: **must** see that wallet is connected <a name="0002-WCON-007" href="#0002-WCON-007">0002-WCON-007</a>
+  - if the dapp DOES already have a permission with the wallet: **must** see that wallet is connected <a name="0002-WCON-007" href="#0002-WCON-007">0002-WCON-007</a> note: if the user want to connect to a different wallet to the one that they were previously connected with, they will have to hit logout.
     - if the app uses one key at a time: **should** show what key is active (re-use the last active key) <a name="0002-WCON-008" href="#0002-WCON-008">0002-WCON-008</a>
 
   - if the wallet does NOT have an existing permission with the wallet: **must** prompt user to check wallet app to approve the request to connect wallet: See [Connecting to Dapps](0002-WCON-connect_vega_wallet.md#connect-wallet-for-the-first-time) for what should happen in wallet app <a name="0002-WCON-009" href="#0002-WCON-009">0002-WCON-009</a>
