@@ -53,6 +53,7 @@ To measure completeness, we require the following from the database API:
 - There is some form of deterministic random access serialisation of the database. This means, the database supports splitting its entire content into blocks/bundles, which are then sequenced sequentially, i.e., there is a mapping from <int> to a bundle so that every integer between 0 and <database_size> points to a unique bundle and every bundle is indexed (in a deterministic way, so all validators end up with the same bundle for the same integer.
 - There is some way to verify the correctness of a bundle, i.e., quering another datanode about the content. If ther serialisation is not typed (i.e., uses well defined trading records), this may need a separate API.
 
+Due to the structure of the database, it may not be possible to get a clean serialisation directly; in this case, we need a more sophisticated mapping from a random value to a range of items. THis is doable (e.g., let the first part of the random vaue choose an SQL table and the second part the entry number), but requires some detailed work that takes into account the database structure.
 
 ### Data bucketing and Merkle tree (commmon, used by both checks below)
 - Data is divided into sequential event bundles which contain all events the included types related to a defined period, e.g. 1 block
