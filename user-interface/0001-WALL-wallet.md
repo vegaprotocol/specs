@@ -127,6 +127,7 @@ When using a Vega wallet, I...
 - **must** see full public key or be able to copy it to clipboard <a name="0001-WALL-054" href="#0001-WALL-054">0001-WALL-054</a>
 - **must** be able to change key name/alias <a name="0001-WALL-055" href="#0001-WALL-055">0001-WALL-055</a>
 - **must** be able to amend other arbitrary key meta data <a name="0001-WALL-056" href="#0001-WALL-056">0001-WALL-056</a>
+- **must** be able to control whether the wallet app queries for data (e.g. asset balances) on each key (to prevent info leaking about what keys belong to a given wallet) <a name="0001-WALL-078" href="#0001-WALL-078">0001-WALL-078</a>
 
 ... so I can manage risk (e.g. isolate margin), mitigate the damage of a key being compromised, or use multiple trading strategies 
 
