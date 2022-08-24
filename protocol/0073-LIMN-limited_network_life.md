@@ -306,7 +306,6 @@ An ERC20 asset loaded from checkpoint can be used in a market loaded from a chec
 An ERC20 asset loaded from checkpoint can be updated (<a name="0073-LIMN-025" href="#0073-LIMN-025">0073-LIMN-025</a>)
 An ERC20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>)
 Can deposit and withdraw funds to/from ERC20 asset loaded from checkpoint (<a name="0073-LIMN-027" href="#0073-LIMN-027">0073-LIMN-027</a>)
-Can update an ERC20 asset loaded from checkpoint (<a name="0073-LIMN-028" href="#0073-LIMN-028">0073-LIMN-028</a>)
 
 1. Propose a valid ERC20 asset.
 1. Wait for the next checkpoint, then stop the network.
