@@ -47,6 +47,7 @@ These limits restrict the risk that can be easily taken by each participant. The
 - It should be possible to amend the `maximum lifetime deposit` via a Vega governance transaction (update asset). This should cause Vega to create a signed bundle when the governance transaction is enacted. Someone would be expected to submit this transaction to the Ethereum chain for it to take effect.  
 - Any attempt to deposit funds where `total funds deposited by sender address > maximum lifetime deposit` must be rejected (by the Ethereum bridge contract).
 - Any attempt to deposit funds where `total funds deposited to receiver address > maximum lifetime deposit` must be rejected (by the Ethereum bridge contract).
+- Users can exempt themselves from the deposit limits by running `exempt_depositor()` after which transactions greater than deposit limit for that asset will be allowed.
 
 #### Withdrawal limits
 
