@@ -79,13 +79,16 @@ LP i virtual stake <- LP i virtual stake x (LP i stake + delta)/(LP i stake).
 ``` 
 
 Independently of the above we also update all virtual stakes at start of each new period. 
-To that end "total value for fee purposes" is cumulated over the period. For a period `n` call this `T(n)`. 
-Set `T(0) = trade value for fee purposes of resolving opening auction`.  
+To that end "total value for fee purposes" is cumulated over the period set by `market.value.windowLength`. For a period `n` call this `T(n)`. 
+We let the `0`th period start the moment the opening auction ends and last for `market.value.windowLength`.   
+We include the volume of the trades that resolved the opening auction in `T(0)`. 
 From this we calculate the running average trade value for fee purposes:
 ```
-A(n) <- A(n-1) x (n-1)/n + T(n)/n.
+A(0) <- T(0),
+A(n) <- A(n-1) x n/(n+1) + T(n)/(n+1), for `n=1,2,...
 ```
-The g`r`owth of the market is then 
+
+For `n = 0` set `r=0` and for `n = 1,2,...` the g`r`owth of the market is then 
 ```
 r = 0
 if A(n) > 0 and A(n-1) > 0
@@ -93,7 +96,7 @@ if A(n) > 0 and A(n-1) > 0
 ```
 Thus at the end of period `n` update
 ```
-if A(n) = 0 or A(n-1) = 0
+if n = 0 or n = 1 or A(n) = 0 or A(n-1) = 0
     LP i virtual stake <- LP i physical stake
 else
     LP i virtual stake <- max(LP i physical stake, (1 + r) x (LP i virtual stake)).
