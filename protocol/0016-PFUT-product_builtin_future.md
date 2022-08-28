@@ -36,6 +36,7 @@ cash_settled_future.value(quote) {
 
 ```javascript
 cash_settled_future.trading_termination_trigger(event) {
+	unregister_data_source_and_stop_listening(cash_settled_future.trading_termination_trigger)
 	setMarketStatus(TRADING_TERMINATED)
 }
 ```
@@ -45,6 +46,7 @@ cash_settled_future.trading_termination_trigger(event) {
 
 ```javascript
 cash_settled_future.settlement_data(event) {
+	unregister_data_source_and_stop_listening(cash_settled_future.settlement_data)
 
 	// If settlement data was received prior to trading termination use the last value received, otherwise use the first value received after trading is terminated 
 	while market.status != TRADING_TERMINATED {
@@ -74,3 +76,8 @@ cash_settled_future.settlement_data(event) {
 1. Lifecycle events are processed atomically as soon as they are triggered, i.e. the above condition always holds even for two or more transactions arriving at effectively the same time - only the transaction that is sequenced first triggers final settlement (<a name="0016-PFUT-010" href="#0016-PFUT-010">0016-PFUT-010</a>)
 1. Once a market is finally settled, the mark price is equal to the settlement data and this is exposed on event bus and market data APIs (<a name="0016-PFUT-011" href="#0016-PFUT-011">0016-PFUT-011</a>)
 1. Assure [settment-at-expiry.feature](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/0002-STTL-settlement_at_expiry.feature) executes correctly (<a name="0016-PFUT-012" href="#0016-PFUT-012">0016-PFUT-012</a>)
+1. After trading termination has been triggered the trading terminated data source is no longer active (assuming it is not used anywhere else) and data from that source is no longer processed. (<a name="0016-PFUT-013" href="#0016-PFUT-013">0016-PFUT-013</a>)
+1. After settlement data has been recieved and the market has settled, the settlement data source is no longer active (assuming it is not used anywhere else) and data from that source is no longer processed. (<a name="0016-PFUT-014" href="#0016-PFUT-014">0016-PFUT-014</a>)
+1. After settlement data has been recieved and the market has not settled yet because trading termination has not been triggered, the settlement data source is no longer active (assuming it is not used anywhere else) and data from that source is no longer processed (because the first data event recieved is stored and eventually used for settlement). (<a name="0016-PFUT-015" href="#0016-PFUT-015">0016-PFUT-015</a>)
+1. After settlement data has been recieved and the market has not settled yet because trading termination has not been triggered, the settlement data source is no longer active (assuming it is not used anywhere else) and data from that source is no longer processed (because the first data event recieved is stored and eventually used for settlement). (<a name="0016-PFUT-016" href="#0016-PFUT-016">0016-PFUT-016</a>)
+1. Where the same oracle definition is used for trading terminated and settlement, and data has been recieved. Trading is terminated and the market is settled with the same data event (a single message does both). The data source is no longer active (assuming it is not used anywhere else) and data from that source is no longer processed. (<a name="0016-PFUT-017" href="#0016-PFUT-017">0016-PFUT-017</a>)
