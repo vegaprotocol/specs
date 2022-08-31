@@ -90,4 +90,21 @@ Other functionality:
 * Attempts to redeem vested tokens will fail if there are not sufficient tokens held on behalf of the sender address that are not staked. Sender must first unstake tokens before they can be redeemed.
 * This functionality does not interact in any way with the staking bridge contract. They are effectively completely separate staking mechanisms, so to unstake all an address's tokens when some are staked on each contract will require calls to both contracts.
 
+# Acceptance Criteria
+### Staking Bridge Smart Contract 
+* Staking Bridge accepts and locks deposited VEGA tokens and emits `Stake_Deposited` event
+* Staking Bridge allows only stakers to remove their staked tokens and emits `Stake_Removed` event
+* Staking Bridge allows users with staked balance to transfer ownership of stake to new ethereum address that only the new address can remove
+* Staking Bridge prohibits withdrawal of VEGA while that VEGA is staked
+
+### Vesting Smart Contract 
+* Vesting Contract locks vesting VEGA tokens and emits `Stake_Deposited` event
+* Vesting Contract unlocks vesting VEGA tokens and emits `Stake_Deposited` event
+* Vesting Contract prohibits withdrawal of VEGA while that VEGA is staked
+
+### Event Queue
+* Event Queue sees and reacts to `Stake_Deposited` event from Staking Bridge smart contract and credits target Vega user with stake
+* Event Queue sees and reacts to `Stake_Removed` event from Staking Bridge smart contract and removes stake from appropriate Vega user
+* Event Queue sees and reacts to `Stake_Deposited` event from Vesting smart contract and credits target Vega user with stake
+* event Queue sees and reacts to `Stake_Removed` event from Vesting smart contract and removes stake from appropriate Vega user
 
