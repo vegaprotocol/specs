@@ -37,7 +37,7 @@ When populating a deal ticket I...
 
 - **must** enter a [price](7001-DATA-data_display.md#quote-price). <a name="6001-SORD-017" href="#6001-SORD-017">6001-SORD-017</a> 
 - **must** see the price unit (as defined in market) <a name="6001-SORD-018" href="#6001-SORD-018">6001-SORD-018</a>
-  - if the input field is empty: with the input focused: **should** be able to hit up/down to populate the input with the current mark price (if there is one, 0 if not) <a name="6001-SORD-011" href="#6001-SORD-011">6001-SORD-011</a>
+  - **should** be able quickly pre-populate the price with the current mark price (if there is one, 0 if not) e.g. by focusing the input and hitting up/down <a name="6001-SORD-011" href="#6001-SORD-011">6001-SORD-011</a>
   - **should** have the previous value for the selected market pre-populated (last submitted or last changed) <a name="6001-SORD-014" href="#6001-SORD-014">6001-SORD-014</a>
   - **should** be able to hit up/down on the keyboard to increase the price by the market's tick size (if set, or smallest increment) <a name="6001-SORD-051" href="#6001-SORD-051">6001-SORD-051</a>
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows <a name="6001-SORD-055" href="#6001-SORD-055">6001-SORD-055</a>
