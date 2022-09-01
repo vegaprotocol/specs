@@ -166,9 +166,7 @@ message Market {
 }
 ```
 # Acceptance Criteria
-- As a user, I can configure a market through the market configuration to use auction mode (<a name="0026-AUCT-001" href="#0026-AUCT-001">0026-AUCT-001</a>)
-  - I can define an opening auction for a continuous trading market, and the duration of the call period. (<a name="0026-AUCT-002" href="#0026-AUCT-002">0026-AUCT-002</a>)
-  - The duration of the auction period at market creation cannot be below the minimum auction period defined within the network (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>)
+- The duration of the auction period (time between close of voting and enactment time) at market creation cannot be below the minimum auction period defined within the network (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>)
 - As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period. (<a name="0026-AUCT-004" href="#0026-AUCT-004">0026-AUCT-004</a>)
 - As a user, I can cancel an order that it either live on the order book or parked. (<a href="./0068-MATC-matching_engine.md#0068-MATC-033">0068-MATC-033</a>)
 - As a user, I can get information about the trading mode of the market (through the [market framework](./0001-MKTF-market_framework.md)) (<a name="0026-AUCT-005" href="#0026-AUCT-005">0026-AUCT-005</a>)
@@ -176,5 +174,14 @@ message Market {
 - As a user, the market depth API provides the same data that would be sent during continuous trading (<a name="0026-AUCT-007" href="#0026-AUCT-007">0026-AUCT-007</a>)
 - As an API user, I can identify: (<a name="0026-AUCT-008" href="#0026-AUCT-008">0026-AUCT-008</a>)
   - If a market is temporarily in an auction period
-  - Why it is in that period (e.g. Auction at open, liquidity sourcing)
-  - When the auction mode ends
+  - Why it is in that period (e.g. Auction at open, liquidity sourcing, price monitoring)
+  - When the auction will next attempt to uncross or if the auction period ended and the auction cannot be resolved for whatever reason then this should come blank or otherwise indicating that the system doesn't know when the auction ought to end.
+- A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run from the close of voting on the market proposal (assumed to pass sucessfully) until 
+1) the enactment time assuming there are orders crossing on the book, [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-009" href="#0026-AUCT-009">0026-AUCT-009</a>)  
+2) past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md) and it won't end until sufficient liquidity is committed and we have limit orders such that after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-010" href="#0026-AUCT-010">0026-AUCT-010</a>)  
+3) past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md0041). It will only end if 
+- more liquidity is committed (<a name="0026-AUCT-011" href="#0026-AUCT-011">0026-AUCT-011</a>)  
+- or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-012" href="#0026-AUCT-012">0026-AUCT-012</a>)   
+4) past the enactment time if there are orders crossing on the book, [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
+- best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>) 
+- or best ask;  it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-014" href="#0026-AUCT-014">0026-AUCT-014</a>)  
