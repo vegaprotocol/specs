@@ -132,7 +132,7 @@ A liquidity provider can amend their orders by providing a new set of liquidity 
 
 ### Checking margins for orders
 
-As pegged orders are parked during an auction are parked and not placed on the book, margin checks will not occur for these orders. This includes checking the orders margin when checking the validity of the transaction so orders are accepted. Open positions are treated the same as any other open positions and their liquidity provider orders are pegged orders and will be treated the same as any other pegged orders.
+As pegged orders are parked during an auction and not placed on the book, margin checks will not occur for these orders. This includes checking the orders margin when checking the validity of the transaction so orders are accepted. Open positions are treated the same as any other open positions and their liquidity provider orders are pegged orders and will be treated the same as any other pegged orders.
 
 
 ## Liquidity provision and penalties
