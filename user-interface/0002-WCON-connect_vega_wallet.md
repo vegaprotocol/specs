@@ -6,6 +6,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
 
 - **should** see a link to get a Vega wallet (in case I don't already have one) (<a name="0002-WCON-036" href="#0002-WCON-036">0002-WCON-036</a>)
 - **should** see a link to connect that opens up connection options (<a name="0002-WCON-001" href="#0002-WCON-001">0002-WCON-001</a>)
+- **should** have a way to easily access help should I need to troubleshoot my connection e.g. link to the docs
 - **must** select a connection method / wallet type: (<a name="0002-WCON-002" href="#0002-WCON-002">0002-WCON-002</a>)
 - if Rest:
   - **must** have the option to input a non-default Wallet location (<a name="0002-WCON-003" href="#0002-WCON-003">0002-WCON-003</a>)
