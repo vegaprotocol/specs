@@ -99,7 +99,7 @@ Other functionality:
 
 ### Vesting Smart Contract 
 * Vesting Contract locks vesting VEGA tokens and emits `Stake_Deposited` event
-* Vesting Contract unlocks vesting VEGA tokens and emits `Stake_Deposited` event
+* Vesting Contract unlocks vesting VEGA tokens and emits `Stake_Removed` event
 * Vesting Contract prohibits withdrawal of VEGA while that VEGA is staked
 
 ### Event Queue
