@@ -166,7 +166,6 @@ message Market {
 }
 ```
 # Acceptance Criteria
-- As a user, I can configure a market through the market configuration to use auction mode (<a name="0026-AUCT-001" href="#0026-AUCT-001">0026-AUCT-001</a>)
   - I can define an opening auction for a continuous trading market, and the duration of the call period. (<a name="0026-AUCT-002" href="#0026-AUCT-002">0026-AUCT-002</a>)
   - The duration of the auction period at market creation cannot be below the minimum auction period defined within the network (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>)
 - As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period. (<a name="0026-AUCT-004" href="#0026-AUCT-004">0026-AUCT-004</a>)
