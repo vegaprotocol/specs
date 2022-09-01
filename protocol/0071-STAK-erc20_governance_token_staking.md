@@ -103,8 +103,8 @@ Other functionality:
 * Vesting Contract prohibits withdrawal of VEGA while that VEGA is staked
 
 ### Event Queue
-* Event Queue sees and reacts to `Stake_Deposited` event from Staking Bridge smart contract and credits target Vega user with stake
-* Event Queue sees and reacts to `Stake_Removed` event from Staking Bridge smart contract and removes stake from appropriate Vega user
-* Event Queue sees and reacts to `Stake_Deposited` event from Vesting smart contract and credits target Vega user with stake
-* event Queue sees and reacts to `Stake_Removed` event from Vesting smart contract and removes stake from appropriate Vega user
+* Event Queue sees `Stake_Deposited` event from Staking Bridge smart contract and credits target Vega user with stake
+* Event Queue sees `Stake_Removed` event from Staking Bridge smart contract and removes stake from appropriate Vega user
+* Event Queue sees `Stake_Deposited` event from Vesting smart contract and credits target Vega user with stake
+* event Queue sees `Stake_Removed` event from Vesting smart contract and removes stake from appropriate Vega user
 
