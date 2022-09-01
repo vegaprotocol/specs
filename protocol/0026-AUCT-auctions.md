@@ -166,9 +166,8 @@ message Market {
 }
 ```
 # Acceptance Criteria
-- As a user, I can configure a market through the market configuration to use auction mode (<a name="0026-AUCT-001" href="#0026-AUCT-001">0026-AUCT-001</a>)
-  - I can define an opening auction for a continuous trading market, and the duration of the call period. (<a name="0026-AUCT-002" href="#0026-AUCT-002">0026-AUCT-002</a>)
-  - The duration of the auction period at market creation cannot be below the minimum auction period defined within the network (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>)
+- A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run at least from the close of voting on the market proposal (assumed to pass sucessfully) and the enactment time. (<a name="0026-AUCT-002" href="#0026-AUCT-002">0026-AUCT-002</a>)
+- The duration of the auction period (time between close of voting and enactment time) at market creation cannot be below the minimum auction period defined within the network (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>)
 - As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period. (<a name="0026-AUCT-004" href="#0026-AUCT-004">0026-AUCT-004</a>)
 - As a user, I can cancel an order that it either live on the order book or parked. (<a href="./0068-MATC-matching_engine.md#0068-MATC-033">0068-MATC-033</a>)
 - As a user, I can get information about the trading mode of the market (through the [market framework](./0001-MKTF-market_framework.md)) (<a name="0026-AUCT-005" href="#0026-AUCT-005">0026-AUCT-005</a>)
@@ -177,4 +176,4 @@ message Market {
 - As an API user, I can identify: (<a name="0026-AUCT-008" href="#0026-AUCT-008">0026-AUCT-008</a>)
   - If a market is temporarily in an auction period
   - Why it is in that period (e.g. Auction at open, liquidity sourcing)
-  - When the auction mode ends
+  - When the auction will next attempt to uncross and end
