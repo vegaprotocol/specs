@@ -1,7 +1,7 @@
 # Summary
 Vega uses various digital assets (cryptocurrencies or tokens) to settlement positions in its markets.
 In order to ensure the safety, security, and allocation of these assets, they must be managed in a fully decentralized and extensible way. Here, we lay out a framework for assets in Vega.
-This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, are not covered deposits and withdrawal for an asset.
+This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, also covered is deposits and withdrawal for an asset.
 
 
 # Guide-level explanation
@@ -63,8 +63,9 @@ message DevAssets {
   repeated AssetSource sources = 1;
 }
 ```
-See: https://github.com/vegaprotocol/vega/blob/develop/proto/assets.proto
-And: https://github.com/vegaprotocol/vega/blob/develop/proto/governance.proto
+See: 
+- https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/assets.proto
+- https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/governance.proto
 
 
 The `maximumLifetimeDeposit` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave.
@@ -75,9 +76,44 @@ All the asset definition fields are immutable (cannot be changed even by governa
 These can be changed by asset modification [governance proposal](./0028-GOVE-governance.md).
 
 
+## Asset framework fields
+
+### `quantum`
+
+This field defines an approximation of the smallest “meaningful” amount of an asset.
+
+It exists to get around the fact that it is not always possible to guarantee a precise exchange rate between assets and a common reference asset (such as USD), however an approximate assessment of the value of the asset is necessary for purposes such as spam protection, reward calculation, etc.
+
+By convention we intend this field to be set to the quantity of the asset valued at around the value of 1 USD.
+It is in fact allowed and expected to be sufficiently imprecise that it would be perfectly acceptable for quantum to be set at a value of around 1 of any of USD/EUR/GBP, at any time a decade or so either side of today. 
+
+This convention makes sense because many assets on Vega are expected to be stablecoins, so they can be created with quantum set to 1 (or something around 1 USD if not close enough already) and mostly ignored. 
+More volatile assets will require occasional updates via governance, but again, as we can cope with significant variance, this should not need to happen too often, even for volatile assets.
+
+A consequence of this is that quantum should only ever be used to drive aspects of the protocol where an order of mangnitude variance from the $1 "standard" can be comfortably tolerated. For example, the minimum LP commitment on a market, minimum size of a user initiated transfer, or a threshold of significant trading required to be eligible for a market creation reward.
+
+In general, quantum would be expected to be used with a multiplier, often specified as a network paramter for the specific use case, for example:
+
+- To reward market creators after a market they created does in the order of magnitude of $10m of lifetime volume, use a threshold of `quantum ✖️ 10^7`
+
+- To prevent transferring value less than in the order of magnitude of $0.01, use `quantum ✖️ 10^-2`
+
+- To require a minimum stake of in the order of magnitude of $1000, use `quantum ✖️ 10^3`
+
+It is recommended that:
+
+- `quantum` **should not be relied on directly without a configurable multiplier**, even if this is initially one, as many assets could experience a significant run-up or drop in value and it is both easier (and less likely to be controversial from a governance perspective) to change a multiplier affecting a specific feature quickly than to change quantum on many assets.
+
+- **`quantum` multipliers should not be shared between unrelated features**, as even if they seem to require roughly the same value initially, it may become apparent that the value implied by the multiplier is too high for one feature and simultaneously too low for another. If they do not have independent multipliers, this problem cannot be sattisfactorily resolved.
+
+- **`quantum` should be set to round values**, as it is an imprecise measure and represents an order of magnutude level approximation of value. For example, at the time of writing, BTC is $21,283.44. This implies setting quantum to `46984885901903` for a wBTC (wrapped BTC) asset with 18 decimals. *Don't do this!* A much more reasonable value would be `50000000000000` ($1 if BTC is $20,000) or `40000000000000` ($1 if BTC is $25,000).
+
+- If the Solana token is added, try to resist the temptation to set a quantum of SOL to `007`.
+
+
 ## Asset Listing Process
 
-This process start with an user submitting a new asset proposal to the vega network. This follow all the normal process for a new proposal (e.g: validation, vote, etc).
+This process start with an user submitting a new asset proposal to the vega network. This follows all the normal process for a new proposal (e.g: validation, vote, etc).
 After an asset has been approved and voted in, the proof of that action needs to be submitted to the appropriate asset bridge to whitelist the asset.
 There are many interfaces and protocols to manage cryptocurrencies and other digital assets, so each protocol and asset class that is supported by Vega has a bridge that manages the storage and distribution of deposited assets in a decentralised manner.
 Most of these rely on some form of multisignature security managed either by the protocol itself or via smart contracts.
@@ -260,7 +296,7 @@ Once a withdrawal is complete and the appropriate events/transaction information
 # Acceptance Criteria
 For each asset class to be considered "supported" by Vega, the following must happen:
 1. An asset of that class can Be voted into Vega (<a name="0040-ASSF-001" href="#0040-ASSF-001">0040-ASSF-001</a>)
-2. An asset previously voted in can be voted out of Vega (<a name="0040-ASSF-002" href="#0040-ASSF-002">0040-ASSF-002</a>)
+2. An asset previously voted in can be voted out of Vega (<a name="0040-COSMICELEVATOR-002" href="#0040-COSMICELEVATOR-002">0040-COSMICELEVATOR-002</a>)
 3. A voted-in asset can be deposited into a Vega bridge (<a name="0040-ASSF-003" href="#0040-ASSF-003">0040-ASSF-003</a>)
 4. A properly deposited asset is credited to the appropriate user (<a name="0040-ASSF-004" href="#0040-ASSF-004">0040-ASSF-004</a>)
 5. A withdrawal can be requested and verified by Vega validator nodes (<a name="0040-ASSF-005" href="#0040-ASSF-005">0040-ASSF-005</a>)

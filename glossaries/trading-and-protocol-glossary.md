@@ -151,7 +151,7 @@ A store of capital instantiated with the order book into which fines are contrib
 The net riskiest composition of a trader's open positions and live orders.  For example if a trader holds +10 contracts and has buy orders of +10 and sell orders of +10, the liable position would be +20 contracts for margin calculation purposes.
 
 ### Liquidity Providers
-Liquidity providers commit a bond and place a special Liquidity Commitment that automatically maintains orders on the book for a specific market. In return, liquidity providers earn a [fee](#fee) for ensuring that markets always have open volume. See [the liquidity provision spec](./../protocol/0044-LIQM-lp_mechanics.md) for more detail.
+Liquidity providers commit a bond and place a special Liquidity Commitment that automatically maintains orders on the book for a specific market. In return, liquidity providers earn a [fee](#fee) for ensuring that markets always have open volume. See [the liquidity provision spec](./../protocol/0044-LIME-lp_mechanics.md) for more detail.
 
 ## M
 ### Margin
@@ -248,7 +248,7 @@ Mark price: Last trade was at 5
 Open Value: 500
 ```
 
-### Open Risk Value 
+### Open Risk Value
 The risk value of the total open interest for an instrument calculated by the risk engine which takes into account the volatility of the instrument and calculates the worst expected move over a specified period of time (the time period used to calculate this is a network parameter).
 
 ### Oracle Feed
@@ -270,7 +270,7 @@ A pegged order's price is calculated from the value of the reference price on en
 ### Position resolution
 The methodology by which distressed trades are unwound through deleveraging market positions.
 
-### Proposal period 
+### Proposal period
 For the creation an instrument, the time between the initial proposal period and the successful vote for the instrument.  This is a network parameter that will default to 5 days.
 
 ## R

@@ -1,8 +1,8 @@
 # Liquidity Provisioning Order Type
 
-## Summary 
+## Summary
 
-When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [Liquidity Provisioning mechanics](./0044-LIQM-lp_mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [Liquidity Provisioning mechanics](./0044-LIME-lp_mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 
 ## Liquidity Provisioning order features
@@ -60,7 +60,7 @@ Input data:
 
 Steps:
 
-1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIQM-lp_mechanics.md).
+1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIME-lp_mechanics.md).
 
 1. Subtract from the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](../protocol/0034-PROB-prob_weighted_liquidity_measure.ipynb)). If you end up with 0 or a negative number, stop, you are done. 
 Note that the book `mid-price` must be used when calculating the probability weighted liquidity measure. 
@@ -99,10 +99,12 @@ Note that for volume pegged between best static bid and best static ask the prob
 
 ``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)```. 
 
-where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-LIQM-lp_mechanics.md) and `price` is the price level at which the `volume` will be placed. 
+where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-LIME-lp_mechanics.md) and `price` is the price level at which the `volume` will be placed. 
 At this point `volume` may have decimal places. 
 
 Note: if the resulting price for any of the entries in the buy / sell shape is outside the valid price range as provided by the price monitoring module (the min/max price that would not trigger the price monitoring auction per triggers configured in the market, see [price monitoring](./0032-PRIM-price_monitoring.md#view-from-quanthttpsgithubcomvegaprotocolquant-library-side) spec for details) it should get shifted to the valid price that's furthest away from the mid for the given order-book side.
+
+Note: if the resulting quote price of any of the entries in the buy / sell shape leads to negative product value from the [product quote-to-value function](0051-PROD-product.md#quote-to-value-function) but strictly positive volume then the entire LP order for this LP is undeployed, their stake won't count towards target stake being met and they shall not receive any LP fees regardless of their equity-like share. This can lead to a [liquidity auction](0035-LIQM-liquidity_monitoring.md) if the supplied stake for the market is below the required level due to this LP. 
 
 Note: calculating the order volumes needs take into account Position Decimal Places and create values (which may be int64s or similar) that are the correct size and precision given the number of Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md). 
 This means that the `integerVolume = ceil(volume x 10^(PDP))`. 
@@ -166,9 +168,9 @@ ________________________
 
 ## Amending the LP order:
 
-Liquidity providers are always allowed to amend their shape generated orders by submitting a new liquidity provider order with a set of revised order shapes (see [Liquidity Provisioning mechanics](./0044-LIQM-lp_mechanics.md)). They are not able to amend orders using "normal" amend orders.
+Liquidity providers are always allowed to amend their shape generated orders by submitting a new liquidity provider order with a set of revised order shapes (see [Liquidity Provisioning mechanics](./0044-LIME-lp_mechanics.md)). They are not able to amend orders using "normal" amend orders.
 
-No cancellation of orders that arise from this LP batch order type other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-LIQM-lp_mechanics.md).
+No cancellation of orders that arise from this LP batch order type other than by lowering commitment as per [[Liquidity Provisioning mechanics spec](./0044-LIME-lp_mechanics.md).
 
 Note that any other orders that the LP has on the book (limit orders, other pegged orders) that are *not* part of this LP batch order (call them "normal" in this paragraph) can be cancelled and amended as normal. When volume is removed / added / pegs moved (on "normal" orders) then as part of the normal peg updates the LP batch order may add or remove volume as described in section "How they are constructed for the order book" above.
 

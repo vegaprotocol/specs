@@ -299,3 +299,20 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Wait for the next checkpoint, then stop the network
 1. Load the checkpoint into a new network
 1. Assert that at every epoch, the recurring transfers to the reward pool continues to happen, and that the funds are properly being distributed to the delegator
+
+## Test case 12:
+Enacted, listed ERC20 asset is remembered in checkpoint (<a name="0073-LIMN-023" href="#0073-LIMN-023">0073-LIMN-023</a>)
+An ERC20 asset loaded from checkpoint can be used in a market loaded from a checkpoint (<a name="0073-LIMN-024" href="#0073-LIMN-024">0073-LIMN-024</a>)
+An ERC20 asset loaded from checkpoint can be updated (<a name="0073-LIMN-025" href="#0073-LIMN-025">0073-LIMN-025</a>)
+An ERC20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>)
+Can deposit and withdraw funds to/from ERC20 asset loaded from checkpoint (<a name="0073-LIMN-027" href="#0073-LIMN-027">0073-LIMN-027</a>)
+
+1. Propose a valid ERC20 asset.
+1. Wait for the next checkpoint, then stop the network.
+1. Load the checkpoint into a new network
+1. Assert that the proposal and the asset have been reloaded into the network with the correct settings.
+1. Propose a new market using this asset
+1. Deposit funds to traders via the bridge and assert that funds are received.
+1. Place orders on the market that will cross.
+1. Withdraw funds for one of the traders.
+1. Propose an update to the asset, and ensure that you can update the ERC20 bridge with the asset update and signature bundle.

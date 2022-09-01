@@ -159,16 +159,18 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 3. No antiwhaling for ersatz stake score (<a name="0069-VCBS-007" href="#0069-VCBS-007">0069-VCBS-007</a>):
   * Delegate to one of the ersatz validators 4000 more tokens. 
   * Run for an epoch with the new delegation (i.e. one ersatz with 500 one with 4500) and transfer 1000 tokens to the reward account. 
-  * Verify that at the end of the epoch the stake score of the validator with 4500 tokens is 0.9 and the one with 500 
+  * Verify that at the end of the epoch the stake score of the validator with 4500 tokens is 0.9 and the one with 500 tokens is 0.1
 4. Antiwhaling for Tendermint validators (<a name="0069-VCBS-008" href="#0069-VCBS-008">0069-VCBS-008</a>): 
   * **Additional setup:** in addition to the 1000 delegated for each node, delegate 500 more to node 1. 
+  * **Additional setup:** ensure that the network parameter for reward.staking.delegation.competitionLevel is set to 1 
   * Once it becomes active let it run for a full epoch during which transfer 1000 tokens to the reward account. 
   * Verify that at the end of the epoch node 1 should have a stake score of 0.2 where all other nodes get stake score of 0.1818181818
 5. Full antiwhaling for Tendermint validators (<a name="0069-VCBS-009" href="#0069-VCBS-009">0069-VCBS-009</a>):
-  * **Additional setup:** ensure that the network parameter for reward.staking.delegation.optimalStakeMultiplier is set to 3 
+  * **Additional setup:** ensure that the network parameter for reward.staking.delegation.optimalStakeMultiplier is set to 3
+  * **Additional setup:** ensure that the network parameter for reward.staking.delegation.competitionLevel is set to 1 
   * **Additional setup:** in addition to the 1000 tokens delegated to each node, delegate 10000 tokens to node1 to get a total delegation of 11000 to it. 
   * Once it becomes active let it run for a full epoch during which transfer 1000 tokens to the reward account. 
-  * Verify that at the end of the epoch node 1 should have a stake score of 0 where all other nodes get stake score of 0.06
+  * Verify that at the end of the epoch all nodes should have a stake score of 0.066666666
 
 ### Multisig score
 1. Verify that for all ersatz validators their multisig score is 1 (<a name="0069-VCBS-010" href="#0069-VCBS-010">0069-VCBS-010</a>)
@@ -326,7 +328,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 9. Swap due to better score (<a name="0069-VCBS-042" href="#0069-VCBS-042">0069-VCBS-042</a>):
   * Setup a network with 5 Tendermint validators and self-delegate 1000 tokens to each of them. 
   * Announce a new node at the beginning of the epoch, self-delegate to them a total that is 10000 tokens. 
-  * At the beginning of the next epoch the new validator should have ranking score *equal* to all of the Tendermint validators so it doesn’t get promoted. 
+  * At the beginning of the next epoch the new validator should have ranking score *equal or lower* to all of the Tendermint validators so it doesn’t get promoted. 
   * In the middle of the epoch, shut node 1 down. 
   * Verify that at the beginning of the next epoch the announced node replaced node 1 as a Tendermint validator. 
   * Restart node 1 again from a snapshot

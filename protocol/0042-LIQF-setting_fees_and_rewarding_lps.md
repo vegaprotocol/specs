@@ -57,7 +57,7 @@ At time of call:
 
 ## Splitting Fees Between Liquidity Providers
 
-The guiding principle of this section is that by committing stake a liquidity provider gets virtual stake that depends on how trading has grown on the market. The virtual stake then determines equity-like-share as will be set out below. Equity like share is then used to split fee revenue between LPs.
+The guiding principle of this section is that by committing stake a liquidity provider gets virtual stake that depends on how trading has grown on the market. The virtual stake then determines equity-like share as will be set out below. Equity-like share is then used to split fee revenue between LPs.
 
 ### Calculating liquidity provider equity-like share
 
@@ -79,13 +79,16 @@ LP i virtual stake <- LP i virtual stake x (LP i stake + delta)/(LP i stake).
 ``` 
 
 Independently of the above we also update all virtual stakes at start of each new period. 
-To that end "total value for fee purposes" is cumulated over the period. For a period `n` call this `T(n)`. 
-Set `T(0) = trade value for fee purposes of resolving opening auction`.  
+To that end "total value for fee purposes" is cumulated over the period set by `market.value.windowLength`. For a period `n` call this `T(n)`. 
+We let the `0`th period start the moment the opening auction ends and last for `market.value.windowLength`.   
+We include the volume of the trades that resolved the opening auction in `T(0)`. 
 From this we calculate the running average trade value for fee purposes:
 ```
-A(n) <- A(n-1) x (n-1)/n + T(n)/n.
+A(0) <- T(0),
+A(n) <- A(n-1) x n/(n+1) + T(n)/(n+1), for `n=1,2,...
 ```
-The g`r`owth of the market is then 
+
+For `n = 0` set `r=0` and for `n = 1,2,...` the g`r`owth of the market is then 
 ```
 r = 0
 if A(n) > 0 and A(n-1) > 0
@@ -93,7 +96,7 @@ if A(n) > 0 and A(n-1) > 0
 ```
 Thus at the end of period `n` update
 ```
-if A(n) = 0 or A(n-1) = 0
+if n = 0 or n = 1 or A(n) = 0 or A(n-1) = 0
     LP i virtual stake <- LP i physical stake
 else
     LP i virtual stake <- max(LP i physical stake, (1 + r) x (LP i virtual stake)).
@@ -101,9 +104,9 @@ else
 Thus the virtual stake of an LP will always be at least their physical stake.
 Moreover, in situations when trading volume was zero in the previous period or if it is zero in the current period then we don't define the growth `r` and so in such extreme situations the virtual stake reverts to the physical stake.
 
-The equity like share for each LP is then
+The equity-like share for each LP is then
 ```
-(LP i equity) = (LP i virtual stake) / (sum over j from 1 to N of (LP j virtual stake)).
+(LP i equity-like share) = (LP i virtual stake) / (sum over j from 1 to N of (LP j virtual stake)).
 ```
 
 The average entry valuation (which should be reported by the APIs) is defined, at the time of change of an LP commitment as:
@@ -115,7 +118,7 @@ The average entry valuation (which should be reported by the APIs) is defined, a
 There is a [Google sheet - requiring Vega login](https://docs.google.com/spreadsheets/d/14AgZwa6gXVBUFBUUOmB7Y9PsG8D4zmYN/edit#gid=886563806) showing this.
 
 
-**Check** the sum from over `i` from `1` to `N` of `LP i equity_share` is equal to `1`.
+**Check** the sum from over `i` from `1` to `N` of `LP i equity-like share` is equal to `1`.
 **Warning** the above will be decimal calculations so the above checks will only be true up to a rounding errors.
 
 ### Distributing fees
@@ -126,15 +129,15 @@ This account is not under control of the LP party (they cannot initiate transfer
 
 A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block. 
 
-The liquidity fees are distributed pro-rata depending on the `LP i equity_share` at a given time. 
+The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` at a given time. 
 
 #### Example
-We have `4` LPs with equity shares:
+We have `4` LPs with equity-like share shares:
 share as below
 ```
-LP 1 eq share = 0.65
-LP 2 eq share = 0.25
-LP 3 eq share = 0.1
+LP 1 els = 0.65
+LP 2 els = 0.25
+LP 3 els = 0.1
 ```
 Trade happened, and the trade value for fee purposes multiplied by the liquidity fee factor is `103.5 ETH`. The following amounts be collected immediately into the LP fee accounts for the market:
 
@@ -146,10 +149,10 @@ Trade happened, and the trade value for fee purposes multiplied by the liquidity
 
 Then LP 4 made a delayed LP commitment, and updated share as below:
 
-LP 1 eq share = 0.43
-LP 2 eq share = 0.17
-LP 3 eq share = 0.07
-LP 4 eq share = 0.33
+LP 1 els = 0.43
+LP 2 els = 0.17
+LP 3 els = 0.07
+LP 4 els = 0.33
 
 When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 ```
