@@ -7,7 +7,7 @@ When populating a deal ticket I...
   - **must** see the current market trading mode (Continuous, Auction etc) (<a name="6001-SORD-002" href="#6001-SORD-002">6001-SORD-002</a>)
 
 - If I have a 0 total balance of the settlement asset: **must** be warned that I have insufficient collateral (but also allow you to populate ticket because I might want to try before I deposit) (<a name="6001-SORD-003" href="#6001-SORD-003">6001-SORD-003</a>)
-  - **should** see a link to deposit the required collateral (<a name="6001-SORD-050" href="#6001-SORD-050">6001-SORD-050</a>)
+  - **should** have a way to easily deposit the required collateral (<a name="6001-SORD-050" href="#6001-SORD-050">6001-SORD-050</a>)
 
 - **must** select a side/direction e.g. long/short (note: some implementations may do this with two different submit buttons long/short rather than a toggle) (<a name="6001-SORD-004" href="#6001-SORD-004">6001-SORD-004</a>)
 
@@ -22,8 +22,8 @@ When populating a deal ticket I...
 ...need to select a size, when selecting a size for my order, I...
 
 - **must** input an order [size](7001-DATA-data_display.md#size) (aka amount or contracts) (<a name="6001-SORD-010" href="#6001-SORD-010">6001-SORD-010</a>)
-  - **should** have the previous value for the selected market pre-populated (last submitted or last changed) (<a name="6001-SORD-012" href="#6001-SORD-012">6001-SORD-012</a>)
-  - **should** be able to hit up/down on the keyboard to increase the size by the market's min-contract size (<a name="6001-SORD-013" href="#6001-SORD-013">6001-SORD-013</a>)
+  - **should** have the previous value for the selected market available e.g. pre-populated (last submitted or last changed) (<a name="6001-SORD-012" href="#6001-SORD-012">6001-SORD-012</a>)
+  - **should** be able to quickly tweak the size by the market's min-contract size e.g. hit up/down on the keyboard to increase (<a name="6001-SORD-013" href="#6001-SORD-013">6001-SORD-013</a>)
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows (<a name="6001-SORD-054" href="#6001-SORD-054">6001-SORD-054</a>)
     - **would like to** be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. (<a name="6001-SORD-056" href="#6001-SORD-056">6001-SORD-056</a>)
   - TODO **would** like to be able to use use a leverage slider to determine a size based on how much leverage I wish to use (given general balance, price input/current price) <!-- (<a name="6001-SORD-015" href="#6001-SORD-015">6001-SORD-015</a>) -->
