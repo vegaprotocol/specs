@@ -34,12 +34,12 @@ At a high level, rewards work as follows:
 
 ## Reward metrics
 
-Reward metrics are scoped by [reward type, market, party] (this triplet can be thought of as a primary key for reward metrics).
-Therefore a party may be in scope for the same reward type multiple times but no more than once per market.
+Fee-based reward metrics are scoped by [`reward type`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
+Therefore a party may be in scope for the same reward type multiple times but no more than once per market per epoch.
 Metrics will be calculated at the end of every epoch, for every eligible party, in each market for each reward type.
 Metrics only need to be calculated where the [market, reward type] reward account has a non-zero balance of at least one asset. 
 
-Reward metrics will be calculated once for each party/market combination in the reward metric asseet which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market. 
+Reward metrics will be calculated once for each party/market combination in the reward metric asset which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market. 
 This is the original precision for the metric source data. 
 
 
@@ -125,7 +125,7 @@ Then calculate `M := m_1 + m_2 + … + m_n` and transfer `R ✖️ m_i / M` to p
 If `M=0` (no-one incurred or received fees as specified by the metric type for the given market) then no transfer will have been made to the reward account and therefore there are no rewards to pay out.
 The transfer will be retried the next epoch if it is still active. 
 
-Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the rewward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward maetrics for any two parties. All funds will always be paid out.
+Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward maetrics for any two parties. All funds will always be paid out.
 
 
 ## Acceptance criteria
@@ -472,9 +472,9 @@ Then during epoch 3 set up the following transfers:
 
 At the end of epoch 3 make sure that no transfer is made to the reward account as the proposer of the market has already been paid the proposer bonus once and there are no other eligible markets.
 
-### Distributing market creation rewards - missed opportunity (<a name="0056-REWA-042" href="#0056-REWA-042">0056-REWA-042</a>)
+### Distributing market creation rewards - account funded after reaching requirement (<a name="0056-REWA-042" href="#0056-REWA-042">0056-REWA-042</a>)
 #### Rationale 
-Market goes above the threshold in trading value in an epoch before the reward account for the market for the reward type has any balance - therefore the proposer will not get compensated, not now, not ever. 
+Market goes above the threshold in trading value in an epoch before the reward account for the market for the reward type has any balance - proposer does receive reward even if account is funded at a later epoch.
 
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
@@ -486,7 +486,7 @@ Market goes above the threshold in trading value in an epoch before the reward a
     * Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
 
 #### Expectation
-At the end of the epoch 2 and at the end of epoch 3 no payout has been made for the market ETHUSDT and the reward account balances should remain unchanged.
+At the end of the epoch 3 a payout is made for the market ETHUSDT to the creator.
 
 
 ### Distributing market creation rewards - multiple asset rewards (<a name="0056-REWA-043" href="#0056-REWA-043">0056-REWA-043</a>)
