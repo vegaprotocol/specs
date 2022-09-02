@@ -452,7 +452,7 @@ At the end of the epoch no payout has been made for the market ETHUSDT and the r
 
 ### Distributing market creation rewards - eligible are paid no more than once (<a name="0056-REWA-041" href="#0056-REWA-041">0056-REWA-041</a>)
 #### Rationale 
-Market has been trading but not yet eligible for proposer bonus. 
+Once a market creator has been paid, they are not paid again from the same reward pool
 
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
@@ -521,24 +521,6 @@ A market reward pool funded with the same asset by different parties should pay 
 
 #### Expectation
 At the end of epoch 2 the VEGA rewards should be distributed. Then, at the end of epoch 3, the VEGA rewards should again be distributed
-
-### Distributing market creation rewards - Same asset multiple party rewards (<a name="0056-REWA-045" href="#0056-REWA-045">0056-REWA-045</a>)
-#### Rationale 
-A market reward pool funded with the same asset by different parties should pay out to eligible markets twice
-
-#### Setup
-* Setup a market ETHUSDT settling in USDT.
-* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
-* Setup and fund multiple reward account for the market ETHUSDT:
-    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
-* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
-* During the epoch 2 let the traded value be greater than 10^6
-* During epoch 3, setup and fund multiple reward account for the market ETHUSDT with a different party:
-    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
-
-#### Expectation
-At the end of epoch 2 the VEGA rewards should be distributed. Then, at the end of epoch 3, the VEGA rewards should again be distributed
-
 
 
 ### Distributing market creation rewards - Multiple markets eligible, one already paid (<a name="0056-REWA-046" href="#0056-REWA-046">0056-REWA-046</a>)
