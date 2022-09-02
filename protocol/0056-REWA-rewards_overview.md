@@ -500,10 +500,10 @@ A market should be able to be rewarded multiple times if several reward pools ar
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
 * start trading in the market such that traded value for fee purposes in USDT is less than 10^6
 * During the epoch 2 let the traded value be greater than 10^6
-* During epoch 3, transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
+* During epoch 3, transfer 20000 USDC to `all | market creation | USDC` 
 
 #### Expectation
-At the end of epoch 2 the VEGA rewards should be distributed. Then, at the end of epoch 3, the funded USDC rewards should be distributed
+At the end of epoch 2 the VEGA rewards should be distributed. Then, at the end of epoch 3, the funded USDC rewards should be distributed again to the market creator
 
 ### Distributing market creation rewards - Same asset multiple party rewards (<a name="0056-REWA-044" href="#0056-REWA-044">0056-REWA-044</a>)
 #### Rationale 
