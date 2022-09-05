@@ -54,9 +54,9 @@ Note: balances can change frequently when users have open positions. Apps should
 When looking to submit the Ethereum transaction the release funds from the Vega bridge into my Ethereum wallet, I...
 
 
-- must see a link to [connect an ethereum wallet]()
-- must see a link to submit an ethereum transaction
-- must submit the transaction
+- **must** see a link to [connect an ethereum wallet]()
+- **must** see a link to [submit the ethereum transaction to finish withdrawal]()
+- **must** submit the transaction
 - if successful:
 - if failed:
 
@@ -64,7 +64,7 @@ When looking to submit the Ethereum transaction the release funds from the Vega 
 
 ## Withdraw history
 
-When looking to at complete
+When looking to either complete a withdraw or view past withdraws, I...
 
 - **must** be able to navigate to a list prepared withdrawals for the [connected to a vega wallet + key(s)](0002-WCON-connect_vega_wallet.md)
 
@@ -72,12 +72,14 @@ When looking to at complete
   - **must** see the asset being withdrawn
   - **must** see the [amount](7001-DATA-data_display.md#asset-balances) being withdrawn
   - **must** see the destination of the withdrawal (e.g. Recipient Eth address)
-  - should see the date with withdraw was prepared
-  - could see the full signiture bundle from Vega node (for use on Ethereum)
+  - **should** see the date with withdraw was prepared
+  - **could** see the full signature bundle from Vega node (for use on Ethereum)
   - for withdraws that are in progress:
-    - must see the status of the withdraw
+    - **must** see the status of the withdraw
   - for completed withdraws:
     - **must** see when it was completed on ethereum
     - **must** see a link to ethereum transaction on etherscan
   - for withdraws that have not been completed on the external chain (e.g. Ethereum):
-    - must see a link to complete the withdraw. See [complete ERC20 withdrawal](#complete-erc20-withdraw-from-ethereum-bridge).
+    - **must** see a link to complete the withdraw. See [complete ERC20 withdrawal](#complete-erc20-withdraw-from-ethereum-bridge).
+
+... so I can complete withdrawals or find details of previous ones
