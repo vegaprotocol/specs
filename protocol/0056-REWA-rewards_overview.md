@@ -488,8 +488,10 @@ Market goes above the threshold in trading value in an epoch before the reward a
 #### Expectation
 At the end of the epoch 2 and at the end of epoch 3 no payout has been made for the market ETHUSDT and the reward account balances should remain unchanged.
 
-
-
-
-
-
+### Reward accounts cannot be topped up with a one-off transfer (<a name="0056-REWA-043" href="#0056-REWA-043">0056-REWA-043</a>)
+The following account types require metric-basd distribution. As a one-off transfer cannot specify how it is rewarded, one-off transfers to metric-based reward pools must be **rejected**.
+A one-off transfer from a user to any of the following account types is rejected. No assets are transferred:
+* ACCOUNT_TYPE_REWARD_LP_RECEIVED_FEES,
+* ACCOUNT_TYPE_REWARD_MAKER_RECEIVED_FEES,
+* ACCOUNT_TYPE_REWARD_TAKER_PAID_FEES,
+* ACCOUNT_TYPE_REWARD_MARKET_PROPOSERS
