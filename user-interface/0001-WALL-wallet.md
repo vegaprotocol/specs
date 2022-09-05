@@ -105,7 +105,7 @@ when looking at a specific transaction...
 
 - **must** see the content of the transaction decoded (<a name="0001-WALL-039" href="#0001-WALL-039">0001-WALL-039</a>)
 - **must** see the time request to sign and send was made (<a name="0001-WALL-040" href="#0001-WALL-040">0001-WALL-040</a>)
-- **should** see the referer that made the request (with note that this is not verified) <!-- (<a name="0001-WALL-041" href="#0001-WALL-041">0001-WALL-041</a>) -->
+- **should** see the referrer that made the request (with note that this is not verified) <!-- (<a name="0001-WALL-041" href="#0001-WALL-041">0001-WALL-041</a>) -->
 - **must** see what wallet / key is being used (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
 - **should** be able to select auto approve for this app (aka don't ask me again) <!-- (<a name="0001-WALL-043" href="#0001-WALL-043">0001-WALL-043</a>) -->
   - **should** be able to select to auto approve for a amount of time that I choose <!-- (<a name="0001-WALL-074" href="#0001-WALL-074">0001-WALL-074</a>) -->
