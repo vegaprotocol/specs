@@ -41,7 +41,7 @@ These acceptance criteria are not final or intended to be "the truth" but a usef
 
 ## 3. Bridges and Transfers
 - Deposit
-- Withdraw
+- [Withdraw](3001-WITH-withdraw.md)
 - Transfer
 
 ## 4. Liquidity provision
