@@ -113,14 +113,14 @@ when looking at a specific transaction...
 - **must** be prompted to enter passphrase (when needed to sign + broadcast transaction) (<a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>)
 - **must** see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network). (<a name="0001-WALL-045" href="#0001-WALL-045">0001-WALL-045</a>)
 - **must** be able to follow a link to block explorer for broadcasted transactions (<a name="0001-WALL-046" href="#0001-WALL-046">0001-WALL-046</a>)
-- **should** see what node it was broadcast to (<a name="0001-WALL-047" href="#0001-WALL-047">0001-WALL-047</a>)
-- **could** see what validator mined the block the transaction was included in (<a name="0001-WALL-048" href="#0001-WALL-048">0001-WALL-048</a>)
-- **must** see at what block and time it was confirmed (<a name="0001-WALL-049" href="#0001-WALL-049">0001-WALL-049</a>)
-- **must** see if there was a reported error/issue, and the details of the issue (<a name="0001-WALL-050" href="#0001-WALL-050">0001-WALL-050</a>)
-- **must** see if the transaction was rejected, and why (<a name="0001-WALL-051" href="#0001-WALL-051">0001-WALL-051</a>)
+- if broadcast: **should** see what node it was broadcast to (<a name="0001-WALL-047" href="#0001-WALL-047">0001-WALL-047</a>)
+- if broadcast + mined: **could** see what validator mined the block the transaction was included in (<a name="0001-WALL-048" href="#0001-WALL-048">0001-WALL-048</a>)
+- if broadcast + mined:**must** see at what block and time it was confirmed (<a name="0001-WALL-049" href="#0001-WALL-049">0001-WALL-049</a>)
+- if broadcast but there was an error: **must** see if there was a reported error/issue, and the details of the issue (<a name="0001-WALL-050" href="#0001-WALL-050">0001-WALL-050</a>)
+- if broadcast + mined: **must** see if the transaction was rejected, and why (<a name="0001-WALL-051" href="#0001-WALL-051">0001-WALL-051</a>)
+- if ignored: must be able to submit, reject or still ignore the transaction (<a name="0001-WALL-xxx" href="#0001-WALL-xxx">0001-WALL-xxx</a>)
 
 .. so I can find all the information about what has happened with mined and un-mined transactions
-
 ## Key management
 When using a Vega wallet, I...
 
