@@ -199,11 +199,8 @@ message CancelTransfer {
 ### One off transfers
 
 - As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
-
-- As a user I can transfer funds from a general account I control to reward account.  Such transfer can be immediate or delayed. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
-
+- As a user I **cannot** transfer funds from a general account I control to reward account. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
 - As a user I can transfer funds from a general account I control to an locked_for_staking. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-COSMICELEVATOR-TRAN-003" href="#0057-COSMICELEVATOR-TRAN-003">0057-COSMICELEVATOR-TRAN-003</a>).
-
 - As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-COSMICELEVATOR-TRAN-004" href="#0057-COSMICELEVATOR-TRAN-004">0057-COSMICELEVATOR-TRAN-004</a>)
 
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
