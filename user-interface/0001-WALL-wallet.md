@@ -118,7 +118,7 @@ when looking at a specific transaction...
 - if broadcast + mined:**must** see at what block and time it was confirmed (<a name="0001-WALL-049" href="#0001-WALL-049">0001-WALL-049</a>)
 - if broadcast but there was an error: **must** see if there was a reported error/issue, and the details of the issue (<a name="0001-WALL-050" href="#0001-WALL-050">0001-WALL-050</a>)
 - if broadcast + mined: **must** see if the transaction was rejected, and why (<a name="0001-WALL-051" href="#0001-WALL-051">0001-WALL-051</a>)
-- if ignored: must be able to submit, reject or still ignore the transaction (<a name="0001-WALL-xxx" href="#0001-WALL-xxx">0001-WALL-xxx</a>)
+- if ignored: must be able to submit, reject or still ignore the transaction (<a name="0001-WALL-079" href="#0001-WALL-079">0001-WALL-079</a>)
 
 .. so I can find all the information about what has happened with mined and un-mined transactions
 ## Key management
