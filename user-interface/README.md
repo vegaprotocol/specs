@@ -15,8 +15,13 @@ Each bullet is worded so that it contains a **must**, **should**, **could**, or 
 
 These acceptance criteria are not final or intended to be "the truth" but a useful tool, they will be improved over time as more people feedback on using Vega.
 
+A user is normally interacting with at least 2 applications when doing tasks on Vega, A **Dapp** or interface designed to help users complete specific tasks and a **Wallet** that is only used to authenticate a user's actions and broadcast them to the network. 
+
 ## 0. Wallets and signing transactions
-- [Get and use a Vega wallet](0001-WALL-wallet.md)
+- [Get and use a Vega wallet](0001-WALL-wallet.md) (This mostly relates to use of a wallet app, for cryptography and broadcast to network)
+  
+These files contain generic user needs for interacting with wallets that are true for all types of interactions that require a wallet. More specific requirements are mentioned where these are referenced. Thy describe what the user needs from the dapp not the wallet.
+
 - [Connect Vega wallet to a Dapp & select keys](0002-WCON-connect_vega_wallet.md)
 - [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
 - Connect Ethereum wallet to a Dapp
