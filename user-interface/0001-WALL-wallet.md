@@ -91,7 +91,7 @@ When looking for a specific balance or asset on a given wallet and network, I...
 ## Transactions
 When thinking about a recent or specific transaction, I ...
 
-- **must** see a history of transactions the wallet app has signed read from the local app(<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
+- **must** see a history of transactions the wallet app has signed read from the local app (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
 - **could** see a history of transactions the selected key has broadcast to a network (e.g. another wallet with the same keys), or from before a key restore (<a name="0001-WALL-077" href="#0001-WALL-077">0001-WALL-077</a>)
 - **must** see pending transactions (Transactions I have not yet approved/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
 - **must** see transactions that have recently been broadcast but not yet seen on the chain (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
