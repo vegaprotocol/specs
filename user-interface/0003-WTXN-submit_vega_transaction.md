@@ -14,7 +14,7 @@ if transaction not auto approved by wallet:
 
 - **must** see a prompt to check connected vega wallet to approve transaction (<a name="0003-WTXN-002" href="#0003-WTXN-002">0003-WTXN-002</a>)
 
-if order is approved by wallet:
+if transaction is approved by wallet:
 
 - **must** see A [transaction hash](7001-DATA-data_display.md#transaction-hash) (<a name="0003-WTXN-003" href="#0003-WTXN-003">0003-WTXN-003</a>)
 - **must** see the public key that this transaction was submitted for (<a name="0003-WTXN-004" href="#0003-WTXN-004">0003-WTXN-004</a>)
