@@ -1,6 +1,6 @@
 # Data display
 
-This is a definition of some common data types and the rules about the display them. These are referenced in other acceptenace criteria to avoid repetition.
+This is a definition of some common data types and the rules about the displaying them. These are referenced in other acceptenace criteria to avoid repetition.
 
 ## Size
 
