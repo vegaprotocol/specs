@@ -126,7 +126,7 @@ NB: if there is no market with contribution to the reward metric - no transfer i
 
 ## Fees
 
-A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0059-simple-POS-rewards.md).
+A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0059-simple-POS-rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
 The fee is set by the `transfer.fee.factor` [network parameter](#network-parameter) that defines the proportion of each transfer taken as a fee. 
 The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred. 
@@ -199,7 +199,7 @@ message CancelTransfer {
 ### One off transfers
 
 - As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
-- As a user I **cannot** transfer funds from a general account I control to reward account. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
+- As a user I **cannot** transfer funds from a general account I control to reward account with a one-off transfer. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
 - As a user I can transfer funds from a general account I control to an locked_for_staking. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-COSMICELEVATOR-TRAN-003" href="#0057-COSMICELEVATOR-TRAN-003">0057-COSMICELEVATOR-TRAN-003</a>).
 - As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-COSMICELEVATOR-TRAN-004" href="#0057-COSMICELEVATOR-TRAN-004">0057-COSMICELEVATOR-TRAN-004</a>)
 
