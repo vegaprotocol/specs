@@ -145,4 +145,4 @@ Market in continuous trading:
 
 Market in auction:
 - Attempt Market order in Auction mode: should warn order is invalid
-- Attempt limit order GFN when market is normally Continuous, should warn
+- Attempt limit order GFN when market is normally Continuous (but currently in auction), should warn that GFN will not work
