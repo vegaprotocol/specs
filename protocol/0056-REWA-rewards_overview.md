@@ -507,7 +507,7 @@ At the end of epoch 2 the VEGA rewards should be distributed. Then, at the end o
 
 ### Distributing market creation rewards - Same asset multiple party rewards (<a name="0056-REWA-044" href="#0056-REWA-044">0056-REWA-044</a>)
 #### Rationale 
-A market reward pool funded with the same asset by different parties should pay out to eligible markets twice
+A market reward pool funded with the same asset by different parties should pay out to eligible markets as many times as there are parties, assuming threshold is reached.
 
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
