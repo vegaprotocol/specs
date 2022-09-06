@@ -119,4 +119,5 @@ To be clear, this also means that if the input data is the wrong "shape" or type
 	1. Number fields can be filtered by greater than (number is greater than filter data). (<a name="0047-DSRF-019" href="#0047-DSRF-019">0047-DSRF-019</a>)
 	1. Date + time fields can be filtered by greater than (datetime is greater than filter data). (<a name="0047-DSRF-020" href="#0047-DSRF-020">0047-DSRF-020</a>)
 	1. Number fields can be filtered by greater than or equal (number is greater than or equal to filter data). (<a name="0047-DSRF-021" href="#0047-DSRF-021">0047-DSRF-021</a>)
-	1. Date + time fields can be filtered by greater than or equal (datetime is greater than or equal to filter data). (<a name="0047-DSRF-022" href="#0047-DSRF-022">0047-DSRF-022</a>)
+	1. Date + time fields can be filtered by greater than or equal (datetime is greater than or equal to filter data). (<a name="0047-DSRF-022" href="#0047-DSRF-022">0047-DSRF-022</a>
+	1. Ensure oracle filters using AND conditions ar supported using multiple filters (<a name="0047-DSRF-023" href="#0047-DSRF-023">0047-DSRF-023</a>)
