@@ -37,6 +37,7 @@
 
 - [ ] Maintains separate position data for each market a trader is active in (<a name="0006-POSI-026" href="#0006-POSI-026">0006-POSI-026</a>)
 - [ ] If there is either one or more of the position record's fields is non zero (i.e. open position size, active buy order size, active sell order size), the position record exists. (<a name="0006-POSI-027" href="#0006-POSI-027">0006-POSI-027</a>)
+- [ ] Open positions are closed for parties who are closed out during trading.(<a name="0006-POSI-028" href="#0006-POSI-028">0006-POSI-028</a>)
 
 # Summary
 
