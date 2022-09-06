@@ -138,9 +138,13 @@ message ProtocolUpgradeEvent {
    
 ## Snapshots (<a name="0075-PLUP-009" href="#0075-PLUP-009">0075-PLUP-009</a>)
    - Post validator joining they should be immediately allowed to propose and included in the overall total count
+   - Validators attempting to join during upgrade will be rejected if protocol versions differ
+   - Ensure that required majority is not met when enough validators join between validator proposals and target block
+   - Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
 
 ## Checkpoints (<a name="0075-PLUP-010" href="#0075-PLUP-010">0075-PLUP-010</a>)
-   - Validator proposals should be stored in the checkpoints and restored into the network where they can be seen to contribute to a successful upgrade
+   - Validator proposals should not be stored in the checkpoints and restored into the network
+   - Upgrade will not occur after a post checkpoint restore until new proposals are made and block height reached
    
 ## API
    - An datanode API should be available to provide information on the upcoming confirmed proposal including total proposals/block details/versions
