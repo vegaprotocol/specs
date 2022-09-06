@@ -98,23 +98,61 @@ message ProtocolUpgradeEvent {
 
 ## Acceptance criteria
 
-### Invalid proposal
-- [ ] A network with 5 validators (<a name="0075-PLUP-001" href="#0075-PLUP-001">0075-PLUP-001</a>)
-  - [ ] Validator 1 proposes a protocol upgrade to an invalid tag - should result in an error
-  - [ ] Validator 2 proposes a protocol upgrade on a block height preceding the current block - should result in an error
+### Invalid proposals - proposal rejections
+   - A network with 5 validators (<a name="0075-PLUP-001" href="#0075-PLUP-001">0075-PLUP-001</a>)
+   - Validator 1 proposes a protocol upgrade to an invalid tag (https://semver.org/) - should result in an error
+   - Validator 2 proposes a protocol upgrade on a block height preceding the current block - should result in an error
+   - Propose and enact a version downgrade 
+   - Non-validator attempts to propose upgrade
+   - Ersatz validator attempts to propose upgrade
+ 
+### Block height validation (<a name="0075-PLUP-002" href="#0075-PLUP-002">0075-PLUP-002</a>)
+   Proposal will not be accepted as valid if validator
+   -  Proposes an upgrade block in the past - should be rejected / failed check - sign via wallet / check wallet
+   -  Proposes a negative upgrade block
+   -  Proposes a 0 upgrade block
+   -  Proposes (string/other upgrade block)
+   -  Proposes with supply a block height
   
 ### Proposal doesn't win majority
-- [ ] A network with 5 validators, current block height x (<a name="0075-PLUP-002" href="#0075-PLUP-002">0075-PLUP-002</a>)
+- [ ] A network with 5 validators, current block height x (<a name="0075-PLUP-003" href="#0075-PLUP-003">0075-PLUP-003</a>)
   - [ ] Validator 1 proposes a protocol upgrade on block height x+50 to version y1
   - [ ] Validator 2 proposes a protocol upgrade on block height x+50 to version y2
   - [ ] Validator 3 proposes a protocol upgrade on block height x+50 to version y1
   - [ ] Validator 4 proposes a protocol upgrade on block height x+50 to version y2
   - [ ] When bloxk x+50 passes an event is expected that the proposal has been rejected and the network continues with the current running version
 
-### Successful upgrade
-- [ ] A new release is made available, and is successfully deployed (<a name="0075-PLUP-003" href="#0075-PLUP-003">0075-PLUP-003</a>) 
+### Successful upgrade - happy path  (<a name="0075-PLUP-004" href="#0075-PLUP-004">0075-PLUP-004</a>) 
+- [ ] A new release is made available, and is successfully deployed
   - [ ] Setup a network with 5 validators running version x
   - [ ] Have 4 validator submit request to upgrade to release >x at block height 1000
   - [ ] At the end of block height 1000 a snapshot is taken and vega is stopped by the vegavisor
   - [ ] All nodes are starting from the snapshot of block 1000 and the network resumes with version >x
+ 
+### VISOR (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) 
+   - Can be seen to automatically download the latest version for install when available at the source location when file meets the format criteria defined
+   
+   
+### Epochs (<a name="0075-PLUP-006" href="#0075-PLUP-006">0075-PLUP-006</a>) 
+   - Proposing an upgrade an upgrade block which ought to be the end of an epoch 
+   - Propose an upgrade block which should result in a new network in the same epoch
+
+### Required Majority 
+   - Counting proposal votes to check if required majority has been reached occurs when any proposed target block has been reached
+   - Only active network validators proposals are counted when any proposed target block has been reached 
+   - Events are emitted for all proposals which fail to reach required majority when target block is reached
+   - When majority reached during the process of upgrading, those validators which didnt propose will stop producing blocks
+
+### Multiple proposals
+   - If multiple proposals are submitted from a validator before the block heights are reached then only the last proposal is considered
+
+## Spam
+   - Excessive numbers of proposals from a single validator within an epoch should be detected and rejected - (Future requirement)
+   
+## Snapshots
+   - Post validator joining they should be immediately allowed to propose and included in the overall total count
+   
+## API
+   - An datanode API should be available to provide information on the upcoming confirmed proposal including total proposals/block details/versions
   
+ 
