@@ -5,6 +5,7 @@
 - All orders for a given party across all markets will be removed from the vega system when a cancel all orders message is sent (<a name="0033-OCAN-003" href="#0033-OCAN-003">0033-OCAN-003</a>)
 - Orders which are not currently on the orderbook but are `parked` due to being in auction should also be affected by cancels. (<a name="0033-OCAN-004" href="#0033-OCAN-004">0033-OCAN-004</a>)
 - Margins must be recalculated after a cancel event (<a name="0033-OCAN-007" href="#0033-OCAN-007">0033-OCAN-007</a>)
+- Using the cancel orders trx, cancelling all orders on market would move the market status to auction due to lack of liquidity  (<a name="0033-OCAN-008" href="#0033-OCAN-008">0033-OCAN-008</a>)
 
 # Summary
 
