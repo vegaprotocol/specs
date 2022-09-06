@@ -344,8 +344,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Send an announce node command from a non validator node should fail
 2. Valid announce node command (<a name="0069-VCBS-045" href="#0069-VCBS-045">0069-VCBS-045</a>):
   * Send a valid announce node from a validator node should result in a validator update event with the details of the validator and a validator ranking event.
-3. Duplicate nodes annouce same keys to core via announce node command (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>):
-  * Only one announce trx should be successful, other duplicate annoucements should be rejected
+3. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>):
+  * Should be rejected
 
 
 
