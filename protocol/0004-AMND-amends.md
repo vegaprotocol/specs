@@ -22,6 +22,12 @@ Start date: `2020-03-12` <br>
 - Attempting to alter details on a filled order will cause the amend to be rejected (<a name="0004-AMND-017" href="#0004-AMND-017">0004-AMND-017</a>)
 - Attempting to alter details on a cancelled order will cause the amend to be rejected (<a name="0004-AMND-018" href="#0004-AMND-018">0004-AMND-018</a>)
 - Attempting to alter details on an expired order will cause the amend to be rejected (<a name="0004-AMND-019" href="#0004-AMND-019">0004-AMND-019</a>)
+- Attempts to amend a liquidity provision order will be rejected (<a name="0004-AMND-020" href="#0004-AMND-020">0004-AMND-020</a>)
+- Amending an order in such a way as to force a margin increase and decrease (<a name="0004-AMND-021" href="#0004-AMND-021">0004-AMND-021</a>)
+- It is possible to amend a fractional size order (<a name="0004-AMND-022" href="#0004-AMND-022">0004-AMND-022</a>)
+- It is possible to amend a partially filled order (<a name="0004-AMND-023" href="#0004-AMND-023">0004-AMND-023</a>)
+- It is possible to amend a versioned order (already amended several times) (<a name="0004-AMND-024" href="#0004-AMND-024">0004-AMND-024</a>)
+- Attempts to amend order fields not in scope are rejected (<a name="0004-AMND-025" href="#0004-AMND-025">0004-AMND-025</a>)
 
 
 ## Summary
