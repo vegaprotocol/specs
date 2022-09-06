@@ -146,7 +146,7 @@ message ProtocolUpgradeEvent {
    - Validator proposals should not be stored in the checkpoints and restored into the network
    - Upgrade will not occur after a post checkpoint restore until new proposals are made and block height reached
    
-## API
+## API (<a name="0075-PLUP-011" href="#0075-PLUP-011">0075-PLUP-011</a>)
    - An datanode API should be available to provide information on the upcoming confirmed proposal including total proposals/block details/versions
    
 
@@ -158,8 +158,7 @@ message ProtocolUpgradeEvent {
   - All nodes are starting from the snapshot of block 1000 and the network resumes with version >x
  
  
- ### Failing consensus
- 
+ ### Failing consensus (<a name="0075-PLUP-012" href="#0075-PLUP-012">0075-PLUP-012</a>)
   - Upgrade takes place at block N. Minimum number of validators -1 restart with correct version. One validator restarts with previous version. Consensus is not achieved. Start another validator with the correct version, consensus is achieved
   - 5 validator network. Upgrade takes places at block N. Start 3 validators immediately. Allow several blocks to pass. Start two remaining validators. (All validators continue to work) - no blocks producing as 3 validators do not have enough weight - need 70% weight to produce blocks
   - Weighting threshold (API TM) is not reached after restart, network does not produce blocks
