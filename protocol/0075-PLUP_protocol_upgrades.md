@@ -98,8 +98,8 @@ message ProtocolUpgradeEvent {
 
 ## Acceptance criteria
 
-### Invalid proposals - Rejections
-   - A network with 5 validators (<a name="0075-PLUP-001" href="#0075-PLUP-001">0075-PLUP-001</a>)
+### Invalid proposals - Rejections (<a name="0075-PLUP-001" href="#0075-PLUP-001">0075-PLUP-001</a>)
+   - A network with 5 validators 
    - Validator 1 proposes a protocol upgrade to an invalid tag (https://semver.org/) - should result in an error
    - Validator 2 proposes a protocol upgrade on a block height preceding the current block - should result in an error
    - Propose and enact a version downgrade 
@@ -113,25 +113,10 @@ message ProtocolUpgradeEvent {
    -  Proposes a 0 upgrade block
    -  Proposes (string/other upgrade block)
    -  Proposes with supply a block height
-  
-### Proposal doesn't win majority (<a name="0075-PLUP-003" href="#0075-PLUP-003">0075-PLUP-003</a>)
-  - A network with 5 validators, current block height x 
-  - Validator 1 proposes a protocol upgrade on block height x+50 to version y1
-  - Validator 2 proposes a protocol upgrade on block height x+50 to version y2
-  - Validator 3 proposes a protocol upgrade on block height x+50 to version y1
-  - Validator 4 proposes a protocol upgrade on block height x+50 to version y2
-  - When bloxk x+50 passes an event is expected that the proposal has been rejected and the network continues with the current running version
 
-### Successful upgrade - happy path  (<a name="0075-PLUP-004" href="#0075-PLUP-004">0075-PLUP-004</a>) 
-  - A new release is made available, and is successfully deployed
-  - Setup a network with 5 validators running version x
-  - Have 4 validator submit request to upgrade to release >x at block height 1000
-  - At the end of block height 1000 a snapshot is taken and vega is stopped by the vegavisor
-  - All nodes are starting from the snapshot of block 1000 and the network resumes with version >x
  
 ### VISOR (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) 
    - Can be seen to automatically download the latest version for install when available at the source location when file meets the format criteria defined
-   
    
 ### Epochs (<a name="0075-PLUP-006" href="#0075-PLUP-006">0075-PLUP-006</a>) 
    - Proposing an upgrade an upgrade block which ought to be the end of an epoch 
@@ -142,6 +127,8 @@ message ProtocolUpgradeEvent {
    - Only active network validators proposals are counted when any proposed target block has been reached 
    - Events are emitted for all proposals which fail to reach required majority when target block is reached
    - When majority reached during the process of upgrading, those validators which didnt propose will stop producing blocks
+   - Proposals for multiple versions at same block height will be rejected if majority has not been reached, network continues with the current running version  
+
 
 ### Multiple proposals (<a name="0075-PLUP-008" href="#0075-PLUP-008">0075-PLUP-008</a>)
    - If multiple proposals are submitted from a validator before the block heights are reached then only the last proposal is considered
@@ -157,5 +144,19 @@ message ProtocolUpgradeEvent {
    
 ## API
    - An datanode API should be available to provide information on the upcoming confirmed proposal including total proposals/block details/versions
-  
+   
+
+### Successful upgrade  (<a name="0075-PLUP-004" href="#0075-PLUP-004">0075-PLUP-004</a>) 
+  - A new release is made available, and is successfully deployed
+  - Setup a network with 5 validators running version x
+  - Have 4 validator submit request to upgrade to release >x at block height 1000
+  - At the end of block height 1000 a snapshot is taken and vega is stopped by the vegavisor
+  - All nodes are starting from the snapshot of block 1000 and the network resumes with version >x
  
+ 
+ ### Failing consensus
+ 
+  - Upgrade takes place at block N. Minimum number of validators -1 restart with correct version. One validator restarts with previous version. Consensus is not achieved. Start another validator with the correct version, consensus is achieved
+  - 5 validator network. Upgrade takes places at block N. Start 3 validators immediately. Allow several blocks to pass. Start two remaining validators. (All validators continue to work) - no blocks producing as 3 validators do not have enough weight - need 70% weight to produce blocks
+  - Weighting threshold (API TM) is not reached after restart, network does not produce blocks
+  - Upgrade takes place, but insufficient validators are restored for 1, 5, 10, minutes. Validators which are restored immediately patiently wait for consensus to be achieved, and then blocks continue  - concensus acheived
