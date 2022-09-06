@@ -462,13 +462,12 @@ Once a market creator has been paid, they are not paid again from the same rewar
     * Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
 * start trading in the market such that traded value for fee purposes in USDT is less than 10^6
 * During the epoch 2 let the traded value be greater than 10^6
+* Then during epoch 3 set up the following transfers with the same party as the first set:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+    * Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
 
 #### Expectation
 At the end of the epoch 2 the proposer of the market ETHUSDT is paid 10000 `$VEGA` and 20000 `USDC`
-
-Then during epoch 3 set up the following transfers:
-* Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
-* Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
 
 At the end of epoch 3 make sure that no transfer is made to the reward account as the proposer of the market has already been paid the proposer bonus once and there are no other eligible markets.
 
