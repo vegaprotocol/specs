@@ -114,20 +114,22 @@ message ProtocolUpgradeEvent {
    -  Proposes (string/other upgrade block)
    -  Proposes with supply a block height
 
- 
 ### VISOR (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) 
    - Can be seen to automatically download the latest version for install when available at the source location when file meets the format criteria defined
+   - Visor automatically upgrades validators to proposed version if requiredMajority has been reached
    
 ### Epochs (<a name="0075-PLUP-006" href="#0075-PLUP-006">0075-PLUP-006</a>) 
-   - Proposing an upgrade an upgrade block which ought to be the end of an epoch 
+   - Proposing an upgrade block which ought to be the end of an epoch
    - Propose an upgrade block which should result in a new network in the same epoch
+   - Ensure end of epoch processes still run after restore e.g reward calculation and distributions
 
 ### Required Majority  (<a name="0075-PLUP-007" href="#0075-PLUP-007">0075-PLUP-007</a>)
    - Counting proposal votes to check if required majority has been reached occurs when any proposed target block has been reached
    - Only active network validators proposals are counted when any proposed target block has been reached 
    - Events are emitted for all proposals which fail to reach required majority when target block is reached
    - When majority reached during the process of upgrading, those validators which didnt propose will stop producing blocks
-   - Proposals for multiple versions at same block height will be rejected if majority has not been reached, network continues with the current running version  
+   - Proposals for multiple versions at same block height will be rejected if majority has not been reached, network continues with the current running version 
+   - Propose with a validator which is moved to Ersatz by the time the upgrade is enacted. If there are 5 validators, 3 vote yes, 2 vote no: One of the yes voters is kicked in favour of a new one, leaving the vote at 2-2 so the upgrade should not happen as counting votes happens at block height only
 
 
 ### Multiple proposals (<a name="0075-PLUP-008" href="#0075-PLUP-008">0075-PLUP-008</a>)
