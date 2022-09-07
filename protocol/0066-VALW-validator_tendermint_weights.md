@@ -32,7 +32,7 @@ If the network has no stake at all, then all validators would have equal voting 
 1. wait for the delegation to become active in the next epoch
 1. check that Tendermint weights for the first `4` validators are `2500` and the last validator `1`. 
 
-### Update at the start of epoch check (<a name="0066-VALW-004" href="#0066-VALW-004">0066-VALW-004</a>)
+### Changes to delegation during the epoch are reflected in the next epoch’s voting power (<a name="0066-VALW-004" href="#0066-VALW-004">0066-VALW-004</a>)
 1. set up a network with 5 validators
 1. give the first `4` validators `1000` of self-stake each. Give the last validator `0`. 
 1. wait for the delegation to become active in the next epoch
