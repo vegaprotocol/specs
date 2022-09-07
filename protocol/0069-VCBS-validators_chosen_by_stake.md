@@ -348,7 +348,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
 -1 validator drops to the lowest delegated stake (1000)
 - 1 ersatzvalidator has 6000 stake and sufficient ownstake
 
-Verify that the the first ersatzvalidator is removed (stops being listed as an ersatzvalidator entirely, not demoted to pending) in the epoch change, and one validator with insufficient ownstake is replaced by the other ersatzvalidator.
+Verify that the the first ersatzvalidator is removed (marked as pending in the epoch change and then removed due to continous insufficient ownstake), and one validator with insufficient ownstake is replaced by the other ersatzvalidator.
 
 12.b Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
