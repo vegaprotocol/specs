@@ -8,11 +8,12 @@ When submitting a Vega transaction of any kind, I...
 
 if not connected to a Vega wallet:
 
-- **must** be told that I am not connected and given the [option to connect](0012-WCON-connect_vega_wallet.md) (<a name="0003-WTXN-001" href="#0003-WTXN-001">0003-WTXN-001</a>)
+- **must** be told that I am not connected, so can not submit a transaction, and given the [option to connect](0012-WCON-connect_vega_wallet.md). (Note: this may have happened if the wallet has become disconnected without the user knowing) (<a name="0003-WTXN-001" href="#3-WTXN-001">0003-WTXN-001</a>)
 
 if transaction not auto approved by wallet:
 
-- **must** see a prompt to check connected vega wallet to approve transaction (<a name="0003-WTXN-002" href="#0003-WTXN-002">0003-WTXN-002</a>)
+- **must** see a prompt to check connected vega wallet to approve transaction (<a name="0003-WTXN-002" href="#3-WTXN-002">0003-WTXN-002</a>)
+- **could** see the transaction details that has been passed to the wallet for broadcast (<a name="0003-WTXN-019" href="#3-WTXN-019">0003-WTXN-019</a>)
 
 if transaction is approved by wallet:
 

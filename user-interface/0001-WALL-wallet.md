@@ -8,7 +8,7 @@ The primary job(s) of a wallet app is to [sign/encrypt transaction](../protocol/
 ## Get wallet
 When on the wallet page of Vega.xyz, I...
 
-- **must** see links to the latest version of the desktop and command line wallets (inc github repos) (<a name="0001-WALL-001" href="#0001-WALL-001">0001-WALL-001</a>)
+- **must** see links to the latest version of all the available wallets (e.g. desktop, command line and browser plugin) (inc github repos) (<a name="0001-WALL-001" href="#1-WALL-001">0001-WALL-001</a>)
 - **must** be able to easily download the latest version for the operating system I am using (<a name="0001-WALL-002" href="#0001-WALL-002">0001-WALL-002</a>)
 - **must** be able to use the default wallet version linked/downloadable from this page with the version of Vega currently running on mainnet (<a name="0001-WALL-076" href="#0001-WALL-076">0001-WALL-076</a>)
 
@@ -22,7 +22,7 @@ When opening the wallet for the first time, I...
 - **must** be able to create a new wallet (<a name="0001-WALL-005" href="#0001-WALL-005">0001-WALL-005</a>)
   - **must** be shown the back up phrase (<a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>)
   - **must** shown version number of the algorithm used to derive key pairs from the back up phrase (<a name="0001-WALL-007" href="#0001-WALL-007">0001-WALL-007</a>)
-  - **must** see the first key without having to "add key" (<a name="0001-WALL-008" href="#0001-WALL-008">0001-WALL-008</a>)
+  - **must** see the first key without having to "add key". (i.e. The wallet auto generates the first key from the seed phrase) (<a name="0001-WALL-008" href="#1-WALL-008">0001-WALL-008</a>)
 
 ...so I can sign transactions
 
