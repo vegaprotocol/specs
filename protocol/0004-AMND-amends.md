@@ -25,7 +25,6 @@ Start date: `2020-03-12` <br>
 
 
 For a party with no position on a given market:
-
 - amending an order in a way that increases the volume sufficiently leads to margin account balance increasing (<a name="0004-AMND-021" href="#0004-AMND-021">0004-AMND-021</a>)
 - Amending an order in a way that decreases the volume sufficiently leads to margin account balance decreasing (<a name="0004-AMND-022" href="#0004-AMND-022">0004-AMND-022</a>)
 - Amending an order by placing it at a sufficiently lower price will lead to margin account balance decreasing (<a name="0004-AMND-023" href="#0004-AMND-023">0004-AMND-023</a>)
