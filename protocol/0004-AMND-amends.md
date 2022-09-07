@@ -26,10 +26,10 @@ Start date: `2020-03-12` <br>
 
 For a party with no position on a given market:
 
-- Amending an order in a way that increases the volume sufficiently leads to margin level increasing (<a name="0004-AMND-021" href="#0004-AMND-021">0004-AMND-021</a>)
-- Amending an order in a way that decreases the volume sufficiently leads to margin level decreasing (<a name="0004-AMND-022" href="#0004-AMND-022">0004-AMND-022</a>)
-- Amending an order by placing it at a sufficiently lower price will lead to margin decreasing (<a name="0004-AMND-023" href="#0004-AMND-023">0004-AMND-023</a>)
-- Amending an order by placing it at sufficiently higher price will increase its margin requirement (<a name="0004-AMND-024" href="#0004-AMND-024">0004-AMND-024</a>)
+- amending an order in a way that increases the volume sufficiently leads to margin account balance increasing (<a name="0004-AMND-021" href="#0004-AMND-021">0004-AMND-021</a>)
+- Amending an order in a way that decreases the volume sufficiently leads to margin account balance decreasing (<a name="0004-AMND-022" href="#0004-AMND-022">0004-AMND-022</a>)
+- Amending an order by placing it at a sufficiently lower price will lead to margin account balance decreasing (<a name="0004-AMND-023" href="#0004-AMND-023">0004-AMND-023</a>)
+- Amending an order by placing it at sufficiently higher price will lead to margin account balance increasing (<a name="0004-AMND-024" href="#0004-AMND-024">0004-AMND-024</a>)
 
 - It is possible to amend a fractional size order (<a name="0004-AMND-025" href="#0004-AMND-025">0004-AMND-025</a>)
 - It is possible to amend a partially filled limit order (<a name="0004-AMND-026" href="#0004-AMND-026">0004-AMND-026</a>)
