@@ -6,7 +6,7 @@ For each validator node Tendermint keeps the "weight" of the node for consensus 
 
 On Vega the voting power is calcualted as follows: `stakeScore x performanceScore` normalised by the sum of those scores. Where `stakeScore` is defined as the anti-whaling stake score of tendermint validators and performance score is the proportion of successful proposals of the validator normalised to their voting power. 
 
-The weights should be updated every epoch (whichever passes first).
+The weights should be updated every epoch.
 
 The minimum voting power for a non-empty network is 1 (0 implies that the validator is removed from the network).
 
