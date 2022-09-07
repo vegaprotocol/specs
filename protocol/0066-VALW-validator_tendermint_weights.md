@@ -6,7 +6,7 @@ For each validator node Tendermint keeps the "weight" of the node for consensus 
 
 On Vega the voting power is calcualted as follows: `stakeScore x performanceScore` normalised by the sum of those scores. Where `stakeScore` is defined as the anti-whaling stake score of tendermint validators and performance score is the proportion of successful proposals of the validator normalised to their voting power. 
 
-The weights should be updated every `1000` blocks and every epoch (whichever passes first).
+The weights should be updated every epoch (whichever passes first).
 
 The minimum voting power for a non-empty network is 1 (0 implies that the validator is removed from the network).
 
@@ -36,11 +36,10 @@ If the network has no stake at all, then all validators would have equal voting 
 1. set up a network with 5 validators
 1. give the first `4` validators `1000` of self-stake each. Give the last validator `0`. 
 1. wait for the delegation to become active in the next epoch
-1. wait for 1000 blocks to pass
 1. check that Tendermint weights for the first `4` validators are `2500` and the last validator `1`. 
-1. just before epoch 0 ends the last validator self-stakes `500`. 
-1. epoch 1 starts 
-1. it's not yet been 1000 blocks from when the last validator self-staked but we see that Tendermint weights for the first `4` validators are `2222` and the last validator `1111`. 
+1. just before the epoch ends the last validator self-stakes `500`. 
+1. next epoch starts 
+1. we see that Tendermint weights for the first `4` validators are `2222` and the last validator `1111`. 
 
 ### Sanity check if everyone unstakes and undelegates (<a name="0066-VALW-005" href="#0066-VALW-005">0066-VALW-005</a>)
 1. set up a network with 5 validators
@@ -48,5 +47,5 @@ If the network has no stake at all, then all validators would have equal voting 
 1. wait for the delegation to become active in the next epoch
 1. check that Tendermint weights for the validators are `2000`
 1. now every validator removes (via undelegate now) their stake and there are no delegations from other parties
-1. wait for 1000 blocks to pass
+1. wait for the epoch to end
 1. the Tendermint weights for each validator are `10` each as there is no stake in the network. 
