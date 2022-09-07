@@ -32,7 +32,7 @@ Start date: `2020-03-12` <br>
 - Amending an order by placing it at sufficiently higher price will increase its margin requirement (<a name="0004-AMND-024" href="#0004-AMND-024">0004-AMND-024</a>)
 
 - It is possible to amend a fractional size order (<a name="0004-AMND-025" href="#0004-AMND-025">0004-AMND-025</a>)
-- It is possible to amend a partially filled order (<a name="0004-AMND-026" href="#0004-AMND-026">0004-AMND-026</a>)
+- It is possible to amend a partially filled limit order (<a name="0004-AMND-026" href="#0004-AMND-026">0004-AMND-026</a>)
 - It is possible to amend a versioned order (already amended several times) (<a name="0004-AMND-027" href="#0004-AMND-027">0004-AMND-027</a>)
 - Attempts to amend order fields not in scope are rejected (<a name="0004-AMND-028" href="#0004-AMND-028">0004-AMND-028</a>)
 
