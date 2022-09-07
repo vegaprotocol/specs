@@ -54,11 +54,17 @@ Note: balances can change frequently when users have open positions. Apps should
 When looking to submit the Ethereum transaction the release funds from the Vega bridge into my Ethereum wallet, I...
 
 
-- **must** see a link to [connect an ethereum wallet]()
-- **must** see a link to [submit the ethereum transaction to finish withdrawal]()
-- **must** submit the transaction
-- if successful:
+- **must** see a link to [connect an ethereum wallet](0004-EWAL-connect_ethereum_wallet.md)
+- **must** see a link to [submit the ethereum transaction to finish withdrawal](0005-ETXN-submit_ethereum_transaction.md)
+- if successful: 
+  - **must** see updated asset balances have been updated
+  - **must** see the list of withdrawals (and their status has been updated)
+  - **could** prompt to start another transaction or complete another incomplete one 
 - if failed:
+  - **must** see a description of why the transaction failed
+  - **must** be returned to a state where I can correct anything that is wrong, and attempt to submit the transaction again
+  - **should** see a link to docs about withdrawals for trouble shooting (e.g. if the signer set has changed significantly since the withdraw was prepared)
+  - **should** see status of incomplete withdrawals (so I can confirm the withdraw I attempted to complete is incomplete)
 
 ... so the funds I withdrew from Vega are credited to my Ethereum key
 
