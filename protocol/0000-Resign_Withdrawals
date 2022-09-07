@@ -22,8 +22,8 @@ Withdrawal:
   are covered by this.
   As we have no timeout mechanim yet, the used nonces need to be stored forever.
   
-  Validators that observe a sufficiently confirmed withdrawal on Ethereum can delete the corresponding transaction from their
-  datstructure. This deletion should be coordinated via the Vega chain to maintain consistency.
+  Validators that observe a sufficiently confirmed withdrawal (i.e., for the event and waited for the defined number of confirmations) on Ethereum can delete the corresponding transaction from their
+  datastructure (i.e., the vega chain side of withdrawal bundles). This deletion should be coordinated via the Vega chain to maintain consistency.
 
 Resigning:
   Any party can apply through a re-signing of their nonce through a re-sign transaction. The flow is as follows:
@@ -42,7 +42,7 @@ Resigning:
 
 
 
-Post Trading: Garbage Collection and Timeout:
+Post Trading (Cosmic Elevator) : Garbage Collection and Timeout:
 Motivation: Avoid the 'non-executed transactions' datastructure to grow indefinitely
 
 - The transaction data also cointains a 'last Ethereum block'; The withdrawal is only executed if Ethereums blockheit is <= that value.
