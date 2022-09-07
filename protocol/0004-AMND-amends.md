@@ -24,7 +24,7 @@ Start date: `2020-03-12` <br>
 - Attempting to alter details on an expired order will cause the amend to be rejected (<a name="0004-AMND-019" href="#0004-AMND-019">0004-AMND-019</a>)
 
 
-- Amending an order in such a way as to force a margin increase and decrease (<a name="0004-AMND-020" href="#0004-AMND-020">0004-AMND-020</a>)
+For a party with no position on a given market:
 
 - Amending an order in a way that increases the volume sufficiently leads to margin level increasing (<a name="0004-AMND-021" href="#0004-AMND-021">0004-AMND-021</a>)
 - Amending an order in a way that decreases the volume sufficiently leads to margin level decreasing (<a name="0004-AMND-022" href="#0004-AMND-022">0004-AMND-022</a>)
