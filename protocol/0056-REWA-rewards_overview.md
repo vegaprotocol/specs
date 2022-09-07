@@ -505,7 +505,7 @@ Then, at the end of epoch 3, the 20000 USDC rewards should be distributed again 
 The reward pool balance should be 0.
 
 
-### Distributing market creation rewards - multiple asset rewards simultaneous payout (<a name="0056-REWA-043" href="#0056-REWA-043">0056-REWA-043</a>)
+### Distributing market creation rewards - multiple asset rewards simultaneous payout (<a name="0056-REWA-045" href="#0056-REWA-045">0056-REWA-045</a>)
 #### Rationale 
 A market should be able to be rewarded multiple times if several reward pools are created with different payout assets.
 
