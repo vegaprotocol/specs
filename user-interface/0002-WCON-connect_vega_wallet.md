@@ -1,6 +1,6 @@
 # Connect Vega wallet & select keys
 
-## Connect wallet for the first time
+## Connect wallet
 
 When looking to use Vega via a user interface e.g. Dapp (Decentralized web App), I...
 
@@ -17,7 +17,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
   - if the dapp DOES already have a permission with the wallet: **must** see that wallet is connected (<a name="0002-WCON-007" href="#0002-WCON-007">0002-WCON-007</a>) note: if the user want to connect to a different wallet to the one that they were previously connected with, they will have to hit logout.
     - if the app uses one key at a time: **should** show what key is active (re-use the last active key) (<a name="0002-WCON-008" href="#0002-WCON-008">0002-WCON-008</a>)
 
-  - if the wallet does NOT have an existing permission with the wallet: **must** prompt user to check wallet app to approve the request to connect wallet: See [Connecting to Dapps](0002-WCON-connect_vega_wallet.md#connect-wallet-for-the-first-time) for what should happen in wallet app (<a name="0002-WCON-009" href="#0002-WCON-009">0002-WCON-009</a>)
+  - if the wallet does NOT have an existing permission with the wallet: **must** prompt user to check wallet app to approve the request to connect wallet: See [Connecting to Dapps](0002-WCON-connect_vega_wallet.md#connect-wallet) for what should happen in wallet app (<a name="0002-WCON-009" href="#0002-WCON-009">0002-WCON-009</a>)
   
   - if new keys are given permission: **must** show the user the keys have been approved (<a name="0002-WCON-010" href="#0002-WCON-010">0002-WCON-010</a>)
     - **should** see [public key(s)](7001-DATA-data_display.md#public-keys). (<a name="0002-WCON-037" href="#0002-WCON-037">0002-WCON-037</a>)
