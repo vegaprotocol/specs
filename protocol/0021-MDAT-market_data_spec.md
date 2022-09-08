@@ -52,7 +52,6 @@ List of market data fields to be available via the API. All these values can be 
   - **Target stake** market's target stake based on current open interest when market is in default trading mode and a theoretical value based on auction's indicative volume when market is in auction mode.
   - **Supplied stake** market's supplied stake.
   - **Price monitoring bounds** one or more price monitoring bounds for the current timestamp.
-  - **Market value proxy** market value proxy for liquidity provision reward calculation purposes.
   - **Liquidity provider fee share** share of the accrued fees each liquidity provider is eligible to.
 
 # Pseudo-code / Examples
