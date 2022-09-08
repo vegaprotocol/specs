@@ -121,4 +121,4 @@ To be clear, this also means that if the input data is the wrong "shape" or type
 	1. Number fields can be filtered by greater than or equal (number is greater than or equal to filter data). (<a name="0047-DSRF-021" href="#0047-DSRF-021">0047-DSRF-021</a>)
 	1. Date + time fields can be filtered by greater than or equal (datetime is greater than or equal to filter data). (<a name="0047-DSRF-022" href="#0047-DSRF-022">0047-DSRF-022</a>
 	1. Oracle data filters can be combined together using AND operation (<a name="0047-DSRF-023" href="#0047-DSRF-023">0047-DSRF-023</a>)
-	1. Filtering should cause the transaction containing the data source definition to be rejected when using filters which are deemed out scope (<a name="0047-DSRF-023" href="#0047-DSRF-023">0047-DSRF-023</a>)
+	1. Filtering should cause the transaction containing the data source definition to be rejected when using filters which are deemed out scope (<a name="0047-DSRF-024" href="#0047-DSRF-024">0047-DSRF-024</a>)
