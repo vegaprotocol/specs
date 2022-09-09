@@ -22,7 +22,7 @@ When opening the wallet for the first time, I...
 - **must** be able to create a new wallet (<a name="0001-WALL-005" href="#0001-WALL-005">0001-WALL-005</a>)
   - **must** be shown the back up phrase (<a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>)
   - **must** shown version number of the algorithm used to derive key pairs from the back up phrase (<a name="0001-WALL-007" href="#0001-WALL-007">0001-WALL-007</a>)
-  - **must** see the first key without having to "add key". (i.e. The wallet auto generates the first key from the seed phrase) (<a name="0001-WALL-008" href="#1-WALL-008">0001-WALL-008</a>)
+  - **must** see the first key without having to "add key". (i.e. The wallet auto generates the first key from the seed phrase) (<a name="0001-WALL-008" href="#0001-WALL-008">0001-WALL-008</a>)
 
 ...so I can sign transactions
 
