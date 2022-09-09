@@ -53,4 +53,4 @@ If the ethereum transaction I've just submitted changes the state of the Vega ne
 - **should** see how many blocks have passed or remain until the required number has been met
 - **must** see whether the expect action has taken place on Vega (e.g. credited Vega key)
 
-... so I know vega has been updated as approporiate
+... so I know vega has been updated as appropriate
