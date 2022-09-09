@@ -9,7 +9,7 @@ The primary job(s) of a wallet app is to [sign/encrypt transaction](../protocol/
 When on the wallet page of Vega.xyz, I...
 
 - **must** see links to the latest version of all the available wallets (e.g. desktop, command line and browser plugin) (inc github repos) (<a name="0001-WALL-001" href="#1-WALL-001">0001-WALL-001</a>)
-- **must** be able to easily download the latest version for the operating system I am using (<a name="0001-WALL-002" href="#0001-WALL-002">0001-WALL-002</a>)
+- **must** see a primary download button is configured for the latest version and the operating system I am using. With a link to download for other operating systems too (<a name="0001-WALL-002" href="#0001-WALL-002">0001-WALL-002</a>)
 - **must** be able to use the default wallet version linked/downloadable from this page with the version of Vega currently running on mainnet (<a name="0001-WALL-076" href="#0001-WALL-076">0001-WALL-076</a>)
 
 ...so I can download and run the wallet app on my machine and use it to interact with the Vega mainnet
