@@ -28,7 +28,7 @@ When populating a deal ticket I...
   - **should** be able to quickly change the size by the market's min-contract size e.g. hit up/down on the keyboard to increase (<a name="6001-SORD-013" href="#6001-SORD-013">6001-SORD-013</a>)
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows (<a name="6001-SORD-054" href="#6001-SORD-054">6001-SORD-054</a>)
     - **would like to** be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. (<a name="6001-SORD-056" href="#6001-SORD-056">6001-SORD-056</a>)
-- **must** be warned (pre-submit) if input has too many decimal places for the market's ["position" decimal places](7001-DATA-data_display.md#size) (<a name="6001-SORD-016" href="#6001-SORD-016">6001-SORD-016</a>) 
+- **must** be warned (pre-submit) if input has too many digits after the decimal place for the market's ["position" decimal places](7001-DATA-data_display.md#size) (<a name="6001-SORD-016" href="#6001-SORD-016">6001-SORD-016</a>) 
 
 ... so I get the size of exposure (open volume that I want)
 
@@ -43,6 +43,7 @@ When populating a deal ticket I...
   - **should** be able to hit up/down on the keyboard to increase the price by the market's tick size (if set, or smallest increment) (<a name="6001-SORD-051" href="#6001-SORD-051">6001-SORD-051</a>)
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows (<a name="6001-SORD-055" href="#6001-SORD-055">6001-SORD-055</a>)
     - **would like to** be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. (<a name="6001-SORD-057" href="#6001-SORD-057">6001-SORD-057</a>)
+- **must** be warned (pre-submit) if the input price has too many digits after the decimal place for the market ["quote"](7001-DATA-data_display.md#quote-price) (<a name="6001-SORD-059" href="#6001-SORD-059">6001-SORD-059</a>)
 
 ... so that my order only trades at up/down to a particular price
 
@@ -53,7 +54,7 @@ When populating a deal ticket I...
 - **must not** see a price input (<a name="6001-SORD-019" href="#6001-SORD-019">6001-SORD-019</a>)
 - **should** be warning if the market is in auction and the market order may be rejected (<a name="6001-SORD-052" href="#6001-SORD-052">6001-SORD-052</a>)
 
-... so I cen quickly submit an order without populating the ticket with elements I don't care about
+... so I can quickly submit an order without populating the ticket with elements I don't care about
 
 ## Pegged
 
@@ -95,7 +96,7 @@ When populating a deal ticket I...
 - **could** see my resulting open volume (<a name="6001-SORD-032" href="#6001-SORD-032">6001-SORD-032</a>)
 - **could** see the amount this order might move the market in percentage terms
 - **could** see what the new best prices of the market would be after placing this order (assuming my order moves the market)
-- **could** see new volume weighted average entry price if not 0(<a name="6001-SORD-033" href="#6001-SORD-033">6001-SORD-033</a>)
+- **could** see new volume weighted average entry price if not 0 (<a name="6001-SORD-033" href="#6001-SORD-033">6001-SORD-033</a>)
 - **could** see and indication the volume weighted price that this particular order 
 - **could** see an indication of how much of the order will trade when it hits the book and how much might remain passive
 - **could** see a new liquidation level (<a name="6001-SORD-034" href="#6001-SORD-034">6001-SORD-034</a>)
