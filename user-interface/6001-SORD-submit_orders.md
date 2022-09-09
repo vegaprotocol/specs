@@ -1,6 +1,8 @@
 # Submit order
 As a user I want change my exposure on a market (e.g. open a position, increase or decrease my open volume), I want to submit an order with instructions for how my order should be executed so I have some control over the price that I get, as well as if when/my order should stay on the book. See [specs about orders](../protocol#orders) for more info.
 
+## Deal ticket
+
 When populating a deal ticket I...
 
 - **must** see/select the [Market](./7001-DATA-data_display.md#market) I am submitting the order for (<a name="6001-SORD-001" href="#6001-SORD-001">6001-SORD-001</a>)
@@ -26,7 +28,6 @@ When populating a deal ticket I...
   - **should** be able to quickly change the size by the market's min-contract size e.g. hit up/down on the keyboard to increase (<a name="6001-SORD-013" href="#6001-SORD-013">6001-SORD-013</a>)
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows (<a name="6001-SORD-054" href="#6001-SORD-054">6001-SORD-054</a>)
     - **would like to** be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. (<a name="6001-SORD-056" href="#6001-SORD-056">6001-SORD-056</a>)
-  - TODO **would** like to be able to use use a leverage slider to determine a size based on how much leverage I wish to use (given general balance, price input/current price) <!-- (<a name="6001-SORD-015" href="#6001-SORD-015">6001-SORD-015</a>) -->
 - **must** be warned (pre-submit) if input has too many decimal places for the market's ["position" decimal places](7001-DATA-data_display.md#size) (<a name="6001-SORD-016" href="#6001-SORD-016">6001-SORD-016</a>) 
 
 ... so I get the size of exposure (open volume that I want)
@@ -86,6 +87,7 @@ When populating a deal ticket I...
 - TODO Populate by selecting a size/price in the chart
 - TODO Populate by selecting a size/price in the depth chart
 - TODO Input price as a % of account, given the current price field
+- **should** be able to determine how much leverage I'd like (given general balance, and other inputs) 
 
 ## See the potential consequences of an order before it is submit
 ... based on the current inputs I'd like an indication of the consequences of my order based on my position and the state of the market, I...
@@ -110,6 +112,7 @@ When populating a deal ticket I...
 
 ... need to submit my order, when submitting my order, I... 
 
+- if not already connected: **must** see a prompt to [connect a Vega wallet](0002-WCON-connect_vega_wallet.md)
 - **must** submit the [Vega submit order transaction](0013-WTXN-submit_vega_transaction.md). (<a name="6001-SORD-039" href="#6001-SORD-039">6001-SORD-039</a>)
 
 - **must** see feedback on my order [status](https://docs.vega.xyz/docs/mainnet/grpc/vega/vega.proto#orderstatus) (not just transaction status above) (<a name="6001-SORD-040" href="#6001-SORD-040">6001-SORD-040</a>)
