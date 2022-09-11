@@ -34,7 +34,7 @@ When either best static ask or best static bid is removed from the book (either 
 
 The auction is triggered when
 ```
-total_stake < c_1 x target_stake OR ( ( there is no best_bid OR there is no best offer) AND `ghost_peg_timer > market.liquidity.ghostPegDuration`).
+deployed_stake =< c_1 x target_stake, where is the sum of bond account balances for the market for those LP who have the LP volume deployed on the book. In particular deployed_stake is zero if ( there is no best_bid OR there is no best offer) AND `ghost_peg_timer > market.liquidity.ghostPegDuration`).
 ```
 Here 0 < c<sub>1</sub> < 1, to reduce the chance of another auction getting triggered soon after e.g. c<sub>1</sub> = 0.7. The parameter c<sub>1</sub> is a network parameter.
 
