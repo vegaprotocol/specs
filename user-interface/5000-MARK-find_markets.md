@@ -1,3 +1,7 @@
 # Find markets
 
-- See all markets in Vega
+## All markets
+
+## Find markets by...
+
+## For each market

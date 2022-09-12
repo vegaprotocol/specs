@@ -56,7 +56,7 @@ These files contain generic user needs for interacting with wallets that are tru
 
 ## 5 - Markets and analysis
 - [Find markets](5000-MARK-find_markets.md) `Incomplete`
-- View Market details
+- [View Market details](5001-MDET-market-details.md) `Incomplete`
 - Analyze Order book
 - Analyze price history
 - Analyze trade history
