@@ -115,7 +115,7 @@ when looking at a specific transaction...
 - **must** be able to follow a link to block explorer for broadcasted transactions (<a name="0001-WALL-046" href="#0001-WALL-046">0001-WALL-046</a>)
 - if broadcast: **should** see what node it was broadcast to (<a name="0001-WALL-047" href="#0001-WALL-047">0001-WALL-047</a>)
 - if broadcast + mined: **could** see what validator mined the block the transaction was included in (<a name="0001-WALL-048" href="#0001-WALL-048">0001-WALL-048</a>)
-- if broadcast + mined:**must** see at what block and time it was confirmed (<a name="0001-WALL-049" href="#0001-WALL-049">0001-WALL-049</a>)
+- if broadcast + mined: **must** see at what block and time it was confirmed (<a name="0001-WALL-049" href="#0001-WALL-049">0001-WALL-049</a>)
 - if broadcast but there was an error: **must** see if there was a reported error/issue, and the details of the issue (<a name="0001-WALL-050" href="#0001-WALL-050">0001-WALL-050</a>)
 - if broadcast + mined: **must** see if the transaction was rejected, and why (<a name="0001-WALL-051" href="#0001-WALL-051">0001-WALL-051</a>)
 - if ignored: must be able to submit, reject or still ignore the transaction (<a name="0001-WALL-079" href="#0001-WALL-079">0001-WALL-079</a>)
