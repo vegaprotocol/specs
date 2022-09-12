@@ -18,32 +18,28 @@ If the network has no stake at all, then all validators would have equal voting 
 2. give each of the validators the following number of self-staked tokens: `2000`
 3. wait for the delegation to become active in the next epoch
 4. when the epoch begins verify that the delegation went through
-5. check that Tendermint weights for the validators are `2000`
 
 
 ### Non-uniform stake check (<a name="0066-VALW-002" href="#0066-VALW-002">0066-VALW-002</a>)
 1. set up a network with 5 validators
 2. give the first `4` validators `1000` of self-stake each. Give the last validator `500`. 
 3. wait for the delegation to become active in the next epoch
-4. check that Tendermint weights for the first `4` validators are `2222` and the last validator `1111`. 
 
 
 ### Zero stake check  (<a name="0066-VALW-003" href="#0066-VALW-003">0066-VALW-003</a>)
 1. set up a network with 5 validators
 2. give the first `4` validators `1000` of self-stake each. Give the last validator `0`. 
 3. wait for the delegation to become active in the next epoch
-4. check that Tendermint weights for the first `4` validators are `2500` and the last validator `1`. 
 
 
 ### Update at the start of epoch check (<a name="0066-VALW-004" href="#0066-VALW-004">0066-VALW-004</a>)
 1. set up a network with 5 validators
 2. give the first `4` validators `1000` of self-stake each. Give the last validator `0`. 
 3. wait for the delegation to become active in the next epoch
-4. wait for 1000 blocks to pass
-5. check that Tendermint weights for the first `4` validators are `2500` and the last validator `1`. 
+5. check that Tendermint weights
 6. just before epoch 0 ends the last validator self-stakes `500`. 
 7. epoch 1 starts 
-8. it's not yet been 1000 blocks from when the last validator self-staked but we see that Tendermint weights for the first `4` validators are `2222` and the last validator `1111`. 
+5. check that Tendermint weights
 
 
 ### Sanity check if everyone unstakes and undelegates (<a name="0066-VALW-005" href="#0066-VALW-005">0066-VALW-005</a>)
@@ -75,7 +71,6 @@ If the network has no stake at all, then all validators would have equal voting 
 3. delegate for the first `4` validators `1000` and from the 5th validator delegate `1000` to the 1st validator
 4. wait for the delegations to become active in the next epoch
 5. check the Tendermint weights across all validators
-6. Validator receiving 2 
 
 ### Validator delegate and undelegate in the same epoch (<a name="0066-VALW-009" href="#0066-VALW-009">0066-VALW-009</a>)
 1. set up a network with 5 validators
