@@ -4,6 +4,7 @@
 
 When looking to use Vega via a user interface e.g. Dapp (Decentralized web App), I...
 
+- If the app loads and already has a connection it can restore "eagerly" (without the user having to click connect) it **could** do so (<a name="0002-WCON-041" href="#0002-WCON-041">0002-WCON-041</a>)
 - **should** see a link to get a Vega wallet (in case I don't already have one) (<a name="0002-WCON-036" href="#0002-WCON-036">0002-WCON-036</a>)
 - **should** see a link to connect that opens up connection options (<a name="0002-WCON-001" href="#0002-WCON-001">0002-WCON-001</a>)
 - **should** have a way to easily access help should I need to troubleshoot my connection e.g. link to the docs (<a name="0002-WCON-040" href="#0002-WCON-040">0002-WCON-040</a>)
