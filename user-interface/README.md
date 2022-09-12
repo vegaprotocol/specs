@@ -1,26 +1,32 @@
 # User interface acceptance criteria
-This folder contain descriptions of things that users do when interacting with a Vega chain. The things they need and some information about why they are doing them. These can be referenced in testing and used as input for building new interfaces (e.g. User requirements).
+This folder contain descriptions of things that users do when interacting with Vega. The information they need and why they are doing them. These can be referenced in testing and used as input for building new interfaces.
 
-These have been listed with the most "upstream" being first.
+The acceptance criteria are organized into files, with each file representing a high level user task. These have been listed with the most "upstream" being first, and grouped into similar tasks.
 
-Each file contains blocks that relate to a user task. What the user is trying to do, a bullet for each thing the need, then why they are doing it...
+Each file contains blocks that relate to a low level user task. The block states what the user is trying to do or the context they are in, has a bullet for each thing the need, then states why they are doing it...
 
 > When doing a thing, I...
 > 
->  - **must** be able to see some particular number [0000-CODE-000]
+>  - **must** be able to see some particulat number [0000-CODE-000]
 > 
 > ...so I can decide if I want to continue.
 
-Each bullet is worded so that it contains a **must**, **should**, **could**, or **would like to**. This gives app developers some indication of the priority of user needs. The current ranking of these is a hypothesis that will improve as we do more user research and get more feedback. At the end of each bullet is a code that can be referenced in tests etc.
+Each bullet is worded so that it contains a **must**, **should**, **could**, or **would like to**. This gives app developers some indication of the priority of user needs. At the end of each bullet is a code that can be referenced in tests etc.
 
-## 0 - Wallets and signing transactions
-- [Get and use a Vega wallet](0001-WALL-wallet.md)
-- [Connect Vega wallet + select keys](0002-WCON-connect_vega_wallet.md)
-- [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
-- [Connect Ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) `Incomplete`
-- [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) `Incomplete`
+These acceptance criteria are not final or intended to be "the truth" but a useful tool, they will be improved over time as more people feedback on using Vega.
 
+A user is normally interacting with at least 2 applications when doing tasks on Vega, A **Dapp** or interface designed to help users complete specific tasks and a **Wallet** that is only used to authenticate a user's actions and broadcast them to the network. 
+
+## 0. Wallets and signing transactions
+- [Get and use a Vega wallet](0001-WALL-wallet.md) (This mostly relates to use of a wallet app, for cryptography and broadcast to network)
   
+These files contain generic user needs for interacting with wallets that are true for all types of interactions that require a wallet. More specific requirements are mentioned where these are referenced. Thy describe what the user needs from the dapp not the wallet.
+
+- [Connect Vega wallet to a Dapp & select keys](0002-WCON-connect_vega_wallet.md)
+- [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
+- Connect Ethereum wallet to a Dapp
+- Submit Ethereum transaction
+
 ## 1 - Staking and Governance
 - [Associate governance token a Vega key](1000-ASSO-associate.md)
 - [View and Redeem vested tokens](1001-VEST-vesting.md)
@@ -60,17 +66,7 @@ Each bullet is worded so that it contains a **must**, **should**, **could**, or 
 - [Manage my orders](6002-MORD-manage_orders.md) `Incomplete`
 - [View my positions](6003-POSI-positions.md) `Incomplete`
 - [View my trades/fills](6003-FILL-fills.md) `Incomplete`
-- [//]: # (Get alerts (price, fills etc))
 
 ## Appendixes 
 
 - [Display display rules](7001-DATA-data_display.md)
-
-# Events
-There are things that happen to users too
-- Market lifecycle
-- liquidation
-- loss socialization 
-- Spam protection
-- Settlement
-... AC for these are in context of the user journey above 👆
