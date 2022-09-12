@@ -48,7 +48,7 @@ These files contain generic user needs for interacting with wallets that are tru
 
 - [Deposit](3000-DEPO-desposit.md) `Incomplete`
 - [Withdraw](3001-WITH-withdraw.md)
-- Transfer
+- [Transfer](3002-TRAN-transfer.md) `Incomplete`
 
 ## 4 - Liquidity provision
 - Understand return of liquidity provision
