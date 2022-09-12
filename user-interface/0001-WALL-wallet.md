@@ -91,7 +91,14 @@ When looking for a specific balance or asset on a given wallet and network, I...
 ## Transactions
 When thinking about a recent or specific transaction, I ...
 
-- **must** see a history of transactions the wallet app has signed read from the local app (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
+- **must** see a history of transactions the wallet app has signed, as read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
+<!--
+- **should** see a history of transactions the wallet app has signed as read from the local app (persistent storage) (<a name="0001-WALL-080" href="#0001-WALL-080">0001-WALL-080</a>)
+  - persistent transaction history **must** be encrypted and require the wallet password to view (<a name="0001-WALL-081" href="#0001-WALL-081">0001-WALL-081</a>)
+  - **should** be possible to delete individual transactions (<a name="0001-WALL-082" href="#0001-WALL-082">0001-WALL-082</a>)
+  - **should** be possible to delete the whole transaction history (<a name="0001-WALL-083" href="#0001-WALL-083">0001-WALL-083</a>)
+  - **would** like to set a maximum age / expiry time for history items after which they are deleted (<a name="0001-WALL-084" href="#0001-WALL-084">0001-WALL-084</a>)
+-->
 - **could** see a history of transactions the selected key has broadcast to a network (e.g. another wallet with the same keys), or from before a key restore (<a name="0001-WALL-077" href="#0001-WALL-077">0001-WALL-077</a>)
 - **must** see pending transactions (Transactions I have not yet approved/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
 - **must** see transactions that have recently been broadcast but not yet seen on the chain (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
