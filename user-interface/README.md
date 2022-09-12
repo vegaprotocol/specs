@@ -7,7 +7,7 @@ Each file contains blocks that relate to a low level user task. The block states
 
 > When doing a thing, I...
 > 
->  - **must** be able to see some particulat number [0000-CODE-000]
+>  - **must** be able to see some particular number [0000-CODE-000]
 > 
 > ...so I can decide if I want to continue.
 
@@ -24,8 +24,8 @@ These files contain generic user needs for interacting with wallets that are tru
 
 - [Connect Vega wallet to a Dapp & select keys](0002-WCON-connect_vega_wallet.md)
 - [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
-- Connect Ethereum wallet to a Dapp
-- Submit Ethereum transaction
+- [Connect Ethereum wallet to a Dapp](0004-EWAL-connect_ethereum_wallet.md))
+- [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md)
 
 ## 1 - Staking and Governance
 - [Associate governance token a Vega key](1000-ASSO-associate.md)
@@ -44,7 +44,6 @@ These files contain generic user needs for interacting with wallets that are tru
 ## 2 - Treasury 
 - Understand treasury rewards 
 
-## 3 - Bridges and Transfers
 - [Deposit](3000-DEPO-desposit.md) `Incomplete`
 - [Withdraw](3001-WITH-withdraw.md) `Incomplete`
 - Transfer
