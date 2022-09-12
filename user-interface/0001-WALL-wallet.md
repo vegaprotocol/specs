@@ -47,7 +47,7 @@ When using an older version of a Vega wallet than the current official release, 
 ## Log in to a wallet
 When using a given wallet, I...
 
-- **must** select a wallet and enter the pasphrase only once per "session" (<a name="0001-WALL-016" href="#0001-WALL-016">0001-WALL-016</a>)
+- **must** select a wallet and enter the passphrase only once per "session" (<a name="0001-WALL-016" href="#0001-WALL-016">0001-WALL-016</a>)
 
 ... so that other users of my machine can not use my wallet, and I am not asked to re-enter frequently
 
