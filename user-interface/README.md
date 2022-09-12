@@ -45,7 +45,7 @@ These files contain generic user needs for interacting with wallets that are tru
 - Understand treasury rewards 
 
 - [Deposit](3000-DEPO-desposit.md) `Incomplete`
-- [Withdraw](3001-WITH-withdraw.md) `Incomplete`
+- [Withdraw](3001-WITH-withdraw.md)
 - Transfer
 
 ## 4 - Liquidity provision
