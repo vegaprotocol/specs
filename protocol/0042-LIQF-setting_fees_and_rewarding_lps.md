@@ -112,7 +112,7 @@ The equity-like share for each LP is then
 
 There is a [Google sheet - requiring Vega login](https://docs.google.com/spreadsheets/d/14AgZwa6gXVBUFBUUOmB7Y9PsG8D4zmYN/edit#gid=886563806) showing this.
 
-The average entry valuation (which should be reported by the APIs and could be calculated only by the data node as it doesn't itself impact core state) is defined, at the time of change of an LP commitment as folows:
+The average entry valuation (which should be reported by the APIs and could be calculated only by the data node as it doesn't itself impact core state) is defined, at the time of change of an LP commitment as follows:
 1. There already is `average entry valuation` for the LP in question (and `average entry valuation = 0` for a new LP). The LP has existing physical stake `S` (and `S=0` for new LP) and wishes to add / remove stake `Delta S`. If `Delta S < 0` then `average entry valuation` is unchanged by the transaction. If `S + Delta S = 0` then the LP is exiting their LP commitment and we do not calculate the `average entry valuation` for them in this case. 
 So `Delta S > 0` (and so `S+Delta S > 0`) in what follows.
 2. Calculate the entry valuation at the time stake `Delta S` is added / removed as 
