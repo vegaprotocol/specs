@@ -555,13 +555,13 @@ The reward account balance should still be empty, as there were no eligible mark
 A market reward pool funded with the same asset by the same party with different market scopes should pay to all markets even if already paid
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
-* Setup a market BTCDAI settling in DAI with a different party.
+* Setup a market BTCDAI settling in DAI with a different proposing party.
 * The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for both `USDT` and `DAI` is `1`. 
-* Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+* Setup and fund recurring reward account transfers using the market_proposer metric and blank metric asset:
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
 * start trading in the market such that traded value for fee purposes in USDT is less than 10^6
 * During epoch 2 let the traded value on ETHUSDT and BTCUSDT be greater than 10^6
-* During epoch 3, setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+* During epoch 3, setup and fund recurring reward account transfers using the market_proposer metric and blank metric asset:
     * Transfer 10000 $VEGA to `all | market creation | $VEGA` 
 
 #### Expectation
@@ -576,7 +576,23 @@ At the end of epoch 3, 10000 VEGA should be distributed split between the BTCDAI
     The reward pool balance should be 0.
 
 
+### Distributing market creation rewards - Market ineligible through metric asset (<a name="0056-REWA-048" href="#0056-REWA-048">0056-REWA-048</a>)
+#### Rationale 
+A market reward pool funded with the a specific metric asset should not pay out to markets not trading in that asset
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* Setup a market BTCDAI settling in DAI with a different proposing party.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for both `USDT` and `DAI` is `1`. 
+* Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
+* During epoch 2 let the traded value on ETHUSDT and BTCUSDT be greater than 10^6
 
+#### Expectation
+At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 10000.
+    The general account balance of the BTCDAI creator should be 0.
+    The reward pool balance should be 0.
 
 
 ### Distributing market creation rewards - Multiple markets eligible, one already paid, specified asset (<a name="0056-REWA-047" href="#0056-REWA-047">0056-REWA-047</a>)
@@ -584,7 +600,7 @@ At the end of epoch 3, 10000 VEGA should be distributed split between the BTCDAI
 A market reward pool funded with the same asset by the same party with different market scopes should pay to all markets even if already paid
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
-* Setup a market BTCUSDT settling in USDT with a different party.
+* Setup a market BTCUSDT settling in USDT using a different proposing party.
 * The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT`is `1`. 
 * Setup and fund recurring reward account transfers for the market ETHUSDT, specifying `USDT` markets for the metric asset:
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
@@ -602,7 +618,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHU
     The reward pool balance should be 0.
 
 At the end of epoch 3, 10000 VEGA should be distributed split between the BTCUSDT creator and the ETHUSDT creator.
-    The general account balance of the ETHUSDT creator should be 10000.
-    The general account balance of the BTCUSDT creator should be 10000.
+    The general account balance of the ETHUSDT creator should be 15000.
+    The general account balance of the BTCUSDT creator should be 5000.
     The reward pool balance should be 0.
 
