@@ -109,6 +109,7 @@ The equity-like share for each LP is then
 (LP i equity-like share) = (LP i virtual stake) / (sum over j from 1 to N of (LP j virtual stake)).
 ```
 **Check** the sum from over `i` from `1` to `N` of `LP i equity-like share` is equal to `1`.
+**Warning** the above will be decimal calculations so the above checks will only be true up to a rounding errors.
 
 There is a [Google sheet - requiring Vega login](https://docs.google.com/spreadsheets/d/14AgZwa6gXVBUFBUUOmB7Y9PsG8D4zmYN/edit#gid=886563806) showing this.
 
@@ -138,8 +139,6 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 ```
 (average entry valuation) = 1090.9
 ```
-
-**Warning** the above will be decimal calculations so the above checks will only be true up to a rounding errors.
 
 ### Distributing fees
 
