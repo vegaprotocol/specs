@@ -34,12 +34,12 @@ At a high level, rewards work as follows:
 
 ## Reward metrics
 
-Reward metrics are scoped by [reward type, market, party] (this triplet can be thought of as a primary key for reward metrics).
-Therefore a party may be in scope for the same reward type multiple times but no more than once per market.
+Fee-based reward metrics are scoped by [`reward type`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
+Therefore a party may be in scope for the same reward type multiple times but no more than once per market per epoch.
 Metrics will be calculated at the end of every epoch, for every eligible party, in each market for each reward type.
 Metrics only need to be calculated where the [market, reward type] reward account has a non-zero balance of at least one asset. 
 
-Reward metrics will be calculated once for each party/market combination in the reward metric asseet which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market. 
+Reward metrics will be calculated once for each party/market combination in the reward metric asset which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market. 
 This is the original precision for the metric source data. 
 
 
@@ -125,7 +125,7 @@ Then calculate `M := m_1 + m_2 + … + m_n` and transfer `R ✖️ m_i / M` to p
 If `M=0` (no-one incurred or received fees as specified by the metric type for the given market) then no transfer will have been made to the reward account and therefore there are no rewards to pay out.
 The transfer will be retried the next epoch if it is still active. 
 
-Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the rewward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward maetrics for any two parties. All funds will always be paid out.
+Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward maetrics for any two parties. All funds will always be paid out.
 
 
 ## Acceptance criteria
@@ -441,7 +441,7 @@ Market has been trading but not yet eligible for proposer bonus.
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
 * The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
-* Setup and fund multiple reward account for the market ETHUSDT:
+* Setup and fund multiple recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
     * Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
 * start trading in the market such that traded value for fee purposes in USDT is less than 10^6
@@ -452,12 +452,12 @@ At the end of the epoch no payout has been made for the market ETHUSDT and the r
 
 ### Distributing market creation rewards - eligible are paid no more than once (<a name="0056-REWA-041" href="#0056-REWA-041">0056-REWA-041</a>)
 #### Rationale 
-Market has been trading but not yet eligible for proposer bonus. 
+Once a market creator has been paid, they are not paid again from the same reward pool
 
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
 * The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
-* Setup and fund multiple reward account for the market ETHUSDT:
+* Setup and fund multiple recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
     * Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
 * start trading in the market such that traded value for fee purposes in USDT is less than 10^6
@@ -466,30 +466,159 @@ Market has been trading but not yet eligible for proposer bonus.
 #### Expectation
 At the end of the epoch 2 the proposer of the market ETHUSDT is paid 10000 `$VEGA` and 20000 `USDC`
 
-Then during epoch 3 make the following transfers:
-* Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
-* Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
+At the end of epoch 3 make sure that no transfer is made to the reward account as the proposer of the market has already been paid the proposer bonus once and there are no other eligible markets.
 
-At the end of epoch 3 make sure that no payout is made from the reward account as the proposer of the market has already been paid the proposer bonus once.
-
-### Distributing market creation rewards - missed opportunity (<a name="0056-REWA-042" href="#0056-REWA-042">0056-REWA-042</a>)
+### Distributing market creation rewards - account funded after reaching requirement (<a name="0056-REWA-042" href="#0056-REWA-042">0056-REWA-042</a>)
 #### Rationale 
-Market goes above the threshold in trading value in an epoch before the reward account for the market for the reward type has any balance - therefore the proposer will not get compensated, not now, not ever. 
+Market goes above the threshold in trading value in an epoch before the reward account for the market for the reward type has any balance - proposer does receive reward even if account is funded at a later epoch.
 
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
 * The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
 * start trading in the market such that trading volume in USDT is less than 10^6
 * During the epoch 2 let the traded value be greater than 10^6
-* in Epoch 3 setup and fund multiple reward account for the market ETHUSDT:
+* in Epoch 3 setup and fund multiple recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
     * Transfer 20000 USDC to `ETHUSDT | market creation | USDC` 
 
 #### Expectation
-At the end of the epoch 2 and at the end of epoch 3 no payout has been made for the market ETHUSDT and the reward account balances should remain unchanged.
+At the end of epoch 3, a payout of 10000 VEGA and 20000 USDC is made for the market ETHUSDT to the creator's general account balance.
+The reward pool balance should be 0.
 
 
+### Distributing market creation rewards - multiple asset rewards (<a name="0056-REWA-043" href="#0056-REWA-043">0056-REWA-043</a>)
+#### Rationale 
+A market should be able to be rewarded multiple times if several reward pools are created with different payout assets.
+
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+   Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
+* During epoch 2 let the traded value be greater than 10^6
+* During epoch 3, transfer 20000 USDC to `all | market creation | USDC` 
+
+#### Expectation
+At the end of epoch 2 1000 VEGA rewards should be distributed to the market creator's general account balance.
+Then, at the end of epoch 3, the 20000 USDC rewards should be distributed again to the market creator's general balance.
+The reward pool balance should be 0.
 
 
+### Distributing market creation rewards - multiple asset rewards simultaneous payout (<a name="0056-REWA-045" href="#0056-REWA-045">0056-REWA-045</a>)
+#### Rationale 
+A market should be able to be rewarded multiple times if several reward pools are created with different payout assets.
 
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+* Setup and fund multiple recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+    * 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+    * 20000 USDC to `all | market creation | USDC` 
+* start trading in the market for one epoch such that traded value for fee purposes in USDT is less than 10^6
+* During epoch 2 let the traded value be greater than 10^6
+
+#### Expectation
+At the end of epoch 1 no transfers should be made and all rewards accounts should remain at `0`
+At the end of epoch 2 the creator of ETHUSDT should receive both 10000 VEGA and 20000 USDC into their
+general account.
+The reward pool balance should be 0.
+
+
+### Distributing market creation rewards - Same asset multiple party rewards (<a name="0056-REWA-044" href="#0056-REWA-044">0056-REWA-044</a>)
+#### Rationale 
+A market reward pool funded with the same asset by different parties should pay out to eligible markets as many times as there are parties, assuming threshold is reached.
+
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+* Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
+* During the epoch 2 let the traded value be greater than 10^6
+* During epoch 3, setup and fund multiple reward account for the market ETHUSDT with a different party:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+
+#### Expectation
+At the end of epoch 2, 10000 VEGA rewards should be distributed to the proposer of the ETHUSDT market, bringing their general `USDT` balance to 10000.
+The reward account balance should be empty.
+
+Then, at the end of epoch 3, the 10000 VEGA rewards should again be distributed to the proposer of ETHUSDT, bringing their general `USDT` balance to 20000.
+The reward account balance should again be empty
+
+Then, at the end of epoch 4, no further VEGA rewards should be distributed, the proposer of ETHUSDT's general `USDT` balance should stay at 20000.
+The reward account balance should still be empty, as there were no eligible markets so no transfer should occur.
+
+
+### Distributing market creation rewards - Multiple markets eligible, one already paid (<a name="0056-REWA-046" href="#0056-REWA-046">0056-REWA-046</a>)
+#### Rationale 
+A market reward pool funded with the same asset by the same party with different market scopes should pay to all markets even if already paid
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* Setup a market BTCDAI settling in DAI with a different proposing party.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for both `USDT` and `DAI` is `1`. 
+* Setup and fund recurring reward account transfers using the market_proposer metric and blank metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
+* During epoch 2 let the traded value on ETHUSDT and BTCUSDT be greater than 10^6
+* During epoch 3, setup and fund recurring reward account transfers using the market_proposer metric and blank metric asset:
+    * Transfer 10000 $VEGA to `all | market creation | $VEGA` 
+
+#### Expectation
+At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 10000.
+    The general account balance of the BTCDAI creator should be 0.
+    The reward pool balance should be 0.
+
+At the end of epoch 3, 10000 VEGA should be distributed split between the BTCDAI creator and the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 15000.
+    The general account balance of the BTCDAI creator should be 5000.
+    The reward pool balance should be 0.
+
+
+### Distributing market creation rewards - Market ineligible through metric asset (<a name="0056-REWA-048" href="#0056-REWA-048">0056-REWA-048</a>)
+#### Rationale 
+A market reward pool funded with the a specific metric asset should not pay out to markets not trading in that asset
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* Setup a market BTCDAI settling in DAI with a different proposing party.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for both `USDT` and `DAI` is `1`. 
+* Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
+* During epoch 2 let the traded value on ETHUSDT and BTCUSDT be greater than 10^6
+
+#### Expectation
+At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 10000.
+    The general account balance of the BTCDAI creator should be 0.
+    The reward pool balance should be 0.
+
+
+### Distributing market creation rewards - Multiple markets eligible, one already paid, specified asset (<a name="0056-REWA-047" href="#0056-REWA-047">0056-REWA-047</a>)
+#### Rationale 
+A market reward pool funded with the same asset by the same party with different market scopes should pay to all markets even if already paid
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* Setup a market BTCUSDT settling in USDT using a different proposing party.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT`is `1`. 
+* Setup and fund recurring reward account transfers for the market ETHUSDT, specifying `USDT` markets for the metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* start trading in the market such that traded value for fee purposes in USDT is less than 10^6
+* During epoch 2 let the traded value on ETHUSDT and BTCUSDT be greater than 10^6
+* During epoch 3, setup and fund recurring reward account for all markets, leaving a blank metric asset, with the same party:
+    * Transfer 10000 $VEGA to `all | market creation | $VEGA` 
+
+#### Expectation
+At the end of epoch 2 the full 10000 VEGA rewards should be distributed to only the ETHUSDT creator. At the end of epoch 3 the full 10000 VEGA rewards should be distributed to the BTCUSDT creator.
+
+At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 10000.
+    The general account balance of the BTCUSDT creator should be 0.
+    The reward pool balance should be 0.
+
+At the end of epoch 3, 10000 VEGA should be distributed split between the BTCUSDT creator and the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 15000.
+    The general account balance of the BTCUSDT creator should be 5000.
+    The reward pool balance should be 0.
 

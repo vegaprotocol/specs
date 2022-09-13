@@ -274,3 +274,11 @@ A user's recurring transfer is cancelled if any transfer fails due to insufficie
   - [ ] The account runs out of funds
   - [ ] The transfer is cancelled
   - [ ] No more transfers are executed.
+
+A user's recurring transfer to a reward account does not occur if there are no parties eligible for a reward in the current epoch (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
+  - [ ] I set up a market ETHUSDT settling in USDT.
+  - [ ] The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+  - [ ] I specify a start and no end epoch, and a factor of 1 to a reward account `ETHUSDT | market creation | $VEGA` 
+  - [ ] In the first epoch no trading occurs and nothing is transferred to the reward account at the end of the epoch
+  - [ ] In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
+  - [ ] At the end of the third epoch, no transfer occurs
