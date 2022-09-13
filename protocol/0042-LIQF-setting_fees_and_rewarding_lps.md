@@ -108,6 +108,7 @@ The equity-like share for each LP is then
 ```
 (LP i equity-like share) = (LP i virtual stake) / (sum over j from 1 to N of (LP j virtual stake)).
 ```
+**Check** the sum from over `i` from `1` to `N` of `LP i equity-like share` is equal to `1`.
 
 There is a [Google sheet - requiring Vega login](https://docs.google.com/spreadsheets/d/14AgZwa6gXVBUFBUUOmB7Y9PsG8D4zmYN/edit#gid=886563806) showing this.
 
@@ -123,7 +124,7 @@ So `Delta S > 0` (and so `S+Delta S > 0`) in what follows.
 (average entry valuation) <- (average entry valuation) x S / (S + Delta S) + (entry valuation) x (Delta S) / (S + Delta S)
 ```
 Example 1: 
-1. A new LP has `0` stake and they wish to add `Delta S = 100`. Currently the sum of all virtual stakes is `1000`. The average entry valuation is
+A new LP has `0` stake and they wish to add `Delta S = 100`. Currently the sum of all virtual stakes is `1000`. The average entry valuation is
 ```
 (average entry valuation) <- 0 + 1000 x 100 / (0 + 100) = 1000
 ```
@@ -138,11 +139,6 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 (average entry valuation) = 1090.9
 ```
 
-
-
-
-
-**Check** the sum from over `i` from `1` to `N` of `LP i equity-like share` is equal to `1`.
 **Warning** the above will be decimal calculations so the above checks will only be true up to a rounding errors.
 
 ### Distributing fees
