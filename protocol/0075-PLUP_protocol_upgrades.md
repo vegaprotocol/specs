@@ -112,7 +112,7 @@ message ProtocolUpgradeEvent {
    -  Proposes a negative upgrade block
    -  Proposes a 0 upgrade block
    -  Proposes (string/other upgrade block)
-   -  Proposes with supply a block height
+   -  Proposes without supplying a block height
 
 ### VISOR (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) 
    - Can be seen to automatically download the latest version for install when available at the source location when file meets the format criteria defined
