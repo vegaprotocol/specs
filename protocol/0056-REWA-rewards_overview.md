@@ -107,7 +107,7 @@ Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limi
 
 ## Reward distribution
 
-All rewards are paid out at the end of each epoch *after* [recurring transfers](0057-TRAN-Transfers.md) have been executed. 
+All rewards are paid out at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed. 
 The entire reward account balance is paid out every epoch unless the total value of the metric over all parties is zero, in which case the balance will also be zero anyway (there are no fractional payouts). 
 There are no payout delays, rewards are paid out instantly at epoch end.
 
@@ -570,6 +570,14 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHU
     The general account balance of the BTCDAI creator should be 0.
     The reward pool balance should be 0.
 
+### Reward accounts cannot be topped up with a one-off transfer (<a name="0056-REWA-043" href="#0056-REWA-043">0056-REWA-043</a>)
+The following account types require metric-based distribution. As a one-off transfer cannot specify how it is rewarded, one-off transfers to metric-based reward pools must be **rejected**.
+A one-off transfer from a user to any of the following account types is rejected. No assets are transferred:
+* ACCOUNT_TYPE_REWARD_LP_RECEIVED_FEES,
+* ACCOUNT_TYPE_REWARD_MAKER_RECEIVED_FEES,
+* ACCOUNT_TYPE_REWARD_TAKER_PAID_FEES,
+* ACCOUNT_TYPE_REWARD_MARKET_PROPOSERS
+
 At the end of epoch 3, 10000 VEGA should be distributed split between the BTCDAI creator and the ETHUSDT creator.
     The general account balance of the ETHUSDT creator should be 15000.
     The general account balance of the BTCDAI creator should be 5000.
@@ -621,4 +629,3 @@ At the end of epoch 3, 10000 VEGA should be distributed split between the BTCUSD
     The general account balance of the ETHUSDT creator should be 15000.
     The general account balance of the BTCUSDT creator should be 5000.
     The reward pool balance should be 0.
-
