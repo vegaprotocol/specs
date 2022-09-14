@@ -187,11 +187,11 @@ message CancelTransfer {
 
 ## Network Parameters
 
-| Property                                   | Type             | Example value | Description                                      |
-| ------------------------------------------ | ---------------- | ------------- | ------------------------------------------------ |
-| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | `"20"`        | The most transfers a use can initiate per minute |
-| `transfer.minTransferQuantumMultiple`      | String (integer) | `"0.1"`       | The most transfers a use can initiate per minute |
-| `transfer.fee.factor`                      | String (decimal) | `"0.001"`     | The percentage of the transfer charged as a fee  |
+| Property                                   | Type             | Validation                  |  Example value | Description                                      |
+| ------------------------------------------ | ---------------- | --------------------------- | -------------- | ------------------------------------------------ |
+| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | strictly greater than `0`   | `"20"`         | The most transfers a use can initiate per minute |
+| `transfer.minTransferQuantumMultiple`      | String (decimal) | greater than or equal to `0`| `"0.1"`        | This, when multiplied by `quantum` (which is specified per asset) determines the minimum transfer amount |
+| `transfer.fee.factor`                      | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The proportion of the transfer charged as a fee  |
 
 
 ## Acceptance criteria
