@@ -316,3 +316,21 @@ Can deposit and withdraw funds to/from ERC20 asset loaded from checkpoint (<a na
 1. Place orders on the market that will cross.
 1. Withdraw funds for one of the traders.
 1. Propose an update to the asset, and ensure that you can update the ERC20 bridge with the asset update and signature bundle.
+
+## Test case 13: A market with future enactment date can become enacted after being restored from checkpoint (<a name="0073-LIMN-028" href="#0073-LIMN-028">0073-LIMN-028</a>)
+1. There is an asset tUSD and no asset proposals.
+1. There are no markets and no market proposals.
+1. There is a party a party called `LP party` with general balance of 10 000 tUSD.
+1. A market is proposed by a party called `LP party` and has enactment date several minutes in the future. The market has id `id_xxx`.
+1. `LP party` commits a stake of 1000 tUSD to `id_xxx`.
+1. Other parties vote on the market and the proposal is accepted (passes rules for vote majority and participation). The market has id `id_xxx`.
+1. The market is in `pending` state, see [market lifecycle](../protocol/0043-MKTL-market_lifecycle.md).
+1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis.
+1. There is an asset tUSD.
+1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
+1. The LP party has general account balance in tUSD of `9000` and bond account balance `1000` on the market `id_xxx`.
+1. The market is still in "pending" state.
+1. The market becomes enaced when the enactment time is passed.
+1. Other parties can trade on the market, and become continuous.
