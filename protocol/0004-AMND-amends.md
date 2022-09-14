@@ -24,6 +24,18 @@ Start date: `2020-03-12` <br>
 - Attempting to alter details on an expired order will cause the amend to be rejected (<a name="0004-AMND-019" href="#0004-AMND-019">0004-AMND-019</a>)
 
 
+For a party with no position on a given market:
+- amending an order in a way that increases the volume sufficiently leads to margin account balance increasing (<a name="0004-AMND-021" href="#0004-AMND-021">0004-AMND-021</a>)
+- Amending an order in a way that decreases the volume sufficiently leads to margin account balance decreasing (<a name="0004-AMND-022" href="#0004-AMND-022">0004-AMND-022</a>)
+- Amending an order by placing it at a sufficiently lower price will lead to margin account balance decreasing (<a name="0004-AMND-023" href="#0004-AMND-023">0004-AMND-023</a>)
+- Amending an order by placing it at sufficiently higher price will lead to margin account balance increasing (<a name="0004-AMND-024" href="#0004-AMND-024">0004-AMND-024</a>)
+
+- It is possible to amend a fractional size order (<a name="0004-AMND-025" href="#0004-AMND-025">0004-AMND-025</a>)
+- It is possible to amend a partially filled limit order (<a name="0004-AMND-026" href="#0004-AMND-026">0004-AMND-026</a>)
+- It is possible to amend a versioned order (already amended several times) (<a name="0004-AMND-027" href="#0004-AMND-027">0004-AMND-027</a>)
+- Attempts to amend order fields not in scope are rejected (<a name="0004-AMND-028" href="#0004-AMND-028">0004-AMND-028</a>)
+
+
 ## Summary
 
 # Summary

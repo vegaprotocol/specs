@@ -187,11 +187,11 @@ message CancelTransfer {
 
 ## Network Parameters
 
-| Property                                   | Type             | Example value | Description                                      |
-| ------------------------------------------ | ---------------- | ------------- | ------------------------------------------------ |
-| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | `"20"`        | The most transfers a use can initiate per minute |
-| `transfer.minTransferQuantumMultiple`      | String (integer) | `"0.1"`       | The most transfers a use can initiate per minute |
-| `transfer.fee.factor`                      | String (decimal) | `"0.001"`     | The percentage of the transfer charged as a fee  |
+| Property                                   | Type             | Validation                  |  Example value | Description                                      |
+| ------------------------------------------ | ---------------- | --------------------------- | -------------- | ------------------------------------------------ |
+| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | strictly greater than `0`   | `"20"`         | The most transfers a use can initiate per minute |
+| `transfer.minTransferQuantumMultiple`      | String (decimal) | greater than or equal to `0`| `"0.1"`        | This, when multiplied by `quantum` (which is specified per asset) determines the minimum transfer amount |
+| `transfer.fee.factor`                      | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The proportion of the transfer charged as a fee  |
 
 
 ## Acceptance criteria
@@ -266,4 +266,12 @@ A user's recurring transfer is cancelled if any transfer fails due to insufficie
   - [ ] The transfer is cancelled
   - [ ] No more transfers are executed.
 
-- A recurring transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-058" href="#0058-TRAN-058">0057-TRAN-058</a>)
+A recurring transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-058" href="#0058-TRAN-058">0057-TRAN-058</a>)
+
+A user's recurring transfer to a reward account does not occur if there are no parties eligible for a reward in the current epoch (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
+  - [ ] I set up a market ETHUSDT settling in USDT.
+  - [ ] The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+  - [ ] I specify a start and no end epoch, and a factor of 1 to a reward account `ETHUSDT | market creation | $VEGA` 
+  - [ ] In the first epoch no trading occurs and nothing is transferred to the reward account at the end of the epoch
+  - [ ] In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
+  - [ ] At the end of the third epoch, no transfer occurs

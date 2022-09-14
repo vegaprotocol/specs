@@ -328,7 +328,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 9. Swap due to better score (<a name="0069-VCBS-042" href="#0069-VCBS-042">0069-VCBS-042</a>):
   * Setup a network with 5 Tendermint validators and self-delegate 1000 tokens to each of them. 
   * Announce a new node at the beginning of the epoch, self-delegate to them a total that is 10000 tokens. 
-  * At the beginning of the next epoch the new validator should have ranking score *equal or lower* to all of the Tendermint validators so it doesn’t get promoted. 
+  * At the beginning of the next epoch the new validator should have ranking score *equal or lower* to all of the Tendermint validators so it doesn’t get promoted. The parameter <incubent_factor> is set sufficiently high to assure this (e.g., 1.1).
   * In the middle of the epoch, shut node 1 down. 
   * Verify that at the beginning of the next epoch the announced node replaced node 1 as a Tendermint validator. 
   * Restart node 1 again from a snapshot
@@ -344,6 +344,10 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Send an announce node command from a non validator node should fail
 2. Valid announce node command (<a name="0069-VCBS-045" href="#0069-VCBS-045">0069-VCBS-045</a>):
   * Send a valid announce node from a validator node should result in a validator update event with the details of the validator and a validator ranking event.
+3. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>):
+  * Should be rejected
+
+
 
 ## Checkpoints
 1. Base case (<a name="0069-VCBS-046" href="#0069-VCBS-046">0069-VCBS-046</a>):
