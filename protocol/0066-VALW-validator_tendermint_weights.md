@@ -6,7 +6,7 @@ For each validator node Tendermint keeps the "weight" of the node for consensus 
 
 On Vega the voting power is calcualted as follows: `stakeScore x performanceScore` normalised by the sum of those scores. Where `stakeScore` is defined as the anti-whaling stake score of tendermint validators and performance score is the proportion of successful proposals of the validator normalised to their voting power. 
 
-The weights should be updated every `1000` blocks and every epoch (whichever passes first).
+The weights should be updated every epoch.
 
 The minimum voting power for a non-empty network is 1 (0 implies that the validator is removed from the network).
 
@@ -32,7 +32,7 @@ If the network has no stake at all, then all validators would have equal voting 
 3. wait for the delegation to become active in the next epoch
 
 
-### Update at the start of epoch check (<a name="0066-VALW-004" href="#0066-VALW-004">0066-VALW-004</a>)
+### Changes to delegation during the epoch are reflected in the next epoch’s voting power (<a name="0066-VALW-004" href="#0066-VALW-004">0066-VALW-004</a>)
 1. set up a network with 5 validators
 2. give the first `4` validators `1000` of self-stake each. Give the last validator `0`. 
 3. wait for the delegation to become active in the next epoch
@@ -40,7 +40,6 @@ If the network has no stake at all, then all validators would have equal voting 
 6. just before epoch 0 ends the last validator self-stakes `500`. 
 7. epoch 1 starts 
 5. check that Tendermint weights
-
 
 ### Sanity check if everyone unstakes and undelegates (<a name="0066-VALW-005" href="#0066-VALW-005">0066-VALW-005</a>)
 1. set up a network with 5 validators
@@ -79,3 +78,4 @@ If the network has no stake at all, then all validators would have equal voting 
 4. undelegate all in the same epoch
 6. wait for the next epoch
 7. Check that Tendermint weights whereby validators would have equal voting power of 10
+

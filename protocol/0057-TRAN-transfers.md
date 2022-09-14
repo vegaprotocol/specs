@@ -126,7 +126,7 @@ NB: if there is no market with contribution to the reward metric - no transfer i
 
 ## Fees
 
-A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0059-simple-POS-rewards.md).
+A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0059-simple-POS-rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
 The fee is set by the `transfer.fee.factor` [network parameter](#network-parameter) that defines the proportion of each transfer taken as a fee. 
 The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred. 
@@ -187,11 +187,11 @@ message CancelTransfer {
 
 ## Network Parameters
 
-| Property                                   | Type             | Example value | Description                                      |
-| ------------------------------------------ | ---------------- | ------------- | ------------------------------------------------ |
-| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | `"20"`        | The most transfers a use can initiate per minute |
-| `transfer.minTransferQuantumMultiple`      | String (integer) | `"0.1"`       | The most transfers a use can initiate per minute |
-| `transfer.fee.factor`                      | String (decimal) | `"0.001"`     | The percentage of the transfer charged as a fee  |
+| Property                                   | Type             | Validation                  |  Example value | Description                                      |
+| ------------------------------------------ | ---------------- | --------------------------- | -------------- | ------------------------------------------------ |
+| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | strictly greater than `0`   | `"20"`         | The most transfers a use can initiate per minute |
+| `transfer.minTransferQuantumMultiple`      | String (decimal) | greater than or equal to `0`| `"0.1"`        | This, when multiplied by `quantum` (which is specified per asset) determines the minimum transfer amount |
+| `transfer.fee.factor`                      | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The proportion of the transfer charged as a fee  |
 
 
 ## Acceptance criteria
@@ -199,31 +199,22 @@ message CancelTransfer {
 ### One off transfers
 
 - As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
-
-- As a user I can transfer funds from a general account I control to reward account.  Such transfer can be immediate or delayed. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
-
+- As a user I **cannot** transfer funds from a general account I control to reward account with a one-off transfer. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
 - As a user I can transfer funds from a general account I control to an locked_for_staking. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-COSMICELEVATOR-TRAN-003" href="#0057-COSMICELEVATOR-TRAN-003">0057-COSMICELEVATOR-TRAN-003</a>).
-
 - As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-COSMICELEVATOR-TRAN-004" href="#0057-COSMICELEVATOR-TRAN-004">0057-COSMICELEVATOR-TRAN-004</a>)
-
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
-
 - As a user I cannot transfer funds from accounts I own but from the type is not supported (e.g. margin, staking). (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>) 
-
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed. (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
   - [ ] The fee cost is correctly calculated using the network parameter
   - [ ] If I have enough funds to pay transfer and fees, the transfer happens.
   - [ ] If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - [ ] The fees are being paid into the infrastructure pool
-
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
   - [ ] The funds arrive in the target account when the transaction is processed (i.e. with the correct delay), which is not before the timestamp occurs
   - [ ] A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.
-
 - The spam protection mechanics prevent me to do more than `spam.protection.maxUserTransfersPerEpoch` transfers per epoch. (<a name="0057-TRAN-009" href="#0057-TRAN-009">0057-TRAN-009</a>)
-
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
-
+- A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
 
 ### Recurring transfers
 
@@ -274,3 +265,13 @@ A user's recurring transfer is cancelled if any transfer fails due to insufficie
   - [ ] The account runs out of funds
   - [ ] The transfer is cancelled
   - [ ] No more transfers are executed.
+
+A recurring transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-058" href="#0058-TRAN-058">0057-TRAN-058</a>)
+
+A user's recurring transfer to a reward account does not occur if there are no parties eligible for a reward in the current epoch (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
+  - [ ] I set up a market ETHUSDT settling in USDT.
+  - [ ] The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+  - [ ] I specify a start and no end epoch, and a factor of 1 to a reward account `ETHUSDT | market creation | $VEGA` 
+  - [ ] In the first epoch no trading occurs and nothing is transferred to the reward account at the end of the epoch
+  - [ ] In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
+  - [ ] At the end of the third epoch, no transfer occurs
