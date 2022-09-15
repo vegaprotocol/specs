@@ -127,16 +127,22 @@ This in particular means that if this is the first LP commitment on the market t
 (average entry valuation) <- (average entry valuation) x S / (S + Delta S) + (entry valuation) x (Delta S) / (S + Delta S)
 ```
 Example 1: 
-A new LP has `0` stake and they wish to add `Delta S = 100`. Currently the sum of all virtual stakes is `1000`. The average entry valuation is
+Currently the sum of all virtual stakes is `900`. A new LP has `0` stake and add stake `Delta S = 100`. The sum of all virtual stakes is now `1000`. The average entry valuation is
 ```
 (average entry valuation) <- 0 + 1000 x 100 / (0 + 100) = 1000
 ```
-Example 2:
+Example 2: 
+A new LP1 has `0` stake and they wish to add `Delta S = 8000` and a new LP2 has `0` stake and they wish to add `Delta S = 2000`. Currently the sum of all virtual stakes is `10000` after the LP commmitments added. The average entry valuations are:
+```
+(average entry valuation LP1) <- 0 + 8000 x 8000 / (0 + 8000) = 8000
+(average entry valuation LP2) <- 0 + (8000 + 2000) x 2000 / (0 + 2000) = 10000
+```
+Example 3:
 An existing LP has `average entry valuation 1000` and `S=100`. Currently the sum of all virtual stakes is `2000`. They wish to add `10` to their stake. 
 ```
 (average entry valuation) <- 1000 x 100 / (100 + 10) + 2000 x 10 / (100 + 10) = 1090.9.... 
 ```
-Example 3: 
+Example 4: 
 An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the sum of all virtual stakes is `3000`. They wish to remove `20` from their stake. Their average entry valuation stays the same
 ```
 (average entry valuation) = 1090.9
