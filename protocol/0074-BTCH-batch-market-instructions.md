@@ -38,7 +38,7 @@ Overall, building the ability to handle batches of market instructions in a sing
 
    1. **Submissions**: this is a list (repeated field) of Submit Order instructions
 
-1. The total number of instructions across all three lists (i.e. sum of the lengths of the lists) must be less than or equal to the current value of the network parameter `network.spam_protection.max_batch_size`.
+1. The total number of instructions across all three lists (i.e. sum of the lengths of the lists) must be less than or equal to the current value of the network parameter `network.spam_protection.max.batch.size`.
 
 
 ## Processing a batch
