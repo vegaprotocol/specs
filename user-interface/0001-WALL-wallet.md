@@ -105,7 +105,7 @@ When thinking about a recent or specific transaction, I ...
 - **must** see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
 - (for tainted keys) **should** see attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions) (<a name="0001-WALL-038" href="#0001-WALL-038">0001-WALL-038</a>)
 
-... so that I can ensure my wallet is being used appropriately and find transaction I might have missed
+... so that I can ensure my wallet is being used appropriately and find transactions I might have missed
 
 ## Transaction detail
 when looking at a specific transaction...
