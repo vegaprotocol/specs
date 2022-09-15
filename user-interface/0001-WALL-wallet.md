@@ -17,7 +17,7 @@ When on the wallet page of Vega.xyz, I...
 ## Set up wallet / Restore wallet
 When opening the wallet for the first time, I...
 
-- **must** be prompted to opt into (or stay out of) analytics (<a name="0001-WALL-003" href="#0001-WALL-003">0001-WALL-003</a>)
+- if the app sends telemetry/analytics: **must** be prompted to opt into (or stay out of) analytics (<a name="0001-WALL-003" href="#0001-WALL-003">0001-WALL-003</a>)
 - **must** be able to restore a wallet from a seed phrase (<a name="0001-WALL-004" href="#0001-WALL-004">0001-WALL-004</a>)
 - **must** be able to create a new wallet (<a name="0001-WALL-005" href="#0001-WALL-005">0001-WALL-005</a>)
   - **must** be shown the back up phrase (<a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>)
