@@ -115,7 +115,7 @@ when looking at a specific transaction...
 - **should** see the referrer that made the request (with note that this is not verified) <!-- (<a name="0001-WALL-041" href="#0001-WALL-041">0001-WALL-041</a>) -->
 - **must** see what wallet / key is being used (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
 - **should** be able to select auto approve for this app (aka don't ask me again) <!-- (<a name="0001-WALL-043" href="#0001-WALL-043">0001-WALL-043</a>) -->
-  - **should** be able to select to auto approve for a amount of time that I choose <!-- (<a name="0001-WALL-074" href="#0001-WALL-074">0001-WALL-074</a>) -->
+  - **should** be able to select to auto approve for an amount of time that I choose <!-- (<a name="0001-WALL-074" href="#0001-WALL-074">0001-WALL-074</a>) -->
   - **should** be able to select to auto approve for a number of transaction that I choose <!-- (<a name="0001-WALL-075" href="#0001-WALL-075">0001-WALL-075</a>) -->
 - **must** be prompted to enter passphrase (when needed to sign + broadcast transaction) (<a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>)
 - **must** see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network). (<a name="0001-WALL-045" href="#0001-WALL-045">0001-WALL-045</a>)
