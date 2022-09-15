@@ -91,9 +91,9 @@ When looking for a specific balance or asset on a given wallet and network, I...
 ## Transactions
 When thinking about a recent or specific transaction, I ...
 
-- **must** see a history of transactions the wallet app has signed, as read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
+- **must** see a history of transactions the wallet app has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
 <!--
-- **should** see a history of transactions the wallet app has signed as read from the local app (persistent storage) (<a name="0001-WALL-080" href="#0001-WALL-080">0001-WALL-080</a>)
+- **should** see a history of transactions the wallet app has signed. As read from the local app (persistent storage) (<a name="0001-WALL-080" href="#0001-WALL-080">0001-WALL-080</a>)
   - persistent transaction history **must** be encrypted and require the wallet password to view (<a name="0001-WALL-081" href="#0001-WALL-081">0001-WALL-081</a>)
   - **should** be possible to delete individual transactions (<a name="0001-WALL-082" href="#0001-WALL-082">0001-WALL-082</a>)
   - **should** be possible to delete the whole transaction history (<a name="0001-WALL-083" href="#0001-WALL-083">0001-WALL-083</a>)
@@ -105,7 +105,7 @@ When thinking about a recent or specific transaction, I ...
 - **must** see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
 - (for tainted keys) **should** see attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions) (<a name="0001-WALL-038" href="#0001-WALL-038">0001-WALL-038</a>)
 
-... so that I can ensure my wallet is being used appropriately and find transactions I might have missed
+... so that I can ensure my wallet is being used appropriately and find transaction I might have missed
 
 ## Transaction detail
 when looking at a specific transaction...
@@ -115,7 +115,7 @@ when looking at a specific transaction...
 - **should** see the referrer that made the request (with note that this is not verified) <!-- (<a name="0001-WALL-041" href="#0001-WALL-041">0001-WALL-041</a>) -->
 - **must** see what wallet / key is being used (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
 - **should** be able to select auto approve for this app (aka don't ask me again) <!-- (<a name="0001-WALL-043" href="#0001-WALL-043">0001-WALL-043</a>) -->
-  - **should** be able to select to auto approve for an amount of time that I choose <!-- (<a name="0001-WALL-074" href="#0001-WALL-074">0001-WALL-074</a>) -->
+  - **should** be able to select to auto approve for a amount of time that I choose <!-- (<a name="0001-WALL-074" href="#0001-WALL-074">0001-WALL-074</a>) -->
   - **should** be able to select to auto approve for a number of transaction that I choose <!-- (<a name="0001-WALL-075" href="#0001-WALL-075">0001-WALL-075</a>) -->
 - **must** be prompted to enter passphrase (when needed to sign + broadcast transaction) (<a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>)
 - **must** see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network). (<a name="0001-WALL-045" href="#0001-WALL-045">0001-WALL-045</a>)
@@ -145,7 +145,7 @@ When protecting myself from use of keys that may be compromised, I..
 
 - **must** select a key I wish to taint (<a name="0001-WALL-057" href="#0001-WALL-057">0001-WALL-057</a>)
 - **must** be prompted to enter wallet password to taint key (<a name="0001-WALL-058" href="#0001-WALL-058">0001-WALL-058</a>)
-- (Dapps that request use of tainted keys **must** not prompt a user to sign transaction) (<a name="0001-WALL-059" href="#0001-WALL-059">0001-WALL-059</a>)
+- (Dapps that request use of tainted keys **must** not prompt a prompt user to sign transaction) (<a name="0001-WALL-059" href="#0001-WALL-059">0001-WALL-059</a>)
 - **must** see tainted keys flagged as tainted (<a name="0001-WALL-060" href="#0001-WALL-060">0001-WALL-060</a>)
 
 ... so that tainted keys must not be used
