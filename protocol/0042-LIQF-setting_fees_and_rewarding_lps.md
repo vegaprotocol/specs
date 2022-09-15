@@ -120,6 +120,8 @@ So `Delta S > 0` (and so `S+Delta S > 0`) in what follows.
 ```
 (entry valuation) = sum over j from 1 to N of (LP j virtual stake)
 ```
+Note, the `virtual stake` used in the calcuation of `entry valuation` is after the change of the LP commitmnet is applied.
+
 3. Update the average entry valuation to 
 ```
 (average entry valuation) <- (average entry valuation) x S / (S + Delta S) + (entry valuation) x (Delta S) / (S + Delta S)
