@@ -145,7 +145,7 @@ When protecting myself from use of keys that may be compromised, I..
 
 - **must** select a key I wish to taint (<a name="0001-WALL-057" href="#0001-WALL-057">0001-WALL-057</a>)
 - **must** be prompted to enter wallet password to taint key (<a name="0001-WALL-058" href="#0001-WALL-058">0001-WALL-058</a>)
-- (Dapps that request use of tainted keys **must** not prompt a prompt user to sign transaction) (<a name="0001-WALL-059" href="#0001-WALL-059">0001-WALL-059</a>)
+- (Dapps that request use of tainted keys **must** not prompt a user to sign transaction) (<a name="0001-WALL-059" href="#0001-WALL-059">0001-WALL-059</a>)
 - **must** see tainted keys flagged as tainted (<a name="0001-WALL-060" href="#0001-WALL-060">0001-WALL-060</a>)
 
 ... so that tainted keys must not be used
