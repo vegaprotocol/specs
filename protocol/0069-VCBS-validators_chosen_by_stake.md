@@ -340,18 +340,18 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Network with 5 tendermint validators and 7 ersatzvalidators
   * In the same epoch, change the network parameter <reward.staking.delegation.minimumValidatorStake> in a way that 3 tendermint validators and 3 ersatzvalidators drop below the ownstake requirement, and change the delegation so that 4 (not affected) Ersatzvalidators have a higher score than two (not affected) Validators. Also, give one of the Ersatzvalidators with insufficient ownstake the highest stake (delegated) of all Ersatzvalidators. 
 
- * At the end of th epoch all validators with insufficient own stake will get a ranking score of 0.
+ * At the end of the epoch all validators with insufficient own stake will get a ranking score of 0.
  * No ersatz validator with insufficient stake will get unlisted as ersatzvalidator
  * The 3 tendermint validators would be swapped with the top 3 ersatzvalidators over the following 3 epochs
  * Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted. 
  * No validator with stake attached to them is ever completely removed 
   
- 12 (Alternative until we can buiuld a large enough network for above AC )
+ 12 (Alternative until we can build a large enough network for above AC )
  12.a Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - one ersatzvalidator gets the highest delegated stake, but insufficient ownstake (delegates: 10000)
 - 2 validators drop below ownstake, but have relative high delegated stake (7000)
--1 validator drops to the lowest delegated stake (1000)
+- 1 validator drops to the lowest delegated stake (1000)
 - 1 ersatzvalidator has 6000 stake and sufficient ownstake
 
 Verify that the the first ersatzvalidator is removed (marked as pending in the epoch change and then removed due to continous insufficient ownstake), and one validator with insufficient ownstake is replaced by the other ersatzvalidator.
