@@ -98,61 +98,60 @@ message ProtocolUpgradeEvent {
 
 ## Acceptance criteria
 
-### Invalid proposals - Rejections (<a name="0075-PLUP-001" href="#0075-PLUP-001">0075-PLUP-001</a>)
+### Invalid proposals - Rejections
    - A network with 5 validators 
-   - Validator 1 proposes a protocol upgrade to an invalid tag (https://semver.org/) - should result in an error
-   - Validator 2 proposes a protocol upgrade on a block height preceding the current block - should result in an error
-   - Propose and enact a version downgrade 
-   - Non-validator attempts to propose upgrade
-   - Ersatz validator attempts to propose upgrade
+   - (<a name="0075-PLUP-001" href="#0075-PLUP-001">0075-PLUP-001</a>) Validator proposes a protocol upgrade to an invalid tag (https://semver.org/) - should result in an error
+   - (<a name="0075-PLUP-002" href="#0075-PLUP-002">0075-PLUP-002</a>) Validator proposes a protocol upgrade on a block height preceding the current block - should result in an error
+   - (<a name="0075-PLUP-003" href="#0075-PLUP-003">0075-PLUP-003</a>) Propose and enact a version downgrade
+   - (<a name="0075-PLUP-004" href="#0075-PLUP-004">0075-PLUP-004</a>) Non-validator attempts to propose upgrade
+   - (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) Ersatz validator attempts to propose upgrade
  
-### Block height validation (<a name="0075-PLUP-002" href="#0075-PLUP-002">0075-PLUP-002</a>)
+### Block height validation
    Proposal will not be accepted as valid if validator
-   -  Proposes an upgrade block in the past - should be rejected / failed check - sign via wallet / check wallet
-   -  Proposes a negative upgrade block
-   -  Proposes a 0 upgrade block
-   -  Proposes (string/other upgrade block)
-   -  Proposes without supplying a block height
+   -  (<a name="0075-PLUP-006" href="#0075-PLUP-006">0075-PLUP-006</a>) Proposes a negative upgrade block
+   -  (<a name="0075-PLUP-007" href="#0075-PLUP-007">0075-PLUP-007</a>) Proposes a 0 upgrade block
+   -  (<a name="0075-PLUP-008" href="#0075-PLUP-008">0075-PLUP-008</a>) Proposes (string/other upgrade block)
+   -  (<a name="0075-PLUP-009" href="#0075-PLUP-009">0075-PLUP-009</a>) Proposes without supplying a block height
 
-### VISOR (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) 
-   - Can be seen to automatically download the latest version for install when available at the source location when file meets the format criteria defined
-   - Visor automatically upgrades validators to proposed version if requiredMajority has been reached
+### VISOR 
+   - (<a name="0075-PLUP-010" href="#0075-PLUP-010">0075-PLUP-010</a>) Can be seen to automatically download the latest version for install when available at the source location when file meets the format criteria defined
+   - (<a name="0075-PLUP-011" href="#0075-PLUP-011">0075-PLUP-011</a>) Visor automatically upgrades validators to proposed version if requiredMajority has been reached
    
-### Epochs (<a name="0075-PLUP-006" href="#0075-PLUP-006">0075-PLUP-006</a>) 
-   - Proposing an upgrade block which ought to be the end of an epoch
-   - Propose an upgrade block which should result in a new network in the same epoch
-   - Ensure end of epoch processes still run after restore e.g reward calculation and distributions
+### Epochs 
+   - (<a name="0075-PLUP-012" href="#0075-PLUP-012">0075-PLUP-012</a>) Proposing an upgrade block which ought to be the end of an epoch
+   - (<a name="0075-PLUP-013" href="#0075-PLUP-013">0075-PLUP-013</a>) Propose an upgrade block which should result in a new network in the same epoch
+   - (<a name="0075-PLUP-014" href="#0075-PLUP-014">0075-PLUP-014</a>) Ensure end of epoch processes still run after restore e.g reward calculation and distributions
 
-### Required Majority  (<a name="0075-PLUP-007" href="#0075-PLUP-007">0075-PLUP-007</a>)
-   - Counting proposal votes to check if required majority has been reached occurs when any proposed target block has been reached
-   - Only active network validators proposals are counted when any proposed target block has been reached 
-   - Events are emitted for all proposals which fail to reach required majority when target block is reached
-   - When majority reached during the process of upgrading, those validators which didnt propose will stop producing blocks
-   - Proposals for multiple versions at same block height will be rejected if majority has not been reached, network continues with the current running version 
-   - Propose with a validator which is moved to Ersatz by the time the upgrade is enacted. If there are 5 validators, 3 vote yes, 2 vote no: One of the yes voters is kicked in favour of a new one, leaving the vote at 2-2 so the upgrade should not happen as counting votes happens at block height only
+### Required Majority
+   - (<a name="0075-PLUP-015" href="#0075-PLUP-015">0075-PLUP-015</a>) Counting proposal votes to check if required majority has been reached occurs when any proposed target block has been reached
+   - (<a name="0075-PLUP-016" href="#0075-PLUP-016">0075-PLUP-016</a>) Only active network validators proposals are counted when any proposed target block has been reached 
+   - (<a name="0075-PLUP-017" href="#0075-PLUP-017">0075-PLUP-017</a>) Events are emitted for all proposals which fail to reach required majority when target block is reached
+   - (<a name="0075-PLUP-018" href="#0075-PLUP-018">0075-PLUP-018</a>) When majority reached during the process of upgrading, those validators which didnt propose will stop producing blocks
+   - (<a name="0075-PLUP-019" href="#0075-PLUP-019">0075-PLUP-019</a>) Proposals for multiple versions at same block height will be rejected if majority has not been reached, network continues with the current running version 
+   - (<a name="0075-PLUP-020" href="#0075-PLUP-020">0075-PLUP-020</a>) Propose with a validator which is moved to Ersatz by the time the upgrade is enacted. If there are 5 validators, 3 vote yes, 2 vote no: One of the yes voters is kicked in favour of a new one, leaving the vote at 2-2 so the upgrade should not happen as counting votes happens at block height only
 
 
-### Multiple proposals (<a name="0075-PLUP-008" href="#0075-PLUP-008">0075-PLUP-008</a>)
+### Multiple proposals (<a name="0075-PLUP-021" href="#0075-PLUP-021">0075-PLUP-021</a>)
    - If multiple proposals are submitted from a validator before the block heights are reached then only the last proposal is considered
 
-## Spam 
+## Spam (<a name="0075-PLUP-022" href="#0075-PLUP-022">0075-PLUP-022</a>) 
    - Excessive numbers of proposals from a single validator within an epoch should be detected and rejected - (Future requirement)
    
-## Snapshots (<a name="0075-PLUP-009" href="#0075-PLUP-009">0075-PLUP-009</a>)
-   - Post validator joining they should be immediately allowed to propose and included in the overall total count
-   - Validators attempting to join during upgrade will be rejected if protocol versions differ
-   - Ensure that required majority is not met when enough validators join between validator proposals and target block
-   - Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
+## Snapshots
+   - (<a name="0075-PLUP-023" href="#0075-PLUP-023">0075-PLUP-023</a>) Post validator joining they should be immediately allowed to propose and included in the overall total count
+   - (<a name="0075-PLUP-024" href="#0075-PLUP-024">0075-PLUP-024</a>) Validators attempting to join during upgrade will be rejected if protocol versions differ
+   - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Ensure that required majority is not met when enough validators join between validator proposals and target block
+   - (<a name="0075-PLUP-026" href="#0075-PLUP-026">0075-PLUP-026</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
 
-## Checkpoints (<a name="0075-PLUP-010" href="#0075-PLUP-010">0075-PLUP-010</a>)
-   - Validator proposals should not be stored in the checkpoints and restored into the network
-   - Upgrade will not occur after a post checkpoint restore until new proposals are made and block height reached
+## Checkpoints
+   - (<a name="0075-PLUP-027" href="#0075-PLUP-027">0075-PLUP-027</a>) Validator proposals should not be stored in the checkpoints and restored into the network
+   - (<a name="0075-PLUP-028" href="#0075-PLUP-028">0075-PLUP-028</a>) Upgrade will not occur after a post checkpoint restore until new proposals are made and block height reached
    
-## API (<a name="0075-PLUP-011" href="#0075-PLUP-011">0075-PLUP-011</a>)
-   - An datanode API should be available to provide information on the upcoming confirmed proposal including total proposals/block details/versions
+## API
+   - (<a name="0075-PLUP-029" href="#0075-PLUP-029">0075-PLUP-029</a>) An datanode API should be available to provide information on the upcoming confirmed proposal including total proposals/block details/versions
    
 
-### Successful upgrade  (<a name="0075-PLUP-004" href="#0075-PLUP-004">0075-PLUP-004</a>) 
+### Successful upgrade  (<a name="0075-PLUP-030" href="#0075-PLUP-030">0075-PLUP-030</a>) 
   - A new release is made available, and is successfully deployed
   - Setup a network with 5 validators running version x
   - Have 4 validator submit request to upgrade to release >x at block height 1000
@@ -160,7 +159,7 @@ message ProtocolUpgradeEvent {
   - All nodes are starting from the snapshot of block 1000 and the network resumes with version >x
  
  
- ### Failing consensus (<a name="0075-PLUP-012" href="#0075-PLUP-012">0075-PLUP-012</a>)
+ ### Failing consensus (<a name="0075-PLUP-031" href="#0075-PLUP-031">0075-PLUP-031</a>)
   - Upgrade takes place at block N. Minimum number of validators -1 restart with correct version. One validator restarts with previous version. Consensus is not achieved. Start another validator with the correct version, consensus is achieved
   - 5 validator network. Upgrade takes places at block N. Start 3 validators immediately. Allow several blocks to pass. Start two remaining validators. (All validators continue to work) - no blocks producing as 3 validators do not have enough weight - need 70% weight to produce blocks
   - Weighting threshold (API TM) is not reached after restart, network does not produce blocks
