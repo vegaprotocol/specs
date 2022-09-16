@@ -150,8 +150,9 @@ message ProposalTerms {
 ```
 
 
-Note that the `quantum` field sets the minimum economically meaningful amount in the asset.
+Note that the `quantum` (compulsory field) sets the minimum economically meaningful amount in the asset.
 For example for USD this may be 1 USD or perhaps 0.01 USD.
+This must be an integer strictly greater than `0`. 
 
 
 # Acceptance Criteria
@@ -182,6 +183,7 @@ For example for USD this may be 1 USD or perhaps 0.01 USD.
 - [ ] A new ERC20 proposal that passes normal governance rules but fails node validation is rejected (<a name="0027-ASSP-016" href="#0027-ASSP-016">0027-ASSP-016</a>)
 - [ ] `validationTimestamp` must occur after the governance proposal opens voting, and before it closes (<a name="0027-ASSP-017" href="#0027-ASSP-017">0027-ASSP-017</a>)
 - [ ] `validationTimestamp` must be provided and in the future for all new ERC20 asset proposals (<a name="0027-ASSP-018" href="#0027-ASSP-018">0027-ASSP-018</a>)
+- [ ] `quantum` must be an integer strictly greater than `0` (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)
 
 ## Delays and Thresholds
 - [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. Withdrawal in asset `X` below `t1` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` above `t1` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)

@@ -302,3 +302,5 @@ For each asset class to be considered "supported" by Vega, the following must ha
 5. A withdrawal can be requested and verified by Vega validator nodes (<a name="0040-ASSF-005" href="#0040-ASSF-005">0040-ASSF-005</a>)
 6. multisig withdrawal order signatures from Vega validator nodes can be aggregated at the request of the user (<a name="0040-ASSF-006" href="#0040-ASSF-006">0040-ASSF-006</a>)
 7. A user can submit the withdrawal order and receive their asset (<a name="0040-ASSF-007" href="#0040-ASSF-007">0040-ASSF-007</a>)
+8. Every asset must specify `quantum` and this must be an integer strictly greater than `0` (<a name="0040-ASSF-008" href="#0040-ASSF-008">0040-ASSF-008</a>)
+
