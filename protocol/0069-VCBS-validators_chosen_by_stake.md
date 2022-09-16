@@ -337,8 +337,14 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
   * Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator. 
 
 11. Change ownstake requirement (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>)
-  * In the same epoch, change the network parameter <reward.staking.delegation.minimumValidatorStake> in a way that 3 validators and three Ersatzvalidators drop below the ownstake requirement, and change the delegation so that 4 (not affected) Ersatzvalidators have a higher score than two (not affected) Validators. Also, give one of the Ersatzvalidators with insufficient ownstake the highest ValidatorScore of all Ersatzvalidators. 
-  * Verify that the the three Ersatzvalidators with now insufficient ownstake are removed at the end of the epoch, and that the three validators with insufficient ownstake are demoted within three epochs (and immediatelly demoted again from being Ersatzvalidators), and that in the fourth epoch the validator with the lowest ValidatorScore is demoted (and each time, the Ersatzvalidatror with the highest score is promoted). Also, verify that the Ersatzvalidator with the highest score and insufficient ownscore got demoted from being an Ersatzvalidator rather than promoted to be a Validator. 
+  * Network with 5 tendermint validators and 7 ersatzvalidators
+  * In the same epoch, change the network parameter <reward.staking.delegation.minimumValidatorStake> in a way that 3 tendermint validators and 3 ersatzvalidators drop below the ownstake requirement, and change the delegation so that 4 (not affected) Ersatzvalidators have a higher score than two (not affected) Validators. Also, give one of the Ersatzvalidators with insufficient ownstake the highest stake (delegated) of all Ersatzvalidators. 
+
+ * At the end of th epoch all validators with insufficient own stake will get a ranking score of 0.
+ * No ersatz validator with insufficient stake will get unlisted as ersatzvalidator
+ * The 3 tendermint validators would be swapped with the top 3 ersatzvalidators over the following 3 epochs
+ * Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted. 
+ * No validator with stake attached to them is ever completely removed 
   
  12 (Alternative until we can buiuld a large enough network for above AC )
  12.a Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
