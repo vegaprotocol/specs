@@ -338,7 +338,7 @@ See [limited network life spec](../non-protocol-specs/0005-NP-LIMN-limited_netwo
 
 11. Change ownstake requirement (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>)
   * Network with 5 tendermint validators and 7 ersatzvalidators
-  * In the same epoch, change the network parameter <reward.staking.delegation.minimumValidatorStake> in a way that 3 tendermint validators and 3 ersatzvalidators drop below the ownstake requirement, and change the delegation so that 4 (not affected) Ersatzvalidators have a higher score than two (not affected) Validators. Also, give one of the Ersatzvalidators with insufficient ownstake the highest stake (delegated) of all Ersatzvalidators. 
+  * In the same epoch, change the network parameter `reward.staking.delegation.minimumValidatorStake` in a way that 3 tendermint validators and 3 ersatzvalidators drop below the ownstake requirement, and change the delegation so that 4 (not affected) Ersatzvalidators have a higher score than two (not affected) Validators. Also, give one of the Ersatzvalidators with insufficient ownstake the highest stake (delegated) of all Ersatzvalidators. 
 
  * At the end of the epoch all validators with insufficient own stake will get a ranking score of 0.
  * No ersatz validator with insufficient stake will get unlisted as ersatzvalidator
