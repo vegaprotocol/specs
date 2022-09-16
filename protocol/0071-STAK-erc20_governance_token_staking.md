@@ -90,4 +90,21 @@ Other functionality:
 * Attempts to redeem vested tokens will fail if there are not sufficient tokens held on behalf of the sender address that are not staked. Sender must first unstake tokens before they can be redeemed.
 * This functionality does not interact in any way with the staking bridge contract. They are effectively completely separate staking mechanisms, so to unstake all an address's tokens when some are staked on each contract will require calls to both contracts.
 
+# Acceptance Criteria
+### Staking Bridge Smart Contract 
+* Staking Bridge accepts and locks deposited VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-001" href="#0071-STAK-001">0071-STAK-001</a>)
+* Staking Bridge allows only stakers to remove their staked tokens and emits `Stake_Removed` event (<a name="0071-STAK-002" href="#0071-STAK-002">0071-STAK-002</a>)
+* Staking Bridge allows users with staked balance to transfer ownership of stake to new ethereum address that only the new address can remove (<a name="0071-STAK-003" href="#0071-STAK-003">0071-STAK-003</a>)
+* Staking Bridge prohibits withdrawal of VEGA while that VEGA is staked (<a name="0071-STAK-004" href="#0071-STAK-004">0071-STAK-004</a>)
+
+### Vesting Smart Contract 
+* Vesting Contract locks vesting VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-005" href="#0071-STAK-005">0071-STAK-005</a>)
+* Vesting Contract unlocks vesting VEGA tokens and emits `Stake_Removed` event (<a name="0071-STAK-006" href="#0071-STAK-006">0071-STAK-006</a>)
+* Vesting Contract prohibits withdrawal of VEGA while that VEGA is staked (<a name="0071-STAK-007" href="#0071-STAK-007">0071-STAK-007</a>)
+
+### Event Queue
+* Event Queue sees `Stake_Deposited` event from Staking Bridge smart contract and credits target Vega user with stake (<a name="0071-STAK-008" href="#0071-STAK-008">0071-STAK-008</a>)
+* Event Queue sees `Stake_Removed` event from Staking Bridge smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-009" href="#0071-STAK-009">0071-STAK-009</a>)
+* Event Queue sees `Stake_Deposited` event from Vesting smart contract and credits target Vega user with stake (<a name="0071-STAK-010" href="#0071-STAK-010">0071-STAK-010</a>)
+* event Queue sees `Stake_Removed` event from Vesting smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-011" href="#0071-STAK-011">0071-STAK-011</a>)
 
