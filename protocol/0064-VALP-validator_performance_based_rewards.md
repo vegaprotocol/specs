@@ -71,9 +71,7 @@ The performance score should be available on all the same API endpoints as the `
   * Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes were removed from Tendermint.
  6. Scores are produced after checkpoint reload (<a name="0064-VALP-006" href="#0064-VALP-006">0064-VALP-006</a>):  
   * Restart network from checkpoint which contains validator performance scores. After restart when network is operable, scores should be available and updated correctly to reflect current validator count  
-|
 
-|
 
 # Future Stuff (in here for discussion purposes, not yet to be implemented)
 
