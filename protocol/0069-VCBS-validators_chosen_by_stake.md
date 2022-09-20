@@ -339,6 +339,50 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Announce 2 new nodes but self-delegate only to one of them. 
   * Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator. 
 
+11. Change ownstake requirement (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>)
+  * Network with 5 tendermint validators and 7 ersatzvalidators
+  * In the same epoch, change the network parameter `reward.staking.delegation.minimumValidatorStake` in a way that 3 tendermint validators and 3 ersatzvalidators drop below the ownstake requirement, and change the delegation so that 4 (not affected) Ersatzvalidators have a higher score than two (not affected) Validators. Also, give one of the Ersatzvalidators with insufficient ownstake the highest stake (delegated) of all Ersatzvalidators. 
+
+ * At the end of the epoch all validators with insufficient own stake will get a ranking score of 0.
+ * No ersatz validator with insufficient stake will get unlisted as ersatzvalidator
+ * The 3 tendermint validators would be swapped with the top 3 ersatzvalidators over the following 3 epochs
+ * Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted. 
+ * No validator with stake attached to them is ever completely removed 
+  
+ 12 (Alternative until we can build a large enough network for above AC )
+ 12.a Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
+
+- one ersatzvalidator gets the highest delegated stake, but insufficient ownstake (delegates: 10000)
+- 2 validators drop below ownstake, but have relative high delegated stake (7000)
+- 1 validator drops to the lowest delegated stake (1000)
+- 1 ersatzvalidator has 6000 stake and sufficient ownstake
+
+Verify that the the first ersatzvalidator is removed (marked as pending in the epoch change and then removed due to continous insufficient ownstake), and one validator with insufficient ownstake is replaced by the other ersatzvalidator.
+
+12.b Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
+
+- 1 validator drops below ownstake, but has relative high delegated stake (7000)
+- 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
+- 2 ersatzvalidators have 6000 stake and sufficient ownstake
+
+Verify that at the epoch change,  the validator with insufficient ownstake is replaced; in 
+the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatzvalidator due to insufficient ownstake is removed (stops being listed as an ersatzvalidator).
+Verify that the validator that dropped below ownstake is not demoted and removed at the same epoch change.
+
+12.c Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
+
+- All validators drop below ownstake
+- All erstazvalidators have sufficient ownstake, but lower stake than the validators
+
+Verify that 2 validators are replaced, one in each epoch
+
+12.d Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
+
+- All validators drop below ownstake
+- All erstazvalidators have sufficient ownstake, and higher stake than the validators
+
+Verify that one validator is replaced the following epoch, one in the epoch after
+
 ## Announce Node
 1. Invalid announce node command (<a name="0069-VCBS-044" href="#0069-VCBS-044">0069-VCBS-044</a>):
   * Send an announce node command from a non validator node should fail
