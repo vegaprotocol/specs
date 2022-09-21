@@ -9,7 +9,7 @@ When wishing to withdraw some of an ERC20 asset from Vega, I...
 
 - **should** be prompted to complete any existing incomplete withdrawals that exist for connected keys (see [complete withdrawal](#complete-erc20-withdraw-on-ethereum))
 
-Note: It is better to encourage the completion of started withdraws as soon as posible after starting them. This is because the validator set could theoretically change enough to make the node signitures that authorise the withdrawal invalid.
+Note: It is better to encourage the completion of started withdraws as soon as possible after starting them. This is because the validator set could theoretically change enough to make the node signatures that authorize the withdrawal invalid.
 
 - **should** be warned that they will need to pay gas on the withdrawal before starting 
 - **could** show the current gas fees BEFORE preparing the withdrawal (note: this is already a requirement for all [ethereum transactions](0005-ETXN-submit_ethereum_transaction.md)) 
@@ -27,6 +27,7 @@ Note: A user may want to delay preparing a withdrawal if gas fees on the network
   - **should** have an easy option (link/button) to withdraw the full amount in general balance (e.g. pre-populate the amount input)
   - **must** be able to specify as many decimal places as the asset supports
 - **must** be warned if the amount is greater than general balance
+- **should** see a link to a faucet on the selected asset (only if there is one)
 
 Note: balances can change frequently when users have open positions. Apps should show up to date information (subscription), and make it easy to fill in the amount this isn't going to make the input invalid as the amount in general balances changes.
 
@@ -35,11 +36,10 @@ Note: balances can change frequently when users have open positions. Apps should
   - **should** be able to withdraw to a different Ethereum key to the one the app is connected to
   - **should** be warned if the input does not look like an ethereum address (wrong number of digits, not starting with 0x etc)
 
-- if there is a withdraw delay on the selected asset:
-  - **must** see how much of the selected asset can be withdrawn without hitting the withdraw delay
-    - **must** see what the withdraw delay is in hours and mins
-    - **must** see how large a withdrawal (or sum of withdrawals) needs to be to hit the `withdraw delay threshold`
-  - **must** must how much I have withdrawn in the last `withdraw delay period`
+- if there is a withdraw delay on the selected [asset](7001-DATA-data_display.md#asset-balances):
+  - **should** see what the withdraw delay is in hours and mins (if hit)
+  - **should** see how large a withdrawal (or sum of withdrawals) needs to be to hit the `withdraw delay threshold`
+  - **should** see how much I have withdrawn in the last `withdraw delay period`
   - **must** be warned if this withdraw will hit a the delay
 
 - **must** be warned if there are known reasons that the prepared withdrawal will not work
@@ -52,7 +52,7 @@ Note: balances can change frequently when users have open positions. Apps should
   -  **must** see that withdraw is complete
   - if this withdraw will not hit the withdrawal threshold:
     - **should** be prompted to complete the transaction on ethereum (see [complete ERC20 withdraw](#complete-erc20-withdraw-from-ethereum-bridge))
-    **could** be directed to a list of incomplete withdrawals
+    - **could** be directed to a list of incomplete withdrawals
   - if this withdraw will hit withdrawal threshold: 
     - **must** see that the withdraw has been complete and is in the list waiting for the delay to pass
 
@@ -73,7 +73,7 @@ When looking to either complete a withdraw or view past withdraws, I...
   - for withdraws that are in progress:
     - **must** see the status of the withdraw (e.g. pending)
   - for completed withdraws:
-    - **must** see when it was completed on native chain (e.g. ethereum)
+    - **could** see when it was completed on native chain (e.g. ethereum)
     - **must** see a link to the transaction on native block explorer (e.g. etherscan)
   - for withdraws that have not been completed on the external chain, but are not delayed (e.g. Ethereum):
     - **must** see a link to complete the withdraw. See [complete ERC20 withdrawal](#complete-erc20-withdraw-from-ethereum-bridge).
