@@ -6,7 +6,7 @@ Feature name: position-resolution
 * [ ] Open positions of distressed traders are closed (<a name="0012-POSR-002" href="#0012-POSR-002">0012-POSR-002</a>)
 * [ ] One market order is submitted for the net liability (<a name="0012-POSR-003" href="#0012-POSR-003">0012-POSR-003</a>)
 * [ ] Mark Price is never updated during position resolution (<a name="0012-POSR-004" href="#0012-POSR-004">0012-POSR-004</a>)
-* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly. (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
+* [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly i.e. after a new mark-to-market price we see the accounts updated with the correct cashflows generated from mark-to-market settlement (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
 
 # Summary
 
