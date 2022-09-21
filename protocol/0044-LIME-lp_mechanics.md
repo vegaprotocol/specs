@@ -230,6 +230,9 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - Change of `market.liquidity.stakeToCcySiskas` will change the liquidity obligation hence change the size of the LP orders on the order book. (<a name="0044-LIME-004" href="#0044-LIME-004">0044-LIME-004</a>)
 - Change of `market.liquidityProvision.shapes.maxSize` will change the maximum number of entries in the order shape of the LP commitment. If `market.liquidityProvision.shapes.maxSize` is decreased all the LP orders that have already been submitted are unaffected. However any new submissions or amendments must respect the new (lower) maximum. (<a name="0044-LIME-005" href="#0044-LIME-005">0044-LIME-005</a>) 
 - Change of `market.liquidity.maximumLiquidityFeeFactorLevel` will change the maximum liquidity fee factor. Any LP orders that have already been submitted are unaffected but any new submission or amendments must respect the new maximum (those that don't get rejected). (<a name="0044-LIME-006" href="#0044-LIME-006">0044-LIME-006</a>)
+- If `market.liquidity.stakeToCcySiskas` is set to `0.0` then the [LP provision order](./0038-OLIQ-liquidity_provision_order_type.md) places `0` volume on the book for the LP regardless of the shape submitted and regardless of the `stake` committed. (<a name="0044-LIME-007" href="#0044-LIME-007">0044-LIME-007</a>)
+- If `market.liquidity.stakeToCcySiskas` is set to `0.0`, there is [target stake](./0041-TSTK-target_stake.md) of `1000` and there are 3 LPs on the market with stake / fee bid submissions of `100, 0.01`, `1000, 0.02` and `200, 0.03` then the liquidity fee is `0.02`. (<a name="0044-LIME-008" href="#0044-LIME-008">0044-LIME-008</a>)
+
 
 
 
