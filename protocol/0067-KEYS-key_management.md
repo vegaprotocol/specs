@@ -261,3 +261,8 @@ need to be hashed individually).
 1. Validator `v3` generates a new hot key `h3_new` using the master key `M`.
 1. Validator `v3` submits a transaction to vega chain announcing that they'll be using `h3_new` instead of `h3_old`. 
 1. Validator `v3` stops their node, restarts with the new key and replays the chain or restore from snapshot. 
+
+### Generic 
+
+1. Rewards are produced post rotation(<a name="0067-KEYS-002" href="#0067-KEYS-002">0067-KEYS-002</a>)
+
