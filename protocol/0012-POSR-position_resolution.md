@@ -12,7 +12,6 @@ If we want to claim settled then we should either:
 a) do a mark price update and check that we're getting correct mark-to-market settlement or
 b) send in a final settlement price and check that everyone gets the correct cashflow (and any potential shortfall comes from insurance pool).
 
-(<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
 
 # Summary
 
