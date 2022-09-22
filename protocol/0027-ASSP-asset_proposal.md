@@ -39,7 +39,7 @@ Once the proposal is accepted, validators will produce a bundle (e.g. transactio
 
 Once the asset has been allowlisted on the originating chain, deposits in this asset will be accepted to the bridge. 
 The bridge contract e.g. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md) must emit an event (on the bridged chain). 
-Vega chain will notified of this event (new asset allowlisted on the bridge contract) via the [event queue](./0036-BRIE-event_queue.md). 
+Vega chain will be notified of this event (new asset allowlisted on the bridge contract) via the [event queue](./0036-BRIE-event_queue.md). 
 
 Once this has happened, the new asset is ready to be used in the vega network. 
 
