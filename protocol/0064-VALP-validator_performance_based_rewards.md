@@ -69,10 +69,9 @@ The performance score should be available on all the same API endpoints as the `
   * Verify that at the beginning of the next epoch the validator has non 0 performance score, and voting power is greater than 10. 
   * Update the network parameter `reward.staking.delegation.minimumValidatorStake` for minimum self-stake to be more than is self-delegated. 
   * Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes were removed from Tendermint.
+ 6. Scores are produced after a snapshot restart (<a name="0064-VALP-006" href="#0064-VALP-006">0064-VALP-006</a>):  
+  * Restart network from snapshot which contains validator performance scores. After restart when network is operable, scores should be available and updated correctly to reflect current validator count.
 
-|
-
-|
 
 # Future Stuff (in here for discussion purposes, not yet to be implemented)
 
@@ -120,4 +119,3 @@ This needs further investigation; it is probably possible to solve this either t
 same way we detect signature verification, or along the lines of the data-node 
 (i.e., Validators are required to post some internal state information from time to
 time that they only have if they run the protocol)
-
