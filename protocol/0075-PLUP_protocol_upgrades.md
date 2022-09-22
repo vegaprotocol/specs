@@ -143,7 +143,7 @@ message ProtocolUpgradeEvent {
    - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Ensure that required majority is not met when enough validators join between validator proposals and target block
    - (<a name="0075-PLUP-026" href="#0075-PLUP-026">0075-PLUP-026</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
 
-## Checkpoints
+## LNL Checkpoints
    - (<a name="0075-PLUP-027" href="#0075-PLUP-027">0075-PLUP-027</a>) Validator proposals should not be stored in the checkpoints and restored into the network
    - (<a name="0075-PLUP-028" href="#0075-PLUP-028">0075-PLUP-028</a>) Upgrade will not occur after a post checkpoint restore until new proposals are made and block height reached
    
