@@ -134,7 +134,7 @@ message ProtocolUpgradeEvent {
 ### Multiple proposals (<a name="0075-PLUP-021" href="#0075-PLUP-021">0075-PLUP-021</a>)
    - If multiple proposals are submitted from a validator before the block heights are reached then only the last proposal is considered
 
-## Spam (<a name="0075-PLUP-022" href="#0075-PLUP-022">0075-PLUP-022</a>) 
+## Spam (<a name="0075-COSMICELEVATOR-022" href="#0075-COSMICELEVATOR-022">0075-COSMICELEVATOR-022</a>) 
    - Excessive numbers of proposals from a single validator within an epoch should be detected and rejected - (Future requirement)
    
 ## Snapshots
