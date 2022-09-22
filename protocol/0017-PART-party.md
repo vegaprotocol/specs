@@ -34,6 +34,7 @@ The `network` party is a pseudoparty. It is used in [position resolution](./0012
 
 1. [x] When a [standard party](#standard-party) must be uniquely identified, it must be identified by the public key of an ed25519 keypair (<a name="0017-PART-001" href="#0017-PART-001">0017-PART-001</a>)
 1. [x] A Party's transaction is rejected if the party has no balance in any asset - this includes proposals, voting and delegations (<a name="0017-PART-002" href="#0017-PART-002">0017-PART-002</a>)
+1. [x] A transaction received through the blockchain as any special party must be rejected. (0017-PART-003) - maybe not testable?
 
 Note that when and how a party can submit transactions is set out and restricted in
 - [Transactions](./0049-TVAL-validate_transaction_preconsensus.md)
