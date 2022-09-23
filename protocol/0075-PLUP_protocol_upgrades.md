@@ -43,7 +43,7 @@ the management of the state, and possible incompatible changes between the state
 The following describes the general workflow of upgrades: 
 1. Vega continuesly make new releases available 
 2. Validators can suggest to the network an upgrade with a given release tag and a block height for the upgrade to take place
-3. If a proposal gets enough votes (`protocol.upgrade.proposal.requiredMajority` of the validators, not stake) at the given height vega will take a snapshot automatically and stop processing further blocks until restarted by the vega-visor, the vega process manager. 
+3. If a proposal gets enough votes (`validators.vote.required` of the validators, not stake) at the given height vega will take a snapshot automatically and stop processing further blocks until restarted by the vega-visor, the vega process manager.
 4. The validators manually download and build/prepare the new binaries. 
 5. When restarted, vega will load from the last snapshot and start processing blocks with the new version. 
 6. If a majority isn't reached and the block height of the proposal has passed, the proposal is rejected. 
@@ -115,7 +115,7 @@ message ProtocolUpgradeEvent {
 
 ### VISOR 
    - (<a name="0075-PLUP-010" href="#0075-PLUP-010">0075-PLUP-010</a>) Can be seen to automatically download the tagged version proposed for install when available at the source location when file meets the format criteria defined
-   - (<a name="0075-PLUP-011" href="#0075-PLUP-011">0075-PLUP-011</a>) Visor automatically upgrades validators to proposed version if requiredMajority has been reached
+   - (<a name="0075-PLUP-011" href="#0075-PLUP-011">0075-PLUP-011</a>) Visor automatically upgrades validators to proposed version if required majority has been reached
    
 ### Epochs 
    - (<a name="(0075-COSMICELEVATOR-012)" href="#(0075-COSMICELEVATOR-012)">(0075-COSMICELEVATOR-012)</a>) Proposing an upgrade block which ought to be the end of an epoch. After upgrade takes place, confirm rewards are distributed, any pending delegations take effect, and validator joining/leaving takes effect.
