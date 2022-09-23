@@ -114,7 +114,7 @@ message ProtocolUpgradeEvent {
    -  (<a name="0075-PLUP-009" href="#0075-PLUP-009">0075-PLUP-009</a>) Proposes without supplying a block height
 
 ### VISOR 
-   - (<a name="0075-PLUP-010" href="#0075-PLUP-010">0075-PLUP-010</a>) Can be seen to automatically download the latest version for install when available at the source location when file meets the format criteria defined
+   - (<a name="0075-PLUP-010" href="#0075-PLUP-010">0075-PLUP-010</a>) Can be seen to automatically download the tagged version proposed for install when available at the source location when file meets the format criteria defined
    - (<a name="0075-PLUP-011" href="#0075-PLUP-011">0075-PLUP-011</a>) Visor automatically upgrades validators to proposed version if requiredMajority has been reached
    
 ### Epochs 
