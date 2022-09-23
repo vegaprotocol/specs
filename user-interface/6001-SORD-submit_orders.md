@@ -1,11 +1,43 @@
 # Submit order
 As a user I want change my exposure on a market (e.g. open a position, increase or decrease my open volume), I want to submit an order with instructions for how my order should be executed so I have some control over the price that I get, as well as if when/my order should stay on the book. See [specs about orders](../protocol#orders) for more info.
 
+## Before seeing a "deal ticket"
+
+When looking at a market, I...
+
+- **must** see/select the [Market](./7001-DATA-data_display.md#market) I am submitting the order for (<a name="6001-SORD-001" href="#6001-SORD-001">6001-SORD-001</a>)
+- **must** see the current `status` of the market (<a name="6001-SORD-061" href="#6001-SORD-061">6001-SORD-061</a>)
+  
+  if the market is in a state of `rejected`, `canceled` or `closed`:
+
+  - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-062" href="#6001-SORD-062">6001-SORD-062</a>)
+  
+  if the market is in a state of `tradingTerminated`:
+
+  - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-063" href="#6001-SORD-063">6001-SORD-063</a>)
+  - **should** see the [price](7001-DATA-data_display.md#quote-price) that was used to settle the market (<a name="6001-SORD-064" href="#6001-SORD-064">6001-SORD-064</a>)
+  - **should** see a link to oracle spec and data (<a name="6001-SORD-064" href="#6001-SORD-064">6001-SORD-064</a>)
+
+  if the market is in a state of `settled`:
+
+  - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-065" href="#6001-SORD-065">6001-SORD-065</a>)
+  - **should** see the oracle event that terminated the market (<a name="6001-SORD-066" href="#6001-SORD-066">6001-SORD-066</a>)
+  - **should** see a link to oracle spec and data
+
+  if the market is in a state of `suspended`:
+  
+  - **should** see what suspended the market (<a name="6001-SORD-067" href="#6001-SORD-067">6001-SORD-067</a>)
+  - **should** see the conditioned required for the auction to end (<a name="6001-SORD-068" href="#6001-SORD-068">6001-SORD-068</a>)
+  - **should** see the current data values that the auction end is measured against (e.g. Supplied stake) (<a name="6001-SORD-069" href="#6001-SORD-069">6001-SORD-069</a>)
+
+...so I know if the market is accepting orders.
+
+The rest of this document only applies if the state of the market is `pending`, `active` or `suspended`:
+
 ## Deal ticket
 
 When populating a deal ticket I...
 
-- **must** see/select the [Market](./7001-DATA-data_display.md#market) I am submitting the order for (<a name="6001-SORD-001" href="#6001-SORD-001">6001-SORD-001</a>)
   - **must** see the current market trading mode (Continuous, Auction etc) (<a name="6001-SORD-002" href="#6001-SORD-002">6001-SORD-002</a>)
 
 - If I have a 0 total balance of the settlement asset: **must** be warned that I have insufficient collateral (but also allow you to populate ticket because I might want to try before I deposit) (<a name="6001-SORD-003" href="#6001-SORD-003">6001-SORD-003</a>)
