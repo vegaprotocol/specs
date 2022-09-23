@@ -138,7 +138,7 @@ message ProtocolUpgradeEvent {
    - Excessive numbers of proposals from a single validator within an epoch should be detected and rejected - (Future requirement)
    
 ## Snapshots
-   - (<a name="0075-PLUP-023" href="#0075-PLUP-023">0075-PLUP-023</a>) Post validator joining they should be immediately allowed to propose and included in the overall total count
+   - (<a name="0075-PLUP-023" href="#0075-PLUP-023">0075-PLUP-023</a>) Post a validator becoming a tendermint validator they should be immediately allowed to propose an upgrade and be included in the overall total count
    - (<a name="0075-PLUP-024" href="#0075-PLUP-024">0075-PLUP-024</a>) Validators attempting to join during upgrade will be rejected if protocol versions differ
    - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Ensure that required majority is not met when enough validators join between validator proposals and target block
    - (<a name="0075-PLUP-026" href="#0075-PLUP-026">0075-PLUP-026</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
