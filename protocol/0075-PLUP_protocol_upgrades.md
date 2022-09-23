@@ -129,6 +129,8 @@ message ProtocolUpgradeEvent {
    - (<a name="0075-PLUP-018" href="#0075-PLUP-018">0075-PLUP-018</a>) When majority reached during the process of upgrading, those validators which didnt propose will stop producing blocks
    - (<a name="0075-PLUP-019" href="#0075-PLUP-019">0075-PLUP-019</a>) Proposals for multiple versions at same block height will be rejected if majority has not been reached, network continues with the current running version 
    - (<a name="0075-PLUP-020" href="#0075-PLUP-020">0075-PLUP-020</a>) Propose with a validator which is moved to Ersatz by the time the upgrade is enacted. If there are 5 validators, 3 vote yes, 2 vote no: One of the yes voters is kicked in favour of a new one, leaving the vote at 2-2 so the upgrade should not happen as counting votes happens at block height only
+   - (<a name="0075-PLUP-036" href="#0075-PLUP-036">0075-PLUP-036</a>) Changing validators.vote.required network parameter to a value above two thirds is respected.
+   - (<a name="0075-PLUP-037" href="#0075-PLUP-037">0075-PLUP-037</a>) The value of validators.vote.required is checked at upgrade block, i.e: vote on a proposal with all validators, then change the validators.vote.required net param before upgrade block, to a higher value, which would cause the upgrade to be rejected. Upgrade fails.
 
 
 ### Multiple proposals (<a name="0075-PLUP-021" href="#0075-PLUP-021">0075-PLUP-021</a>)
@@ -169,3 +171,4 @@ message ProtocolUpgradeEvent {
 ### Overwriting transactions
   - (<a name="0075-PLUP-034" href="#0075-PLUP-034">0075-PLUP-034</a>) A proposal made to upgrade to the currently running version will retract previous proposals. i.e: System is running version V. Make a proposal for block height H and version V + 1 and vote with all validators. Before block height H, submit a new proposal for version V and any future block height, with all validators. Upgrade proposals are retracted, and upgrade does not take place.
   - (<a name="0075-PLUP-035" href="#0075-PLUP-035">0075-PLUP-035</a>) Rejected proposals do not overwrite previous valid upgrade proposals.
+
