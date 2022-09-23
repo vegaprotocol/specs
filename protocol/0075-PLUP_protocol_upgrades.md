@@ -118,7 +118,7 @@ message ProtocolUpgradeEvent {
    - (<a name="0075-PLUP-011" href="#0075-PLUP-011">0075-PLUP-011</a>) Visor automatically upgrades validators to proposed version if requiredMajority has been reached
    
 ### Epochs 
-   - (<a name="0075-PLUP-012" href="#0075-PLUP-012">0075-PLUP-012</a>) Proposing an upgrade block which ought to be the end of an epoch
+   - (<a name="(0075-COSMICELEVATOR-012)" href="#(0075-COSMICELEVATOR-012)">(0075-COSMICELEVATOR-012)</a>) Proposing an upgrade block which ought to be the end of an epoch. After upgrade takes place, confirm rewards are distributed, any pending delegations take effect, and validator joining/leaving takes effect.
    - (<a name="0075-PLUP-013" href="#0075-PLUP-013">0075-PLUP-013</a>) Propose an upgrade block which should result in a new network in the same epoch
    - (<a name="0075-PLUP-014" href="#0075-PLUP-014">0075-PLUP-014</a>) Ensure end of epoch processes still run after restore e.g reward calculation and distributions
 
@@ -139,19 +139,18 @@ message ProtocolUpgradeEvent {
    
 ## Snapshots
    - (<a name="0075-PLUP-023" href="#0075-PLUP-023">0075-PLUP-023</a>) Post a validator becoming a tendermint validator they should be immediately allowed to propose an upgrade and be included in the overall total count
-   - (<a name="0075-PLUP-024" href="#0075-PLUP-024">0075-PLUP-024</a>) Validators attempting to join during upgrade will be rejected if protocol versions differ
-   - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Ensure that required majority is not met when enough validators join between validator proposals and target block
-   - (<a name="0075-PLUP-026" href="#0075-PLUP-026">0075-PLUP-026</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
+   - (<a name="0075-PLUP-024" href="#0075-PLUP-024">0075-PLUP-024</a>) Ensure that required majority is not met when enough validators join between validator proposals and target block, i.e: In a network with 5 validators, required majority is two thirds, 4 vote to upgrade, 2 more validators join before upgrade block and do not vote. Upgrade does not take place.
+   - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
 
 ## LNL Checkpoints
-   - (<a name="0075-PLUP-027" href="#0075-PLUP-027">0075-PLUP-027</a>) Validator proposals should not be stored in the checkpoints and restored into the network
-   - (<a name="0075-PLUP-028" href="#0075-PLUP-028">0075-PLUP-028</a>) Upgrade will not occur after a post checkpoint restore until new proposals are made and block height reached
+   - (<a name="0075-PLUP-026" href="#0075-PLUP-026">0075-PLUP-026</a>) Validator proposals should not be stored in the checkpoints and restored into the network
+   - (<a name="0075-PLUP-027" href="#0075-PLUP-027">0075-PLUP-027</a>) Upgrade will not occur after a post checkpoint restore until new proposals are made and block height reached
    
 ## API
-   - (<a name="0075-PLUP-029" href="#0075-PLUP-029">0075-PLUP-029</a>) An datanode API should be available to provide information on the upcoming confirmed proposal including total proposals/block details/versions
+   - (<a name="0075-PLUP-028" href="#0075-PLUP-028">0075-PLUP-028</a>) An datanode API should be available to provide information on the upcoming confirmed proposal including total proposals/block details/versions
    
 
-### Successful upgrade  (<a name="0075-PLUP-030" href="#0075-PLUP-030">0075-PLUP-030</a>) 
+### Successful upgrade  (<a name="0075-PLUP-029" href="#0075-PLUP-029">0075-PLUP-029</a>)
   - A new release is made available, and is successfully deployed
   - Setup a network with 5 validators running version x
   - Have 4 validator submit request to upgrade to release >x at block height 1000
@@ -159,8 +158,14 @@ message ProtocolUpgradeEvent {
   - All nodes are starting from the snapshot of block 1000 and the network resumes with version >x
  
  
- ### Failing consensus (<a name="0075-PLUP-031" href="#0075-PLUP-031">0075-PLUP-031</a>)
-  - Upgrade takes place at block N. Minimum number of validators -1 restart with correct version. One validator restarts with previous version. Consensus is not achieved. Start another validator with the correct version, consensus is achieved
-  - 5 validator network. Upgrade takes places at block N. Start 3 validators immediately. Allow several blocks to pass. Start two remaining validators. (All validators continue to work) - no blocks producing as 3 validators do not have enough weight - need 70% weight to produce blocks
-  - Weighting threshold (API TM) is not reached after restart, network does not produce blocks
-  - Upgrade takes place, but insufficient validators are restored for 1, 5, 10, minutes. Validators which are restored immediately patiently wait for consensus to be achieved, and then blocks continue  - concensus acheived
+### Failing consensus
+  - (<a name="0075-PLUP-030" href="#0075-PLUP-030">0075-PLUP-030</a>) Upgrade takes place at block N. Restart with a number of validators whose voting power is <= two thirds. Restart one more validator whose voting power would take the total voting power >= two thirds, with an incorrect version. Consensus is not achieved. Now restart that validator with the correct version. Consensus is achieved.
+  - (<a name="0075-PLUP-031" href="#0075-PLUP-031">0075-PLUP-031</a>) 5 validator network. Upgrade takes places at block N. Start 3 validators immediately. Allow several blocks to pass. Start two remaining validators. (All validators continue to work) - no blocks producing as 3 validators do not have enough weight - need 70% weight to produce blocks
+  - (<a name="0075-PLUP-032" href="#0075-PLUP-032">0075-PLUP-032</a>) Upgrade takes place, but insufficient validators are restored for 1, 5, 10, minutes. Validators which are restored immediately patiently wait for consensus to be achieved, and then blocks continue  - concensus acheived
+
+### Mainnet
+  - (<a name="0075-PLUP-033" href="#0075-PLUP-033">0075-PLUP-033</a>) Check that we can protocol upgrade a system which has been restarted from mainnet snapshots with current mainnet version, to next intended release version.
+
+### Overwriting transactions
+  - (<a name="0075-PLUP-034" href="#0075-PLUP-034">0075-PLUP-034</a>) A proposal made to upgrade to the currently running version will retract previous proposals. i.e: System is running version V. Make a proposal for block height H and version V + 1 and vote with all validators. Before block height H, submit a new proposal for version V and any future block height, with all validators. Upgrade proposals are retracted, and upgrade does not take place.
+  - (<a name="0075-PLUP-035" href="#0075-PLUP-035">0075-PLUP-035</a>) Rejected proposals do not overwrite previous valid upgrade proposals.
