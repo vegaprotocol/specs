@@ -119,18 +119,19 @@ message ProtocolUpgradeEvent {
    
 ### Epochs 
    - (<a name="(0075-COSMICELEVATOR-012)" href="#(0075-COSMICELEVATOR-012)">(0075-COSMICELEVATOR-012)</a>) Proposing an upgrade block which ought to be the end of an epoch. After upgrade takes place, confirm rewards are distributed, any pending delegations take effect, and validator joining/leaving takes effect.
-   - (<a name="0075-PLUP-013" href="#0075-PLUP-013">0075-PLUP-013</a>) Propose an upgrade block which should result in a new network in the same epoch
+   - (<a name="0075-PLUP-013" href="#0075-PLUP-013">0075-PLUP-013</a>) Propose an upgrade block which should result in a network running new code version in the same epoch.
    - (<a name="0075-PLUP-014" href="#0075-PLUP-014">0075-PLUP-014</a>) Ensure end of epoch processes still run after restore e.g reward calculation and distributions
 
 ### Required Majority
+For the purposes of protocol upgrade each validator that participates in consensus has one vote. Required majority is set by `validators.vote.required network parameter`. 
    - (<a name="0075-PLUP-015" href="#0075-PLUP-015">0075-PLUP-015</a>) Counting proposal votes to check if required majority has been reached occurs when any proposed target block has been reached
-   - (<a name="0075-PLUP-016" href="#0075-PLUP-016">0075-PLUP-016</a>) Only active network validators proposals are counted when any proposed target block has been reached 
+   - (<a name="0075-PLUP-016" href="#0075-PLUP-016">0075-PLUP-016</a>) Only proposals from validators participating in consensus are counted when any proposed target block has been reached. 
    - (<a name="0075-PLUP-017" href="#0075-PLUP-017">0075-PLUP-017</a>) Events are emitted for all proposals which fail to reach required majority when target block is reached
    - (<a name="0075-PLUP-018" href="#0075-PLUP-018">0075-PLUP-018</a>) When majority reached during the process of upgrading, those validators which didnt propose will stop producing blocks
    - (<a name="0075-PLUP-019" href="#0075-PLUP-019">0075-PLUP-019</a>) Proposals for multiple versions at same block height will be rejected if majority has not been reached, network continues with the current running version 
    - (<a name="0075-PLUP-020" href="#0075-PLUP-020">0075-PLUP-020</a>) Propose with a validator which is moved to Ersatz by the time the upgrade is enacted. If there are 5 validators, 3 vote yes, 2 vote no: One of the yes voters is kicked in favour of a new one, leaving the vote at 2-2 so the upgrade should not happen as counting votes happens at block height only
-   - (<a name="0075-PLUP-036" href="#0075-PLUP-036">0075-PLUP-036</a>) Changing validators.vote.required network parameter to a value above two thirds is respected.
-   - (<a name="0075-PLUP-037" href="#0075-PLUP-037">0075-PLUP-037</a>) The value of validators.vote.required is checked at upgrade block, i.e: vote on a proposal with all validators, then change the validators.vote.required net param before upgrade block, to a higher value, which would cause the upgrade to be rejected. Upgrade fails.
+   - (<a name="0075-PLUP-036" href="#0075-PLUP-036">0075-PLUP-036</a>) Changing `validators.vote.required` network parameter to a value above two thirds is respected.
+   - (<a name="0075-PLUP-037" href="#0075-PLUP-037">0075-PLUP-037</a>) The value of `validators.vote.required` is checked at upgrade block, i.e: vote on a proposal with all validators, then change the `validators.vote.required` net param before upgrade block, to a higher value, which would cause the upgrade to be rejected. Upgrade fails.
 
 
 ### Multiple proposals (<a name="0075-PLUP-021" href="#0075-PLUP-021">0075-PLUP-021</a>)
@@ -140,7 +141,7 @@ message ProtocolUpgradeEvent {
    - Excessive numbers of proposals from a single validator within an epoch should be detected and rejected - (Future requirement)
    
 ## Snapshots
-   - (<a name="0075-PLUP-023" href="#0075-PLUP-023">0075-PLUP-023</a>) Post a validator becoming a tendermint validator they should be immediately allowed to propose an upgrade and be included in the overall total count
+   - (<a name="0075-PLUP-023" href="#0075-PLUP-023">0075-PLUP-023</a>) Post a validator becoming a consensus-participating validator they should be immediately allowed to propose an upgrade and be included in the overall total count
    - (<a name="0075-PLUP-024" href="#0075-PLUP-024">0075-PLUP-024</a>) Ensure that required majority is not met when enough validators join between validator proposals and target block, i.e: In a network with 5 validators, required majority is two thirds, 4 vote to upgrade, 2 more validators join before upgrade block and do not vote. Upgrade does not take place.
    - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
 
