@@ -163,7 +163,7 @@ For the purposes of protocol upgrade each validator that participates in consens
  
 ### Failing consensus
   - (<a name="0075-PLUP-030" href="#0075-PLUP-030">0075-PLUP-030</a>) Upgrade takes place at block N. Restart with a number of validators whose voting power is <= two thirds. Restart one more validator whose voting power would take the total voting power >= two thirds, with an incorrect version. Consensus is not achieved. Now restart that validator with the correct version. Consensus is achieved.
-  - (<a name="0075-PLUP-031" href="#0075-PLUP-031">0075-PLUP-031</a>) 5 validator network. Upgrade takes places at block N. Start 3 validators immediately. Allow several blocks to pass. Start two remaining validators. (All validators continue to work) - no blocks producing as 3 validators do not have enough weight - need 70% weight to produce blocks
+  - (<a name="0075-PLUP-031" href="#0075-PLUP-031">0075-PLUP-031</a>) 5 validator network. Upgrade takes places at block N. Start 3 validators immediately. Allow several seconds to pass. - no blocks producing as 3 validators do not have enough weight - need 70% weight to produce blocks. Start two remaining validators. (All validators continue to work).
   - (<a name="0075-PLUP-032" href="#0075-PLUP-032">0075-PLUP-032</a>) Upgrade takes place, but insufficient validators are restored for 1, 5, 10, minutes. Validators which are restored immediately patiently wait for consensus to be achieved, and then blocks continue  - concensus acheived
 
 ### Mainnet
