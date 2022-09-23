@@ -10,17 +10,17 @@ When looking at a market, I...
   
   if the market is in a state of `rejected`, `canceled` or `closed`:
 
-  - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-062" href="#6001-SORD-062">6001-SORD-062</a>)
+  - **should** see that the market is not accepting orders and never will be (<a name="6001-SORD-062" href="#6001-SORD-062">6001-SORD-062</a>)
   
   if the market is in a state of `tradingTerminated`:
 
-  - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-063" href="#6001-SORD-063">6001-SORD-063</a>)
+  - **should** see that the market is not accepting orders and never will be (<a name="6001-SORD-063" href="#6001-SORD-063">6001-SORD-063</a>)
   - **should** see the [price](7001-DATA-data_display.md#quote-price) that was used to settle the market (<a name="6001-SORD-064" href="#6001-SORD-064">6001-SORD-064</a>)
   - **should** see a link to oracle spec and data (<a name="6001-SORD-065" href="#6001-SORD-065">6001-SORD-065</a>)
 
   if the market is in a state of `settled`:
 
-  - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-066" href="#6001-SORD-066">6001-SORD-066</a>)
+  - **should** see that the market is not accepting orders and never will be (<a name="6001-SORD-066" href="#6001-SORD-066">6001-SORD-066</a>)
   - **should** see the oracle event that terminated the market (<a name="6001-SORD-067" href="#6001-SORD-067">6001-SORD-067</a>)
   - **should** see a link to oracle spec and data
 
