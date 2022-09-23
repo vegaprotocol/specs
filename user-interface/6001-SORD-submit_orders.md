@@ -16,19 +16,19 @@ When looking at a market, I...
 
   - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-063" href="#6001-SORD-063">6001-SORD-063</a>)
   - **should** see the [price](7001-DATA-data_display.md#quote-price) that was used to settle the market (<a name="6001-SORD-064" href="#6001-SORD-064">6001-SORD-064</a>)
-  - **should** see a link to oracle spec and data (<a name="6001-SORD-064" href="#6001-SORD-064">6001-SORD-064</a>)
+  - **should** see a link to oracle spec and data (<a name="6001-SORD-065" href="#6001-SORD-065">6001-SORD-065</a>)
 
   if the market is in a state of `settled`:
 
-  - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-065" href="#6001-SORD-065">6001-SORD-065</a>)
-  - **should** see the oracle event that terminated the market (<a name="6001-SORD-066" href="#6001-SORD-066">6001-SORD-066</a>)
+  - **should** not see a deal ticket, and see that the market is not accepting orders and never will be (<a name="6001-SORD-066" href="#6001-SORD-066">6001-SORD-066</a>)
+  - **should** see the oracle event that terminated the market (<a name="6001-SORD-067" href="#6001-SORD-067">6001-SORD-067</a>)
   - **should** see a link to oracle spec and data
 
   if the market is in a state of `suspended`:
   
-  - **should** see what suspended the market (<a name="6001-SORD-067" href="#6001-SORD-067">6001-SORD-067</a>)
-  - **should** see the conditioned required for the auction to end (<a name="6001-SORD-068" href="#6001-SORD-068">6001-SORD-068</a>)
-  - **should** see the current data values that the auction end is measured against (e.g. Supplied stake) (<a name="6001-SORD-069" href="#6001-SORD-069">6001-SORD-069</a>)
+  - **should** see what suspended the market (<a name="6001-SORD-068" href="#6001-SORD-068">6001-SORD-068</a>)
+  - **should** see the conditioned required for the auction to end (<a name="6001-SORD-069" href="#6001-SORD-069">6001-SORD-069</a>)
+  - **should** see the current data values that the auction end is measured against (e.g. Supplied stake) (<a name="6001-SORD-070" href="#6001-SORD-070">6001-SORD-070</a>)
 
 ...so I know if the market is accepting orders.
 
