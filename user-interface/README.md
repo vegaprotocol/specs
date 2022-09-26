@@ -25,7 +25,7 @@ These files contain generic user needs for interacting with wallets that are tru
 - `0002 WCON` [Connect Vega wallet to a Dapp & select keys](0002-WCON-connect_vega_wallet.md)
 - `0003 WTXN` [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
 - `0004 EWAL` [Connect Ethereum wallet to a Dapp](0004-EWAL-connect_ethereum_wallet.md) `TODO`
-- `0005 EWAL` [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) `TODO`
+- `0005 ETXN` [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) `TODO`
 - `0006 NETW` [Network and node selection](0006-NETW-network-and-nodes.md) `TODO`
 
 ## `1000` Bridges, Transfers and Vesting
