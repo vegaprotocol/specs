@@ -17,7 +17,7 @@ if transaction not auto approved by wallet:
 
 if transaction is approved by wallet:
 
-- **must** see A [transaction hash](7001-DATA-data_display.md#transaction-hash) (<a name="0003-WTXN-003" href="#0003-WTXN-003">0003-WTXN-003</a>)
+- **must** see A [transaction hash](DATA-data_display.md#transaction-hash) (<a name="0003-WTXN-003" href="#0003-WTXN-003">0003-WTXN-003</a>)
 - **must** see the public key that this transaction was submitted for (<a name="0003-WTXN-004" href="#0003-WTXN-004">0003-WTXN-004</a>)
 - **should** see the alias for the key that submitted this transaction (<a name="0003-WTXN-005" href="#0003-WTXN-005">0003-WTXN-005</a>)
 - **could** see a prompt to set this app to [auto approve](0001-WALL-wallet.md#approving-transactions) in wallet app (<a name="0003-WTXN-006" href="#0003-WTXN-006">0003-WTXN-006</a>)
