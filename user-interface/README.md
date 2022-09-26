@@ -75,7 +75,7 @@ These files contain generic user needs for interacting with wallets that are tru
 - `7006-FEES` [View my trading fees](7006-FEES-fees.md) `TODO`
 
 # `8000` Understand transactions and blocks
-- `8001` [Transaction and block content](8001-BLOX-transaction_and_blocks.md) `TODO`
+- `8001-BLOX` [Transaction and block content](8001-BLOX-transaction_and_blocks.md) `TODO`
 ## Appendixes 
 
 - [Display display rules](DATA-data_display.md)
