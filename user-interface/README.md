@@ -38,7 +38,7 @@ These files contain generic user needs for interacting with wallets that are tru
 ## `2000` Staking
 
 - `2001 STKE` [Staking validators](2001-STKE-staking.md) `TODO`
-- `2002 INCO` [Review staking income](2002-INCO-income.md) `TODO`
+- `2002 SINC` [Review staking income](2002-SINC-staking-income.md) `TODO`
 
 ## `3000` Governance
 
