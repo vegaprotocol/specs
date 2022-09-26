@@ -21,7 +21,7 @@ When looking at a market, I...
   if the market is in a state of `settled`:
 
   - **must** see that the market is not accepting orders and never will be (<a name="6001-SORD-066" href="#6001-SORD-066">6001-SORD-066</a>)
-  - **should** see the oracle event that terminated the market (<a name="6001-SORD-067" href="#6001-SORD-067">6001-SORD-067</a>)
+  - **should** see the oracle events that terminated the market (<a name="6001-SORD-067" href="#6001-SORD-067">6001-SORD-067</a>)
   - **should** see a link to oracle spec and data
 
   if the market is in a state of `suspended`:
