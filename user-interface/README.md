@@ -72,7 +72,7 @@ These files contain generic user needs for interacting with wallets that are tru
 - `7003 MORD` [Manage my orders](7003-MORD-manage_orders.md) `TODO`
 - `7004 POSI` [View my positions](7004-POSI-positions.md) `TODO`
 - `7005 FILL` [View my trades/fills](7005-FILL-fills.md) `TODO`
-- `7008 FEES` [View my trading fees](7009-FEES-fees.md) `TODO`
+- `7006 FEES` [View my trading fees](7006-FEES-fees.md) `TODO`
 
 ## Appendixes 
 
