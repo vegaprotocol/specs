@@ -75,7 +75,7 @@ The amount paid at the end of each epoch is calculated using the following formu
 amount = start amount x factor ^ (current epoch - start epoch)
 ``` 
 
-If insufficient funds are present in the source account at the time a transfer is initied by the network, the whole recurring transfer is cancelled.
+If insufficient funds are present in the source account at the time a transfer is initiated by the network, the whole recurring transfer is cancelled.
 If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` then the recurring transfer is cancelled. 
 
 
@@ -189,7 +189,7 @@ message CancelTransfer {
 
 | Property                                   | Type             | Validation                  |  Example value | Description                                      |
 | ------------------------------------------ | ---------------- | --------------------------- | -------------- | ------------------------------------------------ |
-| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | strictly greater than `0`   | `"20"`         | The most transfers a use can initiate per minute |
+| `spam.protection.maxUserTransfersPerEpoch` | String (integer) | strictly greater than `0`   | `"20"`         | The most transfers a use can initiate per epoch |
 | `transfer.minTransferQuantumMultiple`      | String (decimal) | greater than or equal to `0`| `"0.1"`        | This, when multiplied by `quantum` (which is specified per asset) determines the minimum transfer amount |
 | `transfer.fee.factor`                      | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The proportion of the transfer charged as a fee  |
 
