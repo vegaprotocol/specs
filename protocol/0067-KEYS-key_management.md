@@ -243,6 +243,13 @@ need to be hashed individually).
 
 ## Acceptance Criteria 
 
+### Generic 
+
+1. After both a Vega and Ethereum key rotation, rewards are still produced (<a name="0067-KEYS-006" href="#0067-KEYS-006">0067-KEYS-006</a>)
+2. After both a Vega and Ethereum key rotation the node still has the ability to self stake/delegate and delegate to other validator nodes (<a name="0067-KEYS-007" href="#0067-KEYS-007">0067-KEYS-007</a>)
+3. After both a Vega and Ethereum key rotation the node still can generate snapshots and checkpoints and these can successfully be used for node restarts and network restoring respectively (<a name="0067-KEYS-008" href="#0067-KEYS-008">0067-KEYS-008</a>)
+4. After both a Vega and Ethereum key rotation ensure there is no impact on node validator scores (<a name="0067-KEYS-009" href="#0067-KEYS-009">0067-KEYS-009</a>)
+
 ### Ethereum key - 
 
 1. multisig interaction (<a name="0067-KEYS-001" href="#0067-KEYS-001">0067-KEYS-001</a>)
