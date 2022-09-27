@@ -47,7 +47,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 If any of the above parameters or the risk model gets modified in any way, the price monitoring engine should get reset (price history gets cleared and bounds get recalculated). If the market is price monitoring auction (or auction extension triggered by price monitoring engine):
 
-- any remaining price monitoring bounds calculated prior to the update should get disactivated,
+- any remaining price monitoring bounds calculated prior to the update should get deactivated,
 - the auction end time implied by the currently running auction/extension should remain unchanged,
 - when auction uncrosses price monitoring should get reset using the updated parameters.
 
