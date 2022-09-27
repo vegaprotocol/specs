@@ -48,7 +48,6 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 ### Network
 
 - `market.monitor.price.defaultParameters`: Specifies default market parameters outlined in the previous paragraph. These will be used if market parameters don't get explicitly specified.
-- `market.monitor.price.updateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
 
 ### Hard-coded
 - Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market. 
