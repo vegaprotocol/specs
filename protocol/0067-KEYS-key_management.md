@@ -262,10 +262,11 @@ need to be hashed individually).
   * Party `p` submits the withdrawal bundle to ethereum; multisig contract accepts it and transfers the funds on the ethereum chain. 
 
 2. Non-tendermint validators rotating keys does not generate signatures (<a name="0067-KEYS-003" href="#0067-KEYS-003">0067-KEYS-003</a>)
-  * A Vega network is running with such that there is at least 1 ersatz validator and 1 a pending validator, for both ersatz and pending validators:
+  * A Vega network is running such there is at least 1 ersatz
   * Submit a transaction to rotate their ethereum keys.
   * Verify that once `target_block` is reached, the data-node reports that the rotation occurred.
   * Verify that no signatures bundles are emitted from core to add/remove either the new key or the old key.
+  * Repeat the above steps for a pending validator
 
 3. Subsequent rotations cannot be submitted until the previous rotation is resolved on the contract (<a name="0067-KEYS-004" href="#0067-KEYS-004">0067-KEYS-004</a>)
   * Start a Vega network and pick a tendermint validator.
