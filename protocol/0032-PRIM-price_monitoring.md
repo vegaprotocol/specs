@@ -45,9 +45,9 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
   - `probability` - probability level used in price monitoring. Must be in the (0,1) range.
   - `auctionExtension` - auction duration (or extension in case market is already in auction mode) per breach of the `horizon`, `probability` trigger pair specified above. Must be greater than 0.
 
-If any of the above parameters or the risk model gets modified in any way the price monitoring engine should be reset. If market is (price history gets cleared and bounds get recalculated). If the market is price monitoring auction (or auction extension triggered by price monitoring engine):
+If any of the above parameters or the risk model gets modified in any way, the price monitoring engine should get reset (price history gets cleared and bounds get recalculated). If the market is price monitoring auction (or auction extension triggered by price monitoring engine):
 
-- any remaining price bounds calculated prior to the update should get disactivated,
+- any remaining price monitoring bounds calculated prior to the update should get disactivated,
 - the auction end time implied by the currently running auction/extension should remain unchanged,
 - when auction uncrosses price monitoring should get reset using the updated parameters.
 
@@ -123,5 +123,5 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - Change of `market.monitor.price.defaultParameters` will change the default market parameters used in price monitoring when a new market is proposed and market parameters don't get explicitly specified. (<a name="0032-PRIM-010" href="#0032-PRIM-010">0032-PRIM-010</a>)
 - When market is in its default trading mode, change of `priceMonitoringParameters` results in price monitoring bounds being reset immediately. (<a name="0032-PRIM-011" href="#0032-PRIM-011">0032-PRIM-011</a>)
 - When market is in its default trading mode, change of a risk model or any of its parameters results in price monitoring bounds being reset immediately. (<a name="0032-PRIM-012" href="#0032-PRIM-012">0032-PRIM-012</a>)
-- When market is in price monitoring auction, change of `priceMonitoringParameters` doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values (<a name="0032-PRIM-013" href="#0032-PRIM-013">0032-PRIM-013</a>)
-- When market is in price monitoring auction, change of a risk model or any of its parameters doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values (<a name="0032-PRIM-014" href="#0032-PRIM-014">0032-PRIM-014</a>)
+- When market is in price monitoring auction, change of `priceMonitoringParameters` doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values. (<a name="0032-PRIM-013" href="#0032-PRIM-013">0032-PRIM-013</a>)
+- When market is in price monitoring auction, change of a risk model or any of its parameters doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values. (<a name="0032-PRIM-014" href="#0032-PRIM-014">0032-PRIM-014</a>)
