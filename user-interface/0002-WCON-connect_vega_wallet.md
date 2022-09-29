@@ -21,7 +21,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
   - if the wallet does NOT have an existing permission with the wallet: **must** prompt user to check wallet app to approve the request to connect wallet: See [Connecting to Dapps](0002-WCON-connect_vega_wallet.md#connect-wallet) for what should happen in wallet app (<a name="0002-WCON-009" href="#0002-WCON-009">0002-WCON-009</a>)
   
   - if new keys are given permission: **must** show the user the keys have been approved (<a name="0002-WCON-010" href="#0002-WCON-010">0002-WCON-010</a>)
-    - **should** see [public key(s)](7001-DATA-data_display.md#public-keys). (<a name="0002-WCON-037" href="#0002-WCON-037">0002-WCON-037</a>)
+    - **should** see [public key(s)](DATA-data_display.md#public-keys). (<a name="0002-WCON-037" href="#0002-WCON-037">0002-WCON-037</a>)
     - **should** see alias(es) (<a name="0002-WCON-011" href="#0002-WCON-011">0002-WCON-011</a>)
     - **could** see assets on key(s) (<a name="0002-WCON-012" href="#0002-WCON-012">0002-WCON-012</a>)
     - **would like to** see positions on key(s) <!--(<a name="0002-WCON-013" href="#0002-WCON-013">0002-WCON-013</a>)-->
@@ -65,7 +65,7 @@ when looking to do something with a specific key (or set of keys) from my wallet
 - **must** see a list of keys that are approved from the connected wallet (<a name="0002-WCON-026" href="#0002-WCON-026">0002-WCON-026</a>)
 
 - for each key:
-  - **must** see the first and last 6 digits of the [public key](7001-DATA-data_display.md#public-keys). (<a name="0002-WCON-027" href="#0002-WCON-027">0002-WCON-027</a>)
+  - **must** see the first and last 6 digits of the [public key](DATA-data_display.md#public-keys). (<a name="0002-WCON-027" href="#0002-WCON-027">0002-WCON-027</a>)
   - **should** be able to see the whole public key (<a name="0002-WCON-028" href="#0002-WCON-028">0002-WCON-028</a>)
   - **must** be able to copy to clipboard the whole public key (<a name="0002-WCON-029" href="#0002-WCON-029">0002-WCON-029</a>)
   - **must** see the key name/alias (meta data) (<a name="0002-WCON-030" href="#0002-WCON-030">0002-WCON-030</a>)
