@@ -78,4 +78,4 @@ These files contain generic user needs for interacting with wallets that are tru
 - `8001-BLOX` [Transaction and block content](8001-BLOX-transaction_and_blocks.md) `TODO`
 ## Appendixes 
 
-- [Display display rules](DATA-data_display.md)
+- [Display display rules](9001-DATA-data_display.md)
