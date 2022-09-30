@@ -10,7 +10,7 @@
 5. [ ] If ```riskiest short < 0``` and there are no offers on the order book, the ```exit price``` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-006" href="#0019-MCAL-006">0019-MCAL-006</a>)
 6. [ ] If ```riskiest short < 0``` && ```0 <``` *sum of absolute volume of order book offers* ```< riskiest short```, the ```exit price``` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
 7. [ ] A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
-8. [ ] For each market and each part, I can see the API provides the 4 margin levels. Each party with either a position or an order on the market (to avoid complication of margin calculation). (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
+8. [ ] For each market and each party, I can see the API provides the 4 margin levels. Each party with either a position or an order on the market (to avoid complication of margin calculation). (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
 9. [ ] Example 1, 2 and scenarios are tested in core 
 
 # Summary
