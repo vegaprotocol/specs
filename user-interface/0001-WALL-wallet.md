@@ -55,11 +55,11 @@ When using a given wallet, I...
 When a dapp requests use of a wallet, I...
 
 - **must** be prompted to either select a wallet or dismiss the prompt  (<a name="0001-WALL-017" href="#0001-WALL-017">0001-WALL-017</a>)
-- `TODO` am required to select what keys of a wallet to grant access to <!--(<a name="0001-WALL-018" href="#0001-WALL-018">0001-WALL-018</a>)-->
-  - `TODO:` **must** be able to select whole wallet (so that new keys are automatically shared)  <!--(<a name="0001-WALL-019" href="#0001-WALL-019">0001-WALL-019</a>)-->
-  - `TODO:` **must** be able to select specific [keys](DATA-data_display.md#public-keys)<!-- (<a name="0001-WALL-020" href="#0001-WALL-020">0001-WALL-020</a>) -->
-  - `TODO` tainted keys **must** be shown as tainted (<a name="0001-WALL-021" href="#0001-WALL-021">0001-WALL-021</a>)
-  - `TODO` tainted keys **must** not be selectable (<a name="0001-WALL-073" href="#0001-WALL-073">0001-WALL-073</a>)**
+- **must** select what keys of a wallet to grant access to (<a name="0001-WALL-018" href="#0001-WALL-018">0001-WALL-018</a>)
+  - **must** be able to select whole wallet (so that new keys are automatically shared) (<a name="0001-WALL-019" href="#0001-WALL-019">0001-WALL-019</a>)
+  - `TODO:` **must** be able to select specific [keys](DATA-data_display.md#public-keys) (<a name="0001-WALL-020" href="#0001-WALL-020">0001-WALL-020</a>)
+  - tainted keys **must** be shown as tainted (<a name="0001-WALL-021" href="#0001-WALL-021">0001-WALL-021</a>)
+  - tainted keys **must** not be selectable (<a name="0001-WALL-073" href="#0001-WALL-073">0001-WALL-073</a>)
 - **must** enter wallet passphrase before wallet details are shared (assuming a password has not recently been entered)(<a name="0001-WALL-022" href="#0001-WALL-022">0001-WALL-022</a>)
 - **must** be able to retrospectively revoke Dapp's access to a Wallet (<a name="0001-WALL-023" href="#0001-WALL-023">0001-WALL-023</a>)
 - **must** be able to retrospectively revoke Dapp's access particular keys in a wallet (<a name="0001-WALL-072" href="#0001-WALL-072">0001-WALL-072</a>)
@@ -93,11 +93,11 @@ When thinking about a recent or specific transaction, I ...
 
 - **must** see a history of transactions the wallet app has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
 <!--
-- **should** see a history of transactions the wallet app has signed. As read from the local app (persistent storage) (<a name="0001-WALL-080" href="#0001-WALL-080">0001-WALL-080</a>)
-  - persistent transaction history **must** be encrypted and require the wallet password to view (<a name="0001-WALL-081" href="#0001-WALL-081">0001-WALL-081</a>)
-  - **should** be possible to delete individual transactions (<a name="0001-WALL-082" href="#0001-WALL-082">0001-WALL-082</a>)
-  - **should** be possible to delete the whole transaction history (<a name="0001-WALL-083" href="#0001-WALL-083">0001-WALL-083</a>)
-  - **would** like to set a maximum age / expiry time for history items after which they are deleted (<a name="0001-WALL-084" href="#0001-WALL-084">0001-WALL-084</a>)
+- **should** see a history of transactions the wallet app has signed. As read from the local app (persistent storage)
+  - persistent transaction history **must** be encrypted and require the wallet password to view
+  - **should** be possible to delete individual transactions
+  - **should** be possible to delete the whole transaction history
+  - **would** like to set a maximum age / expiry time for history items after which they are deleted
 -->
 - **could** see a history of transactions the selected key has broadcast to a network (e.g. another wallet with the same keys), or from before a key restore (<a name="0001-WALL-077" href="#0001-WALL-077">0001-WALL-077</a>)
 - **must** see pending transactions (Transactions I have not yet approved/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
@@ -112,11 +112,11 @@ when looking at a specific transaction...
 
 - **must** see the content of the transaction decoded (<a name="0001-WALL-039" href="#0001-WALL-039">0001-WALL-039</a>)
 - **must** see the time request to sign and send was made (<a name="0001-WALL-040" href="#0001-WALL-040">0001-WALL-040</a>)
-- **should** see the referrer that made the request (with note that this is not verified) <!-- (<a name="0001-WALL-041" href="#0001-WALL-041">0001-WALL-041</a>) -->
+- **should** see the referrer that made the request (with note that this is not verified)
 - **must** see what wallet / key is being used (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
-- **should** be able to select auto approve for this app (aka don't ask me again) <!-- (<a name="0001-WALL-043" href="#0001-WALL-043">0001-WALL-043</a>) -->
-  - **should** be able to select to auto approve for a amount of time that I choose <!-- (<a name="0001-WALL-074" href="#0001-WALL-074">0001-WALL-074</a>) -->
-  - **should** be able to select to auto approve for a number of transaction that I choose <!-- (<a name="0001-WALL-075" href="#0001-WALL-075">0001-WALL-075</a>) -->
+- **should** be able to select auto approve for this app (aka don't ask me again)
+  - **should** be able to select to auto approve for a amount of time that I choose
+  - **should** be able to select to auto approve for a number of transaction that I choose 
 - **must** be prompted to enter passphrase (when needed to sign + broadcast transaction) (<a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>)
 - **must** see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network). (<a name="0001-WALL-045" href="#0001-WALL-045">0001-WALL-045</a>)
 - **must** be able to follow a link to block explorer for broadcasted transactions (<a name="0001-WALL-046" href="#0001-WALL-046">0001-WALL-046</a>)

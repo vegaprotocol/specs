@@ -16,8 +16,8 @@ When populating a deal ticket I...
 - **must** be able to select the [order type](../protocol/0014-ORDT-order_types.md) that I wish to submit (<a name="6001-SORD-005" href="#6001-SORD-005">6001-SORD-005</a>)
   - **must** see limit order (<a name="6001-SORD-006" href="#6001-SORD-006">6001-SORD-006</a>)
   - **must** see market order (<a name="6001-SORD-007" href="#6001-SORD-007">6001-SORD-007</a>)
-  - **should** see pegged order <!-- (<a name="6001-SORD-008" href="#6001-SORD-008">6001-SORD-008</a>) -->
-  - **should** see liquidity provision <!-- (<a name="6001-SORD-009" href="#6001-SORD-009">6001-SORD-009</a>) -->
+  - **should** see pegged order
+  - **should** see liquidity provision 
 
 ## Order size
 

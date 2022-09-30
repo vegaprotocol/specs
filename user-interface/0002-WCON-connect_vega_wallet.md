@@ -13,7 +13,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
   - **must** have the option to input a non-default Wallet location (<a name="0002-WCON-003" href="#0002-WCON-003">0002-WCON-003</a>)
   - **should** warn if the dapp is unable the see a wallet is running at the wallet location  (<a name="0002-WCON-004" href="#0002-WCON-004">0002-WCON-004</a>)
   - **must** submit attempt to connect to wallet (<a name="0002-WCON-005" href="#0002-WCON-005">0002-WCON-005</a>)
-  - **could** trigger the app to open on the user's machine with a `vegawallet://` prompt <!--(<a name="0002-WCON-006" href="#0002-WCON-006">0002-WCON-006</a>)-->
+  - **could** trigger the app to open on the user's machine with a `vegawallet://` prompt
   
   - if the dapp DOES already have a permission with the wallet: **must** see that wallet is connected (<a name="0002-WCON-007" href="#0002-WCON-007">0002-WCON-007</a>) note: if the user want to connect to a different wallet to the one that they were previously connected with, they will have to hit logout.
     - if the app uses one key at a time: **should** show what key is active (re-use the last active key) (<a name="0002-WCON-008" href="#0002-WCON-008">0002-WCON-008</a>)
@@ -24,7 +24,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
     - **should** see [public key(s)](DATA-data_display.md#public-keys). (<a name="0002-WCON-037" href="#0002-WCON-037">0002-WCON-037</a>)
     - **should** see alias(es) (<a name="0002-WCON-011" href="#0002-WCON-011">0002-WCON-011</a>)
     - **could** see assets on key(s) (<a name="0002-WCON-012" href="#0002-WCON-012">0002-WCON-012</a>)
-    - **would like to** see positions on key(s) <!--(<a name="0002-WCON-013" href="#0002-WCON-013">0002-WCON-013</a>)-->
+    - **would like to** see positions on key(s) 
     - if the dapp uses one key at a time: **should** prompt me to select key. See [select/switch keys](#select-and-switch-keys). (<a name="0002-WCON-014" href="#0002-WCON-014">0002-WCON-014</a>)
 
   - if user rejects connection: **must** see a message saying that the request to connect was denied  (<a name="0002-WCON-015" href="#0002-WCON-015">0002-WCON-015</a>)
@@ -71,9 +71,9 @@ when looking to do something with a specific key (or set of keys) from my wallet
   - **must** see the key name/alias (meta data) (<a name="0002-WCON-030" href="#0002-WCON-030">0002-WCON-030</a>)
   - **should** see what non-zero assets that key has (<a name="0002-WCON-031" href="#0002-WCON-031">0002-WCON-031</a>)
   - **could** see the total asset balances (including associated) (<a name="0002-WCON-032" href="#0002-WCON-032">0002-WCON-032</a>)
-  - **would like to see** a breakdown of the accounts. See [collateral / accounts](6001-COLL-collateral.md) <!--(<a name="0002-WCON-033" href="#0002-WCON-033">0002-WCON-033</a>)-->
-  - **would like to** see any active orders or positions. See [collateral / accounts](6001-COLL-collateral.md) <!--(<a name="0002-WCON-034" href="#0002-WCON-034">0002-WCON-034</a>)-->
-  - **would like to** see my nominations to validators for associated tokens <!--(<a name="0002-WCON-038" href="#0002-WCON-038">0002-WCON-038</a>)-->
+  - **would like to see** a breakdown of the accounts. See [collateral / accounts](6001-COLL-collateral.md)
+  - **would like to** see any active orders or positions. See [collateral / accounts](6001-COLL-collateral.md)
+  - **would like to** see my nominations to validators for associated tokens
 
 - **must** see the option to trigger a re-authenticate so I can use newly created keys (<a name="0002-WCON-035" href="#0002-WCON-035">0002-WCON-035</a>)
 
