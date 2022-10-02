@@ -10,7 +10,10 @@ This is set per-market and represent the number of contracts that are being brou
 
 `Market.positionDecimalPlaces` tells us where to put the decimal when displaying the number. Size can be a whole number if `Market.positionDecimalPlaces` = 0, or a [fractional order](../protocol/0052-FPOS-fractional_orders_positions.md) if > 0.
 It **should** always be displayed to the full number of decimal places. however, there may be exceptions, e.g. when visualizing on a depth chart, where the precision is not required.
+Size can also be prefixed with a + or negative to imply direction/side + for long (aka buy) and - for short (aka sell)  
 
+## Direction / side
+Generally with derivatives (as apposed to spot or cash markets) one talks about going Long as apposed to Buying, Short as apposed to Selling.
 ## Quote price
 
 > aka. price, quote, level.
