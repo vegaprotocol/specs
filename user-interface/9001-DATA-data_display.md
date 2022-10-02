@@ -13,10 +13,11 @@ It **should** always be displayed to the full number of decimal places. however,
 Size can also be prefixed with a + or negative to imply direction/side + for long (aka buy) and - for short (aka sell)  
 
 ## Direction / side
+
 Generally with derivatives (as apposed to spot or cash markets) one talks about going Long as apposed to Buying, Short as apposed to Selling.
 ## Quote price
 
-> aka. price, quote, level.
+> aka. price, quote, level, limit price
 
 This is set per-market and represent the "price" of an asset. It can have a 1-1 relationship with the settlement asset but it is also possible that products will have different payoff methods, which is one of the reasons we don't just use settlement asset, another being in the future some markets could have multiple settlement assets, another being that we don't want 18DP quotes.
 
@@ -51,3 +52,29 @@ Vega public keys are hexadecimal, but the convention is to display them without 
 > aka Transaction ID, txn, tx
 
 The transaction [hash](https://www.investopedia.com/terms/h/hash.asp) acts as an identifier for a transaction network. It is hexadecimal and should be displayed with the preceding `0x`.
+
+## Order type
+
+There are different [types of orders](../protocol/0014-ORDT-order_types.md). 
+
+- Limit
+- Market
+- Stop-market *- not currently supported*
+- Stop-limit *- not currently supported*
+
+## Time in force
+
+Different order types can have different time in force options, these allow control over how these are executed.
+
+The labels fot these should be shown in full where possible (particularly in context of a order ticket), But can be abbreviated if spaces is short.
+
+  - Good till canceled `GTC`
+  - Good till time `GTT` 
+  - Fill or kill `FOK` 
+  - Immediate or cancel `IOC`
+  - Good for normal trading only `GFN` 
+  - Good for auction only `GFA` 
+
+## Order origin
+
+Some limit orders originate not from a "normal" limit order, but are created by the system for the users when they submitted a pegged order shape or a liquidity provision shape.
