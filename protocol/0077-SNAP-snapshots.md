@@ -52,8 +52,8 @@ A bad node can swamp the network by requesting snapshots from other nodes which 
 
 
 ## Acceptance Criteria
-* A node can be started up so that it generates snapshots at given block intervals (<a name="0009-NP-SNAP-001" href="#0009-NP-SNAP-001">0009-NP-SNAP-001</a>)  
-* A node will generate snapshots files on the local filesystem (most likely using GOLevelDB) (<a name="0009-NP-SNAP-002" href="#0009-NP-SNAP-002">0009-NP-SNAP-002</a>)  
-* A node will have a maximum amount of snapshots file on the filesystem. Older ones will be to be removed before a new one can be created. How many snapshots we keep may be something that can be configured. (<a name="0009-NP-SNAP-003" href="#0009-NP-SNAP-003">0009-NP-SNAP-003</a>)  
-* The state of a node that is started from a snapshot should be identical to a node that had reached the same block height via replay. (<a name="0009-NP-SNAP-004" href="#0009-NP-SNAP-004">0009-NP-SNAP-004</a>)  
-* Post a checkpoint restore we see snapshots continuing to be produced as before and can be used to add a node to the network (<a name="0009-NP-SNAP-005" href="#0009-NP-SNAP-005">0009-NP-SNAP-005</a>)  
+* A node can be started up so that it generates snapshots at given block intervals (<a name="0077-SNAP-001" href="#0077-SNAP-001">0077-SNAP-001</a>)  
+* A node will generate snapshots files on the local filesystem (most likely using GOLevelDB) (<a name="0077-SNAP-002" href="#0077-SNAP-002">0077-SNAP-002</a>)  
+* A node will have a maximum amount of snapshots file on the filesystem. Older ones will be to be removed before a new one can be created. How many snapshots we keep may be something that can be configured. (<a name="0077-SNAP-003" href="#0077-SNAP-003">0077-SNAP-003</a>)  
+* The state of a node that is started from a snapshot should be identical to a node that had reached the same block height via replay. (<a name="0077-SNAP-004" href="#0077-SNAP-004">0077-SNAP-004</a>)  
+* Post a checkpoint restore we see snapshots continuing to be produced as before and can be used to add a node to the network (<a name="0077-SNAP-005" href="#0077-SNAP-005">0077-SNAP-005</a>)  
