@@ -7,11 +7,13 @@ Feature name: market-data
 - [ ] If there are multiple sell orders on the order book with a price equal to the best bid price, the best offer volume equals the sum of the sizes of these orders. (<a name="0021-MDAT-004" href="#0021-MDAT-004">0021-MDAT-004</a>)
 - [ ] The mid price is empty / nothing if there is either no buy order or no sell orders. (<a name="0021-MDAT-005" href="#0021-MDAT-005">0021-MDAT-005</a>)
 - [ ] The mid price is the arithmetic average of the best bid price and best offer price. (<a name="0021-MDAT-006" href="#0021-MDAT-006">0021-MDAT-006</a>)
-- [ ] The mark price calculation uses the methodology specified in the market framework. (<a name="0021-MDAT-007" href="#0021-MDAT-007">0021-MDAT-007</a>)
+- [ ] The mark price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the mark price has not yet been set (for example market in opening auction that's not seen any trades yet). (<a name="0021-MDAT-007" href="#0021-MDAT-007">0021-MDAT-007</a>)
 - [ ] The Open interest returns the sum of the size for all open positions where positions size is greater than 0. (<a name="0021-MDAT-008" href="#0021-MDAT-008">0021-MDAT-008</a>) 
 - [ ] The Open interest returns 0 if there are no positions on the market (<a name="0021-MDAT-009" href="#0021-MDAT-009">0021-MDAT-009</a>)
 - [ ] Pegged orders are excluded from the best static price and best static volume calculations. (<a name="0021-MDAT-010" href="#0021-MDAT-010">0021-MDAT-010</a>)
 - [ ] Dynamic orders should be ignored when calculating the static values (<a name="0021-MDAT-011" href="#0021-MDAT-011">0021-MDAT-011</a>)
+- [ ] The auction uncrossing price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the auction uncrossing price has not been set (for example in continuous trading or auction with no bids / offers). (<a name="0021-MDAT-012" href="#0021-MDAT-007">0021-MDAT-012</a>)
+
 
 # Summary
 This data is a snapshot of the state of the market at a point in time.
