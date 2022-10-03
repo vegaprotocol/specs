@@ -146,7 +146,6 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. Market depth state must be processed and built in a timely manner so that the correct real time information is available to the users without unnecessary delays. Using the recommended hardware specs for validators, the data node should be able to handle a continuous order events rate of 500 per second without falling behind. (<a name="0076-DANO-002" href="#0076-DANO-002">0076-DANO-002</a>)
 
 ## Data synchronisation
-
 1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-COSMICELEVATOR-001" href="#0076-COSMICELEVATOR-001">0076-COSMICELEVATOR-001</a>)
 1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network without having to replay the full chain (<a name="0076-DANO-003" href="#0076-DANO-003">0076-DANO-003</a>)
 
@@ -168,3 +167,13 @@ It must be possible to add to the data node APIs that return the result of calcu
 
 ### Schema compatibility:
 1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0076-COSMICELEVATOR-013" href="#0076-COSMICELEVATOR-013">0076-COSMICELEVATOR-013</a>)
+
+### General Acceptance
+* The DataNode must be able to handle brief network outages and disconnects (<a name="0076-DANO-015" href="#0076-DANO-015">0076-DANO-015</a>) 
+* All API functionality currently in the Core node must be available from the DataNode (<a name="0076-DANO-016" href="#0076-DANO-016">0076-DANO-016</a>) 
+* The validator node will only accept requests for event bus subscriptions. All other API requests will be invalid. (<a name="0076-DANO-017" href="#0076-DANO-017">0076-DANO-017</a>)  
+* The event bus stream is only available from the stream node and not the validator or DataNode (<a name="0076-DANO-018" href="#0076-DANO-018">0076-DANO-018</a>)  
+* All information that is emitted from the stream node is processed by the DataNode (no data is lost) (<a name="0076-DANO-019" href="#0076-DANO-019">0076-DANO-019</a>)  
+* If a DataNode loses connection to a streaming node if will attempt to reconnect and if the cached data received from the streaming node is enough to continue working it can resume being a DataNode. (<a name="0076-DANO-020" href="#0076-DANO-020">0076-DANO-020</a>)  
+* If the DataNode loses connection to a streaming node and it is unable to reconnect in time to see all the missing data, it will shutdown. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)  
+* A DataNode will be able to detect a frozen streaming node by the lack of block time updates and will shutdown. (<a name="0076-DANO-022" href="#0076-DANO-022">0076-DANO-022</a>)  
