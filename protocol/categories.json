@@ -30,10 +30,10 @@
     "specs": ["0071-STAK", "0059-STKG", "0056-REWA", "0061-REWP", "0058-REWS", "0055-TREA", "0041-TSTK", "0069-VCBS", "0066-VALW", "0065-FTCO", "0064-VALP", "0063-VALK"]
   },
   "Architecture": {
-    "specs": ["0036-BRIE", "0009-NP-SNAP", "0075-PLUP"]
+    "specs": ["0036-BRIE", "0077-SNAP", "0075-PLUP"]
   },
   "Data": {
-    "specs": ["0011-NP-DANO", "0020-APIS", "0007-POSN"]
+    "specs": ["0076-DANO", "0020-APIS", "0007-POSN"]
   },
   "UI": {
     "specs": ["1000-ASSO", "1001-VEST", "1002-STAK", "1003-INCO", "1004-VOTE", "1005-PROP", "1006-NETW", "1007-WALL", "3000-DEPO", "3001-WITH", "5000-MARK", "6000-COLL", "6001-SORD", "6002-MORD", "6003-POSI", "6004-FILL"]
