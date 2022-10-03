@@ -560,7 +560,7 @@ A market reward pool funded with the same asset by the same party with different
 * Setup and fund recurring reward account transfers using the market_proposer metric and blank metric asset:
     * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
 * start trading in the market such that traded value for fee purposes in USDT is less than 10^6
-* During epoch 2 let the traded value on ETHUSDT and BTCUSDT be greater than 10^6
+* During epoch 2 let the traded value on ETHUSDT and BTCDAI be greater than 10^6
 * During epoch 3, setup and fund recurring reward account transfers using the market_proposer metric and blank metric asset:
     * Transfer 10000 $VEGA to `all | market creation | $VEGA` 
 
@@ -569,19 +569,18 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHU
     The general account balance of the ETHUSDT creator should be 10000.
     The general account balance of the BTCDAI creator should be 0.
     The reward pool balance should be 0.
+At the end of epoch 3, 10000 VEGA should be split between the BTCDAI creator and the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 15000.
+    The general account balance of the BTCDAI creator should be 5000.
+    The reward pool balance should be 0.
 
-### Reward accounts cannot be topped up with a one-off transfer (<a name="0056-REWA-043" href="#0056-REWA-043">0056-REWA-043</a>)
+### Reward accounts cannot be topped up with a one-off transfer (<a name="0056-REWA-049" href="#0056-REWA-049">0056-REWA-049</a>)
 The following account types require metric-based distribution. As a one-off transfer cannot specify how it is rewarded, one-off transfers to metric-based reward pools must be **rejected**.
 A one-off transfer from a user to any of the following account types is rejected. No assets are transferred:
 * ACCOUNT_TYPE_REWARD_LP_RECEIVED_FEES,
 * ACCOUNT_TYPE_REWARD_MAKER_RECEIVED_FEES,
 * ACCOUNT_TYPE_REWARD_TAKER_PAID_FEES,
 * ACCOUNT_TYPE_REWARD_MARKET_PROPOSERS
-
-At the end of epoch 3, 10000 VEGA should be distributed split between the BTCDAI creator and the ETHUSDT creator.
-    The general account balance of the ETHUSDT creator should be 15000.
-    The general account balance of the BTCDAI creator should be 5000.
-    The reward pool balance should be 0.
 
 
 ### Distributing market creation rewards - Market ineligible through metric asset (<a name="0056-REWA-048" href="#0056-REWA-048">0056-REWA-048</a>)
