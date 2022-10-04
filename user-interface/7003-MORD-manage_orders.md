@@ -1,35 +1,37 @@
 # Manage orders
-User place orders as a way of expressing the trades they would like to make. 
-Once a user has placed an order they may wish to confirm its state e.g. whether it has been filled or not.
-They may also wish to make amendments to that order.
+User place orders to describe the trades they would like to make, e.g. what buy/sell, price, and how long the bid/ask is valid for.
+Orders can also be placed on behalf of a user/party via [liquidity](#liquidity-order-shapes) or [pegged](#pegged-order-shapes) order shapes. These order can not be edited on canceled in the same way as other orders.
+Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) e.g. whether it has been accepted, filled or not.
+They may also wish to make amendment or cancel an order based on the state of the market. The status of an order implies wether it can be edited or canceled.
+Markets also have statuses [market statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect what can be done with an order, or what a user might want to do with it e.g if the order was placed while in "normal" continuous trading, but the market is now in auction.
 
-Orders have different [Order statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status). These statuses have consequences on the way you can manage an order.
+## View Orders
 
-Markets also have statuses [market statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state)
-These also have consequences on what you can do with an order
-- parked pegged orders
-- editing orders during auction?
-  Generally when looking at an order a user will want to know what status the market it is in particularly if the market is not in it's "normal" trading mode.
-
-Orders are typically the result of placing a limit, stop, market order etc, But some order will be there as the result of placing a pegged order or liquidity order shape which is an instruction to the network to place limit orders on your behalf and move them when market prices change.
-
-## Open (aka active) orders
-When reviewing the orders I have placed and their status, I...
+User will have differing needs/preferences in terms of what they see about an order and how these orders are grouped listed. It is common for interfaces to allow users to customize how orders are displayed.
 
 Customization
-- **should** have the ability to view all data that is available on a given order or view of orders
+
+- **should** have the ability to select what data is shown for each order in the list
+- **should** have the ability to change the order of items in the list
+- **should** have the ability to give each column in the list more or less space
 
 Filters
+
 - **should** have the ability to see all orders (active and non-active))
-- should have the ability to see only active + Parked orders TODO update this based on what happens to parked orders
-- should hte ability to see only non-active + Parked orders (i.e. all orders that do not have the status of )
-- should have the ability to see only 
+- **should** have the ability to see only active + Parked orders TODO update this based on what happens to parked orders
+- **should** hte ability to see only non-active + Parked orders (i.e. all orders that do not have the status of )
+- **could** have the ability to filter by any field(s)
+  - where a field is an enum: **should** be able to select one on or more values for a field that should be included
 
-Sorting TODO
+Sorting
 
-Grouping TODO
+- **should** be able to sort the list (both directions) by any field in the order list
+  - **should** be able to add a secondry sort. e.g. by market then by date  
 
+Grouping 
+- **should** be able to group by any field e.g. by market
 
+However, in a general case: When reviewing the orders I have placed and their status, I...
 
 - **must** see [Status](TODO-Do-we-need-this?) of the order
 
