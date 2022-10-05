@@ -23,8 +23,8 @@ User will have differing needs/preferences in terms of what they want to see abo
 - **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order, because...
   - `Active​`
     - How much of the order is filled / remains unfilled
-    - How close the mark price is to my order
-    - If this order is filled at the limit price what would my what effect would it have on realized PnL 
+    - How close the mark price is to order
+    - If this order was filled at the limit price what would what effect would it have on realized PnL 
     - I may want to amend or cancel this order
   - `Expired​`
     - When did it expire
@@ -51,19 +51,19 @@ User will have differing needs/preferences in terms of what they want to see abo
 - **must** see [order type](9001-DATA-data_display.md#order-type)
 - if order created by [pegged or liquidity provision shape](9001-DATA-data_display.md#order-origin): **should** see order origin
   - **could** see what part of the liquidity shape or pegged order shape this relates to. See [pegged orders](#pegged-order-shapes) and [liquidity provisions](#liquidity-order-shapes) shapes below.
-  - **could** see link to my full shape
+  - **could** see link to full shape
 
 - **should** see how much of the order's [size](9001-DATA-data_display.md#size) has been filled e.g. if the order was for `50` but so far only 10 have traded I should see Filled = `10`. Note: this is marked as a should because in the case of Rejected order and some other scenarios it isn't relevant.
 - **should** see how much of the order's [size](9001-DATA-data_display.md#size) remains. Note: this does not go to zero if the order status goes to a closed state. TODO double check what the API does in a situation where I got 50% fill then canceled an order 
 
 - if order type = `Limit`: **must** see the Limit [price](9001-DATA-data_display.md#quote-price) that was set on the order
-- if order type = `Market`: **must** not see a price for active or parked orders, a `-`, `Market` or `n/a` is more appropriate (API may return 0).
+- if order type = `Market`: **must** not see a price for active or parked orders, a `-`, `Market` or `n/a` is more appropriate (API may return `0`).
 
 - **must** see the [time in force](9001-DATA-data_display.md#time-in-force) applied to the order (can be abbreviated here)
-- **should** see created At time stamp. TODO check what happens to this in the context of Pegged and LP orders.
+- **should** see "created at" [time](9001-DATA-data_display.md#time). TODO check what happens to this in the context of Pegged and LP orders.
 - **could** see updated at (this is used by the system when an order is amended, or repriced (in pegged and LP) not sure this in needed) TODO check behavior 
 
-- **should** see time/order priority (how many orders are before mine at this price)
+- **should** see time priority (how many orders are before mine at this price)
   
 - if the order is `Active` &amp; **not** part of a liquidity or peg shape: **must** see an option to [amend](#amend-order---price) the individual order
 - if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to amend the individual order
@@ -97,7 +97,7 @@ User will have differing needs/preferences in terms of what they want to see abo
 - **must** select weather to cancel an individual order or all orders on a market
 - **must** be able to submit the [Vega transaction](0003-WTXN-submit_vega_transaction.md) to cancel order(s)
   - **could** show the margin requirement reduction/increase that will take place before submitting
-- **must** see feedback on my order status after the transaction
+- **must** see feedback on order status after the transaction
 
 ## Amend order - price
 
