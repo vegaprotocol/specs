@@ -78,3 +78,6 @@ The labels fot these should be shown in full where possible (particularly in con
 ## Order origin
 
 Some limit orders originate not from a "normal" limit order, but are created by the system for the users when they submitted a pegged order shape or a liquidity provision shape.
+
+# Time
+Times are generally converted to the browser's local time. However in some contexts it is important to show what time zone the stated time is in. e.g. governance votes &amp; and settlement
