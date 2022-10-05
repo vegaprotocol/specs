@@ -69,7 +69,7 @@ These files contain generic user needs for interacting with wallets that are tru
 ## `7000` Collateral, Orders, Positions and Fills 
 - `7001-COLL` [View my collateral / accounts](7001-COLL-collateral.md) `TODO`
 - `7002-SORD` [Submit an order](7002-SORD-submit_orders.md) 
-- `7003-MORD` [Manage my orders](7003-MORD-manage_orders.md) `TODO`
+- `7003-MORD` [Manage my orders](7003-MORD-manage_orders.md)
 - `7004-POSI` [View my positions](7004-POSI-positions.md) `TODO`
 - `7005-FILL` [View my trades/fills](7005-FILL-fills.md) `TODO`
 - `7006-FEES` [View my trading fees](7006-FEES-fees.md) `TODO`
