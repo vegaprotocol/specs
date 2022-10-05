@@ -2,13 +2,11 @@
 
 Users place orders to describe the trades they would like to make: buy or sell, at what price, how long it is valid for etc. In many cases they can edit these orders while they are still active, for example: changing price.
 
+Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) e.g. whether it has been accepted, filled, how close it is to being filled etc. Users may be interested in the price of their orders relative to the price of the market and how much of the order's size has been filled.
+
 Orders can also be placed on behalf of a user/party via [liquidity](#liquidity-order-shapes) or [pegged](#pegged-order-shapes) order shapes. These order cannot be edited on canceled in the same way as other orders.
 
-Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) e.g. whether it has been accepted, filled, how close it is to being filled etc.
-
-Markets also have [statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect how I perceive the state of an order, e.g if the order was placed while in "normal" continuous trading, but the market is now in auction. 
-
-Users may be interested in the price of their orders relative to the price of the market.
+Markets also have [statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect how a user perceives the state of an order, e.g if the order was placed while in "normal" continuous trading, but the market is now in auction. 
 
 ## Orders list
 
