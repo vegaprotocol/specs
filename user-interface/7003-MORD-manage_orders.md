@@ -84,6 +84,8 @@ User will have differing needs/preferences in terms of what they want to see abo
 
 - **should** be able to sort the list (both directions) by any field in the order list
   - **should** be able to add a secondary sort. e.g. by market then by date  
+- **should** have the default sorted by created time (or updated time if newer), with newest at the top
+- **should** retain sorting preferences between switching views / browser reload
 
 ### Grouping
 
