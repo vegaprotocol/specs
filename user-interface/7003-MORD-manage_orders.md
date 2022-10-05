@@ -22,9 +22,9 @@ User will have differing needs/preferences in terms of what they want to see abo
 
 - **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order
   - `Active​`
-    - how much of the order is filled / remains unfilled
-    - how close the mark price is to my order
-    - if this order is filled at the limit price what would my what effect would it have on realized PnL 
+    - How much of the order is filled / remains unfilled
+    - How close the mark price is to my order
+    - If this order is filled at the limit price what would my what effect would it have on realized PnL 
     - I may want to amend or cancel this order
   - `Expired​`
     - When did it expire
@@ -38,11 +38,11 @@ User will have differing needs/preferences in terms of what they want to see abo
   - `Rejected​`
     - Why was this order rejected (show `rejectedReason`)
   - `PartiallyFilled​`
-    - how much was filled before the order was canceled
-    - what was the average fill price I got for this order
+    - How much was filled before the order was canceled
+    - What was the average fill price I got for this order
   - `Parked​`
     - Why is the market currently in auction
-    - link to pegged shape (see bellow) TODO find out what happens to the limit orders in the orders API when market is in auction
+    - Link to pegged shape (see bellow) TODO find out what happens to the limit orders in the orders API when market is in auction
 
 - **must** see what [market](9001-DATA-data_display.md#market) an order is related to (either code, ID or name, preferable name)
   - **should** see what the status is of the market (particularly if it is not "normal")
