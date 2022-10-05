@@ -26,6 +26,15 @@ For a full outline of these behaviours, see [0037-OPEG-pegged_orders](./0037-OPE
 * `Stopped` and `Cancelled` are used to determine whether an order was closed as a result of a user action (`Cancelled`) or by the system (`Stopped`) as a result of, for example, insufficient margin (see [Position Resolution](./0012-POSR-position_resolution.md#position-resolution-algorithm))
 * A pegged order that is unable to reprice or during an auction will have a status of PARKED. This indicates that the order in not on the order book but can re-enter it once the conditions change
 
+## Wash trading
+If, during continuous trading, an order would be filled or partially filled with an existing order from the same [party](./0017-PART-party.md) aka "wash" trade, the order is rejected. Any existing fills that happen before the wash trade is identified will be kept. FOK rules still apply for wash trading so if a wash trade is identified before the full amount of the order is complete, the order will be stopped and nothing filled.
+Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing. 
+
+| Filled State | Resulting status | Reason |
+|--------------|------------------|--------|
+|   Unfilled   |     Stopped     | Order would match with an order with the same partyID |
+|   Partially  |     Partially Filled     | Order has been partially filled but the next partial fill would be with an order with the same partyID |
+
 # Acceptance Criteria
 
 ## Fill or Or Kill (<a name="0024-OSTA-001" href="#0024-OSTA-001">0024-OSTA-001</a>)
@@ -71,12 +80,12 @@ For a full outline of these behaviours, see [0037-OPEG-pegged_orders](./0037-OPE
 
 Note: The last row in the table above is added for clarity. If the order was filled, it is marked as Filled and it is removed from the book, so it can't expire after being filled.
 
-## Wash trading
-If, during continuous trading, an order would be filled or partially filled with an existing order from the same [party](./0017-PART-party.md) aka "wash" trade, the order is rejected. Any existing fills that happen before the wash trade is identified will be kept. FOK rules still apply for wash trading so if a wash trade is identified before the full amount of the order is complete, the order will be stopped and nothing filled.
-Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing. 
+## Wash trading ACs 
+- If, during continuous trading, an order would be filled or partially filled with an existing order from the same [party](./0017-PART-party.md) aka "wash" trade, the order is rejected. (<a name="0024-OSTA-005" href="#0024-OSTA-005">0024-OSTA-005</a>)
+- Any existing fills that happen before the wash trade is identified will be kept. (<a name="0024-OSTA-006" href="#0024-OSTA-006">0024-OSTA-006</a>)
+- FOK rules still apply for wash trading so if a wash trade is identified before the full amount of the order is complete, the order will be stopped and nothing filled. (<a name="0024-OSTA-007" href="#0024-OSTA-007">0024-OSTA-007</a>)
+- Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing. (<a name="0024-OSTA-008" href="#0024-OSTA-008">0024-OSTA-008</a>)
 
-| Filled State | Resulting status | Reason |
-|--------------|------------------|--------|
-|   Unfilled   |     Stopped     | Order would match with an order with the same partyID |
-|   Partially  |     Partially Filled     | Order has been partially filled but the next partial fill would be with an order with the same partyID |
 
+## Impact of order types on settlement
+- Test that market settlement cashflows only depend on parties positions and is independent of what order types there are on the book. (<a name="0024-OSTA-009" href="#0024-OSTA-009">0024-OSTA-009</a>) 
