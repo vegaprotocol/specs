@@ -20,7 +20,7 @@ User will have differing needs/preferences in terms of what they want to see abo
 
 ### Fields
 
-- **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order
+- **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order, because...
   - `Active​`
     - How much of the order is filled / remains unfilled
     - How close the mark price is to my order
