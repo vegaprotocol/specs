@@ -4,7 +4,7 @@ Users place orders to describe the trades they would like to make: buy or sell, 
 
 Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) in a [list](#orders-list) of other orders. e.g. whether it has been accepted, filled, how close it is to being filled etc. Users may be interested in the price of their orders relative to the price of the market and how much of the order's size has been filled.
 
-Orders can also be placed on behalf of a user/party via [liquidity](#liquidity-order-shapes) or [pegged](#pegged-order-shapes) order shapes. These order cannot be edited on canceled in the same way as other orders.
+Orders can also be placed on behalf of a user/party via [liquidity](#liquidity-order-shapes) or [pegged](#pegged-order-shapes) order shapes. These order cannot be amended on canceled in the same way as other orders.
 
 Markets also have [statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect how a user perceives the state of an order, e.g if the order was placed while in "normal" continuous trading, but the market is now in auction. 
 
@@ -25,7 +25,7 @@ User will have differing needs/preferences in terms of what they want to see abo
     - how much of the order is filled / remains unfilled
     - how close the mark price is to my order
     - if this order is filled at the limit price what would my what effect would it have on realized PnL 
-    - I may want to edit or cancel this order
+    - I may want to amend or cancel this order
   - `Expired​`
     - When did it expire
     - How much was filled / remaining
@@ -61,12 +61,12 @@ User will have differing needs/preferences in terms of what they want to see abo
 
 - **must** see the [time in force](9001-DATA-data_display.md#time-in-force) applied to the order (can be abbreviated here)
 - **should** see created At time stamp. TODO check what happens to this in the context of Pegged and LP orders.
-- **could** see updated at (this is used by the system when an order is edited, or repriced (in pegged and LP) not sure this in needed) TODO check behavior 
+- **could** see updated at (this is used by the system when an order is amended, or repriced (in pegged and LP) not sure this in needed) TODO check behavior 
 
 - **should** see time/order priority (how many orders are before mine at this price)
   
-- if the order is `Active` &amp; **not** part of a liquidity or peg shape: **must** see an option to [Edit/amend](#amend-order---price) the individual order
-- if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to Edit/amend the individual order
+- if the order is `Active` &amp; **not** part of a liquidity or peg shape: **must** see an option to [amend](#amend-order---price) the individual order
+- if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to amend the individual order
   - **could** see a link to amend shape
 - if the order is `Active` &amp; **not** part of a liquidity or peg shape: **must** see an option to [cancel](#cancel-orders) the individual order
 - if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to cancel the individual order
@@ -102,7 +102,7 @@ Read more about [order amends](../protocol/0004-AMND-amends.md).
 
 When looking to amend an order, I...
 
-- **must** be able to edit the price of an order
+- **must** be able to amend the price of an order
   - **could** be warned if the price change will, given the current market, fill the order right away
   - **must** be warned (pre-submit) if the input price has too many digits after the decimal place for the market ["quote"](DATA-data_display.md#quote-price)
 - must submit the Amend order [Vega transaction](0003-WTXN-submit_vega_transaction.md)
