@@ -1,97 +1,160 @@
 # Manage orders
-User place orders to describe the trades they would like to make, e.g. what buy/sell, price, and how long the bid/ask is valid for.
+
+Users place orders to describe the trades they would like to make, buy/sell, price, and how long the bid/ask is valid for etc. In many cases they can edit these orders, changing price etc.
 Orders can also be placed on behalf of a user/party via [liquidity](#liquidity-order-shapes) or [pegged](#pegged-order-shapes) order shapes. These order can not be edited on canceled in the same way as other orders.
-Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) e.g. whether it has been accepted, filled or not.
-They may also wish to make amendment or cancel an order based on the state of the market. The status of an order implies wether it can be edited or canceled.
-Markets also have statuses [market statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect what can be done with an order, or what a user might want to do with it e.g if the order was placed while in "normal" continuous trading, but the market is now in auction.
+Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) e.g. whether it has been accepted, filled, how close it is to being filled etc.
+Markets also have [statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect what can be done with an order, e.g if the order was placed while in "normal" continuous trading, but the market is now in auction. 
+Users may be interested in the price of their orders relative to the price of the market.
 
-## View Orders
+## Orders list
 
-User will have differing needs/preferences in terms of what they see about an order and how these orders are grouped listed. It is common for interfaces to allow users to customize how orders are displayed.
+User will have differing needs/preferences in terms of what they want to see about an order and how orders are grouped and listed. It is common for interfaces to allow users to customize how orders are displayed.
 
-Customization
+### Field customization
 
-- **should** have the ability to select what data is shown for each order in the list
+- **should** have the ability to select what [fields/data](#fields) is shown for each order in the list
 - **should** have the ability to change the order of items in the list
 - **should** have the ability to give each column in the list more or less space
 
-Filters
+### Fields
 
-- **should** have the ability to see all orders (active and non-active))
-- **should** have the ability to see only active + Parked orders TODO update this based on what happens to parked orders
-- **should** hte ability to see only non-active + Parked orders (i.e. all orders that do not have the status of )
-- **could** have the ability to filter by any field(s)
-  - where a field is an enum: **should** be able to select one on or more values for a field that should be included
+- **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order
+  - `Active​`
+    - how much of the order is filled / remains unfilled
+    - how close the mark price is my order
+    - if this order is filled at the limit price what would my what effect would it have on realized PnL 
+    - I may want to edit or cancel this order
+  - `Expired​`
+    - When did it expire
+    - How much was filled / remaining
+  - `Cancelled​`
+    - What canceled it? This generally means that it was canceled by the user but there may be exceptions (TODO Documentation needed)  
+  - `Stopped​`
+    - What stopped it (e.g. was it because an [FOC](9001-DATA-data_display.md#time-in-force) that was not filled)
+  - `Filled​`
+    - What was the average fill price I got for this order
+  - `Rejected​`
+    - Why was this order rejected
+  - `PartiallyFilled​`
+    - how much was filled before the order was canceled)
+    - what was the average fill price I got for this order
+  - `Parked​`
+    - Why is the market currently in auction TODO find out what happens to the limit orders in the orders API when market is in auction
 
-Sorting
-
-- **should** be able to sort the list (both directions) by any field in the order list
-  - **should** be able to add a secondry sort. e.g. by market then by date  
-
-Grouping 
-- **should** be able to group by any field e.g. by market
-
-However, in a general case: When reviewing the orders I have placed and their status, I...
-
-- **must** see [Status](TODO-Do-we-need-this?) of the order
-
-- Depending on the order, I...
-  - Active​ - Remaining, how close the market is my order, (I may want to edit or cancel this order)
-  - Expired​ - when did it expire, how much was filled remaining
-  - Cancelled​ - What canceled it. This generally means that it was canceled by the user but there may be exceptions (TODO Documentation needed)  
-  - Stopped​ - What stopped it (e.g. was it because an [FOC](9001-DATA-data_display.md#time-in-force) that was not filled)
-  - Filled​ - What was the fill price I got for this order
-  - Rejected​ - Why was this order rejected
-  - PartiallyFilled​ - how much was filled before the order was canceled)
-  - Parked​ - Why is the market currently in auction TODO find out what happens to the limit orders in the orders API when market is in auction
-
-For each order:
 - **must** see what [market](9001-DATA-data_display.md#market) an order is related to (either code, ID or name, preferable name)
   - **should** see what the status is of the market (particularly if it is not "normal")
-- **must** see the [Size](9001-DATA-data_display.md#size) of the order
-- **must** see the [direction](9001-DATA-data_display.md#direction--side) (Long or Short) of the order (this can be implied with a + or negative suffix on the size, + for Long, - for short)
-- **must** see [Order type](9001-DATA-data_display.md#order-type)
-- **should** see order origin (pegged and liquidity orders)
-  - if origin is [pegged or liquidity provision shape](9001-DATA-data_display.md#order-origin): order **could** see what part of the liquidity shape or pegged order shape this relates to. See [pegged orders](#pegged-order-shapes) and [liquidity provisions](#liquidity-order-shapes) shapes below.
+- **must** see the [size](9001-DATA-data_display.md#size) of the order
+- **must** see the [direction/side](9001-DATA-data_display.md#direction--side) (Long or Short) of the order (this can be implied with a + or negative suffix on the size, + for Long, - for short)
+- **must** see [order type](9001-DATA-data_display.md#order-type)
+- if order created by [pegged or liquidity provision shape](9001-DATA-data_display.md#order-origin): **should** see order origin
+  - **could** see what part of the liquidity shape or pegged order shape this relates to. See [pegged orders](#pegged-order-shapes) and [liquidity provisions](#liquidity-order-shapes) shapes below.
+  - **could** see link to my full shape
 
-- **should** see how much has been Filled [size](9001-DATA-data_display.md#size) e.g. if the order was for `50` but so far only 10 have traded I should see Filled = `10`. Note: this is marked as a should because in the case of Rejected order and some other scenarios it isn't relevant.
+- **should** see how much has been filled [size](9001-DATA-data_display.md#size) e.g. if the order was for `50` but so far only 10 have traded I should see Filled = `10`. Note: this is marked as a should because in the case of Rejected order and some other scenarios it isn't relevant.
 - **should** see how much of the orders [size](9001-DATA-data_display.md#size) remains. Note: this does not go to zero if the order status goes to a closed state. TODO double check what the API does in a situation where I got 50% fill then canceled an order 
 
 - if order type = `Limit`: **must** see the Limit [price](9001-DATA-data_display.md#quote-price) that was set on the order
-- if order type = `Market`: **must** not see a price for active or parked orders, a `-`, `Market` or `n/a` is more appropriate (API may return 0). 
+- if order type = `Market`: **must** not see a price for active or parked orders, a `-`, `Market` or `n/a` is more appropriate (API may return 0).
 
 - **must** see the [time in force](9001-DATA-data_display.md#time-in-force) applied to the order (can be abbreviated here)
-- **should** see Created At time stamp. TODO check what happens to this in the context of Pegged and LP orders.
-- **could** see Updated at (this is used by the system when an order is edited, or repriced (in pegged and LP) not sure this in needed) TODO check behavior 
-  
-- if the order is `Active` or `Parked`: **must** see an option to [Edit/amend](#amend-orders) the individual order
-  - if order origin is pegged or Liquidity: 
-    - **must** not see edit a [pegged or liquidity shape](9001-DATA-data_display.md#order-origin)
-    - **should** see ability to edit [liquidity](#liquidity-order-shapes) or [peg](#pegged-order-shapes) shape below
-- if the order is `Active` or `Parked`: **must** see an option to [Cancel](#cancel-orders) the individual order
+- **should** see created At time stamp. TODO check what happens to this in the context of Pegged and LP orders.
+- **could** see updated at (this is used by the system when an order is edited, or repriced (in pegged and LP) not sure this in needed) TODO check behavior 
 
-... so I can decide what I want to do (if anything) and find the actions to do it.
+- **should** see time/order priority (how many orders are before mine at this price)
+  
+- if the order is `Active` &amp; **not** part of a liquidity or peg shape: **must** see an option to [Edit/amend](#amend-order---price) the individual order
+- if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to Edit/amend the individual order
+  - **could** see a link to amend shape
+- if the order is `Active` &amp; **not** part of a liquidity or peg shape: **must** see an option to [cancel](#cancel-orders) the individual order
+- if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to cancel the individual order
+  - **could** see a link to cancel shape
+
+### Filters
+
+- **should** have the ability to see all orders regardless of status in one list
+- **should** have the ability to see only active &amp; parked orders TODO update this based on what happens to parked orders
+- **should** have the ability to see only non-active &amp; parked order (i.e. all orders that do not have the status of Active &amp; Parked)
+- **could** have the ability to filter by any field(s)
+  - where a field is an enum: **should** be able to select one on or more values for a field that should be included
+
+### Sorting
+
+- **should** be able to sort the list (both directions) by any field in the order list
+  - **should** be able to add a secondary sort. e.g. by market then by date  
+
+### Grouping
+
+- **should** be able to group orders by any field e.g. by market, lp etc
+
 ## Cancel orders
 
-- **must** see ability to cancel the order
-- submit the cancel transaction
-- see feedback on the transaction
-## Amend orders
+- **must** select weather to cancel an individual order or all orders on a market
+- **must** be able to submit the [Vega transaction](0003-WTXN-submit_vega_transaction.md) to cancel order(s)
+  - **could** show the margin requirement reduction/increase that will take place before submitting
+- **must** see feedback on my order status after the transaction
+
+## Amend order - price
+
+Read more about [order amends](../protocol/0004-AMND-amends.md).
+
+When looking to amend an order, I...
 
 - **must** be able to edit the price of an order
-- if the market status make the editing not possible TBD (e.g. edit order while in auction) TODO check what needs to be done
-- if the type of change is not possible
-- Other amends to an order TBD
+  - **could** be warned if the price change will, given the current market, fill the order right away
+  - **must** be warned (pre-submit) if the input price has too many digits after the decimal place for the market ["quote"](DATA-data_display.md#quote-price)
+- must submit the Amend order [Vega transaction](0003-WTXN-submit_vega_transaction.md)
+- must see the status after the transaction (see [submit order](7002-SORD-submit_orders.md#submit-an-order))
 
-- must submit or cancel the order
-- must see the status of the order once confirmed on block
+... so the order is more likely to get filled or will be filled at a more competitive price
 
-## On a chart
+## Amend order - other types
 
-TBD
+`TBD` -  Acceptance criteria for other types of order amend 
+## On a price history chart
+
+when looking at a price history chart, I...
+
+- **would** like to see all my active orders shown on the vertical axis
+- **would** like to drag orders to change their price
+
+... so I can see my orders in context of price history
+## On a depth chart
+
+when looking at a depth chart, I...
+
+- **would** like to see all my active orders shown on the horizontal axis
+- **would** like to drag orders to change their price
+
+... so I can see my orders in context of price history
+
+## In order book
+
+when looking at an order book, I...
+
+- **would** like to see all my active orders shown next to the prices they have
+
+... so I can see my orders in context of price history
+
 ## Pegged order shapes
 
-TBD
+When looking to understand the state of a pegged order shape...
+
+- **would** like to see the pegged order status (e.g. active, parked, canceled etc)
+- **would** like to see the shape I submitted
+  - **would** like to see each buy/sell order with it's reference and offset
+  - **would** like to see the current price for each buy/sell
+- **would** like to see what parts of this shape have been filled and what remains
+
+... so I can decide if I wish to amend or cancel my order
 ## Liquidity order shapes
 
-TBD
+When looking to understand the state of a liquidity provision... 
+
+- **would** like to see the liquidity commitment order status (e.g. pending, active, parked, canceled etc)
+- **would** like to see the shape I submitted
+  - **would** like to see each buy/sell order with it's reference and offset
+  - **would** like to see the current price for each buy/sell
+- **would** like to see the fee bid
+- **would** like to see the date submitted/updated
+
+... so I can decide if I wish to amend or cancel my shape
