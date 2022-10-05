@@ -15,54 +15,67 @@ Each bullet is worded so that it contains a **must**, **should**, **could**, or 
 
 These acceptance criteria are not final or intended to be "the truth" but a useful tool, they will be improved over time as more people feedback on using Vega.
 
-## 0. Wallets and signing transactions
-- [Get and use a Vega wallet](0001-WALL-wallet.md)
-- [Connect Vega wallet to a Dapp & select keys](0002-WCON-connect_vega_wallet.md)
-- [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
-- [Connect Ethereum wallet to a Dapp](0004-EWAL-connect_ethereum_wallet.md))
-- [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md)
+A user is normally interacting with at least 2 applications when doing tasks on Vega, A **Dapp** or interface designed to help users complete specific tasks and a **Wallet** that is only used to authenticate a user's actions and broadcast them to the network. 
 
-## 1. Staking and Governance
-- Associate governance token with a Vega key
-- View and redeem vested tokens
-- Staking validators
-- Review staking income
-- Vote on changes
-- Propose changes
-  - Propose new Market
-  - Propose change(s) to market
-  - Propose new asset
-  - Propose change(s) to asset
-  - Propose change to network parameter(s)
-  - Propose something "Freeform"
+## `0000` Wallets, signing transactions and network selection
+- `0001-WALL` [Get and use a Vega wallet](0001-WALL-wallet.md) (This mostly relates to use of a wallet app, for cryptography and broadcast to network)
+  
+These files contain generic user needs for interacting with wallets that are true for all types of interactions that require a wallet. More specific requirements are mentioned where these are referenced. Thy describe what the user needs from the dapp not the wallet.
 
-## 2. Treasury 
-- Understand treasury rewards
+- `0002-WCON` [Connect Vega wallet to a Dapp & select keys](0002-WCON-connect_vega_wallet.md)
+- `0003-WTXN` [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
+- `0004-EWAL` [Connect Ethereum wallet to a Dapp](0004-EWAL-connect_ethereum_wallet.md) `TODO`
+- `0005-ETXN` [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) `TODO`
+- `0006-NETW` [Network and node selection](0006-NETW-network-and-nodes.md) `TODO`
 
-## 3. Bridges and Transfers
-- Deposit
-- [Withdraw](3001-WITH-withdraw.md)
-- Transfer
+## `1000` Bridges, Transfers and Vesting
+- `1001-DEPO` [Deposit](1001-DEPO-desposit.md) `TODO`
+- `1002-WITH` [Withdraw](1002-WITH-withdraw.md)
+- `1003-TRAN` [Transfer](1003-TRAN-transfer.md) `TODO`
+- `1004-ASSO` [Associate governance token with a Vega key](1004-ASSO-associate.md) `TODO`
+- `1005-VEST` [View and redeem vested tokens](1005-VEST-vesting.md) `TODO`
 
-## 4. Liquidity provision
-- Understand return of liquidity provision
-- Provide liquidity
+## `2000` Staking
 
-## 5. Markets and analysis
-- Find markets 
-- View market specification
-- Analyze Order book
-- Analyze price history
-- Analyze trade history
+- `2001-STKE` [Staking validators](2001-STKE-staking.md) `TODO`
+- `2002-SINC` [Review staking income](2002-SINC-staking-income.md) `TODO`
 
-## 6. Collateral, Orders, Positions and Fills 
-- View my collateral / accounts
-- [Submit an order](6001-SORD-submit_orders.md) 
-- Manage my orders
-- View my positions
-- View my trades/fills
+## `3000` Governance
 
+- `3001-VOTE` [See proposals and Vote on changes](3001-VOTE-vote.md) `TODO`
+- `3002-PROP` [Select proposal type](3002-PROP-propose.md) `TODO`
+- `3003-PMAN` [Propose new Market](3003-PMAN-propose_new_market.md) `TODO`
+- `3004-PMAC` [Propose change(s) to market](3004-PMAC-propose_market_change.md) `TODO`
+- `3005-PASN` [Propose new asset](3005-PASN-propose_new_asset.md) `TODO`
+- `3006-PASC` [Propose change(s) to asset](3006-PASC-propose_asset_change.md) `TODO`
+- `3007-PNEC` [Propose change to network parameter(s)](3007-PNEC-propose_network.md) `TODO`
+- `3008-PFRO` [Propose something "Freeform"](3008-PFRO-propose_freeform.md) `TODO`
+
+## `4000` Treasury 
+- `4001-TRES` [View treasury rewards](4001-TRES-view_treasury_rewards.md) `TODO`
+
+## `5000` Liquidity provision
+- `5001-LIQF` [Find and understand liquidity provision opportunities](5001-LIQF-liquidity_opportunities.md) `TODO`
+- `5002-LIQP` [Provide liquidity](5002-LIQP-provide_liquidity.md) `TODO`
+- `5003-LIQI` [View liquidity provision rewards](5003-LIQI-liquidity_income.md) `TODO`
+
+## `6000` Markets and analysis
+- `6001-MARK` [Find markets](6001-MARK-find_markets.md) `TODO`
+- `6002-MARD` [View market specification](6002-MDET-market-details.md) `TODO`
+- `6003-ORDB` [Analyze Order book](6003-ORDB-order_book.md) `TODO`
+- `6004-PHIS` [Analyze price history](6004-PHIS-price_history.md) `TODO`
+- `6005-THIS` [Analyze trade history](6005-THIS-trade_history.md) `TODO`
+
+## `7000` Collateral, Orders, Positions and Fills 
+- `7001-COLL` [View my collateral / accounts](7001-COLL-collateral.md) `TODO`
+- `7002-SORD` [Submit an order](7002-SORD-submit_orders.md) 
+- `7003-MORD` [Manage my orders](7003-MORD-manage_orders.md) `TODO`
+- `7004-POSI` [View my positions](7004-POSI-positions.md) `TODO`
+- `7005-FILL` [View my trades/fills](7005-FILL-fills.md) `TODO`
+- `7006-FEES` [View my trading fees](7006-FEES-fees.md) `TODO`
+
+## `8000` Understand transactions and blocks
+- `8001-BLOX` [Transaction and block content](8001-BLOX-transaction_and_blocks.md) `TODO`
 ## Appendixes 
 
-- [Display display rules](7001-DATA-data_display.md)
-
+- [Display display rules](9001-DATA-data_display.md)
