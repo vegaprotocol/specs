@@ -1,9 +1,9 @@
 # Manage orders
 
-Users place orders to describe the trades they would like to make, buy/sell, price, and how long the bid/ask is valid for etc. In many cases they can edit these orders, changing price etc.
-Orders can also be placed on behalf of a user/party via [liquidity](#liquidity-order-shapes) or [pegged](#pegged-order-shapes) order shapes. These order can not be edited on canceled in the same way as other orders.
+Users place orders to describe the trades they would like to make: buy or sell, at what price, how long it is valid for etc. In many cases they can edit these orders while they are still active, for example: changing price.
+Orders can also be placed on behalf of a user/party via [liquidity](#liquidity-order-shapes) or [pegged](#pegged-order-shapes) order shapes. These order cannot be edited on canceled in the same way as other orders.
 Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) e.g. whether it has been accepted, filled, how close it is to being filled etc.
-Markets also have [statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect what can be done with an order, e.g if the order was placed while in "normal" continuous trading, but the market is now in auction. 
+Markets also have [statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect how I perceive the state of an order, e.g if the order was placed while in "normal" continuous trading, but the market is now in auction. 
 Users may be interested in the price of their orders relative to the price of the market.
 
 ## Orders list
@@ -12,8 +12,8 @@ User will have differing needs/preferences in terms of what they want to see abo
 
 ### Field customization
 
-- **should** have the ability to select what [fields/data](#fields) is shown for each order in the list
-- **should** have the ability to change the order of items in the list
+- **should** have the ability to select what [fields/data](#fields) are shown for each order in the list
+- **should** have the ability to change the order of fields (e.g. table columns)
 - **should** have the ability to give each column in the list more or less space
 
 ### Fields
@@ -21,25 +21,26 @@ User will have differing needs/preferences in terms of what they want to see abo
 - **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order
   - `Active​`
     - how much of the order is filled / remains unfilled
-    - how close the mark price is my order
+    - how close the mark price is to my order
     - if this order is filled at the limit price what would my what effect would it have on realized PnL 
     - I may want to edit or cancel this order
   - `Expired​`
     - When did it expire
     - How much was filled / remaining
   - `Cancelled​`
-    - What canceled it? This generally means that it was canceled by the user but there may be exceptions (TODO Documentation needed)  
+    - What canceled it? When did I cancel it TODO double check that "cancelled" only comes from user action 
   - `Stopped​`
-    - What stopped it (e.g. was it because an [FOC](9001-DATA-data_display.md#time-in-force) that was not filled)
+    - What stopped it (e.g. was it because an [FOC](9001-DATA-data_display.md#time-in-force) that was not filled, or because of margin availability)
   - `Filled​`
     - What was the average fill price I got for this order
   - `Rejected​`
-    - Why was this order rejected
+    - Why was this order rejected (show `rejectedReason`)
   - `PartiallyFilled​`
-    - how much was filled before the order was canceled)
+    - how much was filled before the order was canceled
     - what was the average fill price I got for this order
   - `Parked​`
-    - Why is the market currently in auction TODO find out what happens to the limit orders in the orders API when market is in auction
+    - Why is the market currently in auction
+    - link to pegged shape (see bellow) TODO find out what happens to the limit orders in the orders API when market is in auction
 
 - **must** see what [market](9001-DATA-data_display.md#market) an order is related to (either code, ID or name, preferable name)
   - **should** see what the status is of the market (particularly if it is not "normal")
