@@ -90,6 +90,7 @@ User will have differing needs/preferences in terms of what they want to see abo
 ### Grouping
 
 - **should** be able to group orders by any field e.g. by market, lp etc
+- **should** have default grouping by market
 
 ## Cancel orders
 
