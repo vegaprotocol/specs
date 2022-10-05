@@ -82,7 +82,7 @@ Note: The last row in the table above is added for clarity. If the order was fil
 
 ## Wash trading ACs 
 - If, during continuous trading, an order would be filled or partially filled with an existing order from the same [party](./0017-PART-party.md) aka "wash" trade, the order is rejected. (<a name="0024-OSTA-005" href="#0024-OSTA-005">0024-OSTA-005</a>)
-- Any existing fills that happen before the wash trade is identified will be kept. (<a name="0024-OSTA-006" href="#0024-OSTA-006">0024-OSTA-006</a>)
+- Any existing fills that happen before the wash trade is identified will be kept. The order should be market both "partially filled" and "rejected to prevent wash trade" (<a name="0024-OSTA-006" href="#0024-OSTA-006">0024-OSTA-006</a>)
 - FOK rules still apply for wash trading so if a wash trade is identified before the full amount of the order is complete, the order will be stopped and nothing filled. (<a name="0024-OSTA-007" href="#0024-OSTA-007">0024-OSTA-007</a>)
 - Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing. (<a name="0024-OSTA-008" href="#0024-OSTA-008">0024-OSTA-008</a>)
 
