@@ -62,7 +62,7 @@ When populating a deal ticket I...
     - **would** like to be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. 
 - **must** be warned (pre-submit) if input has too many digits after the decimal place for the market's ["position" decimal places](7001-DATA-data_display.md#size) (<a name="7002-SORD-016" href="#7002-SORD-016">7002-SORD-016</a>) 
 
-... so I get the size of exposure (open volume that I want)
+... so I get the size of exposure (open volume) that I want
 
 ## Price - Limit order
 
