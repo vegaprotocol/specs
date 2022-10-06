@@ -79,11 +79,11 @@ When a dapp sends a transaction to the wallet for signing and broadcast, I...
 When looking for a specific balance or asset on a given wallet and network, I...
 
 - **must** see total balances of an asset for each key (<a name="0001-WALL-027" href="#0001-WALL-027">0001-WALL-027</a>)
-- **should** see a breakdown of all accounts for an asset on a key (<a name="0001-WALL-028" href="#0001-WALL-028">0001-WALL-028</a>)
-- **should** see a summary of balances when switching keys (to help me find the key I am looking for) (<a name="0001-WALL-029" href="#0001-WALL-029">0001-WALL-029</a>)
-- **would like to** be able to search by market name/code, and see all keys with a margin or liquidity account in matching markets (<a name="0001-WALL-030" href="#0001-WALL-030">0001-WALL-030</a>)
-- **should** be able to search by asset name or code, and see all keys with balance of matching assets (<a name="0001-WALL-031" href="#0001-WALL-031">0001-WALL-031</a>)
-- **should** be able to search for arbitrary metadata added by user to keys (<a name="0001-WALL-032" href="#0001-WALL-032">0001-WALL-032</a>)
+- **should** see a breakdown of all accounts for an asset on a key
+- **should** see a summary of balances when switching keys
+- **would like to** be able to search by market name/code, and see all keys with a margin or liquidity account in matching markets
+- **should** be able to search by asset name or code, and see all keys with balance of matching assets
+- **should** be able to search for arbitrary metadata added by user to keys
 - **must** be able to see a total of all asset for all keys in a given wallet (<a name="0001-WALL-033" href="#0001-WALL-033">0001-WALL-033</a>)
  
 ... so that I can find the keys that I am looking for, see how much I have to consolidate (via transfers) or withdraw funds
@@ -92,14 +92,7 @@ When looking for a specific balance or asset on a given wallet and network, I...
 When thinking about a recent or specific transaction, I ...
 
 - **must** see a history of transactions the wallet app has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
-<!--
-- **should** see a history of transactions the wallet app has signed. As read from the local app (persistent storage)
-  - persistent transaction history **must** be encrypted and require the wallet password to view
-  - **should** be possible to delete individual transactions
-  - **should** be possible to delete the whole transaction history
-  - **would** like to set a maximum age / expiry time for history items after which they are deleted
--->
-- **could** see a history of transactions the selected key has broadcast to a network (e.g. another wallet with the same keys), or from before a key restore (<a name="0001-WALL-077" href="#0001-WALL-077">0001-WALL-077</a>)
+- **could** see a history of transactions the selected key has broadcast to a network (e.g. another wallet with the same keys), or from before a key restore
 - **must** see pending transactions (Transactions I have not yet approved/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
 - **must** see transactions that have recently been broadcast but not yet seen on the chain (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
 - **must** see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
@@ -120,19 +113,19 @@ when looking at a specific transaction...
 - **must** be prompted to enter passphrase (when needed to sign + broadcast transaction) (<a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>)
 - **must** see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network). (<a name="0001-WALL-045" href="#0001-WALL-045">0001-WALL-045</a>)
 - **must** be able to follow a link to block explorer for broadcasted transactions (<a name="0001-WALL-046" href="#0001-WALL-046">0001-WALL-046</a>)
-- if broadcast: **should** see what node it was broadcast to (<a name="0001-WALL-047" href="#0001-WALL-047">0001-WALL-047</a>)
-- if broadcast + mined: **could** see what validator mined the block the transaction was included in (<a name="0001-WALL-048" href="#0001-WALL-048">0001-WALL-048</a>)
+- if broadcast: **should** see what node it was broadcast to
+- if broadcast + mined: **could** see what validator mined the block the transaction was included in
 - if broadcast + mined: **must** see at what block and time it was confirmed (<a name="0001-WALL-049" href="#0001-WALL-049">0001-WALL-049</a>)
-- if broadcast but there was an error: **must** see if there was a reported error/issue, and the details of the issue (<a name="0001-WALL-050" href="#0001-WALL-050">0001-WALL-050</a>)
-- if broadcast + mined: **must** see if the transaction was rejected, and why (<a name="0001-WALL-051" href="#0001-WALL-051">0001-WALL-051</a>)
-- if ignored: must be able to submit, reject or still ignore the transaction (<a name="0001-WALL-079" href="#0001-WALL-079">0001-WALL-079</a>)
+- if broadcast but there was an error: **must** see if there was a reported error/issue, and the details of the issue
+- if broadcast + mined: **must** see if the transaction was rejected, and why
+- if ignored: **must** be able to submit, reject or still ignore the transaction (<a name="0001-WALL-079" href="#0001-WALL-079">0001-WALL-079</a>)
 
 .. so I can find all the information about what has happened with mined and un-mined transactions
 ## Key management
 When using a Vega wallet, I...
 
 - **must** be able to create new keys (derived from the source of wallet) (<a name="0001-WALL-052" href="#0001-WALL-052">0001-WALL-052</a>)
-- **should** be prompted to give keys an alias (user can ignore) (<a name="0001-WALL-053" href="#0001-WALL-053">0001-WALL-053</a>)
+- **should** be prompted to give keys an alias (user can ignore)
 - **must** see full public key or be able to copy it to clipboard (<a name="0001-WALL-054" href="#0001-WALL-054">0001-WALL-054</a>)
 - **must** be able to change key name/alias (<a name="0001-WALL-055" href="#0001-WALL-055">0001-WALL-055</a>)
 - **must** be able to amend other arbitrary key meta data (<a name="0001-WALL-056" href="#0001-WALL-056">0001-WALL-056</a>)
@@ -171,7 +164,7 @@ When wishing to use my wallet to sign arbitrary messages, I...
 
 - **must** enter content to be signed with key  (<a name="0001-WALL-062" href="#0001-WALL-062">0001-WALL-062</a>)
 - **must** see an option to base64 encode content before signing (<a name="0001-WALL-063" href="#0001-WALL-063">0001-WALL-063</a>)
-   - **should** only have the option to broadcast valid Vega transactions to a selected network (<a name="0001-WALL-064" href="#0001-WALL-064">0001-WALL-064</a>)
+   - **should** only have the option to broadcast valid Vega transactions to a selected network
 - **must** be able to submit/sign the content and am given a hash of the signed content as well as the message (now encoded) (<a name="0001-WALL-065" href="#0001-WALL-065">0001-WALL-065</a>)
   - **must** be able to [track progress](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network) of broadcast transaction (<a name="0001-WALL-071" href="#0001-WALL-071">0001-WALL-071</a>)
 

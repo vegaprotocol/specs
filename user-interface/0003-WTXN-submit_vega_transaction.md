@@ -13,18 +13,18 @@ if not connected to a Vega wallet:
 if transaction not auto approved by wallet:
 
 - **must** see a prompt to check connected vega wallet to approve transaction (<a name="0003-WTXN-002" href="#0003-WTXN-002">0003-WTXN-002</a>)
-- **could** see the transaction details that has been passed to the wallet for broadcast (<a name="0003-WTXN-019" href="#0003-WTXN-019">0003-WTXN-019</a>)
+- **could** see the transaction details that has been passed to the wallet for broadcast
 
 if transaction is approved by wallet:
 
 - **must** see A [transaction hash](DATA-data_display.md#transaction-hash) (<a name="0003-WTXN-003" href="#0003-WTXN-003">0003-WTXN-003</a>)
 - **must** see the public key that this transaction was submitted for (<a name="0003-WTXN-004" href="#0003-WTXN-004">0003-WTXN-004</a>)
-- **should** see the alias for the key that submitted this transaction (<a name="0003-WTXN-005" href="#0003-WTXN-005">0003-WTXN-005</a>)
-- **could** see a prompt to set this app to [auto approve](0001-WALL-wallet.md#approving-transactions) in wallet app (<a name="0003-WTXN-006" href="#0003-WTXN-006">0003-WTXN-006</a>)
+- **should** see the alias for the key that submitted this transaction
+- **could** see a prompt to set this app to [auto approve](0001-WALL-wallet.md#approving-transactions) in wallet app
 
 if transaction is rejected by wallet:
 
-- **must** see that the order was rejected by the connected wallet (<a name="0003-WTXN-007" href="#0003-WTXN-007">0003-WTXN-007</a>)
+- **could** see that the order was rejected by the connected wallet (closing the window automatically may be appropriate) (<a name="0003-WTXN-007" href="#0003-WTXN-007">0003-WTXN-007</a>)
 
 if the wallet does not respond:
 
@@ -33,7 +33,7 @@ if the wallet does not respond:
 if the wallet highlights an issue with the transaction:
 
 - **must** show that the transaction was marked as invalid by the wallet and not broadcast (<a name="0003-WTXN-009" href="#0003-WTXN-009">0003-WTXN-009</a>)
-- **should** see the error returned highlighted in context of the form that submitted the transaction in Dapp (<a name="0003-WTXN-010" href="#0003-WTXN-010">0003-WTXN-010</a>)
+- **should** see the error returned highlighted in context of the form that submitted the transaction in Dapp
 - **must** show error returned by wallet (<a name="0003-WTXN-011" href="#0003-WTXN-011">0003-WTXN-011</a>)
 
 ## Track transaction on network 
