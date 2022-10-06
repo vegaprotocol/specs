@@ -334,3 +334,60 @@ Can deposit and withdraw funds to/from ERC20 asset loaded from checkpoint (<a na
 1. The market is still in "pending" state.
 1. The market becomes enaced when the enactment time is passed.
 1. Other parties can trade on the market, and become continuous.
+
+
+
+## Test case 14: Market with trading terminated is not restored, collateral moved correctly 
+1. Set LP fee distribution time step to non-zero value.
+1. Propose, enact, trade in the market, close out distressed party so that insurance pool balance > 0, submit trading terminated. 
+1. System saves LNL checkpoint at a time when undistributed LP fees for the market are > 0.
+1. Restart Vega, load LNL checkpoint. 
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>) 
+1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-030" href="#0073-LIMN-030">0073-LIMN-030</a>)
+1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-031" href="#0073-LIMN-031">0073-LIMN-031</a>)
+1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>)
+1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-033" href="#0073-LIMN-033">0073-LIMN-033</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-034" href="#0073-LIMN-034">0073-LIMN-034</a>)
+
+
+## Test case 15: Market with trading terminated that settled is not restored, collateral moved correctly 
+1. Propose, enact, trade in the market, submit trading terminated and settlement data, observe final settlement cashflows for at least 2 parties. 
+1. System saves LNL checkpoint.
+1. Restart Vega, load LNL checkpoint. 
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>) 
+1. If the market exists in the data node it is marked as settled with correct settlement data. (<a name="0073-LIMN-041" href="#0073-LIMN-041">0073-LIMN-041</a>)
+1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>)
+1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-043" href="#0073-LIMN-043">0073-LIMN-043</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>)
+
+## Test case 16: Markets can be settled and terminated after restore as propposed
+1. Propose, enact a market with some trading termination and settlement date setting. Trade in the market creating positions for at least 2 parties. 
+1. System saves LNL checkpoint.
+1. Restart Vega, load LNL checkpoint.  
+1. A party submits liquidity provision to the market, orders are submitted to the opening auction to allow uncrossing; at least two parties now have a position. 
+1. Submit the trading terminated transaction and settlement date transaction as set out in the proposal and observe the final settlement cashflows for the parties with positions.  (<a name="0073-LIMN-050" href="#0073-LIMN-050">0073-LIMN-050</a>)
+1. It's not possible to submit orders or LP provisions to this market).  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>)
+
+## Test case 17: Markets with internal time trigger for trading terminated that rings between shutdown and restore
+1. Propose, enact a market with some traing terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties. 
+1. System saves LNL checkpoint before the trading terminated trigger rings. 
+1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung. 
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>) 
+1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>)
+1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
+1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>)
+1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-064" href="#0064-LIMN-064">0073-LIMN-064</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>)
+
+## Test case 18: market definition is the same pre and post LNL restore
+1. Propose a market
+1. System saves LNL checkpoint.
+1. Restart Vega, load LNL checkpoint. 
+1. The market has the same:
+  - risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
+  - price monitoring bounds (<a name="0073-LIMN-071" href="#0071-LIMN-071">0073-LIMN-071</a>)
+  - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
+  - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
+  
+
+

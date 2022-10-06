@@ -10,7 +10,8 @@
 5. [ ] If ```riskiest short < 0``` and there are no offers on the order book, the ```exit price``` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-006" href="#0019-MCAL-006">0019-MCAL-006</a>)
 6. [ ] If ```riskiest short < 0``` && ```0 <``` *sum of absolute volume of order book offers* ```< riskiest short```, the ```exit price``` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
 7. [ ] A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
-8. [ ] Example 1, 2 and scenarios are tested in core 
+8. [ ] For each market and each party which has either orders or positions on the market, the API provides the 4 margin levels.  (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
+
 
 # Summary
 
@@ -229,7 +230,6 @@ maintenance_margin = max ( 541.6, 0) = 541.6
 collateral_release_level = 541.6 * collateral_release_scaling_factor = 541.6 * 1.1
 initial_margin = 541.6 * initial_margin_scaling_factor = 541.6 * 1.2
 search_level = 541.6 * search_level_scaling_factor = 541.6 * 1.3
-
 
 
 ```

@@ -84,7 +84,7 @@ All proposals ever submitted + votes (asset, network parameter change, market).
 ## Trading Related Data
 
 ### Market Data
-- as [specified in](0021-market-data-spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this. 
+- as [specified in](./0021-market-data-spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this. 
 
 ### Market lifecycle events
 
@@ -143,28 +143,28 @@ It must be possible to augment APIs so data returned is in a shape and size that
 It must be possible to add to the data node APIs that return the result of calculations on the data node (in addition ot historical data). These calculations may use historical or real time core data but are not available in the core API as they would hinder performance. e.g. Estimates / Margin / risk calculations
 
 # Acceptance criteria
-1. Market depth state must be processed and built in a timely manner so that the correct real time information is available to the users without unnecessary delays. Using the recommended hardware specs for validators, the data node should be able to handle a continuous order events rate of 500 per second without falling behind. (<a name="0011-NP-DANO-002" href="#0011-NP-DANO-002">0011-NP-DANO-002</a>)
+1. Market depth state must be processed and built in a timely manner so that the correct real time information is available to the users without unnecessary delays. Using the recommended hardware specs for validators, the data node should be able to handle a continuous order events rate of 500 per second without falling behind. (<a name="0076-DANO-002" href="#0076-DANO-002">0076-DANO-002</a>)
 
 ## Data synchronisation
 
-1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0011-NP-COSMICELEVATOR-001" href="#0011-NP-COSMICELEVATOR-001">0011-NP-COSMICELEVATOR-001</a>)
-1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network without having to replay the full chain (<a name="0011-NP-DANO-003" href="#0011-NP-DANO-003">0011-NP-DANO-003</a>)
+1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-COSMICELEVATOR-001" href="#0076-COSMICELEVATOR-001">0076-COSMICELEVATOR-001</a>)
+1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network without having to replay the full chain (<a name="0076-DANO-003" href="#0076-DANO-003">0076-DANO-003</a>)
 
 ### Data integrity
-1. Data produced in the core snapshots aligns with the data-node data proving that what is returned by data-node matches core state at any given block height (<a name="0011-NP-DANO-004" href="#0011-NP-DANO-004">0011-NP-DANO-004</a>)
+1. Data produced in the core snapshots aligns with the data-node data proving that what is returned by data-node matches core state at any given block height (<a name="0076-DANO-004" href="#0076-DANO-004">0076-DANO-004</a>)
 
 ### Data-node restoring:
-1. Data loaded into the database from a data-node snapshot must match that of the snapshot. For example: Start a data-node from a data-node snapshot and compare the data in the database to that in the data-node snapshot. (<a name="0011-NP-DANO-005" href="#0011-NP-DANO-005">0011-NP-DANO-005</a>)
-1. Data loaded into the database from a data-node snapshot must match that of the snapshot when queried via the APIs. For example: Start a data-node from a data-node snapshot and compare the data exposed on the APIs to that in the data-node snapshot. Test using REST, gRPC and GraphQL (GraphQL should cover at least those used in the [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0011-NP-COSMICELEVATOR-006" href="#0011-NP-COSMICELEVATOR-006">0011-NP-COSMICELEVATOR-006</a>)
-1. As the network produces more blocks the data should be stored correctly in the data-node after a data-node snapshot restore. For example: Start a data-node from a data-node snapshot at a known block height, ensure the datanode continues to update from that block onwards. (<a name="0011-NP-DANO-007" href="#0011-NP-DANO-007">0011-NP-DANO-007</a>)
-1. No data is duplicated as the core emits events when catching up to the later block height. For example: Starting a core node at block height less than the data-node block height must result in no duplicated data (<a name="0011-NP-DANO-008" href="#0011-NP-DANO-008">0011-NP-DANO-008</a>)
-1. Starting a core node at block height more than the data-node block height must result in and error and a refusal to start (<a name="0011-NP-DANO-014" href="#0011-NP-DANO-014">0011-NP-DANO-014</a>)
-1. If a data-node snapshot fails during the restore the process, it should error and the node(s) wont start (<a name="0011-NP-DANO-009" href="#0011-NP-DANO-009">0011-NP-DANO-009</a>)
+1. Data loaded into the database from a data-node snapshot must match that of the snapshot. For example: Start a data-node from a data-node snapshot and compare the data in the database to that in the data-node snapshot. (<a name="0076-DANO-005" href="#0076-DANO-005">0076-DANO-005</a>)
+1. Data loaded into the database from a data-node snapshot must match that of the snapshot when queried via the APIs. For example: Start a data-node from a data-node snapshot and compare the data exposed on the APIs to that in the data-node snapshot. Test using REST, gRPC and GraphQL (GraphQL should cover at least those used in the [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-COSMICELEVATOR-006" href="#0076-COSMICELEVATOR-006">0076-COSMICELEVATOR-006</a>)
+1. As the network produces more blocks the data should be stored correctly in the data-node after a data-node snapshot restore. For example: Start a data-node from a data-node snapshot at a known block height, ensure the datanode continues to update from that block onwards. (<a name="0076-DANO-007" href="#0076-DANO-007">0076-DANO-007</a>)
+1. No data is duplicated as the core emits events when catching up to the later block height. For example: Starting a core node at block height less than the data-node block height must result in no duplicated data (<a name="0076-DANO-008" href="#0076-DANO-008">0076-DANO-008</a>)
+1. Starting a core node at block height more than the data-node block height must result in and error and a refusal to start (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
+1. If a data-node snapshot fails during the restore the process, it should error and the node(s) wont start (<a name="0076-DANO-009" href="#0076-DANO-009">0076-DANO-009</a>)
 
 ### Data-node network determinism:
-1. Data-node snapshots should be deterministic across all data-nodes on the network, using the recommended hardware and OS versions (<a name="0011-NP-DANO-010" href="#0011-NP-DANO-010">0011-NP-DANO-010</a>)
-1. Data-node databases should be the same across all data-nodes on the network when a data-node has been restored, or joined, using a data-node snapshot. For example: A network has one datanode (A) running, restore a new datanode (B) from a snapshot from node A, then take a snapshot immediately after on node B (assert A and Bs snapshots match) (<a name="0011-NP-DANO-011" href="#0011-NP-DANO-011">0011-NP-DANO-011</a>)
-1. Data-node API responses should be the same across all data-nodes on the network when a data-node has been restored, or joined, using a data-node snapshot. For example: A network has one datanode (A) running, restore a new datanode (B) from a snapshot from node A, then take a snapshot immediately after on node B (assert A and Bs APIs return the same data) (<a name="0011-NP-COSMICELEVATOR-012" href="#0011-NP-COSMICELEVATOR-012">0011-NP-COSMICELEVATOR-012</a>)
+1. Data-node snapshots should be deterministic across all data-nodes on the network, using the recommended hardware and OS versions (<a name="0076-DANO-010" href="#0076-DANO-010">0076-DANO-010</a>)
+1. Data-node databases should be the same across all data-nodes on the network when a data-node has been restored, or joined, using a data-node snapshot. For example: A network has one datanode (A) running, restore a new datanode (B) from a snapshot from node A, then take a snapshot immediately after on node B (assert A and Bs snapshots match) (<a name="0076-DANO-011" href="#0076-DANO-011">0076-DANO-011</a>)
+1. Data-node API responses should be the same across all data-nodes on the network when a data-node has been restored, or joined, using a data-node snapshot. For example: A network has one datanode (A) running, restore a new datanode (B) from a snapshot from node A, then take a snapshot immediately after on node B (assert A and Bs APIs return the same data) (<a name="0076-COSMICELEVATOR-012" href="#0076-COSMICELEVATOR-012">0076-COSMICELEVATOR-012</a>)
 
 ### Schema compatibility:
-1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0011-NP-COSMICELEVATOR-013" href="#0011-NP-COSMICELEVATOR-013">0011-NP-COSMICELEVATOR-013</a>)
+1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0076-COSMICELEVATOR-013" href="#0076-COSMICELEVATOR-013">0076-COSMICELEVATOR-013</a>)

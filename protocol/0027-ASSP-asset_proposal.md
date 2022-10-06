@@ -59,8 +59,11 @@ The onus is on the creator of proposal `B` to submit (and pay the gas for) for p
 ### Vega chain part
 If it changes `quantum` then this new value becomes used immediately on enactement.
 
-**Note on `decimals`.** The Vega ERC20 bridge does not support assets with a changing number of decimals, and is unlikely ever to support such assets (due to both the added complexity and the lack of demonstrable use cases for this).
-Therefore, it is undefined how to proceed in the event that decimals does change, and the specific, immutable instance of the token smart contract on the Ethereum blockchain much be verified by community members when voting on each new asset that is proposed to ensure that the number of decimals used by the asset is guaranteed to be perpetually invariant for the lifetime of the asset.
+**Note on `decimals`.**
+
+- Only non-negative integer values are allowed to specify number of asset decimal places.
+- The Vega ERC20 bridge does not support assets with a changing number of decimals, and is unlikely ever to support such assets (due to both the added complexity and the lack of demonstrable use cases for this).
+Therefore, it is undefined how to proceed in the event that decimals does change, and the specific, immutable instance of the token smart contract on the Ethereum blockchain must be verified by community members when voting on each new asset that is proposed to ensure that the number of decimals used by the asset is guaranteed to be perpetually invariant for the lifetime of the asset.
 Contracts that do not meet this guarantee are not suitable as a basis for Vega bridge assets.
 
 
@@ -170,7 +173,7 @@ This must be an integer strictly greater than `0`.
 
 - [ ] As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal) (<a name="0027-ASSP-005" href="#0027-ASSP-005">0027-ASSP-005</a>)
 - [ ] As a node, when a new asset is accepted through governance, I can sign a payload to the user so they can whitelist the asset with the bridge (<a name="0027-ASSP-006" href="#0027-ASSP-006">0027-ASSP-006</a>)
-- [ ] AS a node, I receive events from the external blockchain queue, that's confirm the asset is enabled in the bridge. (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
+- [ ] As a node, I receive events from the external blockchain queue, that confirm the asset is enabled in the bridge. (<a name="0027-ASSP-007" href="#0027-ASSP-007">0027-ASSP-007</a>)
 - [ ] As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit` or `withdrawalDelayThreshold`, emit a signed a payload to the world so that they can update the corresponding parameters on the bridge (<a name="0027-ASSP-008" href="#0027-ASSP-008">0027-ASSP-008</a>)
 
 ## Validation
@@ -186,7 +189,10 @@ This must be an integer strictly greater than `0`.
 - [ ] `validationTimestamp` must occur after the governance proposal opens voting, and before it closes (<a name="0027-ASSP-017" href="#0027-ASSP-017">0027-ASSP-017</a>)
 - [ ] `validationTimestamp` must be provided and in the future for all new ERC20 asset proposals (<a name="0027-ASSP-018" href="#0027-ASSP-018">0027-ASSP-018</a>)
 - [ ] `quantum` must be an integer strictly greater than `0` (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)
+- [ ] There can be multiple concurrent proposals for the same new ERC20 asset (same means identical Ethereum address). Once the nodes agree (based on events from the external blockchain queue), that the asset is enabled on the bridge all the remaining proposals for the same asset are cancelled. 
+(<a name="0027-ASSP-020" href="#0027-ASSP-020">0027-ASSP-020</a>)
+
 
 ## Delays and Thresholds
-- [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. Withdrawal in asset `X` below `t1` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` above `t1` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)
-- [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. An asset update proposal is submitted to change these to `t2`; it passes voting and is submitted to Ethereum bridge contract. The new thresholds now apply i.e. withdrawal in asset `X` below `t2` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` above `t2` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-020" href="#0027-ASSP-020">0027-ASSP-020</a>)
+- [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. Withdrawal in asset `X` below `t1` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t1` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-020" href="#0027-ASSP-019">0027-ASSP-020</a>)
+- [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. An asset update proposal is submitted to change these to `t2`; it passes voting and is submitted to Ethereum bridge contract. The new thresholds now apply i.e. withdrawal in asset `X` below `t2` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t2` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-021" href="#0027-ASSP-020">0027-ASSP-021</a>)
