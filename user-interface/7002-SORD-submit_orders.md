@@ -15,20 +15,20 @@ When looking at a market, I...
   if the market is in a state of `tradingTerminated`:
 
   - **must** see that the market is not accepting orders and never will be (<a name="7002-SORD-063" href="#7002-SORD-063">7002-SORD-063</a>)
-  - **should** see the [price](7001-DATA-data_display.md#quote-price) that was used to settle the market (<a name="7002-SORD-064" href="#7002-SORD-064">7002-SORD-064</a>)
-  - **should** see a link to oracle spec and data (<a name="7002-SORD-065" href="#7002-SORD-065">7002-SORD-065</a>)
+  - **should** see the [price](7001-DATA-data_display.md#quote-price) that was used to settle the market
+  - **should** see a link to oracle spec and data
 
   if the market is in a state of `settled`:
 
   - **must** see that the market is not accepting orders and never will be (<a name="7002-SORD-066" href="#7002-SORD-066">7002-SORD-066</a>)
-  - **should** see the oracle events that terminated the market (<a name="7002-SORD-067" href="#7002-SORD-067">7002-SORD-067</a>)
+  - **should** see the oracle events that terminated the market
   - **should** see a link to oracle spec and data
 
   if the market is in a state of `suspended`:
   
-  - **should** see what suspended the market (<a name="7002-SORD-068" href="#7002-SORD-068">7002-SORD-068</a>)
-  - **should** see the conditioned required for the auction to end (<a name="7002-SORD-069" href="#7002-SORD-069">7002-SORD-069</a>)
-  - **should** see the current data values that the auction end is measured against (e.g. Supplied stake) (<a name="7002-SORD-070" href="#7002-SORD-070">7002-SORD-070</a>)
+  - **should** see what suspended the market
+  - **should** see the conditioned required for the auction to end
+  - **should** see the current data values that the auction end is measured against (e.g. Supplied stake)
 
 ...so I know if the market is accepting orders.
 
@@ -41,25 +41,25 @@ When populating a deal ticket I...
   - **must** see the current market trading mode (Continuous, Auction etc) (<a name="7002-SORD-002" href="#7002-SORD-002">7002-SORD-002</a>)
 
 - If I have a 0 total balance of the settlement asset: **must** be warned that I have insufficient collateral (but also allow you to populate ticket because I might want to try before I deposit) (<a name="7002-SORD-003" href="#7002-SORD-003">7002-SORD-003</a>)
-  - **should** have a way to easily deposit the required collateral (<a name="7002-SORD-050" href="#7002-SORD-050">7002-SORD-050</a>)
+  - **should** have a way to easily deposit the required collateral
 
 - **must** select a side/direction e.g. long/short (note: some implementations may do this with two different submit buttons long/short rather than a toggle) (<a name="7002-SORD-004" href="#7002-SORD-004">7002-SORD-004</a>)
 
 - **must** be able to select the [order type](../protocol/0014-ORDT-order_types.md) that I wish to submit (<a name="7002-SORD-005" href="#7002-SORD-005">7002-SORD-005</a>)
   - **must** see limit order (<a name="7002-SORD-006" href="#7002-SORD-006">7002-SORD-006</a>)
   - **must** see market order (<a name="7002-SORD-007" href="#7002-SORD-007">7002-SORD-007</a>)
-  - **should** see pegged order <!-- (<a name="7002-SORD-008" href="#7002-SORD-008">7002-SORD-008</a>) -->
-  - **should** see liquidity provision <!-- (<a name="7002-SORD-009" href="#7002-SORD-009">7002-SORD-009</a>) -->
+  - **should** see pegged order 
+  - **should** see liquidity provision 
 
 ## Order size
 
 ...need to select a size, when selecting a size for my order, I...
 
 - **must** input an order [size](7001-DATA-data_display.md#size) (aka amount or contracts) (<a name="7002-SORD-010" href="#7002-SORD-010">7002-SORD-010</a>)
-  - **should** have the previous value for the selected market available e.g. pre-populated (last submitted or last changed) (<a name="7002-SORD-012" href="#7002-SORD-012">7002-SORD-012</a>)
-  - **should** be able to quickly change the size by the market's min-contract size e.g. hit up/down on the keyboard to increase (<a name="7002-SORD-013" href="#7002-SORD-013">7002-SORD-013</a>)
-    - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows (<a name="7002-SORD-054" href="#7002-SORD-054">7002-SORD-054</a>)
-    - **would like to** be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. (<a name="7002-SORD-056" href="#7002-SORD-056">7002-SORD-056</a>)
+  - **should** have the previous value for the selected market available e.g. pre-populated (last submitted or last changed)
+  - **should** be able to quickly change the size by the market's min-contract size e.g. hit up/down on the keyboard to increase
+    - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows
+    - **would** like to be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. 
 - **must** be warned (pre-submit) if input has too many digits after the decimal place for the market's ["position" decimal places](7001-DATA-data_display.md#size) (<a name="7002-SORD-016" href="#7002-SORD-016">7002-SORD-016</a>) 
 
 ... so I get the size of exposure (open volume that I want)
@@ -70,11 +70,11 @@ When populating a deal ticket I...
 
 - **must** enter a [price](7001-DATA-data_display.md#quote-price). (<a name="7002-SORD-017" href="#7002-SORD-017">7002-SORD-017</a>) 
 - **must** see the price unit (as defined in market) (<a name="7002-SORD-018" href="#7002-SORD-018">7002-SORD-018</a>)
-  - **should** be able quickly pre-populate the price with the current mark price (if there is one, 0 if not) e.g. by focusing the input and hitting up/down (<a name="7002-SORD-011" href="#7002-SORD-011">7002-SORD-011</a>)
-  - **should** have the previous value for the selected market pre-populated (last submitted or last changed) (<a name="7002-SORD-014" href="#7002-SORD-014">7002-SORD-014</a>)
-  - **should** be able to hit up/down on the keyboard to increase the price by the market's tick size (if set, or smallest increment) (<a name="7002-SORD-051" href="#7002-SORD-051">7002-SORD-051</a>)
-    - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows (<a name="7002-SORD-055" href="#7002-SORD-055">7002-SORD-055</a>)
-    - **would like to** be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc. (<a name="7002-SORD-057" href="#7002-SORD-057">7002-SORD-057</a>)
+  - **should** be able quickly pre-populate the price with the current mark price (if there is one, 0 if not) e.g. by focusing the input and hitting up/down
+  - **should** have the previous value for the selected market pre-populated (last submitted or last changed)
+  - **should** be able to hit up/down on the keyboard to increase the price by the market's tick size (if set, or smallest increment)
+    - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows
+    - **would** like to be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc.
 - **must** be warned (pre-submit) if the input price has too many digits after the decimal place for the market ["quote"](7001-DATA-data_display.md#quote-price) (<a name="7002-SORD-059" href="#7002-SORD-059">7002-SORD-059</a>)
 
 ... so that my order only trades at up/down to a particular price
@@ -84,7 +84,7 @@ When populating a deal ticket I...
 ... if wanting to trade regardless of price (or assuming that the market is liquid enough that the current best prices are enough of an indication of the price I'll get)...
 
 - **must not** see a price input (<a name="7002-SORD-019" href="#7002-SORD-019">7002-SORD-019</a>)
-- **should** be warning if the market is in auction and the market order may be rejected (<a name="7002-SORD-052" href="#7002-SORD-052">7002-SORD-052</a>)
+- **should** be warning if the market is in auction and the market order may be rejected
 
 ... so I can quickly submit an order without populating the ticket with elements I don't care about
 
@@ -107,8 +107,8 @@ When populating a deal ticket I...
   - Immediate or cancel `IOC` (<a name="7002-SORD-026" href="#7002-SORD-026">7002-SORD-026</a>)
   - Good for normal trading only `GFN` - not applicable to Market orders (<a name="7002-SORD-027" href="#7002-SORD-027">7002-SORD-027</a>)
   - Good for auction only `GFA` - not applicable to Market orders (<a name="7002-SORD-028" href="#7002-SORD-028">7002-SORD-028</a>)
-- **should** only be warned if the time in force is not applicable to the order type I have selected (<a name="7002-SORD-029" href="#7002-SORD-029">7002-SORD-029</a>)
-- **should** only be warned if the time in force is not applicable to current period's trading mode (<a name="7002-SORD-058" href="#7002-SORD-058">7002-SORD-058</a>)
+- **should** only be warned if the time in force is not applicable to the order type I have selected
+- **should** only be warned if the time in force is not applicable to current period's trading mode
 - if the user has not set a preference: market orders **should** default to `IOC` (<a name="7002-SORD-030" href="#7002-SORD-030">7002-SORD-030</a>)
 - if the user has not set a preference: limit orders **should** default to `GTC` (<a name="7002-SORD-031" href="#7002-SORD-031">7002-SORD-031</a>)
 
