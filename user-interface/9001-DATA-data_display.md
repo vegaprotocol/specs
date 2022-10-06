@@ -10,10 +10,14 @@ This is set per-market and represent the number of contracts that are being brou
 
 `Market.positionDecimalPlaces` tells us where to put the decimal when displaying the number. Size can be a whole number if `Market.positionDecimalPlaces` = 0, or a [fractional order](../protocol/0052-FPOS-fractional_orders_positions.md) if > 0.
 It **should** always be displayed to the full number of decimal places. however, there may be exceptions, e.g. when visualizing on a depth chart, where the precision is not required.
+Size can also be prefixed with a + or negative to imply direction/side + for long (aka buy) and - for short (aka sell)  
 
+## Direction / side
+
+Generally with derivatives (as apposed to spot or cash markets) one talks about going Long as apposed to Buying, Short as apposed to Selling.
 ## Quote price
 
-> aka. price, quote, level.
+> aka. price, quote, level, limit price
 
 This is set per-market and represent the "price" of an asset. It can have a 1-1 relationship with the settlement asset but it is also possible that products will have different payoff methods, which is one of the reasons we don't just use settlement asset, another being in the future some markets could have multiple settlement assets, another being that we don't want 18DP quotes.
 
@@ -34,7 +38,7 @@ The is set per Asset and represents the amount of an asset that is held in the b
 
 Markets do not have names, technically it is the instrument within a market that has the name. Theoretically the same instrument can be traded in multiple markets. if/when this happens a user needs to be able to disambiguate between markets. Each market does have a unique ID, Note: this is a hash of the definition of the market when it was created.
 Instruments have both a Name and Code, see [market framework](../protocol/0001-MKTF-market_framework.md) for how these are used. Generally the Code can save space once a user is familiar with the market. The Name is more descriptive and should be the default when discovering markets. It remains to be seen how the community will use these exactly.
-Markets can have several statuses and it may be sensible when listing markets to highlight their status. e.g. if a market is usually in continuous trading mode, but is currently in an auction due to low liquidity. The market name field could be augmented to show the status (add an icon etc).
+Markets can have several [statuses](../protocol/0043-MKTL-market_lifecycle.md) and it may be sensible when listing markets to highlight their status. e.g. if a market is usually in continuous trading mode, but is currently in an auction due to low liquidity. The market name field could be augmented to show the status (add an icon etc).
 
 ## Public keys
 
@@ -48,3 +52,32 @@ Vega public keys are hexadecimal, but the convention is to display them without 
 > aka Transaction ID, txn, tx
 
 The transaction [hash](https://www.investopedia.com/terms/h/hash.asp) acts as an identifier for a transaction network. It is hexadecimal and should be displayed with the preceding `0x`.
+
+## Order type
+
+There are different [types of orders](../protocol/0014-ORDT-order_types.md). 
+
+- Limit
+- Market
+- Stop-market *- not currently supported*
+- Stop-limit *- not currently supported*
+
+## Time in force
+
+Different order types can have different time in force options, these allow control over how these are executed.
+
+The labels fot these should be shown in full where possible (particularly in context of a order ticket), But can be abbreviated if spaces is short.
+
+  - Good till canceled `GTC`
+  - Good till time `GTT` 
+  - Fill or kill `FOK` 
+  - Immediate or cancel `IOC`
+  - Good for normal trading only `GFN` 
+  - Good for auction only `GFA` 
+
+## Order origin
+
+Some limit orders originate not from a "normal" limit order, but are created by the system for the users when they submitted a pegged order shape or a liquidity provision shape.
+
+# Time
+Times are generally converted to the browser's local time. However in some contexts it is important to show what time zone the stated time is in. e.g. governance votes &amp; and settlement
