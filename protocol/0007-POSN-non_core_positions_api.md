@@ -47,6 +47,12 @@ The API is expected to expose:
 * Buyer P&L (0 if buyer is not closing volume)
 * Seller P&L (0 if seller is not closing volume)
 
+## Position and PnL test
+- [ ] when a party does not have any postion, the realised PnL and unrealised PnL should be 0 (<a name="0007-POSN-009" href="#0007-POSN-009">0007-POSN-009</a>)
+- [ ] when a party has a non-zero postion, and no closeout position, the unrealised PnL should be only impacted by change of position or change of mark price while realised PnL should not be updated (<a name="0007-POSN-010" href="#0007-POSN-010">0007-POSN-010</a>)
+- [ ] when a party has a position which gets (partially) closed-out, the unrealised PnL should reflect the change of position while the realised PnL reflect the closed-out position (<a name="0007-POSN-011" href="#0007-POSN-011">0007-POSN-011</a>)
+- [ ] During settlement, unrealised PnL and realised PnL should be unchanged (<a name="0007-POSN-012" href="#0007-POSN-012">0007-POSN-012</a>)
+
 
 ## Definitions / glossary
 
