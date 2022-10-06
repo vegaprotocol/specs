@@ -42,10 +42,6 @@ When populating a deal ticket I...
 
 - If I have a 0 total balance of the settlement asset: **must** be warned that I have insufficient collateral (but also allow you to populate ticket because I might want to try before I deposit) (<a name="7002-SORD-003" href="#7002-SORD-003">7002-SORD-003</a>)
   - **should** have a way to easily deposit the required collateral
-- **must** see/select the [Market](./DATA-data_display.md#market) I am submitting the order for (<a name="7002-SORD-001" href="#7002-SORD-001">7002-SORD-001</a>)
-  - **must** see the current market trading mode (Continuous, Auction etc) (<a name="7002-SORD-002" href="#7002-SORD-002">7002-SORD-002</a>)
-
-- If I have a 0 total balance of the settlement asset: **must** be warned that I have insufficient collateral (but also allow you to populate ticket because I might want to try before I deposit) (<a name="7002-SORD-003" href="#7002-SORD-003">7002-SORD-003</a>)
   - **should** have a way to easily deposit the required collateral (<a name="7002-SORD-050" href="#7002-SORD-050">7002-SORD-050</a>)
 
 - **must** select a side/direction e.g. long/short (note: some implementations may do this with two different submit buttons long/short rather than a toggle) (<a name="7002-SORD-004" href="#7002-SORD-004">7002-SORD-004</a>)
