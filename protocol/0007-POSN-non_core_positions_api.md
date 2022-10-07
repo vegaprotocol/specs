@@ -51,7 +51,7 @@ The API is expected to expose:
 - [ ] when a party has never had a position, the realised PnL and unrealised PnL should be 0 (<a name="0007-POSN-009" href="#0007-POSN-009">0007-POSN-009</a>)
 - [ ] when a party has a non-zero postion, and no closeout position, only the unrealised PnL should be changed by change of position or change of mark price while realised PnL should not be updated (<a name="0007-POSN-010" href="#0007-POSN-010">0007-POSN-010</a>)
 - [ ] when a party has a position which gets (partially) closed-out, the unrealised PnL should reflect the change of position while the realised PnL reflect the closed-out position (<a name="0007-POSN-011" href="#0007-POSN-011">0007-POSN-011</a>)
-- [ ] During settlement, all the parties' position should become 0, unrealised PnL should become 0 and realised PnL should update (<a name="0007-POSN-012" href="#0007-POSN-012">0007-POSN-012</a>)
+- [ ] During settlement, all the parties' position should become 0, unrealised PnL should become 0 and realised PnL should update based on settlement price (<a name="0007-POSN-012" href="#0007-POSN-012">0007-POSN-012</a>)
 
 ## Definitions / glossary
 
