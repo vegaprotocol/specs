@@ -72,6 +72,8 @@ User will have differing needs/preferences in terms of what they want to see abo
 - if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to cancel the individual order
   - **could** see a link to cancel shape
 
+- `todo` show the reference and offset for an order for liquidity and pegged orders (instead of price?)
+
 ### Filters
 
 - **should** have the ability to see all orders regardless of status in one list
