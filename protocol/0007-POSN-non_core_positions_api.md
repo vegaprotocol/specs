@@ -2,7 +2,7 @@
 
 ## Acceptance Criteria
 
-The Position API stores a net position for each trader who has ever traded in a market. Specifically,
+The Position API provides access to net position per party per market. Specifically,
 
 - [ ] Stores all traders’ net open volume by market in which they have an open position. (<a name="0007-POSN-001" href="#0007-POSN-001">0007-POSN-001</a>)
 - [ ] Updates the open volumes after a new trade. (<a name="0007-POSN-002" href="#0007-POSN-002">0007-POSN-002</a>)
