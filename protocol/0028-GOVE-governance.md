@@ -433,7 +433,7 @@ APIs should also exist for clients to:
 
 ### Network parameter change proposals
 - [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
-- [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
+- [x] Network parameter change proposal can only propose a change to a single parameter at a time (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
 
 Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeForm`. 
 - Change of the network parameter `governance.proposal.*.minEnact` will immediately change the minimum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-051" href="#0028-GOVE-051">0028-GOVE-051</a>)
