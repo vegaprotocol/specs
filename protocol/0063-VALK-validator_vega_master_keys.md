@@ -10,7 +10,7 @@ To this end, other validators need access to the public part of the master key f
 ## Transaction to change the key
 When a validator wishes to change the private key used to sign vega transaction emitted by the node (the hot key), they then generate a new hot key pair from the master key and send a transaction to notify the network of the change of public hot key. This transaction includes the hash of the new public key, signed by the master key:
 ```    
-    hash(HOT_PK),sign_MK('vega_val_key_rotate', key_number, target_block, time, hash(HOT_PK)),
+    hash(HOT_PK),sign_MK('vega_val_key_rotate', key_number, target_block, hash(HOT_PK)),
 ```
 where `key_number` is the sequence number of the derived key to prevent replay attacks, and `target_block` is the block number from which on the chage should be valid.
 
@@ -30,14 +30,11 @@ The public master key has to be added to validators' identities in the genesis c
 
 ## Acceptance Criteria:
 
-### Sweetwater++:
 - There is a function (not necessarily inside core) that takes the master key and an index and computes the corresponding hot key  (<a name="0063-VALK-001" href="#0063-VALK-001">0063-VALK-001</a>)
-- The key-rotate transaction is supported and recognized in the core  (<a name="0063-VALK-002" href="#0063-VALK-002">0063-VALK-002</a>)
-- There is a function that validates if a hot-key is valid  (<a name="0063-VALK-003" href="#0063-VALK-003">0063-VALK-003</a>) 
-- The keys are replaced at the correct time (block number) inside core if a valid key change has occured  (<a name="0063-VALK-004" href="#0063-VALK-004">0063-VALK-004</a>)
-
-### Oregon Trail:
-- Any malformed/wrongly signed key-exchange attempt causes a log entry and if possible a security event.  (<a name="0063-VALK-005" href="#0063-VALK-005">0063-VALK-005</a>)
+- A transaction can be submitted to the network to initiate a Vega key rotation (<a name="0063-VALK-002" href="#0063-VALK-002">0063-VALK-002</a>)
+- A transaction submitted by an old hot-key after `target_block` is not associated by the network as being from a Validator (<a name="0063-VALK-003" href="#0063-VALK-003">0063-VALK-003</a>) 
+- Once `target_block` has been reached the network reports the new key as the validators hot-key (<a name="0063-VALK-004" href="#0063-VALK-004">0063-VALK-004</a>)
+- A key rotation submission which is not signed by the master key is rejected causing a transaction-error event that is visible by the whole network.  (<a name="0063-VALK-005" href="#0063-VALK-005">0063-VALK-005</a>)
 
 
 
