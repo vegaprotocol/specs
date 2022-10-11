@@ -115,9 +115,10 @@ When looking to amend an order, I...
 
 ... so the order is more likely to get filled or will be filled at a more competitive price
 
-## Amend order - other types
+## Amend order - other than price
 
 `TBD` -  Acceptance criteria for other types of order amend 
+
 ## On a price history chart
 
 when looking at a price history chart, I...
@@ -147,22 +148,29 @@ when looking at an order book, I...
 
 When looking to understand the state of a pegged order shape...
 
-- **would** like to see the pegged order status (e.g. active, parked, canceled etc)
-- **would** like to see the shape I submitted
-  - **would** like to see each buy/sell order with it's reference and offset
-  - **would** like to see the current price for each buy/sell
-- **would** like to see what parts of this shape have been filled and what remains
+- **should** see the whole shape of a pegged order
+- **must** see the reference and offset for each part pegged order (<a name="7003-MORD-016" href="#7003-MORD-016">7003-MORD-016</a>)
+- **should** see the current price for each buy/sell
+- **should** see the filled/remaining for each part of the order
+- when order is not `Active`: **should** show the order status (perhaps instead of price)
+- **should** be able to cancel the whole pegged order
+- **would** like to see link to edit the shape of a pegged order
+- **would** like to see the date submitted/updated
 
 ... so I can decide if I wish to amend or cancel my order
 ## Liquidity order shapes
 
-When looking to understand the state of a liquidity provision... 
+When looking to understand the state of a liquidity provision, with a provided shape... 
 
-- **would** like to see the liquidity commitment order status (e.g. pending, active, parked, canceled etc)
-- **would** like to see the shape I submitted
-  - **would** like to see each buy/sell order with it's reference and offset
-  - **would** like to see the current price for each buy/sell
+- **would** like to see the liquidity commitment order status (`pending`, `active`, `parked`, `canceled` etc)
 - **would** like to see the fee bid
+
+- **should** see the whole shape of a liquidity order
+- **must** see the reference and offset for each part liquidity order order (<a name="7003-MORD-017" href="#7003-MORD-017">7003-MORD-017</a>)
+- **should** see the current price for each buy/sell
+- when order is not `Active`: **should** show the order status (perhaps instead of price)
+- **should** see link to cancel the whole liquidity order shape (see [liquidity provision](5002-LIQP-provide_liquidity.md))
+- **would** like to see link to edit the shape of a pegged order (see [liquidity provision](5002-LIQP-provide_liquidity.md))
 - **would** like to see the date submitted/updated
 
 ... so I can decide if I wish to amend or cancel my shape
