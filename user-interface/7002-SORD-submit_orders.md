@@ -109,8 +109,8 @@ When populating a deal ticket I...
   - Good for auction only `GFA` - not applicable to Market orders (<a name="7002-SORD-028" href="#7002-SORD-028">7002-SORD-028</a>)
 - **should** only be warned if the time in force is not applicable to the order type I have selected
 - **should** only be warned if the time in force is not applicable to current period's trading mode
-- if the user has not set a preference: market orders **should** default to `IOC` (<a name="7002-SORD-030" href="#7002-SORD-030">7002-SORD-030</a>)
-- if the user has not set a preference: limit orders **should** default to `GTC` (<a name="7002-SORD-031" href="#7002-SORD-031">7002-SORD-031</a>)
+- if the user has not set a preference: market orders **must** default to `IOC` (<a name="7002-SORD-030" href="#7002-SORD-030">7002-SORD-030</a>)
+- if the user has not set a preference: limit orders **must** default to `GTC` (<a name="7002-SORD-031" href="#7002-SORD-031">7002-SORD-031</a>)
 
 ... so I can control if and how my order stays on the order book
 
@@ -125,19 +125,19 @@ When populating a deal ticket I...
 ## See the potential consequences of an order before it is submit
 ... based on the current inputs I'd like an indication of the consequences of my order based on my position and the state of the market, I...
 
-- **could** see my resulting open volume (<a name="7002-SORD-032" href="#7002-SORD-032">7002-SORD-032</a>)
+- **could** see my resulting open volume 
 - **could** see the amount this order might move the market in percentage terms
 - **could** see what the new best prices of the market would be after placing this order (assuming my order moves the market)
-- **could** see new volume weighted average entry price if not 0 (<a name="7002-SORD-033" href="#7002-SORD-033">7002-SORD-033</a>)
+- **could** see new volume weighted average entry price if not 0 
 - **could** see and indication the volume weighted price that this particular order 
 - **could** see an indication of how much of the order will trade when it hits the book and how much might remain passive
-- **could** see a new liquidation level (<a name="7002-SORD-034" href="#7002-SORD-034">7002-SORD-034</a>)
-- **could** see an estimate of the fees that will be paid (if any) (<a name="7002-SORD-035" href="#7002-SORD-035">7002-SORD-035</a>)
+- **could** see a new liquidation level 
+- **could** see an estimate of the fees that will be paid (if any)
 - **could** see my "position leverage" TODO - define this
 - **could** see my "account leverage" TODO - define this 
-- **could** see an amount of realized Profit / Loss (<a name="7002-SORD-036" href="#7002-SORD-036">7002-SORD-036</a>)
-- **could** see any change in margin requirements (if more or less margin will be required) (<a name="7002-SORD-037" href="#7002-SORD-037">7002-SORD-037</a>)
-- **could** see the notional value of my order (<a name="7002-SORD-038" href="#7002-SORD-038">7002-SORD-038</a>)
+- **could** see an amount of realized Profit / Loss 
+- **could** see any change in margin requirements (if more or less margin will be required) 
+- **could** see the notional value of my order 
 
 ... so that I can adjust my inputs before submitting
 
@@ -152,14 +152,14 @@ When populating a deal ticket I...
 - **must** see feedback on my order [status](https://docs.vega.xyz/docs/mainnet/grpc/vega/vega.proto#orderstatus) (not just transaction status above) (<a name="7002-SORD-040" href="#7002-SORD-040">7002-SORD-040</a>)
   - Active (aka Open) (<a name="7002-SORD-041" href="#7002-SORD-041">7002-SORD-041</a>)
   - Expired (<a name="7002-SORD-042" href="#7002-SORD-042">7002-SORD-042</a>)
-  - Cancelled. Should see the txn that cancelled it and a link to the block explorer, if cancelled by a user transaction. (<a name="7002-SORD-043" href="#7002-SORD-043">7002-SORD-043</a>)
-  - Stopped. **should** see an explanation of why stopped (<a name="7002-SORD-044" href="#7002-SORD-044">7002-SORD-044</a>)
-  - Partially filled. **should** see how much of the [size](7001-DATA-data_display.md#size) if filled/remaining (<a name="7002-SORD-045" href="#7002-SORD-045">7002-SORD-045</a>)
+  - Cancelled. see the txn that cancelled it and a link to the block explorer, if cancelled by a user transaction. (<a name="7002-SORD-045" href="#7002-SORD-045">7002-SORD-045</a>)
+  - Stopped. see an explanation of why stopped (<a name="7002-SORD-044" href="#7002-SORD-044">7002-SORD-044</a>)
+  - Partially filled. **must** see how much of the [size](7001-DATA-data_display.md#size) if filled/remaining (<a name="7002-SORD-045" href="#7002-SORD-045">7002-SORD-045</a>)
   - Filled. Must be able to see/link to all trades that were created from this order. (<a name="7002-SORD-046" href="#7002-SORD-046">7002-SORD-046</a>)
   - Rejected: **must** see the reason it was rejected (<a name="7002-SORD-047" href="#7002-SORD-047">7002-SORD-047</a>)
-  - Parked: **should** see an explanation of why parked orders happen (<a name="7002-SORD-048" href="#7002-SORD-048">7002-SORD-048</a>)
+  - Parked: **must** see an explanation of why parked orders happen (<a name="7002-SORD-048" href="#7002-SORD-048">7002-SORD-048</a>)
 - All feedback must be a subscription so is updated as the status changes (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
- - **could** repeat the values that were submitted (order type + all fields) (<a name="7002-SORD-049" href="#7002-SORD-049">7002-SORD-049</a>)
+ - **could** repeat the values that were submitted (order type + all fields)
 
 ... so that I am aware of the status of my order before seeing it in the [orders table](6002-MORD-manage_orders.md).
 
