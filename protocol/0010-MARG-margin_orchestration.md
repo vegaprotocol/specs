@@ -11,6 +11,15 @@
 1. [ ] The mark price changes causing the trader’s margin to move into the close-out zone. A collateral search is initiated and the margin is topped back up to the search zone. No further actions are taken. (<a name="0010-MARG-009" href="#0010-MARG-009">0010-MARG-009</a>)
 1. [ ] The mark price changes causing the trader’s margin to move into the close-out zone. A collateral search is initiated and the margin is topped back up to a level which results in the trader still being in the close-out zone.  (<a name="0010-MARG-010" href="#0010-MARG-010">0010-MARG-010</a>)
 1. [ ] The mark price changes causing the trader’s margin to move in to the release level. Margin should be released back to the trader. (<a name="0010-MARG-011" href="#0010-MARG-011">0010-MARG-011</a>) 
+1. [ ] Maintenance margin is correctly calculated for a party with orders / positions when obtaining risk factors from the lognormal risk model under various different parameters: In particular we see that 
+    - maintenance margin obtained when sigma is 1.0 is lower than maintenance margin obtained when sigma is 1.5 (<a name="0010-MARG-012" href="#0010-MARG-012">0010-MARG-012</a>) 
+    - maintenance margin obtained when tau is 1.0/365.25/24 is lower than maintenance margin obtained when tau is 1.0/365.25/24/12 (<a name="0010-MARG-013" href="#0010-MARG-013">0010-MARG-013</a>)
+    - maintenance margin obtained when risk aversion / lambda is 0.01 is lower than maintenance margin obtained when risk aversion / lambda is 0.0001 (<a name="0010-MARG-014" href="#0010-MARG-014">0010-MARG-014</a>)  
+1. [ ] The margin scaling levels (maintenance, search, initial, release) are correctly applied to the maintenance margin that is calculated by the risk model. In particular we see that:
+    - if there are two identical markets except that one has release level set to 1.7 and the other to 2.0 then a party has to see more mark-to-market gains on a position on the market with 2.0 than on the market with 1.7 to see funds transferred into the general account (<a name="0010-MARG-015" href="#0010-MARG-015">0010-MARG-015</a>)  
+    - if there are two identical markets except that one has search level set to 1.1 and the other to 1.3 then the system will transfer funds from general to margin for a party that sees mark-to-market losses on its position earlier on the market with 1.3 than on the market with 1.1 to see funds transferred into the general account (<a name="0010-MARG-016" href="#0010-MARG-016">0010-MARG-016</a>)
+    - if there are two identical markets except that one has initial level 1.3 and the other 1.5 then a party with no position or orders that places a market order will see a bigger transfer to the margin account on the market with 1.5 than on the one with 1.3. (<a name="0010-MARG-017" href="#0010-MARG-017">0010-MARG-017</a>)
+
 
 ## Summary
 This ticket encapsulates the orchestration of business logic which interfaces with the specified [risk model](./0018-RSKM-quant_risk_models.ipynb) (specified at the instrument level) to ensure that margin levels are calculated whenever certain conditions are met.
