@@ -149,7 +149,7 @@ when looking at an order book, I...
 When looking to understand the state of a pegged order shape...
 
 - **should** see the whole shape of a pegged order
-- **must** see the reference and offset for each part pegged order (<a name="7003-MORD-016" href="#7003-MORD-016">7003-MORD-016</a>)
+- **must** see the reference, offset and direction for each part pegged order (<a name="7003-MORD-016" href="#7003-MORD-016">7003-MORD-016</a>)
 - **should** see the current price for each buy/sell
 - **should** see the filled/remaining for each part of the order
 - when order is not `Active`: **should** show the order status (perhaps instead of price)
@@ -166,7 +166,7 @@ When looking to understand the state of a liquidity provision, with a provided s
 - **would** like to see the fee bid
 
 - **should** see the whole shape of a liquidity order
-- **must** see the reference and offset for each part liquidity order order (<a name="7003-MORD-017" href="#7003-MORD-017">7003-MORD-017</a>)
+- **must** see the reference, offset and direction for each part liquidity order order (<a name="7003-MORD-017" href="#7003-MORD-017">7003-MORD-017</a>)
 - **should** see the current price for each buy/sell
 - when order is not `Active`: **should** show the order status (perhaps instead of price)
 - **should** see link to cancel the whole liquidity order shape (see [liquidity provision](5002-LIQP-provide_liquidity.md))
