@@ -4,7 +4,6 @@ A *Mark Price* is a concept derived from traditional markets.  It is a calculate
 
 # Acceptance criteria
 
-- [ ] The algorithm used to calculate the mark price is specified by a market parameter.  (<a name="0009-COSMICELEVATOR-001" href="#0009-COSMICELEVATOR-001">0009-COSMICELEVATOR-001</a>)
 - [ ] The mark price must be non zero when the market opens  (<a name="0009-MRKP-002" href="#0009-MRKP-002">0009-MRKP-002</a>)
 
 
