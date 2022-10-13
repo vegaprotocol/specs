@@ -178,7 +178,7 @@ This must be an integer strictly greater than `0`.
 
 ## Validation
 ### ERC20 Validation
-- [ ] The contract address in the ERC20 proposal **must** be validated as an ERC20 asset(<a name="0027-ASSP-009" href="#0027-ASSP-009">0027-ASSP-009</a>)
+- [ ] A valid contract address, which exists in ethereum and is specified in the ERC20 proposal **must** be validated as conforming as an ERC20 asset(<a name="0027-ASSP-009" href="#0027-ASSP-009">0027-ASSP-009</a>)
 - [ ] An ERC20 proposal **must** provide a name and that name **must** exactly equal the name of the ERC20 token on the target chain (<a name="0027-ASSP-010" href="#0027-ASSP-010">0027-ASSP-010</a>)
 - [ ] An ERC20 proposal **must** provide a code and that code **must** exactly equal the name of the ERC20 token on the target chain (<a name="0027-ASSP-011" href="#0027-ASSP-011">0027-ASSP-011</a>)
 - [ ] An ERC20 proposal **must** provide a decimal places property and that property **must** exactly equal the decimal places property of the ERC20 token on the target chain (<a name="0027-ASSP-012" href="#0027-ASSP-012">0027-ASSP-012</a>)
@@ -191,6 +191,8 @@ This must be an integer strictly greater than `0`.
 - [ ] `quantum` must be an integer strictly greater than `0` (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)
 - [ ] There can be multiple concurrent proposals for the same new ERC20 asset (same means identical Ethereum address). Once the nodes agree (based on events from the external blockchain queue), that the asset is enabled on the bridge all the remaining proposals for the same asset are cancelled. 
 (<a name="0027-ASSP-020" href="#0027-ASSP-020">0027-ASSP-020</a>)
+- [ ] An invalid contract address, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-022" href="#0027-ASSP-022">0027-ASSP-022</a>)
+- [ ] An valid contract address which cannot be found in ethereum, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-023" href="#0027-ASSP-023">0027-ASSP-023</a>)
 
 
 ## Delays and Thresholds
