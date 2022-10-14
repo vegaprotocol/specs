@@ -99,10 +99,10 @@ When looking at a particular proposal, I...
 - **must** have option to see raw JSON of proposal <a name="3001-VOTE-052" href="#3001-VOTE-052">3001-VOTE-052</a>
 - **should** display the proposed change <a name="3001-VOTE-053" href="#3001-VOTE-053">3001-VOTE-053</a>
 
-- **must** show the rationale text <a name="3001-VOTE-054" href="#3001-VOTE-054">3001-VOTE-054</a>
-- **must** show the rationale URL <a name="3001-VOTE-055" href="#3001-VOTE-055">3001-VOTE-055</a>
-- **should** see that the Dapp has verified that the text on the rationale matches the hash <a name="3001-VOTE-056" href="#3001-VOTE-056">3001-VOTE-056</a>
-
+- **must** see the rationale title <a name="3001-VOTE-054" href="#3001-VOTE-054">3001-VOTE-054</a>
+- **must** see the rationale description if there is one <a name="3001-VOTE-055" href="#3001-VOTE-055">3001-VOTE-055</a>
+- **should** see rationale description rendered as mark down
+  
 For open proposals:
 
 - **must** show a summary of vote status (base on the current total amount associated tokens, note this could change before the vote ends) <a name="3001-VOTE-057" href="#3001-VOTE-057">3001-VOTE-057</a>

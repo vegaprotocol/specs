@@ -25,8 +25,7 @@ when making a proposal, I...
 
 When making a proposal, I...
 
-- **must** input a rationale <a name="3002-PROP-006" href="#3002-PROP-006">3002-PROP-006</a>
-- **must** input a rationale URL <a name="3002-PROP-007" href="#3002-PROP-007">3002-PROP-007</a>
+- **must** input a rationale title and description <a name="3002-PROP-006" href="#3002-PROP-006">3002-PROP-006</a>
 - **must** see the rules (min vote duration and enactment delay) for this proposal type <a name="3002-PROP-008" href="#3002-PROP-008">3002-PROP-008</a>
 - if anything except market change: **must** be warned if the amount I have associated is less the the minimum required to propose for this proposal type <a name="3002-PROP-009" href="#3002-PROP-009">3002-PROP-009</a>
 - if market change: **must** be warned if the amount I have less than the minimum required equity like share to propose a change <a name="3002-PROP-020" href="#3002-PROP-020">3002-PROP-020</a>
