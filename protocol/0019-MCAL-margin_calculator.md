@@ -38,7 +38,8 @@ The calculator takes as inputs:
 - ```scaling levels``` defined in the risk parameters for a market
 - ```quantitative risk factors```
 
-Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as ints (i.e. int64). In this case, **care must be taken** to ensure that the acutal fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actualy 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable becuae outside of margin calculations, and display to end users, the integer values can generally be used as-is.
+Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as ints (i.e. int64). In this case, **care must be taken** to ensure that the acutal fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actually 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable becausee outside of margin calculations, and display to end users, the integer values can generally be used as-is. 
+Note also that if PDP is negative e.g. PDP = -2 then an integer open volume of 12345  is actually 1234500.
 
 and returns 4 margin requirement levels
 

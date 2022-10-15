@@ -62,7 +62,8 @@ In the case of trades, as long as the right data is stored, this can be done in 
 
 ## Updating position size
 
-Position size is a number that represents the net transacted volume of a trader in the market. The position size is therefore only ever updated when a trader is party to a trade. A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md).
+Position size is a number that represents the net transacted volume of a trader in the market. The position size is therefore only ever updated when a trader is party to a trade. A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). 
+Note that negative PDP e.g. -2 means the smallest size is 100.
 
 The Position core functionality processes each trade in the following way:
 

@@ -81,4 +81,3 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
 - [ ] Price bounds are calculated in asset precision, but enforced rounded to the closest value in market precision in range (<a name="0070-MKTD-006" href="#0070-MKTD-006">0070-MKTD-006</a>)
 - [ ] As a user, offsets specified in pegged orders and LP shapes represent the smallest value according to the market precision (<a name="0070-MKTD-007" href="#0070-MKTD-007">0070-MKTD-007</a>)
 - [ ] Trades prices, like orders, are shown in market precision. The transfers and margin requirements are in asset precision. ( <a name="0070-MKTD-008" href="#0070-MKTD-008">0070-MKTD-008</a>)
-- [ ] As a user I should see the trader's order and position size using `Position Decimal Places`. The `Position Decimal Places` are integer, ranging between -7 and 7. (<a name="0070-MKTD-009" href="#0070-MKTD-009">0070-MKTD-009</a>)
