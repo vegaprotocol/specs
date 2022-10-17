@@ -37,7 +37,7 @@ Note: balances can change frequently when users have open positions. Apps should
   - **should** be able to withdraw to a different Ethereum key to the one the app is connected to
   - **should** be warned if the input does not look like an ethereum address (wrong number of digits, not starting with 0x etc)
 
-- if there is a withdraw delay on the selected [asset](9001-DATA-data_display.md#asset-balances):
+- if there is a withdraw delay on the selected asset:
   - **should** see what the withdraw delay is in hours and mins (if hit)
   - **should** see how large a withdrawal (or sum of withdrawals) needs to be to hit the `withdraw delay threshold`
   - **should** see how much I have withdrawn in the last `withdraw delay period`

@@ -11,7 +11,7 @@ When about to click to prompt Ethereum wallet to sign a transaction, I...
 
 after clicking to submit an eth transaction to a connected wallet, I...
 
-- **could** see an indication of current gas prices compared to a recent history
+- **could** see an estimate for gas prices compared to a recent history
 - **could** see an estimated gas price for the function in question
 - **must** see prompt to check Ethereum wallet to approve transactions
 
