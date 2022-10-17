@@ -29,8 +29,8 @@ If the transaction in question requires an ERC20 approval, I...
 - if the current approved amount is less than the amount being "spent": **must** see be prompt to approve 
 - **could** see the current approved amount
 - **should** be able to set the amount to be approved (incase the connected wallet does not handle this)
-- **must** send an approve transaction with either a user specified amount or a very large number
-- **must** see feedback of the state of approve transaction see "tracking ethereum transactions" below.
+- **must** send an approve transaction with either a user specified amount or a very large number (<a name="0005-ETXN-001" href="#0005-ETXN-001">0005-ETXN-001</a>)
+- **must** see feedback of the state of approve transaction see "tracking ethereum transactions" below. (<a name="0005-ETXN-002" href="#0005-ETXN-002">0005-ETXN-002</a>)
 
 ... so I can control the maximum permitted transfer to the contract in question
 
@@ -39,8 +39,8 @@ If the transaction in question requires an ERC20 approval, I...
 After approving a transaction in my wallet app, I...
 
 - **should** see link to the transaction on etherscan
-- **must** see the transactions status (Pending, confirmed, etc) on Ethereum by reading Ethereum (via connected wallet or the back up node specified in the app) 
-- if failed: **must** see why the transaction failed (e.g. didn't pay enough gas)
+- **must** see the transactions status (Pending, confirmed, etc) on Ethereum by reading Ethereum (via connected wallet or the back up node specified in the app) (<a name="0005-ETXN-003" href="#0005-ETXN-003">0005-ETXN-003</a>)
+- if failed: **must** see why the transaction failed (e.g. didn't pay enough gas) (<a name="0005-ETXN-004" href="#0005-ETXN-004">0005-ETXN-004</a>)
 - if success: **should** see how many blocks ago the transaction was confirmed by the eth node being read
 
 ... so I can see the status of the transaction and debug as appropriate
@@ -51,6 +51,6 @@ If the ethereum transaction I've just submitted changes the state of the Vega ne
 
 - **should** see how many Ethereum blocks Vega needs to wait before changing the state of Vega
 - **should** see how many blocks have passed or remain until the required number has been met
-- **must** see whether the expect action has taken place on Vega (e.g. credited Vega key)
+- **must** see whether the expect action has taken place on Vega (e.g. credited Vega key) (<a name="0005-ETXN-005" href="#0005-ETXN-005">0005-ETXN-005</a>)
 
 ... so I know vega has been updated as appropriate 
