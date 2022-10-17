@@ -8,7 +8,7 @@ See [Specs for eth bridge](../protocol/0031-ETHB-ethereum_bridge_spec.md) and [d
 
 When wishing to withdraw some of an ERC20 asset from Vega, I...
 
-- **should** be prompted to complete any existing incomplete withdrawals that exist for connected keys (see [complete withdrawal](#complete-erc20-withdraw-on-ethereum))
+- **should** be prompted to complete any existing incomplete withdrawals that exist for connected keys (see [complete withdrawal](#complete-erc20-withdraw-from-ethereum-bridge)))
 
 Note: It is better to encourage the completion of started withdraws as soon as possible after starting them. This is because the validator set could theoretically change enough to make the node signatures that authorize the withdrawal invalid.
 
@@ -18,13 +18,13 @@ Note: It is better to encourage the completion of started withdraws as soon as p
 Note: A user may want to delay preparing a withdrawal if gas fees on the network are particularly high at the time
 
 - **must** select the asset to withdraw (<a name="1002-WITH-001" href="#1002-WITH-001">1002-WITH-001</a>)
-  - **should not** see option to select assets where I a zero [total balance](7001-DATA-data_display.md#asset-balances) (note this should also avoid `Pending` assets from appearing in the list)
+  - **should not** see option to select assets where I a zero [total balance](9001-DATA-data_display.md#asset-balances) (note this should also avoid `Pending` assets from appearing in the list)
   - **must** see the general balance I have for that asset (<a name="1002-WITH-002" href="#1002-WITH-002">1002-WITH-002</a>)
   - **should** see balances to the full number of decimal places possible for that asset
   - **should** see the total balances of the assets I have
   - **could** see a breakdown of other accounts I have in this asset and their balances
 
-- **must** select the [amount](7001-DATA-data_display.md#asset-balances) of the asset I wish to withdraw (<a name="1002-WITH-003" href="#1002-WITH-003">1002-WITH-003</a>)
+- **must** select the [amount](9001-DATA-data_display.md#asset-balances) of the asset I wish to withdraw (<a name="1002-WITH-003" href="#1002-WITH-003">1002-WITH-003</a>)
   - **should** have an easy option (link/button) to withdraw the full amount in general balance (e.g. pre-populate the amount input)
   - **must** be able to specify as many decimal places as the asset supports (<a name="1002-WITH-004" href="#1002-WITH-004">1002-WITH-004</a>)
 - **must** be warned if the amount is greater than general balance (<a name="1002-WITH-005" href="#1002-WITH-005">1002-WITH-005</a>)
@@ -37,7 +37,7 @@ Note: balances can change frequently when users have open positions. Apps should
   - **should** be able to withdraw to a different Ethereum key to the one the app is connected to
   - **should** be warned if the input does not look like an ethereum address (wrong number of digits, not starting with 0x etc)
 
-- if there is a withdraw delay on the selected [asset](7001-DATA-data_display.md#asset-balances):
+- if there is a withdraw delay on the selected [asset](9001-DATA-data_display.md#asset-balances):
   - **should** see what the withdraw delay is in hours and mins (if hit)
   - **should** see how large a withdrawal (or sum of withdrawals) needs to be to hit the `withdraw delay threshold`
   - **should** see how much I have withdrawn in the last `withdraw delay period`
