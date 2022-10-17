@@ -55,7 +55,7 @@ Note: balances can change frequently when users have open positions. Apps should
     - **should** be prompted to complete the transaction on ethereum (see [complete ERC20 withdraw](#complete-erc20-withdraw-from-ethereum-bridge))
     - **could** be directed to a list of incomplete withdrawals
   - if this withdraw will hit withdrawal threshold: 
-    - **must** see that the withdraw has been complete and is in the list waiting for the delay to pass (<a name="1002-WITH-011" href="#1002-WITH-011">1002-WITH-011</a>)
+    - **must** see that the withdraw has been complete and is in the list waiting for the delay to pass (<a name="1002-WITH-024" href="#1002-WITH-024">1002-WITH-024</a>)
 
 ...so that I can get the details required to release my funds from the the Ethereum ERC20 bridge.
 
