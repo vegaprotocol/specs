@@ -154,7 +154,7 @@ When populating a deal ticket I...
   - Expired (<a name="7002-SORD-042" href="#7002-SORD-042">7002-SORD-042</a>)
   - Cancelled. see the txn that cancelled it and a link to the block explorer, if cancelled by a user transaction. (<a name="7002-SORD-043" href="#7002-SORD-043">7002-SORD-045</a>)
   - Stopped. see an explanation of why stopped (<a name="7002-SORD-044" href="#7002-SORD-044">7002-SORD-044</a>)
-  - Partially filled. **must** see how much of the [size](7001-DATA-data_display.md#size) if filled/remaining (<a name="7002-SORD-045" href="#7002-SORD-045">7002-SORD-045</a>)
+  - Partially filled. **must** see how much of the [size](7001-DATA-data_display.md#size) if filled/remaining (<a name="7002-SORD-064" href="#7002-SORD-064">7002-SORD-064</a>)
   - Filled. Must be able to see/link to all trades that were created from this order. (<a name="7002-SORD-046" href="#7002-SORD-046">7002-SORD-046</a>)
   - Rejected: **must** see the reason it was rejected (<a name="7002-SORD-047" href="#7002-SORD-047">7002-SORD-047</a>)
   - Parked: **must** see an explanation of why parked orders happen (<a name="7002-SORD-048" href="#7002-SORD-048">7002-SORD-048</a>)
