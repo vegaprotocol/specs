@@ -8,7 +8,7 @@ See [Specs for eth bridge](../protocol/0031-ETHB-ethereum_bridge_spec.md) and [d
 
 When wishing to withdraw some of an ERC20 asset from Vega, I...
 
-- **should** be prompted to complete any existing incomplete withdrawals that exist for connected keys (see [complete withdrawal](#complete-erc20-withdraw-from-ethereum-bridge)))
+- **should** be prompted to complete any existing incomplete withdrawals that exist for connected keys (see [complete withdrawal](#complete-erc20-withdraw-from-ethereum-bridge))
 
 Note: It is better to encourage the completion of started withdraws as soon as possible after starting them. This is because the validator set could theoretically change enough to make the node signatures that authorize the withdrawal invalid.
 
