@@ -25,12 +25,11 @@ when making a proposal, I...
 
 When making a proposal, I...
 
-- **must** input a rationale <a name="3002-PROP-006" href="#3002-PROP-006">3002-PROP-006</a>
-- **must** input a rationale URL <a name="3002-PROP-007" href="#3002-PROP-007">3002-PROP-007</a>
+- **must** input a rationale title and description <a name="3002-PROP-006" href="#3002-PROP-006">3002-PROP-006</a>
 - **must** see the rules (min vote duration and enactment delay) for this proposal type <a name="3002-PROP-008" href="#3002-PROP-008">3002-PROP-008</a>
 - if anything except market change: **must** be warned if the amount I have associated is less the the minimum required to propose for this proposal type <a name="3002-PROP-009" href="#3002-PROP-009">3002-PROP-009</a>
 - if market change: **must** be warned if the amount I have less than the minimum required equity like share to propose a change <a name="3002-PROP-020" href="#3002-PROP-020">3002-PROP-020</a>
-- **should** see the balance of associated Governance tokens <a name="3002-PROP-010" href="#3002-PROP-010">3002-PROP-010</a>
+- **should** see the balance of associated Governance tokens
 
 ### Detail on specific proposals
 
@@ -50,11 +49,11 @@ Go to the following for detail on each proposal type:
 - If there is an error on the proposal:
   - **must** be shown an error message will all of the error details from the API <a name="3002-PROP-013" href="#3002-PROP-013">3002-PROP-013</a>
   - **must** see the proposal form populated with all the same values just submitted <a name="3002-PROP-014" href="#3002-PROP-014">3002-PROP-014</a>
-  - **should** see error messages highlighted on the inputs that require user attention <a name="3002-PROP-015" href="#3002-PROP-015">3002-PROP-015</a>
+  - **should** see error messages highlighted on the inputs that require user attention
 - If the proposal was successful:
   - **must** be shown it was successful <a name="3002-PROP-016" href="#3002-PROP-016">3002-PROP-016</a>
-  - **should** be prompted to vote on the proposal <a name="3002-PROP-017" href="#3002-PROP-017">3002-PROP-017</a>
-  - **should** be prompted to share the proposal detail page to encourage others to vote <a name="3002-PROP-018" href="#3002-PROP-018">3002-PROP-018</a>
+  - **should** be prompted to vote on the proposal
+  - **should** be prompted to share the proposal detail page to encourage others to vote
   - **must** see a link to the proposal detail page <a name="3002-PROP-019" href="#3002-PROP-019">3002-PROP-019</a>
 
 ...so that the proposal is listed on the chain and I and others can vote for or against it.
