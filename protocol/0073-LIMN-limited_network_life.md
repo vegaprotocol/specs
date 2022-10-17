@@ -102,9 +102,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 - [ ] Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. 💧 (<a name="0073-LIMN-001" href="#0073-LIMN-001">0073-LIMN-001</a>)
 - [ ] Checkpoint is created every time a party requests a withdrawal transaction on any chain. 💧 (<a name="0073-LIMN-002" href="#0073-LIMN-002">0073-LIMN-002</a>)
 - [ ] We can launch a network with any valid checkpoint file. 💧 (<a name="0073-LIMN-003" href="#0073-LIMN-003">0073-LIMN-003</a>)
-- [ ] Vega network with a restore file hash in genesis will wait for a restore transaction before accepting any other type of transaction. 💧 (<a name="0073-LIMN-004" href="#0073-LIMN-004">0073-LIMN-004</a>)
 - [ ] Hash of the checkpoint file is agreed via consensus. 💧 (<a name="0073-LIMN-005" href="#0073-LIMN-005">0073-LIMN-005</a>)
-- [ ] A node will not sign a withdrawal transaction bundle before making the relevant checkpoint. 💧 (<a name="0073-LIMN-006" href="#0073-LIMN-006">0073-LIMN-006</a>)
 
 ## 💧 Test case 1: Withdrawal status is correctly tracked across resets (<a name="0073-LIMN-007" href="#0073-LIMN-007">0073-LIMN-007</a>)
 1. A party has general account balance of 100 tUSD.
@@ -268,26 +266,6 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. When the EthereumEventListener has replayed all staking events
 1. Then that party has a staking account balance of 100
 1. And that party has 10 VEGA undelegated
-
-## 💧 Test case 8: Transactions submitted before the restore transaction on a chain with a checkpoint hash specified are rejected (<a name="0073-LIMN-019" href="#0073-LIMN-019">0073-LIMN-019</a>)
-1. The network is shut down.
-1. The network is restarted with the checkpoint hash in genesis, but the replay transaction is not submitted.
-1. Any transaction other than replay is submitted
-1. Then that transaction is rejected
-
-## 💧 Test case 9: A replay transaction is submitted with a checkpoint that does not match the hash (<a name="0073-LIMN-020" href="#0073-LIMN-020">0073-LIMN-020</a>)
-1. The network is shut down.
-1. The network is restarted with the checkpoint hash from a checkpoint in genesis
-1. A restore transaction is submitted
-1. And the checkpoint data in the restore transaction does not match the hash specified in genesis
-1. Then the restore transaction is rejected
-1. And the state is not restored
-
-## 💧 Test case 10: Only one valid replay transaction can ever occur (<a name="0073-LIMN-021" href="#0073-LIMN-021">0073-LIMN-021</a>)
-1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
-1. Another validator submits a replay transaction
-1. That transaction is rejected
 
 ## Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0073-LIMN-022" href="#0073-LIMN-022">0073-LIMN-022</a>)
 1. More than one party deposits stake onto Vega
