@@ -2,11 +2,11 @@
 
 Signed messages are the first type of data from external data sources to be supported by Vega. See the [Data Sourcing spec](./0045-DSRC-data_sourcing.md) for more information on data sources in general and the data source framework.
 
-Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by a set of public keys provided as part of the _data source definition_. Note the data supplied by the data source can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
+Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by a set of signing keys/addresses (signers) provided as part of the _data source definition_. Note the data supplied by the data source can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
 
 This spec adds:
 - a transaction that allows arbitrary signed data to be submitted to the Vega blockchain (creating a stream of data that can be matched against a data source definition or discarded if not matched)
-- a way to define a data source that validates these messages against the predefined set of allowable public keys and emits the data received by such a stream 
+- a way to define a data source that validates these messages against the predefined set of allowable signers and emits the data received by such a stream
 
 Data can be submitted at any time. Not all data provided by the source needs to be used by a given consumer as the stream can be an input to a [filter data source definition](./0047-DSRF-data_source_filter.md) that will emit only wanted values, allowing a single stream of data from a signer to supply, for example, many markets.
 
@@ -23,7 +23,7 @@ Note: With this type of oracle there’s no incentive in the Vega data source sy
 
 A data source must define:
 
-- Public keys (and key algorithm to be used if required) that can sign and submit values for this (external) source
+- Signers that can sign and submit values for this (external or internal) source. Signers can be different types of keys/addresses that are used by the data source to sign the data. They have different encryption schemes and are treated differently in the DB settings and in codebase level. Examples are public keys used to sign the data, in case of an Open Oracle - Ethereium address.
 - Type of data to be supplied in the transaction. Initially we should support the following types:
     - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main data source spec (keys are strings)
     - ABI encoded encoded data. Specifically for oracles, we want to be able to support at least the OpenOracle standard by this method
@@ -121,6 +121,6 @@ Where possible, this should be done before the transaction is included in a bloc
 - There are no [rewards](./0056-REWA-rewards_overview.md) associated with being a signed message data source
 - There are no [fees](./0029-FEES-fees.md) associated with being/using a signed message data source
 - There is no internal tracking of reliability of data provided by signed message data sources
-- There is no explicit block list for unreliable signed message data sources or malicious public keys.
+- There is no explicit block list for unreliable signed message data sources or malicious public keys or addresses (signers).
 - There is no API required for signed message data sources except for the APIs defined for all data sources in the data sourcing framework spec.
 - There is no requirement for a party operating a signed message data source (i.e. the holder of the private key) to hold any collateral or any of the governance asset.
