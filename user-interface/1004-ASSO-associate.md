@@ -19,7 +19,7 @@ Governance tokens may be held by a [Vesting contract](1001-VEST-vesting.md).
 
 When looking to acquire governance tokens, I...
 
-- **must** see the contract address for the governance token of the Vega network <a name="1004-ASSO-01" href="#1004-ASSO-01">1004-ASSO-01</a>
+- **must** see the contract address for the governance token of the Vega network <a name="1004-ASSO-001" href="#1004-ASSO-001">1004-ASSO-001</a>
 
 ...so I can participate in governance and staking.
 
