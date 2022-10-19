@@ -12,18 +12,15 @@ When looking to understand to overall vesting schedule for tokens, I...
 For each tranche:
 
 - **must** see a tranche number <a name="1005-VEST-003" href="#1005-VEST-003">1005-VEST-003</a>
-- **could** see any annotation of what this tranche is about (e.g. community schedule A) <a name="1005-VEST-004" href="#1005-VEST-004">1005-VEST-004</a>
+- **could** see any annotation of what this tranche is about (e.g. community schedule A)
 - **must** see a sum of tokens in the tranche <a name="1005-VEST-005" href="#1005-VEST-005">1005-VEST-005</a>
   - **must** see how many tokens in the tranche are locked <a name="1005-VEST-006" href="#1005-VEST-006">1005-VEST-006</a>
   - **must** see how how many tokens in the tranche are redeemable <a name="1005-VEST-007" href="#1005-VEST-007">1005-VEST-007</a>
-- **must** see the vesting terms for each tranche <a name="1005-VEST-008" href="#1005-VEST-008">1005-VEST-008</a>
-  - **must** see when the tranche starts (or will start) unlocking <a name="1005-VEST-009" href="#1005-VEST-009">1005-VEST-009</a>
-  - **must** see when all the tokens in tranche should be unlocked <a name="1005-VEST-010" href="#1005-VEST-010">1005-VEST-010</a>
-- **could** see the number of wallets with tokens in each tranche <a name="1005-VEST-011" href="#1005-VEST-011">1005-VEST-011</a>
+- **must** see the vesting terms for each tranche (when unlocking stats and ends) <a name="1005-VEST-008" href="#1005-VEST-008">1005-VEST-008</a>
 
 ... so I can understand how circulating supply could change over time.
 
-## details of a tranche
+## Details of a tranche
 
 When looking into a specific tranche, I...
 
@@ -33,18 +30,18 @@ When looking into a specific tranche, I...
 for each ethereum wallet:
 
 - **must** see the full eth address of the wallet <a name="1005-VEST-014" href="#1005-VEST-014">1005-VEST-014</a>
-- **must** see the total tokens this address holds from this tranche <a name="1005-VEST-015" href="#1005-VEST-015">1005-VEST-015</a>
+- **must** see the total tokens this address holds in this tranche <a name="1005-VEST-015" href="#1005-VEST-015">1005-VEST-015</a>
   - **must** see how many tokens in the tranche are locked <a name="1005-VEST-016" href="#1005-VEST-016">1005-VEST-016</a>
   - **must** see how how many tokens in the tranche are redeemable <a name="1005-VEST-017" href="#1005-VEST-017">1005-VEST-017</a>
 
 ... so I can see the details of how tokens are distributed in this tranche
 
-## see summary for a given Ethereum key
+## See summary for a given Ethereum key
 
 When looking to see how many tokens I have in total, and how many I might be able to redeem, I...
 
 - **must** be able to [Connect and ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) <a name="1005-VEST-018" href="#1005-VEST-018">1005-VEST-018</a>
-- **should** be able input an ethereum address <a name="1005-VEST-019" href="#1005-VEST-019">1005-VEST-019</a>
+- **should** be able input an ethereum address
 
 for the a given Ethereum wallet/address/key:
 
@@ -57,10 +54,12 @@ for the a given Ethereum wallet/address/key:
   - **must** see how many tokens in each tranche are redeemable <a name="1005-VEST-026" href="#1005-VEST-026">1005-VEST-026</a>
   - **must** see an option to redeem from tranche <a name="1005-VEST-027" href="#1005-VEST-027">1005-VEST-027</a>
   - **must** be warned if amount that can be redeemed from that tranche is greater than the un-associated balance for that Eth key (because this will cause the redeem function to fail) <a name="1005-VEST-028" href="#1005-VEST-028">1005-VEST-028</a>
+  - **should** see how many tokens I'd need to disassociate to be able to run the redeem function (this should be rounded up to avoid the transaction failing due to more tokens having unlocked since the user looked at the form)
+  - **should** see link to [disassociate](1004-ASSO-associate.md) 
 
 ... so I can easily see how many tokens I have, and can redeem.
 
-## redeem tokens from a tranche
+## Redeem tokens from a tranche
 
 Note: it is not possible to choose how many tokens you redeem from a tranche, instead you select a tranche and the smart contract will attempt to redeem all. However, it will fail if some of the amount it attempts to redeem have been associated to a Vega key. Therefore the job of this page is to help the user work out how many tokens to disassociate before they can successfully redeem.
 
@@ -71,7 +70,6 @@ When looking to redeem tokens, I...
 - **must** see the number of tokens that can be redeemed <a name="1005-VEST-031" href="#1005-VEST-031">1005-VEST-031</a>
 - **must** submit the redeem from tranche [ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) <a name="1005-VEST-032" href="#1005-VEST-032">1005-VEST-032</a>
 - **must** get feedback on the progress of the Ethereum transaction <a name="1005-VEST-033" href="#1005-VEST-033">1005-VEST-033</a>
-- **must** see updated balances after redemption <a name="1005-VEST-034" href="#1005-VEST-034">1005-VEST-034</a>
+- **must** see updated balances (in the trance and my eth wallet) after redemption <a name="1005-VEST-034" href="#1005-VEST-034">1005-VEST-034</a>
 
 ... so that I can use this tokens more generally on Ethereum (transfer to another key etc)
- 
