@@ -1,6 +1,6 @@
 # Propose new Asset
 
-- **must** input the new asset definition <a name="3005-PASN-001" href="#3005-PASN-001">3005-PASN-001</a>
+- **must** input the new asset definition (<a name="3005-PASN-001" href="#3005-PASN-001">3005-PASN-001</a>)
 
 ## Submit proposal
 
