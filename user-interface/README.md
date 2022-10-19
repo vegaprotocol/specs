@@ -42,14 +42,14 @@ These files contain generic user needs for interacting with wallets that are tru
 
 ## `3000` Governance
 
-- `3001-VOTE` [See proposals and Vote on changes](3001-VOTE-vote.md) `TODO`
-- `3002-PROP` [Select proposal type](3002-PROP-propose.md) `TODO`
-- `3003-PMAN` [Propose new Market](3003-PMAN-propose_new_market.md) `TODO`
-- `3004-PMAC` [Propose change(s) to market](3004-PMAC-propose_market_change.md) `TODO`
-- `3005-PASN` [Propose new asset](3005-PASN-propose_new_asset.md) `TODO`
-- `3006-PASC` [Propose change(s) to asset](3006-PASC-propose_asset_change.md) `TODO`
-- `3007-PNEC` [Propose change to network parameter(s)](3007-PNEC-propose_network.md) `TODO`
-- `3008-PFRO` [Propose something "Freeform"](3008-PFRO-propose_freeform.md) `TODO`
+- `3001-VOTE` [See proposals and Vote on changes](3001-VOTE-vote.md)
+- `3002-PROP` [Select proposal type](3002-PROP-propose.md)
+- `3003-PMAN` [Propose new Market](3003-PMAN-propose_new_market.md)
+- `3004-PMAC` [Propose change(s) to market](3004-PMAC-propose_market_change.md)
+- `3005-PASN` [Propose new asset](3005-PASN-propose_new_asset.md)
+- `3006-PASC` [Propose change(s) to asset](3006-PASC-propose_asset_change.md)
+- `3007-PNEC` [Propose change to network parameter(s)](3007-PNEC-propose_network.md)
+- `3008-PFRO` [Propose something "Freeform"](3008-PFRO-propose_freeform.md)
 
 ## `4000` Treasury 
 - `4001-TRES` [View treasury rewards](4001-TRES-view_treasury_rewards.md) `TODO`
