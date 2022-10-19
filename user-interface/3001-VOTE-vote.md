@@ -5,24 +5,25 @@ and [docs](https://s.vega.xyz/s/mainnet/concepts/vega-protocol#governance).
 
 There are a few things that can be governed on Vega...
 
-- Network parameters (variables used by the network),
+- Network parameters (variables used by the network)
 - Markets (creation and changes to existing)
 - Assets (creation on changes to existing)
 - "Freeform", which has no affect on the network but can be used to to measure token holders views
-  These are governed through proposed changes, and then Votes for or against these proposal.
+  
+To make proposal: a user will require an amount of the Governance token [associated](1004-ASSO-associate.md) with their key.
 
-To make proposal: Parties will require an amount of the Governance token [associated](./1027-ASSO-associate.md) with their key.
+To vote: a user will require [associated](1004-ASSO-associate.md) Governance tokens (or in the case of market change proposals they could have an active liquidity provision). 
 
-To vote: a party will require [associated](./1027-ASSO-associate.md) Governance tokens (with exceptions around market change proposals where liquidity providers can also vote). A vote is weighted by the number of governance tokens they have associated (or in the case of liquidity providers: their equity like share).
+Each vote has a weight behind it based on the number of associate tokens or the liquidity provision's equity like share at the point in time that the vote closes.
 
-Each type will have a majority figure that is required for the proposal to pass. As in a majority of tokens that as well as a participation level.
+Each proposal type will have a majority required (vote weight in favour) and a participation required (the turn out for the vote needs to be sufficient to be valid).
 
-A short hand is used in these ACs:
+A proposal has a life cycle and various statuses to track it's progress. proposals that accept votes can have a few different statuses. A short hand is used in these ACs:
 
-- Open = Accepting votes
-- To enact = passed but not yet enacted
-- Closed = was accepting votes but deadline has passed (e.g. passed, rejected etc)
-- Failed = did not get to the point of accepting votes.
+- Open = Accepting votes (includes `waitingForNodeVote`)
+- To enact = passed but not yet enacted (`pending)
+- Closed = was accepting votes but deadline has passed (e.g. `passed`, `rejected` etc)
+- `Failed` = did not get to the point of accepting votes.
 
 ## list of proposals
 
@@ -34,7 +35,7 @@ When looking for a particular proposal or wanting to see what proposals are open
 - **must** see open proposals (and ones due for enactment) distinct from others (e.g grouped by "open", "to enact" "closed") (note: freeform proposals do not enact so should be shown as "closed" when "passed") <a name="3001-VOTE-004" href="#3001-VOTE-004">3001-VOTE-004</a>
 - **should** see proposals sorted with the ones closest to enactment first (within each group) 
 - **must** see a history of all "closed" proposals <a name="3001-VOTE-006" href="#3001-VOTE-006">3001-VOTE-006</a>
-- **should** have the option to search for a proposal. by:
+- can search for a proposal. by:
   - **should** be able to search by proposal ID
   - **should** be able to search by public key of the proposer
   - **should** be abel to search by market ID/name/code (ID may be the same as proposal ID)
@@ -45,6 +46,7 @@ When looking for a particular proposal or wanting to see what proposals are open
 for each proposal:
 
 - **must** see the type of proposal <a name="3001-VOTE-007" href="#3001-VOTE-007">3001-VOTE-007</a>
+- **must** see the proposal title <a name="3001-VOTE-097" href="#3001-VOTE-097">3001-VOTE-097</a>
 - **should** see a summary of what the type of proposed change is, without looking at details (network, new market etc)
   - for network parameters: **should** see what parameter is being changed and new value
   - for network parameters: **could** see what the current values are for that parameter
@@ -91,22 +93,22 @@ for each proposal:
 
 ...so I can see select one to view and vote, or view outcome.
 
-## details of a proposal
+## Details of a proposal
 
 When looking at a particular proposal, I...
 
 - see [the same details in the list of proposals](#list-of-proposals) and:
 - **must** have option to see raw JSON of proposal <a name="3001-VOTE-052" href="#3001-VOTE-052">3001-VOTE-052</a>
-- **should** display the proposed change
+- **should** display the proposed change details displayed in a human readable format (e.g. with market id, shown along with that market name)
 
 - **must** see the rationale title <a name="3001-VOTE-054" href="#3001-VOTE-054">3001-VOTE-054</a>
-- **must** see the rationale description if there is one <a name="3001-VOTE-055" href="#3001-VOTE-055">3001-VOTE-055</a>
+- **must** see the full rationale description if there is one <a name="3001-VOTE-055" href="#3001-VOTE-055">3001-VOTE-055</a>
 - **should** see rationale description rendered with markdown
   
 For open proposals:
 
 - **must** show a summary of vote status (base on the current total amount associated tokens, note this could change before the vote ends) <a name="3001-VOTE-057" href="#3001-VOTE-057">3001-VOTE-057</a>
-- **must** see if the Token vote has met the required participation threshold <a name="3001-VOTE-058" href="#3001-VOTE-058">3001-VOTE-058</a>
+- **must** see if the token vote has met a required participation threshold <a name="3001-VOTE-058" href="#3001-VOTE-058">3001-VOTE-058</a>
 - **must** see the sum of tokens that have voted so far <a name="3001-VOTE-059" href="#3001-VOTE-059">3001-VOTE-059</a>
 - **should** see sum of tokens that have voted as a percentage of total voted
 - **should** see what the participation threshold is for this proposal (note this is set per proposal once the proposal hits the chain based on the current network params, incase a proposal is set to enact that changes threshold)
@@ -139,14 +141,12 @@ When looking to vote on the proposal, I...
 - **must** be [connected to a Vega wallet/key](./0002-WCON-connect_vega_wallet.md) <a name="3001-VOTE-076" href="#3001-VOTE-076">3001-VOTE-076</a>
   - **must** see sum of tokens I have [associated](1027-ASSO-associate.md) <a name="3001-VOTE-100" href="#3001-VOTE-100">3001-VOTE-100</a>
   - **should** see what percentage of the total [associated](1027-ASSO-associate.md) tokens I hold
-    - **should**, if i have 0 tokens, see link to [associate](1027-ASSO-associate.md)
+    - **should**, if I have 0 tokens, see link to [associate](1027-ASSO-associate.md)
   - **must** see my current vote for, against, or not voted <a name="3001-VOTE-079" href="#3001-VOTE-079">3001-VOTE-079</a>
   - **must** see option to vote for or against <a name="3001-VOTE-080" href="#3001-VOTE-080">3001-VOTE-080</a>
   - **must** see option to change my vote (vote again in same or different direction) <a name="3001-VOTE-090" href="#3001-VOTE-090">3001-VOTE-090</a>
 
 For open market change proposals, all of the above and:
-
-- **must** be [connected to a Vega wallet/key](./0002-WCON-connect_vega_wallet.md) <a name="3001-VOTE-091" href="#3001-VOTE-091">3001-VOTE-091</a>
   - **must** see your equity like share on the market you are voting on <a name="3001-VOTE-092" href="#3001-VOTE-092">3001-VOTE-092</a>
 
 for both:
