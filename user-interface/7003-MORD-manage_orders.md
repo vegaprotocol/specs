@@ -1,6 +1,6 @@
 # Manage orders
 
-Users place orders to describe the trades they would like to make: buy or sell, at what price, how long it is valid for etc. In many cases they can [ammend](#amend-order---price) or [cancel](#cancel-orders) these orders while they are still active, for example: changing price.
+Users place orders to describe the trades they would like to make: buy or sell, at what price, how long it is valid for etc. In many cases they can [amend](#amend-order---price) or [cancel](#cancel-orders) these orders while they are still active, for example: changing price.
 
 Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) in a [list](#orders-list) of other orders. e.g. whether it has been accepted, filled, how close it is to being filled etc. Users may be interested in the price of their orders relative to the price of the market and how much of the order's size has been filled.
 
@@ -20,7 +20,7 @@ User will have differing needs/preferences in terms of what they want to see abo
 
 ### Fields
 
-- **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order, because... (<a name="7003-MORD-001" href="#7003-MORD-001">7003-MORD-001</a>)
+- **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order, and therefore... (<a name="7003-MORD-001" href="#7003-MORD-001">7003-MORD-001</a>)
   - `Active​`
     - How much of the order is filled / remains unfilled
     - How close the mark price is to order
