@@ -8,14 +8,14 @@ and [docs](https://docs.vega.xyz/docs/mainnet/concepts/vega-protocol#governance)
 When looking to propose something, I...
 
 - **must** see see a link to detailed explanation of Governance in the docs <a name="3002-PROP-001" href="#3002-PROP-001">3002-PROP-001</a>
-- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or [associated](1003-ASSO-associate.md)) to a Vega wallet for use on Vega <a name="3002-PROP-002" href="#3002-PROP-002">3002-PROP-002</a>
-- **must** see that I need some associated tokens, and a link to [associate](1003-ASSO-associate.md) <a name="3002-PROP-003" href="#3002-PROP-003">3002-PROP-003</a>
+- **must** see that the governance token is an ethereum ERC20 token and needs to attributed (or [associated](1004-ASSO-associate.md)) to a Vega wallet for use on Vega <a name="3002-PROP-002" href="#3002-PROP-002">3002-PROP-002</a>
+- **must** see that I need some associated tokens, and a link to [associate](1004-ASSO-associate.md) <a name="3002-PROP-003" href="#3002-PROP-003">3002-PROP-003</a>
 
 ... so I have a sufficient vote weight to propose.
 
 ## Select proposal type
 
-when making a proposal, I...
+When making a proposal, I...
 
 - **must** select a proposal type <a name="3002-PROP-005" href="#3002-PROP-005">3002-PROP-005</a>
 
