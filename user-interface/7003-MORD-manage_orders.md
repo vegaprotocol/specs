@@ -20,7 +20,9 @@ User will have differing needs/preferences in terms of what they want to see abo
 
 ### Fields
 
-- **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order, and therefore... (<a name="7003-MORD-001" href="#7003-MORD-001">7003-MORD-001</a>)
+When looking at a list of orders, I...
+
+- **must** see [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) of the order (<a name="7003-MORD-001" href="#7003-MORD-001">7003-MORD-001</a>), and therefore (nested bullets added for context, ACs are on fields that follow)... 
   - `Active​`
     - How much of the order is filled / remains unfilled
     - How close the mark price is to order
@@ -45,23 +47,23 @@ User will have differing needs/preferences in terms of what they want to see abo
     - Link to pegged shape (see bellow) TODO find out what happens to the limit orders in the orders API when market is in auction
 
 - **must** see what [market](9001-DATA-data_display.md#market) an order is related to (either code, ID or name, preferable name) (<a name="7003-MORD-002" href="#7003-MORD-002">7003-MORD-002</a>)
-  - **should** see what the status is of the market (particularly if it is not "normal")
+  - **should** see what the `status` is of the market (particularly if it is not "normal")
 - **must** see the [size](9001-DATA-data_display.md#size) of the order (<a name="7003-MORD-003" href="#7003-MORD-003">7003-MORD-003</a>)
 - **must** see the [direction/side](9001-DATA-data_display.md#direction--side) (Long or Short) of the order (this can be implied with a + or negative suffix on the size, + for Long, - for short) (<a name="7003-MORD-004" href="#7003-MORD-004">7003-MORD-004</a>)
 - **must** see [order type](9001-DATA-data_display.md#order-type) (<a name="7003-MORD-005" href="#7003-MORD-005">7003-MORD-005</a>)
 - if order created by [pegged or liquidity provision shape](9001-DATA-data_display.md#order-origin): **should** see order origin
-  - **could** see what part of the liquidity shape or pegged order shape this relates to. See [pegged orders](#pegged-order-shapes) and [liquidity provisions](#liquidity-order-shapes) shapes below.
+  - **could** see what part of the liquidity shape or pegged order shape this relates to or it's offset+reference See [pegged orders](#pegged-order-shapes) and [liquidity provisions](#liquidity-order-shapes) shapes below.
   - **could** see link to full shape
 
 - **should** see how much of the order's [size](9001-DATA-data_display.md#size) has been filled e.g. if the order was for `50` but so far only 10 have traded I should see Filled = `10`. Note: this is marked as a should because in the case of Rejected order and some other scenarios it isn't relevant.
-- **should** see how much of the order's [size](9001-DATA-data_display.md#size) remains. Note: this does not go to zero if the order status goes to a closed state. TODO double check what the API does in a situation where I got 50% fill then canceled an order 
+- **should** see how much of the order's [size](9001-DATA-data_display.md#size) remains. 
 
 - if order type = `Limit`: **must** see the Limit [price](9001-DATA-data_display.md#quote-price) that was set on the order
 - if order type = `Market`: **must** not see a price for active or parked orders, a `-`, `Market` or `n/a` is more appropriate (API may return `0`).
 
 - **must** see the [time in force](9001-DATA-data_display.md#time-in-force) applied to the order (can be abbreviated here) (<a name="7003-MORD-006" href="#7003-MORD-006">7003-MORD-006</a>)
-- **should** see "created at" [time](9001-DATA-data_display.md#time). TODO check what happens to this in the context of Pegged and LP orders.
-- **could** see updated at (this is used by the system when an order is amended, or repriced (in pegged and LP) not sure this in needed) TODO check behavior 
+- **should** see "created at" [time](9001-DATA-data_display.md#time)
+- **could** see updated at (this is used by the system when an order is amended, or repriced (in pegged and LP) not sure this in needed)
 
 - **should** see time priority (how many orders are before mine at this price)
   
@@ -72,9 +74,10 @@ User will have differing needs/preferences in terms of what they want to see abo
 - if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to cancel the individual order
   - **could** see a link to cancel shape
 
-- `todo` show the reference and offset for an order for liquidity and pegged orders (instead of price?)
-
+... so I can understand the state of my orders and decide what to do next
 ### Filters
+
+When looking at a list of orders, I...
 
 - **should** have the ability to see all orders regardless of status in one list
 - **should** have the ability to see only active &amp; parked orders TODO update this based on what happens to parked orders
@@ -82,25 +85,36 @@ User will have differing needs/preferences in terms of what they want to see abo
 - **could** have the ability to filter by any field(s)
   - where a field is an enum: **should** be able to select one on or more values for a field that should be included
 
+... so I can focus on the type of orders statuses etc that I want to at that time
+
 ### Sorting
+
+When looking at a list of orders, I...
 
 - **should** be able to sort the list (both directions) by any field in the order list
   - **should** be able to add a secondary sort. e.g. by market then by date  
 - **should** have the default sorted by created time (or updated time if newer), with newest at the top
 - **should** retain sorting preferences between switching views / browser reload
 
+... so the sort order matches my mental model and or makes it easy for me to find the orders I am looking for  
 ### Grouping
+
+When looking at a list of orders, I...
 
 - **should** be able to group orders by any field e.g. by market, lp etc
 - **should** have default grouping by market
 
+... so I can make decisions easily on a set of orders 
 ## Cancel orders
+
+When looking to take order out of the book, I...
 
 - **must** select weather to cancel an individual order or all orders on a market (<a name="7003-MORD-009" href="#7003-MORD-009">7003-MORD-009</a>)
 - **must** be able to submit the [Vega transaction](0003-WTXN-submit_vega_transaction.md) to cancel order(s) (<a name="7003-MORD-010" href="#7003-MORD-010">7003-MORD-010</a>)
   - **could** show the margin requirement reduction/increase that will take place before submitting
-- **must** see feedback on order status after the transaction (<a name="7003-MORD-011" href="#7003-MORD-011">7003-MORD-011</a>)
+- **must** see feedback on order status after the [Vega transaction](0003-WTXN-submit_vega_transaction.md) (<a name="7003-MORD-011" href="#7003-MORD-011">7003-MORD-011</a>)
 
+... so that the order will not be filled and I don't end up with a change in my position that I was not expecting
 ## Amend order - price
 
 Read more about [order amends](../protocol/0004-AMND-amends.md).
@@ -117,7 +131,7 @@ When looking to amend an order, I...
 
 ## Amend order - other than price
 
-`TBD` -  Acceptance criteria for other types of order amend 
+`TODO` -  Acceptance criteria for other types of order amend 
 
 ## On a price history chart
 
@@ -157,7 +171,12 @@ When looking to understand the state of a pegged order shape...
 - **would** like to see link to edit the shape of a pegged order
 - **would** like to see the date submitted/updated
 
-... so I can decide if I wish to amend or cancel my order
+... so I can decide if I wish to amend or cancel my pegged order shape
+
+## Cancel Pegged order shapes
+
+`TODO`
+
 ## Liquidity order shapes
 
 When looking to understand the state of a liquidity provision, with a provided shape... 
@@ -174,3 +193,7 @@ When looking to understand the state of a liquidity provision, with a provided s
 - **would** like to see the date submitted/updated
 
 ... so I can decide if I wish to amend or cancel my shape
+
+## Cancel or amend Pegged order shapes
+
+See [liquidity provision](5002-LIQP-provide_liquidity.md),
