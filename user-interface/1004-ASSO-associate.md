@@ -41,7 +41,7 @@ When looking to stake validators or participate in governance, I first need to a
 - **must** see feedback that the association has been registered by Vega and that it can be used after the number of Ethereum block confirmations required (typically 50, check network param) <a name="1004-ASSO-013" href="#1004-ASSO-013">1004-ASSO-013</a>
   - **should** be able to see a balance for the number of tokens associated that are ready for use <a name="1004-ASSO-014" href="#1004-ASSO-014">1004-ASSO-014</a>
   - **should** be able to see a balance for the number of tokens for each pending association <a name="1004-ASSO-015" href="#1004-ASSO-015">1004-ASSO-015</a>
-- on completion: **should** be prompted to go on to [nominate](1002-STAK-staking.md) and/or participate in [Governance](1004-GOVE-governance_list.md)
+- on completion: **should** be prompted to go on to [nominate](2001-STKE-staking.md) and/or participate in [Governance](1004-GOVE-governance_list.md)
 
 ...so I can then use the Vega wallet to use my tokens.
 
