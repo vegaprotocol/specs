@@ -1,6 +1,6 @@
 # Submit Ethereum transaction
 
-## Know transaction I'm signing
+## Know what transaction I'm signing
 When about to click to prompt Ethereum wallet to sign a transaction, I...
 
 - **should** see the contract address I am about to interact with
