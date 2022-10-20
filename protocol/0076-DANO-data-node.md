@@ -155,7 +155,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 
 ### Data-node decentralized history:
 
-1.  Historical data must be available to load into the datanode and must not be dependent on any centralized entity.
+1.  Historical data must be available to load into the datanode and must not be dependent on any centralized entity. (<a name="0076-DANO-006" href="#0076-DANO-005">0076-DANO-005</a>)
 1.  A datanode restored from decentralised history for a given block span must match exactly the state of a datanode that has the same block span of data created by consuming events.   
 1.  As the network produces more blocks the data should be stored correctly in the data-node after a data-node is restored from decentralized history. For example: Start a data-node from a given history segment for a known block height, ensure the datanode continues to update from that block onwards. (<a name="0076-DANO-007" href="#0076-DANO-007">0076-DANO-007</a>).  
 1.  It should not be necessary to restore the full history (i.e. from genesis block) to be able to process new blocks.  Restoring just the most recent history segment should be sufficient for the node to process new blocks.
