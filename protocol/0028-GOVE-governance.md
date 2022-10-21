@@ -421,7 +421,6 @@ APIs should also exist for clients to:
 - [ ] A market proposal with position decimal places not in `{-7,-6,...,-1,0,1,2,...,7}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
 
 
-
 ### Market change proposals
 - [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
 - [ ] Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)
