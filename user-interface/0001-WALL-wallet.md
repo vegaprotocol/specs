@@ -175,7 +175,7 @@ When seeking to reduce risk of compromise I...
 
 - **must** be able to create multiple wallets (<a name="0001-WALL-066" href="#0001-WALL-066">0001-WALL-066</a>)
 - **must** be able to switch between wallets (<a name="0001-WALL-067" href="#0001-WALL-067">0001-WALL-067</a>)
-- **must** be able to delete a wallet (<a name="0001-WALL-068" href="#0001-WALL-068">0001-WALL-068</a>)
+- **must** be able to remove a wallet (<a name="0001-WALL-068" href="#0001-WALL-068">0001-WALL-068</a>)
 - **must** be able to change wallet name (<a name="0001-WALL-069" href="#0001-WALL-069">0001-WALL-069</a>)
 - **must** be able to change wallet passphrase (<a name="0001-WALL-070" href="#0001-WALL-070">0001-WALL-070</a>)
 - `TODO:` **should** be able to link some wallets to specific networks
