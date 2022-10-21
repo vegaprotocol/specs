@@ -32,7 +32,7 @@ Each state variable must have a default value specified (can be hardcoded for no
 Default risk factors are to be `1.0` for futures (so until a value has been calculated and agreed all trades are over-collateralised) with a tolerance of `1e-6`.  
 Risk factor calculation should be triggered as soon as market is proposed.
 
-Default probability of trading should be `100` ticks on either side of best bid and best ask with `0.005` probability of trading each. As soon as there is the auction uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input. Tolerance should be set to `1e-6`.
+Default probability of trading should be `100` ticks on either side of best bid and best ask with probability of trading for each one them equal to the default value of probability of trading between best bid and best ask as per [0034-PROB-prob_weighted_liquidity_measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb). As soon as there is the auction uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input. Tolerance should be set to `1e-6`.
 
 Default price monitoring bounds should be calculated (as a decimal point calc directly in core) as `10%` on either side of the indicative uncrossing price and used as default. As soon as an indicative uncrossing price is available calculate the real bounds using the full risk model + consensus mechanism. Tolerance should be set to `1e-6`.
 
