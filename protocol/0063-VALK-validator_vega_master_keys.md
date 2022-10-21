@@ -23,7 +23,7 @@ where `key_number` is the sequence number of the derived key to prevent replay a
 ## Ethereum side for staking bridge purposes
 Validators to use their public master key as the "destination" when they associate ERC20 Vega token the their Vega identity.   
 
-## Genesis 
+## Genesis
 The public master key has to be added to validators' identities in the genesis configuration.
 
 
@@ -35,6 +35,10 @@ The public master key has to be added to validators' identities in the genesis c
 - A transaction submitted by an old hot-key after `target_block` is not associated by the network as being from a Validator (<a name="0063-VALK-003" href="#0063-VALK-003">0063-VALK-003</a>) 
 - Once `target_block` has been reached the network reports the new key as the validators hot-key (<a name="0063-VALK-004" href="#0063-VALK-004">0063-VALK-004</a>)
 - A key rotation submission which is not signed by the master key is rejected causing a transaction-error event that is visible by the whole network.  (<a name="0063-VALK-005" href="#0063-VALK-005">0063-VALK-005</a>)
+- It is possible to perform parallel key rotations rotations succesfully in the same block. (<a name="0063-VALK-006" href="#0063-VALK-006">0063-VALK-006</a>)
+- Once a validator master key has been rotated all applicable rewards are correctly received. (<a name="0063-VALK-007" href="#0063-VALK-007">0063-VALK-007</a>)
+- Once a validator master key has been rotated staking and delegation to the validator works as before. (<a name="0063-VALK-008" href="#0063-VALK-008">0063-VALK-008</a>)
+- - Once a validator master key has been rotated self-staking and self-delegation for the validator works as before. (<a name="0063-VALK-009" href="#0063-VALK-009">0063-VALK-009</a>)
 
 
 
