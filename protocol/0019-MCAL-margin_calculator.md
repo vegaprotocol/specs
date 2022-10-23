@@ -139,15 +139,16 @@ where meanings of terms in Step 1 apply except for:
 ## Margin calculation for auctions
 
 We are assuming that:
+
 - `indicative_uncrossing_price` is *not* the mark price, so no mark-to-market transfers happen (update mark-to-market spec)
 - mark price never changes during an auction, so it's the last mark price from before auction,
 - during an auction we never release money from the margin account, however we top-it-up as required,
 - no closeouts during auctions
 
-Use the same calculation as above with the following re-defined: 
+Use the same calculation as above with the following re-defined:
+
 - in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.
-- For the open position part of the margin: `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the previous value for `market_observable` whatever it was (i.e. the last `indicative_uncrossing_price` or `mark_price`).
-- For the orders part of the margin: `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders. 
+- For the orders part of the margin: if mark price is not available (as is the case during the opening auction) use `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders.
 
 
 ## Scaling other margin levels
