@@ -148,6 +148,7 @@ We are assuming that:
 Use the same calculation as above with the following re-defined:
 
 - in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.
+- For the open position part of the margin use the mark price.
 - For the orders part of the margin: if mark price is not available (as is the case during the opening auction) use `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders.
 
 
