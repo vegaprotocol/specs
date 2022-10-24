@@ -9,7 +9,7 @@ A *Mark Price* is a concept derived from traditional markets.  It is a calculate
 
 Algorithm 1:
 
-- [ ] Out of a sequence of transactions with the same time-stamp the last transaction transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade. (<a name="0009-MRKP-007" href="#0009-MRKP-007">0009-MRKP-007</a>)
+- [ ] Out of a sequence of transactions with the same time-stamp the last transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade. (<a name="0009-MRKP-007" href="#0009-MRKP-007">0009-MRKP-007</a>)
 - [ ] A transaction that doesn't result in a trade does not cause the mark price to change.  (<a name="0009-MRKP-004" href="#0009-MRKP-004">0009-MRKP-004</a>)
 - [ ] A transaction out of a sequence of transactions with the same time stamp which isn't the last trade-causing transaction will *not* result in a mark price change. (<a name="0009-MRKP-008" href="#0009-MRKP-008">0009-MRKP-008</a>)
 - [ ] The mark price must be using market decimal place setting (<a name="0009-MRKP-006" href="#0009-MRKP-006">0009-MRKP-006</a>)
