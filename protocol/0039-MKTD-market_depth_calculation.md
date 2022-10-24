@@ -23,9 +23,9 @@ The market depth builder receives a stream of events from the core from which it
 # Guide-level explanation
 When the core processes an external action such as an order, cancel, amend or changing auction state, it generates one or more events which are sent out via the event-bus. 
 
-The market depth module subscribes to all the event types in the market-event and order-event streams. From the events received from these event streams, we build up a market depth structure for each market which will be a representation of the orderbook stored in the core. When the market is created the sequence number of the market depth structure is set to zero. Every update from then onwards increments the sequence number by one.
+The market depth module subscribes to all the event types in the market-event and order-event streams. From the events received from these event streams, we build up a market depth structure for each market which will be a representation of the orderbook stored in the core.
 
-Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occurring to the market depth structure and will contain a sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date.
+Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occurring to the market depth structure and will contain a current and previous sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date. The client will be able to use the current and previous sequence numbers to confirm all messages are received. 
 
 The market depth information should include pegged order volume.
 
@@ -92,12 +92,10 @@ An update message is:
 
     type UpdateMarketDepth struct {
         SequenceNum uint64
+        PrevSeqNum  uint64
         Price       int64
         Volume      uint64
         NumOfOrders uint64
-        Delta       int64
-        Direction   bool // bid or ask
-        Reason      action enum // Cancel, fill, amend etc
     }
 
 
@@ -106,7 +104,6 @@ The server side process to handle updates can be described as such:
     Forever
         Receive update from matching engine
         Apply update to the market depth structure and record which price levels have been touched
-        Increment market depth sequence number
         Send updates to all subscribers for price levels that changed
     End
 
@@ -117,6 +114,7 @@ The client side will perform the following steps to build and keep an up to date
     Request current market depth structure
     Forever
         Receive market depth update
+        Verify that the prevSeqNum of this message matches the SeqNum of the previous message
         If update sequence number is above current sequence number
             Apply update to the market depth structure
         Else
@@ -133,4 +131,4 @@ The client side will perform the following steps to build and keep an up to date
 * Cancel an order and replace it with the same order values, verify the MD sees an update
 * Do nothing for many minutes, make sure subscribers do not timeout/fail
 * Send a large spike of order updates, make sure the system does not stall
-* Sequence number increase for each emitted book update
+* Sequence number is larger for each emitted book update
