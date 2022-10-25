@@ -23,7 +23,7 @@ Data:
   - **Market activation time**: Read only, set by system when market opens. The date/time at which the opening auction uncrossed and the market first entered it's normal trading mode (empty if this had not happened)
   - **Quoted Decimal places**: number of decimals places for quote unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents. Only non-negative integer values are allowed.
   - **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a BTSUSD market. 
-  If this is negative e.g. -3 this means that the smalles oder and position is of size 1000.  
+  If this is negative e.g. -3 this means that the smallest order and position is of size 1000.  
   Accepted values are `-7,-6,...,-1,0,1,2,...,7`.
 
   Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. This also means that, for instance, it would not be possible to create a BTCUSD market that allows order/position sizes equivalent to 1 sat.
