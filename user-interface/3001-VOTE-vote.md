@@ -35,7 +35,7 @@ When looking for a particular proposal or wanting to see what proposals are open
 - **must** see open proposals (and ones due for enactment) distinct from others (e.g grouped by "open", "to enact" "closed") (note: freeform proposals do not enact so should be shown as "closed" when "passed") (<a name="3001-VOTE-004" href="#3001-VOTE-004">3001-VOTE-004</a>)
 - **should** see proposals sorted with the ones closest to enactment first (within each group) 
 - **must** see a history of all "closed" proposals (<a name="3001-VOTE-006" href="#3001-VOTE-006">3001-VOTE-006</a>)
-- can search for a proposal. by:
+- can search for a proposal by:
   - **should** be able to search by proposal ID
   - **should** be able to search by public key of the proposer
   - **should** be abel to search by market ID/name/code (ID may be the same as proposal ID)
