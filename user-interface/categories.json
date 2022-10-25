@@ -1,8 +1,8 @@
 {
-    "Wallets, signing transactions and network selection": {
+    "Wallets & Signing Transactions & Network Selection": {
         "specs": ["0001-WALL", "0002-WCON", "0003-WTXN", "0004-EWAL", "0005-ETXN", "0006-NETW"]
     },
-    "Bridges, Transfers and Vesting": {
+    "Bridges & Transfers & Vesting": {
         "specs": ["1001-DEPO", "1002-WITH", "1003-TRAN", "1004-ASSO", "1005-VEST"]
     },
     "Staking": {
@@ -14,19 +14,19 @@
     "Treasury": {
         "specs": ["4001-TRES"]
     },
-    "Liquidity provision": {
+    "Liquidity Provision": {
         "specs": ["5001-LIQF", "5002-LIQP", "5003-LIQI"]
     },
-    "Markets and analysis": {
+    "Markets & Analysis": {
         "specs": ["6001-MARK", "6002-MDET", "6003-ORDB", "6004-PHIS", "6005-THIS"]
     },
-    "Collateral, Orders, Positions and Fills": {
+    "Collateral & Orders & Positions & Fills": {
         "specs": ["7001-COLL", "7002-SORD", "7003-MORD", "7004-POSI", "7005-FILL", "7006-FEES"]
     },
-    "Block exploring": {
+    "Block Exploring": {
         "specs": ["8001-BLOX"]
     },
-    "Data display": {
+    "Data Display": {
         "specs": ["9001-DATA"]
     }
  }
