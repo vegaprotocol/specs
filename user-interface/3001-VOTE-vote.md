@@ -124,7 +124,7 @@ For open market change proposals, all of the above and:
 - **must** see the equity like share % that has voted so far (<a name="3001-VOTE-069" href="#3001-VOTE-069">3001-VOTE-069</a>)
 - **should** see what the equity like share threshold is for this proposal (note this is see per proposal, incase a proposal is set to enact that changes threshold)
 - **must** see if the equity like share vote has met the required majority threshold (<a name="3001-VOTE-071" href="#3001-VOTE-071">3001-VOTE-071</a>)
-- **must** see the equality like share as percentage that has voted in favour of the proposal (<a name="3001-VOTE-072" href="#3001-VOTE-072">3001-VOTE-072</a>)
+- **must** see the equity like share as percentage that has voted in favour of the proposal (<a name="3001-VOTE-072" href="#3001-VOTE-072">3001-VOTE-072</a>)
 - **must** see what the majority threshold is for this proposal (note this is see per proposal, incase a proposal is set to enact that changes threshold) (<a name="3001-VOTE-073" href="#3001-VOTE-073">3001-VOTE-073</a>)
 
 For `closed` market change proposals, all of the above and:
