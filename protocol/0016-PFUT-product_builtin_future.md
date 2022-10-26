@@ -8,7 +8,7 @@ Futures are a simple "delta one" product and the first product supported by Vega
 
 ## 1. Product parameters
 
-1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status ahead of settlement at expiry (required to ensure no trading can occur after the settlement result may be known by participants). (This would usually be a date/time based trigger but may also use an oracle.)
+1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status ahead of settlement at expiry (required to ensure no trading can occur after the settlement result may be known by participants). (This would usually be a date/time based trigger but may also use an oracle.) This will move market to `cancelled` state if market never left `pending state` (opening auction).
 1. `settlement_data (Data Source: number)`: this data is used by the product to calculate the final settlement cashflows. The receipt of this data triggers this calculation and therefore also moving the product to the `settled` status.
 1. `settlement_asset (Settlement Asset)`: this is used to specify the single asset that an instrument using this product settles in.
 
