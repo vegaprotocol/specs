@@ -197,9 +197,10 @@ No exit. This is a terminal state.
 
 ### Trading Terminated
 
-A market may terminate trading if the instrument is one that expires or if the market is otherwise configured to have a finite lifetime. In the case of futures, termination occurs at some point prior to, or at, the settlement of the product. Markets in this state accept no trading, but retain the positions and margin balances that were in place after processing the expiry trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
+A market will terminate trading if the trading terminated trigger data source rings.
+In the case of futures, termination occurs at some point prior to the settlement of the product. Markets in this state accept no trading, but retain the positions and margin balances that were in place after processing the trading terminated trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
 
-A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading termination, though usually there will be a delay, for instance, to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
+A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading termination if the data source message also contains the required settlement data, though usually there will be a delay, for instance, to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
 
 **Entry:**
 
