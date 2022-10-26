@@ -38,7 +38,7 @@ The public master key has to be added to validators' identities in the genesis c
 - It is possible to perform parallel key rotations rotations succesfully in the same block. (<a name="0063-VALK-006" href="#0063-VALK-006">0063-VALK-006</a>)
 - Once a validator hot key has been rotated all applicable rewards are correctly received. (<a name="0063-VALK-007" href="#0063-VALK-007">0063-VALK-007</a>)
 - Once a validator hot key has been rotated staking and delegation to the validator works as before. (<a name="0063-VALK-008" href="#0063-VALK-008">0063-VALK-008</a>)
-- - Once a validator master key has been rotated self-staking and self-delegation for the validator works as before. (<a name="0063-VALK-009" href="#0063-VALK-009">0063-VALK-009</a>)
+- Once a validator hot key has been rotated self-staking and self-delegation for the validator works as before. (<a name="0063-VALK-009" href="#0063-VALK-009">0063-VALK-009</a>)
 
 
 
