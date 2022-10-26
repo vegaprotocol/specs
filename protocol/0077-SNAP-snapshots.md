@@ -2,6 +2,8 @@
 
 This spec describes how Vega will produce the snapshots. Tendermint handles the process of triggering a snapshot's creation and broadcasting snapshots to new nodes. For more information see the [Tendermint state sync documentation](https://docs.tendermint.com/master/spec/abci/apps.html#state-sync)
 
+A network parameter `snapshot.interval.length` sets how many blocks pass between snapshot creation. The value must be integer representing number of block strictly greater than `0`. Default can be `300`. For example with the default value of `300` all the nodes will create a snapshot at block height `300`, `600`, `900`, ... .
+
 To allow a Vega node to be restarted without the need to replay the whole blockchain, a Vega node can load an existing snapshot created by a different node. This snapshot we enable the starting node to populate all the state inside the core as if the core had processed the historic blockchain. The node can then resume listening to blocks after the snapshot until it gets to the live block height where it will be classed as a normal contributing node.
 
 Every node in a network is able to produce snapshots, the configuration values needed for each node include
@@ -57,3 +59,4 @@ A bad node can swamp the network by requesting snapshots from other nodes which 
 * A node will have a maximum amount of snapshots file on the filesystem. Older ones will be to be removed before a new one can be created. How many snapshots we keep may be something that can be configured. (<a name="0077-SNAP-003" href="#0077-SNAP-003">0077-SNAP-003</a>)  
 * The state of a node that is started from a snapshot should be identical to a node that had reached the same block height via replay. (<a name="0077-SNAP-004" href="#0077-SNAP-004">0077-SNAP-004</a>)  
 * Post a checkpoint restore we see snapshots continuing to be produced as before and can be used to add a node to the network (<a name="0077-SNAP-005" href="#0077-SNAP-005">0077-SNAP-005</a>)  
+* With  `snapshot.interval.length` set to `k` all the nodes in a network will create a snapshot at block height `k`, `2k`, `3k`, ... (<a name="0077-SNAP-006" href="#0077-SNAP-006">0077-SNAP-006</a>)
