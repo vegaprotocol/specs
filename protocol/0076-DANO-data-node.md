@@ -146,7 +146,6 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. Market depth state must be processed and built in a timely manner so that the correct real time information is available to the users without unnecessary delays. Using the recommended hardware specs for validators, the data node should be able to handle a continuous order events rate of 500 per second without falling behind. (<a name="0076-DANO-002" href="#0076-DANO-002">0076-DANO-002</a>)
 
 ## Data synchronisation
-
 1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-COSMICELEVATOR-001" href="#0076-COSMICELEVATOR-001">0076-COSMICELEVATOR-001</a>)
 1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network without having to replay the full chain (<a name="0076-DANO-003" href="#0076-DANO-003">0076-DANO-003</a>)
 
@@ -162,11 +161,21 @@ It must be possible to add to the data node APIs that return the result of calcu
 1.  No data is duplicated as the core emits events when catching up to the later block height. For example: Starting a core node at block height less than the data-node block height must result in no duplicated data (<a name="0076-DANO-008" href="#0076-DANO-008">0076-DANO-008</a>)
 1.  Starting a core node at block height greater than the data-nodes block height must result in an error and a refusal to start (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
 1.  If a data-node snapshot fails during the restore the process, it should error and the node(s) won't start (<a name="0076-DANO-009" href="#0076-DANO-009">0076-DANO-009</a>)
-1.   When queried via the APIs a node restored from decentralized history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
+1.  When queried via the APIs a node restored from decentralized history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
 
 ### Data-node network determinism:
 1. For a given block span, a datanode history segment must be identical across all dat-nodes in the network that are using the recommended hardware and OS versions (<a name="0076-DANO-010" href="#0076-DANO-010">0076-DANO-010</a>)
 1. History segments for the same block span must always match across the network, regardless of whether the producing node was itself restored from decentralized history or not. (<a name="0076-DANO-011" href="#0076-DANO-011">0076-DANO-011</a>)
 
 ### Schema compatibility:
+1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0076-COSMICELEVATOR-013" href="#0076-COSMICELEVATOR-013">0076-COSMICELEVATOR-013</a>)
 1. Restoring a node from decentralized history should work across schema upgrade boundaries and the state of the datanode should match that of a datanode populated purely by event consumption (<a name="0076-COSMICELEVATOR-013" href="#0076-COSMICELEVATOR-013">0076-COSMICELEVATOR-013</a>)
+
+### General Acceptance
+* The DataNode must be able to handle brief network outages and disconnects from the vega node (<a name="0076-DANO-015" href="#0076-DANO-015">0076-DANO-015</a>) 
+* The validator node will only accept requests for event bus subscriptions. All other API subscription requests will be invalid. (<a name="0076-DANO-016" href="#0076-DANO-016">0076-DANO-016</a>)  
+* The event bus stream is available from validators, non validators and the DataNode (<a name="0076-DANO-017" href="#0076-DANO-017">0076-DANO-017</a>)  
+* All events that are emitted on the full unfiltered event stream are processed by the DataNode (no data is lost) (<a name="0076-DANO-018" href="#0076-DANO-018">0076-DANO-018</a>)  
+* If a DataNode loses connection to a Vega node if will attempt to reconnect and if the cached data received from the Vega node is enough to continue working it can resume being a DataNode. (<a name="0076-DANO-019" href="#0076-DANO-019">0076-DANO-019</a>)  
+* If the DataNode loses connection to a Vega node and it is unable to reconnect in time to see all the missing data, it will shutdown. (<a name="0076-DANO-020" href="#0076-DANO-020">0076-DANO-020</a>)  
+* A DataNode will be able to detect a frozen event stream by the lack of block time updates and will shutdown. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)  
