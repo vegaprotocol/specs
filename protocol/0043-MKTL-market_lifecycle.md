@@ -296,7 +296,7 @@ The market state is `settled`.
 
 ### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
 
-1. A market is proposed, approved by governace process and enterst the opening auction (Pending state).
+1. A market is proposed, approved by governace process and enters the opening auction (Pending state).
 1. Trading terminated data source rings before the market leaves the opening auction (so market never left Pending state so far).
 1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
