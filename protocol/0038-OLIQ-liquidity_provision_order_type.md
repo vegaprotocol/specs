@@ -139,7 +139,7 @@ Liquidity provider orders are recalculated and refreshed whenever an order that 
 
 In these cases, repeat all steps above, preserving the order as an order, but recalculating the volume and price of it. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself. 
 
-TIME PRIORITY FOR REFRESHING:
+### Time priority for refreshing:
 
 1. For all orders that are repriced but not as a result of trading (i.e. pegged orders that move as a result of peg moving), treat as per normal pegged orders.
 
@@ -165,6 +165,13 @@ and then this
 
 *NB the actual values of the buy-prices and buy-volumes are dependent on the result of step 2 above and this example is not to test that, so don't try to replicate this with numbers, it's for illustrative purposes only.
 ________________________
+
+
+### Transfers in / out of margin account 
+
+When the system refreshes orders (because a peg moved) and the implied volumes now sit at different price levels there may be different overall margin requirement for the LP party. 
+If the resulting amount is outside search / release then there will be *at most* one transfer in / out of the party's margin account for the entire LP order. 
+
 
 ## Amending the LP order:
 
@@ -195,3 +202,7 @@ If the parameter has been increased then LP order volume that may have been plac
 
 ### LP commitment amendment
 - [ ] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
+
+
+### LP commitment repricing due to peg price moves
+- [ ] If best bid / ask has changed and the LP order volume is moved around to match the shape / new peg levels then the margin requirement for the party may change. There is at most one transfer in / out of the margin account of the LP party as a result of one of the pegs moving. (<a name="0038-OLIQ-007" href="#0038-OLIQ-007">0038-OLIQ-007</a>) 

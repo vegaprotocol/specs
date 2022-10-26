@@ -21,8 +21,13 @@ Data:
     - Algorithm 1 / Last Traded Price: initial mark price
   - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
   - **Market activation time**: Read only, set by system when market opens. The date/time at which the opening auction uncrossed and the market first entered it's normal trading mode (empty if this had not happened)
-  - **Quoted Decimal places**: number of decimals places for quote unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents.
-  - **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a BTSUSD market. (Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. this also means that, for instance, it would not be possible to create a BTCUSD market that allows order/position sizes equivalent to 1 sat.)
+  - **Quoted Decimal places**: number of decimals places for quote unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents. Only non-negative integer values are allowed.
+  - **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a BTSUSD market. 
+  If this is negative e.g. -3 this means that the smalles oder and position is of size 1000.  
+  Accepted values are `-6,...,-1,0,1,2,...,6`.
+
+  Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. This also means that, for instance, it would not be possible to create a BTCUSD market that allows order/position sizes equivalent to 1 sat.
+
 Note that Vega has hard limit maximum of MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS as a "compile-time" parameter. Typical value be MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS=6. See [0052-FPOS - Fractional Orders & Positions](./0052-FPOS-fractional_orders_positions.md) for more detail.
 
 ### Trading mode - continuous trading

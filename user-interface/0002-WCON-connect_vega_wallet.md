@@ -4,14 +4,14 @@
 
 When looking to use Vega via a user interface e.g. Dapp (Decentralized web App), I...
 
-- If the app loads and already has a connection it can restore "eagerly" (without the user having to click connect) it **could** do so (<a name="0002-WCON-041" href="#0002-WCON-041">0002-WCON-041</a>)
-- **should** see a link to get a Vega wallet (in case I don't already have one) (<a name="0002-WCON-036" href="#0002-WCON-036">0002-WCON-036</a>)
-- **should** see a link to connect that opens up connection options (<a name="0002-WCON-001" href="#0002-WCON-001">0002-WCON-001</a>)
-- **should** have a way to easily access help should I need to troubleshoot my connection e.g. link to the docs (<a name="0002-WCON-040" href="#0002-WCON-040">0002-WCON-040</a>)
+- If the app loads and already has a connection it can restore "eagerly" (without the user having to click connect) it **could** do so
+- **should** see a link to get a Vega wallet (in case I don't already have one)
+- **should** see a link to connect that opens up connection options
+- **should** have a way to easily access help should I need to troubleshoot my connection e.g. link to the docs
 - **must** select a connection method / wallet type: (<a name="0002-WCON-002" href="#0002-WCON-002">0002-WCON-002</a>)
 - if Rest:
   - **must** have the option to input a non-default Wallet location (<a name="0002-WCON-003" href="#0002-WCON-003">0002-WCON-003</a>)
-  - **should** warn if the dapp is unable the see a wallet is running at the wallet location  (<a name="0002-WCON-004" href="#0002-WCON-004">0002-WCON-004</a>)
+  - **should** warn if the dapp is unable the see a wallet is running at the wallet location
   - **must** submit attempt to connect to wallet (<a name="0002-WCON-005" href="#0002-WCON-005">0002-WCON-005</a>)
   - **could** trigger the app to open on the user's machine with a `vegawallet://` prompt
   
@@ -21,9 +21,9 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
   - if the wallet does NOT have an existing permission with the wallet: **must** prompt user to check wallet app to approve the request to connect wallet: See [Connecting to Dapps](0002-WCON-connect_vega_wallet.md#connect-wallet) for what should happen in wallet app (<a name="0002-WCON-009" href="#0002-WCON-009">0002-WCON-009</a>)
   
   - if new keys are given permission: **must** show the user the keys have been approved (<a name="0002-WCON-010" href="#0002-WCON-010">0002-WCON-010</a>)
-    - **should** see [public key(s)](DATA-data_display.md#public-keys). (<a name="0002-WCON-037" href="#0002-WCON-037">0002-WCON-037</a>)
-    - **should** see alias(es) (<a name="0002-WCON-011" href="#0002-WCON-011">0002-WCON-011</a>)
-    - **could** see assets on key(s) (<a name="0002-WCON-012" href="#0002-WCON-012">0002-WCON-012</a>)
+    - **should** see [public key(s)](DATA-data_display.md#public-keys)
+    - **should** see alias(es)
+    - **could** see assets on key(s)
     - **would like to** see positions on key(s) 
     - if the dapp uses one key at a time: **should** prompt me to select key. See [select/switch keys](#select-and-switch-keys). (<a name="0002-WCON-014" href="#0002-WCON-014">0002-WCON-014</a>)
 
@@ -52,7 +52,7 @@ When wishing to disconnect my wallet, I...
 
 - **must** see an option to disconnect wallet (<a name="0002-WCON-022" href="#0002-WCON-022">0002-WCON-022</a>)
 - **must** see confirmation that wallet has been disconnected (<a name="0002-WCON-023" href="#0002-WCON-023">0002-WCON-023</a>)
-- **should** see prompt to connect a wallet, after disconnect (<a name="0002-WCON-024" href="#0002-WCON-024">0002-WCON-024</a>)
+- **should** see prompt to connect a wallet, after disconnect
 
 ... so that I can protect my wallet from malicious use or select a different wallet to connect to
 
@@ -66,11 +66,11 @@ when looking to do something with a specific key (or set of keys) from my wallet
 
 - for each key:
   - **must** see the first and last 6 digits of the [public key](DATA-data_display.md#public-keys). (<a name="0002-WCON-027" href="#0002-WCON-027">0002-WCON-027</a>)
-  - **should** be able to see the whole public key (<a name="0002-WCON-028" href="#0002-WCON-028">0002-WCON-028</a>)
+  - **should** be able to see the whole public key
   - **must** be able to copy to clipboard the whole public key (<a name="0002-WCON-029" href="#0002-WCON-029">0002-WCON-029</a>)
   - **must** see the key name/alias (meta data) (<a name="0002-WCON-030" href="#0002-WCON-030">0002-WCON-030</a>)
-  - **should** see what non-zero assets that key has (<a name="0002-WCON-031" href="#0002-WCON-031">0002-WCON-031</a>)
-  - **could** see the total asset balances (including associated) (<a name="0002-WCON-032" href="#0002-WCON-032">0002-WCON-032</a>)
+  - **should** see what non-zero assets that key has
+  - **could** see the total asset balances (including associated)
   - **would like to see** a breakdown of the accounts. See [collateral / accounts](6001-COLL-collateral.md)
   - **would like to** see any active orders or positions. See [collateral / accounts](6001-COLL-collateral.md)
   - **would like to** see my nominations to validators for associated tokens

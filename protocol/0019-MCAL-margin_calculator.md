@@ -11,6 +11,7 @@
 6. [ ] If ```riskiest short < 0``` && ```0 <``` *sum of absolute volume of order book offers* ```< riskiest short```, the ```exit price``` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
 7. [ ] A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
 8. [ ] For each market and each party which has either orders or positions on the market, the API provides the 4 margin levels.  (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
+9. [ ] A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-010" href="#0019-MCAL-010">0019-MCAL-010</a>)
 
 
 # Summary
@@ -38,7 +39,8 @@ The calculator takes as inputs:
 - ```scaling levels``` defined in the risk parameters for a market
 - ```quantitative risk factors```
 
-Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as ints (i.e. int64). In this case, **care must be taken** to ensure that the acutal fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actualy 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable becuae outside of margin calculations, and display to end users, the integer values can generally be used as-is.
+Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as ints (i.e. int64). In this case, **care must be taken** to ensure that the acutal fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actually 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable becausee outside of margin calculations, and display to end users, the integer values can generally be used as-is. 
+Note also that if PDP is negative e.g. PDP = -2 then an integer open volume of 12345  is actually 1234500.
 
 and returns 4 margin requirement levels
 
@@ -138,15 +140,17 @@ where meanings of terms in Step 1 apply except for:
 ## Margin calculation for auctions
 
 We are assuming that:
+
 - `indicative_uncrossing_price` is *not* the mark price, so no mark-to-market transfers happen (update mark-to-market spec)
 - mark price never changes during an auction, so it's the last mark price from before auction,
 - during an auction we never release money from the margin account, however we top-it-up as required,
 - no closeouts during auctions
 
-Use the same calculation as above with the following re-defined: 
+Use the same calculation as above with the following re-defined:
+
 - in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.
-- For the open position part of the margin: `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the previous value for `market_observable` whatever it was (i.e. the last `indicative_uncrossing_price` or `mark_price`).
-- For the orders part of the margin: `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders. 
+- For the open position part of the margin use the mark price.
+- For the orders part of the margin: if mark price is not available (as is the case during the opening auction) use `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders.
 
 
 ## Scaling other margin levels

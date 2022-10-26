@@ -2,7 +2,20 @@
 - The market depth builder must be able to handle all available order types (<a name="0039-MKTD-001" href="#0039-MKTD-001">0039-MKTD-001</a>)
 - Entering and leaving auctions must be handled correctly (<a name="0039-MKTD-003" href="#0039-MKTD-003">0039-MKTD-003</a>)
 - All subscribed clients must receive all the data necessary to build their own view of the market depth (<a name="0039-MKTD-004" href="#0039-MKTD-004">0039-MKTD-004</a>)
-
+- Adding a new limit order to the book updates the market depth at the corresponding price and volume (<a name="0039-MKTD-005" href="#0039-MKTD-005">0039-MKTD-005</a>)
+- Cancelling an existing order reduces the volume in the market depth view and removes the price level if the volume reaches zero (<a name="0039-MKTD-006" href="#0039-MKTD-006">0039-MKTD-006</a>)
+- Fully or partially filling an order will reduce the market depth volume at that given price level (<a name="0039-MKTD-007" href="#0039-MKTD-007">0039-MKTD-007</a>)
+- A GTT order that expires will cause the volume at its price to be reduced in the market depth view (<a name="0039-MKTD-008" href="#0039-MKTD-008">0039-MKTD-008</a>)
+- Amending an order in place (price stays the same but the volume is reduced) will cause the volume at the given price to be reduced in the market depth view (<a name="0039-MKTD-009" href="#0039-MKTD-009">0039-MKTD-009</a>)
+- Amending an order such that a cancel replace is performed will cause the volume in the market depth to be updated correctly (<a name="0039-MKTD-010" href="#0039-MKTD-010">0039-MKTD-010</a>)
+- Entering an auction will cause any GFN orders to be removed from the market depth volume view (<a name="0039-MKTD-011" href="#0039-MKTD-012">0039-MKTD-012</a>)
+- Market depth will show a crossed book if the market is in auction and the book is crossed (<a name="0039-MKTD-013" href="#0039-MKTD-013">0039-MKTD-013</a>)
+- Leaving an auction will cause any GFA orders to be removed from the market depth view (<a name="0039-MKTD-014" href="#0039-MKTD-014">0039-MKTD-014</a>)
+- Pegged orders are part of the market depth view and should update the view when their orders are repriced (<a name="0039-MKTD-015" href="#0039-MKTD-015">0039-MKTD-015</a>)
+- Liquidity orders are part of the market depth view and should update the view when commitment sizes change (<a name="0039-MKTD-016" href="#0039-MKTD-016">0039-MKTD-016</a>)
+- Liquidity orders are part of the market depth view and should update the view when their reference prices move (<a name="0039-MKTD-017" href="#0039-MKTD-017">0039-MKTD-017</a>)
+- Each delta update will have the new sequence number along with the previous sequence number which will match the previous delta update (<a name="0039-MKTD-018" href="#0039-MKTD-018">0039-MKTD-018</a>)
+- The sequence number received as part of the market depth snapshot will match the sequence number of a delta update (<a name="0039-MKTD-019" href="#0039-MKTD-019">0039-MKTD-019</a>)
 
 # Summary
 The market depth builder receives a stream of events from the core from which it builds up a market depth structure for each given market. This structure is used to provide a market depth stream and full market depth dump to any clients which have requested/subscribed to it. 
@@ -10,9 +23,9 @@ The market depth builder receives a stream of events from the core from which it
 # Guide-level explanation
 When the core processes an external action such as an order, cancel, amend or changing auction state, it generates one or more events which are sent out via the event-bus. 
 
-The market depth module subscribes to all the event types in the market-event and order-event streams. From the events received from these event streams, we build up a market depth structure for each market which will be a representation of the orderbook stored in the core. When the market is created the sequence number of the market depth structure is set to zero. Every update from then onwards increments the sequence number by one.
+The market depth module subscribes to all the event types in the market-event and order-event streams. From the events received from these event streams, we build up a market depth structure for each market which will be a representation of the orderbook stored in the core.
 
-Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occurring to the market depth structure and will contain a sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date.
+Clients connect to a vega node and subscribe to a MarketDepth stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occurring to the market depth structure and will contain a current and previous sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date. The client will be able to use the current and previous sequence numbers to confirm all messages are received. 
 
 The market depth information should include pegged order volume.
 
@@ -79,12 +92,10 @@ An update message is:
 
     type UpdateMarketDepth struct {
         SequenceNum uint64
+        PrevSeqNum  uint64
         Price       int64
         Volume      uint64
         NumOfOrders uint64
-        Delta       int64
-        Direction   bool // bid or ask
-        Reason      action enum // Cancel, fill, amend etc
     }
 
 
@@ -93,7 +104,6 @@ The server side process to handle updates can be described as such:
     Forever
         Receive update from matching engine
         Apply update to the market depth structure and record which price levels have been touched
-        Increment market depth sequence number
         Send updates to all subscribers for price levels that changed
     End
 
@@ -104,6 +114,7 @@ The client side will perform the following steps to build and keep an up to date
     Request current market depth structure
     Forever
         Receive market depth update
+        Verify that the prevSeqNum of this message matches the SeqNum of the previous message
         If update sequence number is above current sequence number
             Apply update to the market depth structure
         Else
@@ -120,4 +131,4 @@ The client side will perform the following steps to build and keep an up to date
 * Cancel an order and replace it with the same order values, verify the MD sees an update
 * Do nothing for many minutes, make sure subscribers do not timeout/fail
 * Send a large spike of order updates, make sure the system does not stall
-* Sequence number increase for each emitted book update
+* Sequence number is larger for each emitted book update

@@ -388,7 +388,7 @@ Verify that one validator is replaced the following epoch, one in the epoch afte
   * Send an announce node command from a non validator node should fail
 2. Valid announce node command (<a name="0069-VCBS-045" href="#0069-VCBS-045">0069-VCBS-045</a>):
   * Send a valid announce node from a validator node should result in a validator update event with the details of the validator and a validator ranking event.
-3. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>):
+3. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
   * Should be rejected
 
 

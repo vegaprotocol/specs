@@ -59,8 +59,11 @@ The onus is on the creator of proposal `B` to submit (and pay the gas for) for p
 ### Vega chain part
 If it changes `quantum` then this new value becomes used immediately on enactement.
 
-**Note on `decimals`.** The Vega ERC20 bridge does not support assets with a changing number of decimals, and is unlikely ever to support such assets (due to both the added complexity and the lack of demonstrable use cases for this).
-Therefore, it is undefined how to proceed in the event that decimals does change, and the specific, immutable instance of the token smart contract on the Ethereum blockchain much be verified by community members when voting on each new asset that is proposed to ensure that the number of decimals used by the asset is guaranteed to be perpetually invariant for the lifetime of the asset.
+**Note on `decimals`.**
+
+- Only non-negative integer values are allowed to specify number of asset decimal places.
+- The Vega ERC20 bridge does not support assets with a changing number of decimals, and is unlikely ever to support such assets (due to both the added complexity and the lack of demonstrable use cases for this).
+Therefore, it is undefined how to proceed in the event that decimals does change, and the specific, immutable instance of the token smart contract on the Ethereum blockchain must be verified by community members when voting on each new asset that is proposed to ensure that the number of decimals used by the asset is guaranteed to be perpetually invariant for the lifetime of the asset.
 Contracts that do not meet this guarantee are not suitable as a basis for Vega bridge assets.
 
 
@@ -175,7 +178,7 @@ This must be an integer strictly greater than `0`.
 
 ## Validation
 ### ERC20 Validation
-- [ ] The contract address in the ERC20 proposal **must** be validated as an ERC20 asset(<a name="0027-ASSP-009" href="#0027-ASSP-009">0027-ASSP-009</a>)
+- [ ] A valid contract address, which exists in ethereum and is specified in the ERC20 proposal **must** be validated as conforming as an ERC20 asset(<a name="0027-ASSP-009" href="#0027-ASSP-009">0027-ASSP-009</a>)
 - [ ] An ERC20 proposal **must** provide a name and that name **must** exactly equal the name of the ERC20 token on the target chain (<a name="0027-ASSP-010" href="#0027-ASSP-010">0027-ASSP-010</a>)
 - [ ] An ERC20 proposal **must** provide a code and that code **must** exactly equal the name of the ERC20 token on the target chain (<a name="0027-ASSP-011" href="#0027-ASSP-011">0027-ASSP-011</a>)
 - [ ] An ERC20 proposal **must** provide a decimal places property and that property **must** exactly equal the decimal places property of the ERC20 token on the target chain (<a name="0027-ASSP-012" href="#0027-ASSP-012">0027-ASSP-012</a>)
@@ -188,8 +191,10 @@ This must be an integer strictly greater than `0`.
 - [ ] `quantum` must be an integer strictly greater than `0` (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)
 - [ ] There can be multiple concurrent proposals for the same new ERC20 asset (same means identical Ethereum address). Once the nodes agree (based on events from the external blockchain queue), that the asset is enabled on the bridge all the remaining proposals for the same asset are cancelled. 
 (<a name="0027-ASSP-020" href="#0027-ASSP-020">0027-ASSP-020</a>)
+- [ ] An invalid contract address, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-021" href="#0027-ASSP-021">0027-ASSP-021</a>)
+- [ ] An valid contract address which cannot be found in ethereum, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-022" href="#0027-ASSP-022">0027-ASSP-022</a>)
 
 
 ## Delays and Thresholds
-- [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. Withdrawal in asset `X` below `t1` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` above `t1` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-020" href="#0027-ASSP-019">0027-ASSP-020</a>)
-- [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. An asset update proposal is submitted to change these to `t2`; it passes voting and is submitted to Ethereum bridge contract. The new thresholds now apply i.e. withdrawal in asset `X` below `t2` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` above `t2` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-021" href="#0027-ASSP-020">0027-ASSP-021</a>)
+- [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. Withdrawal in asset `X` below `t1` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t1` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-023" href="#0027-ASSP-023">0027-ASSP-023</a>)
+- [ ] There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. An asset update proposal is submitted to change these to `t2`; it passes voting and is submitted to Ethereum bridge contract. The new thresholds now apply i.e. withdrawal in asset `X` below `t2` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t2` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-024" href="#0027-ASSP-024">0027-ASSP-024</a>)

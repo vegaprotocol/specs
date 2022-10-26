@@ -132,7 +132,7 @@ Future (needed sooner than the others listed in 9 below)
 
 Vega will need to keep track of all "active" defined data sources that are referenced either by markets that are still being managed by the core (i.e. excluding Closed/Settled/Cancelled/other "end state" markets) or by other data source definitions (see each individual data source definition spec, such as [signed message](./0046-DSRM-data_source_signed_message.md) for this specific information).
 
-Vega should consider the specific definition including filters, combinations etc. not just the primary source. So, for example, if two markets use the same public key(s) but different filters or aggregations etc. then these constitute two different data sources and each transaction that arrives signed by these public keys should only be accepted if one or more of these specific active data sources "wants" the data.
+Vega should consider the specific definition including filters, combinations etc. not just the primary source. So, for example, if two markets use the same signing key(s)/addresses (signers) but different filters or aggregations etc. then these constitute two different data sources and each transaction that arrives signed by these signers should only be accepted if one or more of these specific active data sources "wants" the data.
 
 Data sources that are no longer active as defined above will be ignored, as well as any incoming data that is not emitted by an active data source (i.e. passes all filters etc. as well as matching the public key, event name, or whatever).
 
