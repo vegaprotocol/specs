@@ -40,7 +40,7 @@ If it gets decreased below the current total party count in any given market the
 Introduce a new network parameter `limits.markets.maxLimitOrders` controlling the maximum number of limit orders that can rest on a book in any given market. If the limit is reached limit orders can still be submitted, but:
 
 * if the order is aggressive (results in a trade) the trade proceeds as normal,
-* if the order is passive (it doesn't match on entry) and would get added to the order boo (it's a persistent order) it gets rejected.
+* if the order is passive (it doesn't match on entry) and would get added to the order book (it's a persistent order) it gets rejected.
 
 Pegged orders and [liquidity provision orders](./0038-OLIQ-liquidity_provision_order_type.md) do not get counted towards the limit.
 
