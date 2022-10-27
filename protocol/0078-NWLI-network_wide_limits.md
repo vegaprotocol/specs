@@ -25,7 +25,7 @@ If it gets decreased below the current total market count then no further action
 
 Introduce a new network parameter `limits.markets.maxParties` controlling the maximum number of parties allowed within any given market.
 
-A party gets counted towards the limit if it has either open orders or open positions in the market. Once party has no open orders and no open positions it gets removed from a **total party count** within the market. Once the limit gets reached the market accepts no further orders.
+A party gets counted towards the limit if it has either open orders or open positions in the market. Once party has no open orders and no open positions it gets removed from a **total party count** within the market. Once the limit gets reached the market accepts no further orders from parties that are not already in the market.
 Once the total party count drops below the limit market accepts orders again (provided its [state](./0043-MKTL-market_lifecycle.md) allows that).
 
 The limit does not apply to liquidity providers.
