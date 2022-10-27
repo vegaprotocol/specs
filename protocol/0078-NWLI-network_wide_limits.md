@@ -38,7 +38,7 @@ Default value: `1,000,000`.
 A limit order of arbitrary volume which gets placed on the book (doesn't trade in full on entry) contributes +1 to the count. If an order already on the book gets cancelled or filled in full (so that it's remaining size is 0) the count should be decreased by 1. If the count reaches `limits.markets.maxLimitOrders` limit orders can still be submitted, but:
 
 * if the order is aggressive (results in a trade) the trade proceeds as normal,
-* if the order is passive (it doesn't match on entry) and would get added to the order book (it's a persistent order) it gets rejected.
+* if the order or its part is passive (it doesn't match in full on entry to the matching engine) and would get added to the order book (it's a persistent order) it gets rejected.
 
 Pegged orders and [liquidity provision orders](./0038-OLIQ-liquidity_provision_order_type.md) do not get counted towards the limit.
 
