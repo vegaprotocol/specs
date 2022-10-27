@@ -5,7 +5,8 @@ Vega has been designed with low-latency in mind so that the responsiveness of th
 
 ## Number of markets
 
-Introduce a new network parameter `limits.markets.max` controlling the maximum number of markets allowed within a network.
+Introduce a new network parameter `limits.markets.max` controlling the maximum number of markets allowed within a network.\
+Default value: `50`.
 
 Each market in a `Pending` [state](./0043-MKTL-market_lifecycle.md) should increment the **total market count** by 1. If a market reaches a `Rejected`, `Cancelled`, `Closed` or `Settled` state the total market count should be decremented by 1.
 As soon as the total market count reaches the value specified by `limits.markets.max` parmeter no other further market proposals should be accepted. Any markets in a `Proposed` state at that stage they should get rejected. If the total market count drops below `limits.markets.max` the network should start accepting market proposals again.
@@ -17,7 +18,7 @@ If it gets decreased below the current total market count then no further action
 
 ## Parties in a market
 
-Introduce a new network parameter `limits.markets.maxParties` controlling the maximum number of parties allowed within any given market.
+Introduce a new network parameter `limits.markets.maxParties` controlling the maximum number of parties allowed within any given market. Default value: `100,000`.
 
 A party gets counted towards the limit if it has either open orders or open positions in the market. Once party has no open orders and no open positions it gets removed from a **total party count** within the market. Once the limit gets reached the market accepts no further orders from parties that are not already in the market.
 Once the total party count drops below the limit market accepts orders from any party again (provided its [state](./0043-MKTL-market_lifecycle.md) allows that).
@@ -31,7 +32,10 @@ If it gets decreased below the current total party count in any given market the
 
 ## Limit orders on a book
 
-Introduce a new network parameter `limits.markets.maxLimitOrders` controlling the maximum number of limit orders that can rest on a book in any given market. A limit order of arbitrary volume which gets placed on the book (doesn't trade in full on entry) contributes +1 to the count. If an order already on the book gets cancelled or filled in full (so that it's remaining size is 0) the count should be decreased by 1. If the count reaches `limits.markets.maxLimitOrders` limit orders can still be submitted, but:
+Introduce a new network parameter `limits.markets.maxLimitOrders` controlling the maximum number of limit orders that can rest on a book in any given market.\
+Default value: `1,000,000`.
+
+A limit order of arbitrary volume which gets placed on the book (doesn't trade in full on entry) contributes +1 to the count. If an order already on the book gets cancelled or filled in full (so that it's remaining size is 0) the count should be decreased by 1. If the count reaches `limits.markets.maxLimitOrders` limit orders can still be submitted, but:
 
 * if the order is aggressive (results in a trade) the trade proceeds as normal,
 * if the order is passive (it doesn't match on entry) and would get added to the order book (it's a persistent order) it gets rejected.
@@ -45,7 +49,8 @@ If it gets decreased below the current total number of orders on the book in any
 
 ## Pegged orders on a market
 
-Introduce a new network parameter `limits.markets.maxPeggedOrders` controlling the maximum number of pegged orders that can be active in any given market.
+Introduce a new network parameter `limits.markets.maxPeggedOrders` controlling the maximum number of pegged orders that can be active in any given market.\
+Default value: `10,000`.
 
 ### Change of network parameter
 
@@ -60,7 +65,10 @@ Each [LP order shape](./0038-OLIQ-liquidity_provision_order_type.md#how-they-are
 
 ## LPs in a market
 
-Introduce a new network parameter `limits.markets.maxLPs` controlling the maximum number of liquidity providers that can be active in any market. Each liquidity provider that successfully submits a liquidity provision transaction for a given market gets counted towards the **active LP count** for that market. When an LP in a given market reduces their commitment amount to 0 or gets closed out the LP count for that market gets decremented by 1.
+Introduce a new network parameter `limits.markets.maxLPs` controlling the maximum number of liquidity providers that can be active in any market.\
+Default value: `1000`.
+
+Each liquidity provider that successfully submits a liquidity provision transaction for a given market gets counted towards the **active LP count** for that market. When an LP in a given market reduces their commitment amount to 0 or gets closed out the LP count for that market gets decremented by 1.
 
 Once the active LP count in a given market reaches the limit only the LP transactions with commitment amount larger then the lowest commitment already active in that market are accepted. If such a situation occurs the existing LP commitment with the lowest value which has been in the market the shortest should get forcibly cancelled.\
 Once the count drops below the limit the LP commitments from any party submitting a valid commitment transaction are accepted again.
