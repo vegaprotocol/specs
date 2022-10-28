@@ -66,7 +66,7 @@ Each [LP order shape](./0038-OLIQ-liquidity_provision_order_type.md#how-they-are
 ## LPs in a market
 
 Introduce a new network parameter `limits.markets.maxLPs` controlling the maximum number of liquidity providers that can be active in any market.\
-Default value: `1000`.
+Default value: `50`.
 
 Each liquidity provider that successfully submits a liquidity provision transaction for a given market gets counted towards the **active LP count** for that market. When an LP in a given market reduces their commitment amount to 0 or gets closed out the LP count for that market gets decremented by 1.
 
