@@ -9,7 +9,7 @@ Introduce a new network parameter `limits.markets.max` controlling the maximum n
 Default value: `50`.
 
 Each market in a `Pending` [state](./0043-MKTL-market_lifecycle.md) should increment the **total market count** by 1. If a market reaches a `Rejected`, `Cancelled`, `Closed` or `Settled` state the total market count should be decremented by 1.
-As soon as the total market count reaches the value specified by `limits.markets.max` parmeter no other further market proposals should be accepted. Any markets in a `Proposed` state at that stage they should get rejected. If the total market count drops below `limits.markets.max` the network should start accepting market proposals again.
+As soon as the total market count reaches the value specified by `limits.markets.max` parmeter no other further market proposals should be accepted. Any markets in a `Proposed` state at that stage should get rejected. If the total market count drops below `limits.markets.max` the network should start accepting market proposals again.
 
 ### Change of network parameter
 
@@ -38,7 +38,7 @@ Default value: `1,000,000`.
 A limit order of arbitrary volume which gets placed on the book (doesn't trade in full on entry) contributes +1 to the count. If an order already on the book gets cancelled or filled in full (so that it's remaining size is 0) the count should be decreased by 1. If the count reaches `limits.markets.maxLimitOrders` limit orders can still be submitted, but:
 
 * if the order is aggressive (results in a trade) the trade proceeds as normal,
-* if the order or its part is passive (it doesn't match in full on entry to the matching engine) and would get added to the order book (it's a persistent order) it gets rejected.
+* if the order or its part is passive (it doesn't match in full on entry to the matching engine) and it's part would get added to the order book (it's a persistent order) that part of the order gets rejected.
 
 Pegged orders and [liquidity provision orders](./0038-OLIQ-liquidity_provision_order_type.md) do not get counted towards the limit.
 
@@ -92,6 +92,7 @@ If it gets decreased below the current total number of LPs in the market then no
 * Reaching a limit in one of the markets doesn't affect the ability to place the orders in other markets which are still below the limit. (<a name="0078-NWLI-005" href="#0078-NWLI-005">0078-NWLI-005</a>)
 * Lowering `limits.markets.maxParties` to the number number of parties in the market with open orders and/or positions minus 2 results in no changes to the number of active parties or their orders/positions. Once 2 of the parties active in the market with no positions cancel their orders and 1 party with a position closes it out and is left without any orders a single new party can enter the market. The parties that left the market now cannot re-enter it as the limit is now reached. (<a name="0078-NWLI-006" href="#0078-NWLI-006">0078-NWLI-006</a>)
 * When the limit is reached in the market the [market data](./0021-MDAT-market_data_spec.md) API correctly indicates that. (<a name="0078-NWLI-021" href="#0078-NWLI-021">0078-NWLI-021</a>)
+* When `limits.markets.maxParties`  limit is reached, but `limits.markets.maxLPs` limit is not active yet, it is possible for a new LP to join the market. (<a name="0078-NWLI-025" href="#0078-NWLI-025">0078-NWLI-025</a>)
 
 ### Limit orders
 
@@ -100,6 +101,8 @@ If it gets decreased below the current total number of LPs in the market then no
 * Lowering `limits.markets.maxLimitOrders` to the number number of limit orders on the book minus 2 results in no changes to the order book composition. Once 2 of the orders get filled and 1 gets cancelled it is possible to successfully submit one additional limit order (<a name="0078-NWLI-009" href="#0078-NWLI-009">0078-NWLI-009</a>)
 * Once market has reached `limits.markets.maxLimitOrders` a [batch transaction](./0074-BTCH-batch-market-instructions.md) with 1 cancellation, 1 amendent and 1 submission succeeds in full (<a name="0078-NWLI-010" href="#0078-NWLI-010">0078-NWLI-0010</a>)
 * When the limit is reached in the market the [market data](./0021-MDAT-market_data_spec.md) API correctly indicates that. (<a name="0078-NWLI-022" href="#0078-NWLI-022">0078-NWLI-022</a>)
+* When the `limits.markets.maxLimitOrders` limit is reached in the market, but `limits.markets.maxPeggedOrders` is not active yet it is still possible to successfully submit a pegged order (<a name="0078-NWLI-026" href="#0078-NWLI-026">0078-NWLI-026</a>).
+* When the `limits.markets.maxLimitOrders` limit is reached in the market, but `limits.markets.maxLPs` is not active yet it is still possible to successfully submit a new liquidity provision order (<a name="0078-NWLI-027" href="#0078-NWLI-027">0078-NWLI-027</a>).
 
 ### Pegged orders
 
@@ -107,6 +110,7 @@ If it gets decreased below the current total number of LPs in the market then no
 * Reaching a limit in one of the markets doesn't affect the ability to place the orders in other markets which are still below the limit. (<a name="0078-NWLI-012" href="#0078-NWLI-012">0078-NWLI-012</a>)
 * Lowering `limits.markets.maxPeggedOrders` to the number number of pegged orders on the book minus 2 results in no changes to the order book composition. Once 2 of the orders get filled and 1 gets cancelled it is possible to successfully submit one additional pegged order (<a name="0078-NWLI-013" href="#0078-NWLI-013">0078-NWLI-013</a>)
 * When the limit is reached in the market the [market data](./0021-MDAT-market_data_spec.md) API correctly indicates that. (<a name="0078-NWLI-023" href="#0078-NWLI-023">0078-NWLI-023</a>)
+* When the `limits.markets.maxPeggedOrders` limit is reached in the market, but `limits.markets.maxLPs` is not active yet it is still possible to successfully submit a new liquidity provision order (<a name="0078-NWLI-028" href="#0078-NWLI-028">0078-NWLI-028</a>).
 
 ### LP order shapes
 
