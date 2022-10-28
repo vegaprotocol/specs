@@ -50,7 +50,7 @@ If it gets decreased below the current total number of orders on the book in any
 ## Pegged orders on a market
 
 Introduce a new network parameter `limits.markets.maxPeggedOrders` controlling the maximum number of pegged orders that can be active in any given market.\
-Default value: `10,000`.
+Default value: `1,500`.
 
 ### Change of network parameter
 
