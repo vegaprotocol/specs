@@ -21,7 +21,7 @@ If it gets decreased below the current total market count then no further action
 Introduce a new network parameter `limits.markets.maxParties` controlling the maximum number of parties allowed within any given market. Default value: `100,000`.
 
 A party gets counted towards the limit if it has either open orders or open positions in the market. Once party has no open orders and no open positions it gets removed from a **total party count** within the market. Once the limit gets reached the market accepts no further orders from parties that are not already in the market.
-Once the total party count drops below the limit market accepts orders from any party again (provided its [state](./0043-MKTL-market_lifecycle.md) allows that).
+Once the total party count drops below the limit market accepts orders from any party again (provided its [state](./0043-MKTL-market_lifecycle.md#market-lifecycle-statuses) allows that).
 
 The limit does not apply to liquidity providers.
 
@@ -80,4 +80,45 @@ If it gets decreased below the current total number of LPs in the market then no
 
 ## Acceptance Criteria
 
-* (<a name="0078-NWLI-001" href="#0078-NWLI-001">0078-NWLI-001</a>)
+### Markets
+
+* Attempt to submit a new market proposal when the number of markets in a `Pending` and `Active` state is equal to `limits.markets.max` results in a rejection of the proposal. Error message attributes the rejection to the limit. (<a name="0078-NWLI-001" href="#0078-NWLI-001">0078-NWLI-001</a>)
+* Once one of the markets from the above AC reaches a `Settled` state a new market proposal gets accepted and the proposed market reaches a `Pending` state. (<a name="0078-NWLI-002" href="#0078-NWLI-002">0078-NWLI-002</a>)
+* Lowering `limits.markets.max` to the number number of markets in a `Pending` and `Active` minus 2 results in no changes to the number of markets. Markets in a `Pending` state successfully exit the opening auction and continue in an `Active` state. Once 3 of the `Active` markets reach a `Settled` state a single new market proposal gets accepted and the proposed market reaches a `Pending` state. (<a name="0078-NWLI-003" href="#0078-NWLI-003">0078-NWLI-003</a>)
+
+### Parties
+
+* Attempt to place a market order when the number of parties with active orders and/or positions in the market is at `limits.markets.maxParties` results in a rejection. Error message attributes the rejection to the limit. (<a name="0078-NWLI-004" href="#0078-NWLI-004">0078-NWLI-004</a>)
+* Reaching a limit in one of the markets doesn't affect the ability to place the orders in other markets which are still below the limit. (<a name="0078-NWLI-005" href="#0078-NWLI-005">0078-NWLI-005</a>)
+* Lowering `limits.markets.maxParties` to the number number of parties in the market with open orders and/or positions minus 2 results in no changes to the number of active parties or their orders/positions. Once 2 of the parties active in the market with no positions cancel their orders and 1 party with a position closes it out and is left without any orders a single new party can enter the market. The parties that left the market now cannot re-enter it as the limit is now reached. (<a name="0078-NWLI-006" href="#0078-NWLI-006">0078-NWLI-006</a>)
+* When the limit is reached in the market the [market data](./0021-MDAT-market_data_spec.md) API correctly indicates that. (<a name="0078-NWLI-021" href="#0078-NWLI-021">0078-NWLI-021</a>)
+
+### Limit orders
+
+* Attempt to place an additional limit order by a party already active in the market when the number of orders on the book is equal to `limits.markets.maxLimitOrders` results in a rejection. Error message attributes the rejection to the limit. (<a name="0078-NWLI-007" href="#0078-NWLI-007">0078-NWLI-007</a>)
+* Reaching a limit in one of the markets doesn't affect the ability to place the orders in other markets which are still below the limit. (<a name="0078-NWLI-008" href="#0078-NWLI-008">0078-NWLI-008</a>)
+* Lowering `limits.markets.maxLimitOrders` to the number number of limit orders on the book minus 2 results in no changes to the order book composition. Once 2 of the orders get filled and 1 gets cancelled it is possible to successfully submit one additional limit order (<a name="0078-NWLI-009" href="#0078-NWLI-009">0078-NWLI-009</a>)
+* Once market has reached `limits.markets.maxLimitOrders` a [batch transaction](./0074-BTCH-batch-market-instructions.md) with 1 cancellation, 1 amendent and 1 submission succeeds in full (<a name="0078-NWLI-010" href="#0078-NWLI-010">0078-NWLI-0010</a>)
+* When the limit is reached in the market the [market data](./0021-MDAT-market_data_spec.md) API correctly indicates that. (<a name="0078-NWLI-022" href="#0078-NWLI-022">0078-NWLI-022</a>)
+
+### Pegged orders
+
+* Attempt to place an additional pegged order by a party already active in the market when the number of pegged orders on the book is equal to `limits.markets.maxPeggedOrders` results in a rejection. Error message attributes the rejection to the limit. (<a name="0078-NWLI-011" href="#0078-NWLI-011">0078-NWLI-011</a>)
+* Reaching a limit in one of the markets doesn't affect the ability to place the orders in other markets which are still below the limit. (<a name="0078-NWLI-012" href="#0078-NWLI-012">0078-NWLI-012</a>)
+* Lowering `limits.markets.maxPeggedOrders` to the number number of pegged orders on the book minus 2 results in no changes to the order book composition. Once 2 of the orders get filled and 1 gets cancelled it is possible to successfully submit one additional pegged order (<a name="0078-NWLI-013" href="#0078-NWLI-013">0078-NWLI-013</a>)
+* When the limit is reached in the market the [market data](./0021-MDAT-market_data_spec.md) API correctly indicates that. (<a name="0078-NWLI-023" href="#0078-NWLI-023">0078-NWLI-023</a>)
+
+### LP order shapes
+
+* Submitting a [liquidity provision order](./0038-OLIQ-liquidity_provision_order_type.md) with 20 buy shapes and 20 sell shapes proceeds without any errors and liquidity provision becomes active. (<a name="0078-NWLI-014" href="#0078-NWLI-014">0078-NWLI-014</a>)
+* Submitting a liquidity provision order with 21 buy shapes and 20 sell shapes results in a failure. Error message attributes the rejection to the limit. (<a name="0078-NWLI-015" href="#0078-NWLI-015">0078-NWLI-015</a>)
+* Submitting a liquidity provision order with 20 buy shapes and 21 sell shapes results in a failure. Error message attributes the rejection to the limit. (<a name="0078-NWLI-016" href="#0078-NWLI-016">0078-NWLI-016</a>)
+
+### LPs
+
+* Attempt to place an additional liquidity provision with valid commitment amount below the lowest one in the market when the number of liquidity provisions in the market is equal to `limits.markets.maxLPs` results in a rejection. Error message attributes the rejection to the limit. (<a name="0078-NWLI-017" href="#0078-NWLI-017">0078-NWLI-017</a>)
+* When market is in continuous trading and `limits.markets.maxLPs` is reached then submitting a new liquidity provision order with commitment amount higher than the lowest commitment active in the market results in a success and a forced cancellation of the lowest and shortest-lived commitment in the market.(<a name="0078-NWLI-018" href="#0078-NWLI-018">0078-NWLI-018</a>)
+* When market is in liquidity monitoring auction and `limits.markets.maxLPs` is reached then submitting a new liquidity provision order with commitment amount higher than the lowest commitment active and in the market results in a success and a forced cancellation of the lowest and shortest-lived commitment in the market. The amount submitted should be such that the market can now leave the liquidity auction and go back to continuous trading mode.(<a name="0078-NWLI-019" href="#0078-NWLI-019">0078-NWLI-019</a>)
+* Reaching a limit in one of the markets doesn't affect the ability to place the orders with any valid commitment amount in other markets which are still below the limit. (<a name="0078-NWLI-020" href="#0078-NWLI-020">0078-NWLI-020</a>)
+* Lowering `limits.markets.maxLPs` to the number number of active liquidity provisions in the market minus 2 results in no changes to the order book composition. Once 2 of the LPs cancel their commitments and 1 gets closed out it is possible to successfully submit one additional liquidity provision order (<a name="0078-NWLI-020" href="#0078-NWLI-020">0078-NWLI-020</a>)
+* When the limit is reached in the market the [market data](./0021-MDAT-market_data_spec.md) API correctly indicates that. (<a name="0078-NWLI-024" href="#0078-NWLI-024">0078-NWLI-024</a>)
