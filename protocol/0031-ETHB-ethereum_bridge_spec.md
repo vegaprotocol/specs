@@ -220,3 +220,26 @@ This example connects the network to Ropsten:
     *  must return proper Vega asset ID (<a name="0031-ETHB-065" href="#0031-ETHB-065">0031-ETHB-065</a>)
 20. `function get_asset_source(bytes32 vega_asset_id) external view override returns (address)`
     *  must return the deployed asset address from Vega asset ID (<a name="0031-ETHB-066" href="#0031-ETHB-066">0031-ETHB-066</a>)
+
+## ERC20 Asset Pool to Vega Integration Tests (Vega System Tests)
+1. `address public multisig_control_address;`
+   * must show the current multisig control address (<a name="0031-ETHB-067" href="#0031-ETHB-067">0031-ETHB-067</a>)
+   * must change to reflect a sucessful set_multisig_control call (<a name="0031-ETHB-068" href="#0031-ETHB-068">0031-ETHB-068</a>)
+2. `address public erc20_bridge_address;`
+   * must show current deployed erc20_bridge address (<a name="0031-ETHB-069" href="#0031-ETHB-069">0031-ETHB-069</a>)
+   * must change to reflect a sucessful set_bridge_address call (<a name="0031-ETHB-070" href="#0031-ETHB-070">0031-ETHB-070</a>)
+3. `receive() external payable // fallback, should fail`
+4. `function set_multisig_control(address new_address,uint256 nonce,bytes memory signatures)`
+   * must set multisig control (<a name="0031-ETHB-071" href="#0031-ETHB-071">0031-ETHB-071</a>)
+   * must be reflected in `multisig_control_address` (<a name="0031-ETHB-072" href="#0031-ETHB-072">0031-ETHB-072</a>)
+   * must fail on bad sigs (<a name="0031-ETHB-073" href="#0031-ETHB-073">0031-ETHB-073</a>)
+5. `function set_bridge_address(address new_address,uint256 nonce,bytes memory signatures)`
+   * must set bridge address (<a name="0031-ETHB-074" href="#0031-ETHB-074">0031-ETHB-074</a>)
+   * must be reflected in `erc20_bridge_address` (<a name="0031-ETHB-075" href="#0031-ETHB-075">0031-ETHB-075</a>)
+   * must fail on bad sigs (<a name="0031-ETHB-076" href="#0031-ETHB-076">0031-ETHB-076</a>)
+6. `function withdraw(address token_address,address target,uint256 amount)`
+   * must remit the `amount` of `token_address` to the `target` address (<a name="0031-ETHB-077" href="#0031-ETHB-077">0031-ETHB-077</a>)
+   * must be runnable from the current `erc20_bridge_address` address (<a name="0031-ETHB-078" href="#0031-ETHB-078">0031-ETHB-078</a>)
+   * must fail if ran by any other address (<a name="0031-ETHB-079" href="#0031-ETHB-079">0031-ETHB-079</a>)
+   * must work for new bridge after bridge address changed (<a name="0031-ETHB-080" href="#0031-ETHB-080">0031-ETHB-080</a>)
+   * must fail for old bridge after bridge address changed (<a name="0031-ETHB-081" href="#0031-ETHB-081">0031-ETHB-081</a>)
