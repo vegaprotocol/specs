@@ -70,7 +70,7 @@ Default value: `1000`.
 
 Each liquidity provider that successfully submits a liquidity provision transaction for a given market gets counted towards the **active LP count** for that market. When an LP in a given market reduces their commitment amount to 0 or gets closed out the LP count for that market gets decremented by 1.
 
-Once the active LP count in a given market reaches the limit only the LP transactions with commitment amount larger then the lowest commitment already active in that market are accepted. If such a situation occurs the existing LP commitment with the lowest value which has been in the market the shortest should get forcibly cancelled.\
+Once the active LP count in a given market reaches the limit only the LP transactions with commitment amount implying [equity-like-share](0042-LIQF-setting_fees_and_rewarding_lps.md) larger then the lowest equity-like-share already active in that market are accepted. If such a situation occurs the existing LP commitment with equity-like-share which is getting replaced have their commitment cancelled (bond returned to margin account, volume no longer placed on book but positions and orders kept in place).\
 Once the count drops below the limit the LP commitments from any party submitting a valid commitment transaction are accepted again.
 
 ### Change of network parameter
