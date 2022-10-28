@@ -180,7 +180,7 @@ This must be an integer strictly greater than `0`.
 ### ERC20 Validation
 - [ ] A valid contract address, which exists in ethereum and is specified in the ERC20 proposal **must** be validated as conforming as an ERC20 asset(<a name="0027-ASSP-009" href="#0027-ASSP-009">0027-ASSP-009</a>)
 - [ ] An ERC20 proposal **must** provide a name and that name **must** exactly equal the name of the ERC20 token on the target chain (<a name="0027-ASSP-010" href="#0027-ASSP-010">0027-ASSP-010</a>)
-- [ ] An ERC20 proposal **must** provide a code and that code **must** exactly equal the name of the ERC20 token on the target chain (<a name="0027-ASSP-011" href="#0027-ASSP-011">0027-ASSP-011</a>)
+- [ ] An ERC20 proposal **must** provide a code and that code **must** exactly equal the code of the ERC20 token on the target chain (<a name="0027-ASSP-011" href="#0027-ASSP-011">0027-ASSP-011</a>)
 - [ ] An ERC20 proposal **must** provide a decimal places property and that property **must** exactly equal the decimal places property of the ERC20 token on the target chain (<a name="0027-ASSP-012" href="#0027-ASSP-012">0027-ASSP-012</a>)
 - [ ] If the contract name or code do not match, or the contract does not exist, or is not an ERC20 contract, the proposal must be rejected and the rejection reason and error details fields should indicate which rule failed (<a name="0027-ASSP-013" href="#0027-ASSP-013">0027-ASSP-013</a>)
 - [ ] This validation occurs according to the `validationTimestamp` field in the proposal (<a name="0027-ASSP-014" href="#0027-ASSP-014">0027-ASSP-014</a>)
