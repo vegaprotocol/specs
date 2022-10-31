@@ -24,7 +24,7 @@ For each tranche:
 
 When looking into a specific tranche, I...
 
-- **must** see all the same details as the [list of tranches](#details-of-a-tranche) <a name="1005-VEST-012" href="#1005-VEST-012">1005-VEST-012</a>
+- **should** see all the same details as the [list of tranches](#details-of-a-tranche)
 - **must** see a list of ethereum wallets with tokens in this tranche <a name="1005-VEST-013" href="#1005-VEST-013">1005-VEST-013</a>
 
 for each ethereum wallet:
