@@ -68,6 +68,9 @@ When looking to redeem tokens, I...
 - **must** [connect the ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) that holds tokens <a name="1005-VEST-029" href="#1005-VEST-029">1005-VEST-029</a>
 - **must** select a tranche to redeem from <a name="1005-VEST-030" href="#1005-VEST-030">1005-VEST-030</a>
 - **must** see the number of tokens that can be redeemed <a name="1005-VEST-031" href="#1005-VEST-031">1005-VEST-031</a>
+- **must** be warned if the number of tokens you would be attempting to redeem is greater than you have unassociated <a name="1005-VEST-035" href="#1005-VEST-035">1005-VEST-035</a>
+  - **should** tell you how many tokens to disassociate for the redeem function to work (should round up to create a buffer for the tokens that may unlock between now and when the user gets to the disassociate form)
+  - **should** see a link to disassociate 
 - **must** submit the redeem from tranche [ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) <a name="1005-VEST-032" href="#1005-VEST-032">1005-VEST-032</a>
 - **must** get feedback on the progress of the Ethereum transaction <a name="1005-VEST-033" href="#1005-VEST-033">1005-VEST-033</a>
 - **must** see updated balances (in the trance and my eth wallet) after redemption <a name="1005-VEST-034" href="#1005-VEST-034">1005-VEST-034</a>
