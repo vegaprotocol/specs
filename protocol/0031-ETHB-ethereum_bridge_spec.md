@@ -151,6 +151,8 @@ This example connects the network to Ropsten:
 
 
 ## ERC20 Bridge Logic to Vega Integration Tests (Vega System Tests)
+To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on ERC20_Bridge_Logic and their corresponding acceptance criteria.
+
 1.  `address payable public erc20_asset_pool_address;`
    * must match the deployed asset pool address (<a name="0031-ETHB-018" href="#0031-ETHB-018">0031-ETHB-018</a>)
 2.  `function list_asset(address asset_source,bytes32 vega_asset_id,uint256 lifetime_limit,uint256 withdraw_threshold,uint256 nonce,bytes memory signatures)`
@@ -222,6 +224,8 @@ This example connects the network to Ropsten:
     *  must return the deployed asset address from Vega asset ID (<a name="0031-ETHB-066" href="#0031-ETHB-066">0031-ETHB-066</a>)
 
 ## ERC20 Asset Pool to Vega Integration Tests (Vega System Tests)
+To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on ERC20_Asset_Pool and their corresponding acceptance criteria.
+
 1. `address public multisig_control_address;`
    * must show the current multisig control address (<a name="0031-ETHB-067" href="#0031-ETHB-067">0031-ETHB-067</a>)
    * must change to reflect a sucessful set_multisig_control call (<a name="0031-ETHB-068" href="#0031-ETHB-068">0031-ETHB-068</a>)
