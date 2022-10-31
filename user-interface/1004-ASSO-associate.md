@@ -31,7 +31,7 @@ When looking to stake validators or participate in governance, I first need to a
 - **must** select a Vega key to associate to <a name="1004-ASSO-003" href="#1004-ASSO-003">1004-ASSO-003</a>
   - **must** be able use a [connected Vega wallet](0002-WCON-connect_vega_wallet.md) as instead of manually inputting a public key <a name="1004-ASSO-004" href="#1004-ASSO-004">1004-ASSO-004</a>
   - **should** be able to populate field with a string, so I can associate to a wallet I without connecting it
-- if the connected ethereum wallet has vesting tokens: **must** be able to select to associate from either the vesting contract or the wallet <a name="1004-ASSO-006" href="#1004-ASSO-006">1004-ASSO-006</a>
+- if the connected ethereum wallet has vesting tokens: **must** be able to select to associate from either the vesting contract or the wallet (The default should be wallet and the option to use vesting tokens should only appear if there are tokens in a tranche (associated or not)) <a name="1004-ASSO-006" href="#1004-ASSO-006">1004-ASSO-006</a>
 - **must** see the number of associated and un-associated tokens in the selected wallet/vesting contract <a name="1004-ASSO-007" href="#1004-ASSO-007">1004-ASSO-007</a>
 - **must** select the amount of tokens to associate <a name="1004-ASSO-008" href="#1004-ASSO-008">1004-ASSO-008</a>
   - **must** be able to populate the input with the amount of un-associated tokens for the selected wallet/vesting contract <a name="1004-ASSO-009" href="#1004-ASSO-009">1004-ASSO-009</a>
