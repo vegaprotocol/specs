@@ -27,8 +27,10 @@ When making a proposal, I...
 
 - **must** input a rationale title and description (<a name="3002-PROP-006" href="#3002-PROP-006">3002-PROP-006</a>)
 - **must** see the rules (min vote duration and enactment delay) for this proposal type (<a name="3002-PROP-008" href="#3002-PROP-008">3002-PROP-008</a>)
-- if anything except market change: **must** be warned if the amount I have associated is less the the minimum required to propose for this proposal type (<a name="3002-PROP-009" href="#3002-PROP-009">3002-PROP-009</a>)
-- if market change: **must** be warned if the amount I have less than the minimum required equity like share to propose a change (<a name="3002-PROP-020" href="#3002-PROP-020">3002-PROP-020</a>)
+- **should** see the minimum required tokens or LP vote required to make a proposal Spam protection and network parameters
+- if anything except market change: **must** be warned if the amount I have associated is less the the minimum required to propose for this proposal type (due to Spam protection or network parm, whichever is greater) (<a name="3002-PROP-009" href="#3002-PROP-009">3002-PROP-009</a>)
+- if market change: **must** be warned if the amount of tokens I have less than the minimum tokens required to propose a change (due to Spam protection or network params) (<a name="3002-PROP-020" href="#3002-PROP-020">3002-PROP-020</a>)
+- if market change: **must** be warned if the amount of I have less than the minimum required equity like share to propose a change (due to Spam protection or network params) (<a name="3002-PROP-022" href="#3002-PROP-022">3002-PROP-022</a>)
 - **should** see the balance of associated Governance tokens
 
 ### Detail on specific proposals
