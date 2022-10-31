@@ -128,6 +128,8 @@ contract MultisigControl {
 * Consuming smart contract calls `verify_signatures` with valid signature bundle and message hash is returned true if the valid signature count is over threshold % of total signers  (<a name="0030-ETHM-023" href="#0030-ETHM-023">0030-ETHM-023</a>)
  
 ## Multisig Control to Vega Integration Tests (Vega System Tests)
+To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on MultisigControl and their corresponding acceptance criteria.
+
 1. `mapping(address => bool) public signers;`
    * must show "True" for each signer that is currently valid (<a name="0030-ETHM-024" href="#0030-ETHM-024">0030-ETHM-024</a>)
    * must show "False" for non-signers (<a name="0030-ETHM-025" href="#0030-ETHM-025">0030-ETHM-025</a>)
