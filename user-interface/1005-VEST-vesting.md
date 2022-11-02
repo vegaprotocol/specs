@@ -66,6 +66,8 @@ Note: it is not possible to choose how many tokens you redeem from a tranche, in
 When looking to redeem tokens, I...
 
 - **must** [connect the ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) that holds tokens <a name="1005-VEST-029" href="#1005-VEST-029">1005-VEST-029</a>
+- must see see all tranches that you have tokens in (including tranche 0) <a name="1005-VEST-036" href="#1005-VEST-036">1005-VEST-036</a>
+- must see a total of tokens across all tranches (including tranche 0) <a name="1005-VEST-037" href="#1005-VEST-037">1005-VEST-037</a>
 - **must** select a tranche to redeem from <a name="1005-VEST-030" href="#1005-VEST-030">1005-VEST-030</a>
 - **must** see the number of tokens that can be redeemed <a name="1005-VEST-031" href="#1005-VEST-031">1005-VEST-031</a>
 - **must** be warned if the number of tokens you would be attempting to redeem is greater than you have unassociated <a name="1005-VEST-035" href="#1005-VEST-035">1005-VEST-035</a>
