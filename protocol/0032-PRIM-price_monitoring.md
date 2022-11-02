@@ -42,7 +42,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 - `priceMonitoringParameters` - an array of more price monitoring parameters with the following fields:
   - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
-  - `probability` - probability level used in price monitoring. Must be in the (0,1) range.
+  - `probability` - probability level used in price monitoring. Must be in the [0.9,1) range.
   - `auctionExtension` - auction duration (or extension in case market is already in auction mode) per breach of the `horizon`, `probability` trigger pair specified above. Must be greater than 0.
 
 If any of the above parameters or the risk model gets modified in any way, the price monitoring engine should get reset (price history gets cleared and bounds get recalculated). If the market is price monitoring auction (or auction extension triggered by price monitoring engine):
