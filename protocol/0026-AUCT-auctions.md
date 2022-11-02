@@ -88,7 +88,7 @@ Good for normal trading (GFN) orders are rejected during an auction.
 ### Upon entering auction mode
 
 - Pegged orders get parked (see [pegged orders spec](./0037-OPEG-pegged_orders.md) for details).
-- Limit orders stay on the book (unless they have a TIF:GFN only good for normal trading, in this case they get cancelled).
+- Limit orders stay on the book (unless they have a TIF:GFN only good for normal trading, in this case they get removed from the book and have their status set to cancelled).
 - Cannot accept non-persistent orders (Fill Or Kill and Immediate Or Cancel)
 - Any auction that would be less than (network parameter) `min_auction_length` seconds should not be started.
 
@@ -96,7 +96,7 @@ Good for normal trading (GFN) orders are rejected during an auction.
 ### Upon exiting auction mode
 
 - [Pegged orders](./0037-OPEG-pegged_orders.md) (all kinds, including the ones placed by [Liquidity Provision](./0038-OLIQ-liquidity_provision_order_type.md)) get reinstated in the order book they were originally submitted in.
-- Limit orders stay on the book (unless they have a TIF:GFA only good for auction, in this case they are cancelled).
+- Limit orders stay on the book (unless they have a TIF:GFA only good for auction, in this case they are removed from the book and have their status set to cancelled).
 
 
 ## Exiting the auction mode
@@ -176,7 +176,7 @@ message Market {
   - If a market is temporarily in an auction period
   - Why it is in that period (e.g. Auction at open, liquidity sourcing, price monitoring)
   - When the auction will next attempt to uncross or if the auction period ended and the auction cannot be resolved for whatever reason then this should come blank or otherwise indicating that the system doesn't know when the auction ought to end.
-- A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run from the close of voting on the market proposal (assumed to pass sucessfully) until: 
+- A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run from the close of voting on the market proposal (assumed to pass successfully) until: 
 	1) the enactment time assuming there are orders crossing on the book, [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-009" href="#0026-AUCT-009">0026-AUCT-009</a>)  
 	2) past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed and we have limit orders such that after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-010" href="#0026-AUCT-010">0026-AUCT-010</a>)  
 	3) past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md0041). It will only end if 
@@ -185,3 +185,5 @@ message Market {
 	4) past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
 		- best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>) 
 		- or best ask;  it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-014" href="#0026-AUCT-014">0026-AUCT-014</a>)  
+- When entering an auction, all GFN orders will be cancelled. (<a name="0026-AUCT-015" href="#0026-AUCT-015">0026-AUCT-015</a>)
+- When leaving an auction, all GFA orders will be cancelled. (<a name="0026-AUCT-016" href="#0026-AUCT-016">0026-AUCT-016</a>)
