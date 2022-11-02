@@ -42,7 +42,7 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 
 - `priceMonitoringParameters` - an array of more price monitoring parameters with the following fields:
   - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
-  - `probability` - probability level used in price monitoring. Must be in the (0,1) range.
+  - `probability` - probability level used in price monitoring. Must be in the [0.9,1) range.
   - `auctionExtension` - auction duration (or extension in case market is already in auction mode) per breach of the `horizon`, `probability` trigger pair specified above. Must be greater than 0.
 
 If any of the above parameters or the risk model gets modified in any way, the price monitoring engine should get reset (price history gets cleared and bounds get recalculated). If the market is price monitoring auction (or auction extension triggered by price monitoring engine):
@@ -125,3 +125,8 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - When market is in its default trading mode, change of a risk model or any of its parameters results in price monitoring bounds being reset immediately. (<a name="0032-PRIM-012" href="#0032-PRIM-012">0032-PRIM-012</a>)
 - When market is in price monitoring auction, change of `priceMonitoringParameters` doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values. (<a name="0032-PRIM-013" href="#0032-PRIM-013">0032-PRIM-013</a>)
 - When market is in price monitoring auction, change of a risk model or any of its parameters doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values. (<a name="0032-PRIM-014" href="#0032-PRIM-014">0032-PRIM-014</a>)
+- Specifying a non-positive horizon results in an error. (<a name="0032-PRIM-015" href="#0032-PRIM-015">0032-PRIM-015</a>)
+- Specifying a probability outside the range [0.9,1) results in an error. (<a name="0032-PRIM-016" href="#0032-PRIM-016">0032-PRIM-016</a>)
+- Specifying a non-positive auction extension results in an error. (<a name="0032-PRIM-017" href="#0032-PRIM-017">0032-PRIM-017</a>)
+- Settlement price outside the current price monitoring bounds does not trigger an auction (<a name="0032-PRIM-018" href="#0032-PRIM-018">0032-PRIM-018</a>)
+- A network trade (during closeout) with a price outside price monitoring bounds does not trigger an auction. (<a name="0032-PRIM-019" href="#0032-PRIM-019">0032-PRIM-019</a>)
