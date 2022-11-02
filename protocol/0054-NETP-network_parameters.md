@@ -83,6 +83,8 @@ The full list of network parameters must be available to the governance communit
 
 # Current network parameters
 
+The network parameter spec-name to name-in-vega-core mapping is found in the core [keys](https://github.com/vegaprotocol/vega/blob/develop/core/netparams/keys.go) file. 
+
 The current network parameters are specified in the code specifiying the min and max value ranges and the default values. The parameters and related values can be seen in the [defaults](https://github.com/vegaprotocol/vega/blob/develop/core/netparams/defaults.go) file in the core repository.
 
 
