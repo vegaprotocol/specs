@@ -60,7 +60,8 @@ Node 1 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0'
 Node 2 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2393\
 Node 3 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2606\
 Node 4 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2393\
-Node 5 n['stakedByOperator']='0' n['stakedByDelegates']='0' n_voting_power=1
+Node 5 n['stakedByOperator']='0' n['stakedByDelegates']='0' n_voting_power=1\
+
 6. just before epoch 0 ends the last validator self-stakes `500`. 
 7. epoch 1 starts 
 5. check that Tendermint weights as follows:
