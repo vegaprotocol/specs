@@ -12,7 +12,7 @@ Orders should be rejected if we can’t allocate sufficient margin.
 2. [ ] If an order is amended such that margin requirement is increased and user doesn't have sufficient balance in the general account to top up their margin account then their amend is not executed but the unamended order stays on the book. (<a name="0011-MARA-002" href="#0011-MARA-002">0011-MARA-002</a>)
 3. [ ] Cancelling an order releases the margin amount back to user's general account, provided the user has no other orders or positions (<a name="0011-MARA-003" href="#0011-MARA-003">0011-MARA-003</a>) 
 4. [ ] If an order is amended such that margin requirement is decreased then the amendment is executed successfully. (<a name="0011-MARA-004" href="#0011-MARA-004">0011-MARA-004</a>)
-5. [ ] If an order is partially filled then the margin is requirements are recalculated reflecting the reduced order size and new position size. (<a name="0011-MARA-005" href="#0011-MARA-005">0011-MARA-005</a>)
+5. [ ] If an order is partially filled then the margin requirements are recalculated reflecting the reduced order size and new position size. (<a name="0011-MARA-005" href="#0011-MARA-005">0011-MARA-005</a>)
 6. [ ] If an order is partially filled and if this leads to a reduced position and reduced riskiest long / short then the margin requirements are seen to be reduced and if margin balance is above release level then the excess amount is transferred to the general account. (<a name="0011-MARA-006" href="#0011-MARA-006">0011-MARA-006</a>)
 7. [ ] Margin is correctly calculated for [all order types](./0014-ORDT-order_types.md) in continuous trading: 
 - Limit GTT (<a name="0011-MARA-007" href="#0011-MARA-007">0011-MARA-007</a>)
