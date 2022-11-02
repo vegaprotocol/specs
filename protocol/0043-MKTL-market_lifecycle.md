@@ -114,6 +114,8 @@ Note: this state represents any market that will be created, which currently mea
 A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period, 
 and the trading terminated data source input rings, see [data sourcing](./0045-DSRC-data_sourcing.md).
 When a market transitions to a cancelled state all orders should be cancelled and collateral returned to respective parties general account for the relevant asset, all LP commitments should be cancelled and their bond returned to the general account for the relevant asset and any insurance pool balance should be transferred into the network treasury account for that asset. 
+
+Once "cancelled" there must be no open positions tracked by the protocol for the market and any open positions must have been closed including returning all margin and other related collateral if necessary and also notifying downstream event consumers that the positions are closed. Specific position related actions may be unnecessary if the cancelled state is being entered from a state in which there cannot possibly have been any open positions.
 All data sources that are only referenced by this market should be unregistered. 
 
 
