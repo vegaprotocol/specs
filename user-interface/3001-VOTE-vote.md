@@ -103,7 +103,7 @@ When looking at a particular proposal, I...
 
 - **must** see the rationale title (<a name="3001-VOTE-054" href="#3001-VOTE-054">3001-VOTE-054</a>)
 - **must** see the full rationale description if there is one (<a name="3001-VOTE-055" href="#3001-VOTE-055">3001-VOTE-055</a>)
-- **should** see rationale description rendered with markdown
+- **must** see rationale description rendered with markdown (<a name="3001-VOTE-101" href="#3001-VOTE-101">3001-VOTE-101</a>)
   
 For open proposals:
 
