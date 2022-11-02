@@ -20,11 +20,11 @@ If the network has no stake at all, then all validators would have equal voting 
 4. when the epoch begins verify that the delegation went through
 5. check that Tendermint weights as follows:-
 
-Node 1 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066
-Node 2 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066
-Node 3 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066
-Node 4 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066
-Node 5 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=1735
+Node 1 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066\
+Node 2 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066\
+Node 3 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066\
+Node 4 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066\
+Node 5 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=1735\
 
 ### Non-uniform stake check (<a name="0066-VALW-002" href="#0066-VALW-002">0066-VALW-002</a>)
 1. set up a network with 5 validators
