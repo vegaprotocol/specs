@@ -350,8 +350,8 @@ Can deposit and withdraw funds to/from ERC20 asset loaded from checkpoint (<a na
 1. Propose, enact a market with some traing terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties. 
 1. System saves LNL checkpoint before the trading terminated trigger rings. 
 1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung. 
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>) 
-1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>)
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>); if it exists it in `cancelled` state. 
+1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>)
 1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-064" href="#0064-LIMN-064">0073-LIMN-064</a>)
