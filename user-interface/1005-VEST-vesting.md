@@ -24,15 +24,15 @@ For each tranche:
 
 When looking into a specific tranche, I...
 
-- **should** see all the same details as the [list of tranches](#details-of-a-tranche)
-- **must** see a list of ethereum wallets with tokens in this tranche <a name="1005-VEST-013" href="#1005-VEST-013">1005-VEST-013</a>
+- **must** see all the same details as the [list of tranches](#details-of-a-tranche)
+- **should** see a list of ethereum wallets with tokens in this tranche
 
 for each ethereum wallet:
 
-- **must** see the full eth address of the wallet <a name="1005-VEST-014" href="#1005-VEST-014">1005-VEST-014</a>
-- **must** see the total tokens this address holds in this tranche <a name="1005-VEST-015" href="#1005-VEST-015">1005-VEST-015</a>
-  - **must** see how many tokens in the tranche are locked <a name="1005-VEST-016" href="#1005-VEST-016">1005-VEST-016</a>
-  - **must** see how how many tokens in the tranche are redeemable <a name="1005-VEST-017" href="#1005-VEST-017">1005-VEST-017</a>
+- **should** see the full eth address of the wallet 
+- **should** see the total tokens this address holds in this tranche
+  - **should** see how many tokens in the tranche are locked 
+  - **should** see how how many tokens in the tranche are redeemable 
 
 ... so I can see the details of how tokens are distributed in this tranche
 
