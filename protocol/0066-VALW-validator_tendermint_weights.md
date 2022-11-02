@@ -19,6 +19,7 @@ If the network has no stake at all, then all validators would have equal voting 
 3. wait for the delegation to become active in the next epoch
 4. when the epoch begins verify that the delegation went through
 5. check that Tendermint weights as follows:-
+
 Node 1 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066
 Node 2 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066
 Node 3 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2066
@@ -30,6 +31,7 @@ Node 5 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0'
 2. give the first `4` validators `1000` of self-stake each. Give the last validator `500`. 
 3. wait for the delegation to become active in the next epoch
 4. check that Tendermint weights as follows:-
+
 Node 1 n['stakedByOperator']='500000000000000000000' n['stakedByDelegates']='0' n_voting_power=1047
 Node 2 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2092
 Node 3 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2383
@@ -41,6 +43,7 @@ Node 5 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0'
 2. give the first `4` validators `1000` of self-stake each. Give the last validator `0`. 
 3. wait for the delegation to become active in the next epoch
 4. check that Tendermint weights as follows:-
+
 Node 1 n['stakedByOperator']='0' n['stakedByDelegates']='0' n_voting_power=1
 Node 2 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2419
 Node 3 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2419
@@ -52,6 +55,7 @@ Node 5 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0'
 2. give the first `4` validators `1000` of self-stake each. Give the last validator `0`. 
 3. wait for the delegation to become active in the next epoch
 4. check that Tendermint weights
+
 Node 1 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2606
 Node 2 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2393
 Node 3 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2606
@@ -60,6 +64,7 @@ Node 5 n['stakedByOperator']='0' n['stakedByDelegates']='0' n_voting_power=1
 6. just before epoch 0 ends the last validator self-stakes `500`. 
 7. epoch 1 starts 
 5. check that Tendermint weights as follows:
+
 Node 1 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2556
 Node 2 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2248
 Node 3 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2564
@@ -71,6 +76,7 @@ Node 5 n['stakedByOperator']='500000000000000000000' n['stakedByDelegates']='0' 
 2. give each of the validators the following number of self-staked tokens: `2000`
 3. wait for the delegation to become active in the next epoch
 4. check that Tendermint weights for the validators are s follows:
+
 Node 1 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2030
 Node 2 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=1879
 Node 3 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2030
@@ -87,6 +93,7 @@ Node 5 n['stakedByOperator']='2000000000000000000000' n['stakedByDelegates']='0'
 3. delegate to all validators `500` tokens`
 4. wait for the delegation to become active in the next epoch
 5. check that Tendermint weights as follows:
+
 Node 1 n['stakedByOperator']='500000000000000000000' n['stakedByDelegates']='0' n_voting_power=2033
 Node 2 n['stakedByOperator']='500000000000000000000' n['stakedByDelegates']='0' n_voting_power=2069
 Node 3 n['stakedByOperator']='500000000000000000000' n['stakedByDelegates']='0' n_voting_power=2033
@@ -99,6 +106,7 @@ Node 5 n['stakedByOperator']='500000000000000000000' n['stakedByDelegates']='0' 
 3. For several parties create stake and delegate to validators
 4. wait for the delegation to become active in the next epoch
 5. check the Tendermint weights as follows:
+
 Node 1 n['stakedByOperator']='0' n['stakedByDelegates']='1000000000000000000' n_voting_power=1415
 Node 2 n['stakedByOperator']='0' n['stakedByDelegates']='2000000000000000000' n_voting_power=2358
 Node 3 n['stakedByOperator']='0' n['stakedByDelegates']='3000000000000000000' n_voting_power=3113
@@ -111,6 +119,7 @@ Node 5 n['stakedByOperator']='0' n['stakedByDelegates']='0' n_voting_power=1
 3. delegate for the first `4` validators `1000` and from the 5th validator delegate `1000` to the 1st validator
 4. wait for the delegations to become active in the next epoch
 5. check the Tendermint weights across all validators are as follows:-
+
 Node 1 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='1000000000000000000000' n_voting_power=2806
 Node 2 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2089
 Node 3 n['stakedByOperator']='1000000000000000000000' n['stakedByDelegates']='0' n_voting_power=2551
