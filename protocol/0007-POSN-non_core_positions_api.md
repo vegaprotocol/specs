@@ -31,7 +31,12 @@ Note: it is possible to calculate valuation / P&L using various methodologies (e
 
 Note, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in the future.
 
-## API 
+
+### Loss socialisation
+
+When a party is subject to [loss socialisation](./0002-STTL-settlement.md#loss-socialisation), that is their [mark-to-market](./0003-MTMK-mark_to_market_settlement.md) gains get scaled down the amount forgone (calculated MTM gains minus the actual amount received) should get recorded in the realised PnL figure.
+
+## API
 
 The API is expected to expose:
 
@@ -49,9 +54,10 @@ The API is expected to expose:
 
 ## Position and PnL test
 - [ ] when a party has never had a position, the realised PnL and unrealised PnL should be 0 (<a name="0007-POSN-009" href="#0007-POSN-009">0007-POSN-009</a>)
-- [ ] when a party has a non-zero postion, and has not closed any part of it, only the unrealised PnL should be changed by increase in position or change of mark price while realised PnL should stay constant (<a name="0007-POSN-010" href="#0007-POSN-010">0007-POSN-010</a>)
+- [ ] when a party has a non-zero postion, and has not closed any part of it, only the unrealised PnL should be changed by increase in position or change of mark price while realised PnL should stay constant in absence of loss socialisation (<a name="0007-POSN-010" href="#0007-POSN-010">0007-POSN-010</a>)
 - [ ] when a party has a position which gets (partially) closed-out, the unrealised PnL should reflect the change of position while the realised PnL reflect the closed-out position (<a name="0007-POSN-011" href="#0007-POSN-011">0007-POSN-011</a>)
 - [ ] During settlement, all the parties' position should become 0, unrealised PnL should become 0 and realised PnL should update based on settlement price (<a name="0007-POSN-012" href="#0007-POSN-012">0007-POSN-012</a>)
+- [ ] If a party is subject to loss socialisation (its MTM gains get scaled down) the loss amount (forgone profit) should get recorded in realised PnL(<a name="0007-POSN-013" href="#0007-POSN-013">0007-POSN-013</a>)
 
 ## Definitions / glossary
 
