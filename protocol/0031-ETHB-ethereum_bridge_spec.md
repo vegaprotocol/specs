@@ -157,7 +157,7 @@ To ensure complete coverage of public and external smart contract functions, lis
    * must match the deployed asset pool address (<a name="0031-ETHB-018" href="#0031-ETHB-018">0031-ETHB-018</a>)
 2.  `function list_asset(address asset_source,bytes32 vega_asset_id,uint256 lifetime_limit,uint256 withdraw_threshold,uint256 nonce,bytes memory signatures)`
    * must list asset (<a name="0031-ETHB-019" href="#0031-ETHB-019">0031-ETHB-019</a>)
-   * must not list non-asset (<a name="0031-ETHB-020" href="#0031-ETHB-020">0031-ETHB-020</a>)
+   * must not list already-listed asset (<a name="0031-ETHB-020" href="#0031-ETHB-020">0031-ETHB-020</a>)
    * must not list if sigs bad (<a name="0031-ETHB-021" href="#0031-ETHB-021">0031-ETHB-021</a>)
    * must not list if already listed (<a name="0031-ETHB-022" href="#0031-ETHB-022">0031-ETHB-022</a>)
 3.  `function remove_asset(address asset_source,uint256 nonce,bytes memory signatures)`
