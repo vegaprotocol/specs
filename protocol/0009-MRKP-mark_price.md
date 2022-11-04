@@ -2,7 +2,7 @@ Feature name: Mark Price
 # Summary
 A *Mark Price* is a concept derived from traditional markets.  It is a calculated value for the 'current market price' on a market.
 
-Introduce a network parameter `network.markPriceUpdateMaximumFrequency` with minimum allowable value of `0s` maximum allowable value of `1h` and a default of `5s`. 
+Introduce a network parameter `network.markPriceUpdateMaximumFrequency` with minimum allowable value of `1s` maximum allowable value of `1h` and a default of `5s`. 
 
 # Acceptance criteria
 
@@ -12,8 +12,7 @@ Introduce a network parameter `network.markPriceUpdateMaximumFrequency` with min
 Algorithm 1:
 
 
-- [ ] If `network.markPriceUpdateMaximumFrequency=0s` then any transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade. (<a name="0009-MRKP-003" href="#0009-MRKP-003">0009-MRKP-003</a>)
-- [ ] If `network.markPriceUpdateMaximumFrequency>0` then out of a sequence of transactions with the same time-stamp the last transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade but only provided that at least `network.markPriceUpdateMaximumFrequency` has elapsed since the last update. (<a name="0009-MRKP-007" href="#0009-MRKP-007">0009-MRKP-007</a>)
+- [ ] When `network.markPriceUpdateMaximumFrequency>=1` then out of a sequence of transactions with the same time-stamp the last transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade but only provided that at least `network.markPriceUpdateMaximumFrequency` has elapsed since the last update. (<a name="0009-MRKP-007" href="#0009-MRKP-007">0009-MRKP-007</a>)
 - [ ] A transaction that doesn't result in a trade does not cause the mark price to change.  (<a name="0009-MRKP-004" href="#0009-MRKP-004">0009-MRKP-004</a>)
 - [ ] A transaction out of a sequence of transactions with the same time stamp which isn't the last trade-causing transaction will *not* result in a mark price change. (<a name="0009-MRKP-008" href="#0009-MRKP-008">0009-MRKP-008</a>)
 - [ ] The mark price must be using market decimal place setting (<a name="0009-MRKP-006" href="#0009-MRKP-006">0009-MRKP-006</a>)
