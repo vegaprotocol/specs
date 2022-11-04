@@ -42,6 +42,7 @@ The public master key has to be added to validators' identities in the genesis c
 - If several key change transactions are submitted simultaneously (i.e., a new key change is submitted before the target block of a previous one is reached, if key change message 1 has a lower sequence number and a higher/the same target block as change message 2, then the key established by message 2 is not replaced by the key from message 1. This can be done either by managing the parallel executions appropriately or by rejecting additional submissions(<a name="0063-VALK-009" href="#0063-VALK-010">0063-VALK-010</a>)
 - Once the target block of a key change action us reached, all preceeding keys (the original key as well as all hot keys rotated in through a key-change ,messager with a lower sequence number) are invalid. (<a name="0063-VALK-009" href="#0063-VALK-011">0063-VALK-011</a>)
 - Key change message with a lower sequence number than the last one executed are rejected. (<a name="0063-VALK-012" href="#0063-VALK-012">0063-VALK-012</a>)
+- Once a validator hot key has been rotated, reward balances are carried over to ther new key. (<a name="0063-VALK-013" href="#0063-VALK-009">0063-VALK-013</a>)
 
 
 
