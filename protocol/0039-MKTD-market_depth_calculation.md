@@ -8,7 +8,7 @@
 - A GTT order that expires will cause the volume at its price to be reduced in the market depth view (<a name="0039-MKTD-008" href="#0039-MKTD-008">0039-MKTD-008</a>)
 - Amending an order in place (price stays the same but the volume is reduced) will cause the volume at the given price to be reduced in the market depth view (<a name="0039-MKTD-009" href="#0039-MKTD-009">0039-MKTD-009</a>)
 - Amending an order such that a cancel replace is performed will cause the volume in the market depth to be updated correctly (<a name="0039-MKTD-010" href="#0039-MKTD-010">0039-MKTD-010</a>)
-- Entering an auction will cause any GFN orders to be removed from the market depth volume view (<a name="0039-MKTD-011" href="#0039-MKTD-012">0039-MKTD-012</a>)
+- Entering an auction will cause any GFN orders to be removed from the market depth volume view (<a name="0039-MKTD-012" href="#0039-MKTD-012">0039-MKTD-012</a>)
 - Market depth will show a crossed book if the market is in auction and the book is crossed (<a name="0039-MKTD-013" href="#0039-MKTD-013">0039-MKTD-013</a>)
 - Leaving an auction will cause any GFA orders to be removed from the market depth view (<a name="0039-MKTD-014" href="#0039-MKTD-014">0039-MKTD-014</a>)
 - Pegged orders are part of the market depth view and should update the view when their orders are repriced (<a name="0039-MKTD-015" href="#0039-MKTD-015">0039-MKTD-015</a>)
