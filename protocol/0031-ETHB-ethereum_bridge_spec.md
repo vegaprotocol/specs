@@ -148,3 +148,102 @@ This example connects the network to Ropsten:
 * ERC20 smart contract specific requirements:
   * A valid multisig bundle can be passed to the `remove_asset` function to successfully remove a previously  allow listed token (<a name="0031-COSMICELEVATOR-019" href="#0031-COSMICELEVATOR-019">0031-COSMICELEVATOR-019</a>)
   * An invalid multisig bundle is rejected by the `remove_asset` function (<a name="0031-COSMICELEVATOR-020" href="#0031-COSMICELEVATOR-020">0031-COSMICELEVATOR-020</a>)
+
+
+## ERC20 Bridge Logic to Vega Integration Tests (Vega System Tests)
+To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on ERC20_Bridge_Logic and their corresponding acceptance criteria.
+
+1.  `address payable public erc20_asset_pool_address;`
+   * must match the deployed asset pool address (<a name="0031-ETHB-018" href="#0031-ETHB-018">0031-ETHB-018</a>)
+2.  `function list_asset(address asset_source,bytes32 vega_asset_id,uint256 lifetime_limit,uint256 withdraw_threshold,uint256 nonce,bytes memory signatures)`
+   * must list asset (<a name="0031-ETHB-019" href="#0031-ETHB-019">0031-ETHB-019</a>)
+   * must not list already-listed asset (<a name="0031-ETHB-020" href="#0031-ETHB-020">0031-ETHB-020</a>)
+   * must not list if sigs bad (<a name="0031-ETHB-021" href="#0031-ETHB-021">0031-ETHB-021</a>)
+   * must not list if already listed (<a name="0031-ETHB-022" href="#0031-ETHB-022">0031-ETHB-022</a>)
+3.  `function remove_asset(address asset_source,uint256 nonce,bytes memory signatures)`
+   * must remove asset (<a name="0031-ETHB-023" href="#0031-ETHB-023">0031-ETHB-023</a>)
+   * must fail if asset not listed (<a name="0031-ETHB-024" href="#0031-ETHB-024">0031-ETHB-024</a>)
+   * must fail if bad signatures (<a name="0031-ETHB-025" href="#0031-ETHB-025">0031-ETHB-025</a>)
+4.  `uint256 public default_withdraw_delay = 432000;`
+   * must show 432000 (<a name="0031-ETHB-026" href="#0031-ETHB-026">0031-ETHB-026</a>)
+5.  `bool public is_stopped;`
+   *  must be false at first (<a name="0031-ETHB-027" href="#0031-ETHB-027">0031-ETHB-027</a>)
+   *  must be true after `global_stop` called (<a name="0031-ETHB-028" href="#0031-ETHB-028">0031-ETHB-028</a>)
+6.  `function set_asset_limits(address asset_source,uint256 lifetime_limit,uint256 threshold,uint256 nonce,bytes calldata signatures)`
+   *  changes asset limits (<a name="0031-ETHB-029" href="#0031-ETHB-029">0031-ETHB-029</a>)
+   *  must fail if bad sigs (<a name="0031-ETHB-030" href="#0031-ETHB-030">0031-ETHB-030</a>)
+   *  asset must be listed (<a name="0031-ETHB-031" href="#0031-ETHB-031">0031-ETHB-031</a>)
+7.  `function get_asset_deposit_lifetime_limit(address asset_source)`
+   *  must return asset lifetime limit (<a name="0031-ETHB-032" href="#0031-ETHB-032">0031-ETHB-032</a>)
+8.  `function get_withdraw_threshold(address asset_source)`
+   *  must return withdraw threshold (<a name="0031-ETHB-033" href="#0031-ETHB-033">0031-ETHB-033</a>)
+9.  `function set_withdraw_delay(uint256 delay,uint256 nonce,bytes calldata signatures)`
+    *  must set withdraw delay (<a name="0031-ETHB-034" href="#0031-ETHB-034">0031-ETHB-034</a>)
+    *  must be listed asset (<a name="0031-ETHB-035" href="#0031-ETHB-035">0031-ETHB-035</a>)
+    *  must fail if bad sigs (<a name="0031-ETHB-036" href="#0031-ETHB-036">0031-ETHB-036</a>)
+10. `function global_stop(uint256 nonce, bytes calldata signatures)`
+    *  must set `is_stopped` to `true` (<a name="0031-ETHB-037" href="#0031-ETHB-037">0031-ETHB-037</a>)
+    *  must stop deposits (<a name="0031-ETHB-038" href="#0031-ETHB-038">0031-ETHB-038</a>)
+    *  must stop withdrawals (<a name="0031-ETHB-039" href="#0031-ETHB-039">0031-ETHB-039</a>)
+    *  must not be stopped already (<a name="0031-ETHB-040" href="#0031-ETHB-040">0031-ETHB-040</a>)
+    *  must fail on bad signatures (<a name="0031-ETHB-041" href="#0031-ETHB-041">0031-ETHB-041</a>)
+11. `function global_resume(uint256 nonce, bytes calldata signatures)`
+    *  must set `is_stopped` to `false` (<a name="0031-ETHB-042" href="#0031-ETHB-042">0031-ETHB-042</a>)
+    *  must resume deposits (<a name="0031-ETHB-043" href="#0031-ETHB-043">0031-ETHB-043</a>)
+    *  must resume withdrawals (<a name="0031-ETHB-044" href="#0031-ETHB-044">0031-ETHB-044</a>)
+    *  must already be stopped (<a name="0031-ETHB-045" href="#0031-ETHB-045">0031-ETHB-045</a>)
+    *  must fail on bad signatures (<a name="0031-ETHB-046" href="#0031-ETHB-046">0031-ETHB-046</a>)
+12. `function exempt_depositor()`
+    *  must exempt caller from lifetime deposits (<a name="0031-ETHB-047" href="#0031-ETHB-047">0031-ETHB-047</a>)
+    *  must not be already exempt (<a name="0031-ETHB-048" href="#0031-ETHB-048">0031-ETHB-048</a>)
+13. `function revoke_exempt_depositor()`
+    *  must revoke lifetime deposit exemption (<a name="0031-ETHB-049" href="#0031-ETHB-049">0031-ETHB-049</a>)
+    *  must already be exempt (<a name="0031-ETHB-050" href="#0031-ETHB-050">0031-ETHB-050</a>)
+14. `function is_exempt_depositor(address depositor) external view override returns (bool)`
+    *  must show lifetime deposit exemption (<a name="0031-ETHB-051" href="#0031-ETHB-051">0031-ETHB-051</a>)
+15. `function withdraw_asset(address asset_source,uint256 amount,address target,uint256 creation,uint256 nonce,bytes memory signatures)`
+    *  must withdraw asset specified (<a name="0031-ETHB-052" href="#0031-ETHB-052">0031-ETHB-052</a>)
+    *  must fail on bad signatures (<a name="0031-ETHB-053" href="#0031-ETHB-053">0031-ETHB-053</a>)
+    *  must fail on non-matching parameters (<a name="0031-ETHB-054" href="#0031-ETHB-054">0031-ETHB-054</a>)
+16. `function deposit_asset(address asset_source,uint256 amount,bytes32 vega_public_key)`
+    *  must deposit asset from user (<a name="0031-ETHB-055" href="#0031-ETHB-055">0031-ETHB-055</a>)
+    *  must be listed (<a name="0031-ETHB-056" href="#0031-ETHB-056">0031-ETHB-056</a>)
+    *  must be exempt or below lifetime deposit limit (<a name="0031-ETHB-057" href="#0031-ETHB-057">0031-ETHB-057</a>)
+    *  must fail if over lifetime limit and not exempt (<a name="0031-ETHB-058" href="#0031-ETHB-058">0031-ETHB-058</a>)
+    *  must be credited on Vega (<a name="0031-ETHB-059" href="#0031-ETHB-059">0031-ETHB-059</a>)
+17. `function is_asset_listed(address asset_source) external view override returns (bool)`
+    *  must be true if asset is listed (<a name="0031-ETHB-060" href="#0031-ETHB-060">0031-ETHB-060</a>)
+    *  must be false if asset is not listed (<a name="0031-ETHB-061" href="#0031-ETHB-061">0031-ETHB-061</a>)
+    *  when true, deposits must work (<a name="0031-ETHB-062" href="#0031-ETHB-062">0031-ETHB-062</a>)
+    *  when false deposits must not work (<a name="0031-ETHB-063" href="#0031-ETHB-063">0031-ETHB-063</a>)
+18. `function get_multisig_control_address() external view override returns (address)`
+    *  must show deployed multisig address (<a name="0031-ETHB-064" href="#0031-ETHB-064">0031-ETHB-064</a>)
+19. `function get_vega_asset_id(address asset_source) external view override returns (bytes32)`
+    *  must return proper Vega asset ID (<a name="0031-ETHB-065" href="#0031-ETHB-065">0031-ETHB-065</a>)
+20. `function get_asset_source(bytes32 vega_asset_id) external view override returns (address)`
+    *  must return the deployed asset address from Vega asset ID (<a name="0031-ETHB-066" href="#0031-ETHB-066">0031-ETHB-066</a>)
+
+## ERC20 Asset Pool to Vega Integration Tests (Vega System Tests)
+To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on ERC20_Asset_Pool and their corresponding acceptance criteria.
+
+1. `address public multisig_control_address;`
+   * must show the current multisig control address (<a name="0031-ETHB-067" href="#0031-ETHB-067">0031-ETHB-067</a>)
+   * must change to reflect a sucessful set_multisig_control call (<a name="0031-ETHB-068" href="#0031-ETHB-068">0031-ETHB-068</a>)
+2. `address public erc20_bridge_address;`
+   * must show current deployed erc20_bridge address (<a name="0031-ETHB-069" href="#0031-ETHB-069">0031-ETHB-069</a>)
+   * must change to reflect a sucessful set_bridge_address call (<a name="0031-ETHB-070" href="#0031-ETHB-070">0031-ETHB-070</a>)
+3. `receive() external payable // fallback, should fail`
+4. `function set_multisig_control(address new_address,uint256 nonce,bytes memory signatures)`
+   * must set multisig control (<a name="0031-ETHB-071" href="#0031-ETHB-071">0031-ETHB-071</a>)
+   * must be reflected in `multisig_control_address` (<a name="0031-ETHB-072" href="#0031-ETHB-072">0031-ETHB-072</a>)
+   * must fail on bad sigs (<a name="0031-ETHB-073" href="#0031-ETHB-073">0031-ETHB-073</a>)
+5. `function set_bridge_address(address new_address,uint256 nonce,bytes memory signatures)`
+   * must set bridge address (<a name="0031-ETHB-074" href="#0031-ETHB-074">0031-ETHB-074</a>)
+   * must be reflected in `erc20_bridge_address` (<a name="0031-ETHB-075" href="#0031-ETHB-075">0031-ETHB-075</a>)
+   * must fail on bad sigs (<a name="0031-ETHB-076" href="#0031-ETHB-076">0031-ETHB-076</a>)
+6. `function withdraw(address token_address,address target,uint256 amount)`
+   * must remit the `amount` of `token_address` to the `target` address (<a name="0031-ETHB-077" href="#0031-ETHB-077">0031-ETHB-077</a>)
+   * must be runnable from the current `erc20_bridge_address` address (<a name="0031-ETHB-078" href="#0031-ETHB-078">0031-ETHB-078</a>)
+   * must fail if ran by any other address (<a name="0031-ETHB-079" href="#0031-ETHB-079">0031-ETHB-079</a>)
+   * must work for new bridge after bridge address changed (<a name="0031-ETHB-080" href="#0031-ETHB-080">0031-ETHB-080</a>)
+   * must fail for old bridge after bridge address changed (<a name="0031-ETHB-081" href="#0031-ETHB-081">0031-ETHB-081</a>)
