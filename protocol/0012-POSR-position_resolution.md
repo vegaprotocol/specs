@@ -8,6 +8,7 @@ Feature name: position-resolution
 * [ ] Mark Price is never updated during position resolution (<a name="0012-POSR-004" href="#0012-POSR-004">0012-POSR-004</a>)
 * [ ] Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly. (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
 * [ ] When a distressed party has a [staking account](./0013-ACCT-accounts.md) with the same currency as the settlement currency of the market where it's disstressed the staking account is NOT used in margin search and liquidation. (<a name="0012-POSR-006" href="#0012-POSR-006">0012-POSR-006</a>)
+* [ ] When a party is distressed at the point of leaving an auction it should get closed out immediately. (<a name="0012-POSR-007" href="#0012-POSR-007">0012-POSR-007</a>)
 
 # Summary
 
@@ -42,6 +43,7 @@ these trades (as this would result in a new market-wide mark to market settlemen
 
 * Entire distressed position should always be liquidated - even if reducing position size, by say 50%, would result in the remaining portion being above the trader's maintenance margin.
 * When there's insufficient volume on the order-book to close out a distressed position no action should be taken: the position remains open and any amounts in trader's margin account should stay there. Same principle should apply if upon next margin recalculation the position is still distressed.
+* If the party is distressed at a point of leaving auction it should be closedout immediately (provided there's enough volume on the book once all the pegged and liquidity provision orders get redeployed).
   
 # Examples and Pseudo code
 
