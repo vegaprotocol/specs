@@ -55,7 +55,6 @@ List of market data fields to be available via the API. All these values can be 
   - **Supplied stake** market's supplied stake.
   - **Price monitoring bounds** one or more price monitoring bounds for the current timestamp.
   - **Liquidity provider fee share** share of the accrued fees each liquidity provider is eligible to.
-  - **Active limits** list of [network wide limits](./0078-NWLI-network_wide_limits.md) and a boolean indicating if they are active for the queried market
 
 # Pseudo-code / Examples
 
