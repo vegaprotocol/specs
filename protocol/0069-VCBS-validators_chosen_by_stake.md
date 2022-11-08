@@ -115,7 +115,11 @@ Their performance is also defined by the number of heartbeats they sent out of t
 
 ### Rewards for Ersatz validators
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](./0064-VALP-validator_performance_based_rewards.md) and [performance measurement](./0064-VALP-validator_performance_based_rewards.md).
-However `network.validators.ersatz.rewardFactor` in `[0,1]` is taken into account to scale their rewards.
+However `network.validators.ersatz.rewardFactor` in `[0,1]` is taken into account to scale their rewards. Also, the same scoring
+function is aopplied as for the normal validators, so anti-whaling rules apply for Ersatzvalidators as well.
+An Ersatzvalidator being affected by the whaling rule (i.e., getting sufficient stake to havbe their reward lowered by the anti-whaling rule) 
+is a out-of-the ordinary event and should be logged.
+
 
 ### Multisig for Ersatz validators
 At this point, Ersatz validators are not part of the Multisig.
@@ -382,6 +386,11 @@ Verify that 2 validators are replaced, one in each epoch
 - All erstazvalidators have sufficient ownstake, and higher stake than the validators
 
 Verify that one validator is replaced the following epoch, one in the epoch after
+
+13. Ersatzvalidator reward (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>)
+    Set up a network with 5 validators, one of them with sufficient stake to be affected by the anti-whaling rule (e.g., 50% stake).  Demote
+    this validatore to Ersatzvalidator through poor performance. Validate that while being an ersatzvalidator, the reward is correct
+    given the anti-whaling rule.
 
 ## Announce Node
 1. Invalid announce node command (<a name="0069-VCBS-044" href="#0069-VCBS-044">0069-VCBS-044</a>):
