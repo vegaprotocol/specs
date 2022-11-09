@@ -407,11 +407,11 @@ APIs should also exist for clients to:
 - [ ] If a new proposal "P" is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
 - [ ] All proposals with a title field that is empty, or not between 1 and 100 characters, will be rejected (<a name="0028-GOVE-039" href="#0028-GOVE-039">0028-GOVE-039</a>)
 - [ ] Reject any proposal that defines a risk parameter outside it's intended boundaries (<a name="0028-GOVE-040" href="#0028-GOVE-040">0028-GOVE-040</a>)
-  - risk aversion lambda: 1e-8 <= x < 1
-  - tau: 0<x<=1
-  - mu: -20<=x<=20
-  - r: -20<=x<=20
-  - sigma: 1e-4 <= x <= 100
+  - risk aversion lambda: 1e-8 <= x < 0.1
+  - tau: 1e-8 <= x <= 1
+  - mu: -1e-6 <= x <= 1e-6
+  - r: -1 <= x <= 1
+  - sigma: 1e-3 <= x <= 50
 
 ## Governance proposal types
 
