@@ -1,26 +1,28 @@
 ---
 
-name: Auto Assign PR to New Project
+name: "Add IPRs To Project Board"
 
 "on":
-  pull_request:
-    types: [opened]
+  issues:
+    types:
+      - opened
+env:
+  GH_TOKEN: ${{ secrets.GH_NEW_CARD_TO_PROJECT }}
+  PROJECT_ID: ${{ secrets.PROTOCOL_DESIGN_PROJECT_ID }}
+  PR_ID: ${{ github.event.pull_request.node_id }}
+  USER: ${{ github.actor }}
 
 jobs:
-  add_pr:
+  add_issue:
     runs-on: ubuntu-latest
     steps:
-      - name: Add PR to New Core Project Board
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_NEW_CARD_TO_PROJECT }}
-          PROJECT_ID: ${{ secrets.PROTOCOL_DESIGN_PROJECT_ID }}
-          PR_ID: ${{ github.event.pull_request.node_id }}
+      - name: "Add pr to project board"
         run: |
           gh api graphql -f query='
-            mutation($project:ID!, $pr:ID!) {
-              addProjectNextItem(input: {projectId: $project, contentId: $pr}) {
-                projectNextItem {
+            mutation($user:String!, $project:ID!, $pr:ID!) {
+              addProjectV2ItemById(input: {clientMutationId: $user, projectId: $project, contentId: $pr}) {
+                item {
                   id
                 }
               }
-            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectNextItem.projectNextItem.id'
+            }' -f project=$PROJECT_ID -f pr=$PR_ID -f user=$USER
