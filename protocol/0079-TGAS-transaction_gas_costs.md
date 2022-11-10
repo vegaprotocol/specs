@@ -6,7 +6,7 @@ Each block will contain only transactions up to a certain block gas limit.
 
 ## Network parameters
 
-- `network.transactions.maxgasperblock` is a network parameter with type unsigned integer with a minimum value of `100`, maximum value `10 000 000` and a recommended default of `10 000`. 
+- `network.transactions.maxgasperblock` is a network parameter with type unsigned integer with a minimum value of `100`, maximum value `10 000 000` and a recommended default of `10 000`. If the parameter is changed through governance then the next block after enactment will respect the new `maxgasperblock`. 
 - `network.transaction.defaultgas` is a network parameter with type unsigned integer with a minimum value of `1` and maximum value of `99` and default value of `1`.
 
 Note that the min / max values set above are deliberate: as we'll see below we can fit at least one transaction with default gas into a block. 
