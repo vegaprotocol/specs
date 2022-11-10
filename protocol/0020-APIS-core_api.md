@@ -36,6 +36,11 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 
 - List all known [parties](./0016-PART-party.md).
 
+
+### [Network wide limits](./0078-NWLI-network_wide_limits.md)
+
+- Return number of pegged orders across all the markets.
+
 ### Configuration
 
 - List all [Network Parameters](./0054-NETP-network_parameters.md) and their current value
