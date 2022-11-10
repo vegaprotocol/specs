@@ -28,11 +28,12 @@ Cost of transaction depends mainly on the state of underlying market and below w
 
 Variables needed:
 - `network.transactions.maxgasperblock` - `maxGas`
-- number of price levels on the order book taken - `levels`
+- number of price levels on the order book taken, this can count just static volume or static plus dynamic(*) - `levels`
 - number of pegged orders - `pegs`
 - number of LP shape levels on the market - `shapes` 
 - number of positions on the market - `positions`
 
+(*) update after implementation
 
 ### Any type of limit or market order
 
@@ -75,3 +76,21 @@ gas = min(maxGas-1,gasOliq)
 
 
 
+## Acceptance criteria
+
+### Basic happy path test (<a name="0079-TGAS-001" href="#0079-TGAS-001">0079-TGAS-001</a>) 
+
+1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 20`.
+1. Send `100` transactions with default gas cost to a node (e.g. votes on a proposal) and observe that most block have 5 of these transactions each. 
+
+### Test max with a market (<a name="0079-TGAS-001" href="#0079-TGAS-001">0079-TGAS-001</a>) 
+
+1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 1`.
+1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position. 
+1. Another party submits a transaction to place a limit order. A block will be created containing the transaction (even though the gas cost of a limit order is `1 + 100 x 4 + 2 + 0.1 x 6` which is well over `100`.)
+
+### Test we don't overfill a block with a market (<a name="0079-TGAS-001" href="#0079-TGAS-001">0079-TGAS-001</a>) 
+
+1. Set `network.transactions.maxgasperblock = 500` and `network.transaction.defaultgas = 1`.
+1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position. 
+1. Another party submits 10 transaction to place 10 limit order. A separate party submits `100` transactions with default gas cost. Block will be created but each only containing one limit order placement transaction and including some number of vote transactions. 
