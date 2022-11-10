@@ -37,15 +37,40 @@ Variables needed:
 ### Any type of limit or market order
 
 ```
-gas = network.transaction.defaultgas + 100 x pegs 100 x shapes + 1 x positions + 0.1 x levels
-gas = min(maxGas-1,gas)
+gasOrder = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 1 x positions + 0.1 x levels
+gasOrder = min(maxGas-1,gasOrder)
 ```
+
+### Cancellation of an order
+
+```
+gasCancel = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 0.1 x levels
+gasCancel = min(maxGas-1,gasCancel)
+```
+
+### Batch orders 
+
+Define `batchFactor` (a hard coded parameter) set to something between `0.1 and 0.9`.
+Say `batchFactor = 0.5` for now.
+
+Here `gasBatch` is
+1. the full cost of the first cancellation (i.e. `gasCancel`) 
+1. plus `batchFactor` times sum of all subsequent cancellations added together (each costing `gasOrder`)
+1. plus the full cost of the first amendment at `gasOrder`
+1. plus `batchFactor` sum of all subsequent amendments added together (each costing `gasOrder`)
+1. plus the full cost of the first limit order at `gasOrder` 
+1. plus `batchFactor` sum of all subsequent limit orders added together (each costing `gasOrder`)
+
+```
+gas = min(maxGas-1,batchFactor)
+```
+
 
 ### LP provision, new or amendment
 
 ```
-gas = network.transaction.defaultgas + 100 x pegs 100 x shapes + 1 x positions + 0.1 x levels
-gas = min(maxGas-1,gas)
+gasOliq = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 1 x positions + 0.1 x levels
+gas = min(maxGas-1,gasOliq)
 ```
 
 
