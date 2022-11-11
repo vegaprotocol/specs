@@ -83,7 +83,10 @@ gas = min(maxGas-1,batchFactor)
 ### LP provision, new or amendment or cancellation
 
 ```
-gasOliq = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 1 x positions + 0.1 x levels
+gasOliq = network.transaction.defaultgas + peg cost factor x pegs 
+                                    + LP shape cost factor x shapes 
+                                    + position factor x positions 
+                                    + level factor x levels
 gas = min(maxGas-1,gasOliq)
 ```
 
