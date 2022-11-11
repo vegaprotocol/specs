@@ -31,7 +31,7 @@ Variables needed:
 - `network.transactions.maxgasperblock` - `maxGas`
 - number of price levels on the order book taken, this can count just static volume or static plus dynamic(*) - `levels`
 - number of pegged orders - `pegs`
-- number of LP shape levels on the market - `shapes` 
+- number of LP shape levels on the market - `shapes` (this means that if LP A has 3 pegs on buy and 2 on sell and LP B has 1 buy peg and 4 sell pegs and they're the only LPs then this value is 10 ) 
 - number of positions on the market - `positions`
 
 (*) update after implementation
