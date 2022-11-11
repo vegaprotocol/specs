@@ -58,7 +58,7 @@ gasOrder = min(maxGas-1,gasOrder)
 ```
 gasCancel = network.transaction.defaultgas + peg cost factor x pegs 
                                         + LP shape cost factor x shapes 
-                                        + position factor x levels
+                                        + level factor x levels
 gasCancel = min(maxGas-1,gasCancel)
 ```
 
