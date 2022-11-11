@@ -36,17 +36,29 @@ Variables needed:
 
 (*) update after implementation
 
+Constants needed:
+- `peg cost factor = 50` nonnegative decimal
+- `LP shape cost factor = 100` nonnegative decimal
+- `position factor = 1` nonnegative integer
+- `level factor = 0.1` nonnegative integer 
+- `batchFactor = 0.5` decimal between `0.1 and 0.9`.
+
 ### Any type of limit or market order
 
 ```
-gasOrder = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 1 x positions + 0.1 x levels
+gasOrder = network.transaction.defaultgas + peg cost factor x pegs 
+                                        + LP shape cost factor x shapes 
+                                        + position factor x positions 
+                                        + level factor x levels
 gasOrder = min(maxGas-1,gasOrder)
 ```
 
 ### Cancellation of any order
 
 ```
-gasCancel = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 0.1 x levels
+gasCancel = network.transaction.defaultgas + peg cost factor x pegs 
+                                        + LP shape cost factor x shapes 
+                                        + position factor x levels
 gasCancel = min(maxGas-1,gasCancel)
 ```
 
