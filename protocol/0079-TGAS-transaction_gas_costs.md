@@ -25,6 +25,7 @@ Every transaction not listed below will have gas cost `network.transaction.defau
 ## Dynamic transactions costs
 
 Cost of transaction depends mainly on the state of underlying market and below we set out costs of transactions based on market state. 
+Vega will capture the needed statistical variables (see below) on a per-market basis (or per-whatever if other dynamically costed transactions are added, for now per-market is sufficient) from the previous block so that they don't need to be looked up dynamically during block creation. 
 
 Variables needed:
 - `network.transactions.maxgasperblock` - `maxGas`
@@ -42,7 +43,7 @@ gasOrder = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 1 x posi
 gasOrder = min(maxGas-1,gasOrder)
 ```
 
-### Cancellation of an order
+### Cancellation of any order
 
 ```
 gasCancel = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 0.1 x levels
@@ -67,7 +68,7 @@ gas = min(maxGas-1,batchFactor)
 ```
 
 
-### LP provision, new or amendment
+### LP provision, new or amendment or cancellation
 
 ```
 gasOliq = network.transaction.defaultgas + 100 x pegs + 100 x shapes + 1 x positions + 0.1 x levels
@@ -83,13 +84,13 @@ gas = min(maxGas-1,gasOliq)
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 20`.
 1. Send `100` transactions with default gas cost to a node (e.g. votes on a proposal) and observe that most block have 5 of these transactions each. 
 
-### Test max with a market (<a name="0079-TGAS-001" href="#0079-TGAS-001">0079-TGAS-001</a>) 
+### Test max with a market (<a name="0079-TGAS-002" href="#0079-TGAS-002">0079-TGAS-002</a>) 
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position. 
 1. Another party submits a transaction to place a limit order. A block will be created containing the transaction (even though the gas cost of a limit order is `1 + 100 x 4 + 2 + 0.1 x 6` which is well over `100`.)
 
-### Test we don't overfill a block with a market (<a name="0079-TGAS-001" href="#0079-TGAS-001">0079-TGAS-001</a>) 
+### Test we don't overfill a block with a market (<a name="0079-TGAS-002" href="#0079-TGAS-002">0079-TGAS-002</a>) 
 
 1. Set `network.transactions.maxgasperblock = 500` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position. 
