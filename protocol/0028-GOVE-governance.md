@@ -83,8 +83,8 @@ Anyone can create a proposal if the weighting of their vote on the proposal woul
 
 In a future iteration of the governance system we may restrict proposal submission by type of proposal based on a minimum weighting. e.g: only user with a certain number or percentage of the governance asset are allowed to open a "network parameter change" proposal.
 
-Market change proposals additionally require certain minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.market.minEquityLikeShare`.
-So, for example, if `governance.proposal.market.minEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` then they cannot submit a market change proposal.
+Market change proposals additionally require certain minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.updateMarket.minProposerEquityLikeShare`.
+So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` then they cannot submit a market change proposal.
 
 
 ### Duration of the proposal
@@ -437,7 +437,7 @@ APIs should also exist for clients to:
 - [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
 - [ ] Verify that an enacted market change proposal that reduces `market.stake.target.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
 - [ ] Attempts to update immutable market parameter(s) cause the market change proposal to be rejected with an appropriate rejection message (<a name="0028-GOVE-058" href="#0028-GOVE-058">0028-GOVE-058</a>)
-- [ ] Verify that if `governance.proposal.market.minEquityLikeShare = 0` and if a party meets the `governance.proposal.updateMarket.minProposerBalance` threshold then said party can submit a market change proposal. (<a name="0028-GOVE-060" href="#0028-GOVE-060">0028-GOVE-060</a>)
+- [ ] Verify that if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0` and if a party meets the `governance.proposal.updateMarket.minProposerBalance` threshold then said party can submit a market change proposal. (<a name="0028-GOVE-060" href="#0028-GOVE-060">0028-GOVE-060</a>)
 
 
 ### Network parameter change proposals
