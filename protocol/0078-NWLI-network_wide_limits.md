@@ -18,6 +18,7 @@ If it gets decreased below the current total number of pegged orders across all 
 ## LP order shapes
 
 Each [LP order shape](./0038-OLIQ-liquidity_provision_order_type.md#how-they-are-submitted) has a limit of entries (offsets) driven by `market.liquidityProvision.shapes.maxSize`.
+Default value: `5`.
 
 ### Change of network parameter
 
