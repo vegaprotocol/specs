@@ -205,4 +205,4 @@ If the parameter has been increased then LP order volume that may have been plac
 
 
 ### LP commitment repricing due to peg price moves
-- [ ] If best bid / ask has changed and the LP order volume is moved around to match the shape / new peg levels then the margin requirement for the party may change. There is at most one transfer in / out of the margin account of the LP party as a result of one of the pegs moving. (<a name="0038-OLIQ-007" href="#0038-OLIQ-007">0038-OLIQ-007</a>) 
+- [ ] If best bid / ask has changed and the LP order volume is moved around to match the shape / new peg levels then the margin requirement for the party may change. There is at most one transfer in / out of the margin account of the LP party as a result of one of the pegs moving. (<a name="0038-OLIQ-008" href="#0038-OLIQ-008">0038-OLIQ-008</a>) 
