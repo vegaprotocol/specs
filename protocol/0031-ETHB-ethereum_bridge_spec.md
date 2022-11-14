@@ -179,7 +179,6 @@ To ensure complete coverage of public and external smart contract functions, lis
    *  must return withdraw threshold (<a name="0031-ETHB-033" href="#0031-ETHB-033">0031-ETHB-033</a>)
 9.  `function set_withdraw_delay(uint256 delay,uint256 nonce,bytes calldata signatures)`
     *  must set withdraw delay (<a name="0031-ETHB-034" href="#0031-ETHB-034">0031-ETHB-034</a>)
-    *  must be listed asset (<a name="0031-ETHB-035" href="#0031-ETHB-035">0031-ETHB-035</a>)
     *  must fail if bad sigs (<a name="0031-ETHB-036" href="#0031-ETHB-036">0031-ETHB-036</a>)
 10. `function global_stop(uint256 nonce, bytes calldata signatures)`
     *  must set `is_stopped` to `true` (<a name="0031-ETHB-037" href="#0031-ETHB-037">0031-ETHB-037</a>)
@@ -205,6 +204,8 @@ To ensure complete coverage of public and external smart contract functions, lis
     *  must withdraw asset specified (<a name="0031-ETHB-052" href="#0031-ETHB-052">0031-ETHB-052</a>)
     *  must fail on bad signatures (<a name="0031-ETHB-053" href="#0031-ETHB-053">0031-ETHB-053</a>)
     *  must fail on non-matching parameters (<a name="0031-ETHB-054" href="#0031-ETHB-054">0031-ETHB-054</a>)
+    *  must fail on expired withdrawal order (<a name="0031-ETHB-082" href="#0031-ETHB-082">0031-ETHB-082</a>)
+    *  must fail on delay not yet elapsed (<a name="0031-ETHB-083" href="#0031-ETHB-083">0031-ETHB-083</a>)
 16. `function deposit_asset(address asset_source,uint256 amount,bytes32 vega_public_key)`
     *  must deposit asset from user (<a name="0031-ETHB-055" href="#0031-ETHB-055">0031-ETHB-055</a>)
     *  must be listed (<a name="0031-ETHB-056" href="#0031-ETHB-056">0031-ETHB-056</a>)
