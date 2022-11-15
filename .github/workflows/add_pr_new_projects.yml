@@ -3,7 +3,7 @@
 name: "Add IPRs To Project Board"
 
 "on":
-  issues:
+  pull_request:
     types:
       - opened
 env:
