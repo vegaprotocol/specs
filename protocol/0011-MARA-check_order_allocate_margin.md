@@ -25,9 +25,6 @@ Orders should be rejected if we can’t allocate sufficient margin.
 - Limit GTT (<a name="0011-MARA-013" href="#0011-MARA-013">0011-MARA-013</a>)
 - Limit GTC (<a name="0011-MARA-014" href="#0011-MARA-014">0011-MARA-014</a>)
 - Limit GFA (<a name="0011-MARA-015" href="#0011-MARA-015">0011-MARA-015</a>)
-- Pegged GTT (parked in auction \*) (<a name="0011-MARA-016" href="#0011-MARA-016">0011-MARA-016</a>)
-- Pegged GTC (parked in auction \* ) (<a name="0011-MARA-017" href="#0011-MARA-017">0011-MARA-017</a>)
-
 
 
 ## Pseudocode
