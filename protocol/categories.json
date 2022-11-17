@@ -9,7 +9,7 @@
     "specs": ["0002-STTL", "0003-MTMK", "0045-DSRC", "0046-DSRM", "0047-DSRF", "0048-DSRI"]
   },
   "Protections": {
-    "specs": ["0073-LIMN", "0072-SPPW", "0062-SPAM", "0060-WEND", "0003-NP-LIMI", "0072-SPPW", "0078-NWLI"]
+    "specs": ["0073-LIMN", "0072-SPPW", "0062-SPAM", "0060-WEND", "0003-NP-LIMI", "0072-SPPW", "0078-NWLI", "0079-TGAS"]
   },
   "Liquidity": {
     "specs": ["0044-LIME", "0042-LIQF", "0034-PROB"]
