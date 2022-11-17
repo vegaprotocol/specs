@@ -76,3 +76,52 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
 - Reusing a transaction identifier in a way that several transactions with the same ID end up in the same block is detected and the transactions are rejected (<a name="0072-SPPW-005" href="#0072-SPPW-005">0072-SPPW-005</a>)
 - A blocked account is unblocked after 4 epochs. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
 - PoW attached to a valid transaction will be accepted provided it's using correct chain ID and, at time of submission, the block hash is one of the last `spam.pow.numberOfPastBlocks` blocks.  (<a name="0072-COSMICELEVATOR-007" href="#0072-COSMICELEVATOR-007">0072-COSMICELEVATOR-007</a>)
+
+- The parameter 'spam.pow.difficulty' is increased.  Verify that
+    - This is communicated to all wallets, and wallets use the new parameter for each transaction tied to a block with a height higher than the one in which the change happened. 
+    - Transactions tied to such a block using the original difficulty are rejected with an error message.
+    - The effect of pow.increaseDifficulty is still applied, i.e., a wallet key that had the increased difficulty still has the increased difficulty w.r.t. the new baseline.
+    (<a name="0072-COSMICELEVATOR-008" href="#0072-COSMICELEVATOR-008">0072-COSMICELEVATOR-008</a>)
+
+- The parameter 'spam.pow.difficulty' is decreased. Verify that
+     - This is communicated to all wallets, and wallets use the new parameter for each transaction tied to a block with a height higher than the one in which the change happened.
+    - Transactions tied to such a block using the new difficulty are not rejected.
+    - The effect of pow.increaseDifficulty is still applied, i.e., a wallet key that had the increasedd difficulty still has the increased difficulty w.r.t. the new baseline.
+    (<a name="0072-COSMICELEVATOR-009" href="#0072-COSMICELEVATOR-009">0072-COSMICELEVATOR-009</a>)
+
+    - The parameter 'spam.pow.increaseDifficulty' is increased.  Verify that
+     - This is communicated to all wallets, and wallets use the new parameter for each transaction tied to a block with a height higher than the one in which the change happened. This requires some wallets to be subjected to a difficulty increase due to too many messages
+    - Transactions tied to such a block using insufficient difficulty due to the new parameter are rejected with an error message.
+    (<a name="0072-COSMICELEVATOR-010" href="#0072-COSMICELEVATOR-010">0072-COSMICELEVATOR-010</a>)
+
+- The parameter 'spam.pow.difficulty' is decreased. Verify that
+     - This is communicated to all wallets, and wallets use the new parameter for each transaction tied to a block with a height higher than the one in which the change happened.
+    - Transactions tied to such a block using the new difficulty are not rejected.
+    (<a name="0072-COSMICELEVATOR-011" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-011</a>)
+
+
+- The parameter 'spam.pow.numberofTxPerBlock' is decrerased.  Verify that o
+        - The new parameter is communicated to and adapted by the wallets, i.e., if a user has too many transactions according to the new parameter, the wallet does not submit transactions with a too low
+ poW difficulty (either by submitting a PoW of higher difficulty, or by submitting the transactions later).
+        - The new parameter addapted for all blocks with a block height higher than the current one, i.e., a number of transactions that was allowed before and is no longer due to the new parameter is rejected (leaving the spam difficulty level constant)
+    (<a name="0072-COSMICELEVATOR-012" href="#0072-COSMICELEVATOR-012">0072-COSMICELEVATOR-012</a>)
+
+- The parameter 'spam.pow.numberofTxPerBlock' is increased. Verify that
+     - This is communicated to all wallets, and wallets use the new parameter for each transaction tied to a block with a height higher than the one in which the change happened. This means that a wallet
+ that had has a number of trnsactions exceeding the previous limit, but not the current one, does not increase the PoW difficulty or delay the transactions.
+    -  Accordingly, if a number of transactions is submitted with the level 1 PoW that would have exceeded the spam.pow.numberOfTXPerBlock pefore the change and not after, no transaction is rejected.
+    (<a name="0072-COSMICELEVATOR-013" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-013</a>)
+
+
+- Repeat tests 008-013,  where in the same block,
+   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is decreased, and spam.pow.numberOfTXPerBlock is increased.
+   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is increased, and spam.pow.numberOfTXPerBlock is increased.
+   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is decreased, and spam.pow.numberOfTXPerBlock is increased.
+   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is increased, and spam.pow.numberOfTXPerBlock is increased.
+   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is decreased, and spam.pow.numberOfTXPerBlock is decreased.
+   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is increased, and spam.pow.numberOfTXPerBlock is decreased.
+   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is decreased, and spam.pow.numberOfTXPerBlock is decreased.
+   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is increased, and spam.pow.numberOfTXPerBlock is decreased.
+    (<a name="0072-COSMICELEVATOR-014" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-014</a>)
+
+~                                                        
