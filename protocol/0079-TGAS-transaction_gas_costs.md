@@ -8,6 +8,7 @@ Each block will contain only transactions up to a certain block gas limit.
 
 - `network.transactions.maxgasperblock` is a network parameter with type unsigned integer with a minimum value of `100`, maximum value `10 000 000` and a recommended default of `10 000`. If the parameter is changed through governance then the next block after enactment will respect the new `maxgasperblock`. 
 - `network.transaction.defaultgas` is a network parameter with type unsigned integer with a minimum value of `1` and maximum value of `99` and default value of `1`. If the parameter is changed through governance then the next block after enactment will respect the new `defaultgas`. 
+- `network.transactions.minBlockCapacity` is a network parameter with type unsigned integer with a minimum value of `1`, maximum `10000` and default `32` setting the minimum number of transactions that will fit into a block due to their gas costs. 
 
 Note that the min / max values set above are deliberate: as we'll see below we can fit at least one transaction with default gas into a block. 
 
@@ -15,14 +16,13 @@ Note that the min / max values set above are deliberate: as we'll see below we c
 
 Each transaction will have a gas cost assigned to it. Any transaction not specifically named below has gas cost of `network.transaction.defaultgas`. 
 The consensus layer (Tendermint) will choose transactions from the proposer's mempool to include into a block with a maximum total cost of `network.transactions.maxgasperblock`. 
-It must *not* try to include the transactions with the highest gas; in fact it should include transactions in the sequence it's seen them until the block gas limit is reached. 
+It must *not* try to include the transactions with the highest gas; in fact it should include transactions in the sequence it's seen them until the block gas limit is reached.  
 
-## Default transactions cost
+## Default transactions cost
 
 Every transaction not listed below will have gas cost `network.transaction.defaultgas`. 
 
-
-## Dynamic transactions costs
+## Dynamic transactions costs
 
 Cost of transaction depends mainly on the state of underlying market and below we set out costs of transactions based on market state. 
 Vega will capture the needed statistical variables (see below) on a per-market basis (or per-whatever if other dynamically costed transactions are added, for now per-market is sufficient) from the previous block so that they don't need to be looked up dynamically during block creation. 
@@ -43,28 +43,49 @@ Constants needed:
 - `level factor = 0.1` nonnegative integer 
 - `batchFactor = 0.5` decimal between `0.1 and 0.9`.
 
-### Any type of limit or market order
+### Any type of limit or market order
 
 ```
 gasOrder = network.transaction.defaultgas + peg cost factor x pegs 
                                         + LP shape cost factor x shapes 
                                         + position factor x positions 
                                         + level factor x levels
-gasOrder = min(maxGas-1,gasOrder)
+gas = min((maxGas/minBlockCapacity)-1,gasOrder)
 ```
 
-### Cancellation of any order
+### Cancellation of any single order
 
 ```
 gasCancel = network.transaction.defaultgas + peg cost factor x pegs 
                                         + LP shape cost factor x shapes 
                                         + level factor x levels
-gasCancel = min(maxGas-1,gasCancel)
+gas = min((maxGas/minBlockCapacity)-1,gasCancel)
 ```
 
-### Batch orders 
+### Cancellation of all orders on a market
 
-Define `batchFactor` (a hard coded parameter) set to something between `0.1 and 0.9`.
+Same as the cost of cancelling a single order on the market. 
+
+### Cancellation of all orders on all markets
+
+1. For each market `i=1,...,N` calculate 
+```
+gasCancel(i) = network.transaction.defaultgas + peg cost factor x pegs(i) 
+                                        + LP shape cost factor x shapes(i) 
+                                        + level factor x levels(i)
+```                                         
+where the index `i` on `pegs`, `shapes`, `levels` indicate they are those for market `i`. 
+
+2. Calculate
+```
+gasCancelAllOrdersAllMkts = sum over i from 1 to N of gasCancel(i)
+gas = min((maxGas/minBlockCapacity)-1,gasCancelAllOrdersAllMkts)
+```
+
+
+### Batch orders 
+
+Define `batchFactor` (a hard coded parameter) set to something between `0.0 and 1.0`.
 Say `batchFactor = 0.5` for now.
 
 Here `gasBatch` is
@@ -76,36 +97,36 @@ Here `gasBatch` is
 1. plus `batchFactor` sum of all subsequent limit orders added together (each costing `gasOrder`)
 
 ```
-gas = min(maxGas-1,batchFactor)
+gas = min((maxGas/minBlockCapacity)-1,batchGas)
 ```
 
 
-### LP provision, new or amendment or cancellation
+### LP provision, new or amendment or cancellation
 
 ```
 gasOliq = network.transaction.defaultgas + peg cost factor x pegs 
                                     + LP shape cost factor x shapes 
                                     + position factor x positions 
                                     + level factor x levels
-gas = min(maxGas-1,gasOliq)
+gas = min((maxGas/minBlockCapacity)-1,gasOliq)
 ```
 
 
 
 ## Acceptance criteria
 
-### Basic happy path test (<a name="0079-TGAS-001" href="#0079-TGAS-001">0079-TGAS-001</a>) 
+### Basic happy path test (<a name="0079-TGAS-001" href="#0079-TGAS-001">0079-TGAS-001</a>) 
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 20`.
 1. Send `100` transactions with default gas cost to a node (e.g. votes on a proposal) and observe that most block have 5 of these transactions each. 
 
-### Test max with a market (<a name="0079-TGAS-002" href="#0079-TGAS-002">0079-TGAS-002</a>) 
+### Test max with a market (<a name="0079-TGAS-002" href="#0079-TGAS-002">0079-TGAS-002</a>) 
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position. 
 1. Another party submits a transaction to place a limit order. A block will be created containing the transaction (even though the gas cost of a limit order is `1 + 100 x 4 + 2 + 0.1 x 6` which is well over `100`.)
 
-### Test we don't overfill a block with a market (<a name="0079-TGAS-002" href="#0079-TGAS-002">0079-TGAS-002</a>) 
+### Test we don't overfill a block with a market (<a name="0079-TGAS-002" href="#0079-TGAS-002">0079-TGAS-002</a>) 
 
 1. Set `network.transactions.maxgasperblock = 500` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position. 
