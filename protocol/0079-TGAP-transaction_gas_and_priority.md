@@ -63,25 +63,6 @@ gasCancel = network.transaction.defaultgas + peg cost factor x pegs
 gas = min((maxGas/minBlockCapacity)-1,gasCancel)
 ```
 
-### Cancellation of all orders on a market
-
-Same as the cost of cancelling a single order on the market. 
-
-### Cancellation of all orders on all markets
-
-1. For each market `i=1,...,N` calculate 
-```
-gasCancel(i) = network.transaction.defaultgas + peg cost factor x pegs(i) 
-                                        + LP shape cost factor x shapes(i) 
-                                        + level factor x levels(i)
-```                                         
-where the index `i` on `pegs`, `shapes`, `levels` indicate they are those for market `i`. 
-
-2. Calculate
-```
-gasCancelAllOrdersAllMkts = sum over i from 1 to N of gasCancel(i)
-gas = min((maxGas/minBlockCapacity)-1,gasCancelAllOrdersAllMkts)
-```
 
 
 ### Batch orders 
