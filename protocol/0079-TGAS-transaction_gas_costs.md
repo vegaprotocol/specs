@@ -1,8 +1,9 @@
-# Vega transaction gas costs 
+# Vega transaction gas costs and priorities
 
 Vega doesn't charge users gas costs per transaction. 
 However, the system processing capacity is still limited and in order to ensure liveness each transaction will have associated gas cost.
 Each block will contain only transactions up to a certain block gas limit. 
+Transactions with higher priorities will get scheduled first. 
 
 ## Network parameters
 
@@ -10,7 +11,7 @@ Each block will contain only transactions up to a certain block gas limit.
 - `network.transaction.defaultgas` is a network parameter with type unsigned integer with a minimum value of `1` and maximum value of `99` and default value of `1`. If the parameter is changed through governance then the next block after enactment will respect the new `defaultgas`. 
 - `network.transactions.minBlockCapacity` is a network parameter with type unsigned integer with a minimum value of `1`, maximum `10000` and default `32` setting the minimum number of transactions that will fit into a block due to their gas costs. 
 
-Note that the min / max values set above are deliberate: as we'll see below we can fit at least one transaction with default gas into a block. 
+We must have `network.transactions.maxgasperblock >= 2 x network.transactions.minBlockCapacity`. 
 
 ## Including transactions 
 
@@ -111,6 +112,13 @@ gasOliq = network.transaction.defaultgas + peg cost factor x pegs
 gas = min((maxGas/minBlockCapacity)-1,gasOliq)
 ```
 
+
+## Transaction priorities 
+
+There are three priority categories:
+1. "high" which constitue all "protocol transactions" i.e. state variable updates [(floating point consensus)](./0065-FTCO-floating_point_consensus.md), [ethereum events](./0036-BRIE-event_queue.md) , withdrawals, heartbeats (for candidate and ersatz validator performance measurement), see [validators](./0069-VCBS-validators_chosen_by_stake.md) and transactions the protocol uses internally to run. 
+1. "medium" which includes all [governance](./0028-GOVE-governance.md) transactions (market proposals, parameter change proposals, votes).
+1. "low" which includes all other transactions.
 
 
 ## Acceptance criteria
