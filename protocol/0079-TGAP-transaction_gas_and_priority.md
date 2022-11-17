@@ -96,6 +96,9 @@ gas = min((maxGas/minBlockCapacity)-1,gasOliq)
 
 ## Transaction priorities 
 
+Transactions with higher priorities that are present in the mempool will get placed into a block before transactions with lower priority are considered. 
+Transactions with the same priority are placed into a block in the default sequencing order (up to maximum gas cost above).
+
 There are three priority categories:
 1. "high" which constitue all "protocol transactions" i.e. state variable updates [(floating point consensus)](./0065-FTCO-floating_point_consensus.md), [ethereum events](./0036-BRIE-event_queue.md) , withdrawals, heartbeats (for candidate and ersatz validator performance measurement), see [validators](./0069-VCBS-validators_chosen_by_stake.md) and transactions the protocol uses internally to run. 
 1. "medium" which includes all [governance](./0028-GOVE-governance.md) transactions (market proposals, parameter change proposals, votes).
