@@ -40,7 +40,7 @@ When selecting what validators to nominate with my stake, I...
 
 - **must** see all validator information without having to connect Vega wallet <a name="1002-STKE-050" href="#1002-STKE-050">1002-STKE-050</a>
 - see "static" information about the validator (these can change, just not frequently)
-  - **must** see name <a name="1002-STKE-006" href="#1002-STKE-006">1002-STKE-006</a
+  - **must** see name <a name="1002-STKE-006" href="#1002-STKE-006">1002-STKE-006</a>
   - **must** see Vega public key <a name="1002-STKE-008" href="#1002-STKE-008">1002-STKE-008</a>
   - **should** see a URL where to find more information about the validator (if there is one)
   - **must** see Ethereum address<a name="1002-STKE-010" href="#1002-STKE-010">1002-STKE-010</a>
