@@ -628,3 +628,19 @@ At the end of epoch 3, 10000 VEGA should be distributed split between the BTCUSD
     The general account balance of the ETHUSDT creator should be 15000.
     The general account balance of the BTCUSDT creator should be 5000.
     The reward pool balance should be 0.
+
+### Updating the network parameter rewards.marketCreationQuantumMultiple (<a name="0056-REWA-050" href="#0056-REWA-050">0056-REWA-050</a>)
+#### Rationale 
+When the network parameter `rewards.marketCreationQuantumMultiple` is changed via governance, the change should take affect
+immediately and the new value used at the end of the epoch to decide if market creators are eligible for reward.
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+* Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* During epoch 1 start trading such that traded value for fee purposes in USDT is less than 10^6 but greater than 10^5
+* During epoch 2 update the value of `marketCreationQuantumMultiple` via governance to `10^5`.
+#### Expectation
+At the end of epoch 2, 10000 VEGA rewards should be distributed to the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 10000.
+    The reward pool balance should be 0.
