@@ -92,3 +92,5 @@ As mentioned, as a consequence, intra-block, we may end with one side of the boo
 8. If the Max Open Interest field decreases for a created block to a level such that a liquidity auction which is active at the start of a block can now be exited the block stays in auction within the block but leaves at the end. (<a name="0035-LIQM-008" href="#0035-LIQM-008">0035-LIQM-008</a>)
 
 9. When the network parameter `market.liquidity.targetstake.triggering.ratio` is updated via governance, future new market and update market proposals which do not specify a `triggeringRatio` should copy the new network parameter as the market parameter value. (<a name="0035-LIQM-009" href="#0035-LIQM-009">0035-LIQM-009</a>)
+
+9. When the market parameter `triggeringRatio` for an existing market is updated via governance, the next time conditions for entering auction are evaluated, the new triggering ratio is applied. (<a name="0035-LIQM-010" href="#0035-LIQM-010">0035-LIQM-010</a>)
