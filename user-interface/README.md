@@ -32,13 +32,13 @@ These files contain generic user needs for interacting with wallets that are tru
 - `1001-DEPO` [Deposit](1001-DEPO-desposit.md) `TODO`
 - `1002-WITH` [Withdraw](1002-WITH-withdraw.md) `TODO`
 - `1003-TRAN` [Transfer](1003-TRAN-transfer.md) `TODO`
-- `1004-ASSO` [Associate governance token with a Vega key](1004-ASSO-associate.md) `TODO`
-- `1005-VEST` [View and redeem vested tokens](1005-VEST-vesting.md) `TODO`
+- `1004-ASSO` [Associate governance token with a Vega key](1004-ASSO-associate.md)
+- `1005-VEST` [View and redeem vested tokens](1005-VEST-vesting.md)
 
 ## `2000` Staking
 
-- `2001-STKE` [Staking validators](2001-STKE-staking.md) `TODO`
-- `2002-SINC` [Review staking income](2002-SINC-staking-income.md) `TODO`
+- `2001-STKE` [Staking validators](2001-STKE-staking.md)
+- `2002-SINC` [Review staking income](2002-SINC-staking-income.md)
 
 ## `3000` Governance
 
