@@ -388,7 +388,7 @@ Verify that 2 validators are replaced, one in each epoch
 Verify that one validator is replaced the following epoch, one in the epoch after
 
 13. Ersatzvalidator reward (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>)
-    Set up a network with 5 validators, one of them with sufficient stake to be affected by the anti-whaling rule (e.g., 50% stake).  Demote
+    Set up a network with 5 validators one of them with sufficient stake to be affected by the anti-whaling rule (e.g., 50% stake), as well as 5 Ersatzvalidators with equal (low) stake.  Demote
     this validatore to Ersatzvalidator through poor performance. Validate that while being an ersatzvalidator, the reward is correct
     given the anti-whaling rule.
 
