@@ -17,7 +17,7 @@ Validation: none required as these are validated by the asset and data source fr
 
 ## 2. Settlement assets
 
-1 Returns `[cash_settled_future.settlement_asset]`\
+1. Returns `[cash_settled_future.settlement_asset]`.\
 2 It is not possible to change settlement asset via governance.
 
 
