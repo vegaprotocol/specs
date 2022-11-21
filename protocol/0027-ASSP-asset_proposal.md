@@ -191,7 +191,7 @@ This must be an integer strictly greater than `0`.
 - [ ] `quantum` must be an integer strictly greater than `0` (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)
 - [ ] If there is a proposal for some ERC20 asset already present then another proposal for the same ERC20 asset will be rejected. (<a name="0027-0027-ASSP-020" href="#0027-0027-ASSP-020">0027-0027-ASSP-020</a>)
 - [ ] There can be multiple concurrent proposals for the same new ERC20 asset (same means identical Ethereum address). Once the nodes agree (based on events from the external blockchain queue), that the asset is enabled on the bridge all the remaining proposals for the same asset are rejected. 
-(<a name="0027-COSMICELEVATOR-020" href="#0027-COSMICELEVATOR-020">0027-COSMICELEVATOR-020</a>)
+(<a name="0027-COSMICELEVATOR-025" href="#0027-COSMICELEVATOR-025">0027-COSMICELEVATOR-025</a>)
 - [ ] An invalid contract address, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-021" href="#0027-ASSP-021">0027-ASSP-021</a>)
 - [ ] An valid contract address which cannot be found in ethereum, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-022" href="#0027-ASSP-022">0027-ASSP-022</a>)
 
