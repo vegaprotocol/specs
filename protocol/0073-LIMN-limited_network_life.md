@@ -84,11 +84,8 @@ The state will be restored in this order:
 
 There should be a tool to extract all assets from the restore file so that they can be added to genesis block manually, should the validators so desire.
 
-# Taking limited network life into account
-- Participants need access to funds after network ends. This will be facilitated both
-    - (a) the chain will run past the configured `market_trading_terminated` until `chain_end_of_life_date` so that people have time to withdraw; and
-    - (b) using restoration of balances to allow participants to withdraw or continue to trade with funds during the next iteration of the chain.
-- A governance proposal to change `markets_freeze_date` and `chain_end_of_life_date` must check that `chain_end_of_life_date > markets_freeze_date`.
+# Restoring balancs
+- Participants need access to funds after network ends. This will be facilitated by using restoration of balances to allow participants to withdraw or continue to trade with funds during the next iteration of the chain.
 
 # Network parameters
 | Name                                                     | Type     | Description                                                       | Version added  |
