@@ -28,9 +28,9 @@ Note that maker_fee = 0 if there is no maker, taker relationship between the tra
 - maker: market framework / market making (network wide)
 - liquidity: market making system (per market)
 
-The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[maker] = 0.0005 = 0.05%`. 
+The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[infrastructure] = 0.0005 = 0.05%`. 
 The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`. 
-The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions commited to the market, see [setting LP fees](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions committed to the market, see [setting LP fees](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 trade_value_for_fee_purposes:
 * refers to the amount from which we calculate fee, (e.g. for futures, the trade's notional value = size_of_trade * price_of_trade)

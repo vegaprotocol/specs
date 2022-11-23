@@ -19,6 +19,7 @@
     - if there are two identical markets except that one has release level set to 1.7 and the other to 2.0 then a party has to see more mark-to-market gains on a position on the market with 2.0 than on the market with 1.7 to see funds transferred into the general account (<a name="0010-MARG-015" href="#0010-MARG-015">0010-MARG-015</a>)  
     - if there are two identical markets except that one has search level set to 1.1 and the other to 1.3 then the system will transfer funds from general to margin for a party that sees mark-to-market losses on its position earlier on the market with 1.3 than on the market with 1.1 to see funds transferred into the general account (<a name="0010-MARG-016" href="#0010-MARG-016">0010-MARG-016</a>)
     - if there are two identical markets except that one has initial level 1.3 and the other 1.5 then a party with no position or orders that places a market order will see a bigger transfer to the margin account on the market with 1.5 than on the one with 1.3. (<a name="0010-MARG-017" href="#0010-MARG-017">0010-MARG-017</a>)
+1. [ ] Whenever the `market.margin.scalingFactors` network parameter is updated via governance, when margin calculations are next triggered and margin balances re-evaluated for any party, the new scaling factors are applied (there is no need to recalculate margins on an update) (<a name="0010-MARG-018" href="#0010-MARG-018">0010-MARG-018</a>)
 
 
 ## Summary

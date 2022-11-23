@@ -1,6 +1,6 @@
 # Reward framework
 
-The reward framework provides a mechanism for measuring and rewarding a number of key activties on the Vega network. 
+The reward framework provides a mechanism for measuring and rewarding a number of key activities on the Vega network. 
 These rewards operate in addition to the main protocol economic incentives which come from 
 [fees](0029-FEES-fees.md) on every trade. 
 These fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](0061-REWP-simple_pos_rewards_sweetwater.md). 
@@ -52,7 +52,7 @@ Each of these represents a reward type with its own segregated reward accounts f
 1. Sum of maker fees received by the party on the market this epoch
 1. Sum of LP fees received by the party on the market this epoch
 
-Theese metrics apply only to the sum of fees for the epoch in question.
+These metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
 If the reward account balance is 0 at the end of the epoch for a given market, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
@@ -96,13 +96,13 @@ Trading reward accounts are defined by the reward asset (the asset in which the 
 That is, there can be multiple rewards with the same type paid in different assets for the same market.
 
 Note that the market settlement asset has nothing to do in particular with the asset used to pay out a reward for a market. 
-That is, a participant might recieve rewards in the settlement asset of the market, in VEGA governance tokens, and in any number of other unrelated tokens (perhaps governance of "loyalty"/reward tokens issued by LPs or market creators, or stablecoins like DAI).
+That is, a participant might receive rewards in the settlement asset of the market, in VEGA governance tokens, and in any number of other unrelated tokens (perhaps governance of "loyalty"/reward tokens issued by LPs or market creators, or stablecoins like DAI).
 
 Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward.
 These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
 Recurring transfers can target groups of markets, or all markets for a settlement asset, in which case the amount paid to each market is determined pro-rata by the markets' relative total reward metrics for the given reward type. See [transfers](./0057-TRAN-transfers.md) for more detail.
 
-Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for accross a restart.
+Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for across a restart.
 
 
 ## Reward distribution
@@ -125,7 +125,7 @@ Then calculate `M := m_1 + m_2 + … + m_n` and transfer `R ✖️ m_i / M` to p
 If `M=0` (no-one incurred or received fees as specified by the metric type for the given market) then no transfer will have been made to the reward account and therefore there are no rewards to pay out.
 The transfer will be retried the next epoch if it is still active. 
 
-Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward maetrics for any two parties. All funds will always be paid out.
+Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward metrics for any two parties. All funds will always be paid out.
 
 
 ## Acceptance criteria
@@ -138,7 +138,7 @@ There are two assets configured on the Vega chain: $VEGA and USDT.
 
 Setup a recurring transfer of 1000 $VEGA with the following dispatch strategy: asset=USDT, metric=DISPATCH_METRIC_TAKER_FEES_PAID, markets=[].
 Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next epoch generate fees in the markets with the following distribution:
-Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transafer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 200, market2 is funded with 300 and market3 is funded with 500. 
+Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transfer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 200, market2 is funded with 300 and market3 is funded with 500. 
 
 Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts. 
 
@@ -147,7 +147,7 @@ There are two assets configured on the Vega chain: $VEGA and USDT.
 
 Setup a recurring transfer of 1000 $VEGA with the following dispatch strategy: asset=USDT, metric=DISPATCH_METRIC_TAKER_FEES_PAID, markets=[market1, market2].
 Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next epoch generate fees in the markets with the following distribution:
-Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transafer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 400, market2 is funded with 600 and market3 is funded with 0. 
+Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transfer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 400, market2 is funded with 600 and market3 is funded with 0. 
 
 Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts. 
 
@@ -238,7 +238,7 @@ There are no markets.
 *  `ETHUSD-JUN22` market which settles in USDC is launched anytime in epoch 1 by `party_0`
 * For each market in {`ETHUSD-MAR22`, `ETHUSD-JUN22`}
     * `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10. 
-    * Moreover `party_0` provides liquidiity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
+    * Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
     * During epoch `2` we have `party_1` make one buy market order with volume `2`.
     * During epoch `2` we have `party_2` make one sell market order each with notional `1`.
 
@@ -270,7 +270,7 @@ There are no markets.
 * `infrastructure_fee` = 0.0002
 *  `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
 * `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10. 
-* Moreover `party_0` provides liquidiity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
+* Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
 * During epoch 2 `party_1` puts a limit buy order of vol 10 at 2710 and a limit sell order of vol 10 at 2790
 * After that, during epoch 2 `party_2` puts in a market buy order of volume 20.
 
@@ -342,7 +342,7 @@ There are no markets.
 *  `ETHUSD-JUN22` market which settles in USDC is launched anytime in epoch 1 by `party_0`
 * For each market in {`ETHUSD-MAR22`, `ETHUSD-JUN22`}
     * `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10. 
-    * Moreover `party_0` provides liquidiity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
+    * Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
     * During epoch 2 `party_1` puts a limit buy order of vol 10 at 2710 and a limit sell order of vol 10 at 2790
     * After that, during epoch 2 `party_2` puts in a market buy order of volume 20.
 
@@ -627,4 +627,20 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHU
 At the end of epoch 3, 10000 VEGA should be distributed split between the BTCUSDT creator and the ETHUSDT creator.
     The general account balance of the ETHUSDT creator should be 15000.
     The general account balance of the BTCUSDT creator should be 5000.
+    The reward pool balance should be 0.
+
+### Updating the network parameter rewards.marketCreationQuantumMultiple (<a name="0056-REWA-050" href="#0056-REWA-050">0056-REWA-050</a>)
+#### Rationale 
+When the network parameter `rewards.marketCreationQuantumMultiple` is changed via governance, the change should take affect
+immediately and the new value used at the end of the epoch to decide if market creators are eligible for reward.
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+* Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* During epoch 1 start trading such that traded value for fee purposes in USDT is less than 10^6 but greater than 10^5
+* During epoch 2 update the value of `marketCreationQuantumMultiple` via governance to `10^5`.
+#### Expectation
+At the end of epoch 2, 10000 VEGA rewards should be distributed to the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 10000.
     The reward pool balance should be 0.
