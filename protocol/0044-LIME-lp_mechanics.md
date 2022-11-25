@@ -142,10 +142,10 @@ As pegged orders are parked during an auction and not placed on the book, margin
 Each liquidity provider supplies an amount of liquidity which is calculated from their commitment (stake) and measured in 'currency siskas' (i.e. USD siskas, ETH siskas, etc.).This is calculated by multiplying the stake by the network parameter `market.liquidity.stakeToCcySiskas` as follows:
 
 ```
-lp_liquidity_obligation_in_ccy_siskas = market.liquidity.stakeToCcySiskas ⨉ stake.
+lp_liquidity_obligation_in_ccy_volume = market.liquidity.stakeToCcyVolume ⨉ stake.
 ```
 
-Note here "ccy" stands for "currency". Liquidity measure units are 'currency siskas', e.g. ETH or USD siskas. This is because the calculation is basically `volume ⨉ probability of trading ⨉ price of the volume` and the price of the volume is in the said currency.
+Note here "ccy" stands for "currency". Liquidity measure units are 'currency x volume'. This is because the calculation is basically `volume ⨉  ⨉ price of the volume` and the price of the volume is in the said currency.
 
 
 ### How liquidity is supplied

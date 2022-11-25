@@ -146,6 +146,32 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 (average entry valuation) = 1090.9
 ```
 
+### Calculating supplied liquidity from probability of trading 
+
+At every vega time change calculate the supplied liquidity provided by each committed LP. 
+This is done by taking into account all the volume they're providing between the tightest price monitoring bound and then 
+use the formula provided by [probability weighted liquidity measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb).
+
+Now calculate the total provided liquidity by committed LPs:
+```
+total_provided = sum over committed LPs of liquidity provided by a committed LP
+```
+
+Now calculate fraction of liquidity provided for a committed LP:
+```
+fraction of liquidity provided by committed LP = liquidity provided by a committed LP / total_provided
+```
+
+If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then `average fraction of liquidity provided by committed LP` is set to `fraction of liquidity provided by committed LP`. 
+
+Otherwise whenever a new LP fee distribution period starts set a counter `n=1`. 
+Then on ever vega time change, after `fraction of liquidity provided by committed LP` has been obtained update the 
+
+```
+average fraction of liquidity provided by committed LP <- ((n-1)/n) x average fraction of liquidity provided by committed LP + (1/n) x average fraction of liquidity provided by committed LP
+```
+
+
 ### Distributing fees
 
 On every trade, liquidity fee should be collected immediately into an account for each liquidity provider (call it LP fee account). Each party will have an LP fee account on every market on which they committed liquidity by providing LP stake. 
@@ -154,7 +180,7 @@ This account is not under control of the LP party (they cannot initiate transfer
 
 A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block. 
 
-The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` at a given time. 
+The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `average fraction of liquidity provided by committed LP `at a given time. 
 
 #### Example
 We have `4` LPs with equity-like share shares:
