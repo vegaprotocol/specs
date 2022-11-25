@@ -72,8 +72,8 @@ max_lp_vol_price = min(max_price_mon_price, (1.0 + market.liquidity.volumeRange)
 
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIME-lp_mechanics.md).
 
-1. Subtract from the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time that are between and including `min_lp_vol_price` and `max_lp_vol_price`. 
-The contribution is `volume x price`. 
+1. The `liquidity_obligation` calculated as per [LP mechanics](0044-LIME-lp_mechanics.md). Some of it may be fulfilled by persistent orders the liquidity provider has on the book at this point in time that are between and including `min_lp_vol_price` and `max_lp_vol_price`. 
+The contribution is `volume x price`; sum up the contribution across the relevant side of the book and subtract it from `liquidity_obligation` obtained above. 
 If you end up with 0 or a negative number, stop, you are done. 
 
 1. Using the adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the remaining entries in the buy / sell shape (for clarity, this does not include any other persistent orders that the market maker has).
