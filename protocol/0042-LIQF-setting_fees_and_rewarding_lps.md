@@ -161,6 +161,7 @@ Now calculate fraction of liquidity provided for a committed LP:
 ```
 fraction of liquidity provided by committed LP = liquidity provided by a committed LP / total_provided
 ```
+If the `total_provided` comes out as `0` then set `fraction of liquidity provided by committed LP` to `1.0` for all committed LPs. 
 
 If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then `average fraction of liquidity provided by committed LP` is set to `fraction of liquidity provided by committed LP`. 
 
