@@ -388,25 +388,25 @@ APIs should also exist for clients to:
 
 # Acceptance Criteria
 
-- [x] As a user, I can create a new proposal, assuming my staking balance matches or exceeds `minProposerBalance` network param for my proposal type (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)
-- [x] As a user, I can list the open proposals on the network (<a name="0028-GOVE-002" href="#0028-GOVE-002">0028-GOVE-002</a>)
-- [ ] As a user, I can get a list of all proposals I voted for (<a name="0028-GOVE-003" href="#0028-GOVE-003">0028-GOVE-003</a>)
-- [x] As a user, I can receive notification when a new proposal is created and may require attention. (<a name="0028-GOVE-004" href="#0028-GOVE-004">0028-GOVE-004</a>)
-- [x] As the vega network, all votes from eligible users for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)
-- [x] As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected* (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)
-- [x] As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it. (<a name="0028-GOVE-007" href="#0028-GOVE-007">0028-GOVE-007</a>)
-- [ ] As the vega network, proposals that set enactment time before closing time are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
-- [ ] As the vega network, proposals that set closing time beyond the relevant `maxClose` parameter are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
-- [ ] As a user, I can vote for an existing proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
-- [ ] As a user, my vote for an existing proposal is rejected if I have less the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-015" href="#0028-GOVE-015">0028-GOVE-015</a>)
-- [ ] As a user, my vote for an existing proposal is rejected if I have less than the relevant `minVoterBalance` governance tokens in my staking account even if I have more than `minVoterBalance` governance tokens in my general or margin accounts (<a name="0028-GOVE-016" href="#0028-GOVE-016">0028-GOVE-016</a>)
-- [ ] As a user, I can vote multiple times for the same proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account
-  - [x] Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)
-- [ ] When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
-- [ ] If a new proposal is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal and can be queried via APIs separately from the general network parameters. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
-- [ ] If a new proposal "P" is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
-- [ ] All proposals with a title field that is empty, or not between 1 and 100 characters, will be rejected (<a name="0028-GOVE-039" href="#0028-GOVE-039">0028-GOVE-039</a>)
-- [ ] Reject any proposal that defines a risk parameter outside it's intended boundaries (<a name="0028-GOVE-040" href="#0028-GOVE-040">0028-GOVE-040</a>)
+- As a user, I can create a new proposal, assuming my staking balance matches or exceeds `minProposerBalance` network param for my proposal type (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)
+- As a user, I can list the open proposals on the network (<a name="0028-GOVE-002" href="#0028-GOVE-002">0028-GOVE-002</a>)
+- As a user, I can get a list of all proposals I voted for (<a name="0028-GOVE-003" href="#0028-GOVE-003">0028-GOVE-003</a>)
+- As a user, I can receive notification when a new proposal is created and may require attention. (<a name="0028-GOVE-004" href="#0028-GOVE-004">0028-GOVE-004</a>)
+- As the vega network, all votes from eligible users for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)
+- As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected* (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)
+- As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it. (<a name="0028-GOVE-007" href="#0028-GOVE-007">0028-GOVE-007</a>)
+- As the vega network, proposals that set enactment time before closing time are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
+- As the vega network, proposals that set closing time beyond the relevant `maxClose` parameter are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
+- As a user, I can vote for an existing proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
+- As a user, my vote for an existing proposal is rejected if I have less the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-015" href="#0028-GOVE-015">0028-GOVE-015</a>)
+- As a user, my vote for an existing proposal is rejected if I have less than the relevant `minVoterBalance` governance tokens in my staking account even if I have more than `minVoterBalance` governance tokens in my general or margin accounts (<a name="0028-GOVE-016" href="#0028-GOVE-016">0028-GOVE-016</a>)
+- As a user, I can vote multiple times for the same proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account
+  - Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)
+- When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
+- If a new proposal is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal and can be queried via APIs separately from the general network parameters. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
+- If a new proposal "P" is sucessfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
+- All proposals with a title field that is empty, or not between 1 and 100 characters, will be rejected (<a name="0028-GOVE-039" href="#0028-GOVE-039">0028-GOVE-039</a>)
+- Reject any proposal that defines a risk parameter outside it's intended boundaries (<a name="0028-GOVE-040" href="#0028-GOVE-040">0028-GOVE-040</a>)
   - risk aversion lambda: 1e-8 <= x < 0.1
   - tau: 1e-8 <= x <= 1
   - mu: -1e-6 <= x <= 1e-6
@@ -416,33 +416,33 @@ APIs should also exist for clients to:
 ## Governance proposal types
 
 ### New Asset proposals
-- [ ] New asset proposals cannot be created before [`limits.assets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
-- [ ] An asset proposal with a negative or non-integer value supplied for asset decimal places gets rejected. (<a name="0028-GOVE-059" href="#0028-GOVE-059">0028-GOVE-059</a>)
+- New asset proposals cannot be created before [`limits.assets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
+- An asset proposal with a negative or non-integer value supplied for asset decimal places gets rejected. (<a name="0028-GOVE-059" href="#0028-GOVE-059">0028-GOVE-059</a>)
 
 ### New Market proposals
-- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
-- [ ] New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
-- [ ] A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md). (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
-- [ ] A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
-- [ ] A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
+- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
+- A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md). (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
+- A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
+- A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
 
 
 
 ### Market change proposals
-- [ ] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
-- [ ] Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)
-- [ ] Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
-- [ ] Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
-- [ ] Verify that an enacted market which uses trading terminated key `ktt1` and settlement price key `ksp1` which is changed via governance proposal to use trading terminated key `ktt2` and settlement price key `ksp2` can terminate trading using `ktt2` but cannot terminate trading using `ktt1` and `ksp2` can submit the settlement price causing market to settle but the key `ksp1` cannot settle the market. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
-- [ ] Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
-- [ ] Verify that an enacted market change proposal that reduces `market.stake.target.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
-- [ ] Attempts to update immutable market parameter(s) cause the market change proposal to be rejected with an appropriate rejection message (<a name="0028-GOVE-058" href="#0028-GOVE-058">0028-GOVE-058</a>)
-- [ ] Verify that if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0` and if a party meets the `governance.proposal.updateMarket.minProposerBalance` threshold then said party can submit a market change proposal. (<a name="0028-GOVE-060" href="#0028-GOVE-060">0028-GOVE-060</a>)
+- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
+- Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)
+- Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
+- Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
+- Verify that an enacted market which uses trading terminated key `ktt1` and settlement price key `ksp1` which is changed via governance proposal to use trading terminated key `ktt2` and settlement price key `ksp2` can terminate trading using `ktt2` but cannot terminate trading using `ktt1` and `ksp2` can submit the settlement price causing market to settle but the key `ksp1` cannot settle the market. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
+- Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
+- Verify that an enacted market change proposal that reduces `market.stake.target.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
+- Attempts to update immutable market parameter(s) cause the market change proposal to be rejected with an appropriate rejection message (<a name="0028-GOVE-058" href="#0028-GOVE-058">0028-GOVE-058</a>)
+- Verify that if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0` and if a party meets the `governance.proposal.updateMarket.minProposerBalance` threshold then said party can submit a market change proposal. (<a name="0028-GOVE-060" href="#0028-GOVE-060">0028-GOVE-060</a>)
 
 
 ### Network parameter change proposals
-- [x] As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
-- [x] Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
+- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
+- Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
 
 Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeForm`. 
 - Change of the network parameter `governance.proposal.*.minEnact` will immediately change the minimum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-051" href="#0028-GOVE-051">0028-GOVE-051</a>)
@@ -455,11 +455,6 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 
 ### Freeform governance proposals
-- [ ] A freeform governance proposal with a description field that is empty, or not between 1 and 10,000 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
-- [ ] A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
-- [ ] Closed freeform governance proposals can be retrieved from the API along with details of how token holders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
-
-
-
-
-
+- A freeform governance proposal with a description field that is empty, or not between 1 and 10,000 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
+- A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
+- Closed freeform governance proposals can be retrieved from the API along with details of how token holders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)

@@ -205,13 +205,13 @@ message CancelTransfer {
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
 - As a user I cannot transfer funds from accounts I own but from the type is not supported (e.g. margin, staking). (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>) 
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed. (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
-  - [ ] The fee cost is correctly calculated using the network parameter
-  - [ ] If I have enough funds to pay transfer and fees, the transfer happens.
-  - [ ] If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
-  - [ ] The fees are being paid into the infrastructure pool
+  - The fee cost is correctly calculated using the network parameter
+  - If I have enough funds to pay transfer and fees, the transfer happens.
+  - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
+  - The fees are being paid into the infrastructure pool
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
-  - [ ] The funds arrive in the target account when the transaction is processed (i.e. with the correct delay), which is not before the timestamp occurs
-  - [ ] A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.
+  - The funds arrive in the target account when the transaction is processed (i.e. with the correct delay), which is not before the timestamp occurs
+  - A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.
 - The spam protection mechanics prevent me to do more than `spam.protection.maxUserTransfersPerEpoch` transfers per epoch. (<a name="0057-TRAN-009" href="#0057-TRAN-009">0057-TRAN-009</a>)
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
 - A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
@@ -219,59 +219,59 @@ message CancelTransfer {
 ### Recurring transfers
 
 As a user I can create a recurring transfer _which expires after a specified epoch_ (<a name="0057-TRAN-050" href="#0057-TRAN-050">0057-TRAN-050</a>)
-  - [ ] I specify a start and end epoch, and a factor of `1`, start epoch in the future, until the start epoch is reached no transfers are executed.
-  - [ ] Once I reach the start epoch, the first transfer happens.
-  - [ ] The same amount is transfered every epoch.
-  - [ ] In the epoch after the `end epoch`, no transfers are executed.
+  - I specify a start and end epoch, and a factor of `1`, start epoch in the future, until the start epoch is reached no transfers are executed.
+  - Once I reach the start epoch, the first transfer happens.
+  - The same amount is transfered every epoch.
+  - In the epoch after the `end epoch`, no transfers are executed.
 
 As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-051" href="#0057-TRAN-051">0057-TRAN-051</a>)
-  - [ ] I specify a start and end epoch, and a factor of `0.7`
-  - [ ] Until the start epoch is reached not transfers are executed
-  - [ ] Once I reach the start epoch transfers happen and the first tranfer is for the `start amount`. The fee amount taken from the source account is `start amount x transfer.fee.factor` and transferred to the infrastructure fee account for the asset.  
-  - [ ] The transfer at end of  `start epoch + 1` is `0.7 x start amount` and the fee amount is `0.7 x start amount x transfer.fee.factor`. 
-  - [ ] The amount transfered every epoch decreases. 
-  - [ ] After I reach the epoch `?`, no transfers are executed anymore
+  - I specify a start and end epoch, and a factor of `0.7`
+  - Until the start epoch is reached not transfers are executed
+  - Once I reach the start epoch transfers happen and the first tranfer is for the `start amount`. The fee amount taken from the source account is `start amount x transfer.fee.factor` and transferred to the infrastructure fee account for the asset.  
+  - The transfer at end of  `start epoch + 1` is `0.7 x start amount` and the fee amount is `0.7 x start amount x transfer.fee.factor`. 
+  - The amount transfered every epoch decreases. 
+  - After I reach the epoch `?`, no transfers are executed anymore
 
 As a user I can create a recurring transfer that recurs forever, with the same balance transferred each time (<a name="0057-TRAN-052" href="#0057-TRAN-052">0057-TRAN-052</a>)
-  - [ ] I specify a start and no end epoch, and a factor of `1`
-  - [ ] Until the start epoch is reached not transfers are executed
-  - [ ] Once I reach the start epoch transfers happens.
-  - [ ] The amount transfered every epoch is the same
-  - [ ] The transfers happen forever 
+  - I specify a start and no end epoch, and a factor of `1`
+  - Until the start epoch is reached not transfers are executed
+  - Once I reach the start epoch transfers happens.
+  - The amount transfered every epoch is the same
+  - The transfers happen forever 
 
 As a user I can create a recurring transfer that recurs as long as the amount is `transfer.minTransferQuantumMultiple x quantum`, with the amount transfer decreasing. (<a name="0057-TRAN-053" href="#0057-TRAN-053">0057-TRAN-053</a>)
-  - [ ] I specify a start and no end epoch, and a factor of `0.1`
-  - [ ] Until the start epoch is reached not transfers are executed
-  - [ ] In subsequent epochs the amount transfered every epoch `n` is `0.1` times the amount transferred in epoch `n-1`.  
-  - [ ] Once I reach the end of start epoch transfers happens.
-  - [ ] The transfers happen as long as the amount transferred is >  `transfer.minTransferQuantumMultiple x quantum`. 
-  - [ ] After a sufficiently large number of epochs the transfers stops and the recurring transfer is deleted. 
+  - I specify a start and no end epoch, and a factor of `0.1`
+  - Until the start epoch is reached not transfers are executed
+  - In subsequent epochs the amount transfered every epoch `n` is `0.1` times the amount transferred in epoch `n-1`.  
+  - Once I reach the end of start epoch transfers happens.
+  - The transfers happen as long as the amount transferred is >  `transfer.minTransferQuantumMultiple x quantum`. 
+  - After a sufficiently large number of epochs the transfers stops and the recurring transfer is deleted. 
 
 As a user I can cancel a recurring transfer (<a name="0057-TRAN-054" href="#0057-TRAN-054">0057-TRAN-054</a>)
-  - [ ] I specify a start and no end epoch, and a factor of 1
-  - [ ] Once I reach the start epoch transfers happens.
-  - [ ] I cancel the recurring transfer after the start epoch, before the end epoch
-  - [ ] No transfer are executed anymore
+  - I specify a start and no end epoch, and a factor of 1
+  - Once I reach the start epoch transfers happens.
+  - I cancel the recurring transfer after the start epoch, before the end epoch
+  - No transfer are executed anymore
 
 As a user I can cancel a recurring transfer before any transfers have executed (<a name="0057-TRAN-055" href="#0057-TRAN-055">0057-TRAN-055</a>)
-  - [ ] I specify a start and no end epoch, and a factor of 1
-  - [ ] I cancel the transfer after the start epoch, before the end epoch
-  - [ ] No transfer are executed at all
+  - I specify a start and no end epoch, and a factor of 1
+  - I cancel the transfer after the start epoch, before the end epoch
+  - No transfer are executed at all
 
 A user's recurring transfer is cancelled if any transfer fails due to insufficient funds (<a name="0057-TRAN-056" href="#0057-TRAN-056">0057-TRAN-056</a>)
-  - [ ] I specify a start and no end epoch, and a factor of 1
-  - [ ] Until the epoch is reached not transfers are executed
-  - [ ] Once I reach the start epoch transfers happens.
-  - [ ] The account runs out of funds
-  - [ ] The transfer is cancelled
-  - [ ] No more transfers are executed.
+  - I specify a start and no end epoch, and a factor of 1
+  - Until the epoch is reached not transfers are executed
+  - Once I reach the start epoch transfers happens.
+  - The account runs out of funds
+  - The transfer is cancelled
+  - No more transfers are executed.
 
 A recurring transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-058" href="#0058-TRAN-058">0057-TRAN-058</a>)
 
 A user's recurring transfer to a reward account does not occur if there are no parties eligible for a reward in the current epoch (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
-  - [ ] I set up a market ETHUSDT settling in USDT.
-  - [ ] The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
-  - [ ] I specify a start and no end epoch, and a factor of 1 to a reward account `ETHUSDT | market creation | $VEGA` 
-  - [ ] In the first epoch no trading occurs and nothing is transferred to the reward account at the end of the epoch
-  - [ ] In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
-  - [ ] At the end of the third epoch, no transfer occurs
+  - I set up a market ETHUSDT settling in USDT.
+  - The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+  - I specify a start and no end epoch, and a factor of 1 to a reward account `ETHUSDT | market creation | $VEGA` 
+  - In the first epoch no trading occurs and nothing is transferred to the reward account at the end of the epoch
+  - In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
+  - At the end of the third epoch, no transfer occurs

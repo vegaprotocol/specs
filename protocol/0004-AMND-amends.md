@@ -18,7 +18,7 @@ Start date: `2020-03-12` <br>
 - An amend with only the same values as the order still cause the `UpdateAt` field to update but nothing else (<a name="0004-AMND-014" href="#0004-AMND-014">0004-AMND-014</a>)
 - Amending a pegged orders offset or reference will force a reprice (<a name="0004-AMND-015" href="#0004-AMND-015">0004-AMND-015</a>)
 - Attempting to alter pegged details on a non pegged or will cause the amend to be rejected (<a name="0004-AMND-016" href="#0004-AMND-016">0004-AMND-016</a>)
-- [ ] A parked pegged order can be amended. (<a href="./0037-OPEG-pegged_orders.md#0037-OPEG-014">0037-OPEG-014</a>)
+- A parked pegged order can be amended. (<a href="./0037-OPEG-pegged_orders.md#0037-OPEG-014">0037-OPEG-014</a>)
 - Attempting to alter details on a filled order will cause the amend to be rejected (<a name="0004-AMND-017" href="#0004-AMND-017">0004-AMND-017</a>)
 - Attempting to alter details on a cancelled order will cause the amend to be rejected (<a name="0004-AMND-018" href="#0004-AMND-018">0004-AMND-018</a>)
 - Attempting to alter details on an expired order will cause the amend to be rejected (<a name="0004-AMND-019" href="#0004-AMND-019">0004-AMND-019</a>)
