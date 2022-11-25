@@ -60,14 +60,13 @@ Input data:
 
 Steps:
 
-1. From the [price monitoring module](./0032-PRIM-price_monitoring.md#view-from-quant-library-side) get the tightest `min_price_mon_price` and `max_price_mon_price`.
-From the market parameter `market.liquidity.volumeRange` which is a percentage price move (e.g. `0.05 = 5%` and from `mid_price` calculate 
+1. From the market parameter `market.liquidity.volumeRange` which is a percentage price move (e.g. `0.05 = 5%` and from `mid_price` calculate:
 ```
-min_lp_vol_price = max(min_price_mon_price, (1.0 - market.liquidity.volumeRange) x mid_price)
+min_lp_vol_price = (1.0 - market.liquidity.volumeRange) x mid_price
 ``` 
 and 
 ```
-max_lp_vol_price = min(max_price_mon_price, (1.0 + market.liquidity.volumeRange) x mid_price).
+max_lp_vol_price = (1.0 + market.liquidity.volumeRange) x mid_price
 ```
 
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIME-lp_mechanics.md).
