@@ -109,7 +109,7 @@ When looking at a list of orders, I...
 
 When looking to take order out of the book, I...
 
-- **must** select weather to cancel an individual order or all orders on a market (<a name="7003-MORD-009" href="#7003-MORD-009">7003-MORD-009</a>)
+- **must** select whether to cancel an individual order or all orders on a market (<a name="7003-MORD-009" href="#7003-MORD-009">7003-MORD-009</a>)
 - **could** be able to cancel all orders for markets in a given settlement asset
 - **would** like to cancel all orders for all markets
 - **must** be able to submit the [Vega transaction](0003-WTXN-submit_vega_transaction.md) to cancel order(s) (<a name="7003-MORD-010" href="#7003-MORD-010">7003-MORD-010</a>)
