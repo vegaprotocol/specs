@@ -181,7 +181,7 @@ This account is not under control of the LP party (they cannot initiate transfer
 
 A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block. 
 
-The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `average fraction of liquidity provided by committed LP `at a given time. 
+The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `average fraction of liquidity provided by committed i LP` scaled back to `1` across all LPs at a given time. 
 
 #### Example
 We have `4` LPs with equity-like share shares:
