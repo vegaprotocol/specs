@@ -28,7 +28,7 @@ If the transaction in question requires an ERC20 approval, I...
 
 - if the current approved amount is less than the amount being "spent": **must** see be prompt to approve 
 - **could** see the current approved amount
-- **should** be able to set the amount to be approved (incase the connected wallet does not handle this)
+- **must** be able to set the amount to be approved (in case the connected wallet does not handle this) (<a name="0005-ETXN-006" href="#0005-ETXN-006">0005-ETXN-006</a>)
 - **must** send an approve transaction with either a user specified amount or a very large number (<a name="0005-ETXN-001" href="#0005-ETXN-001">0005-ETXN-001</a>)
 - **must** see feedback of the state of approve transaction see "tracking ethereum transactions" below. (<a name="0005-ETXN-002" href="#0005-ETXN-002">0005-ETXN-002</a>)
 
