@@ -16,7 +16,7 @@ Start date: 2021-12-14
        * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) MARKET orders will be matched fully if the volume is available, otherwise the order is cancelled. (<a name="0068-MATC-008" href="#0068-MATC-008">0068-MATC-008</a>) 
        * Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will either be:
          * fully matched if possible to the other side of the book    (<a name="0068-MATC-009" href="#0068-MATC-009">0068-MATC-009</a>) 
-         * if a complete fill is not possible the order is cancelled without trading at all. (<a name="0068-MATC-010" href="#0068-MATC-010">0068-MATC-010</a>) 
+         * if a complete fill is not possible the order is stopped without trading at all. (<a name="0068-MATC-010" href="#0068-MATC-010">0068-MATC-010</a>) 
        * Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-011" href="#0068-MATC-011">0068-MATC-011</a>) 
      * For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order-types.md#time-in-force---validity) orders:
        * Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected by the wallet validation layer. (<a name="0068-MATC-013" href="#0068-MATC-013">0068-MATC-013</a>) 
