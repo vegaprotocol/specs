@@ -44,7 +44,7 @@ When looking at a list of orders, I...
     - What was the average fill price I got for this order
   - `Parked​`
     - Why is the market currently in auction
-    - Link to pegged shape (see bellow) TODO find out what happens to the limit orders in the orders API when market is in auction
+    - Link to pegged shape (see below)
 
 - **must** see what [market](9001-DATA-data_display.md#market) an order is related to (either code, ID or name, preferable name) (<a name="7003-MORD-002" href="#7003-MORD-002">7003-MORD-002</a>)
   - **should** see what the `status` is of the market (particularly if it is not "normal")
