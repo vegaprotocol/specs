@@ -60,7 +60,7 @@ Input data:
 
 Steps:
 
-1. From the market parameter `market.liquidity.volumeRange` which is a percentage price move (e.g. `0.05 = 5%` and from `mid_price` calculate:
+1. From the market parameter - to be set as part of [market proposal](0028-GOVE-governance.md)  `market.liquidity.volumeRange` which is a percentage price move (e.g. `0.05 = 5%` and from `mid_price` calculate:
 ```
 min_lp_vol_price = (1.0 - market.liquidity.volumeRange) x mid_price
 ``` 
