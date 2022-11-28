@@ -80,7 +80,7 @@ When looking at a list of orders, I...
 When looking at a list of orders, I...
 
 - **should** have the ability to see all orders regardless of status in one list
-- **should** have the ability to see only active &amp; parked orders TODO update this based on what happens to parked orders
+- **should** have the ability to see only active &amp; parked orders
 - **should** have the ability to see only non-active &amp; parked order (i.e. all orders that do not have the status of Active &amp; Parked)
 - **could** have the ability to filter by any field(s)
   - where a field is an enum: **should** be able to select one on or more values for a field that should be included
