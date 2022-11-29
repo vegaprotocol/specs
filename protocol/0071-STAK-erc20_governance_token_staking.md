@@ -95,7 +95,6 @@ Other functionality:
 * Staking Bridge accepts and locks deposited VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-001" href="#0071-STAK-001">0071-STAK-001</a>)
 * Staking Bridge allows only stakers to remove their staked tokens and emits `Stake_Removed` event (<a name="0071-STAK-002" href="#0071-STAK-002">0071-STAK-002</a>)
 * Staking Bridge allows users with staked balance to transfer ownership of stake to new ethereum address that only the new address can remove (<a name="0071-STAK-003" href="#0071-STAK-003">0071-STAK-003</a>)
-* Staking Bridge prohibits withdrawal of VEGA while that VEGA is staked (<a name="0071-STAK-004" href="#0071-STAK-004">0071-STAK-004</a>)
 
 ### Vesting Smart Contract 
 * Vesting Contract locks vesting VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-005" href="#0071-STAK-005">0071-STAK-005</a>)
