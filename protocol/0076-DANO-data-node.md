@@ -143,7 +143,6 @@ It must be possible to augment APIs so data returned is in a shape and size that
 It must be possible to add to the data node APIs that return the result of calculations on the data node (in addition ot historical data). These calculations may use historical or real time core data but are not available in the core API as they would hinder performance. e.g. Estimates / Margin / risk calculations
 
 # Acceptance criteria
-1. Market depth state must be processed and built in a timely manner so that the correct real time information is available to the users without unnecessary delays. Using the recommended hardware specs for validators, the data node should be able to handle a continuous order events rate of 500 per second without falling behind. (<a name="0076-DANO-002" href="#0076-DANO-002">0076-DANO-002</a>)
 
 ## Data synchronisation
 1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-COSMICELEVATOR-001" href="#0076-COSMICELEVATOR-001">0076-COSMICELEVATOR-001</a>)
