@@ -196,15 +196,15 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 ## Acceptance Criteria:
 - [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
 - [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>);
-- [ ] Change of the network parameter `market.liquidity.minimum.probabilityOfTrading.lpOrders` will immediately change the minimum probability of trading which affects volume of LP orders. If the parameter has been decreased then any LP order offset that is sitting at a price level where minimum probability of trading applies will be seen to have the volume *increased*, possibly after an incoming transaction (e.g. order) that forces LP orders update. 
-If the parameter has been increased then the LP order that is sitting at a price level where minimum probability of trading applies will be seen to have the volume *decreased*, possibly after an incoming transaction (e.g. order) that forces LP orders update.  (<a name="0038-OLIQ-007" href="#0038-OLIQ-007">0038-OLIQ-007</a>)
-- [ ] If an LP order has offset set such that the resulting price falls outside of the price monitoring bounds the system adjusts it automatically so that it's placed on the previously violated bound (<a name="0038-OLIQ-009" href="#0038-OLIQ-009">0038-OLIQ-009</a>)
-- [ ] If the reference price itself is outside the valid price range the order should get placed at - when bid/ask is used as a reference, or one tick away from it - when mid is used as a reference. (<a name="0038-OLIQ-010" href="#0038-OLIQ-010">0038-OLIQ-010</a>)
+- [ ] If an LP order has offset set such that the resulting price falls outside `[min_lp_vol_price, max_lp_vol_price]` then the system adjusts it automatically so that it's placed on the bound (<a name="0038-OLIQ-011" href="#0038-OLIQ-011">0038-OLIQ-011</a>)
 
 ### LP commitment order creation
 - [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
 - [ ] All orders created by an LP commitment must be pegged orders (<a name="0038-OLIQ-004" href="#0038-OLIQ-004">0038-OLIQ-004</a>)
 - [ ] Filled orders are replaced immediately to confirm to the LP commitment shapes (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-005</a>)
+- [ ] Change of the market parameter `market.liquidity.volumeRange` which decreases the value will immediately tighten `[min_lp_vol_price, max_lp_vol_price]` and volume that was previously pegged inside the valid range and would now be outside is shifted to the bounds.   (<a name="0038-OLIQ-012" href="#0038-OLIQ-012">0038-OLIQ-012</a>)
+- [ ] Change of the market parameter `market.liquidity.volumeRange` which increases the value will immediately widen `[min_lp_vol_price, max_lp_vol_price]` and volume that was previously being shifted to stay inside the range is now deployed at the desired peg.   (<a name="0038-OLIQ-013" href="#0038-OLIQ-013">0038-OLIQ-013</a>)
+
 
 ### LP commitment amendment
 - [ ] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
