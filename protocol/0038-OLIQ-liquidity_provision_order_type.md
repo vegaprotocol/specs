@@ -60,10 +60,20 @@ Input data:
 
 Steps:
 
+1. From the market parameter - to be set as part of [market proposal](0028-GOVE-governance.md)  `market.liquidity.priceRange` which is a percentage price move (e.g. `0.05 = 5%` and from `mid_price` calculate:
+```
+min_lp_vol_price = (1.0 - market.liquidity.priceRange) x mid_price
+``` 
+and 
+```
+max_lp_vol_price = (1.0 + market.liquidity.priceRange) x mid_price
+```
+
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIME-lp_mechanics.md).
 
-1. Subtract from the value obtained from step-1 the amount of the `liquidity_obligation` that is being fulfilled by any persistent orders the liquidity provider has on the book at this point in time according to the probability weighted liquidity measure (see [spec](../protocol/0034-PROB-prob_weighted_liquidity_measure.ipynb)). If you end up with 0 or a negative number, stop, you are done. 
-Note that the book `mid-price` must be used when calculating the probability weighted liquidity measure. 
+1. The `liquidity_obligation` calculated as per [LP mechanics](0044-LIME-lp_mechanics.md). Some of it may be fulfilled by persistent orders the liquidity provider has on the book at this point in time that are between and including `min_lp_vol_price` and `max_lp_vol_price`. 
+The contribution is `volume x price`; sum up the contribution across the relevant side of the book and subtract it from `liquidity_obligation` obtained above. 
+If you end up with 0 or a negative number, stop, you are done. 
 
 1. Using the adjusted `liquidity_obligation`, calculate the `liquidity-normalised-proportion` for each of the remaining entries in the buy / sell shape (for clarity, this does not include any other persistent orders that the market maker has).
 
@@ -89,20 +99,14 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 
 #### Calculating volumes for a set of market making orders (step 6):
 
-From the network parameter `market.liquidity.minimum.probabilityOfTrading.lpOrders` and from `best static bid-price` we get `minPrice` from the [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb): the smallest price level that has probability of trading greater than or equal to `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
-Similarly from `best static ask-price` we get `maxPrice`: the largest price level that has probability of trading greater than or equal to `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
-Any shape entry with a peg less than `minPrice` should have the resulting volume implied at `minPrice` (instead of what the level the peg would be) while any shape entry with peg greater than `maxPrice` should have the resulting volume implied at `maxPrice`. 
+Any shape entry with a peg less than `min_lp_vol_price` should have the resulting volume implied at `min_lp_vol_price` (instead of what level the peg would be) while any shape entry with peg greater than `max_lp_vol_price` should have the resulting volume implied at `max_lp_vol_price`. 
 
-Given the price peg information (`peg-reference`, `number-of-units-from-reference`) and  `liquidity-normalised-proportion` we obtain the `probability_of_trading` at the resulting order price, from the risk model, see [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb). 
-Use `best static bid-price` or `best static ask-price` depending on which side of the book the orders are when getting the probability of trading from the risk model. 
-Note that for volume pegged between best static bid and best static ask the probability of trading is `1` as per [Quant risk model spec](./0018-RSKM-quant_risk_models.ipynb).
+Calculate the volume at the peg as 
 
-``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / probability_of_trading / price)```. 
+``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / price)```. 
 
 where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-LIME-lp_mechanics.md) and `price` is the price level at which the `volume` will be placed. 
 At this point `volume` may have decimal places. 
-
-Note: if the resulting price for any of the entries in the buy / sell shape is outside the valid price range as provided by the price monitoring module (the min/max price that would not trigger the price monitoring auction per triggers configured in the market, see [price monitoring](./0032-PRIM-price_monitoring.md#view-from-quant-library-side) spec for details) it should get shifted to the valid price that's furthest away from the mid for the given order-book side. If the reference price itself is outside the valid price range the order should get placed at - when bid/ask is used as a reference, or one tick away from it - when mid is used as a reference.
 
 Note: if the resulting quote price of any of the entries in the buy / sell shape leads to negative product value from the [product quote-to-value function](0051-PROD-product.md#quote-to-value-function) but strictly positive volume then the entire LP order for this LP is undeployed, their stake won't count towards target stake being met and they shall not receive any LP fees regardless of their equity-like share. This can lead to a [liquidity auction](0035-LIQM-liquidity_monitoring.md) if the supplied stake for the market is below the required level due to this LP. 
 
@@ -190,17 +194,17 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 * Order datatype for LP orders. Any order APIs should contain these orders.
 
 ## Acceptance Criteria:
-- Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
-- Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>);
-- Change of the network parameter `market.liquidity.minimum.probabilityOfTrading.lpOrders` will immediately change the minimum probability of trading which affects volume of LP orders. If the parameter has been decreased then any LP order offset that is sitting at a price level where minimum probability of trading applies will be seen to have the volume *increased*, possibly after an incoming transaction (e.g. order) that forces LP orders update. 
-If the parameter has been increased then the LP order that is sitting at a price level where minimum probability of trading applies will be seen to have the volume *decreased*, possibly after an incoming transaction (e.g. order) that forces LP orders update.  (<a name="0038-OLIQ-007" href="#0038-OLIQ-007">0038-OLIQ-007</a>)
-- If an LP order has offset set such that the resulting price falls outside of the price monitoring bounds the system adjusts it automatically so that it's placed on the previously violated bound (<a name="0038-OLIQ-009" href="#0038-OLIQ-009">0038-OLIQ-009</a>)
-- If the reference price itself is outside the valid price range the order should get placed at - when bid/ask is used as a reference, or one tick away from it - when mid is used as a reference. (<a name="0038-OLIQ-010" href="#0038-OLIQ-010">0038-OLIQ-010</a>)
+- [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
+- [ ] Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>);
+- [ ] If an LP order has offset set such that the resulting price falls outside `[min_lp_vol_price, max_lp_vol_price]` then the system adjusts it automatically so that it's placed on the bound (<a name="0038-OLIQ-011" href="#0038-OLIQ-011">0038-OLIQ-011</a>)
 
 ### LP commitment order creation
-- A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
-- All orders created by an LP commitment must be pegged orders (<a name="0038-OLIQ-004" href="#0038-OLIQ-004">0038-OLIQ-004</a>)
-- Filled orders are replaced immediately to confirm to the LP commitment shapes (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-005</a>)
+- [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
+- [ ] All orders created by an LP commitment must be pegged orders (<a name="0038-OLIQ-004" href="#0038-OLIQ-004">0038-OLIQ-004</a>)
+- [ ] Filled orders are replaced immediately to conform to the LP commitment shapes (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-005</a>)
+- [ ] Change of the market parameter `market.liquidity.priceRange` which decreases the value will, when volumes are next recalculated, tighten `[min_lp_vol_price, max_lp_vol_price]` and volume that was previously pegged inside the valid range and would now be outside is shifted to the bounds.   (<a name="0038-OLIQ-012" href="#0038-OLIQ-012">0038-OLIQ-012</a>)
+- [ ] Change of the market parameter `market.liquidity.priceRange` which increases the value will, when volumes are next recalculated, widen `[min_lp_vol_price, max_lp_vol_price]` and volume that was previously being shifted to stay inside the range is now deployed at the desired peg.   (<a name="0038-OLIQ-013" href="#0038-OLIQ-013">0038-OLIQ-013</a>)
+
 
 ### LP commitment amendment
 - If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
