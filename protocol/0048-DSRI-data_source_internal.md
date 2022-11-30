@@ -117,12 +117,12 @@ Currently (as of Oregon Trail), only the _Vega time changed (1.3 above)_ interna
 	1. Create a cash settled futures market with the trading terminated trigger source being a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger.  (<a name="0048-DSRI-010" href="#0048-DSRI-010">0048-DSRI-010</a>)
 	1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger. (<a name="0048-DSRI-011" href="#0048-DSRI-011">0048-DSRI-011</a>)
 	1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the past. The market state changes to trading terminated immediately. (<a name="0048-DSRI-012" href="#0048-DSRI-012">0048-DSRI-012</a>)
-1. Termination oracle updated after market is terminated (<a name="0048-DSRI-013" href="#0048-DSRI-013">0048-DSRI-013</a>)
+1. Termination oracle updated after market is terminated (<a name="0048-DSRI-015" href="#0048-DSRI-015">0048-DSRI-015</a>)
 	- setup one market with a boolean termination
 	- terminate the market (but do not settle it)
 	- update the market to have a time based termination
-	- update the market to have a later time based termination
-	- wait until the second time to tick
+	- update the market to have an earlier time based termination
+	- wait until the first timer to tick
 	- assert the the market settles successfully
 1. Time based termination across multiple markets (<a name="0048-DSRI-014" href="#0048-DSRI-014">0048-DSRI-014</a>)
 	- setup 3 markets, all with time based termination with identical signer details, two with the same time, one with a later time
