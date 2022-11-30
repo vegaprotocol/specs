@@ -95,6 +95,8 @@ Other functionality:
 * Staking Bridge accepts and locks deposited VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-001" href="#0071-STAK-001">0071-STAK-001</a>)
 * Staking Bridge allows only stakers to remove their staked tokens and emits `Stake_Removed` event (<a name="0071-STAK-002" href="#0071-STAK-002">0071-STAK-002</a>)
 * Staking Bridge allows users with staked balance to transfer ownership of stake to new ethereum address that only the new address can remove (<a name="0071-STAK-003" href="#0071-STAK-003">0071-STAK-003</a>)
+* Staking Bridge prohibits users from removing stake they don't own (<a name="0071-STAK-012" href="#0071-STAK-012">0071-STAK-012</a>)
+* Staking Bridge prohibits users from removing stake they have transfered to other ETH address (<a name="0071-STAK-013" href="#0071-STAK-013">0071-STAK-013</a>)
 
 ### Vesting Smart Contract 
 * Vesting Contract locks vesting VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-005" href="#0071-STAK-005">0071-STAK-005</a>)
@@ -105,5 +107,5 @@ Other functionality:
 * Event Queue sees `Stake_Deposited` event from Staking Bridge smart contract and credits target Vega user with stake (<a name="0071-STAK-008" href="#0071-STAK-008">0071-STAK-008</a>)
 * Event Queue sees `Stake_Removed` event from Staking Bridge smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-009" href="#0071-STAK-009">0071-STAK-009</a>)
 * Event Queue sees `Stake_Deposited` event from Vesting smart contract and credits target Vega user with stake (<a name="0071-STAK-010" href="#0071-STAK-010">0071-STAK-010</a>)
-* event Queue sees `Stake_Removed` event from Vesting smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-011" href="#0071-STAK-011">0071-STAK-011</a>)
+* Event Queue sees `Stake_Removed` event from Vesting smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-011" href="#0071-STAK-011">0071-STAK-011</a>)
 
