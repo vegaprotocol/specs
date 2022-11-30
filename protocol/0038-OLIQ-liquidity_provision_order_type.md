@@ -201,7 +201,7 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 ### LP commitment order creation
 - [ ] A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
 - [ ] All orders created by an LP commitment must be pegged orders (<a name="0038-OLIQ-004" href="#0038-OLIQ-004">0038-OLIQ-004</a>)
-- [ ] Filled orders are replaced immediately to confirm to the LP commitment shapes (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-005</a>)
+- [ ] Filled orders are replaced immediately to conform to the LP commitment shapes (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-005</a>)
 - [ ] Change of the market parameter `market.liquidity.volumeRange` which decreases the value will immediately tighten `[min_lp_vol_price, max_lp_vol_price]` and volume that was previously pegged inside the valid range and would now be outside is shifted to the bounds.   (<a name="0038-OLIQ-012" href="#0038-OLIQ-012">0038-OLIQ-012</a>)
 - [ ] Change of the market parameter `market.liquidity.volumeRange` which increases the value will immediately widen `[min_lp_vol_price, max_lp_vol_price]` and volume that was previously being shifted to stay inside the range is now deployed at the desired peg.   (<a name="0038-OLIQ-013" href="#0038-OLIQ-013">0038-OLIQ-013</a>)
 
