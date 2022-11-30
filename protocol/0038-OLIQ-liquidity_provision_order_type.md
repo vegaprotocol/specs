@@ -99,7 +99,7 @@ The sum of all normalised proportions must = 1 for all refined buy / sell order 
 
 #### Calculating volumes for a set of market making orders (step 6):
 
-Any shape entry with a peg less than `min_lp_vol_price` should have the resulting volume implied at `min_lp_vol_price` (instead of what the level the peg would be) while any shape entry with peg greater than `max_lp_vol_price` should have the resulting volume implied at `max_lp_vol_price`. 
+Any shape entry with a peg less than `min_lp_vol_price` should have the resulting volume implied at `min_lp_vol_price` (instead of what level the peg would be) while any shape entry with peg greater than `max_lp_vol_price` should have the resulting volume implied at `max_lp_vol_price`. 
 
 Calculate the volume at the peg as 
 
