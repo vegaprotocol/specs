@@ -151,6 +151,7 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 At every vega time change calculate the supplied liquidity provided by each committed LP. 
 This is done by taking into account all the volume they're providing between the tightest price monitoring bound and then 
 use the formula provided by [probability weighted liquidity measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb).
+When we say "all the volume" we mean volume provided by their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
 
 Now calculate the total provided liquidity by committed LPs:
 ```
