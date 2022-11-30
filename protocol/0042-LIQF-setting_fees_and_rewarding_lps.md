@@ -155,10 +155,10 @@ When we say "all the volume" we mean volume provided by their limit orders, [peg
 
 Now calculate the total provided liquidity by committed LPs:
 ```
-total_provided = sum over committed LPs of liquidity provided by a committed LP
+total_provided = the sum of all of the liquidity provided by all LPs that have a liquidity commitment
 ```
 
-Now calculate fraction of liquidity provided for a committed LP:
+Now calculate fraction of liquidity provided for a committed LP (i.e. a party that submmitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md)):
 ```
 fraction of liquidity provided by committed LP = liquidity provided by a committed LP / total_provided
 ```
