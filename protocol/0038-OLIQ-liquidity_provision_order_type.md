@@ -207,8 +207,8 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 
 
 ### LP commitment amendment
-- [ ] If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
+- If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
 
 
 ### LP commitment repricing due to peg price moves
-- [ ] If best bid / ask has changed and the LP order volume is moved around to match the shape / new peg levels then the margin requirement for the party may change. There is at most one transfer in / out of the margin account of the LP party as a result of one of the pegs moving. (<a name="0038-OLIQ-008" href="#0038-OLIQ-008">0038-OLIQ-008</a>) 
+- If best bid / ask has changed and the LP order volume is moved around to match the shape / new peg levels then the margin requirement for the party may change. There is at most one transfer in / out of the margin account of the LP party as a result of one of the pegs moving. (<a name="0038-OLIQ-008" href="#0038-OLIQ-008">0038-OLIQ-008</a>) 

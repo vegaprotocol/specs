@@ -49,14 +49,14 @@ There is an minimum LP stake which is `market.liquidityProvision.minLpStakeQuant
 If the participant has sufficient collateral to cover their commitment and margins for the orders generated from their proposed commitment, the commitment amount (stake) is transferred from the participant's general account to their (maybe newly created) [liquidity provision bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts) (new account type, 1 per liquidity provider per market and asset where they are commitment liquidity, created as needed). For clarity, liquidity providers will have a separate [margin account](./0013-ACCT-accounts.md#trader-margin-accounts) and [bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts).
 
 - Liquidity provider bond account:
-    - [ ] Each active market has one bond account per liquidity provider, per settlement asset for that market.
-    - [ ] When a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
-    - [ ] A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment). 
+    - Each active market has one bond account per liquidity provider, per settlement asset for that market.
+    - When a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
+    - A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment). 
     Transfers to/from this account also occur when it is used for settlement or margin shortfall, when penalties are applied, and if the account is under-collateralised because of these uses and is subsequently topped up to the commitment amount during collateral search (see below)
-    - [ ] Collateral withdrawn from this account may only be transferred to either:
-      - [ ] The insurance pool of the market (in event of penalties/slashing)
-      - [ ] The liquidity provider's margin account or the network's settlement account/other participant's margin acounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
-      - [ ] The liquidity provider's general account (in event of liquidity provider reducing their commitment)
+    - Collateral withdrawn from this account may only be transferred to either:
+      - The insurance pool of the market (in event of penalties/slashing)
+      - The liquidity provider's margin account or the network's settlement account/other participant's margin acounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
+      - The liquidity provider's general account (in event of liquidity provider reducing their commitment)
 
 
 ### liquidity provider proposes to amend commitment amount
@@ -97,10 +97,10 @@ i.e. liquidity providers are allowed to decrease the liquidity commitment subjec
 
 When `actual-reduction-amount > 0`:
 
-- [ ] the difference between their actual staked amount and new commitment is transferred back to their general account, i.e.
+- the difference between their actual staked amount and new commitment is transferred back to their general account, i.e.
 `transferred-to-general-account-amount =  actual-stake-amount - new-actual-commitment-amount `
 
-- [ ] the revised fee amount and set of orders are processed.
+- the revised fee amount and set of orders are processed.
 
 Example: if you have a commitment of 500DAI and your bond account only has 400DAI in it (due to slashing - see below), and you submit a new commitment amount of 300DAI, then we only transfer 100DAI such that your bond account is now square.
 When `actual-reduction-amount = 0` the transaction is still processed for any data and actions resulting from the transaction's new fees or order information.
