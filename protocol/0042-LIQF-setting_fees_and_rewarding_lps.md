@@ -166,7 +166,7 @@ If the `total_provided` comes out as `0` then set `fraction of liquidity provide
 If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then `average fraction of liquidity provided by committed LP` is set to `fraction of liquidity provided by committed LP`. 
 
 Otherwise whenever a new LP fee distribution period starts set a counter `n=1`. 
-Then on ever vega time change, after `fraction of liquidity provided by committed LP` has been obtained update the 
+Then on every Vega time change, after `fraction of liquidity provided by committed LP` has been obtained, update the 
 
 ```
 average fraction of liquidity provided by committed LP <- ((n-1)/n) x average fraction of liquidity provided by committed LP + (1/n) x fraction of liquidity provided by committed LP
