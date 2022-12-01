@@ -7,13 +7,13 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.minValidators`.
 1. `numberOfValidators` - the actual number of validators running the consensus (derived from running chain)
 1. `totalStake` - the total number of units of the staking and governance asset (VEGA) associated to the Vega chain (but not necessarily delegated to a specific validator).
-1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
+1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake. 
 1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes. 
 
 ### Other network parameters:
-- `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
-- `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
+- `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.delegatorShare`.
+- `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`.    
 
 
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
