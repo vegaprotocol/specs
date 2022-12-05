@@ -20,10 +20,10 @@ let `v` be the voting power of the validator in the previous epoch
 let `t` be the total voting power in the previous epoch
 
 let `expected = v*b/t` the number of blocks we expected the validator to propose. 
-Then `validator_performance = max(0.05, min((p/expected, 1))`
+Then `proposer_performance_score = max(0.05, min((p/expected, 1))`
 
 ### Ersatz and pending validators
-For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
+For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `ersatz_performance_score` is defined as follows: during each epoch
 Let `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`. 
 Every `numBlocks` blocks the candidate validator node is to send a hash of block number `b` separately signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
 Here `b` is defined as:
@@ -34,6 +34,35 @@ Initially the performance score is set to `0`.
 Both Tendermint validators and pending validators should be signing and sending these messages but only for the pending validators does this impact their score.
 
 The performance score should be available on all the same API endpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
+
+## Performance Measurement 2 (PM2): Forwarding ethereum bridge events
+The measurement is the same for both tendermint consensus and ersatz validators. 
+
+For a given validator let
+- `n` number of vega chain blocks that elapse between a given validator expted a heartbeat submission,
+- `c` be the counter of correctly forwarded heartbeat events in an epoch,
+- `e` be the expected number of events to be forwarded in a just-elapsed epoch which is `e := number of vega block in the last epoch / n`. 
+
+Each validator (consensus, ersatz, pending) is assgined a block number (call this `b`); either the genesis block or the block in which their pending transaction has been submitted. 
+Every `n+b` vega chain blocks the validator must forward a hash of an ethereum block, ethereum block time (newer than all the other submitted till now by other validators) and the ethereum chain block number via the [Ethereum event forwarder (eef)](./0036-BRIE-event_queue.md) and the other consensus validators must confirm its validity (i.e. after observing the message from the "verifying" validator they must forward the block hash for the appropriate block number). 
+Once this becomes verified as correct (as per the voting and number of confirmation rules in [eef](./0036-BRIE-event_queue.md) spec) increment `c` by `1`. 
+
+At the end of an epoch:
+1. calculate `eefScore := c / e`. 
+1. set `c <- 0`. 
+
+## Final score 
+We need to combine PM1 and PM2 into a final score. To that end for each tendermint consensus validator set 
+```
+performance_score <- proposer_performance_score x eefScore
+```
+and for pending / ersatz validators set
+```
+performance_score <- ersatz_performance_score x eefScore
+```
+
+
+
 
 ## Acceptance criteria
 
