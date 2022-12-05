@@ -74,8 +74,10 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
 # Acceptance Criteria
 - A message with a missing/wrong PoW is rejected (<a name="0072-SPPW-001" href="#0072-SPPW-001">0072-SPPW-001</a>)
 - Reusing the same PoW for several messages is detected and the messages are rejected (<a name="0072-SPPW-002" href="#0072-SPPW-002">0072-SPPW-002</a>)
-- Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned of) (<a name="0072-SPPW-003" href="#0072-SPPW-003">0072-SPPW-003</a>)
+- Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned off) (<a name="0072-SPPW-003" href="#0072-SPPW-003">0072-SPPW-003</a>)
 - Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on) (<a name="0072-SPPW-004" href="#0072-SPPW-004">0072-SPPW-004</a>)
 - Reusing a transaction identifier in a way that several transactions with the same ID end up in the same block is detected and the transactions are rejected (<a name="0072-SPPW-005" href="#0072-SPPW-005">0072-SPPW-005</a>)
 - A blocked account is unblocked after 4 epochs. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
 - PoW attached to a valid transaction will be accepted provided it's using correct chain ID and, at time of submission, the block hash is one of the last `spam.pow.numberOfPastBlocks` blocks.  (<a name="0072-COSMICELEVATOR-007" href="#0072-COSMICELEVATOR-007">0072-COSMICELEVATOR-007</a>)
+- For each transaction less than or equal to `spam.pow.numberOfTxPerBlock` in a block `spam.pow.difficulty` zeros are needed in the proof-of-work (<a name="0072-COSMICELEVATOR-008" href="#0072-COSMICELEVATOR-008">0072-COSMICELEVATOR-008</a>)
+- For each transaction greater than `spam.pow.numberOfTxPerBlock` in a block an additional 0 is required in the proof-of-work (1 additional zero for the first, two additional for the second etc) (<a name="0072-COSMICELEVATOR-009" href="#0072-COSMICELEVATOR-009">0072-COSMICELEVATOR-009</a>)
