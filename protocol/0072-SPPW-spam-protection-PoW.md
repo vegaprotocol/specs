@@ -94,7 +94,7 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
     - Transactions tied to such a block using insufficient difficulty due to the new parameter are rejected with an error message.
     (<a name="0072-COSMICELEVATOR-010" href="#0072-COSMICELEVATOR-010">0072-COSMICELEVATOR-010</a>)
 
-- The parameter 'spam.pow.difficulty' is decreased. Verify that
+- The parameter 'spam.pow.increaseDifficulty' is decreased. Verify that
      - This is communicated to all wallets, and wallets use the new parameter for each transaction tied to a block with a height higher than the one in which the change happened.
     - Transactions tied to such a block using the new difficulty are not rejected.
     (<a name="0072-COSMICELEVATOR-011" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-011</a>)
