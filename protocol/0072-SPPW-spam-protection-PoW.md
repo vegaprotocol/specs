@@ -25,17 +25,18 @@ To this end, the hash of the block and a transaction identifier are fed into a h
 
 Thus, the flow is as follows:
 1. The user generates a unique transaction identifier `tid`
-2. The user downloads the hash `H(b)` of the latest block it has seen, and brute forces values of `x` such that `hash("Vega_SPAM_PoW", H(b), tid, x)` as bytes starts with `spam.pow.difficulty` zeros.
-   1. The user must monitor how many transactions they have sent for any given block.
+2. The user downloads the hash `H(b)` of the latest block it has seen (or uses any other block hash within `spam.pow.numberOfPastBlocks` of the block to-be-produced), and brute forces values of `x` such that `hash("Vega_SPAM_PoW", H(b), tid, x)` as bytes starts with `spam.pow.difficulty` zeros.
+   1. The user must monitor how many transactions they have sent with PoW tied to a given block.
       1. If this number is less than or equal to `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros.
-      2. If this number is greater than `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros plus one additional for each transaction beyond the limit (e.g. if `spam.pow.numberOfTxPerBlock` is 10 and `spam.pow.difficulty` is 2 the 10th transaction will require 2 zeros, the 11th 3 zeros, the 12th 4 zeros and so on).
-3. The user then attaches the PoW to a transaction, and sends it off together with `x` and `H(b)`.
+      2. If this number is greater than `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros plus one additional for each `spam.pow.numberOfTxPerBlock` sized batch of transactions beyond the limit (e.g. if `spam.pow.numberOfTxPerBlock` is 10 and `spam.pow.difficulty` is 2 the 11th - 20th transactions will require 2 zeros, the 21st-30th 3 zeros, the 31st-40th 4 zeros and so on).
+3. The user then attaches the PoW to a transaction for a block which will be created within `spam.pow.numberOfPastBlocks` blocks of the one used for PoW hash generation, and sends it off together with `x` and `H(b)`.
  
 The validators verify that
 - `H(b)` is the correct hash of a past block
 - That block is no more than `spam.pow.numberOfPastBlocks` in the past.
   - This check is primarily done by the leader (i.e., block creator). On agreeing on a new block, all parties check their mempool for now outdated transactions and purge them.
-- The hash is computed correctly and begins with `spam.pow.difficulty` zeros, or `spam.pow.difficulty` + n zeros if the validator has seen `spam.pow.numberOfTxPerBlock` + n transactions from this party within the same block.
+- The hash is computed correctly and begins with `spam.pow.difficulty` zeros, or `spam.pow.difficulty` + n zeros if the validator has seen `spam.pow.numberOfTxPerBlock` * n blocks transactions from this party within the same block prior to this one.
+- Note that `spam.pow.numberOfTxPerBlock` is counted against the block used for PoW, not the present block. This means that a party could submit more than `spam.pow.numberOfTxPerBlock` transactions to a single created block at only `spam.pow.difficulty` by using multiple historic blocks all within `spam.pow.numberOfPastBlocks`.
    
 Furthermore, the validators check that:
 - The same identifier has not been used for another transaction from a previously committed block. If the same identifier is used for 
@@ -45,7 +46,7 @@ Furthermore, the validators check that:
   (i.e., if `spam.pow.increaseDifficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on 
- this; however, they can be verified post-agreement, and the offending vega-key can be banished for 4 epochs.
+ this; however, they can be verified post-agreement, and the offending vega-key can be banished for 5 minutes.
 
 
 Notes: 
@@ -54,7 +55,6 @@ this allows users to pre-compute the PoW and thus allows them to perform low
 latency transactions.
 - As for replay protection, there is a danger that a trader communicates with a slow validator, and thus gets a wrong block number. The safest is to check validators worth > 1/3 of the  weight and take the highest block hash.
 - Due to Tendermint constraints, a decision if a transaction is to be rejected or not can only be done based on information that is either synchronized through the chain or contained in the transaction itself, but not based on any other transactions in the mempool. Thus, if a client ties too many transactions to the same block or does not execute the increased difficulty properly, we can not stop this pre-agreement, only detect it post-agreement. This is the reason why some violations are punished with banishment rather than prevented.
-- As some violations could come through misconfigurations, we may consider a less strict way of banishment, e.g., only to a long term banishment for repeat/high volume offenders.
 - In the [0062 spam protection spec](./0062-SPAM-spam_protection.md), we want to do anti-spam before verifying signatures; this order, however, cannot be done if the consequence of spam is banishment. Thus, here the order is:
   1. check if the account is banished and (if so) ignore the transaction
   2. check if the basic PoW with lowest difficulty is done properly
@@ -63,9 +63,7 @@ latency transactions.
   5. if the signed transactions violate the conditions, issue the banishment 
   6. if the signed transactions in a block violate the conditions, remove the offending ones from the block before calling vega [May need discussion]
 - Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to have a large parameter of `spam.pow.numberOfPastBlocks`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
-- The PoW is currently valid for all trransactions; a consideration is to use it only for trading related transactions, so even if something goes wrong here delegators can still vote.
-  
-If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tied to one block by increasing the difficulty. This happens in batches of `spam.pow.numberOfTxPerBlock`,  e.g., if `spam.pow.numberOfTxPerBlock` is `5` and `spam.pow.difficulty` is `7`, then the 6th to 10th transaction can be tied to the same block with difficulty `8`, the 11th would have difficulty `9`, etc.
+- The PoW is currently valid for all transactions; a consideration is to use it only for trading related transactions, so even if something goes wrong here delegators can still vote.
 
 
 ## Hash function:
@@ -77,7 +75,9 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
 - Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned off) (<a name="0072-SPPW-003" href="#0072-SPPW-003">0072-SPPW-003</a>)
 - Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on) (<a name="0072-SPPW-004" href="#0072-SPPW-004">0072-SPPW-004</a>)
 - Reusing a transaction identifier in a way that several transactions with the same ID end up in the same block is detected and the transactions are rejected (<a name="0072-SPPW-005" href="#0072-SPPW-005">0072-SPPW-005</a>)
-- A blocked account is unblocked after 4 epochs. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
+- A blocked account is unblocked after 5 minutes. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
 - PoW attached to a valid transaction will be accepted provided it's using correct chain ID and, at time of submission, the block hash is one of the last `spam.pow.numberOfPastBlocks` blocks.  (<a name="0072-COSMICELEVATOR-007" href="#0072-COSMICELEVATOR-007">0072-COSMICELEVATOR-007</a>)
-- For each transaction less than or equal to `spam.pow.numberOfTxPerBlock` in a block `spam.pow.difficulty` zeros are needed in the proof-of-work (<a name="0072-COSMICELEVATOR-008" href="#0072-COSMICELEVATOR-008">0072-COSMICELEVATOR-008</a>)
-- For each transaction greater than `spam.pow.numberOfTxPerBlock` in a block an additional 0 is required in the proof-of-work (1 additional zero for the first, two additional for the second etc) (<a name="0072-COSMICELEVATOR-009" href="#0072-COSMICELEVATOR-009">0072-COSMICELEVATOR-009</a>)
+- For each transaction less than or equal to `spam.pow.numberOfTxPerBlock` in a block `spam.pow.difficulty` zeros are needed in the proof-of-work (<a name="0072-SPPW-008" href="#0072-SPPW-008">0072-SPPW-008</a>)
+- For each `spam.pow.numberOfTxPerBlock` sized block of transactions greater than `spam.pow.numberOfTxPerBlock` an additional 0 is required in the proof-of-work (1 additional zero for the first batch, two additional for the second batch etc) (<a name="0072-SPPW-009" href="#0072-SPPW-009">0072-SPPW-009</a>)
+- For a given block, a user is able to submit more than `spam.pow.numberOfTxPerBlock` transactions with only `spam.pow.difficulty` zeros by tying them to one or more historic blocks all of which are within `spam.pow.numberOfPastBlocks` blocks (<a name="0072-SPPW-010" href="#0072-SPPW-010">0072-SPPW-010</a>)
+- Using a block older than `spam.pow.numberOfPastBlocks` blocks prior to the current block is detected and leads to a temporary banning of the account (<a name="0072-SPPW-011" href="#0072-SPPW-011">0072-SPPW-011</a>)
