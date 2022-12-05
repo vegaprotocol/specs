@@ -12,7 +12,7 @@ spam.pow.increaseDifficulty = 0 (range: 0/1)
 ```
 
 If there is a governance vote on parameter changes taking effect at blockheight h, then the parameter is valid for all PoWs that are tied to a block of height h or later; that is, old pre-computations remain valid, and only new ones need to respect the new parameters. If spam.pow.numberOfPastBlocks is changed at height h, the parameter is enforced starting at block h+spam.pow.numberOfPastBlocks (being the new value). 
-There is a (theoretical) possibility that a parameter is changed repeatedly so fast that the new parameter is not enforced before it is changed again. To avoid programming complexity, the intermediate parameter is ignored, i.e., we keep the current parameter until the new onw is valid.
+There is a (theoretical) possibility that a parameter is changed repeatedly so fast that the new parameter is not enforced before it is changed again. To avoid programming complexity, the intermediate parameter is ignored, i.e., we keep the current parameter until the new one is valid.
 Example: Suppose, we have numberOfPastBlocks = 100, and difficulty =15
  If we change difficulty to 20 in blockheight 20 000, then all transactions tied to block 20 000 or later need to solve difficulty 20
  However, if we then change the difficulty to 25 at blockheight 20 005, and the current blockheight is 19 990, then we keep difficulty
@@ -26,14 +26,16 @@ To this end, the hash of the block and a transaction identifier are fed into a h
 Thus, the flow is as follows:
 1. The user generates a unique transaction identifier `tid`
 2. The user downloads the hash `H(b)` of the latest block it has seen, and brute forces values of `x` such that `hash("Vega_SPAM_PoW", H(b), tid, x)` as bytes starts with `spam.pow.difficulty` zeros.
-   1. The user must monitor how many transactions they have sent for any given block. If this number is greater than `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` + 1 zeros.
+   1. The user must monitor how many transactions they have sent for any given block.
+      1. If this number is less than or equal to `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros.
+      2. If this number is greater than `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros plus one additional for each transaction beyond the limit (e.g. if `spam.pow.numberOfTxPerBlock` is 10 and `spam.pow.difficulty` is 2 the 10th transaction will require 2 zeros, the 11th 3 zeros, the 12th 4 zeros and so on).
 3. The user then attaches the PoW to a transaction, and sends it off together with `x` and `H(b)`.
  
 The validators verify that
 - `H(b)` is the correct hash of a past block
 - That block is no more than `spam.pow.numberOfPastBlocks` in the past.
   - This check is primarily done by the leader (i.e., block creator). On agreeing on a new block, all parties check their mempool for now outdated transactions and purge them.
-- The hash is computed correctly and begins with `spam.pow.difficulty` zeroes, or `spam.pow.difficulty` + 1 if the validator has already seen `spam.pow.numberOfTxPerBlock` transactions from this party within the same block.
+- The hash is computed correctly and begins with `spam.pow.difficulty` zeros, or `spam.pow.difficulty` + n zeros if the validator has seen `spam.pow.numberOfTxPerBlock` + n transactions from this party within the same block.
    
 Furthermore, the validators check that:
 - The same identifier has not been used for another transaction from a previously committed block. If the same identifier is used for 
@@ -63,7 +65,7 @@ latency transactions.
 - Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to have a large parameter of `spam.pow.numberOfPastBlocks`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
 - The PoW is currently valid for all trransactions; a consideration is to use it only for trading related transactions, so even if something goes wrong here delegators can still vote.
   
-If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tired to one block by increasing the difficulty. This happens in batches of `spam.pow.numberOfTxPerBlock`,  e.g., if `spam.pow.numberOfTxPerBlock` is `5` and `spam.pow.difficulty` is `7`, then the 6th to 10th transaction can be tied to the same block with difficulty `8`, the 11th would have difficulty `9`, etc.
+If increasing difficulty is set to 1 (seen as a boolean flag), then more transactions can be tied to one block by increasing the difficulty. This happens in batches of `spam.pow.numberOfTxPerBlock`,  e.g., if `spam.pow.numberOfTxPerBlock` is `5` and `spam.pow.difficulty` is `7`, then the 6th to 10th transaction can be tied to the same block with difficulty `8`, the 11th would have difficulty `9`, etc.
 
 
 ## Hash function:
