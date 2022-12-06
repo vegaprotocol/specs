@@ -87,7 +87,6 @@ The network parameter spec-name to name-in-vega-core mapping is found in the cor
 
 The current network parameters are specified in the code specifiying the min and max value ranges and the default values. The parameters and related values can be seen in the [defaults](https://github.com/vegaprotocol/vega/blob/develop/core/netparams/defaults.go) file in the core repository.
 
-
 ## Acceptance criteria
 
 - All network parameter set in `genesis.json` can be queried and the values returned are the correct ones (unless overridden by [LNL checkpoint](./0073-LIMN-limited_network_life.md) value). (<a name="0054-NETP-001" href="#0054-NETP-001">0054-NETP-001</a>)
