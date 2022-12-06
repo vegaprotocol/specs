@@ -46,7 +46,7 @@ Furthermore, the validators check that:
   (i.e., if `spam.pow.increaseDifficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on 
- this; however, they can be verified post-agreement, and the offending vega-key can be banished for 30 minutes.
+ this; however, they can be verified post-agreement, and the offending vega-key can be banished for the maximum of 1/48 of an Epoch (30 minutes if an epoch is 1 day) or 30 seconds.
 
 
 Notes: 
@@ -75,7 +75,7 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
 - Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned off) (<a name="0072-SPPW-003" href="#0072-SPPW-003">0072-SPPW-003</a>)
 - Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on) (<a name="0072-SPPW-004" href="#0072-SPPW-004">0072-SPPW-004</a>)
 - Reusing a transaction identifier in a way that several transactions with the same ID end up in the same block is detected and the transactions are rejected (<a name="0072-SPPW-005" href="#0072-SPPW-005">0072-SPPW-005</a>)
-- A blocked account is unblocked after 30 minutes. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
+- A blocked account is unblocked after the maximum of 1/48 of an Epoch or 30 seconds (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
 - PoW attached to a valid transaction will be accepted provided it's using correct chain ID and, at time of submission, the block hash is one of the last `spam.pow.numberOfPastBlocks` blocks.  (<a name="0072-COSMICELEVATOR-007" href="#0072-COSMICELEVATOR-007">0072-COSMICELEVATOR-007</a>)
 - For each transaction less than or equal to `spam.pow.numberOfTxPerBlock` in a block `spam.pow.difficulty` zeros are needed in the proof-of-work (<a name="0072-SPPW-008" href="#0072-SPPW-008">0072-SPPW-008</a>)
 - For each `spam.pow.numberOfTxPerBlock` sized block of transactions greater than `spam.pow.numberOfTxPerBlock` an additional 0 is required in the proof-of-work (1 additional zero for the first batch, two additional for the second batch etc) (<a name="0072-SPPW-009" href="#0072-SPPW-009">0072-SPPW-009</a>)
