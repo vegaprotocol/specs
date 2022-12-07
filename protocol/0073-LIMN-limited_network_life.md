@@ -246,26 +246,6 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ### Test case 6.2: timeElapsedBetweenCheckpoints set to value outside acceptable range ?
 
-## Test case 7 (probably untestable): After network restart, stake balances are recovered by replaying all events (<a name="0073-LIMN-018" href="#0073-LIMN-018">0073-LIMN-018</a>)
-1. A party deposits 100 tUSD
-1. And A party stakes 100 VEGA on Ethereum
-1. And A checkpoint is taken
-1. And that party has a staking account balance of 100 VEGA.
-1. And that party has delegated 60 VEGA to validator 1
-1. And that party has delegated 30 VEGA to validator 2
-1. And that party has 10 VEGA undelegated
-1. And the network is shut down.
-1. And the network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted .
-1. When the state is restored, but before the EthereumEventListener replays all events
-1. Then that party has 100 tUSD restored to their tUSD general account
-1. And that party has delegated 60 VEGA to validator 1
-1. And that party has delegated 30 VEGA to validator 2
-1. And that party has 0 VEGA undelegated
-1. And that party has staking account balance of 0
-1. When the EthereumEventListener has replayed all staking events
-1. Then that party has a staking account balance of 100
-1. And that party has 10 VEGA undelegated
-
 ## Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0073-LIMN-022" href="#0073-LIMN-022">0073-LIMN-022</a>)
 1. More than one party deposits stake onto Vega
 1. The parties delegate stake to the validators
