@@ -28,7 +28,7 @@ Thus, the flow is as follows:
 2. The user downloads the hash `H(b)` of the latest block it has seen (or uses any other block hash within `spam.pow.numberOfPastBlocks` of the block to-be-produced), and brute forces values of `x` such that `hash("Vega_SPAM_PoW", H(b), tid, x)` as bytes starts with `spam.pow.difficulty` zeros.
    1. The user must monitor how many transactions they have sent with PoW tied to a given block.
       1. If this number is less than or equal to `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros.
-      2. If this number is greater than `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros plus one additional for each `spam.pow.numberOfTxPerBlock` sized batch of transactions beyond the limit (e.g. if `spam.pow.numberOfTxPerBlock` is 10 and `spam.pow.difficulty` is 2 the 11th - 20th transactions will require 2 zeros, the 21st-30th 3 zeros, the 31st-40th 4 zeros and so on).
+      2. If this number is greater than `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros plus one additional for each `spam.pow.numberOfTxPerBlock` sized batch of transactions beyond the limit (e.g. if `spam.pow.numberOfTxPerBlock` is 10 and `spam.pow.difficulty` is 2 the 1st - 10th transactions will require 2 zeros, the 11th - 20th transactions will require 3 zeros, the 21st-30th 4 zeros, the 31st-40th 5 zeros and so on).
 3. The user then attaches the PoW to a transaction for a block which will be created within `spam.pow.numberOfPastBlocks` blocks of the one used for PoW hash generation, and sends it off together with `x` and `H(b)`.
  
 The validators verify that
@@ -46,7 +46,7 @@ Furthermore, the validators check that:
   (i.e., if `spam.pow.increaseDifficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on 
- this; however, they can be verified post-agreement, and the offending vega-key can be banished for 30 minutes.
+ this; however, they can be verified post-agreement, and the offending vega-key can be banished for the duration of 1/48 of an Epoch with a minimum duration of 30 seconds. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds.
 
 
 Notes: 
