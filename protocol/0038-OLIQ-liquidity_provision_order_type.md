@@ -87,7 +87,7 @@ Calculate the `liquidity-normalised-proportion` for all entries, where for buy a
 `liquidity-normalised-proportion = liquidity-proportion-for-entry / sum-all-entries(liquidity-proportion-for-order)`
 
 ```
-Example 1 (from above) where refined-buy-order-list = [buy-entry-1, buy-entry-2, sell-entry-1, sell-entry-2]:
+Example 1 (from above) where refined-order-list = [buy-entry-1, buy-entry-2, sell-entry-1, sell-entry-2]:
 
 liquidity-normalised-proportion-buy-order-1 = 2 / (2 + 13) = 0.13333...
 liquidity-normalised-proportion-buy-order-2 = 13 / (2 + 13) = 0.86666...
