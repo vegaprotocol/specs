@@ -82,20 +82,20 @@ If you end up with 0 or a negative number, stop, you are done.
 
 #### Normalising liquidity proportions for a set of market making orders (step 3):
 
-Calculate the `liquidity-normalised-proportion` for all entries, where:
+Calculate the `liquidity-normalised-proportion` for all entries, where for buy and sell side separately:
 
-`liquidity-normalised-proportion = liquidity-proportion-for-entry / sum-all-buy/sell-entries(liquidity-proportion-for-order)`
+`liquidity-normalised-proportion = liquidity-proportion-for-entry / sum-all-entries(liquidity-proportion-for-order)`
 
 ```
 Example 1 (from above) where refined-buy-order-list = [buy-entry-1, buy-entry-2, sell-entry-1, sell-entry-2]:
 
-liquidity-normalised-proportion-buy-order-1 = 2 / (2 + 13 + 5 + 5) = 0.08
-liquidity-normalised-proportion-buy-order-2 = 13 / (2 + 13 + 5 + 5) = 0.52
-liquidity-normalised-proportion-sell-order-1 = 5 / (2 + 13 + 5 + 5) = 0.2
-liquidity-normalised-proportion-sell-order-2 = 5 / (2 + 13 + 5 + 5) = 0.2
+liquidity-normalised-proportion-buy-order-1 = 2 / (2 + 13) = 0.13333...
+liquidity-normalised-proportion-buy-order-2 = 13 / (2 + 13) = 0.86666...
+liquidity-normalised-proportion-sell-order-1 = 5 / (5 + 5) = 0.5
+liquidity-normalised-proportion-sell-order-2 = 5 / (5 + 5) = 0.5
 
 ```
-The sum of all normalised proportions must = 1 for all refined buy / sell order list.
+The sum of all normalised proportions must = 1 on each side.
 
 #### Calculating volumes for a set of market making orders (step 6):
 
