@@ -413,7 +413,8 @@ Then, during epoch 3 we fund the reward accounts for the metric:
 Looking only at epoch 3 - as no trading activity was done, we expect the reward balances in both $VEGA and USDC for the metric to remain unchanged. 
 
 ### Distributing LP fees received - multiple markets (<a name="0056-REWA-33" href="#0056-REWA-033">0056-REWA-033</a>)
-#### Rationale 
+
+#### Rationale
 There are multiple markets, each paying its own reward where due. 
 
 #### Setup
@@ -435,7 +436,8 @@ The calculation of eligibility is identical to [acceptance code REWA-030](https:
 
 
 ### Distributing market creation rewards - no eligibility (<a name="0056-REWA-040" href="#0056-REWA-040">0056-REWA-040</a>)
-#### Rationale 
+
+#### Rationale
 Market has been trading but not yet eligible for proposer bonus. 
 
 #### Setup
