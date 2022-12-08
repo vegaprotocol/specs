@@ -333,19 +333,19 @@ Can deposit and withdraw funds to/from ERC20 asset loaded from checkpoint (<a na
 1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-064" href="#0064-LIMN-064">0073-LIMN-064</a>)
+1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-064" href="#0073-LIMN-064">0073-LIMN-064</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>)
 
 ## Test case 18: market definition is the same pre and post LNL restore
+
 1. Propose a market
 1. System saves LNL checkpoint.
 1. Restart Vega, load LNL checkpoint. 
 1. The market has the same:
-
- - risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
- - price monitoring bounds (<a name="0073-LIMN-071" href="#0071-LIMN-071">0073-LIMN-071</a>)
- - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
- - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
+- risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
+- price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>)
+- oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
+- margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
   
 
 
