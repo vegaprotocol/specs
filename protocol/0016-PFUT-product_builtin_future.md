@@ -59,7 +59,6 @@ cash_settled_future.settlement_data(event) {
 }
 ```
 
-
 # Acceptance Criteria
 
 1. Create a Cash Settled Future with trading termination triggered by a date/time based data source (<a name="0016-PFUT-001" href="#0016-PFUT-001">0016-PFUT-001</a>)
@@ -70,7 +69,7 @@ cash_settled_future.settlement_data(event) {
   2. Mark to market settlement works correctly (<a name="0016-PFUT-006" href="#0016-PFUT-006">0016-PFUT-006</a>)
   3. Settlement at expiry works correctly (<a name="0016-PFUT-007" href="#0016-PFUT-007">0016-PFUT-007</a>)
 1. A market that receives settlement data before trading termination always stores the newest one and upon receiving the trading termination trigger settles the market (<a name="0016-PFUT-008" href="#0016-PFUT-008">0016-PFUT-008</a>)
-1. A market that has already settled and is in trading terminated status never processes any more lifecycle events even if the data source sends more valid data (<a name="0016-PFUT-012" href="#0016-PFUT-009">0016-PFUT-009</a>)
+1. A market that has already settled and is in trading terminated status never processes any more lifecycle events even if the data source sends more valid data (<a name="0016-PFUT-009" href="#0016-PFUT-009">0016-PFUT-009</a>)
 1. Lifecycle events are processed atomically as soon as they are triggered, i.e. the above condition always holds even for two or more transactions arriving at effectively the same time - only the transaction that is sequenced first triggers final settlement (<a name="0016-PFUT-010" href="#0016-PFUT-010">0016-PFUT-010</a>)
 1. Once a market is finally settled, the mark price is equal to the settlement data and this is exposed on event bus and market data APIs (<a name="0016-PFUT-011" href="#0016-PFUT-011">0016-PFUT-011</a>)
 1. Assure [settment-at-expiry.feature](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/0002-STTL-settlement_at_expiry.feature) executes correctly (<a name="0016-PFUT-012" href="#0016-PFUT-012">0016-PFUT-012</a>)

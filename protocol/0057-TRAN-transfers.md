@@ -214,7 +214,7 @@ message CancelTransfer {
   - A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.
 - The spam protection mechanics prevent me to do more than `spam.protection.maxUserTransfersPerEpoch` transfers per epoch. (<a name="0057-TRAN-009" href="#0057-TRAN-009">0057-TRAN-009</a>)
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
-- A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
+- A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-059" href="#0057-TRAN-059">0057-TRAN-059</a>)
 
 ### Recurring transfers
 
@@ -266,7 +266,7 @@ A user's recurring transfer is cancelled if any transfer fails due to insufficie
   - The transfer is cancelled
   - No more transfers are executed.
 
-A recurring transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-058" href="#0058-TRAN-058">0057-TRAN-058</a>)
+A recurring transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-058" href="#0057-TRAN-058">0057-TRAN-058</a>)
 
 A user's recurring transfer to a reward account does not occur if there are no parties eligible for a reward in the current epoch (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
   - I set up a market ETHUSDT settling in USDT.

@@ -21,7 +21,7 @@ Specification PR: https://github.com/vegaprotocol/specs-internal/pull/262
 - A parked pegged order can be amended. (<a name="0037-OPEG-014" href="#0037-OPEG-014">0037-OPEG-014</a>)
 - A pegged order with an offset which would cause it to be priced <= 0 is parked. (<a name="0037-OPEG-017" href="#0037-OPEG-017">0037-OPEG-017</a>)
 - An active pegged order can be amended. (<a name="0037-OPEG-016" href="#0037-OPEG-016">0037-OPEG-016</a>)
-- A transaction submitting a pegged order with negative offset fails with an error explaining the cause was negative offset. (<a name="0037-OPEG-017" href="#0037-OPEG-017">0037-OPEG-017</a>)
+- A transaction submitting a pegged order with negative offset fails with an error explaining the cause was negative offset. (<a name="0037-OPEG-018" href="#0037-OPEG-018">0037-OPEG-018</a>)
 
 ## Summary
 

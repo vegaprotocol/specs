@@ -112,7 +112,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 - Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders. (<a name="0013-ACCT-010" href="#0013-ACCT-010">0013-ACCT-010</a>)
 
 ### Liquidity Provider bond accounts
-- A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIME-lp_mechanics.md). (<a name="0013-ACCT-017" href="#0013-ACCT-017">0013-ACCT-017</a>)
+- A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIME-lp_mechanics.md). (<a name="0013-ACCT-023" href="#0013-ACCT-023">0013-ACCT-023</a>)
 - Each party that has placed a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md) will have one bond account per market they have provided liquidity to (<a name="0013-ACCT-018" href="#0013-ACCT-018">0013-ACCT-018</a>)
 - [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees) (<a name="0013-ACCT-019" href="#0013-ACCT-019">0013-ACCT-019</a>)
 

@@ -341,10 +341,10 @@ Can deposit and withdraw funds to/from ERC20 asset loaded from checkpoint (<a na
 1. System saves LNL checkpoint.
 1. Restart Vega, load LNL checkpoint. 
 1. The market has the same:
-  - risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
-  - price monitoring bounds (<a name="0073-LIMN-071" href="#0071-LIMN-071">0073-LIMN-071</a>)
-  - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
-  - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
+   - risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
+   - price monitoring bounds (<a name="0073-LIMN-071" href="#0071-LIMN-071">0073-LIMN-071</a>)
+   - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
+   - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
   
 
 
