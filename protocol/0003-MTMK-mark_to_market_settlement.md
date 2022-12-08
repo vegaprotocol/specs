@@ -35,7 +35,7 @@ Feature name: mark-to-market-settlement
 1. Observe the following mark-to-market cash-flows: party1 receives `0.02 x (120-100) = 0.4`. Party2 pays `0.4`. 
 
 ## Market with position decimal places < 0 scenario
-In a market with negative PDP, the mark-to-market cash-flows are correct. (<a name="0003-MTMK-013" href="#0003-MTMK-013">0003-MTMK-013</a>):
+In a market with negative PDP, the mark-to-market cash-flows are correct. (<a name="0003-MTMK-014" href="#0003-MTMK-014">0003-MTMK-014</a>):
 1. Set up a market with PDP > 0, say PDP = -3
 1. Set up party1 long postion 2000 and party2 short position 2000; and the trade which created these positions being at price 0.10. 
 1. Set up party3 and party4 which trade volume 1000 at price 0.12. 

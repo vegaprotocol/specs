@@ -416,7 +416,7 @@ APIs should also exist for clients to:
 ## Governance proposal types
 
 ### New Asset proposals
-- New asset proposals cannot be created before [`limits.assets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
+- New asset proposals cannot be created before [`limits.assets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-063" href="#0028-GOVE-063">0028-GOVE-063</a>)
 - An asset proposal with a negative or non-integer value supplied for asset decimal places gets rejected. (<a name="0028-GOVE-059" href="#0028-GOVE-059">0028-GOVE-059</a>)
 
 ### New Market proposals
