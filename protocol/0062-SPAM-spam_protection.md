@@ -60,7 +60,7 @@ For Sweetwater, the policies we enforce are relatively simple:
  pre_block rejected, if there are `<num_votes>` or more votes on the same proposal in the blockchain in this epoch, and
  post_block rejected, if there are `<num_votes>` or more on the same proposal in the blockchain plus earlier in the current block.
 
-- Any tokenholder that had more than 50% if its post-rejected is banned for max (30 seconds, 1/48 of an epoch) or until the next epocvh starts, and all its votes are immediately rejected. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds (or until the start of the next epoch). The test for 50% of the votes is repeated once the next vote is post-rejected, so a it is possible for a violating party to get banned quite quickly again.
+- Any tokenholder that had more than 50% if its post-rejected is banned for max (30 seconds, 1/48 of an epoch) or until the next epocvh starts, and all its votes (and only those, no trading related transactions) are immediately rejected. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds (or until the start of the next epoch). The test for 50% of the votes is repeated once the next vote is post-rejected, so a it is possible for a violating party to get banned quite quickly again.
   
 - A proposal can only be issued by a tokenholder owning more than `<min_proposing_tokens>` at the start of the epoch. Also
    (like above), only `<num_proposals>` proposals can be made per tokenholder per epoch, i.e., every proposal past `<num_proposals>` in an epoch is
@@ -108,6 +108,7 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
  - It is possible for spam transactions to fill a block (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)
  - Parties that continue spamming are blocked and eventually unblocked again  (<a name="0062-SPAM-011" href="#0062-SPAM-011">0062-SPAM-011</a>)
  - Any rejection due to spam protection is reported to the user upon transaction submission detailing which criteria the key exceeded / not met  (<a name="0062-SPAM-013" href="#0062-SPAM-013">0062-SPAM-013</a>)  
+ - If a party is banned for too many voting-rejections, it still can send trading related transactions which are not banned. (<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-013</a>)  
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
 
