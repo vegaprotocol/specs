@@ -20,8 +20,6 @@ For SW, we only have governance, so the following two policies will do:
 Vote transactions can be rejected if a if a party has less than `spam.protection.voting.min.tokens`. Any governance proposal transaction can be rejected if a party has less than `spam.protection.proposal.min.tokens`. Setting these reasonably high provides some level of protection. 
 Any qualified voter can vote `spam.protection.max.votes` times per epoch per active proposal (e.g., if it's `3` then  one initial vote and twice change their mind).
 
-Initially, a qualified voter required at least 100 tokens (i.e., a value of $1500 taking the last coinlist sale).
-Thus, spamming the network for 1 minute would cost $135.000. 
 If 3 blocks in a row for filled with spam i.e., parties sending substantially more than 3 votes, let's say 50 votes), 
 then the number of required tokens is doubled, up to a maximum of 1600 (if someone pays 1.5 million to spam us for 60 
 seconds so be it).
