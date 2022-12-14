@@ -17,7 +17,7 @@ to issue a proposal/vote (`spam.protection.proposal.min.tokens`/`spam.protection
 
 For SW, we only have governance, so the following two policies will do:
 
-Vote proposals can only be done using a lot of tokens (say, 100.0000)
+Vote transactions can be rejected if a if a party has less than `spam.protection.voting.min.tokens`. Any governance proposal transaction can be rejected if a party has less than `spam.protection.proposal.min.tokens`. Setting these reasonably high provides some level of protection. 
 Any qualified voter can vote three times per epoch per active proposal (i.e., one initial vote and twice change their mind).
 
 Initially, a qualified voter required at least 100 tokens (i.e., a value of $1500 taking the last coinlist sale).
