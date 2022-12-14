@@ -439,6 +439,11 @@ APIs should also exist for clients to:
 - Attempts to update immutable market parameter(s) cause the market change proposal to be rejected with an appropriate rejection message (<a name="0028-GOVE-058" href="#0028-GOVE-058">0028-GOVE-058</a>)
 - Verify that if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0` and if a party meets the `governance.proposal.updateMarket.minProposerBalance` threshold then said party can submit a market change proposal. (<a name="0028-GOVE-060" href="#0028-GOVE-060">0028-GOVE-060</a>)
 
+- Change of the network parameter `governance.proposal.updateMarket.minProposerEquityLikeShare` will immediately change the minimum proposer ELS for a market change proposal for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-064" href="#0028-GOVE-064">0028-GOVE-064</a>)
+- Change of the network parameter `governance.proposal.updateMarket.requiredParticipationLP` will immediately change the required LP vote participation (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-065" href="#0028-GOVE-065">0028-GOVE-065</a>)
+- Change of the network parameter `governance.proposal.updateMarket.requiredMajorityLP` will immediately change the required LP vote majority (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-066" href="#0028-GOVE-066">0028-GOVE-066</a>)
+
+
 
 ### Network parameter change proposals
 - As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
