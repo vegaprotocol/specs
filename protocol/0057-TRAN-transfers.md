@@ -278,14 +278,12 @@ A user's recurring transfer to a reward account does not occur if there are no p
 
 
 If the network parameter <transfer.minTransferQuantumMultiple> is modified, this modification is applied
-from the next block on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0059-TRAN-059" href="#0059-TRAN-059">0059-TRAN-059</a>)
+immediately on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0059-TRAN-059" href="#0059-TRAN-059">0059-TRAN-059</a>)
 
-If the network parameter <transfer.minTransferFeeFactor> is modified, this modification is communicated to the frontend clients and applied there appropriately (displayed/rejected on the frontend if the available funds are insufficient) (<a name="0060-TRAN-060" href="#0060-TRAN-060">0060-TRAN-060</a>)
 
 If the network parameter <transfer.minTransferFeeFactor> is modified, this modification is applied
-from the next block on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0061-TRAN-061" href="#0061-TRAN-061">0061-TRAN-061</a>)
+immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0061-TRAN-061" href="#0061-TRAN-061">0061-TRAN-061</a>)
 
-If the network parameter <spam.protection.maxUserTransfersPerEpoch> is modified, this modification is communicated to the frontend clients and applied there appropriately at the start of the next epoch (displayed/rejected on the frontend if too many transfers are send within the epoch) (<a name="0062-TRAN-062" href="#0062-TRAN-062">0062-TRAN-062</a>)
 
 If the network parameter <spam.protection.maxUserTransfersPerEpoch> is modified, this modification is applied from the next Epoch on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0063-TRAN-063" href="#0063-TRAN-063">0063-TRAN-063</a>)
 
