@@ -387,7 +387,7 @@ Verify that one validator is replaced the following epoch, one in the epoch afte
 13.  Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
   * Setup a network with 7 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
   * Decrease the number of tendermint validators to 5.
-  * Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatzvalidator and an Ersatzvalidator is demoted to p[endiong
+  * Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatzvalidator and an Ersatzvalidator is demoted to pending
 
 
 14. Number of Ersatzvalidators increased (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>):
@@ -402,7 +402,7 @@ Verify that one validator is replaced the following epoch, one in the epoch afte
   * Verify that in the following to epochs, in each epoch the ErsatzValidator with the lowest score is demoted to pending 
   * Verify that the third Ersatzvalidator is not promoted in the third epoch
 
-16. Number of Ersatzvalidators Eratic (<a name="0069-VCBS-055" href="#0069-VCBS-055">0069-VCBS-055</a>):
+16. Number of Ersatzvalidators Erratic (<a name="0069-VCBS-055" href="#0069-VCBS-055">0069-VCBS-055</a>):
   * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 4 pending validators
   * Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.9
   * In the next epoch, change network.validators.ersatz.multipleOfTendermintValidators to 0.1
@@ -410,7 +410,7 @@ Verify that one validator is replaced the following epoch, one in the epoch afte
   * Verify that in the following four epochs, first a pending validator is promoted, then two pending validators are demoted, then one is promoted agian (eith the highest/losest scores respectively)
   * Verify that in the fifth epoch, no demotions/promotions happen and the number of Ertsatzvalidators stays at 3
 
-17. Number of ErsatzValidators oddly define (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>)d
+17. Number of ErsatzValidators oddly defined (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>)d
   * Set the factor to 0.00000000000000000000000000000000000000001
   * Verify that all Validators round it the same way, and that there are no Ersatzvalidators
 
