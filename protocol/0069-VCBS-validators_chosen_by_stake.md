@@ -414,7 +414,7 @@ Verify that one validator is replaced the following epoch, one in the epoch afte
   * Set the factor to 0.00000000000000000000000000000000000000001
   * Verify that all Validators round it the same way, and that there are no Ersatzvalidators
 
-  * Set the factor to 3.00000000000000000000000000000000000000001
+  * Set the factor to 3.00000000000000000000000000000000000000001 and run the network with just one tendermint (consensus) validator.
   * Verify that all Validators round it the same way, and that there are three Ersatzvalidators
 
 18. Change network.validators.ersatz.rewardFactor (<a name="0069-VCBS-057" href="#0069-VCBS-057">0069-VCBS-057</a>)
