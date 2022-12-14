@@ -7,13 +7,13 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.minValidators`.
 1. `numberOfValidators` - the actual number of validators running the consensus (derived from running chain)
 1. `totalStake` - the total number of units of the staking and governance asset (VEGA) associated to the Vega chain (but not necessarily delegated to a specific validator).
-1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Valid values are in the range 1 to infinity i.e. (including 1 but excluding infinity) i.e. `1 <= compLevel < infinity`. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
+1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake. 
 1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes. 
 
 ### Other network parameters:
-- `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Valid values are in the range 0 to 1 (inclusive) i.e. `0 <= delegator_share <= 1`. Full name: `reward.staking.delegation.delegatorShare`.
-- `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`. Can be set to any number greater than or equal `0`. Default `3000`.   
+- `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.delegatorShare`.
+- `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`.    
 
 
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
@@ -80,12 +80,7 @@ function validatorScore(valStake) {
 }
 ```
 
-For ersatz validators, the formula changes slightly:
-```go
- linearScore = (valStake)/s_total
- linearScore = Math.min(1.0, Math.max(0.0,linearScore))
-```
-i.e., there is no anti-whaling function applied here (the penalties are removed)
+For ersatz validators, the same formula is used.
 
 
 # Acceptance criteria
@@ -121,5 +116,8 @@ i.e., there is no anti-whaling function applied here (the penalties are removed)
 1. Each validator and delegator receives appropriate share of the `100000`. 
 
 ## Change of network parameters
-1. Change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). No maximum. (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
+1. Change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>) 
 1. Change of network parameter `reward.staking.delegation.minimumValidatorStake` will change minimum amount required of own stake a validator has. Minimum stake applies to all validators. it’s referred to as a prerequisite to being considered a validator. Validators not met with the minimum stake will not be all thrown, and in fact unless there’s someone who can replace them no one will be kicked out. If there is an ersatz ready to replace them only one will be replaced every epoch. (<a name="0061-REWP-009" href="#0061-REWP-009">0061-REWP-009</a>) 
+1. Change of the network parameter 'reward.staking.delegation.optstakemultipolier' is changed to 0 (the reward curve is flat for a validator that exceeds optimal stake), to 0.5 (the reward curve goes down), and 0.1 (the reward curve goes down slightly).(<a name="0061-REWP-010" href="#0061-REWP-010">0061-REWP-010</a>) 
+1. Change of network parameter 'reward.staking.delegation.delegatorShare' to 0 (no reward for delegators, 0.99, and 0.5. The share for delegators at the end of the epochs changes accordingly.  (<a name="0061-REWP-011" href="#0061-REWP-011">0061-REWP-011</a>) 
+
