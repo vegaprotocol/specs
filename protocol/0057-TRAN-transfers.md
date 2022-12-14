@@ -276,7 +276,6 @@ A user's recurring transfer to a reward account does not occur if there are no p
   - [ ] In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
   - [ ] At the end of the third epoch, no transfer occurs
 
-If the network parameter <transfer.minTransferQuantumMultiple> is modified, this modification is communicated to the frontend clients and applied there appropriately (displayed/too small transfers rejected). (<a name="0058-TRAN-058" href="#0058-TRAN-58">0058-TRAN-058</a>)
 
 If the network parameter <transfer.minTransferQuantumMultiple> is modified, this modification is applied
 from the next block on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0059-TRAN-059" href="#0059-TRAN-059">0059-TRAN-059</a>)
