@@ -116,8 +116,8 @@ Their performance is also defined by the number of heartbeats they sent out of t
 ### Rewards for Ersatz validators
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](./0064-VALP-validator_performance_based_rewards.md) and [performance measurement](./0064-VALP-validator_performance_based_rewards.md).
 However `network.validators.ersatz.rewardFactor` in `[0,1]` is taken into account to scale their rewards. Also, the same scoring
-function is aopplied as for the normal validators, so anti-whaling rules apply for Ersatzvalidators as well.
-An Ersatzvalidator being affected by the whaling rule (i.e., getting sufficient stake to havbe their reward lowered by the anti-whaling rule) 
+function is applied as for the normal validators, so anti-whaling rules apply for Ersatzvalidators as well.
+An Ersatzvalidator being affected by the whaling rule (i.e., getting sufficient stake to have their reward lowered by the anti-whaling rule) 
 is a out-of-the ordinary event and should be logged.
 
 
