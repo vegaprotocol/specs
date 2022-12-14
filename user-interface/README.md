@@ -24,13 +24,13 @@ These files contain generic user needs for interacting with wallets that are tru
 
 - `0002-WCON` [Connect Vega wallet to a Dapp & select keys](0002-WCON-connect_vega_wallet.md)
 - `0003-WTXN` [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
-- `0004-EWAL` [Connect Ethereum wallet to a Dapp](0004-EWAL-connect_ethereum_wallet.md) `TODO`
-- `0005-ETXN` [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) `TODO`
+- `0004-EWAL` [Connect Ethereum wallet to a Dapp](0004-EWAL-connect_ethereum_wallet.md)
+- `0005-ETXN` [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md)
 - `0006-NETW` [Network and node selection](0006-NETW-network-and-nodes.md) `TODO`
 
 ## `1000` Bridges, Transfers and Vesting
 - `1001-DEPO` [Deposit](1001-DEPO-desposit.md) `TODO`
-- `1002-WITH` [Withdraw](1002-WITH-withdraw.md) `TODO`
+- `1002-WITH` [Withdraw](1002-WITH-withdraw.md)
 - `1003-TRAN` [Transfer](1003-TRAN-transfer.md) `TODO`
 - `1004-ASSO` [Associate governance token with a Vega key](1004-ASSO-associate.md)
 - `1005-VEST` [View and redeem vested tokens](1005-VEST-vesting.md)
@@ -69,7 +69,7 @@ These files contain generic user needs for interacting with wallets that are tru
 ## `7000` Collateral, Orders, Positions and Fills 
 - `7001-COLL` [View my collateral / accounts](7001-COLL-collateral.md) `TODO`
 - `7002-SORD` [Submit an order](7002-SORD-submit_orders.md) 
-- `7003-MORD` [Manage my orders](7003-MORD-manage_orders.md) `TODO`
+- `7003-MORD` [Manage my orders](7003-MORD-manage_orders.md)
 - `7004-POSI` [View my positions](7004-POSI-positions.md) `TODO`
 - `7005-FILL` [View my trades/fills](7005-FILL-fills.md) `TODO`
 - `7006-FEES` [View my trading fees](7006-FEES-fees.md) `TODO`

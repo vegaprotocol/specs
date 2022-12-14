@@ -13,7 +13,7 @@ Transactions with higher priorities will get scheduled first.
 
 We must have `network.transactions.maxgasperblock >= 2 x network.transactions.minBlockCapacity`. 
 
-## Including transactions 
+## Including transactions
 
 Each transaction will have a gas cost assigned to it. Any transaction not specifically named below has gas cost of `network.transaction.defaultgas`. 
 The consensus layer (Tendermint) will choose transactions from the proposer's mempool to include into a block with a maximum total cost of `network.transactions.maxgasperblock`. 
@@ -65,7 +65,7 @@ gas = min((maxGas/minBlockCapacity)-1,gasCancel)
 
 
 
-### Batch orders 
+### Batch orders
 
 Define `batchFactor` (a hard coded parameter) set to something between `0.0 and 1.0`.
 Say `batchFactor = 0.5` for now.
@@ -94,7 +94,7 @@ gas = min((maxGas/minBlockCapacity)-1,gasOliq)
 ```
 
 
-## Transaction priorities 
+## Transaction priorities
 
 Transactions with higher priorities that are present in the mempool will get placed into a block before transactions with lower priority are considered. 
 Transactions with the same priority are placed into a block in the default sequencing order (up to maximum gas cost above).
@@ -107,18 +107,18 @@ There are three priority categories:
 
 ## Acceptance criteria
 
-### Basic happy path test (<a name="0079-TGAS-001" href="#0079-TGAS-001">0079-TGAS-001</a>) 
+### Basic happy path test (<a name="0079-TGAP-001" href="#0079-TGAP-001">0079-TGAP-001</a>)
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 20`.
 1. Send `100` transactions with default gas cost to a node (e.g. votes on a proposal) and observe that most block have 5 of these transactions each. 
 
-### Test max with a market (<a name="0079-TGAS-002" href="#0079-TGAS-002">0079-TGAS-002</a>) 
+### Test max with a market (<a name="0079-TGAP-002" href="#0079-TGAP-002">0079-TGAP-002</a>)
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position. 
 1. Another party submits a transaction to place a limit order. A block will be created containing the transaction (even though the gas cost of a limit order is `1 + 100 x 4 + 2 + 0.1 x 6` which is well over `100`.)
 
-### Test we don't overfill a block with a market (<a name="0079-TGAS-002" href="#0079-TGAS-002">0079-TGAS-002</a>) 
+### Test we don't overfill a block with a market (<a name="0079-TGAP-003" href="#0079-TGAP-003">0079-TGAP-003</a>)
 
 1. Set `network.transactions.maxgasperblock = 500` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position. 

@@ -43,7 +43,7 @@ When looking to stake validators or participate in governance, I first need to a
   - **should** be able to see a balance for the number of tokens for each pending association <a name="1004-ASSO-015" href="#1004-ASSO-015">1004-ASSO-015</a>
 - on completion: **should** be prompted to go on to [nominate](2001-STKE-staking.md) and/or participate in [Governance](1004-GOVE-governance_list.md)
 - **must** see the balances of tokens available in Ethereum wallet updated (both associated and un-associated) <a name="1004-ASSO-030" href="#1004-ASSO-030">1004-ASSO-030</a>
-- **must** see the balances of tokens available in vesting contract updated (both associated and un-associated) <a name="1004-ASSO-031" href="#1004-ASSO-031">1004-ASSO-031</a>
+- **must** see the balances of tokens available in vesting contract updated (both associated and un-associated) <a name="1004-ASSO-032" href="#1004-ASSO-032">1004-ASSO-032</a>
 
 ...so I can then use the Vega wallet to use my tokens.
 
