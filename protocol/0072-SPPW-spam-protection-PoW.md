@@ -100,7 +100,7 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
     (<a name="0072-COSMICELEVATOR-011" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-011</a>)
 
 
-- The parameter 'spam.pow.numberofTxPerBlock' is decrerased.  Verify that o
+- The parameter 'spam.pow.numberofTxPerBlock' is decreased.  Verify that
         - The new parameter is communicated to and adapted by the wallets, i.e., if a user has too many transactions according to the new parameter, the wallet does not submit transactions with a too low
  poW difficulty (either by submitting a PoW of higher difficulty, or by submitting the transactions later).
         - The new parameter is used for all blocks with a block height higher than the current one, i.e., a number of transactions that was allowed before and is no longer due to the new parameter is rejected (leaving the spam difficulty level constant)
