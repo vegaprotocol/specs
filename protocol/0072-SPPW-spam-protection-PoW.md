@@ -87,12 +87,12 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
     - The effect of pow.increaseDifficulty is still applied, i.e., a wallet key that had the increasedd difficulty still has the increased difficulty w.r.t. the new baseline.
     (<a name="0072-COSMICELEVATOR-009" href="#0072-COSMICELEVATOR-009">0072-COSMICELEVATOR-009</a>)
 
-    - The parameter 'spam.pow.increaseDifficulty' is increased.  Verify that
+    - The parameter 'spam.pow.increaseDifficulty' is changed from 0 to 1.  Verify that
     - Transactions tied to such a block using insufficient difficulty due to the new parameter are rejected with an error message.
     (<a name="0072-COSMICELEVATOR-010" href="#0072-COSMICELEVATOR-010">0072-COSMICELEVATOR-010</a>)
 
-- The parameter 'spam.pow.increaseDifficulty' is decreased. Verify that
-     - Transactions tied to such a block using the new difficulty are not rejected.
+- The parameter 'spam.pow.increaseDifficulty' is changed from 1 to 0. Verify that
+     - Transactions tied to such a block using the base difficulty are not rejected.
     (<a name="0072-COSMICELEVATOR-011" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-011</a>)
 
 
