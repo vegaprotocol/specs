@@ -387,10 +387,21 @@ Verify that 2 validators are replaced, one in each epoch
 
 Verify that one validator is replaced the following epoch, one in the epoch after
 
-13. Ersatzvalidator reward (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>)
-    Set up a network with 5 validators one of them with sufficient stake to be affected by the anti-whaling rule (e.g., 50% stake), as well as 5 Ersatzvalidators with equal (low) stake.  Demote
-    this validatore to Ersatzvalidator through poor performance. Validate that while being an ersatzvalidator, the reward is correct
-    given the anti-whaling rule.
+13. Ersatzvalidator reward (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>)    
+    Setup a network with 5 validators with the following distribution of delegation:
+10%, 10%, 10%, 10%. 60% of the total delegation of tendermint validators
+
+   Setup 5 ersatz validators each with the minimum delegation at the end of the epoch verify that the stake score of the validator with 60% of the delegation (under reward) is anti-whaled
+
+   Shutdown the validator with 60% of the delegation
+
+   Run for an epoch with it down
+
+   At the end of the epoch expect the validator with 60% of the stake to be swapped as a tendermint validator for one of the ersatz validators.
+
+   Restart the validator, run until the end of the epoch
+
+  Verify that this validator is paid reward as ersatz validator and that their stake score under reward is anti-whaled
 
 ## Announce Node
 1. Invalid announce node command (<a name="0069-VCBS-044" href="#0069-VCBS-044">0069-VCBS-044</a>):
