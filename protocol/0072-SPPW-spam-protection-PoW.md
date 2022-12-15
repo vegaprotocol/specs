@@ -106,14 +106,10 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
 
 
 - Repeat tests 008-013,  where in the same block,
-   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is decreased, and spam.pow.numberOfTXPerBlock is increased.
-   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is increased, and spam.pow.numberOfTXPerBlock is increased.
-   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is decreased, and spam.pow.numberOfTXPerBlock is increased.
-   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is increased, and spam.pow.numberOfTXPerBlock is increased.
-   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is decreased, and spam.pow.numberOfTXPerBlock is decreased.
-   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is increased, and spam.pow.numberOfTXPerBlock is decreased.
-   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is decreased, and spam.pow.numberOfTXPerBlock is decreased.
-   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is increased, and spam.pow.numberOfTXPerBlock is decreased.
+   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is increased (0 to 1), and spam.pow.numberOfTXPerBlock is increased.
+   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is increased (0 to 1), and spam.pow.numberOfTXPerBlock is increased.
+   - Spam.pow.difficulty is increased and spam.pow.increaseDifficulty is increased (0 to 1), and spam.pow.numberOfTXPerBlock is decreased.
+   - Spam.pow.difficulty is decreased and spam.pow.increaseDifficulty is increased (0 to 1), and spam.pow.numberOfTXPerBlock is decreased.
     (<a name="0072-COSMICELEVATOR-014" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-014</a>)
 
 ~                                                        
