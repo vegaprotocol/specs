@@ -103,7 +103,7 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
    - Transactions submittting a vote more than `spam.protection.max.votes` times on any one proposal are rejected. (<a name="0062-SPAM-006" href="#0062-SPAM-006">0062-SPAM-006</a>)
    
  - Above thresholds are exceeded in one block, leading to a post-block-reject  (<a name="0062-SPAM-007" href="#0062-SPAM-007">0062-SPAM-007</a>)
- - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again  (<a name="0062-SPAM-008" href="#0062-SPAM-008">0062-SPAM-008</a>)
+ - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 1/48th of an epoch and unblocked afterwards again as per the [policy enforcement](https://github.com/vegaprotocol/specs/blob/master/protocol/0062-SPAM-spam_protection.md#policy-enforcement) rules (<a name="0062-SPAM-008" href="#0062-SPAM-008">0062-SPAM-008</a>)
  - It is possible for spam transactions to fill a block (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)
  - Parties that continue spamming are blocked and eventually unblocked again  (<a name="0062-SPAM-011" href="#0062-SPAM-011">0062-SPAM-011</a>)
  - Any rejection due to spam protection is reported to the user upon transaction submission detailing which criteria the key exceeded / not met  (<a name="0062-SPAM-013" href="#0062-SPAM-013">0062-SPAM-013</a>)  
