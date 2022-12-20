@@ -152,15 +152,15 @@ At every vega time change calculate the liquidity score for each committed LP.
 This is done by taking into account all orders they have deployed between the tightest price monitoring bounds and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantenous liquidity score.
 When we say "all orders" we mean their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
 
-Now calculate the sum the instantenous liquidity score obtained for each committed LP:
+Now calculate the total of the instantenous liquidity scores obtained for each committed LP:
 ```
-total = the sum of all of the instantenous liquidity scores for all LPs that have an active liquidity commitment
+total = the sum of instantenous liquidity scores for all LPs that have an active liquidity commitment
 ```
-Now calculate fractional instantenous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
+Now, if the `total` comes out as `0` then set `fractional instantenous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
+Otherwise calculate fractional instantenous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
 ```
 fractional instantenous liquidity score = instantenous liquidity score / total
 ```
-If the `total` comes out as `0` then set `fractional instantenous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
 
 If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then for each committed LP `liquidity score` is set to `fractional instantenous liquidity score`.
 
