@@ -42,7 +42,7 @@ Furthermore, the validators check that:
   (i.e., if `spam.pow.increaseDifficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on 
- this; however, they can be verified post-agreement, and the offending vega-key can be banished for 5 minutes; this is measured starting at the blocktime in which the violation occurs, and transactions are allowed again in the first block after. Validators should return a meaningful error message to the wallet to let it know that/why a transaction got rejected.
+ this; however, they can be verified post-agreement, and the offending vega-key can be banished for 1/48th of an epocn, i.e., with 1 day epochs for 30 min; this is measured starting at the blocktime in which the violation occurs, and transactions are allowed again in the first block after. Validators should return a meaningful error message to the wallet to let it know that/why a transaction got rejected.
 
 
 Notes: 
