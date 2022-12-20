@@ -146,33 +146,29 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 (average entry valuation) = 1090.9
 ```
 
-### Calculating supplied liquidity from probability of trading 
+### Calculating the liquidity score
 
-At every vega time change calculate the supplied liquidity provided by each committed LP. 
-This is done by taking into account all the volume they're providing between the tightest price monitoring bound and then 
-use the formula provided by [probability weighted liquidity measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb).
-When we say "all the volume" we mean volume provided by their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
+At every vega time change calculate the liquidity score for each committed LP.
+This is done by taking into account all orders they have deployed between the tightest price monitoring bounds and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantenous liquidity score.
+When we say "all orders" we mean their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
 
-Now calculate the total provided liquidity by committed LPs:
+Now calculate the sum the instantenous liquidity score obtained for each committed LP:
 ```
-total_provided = the sum of all of the liquidity provided by all LPs that have a liquidity commitment
+total = the sum of all of the instantenous liquidity scores for all LPs that have an active liquidity commitment
 ```
-
-Now calculate fraction of liquidity provided for a committed LP (i.e. a party that submmitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md)):
+Now calculate fractional instantenous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
 ```
-fraction of liquidity provided by committed LP = liquidity provided by a committed LP / total_provided
+fractional instantenous liquidity score = instantenous liquidity score / total
 ```
-If the `total_provided` comes out as `0` then set `fraction of liquidity provided by committed LP` to `1.0/n` for all committed LPs, where `n` is the number of committed LPs. 
+If the `total` comes out as `0` then set `fractional instantenous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
 
-If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then `average fraction of liquidity provided by committed LP` is set to `fraction of liquidity provided by committed LP`. 
+If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then for each committed LP `liquidity score` is set to `fractional instantenous liquidity score`.
 
-Otherwise whenever a new LP fee distribution period starts set a counter `n=1`. 
-Then on every Vega time change, after `fraction of liquidity provided by committed LP` has been obtained, update the 
-
+Otherwise whenever a new LP fee distribution period starts set a counter `n=1`.
+Then on every Vega time change, after `fractional instantenous liquidity score` has been obtained for all the committed LPs, update:
 ```
-average fraction of liquidity provided by committed LP <- ((n-1)/n) x average fraction of liquidity provided by committed LP + (1/n) x fraction of liquidity provided by committed LP
+liquidity score <- ((n-1)/n) x liquidity score + (1/n) x fractional instantenous liquidity score
 ```
-
 
 ### Distributing fees
 
