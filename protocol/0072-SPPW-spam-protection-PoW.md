@@ -74,7 +74,7 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
 - Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned of) (<a name="0072-SPPW-003" href="#0072-SPPW-003">0072-SPPW-003</a>)
 - Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on) (<a name="0072-SPPW-004" href="#0072-SPPW-004">0072-SPPW-004</a>)
 - Reusing a transaction identifier in a way that several transactions with the same ID end up in the same block is detected and the transactions are rejected (<a name="0072-SPPW-005" href="#0072-SPPW-005">0072-SPPW-005</a>)
-- A blocked account is unblocked after 5 minutes. For transactions sent in the meantime, a meaningfull error message is returned. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
+- A blocked account is unblocked after the appropriate time (1/48 of an eoch). For transactions sent in the meantime, a meaningfull error message is returned. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
 - PoW attached to a valid transaction will be accepted provided it's using correct chain ID and, at time of submission, the block hash is one of the last `spam.pow.numberOfPastBlocks` blocks.  (<a name="0072-COSMICELEVATOR-007" href="#0072-COSMICELEVATOR-007">0072-COSMICELEVATOR-007</a>)
 
 - The parameter 'spam.pow.difficulty' is increased.  Verify that
