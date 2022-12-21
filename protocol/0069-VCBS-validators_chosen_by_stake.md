@@ -115,7 +115,11 @@ Their performance is also defined by the number of heartbeats they sent out of t
 
 ### Rewards for Ersatz validators
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](./0064-VALP-validator_performance_based_rewards.md) and [performance measurement](./0064-VALP-validator_performance_based_rewards.md).
-However `network.validators.ersatz.rewardFactor` in `[0,1]` is taken into account to scale their rewards.
+However `network.validators.ersatz.rewardFactor` in `[0,1]` is taken into account to scale their rewards. Also, the same scoring
+function is applied as for the normal validators, so anti-whaling rules apply for Ersatzvalidators as well.
+An Ersatzvalidator being affected by the whaling rule (i.e., getting sufficient stake to have their reward lowered by the anti-whaling rule) 
+is a out-of-the ordinary event and should be logged.
+
 
 ### Multisig for Ersatz validators
 At this point, Ersatz validators are not part of the Multisig.
@@ -383,26 +387,37 @@ Verify that 2 validators are replaced, one in each epoch
 
 Verify that one validator is replaced the following epoch, one in the epoch after
 
+13. Ersatzvalidator reward (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>)    
+    Setup a network with 5 validators with the following distribution of delegation:
+10%, 10%, 10%, 10%. 60% of the total delegation of tendermint validators
 
-13.  Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
+- Setup 5 ersatz validators each with the minimum delegation at the end of the epoch verify that the stake score of the validator with 60% of the delegation (under reward) is anti-whaled
+- Shutdown the validator with 60% of the delegation
+- Run for an epoch with it down
+- At the end of the epoch expect the validator with 60% of the stake to be swapped as a tendermint validator for one of the ersatz validators.
+- Restart the validator, run until the end of the epoch
+
+Verify that this validator is paid reward as ersatz validator and that their stake score under reward is anti-whaled
+
+14.  Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
   * Setup a network with 7 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
   * Decrease the number of tendermint validators to 5.
   * Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatzvalidator and an Ersatzvalidator is demoted to pending
 
 
-14. Number of Ersatzvalidators increased (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>):
+15. Number of Ersatzvalidators increased (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>):
   * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 4 pending validators
   * Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.9
   * Verify that in the following two epochs, in each epoch the ErsatzValidator with the highest score is promoted to Validator
   * Verify that the third Ersatzvalidator is not promoted in the third epoch
 
-15. Number of Ersatzvalidators decreased (<a name="0069-VCBS-054" href="#0069-VCBS-054">0069-VCBS-054</a>):
+16. Number of Ersatzvalidators decreased (<a name="0069-VCBS-054" href="#0069-VCBS-054">0069-VCBS-054</a>):
   * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5)
   * Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.1
   * Verify that in the following to epochs, in each epoch the ErsatzValidator with the lowest score is demoted to pending 
   * Verify that the third Ersatzvalidator is not promoted in the third epoch
 
-16. Number of Ersatzvalidators Erratic (<a name="0069-VCBS-055" href="#0069-VCBS-055">0069-VCBS-055</a>):
+17. Number of Ersatzvalidators Erratic (<a name="0069-VCBS-055" href="#0069-VCBS-055">0069-VCBS-055</a>):
   * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 4 pending validators
   * Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.9
   * In the next epoch, change network.validators.ersatz.multipleOfTendermintValidators to 0.1
@@ -410,14 +425,14 @@ Verify that one validator is replaced the following epoch, one in the epoch afte
   * Verify that in the following four epochs, first a pending validator is promoted, then two pending validators are demoted, then one is promoted agian (eith the highest/losest scores respectively)
   * Verify that in the fifth epoch, no demotions/promotions happen and the number of Ertsatzvalidators stays at 3
 
-17. Number of ErsatzValidators oddly defined (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>)d
+18. Number of ErsatzValidators oddly defined (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>)d
   * Set the factor to 0.00000000000000000000000000000000000000001
   * Verify that all Validators round it the same way, and that there are no Ersatzvalidators
 
   * Set the factor to 3.00000000000000000000000000000000000000001 and run the network with just one tendermint (consensus) validator.
   * Verify that all Validators round it the same way, and that there are three Ersatzvalidators
 
-18. Change network.validators.ersatz.rewardFactor (<a name="0069-VCBS-057" href="#0069-VCBS-057">0069-VCBS-057</a>)
+19. Change network.validators.ersatz.rewardFactor (<a name="0069-VCBS-057" href="#0069-VCBS-057">0069-VCBS-057</a>)
   * Setup a network with 5 Tendermint validators, 3 ErsatzValidators,  network.validators.ersatz.rewardfactor = 0 
   * Verify that at the end of the Epoch, the ErsatzValidators get no reward
   * Increase the rewardFactor to 0.5
@@ -426,6 +441,7 @@ Verify that one validator is replaced the following epoch, one in the epoch afte
   * Verify that at the end of ther Epoch, the Ersatzvarlidators get 40% of thethe reward that the validators get (in total)
   * Set the rewardFactor to 0.32832979375934745648654893643856748734895749785943759843759437549837534987593483498
   * Verify that all validators round the value of reward for the Ersatzvalidators to the same value.
+
 
 ## Announce Node
 1. Invalid announce node command (<a name="0069-VCBS-044" href="#0069-VCBS-044">0069-VCBS-044</a>):
