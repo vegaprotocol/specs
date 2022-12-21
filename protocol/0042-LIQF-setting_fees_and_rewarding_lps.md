@@ -146,33 +146,29 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 (average entry valuation) = 1090.9
 ```
 
-### Calculating supplied liquidity from probability of trading 
+### Calculating the liquidity score
 
-At every vega time change calculate the supplied liquidity provided by each committed LP. 
-This is done by taking into account all the volume they're providing between the tightest price monitoring bound and then 
-use the formula provided by [probability weighted liquidity measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb).
-When we say "all the volume" we mean volume provided by their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
+At every vega time change calculate the liquidity score for each committed LP.
+This is done by taking into account all orders they have deployed within the `[min_lp_price,max_lp_price]` [range](./0038-OLIQ-liquidity_provision_order_type.md#refining-list-of-orders) and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantenous liquidity score. For orders outside the tightest price monitoring bounds set probability of trading to 0.
+When we say "all orders" we mean their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
 
-Now calculate the total provided liquidity by committed LPs:
+Now calculate the total of the instantenous liquidity scores obtained for each committed LP:
 ```
-total_provided = the sum of all of the liquidity provided by all LPs that have a liquidity commitment
+total = the sum of instantenous liquidity scores for all LPs that have an active liquidity commitment
 ```
-
-Now calculate fraction of liquidity provided for a committed LP (i.e. a party that submmitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md)):
+Now, if the `total` comes out as `0` then set `fractional instantenous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
+Otherwise calculate fractional instantenous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
 ```
-fraction of liquidity provided by committed LP = liquidity provided by a committed LP / total_provided
-```
-If the `total_provided` comes out as `0` then set `fraction of liquidity provided by committed LP` to `1.0/n` for all committed LPs, where `n` is the number of committed LPs. 
-
-If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then `average fraction of liquidity provided by committed LP` is set to `fraction of liquidity provided by committed LP`. 
-
-Otherwise whenever a new LP fee distribution period starts set a counter `n=1`. 
-Then on every Vega time change, after `fraction of liquidity provided by committed LP` has been obtained, update the 
-
-```
-average fraction of liquidity provided by committed LP <- ((n-1)/n) x average fraction of liquidity provided by committed LP + (1/n) x fraction of liquidity provided by committed LP
+fractional instantenous liquidity score = instantenous liquidity score / total
 ```
 
+If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then for each committed LP `liquidity score` is set to `fractional instantenous liquidity score`.
+
+Otherwise whenever a new LP fee distribution period starts set a counter `n=1`.
+Then on every Vega time change, after `fractional instantenous liquidity score` has been obtained for all the committed LPs, update:
+```
+liquidity score <- ((n-1)/n) x liquidity score + (1/n) x fractional instantenous liquidity score
+```
 
 ### Distributing fees
 
@@ -182,7 +178,7 @@ This account is not under control of the LP party (they cannot initiate transfer
 
 A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block. 
 
-The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `average fraction of liquidity provided by committed i LP` scaled back to `1` across all LPs at a given time. 
+The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time. 
 
 #### Example
 We have `4` LPs with equity-like share shares:
@@ -243,4 +239,9 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - [ ] If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
 - [ ] All liquidity providers with `average fraction of liquidity provided by committed LP > 0` in the market receive a greater than zero amount of liquidity fee. The only exception is if a non-zero amount is rounded to zero due to integer representation. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
 
+### API
+- [ ] Equity-like share of each active LP can be obtained via the API (<a name="0042-LIQF-016" href="#0042-LIQF-016">0042-LIQF-016</a>)
+- [ ] Liquidity score of each active LP can be obtained via the API (<a name="0042-LIQF-017" href="#0042-LIQF-017">0042-LIQF-017</a>)
+### Distribution 
 
+- [ ] If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment and that sees the same trade value. (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)  

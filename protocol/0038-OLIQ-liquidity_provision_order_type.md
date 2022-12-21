@@ -62,11 +62,11 @@ Steps:
 
 1. From the market parameter - to be set as part of [market proposal](0028-GOVE-governance.md)  `market.liquidity.priceRange` which is a percentage price move (e.g. `0.05 = 5%` and from `mid_price` calculate:
 ```
-min_lp_vol_price = (1.0 - market.liquidity.priceRange) x mid_price
+min_lp_price = (1.0 - market.liquidity.priceRange) x mid_price
 ``` 
 and 
 ```
-max_lp_vol_price = (1.0 + market.liquidity.priceRange) x mid_price
+max_lp_price = (1.0 + market.liquidity.priceRange) x mid_price
 ```
 
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIME-lp_mechanics.md).
