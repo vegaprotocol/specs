@@ -14,15 +14,15 @@ Event is emitted on each occasion the blockchain time updates. For each chunk of
 
 *Never* use the wall time for anything.
 
-## Retention policies
+## Datanode Retention Modes
 
-It should be possible to configure to store only "current state" and no history of anything (in particular the order book). 
+When initialising a datanode it should be possible to select one of the following data retention modes:
 
-It should be possible to configure the data node so that all data older than any time period (e.g. `1m`, `1h`, `1h:22m:32s`, `1 months`) is deleted. 
+- Lite - the node retains sufficient data to be able to provide that latest state to clients and produce dehistory segments
+- Standard (the default) - retains data according to the default retention policies of the datanode, these should be optionally configurable. 
+- Archive - retains all data.
 
 It should be possible to configure the data node so that all data of certain type is deleted upon an event (and configurable with a delay) e.g. event: MarketID `xyz` settled + `1 week`. 
-
-There will be a "default" configuration for what's considered "minimal useful" data node. 
 
 ## Balances and transfers
 
