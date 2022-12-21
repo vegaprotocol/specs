@@ -66,7 +66,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 # Acceptance Criteria
 
 ### The typical "Happy Path" case (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>)
-- [ ] With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market. 
+- With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market. 
 
 ### Example 1 - A typical path of a cash settled futures market nearing expiry when market is trading in continuous session (<a name="0002-STTL-002" href="#0002-STTL-002">0002-STTL-002</a>)
 
@@ -103,10 +103,10 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 
 ### Collateral movements
 
-- [ ] For settlement at expiry scenarios, transfers for collateral should be attempted by accessing the trader's margin account first and foremost. (<a name="0002-STTL-006" href="#0002-STTL-006">0002-STTL-006</a>)
-- [ ] If margin account of trader is insuffcient to cover collateral transfers, then trade's general account is accessed next. (<a name="0002-STTL-007" href="#0002-STTL-007">0002-STTL-007</a>)
-- [ ] If margin and general account of trader are insuffcient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
-- [ ] If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-009" href="#0002-STTL-009">0002-STTL-009</a>)
+1. For settlement at expiry scenarios, transfers for collateral should be attempted by accessing the trader's margin account first and foremost. (<a name="0002-STTL-006" href="#0002-STTL-006">0002-STTL-006</a>)
+1. If margin account of trader is insuffcient to cover collateral transfers, then trade's general account is accessed next. (<a name="0002-STTL-007" href="#0002-STTL-007">0002-STTL-007</a>)
+1. If margin and general account of trader are insuffcient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
+1. If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-009" href="#0002-STTL-009">0002-STTL-009</a>)
 
 
 ### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)

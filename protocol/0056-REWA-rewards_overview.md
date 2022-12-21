@@ -1,6 +1,6 @@
 # Reward framework
 
-The reward framework provides a mechanism for measuring and rewarding a number of key activties on the Vega network. 
+The reward framework provides a mechanism for measuring and rewarding a number of key activities on the Vega network. 
 These rewards operate in addition to the main protocol economic incentives which come from 
 [fees](0029-FEES-fees.md) on every trade. 
 These fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](0061-REWP-simple_pos_rewards_sweetwater.md). 
@@ -52,7 +52,7 @@ Each of these represents a reward type with its own segregated reward accounts f
 1. Sum of maker fees received by the party on the market this epoch
 1. Sum of LP fees received by the party on the market this epoch
 
-Theese metrics apply only to the sum of fees for the epoch in question.
+These metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
 If the reward account balance is 0 at the end of the epoch for a given market, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
@@ -96,13 +96,13 @@ Trading reward accounts are defined by the reward asset (the asset in which the 
 That is, there can be multiple rewards with the same type paid in different assets for the same market.
 
 Note that the market settlement asset has nothing to do in particular with the asset used to pay out a reward for a market. 
-That is, a participant might recieve rewards in the settlement asset of the market, in VEGA governance tokens, and in any number of other unrelated tokens (perhaps governance of "loyalty"/reward tokens issued by LPs or market creators, or stablecoins like DAI).
+That is, a participant might receive rewards in the settlement asset of the market, in VEGA governance tokens, and in any number of other unrelated tokens (perhaps governance of "loyalty"/reward tokens issued by LPs or market creators, or stablecoins like DAI).
 
 Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward.
 These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
 Recurring transfers can target groups of markets, or all markets for a settlement asset, in which case the amount paid to each market is determined pro-rata by the markets' relative total reward metrics for the given reward type. See [transfers](./0057-TRAN-transfers.md) for more detail.
 
-Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for accross a restart.
+Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for across a restart.
 
 
 ## Reward distribution
@@ -125,7 +125,7 @@ Then calculate `M := m_1 + m_2 + … + m_n` and transfer `R ✖️ m_i / M` to p
 If `M=0` (no-one incurred or received fees as specified by the metric type for the given market) then no transfer will have been made to the reward account and therefore there are no rewards to pay out.
 The transfer will be retried the next epoch if it is still active. 
 
-Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward maetrics for any two parties. All funds will always be paid out.
+Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward metrics for any two parties. All funds will always be paid out.
 
 
 ## Acceptance criteria
@@ -138,7 +138,7 @@ There are two assets configured on the Vega chain: $VEGA and USDT.
 
 Setup a recurring transfer of 1000 $VEGA with the following dispatch strategy: asset=USDT, metric=DISPATCH_METRIC_TAKER_FEES_PAID, markets=[].
 Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next epoch generate fees in the markets with the following distribution:
-Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transafer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 200, market2 is funded with 300 and market3 is funded with 500. 
+Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transfer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 200, market2 is funded with 300 and market3 is funded with 500. 
 
 Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts. 
 
@@ -147,7 +147,7 @@ There are two assets configured on the Vega chain: $VEGA and USDT.
 
 Setup a recurring transfer of 1000 $VEGA with the following dispatch strategy: asset=USDT, metric=DISPATCH_METRIC_TAKER_FEES_PAID, markets=[market1, market2].
 Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next epoch generate fees in the markets with the following distribution:
-Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transafer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 400, market2 is funded with 600 and market3 is funded with 0. 
+Market1 contributes 20% of the fees, market2 contributes 30% of the fees and market3 contributes 50% of the fees - e.g. in market1 200 USDT were paid in taker fees, in market2 300 USDT and in market3 500. At the time the transfer is distributed, expect the reward accounts for the corresponding markets are funded proportionally to the contribution defined above, so if the transfer is of 1000 $VEGA, then market1 is funded with 400, market2 is funded with 600 and market3 is funded with 0. 
 
 Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts. 
 
@@ -194,10 +194,10 @@ At the end of epoch 2:
 ### Distributing fees paid rewards - unfunded account (<a name="0056-REWA-011" href="#0056-REWA-011">0056-REWA-011</a>)
 
 #### Rationale
-This is identical to (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>) just without funding the corresponding reward account. 
+This is identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010) just without funding the corresponding reward account. 
 
 #### Setup
-Identical to (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
+Identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
 
 #### Funding reward accounts
 No funding done.
@@ -210,10 +210,10 @@ At the end of epoch 2 although there was trading in the market `ETHUSD-MAR22`, n
 After having an epoch with trading activity, fund the reward account, but have no trading activity and assert that no payout is made. 
 
 #### Setup
-Identical to (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
+Identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
 
 #### Funding reward accounts
-Identical to (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
+Identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
 
 Then, during epoch 3 we fund the reward accounts for the metric: 
 * `party_R` is funding multiple reward accounts for the same metric and same market to be paid in different assets (`$VEGA`, `USDC`)
@@ -238,7 +238,7 @@ There are no markets.
 *  `ETHUSD-JUN22` market which settles in USDC is launched anytime in epoch 1 by `party_0`
 * For each market in {`ETHUSD-MAR22`, `ETHUSD-JUN22`}
     * `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10. 
-    * Moreover `party_0` provides liquidiity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
+    * Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
     * During epoch `2` we have `party_1` make one buy market order with volume `2`.
     * During epoch `2` we have `party_2` make one sell market order each with notional `1`.
 
@@ -248,7 +248,7 @@ There are no markets.
    * `party_R` makes a transfer of `120` `$VEGA` to `ETHUSD-JUN22 | Sum of fees paid | $VEGA` in epoch `2`.
 
 #### Expectation
-The calculation of eligibility is identical to (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>) but the expected payout is:
+The calculation of eligibility is identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010) but the expected payout is:
 * for market `ETHUSD-MAR22`:
     * `party_1` is paid `90 x 3.36 / 4.98 = 60.72.` $VEGA from the reward account into its $VEGA general account. 
     * `party_2` is paid `90 x 1.62 / 4.98 = 29.28.` $VEGA from the reward account into its $VEGA general account. 
@@ -270,7 +270,7 @@ There are no markets.
 * `infrastructure_fee` = 0.0002
 *  `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
 * `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10. 
-* Moreover `party_0` provides liquidiity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
+* Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
 * During epoch 2 `party_1` puts a limit buy order of vol 10 at 2710 and a limit sell order of vol 10 at 2790
 * After that, during epoch 2 `party_2` puts in a market buy order of volume 20.
 
@@ -298,10 +298,10 @@ At the end of epoch `2` `party_0` is paid `120 x 2.8 / (2.79+2.8)` USDC from the
 ### Distributing maker fees received rewards - unfunded account (<a name="0056-REWA-021" href="#0056-REWA-021">0056-REWA-021</a>)
 
 #### Rationale
-This is identical to (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>) just without funding the corresponding reward account. 
+This is identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020) just without funding the corresponding reward account. 
 
 #### Setup
-Identical to (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>).
+Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
 
 #### Funding reward accounts
 No funding done.
@@ -314,10 +314,10 @@ At the end of epoch 2 although there was trading in the market `ETHUSD-MAR22`, n
 After having an epoch with trading activity, fund the reward account, but have no trading activity and assert that no payout is made. 
 
 #### Setup
-Identical to (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>)
+Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020)
 
 #### Funding reward accounts
-Identical to (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>)
+Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020)
 
 Then, during epoch 3 we fund the reward accounts for the metric: 
 * `party_R` is funding multiple reward accounts for the same metric and same market to be paid in different assets (`$VEGA`, `USDC`)
@@ -342,7 +342,7 @@ There are no markets.
 *  `ETHUSD-JUN22` market which settles in USDC is launched anytime in epoch 1 by `party_0`
 * For each market in {`ETHUSD-MAR22`, `ETHUSD-JUN22`}
     * `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10. 
-    * Moreover `party_0` provides liquidiity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
+    * Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
     * During epoch 2 `party_1` puts a limit buy order of vol 10 at 2710 and a limit sell order of vol 10 at 2790
     * After that, during epoch 2 `party_2` puts in a market buy order of volume 20.
 
@@ -352,7 +352,7 @@ There are no markets.
    * `party_R` makes a transfer of `120` `$VEGA` to `ETHUSD-JUN22 | Sum of maker fees received | $VEGA` in epoch `2`.
 
 #### Expectation
-The calculation of eligibility is identical to (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>) but the expected payout is:
+The calculation of eligibility is identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020) but the expected payout is:
 * for market `ETHUSD-MAR22`:
     *  At the end of epoch `2` `party_1` is paid `90 x 2.79 / (2.79+2.8)` $VEGA from the reward account into its `$VEGA` general account. 
     * At the end of epoch `2` `party_0` is paid `90 x 2.8 / (2.79+2.8)` $VEGA from the reward account into its `$VEGA` general account. 
@@ -366,10 +366,10 @@ The calculation of eligibility is identical to (<a name="0056-REWA-020" href="#0
 A market has 2 reward accounts for the metric, one paying in $VEGA and the other paying in USDC. 
 
 #### Setup
-Identical to (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>).
+Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
 
 #### Funding reward accounts
-Identical to (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>).
+Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
 
 #### Expectation
 At the end of epoch `2` the metric `sum of lp fees received` for `party_0` is:
@@ -383,10 +383,10 @@ At the end of epoch `2` `party_0` is paid `120` `USDC` from the reward account i
 ### Distributing LP fees received rewards - unfunded account (<a name="0056-REWA-031" href="#0056-REWA-031">0056-REWA-031</a>)
 
 #### Rationale
-Identical to (<a name="0056-REWA-030" href="#0056-REWA-030">0056-REWA-030</a>). just without funding the corresponding reward account. 
+Identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030), but without funding the corresponding reward account. 
 
 #### Setup
-Identical to (<a name="0056-REWA-030" href="#0056-REWA-030">0056-REWA-030</a>)
+Identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
 
 #### Funding reward accounts
 No funding done.
@@ -399,10 +399,10 @@ At the end of epoch 2 although there was trading in the market `ETHUSD-MAR22`, n
 After having an epoch with trading activity, fund the reward account, but have no trading activity and assert that no payout is made. 
 
 #### Setup
-Identical to (<a name="0056-REWA-030" href="#0056-REWA-030">0056-REWA-030</a>)
+Identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
 
 #### Funding reward accounts
-Identical to (<a name="0056-REWA-030" href="#0056-REWA-030">0056-REWA-030</a>)
+Identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
 
 Then, during epoch 3 we fund the reward accounts for the metric: 
 * `party_R` is funding multiple reward accounts for the same metric and same market to be paid in different assets (`$VEGA`, `USDC`)
@@ -412,12 +412,13 @@ Then, during epoch 3 we fund the reward accounts for the metric:
 #### Expectation
 Looking only at epoch 3 - as no trading activity was done, we expect the reward balances in both $VEGA and USDC for the metric to remain unchanged. 
 
-### Distributing LP fees received - multiple markets (<a name="0056-REWA-33" href="#0056-REWA-033">0056-REWA-033</a>)
-#### Rationale 
+### Distributing LP fees received - multiple markets (<a name="0056-REWA-033" href="#0056-REWA-033">0056-REWA-033</a>)
+
+#### Rationale
 There are multiple markets, each paying its own reward where due. 
 
 #### Setup
-Identical to (<a name="0056-REWA-023" href="#0056-REWA-023">0056-REWA-023</a>)
+Identical to [acceptance code REWA-023](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards---multiple-markets-0056-rewa-023)
 
 #### Funding reward accounts
 * `party_R` is funding multiple the reward accounts for both markets: 
@@ -425,7 +426,7 @@ Identical to (<a name="0056-REWA-023" href="#0056-REWA-023">0056-REWA-023</a>)
    * `party_R` makes a transfer of `120` `$VEGA` to `ETHUSD-JUN22 | Sum of LP fees received | $VEGA` in epoch `2`.
 
 #### Expectation
-The calculation of eligibility is identical to (<a name="0056-REWA-030" href="#0056-REWA-030">0056-REWA-030</a>) but the expected payout is:
+The calculation of eligibility is identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030) but the expected payout is:
 
 * for market `ETHUSD-MAR22`:
     * At the end of epoch `2` `party_0` is paid `90` `$VEGA` from the reward account into its `$VEGA` general account. 
@@ -435,7 +436,8 @@ The calculation of eligibility is identical to (<a name="0056-REWA-030" href="#0
 
 
 ### Distributing market creation rewards - no eligibility (<a name="0056-REWA-040" href="#0056-REWA-040">0056-REWA-040</a>)
-#### Rationale 
+
+#### Rationale
 Market has been trading but not yet eligible for proposer bonus. 
 
 #### Setup
@@ -449,9 +451,9 @@ Market has been trading but not yet eligible for proposer bonus.
 #### Expectation
 At the end of the epoch no payout has been made for the market ETHUSDT and the reward account balances should remain unchanged.
 
-
 ### Distributing market creation rewards - eligible are paid no more than once (<a name="0056-REWA-041" href="#0056-REWA-041">0056-REWA-041</a>)
-#### Rationale 
+
+#### Rationale
 Once a market creator has been paid, they are not paid again from the same reward pool
 
 #### Setup
@@ -469,7 +471,8 @@ At the end of the epoch 2 the proposer of the market ETHUSDT is paid 10000 `$VEG
 At the end of epoch 3 make sure that no transfer is made to the reward account as the proposer of the market has already been paid the proposer bonus once and there are no other eligible markets.
 
 ### Distributing market creation rewards - account funded after reaching requirement (<a name="0056-REWA-042" href="#0056-REWA-042">0056-REWA-042</a>)
-#### Rationale 
+
+#### Rationale
 Market goes above the threshold in trading value in an epoch before the reward account for the market for the reward type has any balance - proposer does receive reward even if account is funded at a later epoch.
 
 #### Setup
@@ -485,9 +488,9 @@ Market goes above the threshold in trading value in an epoch before the reward a
 At the end of epoch 3, a payout of 10000 VEGA and 20000 USDC is made for the market ETHUSDT to the creator's general account balance.
 The reward pool balance should be 0.
 
-
 ### Distributing market creation rewards - multiple asset rewards (<a name="0056-REWA-043" href="#0056-REWA-043">0056-REWA-043</a>)
-#### Rationale 
+
+#### Rationale
 A market should be able to be rewarded multiple times if several reward pools are created with different payout assets.
 
 #### Setup
@@ -504,9 +507,9 @@ At the end of epoch 2 1000 VEGA rewards should be distributed to the market crea
 Then, at the end of epoch 3, the 20000 USDC rewards should be distributed again to the market creator's general balance.
 The reward pool balance should be 0.
 
-
 ### Distributing market creation rewards - multiple asset rewards simultaneous payout (<a name="0056-REWA-045" href="#0056-REWA-045">0056-REWA-045</a>)
-#### Rationale 
+
+#### Rationale
 A market should be able to be rewarded multiple times if several reward pools are created with different payout assets.
 
 #### Setup
@@ -526,7 +529,8 @@ The reward pool balance should be 0.
 
 
 ### Distributing market creation rewards - Same asset multiple party rewards (<a name="0056-REWA-044" href="#0056-REWA-044">0056-REWA-044</a>)
-#### Rationale 
+
+#### Rationale
 A market reward pool funded with the same asset by different parties should pay out to eligible markets as many times as there are parties, assuming threshold is reached.
 
 #### Setup
@@ -551,8 +555,10 @@ The reward account balance should still be empty, as there were no eligible mark
 
 
 ### Distributing market creation rewards - Multiple markets eligible, one already paid (<a name="0056-REWA-046" href="#0056-REWA-046">0056-REWA-046</a>)
-#### Rationale 
+
+#### Rationale
 A market reward pool funded with the same asset by the same party with different market scopes should pay to all markets even if already paid
+
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
 * Setup a market BTCDAI settling in DAI with a different proposing party.
@@ -575,6 +581,7 @@ At the end of epoch 3, 10000 VEGA should be split between the BTCDAI creator and
     The reward pool balance should be 0.
 
 ### Reward accounts cannot be topped up with a one-off transfer (<a name="0056-REWA-049" href="#0056-REWA-049">0056-REWA-049</a>)
+
 The following account types require metric-based distribution. As a one-off transfer cannot specify how it is rewarded, one-off transfers to metric-based reward pools must be **rejected**.
 A one-off transfer from a user to any of the following account types is rejected. No assets are transferred:
 * ACCOUNT_TYPE_REWARD_LP_RECEIVED_FEES,
@@ -582,10 +589,11 @@ A one-off transfer from a user to any of the following account types is rejected
 * ACCOUNT_TYPE_REWARD_TAKER_PAID_FEES,
 * ACCOUNT_TYPE_REWARD_MARKET_PROPOSERS
 
-
 ### Distributing market creation rewards - Market ineligible through metric asset (<a name="0056-REWA-048" href="#0056-REWA-048">0056-REWA-048</a>)
-#### Rationale 
+
+#### Rationale
 A market reward pool funded with the a specific metric asset should not pay out to markets not trading in that asset
+
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
 * Setup a market BTCDAI settling in DAI with a different proposing party.
@@ -601,10 +609,11 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHU
     The general account balance of the BTCDAI creator should be 0.
     The reward pool balance should be 0.
 
-
 ### Distributing market creation rewards - Multiple markets eligible, one already paid, specified asset (<a name="0056-REWA-047" href="#0056-REWA-047">0056-REWA-047</a>)
-#### Rationale 
+
+#### Rationale
 A market reward pool funded with the same asset by the same party with different market scopes should pay to all markets even if already paid
+
 #### Setup
 * Setup a market ETHUSDT settling in USDT.
 * Setup a market BTCUSDT settling in USDT using a different proposing party.
@@ -627,4 +636,22 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHU
 At the end of epoch 3, 10000 VEGA should be distributed split between the BTCUSDT creator and the ETHUSDT creator.
     The general account balance of the ETHUSDT creator should be 15000.
     The general account balance of the BTCUSDT creator should be 5000.
+    The reward pool balance should be 0.
+
+### Updating the network parameter rewards.marketCreationQuantumMultiple (<a name="0056-REWA-050" href="#0056-REWA-050">0056-REWA-050</a>)
+
+#### Rationale
+When the network parameter `rewards.marketCreationQuantumMultiple` is changed via governance, the change should take affect
+immediately and the new value used at the end of the epoch to decide if market creators are eligible for reward.
+
+#### Setup
+* Setup a market ETHUSDT settling in USDT.
+* The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
+* Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
+    * Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA` 
+* During epoch 1 start trading such that traded value for fee purposes in USDT is less than 10^6 but greater than 10^5
+* During epoch 2 update the value of `marketCreationQuantumMultiple` via governance to `10^5`.
+#### Expectation
+At the end of epoch 2, 10000 VEGA rewards should be distributed to the ETHUSDT creator.
+    The general account balance of the ETHUSDT creator should be 10000.
     The reward pool balance should be 0.

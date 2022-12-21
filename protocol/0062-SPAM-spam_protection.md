@@ -17,11 +17,9 @@ to issue a proposal/vote (`spam.protection.proposal.min.tokens`/`spam.protection
 
 For SW, we only have governance, so the following two policies will do:
 
-Vote proposals can only be done using a lot of tokens (say, 100.0000), or through v1 tokens (the latter is the current proposal)
-Any qualified voter can vote three times per epoch per active proposal (i.e., one initial vote and twice change their mind).
+Vote transactions can be rejected if a if a party has less than `spam.protection.voting.min.tokens`. Any governance proposal transaction can be rejected if a party has less than `spam.protection.proposal.min.tokens`. Setting these reasonably high provides some level of protection. 
+Any qualified voter can vote `spam.protection.max.votes` times per epoch per active proposal (e.g., if it's `3` then  one initial vote and twice change their mind).
 
-Initially, a qualified voter required at least 100 tokens (i.e., a value of $1500 taking the last coinlist sale).
-Thus, spamming the network for 1 minute would cost $135.000. 
 If 3 blocks in a row for filled with spam i.e., parties sending substantially more than 3 votes, let's say 50 votes), 
 then the number of required tokens is doubled, up to a maximum of 1600 (if someone pays 1.5 million to spam us for 60 
 seconds so be it).
@@ -60,8 +58,8 @@ For Sweetwater, the policies we enforce are relatively simple:
  pre_block rejected, if there are `<num_votes>` or more votes on the same proposal in the blockchain in this epoch, and
  post_block rejected, if there are `<num_votes>` or more on the same proposal in the blockchain plus earlier in the current block.
 
-- Any tokenholder that had more than 50% if its votes post-rejected is banned for 4 epochs, and all its votes are immediately 
-  rejected. 
+- Any tokenholder that had more than 50% if its post-rejected is banned for max (30 seconds, 1/48 of an epoch) or until the next epoch starts, and all its governance related transactions ( but no no trading related transactions) are immediately rejected. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds (or until the start of the next epoch). The test for 50% of the governance transactions is repeated once the next governance related transaction is post-rejected, so a it is possible for a violating party to get banned quite quickly again; the test is only done in case of a new post-rejection, so the account does not get banned twice just because the 50% quata is still excveeded when the ban ends.
+The voting counters are unaffected by the ban, so voting again on an issue that already had the full number of votes in the epoch will lead to a rejection of the new vote; this is now likely to not trigger a new ban, as this rejection will happen pre-consensus, and thus not affect the 50% rule.
   
 - A proposal can only be issued by a tokenholder owning more than `<min_proposing_tokens>` at the start of the epoch. Also
    (like above), only `<num_proposals>` proposals can be made per tokenholder per epoch, i.e., every proposal past `<num_proposals>` in an epoch is
@@ -109,6 +107,7 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
  - It is possible for spam transactions to fill a block (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)
  - Parties that continue spamming are blocked and eventually unblocked again  (<a name="0062-SPAM-011" href="#0062-SPAM-011">0062-SPAM-011</a>)
  - Any rejection due to spam protection is reported to the user upon transaction submission detailing which criteria the key exceeded / not met  (<a name="0062-SPAM-013" href="#0062-SPAM-013">0062-SPAM-013</a>)  
+ - If a party is banned for too many voting-rejections, it still can send trading related transactions which are not banned. (<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-013</a>)  
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
 
