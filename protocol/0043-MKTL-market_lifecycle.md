@@ -26,7 +26,7 @@ A market can progress through a number of statuses through its life. The overall
 | Proposed           |   Yes          | No trading          | Governance proposal valid and accepted                                       | Governance proposal voting period ends
 | Rejected           |   No           | No trading          | Outcome of governance votes is to reject the market             | N/A                                                    
 | Pending            |   Yes          | Opening auction     | Governance vote passes/wins                                     | Governance vote (to close) OR enactment date reached
-| Cancelled           |  No           | No trading          | Market triggers cancellation condition or governance votes to close before market becomes Active              | N/A                                                    
+| Cancelled           |  No           | No trading          | Market triggers cancellation condition                          | N/A                                                    
 | Active             |   Yes          | Normal trading      | Enactment date reached and usual auction exit checks pass       | Governance vote (to close) OR maturity of market      
 | Suspended          |   Yes          | Exceptional auction | Price monitoring or liquidity monitoring trigger, or product lifecycle trigger                | Exit conditions met per monitoring spec. that triggered it, no other monitoring triggered or governance vote if allowed (see below)
 | Closed             |   No           | No trading          | Governance vote (to close)                                      | N/A
@@ -37,6 +37,8 @@ A market can progress through a number of statuses through its life. The overall
 [1] Accepting LPs: it is possible to make or amend [Liquidity Provision Commitments](./0038-OLIQ-liquidity_provision_order_type.md)
 
 ![Life cycle flow diagram](./0043-market-lifecycle-flow-diagram.svg)
+
+Note that there is no governance proposal to cancel a market. However it is possible to submit a market change proposal which will change the trading terminated trigger and the settlement price source. Thus, via governance, it is possible to get market into a cancelled state if it never left Pending state (opening auction) or settle a market immediately (if any positions were ever created on the market). Either of these effectively removes the market.
 
 ## Market status descriptions
 
@@ -109,13 +111,13 @@ Note: this state represents any market that will be created, which currently mea
 
 ### Cancelled
 
-A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period, and one of the following apply:
+A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period, 
+and the trading terminated data source input rings, see [data sourcing](./0045-DSRC-data_sourcing.md).
+When a market transitions to a cancelled state all orders should be cancelled and collateral returned to respective parties general account for the relevant asset, all LP commitments should be cancelled and their bond returned to the general account for the relevant asset and any insurance pool balance should be transferred into the network treasury account for that asset. 
 
-* the market reaches a timeout for the length of time in the Pending state; or
-* the Instrument hits expiry; or
-* governance votes (by approving a proposal to close the market) not to create the market after all.
+Once "cancelled" there must be no open positions tracked by the protocol for the market and any open positions must have been closed including returning all margin and other related collateral if necessary and also notifying downstream event consumers that the positions are closed. Specific position related actions may be unnecessary if the cancelled state is being entered from a state in which there cannot possibly have been any open positions.
+All data sources that are only referenced by this market should be unregistered. 
 
-In future, it's expected that we will implement the functionality described in the white paper by which a proposer can revoke their proposal during the voting period by voting against it. In this case the status would also become Cancelled.
 
 **Entry:**
 
@@ -197,9 +199,10 @@ No exit. This is a terminal state.
 
 ### Trading Terminated
 
-A market may terminate trading if the instrument is one that expires or if the market is otherwise configured to have a finite lifetime. In the case of futures, termination occurs at some point prior to, or at, the settlement of the product. Markets in this state accept no trading, but retain the positions and margin balances that were in place after processing the expiry trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
+A market may terminate trading if the product is one that expires or if the market is otherwise configured to have a finite lifetime.
+In the case of futures, termination occurs at some point prior to the settlement of the product and is triggered by the trading terminated data source configured on the market. Markets in this state accept no trading, but retain the positions and margin balances that were in place after processing the trading terminated trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
 
-A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading termination, though usually there will be a delay, for instance, to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
+A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading termination if the data source message also contains the required settlement data, though usually there will be a delay, for instance, to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
 
 **Entry:**
 
@@ -292,4 +295,14 @@ Parties that had open positions see settlement cash-flows happen.
 Margin account balances are transferred to the general account. 
 Any insurance pool balance is transferred to the network treasury account for the asset. 
 The market state is `settled`. 
+
+### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
+
+1. A market is proposed, approved by governace process and enters the opening auction (Pending state).
+1. Trading terminated data source rings before the market leaves the opening auction (so market never left Pending state so far).
+1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
+1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
+1. Any insurance pool balance should be transferred into the network treasury account for that asset. 
+1. All data sources that are only referenced by that market are unregistered. 
+1. The market state is set to cancelled. 
 

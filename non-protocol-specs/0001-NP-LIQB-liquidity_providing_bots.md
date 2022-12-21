@@ -200,10 +200,10 @@ Don't use any of the pseudocode above!
 
 ### Acceptance criteria
 
-- [ ] Bot can submit a market proposal (optional), commit liquidity and then manage it's position as described above, see also [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md). (<a name="0001-NP-LIQB-001" href="#0001-NP-LIQB-001">0001-NP-LIQB-001</a>) 
-- [ ] Bot can connect to an existing market, submit an [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and then manage it's position as described above. (<a name="0001-NP-LIQB-002" href="#0001-NP-LIQB-002">0001-NP-LIQB-002</a>)  
-- [ ] Bot can participate in an opening auction placing orders around target price (set via params, see above).(<a name="0001-NP-LIQB-003" href="#0001-NP-LIQB-003">0001-NP-LIQB-003</a>)  
-- [ ] Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).(<a name="0001-NP-LIQB-004" href="#0001-NP-LIQB-004">0001-NP-LIQB-004</a>)  
-- [ ] Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached.(<a name="0001-NP-LIQB-005" href="#0001-NP-LIQB-005">0001-NP-LIQB-005</a>)  
-- [ ] The repository is public from the start.
-- [ ] Bot is not called Bot Mc BotFace.
+1. Bot can submit a market proposal (optional), commit liquidity and then manage it's position as described above, see also [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md). (<a name="0001-NP-LIQB-001" href="#0001-NP-LIQB-001">0001-NP-LIQB-001</a>) 
+1. Bot can connect to an existing market, submit an [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and then manage it's position as described above. (<a name="0001-NP-LIQB-002" href="#0001-NP-LIQB-002">0001-NP-LIQB-002</a>)  
+1. Bot can participate in an opening auction placing orders around target price (set via params, see above).(<a name="0001-NP-LIQB-003" href="#0001-NP-LIQB-003">0001-NP-LIQB-003</a>)  
+1. Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).(<a name="0001-NP-LIQB-004" href="#0001-NP-LIQB-004">0001-NP-LIQB-004</a>)  
+1. Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached.(<a name="0001-NP-LIQB-005" href="#0001-NP-LIQB-005">0001-NP-LIQB-005</a>)  
+ - The repository is public from the start.
+ - Bot is not called Bot Mc BotFace.
