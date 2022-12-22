@@ -7,7 +7,7 @@ This specification contains a set of tests/acceptance criteria that clients (wal
 2. The parameter `spam.pow.numberOfTxPerBlock` is increased. Verify that:
      - This is communicated to the wallet, and the wallet uses the new parameter for each transaction tied to a block with a height higher than the one in which the change happened. This means that a wallet that has had a number of transactions exceeding the previous limit, but not the current one, does not increase the PoW difficulty or delay the transactions (<a name="0011-NP-CLIE-002" href="#0011-NP-CLIE-002">0011-NP-CLIE-002</a>)  
 3. The parameter `spam.pow.difficulty` is increased. Verify that:
-    - This is communicated to all the wallet, and the wallet uses the new parameter for each transaction tied to a block with a height higher than the one in which the change happened. (<a name="0011-NP-CLIE-003" href="#0011-NP-CLIE-003">0011-NP-CLIE-003</a>)  
+    - This is communicated to the wallet, and the wallet uses the new parameter for each transaction tied to a block with a height higher than the one in which the change happened. (<a name="0011-NP-CLIE-003" href="#0011-NP-CLIE-003">0011-NP-CLIE-003</a>)  
 4. The parameter `spam.pow.difficulty` is decreased. Verify that
     - This is communicated to the wallet, and the wallet use these new parameters for each transaction tied to a block with a height higher than the one in which the change happened. (<a name="0011-NP-CLIE-004" href="#0011-NP-CLIE-004">0011-NP-CLIE-004</a>)  
 5. The parameter `spam.pow.increaseDifficulty` is changed from `0` to `1`.  Verify that
