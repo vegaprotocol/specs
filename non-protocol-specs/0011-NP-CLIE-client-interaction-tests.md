@@ -2,7 +2,7 @@
 
 This specification contains a set of tests/acceptance criteria that clients (wallets/bots) interacting with Vega are advised to test against to assure that they can authenticate properly, pass spam protection, process notifications, etc. 
 
-1. The parameter `spam.pow.numberofTxPerBlock` is decrerased.  Verify that:
+1. The parameter `spam.pow.numberofTxPerBlock` is decreased.  Verify that:
     - The new parameter is communicated to and adapted by the wallet, i.e., if a user has too many transactions according to the new parameter, the wallet does not submit transactions with a too low PoW difficulty (either by submitting a PoW of higher difficulty, or by submitting the transactions later). (<a name="0011-NP-CLIE-001" href="#0011-NP-CLIE-001">0011-NP-CLIE-001</a>)           
 2. The parameter `spam.pow.numberOfTxPerBlock` is increased. Verify that:
      - This is communicated to the wallet, and the wallet uses the new parameter for each transaction tied to a block with a height higher than the one in which the change happened. This means that a wallet that had has a number of transactions exceeding the previous limit, but not the current one, does not increase the PoW difficulty or delay the transactions (<a name="0011-NP-CLIE-002" href="#0011-NP-CLIE-002">0011-NP-CLIE-002</a>)  
