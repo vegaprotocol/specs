@@ -170,6 +170,8 @@ Then on every Vega time change, after `fractional instantenous liquidity score` 
 liquidity score <- ((n-1)/n) x liquidity score + (1/n) x fractional instantenous liquidity score
 ```
 
+The liquidity score should always be rounded to 10 decimal places to prevent spurious accuracy and overly long string representation of a number.
+
 ### Distributing fees
 
 On every trade, liquidity fee should be collected immediately into an account for each liquidity provider (call it LP fee account). Each party will have an LP fee account on every market on which they committed liquidity by providing LP stake. 
