@@ -109,5 +109,4 @@ Note: The last row in the table above is added for clarity. If the order was fil
 - Order reason of "ORDER_ERROR_OFFSET_MUST_BE_GREATER_THAN_ZERO" pegged order offset must be >0 when referencing MID price (<a name="0024-OSTA-025" href="#0024-OSTA-025">0024-OSTA-025</a>)
 - Order reason of "ORDER_ERROR_SELL_CANNOT_REFERENCE_BEST_BID_PRICE" sell pegged order cannot reference the bid price (<a name="0024-OSTA-026" href="#0024-OSTA-026">0024-OSTA-026</a>)
 - Order reason of "ORDER_ERROR_INSUFFICIENT_ASSET_BALANCE" user does not have enough of the asset or does not have an account at all (<a name="0024-OSTA-027" href="#0024-OSTA-027">0024-OSTA-027</a>)
-- Order reason of "ORDER_ERROR_MISSING_GENERAL_ACCOUNT" user does not have a general account with the asset required for the market (<a name="0024-OSTA-028" href="#0024-OSTA-028">0024-OSTA-028</a>)
 - Order reason of "ORDER_ERROR_SELF_TRADING" when the order would match with one from the same user while not in auction (<a name="0024-OSTA-029" href="#0024-OSTA-029">0024-OSTA-029</a>)
