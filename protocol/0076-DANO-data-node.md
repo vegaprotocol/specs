@@ -14,15 +14,15 @@ Event is emitted on each occasion the blockchain time updates. For each chunk of
 
 *Never* use the wall time for anything.
 
-## Retention policies
+## Datanode Retention Modes
 
-It should be possible to configure to store only "current state" and no history of anything (in particular the order book). 
+When initialising a datanode it should be possible to select one of the following data retention modes:
 
-It should be possible to configure the data node so that all data older than any time period (e.g. `1m`, `1h`, `1h:22m:32s`, `1 months`) is deleted. 
+- Lite - the node retains sufficient data to be able to provide that latest state to clients and produce dehistory segments
+- Standard (the default) - retains data according to the default retention policies of the datanode, these should be optionally configurable. 
+- Archive - retains all data.
 
 It should be possible to configure the data node so that all data of certain type is deleted upon an event (and configurable with a delay) e.g. event: MarketID `xyz` settled + `1 week`. 
-
-There will be a "default" configuration for what's considered "minimal useful" data node. 
 
 ## Balances and transfers
 
@@ -147,6 +147,9 @@ It must be possible to add to the data node APIs that return the result of calcu
 ## Data synchronisation
 1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-COSMICELEVATOR-001" href="#0076-COSMICELEVATOR-001">0076-COSMICELEVATOR-001</a>)
 1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network without having to replay the full chain (<a name="0076-DANO-003" href="#0076-DANO-003">0076-DANO-003</a>)
+1. Nodes must be able to start processing new blocks having loaded the only the most recent history  (<a name="0076-DANO-023" href="#0076-DANO-023">0076-DANO-023</a>)
+1. Nodes that have been temporarily disconnected from the network should be able to load the missed history to get back up to the current network height (or most recently produced history) and then be able to start processing new blocks  (<a name="0076-DANO-024" href="#0076-DANO-024">0076-DANO-024</a>)
+1. It must be possible to fetch history from the network whilst the node processes new blocks.  So for example, if setting up a new Archive node, the node can keep up to date with the network whilst retrieving history all the way back to the first block.  Once this is done the node should be able to reconcile the fetched history with that produced whilst the history was being retrieved such that the node will have a full history from the first block all the way to the networks current height.  (<a name="0076-DANO-025" href="#0076-DANO-025">0076-DANO-025</a>)
 
 ### Data integrity
 1. Data produced in the core snapshots aligns with the data-node data proving that what is returned by data-node matches core state at any given block height (<a name="0076-DANO-004" href="#0076-DANO-004">0076-DANO-004</a>)
@@ -169,6 +172,12 @@ It must be possible to add to the data node APIs that return the result of calcu
 ### Schema compatibility:
 1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
 1. Restoring a node from decentralized history should work across schema upgrade boundaries and the state of the datanode should match that of a datanode populated purely by event consumption (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
+
+### Data Retention:
+
+1. Lite nodes should have enough state to provide the current state of:  Assets, Parties, Accounts, Balances, Live Orders, Network Limits, Nodes, Delegations, Markets, Margin Levels, Network Parameters, Positions, Liquidity Provisions (<a name="0076-DANO-026" href="#0076-DANO-026">0076-DANO-026</a>)
+2. Standard nodes should retain data in accordance with the configured data retention policy (<a name="0076-DANO-027" href="#0076-DANO-027">0076-DANO-027</a>)
+3. Archival nodes should retain all data from the height at which they joined the network (<a name="0076-DANO-028" href="#0076-DANO-028">0076-DANO-028</a>)
 
 ### General Acceptance
 1. The DataNode must be able to handle brief network outages and disconnects from the vega node (<a name="0076-DANO-015" href="#0076-DANO-015">0076-DANO-015</a>) 
