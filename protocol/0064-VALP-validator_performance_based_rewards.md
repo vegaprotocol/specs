@@ -19,8 +19,18 @@ let `b` be the number of blocks in the previous epoch
 let `v` be the voting power of the validator in the previous epoch
 let `t` be the total voting power in the previous epoch
 
-let `expected = v*b/t` the number of blocks we expected the validator to propose. 
-Then `validator_performance = max(0.05, min((p/expected, 1))`
+let `expected = v*b/t` the number of blocks we expected the validator to propose. This
+is the number of blocks in which the validator can be expected to be chosen as a leader
+
+The number of blocks a validators is considered to have succeeded in proposing is scaled to allow for
+easier testing using the network paramerters minBlocksTolerance and validators.performance.scalingfactor, i.e., 
+p' = p + max(minBlocksTolerance, p * validators.performance.scalingfactor)
+
+This function is primarily for testing purposes to allow for very short epochs without triggering 
+odd effects due to lack of time for performances to average out; for mainnet, the parameters should not
+be modified and set to neutral defaults (i.e., 0)
+
+Then `validator_performance = max(0.05, min((p'/expected, 1))`
 
 ### Ersatz and pending validators
 For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
