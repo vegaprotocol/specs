@@ -162,7 +162,6 @@ When populating a deal ticket I...
 - All feedback must be a subscription so is updated as the status changes (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
  - **could** repeat the values that were submitted (order type + all fields)
 
-
 ... so that I am aware of the status of my order before seeing it in the [orders table](6002-MORD-manage_orders.md).
 
 ... so I get the sort of order, and price, I wish.
