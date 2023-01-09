@@ -54,6 +54,7 @@ When looking at a list of orders, I...
 - if order created by [pegged or liquidity provision shape](9001-DATA-data_display.md#order-origin): **should** see order origin
   - **could** see what part of the liquidity shape or pegged order shape this relates to or it's offset+reference See [pegged orders](#pegged-order-shapes) and [liquidity provisions](#liquidity-order-shapes) shapes below.
   - **could** see link to full shape
+- if the order has a rejected reason: **must** see the rejected reason  (<a name="7003-MORD-018" href="#7003-MORD-018">7003-MORD-018</a>)
 
 - **should** see how much of the order's [size](9001-DATA-data_display.md#size) has been filled e.g. if the order was for `50` but so far only 10 have traded I should see Filled = `10`. Note: this is marked as a should because in the case of Rejected order and some other scenarios it isn't relevant.
 - **should** see how much of the order's [size](9001-DATA-data_display.md#size) remains. 
