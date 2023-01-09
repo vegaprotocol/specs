@@ -213,8 +213,19 @@ Note the following key points from the market lifecycle spec:
 * A market usually enters Active status at the proposal's enactment date/time, but some conditions may delay this or cause the market to be Cancelled instead
 
 A proposal to create a market contains
-1. a complete market specification as per the Market Framework (see spec) that describes the market to be created.
+1. a complete market specification as per the [Market Framework](./0001-MKTF-market_framework.md) that describes the market to be created.
 1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
+1. if the market is meant to be a *sucessor* of a given market then it contains the marketId of the market it's suceeding (parent market) and certain entries in the market proposal must be identical to those of the market it's succeeding. 
+The parent market must be in one of `active` or `suspended` or `trading terminated` states. 
+If the parent market is `settled` or `proposed` or `pending` or `cancelled` then the proposal should be rejected at validation stage with an error "parent market cannot be in * state" with * being one of the dis-allowed states above. 
+The point of setting up a market to be successor of existing market is to 
+a) allow LPs who wish to continue claim their equity-like-share (ELS) by commiting liquidity to the successor market during the pending period and
+b) allow the successor market to inherit the insurance pool of the parent market, once the parent market moves from "trading terminated" to "settled" state. 
+
+Note that each market can have exactly one market as a *sucessor* market. 
+- if there already is a market (possibly pending i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)) naming a parent market which is referenced in the proposal then the proposal is rejected with error parent market no longer available. 
+- if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the sucessor of the named parent; the other proposal is cancelled with reason "parent market no longer available". 
+
 
 All **new market proposals** initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 

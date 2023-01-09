@@ -64,9 +64,11 @@ The guiding principle of this section is that by committing stake a liquidity pr
 The parameter which determines the period over which market value and hence growth is `market.value.windowLength` which could be e.g. a week. 
 From the end of the opening auction, which we will refer to as `t0` until `t0+market.value.windowLength` is the `0th` or "bootstrap period". Then from `t0+market.value.windowLength` until `t0 + 2 x market.value.windowLength` is the `1st` period and so on. 
 For each LP we track the stake they have and also their virtual stake. 
-Before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake. 
+For markets that have no "parent" market, see [governance](./0028-GOVE-governance.md)  we postulate that before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake. 
 
-For any period `n >= 1` LP can add stake or remove stake but virtual stake is treated differently:
+For any period `n >= 1` LP can add stake or remove stake but virtual stake is treated differently or for markets with "parent market":
+
+If the market has a "parent market" then each LP which commits liquidity (to this market) gets the virtual stake copied from the parent market as the 1st step of the process and the stake they are committing here minus the stake on parent market is treated as the `delta` here. 
 
 Say an `LP i` wants increases their commitment by `delta > market.liquidityProvision.minLpStakeQuantumMultiple x quantum` (this could also be the initial commitment). Then we update
 ```
@@ -81,7 +83,8 @@ LP i virtual stake <- LP i virtual stake x (LP i stake + delta)/(LP i stake).
 Independently of the above we also update all virtual stakes at start of each new period. 
 To that end "total value for fee purposes" is cumulated over the period set by `market.value.windowLength`. For a period `n` call this `T(n)`. 
 We let the `0`th period start the moment the opening auction ends and last for `market.value.windowLength`.   
-We include the volume of the trades that resolved the opening auction in `T(0)`. 
+We include the volume of the trades that resolved the opening auction in `T(0)` for markets with no parent market.
+For markets with a parent market we take `T(0)` to be the most recent `T_{parent}(latest)`.  
 From this we calculate the running average trade value for fee purposes:
 ```
 A(0) <- T(0),
@@ -247,3 +250,11 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 ### Distribution 
 
 - [ ] If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment and that sees the same trade value. (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)  
+
+
+### Sucessor market
+- [ ] If an LP has ELS of `0.5` and stake of `10000` on a parent marketId=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `10000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has ELS of `0.5` and stake of `10000` on `m2`. (<a name="0042-LIQF-019" href="#0042-LIQF-019">0042-LIQF-019</a>)  
+- [ ] If an LP has ELS of `0.5` and stake of `10000` on a parent marketId=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `20000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has ELS which must be result of the virtual stake obtained from `m1` with the `delta=10000` added on. (<a name="0042-LIQF-020" href="#0042-LIQF-020">0042-LIQF-020</a>)  
+- [ ] If an LP has ELS of `0.5` and stake of `10000` on a parent marketId=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `5000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has ELS which must be result of the virtual stake obtained from `m1` with the `delta=-5000` added on (i.e. 5000 removed). (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>) 
+
+
