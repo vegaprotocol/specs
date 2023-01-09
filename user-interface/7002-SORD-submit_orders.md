@@ -158,8 +158,10 @@ When populating a deal ticket I...
   - Filled. Must be able to see/link to all trades that were created from this order. (<a name="7002-SORD-046" href="#7002-SORD-046">7002-SORD-046</a>)
   - Rejected: **must** see the reason it was rejected (<a name="7002-SORD-047" href="#7002-SORD-047">7002-SORD-047</a>)
   - Parked: **must** see an explanation of why parked orders happen (<a name="7002-SORD-048" href="#7002-SORD-048">7002-SORD-048</a>)
+  - All: **must** see a rejected reason if one was provided (<a name="7002-SORD-067" href="#7002-SORD-067">7002-SORD-067</a>)
 - All feedback must be a subscription so is updated as the status changes (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
  - **could** repeat the values that were submitted (order type + all fields)
+
 
 ... so that I am aware of the status of my order before seeing it in the [orders table](6002-MORD-manage_orders.md).
 
