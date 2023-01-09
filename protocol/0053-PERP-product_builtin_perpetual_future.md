@@ -10,6 +10,8 @@ Perpetual futures are a simple "delta one" product.
 
 1. `settlement_data (Data Source: number)`: this data is used by the product to calculate periodic settlement cashflows. The receipt of this data triggers this calculation and the transfers between parties to "true up" to the external reference price.
 1. `settlement_asset (Settlement Asset)`: this is used to specify the single asset that an instrument using this product settles in.
+1. ` data_source_spec_binding`: The binding between the data source spec and the settlement data.
+1. `max_settlement_gap`: value expressed in seconds which specifies the amount of time without settlement ("periodic funding") after which the market will go into protective auction and remain in that mode until settlement data is received.
 
 Validation: none required as these are validated by the asset and data source frameworks.
 
@@ -37,6 +39,10 @@ cash_settled_perpetual_future.settlement_data(event) {
 	setMarkPrice(event.data)
 }
 ```
+
+### 4.2 Protective auction
+
+If the amount of time in seconds since last [settlement](#41-settlement-periodic-funding) exceeds `max_settlement_gap` set for the market then the market goes into auction mode and remains in it until new settlement data is received. Upon receiving the settlement data the auction uncrosses, positions are updated and then settled using the newly arrived data. It is possible to update the market's data source when it is in protective auction.
 
 ## Acceptance Criteria
 
