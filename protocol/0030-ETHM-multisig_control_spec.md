@@ -16,6 +16,9 @@ In order for a smart contract to be securely controlled by the Vega network, it 
 
 A signature bundle is a hex string of appended 65 byte ECDSA signatures where each signer signed the same message hash usually containing the parameters of the function being called, the current epoch data consisting of a list of signers and their corresponding weights, and a nonce that is used to prevent replay attacks.
 
+## Epoch Data
+Epoch Data is the set of signer addresses and their associated weight. Once hashed, the epoch data hash must match the current epoch data hash stored on the smart contract. This hash can be updated by calling `update_signers` (see below). The entire set of addresses and weights needs to be sent with every verified transaction and will be invalid once the signer set (or weights) change.
+
 ## Verify Signatures
 The core of Multisig Control is the function: 
 `function verify_signatures(bytes32  message_hash, bytes calldata epoch_data, bytes calldata signatures)`
@@ -29,10 +32,12 @@ This is also known as the "Final Hash"
 
 `this_epoch_hash` is defined as:
 `keccak256(abi.encode(epoch_data))`
-where epoch data is an ABI encoded hex string in the following format:
+where `epoch_data` is an ABI encoded hex string in the following format:
 `epoch_data = "0x" + [signer_address_1, weight_1] + [2] + [3]...`
 
 `calling_contract` is the contract that calls multisig, this protects against replays and collisions
+
+If the epoch data hash matches the current signer set, the signatures resolve to the appropriate signer address provided AND the total summed weights is greater than the current threshold, then the transaction is verified, otherwise this function will revert the EVM and stop the transaction. Once verified, the "final hash" is marked complete to prevent reusing the signature bundle.
 
 ## Update Signers
 As Vega validators change staking weight and cycle in or out, the function `update_signers(bytes32 new_epoch_hash, uint32 new_threshold, bytes calldata epoch_data, bytes calldata signatures)`
