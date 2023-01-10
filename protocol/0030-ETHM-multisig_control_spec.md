@@ -52,7 +52,7 @@ This will update the current `epoch_hash` that will be compared to the recovered
 
 This will also update the threshold if necessary.
 
-TODO: explain incentives to update signers
+For details on how signer updating is incentivized [See Here](https://github.com/vegaprotocol/specs/blob/Multisig_v2_spec/protocol/0030-ETHM-multisig_control_spec.md)
 
 ### Signer Set Nonce
 In order to protect against the weights and signers creating the same epoch hash, every time an update occurs, the signer set must have a dummy signer with a generated fake address and zero weight. This acts as a nonce for the signer set.
