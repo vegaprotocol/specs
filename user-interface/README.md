@@ -1,9 +1,9 @@
 # User interface acceptance criteria
-This folder contain descriptions of things that users do when interacting with Vega. The information they need and why they are doing them. These can be referenced in testing and used as input for building new interfaces.
+This folder contains descriptions of things that users do when interacting with Vega. The information they need and why they are doing them. These can be referenced in testing and used as input for building new interfaces.
 
 The acceptance criteria are organized into files, with each file representing a high level user task. These have been listed with the most "upstream" being first, and grouped into similar tasks.
 
-Each file contains blocks that relate to a low level user task. The block states what the user is trying to do or the context they are in, has a bullet for each thing the need, then states why they are doing it...
+Each file contains blocks that relate to a low level user task. The block states what the user is trying to do or the context they are in, has a bullet for each thing they need, then states why they are doing it...
 
 > When doing a thing, I...
 > 
@@ -20,7 +20,7 @@ A user is normally interacting with at least 2 applications when doing tasks on 
 ## `0000` Wallets, signing transactions and network selection
 - `0001-WALL` [Get and use a Vega wallet](0001-WALL-wallet.md) (This mostly relates to use of a wallet app, for cryptography and broadcast to network)
   
-These files contain generic user needs for interacting with wallets that are true for all types of interactions that require a wallet. More specific requirements are mentioned where these are referenced. Thy describe what the user needs from the dapp not the wallet.
+These files contain generic user needs for interacting with wallets that are true for all types of interactions that require a wallet. More specific requirements are mentioned where these are referenced. They describe what the user needs from the dapp not the wallet.
 
 - `0002-WCON` [Connect Vega wallet to a Dapp & select keys](0002-WCON-connect_vega_wallet.md)
 - `0003-WTXN` [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md) 
