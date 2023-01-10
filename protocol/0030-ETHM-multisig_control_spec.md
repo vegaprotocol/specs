@@ -40,9 +40,10 @@ where `epoch_data` is an ABI encoded hex string in the following format:
 If the epoch data hash matches the current signer set, the signatures resolve to the appropriate signer address provided AND the total summed weights is greater than the current threshold, then the transaction is verified, otherwise this function will revert the EVM and stop the transaction. Once verified, the "final hash" is marked complete to prevent reusing the signature bundle.
 
 ### Signer Set Nonce
-In order to protect against the weights and signers creating the same epoch hash, every time an update occurs, the signer set must have a dummy signer with random address and signer. This acts as a nonce for the signer set.
+In order to protect against the weights and signers creating the same epoch hash, every time an update occurs, the signer set must have a dummy signer with a generated fake address and zero weight. This acts as a nonce for the signer set.
+The dummy signer address should be in the following format: `0x[8 byte epoch][4 bytes 0][8 byte timestamp]` so for instance on epoch 1 at timestamp 1673365824 it would be `0x0000000000000001000000000000000063BD8940`
 
-All signers (and dummy signer) must be included in every call to `verify_signatures`. If a signer is not needed to chooses to not participate in that transaction set the signature to `0x0000000000000000000000000000000000000000000000000000000000000000` (32 empty bytes)
+All signers (and dummy signer) must be included in every call to `verify_signatures`. If a signer is not needed or chooses to not participate in that transaction set the signature to 65 empty bytes which will cause it to be skipped when doing the `ecrecover`.
 
 ## Update Signers
 As Vega validators change staking weight and cycle in or out, the function `update_signers(bytes32 new_epoch_hash, uint32 new_threshold, bytes calldata epoch_data, bytes calldata signatures)`
@@ -54,7 +55,8 @@ This will also update the threshold if necessary.
 TODO: explain incentives to update signers
 
 ### Signer Set Nonce
-In order to protect against the weights and signers creating the same epoch hash, every time an update occurs, the signer set must have a dummy signer with random address and signer. This acts as a nonce for the signer set.
+In order to protect against the weights and signers creating the same epoch hash, every time an update occurs, the signer set must have a dummy signer with a generated fake address and zero weight. This acts as a nonce for the signer set.
+The dummy signer address should be in the following format: `0x[8 byte epoch][4 bytes 0][8 byte timestamp]` so for instance on epoch 1 at timestamp 1673365824 it would be `0x0000000000000001000000000000000063BD8940`
 
 ## Burn Hash
 If a transaction needs to be blocked or otherwise invalidated, Vega validators can run the function:
@@ -97,6 +99,9 @@ contract MultisigControl {
 ```  
 
 # Acceptance Criteria
+### Vega-Side
+* Every signer set and weight update contains a random dummy signer as nonce
+
 ### MultisigControl Smart Contract 
 
 ### MultisigControl Consuming Smart Contract
