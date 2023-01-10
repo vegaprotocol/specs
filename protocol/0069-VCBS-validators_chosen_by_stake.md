@@ -353,7 +353,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
  * Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted. 
  * No validator with stake attached to them is ever completely removed 
   
- 12 (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>)
+ 12 (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>)
  12.a Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - one ersatzvalidator gets the highest delegated stake, but insufficient ownstake (delegates: 10000)
@@ -387,7 +387,7 @@ Verify that 2 validators are replaced, one in each epoch
 
 Verify that one validator is replaced the following epoch, one in the epoch after
 
-13. Ersatzvalidator reward (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>)    
+13. Ersatzvalidator reward (<a name="0069-VCBS-061" href="#0069-VCBS-061">0069-VCBS-061</a>)    
     Setup a network with 5 validators with the following distribution of delegation:
 10%, 10%, 10%, 10%. 60% of the total delegation of tendermint validators
 
@@ -405,7 +405,7 @@ Verify that this validator is paid reward as ersatz validator and that their sta
   * Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatzvalidator and an Ersatzvalidator is demoted to pending
 
 
-15. Number of Ersatzvalidators increased (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>):
+15. Number of Ersatzvalidators increased (<a name="0069-VCBS-058" href="#0069-VCBS-058">0069-VCBS-058</a>):
   * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 4 pending validators
   * Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.9
   * Verify that in the following two epochs, in each epoch the ErsatzValidator with the highest score is promoted to Validator
@@ -448,7 +448,7 @@ Verify that this validator is paid reward as ersatz validator and that their sta
   * Send an announce node command from a non validator node should fail
 2. Valid announce node command (<a name="0069-VCBS-045" href="#0069-VCBS-045">0069-VCBS-045</a>):
   * Send a valid announce node from a validator node should result in a validator update event with the details of the validator and a validator ranking event.
-3. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
+3. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-060" href="#0069-VCBS-060">0069-VCBS-060</a>):
   * Should be rejected
 
 
