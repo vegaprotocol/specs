@@ -100,7 +100,9 @@ contract MultisigControl {
 
 # Acceptance Criteria
 ### Vega-Side
-* Every signer set and weight update contains a random dummy signer as nonce
+* Every signer set and weight update MUST contain a random dummy signer as nonce. 
+* The dummy signer MUST follow the format `0x[8 byte epoch][4 bytes 0][8 byte timestamp]`. 
+* Every validator MUST verify that the epoch and timestamp are correct.
 
 ### MultisigControl Smart Contract 
 
