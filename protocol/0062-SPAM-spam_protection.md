@@ -91,9 +91,11 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
   
   
 ### Withdrawal Spam
-As unclaimed withdrawals do not automatically expire, an attacker could generate a large number of messages as well as an evergrowing datastructure through withdrawal requests (see https://github.com/vegaprotocol/specs/blob/Multisig_v2_spec/protocol/0030-ETHM-multisig_control_spec.md)
+As unclaimed withdrawals do not automatically expire, an attacker could generate a large number of messages as well as an evergrowing datastructure through [withdrawal requests](0030-ETHM-multisig_control_spec.md).
 
-To avoid this, all withdrawal requests need a minimum withdrawal amount as defined in the network parameter spam.protection.minimumWitdrawalQuantumMultiple. Any withdrawal requests for a smaller amount are immediatelly rejected.
+To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWitdrawalQuantumMultiple`. 
+The minimum allowed withdrawal amount is `spam.protection.minimumWitdrawalQuantumMultiple x quantum`, where `quantum` is set per [asset](0040-ASSF-asset_framework.md) and should be thought of as the amount of any vega asset that has roughly value of 1 USD. 
+Any withdrawal requests for a smaller amounts are immediately rejected.
 
 ### Acceptance Criteria
 
@@ -125,11 +127,11 @@ To avoid this, all withdrawal requests need a minimum withdrawal amount as defin
  - If a party gets banned several times during an epoch, all banns last for the defined time or until the epoch ends (try with at least three banns) (<a name="0062-SPAM-018" href="#0062-SPAM-018">0062-SPAM-018</a>)  
  - During a ban due to too many votes, all governance related transactions are rejected (<a name="0062-SPAM-019" href="#0062-SPAM-019">0062-SPAM-019</a>)  
  - After having been banned for too many votes and unbanned, with the maximum number of votes in that epoch exceeded, any additional votes are rejected without a new ban. (<a name="0062-SPAM-020" href="#0062-SPAM-020">0062-SPAM-020</a>)  
- - Try to create a withdrawal bundle for an amount smaller than defined in spam.protection.minimumWitdrawalQuantumMultiple and verify that it is rejected (<a name="0062-SPAM-021" href="#0062-SPAM-021">0062-SPAM-021</a>)   
- - Try to set spam.protection.minimumWitdrawalQuantumMultiple to 0 and verify that the parameter is rejected.(<a name="0062-SPAM-022" href="#0062-SPAM-022">0062-SPAM-022</a>)   
- - Increase spam.protection.minimumWitdrawalQuantumMultiple and verify that a withdrawal transaction  that would be valid according to the former parameter and invalid with the new one is rejected. (<a name="0062-SPAM-023" href="#0062-SPAM-023">0062-SPAM-023</a>)   
- - Decrease spam.protection.minimumWitdrawalQuantumMultiple and verify that a withdrtawal transaction that would be invalid with the old parameter and valid with the new one is accepted.(<a name="0062-SPAM-024" href="#0062-SPAM-024">0062-SPAM-024</a>)   
- - Issue a valid withdrawal bubndle. Increase spam.protection.minimumWitdrawalQuantumMultiple to a value that that bundle would no longer be valid. Ask for a re-issuing of the bundle and verify that it's not rejected. (<a name="0062-SPAM-025" href="#0062-SPAM-025">0062-SPAM-025</a>)   
+ - Try to create a withdrawal bundle for an amount smaller than defined by `spam.protection.minimumWitdrawalQuantumMultiple x quantum` and verify that it is rejected (<a name="0062-SPAM-021" href="#0062-SPAM-021">0062-SPAM-021</a>)   
+ - Try to set `spam.protection.minimumWitdrawalQuantumMultiple` to `0` and verify that the parameter is rejected.(<a name="0062-SPAM-022" href="#0062-SPAM-022">0062-SPAM-022</a>)   
+ - Increase `spam.protection.minimumWitdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been valid according to the former parameter value is rejected with the new one. (<a name="0062-SPAM-023" href="#0062-SPAM-023">0062-SPAM-023</a>)   
+ - Decrease `spam.protection.minimumWitdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been invalid with the old parameter and is valid with the new value and is accepted.(<a name="0062-SPAM-024" href="#0062-SPAM-024">0062-SPAM-024</a>)   
+ - Issue a valid withdrawal bubndle. Increase `spam.protection.minimumWitdrawalQuantumMultiple` to a value that that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-SPAM-025" href="#0062-SPAM-025">0062-SPAM-025</a>)   
 
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
