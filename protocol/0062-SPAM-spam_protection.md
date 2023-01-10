@@ -110,8 +110,8 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
  - If a party is banned for too many voting-rejections, it still can send trading related transactions which are not banned. (<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-013</a>)  
  - If the ban of a party ends because the banning time is up, transactions from that party are no longer rejected (<a name="0062-SPAM-015" href="#0062-SPAM-015">0062-SPAM-015</a>)  
  - If the ban of a party ends because the epoch ends, transactions from that party are no longer rejected (<a name="0062-SPAM-016" href="#0062-SPAM-016">0062-SPAM-063</a>)  
- - If a party gets banned, the ban ends due to the epoch ending, and it gets banned again at the beginning of the new epoch, the bann still laasts the entire time (or until the next epoch end), i.e., the ban-expiration timer is reset. (<a name="0062-SPAM-017" href="#0062-SPAM-017">0062-SPAM-017</a>)  
- - If a party gets banned several times duting an epoch, all banns last for the defined time or until the epich ends (try with at least three banns) (<a name="0062-SPAM-018" href="#0062-SPAM-018">0062-SPAM-018</a>)  
+ - If a party gets banned, the ban ends due to the epoch ending, and it gets banned again at the beginning of the new epoch, the ban still lasts the entire time (or until the next epoch end), i.e., the ban-expiration timer is reset. (<a name="0062-SPAM-017" href="#0062-SPAM-017">0062-SPAM-017</a>)  
+ - If a party gets banned several times during an epoch, all banns last for the defined time or until the epoch ends (try with at least three banns) (<a name="0062-SPAM-018" href="#0062-SPAM-018">0062-SPAM-018</a>)  
  - During a ban due to too many votes, all governance related transactions are rejected (<a name="0062-SPAM-019" href="#0062-SPAM-019">0062-SPAM-019</a>)  
  - After having been banned for too many votes and unbanned, with the maximum number of votes in that epoch exceeded, any additional votes are rejected without a new ban. (<a name="0062-SPAM-020" href="#0062-SPAM-020">0062-SPAM-020</a>)  
 
