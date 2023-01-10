@@ -97,7 +97,7 @@ is then not increased for another 10 blocks. At the beginning of every epoch, th
    - More than 360 delegation changes in one epoch (or, respectively, the value of `spam.protection.max.delegation`). This includes the undelegate trnsactions. Specifically, verify
       -    More than the allowed quota through delegation change only
       -    More than the allowed quota through undelegation only (this might require lowering the parameter)
-      -    More than the allowed quata through a mix, where each individual set of messages is within the quota
+      -    More than the allowed quota through a mix, where each individual set of messages is within the quota
      (<a name="0062-SPAM-001" href="#0062-SPAM-001">0062-SPAM-001</a>)
    - Delegating while having less than one vega (`10^18` of our smallest unit) (`spam.protection.delegation.min.tokens`)  (<a name="0062-SPAM-002" href="#0062-SPAM-002">0062-SPAM-002</a>)
    - Making a proposal when having less than 100.000 vega (`spam.protection.proposal.min.tokens`)  (<a name="0062-SPAM-003" href="#0062-SPAM-003">0062-SPAM-003</a>)
