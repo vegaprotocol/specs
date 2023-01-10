@@ -39,14 +39,22 @@ where `epoch_data` is an ABI encoded hex string in the following format:
 
 If the epoch data hash matches the current signer set, the signatures resolve to the appropriate signer address provided AND the total summed weights is greater than the current threshold, then the transaction is verified, otherwise this function will revert the EVM and stop the transaction. Once verified, the "final hash" is marked complete to prevent reusing the signature bundle.
 
+### Signer Set Nonce
+In order to protect against the weights and signers creating the same epoch hash, every time an update occurs, the signer set must have a dummy signer with random address and signer. This acts as a nonce for the signer set.
+
+All signers (and dummy signer) must be included in every call to `verify_signatures`. If a signer is not needed to chooses to not participate in that transaction set the signature to `0x0000000000000000000000000000000000000000000000000000000000000000` (32 empty bytes)
+
 ## Update Signers
 As Vega validators change staking weight and cycle in or out, the function `update_signers(bytes32 new_epoch_hash, uint32 new_threshold, bytes calldata epoch_data, bytes calldata signatures)`
 
 This will update the current `epoch_hash` that will be compared to the recovered `epoch_hash` from the `epoch_data` array passed into `verify_signatures`. This `epoch_hash` represents both the signer set and signer weights.
 
-This will also update the threshold.
+This will also update the threshold if necessary.
 
 TODO: explain incentives to update signers
+
+### Signer Set Nonce
+In order to protect against the weights and signers creating the same epoch hash, every time an update occurs, the signer set must have a dummy signer with random address and signer. This acts as a nonce for the signer set.
 
 ## Burn Hash
 If a transaction needs to be blocked or otherwise invalidated, Vega validators can run the function:
