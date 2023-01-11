@@ -131,7 +131,7 @@ shape-entry = {
 
 peg-implied-price = 103 - 2 = 101
 
-Call probability-of-trading function with best-static-bid-on-order-book = 105, LP-time-horizon (network parameter), peg-implied-price. 
+Call probability-of-trading function with best-static-bid-on-order-book = 105, time-horizon given by risk model tau multiplied by  `market.liquidity.probabilityOfTrading.tau.scaling`, peg-implied-price. 
 
 This will return probably of trading at price = 101. This can be used in the formula for volume, above.
 
@@ -187,8 +187,8 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 
 
 ## Network Parameters:
-* mm-time-horizon: market making time horizon to imply probability of trading.
-* market.liquidity.minimum.probabilityOfTrading.lpOrders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the `market.liquidity.minimum.probabilityOfTrading.lpOrders`. Reasonable value `1e-8`. For validation purposes the minimum value is `1e-15` and maximum value is `0.1`. 
+* market.liquidity.probabilityOfTrading.tau.scaling: scaling factor multiplying risk model value of tau to imply probability of trading.
+* market.liquidity.minimum.probabilityOfTrading.lpOrders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
 
 ## APIs:
 * Order datatype for LP orders. Any order APIs should contain these orders.
