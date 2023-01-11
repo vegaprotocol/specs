@@ -74,6 +74,9 @@ A can have a number of different accounts for any given asset.
 - Locked for withdraw - one for each withdraw that is waiting to be finalised (e.g. where withdrawal limits/time locks are in place)
   
 In the case of the Governance token the party may also have staked balances
+
+All part accounts should be displayed as an [asset balance](#asset-balances) with the appropriate number of decimal places.
+
 ## Transaction hash
 
 > aka Transaction ID, txn, tx
