@@ -293,7 +293,7 @@ The market state is `trading terminated`.
 1. The settlement price oracle transaction is sent and it is  *not* equal to `p`. 
 Parties that had open positions see settlement cash-flows happen. 
 Margin account balances are transferred to the general account. 
-Any insurance pool balance is transferred to the network treasury account for the asset. 
+Any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 The market state is `settled`. 
 
 ### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
@@ -302,7 +302,7 @@ The market state is `settled`.
 1. Trading terminated data source rings before the market leaves the opening auction (so market never left Pending state so far).
 1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
-1. Any insurance pool balance should be transferred into the network treasury account for that asset. 
+1. Any insurance pool balance should be [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 1. All data sources that are only referenced by that market are unregistered. 
 1. The market state is set to cancelled. 
 
