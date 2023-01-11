@@ -4,7 +4,7 @@ This is a definition of some common data types and the rules about the displayin
 
 ## Size
 
-> aka contracts, volume, amount.
+> aka contracts, volume, amount, quantities.
 
 This is set per-market and represent the number of contracts that are being brought or sold.
 
@@ -31,7 +31,7 @@ This is a value that is calculated as an indication of what price the market wou
 
 ## Asset balances
 
-> aka Collateral, account balance, Profit and loss, PnL fees, transfers.
+> aka Collateral, account balance, Profit and loss, PnL fees, transfers, financial values.
 
 The is set per Asset and represents the amount of an asset that is held in the bridge.
 
