@@ -119,7 +119,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 ### Insurance pool accounts
 - When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0013-ACCT-020" href="#0013-ACCT-020">0013-ACCT-020</a>)
 - Only protocol-initiated aka internal transfer requests move money in or out of the insurance account. User initiated tranfer requests cannot be used to move funds in or out of insurance pool. (<a name="0013-ACCT-021" href="#0013-ACCT-021">0013-ACCT-021</a>)
-- When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds transferred to the [network treasury](./0055-TREA-on_chain_treasury.md) account for the appropriate asset (if it doesn't exist create it).  (<a name="0013-ACCT-022" href="#0013-ACCT-022">0013-ACCT-022</a>)
+- When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds redistributed to the [network treasury](./0055-TREA-on_chain_treasury.md) account for the appropriate asset (if it doesn't exist create it) and other insurance pools using the same asset. (<a name="0013-ACCT-022" href="#0013-ACCT-022">0013-ACCT-022</a>)
 
 ## Special case: Staking accounts
 One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain. For more information on staking and stake delegation see [Simple staking and delegation](./0050-STKG-simple_staking_and_delegating.md).
