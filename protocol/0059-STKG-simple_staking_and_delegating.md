@@ -81,7 +81,7 @@ well as in the beginning of the next epoch just before the command takes effect.
 The amount of delegatable stake is reduced right away once the command is put into 
 a block.
 
-Each validator will have a maximum amount of stake that they can accept as delegation (initially this will be the same for all validators, governed by a network parameter `maxStakePerValidator`). If a participant is delegating such that the size of their stake would cause this amount to be exceeded, then they are only staked up to this maximum amount. The remaining of their stake is therefore eligible to stake to another validator.
+There is not maximum amount of stake that a validator can accept, instead at the end of the epoch when staking rewards are calculated, the stake of each validator (and their delegator) may be penalised if it represents a stake that it more than the optimal stake, i.e. the desired stake to be owned by each validator and its delegators. 
 
 ### Undelegating
 Users can remove stake by submitting an `Undelegate` transaction. The tokens will then be restored back to their token balance.
@@ -118,10 +118,8 @@ The user is marked to not receive any reward from the validator in that epoch. T
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring any interaction between the smart contract and the details of the delegation system. This also allows the delegator to change their mind about a delegation before it is activated.
 
 
-_optional (not needed now, but later)_
 `UndelegateInAnger`:
-To unlock any stake fast, this has the same effect as `UndelegateNow`, but the stake is removed from the validator right away (at least as far as voting rights are concerned). The delegator loses the delegated stake and the income with it, as well as their voting weight.
-As this is not required for first mainnet, and involves more subtleties (weights need to be recalculated on the fly, there may be a mixture of normal undelegated and undelegate in anger, ...), this feature does not need to be implemented right away for Mainnet alpha.
+This is not strictly a type of undelegation but it's effect is quite similar to undelegate now. This is expressed by unstaking rather than by un-delegating. When removing the stake, the corresponding stake will automatically be undelegated. 
 
 ### Auto [Un]delegation
 - A party become eligible to participate in auto delegation once they have manually delegated (nominated) over x% of the association. In theory this should be 100% but in practice due to rounding issues we can make this closer to 100%. It is currently defined as 95% of the association. 
@@ -145,12 +143,6 @@ With this setup, a delegator can use a constant delegation/undelegate-now to spa
 If several delegators change the delegation within the same block, some of them may not be allowed to 
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
 block creator has the responsibility to filter out these transactions.
-
-It is possible in Sweetwater that a Delegator gets removed (e.g., due to non-participation) between re-runs. 
-In this case, it must be assured that the rewards are distributed only to the remaining active validators.
-This will also leave some delegators that have delegated to a non-existing validator; the easiest solution
-is to simply declare all their stake undelegated (if they delegated to a bad validators, their problem).
-This means we also need to test how the formulars react to changing numbers of validators.
 
 Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted proportionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calcualte first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is guaranteed to be less than or equal to the available un-nominated association. 
 
@@ -203,16 +195,6 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
   - Staking on the new validator, as per normal [function: Stake](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md)
   - These can happen concurrently, so that at the next epoch, the stake is removed from the current validator and staked on the new validator 
   
-### A delegation transaction that would cause a single validator's total delegated amount to exceed `validators.delegation.maxStakePerValidator` will be reduced to fit (<a name="0059-STKG-017" href="#0059-STKG-017">0059-STKG-017</a>)
-- A validator, Validator A exists
-- `validators.delegation.maxStakePerValidator` is set to `99.99`
-- Party A delegates 99.8 to validator A
-- This delegation is successful
-- Party B delegates 10 to validator A
-- This delegation only successfully delegates 0.1
-- Party C delegates 0.1 to validator A
-- This transaction is rejected as it would exceed `maxStakePerValidator`
-
 ## Auto delegation scenarios
 
 ### Normal scenario auto undelegation:  (<a name="0059-STKG-018" href="#0059-STKG-018">0059-STKG-018</a>)
@@ -245,13 +227,6 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 - epoch 2: party associated 100 VEGA
 - end of epoch 2: party has 500 nominated to validator2 and 200 nominated to validators 3-5
 - end of epoch 3: party has 100 unnominated VEGA which gets nominated proportionally between validators 2-5 - i.e. validator 2 gets 45, validator 3-4-5 get 18 each
-
-### Edge case 3: respecting max per validator (<a name="0059-STKG-022" href="#0059-STKG-022">0059-STKG-022</a>)
-- epoch 0: party associated 1500 VEGA
-- epoch 0: party nominated 100, 200, 300, 400, 500 VEGA to validators 1-5 respectively
-- epoch 1: party associated 300 VEGA
-- end of epoch 1: according to the proportion of nomination, validators need to get 20,40,60,80,100 respectively - however max per validator implies availale balances of 100, 80, 60, 40, 20 for validators 1,2,3,4,5 respectively
-- meaning that at the following delegation will apply: 120, 240, 360, 440, 520. There will be no attempt to top up validators against the proportion implied by the nomination.
 
 # See also
 - [0013-ACCT Acccounts](./0013-ACCT-accounts.md) - staking accounts are not like other account types, but the differences are covered here.
