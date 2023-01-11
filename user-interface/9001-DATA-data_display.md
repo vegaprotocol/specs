@@ -50,6 +50,10 @@ The profit or loss is the difference between what a user paid for a thing and th
 
 ### Realised Profit and Loss
 
+## Quantum
+
+The quantum is a value that is used to define "The minimum economically meaningful amount of this specific asset". It can be used to show only the number of decimal places that are meaningful in summary information. A quantum is defined on each asset.
+
 ## Market
 
 Markets do not have names, technically it is the instrument within a market that has the name. Theoretically the same instrument can be traded in multiple markets. if/when this happens a user needs to be able to disambiguate between markets. Each market does have a unique ID, Note: this is a hash of the definition of the market when it was created.
@@ -67,12 +71,13 @@ Vega public keys are hexadecimal, but the convention is to display them without 
 
 > aka account balances
 
-A can have a number of different accounts for any given asset. 
+A can have a number of different accounts for any given asset.
+
 - General account - For assets that have not been deployed to one of the following
 - Margin accounts - one for each market the part has orders/position
 - Bond accounts - (aka liquidity commitment) one for each market the user has committed to providing liquidity on
 - Locked for withdraw - one for each withdraw that is waiting to be finalised (e.g. where withdrawal limits/time locks are in place)
-  
+
 In the case of the Governance token the party may also have staked balances
 
 All part accounts should be displayed as an [asset balance](#asset-balances) with the appropriate number of decimal places.
