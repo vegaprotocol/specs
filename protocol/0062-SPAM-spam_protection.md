@@ -131,7 +131,7 @@ Any withdrawal requests for a smaller amounts are immediately rejected.
  - Try to set `spam.protection.minimumWitdrawalQuantumMultiple` to `0` and verify that the parameter is rejected.(<a name="0062-SPAM-022" href="#0062-SPAM-022">0062-SPAM-022</a>)   
  - Increase `spam.protection.minimumWitdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been valid according to the former parameter value is rejected with the new one. (<a name="0062-SPAM-023" href="#0062-SPAM-023">0062-SPAM-023</a>)   
  - Decrease `spam.protection.minimumWitdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been invalid with the old parameter and is valid with the new value and is accepted.(<a name="0062-SPAM-024" href="#0062-SPAM-024">0062-SPAM-024</a>)   
- - Issue a valid withdrawal bubndle. Increase `spam.protection.minimumWitdrawalQuantumMultiple` to a value that that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-SPAM-025" href="#0062-SPAM-025">0062-SPAM-025</a>)   
+ - Issue a valid withdrawal bundle. Increase `spam.protection.minimumWitdrawalQuantumMultiple` to a value that that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-COSMICELEVATOR-001" href="#0062-COSMICELEVATOR-001">0062-COSMICELEVATOR-001</a>)   
 
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
