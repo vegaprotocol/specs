@@ -76,6 +76,9 @@ A network parameter, `network.validators.minimumEthereumEventsForNewValidator`, 
 
 ## Multisig updates (and multisig weight updates if those are used)
 
+
+TODO: edit this for Multisig v2
+
 Vega will know the initial multisig signer list (and weights) and watch for `signer added` and `signer removed` events to track which ethereum keys are present on multisig.
 
 Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing. 
