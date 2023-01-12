@@ -173,3 +173,11 @@ For the purposes of protocol upgrade each validator that participates in consens
   - (<a name="0075-PLUP-034" href="#0075-PLUP-034">0075-PLUP-034</a>) A proposal made to upgrade to the currently running version will retract previous proposals. i.e: System is running version V. Make a proposal for block height H and version V + 1 and vote with all validators. Before block height H, submit a new proposal for version V and any future block height, with all validators. Upgrade proposals are retracted, and upgrade does not take place.
   - (<a name="0075-PLUP-035" href="#0075-PLUP-035">0075-PLUP-035</a>) Rejected proposals do not overwrite previous valid upgrade proposals.
 
+### Data is preserved
+ - (<a name="0075-PLUP-038" href="#0075-PLUP-038">0075-PLUP-038</a>) An open market with active orders which is available prior to upgrade, is still available, active, and can be traded on, post-upgrade.
+ - (<a name="0075-PLUP-039" href="#0075-PLUP-039">0075-PLUP-039</a>) Stake available prior to upgrade is still available post upgrade.
+ - (<a name="0075-PLUP-040" href="#0075-PLUP-040">0075-PLUP-040</a>) Active and pending delegations made prior to upgrade are still active post upgrade.
+ - (<a name="0075-PLUP-041" href="#0075-PLUP-041">0075-PLUP-041</a>) A market due to expire during an upgrade will terminate and/or settle post-upgrade.
+ - (<a name="0075-PLUP-042" href="#0075-PLUP-042">0075-PLUP-042</a>) Trader balances available prior to upgrade is still available post upgrade.
+ - (<a name="0075-PLUP-043" href="#0075-PLUP-043">0075-PLUP-043</a>) Pending and active assets available prior to upgrade is still available post upgrade.
+ - (<a name="0075-PLUP-044" href="#0075-PLUP-044">0075-PLUP-044</a>) Network parameter, market and asset proposals can span a protocol upgrade.
