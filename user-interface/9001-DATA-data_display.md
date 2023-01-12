@@ -80,6 +80,8 @@ A can have a number of different accounts for any given asset.
 
 In the case of the Governance token the party may also have staked balances
 
+When listing markets in a breakdown it may good to see a total exposure to a market, that is then broken down by Margin and Bond
+
 All part accounts should be displayed as an [asset balance](#asset-balances) with the appropriate number of decimal places.
 
 ## Transaction hash
