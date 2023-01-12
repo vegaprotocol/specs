@@ -406,16 +406,14 @@ Verify that this validator is paid reward as ersatz validator and that their sta
 
 
 15. Number of Ersatzvalidators increased (<a name="0069-VCBS-058" href="#0069-VCBS-058">0069-VCBS-058</a>):
-  * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 4 pending validators
+  * Setup a network with 4 Tendermint validators, 2 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 2 pending validators
   * Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.9
-  * Verify that in the following two epochs, in each epoch the ErsatzValidator with the highest score is promoted to Validator
-  * Verify that the third Ersatzvalidator is not promoted in the third epoch
+  * Verify that in the following epoch, the ErsatzValidator with the highest score is promoted to Validator
 
 16. Number of Ersatzvalidators decreased (<a name="0069-VCBS-054" href="#0069-VCBS-054">0069-VCBS-054</a>):
-  * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5)
+  * Setup a network with 5 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5)
   * Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.1
-  * Verify that in the following to epochs, in each epoch the ErsatzValidator with the lowest score is demoted to pending 
-  * Verify that the third Ersatzvalidator is not promoted in the third epoch
+  * Verify that in the following to epoch, all the ErsatzValidators are demoted to pending 
 
 17. Number of Ersatzvalidators Erratic (<a name="0069-VCBS-055" href="#0069-VCBS-055">0069-VCBS-055</a>):
   * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 4 pending validators
