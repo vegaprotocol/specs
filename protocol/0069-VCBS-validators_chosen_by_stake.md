@@ -13,12 +13,14 @@ At the end of each epoch Vega will calculate the unnormalised `validator_score`,
 For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validators.incumbentBonus)`. 
 Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance.
 
-Vega will sort all current Tendermint validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score. 
+Vega will sort all current consensus forming (also called Tendermint) validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score. 
 If for any `l,m=1,...,n` we have  `v_l == v_m` then we place higher the one who's been validator for longer (so this is a mechanism for resolving ties).
 Vega will sort all those who submitted a transaction wishing to be validators using `validator_score` as `[w_1, ..., w_k]`. 
 These may be ersatz validators (ie getting rewards) or others who just submitted the transaction to join.
-If `empty_slots := network.validators.tendermint.number - n > 0` (we have empty Tendermint validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to Tendermint validators. 
-If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a Tendermint validator, and the lowest scoring incumbent becomes an ersatz validator. The exception to that rule is if one or more incumbent validators drop below the required ownstake (ownstake < reward.staking.delegation.minimumValidatorStake), either through changeing their self-delegation or due to a change of the network parameter. In that case, the validator with the smallest ownstake (which is smaller than reward.staking.delegation.minimumValidatorStake) is demoted, and the validator score is not used for demotion in that epoch. 
+If `empty_slots := network.validators.tendermint.number - n > 0` (we have empty consensus (Tendermint) validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to consensus (Tendermint) validators. 
+If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a consensus forming (Tendermint) validator, and the lowest scoring incumbent becomes an ersatz validator. 
+The exception to that rule is if one or more incumbent validators drop below the required ownstake (ownstake < reward.staking.delegation.minimumValidatorStake), either through changing their self-delegation or due to a change of the network parameter. 
+In that case, the validator with the smallest ownstake (which is smaller than reward.staking.delegation.minimumValidatorStake) is demoted, and the validator score is not used for demotion in that epoch. 
 
 If for any `l,m=1,...,k` we have `w_l == w_m` then we resolve this by giving priority to the one who submitted the transaction to become validator earlier (so this is a mechanism for resolving ties).  
 Note that we only do this check once per epoch so at most one validator can be changed per epoch in the case `empty_slots == 0`.
@@ -27,7 +29,7 @@ The same way, if there are free slots for ersatz validators and nodes that have 
 
 If a node that submitted the transaction to join and satisfies all other conditions and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is demoted to pending validator. The 'transaction to join' of a validator demoted this way remains active until the delegated stake drops below the required minimum
 
-As both these checks are done between epochs, it is possible for a validator to be demoted first from Tendermint validator to ersatz validator, and then from ersatz validator to pending validator.
+As both these checks are done between epochs, it is possible for a validator to be demoted first from a consensus forming (Tendermint) validator to an ersatz validator, and then from an ersatz validator to a pending validator.
 
 ## Becoming validator transaction
 All keys mentioned here are understood to match the node configuration.
@@ -82,6 +84,7 @@ Once (if) the ethereum multisig contract supports validator weights the vega nod
 Thus for each validator that is on the multisig contract it will know the validator score (weight) the ethereum multisig is using. 
 
 We will have `network.validators.multisig.numberOfSigners` represented on the multisig (currently `13`) but this could change. 
+Note that `network.validators.multisig.numberOfSigners` must always be less than or equal to `network.validators.tendermint.number`.
 
 In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *not* on the multisig contract. 
 
@@ -95,13 +98,12 @@ Note that this could become obsolete if a future version of the protocol impleme
 
 
 ## Ersatz validators
-In addition to the normal validators, there is an additional set of Ersatz validators as defined by the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will reward:
+In addition to the normal validators, there is an additional set of Ersatz validators as defined by the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will have
 ```
 n' := ceil(network.validators.multipleOfTendermintValidators x network.validators.tendermint.number)
 ```
-
 ersatz validators. 
-The value range for this decimal is `0.0` to `infinity`. 
+The value range for the decimal `network.validators.multipleOfTendermintValidators` is `0.0` to `infinity`. 
 Reasonable values may be e.g. `0.5`, `1.0` or `2.0`.
 
 Like the other validators, Ersatz validators are defined through own + delegated stake, being the validators with the scores below the Tendermint ones; is `NumberOfTendermintValidators` is `n` and NumberOfErsatzValidators is `n'`, 
@@ -300,6 +302,36 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Setup a network with 4 Tendermint validators
   * Change the network parameter `network.validators.tendermint.number` to 3 Tendermint validators
   * Verify that the Tendermint validator with the lowest score is demoted to an ersatz validator at the beginning of the next epoch
+
+3.b Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-062" href="#0069-VCBS-062">0069-VCBS-062</a>):
+  * Run with `network.validators.ersatz.multipleOfTendermintValidators = 1`
+  * Setup a network with 6 consensus forming (Tendermint) validators
+  * Ensure that the multisig is updated to those 6 validators.
+  * Ensure that the threshold on the multisig is set to `666`.
+  * Change the network parameter `network.validators.tendermint.number` to 3 Tendermint validators.
+  * Verify that exactly one consensus forming validator with the lowest score is demoted to an ersatz validator at the beginning of the next epoch and we are running with 5 consensus (Tendermint) validators. 
+  * Ensure that the multisig is updated to those 5 validators.
+  * Verify that exactly one consensus forming validator with the lowest score is demoted to an ersatz validator at the beginning of the following epoch and we are running with 4 consensus (Tendermint) validators.
+  * Ensure that the multisig is updated to those 4 validators.
+  * Finally verify that exactly one consensus forming validator with the lowest score is demoted to an ersatz validator at the beginning of the following epoch and we are running with 3 consensus (Tendermint) validators.
+
+3.c Try to demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-063" href="#0069-VCBS-063">0069-VCBS-063</a>):
+  * Run with `network.validators.ersatz.multipleOfTendermintValidators = 1`
+  * Setup a network with 6 consensus forming (Tendermint) validators
+  * Ensure that the multisig is updated to those 6 validators.
+  * Ensure that the threshold on the multisig is set to `900`.   
+  * Change the network parameter `network.validators.tendermint.number` to 3 Tendermint validators.
+  * Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 6 consensus (Tendermint) validators. 
+
+3.d Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-064" href="#0069-VCBS-064">0069-VCBS-064</a>):
+  * Setup a network with 3 consensus forming (Tendermint) validators
+  * Ensure that the multisig is updated to those 3 validators.
+  * Ensure that the threshold on the multisig is set to `666`. 
+  * Change the network parameter `network.validators.tendermint.number` to 2 Tendermint validators.
+  * Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 3 consensus (Tendermint) validators. 
+  
+
+
 4. Demote an ersatz validator due to lack of slots (<a name="0069-VCBS-037" href="#0069-VCBS-037">0069-VCBS-037</a>):
   * Setup a network with 4 tendermint validators, and 2 ersatz validators.
   * Change the ersatz network parameter `network.validators.ersatz.multipleOfTendermintValidators` to 0.25 of the Tendermint validators 
@@ -353,7 +385,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
  * Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted. 
  * No validator with stake attached to them is ever completely removed 
   
- 12 (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>)
+ 12. (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>)
  12.a Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - one ersatzvalidator gets the highest delegated stake, but insufficient ownstake (delegates: 10000)
