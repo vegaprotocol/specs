@@ -120,7 +120,7 @@ Any withdrawal requests for a smaller amounts are immediately rejected.
  - It is possible for spam transactions to fill a block (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)
  - Parties that continue spamming are blocked and eventually unblocked again  (<a name="0062-SPAM-011" href="#0062-SPAM-011">0062-SPAM-011</a>)
  - Any rejection due to spam protection is reported to the user upon transaction submission detailing which criteria the key exceeded / not met  (<a name="0062-SPAM-013" href="#0062-SPAM-013">0062-SPAM-013</a>)  
- - If a party is banned for too many voting-rejections, it still can send trading related transactions which are not banned. (<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-013</a>)  
+ - If a party is banned for too many voting-rejections, it still can send trading related transactions which are not banned. (<a name="0062-SPAM-025" href="#0062-SPAM-025">0062-SPAM-025</a>)  
  - If the ban of a party ends because the banning time is up, transactions from that party are no longer rejected (<a name="0062-SPAM-015" href="#0062-SPAM-015">0062-SPAM-015</a>)  
  - If the ban of a party ends because the epoch ends, transactions from that party are no longer rejected (<a name="0062-SPAM-016" href="#0062-SPAM-016">0062-SPAM-063</a>)  
  - If a party gets banned, the ban ends due to the epoch ending, and it gets banned again at the beginning of the new epoch, the ban still lasts the entire time (or until the next epoch end), i.e., the ban-expiration timer is reset. (<a name="0062-SPAM-017" href="#0062-SPAM-017">0062-SPAM-017</a>)  
