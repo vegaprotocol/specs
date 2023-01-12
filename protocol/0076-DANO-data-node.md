@@ -185,5 +185,4 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. The event bus stream is available from validators, non validators and the DataNode (<a name="0076-DANO-017" href="#0076-DANO-017">0076-DANO-017</a>)  
 1. All events that are emitted on the full unfiltered event stream are processed by the DataNode (no data is lost) (<a name="0076-DANO-018" href="#0076-DANO-018">0076-DANO-018</a>)  
 1. If a DataNode loses connection to a Vega node if will attempt to reconnect and if the cached data received from the Vega node is enough to continue working it can resume being a DataNode. (<a name="0076-DANO-019" href="#0076-DANO-019">0076-DANO-019</a>)  
-1. If the DataNode loses connection to a Vega node and it is unable to reconnect in time to see all the missing data, it will shutdown. (<a name="0076-DANO-020" href="#0076-DANO-020">0076-DANO-020</a>)  
-1. A DataNode will be able to detect a frozen event stream by the lack of block time updates and will shutdown. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)  
+1. The DataNode must provide its current block height and connection status on responses to client requests so the client can determine whether or not the data is stale. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)  
