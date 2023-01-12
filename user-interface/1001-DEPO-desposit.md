@@ -10,23 +10,27 @@ Note: ERC20 assets require an approval transaction to be finalised before funds 
 When looking to deposit ERC20 assets to an Vega key, I...
 
 - **must** see a link to [connect an ethereum wallet](0004-EWAL-connect_ethereum_wallet.md) that I want to deposit from (1001-DEPO-xxx)
-- **must** select the asset that I want to deposit (1001-DEPO-xxx)
+- **must** select the [asset](9001-DATA-data_display.md#asset) that I want to deposit (1001-DEPO-xxx)
   - **should** easily see the assets that there is a non-zero balance for in the connected wallet
+  - **should** see the ERC20 token address of the asset
+  - **should** see the [Vega asset symbol](9001-DATA-data_display.md#asset-symbol)
+  - **should** see the [Vega asset name](9001-DATA-data_display.md#asset-name) name
 - **must** select the [amount of the asset](9001-DATA-data_display.md#asset-balances) that I want to deposit  (1001-DEPO-xxx)
   - **should** see an ability to populate the input with the full balance in the connected wallet
-- **must** select the Vega key
-  - **should** be pre-populated with current connected key [link](#)
-  - **should** be able to specify a Vega key that you are not connected with  
-  - if approved is less than deposit: 
-    - **must** be prompted to approve more
+  - **must** warn if the amount being deposited is greater than the balance of the token in the connected Eth wallet (1001-DEPO-xxx)
+- **must** select the [Vega key](9001-DATA-data_display.md#public-keys) that I wish to deposit to (1001-DEPO-xxx)
+  - **must** be able to [connect to a Vega wallet and select a key](0002-WCON-connect_vega_wallet.md#select-and-switch-keys) (1001-DEPO-xxx)
+  - **should** be easily (if not automatically) pre-populated with [currently connected and active Vega key](0002-WCON-connect_vega_wallet.md#select-and-switch-keys)
+  - **should** be able to input a Vega key that you are not connected with
+  - if approved amount is less than deposit: 
+    - **must** see that an approval is needed and be prompted to approve more (1001-DEPO-xxx)
     - **should** see the approved amount
     - **should** be able to input the approved amount
-    - submit eth transaction to approve more LINK
-    - must see feedback for the approve transaction 
-  - if approve is more than deposit amount: 
-
-- Deposit
-  - Eth transaction
-- Feedback
+    - **must** submit eth transaction to approve more LINK (1001-DEPO-xxx)
+    - **must** see feedback for the approve transaction (1001-DEPO-xxx)
+  - if approved amount is more than deposit amount (so ): 
+    - Deposit
+    - Eth transaction
+  - Feedback
 
 ...so that my Vega key can use these assets on Vega
