@@ -1,0 +1,33 @@
+---
+
+name: 'Quality checks'
+
+"on":
+  pull_request:
+    branches:
+      - master
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  yamllint:
+    name: Yamllint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v3.1.0
+        with:
+          config_file: .github/workflows/config/.yamllintconfig.yml
+
+  markdownlint:
+    name: Markdownlint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: nosborn/github-action-markdown-cli@v3.1.0
+      name: Markdownlint
+      with:
+        files: .
+        config_file: "markdownlint.json"
