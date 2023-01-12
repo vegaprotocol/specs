@@ -416,12 +416,14 @@ Verify that this validator is paid reward as ersatz validator and that their sta
   * Verify that in the following to epoch, all the ErsatzValidators are demoted to pending 
 
 17. Number of Ersatzvalidators Erratic (<a name="0069-VCBS-055" href="#0069-VCBS-055">0069-VCBS-055</a>):
-  * Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 4 pending validators
+  * Setup a network with 5 Tendermint validators, 2 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 2 pending validators
   * Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.9
-  * In the next epoch, change network.validators.ersatz.multipleOfTendermintValidators to 0.1
-  * Two epochs lated, change network.validators.ersatz.multipleOfTendermintValidators to 0.5
-  * Verify that in the following four epochs, first a pending validator is promoted, then two pending validators are demoted, then one is promoted agian (eith the highest/losest scores respectively)
-  * Verify that in the fifth epoch, no demotions/promotions happen and the number of Ertsatzvalidators stays at 3
+  * Verify that in the next epoch the 2 pending validators are promoted to ersatz
+  * Change network.validators.ersatz.multipleOfTendermintValidators to 0.1
+  * Verify that in the next epoch the 4 ersatz validators are demoted to pending
+  * Two epochs later, change network.validators.ersatz.multipleOfTendermintValidators to 0.5
+  * Verify that in the next epoch the 2 pending validators are promoted to ersatz
+  * Verify that in the last epoch, no demotions/promotions happen and the number of Ertsatzvalidators stays at 2
 
 18. Number of ErsatzValidators oddly defined (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>)d
   * Set the factor to 0.00000000000000000000000000000000000000001
