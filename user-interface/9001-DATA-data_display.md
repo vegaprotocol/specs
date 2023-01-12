@@ -51,3 +51,15 @@ Vega public keys are hexadecimal, but the convention is to display them without 
 > aka Transaction ID, txn, tx
 
 The transaction [hash](https://www.investopedia.com/terms/h/hash.asp) acts as an identifier for a transaction network. It is hexadecimal and should be displayed with the preceding `0x`.
+
+## Asset
+
+> aka Collateral
+
+### Asset name
+
+e.g. United states Dollar. Each asset has a name this should be shown (as well as symbol) in places where the user may need to distinguish one asset from another or if the symbol is ambiguous.
+
+### Asset symbol
+
+e.g USD. Symbols are short codes for an asset to be used in places low on space where the user is likely to be familiar with the asset. Often all caps but not always, so it is important to display upper and lower case.
