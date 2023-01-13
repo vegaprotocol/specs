@@ -303,7 +303,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Change the network parameter `network.validators.tendermint.number` to 3 Tendermint validators
   * Verify that the Tendermint validator with the lowest score is demoted to an ersatz validator at the beginning of the next epoch
 
-3.b Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-062" href="#0069-VCBS-062">0069-VCBS-062</a>):
+3.b Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-COSMICELEVATOR-062" href="#0069-COSMICELEVATOR-062">0069-COSMICELEVATOR-062</a>):
   * Run with `network.validators.ersatz.multipleOfTendermintValidators = 1`
   * Setup a network with 6 consensus forming (Tendermint) validators
   * Ensure that the multisig is updated to those 6 validators.
@@ -315,7 +315,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Ensure that the multisig is updated to those 4 validators.
   * Finally verify that exactly one consensus forming validator with the lowest score is demoted to an ersatz validator at the beginning of the following epoch and we are running with 3 consensus (Tendermint) validators.
 
-3.c Try to demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-063" href="#0069-VCBS-063">0069-VCBS-063</a>):
+3.c Try to demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-COSMICELEVATOR-063" href="#0069-COSMICELEVATOR-063">0069-COSMICELEVATOR-063</a>):
   * Run with `network.validators.ersatz.multipleOfTendermintValidators = 1`
   * Setup a network with 6 consensus forming (Tendermint) validators
   * Ensure that the multisig is updated to those 6 validators.
@@ -323,14 +323,14 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Change the network parameter `network.validators.tendermint.number` to 3 Tendermint validators.
   * Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 6 consensus (Tendermint) validators. 
 
-3.d Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-064" href="#0069-VCBS-064">0069-VCBS-064</a>):
+3.d Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-COSMICELEVATOR-064" href="#0069-COSMICELEVATOR-064">0069-COSMICELEVATOR-064</a>):
   * Setup a network with 3 consensus forming (Tendermint) validators
   * Ensure that the multisig is updated to those 3 validators.
   * Ensure that the threshold on the multisig is set to `666`. 
   * Change the network parameter `network.validators.tendermint.number` to 2 Tendermint validators.
-  * Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 3 consensus (Tendermint) validators. 
+  * Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 3 consensus (Tendermint) validators.   
   
-3.e Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-065" href="#0069-VCBS-065">0069-VCBS-065</a>):
+3.e Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-COSMICELEVATOR-065" href="#0069-COSMICELEVATOR-065">0069-COSMICELEVATOR-065</a>):
   * Run with `network.validators.ersatz.multipleOfTendermintValidators = 1`
   * Setup a network with 6 consensus forming (Tendermint) validators
   * Ensure that the multisig is updated to those 6 validators.
@@ -342,7 +342,10 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Ensure that the multisig is *not* updated to those 4 validators, but we have the 5 validators from previous step.
   * Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 3 consensus (Tendermint) validators. 
 
-
+3.f Stopgap preventing `network.validators.tendermint.number` to be decreased via governance (<a name="0069-VCBS-066" href="#0069-VCBS-066">0069-VCBS-066</a>)
+* Run a network with 4 validator nodes with `network.validators.tendermint.number = 4`
+* Submit a network parameter change proposal to set `network.validators.tendermint.number = 3`.
+* The proposal is rejected. 
 
 4. Demote an ersatz validator due to lack of slots (<a name="0069-VCBS-037" href="#0069-VCBS-037">0069-VCBS-037</a>):
   * Setup a network with 4 tendermint validators, and 2 ersatz validators.
