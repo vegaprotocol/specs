@@ -29,7 +29,7 @@ These files contain generic user needs for interacting with wallets that are tru
 - `0006-NETW` [Network and node selection](0006-NETW-network-and-nodes.md) `TODO`
 
 ## `1000` Bridges, Transfers and Vesting
-- `1001-DEPO` [Deposit](1001-DEPO-desposit.md) `TODO`
+- `1001-DEPO` [Deposit](1001-DEPO-desposit.md)
 - `1002-WITH` [Withdraw](1002-WITH-withdraw.md)
 - `1003-TRAN` [Transfer](1003-TRAN-transfer.md) `TODO`
 - `1004-ASSO` [Associate governance token with a Vega key](1004-ASSO-associate.md)
