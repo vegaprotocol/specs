@@ -46,7 +46,7 @@ Furthermore, the validators check that:
   (i.e., if `spam.pow.increaseDifficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on this; however, they can be verified post-agreement, and the offending vega-key can be banished for the duration of 1/48 of an Epoch with a minimum duration of 30 seconds. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds; this is measured starting at the blocktime in which the violation occurs, and transactions are allowed again in the first block after. Validators should return a meaningful error message to the wallet to let it know that/why a transaction got rejected.
-Linking a transaction to a too old block will not lerad to a banishment, but only to a rejecteion of the offending transaction.
+Linking a transaction to a too old block will not lead to a banishment, but only to a rejection of the offending transaction.
 
 
 Notes: 
