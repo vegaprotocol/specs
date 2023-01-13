@@ -46,6 +46,7 @@ Furthermore, the validators check that:
   (i.e., if `spam.pow.increaseDifficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
  
  Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on this; however, they can be verified post-agreement, and the offending vega-key can be banished for the duration of 1/48 of an Epoch with a minimum duration of 30 seconds. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds; this is measured starting at the blocktime in which the violation occurs, and transactions are allowed again in the first block after. Validators should return a meaningful error message to the wallet to let it know that/why a transaction got rejected.
+Linking a transaction to a too old block will not lead to a banishment, but only to a rejection of the offending transaction.
 
 
 Notes: 
@@ -80,7 +81,7 @@ The initial hash-function used is SHA3 . To allow for a more fine-grained contro
 - For each transaction less than or equal to `spam.pow.numberOfTxPerBlock` in a block `spam.pow.difficulty` zeros are needed in the proof-of-work (<a name="0072-SPPW-008" href="#0072-SPPW-008">0072-SPPW-008</a>)
 - For each `spam.pow.numberOfTxPerBlock` sized block of transactions greater than `spam.pow.numberOfTxPerBlock` an additional 0 is required in the proof-of-work (1 additional zero for the first batch, two additional for the second batch etc) (<a name="0072-SPPW-009" href="#0072-SPPW-009">0072-SPPW-009</a>)
 - For a given block, a user is able to submit more than `spam.pow.numberOfTxPerBlock` transactions with only `spam.pow.difficulty` zeros by tying them to one or more historic blocks all of which are within `spam.pow.numberOfPastBlocks` blocks (<a name="0072-SPPW-010" href="#0072-SPPW-010">0072-SPPW-010</a>)
-- Using a block older than `spam.pow.numberOfPastBlocks` blocks prior to the current block is detected and leads to a temporary banning of the account (<a name="0072-SPPW-011" href="#0072-SPPW-011">0072-SPPW-011</a>)
+- Using a block older than `spam.pow.numberOfPastBlocks` blocks prior to the current block is detected the transaction is rejected (<a name="0072-SPPW-011" href="#0072-SPPW-011">0072-SPPW-011</a>)
 
 - The parameter 'spam.pow.difficulty' is increased.  Verify that
     - Transactions tied to such a block using the original difficulty are rejected with an error message.
