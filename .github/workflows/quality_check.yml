@@ -34,7 +34,6 @@ jobs:
       - name: "Run PySpelling"
         uses: rojopolis/spellcheck-github-actions@0.24.0
         with:
-          source_files: protocol/*.md
           task_name: Markdown
 
   markdownlint:
