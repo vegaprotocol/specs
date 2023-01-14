@@ -5,7 +5,7 @@ The point of liquidity provision on Vega is to incentivise people to place order
 Each market on Vega must have at least one committed liquidity provider (LP).
 This is enforced when a [governance proposal to create a market is submitted](./0028-GOVE-governance.md#1-create-market).
 In particular the proposal has to include [liquidity provision commitment](./0038-OLIQ-liquidity_provision_order_type.md),
-see also below. 
+see also below.
 
 Important note on wording:
 * liquidity provision / liquidity COMMITMENTs are the amount of stake a liquidity provider places as a bond on the market to earn rewards.
@@ -22,7 +22,7 @@ Any Vega participant can apply to become a liquidity provider (LP) on a market b
 
 Accepted if all of the following are true:
 - The order is valid - see [0038-OLIQ-Liquidity provision order type spec](./0038-OLIQ-liquidity_provision_order_type.md) for full details
-- The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount as well as the margin requirements 
+- The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount as well as the margin requirements
 - The market is in a state that accepts new liquidity provision [market lifecycle spec](./0043-MKTL-market_lifecycle.md).
 
 General notes:
@@ -41,7 +41,7 @@ Example: amending only a commitment amount but retaining old fee bid and orders 
 
 ### Processing the commitment
 
-When a commitment is made the liquidity commitment amount is assumed to be specified in terms of the settlement currency of the market. 
+When a commitment is made the liquidity commitment amount is assumed to be specified in terms of the settlement currency of the market.
 There is an minimum LP stake which is `market.liquidityProvision.minLpStakeQuantumMultiple x quantum` where `quantum` is specified per asset, see [asset framework spec](./0040-ASSF-asset_framework.md).
 
 If the participant has sufficient collateral to cover their commitment and margins for the orders generated from their proposed commitment, the commitment amount (stake) is transferred from the participant's general account to their (maybe newly created) [liquidity provision bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts) (new account type, 1 per liquidity provider per market and asset where they are commitment liquidity, created as needed). For clarity, liquidity providers will have a separate [margin account](./0013-ACCT-accounts.md#trader-margin-accounts) and [bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts).
@@ -49,7 +49,7 @@ If the participant has sufficient collateral to cover their commitment and margi
 - Liquidity provider bond account:
     - Each active market has one bond account per liquidity provider, per settlement asset for that market.
     - When a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
-    - A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment). 
+    - A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment).
     Transfers to/from this account also occur when it is used for settlement or margin shortfall, when penalties are applied, and if the account is under-collateralised because of these uses and is subsequently topped up to the commitment amount during collateral search (see below)
     - Collateral withdrawn from this account may only be transferred to either:
       - The insurance pool of the market (in event of penalties/slashing)
@@ -59,7 +59,7 @@ If the participant has sufficient collateral to cover their commitment and margi
 ### liquidity provider proposes to amend commitment amount
 
 The commitment transaction is also used to amend any aspect of their liquidity provision obligations.
-A participant may apply to amend their commitment amount by submitting a transaction for the market with a revised commitment amount. 
+A participant may apply to amend their commitment amount by submitting a transaction for the market with a revised commitment amount.
 
 `proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
 
@@ -82,7 +82,7 @@ where:
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
 - `actual-reduction-amount = min(-proposed-commitment-variation, maximum-reduction-amount)`
 - `new-actual-commitment-amount =  old-commitment-amount - actual-reduction-amount`
-- `market.liquidityProvision.shapes.maxSize` is the maximum entry of the LP order shape on liquidity commitment. 
+- `market.liquidityProvision.shapes.maxSize` is the maximum entry of the LP order shape on liquidity commitment.
 
 i.e. liquidity providers are allowed to decrease the liquidity commitment subject to there being sufficient stake committed to the market so that it stays above the market's required stake threshold. The above formulae result in the fact that if `maximum-reduction-amount = 0`, then `actual-reduction-amount = 0` and therefore the liquidity provider is unable to reduce their commitment amount.
 
@@ -176,14 +176,14 @@ Note:
 
 ### Bond account top up by collateral search
 
-In the same way that a collateral search is initiated to attempt to top-up a trader's margin account if it drops below the _collateral search level_, the system must also attempt to top up the bond account if its balance drops below the size of the LP's commitment. 
+In the same way that a collateral search is initiated to attempt to top-up a trader's margin account if it drops below the _collateral search level_, the system must also attempt to top up the bond account if its balance drops below the size of the LP's commitment.
 
 This should happen every time the network is performing a margin calculation and search. The system should prioritise topping up the margin account first, and then the bond account, if there are insufficient funds to do both.
 
 ## Network parameters
 
-- `market.liquidity.bondPenaltyParameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations. 
-Valid values: any decimal number `>= 0` with a default value of `0.1`.  
+- `market.liquidity.bondPenaltyParameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations.
+Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - `market.liquidity.maximumLiquidityFeeFactorLevel` - used in validating fee amounts that are submitted as part of [lp order type](./0038-OLIQ-liquidity_provision_order_type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
 - `market.liquidity.stakeToCcySiskas` - used to translate a commitment to an obligation (in siskas). Any decimal number `>0` with default value `1`.
 
@@ -205,9 +205,9 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - Through the API, I can list all active liquidity providers for a market (<a name="0044-LIME-001" href="#0044-LIME-001">0044-LIME-001</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIME-002" href="#0044-LIME-002">0044-LIME-002</a>).
 - Change of network parameter `market.liquidity.bondPenaltyParameter` will immediately change the amount by which the bond account will be 'slashed' when a liquidity provider has insufficient capital for Vega to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIME-003" href="#0044-LIME-003">0044-LIME-003</a>)
-- Change of `market.liquidityProvision.shapes.maxSize` will change the maximum number of entries in the order shape of the LP commitment. If `market.liquidityProvision.shapes.maxSize` is decreased all the LP orders that have already been submitted are unaffected. However any new submissions or amendments must respect the new (lower) maximum. (<a name="0044-LIME-005" href="#0044-LIME-005">0044-LIME-005</a>) 
+- Change of `market.liquidityProvision.shapes.maxSize` will change the maximum number of entries in the order shape of the LP commitment. If `market.liquidityProvision.shapes.maxSize` is decreased all the LP orders that have already been submitted are unaffected. However any new submissions or amendments must respect the new (lower) maximum. (<a name="0044-LIME-005" href="#0044-LIME-005">0044-LIME-005</a>)
 - Change of `market.liquidity.maximumLiquidityFeeFactorLevel` will change the maximum liquidity fee factor. Any LP orders that have already been submitted are unaffected but any new submission or amendments must respect the new maximum (those that don't get rejected). (<a name="0044-LIME-006" href="#0044-LIME-006">0044-LIME-006</a>)
-- Check that bond slashing works with non-default asset decimals, market decimals, position decimals. This can be done by following a similar story to [bond slashing feature test](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/liquidity-provision-bond-account.feature). Should test at least three different combinations, each decimal settings different to each other. (<a name="0044-LIME-009" href="#0044-LIME-009">0044-LIME-009</a>) 
+- Check that bond slashing works with non-default asset decimals, market decimals, position decimals. This can be done by following a similar story to [bond slashing feature test](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/liquidity-provision-bond-account.feature). Should test at least three different combinations, each decimal settings different to each other. (<a name="0044-LIME-009" href="#0044-LIME-009">0044-LIME-009</a>)
 - Change of `market.liquidity.stakeToCcyVolume` will change the liquidity obligation hence change the size of the LP orders on the order book. (<a name="0044-LIME-010" href="#0044-LIME-010">0044-LIME-010</a>)
 - If `market.liquidity.stakeToCcyVolume` is set to `0.0` then the [LP provision order](./0038-OLIQ-liquidity_provision_order_type.md) places `0` volume on the book for the LP regardless of the shape submitted and regardless of the `stake` committed. (<a name="0044-LIME-011" href="#0044-LIME-011">0044-LIME-011</a>)
 - If `market.liquidity.stakeToCcyVolume` is set to `0.0`, there is [target stake](./0041-TSTK-target_stake.md) of `1000` and there are 3 LPs on the market with stake / fee bid submissions of `100, 0.01`, `1000, 0.02` and `200, 0.03` then the liquidity fee is `0.02`. (<a name="0044-LIME-012" href="#0044-LIME-012">0044-LIME-012</a>)

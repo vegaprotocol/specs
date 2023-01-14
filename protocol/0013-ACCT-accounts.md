@@ -2,26 +2,26 @@
 
 ## Accounts controlled by parties
 
-A party only has control over balances in the "general" account for each asset. 
-[Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account for the relevant [asset](./0040-ASSF-asset_framework.md) created. 
+A party only has control over balances in the "general" account for each asset.
+[Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account for the relevant [asset](./0040-ASSF-asset_framework.md) created.
 In order to submit [orders](./0014-ORDT-order_types.md a non-zero general account balance is needed; Vega will transfer appropriate amount to the [margin account](./0011-MARA-check_order_allocate_margin.md) for the party and the market.
 
-Any party can submit a withdrawal transaction to withdraw assets from the general account to a specified address on another chain, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md). 
+Any party can submit a withdrawal transaction to withdraw assets from the general account to a specified address on another chain, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md).
 
 Any party can set up a transfer from their general account to other Vega accounts as described by the [transfer spec](./0057-TRAN-transfers.md).
 
-Note that a party can also associate the governance / staking asset via the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) but this number is *not* an account balance because it *cannot* be used as [collateral](./0005-COLL-collateral.md) for trading and it cannot be transferred. 
+Note that a party can also associate the governance / staking asset via the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) but this number is *not* an account balance because it *cannot* be used as [collateral](./0005-COLL-collateral.md) for trading and it cannot be transferred.
 
 ## Accounts controlled by Vega
 
 1. Mark-to-market settlement account per market: this is used for collecting and distributing mark-to-market settlement cashflows and is *zero* at the end of each mark-to-market settlement run.
 1. Margin accounts for each party with open orders or positions on any [market](./0043-MKTL-market_lifecycle.md).
-1. Bond account for any party that's an [LP on any market](0038-OLIQ-liquidity_provision_order_type.md). 
-1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md) for any market. 
-1. [Liquidity fee pool](0042-LIQF-setting_fees_and_rewarding_lps.md) for any market. 
-1. [Infrastructure fee pool](0029-FEES-fees.md) for any asset. 
-1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [staking rewards](0061-REWP-pos_rewards.md) account. 
-1. [Vega trasury accounts](0055-TREA-on_chain_treasury.md) per Vega asset. 
+1. Bond account for any party that's an [LP on any market](0038-OLIQ-liquidity_provision_order_type.md).
+1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md) for any market.
+1. [Liquidity fee pool](0042-LIQF-setting_fees_and_rewarding_lps.md) for any market.
+1. [Infrastructure fee pool](0029-FEES-fees.md) for any asset.
+1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [staking rewards](0061-REWP-pos_rewards.md) account.
+1. [Vega trasury accounts](0055-TREA-on_chain_treasury.md) per Vega asset.
 
 One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
@@ -43,12 +43,12 @@ All accounts must:
 
 **Creation/Deletion:**
 
-The first time an entity deposits an asset into Vega's collateral smart contract, an asset account is created for that party on Vega and credited with the equivalent amount. 
+The first time an entity deposits an asset into Vega's collateral smart contract, an asset account is created for that party on Vega and credited with the equivalent amount.
 
 This account:
 
 * is where the trading profits for all markets that have settlement in that asset will be eventually distributed back to (this occurs when the protocol releases collateral from a margin account)
-* is where the protocol searches for collateral if the trader has entered a collateral search zone. 
+* is where the protocol searches for collateral if the trader has entered a collateral search zone.
 * is used by all Vega markets with that settlement asset.
 * will have it's balance increased or decreased when a party deposits or withdraws that asset from Vega.
 
@@ -72,7 +72,7 @@ If there is a positive balance in an account that is being deleted, that balance
 
 ## Bond accounts
 
-Bond accounts are opened when a party opens a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md). The bond is held by the network to ensure that the Liquidity PRovider maintains enough collateral to cover their commitment. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management. 
+Bond accounts are opened when a party opens a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md). The bond is held by the network to ensure that the Liquidity PRovider maintains enough collateral to cover their commitment. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management.
 
 ## Insurance pools
 
@@ -80,7 +80,7 @@ Every market will have at least one insurance pool account that holds collateral
 
 **Creation/Deletion:**
 
-When a [market launches](./0043-MKTL_market_livecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). 
+When a [market launches](./0043-MKTL_market_livecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md).
 
 When a market is finalised / closed remaining funds are distributed to the on chain treasury.  This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
 
@@ -104,7 +104,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 - Every party that deposits an asset on Vega will have an asset account created for that asset. (<a name="0013-ACCT-003" href="#0013-ACCT-003">0013-ACCT-003</a>)
   - Only one general asset account exists per party per asset. (<a name="0013-ACCT-004" href="#0013-ACCT-004">0013-ACCT-004</a>)
   - When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. (<a name="0013-ACCT-005" href="#0013-ACCT-005">0013-ACCT-005</a>)
-  - When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. (<a name="0013-ACCT-006" href="#0013-ACCT-006">0013-ACCT-006</a>) 
+  - When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. (<a name="0013-ACCT-006" href="#0013-ACCT-006">0013-ACCT-006</a>)
   - [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are paid in to this account. (<a name="0013-ACCT-011" href="#0013-ACCT-011">0013-ACCT-011</a>)
 
 ### Party margin accounts

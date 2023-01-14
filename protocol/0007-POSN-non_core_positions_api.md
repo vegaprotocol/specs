@@ -23,7 +23,7 @@ The Positions API requires additional position data for each trader, on top of t
 * The portion of profit/loss (P&L) that has been "locked in" by partly closing out a position, i.e. "Realised P&L" (this is a cumulative of the per trade realised P&L)
 * The [volume weighted average entry price](../glossaries/trading-and-protocol-glossary.md#average-entry-price) of an open position.
 * The portion of profit/loss (P&L) that continuously changes when the _mark price_ changes, i.e. "Open P&L".
-* The per trade realised P&L for the buyer and seller 
+* The per trade realised P&L for the buyer and seller
 
 Note: A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md).
 
@@ -63,7 +63,7 @@ The API is expected to expose:
 ## Definitions / glossary
 
 | Term        | Definition           |
-| ------------- |-------------| 
+| ------------- |-------------|
 | Open Volume     | Traded volume that hasn't been closed out with an offsetting trade, this is positive for a long position and negative for a short position. |
 | Closing Out     | Entering a trade that reduces the absolute size of the open volume (i.e. takes it closer to zero) or switches the sign of the volume (i.e. a net long position (+'ve) becomes a net short position (-'ve)). Close out trades will generate a non-zero P&L if the Trade Price differs from the Open Volume Entry Price. |
 | Unrealised P&L      | The profit/loss on the open volume (dependent on the P&L calculation methodology): `Unrealised P&L [averaged] = (Product.value(Open Volume Entry Price) - Product.Value(mark_price)) *  open volume` |

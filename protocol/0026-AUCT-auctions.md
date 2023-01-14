@@ -10,7 +10,7 @@ They are mostly useful in less liquid markets, or in specific scenarios where a 
 
 ## Reference-level explanation
 
-As mentioned earlier, this specification introduces new trading modes. 
+As mentioned earlier, this specification introduces new trading modes.
 
 1. General auctions
 1. Opening auctions: purpose is to calibrate a market / help with price discovery when a new market is started.
@@ -93,7 +93,7 @@ Good for normal trading (GFN) orders are rejected during an auction.
 
 Auction periods may be ended with an uncrossing and the creation of any resulting trades due to:
 
-- the auction call period end time being reached (if such a time is set); or 
+- the auction call period end time being reached (if such a time is set); or
 - other functionality (related to the type of auction period) that triggers the end of auction.
 
 Auction periods do not end if the resulting state would immediately cause another auction to occur. Instead the current auction gets extended. For example, if a liquidity monitoring auction would be triggered at the end of an opening auction, then the opening auction continues and the _auction extension trigger_ field in the [market data API](./0021-MDAT-market_data_spec.md) is updated to account for the fact that the opening auction has been extended due to insufficent liquidity.
@@ -166,14 +166,14 @@ message Market {
   - If a market is temporarily in an auction period
   - Why it is in that period (e.g. Auction at open, liquidity sourcing, price monitoring)
   - When the auction will next attempt to uncross or if the auction period ended and the auction cannot be resolved for whatever reason then this should come blank or otherwise indicating that the system doesn't know when the auction ought to end.
-- A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run from the close of voting on the market proposal (assumed to pass successfully) until: 
+- A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run from the close of voting on the market proposal (assumed to pass successfully) until:
 	1) the enactment time assuming there are orders crossing on the book, [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-009" href="#0026-AUCT-009">0026-AUCT-009</a>)
-	2) past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed and we have limit orders such that after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-010" href="#0026-AUCT-010">0026-AUCT-010</a>)  
-	3) past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md0041). It will only end if 
+	2) past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed and we have limit orders such that after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-010" href="#0026-AUCT-010">0026-AUCT-010</a>)
+	3) past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md0041). It will only end if
 		- more liquidity is committed (<a name="0026-AUCT-011" href="#0026-AUCT-011">0026-AUCT-011</a>)
 		- or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-012" href="#0026-AUCT-012">0026-AUCT-012</a>)
 	4) past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
-		- best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>) 
+		- best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>)
 		- or best ask;  it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-014" href="#0026-AUCT-014">0026-AUCT-014</a>)
 - When entering an auction, all GFN orders will be cancelled. (<a name="0026-AUCT-015" href="#0026-AUCT-015">0026-AUCT-015</a>)
 - When leaving an auction, all GFA orders will be cancelled. (<a name="0026-AUCT-016" href="#0026-AUCT-016">0026-AUCT-016</a>)

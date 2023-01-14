@@ -22,7 +22,7 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 1. There will be a new transaction type called a Batch Instruction.
 
-1. This transaction must be signed by a single valid Vega key, which should have the required resources to execute all instructions in the transaction (if it does not some instructions will fail in later steps, as they would if executed as standalone transactions). 
+1. This transaction must be signed by a single valid Vega key, which should have the required resources to execute all instructions in the transaction (if it does not some instructions will fail in later steps, as they would if executed as standalone transactions).
 
 1. All instructions in the transaction will be performed as if individually signed by this key.
 
@@ -44,7 +44,7 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 1. The batches must be processed in the order **all cancellations, then all amendments, then all submissions**. This is to prevent gaming the system, and to prevent any order being modified by more than one action in the batch.
 
-1. When processing each list, the instructions within the list must be processed in the order they appear in the list (i.e. in the order prescribed by the submitter). (Notwithstanding that each list is processed in its entirety before moving onto the next list, in the order specified above). 
+1. When processing each list, the instructions within the list must be processed in the order they appear in the list (i.e. in the order prescribed by the submitter). (Notwithstanding that each list is processed in its entirety before moving onto the next list, in the order specified above).
 
 1. All instructions within each list must be validated as normal **at the time that the instruction is processed**. That is, instructions cannot be pre-validatted as a batch. If a prior instruction, would create a state that would cause a later instruction to fail validation, the later instruction must fail validation (and vice verse). If validation fails, that instruction must be skipped and the subsequent instructions must still be processed. Any validation or other errors should be returned, as well as a reference to the instruction to which they relate, in the response.
 
@@ -56,11 +56,11 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 ### Auction behaviour
 
-1. Processing each instruction within a batch must behave the same way regarding auction triggers as if it were a standalone transaction: 
+1. Processing each instruction within a batch must behave the same way regarding auction triggers as if it were a standalone transaction:
 
    - Entry to or exit from auctions must happen immediately **before continuing processing the rest of the batch** if that is what would happen were the transactions in the batch submitted individually outside of a batch.
 
-   - Under some cirucmstances many or all of the remaining instructons in the batch may fail validation / not be accepted or may behave differently when processed. 
+   - Under some cirucmstances many or all of the remaining instructons in the batch may fail validation / not be accepted or may behave differently when processed.
    This is normal and expected, and handling such failures is covered in the section "Processing a batch", above.
 
    - Triggers, etc. that are only evaluated after some other condition is met, such as the completion of processing for all concurrently delivered  transactions with the same timestamp, should continue to obey these rules.

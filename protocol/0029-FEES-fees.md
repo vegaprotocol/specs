@@ -1,7 +1,7 @@
 
 # Fees on Vega
 
-Fees are incurred on every trade on Vega. 
+Fees are incurred on every trade on Vega.
 
 An order may cross with more than one other order, creating multiple trades. Each trade incurs a fee which is always non-negative.
 
@@ -27,13 +27,13 @@ Note that maker_fee = 0 if there is no maker, taker relationship between the tra
 - maker: market framework / market making (network wide)
 - liquidity: market making system (per market)
 
-The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[infrastructure] = 0.0005 = 0.05%`. 
-The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`. 
+The infrastructure fee factor is set by a network parameter `market.fee.factors.infrastructureFee` and a reasonable default value is `fee_factor[infrastructure] = 0.0005 = 0.05%`.
+The maker fee factor is set by a network parameter `market.fee.factors.makerFee` and a reasonable default value is `fee_factor[maker] = 0.00025 = 0.025%`.
 The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions committed to the market, see [setting LP fees](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 trade_value_for_fee_purposes:
 * refers to the amount from which we calculate fee, (e.g. for futures, the trade's notional value = size_of_trade * price_of_trade)
-* trade_value_for_fee_purposes is defined on the Product and is a function that may take into account other product parameters 
+* trade_value_for_fee_purposes is defined on the Product and is a function that may take into account other product parameters
 
 Initially, for futures, the trade_value_for_fee_purposes = notional value of the trade = size_of_trade * price_of_trade. For other product types, we may want to use something other than the notional value. This is determined by the Product.
 
@@ -42,21 +42,21 @@ NB: size of trade needs to take into account Position Decimal Places specified i
 ### Collecting and Distributing Fees
 
 We need to calculate the total fee for the transaction.
-Attempt to transfer the full fee from the trader into a temporary bucket, one bucket per trade (so we know who the maker is) from the trader general account. 
+Attempt to transfer the full fee from the trader into a temporary bucket, one bucket per trade (so we know who the maker is) from the trader general account.
 If insufficient, then take the remainder (possibly full fee) from the margin account.
 The margin account should have enough left after paying the fees to cover maintenance level of margin for the trades.
-If the transfer fails: 
-1) If we are in continuous trading mode, than trades should be discarded, any orders on the book that would have been hit should remain in place with previous remaining size intact and the incoming order should be rejected (not enough fees error). 
-This functionality requires to match orders and create trades without changing the state of the order book or passing trades downstream so that the execution of the transaction can be discarded with no impact on the order book if needed. 
-Other than the criteria whether to proceed or discard, this is exactly the same functionality required to implement [price monitoring](./0032-PRIM-price_monitoring.md). 
-1) If we are in auction mode, ignore the shortfall (and see more details below). 
+If the transfer fails:
+1) If we are in continuous trading mode, than trades should be discarded, any orders on the book that would have been hit should remain in place with previous remaining size intact and the incoming order should be rejected (not enough fees error).
+This functionality requires to match orders and create trades without changing the state of the order book or passing trades downstream so that the execution of the transaction can be discarded with no impact on the order book if needed.
+Other than the criteria whether to proceed or discard, this is exactly the same functionality required to implement [price monitoring](./0032-PRIM-price_monitoring.md).
+1) If we are in auction mode, ignore the shortfall (and see more details below).
 
-The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the three components. 
+The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the three components.
 
 Now distribute funds from the "temporary fee bucket" as follows:
 1) Infrastructure_fee is transferred to infrastructure fee pool for that asset. Its distribution is described in [0061 - Proof of Stake rewards](./0061-REWP-pos_rewards.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to validator score and type.
-1) The maker_fee is transferred to the relevant party. 
-1) The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md). 
+1) The maker_fee is transferred to the relevant party.
+1) The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 ### During Continuous Trading
 
@@ -66,9 +66,9 @@ The "aggressor or price taker" pays the fee. The "passive or price maker" party 
 
 ### Normal Auctions (including market protection and opening auctions)
 
-During normal auctions there is no "price maker" both parties are "takers". Each side in a matched trade should contribute 1/2 of the infrastructure_fee + liquidity_fee. Note that this does not include a maker fee. 
+During normal auctions there is no "price maker" both parties are "takers". Each side in a matched trade should contribute 1/2 of the infrastructure_fee + liquidity_fee. Note that this does not include a maker fee.
 
-Fees calculated and collected from general + margin as in continuous trading *but* if a party has insufficient capital to cover the trading fee then in auction the trade *still* *goes* *ahead* as long as the margin account should have enough left after paying the fees to cover maintenance level of margin for the orders and then converted trades. The fee is distributed so that the infrastructure_fee is paid first and only then the liquidity_fee. 
+Fees calculated and collected from general + margin as in continuous trading *but* if a party has insufficient capital to cover the trading fee then in auction the trade *still* *goes* *ahead* as long as the margin account should have enough left after paying the fees to cover maintenance level of margin for the orders and then converted trades. The fee is distributed so that the infrastructure_fee is paid first and only then the liquidity_fee.
 
 During an opening auction of a market, no fees are collected.
 
@@ -78,8 +78,8 @@ Order that entered the book in the current batch are considered aggressive order
 
 ### Position Resolution
 
-The trades that were netted off against each other during position resolution incur no fees. 
-During position resolution all of the parties being liquidated share the total fee for the network order, pro-rated by the size of position. 
+The trades that were netted off against each other during position resolution incur no fees.
+During position resolution all of the parties being liquidated share the total fee for the network order, pro-rated by the size of position.
 As for fees in other cases, the fee is taken out of the general + margin account for the liable traders (the insurance pool is not used to top up fees that cannot be paid). If the general + margin account is insufficient to cover the fee then the fee (or part of it) is not going to get paid. In this case we first pay out the maker_fee (or as much as possible), then then infrastructure_fee (or as much as possible) and finally the liquidity_fee.
 
 ### Rounding

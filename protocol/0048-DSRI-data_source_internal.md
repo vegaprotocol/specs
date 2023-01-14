@@ -24,7 +24,7 @@ value { type: number, value: 1400.5 }
 
 ## 1.2 Time triggered
 
-This data source would be used to emit an event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example. 
+This data source would be used to emit an event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example.
 
 This trigger will emit the contents of the specified data source (could be omitted if just triggering trading termination, or could be a value as described in 1.1, or another data source in order to implement a delay/ensure the value from the data source is not emitted before a certain time).
 
@@ -53,7 +53,7 @@ on: {
 
 ## 1.3 Vega time changed
 
-This data source will emit the current Vega time *once* (and once only) whenever the Vega time changes. 
+This data source will emit the current Vega time *once* (and once only) whenever the Vega time changes.
 This can be used directly as a data source supplying a time feed, or wrapped in a filter to trigger a simple event (i.e. one that does not need to consume a value from another data source, such as the [trading terminated trigger]() for cash settled futures, as only the Vega time will be supplied).
 
 Pseudocode example: (block time feed - not useful with Oregon Trail feature set)
@@ -66,8 +66,8 @@ vegaprotocol.builtin.timestamp
 Pseudocode example: (with filter - i.e. for trading terminated trigger)
 
 ```rust
-filter { 
-	data: vegaprotocol.builtin.timestamp, 
+filter {
+	data: vegaprotocol.builtin.timestamp,
 	filters: [
 		greaterOrEqual { key: 'timestamp', value: '2023-12-31T23:55:00Z' }
 	]

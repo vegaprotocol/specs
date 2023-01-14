@@ -10,19 +10,19 @@ There is one 'write' endpoint - `transaction`, which will accept signed transact
 
 ## Read
 
-> **[REST API documentation](https://docs.vega.xyz/testnet/api/rest/core/core-service-submit-transaction)** 
+> **[REST API documentation](https://docs.vega.xyz/testnet/api/rest/core/core-service-submit-transaction)**
 
 To *observe the operation, and validate the state of the protocol, we must be able to obtain data provided by the following domains:*
 
 ### Governance
 
 - List all [governance proposals](./0028-GOVE-governance.md), regardless of state
-- List all proposals, filtered by the [party identitifier](./0016-PART-party.md) of the party that created it. 
+- List all proposals, filtered by the [party identitifier](./0016-PART-party.md) of the party that created it.
 - Retrieve a specified proposal
 - List all [votes](./0027-GOVE-governance.md#voting-for-a-proposal)
 - List [governance stake](./0059-STKG-simple_staking_and_delegating.md) for a specific party
 - List [delegations](./0059-STKG-simple_staking_and_delegating.md) for a specific party
- 
+
 ### Market
 
 - List all known [markets](./0001-MKTF-market_framework.md)
@@ -32,7 +32,7 @@ To *observe the operation, and validate the state of the protocol, we must be ab
   - Retrieve and stream market data (all fields described in [0021-MDATA - market data](./0021-MDAT-market_data_spec.md)) for a market
 - List all [assets](./0040-ASSF-asset_framework.md)
   - **Note**: This will not include assets that have not passed a governance vote. To query for these, query [governance](#governance)
- 
+
 ### Party
 
 - List all known [parties](./0016-PART-party.md).
@@ -44,15 +44,15 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 ### Configuration
 
 - List all [Network Parameters](./0054-NETP-network_parameters.md) and their current value
- 
+
 ### Consensus data
 
-> **[REST API documentation](https://docs.vega.xyz/testnet/category/api/rest/core/core-service)** 
+> **[REST API documentation](https://docs.vega.xyz/testnet/category/api/rest/core/core-service)**
 
 Separate from the state of trading, we need to be able to see that the network is operational.
 
 - Get statistics
-  - This includes data such as backlog length, che current version of the application 
+  - This includes data such as backlog length, che current version of the application
 - Get the current block height
 - Get the current timestamp, aka Vega Time
 

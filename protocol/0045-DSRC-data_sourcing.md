@@ -39,7 +39,7 @@ Note that this approach means:
 
 Any part of Vega requiring a an external or internal data source should be able to use any type of data source. **This means that there is a single common method for specifying a data source where one is required.**
 
-The types of data sources that are supported are listed towards the end of this spec. 
+The types of data sources that are supported are listed towards the end of this spec.
 
 Data sources will be specified by providing:
 
@@ -51,7 +51,7 @@ Data sources may refer to other data sources, for example:
 1. A data source that takes a source of structured data records as input and emits only the value of a named field (e.g. to return "BTCUSD_PRICE" from a record containing many prices, for instance)
 1. A data source that takes another data source as input and emits only data that matches a set of defined filters (e.g. to return only records with specific values in the timestamp and ticket symbol fields)
 
-NB: the above could be composed, so filter the stream and then select a field. 
+NB: the above could be composed, so filter the stream and then select a field.
 
 ## 3. Specifying a new data source
 
@@ -72,7 +72,7 @@ Data sources must be able to emit the following data types:
 
 Note that for number types the system should convert appropriately when these are used in a situation that requires Vega's internal price/quote type using the configured decimal places, etc. for the market.
 
-Additionally, for number types where the data source value cannot be interpreted without decimal place conversion (e.g. it is a number from Ethereum represented as a very large integer, perhaps as a string, with 18 or some other number of implicit decimals), it must be possible to specify the number of implicit decimals, when specifying the data source (e.g. in a market proposal or wherever the data source is to be used). Strings and numbers with decimal points and numbers after them should be interpreted correctly. 
+Additionally, for number types where the data source value cannot be interpreted without decimal place conversion (e.g. it is a number from Ethereum represented as a very large integer, perhaps as a string, with 18 or some other number of implicit decimals), it must be possible to specify the number of implicit decimals, when specifying the data source (e.g. in a market proposal or wherever the data source is to be used). Strings and numbers with decimal points and numbers after them should be interpreted correctly.
 
 For example: this means that if a data source with specified 18 decimal places is used to settle a market with 4 market decimals then:
 * Data with a value of `103500000000000000000` implies an actual value of `103.5`
@@ -101,10 +101,10 @@ select: {
 }
 ```
 
-This would emit just the value of the price field, i.e. 
+This would emit just the value of the price field, i.e.
 
 ```json
-{ "ticker": "GOLD", "price": 27.2 } 
+{ "ticker": "GOLD", "price": 27.2 }
 ```
 The above JSON gives output of `27.2`.
 
@@ -159,9 +159,9 @@ In future, we would therefore expect arbitrary compositions of these features to
 
 ## Examples
 
-Here are some examples of how a data source might be specified. 
+Here are some examples of how a data source might be specified.
 
-Note that these are examples *not actual specs*, please see specs for currently specified data types! 
+Note that these are examples *not actual specs*, please see specs for currently specified data types!
 
 Signed message stream filtered to return a single value:
 
@@ -170,17 +170,17 @@ select: {
   field: 'price',
   data: {
     filteredData: {
-      filters: [ 
+      filters: [
     -   { 'field': 'feed_id', 'equals': 'BTCUSD/EOD' },
         { 'field': 'mark_time', 'equals': '31/12/20' }
       ],
-      data: { 
+      data: {
         signedMessage: {
           sourcePubkeys: ['VEGA_PUBKEY_HERE', ...],
           dataType: { type: 'decimal', places: 5 }
         }
       }
-    } 
+    }
   }
 }
 ```
@@ -188,10 +188,10 @@ select: {
 Simple value, emitted at a date/time:
 
 ```proto
-on: { 
-  timestamp: '2021-01-31T23:59:59Z', 
-  data: { 
-    value { value: 0.2, type: 'float', } 
+on: {
+  timestamp: '2021-01-31T23:59:59Z',
+  data: {
+    value { value: 0.2, type: 'float', }
   }
 }
 ```

@@ -22,15 +22,15 @@
 
 ## Summary
 
-The market depth builder receives a stream of events from the core from which it builds up a market depth structure for each given market. This structure is used to provide a market depth stream and full market depth dump to any clients which have requested/subscribed to it. 
+The market depth builder receives a stream of events from the core from which it builds up a market depth structure for each given market. This structure is used to provide a market depth stream and full market depth dump to any clients which have requested/subscribed to it.
 
 ## Guide-level explanation
 
-When the core processes an external action such as an order, cancel, amend or changing auction state, it generates one or more events which are sent out via the event-bus. 
+When the core processes an external action such as an order, cancel, amend or changing auction state, it generates one or more events which are sent out via the event-bus.
 
 The market depth module subscribes to all the event types in the market-event and order-event streams. From the events received from these event streams, we build up a market depth structure for each market which will be a representation of the orderbook stored in the core.
 
-Clients connect to a vega node and subscribe to a `MarketDepth` stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occurring to the market depth structure and will contain a current and previous sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date. The client will be able to use the current and previous sequence numbers to confirm all messages are received. 
+Clients connect to a vega node and subscribe to a `MarketDepth` stream via gRPC or GraphQL for a specific market. This stream will contain all the updates occurring to the market depth structure and will contain a current and previous sequence number with each update. The client then makes a request to get a snapshot dump of the market depth state. This dump will contain the full market depth structure at the current time along with a sequence number for the current state. The client will then apply all updates that have a sequence number higher than the original dump to the market depth structure to keep it up to date. The client will be able to use the current and previous sequence numbers to confirm all messages are received.
 
 The market depth information should include pegged order volume.
 
@@ -67,7 +67,7 @@ The possible actions we know that can happen in the market engine are:
 
 Market depth information is not as detailed as the full orderbook. We have no need to store the individual orders, order ids and order types. The only information needed is the book side, price level, the number of orders at that level and the total volume at that level.
 
-Clients are able to subscribe to a market to receive the market depth information. To enable a better experience in the GUI and to prevent the concept of blocks from affecting the client we will send updates as they occur and not at the end of each block. 
+Clients are able to subscribe to a market to receive the market depth information. To enable a better experience in the GUI and to prevent the concept of blocks from affecting the client we will send updates as they occur and not at the end of each block.
 
 When a new event arrives at the market depth builder, we apply the change to our market depth structure and then send a copy of the price level details for the affected price level. The client is responsible for applying that update to their copy of market depth structure.
 

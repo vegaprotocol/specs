@@ -9,28 +9,28 @@ Markets on Vega are permissionlessly proposed using the [governance mechanism](.
 - whether the market is open for trading
 - status of settlement
 
-Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close). 
+Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close).
 
-All markets are proposed without any [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md). 
-If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date. 
+All markets are proposed without any [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md).
+If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date.
 However, the market may stay in an opening auction past the proposed `enactment` date until at least on party makes a liquidity commitment that meets criteria for exiting [liquidity auction](./0035-LIQM-liquidity_monitoring.md).
 
 ## Market lifecycle statuses
 
-A market can progress through a number of statuses through its life. The overall market status flow is shown in the diagram below. A market is created in a `proposed` state when a valid market creation governance proposal is `accepted`. 
+A market can progress through a number of statuses through its life. The overall market status flow is shown in the diagram below. A market is created in a `proposed` state when a valid market creation governance proposal is `accepted`.
 
 
-| Status              | Accepting LPs[1]  | Trading Mode        | Condition for entry                                                           | Condition for exit                   
-| ------------------ | -------------- | ------------------- | --------------------------------------------------------------- | -----------------------------------------         
+| Status              | Accepting LPs[1]  | Trading Mode        | Condition for entry                                                           | Condition for exit
+| ------------------ | -------------- | ------------------- | --------------------------------------------------------------- | -----------------------------------------
 | Proposed           |   Yes          | No trading          | Governance proposal valid and accepted                                       | Governance proposal voting period ends
-| Rejected           |   No           | No trading          | Outcome of governance votes is to reject the market             | N/A                                                    
+| Rejected           |   No           | No trading          | Outcome of governance votes is to reject the market             | N/A
 | Pending            |   Yes          | Opening auction     | Governance vote passes/wins                                     | Governance vote (to close) OR enactment date reached
-| Cancelled           |  No           | No trading          | Market triggers cancellation condition                          | N/A                                                    
-| Active             |   Yes          | Normal trading      | Enactment date reached and usual auction exit checks pass       | Governance vote (to close) OR maturity of market      
+| Cancelled           |  No           | No trading          | Market triggers cancellation condition                          | N/A
+| Active             |   Yes          | Normal trading      | Enactment date reached and usual auction exit checks pass       | Governance vote (to close) OR maturity of market
 | Suspended          |   Yes          | Exceptional auction | Price monitoring or liquidity monitoring trigger, or product lifecycle trigger                | Exit conditions met per monitoring spec. that triggered it, no other monitoring triggered or governance vote if allowed (see below)
 | Closed             |   No           | No trading          | Governance vote (to close)                                      | N/A
-| Trading Terminated |   No           | No trading          | Defined by the product (i.e. from a product parameter, specified in market definition, giving close date/time) | Settlement event commences                       
-| Settled            |   No           | No trading          | Settlement triggered and completed as defined by product                                      | N/A                                            
+| Trading Terminated |   No           | No trading          | Defined by the product (i.e. from a product parameter, specified in market definition, giving close date/time) | Settlement event commences
+| Settled            |   No           | No trading          | Settlement triggered and completed as defined by product                                      | N/A
 
 
 [1] Accepting LPs: it is possible to make or amend [Liquidity Provision Commitments](./0038-OLIQ-liquidity_provision_order_type.md)
@@ -47,7 +47,7 @@ All Markets are first [proposed via the governance mechanism](./0028-GOVE-govern
 
 **Entry:**
 
-- Valid [governance proposal](./0028-GOVE-governance.md#1-create-market) submitted and accepted. 
+- Valid [governance proposal](./0028-GOVE-governance.md#1-create-market) submitted and accepted.
 
 **Exit:**
 
@@ -59,7 +59,7 @@ All Markets are first [proposed via the governance mechanism](./0028-GOVE-govern
 **Behaviour:**
 
 - Participants can vote for or against the Market Proposal
-- Liquidity Providers can make, change, or exit Liquidity Commitments 
+- Liquidity Providers can make, change, or exit Liquidity Commitments
 - No trading is possible, no orders can be placed (except the buy/sell order shapes that form part of a Liquidity Commitment)
 - No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
 
@@ -82,9 +82,9 @@ When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-
 
 ### Pending
 
-When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal. 
+When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal.
 
-Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. In reasonably near future there will be automated market creation e.g. for a series of markets that is voted on once, market creation from a data source (oracle), etc. so market creation and the market lifecycle should be implemented independently of the governance framework and the lifecycle of a proposal. 
+Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. In reasonably near future there will be automated market creation e.g. for a series of markets that is voted on once, market creation from a data source (oracle), etc. so market creation and the market lifecycle should be implemented independently of the governance framework and the lifecycle of a proposal.
 
 **Entry:**
 
@@ -101,18 +101,18 @@ Note: this state represents any market that will be created, which currently mea
 
 **Behaviour:**
 
-- Liquidity providers can make, change, or exit commitments 
+- Liquidity providers can make, change, or exit commitments
 - Auction orders are accepted as per [any regular auction period](./0026-AUCT-auctions.md).
 - Margins on orders as per auction margin instructions in [margin calculator spec](./0019-MCAL-margin_calculator.md).
 
 ### Cancelled
 
-A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period, 
+A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period,
 and the trading terminated data source input rings, see [data sourcing](./0045-DSRC-data_sourcing.md).
-When a market transitions to a cancelled state all orders should be cancelled and collateral returned to respective parties general account for the relevant asset, all LP commitments should be cancelled and their bond returned to the general account for the relevant asset and any insurance pool balance should be transferred into the network treasury account for that asset. 
+When a market transitions to a cancelled state all orders should be cancelled and collateral returned to respective parties general account for the relevant asset, all LP commitments should be cancelled and their bond returned to the general account for the relevant asset and any insurance pool balance should be transferred into the network treasury account for that asset.
 
 Once "cancelled" there must be no open positions tracked by the protocol for the market and any open positions must have been closed including returning all margin and other related collateral if necessary and also notifying downstream event consumers that the positions are closed. Specific position related actions may be unnecessary if the cancelled state is being entered from a state in which there cannot possibly have been any open positions.
-All data sources that are only referenced by this market should be unregistered. 
+All data sources that are only referenced by this market should be unregistered.
 
 **Entry:**
 
@@ -145,7 +145,7 @@ Once the enactment date is reached and the other conditions specified to exit th
 
 **Behaviour:**
 
-- Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-LIME-lp_mechanics.md). 
+- Liquidity Providers can make, change, or exit Liquidity Commitments, as per conditions specified in the [liquidity mechanics spec](./0044-LIME-lp_mechanics.md).
 - Orders can be placed into the market, trading occurs according to normal trading mode rules
 - Market data is emitted
 - Positions and margins are managed as per the specs
@@ -162,13 +162,13 @@ Suspension currently always operates as an auction call period. Depending on the
 
 **Exit:**
 
-- Conditions specified in [price monitoring](./0032-PRIM-price_monitoring.md) and [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) and the usual [ending of auction checks](./0026-AUCT-auctions.md) pass → Active 
+- Conditions specified in [price monitoring](./0032-PRIM-price_monitoring.md) and [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) and the usual [ending of auction checks](./0026-AUCT-auctions.md) pass → Active
 - Governance vote to close a market passes → Closed
 - Market was suspended by governance vote of product lifecycle trigger and a governance vote passes to set the status to ACTIVE → Active
 
 **Behaviour:**
 
-- Liquidity providers can make, change, or exit commitments. 
+- Liquidity providers can make, change, or exit commitments.
 - Auction orders are accepted as per [any regular auction period](./0026-AUCT-auctions.md).
 - Margins on orders as per auction based instructions in [margin calculator spec](./0019-MCAL-margin_calculator.md).
 
@@ -191,7 +191,7 @@ No exit. This is a terminal state.
 ### Trading Terminated
 
 A market may terminate trading if the product is one that expires or if the market is otherwise configured to have a finite lifetime.
-In the case of futures, termination occurs at some point prior to the settlement of the product and is triggered by the trading terminated data source configured on the market. Markets in this state accept no trading, but retain the positions and margin balances that were in place after processing the trading terminated trigger (which may itself generate MTM cashflows, though for futures it doesn't). 
+In the case of futures, termination occurs at some point prior to the settlement of the product and is triggered by the trading terminated data source configured on the market. Markets in this state accept no trading, but retain the positions and margin balances that were in place after processing the trading terminated trigger (which may itself generate MTM cashflows, though for futures it doesn't).
 
 A market moves from this termination state to Settled when enough information exists and the triggers are reached to settle the market. This could happen instantly upon trading termination if the data source message also contains the required settlement data, though usually there will be a delay, for instance, to wait for receipt and acceptance of data from a data source (oracle). An example of an instant transition would be where the trigger for terminating trading and the settlement are the publishing of a specific price from another market on the Vega network itself (same shard), or in the rare case of extremely delayed blocks meaning that the settlement data is available before the trigger is activated (note that market creators would be expected to allow enough of a buffer that this should effectively never happen).
 
@@ -209,19 +209,19 @@ A market moves from this termination state to Settled when enough information ex
 - Mark to market settlement is performed, if required, after termination is triggered, then never again
 - A single set of market data may be emitted for the final settlement data (e.g. settlement mark price), after which no market data are emitted.
 - During the transition out of this state:
-  - All final settlement cashflows are calculated and applied (settled) 
+  - All final settlement cashflows are calculated and applied (settled)
   - Margins are transferred back to general accounts
   - Insurance pool funds are redistributed
 - No risk management or price/liquidity monitoring occurs
 
 ### Settled
 
-Once the required data to calculate the settlement cashflows is provided by oracle input for a market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). 
-The positions are then closed and all orders cleared. 
-All money held in margin accounts after final settlement is returned to traders' general accounts. 
-[Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset. 
-[LP fees](0042-LIQF-setting_fees_and_rewarding_lps.md) that have been cumulated but not yet paid out are distributed to the market LPs as per the LP spec. 
-The market can be deleted entirely at this point, from a core perspective. 
+Once the required data to calculate the settlement cashflows is provided by oracle input for a market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement).
+The positions are then closed and all orders cleared.
+All money held in margin accounts after final settlement is returned to traders' general accounts.
+[Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset.
+[LP fees](0042-LIQF-setting_fees_and_rewarding_lps.md) that have been cumulated but not yet paid out are distributed to the market LPs as per the LP spec.
+The market can be deleted entirely at this point, from a core perspective.
 
 **Entry:**
 
@@ -236,7 +236,7 @@ The market can be deleted entirely at this point, from a core perspective.
 
 - No trading occurs, no orders are accepted
 - During the transition into this state:
-  - All final settlement cashflows are calculated and applied (settled) 
+  - All final settlement cashflows are calculated and applied (settled)
   - Margins are transferred back to general accounts
   - All insurance pool funds are redistributed or moved to a network wide insurance fund account
   - All fees are distributed (after a delay/at the next relevant epoch if needed - this means the market may continue to need to be "tracked" by the core until this step is complete)
@@ -246,45 +246,45 @@ The market can be deleted entirely at this point, from a core perspective.
 
 ### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)
 
-1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`). 
-Market state is `proposed`. 
-1. Parties vote against the market proposal. 
-The LP bond of the party that proposed the market is transferred to the general account. 
-It is not possible to submit orders to the market. 
-No parties have margin account balances that are non-zero for the market. 
+1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
+Market state is `proposed`.
+1. Parties vote against the market proposal.
+The LP bond of the party that proposed the market is transferred to the general account.
+It is not possible to submit orders to the market.
+No parties have margin account balances that are non-zero for the market.
 Market state is `rejected`.
 
 ### Lifecycle happy path (<a name="0043-MKTL-002" href="#0043-MKTL-002">0043-MKTL-002</a>)
 
-1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`). 
-Market state is `proposed`. 
-The LP bond of the party that proposed the market is transferred from general to bond account. 
-1. Market `m1` is accepted and enters opening auction. 
-Market state is `pending`. 
-1. Parties place orders and at least one trade happens in continuous trading mode. 
+1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
+Market state is `proposed`.
+The LP bond of the party that proposed the market is transferred from general to bond account.
+1. Market `m1` is accepted and enters opening auction.
+Market state is `pending`.
+1. Parties place orders and at least one trade happens in continuous trading mode.
 Market state is `active`.
-1. Parties place orders so that a [price monitoring auction is triggered](0032-PRIM-price_monitoring.md). 
-Market state is `suspended`. 
-1. Price monitoring auction ends and the market is in continous trading again. 
-The market state is `active`. 
-1. Parties cancel orders so that there is no "best static bid" on the order book. 
-The market enters [liquidity monitoring auction](0035-LIQM-liquidity_monitoring.md). 
-The market state is `suspended`. 
-1. A party place bid; this becomes a best static bid. 
-After the specified time the liquidity auction ends. 
-The market state is `active`. 
-1. Make sure that trades happen so that at least two parties have open positions. 
-The mark price is `p`. 
-1. The time specified at market proposal by the interal time oracle is reached. 
-Any orders that parties submit get rejected. 
-The parties with open position in the immediately preceding step still have open positions. 
-Parties with open positions still have non-zero margin account balances. 
+1. Parties place orders so that a [price monitoring auction is triggered](0032-PRIM-price_monitoring.md).
+Market state is `suspended`.
+1. Price monitoring auction ends and the market is in continous trading again.
+The market state is `active`.
+1. Parties cancel orders so that there is no "best static bid" on the order book.
+The market enters [liquidity monitoring auction](0035-LIQM-liquidity_monitoring.md).
+The market state is `suspended`.
+1. A party place bid; this becomes a best static bid.
+After the specified time the liquidity auction ends.
+The market state is `active`.
+1. Make sure that trades happen so that at least two parties have open positions.
+The mark price is `p`.
+1. The time specified at market proposal by the interal time oracle is reached.
+Any orders that parties submit get rejected.
+The parties with open position in the immediately preceding step still have open positions.
+Parties with open positions still have non-zero margin account balances.
 The market state is `trading terminated`.
-1. The settlement price oracle transaction is sent and it is  *not* equal to `p`. 
-Parties that had open positions see settlement cash-flows happen. 
-Margin account balances are transferred to the general account. 
+1. The settlement price oracle transaction is sent and it is  *not* equal to `p`.
+Parties that had open positions see settlement cash-flows happen.
+Margin account balances are transferred to the general account.
 Any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
-The market state is `settled`. 
+The market state is `settled`.
 
 ### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
 
@@ -293,5 +293,5 @@ The market state is `settled`.
 1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
 1. Any insurance pool balance should be [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
-1. All data sources that are only referenced by that market are unregistered. 
-1. The market state is set to cancelled. 
+1. All data sources that are only referenced by that market are unregistered.
+1. The market state is set to cancelled.

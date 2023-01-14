@@ -1,15 +1,15 @@
 # Simple Staking and Delegation
 
-Vega runs on a delegated proof of stake (DPOS) blockchain. Participants who hold a balance of the configured [governance asset](./0028-GOVE-governance.md) can stake these on the network by delegating their tokens to one or more validators that they trust. This helps to secure the network. 
+Vega runs on a delegated proof of stake (DPOS) blockchain. Participants who hold a balance of the configured [governance asset](./0028-GOVE-governance.md) can stake these on the network by delegating their tokens to one or more validators that they trust. This helps to secure the network.
 
 Validators and delegators receive incentives from the network, depending on various factors, including how much stake is delegated and how honest they are.
 
 ## Note on terminology
 
 Staking requires the combined action of:
-- Associating tokens on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md); and 
+- Associating tokens on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md); and
 - Nominating these tokens to one or more validators
-- Delegation in some contexts is used to mean `associate + nominate`. For the purposes of this document, once it's clear from context that association has happened `delegate` and `nominate` may be used interchangeably. 
+- Delegation in some contexts is used to mean `associate + nominate`. For the purposes of this document, once it's clear from context that association has happened `delegate` and `nominate` may be used interchangeably.
 
 Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can associate a token in the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), which is then available for
 nomination. To this end, a Vega token (or a fraction thereof) can be:
@@ -18,7 +18,7 @@ nomination. To this end, a Vega token (or a fraction thereof) can be:
 
 ## Smart Contract / Staking Bridge Interaction
 
-It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) through the validators; thus, all actions regarding associating 
+It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) through the validators; thus, all actions regarding associating
 and dissociating of stake are initiated by the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), not by the Vega chain.
 
 In order to delegate, users require tokens that will be associated in a smart contract (see [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md)). Vega will be made aware of how many tokens a given party has associated through bridge events. When the same tokens are dissociated, a corresponding event will be emitted:
@@ -48,19 +48,19 @@ This token is now available for delegation.
 
 ### A token gets dissociated:
 
-If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegatable tokens is reduced to match the (un)locking status). 
+If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegatable tokens is reduced to match the (un)locking status).
 
-This could mean that the token-holder has a delegation-command scheduled that is no longer executable; this command will then be ignored at the start of the next epoch. 
+This could mean that the token-holder has a delegation-command scheduled that is no longer executable; this command will then be ignored at the start of the next epoch.
 
-If the token holder does not have sufficient undelegated stake, at first the validators verify if tokens are in the process of being delegated (i.e., the delegation command has been issued, but not yet executed), and uses those tokens to cover the unlocking. If this is insufficient, the `undelegate-now` command is automatically triggered, undelegating evenly from all validators to cover the needs. 
+If the token holder does not have sufficient undelegated stake, at first the validators verify if tokens are in the process of being delegated (i.e., the delegation command has been issued, but not yet executed), and uses those tokens to cover the unlocking. If this is insufficient, the `undelegate-now` command is automatically triggered, undelegating evenly from all validators to cover the needs.
 
 ## Delegation Transaction
 
-Any locked and undelegated stake can be delegated at any time by putting a 
-delegation-message on the chain. However, the delegation only becomes valid 
+Any locked and undelegated stake can be delegated at any time by putting a
+delegation-message on the chain. However, the delegation only becomes valid
 towards the next epoch, though it can be undone through undelegate.
 
-Once Vega is aware of locked tokens, the users will have an [account](./0013-ACCT-accounts.md#staking-accounts) with the balance reflecting how many tokens were locked. At this point, the user can submit a transaction to stake (delegate) their tokens. The amount they stake must be `<= balance`, naturally. 
+Once Vega is aware of locked tokens, the users will have an [account](./0013-ACCT-accounts.md#staking-accounts) with the balance reflecting how many tokens were locked. At this point, the user can submit a transaction to stake (delegate) their tokens. The amount they stake must be `<= balance`, naturally.
 
 ```proto
 message Delegate {
@@ -80,12 +80,12 @@ To avoid fragmentation or spam, there is a network parameter `minimum delegateab
 
 To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
-it is put on the chain) that the delegator has sufficient unlocked stake, as 
+it is put on the chain) that the delegator has sufficient unlocked stake, as
 well as in the beginning of the next epoch just before the command takes effect.
-The amount of delegatable stake is reduced right away once the command is put into 
+The amount of delegatable stake is reduced right away once the command is put into
 a block.
 
-There is not maximum amount of stake that a validator can accept, instead at the end of the epoch when staking rewards are calculated, the stake of each validator (and their delegator) may be penalised if it represents a stake that it more than the optimal stake, i.e. the desired stake to be owned by each validator and its delegators. 
+There is not maximum amount of stake that a validator can accept, instead at the end of the epoch when staking rewards are calculated, the stake of each validator (and their delegator) may be penalised if it represents a stake that it more than the optimal stake, i.e. the desired stake to be owned by each validator and its delegators.
 
 ### Undelegating
 
@@ -94,7 +94,7 @@ Users can remove stake by submitting an `Undelegate` transaction. The tokens wil
 At the top level, `Stake_Deposited` simply adds `amount` of tokens to the account of the user associated with the `user`. Likewise, the `Stake_Removed` event subtracts the `amount` of tokens from their account.
 
 - If the `Stake_Removed` amount of tokens is higher than the balance of said user, something went seriously wrong somewhere. This is a good time to panic.
-- If the amount is higher than the amount of undelegated stake, the missing amount must be freed using the undelegate function (see section above about bridge contract interaction). There is currently no rule how to choose this; 
+- If the amount is higher than the amount of undelegated stake, the missing amount must be freed using the undelegate function (see section above about bridge contract interaction). There is currently no rule how to choose this;
 
 *Option-1*
 A first heuristic would be to take from the highest delegation first and then go down, e.g.
@@ -121,17 +121,17 @@ The user is marked to not receive any reward from the validator in that epoch. T
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring any interaction between the smart contract and the details of the delegation system. This also allows the delegator to change their mind about a delegation before it is activated.
 
 `UndelegateInAnger`:
-This is not strictly a type of undelegation but it's effect is quite similar to undelegate now. This is expressed by unstaking rather than by un-delegating. When removing the stake, the corresponding stake will automatically be undelegated. 
+This is not strictly a type of undelegation but it's effect is quite similar to undelegate now. This is expressed by unstaking rather than by un-delegating. When removing the stake, the corresponding stake will automatically be undelegated.
 
 ### Auto [Un]delegation
 
-- A party become eligible to participate in auto delegation once they have manually delegated (nominated) over x% of the association. In theory this should be 100% but in practice due to rounding issues we can make this closer to 100%. It is currently defined as 95% of the association. 
-- Once entering auto delegation mode, any un-nominated associated tokens will be automatically distributed according to the current validator nomination of the party maintaining the same proportion. 
+- A party become eligible to participate in auto delegation once they have manually delegated (nominated) over x% of the association. In theory this should be 100% but in practice due to rounding issues we can make this closer to 100%. It is currently defined as 95% of the association.
+- Once entering auto delegation mode, any un-nominated associated tokens will be automatically distributed according to the current validator nomination of the party maintaining the same proportion.
 - Edge cases:
-  - If a party has entered auto delegation mode, and their association has increased it should be automatically distributed for the epoch following the increase of association. However, if during the same epoch the party requests to execute manual delegation, no automatic delegation will be done in that epoch. If there is still un-nominated association in the next epoch, it will be automatically distributed. 
-  - If a party qualifies for auto delegation and have un-nominated association, however the party requests to undelegate (either during the epoch or at the end of the epoch) - they exit auto delegation mode. The rationale here is that they probably want to do some rearrangement of their nomination and we give them a chance to do so. Once the party reached more than x% of nomination again, they would enter auto delegation mode again and any future un-nominated association will be automatically distributed. 
-  - When distributing the newly available association according to the current validators nomination of the party, if validator A should get X but can only accept X - e (due to max per validator constraint), we don't try to distribute e between the other validators and will try to distribute it again in the next round. 
-- Auto undelegation - whenever the party dissociates tokens, their nomination must be updated such that their maximum nomination reflects the association. 
+  - If a party has entered auto delegation mode, and their association has increased it should be automatically distributed for the epoch following the increase of association. However, if during the same epoch the party requests to execute manual delegation, no automatic delegation will be done in that epoch. If there is still un-nominated association in the next epoch, it will be automatically distributed.
+  - If a party qualifies for auto delegation and have un-nominated association, however the party requests to undelegate (either during the epoch or at the end of the epoch) - they exit auto delegation mode. The rationale here is that they probably want to do some rearrangement of their nomination and we give them a chance to do so. Once the party reached more than x% of nomination again, they would enter auto delegation mode again and any future un-nominated association will be automatically distributed.
+  - When distributing the newly available association according to the current validators nomination of the party, if validator A should get X but can only accept X - e (due to max per validator constraint), we don't try to distribute e between the other validators and will try to distribute it again in the next round.
+- Auto undelegation - whenever the party dissociates tokens, their nomination must be updated such that their maximum nomination reflects the association.
 
 ## Fringe Cases:
 
@@ -142,19 +142,19 @@ If the value of `minimum_delegateable_stake` changes in a bad way, stakers might
 some fraction they can't modify anymore. To this end, the undelegate commands also should
 support a parameter "all".
 
-With this setup, a delegator can use a constant delegation/undelegate-now to spam the network.	
+With this setup, a delegator can use a constant delegation/undelegate-now to spam the network.
 
-If several delegators change the delegation within the same block, some of them may not be allowed to 
+If several delegators change the delegation within the same block, some of them may not be allowed to
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
 block creator has the responsibility to filter out these transactions.
 
-Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted proportionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calcualte first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is guaranteed to be less than or equal to the available un-nominated association. 
+Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted proportionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calcualte first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is guaranteed to be less than or equal to the available un-nominated association.
 
 ## Network Parameters
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `validators.delegation.minAmount`       | String (float) |  `"0.001"`        | The smallest fraction of the [governance token](./0028-GOVE-governance.md) that can be [delegated to a validator](#delegation-transaction). | 
+| `validators.delegation.minAmount`       | String (float) |  `"0.001"`        | The smallest fraction of the [governance token](./0028-GOVE-governance.md) that can be [delegated to a validator](#delegation-transaction). |
 
 Actual validator score calculation is in [simple scheme for Sweetwater](0061-simple-POS-rewards\ -\ SweetWater.md) and it introduces its own network parameters.
 
@@ -201,7 +201,7 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 - Changing the validator to whom a participant wants to validate to involves:
   - Announcing removal of stake for current validator
   - Staking on the new validator, as per normal [function: Stake](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md)
-  - These can happen concurrently, so that at the next epoch, the stake is removed from the current validator and staked on the new validator 
+  - These can happen concurrently, so that at the next epoch, the stake is removed from the current validator and staked on the new validator
 
 ## Auto delegation scenarios
 

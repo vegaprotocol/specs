@@ -7,7 +7,7 @@ Vega makes uses of a ERC-20 token on the Ethereum blockchain as a [governance as
 Although it would be possible to use the standard ERC-20 bridge to deposit governance tokens and put them in full control of the Vega network, the system will not do this for the governance asset. Instead there will be a separate system that allows governance tokens (only) to be "staked" to a Vega public key (and "unstaked" when done) without any action on the Vega network, and without putting the tokens under the control of the Vega network. This approach has been chosen for two primary reasons:
 
 1. Any attacker who gains control of or is able to exploit the Vega network will be unable to steal staked Vega tokens. This means that even if an attacker was able to take over the network, the tokenholders would remain unchanged and could fix the issue and relaunch the network by delegating to new validators.
-2. This method allows unvested (locked) tokens to be staked. Both staking and unstaking are controlled entirely on the Ethereum side, and staked balances are recognised on the Vega network by listening for `Stake_*` events which can be emitted by any contract that's recognised by the network, which makes it possible to implement stake/unstake functionality into the token vesting contract in additional to the normal "staking bridge" contract. 
+2. This method allows unvested (locked) tokens to be staked. Both staking and unstaking are controlled entirely on the Ethereum side, and staked balances are recognised on the Vega network by listening for `Stake_*` events which can be emitted by any contract that's recognised by the network, which makes it possible to implement stake/unstake functionality into the token vesting contract in additional to the normal "staking bridge" contract.
 
 In order to manage the staking of Vega tokens from mainnet Ethereum to Vega mainnet, events need to be raised on ETH that can then be consumed by Vega.
 Much like [the Ethereum bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md), a bridge smart contract will be used.
@@ -80,7 +80,7 @@ Functions:
 	* Requires that the vesting contract holds at least `amount` governance tokens, that are currently not staked, on behalf of the sender address (i.e. they will be redeemable by sender once vested)
 	* Must allow both unvested (locked) tokens and vested tokens that are not yet redeemed to be staked
 	* Emits `Stake_Deposited`
-* `remove_stake(uint256 amount, bytes32 vega_public_key)` 
+* `remove_stake(uint256 amount, bytes32 vega_public_key)`
 	* Requires that the vesting contract holds at least `amount` governance tokens, that are currently staked to the specified Vega public key, on behalf of the sender address (i.e. they will be redeemable by sender once vested)
 	* Emits `Stake_Removed`
 

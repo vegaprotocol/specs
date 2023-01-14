@@ -33,7 +33,7 @@ For a full outline of these behaviours, see [0037-OPEG-pegged_orders](./0037-OPE
 ### Wash trading
 
 If, during continuous trading, an order would be filled or partially filled with an existing order from the same [party](./0017-PART-party.md) aka "wash" trade, the order is rejected. Any existing fills that happen before the wash trade is identified will be kept. FOK rules still apply for wash trading so if a wash trade is identified before the full amount of the order is complete, the order will be stopped and nothing filled.
-Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing. 
+Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing.
 
 | Filled State | Resulting status | Reason |
 |--------------|------------------|--------|
@@ -95,7 +95,7 @@ Note: The last row in the table above is added for clarity. If the order was fil
 
 ### Impact of order types on settlement
 
-- Test that market settlement cashflows only depend on parties positions and is independent of what order types there are on the book. (<a name="0024-OSTA-009" href="#0024-OSTA-009">0024-OSTA-009</a>) 
+- Test that market settlement cashflows only depend on parties positions and is independent of what order types there are on the book. (<a name="0024-OSTA-009" href="#0024-OSTA-009">0024-OSTA-009</a>)
 
 ### Reject reasons
 

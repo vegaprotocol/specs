@@ -4,7 +4,7 @@
 
 A *Mark Price* is a concept derived from traditional markets.  It is a calculated value for the 'current market price' on a market.
 
-Introduce a network parameter `network.markPriceUpdateMaximumFrequency` with minimum allowable value of `0s` maximum allowable value of `1h` and a default of `5s`. 
+Introduce a network parameter `network.markPriceUpdateMaximumFrequency` with minimum allowable value of `0s` maximum allowable value of `1h` and a default of `5s`.
 
 ## Acceptance criteria
 
@@ -39,31 +39,31 @@ The most recently calculated *Mark Price* is used in the [mark-to-market settlem
 ## Algorithms for calculating the *Mark Price*:
 
  ### 1. Last Traded Price of a Sequence with same time stamp with maximum frequency set by `network.markPriceUpdateMaximumFrequency`
- 
- The mark price for the instrument is set to the last trade price in the market following processing of each transaction (i.e. submit/amend/delete order) from a sequence of transactions with the same time stamp, provided that at least `network.markPriceUpdateMaximumFrequency` has elapsed since the last mark price update.
- 
- >*Example:* Assume `network.markPriceUpdateMaximumFrequency = 10s`. 
- 
- Consider the situation where the mark price was last updated to $900 and this was 12s ago. There is a market sell order for -20 and a market buy order for +100 with the same time stamp. The sell order results in two trades: 15 @ 920 and 5 @ 910. The buy order results in 3 trades; 50 @ $1000, 25 @ $1100 and 25 @ $1200, the mark price changes **once** to a new value of $1200. 
 
- Now 8s has elapsed since the last update and there is a market sell order for volume 3 which executes against book volume as 1 @ 1190 and 2 @ 1100. 
- The mark price isn't updated because `network.markPriceUpdateMaximumFrequency = 10s` has not elapsed yet. 
+ The mark price for the instrument is set to the last trade price in the market following processing of each transaction (i.e. submit/amend/delete order) from a sequence of transactions with the same time stamp, provided that at least `network.markPriceUpdateMaximumFrequency` has elapsed since the last mark price update.
+
+ >*Example:* Assume `network.markPriceUpdateMaximumFrequency = 10s`.
+
+ Consider the situation where the mark price was last updated to $900 and this was 12s ago. There is a market sell order for -20 and a market buy order for +100 with the same time stamp. The sell order results in two trades: 15 @ 920 and 5 @ 910. The buy order results in 3 trades; 50 @ $1000, 25 @ $1100 and 25 @ $1200, the mark price changes **once** to a new value of $1200.
+
+ Now 8s has elapsed since the last update and there is a market sell order for volume 3 which executes against book volume as 1 @ 1190 and 2 @ 1100.
+ The mark price isn't updated because `network.markPriceUpdateMaximumFrequency = 10s` has not elapsed yet.
 
  Now 10.1s has elapsed since the last update and there is a market buy order for volume 5 which executes against book volume as 1 @ 1220, 2 @ 1250 and 2 @ 1500. The mark price is updated to 1500.
 
  ### 2. Last Traded Price + Order Book
 The mark price is set to the higher / lower of the last traded price, bid/offer.
 
->*Example a):* consider the last traded price was $1000 and the current best bid in the market is $1,100. The bid price is higher than the last traded price so the new Mark Price is $1,100. 
+>*Example a):* consider the last traded price was $1000 and the current best bid in the market is $1,100. The bid price is higher than the last traded price so the new Mark Price is $1,100.
 
->*Example b):* consider the last traded price was $1000 and the current best bid in the market is $999. The last traded price is higher than the bid price so the new Mark Price is $1,000. 
+>*Example b):* consider the last traded price was $1000 and the current best bid in the market is $999. The last traded price is higher than the bid price so the new Mark Price is $1,000.
 
  ### 3. Oracle
  An oracle source external to the market provides updates to the Mark Price. See the [data sourcing spec](./0045-DSRC-data_sourcing.md).
 
  ### 4. Model
  The *Mark Price* may be calculated using a built in model.
- 
+
  >*Example:* An option price will theoretically decay with time even if the market's order book or trade history does not reflect this.
 
  ### 5. Defined as part of the product

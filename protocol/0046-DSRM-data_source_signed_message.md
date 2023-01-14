@@ -34,7 +34,7 @@ Note: that as a public key may provide many messages, a [filter](./0047-DSRF-dat
 Data source for a public key that will only send one transaction containing prices for several markets and therefore doesn't need to be filtered, but the correct value does need to be extracted:
 
 ```proto
-// emits 1503.42 if 0xBLAHBLAH submits { ETHUSD: 1503.42, BTCUSD: 80123.45 } 
+// emits 1503.42 if 0xBLAHBLAH submits { ETHUSD: 1503.42, BTCUSD: 80123.45 }
 select { field: 'ETHUSD', data: signed_message: { pubkey=0xBLAHBLAH } }
 ```
 
@@ -42,16 +42,16 @@ Data source for a public key that will send multiple transactions containing pri
 
 ```proto
 // emits 80123.45 if 0xBLAHBLAH submits:
-// { ticker='ETHUSD', price=1503.42 } 
-// then { ticker='BTCUSD', price=80123.45 } 
+// { ticker='ETHUSD', price=1503.42 }
+// then { ticker='BTCUSD', price=80123.45 }
 
-select { 
-  field: 'price', 
+select {
+  field: 'price',
   data: filter {
     filters: [ equal { key: 'ticker', value: 'BTCUSD' } ]
-    data: signed_message { 
-    pubkey=0xBLAHBLAH 
-  }, 
+    data: signed_message {
+    pubkey=0xBLAHBLAH
+  },
 }
 ```
 

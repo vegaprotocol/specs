@@ -57,13 +57,13 @@ If any of the above parameters or the risk model gets modified in any way, the p
 
 #### Hard-coded
 
-- Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market. 
+- Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market.
 
-There are several reasons why this maximum is enforced. 
+There are several reasons why this maximum is enforced.
 
 1. anything more than `5` triplets makes reasoning about what and when will trigger an auction more difficult and could lead to markets that behave in unexpected ways.
 1. allowing high number of triplets could have performance impact
-1. testing everything works correctly is more manageable if the number is capped. 
+1. testing everything works correctly is more manageable if the number is capped.
 
 
 ### View from the Vega side
@@ -102,9 +102,9 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - The risk model calculates the bounds per reference price, horizon τ and confidence level α beyond which a price monitoring auction should be triggered.
 - The ranges of valid price moves are returned as either additive offsets or multiplicative factors for the up and down move. The price monitoring engine (PME) will know how to cope with either and apply it to the price bounds.
 - These bounds are to be available to other components and included in the market data API
-- Internally the risk model implements a function that takes as input: (reference price, confidence level alpha, time period tau) and returns either: 
+- Internally the risk model implements a function that takes as input: (reference price, confidence level alpha, time period tau) and returns either:
   - the additive offsets: f<sub>min</sub><sup>additive</sup>, f<sub>max</sub><sup>additive</sup> such that S<sub>min</sub>:=S<sub>ref</sub>+f<sub>min</sub><sup>additive</sup> and S<sub>max</sub>:=S<sub>ref</sub>+f<sub>max</sub><sup>additive</sup>  or
-  - the multiplicative factors: f<sub>min</sub><sup>multiplicative</sup>, f<sub>max</sub><sup>multiplicative</sup> such that S<sub>min</sub>:=S<sub>ref</sub>*f<sub>min</sub><sup>multiplicative</sup> and S<sub>max</sub>:=S<sub>ref</sub>*f<sub>max</sub><sup>multiplicative</sup> 
+  - the multiplicative factors: f<sub>min</sub><sup>multiplicative</sup>, f<sub>max</sub><sup>multiplicative</sup> such that S<sub>min</sub>:=S<sub>ref</sub>*f<sub>min</sub><sup>multiplicative</sup> and S<sub>max</sub>:=S<sub>ref</sub>*f<sub>max</sub><sup>multiplicative</sup>
 
   so that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α.
 

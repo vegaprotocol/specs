@@ -28,7 +28,7 @@ As detailed above, the validators will check the validity of the details supplie
 - The contract must not already have an existing asset accepted on the Vega network (note: another _proposal_ could exist for the same asset)
 - The name must strictly match the name in the ERC20 contract (e.g. `Wrapped ether`)
 - The symbol must strictly match the symbol (e.g. `WETH`)
-- 
+-
 
 ## Enabling a new asset on the bridge
 
@@ -37,11 +37,11 @@ Once the proposal is accepted, validators will produce a bundle (e.g. transactio
 
 ## Enabling a new asset on vega
 
-Once the asset has been allowlisted on the originating chain, deposits in this asset will be accepted to the bridge. 
-The bridge contract e.g. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md) must emit an event (on the bridged chain). 
-Vega chain will be notified of this event (new asset allowlisted on the bridge contract) via the [event queue](./0036-BRIE-event_queue.md). 
+Once the asset has been allowlisted on the originating chain, deposits in this asset will be accepted to the bridge.
+The bridge contract e.g. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md) must emit an event (on the bridged chain).
+Vega chain will be notified of this event (new asset allowlisted on the bridge contract) via the [event queue](./0036-BRIE-event_queue.md).
 
-Once this has happened, the new asset is ready to be used in the vega network. 
+Once this has happened, the new asset is ready to be used in the vega network.
 
 ## Modifying an existing asset
 
@@ -157,7 +157,7 @@ message ProposalTerms {
 
 Note that the `quantum` (compulsory field) sets the minimum economically meaningful amount in the asset.
 For example for USD this may be 1 USD or perhaps 0.01 USD.
-This must be an integer strictly greater than `0`. 
+This must be an integer strictly greater than `0`.
 
 ## Acceptance Criteria
 
@@ -191,7 +191,7 @@ This must be an integer strictly greater than `0`.
 - `validationTimestamp` must be provided and in the future for all new ERC20 asset proposals (<a name="0027-ASSP-018" href="#0027-ASSP-018">0027-ASSP-018</a>)
 - `quantum` must be an integer strictly greater than `0` (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)
 - If there is a proposal for some ERC20 asset already present then another proposal for the same ERC20 asset will be rejected. (<a name="0027-0027-ASSP-020" href="#0027-0027-ASSP-020">0027-0027-ASSP-020</a>)
-- There can be multiple concurrent proposals for the same new ERC20 asset (same means identical Ethereum address). Once the nodes agree (based on events from the external blockchain queue), that the asset is enabled on the bridge all the remaining proposals for the same asset are rejected. 
+- There can be multiple concurrent proposals for the same new ERC20 asset (same means identical Ethereum address). Once the nodes agree (based on events from the external blockchain queue), that the asset is enabled on the bridge all the remaining proposals for the same asset are rejected.
 (<a name="0027-COSMICELEVATOR-025" href="#0027-COSMICELEVATOR-025">0027-COSMICELEVATOR-025</a>)
 - An invalid contract address, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-021" href="#0027-ASSP-021">0027-ASSP-021</a>)
 - An valid contract address which cannot be found in ethereum, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-022" href="#0027-ASSP-022">0027-ASSP-022</a>)

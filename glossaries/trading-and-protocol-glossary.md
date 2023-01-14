@@ -16,7 +16,7 @@ A trader has 3 price levels at which their open volume was purchased:
 
 ***Average Entry Price*** = (3 * $100 + 2 * $80 + 5 * $150)/(3 + 2 + 5) = ($300 + $160 + $750) / 10 = $121
 
-*Example 2 - all sells:* 
+*Example 2 - all sells:*
 
 A trader has 3 price levels at which their open volume was sold:
 
@@ -24,7 +24,7 @@ A trader has 3 price levels at which their open volume was sold:
 2.  Short -2 contracts @ $80
 3.  Short -5 contracts @ $150
 
-Note, with position management we treat the volume of sells as negative for calculation purposes (not necessarily display purposes to users). Note, that in this calculation however, the negatives cancel each other out. 
+Note, with position management we treat the volume of sells as negative for calculation purposes (not necessarily display purposes to users). Note, that in this calculation however, the negatives cancel each other out.
 
 ***Average Entry Price*** = (-3 * $100 + -2 * $80 + -5 * $150)/(-3 - 2 - 5) = (-$300 - $160 - $750) / -10 = $121
 
@@ -62,7 +62,7 @@ The set of long and short contracts with price and volume specified that are mat
 
 ### Closed volume
 
-The volume that is matched into [closed volume](#closed-volume) during the [FIFO](#fifo) netting process.  It is measured as the sum of the buys of the matched volume.  So, if 2 long (or +2) contracts are netted with 2 short (or -2) contracts, the ***Closed Volume*** = 2. 
+The volume that is matched into [closed volume](#closed-volume) during the [FIFO](#fifo) netting process.  It is measured as the sum of the buys of the matched volume.  So, if 2 long (or +2) contracts are netted with 2 short (or -2) contracts, the ***Closed Volume*** = 2.
 
 The profit or loss that a trader locks in when they close volume is called the [Realised P&L](#realised-pnl) and is not affected by future price moves in the instrument.
 
@@ -95,7 +95,7 @@ A matching methodology which prioritises older volume as an offset when counter 
 
 Use Case 2 - Calculating a trader's open and closed position.
 
-***Example - FIFO on an individual trader's trades:*** 
+***Example - FIFO on an individual trader's trades:***
 
 1.  24-July-07:00 Buy 3 contracts @ $100
 2.  24-July-07:10 Sell 1 contract @ $400
@@ -160,7 +160,7 @@ An order that trades any amount and as much as possible and remains on the book 
 
 ### GTT - Good 'til time
 
-An order that trades any amount and as much as possible and remains on the book until they either trade completely, are cancelled, or expires at a set time 
+An order that trades any amount and as much as possible and remains on the book until they either trade completely, are cancelled, or expires at a set time
 
 ## I
 
@@ -199,7 +199,7 @@ The amount of collateral (due in the base currency of the product) that a trader
 
 ### Mark Price
 
-An instrument's market valuation at any point in time.  This will be set to the higher / lower of the: 
+An instrument's market valuation at any point in time.  This will be set to the higher / lower of the:
 
 * last traded price;
 * bid / offer
@@ -214,11 +214,11 @@ An instrument that is trading on the Vega network may be called a market.
 
 ### Market Depth (Depth of Market)
 
-Market Depth is a measure of the number of open buy and sell orders for a market at different prices. The depth measure provides an indication of the liquidity. 
+Market Depth is a measure of the number of open buy and sell orders for a market at different prices. The depth measure provides an indication of the liquidity.
 
 ### Minimum Risk Margin
 
-The margin amount that is calculated by the [Risk Model](#risk-model) as the minimum amount of collateral (in the base currency of the product) that a trader must hold.  Below this level, the position is considered to be unsafe for the Vega system.  
+The margin amount that is calculated by the [Risk Model](#risk-model) as the minimum amount of collateral (in the base currency of the product) that a trader must hold.  Below this level, the position is considered to be unsafe for the Vega system.
 
 Traders will be required to provide a margin amount greater than the Minimum Risk Margin, called the [Margin](#margin).
 
@@ -252,11 +252,11 @@ Calculate:
 
 * ***Realised Volume*** is the ***Closed Volume Amount***
 
-* ***Realised PnL*** = ***Closed Volume Amount*** * (***Average Entry Price*** (of Closed Short Contracts)  - [Average Entry Price](#average-entry-prive) (of Closed Long Contracts)) 
+* ***Realised PnL*** = ***Closed Volume Amount*** * (***Average Entry Price*** (of Closed Short Contracts)  - [Average Entry Price](#average-entry-prive) (of Closed Long Contracts))
 
 * ***Unrealised Volume*** is the sum of the volume of all the ***Open Contracts***
 
-* ***Unrealised PnL*** = ***Unrealised Volume*** * (***Mark Price*** - ***Average Entry Price***(of Open Contracts)) 
+* ***Unrealised PnL*** = ***Unrealised Volume*** * (***Mark Price*** - ***Average Entry Price***(of Open Contracts))
 
 ### Notional Value
 
@@ -307,7 +307,7 @@ The risk value of the total open interest for an instrument calculated by the ri
 
 ### Oracle Feed
 
-A definite source of price information for an underlying (could come from another instrument's market activity (eg. trading or prices) on the Vega network, or from an external source). 
+A definite source of price information for an underlying (could come from another instrument's market activity (eg. trading or prices) on the Vega network, or from an external source).
 
 ### Order Book
 
@@ -340,7 +340,7 @@ For the creation an instrument, the time between the initial proposal period and
 The ***Realised PnL*** calculates the profitability that has been locked in by a trader who exits an existing [open position](#open-position).
 The inputs to a ***Realised PnL*** calculation is the set of positions, including specification of volume and price, that are the result of matched volume, calculated by [FIFO](#fifo).
 
-Example: 
+Example:
 
 A trader's closed position is comprised of the following:
 
@@ -354,8 +354,8 @@ A trader's closed position is comprised of the following:
 
 Note, for closed positions, the number of longs and number of shorts should equal each other (in this case we are 10 long and 10 short).  Short positions are represented by -'ve numbers for volume.
 
-***Realised PnL*** = Total Volume * (Average Entry Price (sells) - Average Entry Price (buys)) 
-=  10 ( (-1 * $400 + -6 * $370 + -2 * $300 + -1 * $320 )/-10  - (3 * $100 + $2 * 80 + 5 * $150)/10 ) 
+***Realised PnL*** = Total Volume * (Average Entry Price (sells) - Average Entry Price (buys))
+=  10 ( (-1 * $400 + -6 * $370 + -2 * $300 + -1 * $320 )/-10  - (3 * $100 + $2 * 80 + 5 * $150)/10 )
 = 10 ($354 - $121) = $2330
 
 ### Risk Engine
@@ -369,10 +369,10 @@ The part of the code base that calculates a pair of risk factors - one for a sho
 ### Risk Universe
 
 A collection of one or more order books on the same underlying which are able to offset each other for margining purposes.
-For example, for Futures the risk universe will typically consist of one order book only. 
-For European Options, the risk universe will be all the order books for one underlying and one exercise date across a range of strikes. 
+For example, for Futures the risk universe will typically consist of one order book only.
+For European Options, the risk universe will be all the order books for one underlying and one exercise date across a range of strikes.
 Importantly, each risk universe specifies the risk model, acceptable collateral
-and the oracle for underlying.  Instruments within a risk universe must belong to the same Market. 
+and the oracle for underlying.  Instruments within a risk universe must belong to the same Market.
 
 ## S
 
@@ -386,13 +386,13 @@ A language for creating smart financial products on Vega.
 
 ### Smart Product
 
-A financial agreement which involves transfer of value (in digital currency) between two counterparts at a specified time, according to specified conditions which must be specified digitally. Example: Future, European Options, CFD 
+A financial agreement which involves transfer of value (in digital currency) between two counterparts at a specified time, according to specified conditions which must be specified digitally. Example: Future, European Options, CFD
 
 ### Staking
 
 Staking is the act of committing a governance asset balance to a validator node in order to earn a portion of the [infrastructure fee](#fees).
 
-Staking and delegation are used relatively interchangeably as in Vega, staking has the same meaning as self-delegation. 
+Staking and delegation are used relatively interchangeably as in Vega, staking has the same meaning as self-delegation.
 
 ## T
 
@@ -410,9 +410,9 @@ The quote price which a buyer and seller are matched at.
 
 The ***Unrealised PnL*** calculates the profitability that a trader would receive if they were able to close their open positions at the current market price, as measured by the [mark price](#mark-price).  It is sometimes referred to as [mark to market](#mark-to-market).  It helps traders to understand what the 'value' of their portfolio is. Also they are required to cover any unrealised losses in their margin requirements.
 
-The inputs to a ***Unrealised PnL*** calculation is the set of trades (or partial trades) which specify volume and price, that are the result of unmatched volume, calculated by [FIFO](#fifo). This will always be either all buys or all sells.  
+The inputs to a ***Unrealised PnL*** calculation is the set of trades (or partial trades) which specify volume and price, that are the result of unmatched volume, calculated by [FIFO](#fifo). This will always be either all buys or all sells.
 
-***Example 1 (trader has a net long open position):*** 
+***Example 1 (trader has a net long open position):***
 
 A trader's open volume is comprised of the following:
 
@@ -422,13 +422,13 @@ A trader's open volume is comprised of the following:
 
 Let's assume the latest [mark price](#mark-price) is set by the last trade in this market at $120.
 
-***Unrealised PnL*** = Total Volume * ([mark price](#mark-price) - [average entry price](#average-entry-price)) 
-=  10 ( $120 - (3 * $100 + $2 * 80 + 5 * $150)/Abs(10) ) 
+***Unrealised PnL*** = Total Volume * ([mark price](#mark-price) - [average entry price](#average-entry-price))
+=  10 ( $120 - (3 * $100 + $2 * 80 + 5 * $150)/Abs(10) )
 = 10 ($120 - $121) = - $10
 
 The trader has made a loss of -$10 across their trades.  However, this isn't locked in (realised) and the market may still move back in their favour.
 
-***Example 2 (trader has a net short open position):*** 
+***Example 2 (trader has a net short open position):***
 
 A trader's open volume is comprised of the following:
 
@@ -439,7 +439,7 @@ A trader's open volume is comprised of the following:
 Let's assume the latest [mark price](#mark-price) is set by the last trade in this market at $666.
 
 ***Unealised PnL*** = Total Volume * ([mark price](#mark-price) - [average entry price](#average-entry-price))
-=  -9 * ( $666 - (-1 * $750 + -6 * $330 + -2 * $999)/-9 ) 
+=  -9 * ( $666 - (-1 * $750 + -6 * $330 + -2 * $999)/-9 )
 = -9 * ($666 - $525.33) = - $140.67
 
 The trader has made a loss of -$140.67 across their trades.  However, this isn't locked in (realised) and the market may still move back in their favour.

@@ -20,7 +20,7 @@ Validation: none required as these are validated by the asset and data source fr
 ## 3. Valuation function
 
 ```javascript
-// Futures are quoted in directly terms of price 
+// Futures are quoted in directly terms of price
 cash_settled_perpetual_future.value(quote) {
 	return quote
 }
@@ -32,7 +32,7 @@ cash_settled_perpetual_future.value(quote) {
 
 ```javascript
 cash_settled_perpetual_future.settlement_data(event) {
-	cashflow = cash_settled_perpetual_future.value(event.data) - cash_settled_perpetual_future.value(market.mark_price)) 
+	cashflow = cash_settled_perpetual_future.value(event.data) - cash_settled_perpetual_future.value(market.mark_price))
 	settle(cash_settled_perpetual_future.settlement_asset, cashflow)
 	setMarkPrice(event.data)
 }

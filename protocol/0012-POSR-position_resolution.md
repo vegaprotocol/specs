@@ -31,7 +31,7 @@ See [Whitepaper](https://vega.xyz/papers/vega-protocol-whitepaper.pdf), Section 
 3. This net outstanding liability is sourced from the market's order book via a single market order (in above example, that would be a market order to sell 3 on the order book) executed by the network as a counterpart. This internal entity is the counterpart of all trades that result from this single market order and now has a position which is comprised of a set of trades that transacted with the non-distressed traders on the order book. Note, the network's order should not incur a margin liability. Also, these new positions (including that incurred by the network) will need to be "MTM settled". This should happen after Step 5 to ensure we don't bankrupt the insurance pool before collecting the distressed trader's collateral.  This has been included as Step 6.
 
 4. The network then generates a set of trades with all the distressed traders all at the volume weighted average price of the network's (new) open position.   These trades should be readily distinguished from the trades executed by the network counterpart in Step 3 (suggest by a flag on the trades)
-Note, If there was no market order (i.e step 3 didn't happen) the close-out price is the most recently calculated _Mark Price_. See Scenario 1 below for the list of resulting trades for the above example. The open positions of all the "distressed" traders is now zero and the networks position is also zero. Note, no updates to the _Mark Price_ should happen as a result of any of 
+Note, If there was no market order (i.e step 3 didn't happen) the close-out price is the most recently calculated _Mark Price_. See Scenario 1 below for the list of resulting trades for the above example. The open positions of all the "distressed" traders is now zero and the networks position is also zero. Note, no updates to the _Mark Price_ should happen as a result of any of
 these trades (as this would result in a new market-wide mark to market settlement at this new price and potentially lead to cascade close outs).
 
 5. All bankrupt trader's remaining collateral in their margin account for this market is confiscated to the market's insurance pool.
@@ -43,7 +43,7 @@ these trades (as this would result in a new market-wide mark to market settlemen
 * Entire distressed position should always be liquidated - even if reducing position size, by say 50%, would result in the remaining portion being above the trader's maintenance margin.
 * When there's insufficient volume on the order-book to close out a distressed position no action should be taken: the position remains open and any amounts in trader's margin account should stay there. Same principle should apply if upon next margin recalculation the position is still distressed.
 * If the party is distressed at a point of leaving auction it should be closedout immediately (provided there's enough volume on the book once all the pegged and liquidity provision orders get redeployed).
-  
+
 ## Examples and Pseudo code
 
 ### ***Scenario -  All steps***
@@ -69,7 +69,7 @@ No traders are removed from the distressed trader list.
 LiquiditySourcingOrder: {
   type: 'market',
   direction: 'sell',
-  size: 3 
+  size: 3
 }
 
 LiquiditySourcingTrade1: {
@@ -101,7 +101,7 @@ CloseOutTrade1 {
   seller: Trader1,
   size: 5,
   price: 113.33,
-  type: 'safety-provision'  
+  type: 'safety-provision'
 }
 
 CloseOutTrade2 {
@@ -109,7 +109,7 @@ CloseOutTrade2 {
   seller: Network,
   size: 4,
   price: 113.33,
-  type: 'safety-provision'   
+  type: 'safety-provision'
 }
 
 CloseOutTrade3 {
@@ -117,7 +117,7 @@ CloseOutTrade3 {
   seller: Trader3,
   size: 2,
   price: 113.33,
-  type: 'safety-provision'   
+  type: 'safety-provision'
 }
 ```
 
@@ -135,20 +135,20 @@ The collateral from distressed traders is moved to the insurance pool
 ```json
 // sent by Settlement Engine to the Collateral Engine
 TransferRequest1 {
-  from: [Trader1_MarginAccount], 
+  from: [Trader1_MarginAccount],
   to: MarketInsuranceAccount,
   amount: Trader1_MarginAccount.size, // this needs to be the full amount
 }
 
 TransferRequest2 {
   from: [Trader2_MarginAccount],
-  to: MarketInsuranceAccount, 
+  to: MarketInsuranceAccount,
   amount: Trader2_MarginAccount.size, // this needs to be the full amount
 }
 
 TransferRequest3 {
   from: [Trader3_MarginAccount],
-  to:  MarketInsuranceAccount, 
+  to:  MarketInsuranceAccount,
   amount: Trader3_MarginAccount.size, // this needs to be the full amount
 }
 ```
@@ -168,7 +168,7 @@ Trader4 has therefore closed out 2 contracts through the LiquiditySourcingTrade1
 ```json
 TransferRequest4 {
   from: [MarketInsuranceAccount],
-  to:  Trader4_MarginAccount, 
+  to:  Trader4_MarginAccount,
   amount: (120 - PreviousMarkPrice) * -2, // this is the movement since the last settlement multiplied by the volume of the closed out amount
 }
 

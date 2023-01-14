@@ -3,12 +3,12 @@
 ## Acceptance Criteria
 
 1. For a position with a negative settlement amount:
-  - If settlement amount <= the trader’s margin account balance (<a name="0003-MTMK-001" href="#0003-MTMK-001">0003-MTMK-001</a>): 
-    - entire settlement amount is transferred from trader’s margin account to the market’s temporary settlement account 
-  - If settlement amount > trader’s margin account balance  and <= trader's margin account balance + general account balance for the asset (<a name="0003-MTMK-002" href="#0003-MTMK-002">0003-MTMK-002</a>): 
+  - If settlement amount <= the trader’s margin account balance (<a name="0003-MTMK-001" href="#0003-MTMK-001">0003-MTMK-001</a>):
+    - entire settlement amount is transferred from trader’s margin account to the market’s temporary settlement account
+  - If settlement amount > trader’s margin account balance  and <= trader's margin account balance + general account balance for the asset (<a name="0003-MTMK-002" href="#0003-MTMK-002">0003-MTMK-002</a>):
     - the full balance of the trader’s margin account is transferred to the market’s temporary settlement account
     - the remainder, i.e. difference between the amount transferred from the margin account and the settlement amount, is transferred from the trader’s general account for the asset to the market’s temporary settlement account
-  - If settlement amount > trader’s margin account balance + trader’s general account balance for the asset (<a name="0003-MTMK-003" href="#0003-MTMK-003">0003-MTMK-003</a>): 
+  - If settlement amount > trader’s margin account balance + trader’s general account balance for the asset (<a name="0003-MTMK-003" href="#0003-MTMK-003">0003-MTMK-003</a>):
     - the full balance of the trader’s margin account is transferred to the market’s temporary settlement account
     - the full balance of the trader’s general account for the assets are transferred to the market’s temporary settlement account
     - the minimum insurance pool account balance for the market & asset, and the remainder, i.e. the difference between the total amount transferred from the trader’s margin + general accounts and the settlement amount, is transferred from the insurance pool account for the market to the temporary settlement account for the market
@@ -26,16 +26,16 @@
 ## Market with position decimal places > 0 scenario
 
 1. Set up a market with PDP > 0, say PDP = 2
-1. Set up party1 long postion 0.02 and party2 short position 0.02; and the trade which created these positions being at price 100. 
-1. Set up party3 and party4 which trade volume 0.12 at price 120. 
-1. Observe the following mark-to-market cash-flows: party1 receives `0.02 x (120-100) = 0.4`. Party2 pays `0.4`. 
+1. Set up party1 long postion 0.02 and party2 short position 0.02; and the trade which created these positions being at price 100.
+1. Set up party3 and party4 which trade volume 0.12 at price 120.
+1. Observe the following mark-to-market cash-flows: party1 receives `0.02 x (120-100) = 0.4`. Party2 pays `0.4`.
 
 ## Market with position decimal places < 0 scenario
 
 In a market with negative PDP, the mark-to-market cash-flows are correct. (<a name="0003-MTMK-014" href="#0003-MTMK-014">0003-MTMK-014</a>):
 1. Set up a market with PDP > 0, say PDP = -3
-1. Set up party1 long postion 2000 and party2 short position 2000; and the trade which created these positions being at price 0.10. 
-1. Set up party3 and party4 which trade volume 1000 at price 0.12. 
+1. Set up party1 long postion 2000 and party2 short position 2000; and the trade which created these positions being at price 0.10.
+1. Set up party3 and party4 which trade volume 1000 at price 0.12.
 1. Observe the following mark-to-market cash-flows: party1 receives `2000 x (0.12-0.10) = 40`. Party2 pays `40`.
 
 ## Summary

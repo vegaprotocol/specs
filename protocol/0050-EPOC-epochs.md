@@ -13,10 +13,10 @@ exceeds this time is the last block of its epoch*.
 
 The length of an epoch is a [network parameter](#network-parameters). To make the chain understandable
 without having to trace all system parameters, the time an epoch ends is added
-to its first block. This also means that the block validity check needs to verify 
+to its first block. This also means that the block validity check needs to verify
 that deadline.
 
-Every epoch also has a unique identifier (i.e., a sequential number), which is also 
+Every epoch also has a unique identifier (i.e., a sequential number), which is also
 added to the first block of the new epoch.
 
 Rationale: Using the blocks after the deadline makes it easy to have a common agreement
@@ -27,7 +27,7 @@ next epoch into that block.
 
 Correction: As we cannot (at this point) control the block into which a particular transaction
 goes, for Sweetwater the epoch changes will be done as described in the
-beginning without a synchronizing block: There is a time (determined by the 
+beginning without a synchronizing block: There is a time (determined by the
 [network parameter](#network-parameters) `epoch_length`), when a new epoch starts. The last block in every epoch is the
 first block that has a blocktime exceeding the length of its epoch, i.e., the later blocks
 then go into the next epoch. In a later version we will have better control of the mempool,
@@ -37,16 +37,16 @@ and then can add a synchronizing block.
 
  If the epoch-time is too short, then it is possible to have several epochs starting
  at the same time (say, we have 5 second epochs, and one block takes 20 seconds, thus  pushing the
- blocktime past several deadlines. While this really shouldn't happen, it can be resolved by the 
+ blocktime past several deadlines. While this really shouldn't happen, it can be resolved by the
  last epoch winning. This would cause issues with delay factors (e.g., a validator staying on for
  another 5 epochs after losing delegation), but as it indicates that something already is very
- wrong this should not be an issue. 
+ wrong this should not be an issue.
 
  If we have an integer overflow of the epoch number, nothing overly bad should happen; even
- if we'd use normal unsigned int, with an expected epoch duration of 24h, we're all dead when 
- this happens. It also shouldn't have any real effect, though (eventually) it may make sense 
+ if we'd use normal unsigned int, with an expected epoch duration of 24h, we're all dead when
+ this happens. It also shouldn't have any real effect, though (eventually) it may make sense
  to catch the overflow in the code.
- 
+
  While hopefully not an issue with golang anymore, one thing to watch out for is
  the year 2038 problem; this is a bit unrelated, but can easily hit anything that
  works on a second-basis.
@@ -63,9 +63,9 @@ staking. To this end, an Vega token
 - Delegated: The (locked) token is delegated to a validator
 - Undelegated: The token is not delegated to a validator, and can be either
 	delegated or unlocked.
-	
-Any locked and undelegated stake can be delegated at any time by putting a 
-delegation-message on the chain. However, the delegation only becomes valid 
+
+Any locked and undelegated stake can be delegated at any time by putting a
+delegation-message on the chain. However, the delegation only becomes valid
 towards the next epoch, though it can be undone through undelegate.
 
 > **Note:** To avoid fragmentation or spam, there is a network parameter "Minimum delegateable stake"
@@ -73,12 +73,12 @@ that defines the smallest unit of (fractions of) tokens that can be used for del
 
 To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
-it is put on the chain) that the delegator has sufficient unlocked stake, as 
+it is put on the chain) that the delegator has sufficient unlocked stake, as
 well as in the beginning of the next epoch just before the command takes effect.
-The amount of delegatable stake is reduced right away once the command is put into 
+The amount of delegatable stake is reduced right away once the command is put into
 a block.
 
-As validators (will) have an optimum amount of stake they don't want to exceed, 
+As validators (will) have an optimum amount of stake they don't want to exceed,
 There are three ways a delegator can undelegate:
 
 ## Undelegate towards the end of the episode
@@ -111,7 +111,7 @@ and undelegate in anger, ...), this feature does not need to be implemented righ
 Mainnet alpha.
 
 Rationale: A validator is found to have done something outrageous, and needs to be removed
-right away. 
+right away.
 
 ## Undelegation of locked stake
 
@@ -119,7 +119,7 @@ Furthermore, the validators watch the smart contract, and observe the following 
 
 - A token gets locked: This token is now available for delegation
 - A token gets unlocked: If the token holder has sufficient undelegated tokens, this stake is
-	used to cover the now unlocked tokens (i.e., the available amount of delegatable 
+	used to cover the now unlocked tokens (i.e., the available amount of delegatable
 	tokens is reduced to match the locking status. This could mean that the token-
 	holder has a delegation-command scheduled that is no longer executable; this
 	command will then be ignored at the start of the next epoch.
@@ -145,9 +145,9 @@ If the value of `minimum_delegateable_stake` changes in a bad way, stakers might
 some fraction they can't modify anymore. To this end, the undelegate commands also should
 support a parameter "all".
 
-With this setup, a delegator can use a constant delegation/undelegate-now to spam the network.	
+With this setup, a delegator can use a constant delegation/undelegate-now to spam the network.
 
-If several delegators change the delegation within the same block, some of them may not be allowed to 
+If several delegators change the delegation within the same block, some of them may not be allowed to
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
 block creator has the responsibility to filter out these transactions.
 
@@ -155,7 +155,7 @@ block creator has the responsibility to filter out these transactions.
 
 ```javascript
 delegate(delegator_ID, validator_ID, amount/'all')
-      // delegate amount(all) undelegated stake form delegator_ID to validator_ID, 
+      // delegate amount(all) undelegated stake form delegator_ID to validator_ID,
       // provided there is sufficient undelegated stake available and the value would
       // not exceed max_wanted_stake.
 
@@ -167,19 +167,19 @@ undelegate_now(delegator_ID, validator_ID, amount/'all')
 # General Fringe Cases:
 
 Due to the various parameters, we have a setting where an inconsistent view of the settings
-can cause trouble - if one validator things a transaction is valid and another one does not, 
+can cause trouble - if one validator things a transaction is valid and another one does not,
 this disagreement could stop the entire blockchain.
 While this should not happen, it can. One example would be that different implementations use
-slightly different rounding rules, or even processors with different float units coming to 
-different results. 
-My proposal here is a bit of a hack; if t+1 (or f+1 in tendermint speak) blocks in a row get 
-rejected due to invalid proposals with anything that could be explained through parameter 
-inconsistencies, the chain goes into a backup mode where parameter changes are only allowed 
-every n-1 th block, where n is the number of validators (thus, every delegation-related 
-transaction needs ot wait in mempool until the next block-number is divisible by n-1; using n-1 
-assures that the responsibility for these blocks still rotates between the validators). 
-Thus, even if the inconsistency blocks delegation related commands, the primary operation of 
-the chain can still go on. 
+slightly different rounding rules, or even processors with different float units coming to
+different results.
+My proposal here is a bit of a hack; if t+1 (or f+1 in tendermint speak) blocks in a row get
+rejected due to invalid proposals with anything that could be explained through parameter
+inconsistencies, the chain goes into a backup mode where parameter changes are only allowed
+every n-1 th block, where n is the number of validators (thus, every delegation-related
+transaction needs ot wait in mempool until the next block-number is divisible by n-1; using n-1
+assures that the responsibility for these blocks still rotates between the validators).
+Thus, even if the inconsistency blocks delegation related commands, the primary operation of
+the chain can still go on.
 
 In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow. In later versions, we'd need a simple resync protocol (e.g., all validators put on the block what they think the parameters are; the majority of the first n-t blocks wins).
 
@@ -201,7 +201,7 @@ All parameters that are changed through a governance vote are valid starting the
    - Given an epoch length of `1d`, with a block time of `1h`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
    - Given an epoch length of `1d`, with a block time of `1h`, at end of block 23 the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
    - Given an epoch length of `1d`, with a block time of `1h`, at end of block 24 the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
-2. Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>) 
+2. Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>)
    - Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1`
    - Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61`
 3. Nomination takes effect at epoch changeover

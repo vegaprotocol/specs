@@ -1,6 +1,6 @@
 # Product
 
-A Product in Vega is the entity that determines how buyers and sellers in a market make or lose money. It contains all the parameters and logic necessary to value a position, determine when lifecycle events (such as Trading Termination and Final Settlement at expiry) occur, and to calculate interim and final settlement cashflows. 
+A Product in Vega is the entity that determines how buyers and sellers in a market make or lose money. It contains all the parameters and logic necessary to value a position, determine when lifecycle events (such as Trading Termination and Final Settlement at expiry) occur, and to calculate interim and final settlement cashflows.
 
 ## Product parameters
 
@@ -22,7 +22,7 @@ Product parameters my be one of two types:
 
 Any *explicit value* or *data source reference* product parameter that is defined may be changed through on-chain governance proposals.
 
-*Settlement asset* product parameters are immutable and not able to be modified through governance. If there is an issue with the settlement asset or its definition on a market, the market would need to be Closed via governance and a new market created, as Vega has no defined way to migrate margins from one asset to another for a live market. 
+*Settlement asset* product parameters are immutable and not able to be modified through governance. If there is an issue with the settlement asset or its definition on a market, the market would need to be Closed via governance and a new market created, as Vega has no defined way to migrate margins from one asset to another for a live market.
 
 ### Validating product parameters
 
@@ -38,7 +38,7 @@ Validation of values can occur in two phases:
 
 The product must be able to return a list/set of all settlement assets that it uses. This is separate from the parameters that specify them so that the parameters can be named meaningfully for the product.
 
-This is used so that Vega knows which assets will be required for margining. That is, there will be one margin account per settlement asset per position in a market. The valuation function (see below) will provide the value of a position in terms of each settlement asset. 
+This is used so that Vega knows which assets will be required for margining. That is, there will be one margin account per settlement asset per position in a market. The valuation function (see below) will provide the value of a position in terms of each settlement asset.
 
 For example, a product such as a physically settled future (NB: a cash settled future only has one settlement asset) with two *settlement asset* parameters: `base_asset` and `quote_asset` would return `product.settlement assets == [base_asset, quote_asset]` as the settlement assets.
 
@@ -46,7 +46,7 @@ For example, a product such as a physically settled future (NB: a cash settled f
 
 Every product must specify a quote-to-valuation function. This will often be referred to in other specs as `product.value(quote)` (but some specs that need an update will use `product.value(price)`). It returns the value in terms of the settlement asset(s) of a position of size +1 given a market `quote`. It must provide a value for all settlement assets defined in the product parameters. For built-in cash settled Futures (and other cash settled products, e.g. cash settled options) there is a single settlement asset only but this will not be true for other products.
 
-Note that we are assuming tacitly in all specs that `product.value` scales linearly with position size and direction. 
+Note that we are assuming tacitly in all specs that `product.value` scales linearly with position size and direction.
 
 The valuation function has access to the state of the market including the current Vega time, product parameters, and any values received on data sources defined as product parameters. It does not have access to other markets' data unless these are defined as data source parameters.
 
@@ -64,14 +64,14 @@ callOption.value(quote) {
 	strike = callOption.parameters["strike"]
 	timeToMaturity = dateTimeToYearFraction(callOption.parameters["expiryTime"] - vegaTime)
 	underlying = callOption.underlying_data_source.currentPrice()
-	
+
 	return BlackScholesCallPrice(underlying, strike, timeToMaturity, rfRate, bsVol)
 }
 ```
 
 ## Quote-to-value function
 
-See [Fees spec](./0029-FEES-fees.md) for context. Fees are calculated based on `trade_value_for_fee_purposes`. Any product *may* provide `product.valueForFeePurposes(quote)` function which returns the value of the product for size of `1` which will be used in calculating fees: 
+See [Fees spec](./0029-FEES-fees.md) for context. Fees are calculated based on `trade_value_for_fee_purposes`. Any product *may* provide `product.valueForFeePurposes(quote)` function which returns the value of the product for size of `1` which will be used in calculating fees:
 For many products this will simply be
 
 ```javascript
@@ -99,7 +99,7 @@ product.<data_source>(data) {
 }
 ```
 
-where: 
+where:
 
 - `product.<data_source>(data) { ... }` defines a function to executed when data is received from the `<data_source>` by Vega. The `<data_source>` must be one of the product parameters that defines a data source used by the product, and `data` will contain the received data.
 - `settle(ASSET, amount)` means that a long position of size +1 will receive `amount` of `ASSET` (and a short position, size = -1) will similarly lose the same amount. `ASSET` must be one of the *settlement assets* defined on the product.
@@ -108,7 +108,7 @@ where:
 
 Generally the function might use conditional logic to apply tests to the data/market state and then if certain conditions are matched do one or both of emitting settlement cashflows and changing market status.
 
-See the [built-in Futures spec](../protocol/0016-PFUT-product_builtin_future.md) for an example. 
+See the [built-in Futures spec](../protocol/0016-PFUT-product_builtin_future.md) for an example.
 
 ## APIs
 
@@ -126,5 +126,5 @@ APIS should be available to:
   1. The settlement asset / settlement assets cannot be changed on a product via governance  (<a name="0051-PROD-003" href="#0051-PROD-003">0051-PROD-003</a>)
 
 ## See also
-- [Product: Built In Futures](./016-PFUT-product_builtin_future.md) 
+- [Product: Built In Futures](./016-PFUT-product_builtin_future.md)
 - [Product: Cash settled Perpetual Future](./0053-PERP-product_builtin_perpetual_future.md)

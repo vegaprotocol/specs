@@ -19,7 +19,7 @@ When an order is placed into the vega system, it is uniquely identified by it's 
 
 - Cancel by orderID and marketID - This removes at most one order from the order book
 - Cancel by marketID - This removes all the orders for a given party in the given market.
-- Cancel with no arguments - This removes every order for that given party in the vega system. 
+- Cancel with no arguments - This removes every order for that given party in the vega system.
 
 Parked orders are affected as part of direct cancels or cancels that sweep over a market/system.
 

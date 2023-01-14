@@ -1,4 +1,5 @@
 # Fundamental concepts
+
 - [Parties](./0017-PART-party.md)
 - [Signing & Authentication](./0022-AUTH-auth.md)
 - [Products](./0051-PROD-product.md)
@@ -10,7 +11,8 @@
 - [Network Parameters](./0054-NETP-network_parameters.md)
 
 
-# Market operation
+## Market operation
+
 - [Market Lifecycle](./0043-MKTL-market_lifecycle.md)
 - [Auctions](./0026-AUCT-auctions.md)
 - [Positions](./0006-POSI-positions_core.md)
@@ -22,22 +24,27 @@
 - [Market depth calculation](./0039-MKTD-market_depth_calculation.md)
 
 ## [Settlement](./0002-STTL-settlement.md)
+
 - [Mark to market settlement](./0003-MTMK-mark_to_market_settlement.md)
 
 ## Market protections
+
 - [Price monitoring](./0032-PRIM-price_monitoring.md)
 - [Liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)
 
 ## Liquidity
+
 - [Liquidity provisioning mechanics](./0044-LIME-lp_mechanics.md)
 - [Liquidity provisioning fees and rewards](./0042-LIQF-setting_fees_and_rewarding_lps.md)
 - [Probability weighted liquidity measurement (Python notebook)](./0034-PROB-prob_weighted_liquidity_measure.ipynb)
 
 ## Governance
+
 - [Overview](./0028-GOVE-governance.md)
 - [Asset proposals](./0027-ASSP-asset_proposal.md)
 
 ## Orders
+
 - [Order Types](./0014-ORDT-order_types.md)
 - [Order amends](./0004-AMND-amends.md)
 - [Order status](./0024-OSTA-order_status.md)
@@ -47,6 +54,7 @@
 - [Liquidity provisions](./0038-OLIQ-liquidity_provision_order_type.md)
 
 ## Margin, collateral & risk
+
 - [Fees](./0029-FEES-fees.md)
 - [Collateral](./0005-COLL-collateral.md)
 - [Margin orchestration](./0010-MARG-margin_orchestration.md)
@@ -57,27 +65,32 @@
 - [Quant risk model Calibrators](./0023-CALI-calibrators.md)
 
 ## Data Sourcing
+
 - [Data Sourcing](./0045-DSRC-data_sourcing.md)
 - [Signed data source messages](./0046-DSRM-data_source_signed_message.md)
 - [Data source filters](./0047-DSRF-data_source_filter.md)
 - [Internals](./0048-DSRI-data_source_internal.md)
 
-# Validators & bridges
+## Validators & bridges
+
 - [Validating transactions preconsensus](./0049-TVAL-validate_transaction_preconsensus.md)
 - [Epochs](./0050-EPOC-epochs.md)
 - [Ethereum multisig control](./0030-ETHM-multisig_control_spec.md)
 - [Ethereum bridge spec](./0031-ETHB-ethereum_bridge_spec.md)
 
 ## Delegation, staking and rewards
+
 - [Staking & Delegating](./0059-STKG-simple_staking_and_delegating.md)
 - [Rewards Overview](./0056-REWA-rewards_overview.md)
 - [Simple Proof Of Stake rewards](./0058-REWS-simple_pos_rewards.md)
 - [On chain treasury](./0055-TREA-on_chain_treasury.md)
 
 ## Architecture
+
 - [Event queue](./0036-BRIE-event_queue.md)
 
 # Tools & APIs
+
 See also: [non-protocol-specs](../non-protocol-specs) folder.
 - [Core APIs](./0020-APIS-core_api.md)
 - [Positions API](./0007-POSN-non_core_positions_api.md)

@@ -11,8 +11,8 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 1. Supply canot be increased before a date (TBC) known as the `supply fix cut-off date`
 1. After the `supply fix cut-off date`, supply **can** be increased by community governance on the Vega chain (i.e. via multisig control)
 1. Supply cannot be changed by the contract owner/administrator
-1. If supply is ever increased, the issuance of this supply should be done by the Vega chain too (i.e. via multisig control). It is not obvious that we need to enforce this, as long as multisig control can be an allowed issuer. 
-1. If supply is ever increased, the issuance of this supply must be possible, even if the contract owner has relinquished control. 
+1. If supply is ever increased, the issuance of this supply should be done by the Vega chain too (i.e. via multisig control). It is not obvious that we need to enforce this, as long as multisig control can be an allowed issuer.
+1. If supply is ever increased, the issuance of this supply must be possible, even if the contract owner has relinquished control.
 1. If supply is ever increased, it is most almost certain that it would/should be paid into the bridge and distributed by the Vega protocol from there.
 
 ## 2. Migration from Token V1
@@ -50,8 +50,8 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 
 ## 5. Future upgrades (nice to have)
 
-1. The token can be upgraded by the community (e.g. multisig control or token holders voting...?) 
-1. During an upgrade, all addresses with balances should retain their original balance 
+1. The token can be upgraded by the community (e.g. multisig control or token holders voting...?)
+1. During an upgrade, all addresses with balances should retain their original balance
 1. During an upgrade, all unlocked tokens should remain unlocked
 
 ## 6. Security and control
@@ -69,7 +69,7 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
     1. We need to support staking of locked tokens
     1. There may be a security advantage to not having staked tokens under the control of the bridge/multisigcontrol (i.e. so that taking over the validators/network would not allow you to also take ownership of **all** staked tokens)
 
-1. It must be possible to stake locked tokens as a validator/for delegation on the Vega network. 
+1. It must be possible to stake locked tokens as a validator/for delegation on the Vega network.
 1. Unlocked tokens that have been transferred away cannot be or remain staked.
 1. Once staked on the Vega side, tokens cannot be allowed to be transferred to another address even if they are unlocked from the perspective of vesting
 

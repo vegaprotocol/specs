@@ -13,14 +13,14 @@ Notes on scope of current version of this spec:
 ### Order types:
 
 1. **Immediate:** order is evaluated immediately (this is the default)
-2. **Stop:** order is only evaluated if and when the _stop price_ is reached 
+2. **Stop:** order is only evaluated if and when the _stop price_ is reached
 3. **Network:** an order triggered by the network. See [Network Orders](#network-orders)
 
 ### Order pricing methods:
 
 *Price type and associated data if required (i.e. limit price, peg reference and offset) must be explicitly provided as one of the below three options and required data, there is no default.*
 
-1. **Limit (+ limit price):** the order is priced with a static limit price, which is the worst price (i.e. highest buy price / lowest sell price) at which the order can trade. If the order has a persistent validity type it will remain on the order book until it fully executes, expires (as defined by the specific validity type), or is cancelled. 
+1. **Limit (+ limit price):** the order is priced with a static limit price, which is the worst price (i.e. highest buy price / lowest sell price) at which the order can trade. If the order has a persistent validity type it will remain on the order book until it fully executes, expires (as defined by the specific validity type), or is cancelled.
 1. **Pegged (+ reference, price offset):** the order is priced relative to a reference price in the market (i.e. best bid, mid, or best offer price) and is automatically repriced (losing time priority) when the reference price changes. Execution is as for a limit order at that price, including on entry and repricing. The order is removed from the book and 'parked' (in entry time priority) if the reference price is undefined, including during an auction. See the [Pegged Orders](./0037-OPEG-pegged_orders.md) spec for more detail.
 1. **Market:** the order is not priced and will take volume at any price (i.e. equivalent to a zero priced sell order or an infinitely priced buy order). Only valid on non-persistent validity types.
 
@@ -30,7 +30,7 @@ Notes on scope of current version of this spec:
 
  - **Persistent:**
 	1. **Good 'Til Time (GTT):** order is valid until the supplied expiry time, which may be supplied either as an absolute date/time or a relative offset from the  timestamp on the order (i.e. the timestamp added by the core when it receives the order, which is deterministically the same on all nodes)
-	1. **Good 'Til Cancelled (GTC):** order is valid indefinitely. 
+	1. **Good 'Til Cancelled (GTC):** order is valid indefinitely.
 - **Non-persistent:**
 	1. **Immediate Or Cancel (IOC):** an order that trades as much of its volume as possible with passive orders already on the order book (assuming it is crossed with them) and then stops execution. It is never placed on the book even if it is not completely filled immediately, instead it is stopped/cancelled.
 	1. **Fill Or Kill (FOK):** an order that either trades all of its volume immediately on entry or is stopped/cancelled immediately without trading anything. That is, unless the order can be completely filled immediately, it does not trade at all. It is never placed on the book, even if it does not trade.
@@ -63,7 +63,7 @@ Notes on scope of current version of this spec:
 
 ### Network orders
 
-Network orders are used during [position resolution](./0012-POSR-position_resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders. 
+Network orders are used during [position resolution](./0012-POSR-position_resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders.
 * Network orders have a counterparty of `Network`
 * Network orders are a Fill Or Kill, Market orders
 * Network orders cannot be submitted by any party, they are created during transaction processing.

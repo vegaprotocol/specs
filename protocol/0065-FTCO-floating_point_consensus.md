@@ -19,17 +19,17 @@ The reasons outlined above imply that any intermediate computation results which
 
 We will call each such value a **"state variable"**. Currently state variables exist on market level, however in the future some of them could be moved to risk-universe level. State variable value nominated by a single node will be called a **"candidate value"**, whereas a state variable value that has successfully gone through the consensus mechanism and is to be used by each of the nodes will be called a **"consensus value"**.
 
-Each state variable will be represented as a key-tolerance-value triple. 
+Each state variable will be represented as a key-tolerance-value triple.
 The key will be a `string`.
 The tolerance will be a `decimal` which will be provided by the quant library producing this and must be *deterministic* (ie it is either hard coded in the library or produced without floating point arithmetic).
-The value will be a single `floating-point`, this will be provided by the quant library as a result of some floating point calculation.  
+The value will be a single `floating-point`, this will be provided by the quant library as a result of some floating point calculation.
 State variables will be bundled together by the event that triggered their update.
 
 ### Default values & initialisation
 
 Each state variable must have a default value specified (can be hardcoded for now).
 
-Default risk factors are to be `1.0` for futures (so until a value has been calculated and agreed all trades are over-collateralised) with a tolerance of `1e-6`.  
+Default risk factors are to be `1.0` for futures (so until a value has been calculated and agreed all trades are over-collateralised) with a tolerance of `1e-6`.
 Risk factor calculation should be triggered as soon as market is proposed.
 
 Default probability of trading should be `100` ticks on either side of best bid and best ask with probability of trading for each one them equal to the default value of probability of trading between best bid and best ask as per [0034-PROB-prob_weighted_liquidity_measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb). As soon as there is the auction uncrossing price in the opening auction an event should be triggered to calculate the probabilities of trading using the indicative uncrossing price as an input. Tolerance should be set to `1e-6`.
@@ -44,7 +44,7 @@ Here we describe how the consensus value should be chosen from the candidates ga
 
 Each calculation will be triggered by the specified [event](#update-events). Each event will have a unique identifier (hash). Any candidate key-tolerance-value triples should be submitted along with that hash as part of a bundle.
 We wait for 2/3 (rounded up) answers with matching identifier to be submitted.
-If all candidate values for a given variable are equal to each other then just accept that value. 
+If all candidate values for a given variable are equal to each other then just accept that value.
 If all values in a bundle are accepted then the whole bundle is accepted and the values in core are updated with the appropriate decimal representations.
 
 If at least one value differs then:

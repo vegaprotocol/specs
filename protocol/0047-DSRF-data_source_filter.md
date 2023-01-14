@@ -36,15 +36,15 @@ gives:
 	{ ticker: 'TSLA', timestamp: '2021-12-31T23:59:59Z', price: 694.20 }
 ```
 
-Unlike the first example, this would be useful for trigger final settlement of a futures market. 
+Unlike the first example, this would be useful for trigger final settlement of a futures market.
 
 Note that to extract the price value, this would need to be wrapped in a 'select' data source (see [Data Sourcing main spec](./0045-DSRC-data_sourcing.md)) that specifies the field of interest ('price', here), i.e.:
 
 ```proto
 DATA_SOURCE = select {
 	field: 'price'
-	data: filter { 
-		data: SignedMessage{ pubkey=0xA45e...d6 }, 
+	data: filter {
+		data: SignedMessage{ pubkey=0xA45e...d6 },
 		filters: [
 	    equal { key: 'ticker', value: 'TSLA' },
 	    equal { key: 'timestamp', value: '2021-12-31T23:59:59Z' }
@@ -70,7 +70,7 @@ This can be *any* other data source within the data sourcing framework.
 
 These specify the condition to apply to the data. If ALL filters match the data is emitted (note that in future we may add things like 'or' filters that combine other filters but initially this is not required).
 
-For each filter, a `key` parameter is required 
+For each filter, a `key` parameter is required
 
 Filter types:
 

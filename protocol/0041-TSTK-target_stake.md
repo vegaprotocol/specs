@@ -3,7 +3,7 @@
 This spec outlines how to measure how much stake we want committed to a market relative to what is happening on the market (currently open interest).
 The target stake is a calculated quantity, utilised by various mechanisms in the protocol:
 
-- If the LPs total committed stake is less than c_1 x `target_stake` we trigger liquidity auction. See [Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md). Note that there is a one-to-one correspondence between the amount of stake LPs committed and the supplied liquidity. 
+- If the LPs total committed stake is less than c_1 x `target_stake` we trigger liquidity auction. See [Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md). Note that there is a one-to-one correspondence between the amount of stake LPs committed and the supplied liquidity.
 The parameter c_1 is a market parameter (with network parameter `market.liquidity.targetstake.triggering.ratio` providing a default value) defined in the [liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md) spec.
 - It is used to set the fee factor for the LPs: see [Setting fees and rewarding LPs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
@@ -18,12 +18,12 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 
 ### Current definitions
 
-First, `max_oi` is defined  maximum (open interest) measured over a time window, 
+First, `max_oi` is defined  maximum (open interest) measured over a time window,
 `t_window = [max(t-market.stake.target.timeWindow,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction. Note that `max_oi` should be calculated recorded per transaction, so if there are multiple OI changes withing the same block (which implies the same timestamp), we should pick the max one, NOT the last one that was processed.
 
 Example 1:
 `t_market.stake.target.timeWindow = 1 hour`
-the market opened at `t_0 = 1:55`. 
+the market opened at `t_0 = 1:55`.
 We have the following information about open interest over time:
 ```
 [time, OI]
@@ -37,9 +37,9 @@ We have the following information about open interest over time:
 and the current time is `4:53`
 then the `t_window = [3:53, 4:53]`. The `max_oi` is `120`.
 
-Example 2: As above but the market opened at `t_0 = 4:15`. Then `t_window = [4:15,4:53]` and `max_oi` is `110`. 
+Example 2: As above but the market opened at `t_0 = 4:15`. Then `t_window = [4:15,4:53]` and `max_oi` is `110`.
 
-From `max_oi` we calculate 
+From `max_oi` we calculate
 
 `target_stake = reference_price x max_oi x market.stake.target.scalingFactor x rf`,
 

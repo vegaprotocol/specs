@@ -2,7 +2,7 @@
 
 There are a number of validations that can be performed on every transaction to determine whether it can be included in a valid block. Doing validation at this stage is advantageous because the validation can done synchronously on receipt of the transaction and occurs before the transaction is included in a block. This:
 
-* Reduces the size the block and the overall chain 
+* Reduces the size the block and the overall chain
 * Can therefore be used to mitigate certain types of spam, liveness and other attacks
 * Provides immediate feedback on errors to users
 

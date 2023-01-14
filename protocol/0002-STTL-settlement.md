@@ -39,7 +39,7 @@ If all requested amounts are succesfully transferred to the *market settlement a
 
 #### Loss socialisation
 
-If some of the collection transfers are not able to supply the full amount to the *market settlement account* due to some traders having insufficient collateral in their margin account and general account to handle the price / position (mark to market) move, and if the insurance pool can't cover the shortfall for some of these, then not enough funds will have been collected to distribute the full amount of the mark to market gains made by traders on the other side. Therefore, settlement needs to decide how to fairly distribute the funds that have been collected. This is called *loss socialisation*. 
+If some of the collection transfers are not able to supply the full amount to the *market settlement account* due to some traders having insufficient collateral in their margin account and general account to handle the price / position (mark to market) move, and if the insurance pool can't cover the shortfall for some of these, then not enough funds will have been collected to distribute the full amount of the mark to market gains made by traders on the other side. Therefore, settlement needs to decide how to fairly distribute the funds that have been collected. This is called *loss socialisation*.
 
 In future, a more sophisticated algorithm may be used for this (perhaps taking into account a trader's overall profit on their positions, for example) but initially this will be implemented by reducing the amount to distribute to each trader with an MTM gain pro-rata by relative position size:
 
@@ -60,13 +60,13 @@ Some markets on Vega will be trading instruments that "expire" (i.e. they are in
 
 The expiry of a market happens when an oracle publishes data that meets the filter requirements as defined on the Product (see [Market Framework](./0001-MKTF-market_framework.md)).
 
-The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on all the potential paths of a market nearing expiry and should be consulted as the source of truth. 
+The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on all the potential paths of a market nearing expiry and should be consulted as the source of truth.
 
 ## Acceptance Criteria
 
 ### The typical "Happy Path" case (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>)
 
-- With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market. 
+- With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market.
 
 ### Example 1 - A typical path of a cash settled futures market nearing expiry when market is trading in continuous session (<a name="0002-STTL-002" href="#0002-STTL-002">0002-STTL-002</a>)
 
@@ -110,16 +110,16 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 ### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)
 
 1. A [cash settled futures](0016-PFUT-product_builtin_future.md) market has a status of ACTIVE and is trading in default trading mode (continuous trading)
-1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated. 
+1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated.
 This oracle input retained and market is in the default trading mode (continous trading).
-1. At least one party places an order that triggers a trade (just to prove that we can). 
-1. An [oracle event occurs *again*](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated. 
+1. At least one party places an order that triggers a trade (just to prove that we can).
+1. An [oracle event occurs *again*](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated.
 This oracle input retained and market is in the default trading mode (continous trading).
-1. At least one party places an order that triggers a trade (just to prove that we can again). 
+1. At least one party places an order that triggers a trade (just to prove that we can again).
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
 The market's status is set to [TRADING TERMINATED](./0043-MKTL-market_lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs.
 Final cashflow is calculated according to the valuation formula defined on the product (see [cash settled direct futures product](./0016-PFUT-product_builtin_future.md#42-final-settlement-expiry)) using the *most recent* retained settlement price input.
-All of that happens while processing the trading terminated transaction. 
+All of that happens while processing the trading terminated transaction.
 1. Accounts are settled as per collection and distribution methods described above.
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.

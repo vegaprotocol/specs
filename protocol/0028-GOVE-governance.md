@@ -1,3 +1,4 @@
+
 # Governance
 
 Governance allows the vega network to arrive at on-chain decisions. Implementing this specification will provide the ability for users to create proposals involving assets, markets, network parameters and free form text.

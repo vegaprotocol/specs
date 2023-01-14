@@ -27,13 +27,13 @@ Point two requires that at load time, each node calculates the hash of the check
 
 Information to store:
 - All [network parameters](../protocol/0054-NETP-network_parameters.md), including those defined [below](#network-parameters).
-- All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition). 
-Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_overview.md), [LP committed liquidity](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and [LP fee pool](../protocol/0029-FEES-fees.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market. 
-- All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted* but not those where the market already started trading and reached *trading terminated* state. 
+- All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition).
+Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_overview.md), [LP committed liquidity](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and [LP fee pool](../protocol/0029-FEES-fees.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market.
+- All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted* but not those where the market already started trading and reached *trading terminated* state.
 - All [asset proposals](../protocol/0028-GOVE-governance.md) that have been *accepted*.
 - All delegation info.
 - On chain treasury balances and on-chain rewards for staking and delegation [Staking and delegation](../protocol/0056-REWA-rewards_overview.md).
-- [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts. 
+- [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts.
 - Event ID of the last processed deposit event for all bridged chains
 - Withdrawal transaction bundles for all bridged chains.
 - Hash of the previous block, block number and transaction id of the block from which the snapshot is derived
@@ -50,7 +50,7 @@ When to create a checkpoint:
 - if `current_time - network.checkpoint.timeElapsedBetweenCheckpoints > time_of_last_full_checkpoint`
 
 Information we explicitly don't try to checkpoint:
-- Positions, limit orders, pegged orders or any order book data. LP commitments. 
+- Positions, limit orders, pegged orders or any order book data. LP commitments.
 - Market and asset proposals where the voting period hasn't ended.
 
 When a checkpoint is created, each validator should calculate its hash and submit this is a transaction to the chain, so that non-validating parties can trust the hash being restored represents truly the balances.
@@ -160,8 +160,8 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 USD.
-1. A market is proposed by a party called `LP party`. 
-1. `LP party` commits a stake of 1000 USD. 
+1. A market is proposed by a party called `LP party`.
+1. `LP party` commits a stake of 1000 USD.
 1. The voting period ends 1 year in the future. The enactment date is 2 years in the future.
 1. Enough time passes (but less than 1 year) so a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
@@ -308,10 +308,10 @@ Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a n
 ### Test case 14: Market with trading terminated is not restored, collateral moved correctly
 
 1. Set LP fee distribution time step to non-zero value.
-1. Propose, enact, trade in the market, close out distressed party so that insurance pool balance > 0, submit trading terminated. 
+1. Propose, enact, trade in the market, close out distressed party so that insurance pool balance > 0, submit trading terminated.
 1. System saves LNL checkpoint at a time when undistributed LP fees for the market are > 0.
-1. Restart Vega, load LNL checkpoint. 
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>) 
+1. Restart Vega, load LNL checkpoint.
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>)
 1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-030" href="#0073-LIMN-030">0073-LIMN-030</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-031" href="#0073-LIMN-031">0073-LIMN-031</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>)
@@ -320,10 +320,10 @@ Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a n
 
 ### Test case 15: Market with trading terminated that settled is not restored, collateral moved correctly
 
-1. Propose, enact, trade in the market, submit trading terminated and settlement data, observe final settlement cashflows for at least 2 parties. 
+1. Propose, enact, trade in the market, submit trading terminated and settlement data, observe final settlement cashflows for at least 2 parties.
 1. System saves LNL checkpoint.
-1. Restart Vega, load LNL checkpoint. 
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>) 
+1. Restart Vega, load LNL checkpoint.
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>)
 1. If the market exists in the data node it is marked as settled with correct settlement data. (<a name="0073-LIMN-041" href="#0073-LIMN-041">0073-LIMN-041</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>)
 1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-043" href="#0073-LIMN-043">0073-LIMN-043</a>)
@@ -331,19 +331,19 @@ Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a n
 
 ### Test case 16: Markets can be settled and terminated after restore as propposed
 
-1. Propose, enact a market with some trading termination and settlement date setting. Trade in the market creating positions for at least 2 parties. 
+1. Propose, enact a market with some trading termination and settlement date setting. Trade in the market creating positions for at least 2 parties.
 1. System saves LNL checkpoint.
-1. Restart Vega, load LNL checkpoint.  
-1. A party submits liquidity provision to the market, orders are submitted to the opening auction to allow uncrossing; at least two parties now have a position. 
+1. Restart Vega, load LNL checkpoint.
+1. A party submits liquidity provision to the market, orders are submitted to the opening auction to allow uncrossing; at least two parties now have a position.
 1. Submit the trading terminated transaction and settlement date transaction as set out in the proposal and observe the final settlement cashflows for the parties with positions.  (<a name="0073-LIMN-050" href="#0073-LIMN-050">0073-LIMN-050</a>)
 1. It's not possible to submit orders or LP provisions to this market).  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>)
 
 ### Test case 17: Markets with internal time trigger for trading terminated that rings between shutdown and restore
 
-1. Propose, enact a market with some traing terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties. 
-1. System saves LNL checkpoint before the trading terminated trigger rings. 
-1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung. 
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>); if it exists it in `cancelled` state. 
+1. Propose, enact a market with some traing terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties.
+1. System saves LNL checkpoint before the trading terminated trigger rings.
+1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung.
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>); if it exists it in `cancelled` state.
 1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>)
@@ -354,7 +354,7 @@ Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a n
 
 1. Propose a market
 1. System saves LNL checkpoint.
-1. Restart Vega, load LNL checkpoint. 
+1. Restart Vega, load LNL checkpoint.
 1. The market has the same:
 - risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
 - price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>)

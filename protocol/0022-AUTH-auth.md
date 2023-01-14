@@ -83,7 +83,7 @@ A wallet is represented as an encrypted file containing a list of public and pri
 - We want a user of the wallet service to be able to download his wallet.
 - The API should return the full wallet file of the user.
 - The user should be able to use the file locally and decrypt it in order to use the public and private key.
- 
+
 ### Network
 
 The network will need to update the existing command in order to add to them a signature or public key.

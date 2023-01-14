@@ -56,7 +56,7 @@ This core processes each relevant transaction (in sequential order, as they occu
 - size updates to orders
 - cancellation or expiry of orders
 
-and updates the required position record. 
+and updates the required position record.
 
 In the case of trades, as long as the right data is stored, this can be done in both cases without re-iterating over prior trades when ingesting a new trade.
 
@@ -64,7 +64,7 @@ In the case of trades, as long as the right data is stored, this can be done in 
 
 #### Updating position size
 
-Position size is a number that represents the net transacted volume of a trader in the market. The position size is therefore only ever updated when a trader is party to a trade. A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). 
+Position size is a number that represents the net transacted volume of a trader in the market. The position size is therefore only ever updated when a trader is party to a trade. A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md).
 Note that negative PDP e.g. -2 means the smallest size is 100.
 
 The Position core functionality processes each trade in the following way:
@@ -81,7 +81,7 @@ The Position core functionality processes each trade in the following way:
 
 #### Updating net active buy and sell order sizes
 
-Net active buy size (and net active sell) size refer to the aggregated size of buy (and sell) orders that a trader has active on the order book at a point in time. 
+Net active buy size (and net active sell) size refer to the aggregated size of buy (and sell) orders that a trader has active on the order book at a point in time.
 
 These numbers are affected by any transaction that alters the net sum of a trader's open orders on the order book, including:
 

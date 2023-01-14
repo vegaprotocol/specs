@@ -23,7 +23,7 @@ Validation: none required as these are validated by the asset and data source fr
 ## 3. Valuation function
 
 ```javascript
-// Futures are quoted in directly terms of price 
+// Futures are quoted in directly terms of price
 cash_settled_future.value(quote) {
 	return quote
 }
@@ -44,7 +44,7 @@ cash_settled_future.trading_termination_trigger(event) {
 ```javascript
 cash_settled_future.settlement_data(event) {
 
-	// If settlement data was received prior to trading termination use the last value received, otherwise use the first value received after trading is terminated 
+	// If settlement data was received prior to trading termination use the last value received, otherwise use the first value received after trading is terminated
 	while market.status != TRADING_TERMINATED {
 		waitForMarketStatus(TRADING_TERMINATED)
 	}

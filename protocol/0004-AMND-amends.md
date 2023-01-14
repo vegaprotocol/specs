@@ -40,7 +40,7 @@ The amend order can alter the quantity, price and expiry time/`TIF` type. For pe
 
 The amend order message is a custom message containing the `orderID` of the original order and optional fields that can be altered. Prices can be changed with a new absolute value, quantity can be reduced or increased from their current remaining size. Expiry time can be set to a new value and the `TIF` type can be toggled between `GTC` and `GTT`. Changing the `TIF` field will impact the value in the ExpiryTime field as it will either be blanked or set to a new valid value.
 
-Some examples: 
+Some examples:
 A LIMIT order sitting on the bid side of the order book:
 
 `Bids: 100@1000 GTC (OrderID V0000000001-0000000001)`
@@ -81,7 +81,7 @@ The fields which can be altered are:
 - `Price`
   * Amending the price causes the order to be removed from the book and re-inserted at the new price level. This can result in the order being filled if the price is moved to a level that would cross.
 - `SizeDelta`
-  * A size change is specified as a delta to the current amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then SizeDelta must be a whole multiple of 0.01. (NB: SizeDelta may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp). In case PDP is negative this again applies e.g. if PDP = -1 then SizeDelta must be a whole multiple of 10. 
+  * A size change is specified as a delta to the current amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then SizeDelta must be a whole multiple of 0.01. (NB: SizeDelta may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp). In case PDP is negative this again applies e.g. if PDP = -1 then SizeDelta must be a whole multiple of 10.
 - `TimeInForce`
   * The `TIF` enumeration can only be toggled between `GTT` and `GTC`. Amending to `GTT` requires an `expiryTime` value to be set. Amending to `GTC` removes the `expiryTime` value.
 - `ExpiryTime`
@@ -101,9 +101,9 @@ To keep all versions of an order available for historic lookup, when an order is
 message amendOrder {
     string orderID 1 [(validator.field) = {string_not_empty : true}];
     uint64 price 2;
-    int64  sizeDelta 3; 
+    int64  sizeDelta 3;
     enum   TIF 4;
-    int64  expiryTime 5; 
+    int64  expiryTime 5;
     PeggedOrder *peggedOrder 6;
 }
 ```

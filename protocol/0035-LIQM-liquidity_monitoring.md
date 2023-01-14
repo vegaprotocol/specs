@@ -6,8 +6,8 @@ Liquidity in the market is not only a desirable feature from a trader's point of
 
 Similarly to [price monitoring](./0032-PRIM-price_monitoring.md), we need to be able to detect when the market liquidity drops below the safe level, launch a "liquidity seeking" auction (in which, due to the [liquidity mechanics](./0044-LIME-lp_mechanics.md), there is an incentive through the ability to set fees, to provide the missing liquidity) and terminate it when the market liquidity level is back at a sufficiently high level.
 
-Note that as long as all pegs that LP batch orders can peg to exists on the book there is one-to-one correspondence between the total stake committed by liquidity providers (LPs), see [LP mechanics](./0044-LIME-lp_mechanics.md) spec, and the total supplied liquidity. 
-Indeed 
+Note that as long as all pegs that LP batch orders can peg to exists on the book there is one-to-one correspondence between the total stake committed by liquidity providers (LPs), see [LP mechanics](./0044-LIME-lp_mechanics.md) spec, and the total supplied liquidity.
+Indeed
 ```
 lp_liquidity_obligation_in_ccy_siskas = stake_to_ccy_siskas ⨉ stake.
 ```
@@ -18,11 +18,11 @@ Note that [target stake](./0041-TSTK-target_stake.md) is defined in a separate s
 
 ## Liquidity auction network parameters
 
-**c<sub>1</sub>** - constant multiple for [target stake](./0041-TSTK-target_stake.md) triggering the commencement of liquidity auction. In this spec it is referred to as `c_1` but in fact it's name is `market.liquidity.targetstake.triggering.ratio` and it's a market parameter (with a network parameter providing a default value for markets that don't specify it). 
+**c<sub>1</sub>** - constant multiple for [target stake](./0041-TSTK-target_stake.md) triggering the commencement of liquidity auction. In this spec it is referred to as `c_1` but in fact it's name is `market.liquidity.targetstake.triggering.ratio` and it's a market parameter (with a network parameter providing a default value for markets that don't specify it).
 
 ## Total stake
 
-`total_stake` is the sum the stake amounts committed by all the LPs in the market (see [LP mechanics](./0044-LIME-lp_mechanics.md)) for how LPs commit stake and what it obliges them to do. 
+`total_stake` is the sum the stake amounts committed by all the LPs in the market (see [LP mechanics](./0044-LIME-lp_mechanics.md)) for how LPs commit stake and what it obliges them to do.
 
 ## Trigger for entering an auction
 
@@ -62,13 +62,13 @@ The auction proceeds as usual. Please see the [auction spec](./0026-AUCT-auction
 
 ## Frequency of checking for liquidity auction entry conditions
 
- Through a sequence of actions which occur with the same timestamp the market may be moved into a state in which a liquidity auction is expected and then back out of said state. Ideally, liquidity auctions should only be entered when the market truly requires one as once entered a minimum auction length (controlled by `market.auction.minimumDuration`) must be observed. Even with a very short a minimum auction length, a market flickering between two states is suboptimal. 
+ Through a sequence of actions which occur with the same timestamp the market may be moved into a state in which a liquidity auction is expected and then back out of said state. Ideally, liquidity auctions should only be entered when the market truly requires one as once entered a minimum auction length (controlled by `market.auction.minimumDuration`) must be observed. Even with a very short a minimum auction length, a market flickering between two states is suboptimal.
 
- To resolve this, the conditions for entering a liquidity auction should only be checked at the end of each batch of transactions occurring with an identical timestamp (in the current Tendermint implementation this is equivalent to once per block). At the end of each such period the auction conditions should be checked and the market moved into liquidity auction state if the conditions for entering a liquidity auction are satisfied. 
+ To resolve this, the conditions for entering a liquidity auction should only be checked at the end of each batch of transactions occurring with an identical timestamp (in the current Tendermint implementation this is equivalent to once per block). At the end of each such period the auction conditions should be checked and the market moved into liquidity auction state if the conditions for entering a liquidity auction are satisfied.
 The criteria for exiting any auction (liquidity or price monitoring) should be checked only on timestamp change (ie block boundary with Tendermint). This means that a market cannot leave a liquidity auction only to immediately re-enter it at the end of the block.
 
- A liquidity provider amending LP provision order can reduce their stake (as long as total stake >= target stake) even if doing so would mean that at the end of block the system enters liquidity auction (because e.g. max open interest increased or because another LP was removed due to not meeting margin commitments). 
-An implication is that within the same time stamp an aggressive order may remove the `best_bid` or `best_ask`. At that point all LP provision volume is removed from the book (and by implication at least one side of the book is empty). If a subsequent limit order re-creates the peg (still with the same timestamp / from the same block) then the LP volume is re-deployed. If no subsequent limit order places a limit order restoring the peg and we reach end of the block we end up in a liquidity auction. 
+ A liquidity provider amending LP provision order can reduce their stake (as long as total stake >= target stake) even if doing so would mean that at the end of block the system enters liquidity auction (because e.g. max open interest increased or because another LP was removed due to not meeting margin commitments).
+An implication is that within the same time stamp an aggressive order may remove the `best_bid` or `best_ask`. At that point all LP provision volume is removed from the book (and by implication at least one side of the book is empty). If a subsequent limit order re-creates the peg (still with the same timestamp / from the same block) then the LP volume is re-deployed. If no subsequent limit order places a limit order restoring the peg and we reach end of the block we end up in a liquidity auction.
 
 As mentioned, as a consequence, intra-block, we may end with one side of the book empty which means that a party not meeting margin requirement *cannot* be closed out. We accept this consequence, their margin will be checked again when the mark price changes and either the book is restored (and they can get closed out) or the market is in liquidity auction.
 
