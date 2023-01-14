@@ -32,10 +32,11 @@ The maker fee factor is set by a network parameter `market.fee.factors.makerFee`
 The liquidity fee factor is set by an auction-like mechanism based on the liquidity provisions committed to the market, see [setting LP fees](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 trade_value_for_fee_purposes:
-* refers to the amount from which we calculate fee, (e.g. for futures, the trade's notional value = size_of_trade * price_of_trade)
-* trade_value_for_fee_purposes is defined on the Product and is a function that may take into account other product parameters
 
-Initially, for futures, the trade_value_for_fee_purposes = notional value of the trade = size_of_trade * price_of_trade. For other product types, we may want to use something other than the notional value. This is determined by the Product.
+- refers to the amount from which we calculate fee, (e.g. for futures, the trade's notional value = size_of_trade * price_of_trade)
+- trade_value_for_fee_purposes is defined on the Product and is a function that may take into account other product parameters
+
+Initially, for futures, the trade_value_for_fee_purposes = notional value of the trade = `size_of_trade` * `price_of_trade`. For other product types, we may want to use something other than the notional value. This is determined by the Product.
 
 NB: size of trade needs to take into account Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md), and if trade/position sizes are stored as ints will need to divide by `10^PDP` where PDP is the configured number of Position Decimal Places for the market (or this division will need to be abstracted and done global by the position management component of Vega which may expose both a true and an integer position size, or something).
 

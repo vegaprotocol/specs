@@ -65,7 +65,6 @@ There are several reasons why this maximum is enforced.
 1. allowing high number of triplets could have performance impact
 1. testing everything works correctly is more manageable if the number is capped.
 
-
 ### View from the Vega side
 
 - Per each transaction:
@@ -107,7 +106,6 @@ to the risk model and obtains the range of valid up/down price moves per each of
   - the multiplicative factors: f<sub>min</sub><sup>multiplicative</sup>, f<sub>max</sub><sup>multiplicative</sup> such that S<sub>min</sub>:=S<sub>ref</sub>*f<sub>min</sub><sup>multiplicative</sup> and S<sub>max</sub>:=S<sub>ref</sub>*f<sub>max</sub><sup>multiplicative</sup>
 
   so that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α.
-
 
 ## Acceptance Criteria
 

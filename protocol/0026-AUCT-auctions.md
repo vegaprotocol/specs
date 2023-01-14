@@ -175,7 +175,7 @@ message Market {
   
 		- more liquidity is committed (<a name="0026-AUCT-011" href="#0026-AUCT-011">0026-AUCT-011</a>)
 		- or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-012" href="#0026-AUCT-012">0026-AUCT-012</a>)
-	
+
   1. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
 
 		- best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>)

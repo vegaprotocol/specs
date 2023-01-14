@@ -66,7 +66,7 @@ In future, governance weighting for some proposal types will be based on alterna
 
 The governance system must be generic in term of weighting of the vote for a given proposal. As noted above, the first implementation will start with _the amount of a particular token that a participant holds_ but this will be extended in the near future, as additional protocol features and governance actions are added.
 
-Initially the weighting will be based on the amount of the configured governance asset that the user has on the network as determined *only* by their staking account balance of this asset. 1 token represents 1 vote (0.0001 tokens represents 0.0001 votes, etc.). A user with a balance of 0 cannot vote or submit a proposal of that type, and ideally this would be enforced in a check _before_ scheduling the voting transaction in a block.
+Initially the weighting will be based on the amount of the configured governance asset that the user has on the network as determined _only_ by their staking account balance of this asset. 1 token represents 1 vote (0.0001 tokens represents 0.0001 votes, etc.). A user with a balance of 0 cannot vote or submit a proposal of that type, and ideally this would be enforced in a check _before_ scheduling the voting transaction in a block.
 
 The governance token used for calculating voting weight must be an asset that is configured within the asset framework in Vega (this could be a "Vega native" asset on some networks or an asset deposited via a bridge, i.e. an ERC20 on Ethereum). Note: this means that the asset framework will _always_ need to be able to support pre-configured assets (the configuration of which must be verifiably the same on every node) in order to bootstrap the governance system. The governance asset configuration will be different on different Vega networks, so this cannot be hard coded.
 
@@ -128,14 +128,14 @@ Which of these makes most sense will depend on the type of change, the timing of
 
 At the conclusion of the voting period the network will calculate two values:
 
-1. The participation rate: `participation_rate = SUM ( weightings of ALL valid votes cast ) / max total weighting possible` (e.g. sum of token balances of all votes cast / total supply of governance asset, this implies that for this version it is only possible to use an asset with **fixed supply** as the governance asset)
+1. The participation rate: `participation_rate = SUM ( weightings of ALL valid votes cast ) / max total weighting possible` (e.g. sum of token balances of all votes cast / total supply of governance asset, this implies that for this version it is only possible to use an asset with _fixed supply_ as the governance asset)
 1. The "for" rate: `for_rate = SUM ( weightings of votes cast for ) / SUM ( weightings of all votes cast )`
 
 Any proposal that is not market parameter change proposal is considered successful and will be enacted (where necessary) if:
 
 - The `participation_rate` is greater than or equal to the minimum participation rate for the proposal
 - The `for_rate` is greater than or equal to the minimum required majority for the proposal
-- The `participation rate` is calculated against the *total supply of the governance asset*.
+- The `participation rate` is calculated against the _total supply of the governance asset_.
 
 Note: see below for details on minimum participation rate and minimum required majority, which are defined by type of governance action, and in some cases a category or sub-type.
 
@@ -217,7 +217,7 @@ Note the following key points from the market lifecycle spec:
 A proposal to create a market contains
 
 1. a complete market specification as per the Market Framework (see spec) that describes the market to be created.
-1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
+1. an enactment time that is at least the _minimum auction duration_ after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
 
 All _new market proposals_ initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
@@ -241,7 +241,7 @@ The following are immutable and cannot be changed:
 
 ## 3. Change network parameters
 
-[Network parameters](./0054-NETP-network_parameters.md) that may be changed are described in the *Network Parameters* spec, this document for details on these parameters, including the category of the parameters. New network parameters require a code change, so there is no support for adding new network parameters.
+[Network parameters](./0054-NETP-network_parameters.md) that may be changed are described in the _Network Parameters_ spec, this document for details on these parameters, including the category of the parameters. New network parameters require a code change, so there is no support for adding new network parameters.
 
 All _change network parameter proposals_ have their validation configured by the network parameters `Governance.UpdateNetwork.<CATEGORY>.*`, where `<CATEGORY>` is the category assigned to the parameter in the Network Parameter spec.
 
@@ -256,7 +256,8 @@ Any existing [asset](./0040-ASSF-asset_framework.md) can be modified through the
 Only some properties of an asset may be modified, this is detailed in [asset framework spec](./0040-ASSF-asset_framework.md).
 All proposals to modify an existing asset have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`.
 Enactment of an asset modification proposal is:
-- For data that must be synchronised with the asset blockchain (e.g. Ehtereum): *only* the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emmitted by the bridge chain.
+
+- For data that must be synchronised with the asset blockchain (e.g. Ehtereum): _only_ the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emmitted by the bridge chain.
 - For any data that is stored only on the Vega chain: the data is updated once the proposal is enacted.
 
 ## 5. Transfers initiated by Governance (post Oregon trail)
@@ -322,8 +323,8 @@ The amount is calculated by
 
 Where:
 
--  `NETWORK_MAX_AMOUNT` is a network parameter specifying the maximum absolute amount that can be transferred by governance for the source account type
--  `NETWORK_MAX_FRACTION` is a network parameter specifying the maximum fraction of the balance that can be transferred by governance for the source account type (must be <= 1)
+- `NETWORK_MAX_AMOUNT` is a network parameter specifying the maximum absolute amount that can be transferred by governance for the source account type
+- `NETWORK_MAX_FRACTION` is a network parameter specifying the maximum fraction of the balance that can be transferred by governance for the source account type (must be <= 1)
 
 If `type` is "all or nothing" then the transfer will only proceed if:
 
@@ -377,16 +378,16 @@ Notes:
 
 The core should expose via core APIs:
 
- - all the active proposals on the network
- - the current results for an active proposal or a proposal awaiting enactment
+- all the active proposals on the network
+- the current results for an active proposal or a proposal awaiting enactment
 
 APIs should also exist for clients to:
 
- - list all proposals including historic ones, filter by status/type, sort either way by submission date, vote closing date, or enactment date
- - retrieve the summary results and status for any proposal
- - retrieve the party IDs (pub keys) of all votes counting for (i.e. only one latest vote per party) and against a proposal
- - retrieve the full voting history for a proposal including where a party voted multiple times
- - get a list of all proposals a party voted on
+- list all proposals including historic ones, filter by status/type, sort either way by submission date, vote closing date, or enactment date
+- retrieve the summary results and status for any proposal
+- retrieve the party IDs (pub keys) of all votes counting for (i.e. only one latest vote per party) and against a proposal
+- retrieve the full voting history for a proposal including where a party voted multiple times
+- get a list of all proposals a party voted on
 
 ## Acceptance Criteria
 
@@ -434,10 +435,10 @@ APIs should also exist for clients to:
 
 - As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
 - Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)
-- Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for *BUT* governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
+- Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for _BUT_ governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
 - Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
 - Verify that an enacted market which uses trading terminated key `ktt1` and settlement price key `ksp1` which is changed via governance proposal to use trading terminated key `ktt2` and settlement price key `ksp2` can terminate trading using `ktt2` but cannot terminate trading using `ktt1` and `ksp2` can submit the settlement price causing market to settle but the key `ksp1` cannot settle the market. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
-- Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the *new* bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
+- Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the _new_ bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
 - Verify that an enacted market change proposal that reduces `market.stake.target.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
 - Attempts to update immutable market parameter(s) cause the market change proposal to be rejected with an appropriate rejection message (<a name="0028-GOVE-058" href="#0028-GOVE-058">0028-GOVE-058</a>)
 - Verify that if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0` and if a party meets the `governance.proposal.updateMarket.minProposerBalance` threshold then said party can submit a market change proposal. (<a name="0028-GOVE-060" href="#0028-GOVE-060">0028-GOVE-060</a>)

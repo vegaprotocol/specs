@@ -7,6 +7,7 @@ When market makers commit to providing liquidity they are required to submit a s
 ## Liquidity Provisioning order features
 
 LP orders are a special order type with the following features:
+
 - Is a batch order: allows simultaneously specifying multiple orders in one message/transaction
 - Initially all are pegged orders but other price types may be available in future
 - Are always priced limit orders that sit on the book
@@ -59,10 +60,13 @@ Input data:
 Steps:
 
 1. From the market parameter - to be set as part of [market proposal](0028-GOVE-governance.md)  `market.liquidity.priceRange` which is a percentage price move (e.g. `0.05 = 5%` and from `mid_price` calculate:
+
 ```
 min_lp_price = (1.0 - market.liquidity.priceRange) x mid_price
 ```
+
 and
+
 ```
 max_lp_price = (1.0 + market.liquidity.priceRange) x mid_price
 ```
@@ -77,7 +81,7 @@ If you end up with 0 or a negative number, stop, you are done.
 
 1. Calculate the volume implied by each entry in the refined buy/sell order list. You will now create orders from this volume at the relevant price point and apply them to the order book.
 
-#### Normalising liquidity proportions for a set of market making orders (step 3):
+#### Normalising liquidity proportions for a set of market making orders (step 3)
 
 Calculate the `liquidity-normalised-proportion` for all entries, where for buy and sell side separately:
 
@@ -94,7 +98,7 @@ liquidity-normalised-proportion-sell-order-2 = 5 / (5 + 5) = 0.5
 ```
 The sum of all normalised proportions must = 1 on each side.
 
-#### Calculating volumes for a set of market making orders (step 6):
+#### Calculating volumes for a set of market making orders (step 6)
 
 Any shape entry with a peg less than `min_lp_vol_price` should have the resulting volume implied at `min_lp_vol_price` (instead of what level the peg would be) while any shape entry with peg greater than `max_lp_vol_price` should have the resulting volume implied at `max_lp_vol_price`.
 
@@ -140,7 +144,7 @@ Liquidity provider orders are recalculated and refreshed whenever an order that 
 
 In these cases, repeat all steps above, preserving the order as an order, but recalculating the volume and price of it. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself.
 
-### Time priority for refreshing:
+### Time priority for refreshing
 
 1. For all orders that are repriced but not as a result of trading (i.e. pegged orders that move as a result of peg moving), treat as per normal pegged orders.
 
@@ -174,7 +178,7 @@ ________________________
 When the system refreshes orders (because a peg moved) and the implied volumes now sit at different price levels there may be different overall margin requirement for the LP party.
 If the resulting amount is outside search / release then there will be *at most* one transfer in / out of the party's margin account for the entire LP order.
 
-## Amending the LP order:
+## Amending the LP order
 
 Liquidity providers are always allowed to amend their shape generated orders by submitting a new liquidity provider order with a set of revised order shapes (see [Liquidity Provisioning mechanics](./0044-LIME-lp_mechanics.md)). They are not able to amend orders using "normal" amend orders.
 
@@ -182,14 +186,14 @@ No cancellation of orders that arise from this LP batch order type other than by
 
 Note that any other orders that the LP has on the book (limit orders, other pegged orders) that are *not* part of this LP batch order (call them "normal" in this paragraph) can be cancelled and amended as normal. When volume is removed / added / pegs moved (on "normal" orders) then as part of the normal peg updates the LP batch order may add or remove volume as described in section "How they are constructed for the order book" above.
 
-## Network Parameters:
+## Network Parameters
 
-* `market.liquidity.probabilityOfTrading.tau.scaling`: scaling factor multiplying risk model value of tau to imply probability of trading.
-* `market.liquidity.minimum.probabilityOfTrading.lpOrders`: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the `market.liquidity.minimum.probabilityOfTrading.lpOrders`.
+- `market.liquidity.probabilityOfTrading.tau.scaling`: scaling factor multiplying risk model value of tau to imply probability of trading.
+- `market.liquidity.minimum.probabilityOfTrading.lpOrders`: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the `market.liquidity.minimum.probabilityOfTrading.lpOrders`.
 
-## APIs:
+## APIs
 
-* Order datatype for LP orders. Any order APIs should contain these orders.
+- Order datatype for LP orders. Any order APIs should contain these orders.
 
 ## Acceptance Criteria:
 

@@ -8,9 +8,9 @@ Similarly to [price monitoring](./0032-PRIM-price_monitoring.md), we need to be 
 
 Note that as long as all pegs that LP batch orders can peg to exists on the book there is one-to-one correspondence between the total stake committed by liquidity providers (LPs), see [LP mechanics](./0044-LIME-lp_mechanics.md) spec, and the total supplied liquidity.
 Indeed
-```
-lp_liquidity_obligation_in_ccy_siskas = stake_to_ccy_siskas ⨉ stake.
-```
+
+`lp_liquidity_obligation_in_ccy_siskas = stake_to_ccy_siskas ⨉ stake`.
+
 Thus it is sufficient to compare `target_stake` with `total_stake` while also ensuring that `best_bid` and `best_offer` are present on the book (*).
 Note that [target stake](./0041-TSTK-target_stake.md) is defined in a separate spec.
 
@@ -27,9 +27,9 @@ Note that [target stake](./0041-TSTK-target_stake.md) is defined in a separate s
 ## Trigger for entering an auction
 
 The auction is triggered when
-```
-total_stake < c_1 x target_stake OR there is no best_bid OR there is no best offer.
-```
+
+`total_stake < c_1 x target_stake OR there is no best_bid OR there is no best offer`.
+
 Here 0 < c<sub>1</sub> < 1, to reduce the chance of another auction getting triggered soon after e.g. c<sub>1</sub> = 0.7. The parameter c<sub>1</sub> is a network parameter.
 
 ### Increasing target stake

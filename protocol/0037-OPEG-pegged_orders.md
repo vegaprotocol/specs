@@ -60,7 +60,7 @@ Pegged orders can be amended like normal limit orders, in such their size, refer
 | MID (for a sell)   | Not allowed  | Allowed      | N/A     |
 | MID (for a buy)    | Allowed      | Not allowed  | N/A     |
 
-# Reference-level explanation
+## Reference-level explanation
 
 Pegged orders are restricted in what values can be used when they are created, these can be defined by a list of rules each order must abide with.
 
@@ -131,17 +131,17 @@ Extra functionality will be added to the expiring and cancelling steps
 ## Test cases
 
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
-* Insert a pegged order using all of the available reference types and an offset to make the order persistent.
-* Insert a pegged order using all of the available reference types and an offset to make the order fill.
-* Insert a pegged order using all of the available reference types and an offset to make the order partially fill.
-* Insert a pegged order with TIF=GTT and let the order expire while still on the book.
-* Insert all the pegged order types and cancel them.
-* Insert a pegged order with a large negative offset and drive the price low to make the pegged price <= 0, verify that the order is parked. Move the price higher and verify that the order is unparked.
-* Try to submit valid pegged orders during auction.
-* Switch a market to auction and make sure the pegged orders are parked.
-* Switch a market from auction to continuous trading to make sure the orders are unparked.
-* Try to insert non LIMIT orders and make sure they are rejected.
-* Test where both buy and sell orders are pegged against a mid which is not a whole number.
-* Check that a repriced pegged order does not have the version value incremented.
-* Amend a pegged order
-* Amend a parked pegged order
+- Insert a pegged order using all of the available reference types and an offset to make the order persistent.
+- Insert a pegged order using all of the available reference types and an offset to make the order fill.
+- Insert a pegged order using all of the available reference types and an offset to make the order partially fill.
+- Insert a pegged order with TIF=GTT and let the order expire while still on the book.
+- Insert all the pegged order types and cancel them.
+- Insert a pegged order with a large negative offset and drive the price low to make the pegged price <= 0, verify that the order is parked. Move the price higher and verify that the order is unparked.
+- Try to submit valid pegged orders during auction.
+- Switch a market to auction and make sure the pegged orders are parked.
+- Switch a market from auction to continuous trading to make sure the orders are unparked.
+- Try to insert non LIMIT orders and make sure they are rejected.
+- Test where both buy and sell orders are pegged against a mid which is not a whole number.
+- Check that a repriced pegged order does not have the version value incremented.
+- Amend a pegged order
+- Amend a parked pegged order

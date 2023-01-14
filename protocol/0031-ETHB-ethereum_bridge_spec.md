@@ -89,8 +89,9 @@ contract IVega_Bridge {
 ### Allow-listing and Block-listing
 
 The ERC20 contract, and any other contract that represents an asset class rather than an individual asset, will maintain a whitelist of assets that can and cannot be deposited. Only allow listed assets can be deposited.
-* An asset that is on the allowed list can be withdrawn and deposited
-* An asset that is not on the allowed list can be withdrawn but not deposited
+
+- An asset that is on the allowed list can be withdrawn and deposited
+- An asset that is not on the allowed list can be withdrawn but not deposited
 
 #### Allow-listing
 
@@ -159,28 +160,28 @@ This example connects the network to Ropsten:
   - A valid multisig bundle can be passed to the `remove_asset` function to successfully remove a previously  allow listed token (<a name="0031-COSMICELEVATOR-019" href="#0031-COSMICELEVATOR-019">0031-COSMICELEVATOR-019</a>)
   - An invalid multisig bundle is rejected by the `remove_asset` function (<a name="0031-COSMICELEVATOR-020" href="#0031-COSMICELEVATOR-020">0031-COSMICELEVATOR-020</a>)
 
-
 ### ERC20 Bridge Logic to Vega Integration Tests (Vega System Tests)
+
 To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on `ERC20_Bridge_Logic` and their corresponding acceptance criteria.
 
-1.  `address payable public erc20_asset_pool_address;`
+1. `address payable public erc20_asset_pool_address;`
 
 - must match the deployed asset pool address (<a name="0031-ETHB-018" href="#0031-ETHB-018">0031-ETHB-018</a>)
 
-1.  `function list_asset(address asset_source,bytes32 vega_asset_id,uint256 lifetime_limit,uint256 withdraw_threshold,uint256 nonce,bytes memory signatures)`
+1. `function list_asset(address asset_source,bytes32 vega_asset_id,uint256 lifetime_limit,uint256 withdraw_threshold,uint256 nonce,bytes memory signatures)`
 
 - must list asset (<a name="0031-ETHB-019" href="#0031-ETHB-019">0031-ETHB-019</a>)
 - must not list already-listed asset (<a name="0031-ETHB-020" href="#0031-ETHB-020">0031-ETHB-020</a>)
 - must not list if sigs bad (<a name="0031-ETHB-021" href="#0031-ETHB-021">0031-ETHB-021</a>)
 - must not list if already listed (<a name="0031-ETHB-022" href="#0031-ETHB-022">0031-ETHB-022</a>)
 
-1.  `function remove_asset(address asset_source,uint256 nonce,bytes memory signatures)`
+1. `function remove_asset(address asset_source,uint256 nonce,bytes memory signatures)`
 
 - must remove asset (<a name="0031-ETHB-023" href="#0031-ETHB-023">0031-ETHB-023</a>)
 - must fail if asset not listed (<a name="0031-ETHB-024" href="#0031-ETHB-024">0031-ETHB-024</a>)
 - must fail if bad signatures (<a name="0031-ETHB-025" href="#0031-ETHB-025">0031-ETHB-025</a>)
 
-1.  `uint256 public default_withdraw_delay = 432000;`
+1. `uint256 public default_withdraw_delay = 432000;`
 
 - must show 432000 (<a name="0031-ETHB-026" href="#0031-ETHB-026">0031-ETHB-026</a>)
 
@@ -189,21 +190,21 @@ To ensure complete coverage of public and external smart contract functions, lis
 - must be false at first (<a name="0031-ETHB-027" href="#0031-ETHB-027">0031-ETHB-027</a>)
 - must be true after `global_stop` called (<a name="0031-ETHB-028" href="#0031-ETHB-028">0031-ETHB-028</a>)
 
-1.  `function set_asset_limits(address asset_source,uint256 lifetime_limit,uint256 threshold,uint256 nonce,bytes calldata signatures)`
+1. `function set_asset_limits(address asset_source,uint256 lifetime_limit,uint256 threshold,uint256 nonce,bytes calldata signatures)`
  
 - changes asset limits (<a name="0031-ETHB-029" href="#0031-ETHB-029">0031-ETHB-029</a>)
 - must fail if bad sigs (<a name="0031-ETHB-030" href="#0031-ETHB-030">0031-ETHB-030</a>)
 - asset must be listed (<a name="0031-ETHB-031" href="#0031-ETHB-031">0031-ETHB-031</a>)
 
-1.  `function get_asset_deposit_lifetime_limit(address asset_source)`
+1. `function get_asset_deposit_lifetime_limit(address asset_source)`
 
 - must return asset lifetime limit (<a name="0031-ETHB-032" href="#0031-ETHB-032">0031-ETHB-032</a>)
 
-1.  `function get_withdraw_threshold(address asset_source)`
+1. `function get_withdraw_threshold(address asset_source)`
 
 - must return withdraw threshold (<a name="0031-ETHB-033" href="#0031-ETHB-033">0031-ETHB-033</a>)
 
-1.  `function set_withdraw_delay(uint256 delay,uint256 nonce,bytes calldata signatures)`
+1. `function set_withdraw_delay(uint256 delay,uint256 nonce,bytes calldata signatures)`
 
 - must set withdraw delay (<a name="0031-ETHB-034" href="#0031-ETHB-034">0031-ETHB-034</a>)
 - must fail if bad sigs (<a name="0031-ETHB-036" href="#0031-ETHB-036">0031-ETHB-036</a>)
@@ -274,6 +275,7 @@ To ensure complete coverage of public and external smart contract functions, lis
 - must return the deployed asset address from Vega asset ID (<a name="0031-ETHB-066" href="#0031-ETHB-066">0031-ETHB-066</a>)
 
 ### ERC20 Asset Pool to Vega Integration Tests (Vega System Tests)
+
 To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on ERC20_Asset_Pool and their corresponding acceptance criteria.
 
 1. `address public multisig_control_address;`
