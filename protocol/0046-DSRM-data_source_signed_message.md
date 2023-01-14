@@ -25,12 +25,12 @@ A data source must define:
 
 - Signers that can sign and submit values for this (external or internal) source. Signers can be different types of keys/addresses that are used by the data source to sign the data. They have different encryption schemes and are treated differently in the DB settings and in codebase level. Examples are public keys used to sign the data, in case of an Open Oracle - Ethereium address.
 - Type of data to be supplied in the transaction. Initially we should support the following types:
-    - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main data source spec (keys are strings)
-    - ABI encoded encoded data. Specifically for oracles, we want to be able to support at least the OpenOracle standard by this method
+  - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main data source spec (keys are strings)
+  - ABI encoded encoded data. Specifically for oracles, we want to be able to support at least the OpenOracle standard by this method
 
 Note: that as a public key may provide many messages, a [filter](./0047-DSRF-data_source_filter.md) is likely to be needed to extract the required message, and a field select would be used to extract the required field ('price' or 'temperature', etc.)
 
-### Examples:
+### Examples
 
 Data source for a public key that will only send one transaction containing prices for several markets and therefore doesn't need to be filtered, but the correct value does need to be extracted:
 
@@ -90,20 +90,24 @@ Where possible, this should be done before the transaction is included in a bloc
 
 An [instrument can be created](./0028-GOVE-governance.md) to rely on a signed message data source:
 
--The instrument must specify a valid signed message data source (<a name="0046-DSRM-001" href="#0046-DSRM-001">0046-DSRM-001</a>)
+- The instrument must specify a valid signed message data source (<a name="0046-DSRM-001" href="#0046-DSRM-001">0046-DSRM-001</a>)
 - A market proposal specifying an invalid data source will be rejected (<a name="0046-DSRM-002" href="#0046-DSRM-002">0046-DSRM-002</a>)
   - This rejection will happen at _the [creation of the proposal](./0028-GOVE-governance.md)_  (<a name="0046-DSRM-003" href="#0046-DSRM-003">0046-DSRM-003</a>)
-- Multiple instruments can rely on the same data source:
-  - Multiple instruments can settle based on the same `SubmitData` message.  (<a name="0046-DSRM-004" href="#0046-DSRM-004">0046-DSRM-004</a>)
-  - Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
-  - Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
+
+Multiple instruments can rely on the same data source:
+
+- Multiple instruments can settle based on the same `SubmitData` message.  (<a name="0046-DSRM-004" href="#0046-DSRM-004">0046-DSRM-004</a>)
+- Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
+- Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
 
 `SubmitData` transactions can be submitted by any public key as long as the data included in the transaction is signed by at least one of the keys included in an active signed message data source definition:
 
 - `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)
 - `SubmitData` transactions by inactive data sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
 - `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)
-1. To be valid, a `SubmitData` transaction must:
+
+To be valid, a `SubmitData` transaction must:
+
 - Contain correctly signed data from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)
 - Invalid `SubmitData` transactions must be rejected.  (<a name="0046-DSRM-011" href="#0046-DSRM-011">0046-DSRM-011</a>)
 

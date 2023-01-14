@@ -64,7 +64,7 @@ When defining a data source, the specification for that data source must describ
 
 ## 4. Data types
 
-### Allowable types:
+### Allowable types
 
 Data sources must be able to emit the following data types:
 
@@ -171,7 +171,7 @@ In future, we would therefore expect arbitrary compositions of these features to
 
 Here are some examples of how a data source might be specified.
 
-Note that these are examples *not actual specs*, please see specs for currently specified data types!
+Note that these are examples _not actual specs_, please see specs for currently specified data types!
 
 Signed message stream filtered to return a single value:
 

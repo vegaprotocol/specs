@@ -83,7 +83,7 @@ Then a proposal that attempted to change the `market.fee.factors.makerFee` would
 
 The full list of network parameters must be available to the governance community. All proposals to change a network parameter should be easily discoverable.
 
-# Current network parameters
+## Current network parameters
 
 The network parameter spec-name to name-in-vega-core mapping is found in the core [keys](https://github.com/vegaprotocol/vega/blob/develop/core/netparams/keys.go) file.
 
