@@ -43,11 +43,11 @@ There is no interaction with the smart contract that is initiated by Vega.
 
 The validators watch for events emitted by the staking and delegation smart contract, and observe the following actions:
 
-### A token gets associated:
+### A token gets associated
 
 This token is now available for delegation.
 
-### A token gets dissociated:
+### A token gets dissociated
 
 If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegatable tokens is reduced to match the (un)locking status).
 
@@ -114,18 +114,18 @@ Another option would be to withdraw stake proportionally from the validators.
 
 #### Types of undelegations
 
-_Undelegate towards the end of the epoch_
+##### Undelegate towards the end of the epoch
 
 - The action is announced in the next available block, but the delegator keeps the delegation alive till the last block of the epoch. The delegator can then re-delegate the stake, which then be valid once the next epoch starts. The delegator cannot move the tokens before the epoch ends, they remain locked.
 
-_Undelegate Now_ `UndelegateNow`:
+##### Undelegate Now `UndelegateNow`
 
 - The action can be announced at any time and is executed immediately following the block it is announced in.
 - The user is marked to not receive any reward from the validator in that epoch. - The reward should instead go into the [on-chain treasury account for that asset](./0055-TREA-on_chain_treasury.md). The stake is marked as free for the delegator, but is not yet removed from the validator stake (this happens at the end of the epoch).
 
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring any interaction between the smart contract and the details of the delegation system. This also allows the delegator to change their mind about a delegation before it is activated.
 
-_Undelegate in Anger_ `UndelegateInAnger`:
+##### Undelegate in Anger `UndelegateInAnger`
 
 - This is not strictly a type of undelegation but it's effect is quite similar to undelegate now. This is expressed by unstaking rather than by un-delegating. When removing the stake, the corresponding stake will automatically be undelegated.
 
@@ -139,7 +139,7 @@ _Undelegate in Anger_ `UndelegateInAnger`:
   - When distributing the newly available association according to the current validators nomination of the party, if validator A should get X but can only accept X - e (due to max per validator constraint), we don't try to distribute e between the other validators and will try to distribute it again in the next round.
 - Auto undelegation - whenever the party dissociates tokens, their nomination must be updated such that their maximum nomination reflects the association.
 
-## Fringe Cases:
+## Fringe Cases
 
 A delegator can delegate some stake, and immediately undelegate it before the next
 epoch starts. This is fine with us.
@@ -200,7 +200,7 @@ These accounts will be created:
 ### Removing stake
 
 - Any stake may be withdrawn from the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) at any time (<a name="0059-STKG-011" href="#0059-STKG-011">0059-STKG-011</a>)
- - Unlocking your tokens in the bridge contract will effectively "remove" them from any delegation they're doing (unless you have remaining undelegated tokens that could fulfil your delegation) (<a name="0059-STKG-012" href="#0059-STKG-012">0059-STKG-012</a>)
+  - Unlocking your tokens in the bridge contract will effectively "remove" them from any delegation they're doing (unless you have remaining undelegated tokens that could fulfil your delegation) (<a name="0059-STKG-012" href="#0059-STKG-012">0059-STKG-012</a>)
 - Delegation may be fully or partially removed. The amount specified in the [function: Remove](./0071-STAK-erc20_governance_token_staking.md) - is the size by which the existing staked amount will be decremented (<a name="0059-STKG-013" href="#0059-STKG-013">0059-STKG-013</a>)
 - Removal of delegation may happen in the following 2 ways:
   - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator). (<a name="0059-STKG-014" href="#0059-STKG-014">0059-STKG-014</a>)

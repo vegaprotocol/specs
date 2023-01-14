@@ -4,7 +4,7 @@ This describes the SweetWater requirements for calculation and distribution of r
 
 This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on_chain_treasury.md) as well rewards resulting from trading via [infrastructure fees](./0029-FEES-fees.md).
 
-## Network parameters used for `score_val` calculation:
+## Network parameters used for `score_val` calculation
 
 1. `min_val`: minimum validators we need (for now, 5). This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.minValidators`.
 1. `numberOfValidators` - the actual number of validators running the consensus (derived from running chain)
@@ -13,11 +13,10 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake.
 1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes.
 
-## Other network parameters:
+## Other network parameters
 
 - `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.delegatorShare`.
 - `min_own_stake`: the minimum number of staking and governance asset (VEGA) that a validator needs to self-delegate to be eligible for rewards. Full name: `reward.staking.delegation.minimumValidatorStake`.
-
 
 **Note**: changes of any network parameters affecting these calculations will take an immediate effect (they aren't delayed until next epoch).
 
@@ -34,17 +33,18 @@ This is to ensure that validators (all validators) have incentive to pay Ethereu
 
 ## Primary (consensus forming) Nodes, Ersatz Nodes, Non-validator nodes
 
- From the point of view of proof of stake rewards three are three types of nodes:
- 1. Non-validator nodes that process transactions and can run the [data node](./0076-DANO-data-node.md) for client use but they don't determine which transactions go into blocks and they get no proof of stake rewards. Any such validator [can submit a transaction](./0069-VCBS-validators_chosen_by_stake.md) to join the ersatz nodes / validator nodes set. Once they submit such transaction they become [pending nodes](./0064-VALP-validator_performance_based_rewards.md) and their performance is measured to determine their suitability.  If they meet staking and performance criteria will get "promoted" to the next level.
- 1. The [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) who, from the point of view of consensus protocol are non-validator nodes but they have sufficient stake (own or delegated) and meet performance criteria. Their role is to be readily available if any of the primary (Tendermint) validators was to drop out in which case they become primary validators. They can also become primary validators if the stake composition [changes sufficiently](./0069-VCBS-validators_chosen_by_stake.md). They receive proof of stake rewards. If their performance score or amount of delegated stake drops they can be demoted to a pending non-validator node.
- 1. The primary (Consensus forming / Tendermint) nodes (which propose and verify blocks based on delegated PoS using the Tendermint protocol). They receive proof of stake rewards.
+From the point of view of proof of stake rewards three are three types of nodes:
 
- ### Proof of stake reward split between primary (tendermint) validators and ersatz validators
+1. Non-validator nodes that process transactions and can run the [data node](./0076-DANO-data-node.md) for client use but they don't determine which transactions go into blocks and they get no proof of stake rewards. Any such validator [can submit a transaction](./0069-VCBS-validators_chosen_by_stake.md) to join the ersatz nodes / validator nodes set. Once they submit such transaction they become [pending nodes](./0064-VALP-validator_performance_based_rewards.md) and their performance is measured to determine their suitability.  If they meet staking and performance criteria will get "promoted" to the next level.
+1. The [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) who, from the point of view of consensus protocol are non-validator nodes but they have sufficient stake (own or delegated) and meet performance criteria. Their role is to be readily available if any of the primary (Tendermint) validators was to drop out in which case they become primary validators. They can also become primary validators if the stake composition [changes sufficiently](./0069-VCBS-validators_chosen_by_stake.md). They receive proof of stake rewards. If their performance score or amount of delegated stake drops they can be demoted to a pending non-validator node.
+1. The primary (Consensus forming / Tendermint) nodes (which propose and verify blocks based on delegated PoS using the Tendermint protocol). They receive proof of stake rewards.
 
- The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatz validators have.
- Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
+### Proof of stake reward split between primary (tendermint) validators and ersatz validators
 
- The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively).
+The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatz validators have.
+Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
+
+The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively).
 
 ## For each validator we then do
 
@@ -53,8 +53,7 @@ Here `allDelegatedTokens` is the count of the tokes delegated to this validator.
 Note `validatorScore` also depends on the other network parameters, see below where the exact `validatorScore` function is defined.
 1. Obtain the performance score as per [validator performance specification](./0064-VALP-validator_performance_based_rewards.md). Update `validatorScore <- validatorScore x performance_score`.
 1. The fraction of the total available reward that goes to a node (some of this will be for the validator , some is for their delegators) is then `nodeAmount := stakingRewardAmtForEpoch x validatorScore / sumAllValidatorScores` where `sumAllValidatorScores` is the sum of all scores achieved by the validators. Note that this is subject to `min_own_stake` criteria being met. (see below).
-1. The amount that is for the validator to keep (subject to delay and max payout per participant) is
-`valAmt = nodeAmount x (1 - delegatorShare)`.
+1. The amount that is for the validator to keep (subject to delay and max payout per participant) is `valAmt = nodeAmount x (1 - delegatorShare)`.
 1. The amount to be distributed among all the parties that delegated to this validator is `allDelegatorsAmt := nodeAmount x delegatorShare x score_val / total_score`.
 
 ### For each delegator that delegated to this validator
@@ -71,7 +70,7 @@ If the reward pool in question is the on-chain treasury for the staking and gove
 The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant receives their due, capped by the max. The unpaid amount remain in the treasury.
 Setting this to `0` means no cap.
 
-## validatorScore functions:
+## validatorScore functions
 
 This is defined as follows:
 
@@ -102,11 +101,10 @@ For ersatz validators, the same formula is used.
 1. One of the Tendermint validators goes offline forever and is removed from the set of Tendermint validators but their key still stays on multisig (no-one updated).
 1. Epoch ends and multisig hasn't been updated.
 1. Tendermint validators get no rewards. Ersatz validators still receive rewards.
-
-- A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)
-- With `delegator_share` set to `0`, a validator keeps 100% of their own rewards, and a delegator receives no reward (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>)
-- With `delegator_share` set to `1`, a validator receives no reward, and their delegators receive a proprotional amount of 100% (<a name="0061-REWP-004" href="#0061-REWP-004">0061-REWP-004</a>)
-- With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proprotional amount of the remaining 50% (<a name="0061-REWP-005" href="#0061-REWP-005">0061-REWP-005</a>)
+  - A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)
+  - With `delegator_share` set to `0`, a validator keeps 100% of their own rewards, and a delegator receives no reward (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>)
+  - With `delegator_share` set to `1`, a validator receives no reward, and their delegators receive a proprotional amount of 100% (<a name="0061-REWP-004" href="#0061-REWP-004">0061-REWP-004</a>)
+  - With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proprotional amount of the remaining 50% (<a name="0061-REWP-005" href="#0061-REWP-005">0061-REWP-005</a>)
 
 ### Rewards distribution corresponds to the signers on the multisig contract in the case that it hasn’t been updated after a validator set change (<a name="0061-REWP-006" href="#0061-REWP-006">0061-REWP-006</a>)
 

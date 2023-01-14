@@ -183,6 +183,7 @@ and for `party_2` it is:
 ```
 
 At the end of epoch 2:
+
 - `party_1` is paid `90 x 3.36 / 4.98 = 60.72.` $VEGA from the reward account into its $VEGA general account.
 - `party_2` is paid `90 x 1.62 / 4.98 = 29.28.` $VEGA from the reward account into its $VEGA general account.
 - `party_1` is paid `120 x 3.36 / 4.98 = 80.96.` USDC from the reward account into its USDC general account.
@@ -221,6 +222,7 @@ Identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/bl
 Identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
 
 Then, during epoch 3 we fund the reward accounts for the metric:
+
 - `party_R` is funding multiple reward accounts for the same metric and same market to be paid in different assets (`$VEGA`, `USDC`)
   - `party_R` makes a transfer of `90` `$VEGA` to `ETHUSD-MAR22 | Sum of fees paid | $VEGA` in epoch `3`. (`ETHUSD-MAR22` is just brevity, this should be the market id not name).
   - `party_R` makes a transfer of `120` `USDC` to `ETHUSD-MAR22 | Sum of fees paid | $USDC` in epoch `3`. (`ETHUSD-MAR22` is just brevity, this should be the market id not name).
@@ -243,8 +245,8 @@ There are no markets.
 - `transfer.fee.factor` = 0
 - `maker_fee` = 0.0001
 - `infrastructure_fee` = 0.0002
--  `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
--  `ETHUSD-JUN22` market which settles in USDC is launched anytime in epoch 1 by `party_0`
+- `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
+- `ETHUSD-JUN22` market which settles in USDC is launched anytime in epoch 1 by `party_0`
 - For each market in {`ETHUSD-MAR22`, `ETHUSD-JUN22`}
   - `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10.
   - Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
@@ -260,6 +262,7 @@ There are no markets.
 #### Expectation 4
 
 The calculation of eligibility is identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010) but the expected payout is:
+
 - for market `ETHUSD-MAR22`:
   - `party_1` is paid `90 x 3.36 / 4.98 = 60.72.` $VEGA from the reward account into its $VEGA general account.
   - `party_2` is paid `90 x 1.62 / 4.98 = 29.28.` $VEGA from the reward account into its $VEGA general account.
@@ -281,7 +284,7 @@ There are no markets.
 - `transfer.fee.factor` = 0
 - `maker_fee` = 0.0001
 - `infrastructure_fee` = 0.0002
--  `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
+- `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
 - `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10.
 - Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
 - During epoch 2 `party_1` puts a limit buy order of vol 10 at 2710 and a limit sell order of vol 10 at 2790
@@ -345,6 +348,7 @@ Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/bl
 Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020)
 
 Then, during epoch 3 we fund the reward accounts for the metric:
+
 - `party_R` is funding multiple reward accounts for the same metric and same market to be paid in different assets (`$VEGA`, `USDC`)
   - `party_R` makes a transfer of `90` `$VEGA` to `ETHUSD-MAR22 | Sum of maker fees received | VEGA` in epoch `3`.
   - `party_R` makes a transfer of `120` `USDC` to `ETHUSD-MAR22 | Sum of maker fees received | USDC` in epoch `3`.
@@ -367,8 +371,8 @@ There are no markets.
 - `transfer.fee.factor` = 0
 - `maker_fee` = 0.0001
 - `infrastructure_fee` = 0.0002
--  `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
--  `ETHUSD-JUN22` market which settles in USDC is launched anytime in epoch 1 by `party_0`
+- `ETHUSD-MAR22` market which settles in USDT is launched anytime in epoch 1 by `party_0`
+- `ETHUSD-JUN22` market which settles in USDC is launched anytime in epoch 1 by `party_0`
 - For each market in {`ETHUSD-MAR22`, `ETHUSD-JUN22`}
   - `party_0` and `party_1` provide auction orders so there is a trade to leave the opening auction and the remaining best bid = 2700 and and best offer = 2800 are supplied by party_0 each with volume 10.
   - Moreover `party_0` provides liquidity with `liquidity_fee` = 0.0003 and offset + 10 (so their LP volume lands on 2690 and 2810).
@@ -384,10 +388,10 @@ There are no markets.
 #### Expectation 8
 
 The calculation of eligibility is identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020) but the expected payout is:
-- for market `ETHUSD-MAR22`:
-  -  At the end of epoch `2` `party_1` is paid `90 x 2.79 / (2.79+2.8)` $VEGA from the reward account into its `$VEGA` general account.
-  - At the end of epoch `2` `party_0` is paid `90 x 2.8 / (2.79+2.8)` $VEGA from the reward account into its `$VEGA` general account.
 
+- for market `ETHUSD-MAR22`:
+  - At the end of epoch `2` `party_1` is paid `90 x 2.79 / (2.79+2.8)` $VEGA from the reward account into its `$VEGA` general account.
+  - At the end of epoch `2` `party_0` is paid `90 x 2.8 / (2.79+2.8)` $VEGA from the reward account into its `$VEGA` general account.
 - for market `ETHUSD-Jun22`:
   - At the end of epoch `2` `party_1` is paid `120 x 2.79 / (2.79+2.8)` USDC from the reward account into its `$VEGA` general account.
   - At the end of epoch `2` `party_0` is paid `120 x 2.8 / (2.79+2.8)` USDC from the reward account into its `$VEGA` general account.
@@ -416,7 +420,6 @@ At the end of epoch `2` the metric `sum of lp fees received` for `party_0` is:
 
 At the end of epoch `2` `party_0` is paid `90` `$VEGA` from the reward account into its `$VEGA` general account.
 At the end of epoch `2` `party_0` is paid `120` `USDC` from the reward account into its `USDC` general account.
-
 
 ### Distributing LP fees received rewards - unfunded account (<a name="0056-REWA-031" href="#0056-REWA-031">0056-REWA-031</a>)
 
@@ -592,7 +595,6 @@ At the end of epoch 2 the creator of `ETHUSDT` should receive both 10000 VEGA an
 general account.
 The reward pool balance should be 0.
 
-
 ### Distributing market creation rewards - Same asset multiple party rewards (<a name="0056-REWA-044" href="#0056-REWA-044">0056-REWA-044</a>)
 
 #### Rationale 18
@@ -677,7 +679,7 @@ A market reward pool funded with the a specific metric asset should not pay out 
 - Setup and fund recurring reward account transfers using the market_proposer metric and `USDT` metric asset:
   - Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA`
 - start trading in the market such that traded value for fee purposes in USDT is less than `10^6`
-- During epoch 2 let the traded value on `ETHUSDT` and `BTCUSDT` be greater than 10^6
+- During epoch 2 let the traded value on `ETHUSDT` and `BTCUSDT` be greater than `10^6`
 
 #### Expectation 20
 
@@ -710,7 +712,7 @@ A market reward pool funded with the same asset by the same party with different
 At the end of epoch 2 the full 10000 VEGA rewards should be distributed to only the `ETHUSDT` creator. At the end of epoch 3 the full 10000 VEGA rewards should be distributed to the `BTCUSDT` creator.
 
 At the end of epoch 2, 10000 VEGA rewards should be distributed to only the `ETHUSDT` creator.
-    
+
 - The general account balance of the `ETHUSDT` creator should be 10000.
 - The general account balance of the `BTCUSDT` creator should be 0.
 - The reward pool balance should be 0.
