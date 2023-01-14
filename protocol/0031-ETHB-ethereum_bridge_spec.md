@@ -17,18 +17,18 @@ graph TD
   F --> G[Vega chain]
 ```
 
-There will be one smart contract per Ethereum asset class (such as ETH or ERC20 tokens). We will consider new token standards as they are used, and develop new smart contracts to handle those. Regardless of asset type, the new Event Bus will be polling an Ethereum node for events on the known smart contracts, and pushing those in to Vega through a new API.
+There will be one smart contract per Ethereum asset class (such as ETH or ERC-20 tokens). We will consider new token standards as they are used, and develop new smart contracts to handle those. Regardless of asset type, the new Event Bus will be polling an Ethereum node for events on the known smart contracts, and pushing those in to Vega through a new API.
 
 ### On Chain Event Recording
 
-In order to enable decentralized and secure depositing and withdrawal of funds, we have created a series of “bridge” smart contracts. These bridges each target a specific asset class, such as ETH or ERC20 tokens, and expose simple functionality to allow the Vega network to accept deposits, hold, and then release assets as needed. This immutably records all deposits and withdrawals for all of the assets that Vega markets use, as well as any governance pertaining to the bridge smart contracts.
+In order to enable decentralised and secure depositing and withdrawal of funds, we have created a series of “bridge” smart contracts. These bridges each target a specific asset class, such as ETH or ERC-20 tokens, and expose simple functionality to allow the Vega network to accept deposits, hold, and then release assets as needed. This immutably records all deposits and withdrawals for all of the assets that Vega markets use, as well as any governance pertaining to the bridge smart contracts.
 Each bridge contains two primary functions and emits two primary events, each tailored to the asset class. They are deposit and withdraw and the corresponding events of deposited and withdrawn. Deposit is ran by a user or process and ensures that the asset is stored safely on-contract and then emits the deposited event. The withdrawal function itself is run by the user or process once signatures have been aggregated from validator nodes. This multisig aggregation is out of the scope of this specification and will be covered elsewhere.
 
 ### Block confirmations
 
 It is normal behaviour when validating transfers to wait a certain number of blocks for a deposit to be 'confirmed'. For example, [this is Kraken's wait time](https://support.kraken.com/hc/en-us/articles/203325283-Cryptocurrency-deposit-processing-times). We need to do the same, to be sure that enough time has passed that it is a certainty that the event we saw is included in the chain.
 
-This will need to be configured per chain that we connect to. ETH, ERC20, ERCXXX can all share a value, which should be configurable and changeable via governance. For Ethereum, this should be 20 confirmations. It is safe to lower this for development networks.
+This will need to be configured per chain that we connect to. ETH, ERC-20, ERC-XXX can all share a value, which should be configurable and changeable via governance. For Ethereum, this should be 20 confirmations. It is safe to lower this for development networks.
 
 ## Reference-level explanation
 
@@ -44,15 +44,15 @@ graph TD
 
 ### Bridge smart contracts
 
-For each asset class, there is a bridge smart contract. Currently all contracts are Ethereum-based assets, namely Ether and ERC20 tokens. In the future ERC721 nonfungible tokens, ERC1155 crypto items, and Oracle Controlled Assets (assets that are reported by an authority) and other asset classes will be added. Each asset class will receive a bridge contract on the appropriate platform (ETH, EOS, Tron, etc).
+For each asset class, there is a bridge smart contract. Currently all contracts are Ethereum-based assets, namely Ether and ERC-20 tokens. In the future ERC-721 nonfungible tokens, ERC1155 crypto items, and Oracle Controlled Assets (assets that are reported by an authority) and other asset classes will be added. Each asset class will receive a bridge contract on the appropriate platform (ETH, EOS, Tron, etc).
 
 ### Deposits
 
-Deposits happen when a user runs the deposit function of a bridge contract for a given asset. Once this is executed on-chain, an event is raised from the Ethereum protocol. This event is processed by the event queue (covered in another spec) which passes the event to Vega Consensus. Each node recieves notice of the event either from the Event Queue or through inter-node gossip and validates the transaction for itself on its local external blockchain node (such as Geth, Parity, etc). This necessitates each node to either run a given blockchain node locally or have a trusted source to the node.
+Deposits happen when a user runs the deposit function of a bridge contract for a given asset. Once this is executed on-chain, an event is raised from the Ethereum protocol. This event is processed by the event queue (covered in another spec) which passes the event to Vega Consensus. Each node receives notice of the event either from the Event Queue or through inter-node gossip and validates the transaction for itself on its local external blockchain node (such as Geth, Parity, etc). This necessitates each node to either run a given blockchain node locally or have a trusted source to the node.
 
 ### Withdrawals
 
-Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides release an asset to a user. When this happens, the client aggregates signatures from the validator nodes (covered elsewhere). Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorized signatures.
+Withdrawals happen when a user decides to withdrawal funds from Vega and/or Vega consensus decides release an asset to a user. When this happens, the client aggregates signatures from the validator nodes (covered elsewhere). Once a threshold of signatures is reached, the client runs the `withdraw_asset` command while providing the bundle of authorised signatures.
 
 #### Pseudo-code / Examples
 
@@ -88,7 +88,7 @@ contract IVega_Bridge {
 
 ### Allow-listing and Block-listing
 
-The ERC20 contract, and any other contract that represents an asset class rather than an individual asset, will maintain a whitelist of assets that can and cannot be deposited. Only allow listed assets can be deposited.
+The ERC-20 contract, and any other contract that represents an asset class rather than an individual asset, will maintain a whitelist of assets that can and cannot be deposited. Only allow listed assets can be deposited.
 
 - An asset that is on the allowed list can be withdrawn and deposited
 - An asset that is not on the allowed list can be withdrawn but not deposited
@@ -171,7 +171,7 @@ To ensure complete coverage of public and external smart contract functions, lis
 
 - must list asset (<a name="0031-ETHB-019" href="#0031-ETHB-019">0031-ETHB-019</a>)
 - must not list already-listed asset (<a name="0031-ETHB-020" href="#0031-ETHB-020">0031-ETHB-020</a>)
-- must not list if sigs bad (<a name="0031-ETHB-021" href="#0031-ETHB-021">0031-ETHB-021</a>)
+- must not list if bad signatures (<a name="0031-ETHB-021" href="#0031-ETHB-021">0031-ETHB-021</a>)
 - must not list if already listed (<a name="0031-ETHB-022" href="#0031-ETHB-022">0031-ETHB-022</a>)
 
 1. `function remove_asset(address asset_source,uint256 nonce,bytes memory signatures)`
@@ -192,7 +192,7 @@ To ensure complete coverage of public and external smart contract functions, lis
 1. `function set_asset_limits(address asset_source,uint256 lifetime_limit,uint256 threshold,uint256 nonce,bytes calldata signatures)`
 
 - changes asset limits (<a name="0031-ETHB-029" href="#0031-ETHB-029">0031-ETHB-029</a>)
-- must fail if bad sigs (<a name="0031-ETHB-030" href="#0031-ETHB-030">0031-ETHB-030</a>)
+- must fail if bad signatures (<a name="0031-ETHB-030" href="#0031-ETHB-030">0031-ETHB-030</a>)
 - asset must be listed (<a name="0031-ETHB-031" href="#0031-ETHB-031">0031-ETHB-031</a>)
 
 1. `function get_asset_deposit_lifetime_limit(address asset_source)`
@@ -206,7 +206,7 @@ To ensure complete coverage of public and external smart contract functions, lis
 1. `function set_withdraw_delay(uint256 delay,uint256 nonce,bytes calldata signatures)`
 
 - must set withdraw delay (<a name="0031-ETHB-034" href="#0031-ETHB-034">0031-ETHB-034</a>)
-- must fail if bad sigs (<a name="0031-ETHB-036" href="#0031-ETHB-036">0031-ETHB-036</a>)
+- must fail if bad signatures (<a name="0031-ETHB-036" href="#0031-ETHB-036">0031-ETHB-036</a>)
 
 1. `function global_stop(uint256 nonce, bytes calldata signatures)`
 
@@ -280,25 +280,25 @@ To ensure complete coverage of public and external smart contract functions, lis
 1. `address public multisig_control_address;`
 
 - must show the current multisig control address (<a name="0031-ETHB-067" href="#0031-ETHB-067">0031-ETHB-067</a>)
-- must change to reflect a sucessful set_multisig_control call (<a name="0031-ETHB-068" href="#0031-ETHB-068">0031-ETHB-068</a>)
+- must change to reflect a successful set_multisig_control call (<a name="0031-ETHB-068" href="#0031-ETHB-068">0031-ETHB-068</a>)
 
 1. `address public erc20_bridge_address;`
 
-- must show current deployed erc20_bridge address (<a name="0031-ETHB-069" href="#0031-ETHB-069">0031-ETHB-069</a>)
-- must change to reflect a sucessful set_bridge_address call (<a name="0031-ETHB-070" href="#0031-ETHB-070">0031-ETHB-070</a>)
+- must show current deployed `erc20_bridge` address (<a name="0031-ETHB-069" href="#0031-ETHB-069">0031-ETHB-069</a>)
+- must change to reflect a successful set_bridge_address call (<a name="0031-ETHB-070" href="#0031-ETHB-070">0031-ETHB-070</a>)
 
 1. `receive() external payable // fallback, should fail`
 1. `function set_multisig_control(address new_address,uint256 nonce,bytes memory signatures)`
 
 - must set multisig control (<a name="0031-ETHB-071" href="#0031-ETHB-071">0031-ETHB-071</a>)
 - must be reflected in `multisig_control_address` (<a name="0031-ETHB-072" href="#0031-ETHB-072">0031-ETHB-072</a>)
-- must fail on bad sigs (<a name="0031-ETHB-073" href="#0031-ETHB-073">0031-ETHB-073</a>)
+- must fail on bad signatures (<a name="0031-ETHB-073" href="#0031-ETHB-073">0031-ETHB-073</a>)
 
 1. `function set_bridge_address(address new_address,uint256 nonce,bytes memory signatures)`
 
 - must set bridge address (<a name="0031-ETHB-074" href="#0031-ETHB-074">0031-ETHB-074</a>)
 - must be reflected in `erc20_bridge_address` (<a name="0031-ETHB-075" href="#0031-ETHB-075">0031-ETHB-075</a>)
-- must fail on bad sigs (<a name="0031-ETHB-076" href="#0031-ETHB-076">0031-ETHB-076</a>)
+- must fail on bad signatures (<a name="0031-ETHB-076" href="#0031-ETHB-076">0031-ETHB-076</a>)
 
 1. `function withdraw(address token_address,address target,uint256 amount)`
 

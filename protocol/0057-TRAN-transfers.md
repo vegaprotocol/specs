@@ -50,7 +50,7 @@ Trading or staking rewards to be received for that epoch will not be available t
 Recurring transfers to reward accounts will happen before rewards are paid out.
 
 Recurring transfers (including to reward accounts) are processed in order they were created.
-This means that in order for recurring transfer B to make use of funds that would received from recurring trasnfer A, A must have been created before B.
+This means that in order for recurring transfer B to make use of funds that would received from recurring transfer A, A must have been created before B.
 
 It's possible to cancel a recurring transfer.
 It's not possible to amend a transfer, a party will need to cancel the transfer and submit a new one in this case.
@@ -59,7 +59,7 @@ A party is limited to a maximum of 1 running recurring transfer to any given acc
 E.g: say we have accounts A1, A2, A3 and party1 which controls A1.
 Party1 can have a recurring transfer rt1 from A1 to A2 and another one (call it rt2) from A1 to A3. However it is not allowed to set up a recurring transfer rt3 from A1 to A2 with different amounts.
 
-A recurring transfers needs to contain these specific informations:
+A recurring transfers needs to contain this specific information:
 
 - start amount uint specifying the amount (interpreted according to the number of decimals specified by the [asset](0040-asset-framework.md)).
 - start epoch: at the end of this epoch the first recurring transfer will be made between
@@ -211,16 +211,16 @@ As a user I can create a recurring transfer _which expires after a specified epo
 
 - I specify a start and end epoch, and a factor of `1`, start epoch in the future, until the start epoch is reached no transfers are executed.
 - Once I reach the start epoch, the first transfer happens.
-- The same amount is transfered every epoch.
+- The same amount is transferred every epoch.
 - In the epoch after the `end epoch`, no transfers are executed.
 
 As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-051" href="#0057-TRAN-051">0057-TRAN-051</a>)
 
 - I specify a start and end epoch, and a factor of `0.7`
 - Until the start epoch is reached not transfers are executed
-- Once I reach the start epoch transfers happen and the first tranfer is for the `start amount`. The fee amount taken from the source account is `start amount x transfer.fee.factor` and transferred to the infrastructure fee account for the asset.
+- Once I reach the start epoch transfers happen and the first transfer is for the `start amount`. The fee amount taken from the source account is `start amount x transfer.fee.factor` and transferred to the infrastructure fee account for the asset.
 - The transfer at end of  `start epoch + 1` is `0.7 x start amount` and the fee amount is `0.7 x start amount x transfer.fee.factor`.
-- The amount transfered every epoch decreases.
+- The amount transferred every epoch decreases.
 - After I reach the epoch `?`, no transfers are executed anymore
 
 As a user I can create a recurring transfer that recurs forever, with the same balance transferred each time (<a name="0057-TRAN-052" href="#0057-TRAN-052">0057-TRAN-052</a>)
@@ -228,14 +228,14 @@ As a user I can create a recurring transfer that recurs forever, with the same b
 - I specify a start and no end epoch, and a factor of `1`
 - Until the start epoch is reached not transfers are executed
 - Once I reach the start epoch transfers happens.
-- The amount transfered every epoch is the same
+- The amount transferred every epoch is the same
 - The transfers happen forever
 
 As a user I can create a recurring transfer that recurs as long as the amount is `transfer.minTransferQuantumMultiple x quantum`, with the amount transfer decreasing. (<a name="0057-TRAN-053" href="#0057-TRAN-053">0057-TRAN-053</a>)
 
 - I specify a start and no end epoch, and a factor of `0.1`
 - Until the start epoch is reached not transfers are executed
-- In subsequent epochs the amount transfered every epoch `n` is `0.1` times the amount transferred in epoch `n-1`.
+- In subsequent epochs the amount transferred every epoch `n` is `0.1` times the amount transferred in epoch `n-1`.
 - Once I reach the end of start epoch transfers happens.
 - The transfers happen as long as the amount transferred is >  `transfer.minTransferQuantumMultiple x quantum`.
 - After a sufficiently large number of epochs the transfers stops and the recurring transfer is deleted.

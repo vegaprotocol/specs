@@ -36,7 +36,7 @@ Here 0 < c<sub>1</sub> < 1, to reduce the chance of another auction getting trig
 
 If an incoming order would match orders on the book resulting in trades increasing `target_stake` so that liquidity auction gets triggered then:
 
-- if the incoming order would stay on the book in auction mode the auction should get triggered pre-emptively (the order doesn't get matched in market's current trading mode, market switches to auction mode and the incoming order gets added to the book once market is in auction mode).
+- if the incoming order would stay on the book in auction mode the auction should get triggered preemptively (the order doesn't get matched in market's current trading mode, market switches to auction mode and the incoming order gets added to the book once market is in auction mode).
 
 ### Decreasing supplied stake
 
@@ -70,7 +70,7 @@ The criteria for exiting any auction (liquidity or price monitoring) should be c
  A liquidity provider amending LP provision order can reduce their stake (as long as total stake >= target stake) even if doing so would mean that at the end of block the system enters liquidity auction (because e.g. max open interest increased or because another LP was removed due to not meeting margin commitments).
 An implication is that within the same time stamp an aggressive order may remove the `best_bid` or `best_ask`. At that point all LP provision volume is removed from the book (and by implication at least one side of the book is empty). If a subsequent limit order re-creates the peg (still with the same timestamp / from the same block) then the LP volume is re-deployed. If no subsequent limit order places a limit order restoring the peg and we reach end of the block we end up in a liquidity auction.
 
-As mentioned, as a consequence, intra-block, we may end with one side of the book empty which means that a party not meeting margin requirement *cannot* be closed out. We accept this consequence, their margin will be checked again when the mark price changes and either the book is restored (and they can get closed out) or the market is in liquidity auction.
+As mentioned, as a consequence, intrablock, we may end with one side of the book empty which means that a party not meeting margin requirement *cannot* be closed out. We accept this consequence, their margin will be checked again when the mark price changes and either the book is restored (and they can get closed out) or the market is in liquidity auction.
 
 ## Acceptance Criteria
 

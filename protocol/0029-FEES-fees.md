@@ -38,7 +38,7 @@ trade_value_for_fee_purposes:
 
 Initially, for futures, the trade_value_for_fee_purposes = notional value of the trade = `size_of_trade` * `price_of_trade`. For other product types, we may want to use something other than the notional value. This is determined by the Product.
 
-NB: size of trade needs to take into account Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md), and if trade/position sizes are stored as ints will need to divide by `10^PDP` where PDP is the configured number of Position Decimal Places for the market (or this division will need to be abstracted and done global by the position management component of Vega which may expose both a true and an integer position size, or something).
+NB: size of trade needs to take into account Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md), and if trade/position sizes are stored as integers will need to divide by `10^PDP` where PDP is the configured number of Position Decimal Places for the market (or this division will need to be abstracted and done global by the position management component of Vega which may expose both a true and an integer position size, or something).
 
 ### Collecting and Distributing Fees
 
@@ -87,7 +87,7 @@ As for fees in other cases, the fee is taken out of the general + margin account
 
 ### Rounding
 
-All fees are being rounded up (using math.Ceil in most math libraries).
+All fees are being rounded up (using `math.Ceil` in most math libraries).
 This ensures that any trade in the network will require the party to pay a fee, even in the case that the trade would require a fee smaller than the smallest unit of the asset.
 For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 wei, so if the fee calculation was to be a fraction of a wei (e.g 0.25 wei), which you cannot represent in this currency, then the Vega network would round it up to 1.
 
