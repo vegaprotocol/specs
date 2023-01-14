@@ -4,9 +4,9 @@ This document aims to outline how we are to handle the decimal places of a given
 
 ## Terminology
 
-* Settlement asset: the asset in which transactions for a given market are made (margin balances, fees, settlements, etc...).
-* Market precision: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a GWei has a 9 decimal places, so the market precision is 9). Synonymous with _market tick_.
-* Asset precision: the number of decimal places for a given asset. Again, a market with precision 9 that settles in ETH will have a market precision of 9, whereas the asset precision is 18.
+- Settlement asset: the asset in which transactions for a given market are made (margin balances, fees, settlements, etc...).
+- Market precision: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a GWei has a 9 decimal places, so the market precision is 9). Synonymous with _market tick_.
+- Asset precision: the number of decimal places for a given asset. Again, a market with precision 9 that settles in ETH will have a market precision of 9, whereas the asset precision is 18.
 
 ## Mechanics
 

@@ -49,65 +49,68 @@ The staking interface defines the events necessary to track all Ethereum-side tr
 Any contract that wants to be recognized by Vega as valid for staking must emit the specified events.
 
 These events are:
-* `event Stake_Deposited(address indexed user, uint256 amount, bytes32 indexed vega_public_key)` - This event is emitted when a stake deposit is made and must be credited to provided vega_public_key's stake account
-* `event Stake_Removed(address indexed user, uint256 amount, bytes32 indexed vega_public_key)` - This event is emitted when a user removes stake and must trigger the targeted vega_public_key's stake account to be decremented
-* `event Stake_Transferred(address indexed from, uint256 amount, address indexed to, bytes32 indexed vega_public_key)` - This event is emitted when a user transfers the given amount of stake between the `from` and `to` wallets. This allows a user to change owing ETH wallet without removing potentially delegated stake. It is optional whether contracts that permit staking allow this operation.
+
+- `event Stake_Deposited(address indexed user, uint256 amount, bytes32 indexed vega_public_key)` - This event is emitted when a stake deposit is made and must be credited to provided vega_public_key's stake account
+- `event Stake_Removed(address indexed user, uint256 amount, bytes32 indexed vega_public_key)` - This event is emitted when a user removes stake and must trigger the targeted vega_public_key's stake account to be decremented
+- `event Stake_Transferred(address indexed from, uint256 amount, address indexed to, bytes32 indexed vega_public_key)` - This event is emitted when a user transfers the given amount of stake between the `from` and `to` wallets. This allows a user to change owing ETH wallet without removing potentially delegated stake. It is optional whether contracts that permit staking allow this operation.
 
 ### Staking bridge (`Vega_Staking_Bridge.sol`)
 
 The staking bridge contains functions enabling users to deposit, remove, and transfer stake by moving the governance tokens from a user's wallet to the staking bridge. This contract is used for all staking of tokens except where the tokens to be staked reside in the ERC-20 vesting contract.
 
 Functions:
-* `Stake(uint256 amount, bytes32 vega_public_key)` - stakes the given amount of governance tokens to the target vega_public_key
-	* Requires that the sender address calling the function holds at least `amount` governance tokens that are able to be transferred to the staking bridge (note: tokens held by the vesting contract on behalf of an address do not count here)
-	* Emits the `Stake_Deposited` event
-* `Remove_Stake(uint256 amount, bytes32 vega_public_key)`- removes the given amount of governance tokens stake from the target vega_public_key
-	* Requires that at least `amount` tokens are staked by the sender with the staking bridge (not the vesting or any other contract implementing `IStake`) to the specified Vega public key
-	* Must not unstake tokens staked to another Vega key or from another contract (i.e. vesting)
-	* Emits the `Stake_Removed` event
-* `Transfer_Stake(uint256 amount, address new_address, bytes32 vega_public_key)` - Transfers staked governance from the sender to the target address
-	* This changes the address that can unstake the tokens, and that will receive the tokens from the staking bridge when unstaked
-	* This does not change the Vega public key to which the tokens are staked and will therefore not intterupt delegation
-	* Requires that at least `amount` tokens are staked by the sender with the staking bridge (not the vesting or any other contract implementing `IStake`) to the specified Vega public key
-	* Emits the `Stake_Transferred` event
+
+- `Stake(uint256 amount, bytes32 vega_public_key)` - stakes the given amount of governance tokens to the target vega_public_key
+  - Requires that the sender address calling the function holds at least `amount` governance tokens that are able to be transferred to the staking bridge (note: tokens held by the vesting contract on behalf of an address do not count here)
+  - Emits the `Stake_Deposited` event
+- `Remove_Stake(uint256 amount, bytes32 vega_public_key)`- removes the given amount of governance tokens stake from the target vega_public_key
+  - Requires that at least `amount` tokens are staked by the sender with the staking bridge (not the vesting or any other contract implementing `IStake`) to the specified Vega public key
+  - Must not unstake tokens staked to another Vega key or from another contract (i.e. vesting)
+  - Emits the `Stake_Removed` event
+- `Transfer_Stake(uint256 amount, address new_address, bytes32 vega_public_key)` - Transfers staked governance from the sender to the target address
+  - This changes the address that can unstake the tokens, and that will receive the tokens from the staking bridge when unstaked
+  - This does not change the Vega public key to which the tokens are staked and will therefore not intterupt delegation
+  - Requires that at least `amount` tokens are staked by the sender with the staking bridge (not the vesting or any other contract implementing `IStake`) to the specified Vega public key
+  - Emits the `Stake_Transferred` event
 
 ### ERC-20 vesting contract (`ERC20_Vesting.sol`)
 
 The ERC-20 vesting contract implements the [Token V2](./0002-NP-TOKT-token_v2.md) specification and must also support the staking of tokens it holds as specified here. It will [ERC20_Vesting.sol](https://github.com/vegaprotocol/Vega_Token_V2/blob/main/contracts/ERC20_Vesting.sol) emit the `Stake_Deposited` and `Stake_Removed` events.
 
 Functions:
-* `stake_tokens(uint256 amount, bytes32 vega_public_key)` allows staking of tokens held by the contract on behalf of an address
-	* Requires that the vesting contract holds at least `amount` governance tokens, that are currently not staked, on behalf of the sender address (i.e. they will be redeemable by sender once vested)
-	* Must allow both unvested (locked) tokens and vested tokens that are not yet redeemed to be staked
-	* Emits `Stake_Deposited`
-* `remove_stake(uint256 amount, bytes32 vega_public_key)`
-	* Requires that the vesting contract holds at least `amount` governance tokens, that are currently staked to the specified Vega public key, on behalf of the sender address (i.e. they will be redeemable by sender once vested)
-	* Emits `Stake_Removed`
+
+- `stake_tokens(uint256 amount, bytes32 vega_public_key)` allows staking of tokens held by the contract on behalf of an address
+  - Requires that the vesting contract holds at least `amount` governance tokens, that are currently not staked, on behalf of the sender address (i.e. they will be redeemable by sender once vested)
+  - Must allow both unvested (locked) tokens and vested tokens that are not yet redeemed to be staked
+  - Emits `Stake_Deposited`
+- `remove_stake(uint256 amount, bytes32 vega_public_key)`
+  - Requires that the vesting contract holds at least `amount` governance tokens, that are currently staked to the specified Vega public key, on behalf of the sender address (i.e. they will be redeemable by sender once vested)
+  - Emits `Stake_Removed`
 
 Other functionality:
 
-* Attempts to redeem vested tokens will fail if there are not sufficient tokens held on behalf of the sender address that are not staked. Sender must first unstake tokens before they can be redeemed.
-* This functionality does not interact in any way with the staking bridge contract. They are effectively completely separate staking mechanisms, so to unstake all an address's tokens when some are staked on each contract will require calls to both contracts.
+- Attempts to redeem vested tokens will fail if there are not sufficient tokens held on behalf of the sender address that are not staked. Sender must first unstake tokens before they can be redeemed.
+- This functionality does not interact in any way with the staking bridge contract. They are effectively completely separate staking mechanisms, so to unstake all an address's tokens when some are staked on each contract will require calls to both contracts.
 
 ## Acceptance Criteria
 
 ### Staking Bridge Smart Contract
 
-* Staking Bridge accepts and locks deposited VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-001" href="#0071-STAK-001">0071-STAK-001</a>)
-* Staking Bridge allows only stakers to remove their staked tokens and emits `Stake_Removed` event (<a name="0071-STAK-002" href="#0071-STAK-002">0071-STAK-002</a>)
-* Staking Bridge allows users with staked balance to transfer ownership of stake to new ethereum address that only the new address can remove (<a name="0071-STAK-003" href="#0071-STAK-003">0071-STAK-003</a>)
-* Staking Bridge prohibits users from removing stake they don't own (<a name="0071-STAK-012" href="#0071-STAK-012">0071-STAK-012</a>)
-* Staking Bridge prohibits users from removing stake they have transfered to other ETH address (<a name="0071-STAK-013" href="#0071-STAK-013">0071-STAK-013</a>)
+- Staking Bridge accepts and locks deposited VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-001" href="#0071-STAK-001">0071-STAK-001</a>)
+- Staking Bridge allows only stakers to remove their staked tokens and emits `Stake_Removed` event (<a name="0071-STAK-002" href="#0071-STAK-002">0071-STAK-002</a>)
+- Staking Bridge allows users with staked balance to transfer ownership of stake to new ethereum address that only the new address can remove (<a name="0071-STAK-003" href="#0071-STAK-003">0071-STAK-003</a>)
+- Staking Bridge prohibits users from removing stake they don't own (<a name="0071-STAK-012" href="#0071-STAK-012">0071-STAK-012</a>)
+- Staking Bridge prohibits users from removing stake they have transfered to other ETH address (<a name="0071-STAK-013" href="#0071-STAK-013">0071-STAK-013</a>)
 
 ### Vesting Smart Contract
 
-* Vesting Contract locks vesting VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-005" href="#0071-STAK-005">0071-STAK-005</a>)
-* Vesting Contract unlocks vesting VEGA tokens and emits `Stake_Removed` event (<a name="0071-STAK-006" href="#0071-STAK-006">0071-STAK-006</a>)
-* Vesting Contract prohibits withdrawal of VEGA while that VEGA is staked (<a name="0071-STAK-007" href="#0071-STAK-007">0071-STAK-007</a>)
+- Vesting Contract locks vesting VEGA tokens and emits `Stake_Deposited` event (<a name="0071-STAK-005" href="#0071-STAK-005">0071-STAK-005</a>)
+- Vesting Contract unlocks vesting VEGA tokens and emits `Stake_Removed` event (<a name="0071-STAK-006" href="#0071-STAK-006">0071-STAK-006</a>)
+- Vesting Contract prohibits withdrawal of VEGA while that VEGA is staked (<a name="0071-STAK-007" href="#0071-STAK-007">0071-STAK-007</a>)
 
 ### Event Queue
 
-* Event Queue sees `Stake_Deposited` event from Staking Bridge smart contract and credits target Vega user with stake (<a name="0071-STAK-008" href="#0071-STAK-008">0071-STAK-008</a>)
-* Event Queue sees `Stake_Removed` event from Staking Bridge smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-009" href="#0071-STAK-009">0071-STAK-009</a>)
-* Event Queue sees `Stake_Deposited` event from Vesting smart contract and credits target Vega user with stake (<a name="0071-STAK-010" href="#0071-STAK-010">0071-STAK-010</a>)
-* Event Queue sees `Stake_Removed` event from Vesting smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-011" href="#0071-STAK-011">0071-STAK-011</a>)
+- Event Queue sees `Stake_Deposited` event from Staking Bridge smart contract and credits target Vega user with stake (<a name="0071-STAK-008" href="#0071-STAK-008">0071-STAK-008</a>)
+- Event Queue sees `Stake_Removed` event from Staking Bridge smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-009" href="#0071-STAK-009">0071-STAK-009</a>)
+- Event Queue sees `Stake_Deposited` event from Vesting smart contract and credits target Vega user with stake (<a name="0071-STAK-010" href="#0071-STAK-010">0071-STAK-010</a>)
+- Event Queue sees `Stake_Removed` event from Vesting smart contract and removes stake from appropriate Vega user (<a name="0071-STAK-011" href="#0071-STAK-011">0071-STAK-011</a>)

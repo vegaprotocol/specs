@@ -16,6 +16,7 @@ This is especially important early on when rapid iteration is desirable, as the 
 ## Overview
 
 There are four main features:
+
 1. Create checkpoints with relevant (but minimal) information at regular intervals, and on every withdrawal request.
 2. Ability to specify a checkpoint hash as part of genesis.
 3. A new 'Restore' transaction that contains the full checkpoint file and triggers state restoration
@@ -26,6 +27,7 @@ Point two requires that at load time, each node calculates the hash of the check
 ## Creating a checkpoint
 
 Information to store:
+
 - All [network parameters](../protocol/0054-NETP-network_parameters.md), including those defined [below](#network-parameters).
 - All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition).
 Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_overview.md), [LP committed liquidity](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and [LP fee pool](../protocol/0029-FEES-fees.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market.
@@ -47,9 +49,11 @@ Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_
   - all the pending staking events [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
 
 When to create a checkpoint:
+
 - if `current_time - network.checkpoint.timeElapsedBetweenCheckpoints > time_of_last_full_checkpoint`
 
 Information we explicitly don't try to checkpoint:
+
 - Positions, limit orders, pegged orders or any order book data. LP commitments.
 - Market and asset proposals where the voting period hasn't ended.
 
@@ -63,6 +67,7 @@ The checkpoint file should either be human-readable OR there should be a command
 
 The hash of the state file to be restored must be specified in genesis.
 Any validator will submit a transaction containing the checkpoint file. Nodes verify the hash / chain of hashes to verify the hash that is in genesis.
+
 - If the hash matches, it will be restored.
 - If it does not, the hash transaction will have no effect.
 
@@ -72,16 +77,14 @@ The state will be restored in this order:
 
 1. Restore network parameters.
 2. Load the asset definitions.
-    1. The network will compare the asset coming from the restore file with the genesis assets, one by one. If there is an exact match on asset id:
-      -  either the rest of the asset definition matches exactly in which case move to next asset coming from restore file.
-      -  or any of the part of the definition differ, in which case ignore the entire restore transaction, the node should stop with an error.
-    2. If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then restore the asset.
+  1. The network will compare the asset coming from the restore file with the genesis assets, one by one. If there is an exact match on asset id:
+  -  either the rest of the asset definition matches exactly in which case move to next asset coming from restore file.
+  -  or any of the part of the definition differ, in which case ignore the entire restore transaction, the node should stop with an error.
+  2. If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then restore the asset.
 3. Load the accepted market proposals. If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
 4. Replay events from bridged chains
-   - Concerning bridges used to deposit collateral for trading, replay from the last block specified in the checkpoint and reload the
-     pending deposits from the checkpoint so the network can start again to confirm these events.
-   - Concerning the staking bridges, all balances will be reconcilied using the staking events from the checkpoint, up to the last seen block
-     store as part of the checkpoint, then apply again the delegations to the validators.
+  - Concerning bridges used to deposit collateral for trading, replay from the last block specified in the checkpoint and reload the pending deposits from the checkpoint so the network can start again to confirm these events.
+  - Concerning the staking bridges, all balances will be reconcilied using the staking events from the checkpoint, up to the last seen block store as part of the checkpoint, then apply again the delegations to the validators.
 
 There should be a tool to extract all assets from the restore file so that they can be added to genesis block manually, should the validators so desire.
 
@@ -110,10 +113,10 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 2. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
 3. The network is shut down.
 4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
-5. The check the following subcases
-6. 1. If the ethereum replay says withrawal completed. The party has general account balance of 0 USD. The party has "signed for withdrawal" 0.
-6. 2. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 USD. The party has "signed for withdrawal" 100.
-6. 3. If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 USD.
+5. The check the following subcases:
+- If the ethereum replay says withrawal completed. The party has general account balance of 0 USD. The party has "signed for withdrawal" 0.
+- If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 USD. The party has "signed for withdrawal" 100.
+- If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 USD.
 
 ### Test case 2: Orders and positions are *not* maintained across resets, balances are and *accepted* markets are (<a name="0073-LIMN-008" href="#0073-LIMN-008">0073-LIMN-008</a>)
 
@@ -170,6 +173,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is no market and there are no market proposals.
 
 #### Test case 3.3: Market is proposed, voting has closed, market rejected, proposal not restored (<a name="0073-LIMN-011" href="#0073-LIMN-011">0073-LIMN-011</a>)
+
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of `10 000` USD.
@@ -252,17 +256,17 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ### Test case 6: Network Parameters / Exceptional case handling
 
-#### Test case 6.1: timeElapsedBetweenCheckpoints not set ?
+#### Test case 6.1: timeElapsedBetweenCheckpoints not set
 
-#### Test case 6.2: timeElapsedBetweenCheckpoints set to value outside acceptable range ?
+#### Test case 6.2: timeElapsedBetweenCheckpoints set to value outside acceptable range
 
 ### Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0073-LIMN-022" href="#0073-LIMN-022">0073-LIMN-022</a>)
 
 1. More than one party deposits stake onto Vega
 1. The parties delegate stake to the validators
 1. Setup the rewards:
-   - A party deposits VEGA funds to their Vega general account
-   - The party creates a continuing recurring transfer (for e.g: 1 token) from their general account to the reward pool
+  - A party deposits VEGA funds to their Vega general account
+  - The party creates a continuing recurring transfer (for e.g: 1 token) from their general account to the reward pool
 1. Assert that every end of epoch, the funds are distributed, over the parties delegating stake, at end of every epoch
 1. Wait for the next checkpoint, then stop the network
 1. Load the checkpoint into a new network
@@ -270,11 +274,11 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ### Test case 12:
 
-Enacted, listed ERC-20 asset is remembered in checkpoint (<a name="0073-LIMN-023" href="#0073-LIMN-023">0073-LIMN-023</a>)
-An ERC-20 asset loaded from checkpoint can be used in a market loaded from a checkpoint (<a name="0073-LIMN-024" href="#0073-LIMN-024">0073-LIMN-024</a>)
-An ERC-20 asset loaded from checkpoint can be updated (<a name="0073-LIMN-025" href="#0073-LIMN-025">0073-LIMN-025</a>)
-An ERC-20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>)
-Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a name="0073-LIMN-027" href="#0073-LIMN-027">0073-LIMN-027</a>)
+1. Enacted, listed ERC-20 asset is remembered in checkpoint (<a name="0073-LIMN-023" href="#0073-LIMN-023">0073-LIMN-023</a>)
+1. An ERC-20 asset loaded from checkpoint can be used in a market loaded from a checkpoint (<a name="0073-LIMN-024" href="#0073-LIMN-024">0073-LIMN-024</a>)
+1. An ERC-20 asset loaded from checkpoint can be updated (<a name="0073-LIMN-025" href="#0073-LIMN-025">0073-LIMN-025</a>)
+1. An ERC-20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>)
+1. Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a name="0073-LIMN-027" href="#0073-LIMN-027">0073-LIMN-027</a>)
 
 1. Propose a valid ERC-20 asset.
 1. Wait for the next checkpoint, then stop the network.
