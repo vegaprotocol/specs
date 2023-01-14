@@ -3,15 +3,16 @@
 ## Acceptance Criteria
 
 1. For a position with a negative settlement amount:
-   - If settlement amount <= the trader’s margin account balance (<a name="0003-MTMK-001" href="#0003-MTMK-001">0003-MTMK-001</a>):
-      - entire settlement amount is transferred from trader’s margin account to the market’s temporary settlement account
-   - If settlement amount > trader’s margin account balance  and <= trader's margin account balance + general account balance for the asset (<a name="0003-MTMK-002" href="#0003-MTMK-002">0003-MTMK-002</a>):
-      - the full balance of the trader’s margin account is transferred to the market’s temporary settlement account
-      - the remainder, i.e. difference between the amount transferred from the margin account and the settlement amount, is transferred from the trader’s general account for the asset to the market’s temporary settlement account
-   - If settlement amount > trader’s margin account balance + trader’s general account balance for the asset (<a name="0003-MTMK-003" href="#0003-MTMK-003">0003-MTMK-003</a>):
-      - the full balance of the trader’s margin account is transferred to the market’s temporary settlement account
-      - the full balance of the trader’s general account for the assets are transferred to the market’s temporary settlement account
-   - the minimum insurance pool account balance for the market & asset, and the remainder, i.e. the difference between the total amount transferred from the trader’s margin + general accounts and the settlement amount, is transferred from the insurance pool account for the market to the temporary settlement account for the market
+  - If settlement amount <= the trader’s margin account balance (<a name="0003-MTMK-001" href="#0003-MTMK-001">0003-MTMK-001</a>): 
+    - entire settlement amount is transferred from trader’s margin account to the market’s temporary settlement account 
+  - If settlement amount > trader’s margin account balance  and <= trader's margin account balance + general account balance for the asset (<a name="0003-MTMK-002" href="#0003-MTMK-002">0003-MTMK-002</a>): 
+    - the full balance of the trader’s margin account is transferred to the market’s temporary settlement account
+    - the remainder, i.e. difference between the amount transferred from the margin account and the settlement amount, is transferred from the trader’s general account for the asset to the market’s temporary settlement account
+  - If settlement amount > trader’s margin account balance + trader’s general account balance for the asset (<a name="0003-MTMK-003" href="#0003-MTMK-003">0003-MTMK-003</a>): 
+    - the full balance of the trader’s margin account is transferred to the market’s temporary settlement account
+    - the full balance of the trader’s general account for the assets are transferred to the market’s temporary settlement account
+    - the minimum insurance pool account balance for the market & asset, and the remainder, i.e. the difference between the total amount transferred from the trader’s margin + general accounts and the settlement amount, is transferred from the insurance pool account for the market to the temporary settlement account for the market
+
 2. The total market's positive mark-to-market moves are equal in size to the negative mark-to-market moves. (<a name="0003-MTMK-005" href="#0003-MTMK-005">0003-MTMK-005</a>)
 3.The total amount *collected* by the network should be less than or equal to the sum of all of the negative settlement amounts (in absolute size)(<a name="0003-MTMK-006" href="#0003-MTMK-006">0003-MTMK-006</a>)
 4. If a trader's settlement amount is positive and the amount collected, i.e. the balance of the temporary settlement account, equals the sum of all negative settlement amounts (in absolute size), every trader with a positive settlement amount receives that amount transferred to their margin account from the temporary settlement account.(<a name="0003-MTMK-007" href="#0003-MTMK-007">0003-MTMK-007</a>)
@@ -20,7 +21,8 @@
 7. The market's settlement account balance is zero at the start of the market-to-market settlement process (<a name="0003-MTMK-010" href="#0003-MTMK-010">0003-MTMK-010</a>)
 8. After completing the mark-to-market settlement process, the market’s settlement account balance is zero (<a name="0003-MTMK-011" href="#0003-MTMK-011">0003-MTMK-011</a>)
 9. If the mark price hasn't changed:
-   - A trader with no change in open position size has no transfers in or out of their margin account (<a name="0003-MTMK-012" href="#0003-MTMK-012">0003-MTMK-012</a>)
+  - A trader with no change in open position size has no transfers in or out of their margin account (<a name="0003-MTMK-012" href="#0003-MTMK-012">0003-MTMK-012</a>)
+
 10. An aggressive order to buy 2 units at 1010 which matches with two passive orders each of size one resting on the book with prices of 1000 and 1010 results in a transfer of 10 flowing from the party with order priced at 1000 to the aggressive party during the next MTM settlement <a name="0003-MTMK-013" href="#0003-MTMK-013">0003-MTMK-013</a>)
 
 ## Market with position decimal places > 0 scenario
@@ -33,6 +35,7 @@
 ## Market with position decimal places < 0 scenario
 
 In a market with negative PDP, the mark-to-market cash-flows are correct. (<a name="0003-MTMK-014" href="#0003-MTMK-014">0003-MTMK-014</a>):
+
 1. Set up a market with PDP > 0, say PDP = -3
 1. Set up party1 long position 2000 and party2 short position 2000; and the trade which created these positions being at price 0.10.
 1. Set up party3 and party4 which trade volume 1000 at price 0.12.
