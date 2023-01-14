@@ -47,23 +47,23 @@ The market depth builder needs to receive enough information from the core to be
 The possible actions we know that can happen in the market engine are:
 
 - Create a new order on the book
-  * Send the order details in a new order event
+  - Send the order details in a new order event
 - Cancel an existing order
-  * Send the cancel details in an order event
+  - Send the cancel details in an order event
 - Fully/Partially fill an order on the book
-  * Send the order update details in an order event
+  - Send the order update details in an order event
 - Expire an order
-  * Send the expire details in an order event
+  - Send the expire details in an order event
 - Amend an order in place
-  * Send an order event with the new details in
+  - Send an order event with the new details in
 - Cancel/Replace amend an order
-  * Send an order event with the new details in
+  - Send an order event with the new details in
 - Enter auction
-  * Send cancels/new order events for all orders that change
+  - Send cancels/new order events for all orders that change
 - Leave auction
-  * Send cancels/new order events for all orders that change
+  - Send cancels/new order events for all orders that change
 - Pegged orders
-  * Send cancels/new order events for all orders that change
+  - Send cancels/new order events for all orders that change
 
 Market depth information is not as detailed as the full orderbook. We have no need to store the individual orders, order ids and order types. The only information needed is the book side, price level, the number of orders at that level and the total volume at that level.
 
@@ -103,7 +103,6 @@ An update message is:
         NumOfOrders uint64
     }
 
-
 The server side process to handle updates can be described as such:
 
     Forever
@@ -111,7 +110,6 @@ The server side process to handle updates can be described as such:
         Apply update to the market depth structure and record which price levels have been touched
         Send updates to all subscribers for price levels that changed
     End
-
 
 The client side will perform the following steps to build and keep an up to date market depth structure
 
@@ -127,13 +125,12 @@ The client side will perform the following steps to build and keep an up to date
         End
     End
 
-
 ## Test cases
 
-* Create a new order in an empty order book, verify MD
-* Cancel an existing order, verify MD
-* Amend an existing order for both price and quantity, verify MD
-* Cancel an order and replace it with the same order values, verify the MD sees an update
-* Do nothing for many minutes, make sure subscribers do not timeout/fail
-* Send a large spike of order updates, make sure the system does not stall
-* Sequence number is larger for each emitted book update
+- Create a new order in an empty order book, verify MD
+- Cancel an existing order, verify MD
+- Amend an existing order for both price and quantity, verify MD
+- Cancel an order and replace it with the same order values, verify the MD sees an update
+- Do nothing for many minutes, make sure subscribers do not timeout/fail
+- Send a large spike of order updates, make sure the system does not stall
+- Sequence number is larger for each emitted book update

@@ -6,7 +6,6 @@ Vega uses various digital assets (cryptocurrencies or tokens) to settlement posi
 In order to ensure the safety, security, and allocation of these assets, they must be managed in a fully decentralized and extensible way. Here, we lay out a framework for assets in Vega.
 This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, also covered is deposits and withdrawal for an asset.
 
-
 ## Guide-level explanation
 
 ### Asset Definition
@@ -67,12 +66,14 @@ message DevAssets {
 }
 ```
 See:
+
 - [assets proto](https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/assets.proto)
 - [governance proto](https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/governance.proto)
 
 The `maximumLifetimeDeposit` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave.
 
 All the asset definition fields are immutable (cannot be changed even by governance) except:
+
 - `name`, `symbol`, `totalSupply` — refer to the asset proposal spec. for the relevant chain for whether or not these can be changed for assets on that chain, and if so, the mechanism by which they change
 - `quantum`, `maximumLifetimeDeposit`, `withdrawalDelayThreshold` —
 These can be changed by asset modification [governance proposal](./0028-GOVE-governance.md).
@@ -123,7 +124,7 @@ To add a new asset to Vega, a market maker or other interested party will submit
 ### Governance Vote
 
 `https://github.com/vegaprotocol/vega/blob/develop/proto/governance.proto`
-`ProposalTerms `
+`ProposalTerms`
 
 ```proto
 oneof change {
@@ -150,7 +151,7 @@ See: [Multisig Control spec](./0030-ETHM-multisig_control_spec.md)
 
 Before an asset can be accepted for deposit by a bridge, it needs to be whitelisted on that bridge.
 
-#### Ethereum-based assets
+#### Ethereum-based assets on the bridge
 
 Once an asset is listed, the submitter of the listing will request an aggregated multisig signature bundle from Vega validator nodes. See: [multisig control spec](./0030-ETHM-multisig_control_spec.md).
 All Ethereum assets are managed by a smart contract that supports the IVega_Bridge interface. The interface defines a function to whitelist new assets:
@@ -160,11 +161,11 @@ All Ethereum assets are managed by a smart contract that supports the IVega_Brid
 Once a successful whitelist_asset transaction has occurred, the `Asset_Whitelisted` event will be emitted for later use by the Vega Event Queue.
 See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
-##### Ether (ETH)
+##### Ether (ETH) on the bridge
 
 Ether (ETH) is not supported unless wrapped as an ERC20.
 
-##### ERC-20
+##### ERC-20 on the bridge
 
 To add a new ERC-20, the signature bundle and token address is submitted to the appropriate Vega ERC-20 bridge by way of the `whitelist_asset` function.
 Upon successful execution of the `whitelist_asset` function, that token will be available for on-chain deposits via the `deposit_asset` function on the smart contract.
@@ -174,7 +175,7 @@ Deposits that are made to the contract will raise the `Asset_Deposited` event wh
 
 This section will be expanded if additional Ethereum token standards are supported by Vega. New bridges will be expected to implement `IVega_Bridge`.
 
-#### Other Assets
+#### Other Assets on the bridge
 
 This section will be expanded when asset bridges to other blockchains are supported by Vega. Since blockhains and their supported asset standards vary significantly, each section will be unique.
 
@@ -186,11 +187,11 @@ Once the listing transaction has completed the Vega Event Queue will package it 
 
 In order to acquire an asset balance on the Vega network, a user must first deposit an asset using a Vega Asset Bridge. There is a bridge for every asset class supported by and voted into Vega. Due to variation in asset infrastructure, each bridge will have a different way to make a deposit, and are described here.
 
-### Vega Asset Bridges
+### Vega Bridge Assets
 
-#### Ethereum-based assets
+#### Ethereum assets
 
-All Ethereum assets are managed by a smart contract that supports the IVega_Bridge interface.
+All Ethereum assets are managed by a smart contract that supports the `IVega_Bridge` interface.
 The interface defines a function to deposit assets:
 
 `function deposit_asset(address asset_source, uint256 asset_id, uint256 amount, bytes32 vega_public_key) public;`
@@ -198,7 +199,7 @@ The interface defines a function to deposit assets:
 Once a successful deposit transaction has occurred, the `Asset_Deposited` event will be emitted for later use by the Vega Event Queue.
 See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
-##### ERC-20
+##### ERC-20 assets
 
 ERC-20 tokens have a token address but no individual token ID, as such, the Vega ERC-20 Bridge will require that a user pass 0 as `asset_id` for all ERC-20 tokens. `asset_source` will be the address of the asset token smart contract.
 
@@ -262,29 +263,28 @@ Same process than AssetList. See: [Ethereum Bridge spec](./0031-ETHB-ethereum_br
 After signatures are aggregated a user is ready to make the withdrawal transaction. Each asset has a different withdrawal process, but they will primarily be managed by Vega Bridges, a CQRS pattern Vega uses to integrate the various blockchains and asset management APIs.
 Where available, multisignature withdrawal orders will have a built-in and protocol-enforced expiration timestamp.
 
-#### Ethereum-based assets
+#### Signing Ethereum-based assets
 
-All Ethereum assets are managed by a smart contract that supports the IVega_Bridge interface.
+All Ethereum assets are managed by a smart contract that supports the `IVega_Bridge` interface.
 The interface defines a function to withdrawal assets:
 
 `function withdraw_asset(address asset_source, uint256 asset_id, uint256 amount, uint256 expiry, uint256 nonce, bytes memory signatures) public;`
 
-
 Once a successful withdrawal transaction has occurred, the `Asset_Withdrawn` event will be emitted for later use by the Vega Event Queue. See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
-##### ERC-20
+##### Signing ERC-20
 
 ERC-20 tokens have a token address but no individual token ID, as such, the Vega ERC-20 Bridge will require that a user pass 0 as `asset_id` for all ERC-20 tokens. `asset_source` will be the address of the asset token smart contract.
 
-##### Other Ethereum Token Standards
+##### Signing other Ethereum Token Standards
 
 This section will be expanded if additional ethereum based token standards are supported by Vega. New bridges will be expected to implement `IVega_Bridge`.
 
-#### Other Assets
+#### Signing other Assets
 
 This section will be expanded when asset bridges to other blockchains are supported by Vega. Since blockhains and their supported asset standards vary significantly, each section will be unique.
 
-### Event Queue Path
+### Event Queue Path (Signing)
 
 Once a withdrawal is complete and the appropriate events/transaction information is available on the respective chain, the transaction is then recognized by the Vega Event Queue and packaged as an event. This event is submitted to Vega consensus, which will verify the event contents against a trusted node of the appropriate blockchain, which completes the cycle.
 

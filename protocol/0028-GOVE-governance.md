@@ -150,6 +150,7 @@ A market parameter change is passed only when:
 
 - either the governance token holder vote is successful i.e. `participation_rate >= governance.proposal.updateMarketParam.requiredParticipation` AND `for_rate > governance.proposal.updateMarketParam.requiredMajority` (in this case the LPs were overridden by governance token holders)
 - or the governance token holder vote does not reach participation threshold but the LP vote does and approves the proposal `participation_rate < governance.proposal.updateMarketParam.requiredParticipation` AND `LP participation rate >= governance.proposal.updateMarketParam.requiredParticipationLP` AND `LP for rate >= governance.proposal.updateMarketParam.requiredMajorityLP`.
+
 The logic is
 
 ![image](./0028-GOVE-governance-mkt-gov-proposal.png)
@@ -396,7 +397,7 @@ APIs should also exist for clients to:
 - As a user, I can get a list of all proposals I voted for (<a name="0028-GOVE-003" href="#0028-GOVE-003">0028-GOVE-003</a>)
 - As a user, I can receive notification when a new proposal is created and may require attention. (<a name="0028-GOVE-004" href="#0028-GOVE-004">0028-GOVE-004</a>)
 - As the vega network, all votes from eligible users for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)
-- As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are *rejected* (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)
+- As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are _rejected_ (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)
 - As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it. (<a name="0028-GOVE-007" href="#0028-GOVE-007">0028-GOVE-007</a>)
 - As the vega network, proposals that set enactment time before closing time are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
 - As the vega network, proposals that set closing time beyond the relevant `maxClose` parameter are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
@@ -435,7 +436,7 @@ APIs should also exist for clients to:
 
 - As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
 - Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)
-- Verify that a market change proposal does *not* get enacted if enough LPs participate and vote for _BUT_ governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
+- Verify that a market change proposal does _not_ get enacted if enough LPs participate and vote for _BUT_ governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
 - Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
 - Verify that an enacted market which uses trading terminated key `ktt1` and settlement price key `ksp1` which is changed via governance proposal to use trading terminated key `ktt2` and settlement price key `ksp2` can terminate trading using `ktt2` but cannot terminate trading using `ktt1` and `ksp2` can submit the settlement price causing market to settle but the key `ksp1` cannot settle the market. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
 - Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the _new_ bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)

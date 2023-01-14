@@ -52,6 +52,7 @@ Sell-shape: {
 ## How they are constructed for the order book
 
 Input data:
+
 1. The commitment, buy-shape, sell-shape (as submitted in the [liquidity provision network transaction](./0038-OLIQ-liquidity_provision_order_type.md).)
 1. Any persistent orders that the liquidity provider has on the book at a point in time.
 
@@ -61,15 +62,11 @@ Steps:
 
 1. From the market parameter - to be set as part of [market proposal](0028-GOVE-governance.md)  `market.liquidity.priceRange` which is a percentage price move (e.g. `0.05 = 5%` and from `mid_price` calculate:
 
-```
-min_lp_price = (1.0 - market.liquidity.priceRange) x mid_price
-```
+`min_lp_price = (1.0 - market.liquidity.priceRange) x mid_price`
 
 and
 
-```
-max_lp_price = (1.0 + market.liquidity.priceRange) x mid_price
-```
+`max_lp_price = (1.0 + market.liquidity.priceRange) x mid_price`
 
 1. Calculate `liquidity_obligation`, as per calculation in the [market making mechanics spec](./0044-LIME-lp_mechanics.md).
 
@@ -104,7 +101,7 @@ Any shape entry with a peg less than `min_lp_vol_price` should have the resultin
 
 Calculate the volume at the peg as
 
-``` volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / price)```.
+`volume = ceiling(liquidity_obligation x liquidity-normalised-proportion / price)`.
 
 where `liquidity_obligation` is calculated as defined in the [market making mechanics spec](./0044-LIME-lp_mechanics.md) and `price` is the price level at which the `volume` will be placed.
 At this point `volume` may have decimal places.
@@ -114,11 +111,12 @@ Note: if the resulting quote price of any of the entries in the buy / sell shape
 Note: calculating the order volumes needs take into account Position Decimal Places and create values (which may be int64s or similar) that are the correct size and precision given the number of Position Decimal Places specified in the [Market Framework](./0001-MKTF-market_framework.md).
 This means that the `integerVolume = ceil(volume x 10^(PDP))`.
 For example, if the offset, commitment and prob of trading imply volume of say `0.65` then the `integerVolume` we want to see on the book depends on position decimals. If we have:
+
 - `0dp` then round up to volume `1`
 - `1dp` then round up to volume `7` (i.e. `0.7` i.e. `1dp`).
 - `3dp` then no need for any rounding it's `650` (i.e. `0.650`)
-and so on.
 
+and so on.
 
 ```proto
 Example:
@@ -159,6 +157,7 @@ ________________________
  [mm-2-order, buy-volume=5, buy-price=99, order-time=13004]
 }
 ```
+
 and a new market order sells 8. Then, a plausible refreshed set of orders could look like this*:
 
 ```proto
@@ -169,7 +168,7 @@ and then this
  [mm-2-order, buy-volume=5, buy-price=96, order-time=16459]
 ```
 
-*NB the actual values of the buy-prices and buy-volumes are dependent on the result of step 2 above and this example is not to test that, so don't try to replicate this with numbers, it's for illustrative purposes only.
+*Note: the actual values of the buy-prices and buy-volumes are dependent on the result of step 2 above and this example is not to test that, so don't try to replicate this with numbers, it's for illustrative purposes only.
 ________________________
 
 
@@ -195,7 +194,7 @@ Note that any other orders that the LP has on the book (limit orders, other pegg
 
 - Order datatype for LP orders. Any order APIs should contain these orders.
 
-## Acceptance Criteria:
+## Acceptance Criteria
 
 - Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
 - Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>);

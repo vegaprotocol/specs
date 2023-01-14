@@ -131,6 +131,7 @@ Extra functionality will be added to the expiring and cancelling steps
 ## Test cases
 
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
+
 - Insert a pegged order using all of the available reference types and an offset to make the order persistent.
 - Insert a pegged order using all of the available reference types and an offset to make the order fill.
 - Insert a pegged order using all of the available reference types and an offset to make the order partially fill.

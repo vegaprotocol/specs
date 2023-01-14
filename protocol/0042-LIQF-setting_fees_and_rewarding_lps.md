@@ -55,9 +55,10 @@ Once the market opens (opening auction starts) a clock starts ticking. We calcul
 ### APIs for fee factor calculations - what should core be exposing?
 
 At time of call:
-* The `liquidity-fee-factor` for the market.
-* Current liquidity provider commitments and their individually nominated fee factors
-* [Target stake](./0041-TSTK-target_stake.md)
+
+- The `liquidity-fee-factor` for the market.
+- Current liquidity provider commitments and their individually nominated fee factors
+- [Target stake](./0041-TSTK-target_stake.md)
 
 ## Splitting Fees Between Liquidity Providers
 
@@ -98,6 +99,7 @@ r = 0
 if A(n) > 0 and A(n-1) > 0
     r =  (A(n)-A(n-1))/A(n-1),
 ```
+
 Thus at the end of period `n` update
 
 ```go
@@ -150,19 +152,20 @@ A new LP1 has `0` stake and they wish to add `Delta S = 8000` and a new LP2 has 
 (average entry valuation LP1) <- 0 + 8000 x 8000 / (0 + 8000) = 8000
 (average entry valuation LP2) <- 0 + (8000 + 2000) x 2000 / (0 + 2000) = 10000
 ```
+
 Example 3:
 An existing LP has `average entry valuation 1000` and `S=100`. Currently the sum of all virtual stakes is `2000`. They wish to add `10` to their stake.
 
 ```math
 (average entry valuation) <- 1000 x 100 / (100 + 10) + 2000 x 10 / (100 + 10) = 1090.9....
 ```
+
 Example 4:
 An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the sum of all virtual stakes is `3000`. They wish to remove `20` from their stake. Their average entry valuation stays the same
 
 ```math
 (average entry valuation) = 1090.9
 ```
-
 
 ### Calculating the liquidity score
 
@@ -171,11 +174,14 @@ This is done by taking into account all orders they have deployed within the `[m
 When we say "all orders" we mean their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
 
 Now calculate the total of the instantenous liquidity scores obtained for each committed LP:
+
 ```
 total = the sum of instantenous liquidity scores for all LPs that have an active liquidity commitment
 ```
+
 Now, if the `total` comes out as `0` then set `fractional instantenous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
 Otherwise calculate fractional instantenous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
+
 ```
 fractional instantenous liquidity score = instantenous liquidity score / total
 ```
@@ -210,6 +216,7 @@ LP 1 els = 0.65
 LP 2 els = 0.25
 LP 3 els = 0.1
 ```
+
 Trade happened, and the trade value for fee purposes multiplied by the liquidity fee factor is `103.5 ETH`. The following amounts be collected immediately into the LP fee accounts for the market:
 
 ```math
@@ -237,13 +244,13 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 
 ### APIs for fee splits and payments
 
-* Each liquidity provider's equity-like share
-* Each liquidity provider's average entry valuation
-* The `market-value-proxy`
+- Each liquidity provider's equity-like share
+- Each liquidity provider's average entry valuation
+- The `market-value-proxy`
 
 ## Acceptance Criteria
 
-### CALCULATING LIQUIDITY FEE FACTOR
+### CALCULATING LIQUIDITY FEE FACTOR TESTS
 
 - The examples provided result in the given outcomes (<a name="0042-LIQF-001" href="#0042-LIQF-001">0042-LIQF-001</a>)
 - The resulting liquidity-fee-factor is always equal to one of the liquidity provider's individually nominated fee factors (<a name="0042-LIQF-002" href="#0042-LIQF-002">0042-LIQF-002</a>)
@@ -253,24 +260,24 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - If a change in the open interest causes the liquidity demand estimate to change, then fee factor is correctly recalculated.  (<a name="0042-LIQF-006" href="#0042-LIQF-006">0042-LIQF-006</a>)
 - If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated.  (<a name="0042-LIQF-007" href="#0042-LIQF-007">0042-LIQF-007</a>)
 
-### CHANGE OF NETWORK PARAMETERS
+### CHANGE OF NETWORK PARAMETERS TESTS
 
 - Change of network parameter "market.liquidityProvision.minLpStakeQuantumMultiple" will change the multiplier of the asset quantum that sets the minimum LP commitment amount. If `market.liquidityProvision.minLpStakeQuantumMultiple` is changed then no LP orders that have already been submitted are affected. However any new submissions or amendments must respect the new amount and those not meeting the new minimum will be rejected. (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>)
 - Change of network parameter "market.value.windowLength" will affect equity-like share calculations from the next block. Decreasing it so that the current period is already longer then the new parameter value will end it immediately and the next period will have the length specified by the updated parameter. Increasing it will lengthen the current period up to the the length specified by the updated parameter. (<a name="0042-LIQF-022" href="#0042-LIQF-022">0042-LIQF-022</a>)
 
 ### SPLITTING FEES BETWEEN liquidity providers
 
-- [ ] The examples provided result in the given outcomes.  (<a name="0042-LIQF-008" href="#0042-LIQF-008">0042-LIQF-008</a>)
-- [ ] The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-all-trades` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
-- [ ] Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
-- [ ] If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
-- [ ] All liquidity providers with `average fraction of liquidity provided by committed LP > 0` in the market receive a greater than zero amount of liquidity fee. The only exception is if a non-zero amount is rounded to zero due to integer representation. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
+- The examples provided result in the given outcomes.  (<a name="0042-LIQF-008" href="#0042-LIQF-008">0042-LIQF-008</a>)
+- The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-all-trades` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
+- Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
+- If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
+- All liquidity providers with `average fraction of liquidity provided by committed LP > 0` in the market receive a greater than zero amount of liquidity fee. The only exception is if a non-zero amount is rounded to zero due to integer representation. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
 
 ### API
 
-- [ ] Equity-like share of each active LP can be obtained via the API (<a name="0042-LIQF-016" href="#0042-LIQF-016">0042-LIQF-016</a>)
-- [ ] Liquidity score of each active LP can be obtained via the API (<a name="0042-LIQF-017" href="#0042-LIQF-017">0042-LIQF-017</a>)
+- Equity-like share of each active LP can be obtained via the API (<a name="0042-LIQF-016" href="#0042-LIQF-016">0042-LIQF-016</a>)
+- Liquidity score of each active LP can be obtained via the API (<a name="0042-LIQF-017" href="#0042-LIQF-017">0042-LIQF-017</a>)
 
 ### Distribution
 
-- [ ] If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment and that sees the same trade value. (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)
+- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment and that sees the same trade value. (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)

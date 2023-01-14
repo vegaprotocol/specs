@@ -13,6 +13,7 @@ The Event Queue continually scans local or hosted external blockchain nodes to d
 Found external blockchain events are then sent to Vega validator nodes.
 This makes the event queue works as a buffer between the slow/complicated world of various blockchains, and the high throughput, low latency of Vega Core.
 This message queue will use gRPC to communicate with the Vega network via 3 main functions:
+
 1. `GetSubscribedEventSources` returns a list of smart contract addresses and events that consensus has deemed as a valid source.
 1. `PropagateChainEvent` allows an event queue to send events raised on 3rd party blockchains (deposits, withdrawals, etc) through Vega consensus to ensure an event has been seen by the network. This function must support multiple blockchains as sources of events and multiple sources on a single blockchain (such as multiple deployments of an ERC20 bridge).
 

@@ -103,7 +103,6 @@ The list of assets that are allow listed could be inferred by looking through th
 
 Block listing is simply removing an asset from the whitelist via the `remove_asset` function.
 
-
 ## Network Parameters
 
 The Ethereum Bridge uses 1 network parameter, `blockchains.ethereumConfig`, a JSON value which must configure:
@@ -185,13 +184,13 @@ To ensure complete coverage of public and external smart contract functions, lis
 
 - must show 432000 (<a name="0031-ETHB-026" href="#0031-ETHB-026">0031-ETHB-026</a>)
 
-1.  `bool public is_stopped;`
+1. `bool public is_stopped;`
 
 - must be false at first (<a name="0031-ETHB-027" href="#0031-ETHB-027">0031-ETHB-027</a>)
 - must be true after `global_stop` called (<a name="0031-ETHB-028" href="#0031-ETHB-028">0031-ETHB-028</a>)
 
 1. `function set_asset_limits(address asset_source,uint256 lifetime_limit,uint256 threshold,uint256 nonce,bytes calldata signatures)`
- 
+
 - changes asset limits (<a name="0031-ETHB-029" href="#0031-ETHB-029">0031-ETHB-029</a>)
 - must fail if bad sigs (<a name="0031-ETHB-030" href="#0031-ETHB-030">0031-ETHB-030</a>)
 - asset must be listed (<a name="0031-ETHB-031" href="#0031-ETHB-031">0031-ETHB-031</a>)

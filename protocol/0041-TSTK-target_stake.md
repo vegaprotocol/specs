@@ -25,6 +25,7 @@ Example 1:
 `t_market.stake.target.timeWindow = 1 hour`
 the market opened at `t_0 = 1:55`.
 We have the following information about open interest over time:
+
 ```
 [time, OI]
 [3:51, 140]
@@ -34,6 +35,7 @@ We have the following information about open interest over time:
 [4:33, 70]
 [4:52, 110]
 ```
+
 and the current time is `4:53`
 then the `t_window = [3:53, 4:53]`. The `max_oi` is `120`.
 
@@ -50,14 +52,14 @@ Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi
 
 ### APIs
 
-* target stake
-  * return current (real-time) target stake when market is in default trading mode.
-  * return theoretical (based on idicative uncrossing volume) target stake when market is in auction mode.
+- target stake
+  - return current (real-time) target stake when market is in default trading mode.
+  - return theoretical (based on idicative uncrossing volume) target stake when market is in auction mode.
 
 ### Acceptance Criteria
 
-* examples showing a growing list (before we hit time window) (<a name="0041-TSTK-001" href="#0041-TSTK-001">0041-TSTK-001</a>)
-* examples showing a list that drops off values (<a name="0041-TSTK-002" href="#0041-TSTK-002">0041-TSTK-002</a>)
-* if open interest changes to a value that is less then or equal to the maximum open interest over the time window and if the mark price is unchanged, then the liquidity demand doesn't change. (<a name="0041-TSTK-003" href="#0041-TSTK-003">0041-TSTK-003</a>)
+- examples showing a growing list (before we hit time window) (<a name="0041-TSTK-001" href="#0041-TSTK-001">0041-TSTK-001</a>)
+- examples showing a list that drops off values (<a name="0041-TSTK-002" href="#0041-TSTK-002">0041-TSTK-002</a>)
+- if open interest changes to a value that is less then or equal to the maximum open interest over the time window and if the mark price is unchanged, then the liquidity demand doesn't change. (<a name="0041-TSTK-003" href="#0041-TSTK-003">0041-TSTK-003</a>)
 - Change of `market.stake.target.scalingFactor` will immediately change the scaling between liquidity demand estimate based on open interest and target stake, hence immediately change the target stake. (<a name="0041-TSTK-004" href="#0041-TSTK-004">0041-TSTK-004</a>)
 - Change of `market.stake.target.timeWindow` will immediately change the length of time window over which open interest is measured, hence will immediately change the value of `max_oi`. (<a name="0041-TSTK-005" href="#0041-TSTK-005">0041-TSTK-005</a>)

@@ -74,7 +74,6 @@ Cancelling an order triggers a margin recalculation for a party. This is true fo
         EndFor
     EndFor
 
-
 ## Test cases
 
 - Insert a single order and cancel it via `orderID+marketID+partyID`
