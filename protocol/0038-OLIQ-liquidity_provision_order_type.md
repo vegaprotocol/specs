@@ -2,8 +2,7 @@
 
 ## Summary
 
-When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [Liquidity Provisioning mechanics](./0044-LIME-lp_mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding MMs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-
+When market makers commit to providing liquidity they are required to submit a set of valid buy shapes and sell shapes [Liquidity Provisioning mechanics](./0044-LIME-lp_mechanics.md). This commitment will ensure that they are eligible for portion of the market fees as set out in [Setting Fees and Rewarding Market Makers](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 ## Liquidity Provisioning order features
 
@@ -13,7 +12,6 @@ LP orders are a special order type with the following features:
 - Are always priced limit orders that sit on the book
 - Are “post only” and do not trade on entry (as per normal pegged orders)
 - The order is always refreshed after it trades (once the tx is processed so not refreshed before closeouts, etc.) based on the above requirements so that the full commitment is always supplied.
-
 
 ## How they are submitted
 
@@ -27,7 +25,7 @@ Each entry must specify:
 
 2. A **price peg:** , as per normal [pegged orders](../protocol/0037-OPEG-pegged_orders.md), a price level specified by a reference point (e.g mid, best bid, best offer) and an amount of units away. The amount is always positive and is subtracted for buy orders and added for sell orders to the reference price.
 
-```
+```proto
 # Example 1:
 Buy-shape: {
   buy-entry-1: [buy-liquidity-proportion-1, [buy-price-peg-reference-1, buy-number-of-units-from-reference-1]],
@@ -79,7 +77,6 @@ If you end up with 0 or a negative number, stop, you are done.
 
 1. Calculate the volume implied by each entry in the refined buy/sell order list. You will now create orders from this volume at the relevant price point and apply them to the order book. 
 
-
 #### Normalising liquidity proportions for a set of market making orders (step 3):
 
 Calculate the `liquidity-normalised-proportion` for all entries, where for buy and sell side separately:
@@ -119,7 +116,7 @@ For example, if the offset, commitment and prob of trading imply volume of say `
 and so on.
 
 
-```
+```proto
 Example: 
 
 best-static-bid-on-order-book = 103
@@ -143,7 +140,7 @@ Liquidity provider orders are recalculated and refreshed whenever an order that 
 
 In these cases, repeat all steps above, preserving the order as an order, but recalculating the volume and price of it. Note, this should only happen at the end of a transaction (that caused the trade), not immediately following the trade itself. 
 
-### Time priority for refreshing:
+### Time priority for refreshing:
 
 1. For all orders that are repriced but not as a result of trading (i.e. pegged orders that move as a result of peg moving), treat as per normal pegged orders.
 
@@ -151,7 +148,8 @@ In these cases, repeat all steps above, preserving the order as an order, but re
 
 ________________________
 **Example**: we have a buy side of an order book that looks like this:
-```
+
+```proto
 {
  [mm-1-order, buy-volume=3, buy-price=100, order-time=13007]
  [mm-2-order, buy-volume=5, buy-price=99, order-time=13004]
@@ -159,7 +157,7 @@ ________________________
 ```
 and a new market order sells 8. Then, a plausible refreshed set of orders could look like this*:
 
-```
+```proto
 add this first
  [mm-1-order, buy-volume=3, buy-price=97, order-time=16458]
 
@@ -171,11 +169,10 @@ and then this
 ________________________
 
 
-### Transfers in / out of margin account 
+### Transfers in / out of margin account
 
 When the system refreshes orders (because a peg moved) and the implied volumes now sit at different price levels there may be different overall margin requirement for the LP party. 
 If the resulting amount is outside search / release then there will be *at most* one transfer in / out of the party's margin account for the entire LP order. 
-
 
 ## Amending the LP order:
 
@@ -185,30 +182,33 @@ No cancellation of orders that arise from this LP batch order type other than by
 
 Note that any other orders that the LP has on the book (limit orders, other pegged orders) that are *not* part of this LP batch order (call them "normal" in this paragraph) can be cancelled and amended as normal. When volume is removed / added / pegs moved (on "normal" orders) then as part of the normal peg updates the LP batch order may add or remove volume as described in section "How they are constructed for the order book" above.
 
-
 ## Network Parameters:
-* market.liquidity.probabilityOfTrading.tau.scaling: scaling factor multiplying risk model value of tau to imply probability of trading.
-* market.liquidity.minimum.probabilityOfTrading.lpOrders: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
+
+* `market.liquidity.probabilityOfTrading.tau.scaling`: scaling factor multiplying risk model value of tau to imply probability of trading.
+* `market.liquidity.minimum.probabilityOfTrading.lpOrders`: a minimum probability of trading; any shape proportions at pegs that would have smaller probability of trading are to be moved to pegs that imply price that have probability of trading no less than the `market.liquidity.minimum.probabilityOfTrading.lpOrders`. 
 
 ## APIs:
+
 * Order datatype for LP orders. Any order APIs should contain these orders.
 
 ## Acceptance Criteria:
+
 - Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios there. (<a name="0038-OLIQ-001" href="#0038-OLIQ-001">0038-OLIQ-001</a>);
 - Volume implied by the liquidity provision order is that given by [0034-PROB-liquidity_measure.feature](https://github.com/vegaprotocol/vega/blob/develop/integration/features/verified/0034-PROB-liquidity_measure.feature) in all the various scenarios that test fractional order sizes (smallest order position of 0.01). (<a name="0038-OLIQ-002" href="#0038-OLIQ-002">0038-OLIQ-002</a>);
 - If an LP order has offset set such that the resulting price falls outside `[min_lp_vol_price, max_lp_vol_price]` then the system adjusts it automatically so that it's placed on the bound (<a name="0038-OLIQ-011" href="#0038-OLIQ-011">0038-OLIQ-011</a>)
 
 ### LP commitment order creation
+
 - A liquidity provisioning order must specify orders for both sides of the book (<a name="0038-OLIQ-003" href="#0038-OLIQ-003">0038-OLIQ-003</a>)
 - All orders created by an LP commitment must be pegged orders (<a name="0038-OLIQ-004" href="#0038-OLIQ-004">0038-OLIQ-004</a>)
 - Filled orders are replaced immediately to conform to the LP commitment shapes (<a name="0038-OLIQ-005" href="#0038-OLIQ-005">0038-OLIQ-005</a>)
 - Change of the market parameter `market.liquidity.priceRange` which decreases the value will, when volumes are next recalculated, tighten `[min_lp_vol_price, max_lp_vol_price]` and volume that was previously pegged inside the valid range and would now be outside is shifted to the bounds.   (<a name="0038-OLIQ-012" href="#0038-OLIQ-012">0038-OLIQ-012</a>)
 - Change of the market parameter `market.liquidity.priceRange` which increases the value will, when volumes are next recalculated, widen `[min_lp_vol_price, max_lp_vol_price]` and volume that was previously being shifted to stay inside the range is now deployed at the desired peg.   (<a name="0038-OLIQ-013" href="#0038-OLIQ-013">0038-OLIQ-013</a>)
 
-
 ### LP commitment amendment
+
 - If amending a commitment size would reduce the market's supplied liquidity below the target stake, the amendment will be rejected (see [0035 Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md#decreasing-supplied-stake)) (<a name="0038-OLIQ-006" href="#0038-OLIQ-006">0038-OLIQ-006</a>)
 
-
 ### LP commitment repricing due to peg price moves
+
 - If best bid / ask has changed and the LP order volume is moved around to match the shape / new peg levels then the margin requirement for the party may change. There is at most one transfer in / out of the margin account of the LP party as a result of one of the pegs moving. (<a name="0038-OLIQ-008" href="#0038-OLIQ-008">0038-OLIQ-008</a>) 

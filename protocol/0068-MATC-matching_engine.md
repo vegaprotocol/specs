@@ -1,7 +1,7 @@
-Feature name: matching-engine
-Start date: 2021-12-14
+# Matching engine
 
-# Acceptance Criteria
+## Acceptance Criteria
+
  * The matching engine co-ordinates the trading of incoming orders with existing orders already on an order book.
    * In a market that is in [Continuous Trading](./0001-MKTF-market_framework.md#trading-mode---continuous-trading) 
      * An [Immediate or Cancel (IOC)](./0014-ORDT_order_types.md#time-in-force---validity) order:
@@ -50,19 +50,23 @@ Start date: 2021-12-14
   * The TIF of any persistent order can be updated to and from GTC and GTT only. Expiry time is required if amending to GTT and must not be given if amending to GTC. (<a name="0068-MATC-036" href="#0068-MATC-036">0068-MATC-036</a>) 
   * An update to an order that is not [ACTIVE or PARKED](./0024-OSTA-order_status.md) (Stopped, Cancelled, Expired, Filled) will be rejected (<a name="0068-MATC-037" href="#0068-MATC-037">0068-MATC-037</a>) 
 
-# Summary
+## Summary
+
 The matching engine is responsible for updating and maintaining the state of the order book. The order book contains two lists of orders in price and time order, one for the buy side and one for the sell side. As new orders come into the matching engine, they are analysed to see if they will match against current orders to create trades or will be placed in the order book if they are persistent order types. If the matching engine is running in continuous trading mode, the matching will take place as the orders arrive. If it is running in auction mode, all the orders are placed on the order book and are only matched when we attempt to leave the auction. Indicative price and volume details are generated during an auction after each new order is added.
 
-# Guide-level explanation
+## Guide-level explanation
+
 The machine engine consists of an order book and the logic to handle new orders arriving into the engine. The matching engine can be in one of two possible states, continuous trading or auction trading. In continuous trading the incoming orders are processed immediately. In auction mode incoming orders are placed on the order book and are not processed for matching until we attempt to uncross. 
 
-## Continuous Mode
+### Continuous Mode
+
 New orders arrive at the engine and are checked for validity including if they are of the right type (not GFA). If the order can be matched to an order already on the book, that matching will take place. If the order does not match against an existing order and the order type is persistent, we place the order into the correct side of the order book at the price level given by the order. If there are already orders in the book at the same price level, the new order will be added after all existing orders at that price to keep the time ordering correct. If a cancel order is received, we remove the existing order from the order book. If an [amend order](./0004-AMND-amends.md) is received we remove the existing order and re-insert the amended version.
 
-## [Auction](./0026-AUCT-auctions.md) Mode
+### [Auction](./0026-AUCT-auctions.md) Mode
+
 New orders arrive at the engine and no matching is performed. Instead the order is checked for validity (GFA) and then placed directly onto the order book in price and time priority. When the auction is uncrossed, orders which are in the crossed range are matched until there are no further orders crossed.
 
-## Order books construction
+### Order books construction
 
 An order book is made up of two halves, the buy and the sell side. Each side contains all the persistent orders which have not yet been fully matched. They are sorted in price and then time first order. This ensures that when we are looking for matches we can search through the opposite side of the book and know that the closest match will be top of the list and if there are multiple orders at that price level they will be ordered in the time that they arrived.
 
@@ -76,6 +80,7 @@ Given an order book that looks like this in the market display:
 | | 90 | 10 |
 | | 80 | 15 |
 
-# See also
+## See also
+
 - [0008-TRAD-Trading Workflow](./0008-TRAD-trading_workflow.md)
 - [0029-FEES-Fees](./0029-FEES-fees.md)

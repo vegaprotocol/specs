@@ -2,10 +2,9 @@
 
 This built-in product provides perpetual futures that are cash-settled, i.e. they are margined and settled in a single asset.
 
-Background reading: https://www.paradigm.xyz/2021/05/everlasting-options/#Perpetual_Futures
+[Background reading](https://www.paradigm.xyz/2021/05/everlasting-options/#Perpetual_Futures)
 
 Perpetual futures are a simple "delta one" product.
-
 
 ## 1. Product parameters
 
@@ -14,11 +13,9 @@ Perpetual futures are a simple "delta one" product.
 
 Validation: none required as these are validated by the asset and data source frameworks.
 
-
 ## 2. Settlement assets
 
 1. Returns `[cash_settled_perpetual_future.settlement_asset]`
-
 
 ## 3. Valuation function
 
@@ -29,9 +26,7 @@ cash_settled_perpetual_future.value(quote) {
 }
 ```
 
-
 ## 4. Lifecycle triggers
-
 
 ### 4.1 Settlement ("periodic funding")
 
@@ -43,8 +38,7 @@ cash_settled_perpetual_future.settlement_data(event) {
 }
 ```
 
-
-# Acceptance Criteria
+## Acceptance Criteria
 
 1. Create a Cash Settled Perpetual Future with the settlement data provided by an external data source (<a name="0053-COSMICELEVATOR-001" href="#0053-COSMICELEVATOR-001">0053-COSMICELEVATOR-001</a>)
 2. Create a Cash Settled Perpetual Future for any settlement asset that's configured in Vega (<a name="0053-COSMICELEVATOR-002" href="#0053-COSMICELEVATOR-002">0053-COSMICELEVATOR-002</a>)

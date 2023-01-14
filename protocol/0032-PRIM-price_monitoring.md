@@ -34,11 +34,11 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 - Once the price protection auction period finishes, the remaining triggers should be examined and if hit the auction period should be extended accordingly.
 - Then the market continues in the regular fashion.
 
-# Reference-level explanation
+## Reference-level explanation
 
-## Parameters
+### Parameters
 
-### Market
+#### Market
 
 - `priceMonitoringParameters` - an array of more price monitoring parameters with the following fields:
   - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
@@ -51,11 +51,12 @@ If any of the above parameters or the risk model gets modified in any way, the p
 - the auction end time implied by the currently running auction/extension should remain unchanged,
 - when auction uncrosses price monitoring should get reset using the updated parameters.
 
-### Network
+#### Network
 
 - `market.monitor.price.defaultParameters`: Specifies default market parameters outlined in the previous paragraph. These will be used if market parameters don't get explicitly specified.
 
-### Hard-coded
+#### Hard-coded
+
 - Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market. 
 
 There are several reasons why this maximum is enforced. 
@@ -65,7 +66,7 @@ There are several reasons why this maximum is enforced.
 1. testing everything works correctly is more manageable if the number is capped. 
 
 
-## View from the Vega side
+### View from the Vega side
 
 - Per each transaction:
   - the matching engine sends the **price monitoring engine** the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`
@@ -73,7 +74,7 @@ There are several reasons why this maximum is enforced.
   - if no trigger gets activated then the transaction is processed in a regular fashion, otherwise:
     - the price protection auction commences and the transaction considered should be processed in this way (along with any other orders on the book and pending transactions that are valid for auction).
 
-## View from the price monitoring engine side
+### View from the price monitoring engine side
 
 Price monitoring engine will interface between the matching engine and the risk model. It will communicate with the matching engine every time a new transaction is processed (to check it its' arrival price should trigger an auction). It will communicate with the risk model with a predefined frequency to inform the risk model of the latest price history and obtain a new set of scaling factors used to calculate min/max prices from the reference price.
 
@@ -96,7 +97,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
 - The resulting auction length should be at least `min_auction_length` (see the [auctions](./0026-AUCT-auctions.md#auction-config) spec). If the auction length implied by the triggers is less than that it should be extended.
 
-## View from [quant](https://github.com/vegaprotocol/quant) library side
+### View from [quant](https://github.com/vegaprotocol/quant) library side
 
 - The risk model calculates the bounds per reference price, horizon τ and confidence level α beyond which a price monitoring auction should be triggered.
 - The ranges of valid price moves are returned as either additive offsets or multiplicative factors for the up and down move. The price monitoring engine (PME) will know how to cope with either and apply it to the price bounds.

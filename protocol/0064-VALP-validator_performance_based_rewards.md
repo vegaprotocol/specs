@@ -1,4 +1,6 @@
-# Adjusting Validator Rewards Based on Performance
+# Validator performance based rewards
+
+## Adjusting Validator Rewards Based on Performance
 
 The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury.
 
@@ -7,8 +9,10 @@ see [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md), as well a
 
 The purpose of the specification is to define how the validator rewards will be additionally scaled based on their performance. 
 
-## Performance Measurement 1 (PM1): Offline Validator (sufficient for Oregon Trail)
+## Performance Measurement 1 (`PM1`): Offline Validator (sufficient for Oregon Trail)
+
 ### Tendermint validators
+
 Goal: Detect how long a validator is offline and punish them 
 Detection: Validator does not act as a leader
 
@@ -33,6 +37,7 @@ be modified and set to neutral defaults (i.e., 0)
 Then `validator_performance = max(0.05, min((p'/expected, 1))`
 
 ### Ersatz and pending validators
+
 For validators who [have submitted a transaction to become validators](./0069-VCBS-validators_chosen_by_stake.md) the `performance_score` is defined as follows: during each epoch
 Let `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`. 
 Every `numBlocks` blocks the candidate validator node is to send a hash of block number `b` separately signed by all the three keys and submitted; the network will verify this to confirm that the validator owns the keys. 
@@ -48,6 +53,7 @@ The performance score should be available on all the same API endpoints as the `
 ## Acceptance criteria
 
 ### Performance score
+
 1. Tendermint validator with insufficient self-delegation (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>):
   * Set up a network with 5 validators 
   * Self-delegate to 4 of the nodes **more** than the minimum amount set in `reward.staking.delegation.minimumValidatorStake`. 
@@ -82,20 +88,22 @@ The performance score should be available on all the same API endpoints as the `
  6. Scores are restored after a snapshot restart (<a name="0064-VALP-006" href="#0064-VALP-006">0064-VALP-006</a>):  
   * With a snapshot that was taken at a block-height that falls in the middle of an epoch, restart a node from that snapshot. Ensure that at the end of the epoch the node remains in consensus and has produced the correct performance scores.
 
+## Future Stuff (in here for discussion purposes, not yet to be implemented)
 
-# Future Stuff (in here for discussion purposes, not yet to be implemented)
+### Non Linear punishment
 
-# Non Linear punishment
-Currently, PM1 does a linear reduction of payment - maybe an s-curve would be better so that small violations are punished less, 
+Currently, `PM1` does a linear reduction of payment - maybe an s-curve would be better so that small violations are punished less, 
 while a validator that is offline half the time gets more than 50% subtraction. For example, 1/(1+2^((3*x-1)*10)) would punish
 small failures less, and bigger failures pretty radically.
 
-#Weight reduction
+### Weight reduction
+
 In addition, for every epoch for which a node was offline, we can decrease its tendermint weight by 10%. Permanently absent nodes thus are
 automatically reduced in influence, even if they have a lot of delegation. Note that this may increase the discrepancy between the voting weight on 
 tendermint and the voting weight on the multisig contract.
 
-# PM2: Validator does not verify signatures
+## `PM2`: Validator does not verify signatures
+
 To detect this, validators need to issue tagged signatures from time to time.
      The tagged signature is the original signed message with the tag [TAGGED] associated to it.
      Thus, the normal signature verification for message m will fail, and the verifier is supposed
@@ -103,8 +111,9 @@ To detect this, validators need to issue tagged signatures from time to time.
      The verifier is then required  (if using this signature to validate anything) to flag that
       The signature pool contains a tagged signature and which one it is.
       Failure to do so provably shows that the signature was not verified properly.
-      
- # PM3: Validator does not run event forwarder
+
+ ## `PM3`: Validator does not run event forwarder
+ 
  This is difficult to detect, as a validator may legitimately see Ethereum events a few seconds after other validators
  and thus never get an event to forward. Also, eventually EEF will be integrated into core, and thus it will be more
  effort to not run that part of the code.
@@ -120,11 +129,13 @@ Should we instead have additional rewards for forwarding events from Ethereum? F
 If we had another reward pool we could share it according to `f/n`. 
 
 
-# PM5: Validator only acts as a Tendermint leader.
+## `PM5`: Validator only acts as a Tendermint leader
+
 Finding this requires a statistic we don't have at this point (as we would like to also include messages that were sent but don't contribute to consensus anymore to avoid discriminating against geographically far away servers. Once we figured out how to do
 this, we can build a formula for the reward. 
 
-# PM6: Validator doesn't run the Vega app, just signs everything the others do.
+## `PM6`: Validator doesn't run the Vega app, just signs everything the others do
+
 This needs further investigation; it is probably possible to solve this either the
 same way we detect signature verification, or along the lines of the data-node 
 (i.e., Validators are required to post some internal state information from time to

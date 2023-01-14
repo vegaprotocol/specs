@@ -1,6 +1,4 @@
-Feature name: liquidity-monitoring
-Start date: 2020-07-14
-Specification PR: https://github.com/vegaprotocol/specs-internal/pull/322
+# Liquidity monitoring
 
 ## Summary
 
@@ -53,15 +51,15 @@ If an incoming order would get matched so that entire side of the order book get
 ## Trigger for exiting the auction
 
 We exit if
-```
-total_stake >= target_stake AND there is best_bid AND there is best_offer.
-``` 
+
+`total_stake >= target_stake AND there is best_bid AND there is best_offer`.
 
 During the liquidity monitoring auction new or existing LPs can commit more stake (and hence liquidity) through the special market making order type and enable this by posting enough margin - see the [liquidity provision mechanics](./0044-LIME-lp_mechanics.md) spec for details. These need to be monitored to see if auction mode can be exit.
 
 ## What happens during the auction?
 
-The auction proceeds as usual. Please see the auction spec for details.
+The auction proceeds as usual. Please see the [auction spec](./0026-AUCT-auctions.md) for details.
+
 ## Frequency of checking for liquidity auction entry conditions
 
  Through a sequence of actions which occur with the same timestamp the market may be moved into a state in which a liquidity auction is expected and then back out of said state. Ideally, liquidity auctions should only be entered when the market truly requires one as once entered a minimum auction length (controlled by `market.auction.minimumDuration`) must be observed. Even with a very short a minimum auction length, a market flickering between two states is suboptimal. 
@@ -73,24 +71,16 @@ The criteria for exiting any auction (liquidity or price monitoring) should be c
 An implication is that within the same time stamp an aggressive order may remove the `best_bid` or `best_ask`. At that point all LP provision volume is removed from the book (and by implication at least one side of the book is empty). If a subsequent limit order re-creates the peg (still with the same timestamp / from the same block) then the LP volume is re-deployed. If no subsequent limit order places a limit order restoring the peg and we reach end of the block we end up in a liquidity auction. 
 
 As mentioned, as a consequence, intra-block, we may end with one side of the book empty which means that a party not meeting margin requirement *cannot* be closed out. We accept this consequence, their margin will be checked again when the mark price changes and either the book is restored (and they can get closed out) or the market is in liquidity auction.
+
 ## Acceptance Criteria
 
 1. The scenarios in the feature test [0026-AUCT-auction_interaction.feature](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/0026-AUCT-auction_interaction.feature) are verified and pass. (<a name="0035-LIQM-001" href="#0035-LIQM-001">0035-LIQM-001</a>)
-
 2. An incoming order that would consume `best_bid` or `best_offer` gets executed (unless it will also trigger price monitoring auction at the same time), the trades are generated. The volume implied by LP provision is removed (from both sides of the book and for all LPs). If `best_bid` is missing but `best_ask` is present then all the "normal pegged orders" (i.e. not the LP ones) which use `best_ask` as peg are still deployed. If `best_ask` is missing but `best_bid` is present then all the "normal pegged orders" (i.e. not the LP ones) which use `best_bid` as peg are still deployed. The market goes into a liquidity auction at the end of a block (because there is a peg missing and  the liquidity provision volume is not deployed). (<a name="0035-LIQM-002" href="#0035-LIQM-002">0035-LIQM-002</a>)
-   
 3. A market which enters a state requiring liquidity auction at the end of a block through increased open interest remains in open trading between entering that state and the end of the block. (<a name="0035-LIQM-003" href="#0035-LIQM-003">0035-LIQM-003</a>)
-   
 4. A market which enters a state requiring liquidity auction at the end of a block through decreased total stake (e.g. through LP bankruptcy) remains in open trading between entering that state and the end of the block. (<a name="0035-LIQM-004" href="#0035-LIQM-004">0035-LIQM-004</a>)
-
 5. A market which enters a state requiring liquidity auction through increased open interest during a block but then leaves state again prior to block completion never enters liquidity auction. (<a name="0035-LIQM-005" href="#0035-LIQM-005">0035-LIQM-005</a>)
-
 6. A market which enters a state requiring liquidity auction through reduced current stake (e.g. through LP bankruptcy) during a block but then leaves state again prior to block completion never enters liquidity auction. (<a name="0035-LIQM-006" href="#0035-LIQM-006">0035-LIQM-006</a>)
-
 7. A liquidity provider cannot remove their liquidity within the block if this would bring the current total stake below the target stake as of that transaction. (<a name="0035-LIQM-007" href="#0035-LIQM-007">0035-LIQM-007</a>)
-   
 8. If the Max Open Interest field decreases for a created block to a level such that a liquidity auction which is active at the start of a block can now be exited the block stays in auction within the block but leaves at the end. (<a name="0035-LIQM-008" href="#0035-LIQM-008">0035-LIQM-008</a>)
-
 9. When the network parameter `market.liquidity.targetstake.triggering.ratio` is updated via governance, future new market and update market proposals which do not specify a `triggeringRatio` should copy the new network parameter as the market parameter value. (<a name="0035-LIQM-009" href="#0035-LIQM-009">0035-LIQM-009</a>)
-
-9. When the market parameter `triggeringRatio` for an existing market is updated via governance, the next time conditions for entering auction are evaluated, the new triggering ratio is applied. (<a name="0035-LIQM-010" href="#0035-LIQM-010">0035-LIQM-010</a>)
+10. When the market parameter `triggeringRatio` for an existing market is updated via governance, the next time conditions for entering auction are evaluated, the new triggering ratio is applied. (<a name="0035-LIQM-010" href="#0035-LIQM-010">0035-LIQM-010</a>)

@@ -52,7 +52,7 @@ Therefore, Vega needs to know for each network parameter what governance thresho
 * proposal maximum enactment period
 * proposal required participation to pass
 * proposal required majority to pass
-* proposal minimum  proposer balance
+* proposal minimum proposer balance
 * proposal minimum voter balance
 
 There are groups of network parameters that will use the same values for the thresholds. The parameters can be set for the following groups:

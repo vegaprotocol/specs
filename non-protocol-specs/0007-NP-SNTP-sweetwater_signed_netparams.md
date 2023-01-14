@@ -31,8 +31,6 @@ TODO: find where `validator min balance` is defined and reference correctly.
 | `network.checkpoint.chainEndOfLifeDate`                     | Can enforce code upgrade by setting this not too far ahead.        | 21 days                    | 
 | `genesis training wheels section`                           | This is important.                                                 |                            |
 
-
-
 ## Notes
 
 The `governance.proposal.updateNetParam.requiredMajority` and `governance.proposal.updateNetParam.requiredParticipation`  

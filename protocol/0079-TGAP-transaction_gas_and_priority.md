@@ -5,7 +5,7 @@ However, the system processing capacity is still limited and in order to ensure 
 Each block will contain only transactions up to a certain block gas limit. 
 Transactions with higher priorities will get scheduled first. 
 
-## Network parameters
+## Network parameters
 
 - `network.transactions.maxgasperblock` is a network parameter with type unsigned integer with a minimum value of `100`, maximum value `10 000 000` and a recommended default of `10 000`. If the parameter is changed through governance then the next block after enactment will respect the new `maxgasperblock`. 
 - `network.transaction.defaultgas` is a network parameter with type unsigned integer with a minimum value of `1` and maximum value of `99` and default value of `1`. If the parameter is changed through governance then the next block after enactment will respect the new `defaultgas`. 
@@ -46,7 +46,7 @@ Constants needed:
 
 ### Any type of limit or market order
 
-```
+```go
 gasOrder = network.transaction.defaultgas + peg cost factor x pegs 
                                         + LP shape cost factor x shapes 
                                         + position factor x positions 
@@ -56,14 +56,12 @@ gas = min((maxGas/minBlockCapacity)-1,gasOrder)
 
 ### Cancellation of any single order
 
-```
+```go
 gasCancel = network.transaction.defaultgas + peg cost factor x pegs 
                                         + LP shape cost factor x shapes 
                                         + level factor x levels
 gas = min((maxGas/minBlockCapacity)-1,gasCancel)
 ```
-
-
 
 ### Batch orders
 
@@ -78,21 +76,20 @@ Here `gasBatch` is
 1. plus the full cost of the first limit order at `gasOrder` 
 1. plus `batchFactor` sum of all subsequent limit orders added together (each costing `gasOrder`)
 
-```
+```go
 gas = min((maxGas/minBlockCapacity)-1,batchGas)
 ```
 
 
 ### LP provision, new or amendment or cancellation
 
-```
+```go
 gasOliq = network.transaction.defaultgas + peg cost factor x pegs 
                                     + LP shape cost factor x shapes 
                                     + position factor x positions 
                                     + level factor x levels
 gas = min((maxGas/minBlockCapacity)-1,gasOliq)
 ```
-
 
 ## Transaction priorities
 

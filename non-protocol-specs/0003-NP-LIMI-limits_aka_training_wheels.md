@@ -4,7 +4,6 @@ This spec describes a set of limits and controls that must be supported by deplo
 
 These limits are expected to be used in early deployments of Vega and are desiogned to be raised and/or removed over time via the governance protocol as the security and the robustness of the implementation is demonstrated.
 
-
 ## Principles
 
 These features:
@@ -15,9 +14,7 @@ These features:
 - Signal the system's readiness and risk level: should be implemented and communicated and raised over time in such a way that the risks inherent in the system are clear, and that going beyond the limits (e.g. using sybils) requires sufficient understanding and effort that it would be done with clear knowledge of the risks.
 - Are intended for early alpha versions of the Vega system and are expected to be implemented almost entirely in the Ethereum bridge smart contracts, no thought has been given to implementations for other chains.
 
-
 ## Required limits and controls
-
 
 ### Sweetwater
 
@@ -37,7 +34,6 @@ We have identified three types of limit/control that will together achieve these
 - Deposit limits reduce the exposure of individual participants as well as the total funds at risk
 - Withdrawal controls reduce the probability that funds acquired in error on Vega can be taken outside the control of the system before the error can be fixed
 - A system wide deposit/withdrawal stop provides the ability to buy extra time to investigate or fix any issues 
-
 
 #### Deposit limits
 
@@ -83,7 +79,6 @@ This is primarily for liquidity providers and other sophisticated participants a
 - Unless explicitly mentioned, Vega transactions (governance or otherwise) are **not required** and the Vega chain does not need to interact with these features directly.
 - Console should be aware of limits, delays, thresholds etc. (i.e. by querying the bridge contract system)
 
-
 ## Out of scope
 
 - Orderly withdrawal of funds (including those held by participant accounts and the insurance pool) at the end of life of a Vega network (when these have limited lives) is out of scope for this spec and is covered in the [limited network life spec](../protocol/0073-LIMN-limited_network_life.md).
@@ -93,6 +88,7 @@ This is primarily for liquidity providers and other sophisticated participants a
 - These features do not protect against a malicious validator set.
 - No attempt is made to prevent sybils with these features, although the ratio between gas fees for deposites and withdrawals and the limits per public key will affect the attractiveness of **any** money making scheme whether by intended or unintended behaviour of the protocol, therefore low limits can provide some level of mitigation here.
 - Users could submit multiple small withdrawals to get around the size limits for delays. To mitigate this, sizes can be set such that gas costs of such an approach would be significant, or to zero so that all withdrawals are delayed. 
+- 
 # Network Parameters
 
 | Property         | Type   | Example value | Description |
@@ -100,9 +96,10 @@ This is primarily for liquidity providers and other sophisticated participants a
 | `limits.assets.proposeEnabledFrom`       | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which asset creation is allowed.  | 
 | `limits.markets.proposeEnabledFrom`      | String (date) |  `"2021-12-17T14:34:26Z"`        | The date/time after which market creation is allowed.  | 
 
+## Acceptance Criteria
 
-# Acceptance Criteria
-## Vega criteria
+### Vega criteria
+
 1. Market Creation can be restricted using a genesis configuration (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-024">0028-GOVE-024</a>)
     - With `propose_market_enabled` set to true in the genesis configuration;
     - With `propose_market_enabled_from` set to the future
@@ -122,7 +119,7 @@ This is primarily for liquidity providers and other sophisticated participants a
 3. `propose_market_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
 4. `propose_asset_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
 
-## Smart contract criteria
+### Smart contract criteria
 5. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md) (<a name="0003-NP-LIMI-001" href="#0003-NP-LIMI-001">0003-NP-LIMI-001</a>)
    - This does not apply to the [governance staking contract](./../glossaries/staking-and-governance.md)
    - With an Ethereum address that has never deposited to Vega before:

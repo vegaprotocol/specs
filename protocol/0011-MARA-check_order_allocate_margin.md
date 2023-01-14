@@ -1,6 +1,6 @@
 # Check Order Allocate Margin
 
-# Outline
+## Outline
 
 When an order or other market instruction (amend, cancel, etc.) is submitted we need to check if it changes the margin requirement for the trader who has submitted it, and if it increases them we need to allocate (request to allocate in a future, shared world) margin before accepting the order.
 
@@ -28,13 +28,11 @@ Orders should be rejected if we can’t allocate sufficient margin.
 - Pegged GTT (parked in auction \*) (<a name="0011-MARA-016" href="#0011-MARA-016">0011-MARA-016</a>)
 - Pegged GTC (parked in auction \* ) (<a name="0011-MARA-017" href="#0011-MARA-017">0011-MARA-017</a>)
 
-
-
 ## Pseudocode
 
 The logic is something like this:
 
-```
+```go
 enum ValidationResult = Accept | Reject
 
 /* NB: a position record is assumed to contain all required data about a trader's open volume and active orders to calculate margin. For example, this means containing or being able calculate the 'net worst' long and short positions given all orders.

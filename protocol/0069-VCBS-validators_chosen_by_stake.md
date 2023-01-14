@@ -1,4 +1,7 @@
 # Validators chosen by stake
+
+## Summary
+
 At a high level a participant that wishes to become a validator will:
 1) start a Vega node as validating node + associated infra 
 1) submit a transaction, see below for details, with their keys, saying they want to validate.
@@ -30,6 +33,7 @@ If a node that submitted the transaction to join and satisfies all other conditi
 As both these checks are done between epochs, it is possible for a validator to be demoted first from Tendermint validator to ersatz validator, and then from ersatz validator to pending validator.
 
 ## Becoming validator transaction
+
 All keys mentioned here are understood to match the node configuration.
 
 This will include (all as strings):
@@ -41,6 +45,7 @@ This will include (all as strings):
 - starting epoch number: number of epoch from start of which they are expected to perform
 
 for example:
+
 ```javascript
 {
         "id": "126751c5830b50d39eb85412fb2964f46338cce6946ff455b73f1b1be3f5e8cc",
@@ -61,6 +66,7 @@ Nodes that submitted the transaction to become "pending" nodes (with the aim of 
 
 
 ## Running a pending validator node
+
 Start [node as a validator node](https://github.com/vegaprotocol/networks/blob/master/README.md).
 
 From now we assume that the transaction has been submitted and the node started. 
@@ -70,6 +76,7 @@ From now we assume that the transaction has been submitted and the node started.
 Basic vega chain liveness criteria is covered in their [performance score](./0064-VALP-validator_performance_based_rewards.md). 
 
 ## Verifying Ethereum (and later other chain) integration
+
 In order to be considered for promotion from ersatz validator to Tendermint validator, an ersatz validator must prove itself to be reliable. This is measured by ensuring their reliability in forwarding [Ethereum events](./0036-BRIE-event_queue.md). 
 A network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to set the acceptable minimum count of times that an ersatz validator was the first to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times.
 
@@ -95,8 +102,10 @@ Note that this could become obsolete if a future version of the protocol impleme
 
 
 ## Ersatz validators
+
 In addition to the normal validators, there is an additional set of Ersatz validators as defined by the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will reward:
-```
+
+```javascript
 n' := ceil(network.validators.multipleOfTendermintValidators x network.validators.tendermint.number)
 ```
 
@@ -109,11 +118,13 @@ then these are the validators with scores `n+1` to `n+n'`.
 
 
 ### Performance of Ersatz validators
+
 Ersatz validators are required to run a validator Vega node with all the related infrastructure (Ethereum forwarder, data node etc.) at all times, see [the section on performance for validator nodes in 0064-VALP](./0064-VALP-validator_performance_based_rewards.md).
 
 Their performance is also defined by the number of heartbeats they sent out of the last 10 expected heartbeats.
 
 ### Rewards for Ersatz validators
+
 In terms of rewards, Ersatz validators are treated in line with Tendermint validators, see details in [validator rewards spec](./0064-VALP-validator_performance_based_rewards.md) and [performance measurement](./0064-VALP-validator_performance_based_rewards.md).
 However `network.validators.ersatz.rewardFactor` in `[0,1]` is taken into account to scale their rewards. Also, the same scoring
 function is applied as for the normal validators, so anti-whaling rules apply for Ersatzvalidators as well.
@@ -122,6 +133,7 @@ is a out-of-the ordinary event and should be logged.
 
 
 ### Multisig for Ersatz validators
+
 At this point, Ersatz validators are not part of the Multisig.
 
 
@@ -133,7 +145,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 1. When loading LNL file we have to run the same algorithm that selects the "correct" validators; after this is done Tendermint weights are updated.
 1. If the validators arising from LNL weight updates are missing from the chain because they haven't started nodes then the chain will stop. The restart needs better coordination so the relevant nodes are present. 
 
-# Network Parameters
+## Network Parameters
 
 | Property                                                  | Type             | Example value | Description |
 |-----------------------------------------------------------|------------------|:-------------:|-------------|
@@ -144,17 +156,19 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 |`network.validators.ersatz.rewardFactor`                   | String (float)   |      0.2      | Scales down [the rewards](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz validators relative to actual validators  |
 |`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) |       2       | Used to [calculate the number](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz Validators that will earn rewards |
 
-# Acceptance criteria
+## Acceptance criteria
 
-## Joining / leaving VEGA chain (<a name="0069-VCBS-001" href="#0069-VCBS-001">0069-VCBS-001</a>)
+### Joining / leaving VEGA chain (<a name="0069-VCBS-001" href="#0069-VCBS-001">0069-VCBS-001</a>)
+
 1. A running Vega node which isn't a "pending" or "ersatz" or "validator" node already can submit a transaction to become a validator. 
 2. Their performance score will be calculated. See [performance score](./0064-VALP-validator_performance_based_rewards.md).
 3. If they meet the Ethereum verification criteria and have enough stake they will become part of the validator set at the start of next epoch. See about [verifying ethereum integration](#verifying-ethereum-and-later-other-chain-integration).
 4. Hence after the end of the current epoch the node that got "pushed out" will no longer be a validator node for Tendermint.
 
-## Reward scores for validators joining and leaving
+### Reward scores for validators joining and leaving
 
-### Stake score
+#### Stake score
+
 **Setup a network for each test** with 5 Tendermint validators and 2 ersatz validators. Verify the value of the min.validators network parameter is 5. Delegate 1000 tokens to each Tendermint validator and 500 to each ersatz validator (where minimum is defined as 500). Transfer 1000 tokens to the reward account. The test assumes that the validators are already in their state (i.e. 5 are Tendermint, 2 are ersatz). 
 1. Base case for Tendermint validators (<a name="0069-VCBS-005" href="#0069-VCBS-005">0069-VCBS-005</a>): 
   * Verify that the stakeScore for each of the Tendermint validators is 0.2 
@@ -176,7 +190,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Once it becomes active let it run for a full epoch during which transfer 1000 tokens to the reward account. 
   * Verify that at the end of the epoch all nodes should have a stake score of 0.066666666
 
-### Multisig score
+#### Multisig score
+
 1. Verify that for all ersatz validators their multisig score is 1 (<a name="0069-VCBS-010" href="#0069-VCBS-010">0069-VCBS-010</a>)
 2. Tendermint validators excess signature (<a name="0069-VCBS-011" href="#0069-VCBS-011">0069-VCBS-011</a>): 
   * Setup a network with 5 Tendermint validators but with only 4 validators that have sufficient self-delegation. Call the one without enough self-delegation Bob.
@@ -213,15 +228,17 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Ensure its ethereum key is **NOT** put on the multisig contract.
   * Verify the validator has 0 for their multisig score and receives no staking reward.
 
-### Validator Score
+#### Validator Score
+
 1. Verify that the validator score is always equal to the `stakeScore` x `perfScore` x `multisigScore` when the validator is a Tendermint validator (<a name="0069-VCBS-014" href="#0069-VCBS-014">0069-VCBS-014</a>)
 2. Verify that the validator score is always equal to the `stakeScore` x `perfScore` when the validator is an ersatz validator (<a name="0069-VCBS-015" href="#0069-VCBS-015">0069-VCBS-015</a>)
 
-### Normalised Score
+#### Normalised Score
+
 1. The sum of normalised scores must always equal 1 (<a name="0069-VCBS-016" href="#0069-VCBS-016">0069-VCBS-016</a>)
 2. The normalised score for validator i must equal `validatorScore_{i}` / `total_validator_score`. Note: the total validator score is calculated over the relevant set separately (i.e. Tendermint and ersatz) (<a name="0069-VCBS-017" href="#0069-VCBS-017">0069-VCBS-017</a>)
 
-## Rewards split between tendermint and ersatz validators
+### Rewards split between tendermint and ersatz validators
 
 1. Base scenario (<a name="0069-VCBS-018" href="#0069-VCBS-018">0069-VCBS-018</a>):
   * There are no ersatz validators in the network. 
@@ -256,15 +273,13 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Run the network for a full epoch with the delegation, during which transfer 1000 tokens to the reward account. 
   * Verify that, at the end of the epoch, none of the pending validators are promoted.
 
-## Ranking scores
+### Ranking scores
 
-### General
+#### General
 1. Verify that at the beginning of epoch an event is emitted for every validator known to Vega with their respective ranking scores. (<a name="0069-VCBS-025" href="#0069-VCBS-025">0069-VCBS-025</a>) 
 2. Verify the ranking score is available through the epoch/validator/`rankingScore` API in the data-node. (<a name="0069-VCBS-026" href="#0069-VCBS-026">0069-VCBS-026</a>)
 3. Verify that the `rankingScore` is always equal to `performanceScore` x `stakeScore` x `incumbentBonus` (for tendermint validators and ersatz validators) Note: `network.validators.incumbentBonus` is a network parameter that is applied as a factor (1 + `incumbentBonus` net param) on `performanceScore` x `stakeScore`. (<a name="0069-VCBS-027" href="#0069-VCBS-027">0069-VCBS-027</a>)
 4. Verify that if a node has a 0 `rankingScore` for 1e6 blocks (corresponding to around 11.5 days) it gets removed from the network and will have to be re-announced. (<a name="0069-VCBS-028" href="#0069-VCBS-028">0069-VCBS-028</a>)
-
-
 
 ### Stake score
 1. No stake (<a name="0069-VCBS-029" href="#0069-VCBS-029">0069-VCBS-029</a>):
@@ -287,8 +302,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Announce a new node and delegate it 1000 tokens
   * Verify that the `stakeScore` of all nodes is 0.2 at the beginning of the next epoch. Note: for the first 4 validators this is changing from 0.25 in the previous epoch to 0.2 in the next. 
 
+### Promotions/Demotions
 
-## Promotions/Demotions
 1. Announce node (<a name="0069-VCBS-034" href="#0069-VCBS-034">0069-VCBS-034</a>):
   * Verify that a node node, once added successfully to the topology, is shown on data-node API with the status pending
 2. Promote a node to become an ersatz validator (<a name="0069-VCBS-035" href="#0069-VCBS-035">0069-VCBS-035</a>):
@@ -442,8 +457,8 @@ Verify that this validator is paid reward as ersatz validator and that their sta
   * Set the rewardFactor to 0.32832979375934745648654893643856748734895749785943759843759437549837534987593483498
   * Verify that all validators round the value of reward for the Ersatzvalidators to the same value.
 
+### Announce Node
 
-## Announce Node
 1. Invalid announce node command (<a name="0069-VCBS-044" href="#0069-VCBS-044">0069-VCBS-044</a>):
   * Send an announce node command from a non validator node should fail
 2. Valid announce node command (<a name="0069-VCBS-045" href="#0069-VCBS-045">0069-VCBS-045</a>):
@@ -451,9 +466,8 @@ Verify that this validator is paid reward as ersatz validator and that their sta
 3. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-060" href="#0069-VCBS-060">0069-VCBS-060</a>):
   * Should be rejected
 
+### Checkpoints
 
-
-## Checkpoints
 1. Base case (<a name="0069-VCBS-046" href="#0069-VCBS-046">0069-VCBS-046</a>):
   * Setup a network with 5 Tendermint validators
   * Take a checkpoint
@@ -478,11 +492,8 @@ Verify that this validator is paid reward as ersatz validator and that their sta
   * Restore from the checkpoint. 
   * Verify the network is not able to produce blocks. 
 
+### Multisig update
 
-
-## Multisig update
 1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-COSMICELEVATOR-002" href="#0069-COSMICELEVATOR-002">0069-COSMICELEVATOR-002</a>)
 2. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-COSMICELEVATOR-003" href="#0069-COSMICELEVATOR-003">0069-COSMICELEVATOR-003</a>)
 3. It is possible to submit a transaction to update the weights. (<a name="0069-COSMICELEVATOR-004" href="#0069-COSMICELEVATOR-004">0069-COSMICELEVATOR-004</a>)
- 
-

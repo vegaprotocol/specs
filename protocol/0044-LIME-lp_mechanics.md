@@ -11,7 +11,6 @@ Important note on wording:
 * liquidity provision / liquidity COMMITMENTs are the amount of stake a liquidity provider places as a bond on the market to earn rewards.
 * the COMMITMENT is converted to a liquidity OBLIGATION, measured in siskas.
 
-
 ## Commit liquidity network transaction
 
 Any Vega participant can apply to become a liquidity provider (LP) on a market by submitting a transaction to the network which includes the following
@@ -29,7 +28,6 @@ Accepted if all of the following are true:
 General notes:
 - If market is in auction mode it won't be possible to check the margin requirements for orders generated from LP commitment. If on transition from auction the funds in margin and general accounts are insufficient to cover the margin requirements associated with those orders funds in bond account should be used to cover the shortfall (with no penalty applied as outlined in the [Penalties](#penalties) section). If even the entire bond account balance is insufficient to cover those margin requirement the liquidity commitment transaction should get cancelled.
 
-
 ### Valid submission combinations:
 
 Assume MarketID is always submitted, then a participant can submit the following combinations:
@@ -39,10 +37,10 @@ Assume MarketID is always submitted, then a participant can submit the following
 Example: it's possible to amend fee bid or orders individually or together without changing the commitment level.
 Example: amending only a commitment amount but retaining old fee bid and orders is also allowed.
 
-
 ## COMMITMENT AMOUNT
 
 ### Processing the commitment
+
 When a commitment is made the liquidity commitment amount is assumed to be specified in terms of the settlement currency of the market. 
 There is an minimum LP stake which is `market.liquidityProvision.minLpStakeQuantumMultiple x quantum` where `quantum` is specified per asset, see [asset framework spec](./0040-ASSF-asset_framework.md).
 
@@ -58,15 +56,12 @@ If the participant has sufficient collateral to cover their commitment and margi
       - The liquidity provider's margin account or the network's settlement account/other participant's margin acounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
       - The liquidity provider's general account (in event of liquidity provider reducing their commitment)
 
-
 ### liquidity provider proposes to amend commitment amount
 
 The commitment transaction is also used to amend any aspect of their liquidity provision obligations.
 A participant may apply to amend their commitment amount by submitting a transaction for the market with a revised commitment amount. 
 
-```
-proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
-```
+`proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
 
 **INCREASING COMMITMENT**
 ***Case:*** `proposed-commitment-variation >= 0`
@@ -74,15 +69,12 @@ A liquidity provider can always increase their commitment amount as long as they
 
 If they do not have sufficient collateral the transaction is rejected in entirety. This means that any data from the fees or orders are not applied. This means that the  `old-commitment-amount` is retained.
 
-
 **DECREASING COMMITMENT**
 
 ***Case:*** `proposed-commitment-variation < 0`
 We to calculate whether the liquidity provider may lower their commitment amount and if so, by how much. To do this we first evaluate the maximum amount that the market can reduce by given the current liquidity demand in the market.
 
-```
-maximum-reduction-amount = total_stake - target_stake
-```
+`maximum-reduction-amount = total_stake - target_stake`
 
 where:
 
@@ -91,7 +83,6 @@ where:
 - `actual-reduction-amount = min(-proposed-commitment-variation, maximum-reduction-amount)`
 - `new-actual-commitment-amount =  old-commitment-amount - actual-reduction-amount`
 - `market.liquidityProvision.shapes.maxSize` is the maximum entry of the LP order shape on liquidity commitment. 
-
 
 i.e. liquidity providers are allowed to decrease the liquidity commitment subject to there being sufficient stake committed to the market so that it stays above the market's required stake threshold. The above formulae result in the fact that if `maximum-reduction-amount = 0`, then `actual-reduction-amount = 0` and therefore the liquidity provider is unable to reduce their commitment amount.
 
@@ -105,23 +96,19 @@ When `actual-reduction-amount > 0`:
 Example: if you have a commitment of 500DAI and your bond account only has 400DAI in it (due to slashing - see below), and you submit a new commitment amount of 300DAI, then we only transfer 100DAI such that your bond account is now square.
 When `actual-reduction-amount = 0` the transaction is still processed for any data and actions resulting from the transaction's new fees or order information.
 
-
 ## Fees
 
 ### Nominating and amending fee amounts
 
 The network transaction is used by liquidity providers to nominate a fee amount which is used by the network to calculate the [liquidity_fee](./0042-LIQF-setting_fees_and_rewarding_lps.md) of the market. Liquidity providers may amend their nominated fee amount by submitting a liquidity provider transaction to the network with a new fee amount. If the fee amount is valid, this new amount is used. Otherwise, the entire transaction is considered invalid.
 
-
 ### How fee amounts are used
 
 The [liquidity_fee](./0029-FEES-fees.md) of a market on Vega takes as an input, a [`fee factor[liquidity]`](./0029-FEES-fees.md) which is calculated by the network, taking as an input the data submitted by the liquidity providers in their liquidity provision network transactions (see [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md) for more information on the specific calculation).
 
-
 ### Distributing fees between liquidity providers
 
 When calculating fees for a trade, the size of a liquidity provider’s commitment along with when they committed and the market size are inputs that will be used to calculate how the liquidity fee is distributed between liquidity providers. See [setting fees and rewarding lps](./0042-LIQF-setting_fees_and_rewarding_lps.md) for the calculation of the split.
-
 
 ## Orders (buy shape/sell shape)
 
@@ -129,11 +116,9 @@ In a market maker proposal transaction the participant must submit a valid set o
 
 A liquidity provider can amend their orders by providing a new set of liquidity provision orders in the liquidity provider network transaction. If the amended orders are invalid the transaction is rejected, and the previous set of orders will be retained.
 
-
 ### Checking margins for orders
 
 As pegged orders are parked during an auction and not placed on the book, margin checks will not occur for these orders. This includes checking the orders margin when checking the validity of the transaction so orders are accepted. Open positions are treated the same as any other open positions and their liquidity provider orders are pegged orders and will be treated the same as any other pegged orders.
-
 
 ## Liquidity provision and penalties
 
@@ -147,7 +132,6 @@ lp_liquidity_obligation_in_ccy_volume = market.liquidity.stakeToCcyVolume ⨉ st
 
 Note here "ccy" stands for "currency". Liquidity measure units are 'currency x volume'. This is because the calculation is basically `volume ⨉ price of the volume` and the price of the volume is in the said currency.
 
-
 ### How liquidity is supplied
 
 When a liquidity provider commits to a market, the LP Commitment transaction includes a _buy shape_ and _sell shape_ which allow the LP to spread their liquidity provision over a number of pegged orders at varying distances from the best prices on each side of the book. These 'shapes' are used to generate pegged orders (see the [liquidity provision order type spec](./0038-OLIQ-liquidity_provision_order_type.md)).
@@ -159,16 +143,13 @@ Since liquidity provider orders automatically refresh, the protocol ensures that
 - Pegged orders generated from liquidity provider Commitments are parked like all pegged orders during auctions. Limit orders placed by liquidity providers obey the normal rules for their specific order type in an auction.
 - Liquidity providers are not required to supply any orders that offer liquidity or trade during an auction uncrossing. They must maintain their stake however and their liquidity will be placed back on the book when normal trading resumes.
 
-
 ### Penalties
 
 If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall. The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
 
 Calculating the penalty:
 
-```
-bondPenalty = market.liquidity.bondPenaltyParameter ⨉ shortfall
-```
+`bondPenalty = market.liquidity.bondPenaltyParameter ⨉ shortfall`
 
 The above simple formula defines the amount by which the bond account will be 'slashed', where:
 
@@ -199,14 +180,12 @@ In the same way that a collateral search is initiated to attempt to top-up a tra
 
 This should happen every time the network is performing a margin calculation and search. The system should prioritise topping up the margin account first, and then the bond account, if there are insufficient funds to do both.
 
-
 ## Network parameters
 
 - `market.liquidity.bondPenaltyParameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations. 
 Valid values: any decimal number `>= 0` with a default value of `0.1`.  
 - `market.liquidity.maximumLiquidityFeeFactorLevel` - used in validating fee amounts that are submitted as part of [lp order type](./0038-OLIQ-liquidity_provision_order_type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
 - `market.liquidity.stakeToCcySiskas` - used to translate a commitment to an obligation (in siskas). Any decimal number `>0` with default value `1`.
-
 
 ## What data do we keep relating to liquidity provision?
 
@@ -216,14 +195,13 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb))
 1. Each liquidity provider's actual bond amount (i.e. the balance of their bond account)
 
-
 ## APIs
 
 - Transfers to and from the bond account, new or changed commitments, and any penalties applied should all be published on the event stream
 - It should be possible to query all details of liquidity providers via an API
 
-
 ## Acceptance Criteria
+
 - Through the API, I can list all active liquidity providers for a market (<a name="0044-LIME-001" href="#0044-LIME-001">0044-LIME-001</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIME-002" href="#0044-LIME-002">0044-LIME-002</a>).
 - Change of network parameter `market.liquidity.bondPenaltyParameter` will immediately change the amount by which the bond account will be 'slashed' when a liquidity provider has insufficient capital for Vega to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIME-003" href="#0044-LIME-003">0044-LIME-003</a>)
@@ -233,6 +211,3 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - Change of `market.liquidity.stakeToCcyVolume` will change the liquidity obligation hence change the size of the LP orders on the order book. (<a name="0044-LIME-010" href="#0044-LIME-010">0044-LIME-010</a>)
 - If `market.liquidity.stakeToCcyVolume` is set to `0.0` then the [LP provision order](./0038-OLIQ-liquidity_provision_order_type.md) places `0` volume on the book for the LP regardless of the shape submitted and regardless of the `stake` committed. (<a name="0044-LIME-011" href="#0044-LIME-011">0044-LIME-011</a>)
 - If `market.liquidity.stakeToCcyVolume` is set to `0.0`, there is [target stake](./0041-TSTK-target_stake.md) of `1000` and there are 3 LPs on the market with stake / fee bid submissions of `100, 0.01`, `1000, 0.02` and `200, 0.03` then the liquidity fee is `0.02`. (<a name="0044-LIME-012" href="#0044-LIME-012">0044-LIME-012</a>)
-
-
-

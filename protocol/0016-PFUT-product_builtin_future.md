@@ -2,7 +2,7 @@
 
 This built-in product provides "direct" futures (i.e. opposite of inverse futures) that are cash-settled, i.e. they are margined and settled in a single asset.
 
-Background reading: https://www.cmegroup.com/education/courses/introduction-to-futures.html
+[Background reading](https://www.cmegroup.com/education/courses/introduction-to-futures.html)
 
 Futures are a simple "delta one" product and the first product supported by Vega. Note that in future (hah) there will likely be a number of other products (synthetics, contracts for difference).
 
@@ -14,10 +14,9 @@ Futures are a simple "delta one" product and the first product supported by Vega
 
 Validation: none required as these are validated by the asset and data source frameworks.
 
-
 ## 2. Settlement assets
 
-1. Returns `[cash_settled_future.settlement_asset]`.\
+1. Returns `[cash_settled_future.settlement_asset]`.
 1. It is not possible to change settlement asset via governance.
 
 
@@ -30,7 +29,6 @@ cash_settled_future.value(quote) {
 }
 ```
 
-
 ## 4. Lifecycle triggers
 
 ### 4.1 Termination of trading
@@ -40,7 +38,6 @@ cash_settled_future.trading_termination_trigger(event) {
 	setMarketStatus(TRADING_TERMINATED)
 }
 ```
-
 
 ### 4.2 Final settlement ("expiry")
 
@@ -59,7 +56,7 @@ cash_settled_future.settlement_data(event) {
 }
 ```
 
-# Acceptance Criteria
+## Acceptance Criteria
 
 1. Create a Cash Settled Future with trading termination triggered by a date/time based data source (<a name="0016-PFUT-001" href="#0016-PFUT-001">0016-PFUT-001</a>)
 2. Create a Cash Settled Future with trading termination triggered by an external data source (<a name="0016-PFUT-002" href="#0016-PFUT-002">0016-PFUT-002</a>)

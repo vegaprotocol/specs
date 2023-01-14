@@ -7,9 +7,10 @@ Core APIS are endpoints in REST and GRPC only. Vega core previously provided Gra
 ## Write
 
 There is one 'write' endpoint - `transaction`, which will accept signed transaction bundles.
-  
+
 ## Read
-> **[REST API documentation](https://docs.vega.xyz/docs/api/rest/core/state#operation/SubmitTransaction)** 
+
+> **[REST API documentation](https://docs.vega.xyz/testnet/api/rest/core/core-service-submit-transaction)** 
 
 To *observe the operation, and validate the state of the protocol, we must be able to obtain data provided by the following domains:*
 
@@ -36,7 +37,6 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 
 - List all known [parties](./0016-PART-party.md).
 
-
 ### [Network wide limits](./0078-NWLI-network_wide_limits.md)
 
 - Return number of pegged orders across all the markets.
@@ -46,7 +46,8 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 - List all [Network Parameters](./0054-NETP-network_parameters.md) and their current value
  
 ### Consensus data
-> **[REST API documentation](https://docs.vega.xyz/docs/api/rest/core/core#tag/CoreService)** 
+
+> **[REST API documentation](https://docs.vega.xyz/testnet/category/api/rest/core/core-service)** 
 
 Separate from the state of trading, we need to be able to see that the network is operational.
 
@@ -55,7 +56,8 @@ Separate from the state of trading, we need to be able to see that the network i
 - Get the current block height
 - Get the current timestamp, aka Vega Time
 
-# Acceptance Criteria
+## Acceptance Criteria
+
 On any Vega node, I can:
 
 | Requirement | Acceptance Criteria code |
@@ -75,6 +77,7 @@ On any Vega node, I can:
 | Retrieve statistics about the network via REST & GRPC | <a name="0020-APIS-013" href="#0020-APIS-013">0020-APIS-013</a>|
 | Submit a valid transaction via REST & GRPC | <a name="0020-APIS-014" href="#0020-APIS-014">0020-APIS-014</a>|
 
-# See also
+## See also
+
 - [0022-AUTH Authentication](./0022-AUTH-auth.md) details what makes a transaction invalid or valid for submission
 - [0062-SPAM Spam protection](./0022-AUTH-auth.md) may also influence which transactions are accepted by submit

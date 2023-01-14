@@ -1,8 +1,10 @@
-# Outline
+# Trading Workflow
+
+## Outline
 
 This is an attempt to document the flow of processing orchestrated by the trading core when processing market instructions and dealing with the resulting new Trades and Order updates.
 
-# Acceptance Criteria
+## Acceptance Criteria
 
 The order of processing of transactions happens in the order defined in the diagram, specifically:
 

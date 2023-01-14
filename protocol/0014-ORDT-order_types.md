@@ -8,10 +8,10 @@ Notes on scope of current version of this spec:
 - Includes only detailed specification for orders valid for *continuous trading*, does not specify behaviour of these order types in an auction.
 - Does not include detailed specification for **stop** orders. Inclusion of stops in guide level explanation is a placeholder/indicator of future requirements.
 
-
 ## Guide-level explanation
 
 ### Order types:
+
 1. **Immediate:** order is evaluated immediately (this is the default)
 2. **Stop:** order is only evaluated if and when the _stop price_ is reached 
 3. **Network:** an order triggered by the network. See [Network Orders](#network-orders)
@@ -38,7 +38,6 @@ Notes on scope of current version of this spec:
 	1. **Good For Auction (GFA):** This order will only be accepted by the system if it arrives during an auction period, otherwise it will be rejected. The order can act like either a GTC or GTT order depending on whether the expiresAt field is set.
 	1. **Good For Normal (GFN):** This order will only be accepted by the system if it arrived during normal trading, otherwise it will be rejected. Normal trading is defined as either continuous trading on a normal market or auction trading in a frequent batch auction market. The order can act like either a GTC or GTT order depending on whether the expiresAt field is set.
 
-
 ### Valid order entry combinations
 
 ##### Continuous trading
@@ -52,7 +51,6 @@ Notes on scope of current version of this spec:
 \* IOC/FOK LIMIT orders never rest on the book, if they do not match immediately they are cancelled/stopped.<br>
 \** IOC/FOK PEGGED orders are not currently supported as they will always result in the cancelled/stopped state. This may change in the future if pegged orders are allowed to have negative offsets that can result in an immediate match.
 
-
 ##### Auction
 
 | Pricing method | GTT | GTC | IOC | FOK | GFA | GFN |
@@ -64,12 +62,14 @@ Notes on scope of current version of this spec:
 \* Pegged orders will be [parked](./0024-OSTA-order_status.md#parked-orders) if placed during [an auction](./0026-AUCT-auctions.md), with time priority preserved. See also [0024-OSTA](./0024-OSTA-order_status.md#parked-orders)<br>
 
 ### Network orders
+
 Network orders are used during [position resolution](./0012-POSR-position_resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders. 
 * Network orders have a counterparty of `Network`
 * Network orders are a Fill Or Kill, Market orders
 * Network orders cannot be submitted by any party, they are created during transaction processing.
 
-# Acceptance Critieria
+## Acceptance Critieria
+
 - Immediate orders, continuous trading:
 	- An aggressive persistent (GTT, GTC) limit order that is not crossed with the order book is included on the order book at limit order price at the back of the queue of orders at that price. No trades are generated. (<a name="0014-ORDT-001" href="#0014-ORDT-001">0014-ORDT-001</a>)
 	- An aggressive persistent (GTT, GTC) limit order that crosses with trades >= to its volume is filled completely and does not appear on the order book or in the order book volume. Trades are atomically generated for the full volume. (<a name="0014-ORDT-002" href="#0014-ORDT-002">0014-ORDT-002</a>)
@@ -77,5 +77,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 	- Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporate its volume and/or price level. (<a name="0014-ORDT-004" href="#0014-ORDT-004">0014-ORDT-004</a>)
 	- A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>)
 - No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>)
-# See also
+
+### See also
+
 - [0068-MATC-Matching engine](./0068-MATC-matching_engine.md)

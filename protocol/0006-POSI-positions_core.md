@@ -1,8 +1,9 @@
 # Positions Core
 
-# Acceptance Criteria
+## Acceptance Criteria
 
-## Open position data
+### Open position data
+
 - Verify that the open position is correct after the following changes:
   - Open long position, trades occur increasing long position (<a name="0006-POSI-001" href="#0006-POSI-001">0006-POSI-001</a>)
   - Open long position, trades occur decreasing long position (<a name="0006-POSI-002" href="#0006-POSI-002">0006-POSI-002</a>)
@@ -18,7 +19,8 @@
 - Opening and closing positions for multiple traders, maintains position size for all open (non-zero) positions (<a name="0006-POSI-013" href="#0006-POSI-013">0006-POSI-013</a>)
 - Does not change position size for a wash trade (buyer = seller) (<a name="0006-POSI-014" href="#0006-POSI-014">0006-POSI-014</a>)
 
-## Open orders data
+### Open orders data
+
 - Verify that the net buy order amounts are correct after the following changes:
   - No active buy orders, a new buy order is added to the order book (<a name="0006-POSI-016" href="#0006-POSI-016">0006-POSI-016</a>)
   - Active buy orders, a new buy order is added to the order book (<a name="0006-POSI-017" href="#0006-POSI-017">0006-POSI-017</a>)
@@ -38,7 +40,7 @@
 - Maintains separate position data for each market a trader is active in (<a name="0006-POSI-026" href="#0006-POSI-026">0006-POSI-026</a>)
 - If there is either one or more of the position record's fields is non zero (i.e. open position size, active buy order size, active sell order size), the position record exists. (<a name="0006-POSI-027" href="#0006-POSI-027">0006-POSI-027</a>)
 
-# Summary
+## Summary
 
 **Vega core** needs to keep basic position data for each trader in each market where they have a *non-zero net open position* and/or *non-zero net active buy orders* and/or *non-zero net active sell orders*.
 
@@ -58,9 +60,9 @@ and updates the required position record.
 
 In the case of trades, as long as the right data is stored, this can be done in both cases without re-iterating over prior trades when ingesting a new trade.
 
-# Reference-level explanation
+### Reference-level explanation
 
-## Updating position size
+#### Updating position size
 
 Position size is a number that represents the net transacted volume of a trader in the market. The position size is therefore only ever updated when a trader is party to a trade. A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). 
 Note that negative PDP e.g. -2 means the smallest size is 100.
@@ -72,12 +74,12 @@ The Position core functionality processes each trade in the following way:
 1. For each of the buyer and seller, look for a position record for the current market. If either record is not found, create it.
 
 1. Update the position size for each record:
-	- BuyerPosition.size += Trade.size
-	- SellerPosition.size -= Trade.size
+	- `BuyerPosition.size` += `Trade.size`
+	- `SellerPosition.size` -= `Trade.size`
 
 1. If either position record has Position.size == 0 and no active orders, delete it, otherwise save the updated record.
 
-## Updating net active buy and sell order sizes
+#### Updating net active buy and sell order sizes
 
 Net active buy size (and net active sell) size refer to the aggregated size of buy (and sell) orders that a trader has active on the order book at a point in time. 
 

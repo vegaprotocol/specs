@@ -14,15 +14,15 @@
 1. [ ] Maintenance margin is correctly calculated for a party with orders / positions when obtaining risk factors from the lognormal risk model under various different parameters: In particular we see that 
     - maintenance margin obtained when sigma is 1.0 is lower than maintenance margin obtained when sigma is 1.5 (<a name="0010-MARG-012" href="#0010-MARG-012">0010-MARG-012</a>) 
     - maintenance margin obtained when tau is 1.0/365.25/24 is lower than maintenance margin obtained when tau is 1.0/365.25/24/12 (<a name="0010-MARG-013" href="#0010-MARG-013">0010-MARG-013</a>)
-    - maintenance margin obtained when risk aversion / lambda is 0.01 is lower than maintenance margin obtained when risk aversion / lambda is 0.0001 (<a name="0010-MARG-014" href="#0010-MARG-014">0010-MARG-014</a>)  
+    - maintenance margin obtained when risk aversion / lambda is 0.01 is lower than maintenance margin obtained when risk aversion / lambda is 0.0001 (<a name="0010-MARG-014" href="#0010-MARG-014">0010-MARG-014</a>)
 1. [ ] The margin scaling levels (maintenance, search, initial, release) are correctly applied to the maintenance margin that is calculated by the risk model. In particular we see that:
     - if there are two identical markets except that one has release level set to 1.7 and the other to 2.0 then a party has to see more mark-to-market gains on a position on the market with 2.0 than on the market with 1.7 to see funds transferred into the general account (<a name="0010-MARG-015" href="#0010-MARG-015">0010-MARG-015</a>)  
     - if there are two identical markets except that one has search level set to 1.1 and the other to 1.3 then the system will transfer funds from general to margin for a party that sees mark-to-market losses on its position earlier on the market with 1.3 than on the market with 1.1 to see funds transferred into the general account (<a name="0010-MARG-016" href="#0010-MARG-016">0010-MARG-016</a>)
     - if there are two identical markets except that one has initial level 1.3 and the other 1.5 then a party with no position or orders that places a market order will see a bigger transfer to the margin account on the market with 1.5 than on the one with 1.3. (<a name="0010-MARG-017" href="#0010-MARG-017">0010-MARG-017</a>)
 1. [ ] Whenever the `market.margin.scalingFactors` network parameter is updated via governance, when margin calculations are next triggered and margin balances re-evaluated for any party, the new scaling factors are applied (there is no need to recalculate margins on an update) (<a name="0010-MARG-018" href="#0010-MARG-018">0010-MARG-018</a>)
 
-
 ## Summary
+
 This ticket encapsulates the orchestration of business logic which interfaces with the specified [risk model](./0018-RSKM-quant_risk_models.ipynb) (specified at the instrument level) to ensure that margin levels are calculated whenever certain conditions are met.
 
 ## Reference-level explanation
@@ -40,8 +40,7 @@ The [margin calculator](./0019-MCAL-margin_calculator.md) will calculate the mar
 1. initial margin
 1. collateral release level
 
-The [margin calculator](./0019-MCAL-margin_calculator.md) utilises risk factors which are updated by the [quant risk model](./0018-RSKM-quant_risk_models.ipynb).  
-
+The [margin calculator](./0019-MCAL-margin_calculator.md) utilises risk factors which are updated by the [quant risk model](./0018-RSKM-quant_risk_models.ipynb).
 
 ### **Conditions for recalculating margins**
 
@@ -64,7 +63,6 @@ If already re-calculating all margins, don’t need to check for this. Otherwise
 
 1. If a trader’s net open position changes
 2. If either or both of a traders net potential long or short position (e.g. the sum of all buy order volume and sum of all sell order volume) has changed
-
 
 ### **Utilising margins to evaluate solvency**
 

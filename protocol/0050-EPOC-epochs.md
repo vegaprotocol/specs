@@ -1,10 +1,11 @@
+# Epochs
 
 To implement more stability in parameter changes (especially around staking), Vega uses
 the concepts of epochs. An epoch is a time period (initially 24 hours, but changeable
 via governance vote) during which changes can be announced, but will not be executed
 until the next epoch (with some rare exceptions).
 
-# Epoch Transition
+## Epoch Transition
 
 The trigger to start a new epoch is blocktime. To this end, there is a
 defined time when an epoch ends; the *first block after the block that
@@ -31,7 +32,9 @@ beginning without a synchronizing block: There is a time (determined by the
 first block that has a blocktime exceeding the length of its epoch, i.e., the later blocks
 then go into the next epoch. In a later version we will have better control of the mempool,
 and then can add a synchronizing block.
+
 ## Fringe cases
+
  If the epoch-time is too short, then it is possible to have several epochs starting
  at the same time (say, we have 5 second epochs, and one block takes 20 seconds, thus  pushing the
  blocktime past several deadlines. While this really shouldn't happen, it can be resolved by the 
@@ -48,7 +51,7 @@ and then can add a synchronizing block.
  the year 2038 problem; this is a bit unrelated, but can easily hit anything that
  works on a second-basis.
 
-# (Un)delegation
+## (Un)delegation
 
 A delegator can lock a token in the smart contract, which is then available for
 staking. To this end, an Vega token
@@ -79,12 +82,14 @@ As validators (will) have an optimum amount of stake they don't want to exceed,
 There are three ways a delegator can undelegate:
 
 ## Undelegate towards the end of the episode
+
 The action is announced in the next available block, but the delegator keeps
 the delegation alive till the last block of the epoch. The delegator can then
 re-delegate the stake, which then be valid once the next epoch starts.
 The delegator cannot move the tokens before the epoch ends, they remain locked.
 
 ## Undelegate now
+
 The action can be announced at any time and is executed immediately following the block
 it is announced in. However, the stake is still counted as delegated to the validator until
 the last block of the epoch, though the delegator rewards are not paid to the delegator, but
@@ -95,8 +100,9 @@ Rationale: This allows a delegator to sell their tokens in a rush, without requi
 any interaction between the smart contract and the details of the delegation system.
 This also allows the delegator to change their mind about a delegation before it is
 activated.
-  
+
 ## Undelegate in anger
+
 This action is announced at any time and is executed immediately following the block it
 is announced in. The delegator loses the delegated stake and the income with it, as well
 as their voting weight. As this is not required for first mainnet, and involves more subtleties
@@ -108,6 +114,7 @@ Rationale: A validator is found to have done something outrageous, and needs to 
 right away. 
 
 ## Undelegation of locked stake
+
 Furthermore, the validators watch the smart contract, and observe the following actions:
 
 - A token gets locked: This token is now available for delegation
@@ -125,10 +132,12 @@ Furthermore, the validators watch the smart contract, and observe the following 
 	all validators to cover the needs.
 
 ## Validator commands
+
 Change wanted stake: Define a new parameter of `wanted_stake[validator]`, valid at the epoch
 following the one in which the command is put into a block.
 
 ## Fringe Cases:
+
 A delegator can delegate some stake, and immediately undelegate it before the next
 epoch starts. This is fine with us.
 
@@ -143,6 +152,7 @@ execute (as this would exceed the maximum stake the validator wants). To save re
 block creator has the responsibility to filter out these transactions.
 
 ## Commands:
+
 ```javascript
 delegate(delegator_ID, validator_ID, amount/'all')
       // delegate amount(all) undelegated stake form delegator_ID to validator_ID, 
@@ -153,8 +163,6 @@ undelegate(delegator_ID, validator_ID, amount/'all')
 
 undelegate_now(delegator_ID, validator_ID, amount/'all')
 ```
-
-
 
 # General Fringe Cases:
 
@@ -184,6 +192,7 @@ In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow.
 See the [network parameters spec](./0054-NETP-network_parameters.md#current-network-parameters) for a full list of parameters.
 
 ## Parameter changes
+
 All parameters that are changed through a governance vote are valid starting the epoch following the one the block is in that finalized the vote.
 
 ## Acceptance Criteria
@@ -201,5 +210,6 @@ All parameters that are changed through a governance vote are valid starting the
      - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
      - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
 
-# See also
+## See also
+
 - [0059 - STKG - Simple staking and delegating](./0059-STKG-simple_staking_and_delegating) - staking and delegation are both calculated in terms of epochs.

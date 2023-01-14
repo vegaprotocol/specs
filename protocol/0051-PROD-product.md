@@ -2,13 +2,11 @@
 
 A Product in Vega is the entity that determines how buyers and sellers in a market make or lose money. It contains all the parameters and logic necessary to value a position, determine when lifecycle events (such as Trading Termination and Final Settlement at expiry) occur, and to calculate interim and final settlement cashflows. 
 
-
 ## Product parameters
 
 A product may have many parameters if they are required to value and trade it, however every product will have at least one *Settlement asset* parameter as at a minimum the valuation function will need to know the asset being used.
 
 Every piece of data that is not provided by the Vega core and is not part of the [Market Framework](./0001-MKTF-market_framework.md) definition of the market or instrument must be a product parameter as the various functions described below do not have any other source of data.
-
 
 ### Types of Product parameter
 
@@ -20,13 +18,11 @@ Product parameters my be one of two types:
 
 * **Settlement asset:** settlement asset parameters may either be one of more single [asset references](./0040-ASSF-asset_framework.md), e.g. ("base_asset" and "quote_asset" or "settlement_asset" if there's just one), or in the case of a more advanced product could be a single parameter that holds a list of assets, which may or may not have a required length.
 
-
 ### Changing product parameters
 
 Any *explicit value* or *data source reference* product parameter that is defined may be changed through on-chain governance proposals.
 
 *Settlement asset* product parameters are immutable and not able to be modified through governance. If there is an issue with the settlement asset or its definition on a market, the market would need to be Closed via governance and a new market created, as Vega has no defined way to migrate margins from one asset to another for a live market. 
-
 
 ### Validating product parameters
 
@@ -38,7 +34,6 @@ Validation of values can occur in two phases:
 
 1. Logic that requires access to the Vega state which includes, for example, the current date/time, market data from another Vega market, or values from a data source reference. These validations occur once a transaction is confirmed and could cause an market proposal to fail even though it is accepted by the network and processed.
 
-
 ## Settlement assets
 
 The product must be able to return a list/set of all settlement assets that it uses. This is separate from the parameters that specify them so that the parameters can be named meaningfully for the product.
@@ -46,7 +41,6 @@ The product must be able to return a list/set of all settlement assets that it u
 This is used so that Vega knows which assets will be required for margining. That is, there will be one margin account per settlement asset per position in a market. The valuation function (see below) will provide the value of a position in terms of each settlement asset. 
 
 For example, a product such as a physically settled future (NB: a cash settled future only has one settlement asset) with two *settlement asset* parameters: `base_asset` and `quote_asset` would return `product.settlement assets == [base_asset, quote_asset]` as the settlement assets.
-
 
 ## Quote-to-value function
 
@@ -59,6 +53,7 @@ The valuation function has access to the state of the market including the curre
 See the [built-in Futures spec](./0016-PFUT-product_builtin_future.md) for an example.
 
 ### Example: call options market quoted in Black-Scholes implied volatility
+
 ```javascript
 // Call options market quoted in Black-Scholes vol
 // strike and rfRate will be product parameters
@@ -73,15 +68,17 @@ callOption.value(quote) {
 	return BlackScholesCallPrice(underlying, strike, timeToMaturity, rfRate, bsVol)
 }
 ```
+
 ## Quote-to-value function
 
 See [Fees spec](./0029-FEES-fees.md) for context. Fees are calculated based on `trade_value_for_fee_purposes`. Any product *may* provide `product.valueForFeePurposes(quote)` function which returns the value of the product for size of `1` which will be used in calculating fees: 
 For many products this will simply be
+
 ```javascript
 trade_value_for_fee_purposes = math.Abs(size) * product.valueForFeePurposes(quote)
 ```
-For products which do *not* define this, `product.value(quote)` will be used by default.
 
+For products which do *not* define this, `product.value(quote)` will be used by default.
 
 ## Lifecycle triggers
 
@@ -91,7 +88,7 @@ Lifecycle events are triggered by receipt of data from a data source defined as 
 
 A lifecycle trigger looks like this, in pseudocode:
 
-```
+```proto
 product.<data_source>(data) {
 	// calculation logic with access to product params, data sources, market state
 	settle(ASSET, amount)
@@ -113,7 +110,6 @@ Generally the function might use conditional logic to apply tests to the data/ma
 
 See the [built-in Futures spec](../protocol/0016-PFUT-product_builtin_future.md) for an example. 
 
-
 ## APIs
 
 APIS should be available to:
@@ -121,15 +117,14 @@ APIS should be available to:
 - Emit an event bus event any time a product lifecycle event calls `settle(...)`
 - Emit an event bus event any time a product lifecycle event changes a market's status
 
-
-# Acceptance criteria
+## Acceptance criteria
 
 1. Settlement assets
   1. A product of any type cannot be created without specifying at least one settlement asset (<a name="0051-PROD-001" href="#0051-PROD-001">0051-PROD-001</a>)
   2. The settlement asset or assets must exist at the time when the product is created (<a name="0051-PROD-002" href="#0051-PROD-002">0051-PROD-002</a>)
 2. Product updates via governance
   1. The settlement asset / settlement assets cannot be changed on a product via governance  (<a name="0051-PROD-003" href="#0051-PROD-003">0051-PROD-003</a>)
-  
-# See also
+
+## See also
 - [Product: Built In Futures](./016-PFUT-product_builtin_future.md) 
 - [Product: Cash settled Perpetual Future](./0053-PERP-product_builtin_perpetual_future.md)

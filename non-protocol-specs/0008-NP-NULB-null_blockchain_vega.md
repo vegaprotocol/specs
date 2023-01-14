@@ -28,13 +28,12 @@ Transactions are submitted in the same way as for a normal live system, i.e. mes
 It must be possible to launch a data node alongside this and record everything that data node is normally able to record. 
 Event bus data can be recorded either in the test app via a subscription to the event stream or using externals tools such as `vegatools stream`
 
-
 ## API Support
 
 Null blockchain Vega must support all the APIs that Vega core supports with all the standard language bindings plus the additional ones outlined above. 
 An extra API is added to allow the user to control the time and block start/end times without changing the standard API endpoints.
 
-# Acceptance criteria
+## Acceptance criteria
 
 - Time can only move forward
   - I submit `{ forward: "-10s" }` to the time fast forward endpoint. Time does not move and I receive an error. (<a name="0008-NP-NULB-001" href="#0008-NP-NULB-001">0008-NP-NULB-001</a>)

@@ -1,10 +1,9 @@
-
 # Market Lifecycle
 
 This spec describes the lifecycle of a market. The market lifecycle begins at acceptance of a proposal and is driven by the market's `status`. Each status and the entry and exit criteria are described below.
 
-
 ## Market proposal and creation
+
 Markets on Vega are permissionlessly proposed using the [governance mechanism](./0028-GOVE-governance.md#1-create-market). If a market passes the governance vote, it undergoes various state changes throughout its lifecycle. Aspects of the state that change include:
 - trading mode
 - whether the market is open for trading
@@ -64,7 +63,6 @@ All Markets are first [proposed via the governance mechanism](./0028-GOVE-govern
 - No trading is possible, no orders can be placed (except the buy/sell order shapes that form part of a Liquidity Commitment)
 - No market data (price, etc.) is emitted, no positions exist on the market, and no risk management occurs
 
-
 ### Rejected
 
 When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-governance.md#outcome), Market state is Rejected.
@@ -81,7 +79,6 @@ When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-
 **Behaviour:**
 
 - Nothing can happen to the market with this status - it does not exist (Vega core has no need to keep any information about this market proposal). Any collateral locked to liquidity commitments is returned to the general account of the party that submitted the liquidity commitment.
-
 
 ### Pending
 
@@ -108,7 +105,6 @@ Note: this state represents any market that will be created, which currently mea
 - Auction orders are accepted as per [any regular auction period](./0026-AUCT-auctions.md).
 - Margins on orders as per auction margin instructions in [margin calculator spec](./0019-MCAL-margin_calculator.md).
 
-
 ### Cancelled
 
 A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period, 
@@ -117,7 +113,6 @@ When a market transitions to a cancelled state all orders should be cancelled an
 
 Once "cancelled" there must be no open positions tracked by the protocol for the market and any open positions must have been closed including returning all margin and other related collateral if necessary and also notifying downstream event consumers that the positions are closed. Specific position related actions may be unnecessary if the cancelled state is being entered from a state in which there cannot possibly have been any open positions.
 All data sources that are only referenced by this market should be unregistered. 
-
 
 **Entry:**
 
@@ -132,7 +127,6 @@ All data sources that are only referenced by this market should be unregistered.
 **Behaviour:**
 
 - Nothing can happen to the market with this status - it does not exist (Vega core has no need to keep any information about this market proposal).
-
 
 ### Active
 
@@ -156,7 +150,6 @@ Once the enactment date is reached and the other conditions specified to exit th
 - Market data is emitted
 - Positions and margins are managed as per the specs
 
-
 ### Suspended
 
 A Suspended market occurs when an Active market is temporarily stopped from trading to protect the market or the network from various types of risk. Suspension is used when the system has determined it is either not safe or not reasonable to operate the market at the current time, for example due to extremely low liquidity. No trades may be created while a market is Suspended.
@@ -179,7 +172,6 @@ Suspension currently always operates as an auction call period. Depending on the
 - Auction orders are accepted as per [any regular auction period](./0026-AUCT-auctions.md).
 - Margins on orders as per auction based instructions in [margin calculator spec](./0019-MCAL-margin_calculator.md).
 
-
 ### Closed
 
 Note, this governance action is unspecc'd and not MVP.
@@ -195,7 +187,6 @@ No exit. This is a terminal state.
 **Behaviour:**
 
 - Orders may be cancelled, no new orders accepted. Something will need to be done to unwind positions [TODO: design and spec this]
-
 
 ### Trading Terminated
 
@@ -222,7 +213,6 @@ A market moves from this termination state to Settled when enough information ex
   - Margins are transferred back to general accounts
   - Insurance pool funds are redistributed
 - No risk management or price/liquidity monitoring occurs
-
 
 ### Settled
 
@@ -252,10 +242,10 @@ The market can be deleted entirely at this point, from a core perspective.
   - All fees are distributed (after a delay/at the next relevant epoch if needed - this means the market may continue to need to be "tracked" by the core until this step is complete)
 - Market is over and can be removed from core data, nothing happens after the final settlement above is complete.
 
-
 ## Acceptance Criteria
 
 ### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)
+
 1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`). 
 Market state is `proposed`. 
 1. Parties vote against the market proposal. 
@@ -296,7 +286,7 @@ Margin account balances are transferred to the general account.
 Any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 The market state is `settled`. 
 
-### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
+### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
 
 1. A market is proposed, approved by governace process and enters the opening auction (Pending state).
 1. Trading terminated data source rings before the market leaves the opening auction (so market never left Pending state so far).
@@ -305,4 +295,3 @@ The market state is `settled`.
 1. Any insurance pool balance should be [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 1. All data sources that are only referenced by that market are unregistered. 
 1. The market state is set to cancelled. 
-

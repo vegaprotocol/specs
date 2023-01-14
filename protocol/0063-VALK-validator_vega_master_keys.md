@@ -8,25 +8,29 @@ For the validator we set their identity, for the purposes of staking and delegat
 To this end, other validators need access to the public part of the master key for all other validators.
 
 ## Transaction to change the key
+
 When a validator wishes to change the private key used to sign vega transaction emitted by the node (the hot key), they then generate a new hot key pair from the master key and send a transaction to notify the network of the change of public hot key. This transaction includes the hash of the new public key, signed by the master key:
-```    
-    hash(HOT_PK),sign_MK('vega_val_key_rotate', key_number, target_block, hash(HOT_PK)),
+
+``` proto
+hash(HOT_PK),sign_MK('vega_val_key_rotate', key_number, target_block, hash(HOT_PK)),
 ```
+
 where `key_number` is the sequence number of the derived key to prevent replay attacks, and `target_block` is the block number from which on the chage should be valid.
 
 ## When does this change take effect
+
 1. The node operator sends a transaction to the network saying they’re changing their hot key.
 1. From `target_block` onwards the other validators no longer recognise the *old* hot key as valid.
 1. The node operator restarts the node and catches up by replaying the chain or using a full checkpoint (when checkpoints become available). Or the whole network is restarted but due to the transaction other validators have the new hot key. 
 1. The hot key switch is complete. 
 
 ## Ethereum side for staking bridge purposes
-Validators to use their public master key as the "destination" when they associate ERC20 Vega token the their Vega identity.   
+
+Validators to use their public master key as the "destination" when they associate ERC20 Vega token the their Vega identity.
 
 ## Genesis
+
 The public master key has to be added to validators' identities in the genesis configuration.
-
-
 
 ## Acceptance Criteria:
 
@@ -43,14 +47,3 @@ The public master key has to be added to validators' identities in the genesis c
 - Once the target block of a key change action us reached, all preceeding keys (the original key as well as all hot keys rotated in through a key-change ,messager with a lower sequence number) are invalid. (<a name="0063-VALK-011" href="#0063-VALK-011">0063-VALK-011</a>)
 - Key change message with a lower sequence number than the last one executed are rejected. (<a name="0063-VALK-012" href="#0063-VALK-012">0063-VALK-012</a>)
 - Once a validator hot key has been rotated, reward balances are carried over to ther new key. (<a name="0063-VALK-013" href="#0063-VALK-013">0063-VALK-013</a>)
-
-
-
-
-
-
-
-
-
-
-

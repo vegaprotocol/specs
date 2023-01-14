@@ -1,15 +1,19 @@
 # Summary
+
 The market framework is a set of concepts that define the markets available on a Vega network in terms of the product and instrument being traded on each, the trading mode and related parameters, and the risk model being used for margin calculations.
 
 The market framework is described in Section 3 of the [whitepaper](https://vega.xyz/papers/vega-protocol-whitepaper.pdf).
 
-# Guide-level explanation
+## Guide-level explanation
+
 The trading core will create order books, risk engines, etc. and accept orders and other instructions based on the data held within the market framework. Changes to the market framework entities on a running Vega instance will always be made via [governance transactions](./0028-GOVE-governance.md).
 
-# Reference-level explanation
+## Reference-level explanation
+
 The market framework is essentially a set of data structures that configure and control almost all of the behaviour of a Vega network (the main exceptions being per-instance network and node configuration, and [network-wide parameters](./0054-NETP-network_parameters.md) that apply to all markets). These data structures are described in the sections below.
 
-## Market
+### Market
+
 The market data structure collects all of the information required for Vega to operate a market. The component structures tradable instrument, instrument, and product may not exist in a Vega network at all unless defined and used by one (or more, in the case of products) markets. [Risk models](./0018-RSKM-quant_risk_models.ipynb) are a set of instances of a risk model data structure that are external to the market framework and provided by the risk model implementation. They are part of the Vega codebase and in the current version of the protocol, new risk models are not created by governance or configuration on a running Vega node. All structures in the market framework should be fully and unambiguously defined by their parameters.
 
 Data:
@@ -45,7 +49,6 @@ A market can be in [Auction Mode](./0026-AUCT-auctions.md) for a number of reaso
 - Due to [price monitoring](./0032-PRIM-price_monitoring.md) triggering a price discovery auction.
 
 How markets operate during auction mode is a separate specification: [0026 - Auctions](./0026-AUCT-auctions.md)
-
 
 ## Tradable instrument
 
@@ -115,10 +118,9 @@ An arbitrary limit of 4 price parameters can be set per market. This prevents bu
 
 ----
 
-# Pseudo-code / examples
+## Pseudo-code / examples
 
-
-## Market framework data structures
+### Market framework data structures
 
 ```rust
 
@@ -205,11 +207,9 @@ Market {
 }
 ```
 
-
-
 ## Acceptance criteria
+
 - Details of a market's instrument must be available for each market through the API (<a name="0001-MKTF-001" href="#0001-MKTF-001">0001-MKTF-001</a>)
 - Details of a market's product must be available for each market through the API (<a name="0001-MKTF-002" href="#0001-MKTF-002">0001-MKTF-002</a>)
 - Details of a market's tradable instrument must be available for each market through the API (<a name="0001-MKTF-003" href="#0001-MKTF-003">0001-MKTF-003</a>)
 - Market framework can report position decimal places <a name="0001-MKTF-004" href="#0001-MKTF-004">0001-MKTF-004</a>
-

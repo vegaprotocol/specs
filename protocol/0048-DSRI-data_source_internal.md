@@ -1,16 +1,14 @@
 # [Data Source](./0045-DSRC-data_sourcing.md): Internal data
 
-
-# 0. Overview
+## 0. Overview
 
 Internal data sources provide data that comes from within Vega rather than an external source. They are defined and used in the same way as other data sources but are triggered by the relevant event in the Vega protocol rather than directly by an incoming transaction.
 
 The internal data sources are defined below.
 
+## 1. Data sources
 
-# 1. Data sources
-
-## 1.1 Value
+### 1.1 Value
 
 This data source provides an immediate value. It would be used either where a data source is required but the value may be known at the time of definition.
 
@@ -19,10 +17,10 @@ Any code expecting to be triggered when a value is received on a data source wou
 Initially the one use case of this is to submit a governance change proposal to update a futures market's settlement data source to a price value. This would happen if the defined data source fails and token holders choose to simply vote to accept a specific value to be used for settlement.
 
 Pseudocode example:
+
 ```rust
 value { type: number, value: 1400.5 }
 ```
-
 
 ## 1.2 Time triggered
 
@@ -35,7 +33,8 @@ Note that trading terminated in the futures definition uses a data source as a t
 In future, there will be a need to support repeating time based triggers, for example every 2 days or at 04:00, 12:00 and 20:00 every day, etc. (as some products will have triggers that happen regularly).
 
 Pseudocode example:
-```
+
+```rust
 on: {
 	timestamp: '20210401T09:00:00'
 	data: value { type: number, value: 420.69 }
@@ -44,13 +43,13 @@ on: {
 ```
 
 Pseudocode example: (no data, just used to trigger event like trading terminated)
-```
+
+```rust
 on: {
 	timestamp: '202112311T23:59:59'
 }
 
 ```
-
 
 ## 1.3 Vega time changed
 
@@ -58,12 +57,14 @@ This data source will emit the current Vega time *once* (and once only) whenever
 This can be used directly as a data source supplying a time feed, or wrapped in a filter to trigger a simple event (i.e. one that does not need to consume a value from another data source, such as the [trading terminated trigger]() for cash settled futures, as only the Vega time will be supplied).
 
 Pseudocode example: (block time feed - not useful with Oregon Trail feature set)
+
 ```rust
 vegaprotocol.builtin.timestamp
 
 ```
 
 Pseudocode example: (with filter - i.e. for trading terminated trigger)
+
 ```rust
 filter { 
 	data: vegaprotocol.builtin.timestamp, 
@@ -72,7 +73,6 @@ filter {
 	]
 }
 ```
-
 
 ## Implementation
 

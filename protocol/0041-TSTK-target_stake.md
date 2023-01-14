@@ -8,13 +8,13 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 - It is used to set the fee factor for the LPs: see [Setting fees and rewarding LPs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 ## Definitions / Parameters used
+
 - **Open interest**: the volume of all open positions in a given market.
 - `market.stake.target.timeWindow` is a market parameter defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds.
 - `market.stake.target.scalingFactor` is a market parameter defining scaling between liquidity demand estimate based on open interest and target stake.
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see [the Quant Risk Models spec](./0018-RSKM-quant_risk_models.ipynb).
 - `mark_price`, see [mark price](./0009-MRKP-mark_price.md) spec.
 - `indicative_uncrossing_price`, see [auction](./0026-AUCT-auctions.md) spec.
-
 
 ### Current definitions
 
@@ -49,16 +49,15 @@ Note that the units of `target_stake` are the settlement currency of the market 
 Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi = 120` then `target_stake = 4.8`.
 
 ### APIs
+
 * target stake
   * return current (real-time) target stake when market is in default trading mode.
   * return theoretical (based on idicative uncrossing volume) target stake when market is in auction mode.
 
 ### Acceptance Criteria
-* examples showing a growing list (before we hit t-window) (<a name="0041-TSTK-001" href="#0041-TSTK-001">0041-TSTK-001</a>)
+
+* examples showing a growing list (before we hit time window) (<a name="0041-TSTK-001" href="#0041-TSTK-001">0041-TSTK-001</a>)
 * examples showing a list that drops off values (<a name="0041-TSTK-002" href="#0041-TSTK-002">0041-TSTK-002</a>)
 * if open interest changes to a value that is less then or equal to the maximum open interest over the time window and if the mark price is unchanged, then the liquidity demand doesn't change. (<a name="0041-TSTK-003" href="#0041-TSTK-003">0041-TSTK-003</a>)
 - Change of `market.stake.target.scalingFactor` will immediately change the scaling between liquidity demand estimate based on open interest and target stake, hence immediately change the target stake. (<a name="0041-TSTK-004" href="#0041-TSTK-004">0041-TSTK-004</a>)
 - Change of `market.stake.target.timeWindow` will immediately change the length of time window over which open interest is measured, hence will immediately change the value of `max_oi`. (<a name="0041-TSTK-005" href="#0041-TSTK-005">0041-TSTK-005</a>)
-
-
-

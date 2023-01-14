@@ -1,6 +1,6 @@
-Feature name: position-resolution
+# Position resolution
 
-# Acceptance Criteria
+## Acceptance Criteria
 
 * [ ] All orders of "distressed traders" are cancelled (<a name="0012-POSR-001" href="#0012-POSR-001">0012-POSR-001</a>)
 * [ ] Open positions of distressed traders are closed (<a name="0012-POSR-002" href="#0012-POSR-002">0012-POSR-002</a>)
@@ -10,18 +10,17 @@ Feature name: position-resolution
 * [ ] When a distressed party has a [staking account](./0013-ACCT-accounts.md) with the same currency as the settlement currency of the market where it's disstressed the staking account is NOT used in margin search and liquidation. (<a name="0012-POSR-006" href="#0012-POSR-006">0012-POSR-006</a>)
 * [ ] When a party is distressed at the point of leaving an auction it should get closed out immediately. (<a name="0012-POSR-007" href="#0012-POSR-007">0012-POSR-007</a>)
 
-# Summary
+## Summary
 
 Position resolution is the mechanism which deals with closing out distressed positions on a given market. It is instigated when one or more participant's collateral balance is insufficient to fulfil their settlement or margin liabilities.
 
-# Guide-level explanation
+## Guide-level explanation
 
-# Reference-level explanation
+## Reference-level explanation
 
 Any trader that has insufficient collateral to cover their margin liability is referred to as a "distressed trader".
 
-
-## Position resolution algorithm
+### Position resolution algorithm
 
 See [Whitepaper](https://vega.xyz/papers/vega-protocol-whitepaper.pdf), Section 5.3 , steps 1 - 3
 
@@ -45,30 +44,28 @@ these trades (as this would result in a new market-wide mark to market settlemen
 * When there's insufficient volume on the order-book to close out a distressed position no action should be taken: the position remains open and any amounts in trader's margin account should stay there. Same principle should apply if upon next margin recalculation the position is still distressed.
 * If the party is distressed at a point of leaving auction it should be closedout immediately (provided there's enough volume on the book once all the pegged and liquidity provision orders get redeployed).
   
-# Examples and Pseudo code
+## Examples and Pseudo code
 
-## ***Scenario -  All steps***
+### ***Scenario -  All steps***
 
-```
-Trader1 open position: +5
-Trader1 open orders:  0
-Trader2 open position: -4
-Trader2 open orders:   0
-Trader3 open position: +2
-Trader3 open orders:   0
-```
+`Trader1 open position: +5`
+`Trader1 open orders:  0`
+`Trader2 open position: -4`
+`Trader2 open orders:   0`
+`Trader3 open position: +2`
+`Trader3 open orders:   0`
 
 #### STEP 1
+
 No traders are removed from the distressed trader list.
 
 #### STEP 2
 
-```
-NetOutstandingLiability = 5 - 4 + 2 = 3
-```
+`NetOutstandingLiability = 5 - 4 + 2 = 3`
+
 #### STEP 3
 
-```
+```json
 LiquiditySourcingOrder: {
   type: 'market',
   direction: 'sell',
@@ -98,7 +95,7 @@ LiquiditySourcingTrade2: {
 
 Close out trades are generated with the distressed traders
 
-```
+```json
 CloseOutTrade1 {
   buyer: Network,
   seller: Trader1,
@@ -126,18 +123,16 @@ CloseOutTrade3 {
 
 This results in the open position sizes for all distressed traders and the network entities to be zero.
 
-```
-// OpenPosition of Network =  -3 +5 -4 +2 = 0
-// OpenPosition of Trader1 =  +5 -5 = 0
-// OpenPosition of Trader2 = -4 +4 =  0
-// OpenPosition of Trader3 =  +2 - 2 = 0
-```
+`// OpenPosition of Network =  -3 +5 -4 +2 = 0`
+`// OpenPosition of Trader1 =  +5 -5 = 0`
+`// OpenPosition of Trader2 = -4 +4 =  0`
+`// OpenPosition of Trader3 =  +2 - 2 = 0`
 
 #### STEP 5
 
 The collateral from distressed traders is moved to the insurance pool
 
-```
+```json
 // sent by Settlement Engine to the Collateral Engine
 TransferRequest1 {
   from: [Trader1_MarginAccount], 
@@ -164,14 +159,13 @@ Traders from step 3 need to be settled.
 
 Prior to STEP 3 trades, assume Trader 4 and Trader 5 had the following open positions.
 
-```
-// OpenPosition of Trader4 =  -3
-// OpenPosition of Trader5 =  15
-```
+
+`// OpenPosition of Trader4 =  -3`
+`// OpenPosition of Trader5 =  15`
 
 Trader4 has therefore closed out 2 contracts through the LiquiditySourcingTrade1. These need to be settled against the trade price.
 
-```
+```json
 TransferRequest4 {
   from: [MarketInsuranceAccount],
   to:  Trader4_MarginAccount, 

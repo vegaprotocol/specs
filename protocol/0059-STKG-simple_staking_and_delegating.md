@@ -1,4 +1,5 @@
 # Simple Staking and Delegation
+
 Vega runs on a delegated proof of stake (DPOS) blockchain. Participants who hold a balance of the configured [governance asset](./0028-GOVE-governance.md) can stake these on the network by delegating their tokens to one or more validators that they trust. This helps to secure the network. 
 
 Validators and delegators receive incentives from the network, depending on various factors, including how much stake is delegated and how honest they are.
@@ -16,6 +17,7 @@ nomination. To this end, a Vega token (or a fraction thereof) can be:
 - Associated: The token is locked in the staking and delegation smart contract and associated to a Vega key. It can be used on the Vega chain for governance and it can be nominated to a validator.
 
 ## Smart Contract / Staking Bridge Interaction
+
 It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) through the validators; thus, all actions regarding associating 
 and dissociating of stake are initiated by the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), not by the Vega chain.
 
@@ -23,7 +25,7 @@ In order to delegate, users require tokens that will be associated in a smart co
 
 Note that the bridge contract uses `deposited` and `removed` instead of `associated` and `dissociated`.
 
-```
+```solidity
   event Stake_Deposited(address indexed user, uint256 amount, bytes32 vega_public_key);
   event Stake_Removed(address indexed user, uint256 amount);
 ```
@@ -41,9 +43,11 @@ There is no interaction with the smart contract that is initiated by Vega.
 The validators watch for events emitted by the staking and delegation smart contract, and observe the following actions:
 
 ### A token gets associated:
+
 This token is now available for delegation.
 
 ### A token gets dissociated:
+
 If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegatable tokens is reduced to match the (un)locking status). 
 
 This could mean that the token-holder has a delegation-command scheduled that is no longer executable; this command will then be ignored at the start of the next epoch. 
@@ -84,6 +88,7 @@ a block.
 There is not maximum amount of stake that a validator can accept, instead at the end of the epoch when staking rewards are calculated, the stake of each validator (and their delegator) may be penalised if it represents a stake that it more than the optimal stake, i.e. the desired stake to be owned by each validator and its delegators. 
 
 ### Undelegating
+
 Users can remove stake by submitting an `Undelegate` transaction. The tokens will then be restored back to their token balance.
 
 At the top level, `Stake_Deposited` simply adds `amount` of tokens to the account of the user associated with the `user`. Likewise, the `Stake_Removed` event subtracts the `amount` of tokens from their account.
@@ -103,12 +108,10 @@ Another option would be to withdraw stake proportionally from the validators.
 	* If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we split the withdrawal across all validators proportionately:
 	* Free from delegator-1 (to whom the participant has delegated 100) an amount equal to 30 * (100/(100+90+80+70)) etc. Not sure how to deal with rounding.
 
-
 #### Types of undelegations
 
 _Undelegate towards the end of the epoch_
 - The action is announced in the next available block, but the delegator keeps the delegation alive till the last block of the epoch. The delegator can then re-delegate the stake, which then be valid once the next epoch starts. The delegator cannot move the tokens before the epoch ends, they remain locked.
-
 
 _Undelegate Now_
 `UndelegateNow`:
@@ -117,11 +120,11 @@ The user is marked to not receive any reward from the validator in that epoch. T
 
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring any interaction between the smart contract and the details of the delegation system. This also allows the delegator to change their mind about a delegation before it is activated.
 
-
 `UndelegateInAnger`:
 This is not strictly a type of undelegation but it's effect is quite similar to undelegate now. This is expressed by unstaking rather than by un-delegating. When removing the stake, the corresponding stake will automatically be undelegated. 
 
 ### Auto [Un]delegation
+
 - A party become eligible to participate in auto delegation once they have manually delegated (nominated) over x% of the association. In theory this should be 100% but in practice due to rounding issues we can make this closer to 100%. It is currently defined as 95% of the association. 
 - Once entering auto delegation mode, any un-nominated associated tokens will be automatically distributed according to the current validator nomination of the party maintaining the same proportion. 
 - Edge cases:
@@ -131,6 +134,7 @@ This is not strictly a type of undelegation but it's effect is quite similar to 
 - Auto undelegation - whenever the party dissociates tokens, their nomination must be updated such that their maximum nomination reflects the association. 
 
 ## Fringe Cases:
+
 A delegator can delegate some stake, and immediately undelegate it before the next
 epoch starts. This is fine with us.
 
@@ -146,7 +150,7 @@ block creator has the responsibility to filter out these transactions.
 
 Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted proportionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calcualte first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is guaranteed to be less than or equal to the available un-nominated association. 
 
-# Network Parameters
+## Network Parameters
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
@@ -159,6 +163,7 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 ## Acceptance Criteria
 
 ### Staking for the first time
+
 - To lock tokens, a participant must:
   - Have some balance of vested or unvested governance asset in an Ethereum wallet. These assets must not be locked to another smart contract (including the [Vega collateral bridge](./0031-ETHB-ethereum_bridge_spec.md)).
   - Have a Vega wallet
@@ -176,59 +181,67 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
   - The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next epoch) (<a name="0059-STKG-007" href="#0059-STKG-007">0059-STKG-007</a>)
 
 ### Adding more stake
+
 - More tokens may be locked at any time on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)
 - More stake may be delegated at any time (see [function: Stake](./0071-STAK-erc20_governance_token_staking.md) - amount refers to size by which to increment existing staked amount) (<a name="0059-STKG-009" href="#0059-STKG-009">0059-STKG-009</a>)
 - Same timings apply as per staking for the first time (<a name="0059-STKG-010" href="#0059-STKG-010">0059-STKG-010</a>)
 
 ### Removing stake
+
 - Any stake may be withdrawn from the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) at any time (<a name="0059-STKG-011" href="#0059-STKG-011">0059-STKG-011</a>)
  - Unlocking your tokens in the bridge contract will effectively "remove" them from any delegation they're doing (unless you have remaining undelegated tokens that could fulfil your delegation) (<a name="0059-STKG-012" href="#0059-STKG-012">0059-STKG-012</a>)
 - Delegation may be fully or partially removed. The amount specified in the [function: Remove](./0071-STAK-erc20_governance_token_staking.md) - is the size by which the existing staked amount will be decremented (<a name="0059-STKG-013" href="#0059-STKG-013">0059-STKG-013</a>)
 - Removal of delegation may happen in the following 2 ways:
   - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator). (<a name="0059-STKG-014" href="#0059-STKG-014">0059-STKG-014</a>)
   - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the onchain treasury account for that asset. (<a name="0059-STKG-015" href="#0059-STKG-015">0059-STKG-015</a>)
-- Every 30 seconds (and at the end of an epoch) the associated stake is reconciled against the current nomination to ensure that the total nomination is not exceeding the total association. In case it does we proportionally un-nominate from the validators until the nomination is not exceeding the association. It's worth mentioning that this only affects the balance of the current epoch - we don't attempt to reconcile the balance for the next epoch until the epoch ends, so if for example the party had an association of a 100 tokens, then they requested to nominate 100 tokens to validator1, their balance for the next epoch would remain 100 until the end of the epoch even if they immediately dissociate the 100 tokens.  (<a name="0059-STKG-016" href="#0059-STKG-016">0059-STKG-016</a>)
+- Every 30 seconds (and at the end of an epoch) the associated stake is reconciled against the current nomination to ensure that the total nomination is not exceeding the total association. In case it does we proportionally un-nominate from the validators until the nomination is not exceeding the association. It's worth mentioning that this only affects the balance of the current epoch - we don't attempt to reconcile the balance for the next epoch until the epoch ends, so if for example the party had an association of a 100 tokens, then they requested to nominate 100 tokens to `validator1`, their balance for the next epoch would remain 100 until the end of the epoch even if they immediately dissociate the 100 tokens.  (<a name="0059-STKG-016" href="#0059-STKG-016">0059-STKG-016</a>)
 
 ### Changing delegation
+
 - Changing the validator to whom a participant wants to validate to involves:
   - Announcing removal of stake for current validator
   - Staking on the new validator, as per normal [function: Stake](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md)
   - These can happen concurrently, so that at the next epoch, the stake is removed from the current validator and staked on the new validator 
-  
+
 ## Auto delegation scenarios
 
 ### Normal scenario auto undelegation:  (<a name="0059-STKG-018" href="#0059-STKG-018">0059-STKG-018</a>)
+
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
 - epoch 1: party dissociated 200 VEGA
-- at the end of epoch1: party one would have left 160 tokens nominated to validators 1-5 (for both epoch 1 and onwards - the former is important so that they don't get rewarded for 200 per validator)
+- at the end of epoch 1: `party1` would have left 160 tokens nominated to validators 1-5 (for both epoch 1 and onwards - the former is important so that they don't get rewarded for 200 per validator)
 
 ### Normal scenario auto delegation: (<a name="0059-STKG-019" href="#0059-STKG-019">0059-STKG-019</a>)
+
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
 - epoch 1: party associated 200 VEGA
-- end of epoch 1: there's sufficient space on each validator 1-5 to accept the delegation of 40 VEGA from party 1 and party1 now has delegation of 240 for validators 1-5 for epoch 2.
+- end of epoch 1: there's sufficient space on each validator 1-5 to accept the delegation of 40 VEGA from `party1` and `party1` now has delegation of 240 for validators 1-5 for epoch 2.
 
 ### Edge case 1: manual delegation for party eligible for auto delegation:  (<a name="0059-STKG-020" href="#0059-STKG-020">0059-STKG-020</a>)
+
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
 - epoch 1: party associated 200 VEGA
-- epoch 1: party requests to delegate 100 VEGA to validator1
+- epoch 1: party requests to delegate 100 VEGA to `validator1`
 - end of epoch1: party1 has 300 delegated to validator1, 200 delegated to validators 2-5 and 100 remain undelegated.
-- end of epoch2: the remaining associated undelegated 100 VEGA get auto-delegated and distributed such that validator1 gets 27 (100 * 300/1100) and validators 2-5 get each 18 - and 1 token remains undelegated
+- end of epoch2: the remaining associated undelegated 100 VEGA get auto-delegated and distributed such that `validator1` gets 27 (100 * 300/1100) and validators 2-5 get each 18 - and 1 token remains undelegated
 
 ### Edge case 2: manual undelegation for party eligible for auto delegation: (<a name="0059-STKG-021" href="#0059-STKG-021">0059-STKG-021</a>)
+
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
 - epoch 1: party associated 100 VEGA
-- epoch 1: party requests to undelegate 200 VEGA from validator1
+- epoch 1: party requests to undelegate 200 VEGA from `validator1`
 - end of epoch1: party has 300 unnominated VEGA which will NOT be auto delegated
-- epoch 2: party requests to delegate 300 to validator 2
+- epoch 2: party requests to delegate 300 to `validator2`
 - epoch 2: party associated 100 VEGA
-- end of epoch 2: party has 500 nominated to validator2 and 200 nominated to validators 3-5
-- end of epoch 3: party has 100 unnominated VEGA which gets nominated proportionally between validators 2-5 - i.e. validator 2 gets 45, validator 3-4-5 get 18 each
+- end of epoch 2: party has 500 nominated to `validator2` and 200 nominated to validators 3-5
+- end of epoch 3: party has 100 unnominated VEGA which gets nominated proportionally between validators 2-5 - i.e. `validator2` gets 45, validators 3-4-5 get 18 each
 
-# See also
+## See also
+
 - [0013-ACCT Acccounts](./0013-ACCT-accounts.md) - staking accounts are not like other account types, but the differences are covered here.
 - [0028-GOVE Governance](./0028-GOVE-governance.md) - a party's stake controls their ability to participate in governance.
 - [0069-VALW Validators chosen by stake](./0069-VALW-validators_chosen_by_stake.md) - staking and delegation is used to pick validators.

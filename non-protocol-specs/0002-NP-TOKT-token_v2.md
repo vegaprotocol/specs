@@ -5,7 +5,6 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 1. It allows for more sophisticated unlocking (vesting) schedules to be implemented and enforced on chain
 1. It places the total supply of the token in the control of  network/token holder governance
 
-
 ## 1. Token supply
 
 1. Supply is fixed initially at `64,999,723`
@@ -16,7 +15,6 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 1. If supply is ever increased, the issuance of this supply must be possible, even if the contract owner has relinquished control. 
 1. If supply is ever increased, it is most almost certain that it would/should be paid into the bridge and distributed by the Vega protocol from there.
 
-
 ## 2. Migration from Token V1
 
 1. Deployment/activation of the token contract will automatically issue tokens based on the wallet balances of the V1 token at deployment time
@@ -24,7 +22,6 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 1. Tokens held by a single address may comprise tokens in multiple tranches
 1. Each address receiving auto-issed tokens may have a different vesting tranche
 1. Auto-issued tokens with no assigned vesting tranche must remain locked
-
 
 ## 3. Issuance mechanics
 
@@ -36,7 +33,6 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 1. An address may have a balance in multiple tranches
 1. Tokens must remain locked until they unlock per the vesting (unlock) rules below, as applied for the tranche they are assigned to (the rules can mean they are immediately unlocked)
 1. Tokens cannot be recalled/clawed back or re-issued once issued
-
 
 ## 4. Vesting/unlock tranches and rules
 
@@ -52,13 +48,11 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 1. The `cliff duration`, `vesting duration` and `trigger start date/time` can be changed before the `trigger start date/time` or if the `trigger start date/time` has not been set
 1. Once the `trigger start date/time` has been set and reach (i.e. the cliff/vesting have started), the process must be irreversible and deterministic.
 
-
 ## 5. Future upgrades (nice to have)
 
 1. The token can be upgraded by the community (e.g. multisig control or token holders voting...?) 
 1. During an upgrade, all addresses with balances should retain their original balance 
 1. During an upgrade, all unlocked tokens should remain unlocked
-
 
 ## 6. Security and control
 
@@ -67,7 +61,6 @@ Version 2 of the $VEGA token replaces the existing token and providse two crucia
 1. The contract owner must not be able to change the supply of the token
 1. The contract owner must not be able to effect a token contract upgrade
 1. The contract owner must not be able to modify the functionality of the token contract, except to renounce ownership entirely, for example by assigning a null address as the new contract owner (which would mean the contract owner no longer held any powers)
-
 
 ## 7. Staking and delegation
 

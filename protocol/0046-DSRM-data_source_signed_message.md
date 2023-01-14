@@ -16,7 +16,6 @@ Note: With this type of oracle there’s no incentive in the Vega data source sy
 
 *NOTE: This is the only external oracle available initially in Vega, and initially requires only one of the specified keys to sign and submit the data transaction. This means that initially it will only be possible to construct external oracles on Vega in which one or more third party entities/systems must be trusted. This will change with modifiers that allow combinations of data sources, verification of data stream via governance votes, and data sources that bridge to events included on other blockchains.*
 
-
 ## Defining the data source
 
 ### Parameters
@@ -30,19 +29,18 @@ A data source must define:
 
 Note: that as a public key may provide many messages, a [filter](./0047-DSRF-data_source_filter.md) is likely to be needed to extract the required message, and a field select would be used to extract the required field ('price' or 'temperature', etc.)
 
-
 ### Examples:
 
 Data source for a public key that will only send one transaction containing prices for several markets and therefore doesn't need to be filtered, but the correct value does need to be extracted:
 
-```
+```proto
 // emits 1503.42 if 0xBLAHBLAH submits { ETHUSD: 1503.42, BTCUSD: 80123.45 } 
 select { field: 'ETHUSD', data: signed_message: { pubkey=0xBLAHBLAH } }
 ```
 
 Data source for a public key that will send multiple transactions containing prices for several markets and must be [filtered](./0047-DSRF-data_source_filter.md):
 
-```
+```proto
 // emits 80123.45 if 0xBLAHBLAH submits:
 // { ticker='ETHUSD', price=1503.42 } 
 // then { ticker='BTCUSD', price=80123.45 } 
@@ -57,11 +55,9 @@ select {
 }
 ```
 
-
 ### Validation
 
 The system must validate that the public key data is valid and well formed.
-
 
 ## Blockchain Transaction data submission
 
@@ -69,7 +65,7 @@ This data is submitted once the data is available, e.g. when a market has termin
 
 If the data payload is malformed or the transaction signature is invalid, the transaction should be rejected before inclusion in a block.
 
-```
+```proto
 SubmitData {
     key1: value1
     key2: value2
@@ -83,13 +79,11 @@ SubmitData {
 }
 ```
 
-
 ## Accepting/rejecting the transaction
 
 If data is supplied in a signed message but no active data source (see [data sourcing framework](./0045-DSRC-data_sourcing.md) section on keeping track of data sources) matches the received message i.e. the pubkey does not exist on any defined data source or in all cases where it is referenced, the message is rejected by a filter, the transaction can be ignored.
 
 Where possible, this should be done before the transaction is included in a block.
-
 
 ### Criteria
 

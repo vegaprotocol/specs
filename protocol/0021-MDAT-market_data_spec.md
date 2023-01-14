@@ -1,6 +1,7 @@
-Feature name: market-data
+# Market data
 
-# Acceptance Criteria
+## Acceptance Criteria
+
 - If there are no buy orders on the order book, the best bid price is empty / nothing. (<a name="0021-MDAT-001" href="#0021-MDAT-001">0021-MDAT-001</a>)
 - If there are no sell orders on the order book, the best offer price is empty / nothing. (<a name="0021-MDAT-002" href="#0021-MDAT-002">0021-MDAT-002</a>)
 - If there are multiple buy orders on the order book with a price equal to the best bid price, the best bid volume equals the sum of the sizes of these orders. (<a name="0021-MDAT-003" href="#0021-MDAT-003">0021-MDAT-003</a>)
@@ -14,19 +15,21 @@ Feature name: market-data
 - Dynamic orders should be ignored when calculating the static values (<a name="0021-MDAT-011" href="#0021-MDAT-011">0021-MDAT-011</a>)
 - The auction uncrossing price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the auction uncrossing price has not been set (for example in continuous trading or auction with no bids / offers). (<a name="0021-MDAT-012" href="#0021-MDAT-012">0021-MDAT-012</a>)
 
+## Summary
 
-# Summary
 This data is a snapshot of the state of the market at a point in time.
 
-# Guide-level explanation
+## Guide-level explanation
+
 Due to supporting dynamic orders such as [pegged orders](0037-OPEG-pegged_orders.md) and [LP provision orders](0038-OLIQ-liquidity_provision_order_type.md) the main market data fields are split up into two parts. Normal values and static values. Normal values for **Mid price**, **Best bid price** and **Best offer price** take into account all orders on the book (both normal and dynamic). Static values are calculated using only non-dynamic orders and so will not count any pegged orders in the calculation.
 
-# Reference-level explanation
+## Reference-level explanation
 
-## Definition of dynamic orders
+### Definition of dynamic orders
+
 A "dynamic" order is either a [pegged order](0037-OPEG-pegged_orders.md) or orders that are placed on the book by Vega as part of the [LP liquidity provision order](0038-OLIQ-liquidity_provision_order_type.md).
 
-## Market data
+### Market data
 
 List of market data fields to be available via the API. All these values can be empty/nothing if there is insufficient relevant data.
 
@@ -56,12 +59,10 @@ List of market data fields to be available via the API. All these values can be 
   - **Price monitoring bounds** one or more price monitoring bounds for the current timestamp.
   - **Liquidity provider fee share** share of the accrued fees each liquidity provider is eligible to.
 
-# Pseudo-code / Examples
+## Pseudo-code / Examples
 
 See Test cases
 
-# Test cases
+## Test cases
 
-https://docs.google.com/spreadsheets/d/19_WPOQrTs6AsFfCaRjh8nXJF6B0IDHuP/edit#gid=128551767
-
-
+[Test cases](https://docs.google.com/spreadsheets/d/19_WPOQrTs6AsFfCaRjh8nXJF6B0IDHuP/edit#gid=128551767)

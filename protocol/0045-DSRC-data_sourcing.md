@@ -27,7 +27,6 @@ b) Things that are explicitly NOT goals of the data sourcing framework at this t
 1. Processing arbitrary message formats is out-of-scope. Each required format should be specified explicitly. For instance we may specify that "Vega native protobuf message of key/value pairs" or "ABI encoded data in the OpenOracle format" must be valid data (and there may be more than one required format), but do not require general consumption of arbitrary data.
 1. Whilst we do need to build a framework that will be *extensible* with new sources and transformation/aggregation options, and *composable* by combining options, we are not aiming to build a large library of such features for unproven use cases initially. The MVP can be built and will be very useful with a small number of features.
 
-
 Note that this approach means:
 
 1. Vega will not integrate directly with data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles and standards (so that data sources that implement these standards will hopefully be compatible with little or no work).
@@ -35,7 +34,6 @@ Note that this approach means:
 1. Once upstream finality is achieved, Vega may in future provide optional mechanisms for querying, verification or dispute resolution that are independent of the source. These would be composable steps that could be added to any source.
 // TODO: Discuss how is this related to any potential consensus agreement on external data sources level - it is not related.
 1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each. This takes into consideration the fact that external sources could be distributed entitites themselves.
-
 
 ## 2. Data sourcing framework
 
@@ -55,7 +53,6 @@ Data sources may refer to other data sources, for example:
 
 NB: the above could be composed, so filter the stream and then select a field. 
 
-
 ## 3. Specifying a new data source
 
 When defining a data source, the specification for that data source must describe:
@@ -63,9 +60,7 @@ When defining a data source, the specification for that data source must describ
 1. How the data source interprets those parameters to emit one or more values
 1. Any additional requirements needed for the data source to work (such as external "bridge" infrastructure to other blockchains)
 
-
 ## 4. Data types
-
 
 ### Allowable types:
 
@@ -87,13 +82,11 @@ Vega should support sufficient number types to enable processing of any reasonab
 
 In future there will likely be other types.
 
-
 ### Type checking
 
 The context in which the data source is used can determine the type of data required to be received. Data sources that emit data of an incorrect type to a defined data source should trigger an event or log of some sort (the type may depend if this is detected within processing of a block or before accepting a tx). If the error is detected synchronously on submission, the error message returned by the node should explicitly detail the issue (i.e. what mismatched, how, and in what part of what data source definition it occurred).
 
 For [futures](./0016-PFUT-product_builtin_future.md) the data type expected will  be a number ("price"/quote) for settlement, and any event for the trading terminated trigger. For filtered data, the input data source can be any type and the output must be the type required by the part of the system using the data source.
-
 
 ## 5. Selecting a field
 
@@ -127,7 +120,6 @@ Future (needed sooner than the others listed in 9 below)
 1. Repeating time triggers
 1. Vega market data (i.e. prices from other markets on Vega)
 
-
 ## 7. Tracking active data sources
 
 Vega will need to keep track of all "active" defined data sources that are referenced either by markets that are still being managed by the core (i.e. excluding Closed/Settled/Cancelled/other "end state" markets) or by other data source definitions (see each individual data source definition spec, such as [signed message](./0046-DSRM-data_source_signed_message.md) for this specific information).
@@ -136,13 +128,11 @@ Vega should consider the specific definition including filters, combinations etc
 
 Data sources that are no longer active as defined above will be ignored, as well as any incoming data that is not emitted by an active data source (i.e. passes all filters etc. as well as matching the public key, event name, or whatever).
 
-
 ## 8. APIs
 
 APIs should be available to:
 1. List active data sources and their configuration
 1. Emit an event on the event bus when a data source value is emitted.
-
 
 ## 9. Future work
 
@@ -167,7 +157,6 @@ In future, we would therefore expect arbitrary compositions of these features to
 
 ![dta source pipeline example](./data-sources.png)
 
-
 ## Examples
 
 Here are some examples of how a data source might be specified. 
@@ -175,7 +164,8 @@ Here are some examples of how a data source might be specified.
 Note that these are examples *not actual specs*, please see specs for currently specified data types! 
 
 Signed message stream filtered to return a single value:
-```
+
+```proto
 select: {
   field: 'price',
   data: {
@@ -196,7 +186,8 @@ select: {
 ```
 
 Simple value, emitted at a date/time:
-```
+
+```proto
 on: { 
   timestamp: '2021-01-31T23:59:59Z', 
   data: { 
@@ -206,13 +197,14 @@ on: {
 ```
 
 Empty value, trigger only, i.e. trigger trading terminated at a date/time for futures:
-```
+
+```proto
 on: { timestamp: '2021-01-31T23:59:59Z' }
 ```
 
-
 In future: value from a read only call on Ethereum
-```
+
+```proto
 ethereumCall: {
   at: '2021-01-31T23:59:59Z',
   contractAddress: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
@@ -222,12 +214,11 @@ ethereumCall: {
 }
 ```
 
-
-# Acceptance criteria
+## Acceptance criteria
 
 Vega should reject any data source tx that is not explicitly required, so this would include a tx:
 
-1. If a data source combines a primary source (like a signed message) with a filter (for instance saying we are only interested in messages where ticker = GBPUSD and timestamp = 20211231T23:59:00) then the complete data source definition defines the source and can be used to accept/reject transactions, so for an active data source is active, transactions from the same provider (pubkey, Ethereum contract/event, URL, etc.) do not form part of the defined data source. If submitted, they should be rejected where possible and must not supply data to the target for the data source if the metadata or data content itself is not selected by the source definition (e.g. because ticker and timestamp do not match a filter). (<a name="0045-DSRC-001" href="#0045-DSRC-001">0045-DSRC-001</a>)
+1. If a data source combines a primary source (like a signed message) with a filter (for instance saying we are only interested in messages where ticker = `GBPUSD` and timestamp = `20211231T23:59:00`) then the complete data source definition defines the source and can be used to accept/reject transactions, so for an active data source is active, transactions from the same provider (pubkey, Ethereum contract/event, URL, etc.) do not form part of the defined data source. If submitted, they should be rejected where possible and must not supply data to the target for the data source if the metadata or data content itself is not selected by the source definition (e.g. because ticker and timestamp do not match a filter). (<a name="0045-DSRC-001" href="#0045-DSRC-001">0045-DSRC-001</a>)
 1. When no reference to a data source remains in any active part of the system (for instance a non-cancelled/settled market), data source no longer needs to be tracked and can be discarded. Any transactions that would previously have matched and been selected by that data source would be rejected/ignored. (<a name="0045-DSRC-002" href="#0045-DSRC-002">0045-DSRC-002</a>)
 1. If the same complete data source (provider and filters, etc.) is referenced in multiple places (e.g. two separate active markets) then it will remain acrtive if any subset of those references remain active. For example 2 markets reference the same data source (full definition must match exactly) and one of those markets is closed/cancelled/settled before the other, either because some other difference in their definition or because of governance action. (<a name="0045-DSRC-003" href="#0045-DSRC-003">0045-DSRC-003</a>)
 1. If multiple data sources share common roots (e.g. the same provider - pubkey etc. but different filters) and at least one of those sources filters out a transaction but at least one other selects it (all filters match), the transaction data must still be supplied for the sources that match and must not be supplied for the sources that don't match. (<a name="0045-DSRC-004" href="#0045-DSRC-004">0045-DSRC-004</a>)

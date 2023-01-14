@@ -9,21 +9,20 @@ An order may cross with more than one other order, creating multiple trades. Eac
 
 The trading fee is:
 
-```
-total_fee = infrastructure_fee + maker_fee + liquidity_fee`
+`total_fee = infrastructure_fee + maker_fee + liquidity_fee`
 
-infrastructure_fee = fee_factor[infrastructure] * trade_value_for_fee_purposes`
+`infrastructure_fee = fee_factor[infrastructure] * trade_value_for_fee_purposes`
 
-maker_fee =  fee_factor[maker]  * trade_value_for_fee_purposes
+`maker_fee =  fee_factor[maker]  * trade_value_for_fee_purposes`
 
-liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes
-```
+`liquidity_fee = fee_factor[liquidity] * trade_value_for_fee_purposes`
 
 Fees are calculated and collected in the settlement currency of the market, collected from the general account. Fees are collected first from the trader's account and then margin from account balance. If the general account doesn't have sufficient balance, then the remaining fee amount is collected from the margin account. If this is still insufficient then different rules apply between continuous trading and auctions (details below).
 
 Note that maker_fee = 0 if there is no maker, taker relationship between the trading parties (in particular auctions).
 
 ### Factors
+
 - infrastructure: staking/governance system/engine (network wide)
 - maker: market framework / market making (network wide)
 - liquidity: market making system (per market)
@@ -90,6 +89,7 @@ This ensures that any trade in the network will require the party to pay a fee, 
 For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 wei, so if the fee calculation was to be a fraction of a wei (e.g 0.25 wei), which you cannot represent in this currency, then the Vega network would round it up to 1.
 
 ## Acceptance Criteria
+
 - Fees are collected during continuous trading and auction modes and distributed to the appropriate accounts, as described above. (<a name="0029-FEES-001" href="#0029-FEES-001">0029-FEES-001</a>)
 - Fees are debited from the general (+ margin if needed) account on any market orders that during continuous trading, the price maker gets the appropriate fee credited to their margin account and the remainder is split between the market making pool and staging pool. (<a name="0029-FEES-002" href="#0029-FEES-002">0029-FEES-002</a>)
 - Fees are debited from the general (+ margin if needed) account on the volume that resulted in a trade on any "aggressive / price taking" limit order that executed during continuous trading, the price maker gets the appropriate fee credited to their margin account and the remainder is split between the market making pool and staging pool.  (<a name="0029-FEES-003" href="#0029-FEES-003">0029-FEES-003</a>)
@@ -102,5 +102,5 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 - A "buyer_fee" and "seller_fee" are exposed in APIs for every trade, split into the three components (after the trade definitely happened) (<a name="0029-FEES-010" href="#0029-FEES-010">0029-FEES-010</a>)
 - Users should be able to understand the breakdown of the fee to the three components (by querying for fee payment transfers by trade ID, this requires enough metadata in the transfer API to see the transfer type and the associated trade.) (<a name="0029-FEES-011" href="#0029-FEES-011">0029-FEES-011</a>)
 - The three component fee rates (fee_factor[infrastructure, fee_factor[maker], fee_factor[liquidity] are available via an API such as the market data API or market framework. (<a name="0029-FEES-012" href="#0029-FEES-012">0029-FEES-012</a>)
-- A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to 2. A market order of size 1.23 is placed which is filled at VWAP of 100. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `1.23 x 100 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-013" href="#0029-FEES-013">0029-FEES-013</a>)   
-- A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to -2. A market order of size 12300 is placed which is filled at VWAP of 0.01. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `12300 x 0.01 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-014" href="#0029-FEES-014">0029-FEES-014</a>)   
+- A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to 2. A market order of size 1.23 is placed which is filled at VWAP of 100. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `1.23 x 100 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-013" href="#0029-FEES-013">0029-FEES-013</a>)
+- A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to -2. A market order of size 12300 is placed which is filled at VWAP of 0.01. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `12300 x 0.01 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-014" href="#0029-FEES-014">0029-FEES-014</a>)

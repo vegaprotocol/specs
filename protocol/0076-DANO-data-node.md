@@ -1,4 +1,4 @@
-# Data Node Spec
+# Data node
 
 Vega core node (consensus and non-consensus) nodes run the core protocol and only keep information required to do so. 
 
@@ -8,7 +8,8 @@ The job of the data node is to collect and store the events and make those avail
 
 
 ## Working with events
-Each chunk of data should contain the eventID that created it and the block from which the event was created.
+
+Each chunk of data should contain the `eventID` that created it and the block from which the event was created.
 
 Event is emitted on each occasion the blockchain time updates. For each chunk of data stored, label it with this time stamp. When a new timestamp event comes, start using that one. 
 
@@ -22,12 +23,13 @@ When initialising a datanode it should be possible to select one of the followin
 - Standard (the default) - retains data according to the default retention policies of the datanode, these should be optionally configurable. 
 - Archive - retains all data.
 
-It should be possible to configure the data node so that all data of certain type is deleted upon an event (and configurable with a delay) e.g. event: MarketID `xyz` settled + `1 week`. 
+It should be possible to configure the data node so that all data of certain type is deleted upon an event (and configurable with a delay) e.g. event: `MarketID` `xyz` settled + `1 week`. 
 
 ## Balances and transfers
 
 Store all
-```
+
+```proto
 LedgerEntry {
   // One or more accounts to transfer from
   string from_account = 1;
@@ -46,7 +48,8 @@ LedgerEntry {
 ```
 
 and all
-```
+
+```proto
 TransferBalance {
   // The account relating to the transfer
   Account account = 1;
@@ -84,6 +87,7 @@ All proposals ever submitted + votes (asset, network parameter change, market).
 ## Trading Related Data
 
 ### Market Data
+
 - as [specified in](./0021-market-data-spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this. 
 
 ### Market lifecycle events
@@ -145,6 +149,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 # Acceptance criteria
 
 ## Data synchronisation
+
 1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-COSMICELEVATOR-001" href="#0076-COSMICELEVATOR-001">0076-COSMICELEVATOR-001</a>)
 1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network without having to replay the full chain (<a name="0076-DANO-003" href="#0076-DANO-003">0076-DANO-003</a>)
 1. Nodes must be able to start processing new blocks having loaded the only the most recent history  (<a name="0076-DANO-023" href="#0076-DANO-023">0076-DANO-023</a>)
@@ -152,6 +157,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. It must be possible to fetch history from the network whilst the node processes new blocks.  So for example, if setting up a new Archive node, the node can keep up to date with the network whilst retrieving history all the way back to the first block.  Once this is done the node should be able to reconcile the fetched history with that produced whilst the history was being retrieved such that the node will have a full history from the first block all the way to the networks current height.  (<a name="0076-DANO-025" href="#0076-DANO-025">0076-DANO-025</a>)
 
 ### Data integrity
+
 1. Data produced in the core snapshots aligns with the data-node data proving that what is returned by data-node matches core state at any given block height (<a name="0076-DANO-004" href="#0076-DANO-004">0076-DANO-004</a>)
 
 ### Data-node decentralized history:
@@ -165,21 +171,24 @@ It must be possible to add to the data node APIs that return the result of calcu
 1.  If a data-node snapshot fails during the restore the process, it should error and the node(s) won't start (<a name="0076-DANO-009" href="#0076-DANO-009">0076-DANO-009</a>)
 1.  When queried via the APIs a node restored from decentralized history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-022" href="#0076-DANO-022">0076-DANO-022</a>)
 
-### Data-node network determinism:
+### Data-node network determinism
+
 1. For a given block span, a datanode history segment must be identical across all dat-nodes in the network that are using the recommended hardware and OS versions (<a name="0076-DANO-010" href="#0076-DANO-010">0076-DANO-010</a>)
 1. History segments for the same block span must always match across the network, regardless of whether the producing node was itself restored from decentralized history or not. (<a name="0076-DANO-011" href="#0076-DANO-011">0076-DANO-011</a>)
 
-### Schema compatibility:
+### Schema compatibility
+
 1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
 1. Restoring a node from decentralized history should work across schema upgrade boundaries and the state of the datanode should match that of a datanode populated purely by event consumption (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
 
-### Data Retention:
+### Data Retention
 
 1. Lite nodes should have enough state to provide the current state of:  Assets, Parties, Accounts, Balances, Live Orders, Network Limits, Nodes, Delegations, Markets, Margin Levels, Network Parameters, Positions, Liquidity Provisions (<a name="0076-DANO-026" href="#0076-DANO-026">0076-DANO-026</a>)
 2. Standard nodes should retain data in accordance with the configured data retention policy (<a name="0076-DANO-027" href="#0076-DANO-027">0076-DANO-027</a>)
 3. Archival nodes should retain all data from the height at which they joined the network (<a name="0076-DANO-028" href="#0076-DANO-028">0076-DANO-028</a>)
 
 ### General Acceptance
+
 1. The DataNode must be able to handle brief network outages and disconnects from the vega node (<a name="0076-DANO-015" href="#0076-DANO-015">0076-DANO-015</a>) 
 1. The validator node will only accept requests for event bus subscriptions. All other API subscription requests will be invalid. (<a name="0076-DANO-016" href="#0076-DANO-016">0076-DANO-016</a>)  
 1. The event bus stream is available from validators, non validators and the DataNode (<a name="0076-DANO-017" href="#0076-DANO-017">0076-DANO-017</a>)  

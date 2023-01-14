@@ -1,16 +1,13 @@
-Feature name: Event Queue
+# Event queue
 
-Start date: 2020-04-09
+## Summary
 
-Specification PR: https://github.com/vegaprotocol/specs-internal/pull/271
-
-
-# Summary
 Latency and throughput is of paramount importance to Vega validator nodes, so monitoring various 3rd party (and notably low transaction speed) blockchains and crypto-assets isn’t possible.
 To counter this problem we have created an event queue management system.
 This event queue allows the standardisation and propagation of transactions from 3rd party asset chains in the Vega event message format.
 
-# Guide-level explanation
+## Guide-level explanation
+
 Events and transactions are gathered and processed by the Event Queue from a given 3rd party blockchain, and only the ones subscribed to by Vega nodes will be propagated through consensus and then validated by the validator nodes.
 The Event Queue continually scans local or hosted external blockchain nodes to discover on-chain events that are applicable to Vega. 
 Found external blockchain events are then sent to Vega validator nodes. 
@@ -22,7 +19,8 @@ This message queue will use gRPC to communicate with the Vega network via 3 main
    Each validator will individually process and validate the given transaction and process the specified event reported using their local chain node (such as Ethereum). 
 1. `GetEventAcceptanceStatus` returns the consensus acceptance status of a requested event. The event queue uses this function to determine if it should attempt to send the event again.
 
-# Reference-level explanation
+## Reference-level explanation
+
 * The event queue calls `GetSubscribedEventSources` on a Vega node to get the list of subscribed smart contracts
 * Using configured external blockchain nodes, the Event Queue filters for specific events provided in `GetSubscribedEventSourcesResponse`
 * For each event it calls `GetEventAcceptanceStatus` on a Vega node
@@ -30,9 +28,10 @@ This message queue will use gRPC to communicate with the Vega network via 3 main
 * Vega validators each verify each event against local external blockchain nodes as the event is gossiped 
 * Consensus agrees and writes event into the Vega chain
 
-# Pseudo-code / Examples
+## Pseudo-code / Examples
 
 The protobuf of the service:
+
 ```proto
 
 service trading{
@@ -146,8 +145,10 @@ message GetEventAcceptanceStatusResponse {
 }
 ```
 
-# Acceptance Criteria
-## Event Queue
+## Acceptance Criteria
+
+### Event Queue
+
 * Event Queue calls `GetSubscribedEventSources` and successfully parses the response (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)
 * Event Queue connects to a configured local or hosted external blockchain node (<a name="0036-BRIE-002" href="#0036-BRIE-002">0036-BRIE-002</a>)
 * Event Queue gathers and filters applicable events from configured external blockchain node (<a name="0036-BRIE-003" href="#0036-BRIE-003">0036-BRIE-003</a>)
@@ -155,7 +156,8 @@ message GetEventAcceptanceStatusResponse {
 * Event Queue propagates unaccepted events to Vega node via `PropagateEvent` (<a name="0036-BRIE-005" href="#0036-BRIE-005">0036-BRIE-005</a>)
 * Event Queue retries sending events that have gone too long without being accepted  (<a name="0036-BRIE-006" href="#0036-BRIE-006">0036-BRIE-006</a>)
 
-## Vega Nodes
+### Vega Nodes
+
 * Vega nodes respond to `GetSubscribedEventSources` with a list of valid smart contract events (<a name="0036-BRIE-007" href="#0036-BRIE-007">0036-BRIE-007</a>)
 * Vega nodes accept events submitted to `PropagateEvent` and verifies them against configured external blockchain node (<a name="0036-BRIE-008" href="#0036-BRIE-008">0036-BRIE-008</a>)
 * Vega nodes write events to chain once verified (<a name="0036-BRIE-009" href="#0036-BRIE-009">0036-BRIE-009</a>)

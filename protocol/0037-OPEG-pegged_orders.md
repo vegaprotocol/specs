@@ -1,10 +1,7 @@
-Feature name: Pegged and Market Maker Orders
-Start date: 2020-02-10
-Specification PR: https://github.com/vegaprotocol/specs-internal/pull/262
-
 # Pegged and Market Maker orders
 
 ## Acceptance Criteria
+
 - Pegged orders can only be LIMIT orders, all other types are rejected. (<a name="0037-OPEG-001" href="#0037-OPEG-001">0037-OPEG-001</a>)
 - Pegged orders can only be GTT and GTC orders. IOC and FOK will be added in the second phase of pegged orders. (<a name="0037-OPEG-002" href="#0037-OPEG-002">0037-OPEG-002</a>)
   - Until phase 2, FOK or IOC pegged orders are invalid (<a name="0037-OPEG-015" href="#0037-OPEG-015">0037-OPEG-015</a>)
@@ -63,7 +60,6 @@ Pegged orders can be amended like normal limit orders, in such their size, refer
 | MID (for a sell)   | Not allowed  | Allowed      | N/A     |
 | MID (for a buy)    | Allowed      | Not allowed  | N/A     |
 
-
 # Reference-level explanation
 
 Pegged orders are restricted in what values can be used when they are created, these can be defined by a list of rules each order must abide with.
@@ -89,8 +85,8 @@ Amending a pegged order can cause it to lose time priority in the entry time sor
 
 The position state for a party is updated wherever an order is placed, amended or cancelled. This it to allow the core to calculate the correct margin for the party. For pegged orders we reduce the position whenever we park the order and we increase the position whenever an order is unparked. An order only contributes to a parties position when it is live and on the order book.
 
+## Pseudo-code / Examples
 
-# Pseudo-code / Examples
 Each market has a slice containing all the pegged orders. New pegged orders are added to the end of the slice to maintain time ordering.
 
     PeggedOrder{
@@ -132,7 +128,8 @@ Extra functionality will be added to the expiring and cancelling steps
         }
     }
 
-# Test cases
+## Test cases
+
 Some plain text walkthroughs of some scenarios that would prove that the implementation correctly follows this specification.
 * Insert a pegged order using all of the available reference types and an offset to make the order persistent.
 * Insert a pegged order using all of the available reference types and an offset to make the order fill.

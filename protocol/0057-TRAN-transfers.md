@@ -9,7 +9,6 @@ Allowing users to initiate transfers allows for the following capabilities:
 - A user can set up a recurring transfer. 
 - A user can set up a recurring transfer to one or more [reward accounts](0056-REWA-rewards_overview.md#reward-accounts).
 
-
 ## Limits
 
 Transfer can only be initiated by a party using their own funds from [accounts](./0013-accounts.md) that they are in control of:
@@ -26,24 +25,20 @@ Here's the list of accounts types into which funds can be sent:
 - [REWARD_POOL](0056-REWA-rewards_overview.md#rewards-accounts) (only by the special recurring transfer to reward accounts transfer type)
 - [ON_CHAIN_TREASURY](0055-TREA-on_chain_treasury.md#network-treasury)
 
-
 ## Delayed transfer
 
 The system should be able to delay transfer. Such feature would be useful in the context of distributing token related to incentives for example.
 In order to do this the request for transfer should contain a field indicating when the destination account should be credited. The funds should be taken straight away from the origin account, but distributed to the destination only once the time is reached.
-
 
 ## Spam protection
 
 In order to prevent the abuse of user-initiated transfers as spam attack there will be:
 - `spam.protection.maxUserTransfersPerEpoch` that will limit the number of transfers that a user can initiate within an epoch, see [network parameter](#network-parameters). 
 
-
 ## Minimum transfer amount
 
 This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-asset-framework.md)).
 The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`. 
-
 
 ## Recurring transfers
 
@@ -71,13 +66,12 @@ A recurring transfers needs to contain these specific informations:
 
 The amount paid at the end of each epoch is calculated using the following formula:
 
-```
+```math
 amount = start amount x factor ^ (current epoch - start epoch)
 ``` 
 
 If insufficient funds are present in the source account at the time a transfer is initiated by the network, the whole recurring transfer is cancelled.
 If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` then the recurring transfer is cancelled. 
-
 
 ## Recurring transfers to reward accounts
 
@@ -104,7 +98,7 @@ Therefore:
 
 For example, a recurring transfer is defined as follows:
 
-```
+```proto
 Reward asset: $VEGA
 Reward metric: taker paid fees
 Reward metric asset: USDT
@@ -121,8 +115,7 @@ If the transfer amount is 1000 $VEGA, then
 600 $VEGA would be transferred to the reward account of market3 for $VEGA
 ```
 
-NB: if there is no market with contribution to the reward metric - no transfer is made. 
-
+Note: if there is no market with contribution to the reward metric - no transfer is made. 
 
 ## Fees
 
@@ -133,12 +126,11 @@ The fee is taken from the transfer initiator's account immediately on execution,
 It is [paid in to the infrastructure fee pool](./0029-fees.md#collecting-and-distributing-fees). 
 Fees are charged in the asset that is being transferred.
 
-
 ## Proposed command
 
 This new functionality requires the introduction of a new command in the transaction API. The payload is as follows:
 
-```
+```proto
 message Transfer {
   // The account type from which the funds of the party
   // should be taken
@@ -183,7 +175,6 @@ message CancelTransfer {
   string transfer_id = 1;
 }
 ```
-
 
 ## Network Parameters
 
@@ -269,19 +260,17 @@ A user's recurring transfer is cancelled if any transfer fails due to insufficie
 A recurring transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-058" href="#0057-TRAN-058">0057-TRAN-058</a>)
 
 A user's recurring transfer to a reward account does not occur if there are no parties eligible for a reward in the current epoch (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
-  - I set up a market ETHUSDT settling in USDT.
+  - I set up a market `ETHUSDT` settling in USDT.
   - The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`. 
   - I specify a start and no end epoch, and a factor of 1 to a reward account `ETHUSDT | market creation | $VEGA` 
   - In the first epoch no trading occurs and nothing is transferred to the reward account at the end of the epoch
   - In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
   - At the end of the third epoch, no transfer occurs
 
-If the network parameter <transfer.minTransferFeeFactor> is modified, this modification is applied
+If the network parameter `transfer.minTransferFeeFactor` is modified, this modification is applied
 immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-062" href="#0057-TRAN-062">0057-TRAN-062</a>)
 
-If the network parameter <spam.protection.maxUserTransfersPerEpoch> is modified, this modification is applied from the next Epoch on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-060" href="#0057-TRAN-060">0057-TRAN-060</a>)
+If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified, this modification is applied from the next Epoch on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-060" href="#0057-TRAN-060">0057-TRAN-060</a>)
 
-If the network parameter <transfer.minTransferQuantumMultiple> is modified, this modification is applied
+If the network parameter `transfer.minTransferQuantumMultiple` is modified, this modification is applied
 immediately on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-061" href="#0057-TRAN-061">0057-TRAN-061</a>)
-
-

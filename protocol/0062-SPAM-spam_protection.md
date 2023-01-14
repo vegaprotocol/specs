@@ -46,7 +46,7 @@ two different ways:
 
 For Sweetwater, the policies we enforce are relatively simple:
 
-```
+```math
 <num_votes> = 3
 <min_voting_tokens>  = 1
 <num_proposals> = 3
@@ -60,7 +60,7 @@ For Sweetwater, the policies we enforce are relatively simple:
 
 - Any tokenholder that had more than 50% if its post-rejected is banned for max (30 seconds, 1/48 of an epoch) or until the next epoch starts, and all its governance related transactions ( but no no trading related transactions) are immediately rejected. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds (or until the start of the next epoch). The test for 50% of the governance transactions is repeated once the next governance related transaction is post-rejected, so a it is possible for a violating party to get banned quite quickly again; the test is only done in case of a new post-rejection, so the account does not get banned twice just because the 50% quata is still excveeded when the ban ends.
 The voting counters are unaffected by the ban, so voting again on an issue that already had the full number of votes in the epoch will lead to a rejection of the new vote; this is now likely to not trigger a new ban, as this rejection will happen pre-consensus, and thus not affect the 50% rule.
-  
+
 - A proposal can only be issued by a tokenholder owning more than `<min_proposing_tokens>` at the start of the epoch. Also
    (like above), only `<num_proposals>` proposals can be made per tokenholder per epoch, i.e., every proposal past `<num_proposals>` in an epoch is
    rejected by post-block-reject (if there sum of proposals in past blocks and the ones in the current block exceed
@@ -69,8 +69,9 @@ The voting counters are unaffected by the ban, so voting again on an issue that 
    There also is a separate parameter to the same end that is enforced in the core. For SW, both these parameters have the same value. 
    In the future, we can set the spam protection value lower, as the amplification effect of a proposal (i.e., a proposal resulting in
    a very large number of votes) would also be covered by the core then.
-   
+
 ### Notes
+
 - What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices
  and ETH speed) that the same token is moved around to different entities, this explicitly doesn't work.
 - This means that every tokenholder with more than `<min_voting_tokens>` can spam exactly one block on SW.
@@ -79,18 +80,21 @@ The voting counters are unaffected by the ban, so voting again on an issue that 
  the enforcement code.
 
 ### Increasing thresholds:
+
 If on average for the last 10 blocks, more than 30% of all voting and proposal transactions need to be post-rejected, then the network is
 under Spam attack. In this case, the `<min_voting_tokens>` value is doubled, until it reaches 1600. The threshold
 is then not increased for another 10 blocks. At the beginning of every epoch, the value of `<min_voting_tokens>` is reset to its original.
 
 
-### Issues: It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting. Due to the
-  banning policy this is not doable from one account, but with a sybil attack it can be done. If this ends up being a
+### Issues: It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting.
+
+  Due to the banning policy this is not doable from one account, but with a sybil attack it can be done. If this ends up being a
   problem, we can address it by increasing the ban-time.
   
   
   
 ### Withdrawal Spam
+
 As unclaimed withdrawals do not automatically expire, an attacker could generate a large number of messages as well as an evergrowing datastructure through [withdrawal requests](0030-ETHM-multisig_control_spec.md).
 
 To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWitdrawalQuantumMultiple`. 
@@ -101,7 +105,7 @@ Any withdrawal requests for a smaller amounts are immediately rejected.
 
  - A spam attack using votes/governance proposals is detected and the votes transactions are rejected, i.e.,
    a party that issues too many votes/governance proposals gets the follow on transactions rejected. This means
-   (given the original parameters parameters from https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0054-NETP-network_parameters.md
+   (given the original parameters parameters from [0054-NETP-network_parameters.md](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0054-NETP-network_parameters.md)
    )
    - More than 360 delegation changes in one epoch (or, respectively, the value of `spam.protection.max.delegation`). This includes the undelegate transactions. Specifically, verify
       -    More than the allowed quota through delegation change only
@@ -133,6 +137,4 @@ Any withdrawal requests for a smaller amounts are immediately rejected.
  - Decrease `spam.protection.minimumWitdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been invalid with the old parameter and is valid with the new value and is accepted.(<a name="0062-SPAM-024" href="#0062-SPAM-024">0062-SPAM-024</a>)   
  - Issue a valid withdrawal bundle. Increase `spam.protection.minimumWitdrawalQuantumMultiple` to a value that that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-COSMICELEVATOR-001" href="#0062-COSMICELEVATOR-001">0062-COSMICELEVATOR-001</a>)   
 
-
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
-

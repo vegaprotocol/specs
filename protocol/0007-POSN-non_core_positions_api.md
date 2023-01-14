@@ -27,7 +27,7 @@ The Positions API requires additional position data for each trader, on top of t
 
 Note: A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md).
 
-Note: it is possible to calculate valuation / P&L using various methodologies (e.g. Average cost, FIFO, LIFO) when a position has been only partially closed out. These are well known alternative accounting methods that can be used when account for profit/loss on selling 'inventory' of a product. In this case, we can consider a trader's open position as their inventory. We will be outlining the average cost methodology in this API as described at https://www.investopedia.com/terms/a/averagecostmethod.asp, however we may also add others in future and the API should be designed to allow for multiple such approaches to be used simultaneously.
+Note: it is possible to calculate valuation / P&L using various methodologies (e.g. Average cost, FIFO, LIFO) when a position has been only partially closed out. These are well known alternative accounting methods that can be used when account for profit/loss on selling 'inventory' of a product. In this case, we can consider a trader's open position as their inventory. We will be outlining the average cost methodology in this API as described at [investopedia](https://www.investopedia.com/terms/a/averagecostmethod.asp), however we may also add others in future and the API should be designed to allow for multiple such approaches to be used simultaneously.
 
 Note, fully closed positions only have one possible calculation as the set of trades that both opened and closed the position is known and unambiguous, so there is only one correct P&L once a position is fully closed. We may choose to make the valuation methodology for open/partially closed positions configurable in the future.
 
@@ -53,6 +53,7 @@ The API is expected to expose:
 * Seller P&L (0 if seller is not closing volume)
 
 ## Position and PnL test
+
 - When a party has never had a position, the realised PnL and unrealised PnL should be 0 (<a name="0007-POSN-009" href="#0007-POSN-009">0007-POSN-009</a>)
 - When a party has a non-zero postion, and has not closed any part of it, only the unrealised PnL should be changed by increase in position or change of mark price while realised PnL should stay constant in absence of loss socialisation (<a name="0007-POSN-010" href="#0007-POSN-010">0007-POSN-010</a>)
 - When a party has a position which gets (partially) closed-out, the unrealised PnL should reflect the change of position while the realised PnL reflect the closed-out position (<a name="0007-POSN-011" href="#0007-POSN-011">0007-POSN-011</a>)
@@ -73,16 +74,12 @@ The API is expected to expose:
 | Averaged price P&L calculation method | The accounting method whereby entry price for P&L calculation is averaged across all open volume, i.e. the open volume is considered fungible and close out trades are not matched with previous trades that opened volume to determine the entry price used for P&L calculations. |
 | FIFO (not used) | The accounting method whereby Realised P&L is allocated an entry price for purposes of calculating the profit/loss by comparing the trade price of the exit volume to the volume weighted average price of the oldest equivalent open trades (i.e. trades that have not already been 'matched' by closed volume.)  |
 
-
 ## Formulae (Python notebook)
 
-Averaged method: https://colab.research.google.com/drive/1GpiNQUF6qt4rCMUJRAiXkcHjXxlGP-YB
+[Averaged method](https://colab.research.google.com/drive/1GpiNQUF6qt4rCMUJRAiXkcHjXxlGP-YB)
 
-FIFO method (unused currently, for reference): https://colab.research.google.com/drive/1QLBcf4HSQNDFOIbN3TMX-YyqJWmfuH_d
+[FIFO method](https://colab.research.google.com/drive/1QLBcf4HSQNDFOIbN3TMX-YyqJWmfuH_d) (unused currently, for reference).
 
 ## Test cases
 
 [See spreadsheet here](https://docs.google.com/spreadsheets/d/1XJESwh5cypALqlYludWobAOEH1Pz-1xS/edit#gid=1136043307) for examples (Please don't edit)
-
-
-

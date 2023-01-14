@@ -2,8 +2,7 @@
 
 This spec adds a transaction type that allows a user of the protocol to submit multiple market instructions (e.g. SubmitOrder, CancelOrder, AmendOrder) in a single transaction.
 
-
-# Rationale
+## Rationale
 
 This feature is required because:
 
@@ -17,10 +16,9 @@ This feature is required because:
 
 Overall, building the ability to handle batches of market instructions in a single transaction will decrease the complexity of client integrations and reduce the computational and network load on both validators and clients. It will also make Vega's functionality and APIs closer to parity with those of traditional centralised exchanges.
 
+## Functionality
 
-# Functionality
-
-## New transaction: Batch Instruction
+### New transaction: Batch Instruction
 
 1. There will be a new transaction type called a Batch Instruction.
 
@@ -40,8 +38,7 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 1. The total number of instructions across all three lists (i.e. sum of the lengths of the lists) must be less than or equal to the current value of the network parameter `network.spam_protection.max.batch.size`.
 
-
-## Processing a batch
+### Processing a batch
 
 1. A batch is considered a single transaction, with a single transaction ID and a single timestamp applying to all instructions within it. Each instruction should be given a sub-identifier and index allowing it to be placed sequentially in the transaction (e.g. by consumers of the event stream). These identifiers must be sufficient for a user to determine which instruction within a batch any result (order updates, trades, errors, etc.) relates to.
 
@@ -57,8 +54,7 @@ Overall, building the ability to handle batches of market instructions in a sing
 
    - Any second or subsequent Amend Order instruction for the same order ID within a single Batch Instruction transaction is an error
 
-
-## Auction behaviour
+### Auction behaviour
 
 1. Processing each instruction within a batch must behave the same way regarding auction triggers as if it were a standalone transaction: 
 
@@ -73,8 +69,7 @@ Overall, building the ability to handle batches of market instructions in a sing
 1. The batch is still treated as a single transaction and executed atomically, regardless of state changes such as entering an auction.
 After entering or exiting an auction mid-batch, the full batch must be processed as described above, even if every remaining instruction fails validation, before processing any other transactions.
 
-
-# Acceptance criteria
+## Acceptance criteria
 
  - Given a market with a party having two orders, A and B, a batch transaction to cancel A, amend B to B' and place a limit order which does not immediately execute C should result in a market with orders B' and C. (<a name="0074-BTCH-001" href="#0074-BTCH-001">0074-BTCH-001</a>)
  - Any batch transaction containing more than one amend to the same order ID should attempt to execute the first as normal but all further amends should error without being executed. (<a name="0074-BTCH-002" href="#0074-BTCH-002">0074-BTCH-002</a>)

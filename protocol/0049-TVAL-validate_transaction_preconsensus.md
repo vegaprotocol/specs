@@ -6,9 +6,7 @@ There are a number of validations that can be performed on every transaction to 
 * Can therefore be used to mitigate certain types of spam, liveness and other attacks
 * Provides immediate feedback on errors to users
 
-
 ## `1` Validations
-
 
 ### `1.1` Valid signing key
 
@@ -26,7 +24,7 @@ Note that this means that a transaction cannot share a block with the transactio
 
 Future enhancemments: for each root transaction message type (e.g. SubmitOrder, AmendOrder, ProposeMarket, ...) it is possible to define which of these conditions is required. For instance, all trading transactions require a non-zero balance. Initially we can apply the union of the key sets meeting each of the conditions to all transactions.
 
-#### `1.1.2` Acceptance criteria 
+#### `1.1.2` Acceptance criteria
 
 Note that separate pre-consensus validation is carried out as part of PoW anti-spam checks, see the ACs in [PoW spec](./0072-SPPW-spam-protection-PoW.md).
 
@@ -36,4 +34,3 @@ Note that separate pre-consensus validation is carried out as part of PoW anti-s
 1. [ ] Transaction is rejected (never included in a block) if a party has strictly less than the [quantum](./0041-TSTK-target_stake.md)  balance in the settlement asset of the market and it is submitting any kind of orders (limit, market, LP provision)  (<a name="0049-COSMICELEVATOR-004" href="#0049-COSMICELEVATOR-004">0049-COSMICELEVATOR-004</a>)
 1. [ ] Transaction interacting in a market is included in a block if signed with a key from a non-validator party with a balance >= [quantum](./0041-TSTK-target_stake.md) of the settlement asset for the market, where an identical (apart from PoW proof and block data details) transaction was rejected from a previous block when the party had relevant balance < less than relevant [quantum](./0041-TSTK-target_stake.md) (<a name="0049-COSMICELEVATOR-005" href="#0049-COSMICELEVATOR-005">0049-COSMICELEVATOR-005</a>)
 1. [ ] Transaction sent to a non-validator node is propogated to validator and included in a block. (<a name="0049-TVAL-006" href="#0049-TVAL-006">0049-TVAL-006</a>)
-
