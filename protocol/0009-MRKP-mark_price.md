@@ -52,22 +52,22 @@ The most recently calculated *Mark Price* is used in the [mark-to-market settlem
  Now 10.1s has elapsed since the last update and there is a market buy order for volume 5 which executes against book volume as 1 @ 1220, 2 @ 1250 and 2 @ 1500. The mark price is updated to 1500.
 
 ### 2. Last Traded Price + Order Book
+
 The mark price is set to the higher / lower of the last traded price, bid/offer.
 
 >*Example a):* consider the last traded price was $1000 and the current best bid in the market is $1,100. The bid price is higher than the last traded price so the new Mark Price is $1,100.
-
 >*Example b):* consider the last traded price was $1000 and the current best bid in the market is $999. The last traded price is higher than the bid price so the new Mark Price is $1,000.
 
  ### 3. Oracle
 
  An oracle source external to the market provides updates to the Mark Price. See the [data sourcing spec](./0045-DSRC-data_sourcing.md).
 
- ### 4. Model
+### 4. Model
 
  The *Mark Price* may be calculated using a built in model.
 
  >*Example:* An option price will theoretically decay with time even if the market's order book or trade history does not reflect this.
 
- ### 5. Defined as part of the product
+### 5. Defined as part of the product
 
   The *Mark Price* may be calculated using an algorithm defined by the product -- and 'selected' by a market parameter.

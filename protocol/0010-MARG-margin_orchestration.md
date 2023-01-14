@@ -32,6 +32,7 @@ This ticket encapsulates the orchestration of business logic which interfaces wi
 ## Reference-level explanation
 
 This specification outlines:
+
 - When the margin levels are recalculated and for whom
 - How the margin levels are utilised in the protocol
 

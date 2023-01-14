@@ -47,10 +47,10 @@ The first time an entity deposits an asset into Vega's collateral smart contract
 
 This account:
 
-* is where the trading profits for all markets that have settlement in that asset will be eventually distributed back to (this occurs when the protocol releases collateral from a margin account)
-* is where the protocol searches for collateral if the trader has entered a collateral search zone.
-* is used by all Vega markets with that settlement asset.
-* will have it's balance increased or decreased when a party deposits or withdraws that asset from Vega.
+- is where the trading profits for all markets that have settlement in that asset will be eventually distributed back to (this occurs when the protocol releases collateral from a margin account)
+- is where the protocol searches for collateral if the trader has entered a collateral search zone.
+- is used by all Vega markets with that settlement asset.
+- will have it's balance increased or decreased when a party deposits or withdraws that asset from Vega.
 
 The core protocol does not require these general asset accounts if they have a balance of zero.
 
@@ -63,8 +63,9 @@ Moreover, margin accounts are conceptually connected to open positions and given
 **Creation/Deletion:**
 
 When a trader places an order on a market and they do not have a margin account for that market, a margin accounts is created for the trader for each settlement asset of that market. This may be due to either:
-* it's the first time a trader has placed an order or;
-* they've previously had a margin account but it was deleted for the reason listed below.
+
+- it's the first time a trader has placed an order or;
+- they've previously had a margin account but it was deleted for the reason listed below.
 
 When a trader no longer has collateral requirements for a  market (because they don't have open positions or active orders), these accounts no longer have utility in the core protocol and may be deleted. Accounts may also be deleted for other reasons (e.g. a system account at the conclusion of a set of [closeouts](./0012-POSR-position_resolution.md)).
 
@@ -118,7 +119,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 - A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIME-lp_mechanics.md). (<a name="0013-ACCT-023" href="#0013-ACCT-023">0013-ACCT-023</a>)
 - Each party that has placed a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md) will have one bond account per market they have provided liquidity to (<a name="0013-ACCT-018" href="#0013-ACCT-018">0013-ACCT-018</a>)
-- [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the _margin_ account for this trader](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees) (<a name="0013-ACCT-019" href="#0013-ACCT-019">0013-ACCT-019</a>)
+- [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the *margin* account for this trader](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees) (<a name="0013-ACCT-019" href="#0013-ACCT-019">0013-ACCT-019</a>)
 
 ### Insurance pool accounts
 

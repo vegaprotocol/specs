@@ -29,8 +29,7 @@ See [Whitepaper](https://vega.xyz/papers/vega-protocol-whitepaper.pdf), Section 
 1. This net outstanding liability is sourced from the market's order book via a single market order (in above example, that would be a market order to sell 3 on the order book) executed by the network as a counterpart. This internal entity is the counterpart of all trades that result from this single market order and now has a position which is comprised of a set of trades that transacted with the non-distressed traders on the order book. Note, the network's order should not incur a margin liability. Also, these new positions (including that incurred by the network) will need to be "MTM settled". This should happen after Step 5 to ensure we don't bankrupt the insurance pool before collecting the distressed trader's collateral.  This has been included as Step 6.
 1. The network then generates a set of trades with all the distressed traders all at the volume weighted average price of the network's (new) open position.   These trades should be readily distinguished from the trades executed by the network counterpart in Step 3 (suggest by a flag on the trades)
 
-Note, If there was no market order (i.e step 3 didn't happen) the close-out price is the most recently calculated _Mark Price_. See Scenario 1 below for the list of resulting trades for the above example. The open positions of all the "distressed" traders is now zero and the networks position is also zero. Note, no updates to the _Mark Price_ should happen as a result of any of
-these trades (as this would result in a new market-wide mark to market settlement at this new price and potentially lead to cascade close outs).
+  Note, If there was no market order (i.e step 3 didn't happen) the close-out price is the most recently calculated _Mark Price_. See Scenario 1 below for the list of resulting trades for the above example. The open positions of all the "distressed" traders is now zero and the networks position is also zero. Note, no updates to the _Mark Price_ should happen as a result of any of these trades (as this would result in a new market-wide mark to market settlement at this new price and potentially lead to cascade close outs).
 
 1. All bankrupt trader's remaining collateral in their margin account for this market is confiscated to the market's insurance pool.
 1. If an order was executed on the market (in Step 3), the resulting trade volume between the network and passive orders must be mark-to-market settled for all parties involved including the network's internal 'virtual' party. As the network's closeout counterparty doesn't have collateral, any funds it 'owes' will be transferred from the insurance fund during this settlement process (as defined in the [settlement spec](./0003-MTMK-mark_to_market_settlement.md).). It's worth noting that the network close-out party must never have margins calculated for it. This also should naturally happen because no margin calculations would happen during the period that the network temporarily (instantaneously) has an open position, as the entire position resolution process must happen atomically.
@@ -43,7 +42,7 @@ these trades (as this would result in a new market-wide mark to market settlemen
 
 ## Examples and Pseudo code
 
-### ***Scenario -  All steps***
+### _Scenario -  All steps_
 
 `Trader1 open position: +5`
 `Trader1 open orders:  0`
@@ -155,7 +154,6 @@ TransferRequest3 {
 Traders from step 3 need to be settled.
 
 Prior to STEP 3 trades, assume Trader 4 and Trader 5 had the following open positions.
-
 
 `// OpenPosition of Trader4 =  -3`
 `// OpenPosition of Trader5 =  15`
