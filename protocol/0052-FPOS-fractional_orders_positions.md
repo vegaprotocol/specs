@@ -6,9 +6,9 @@ Although prior versions of the specs have not specified a data type, the initial
 
 The solution to this is to:
 
-* Introduce a new [market framework](./0001-MKTF-market_framework.md) parameter for all markets known as `Position Decimal Places` that specifies the precision allowable on that market.
-* Convert at API boundaries OR instruct clients to do so by dividing outputs and multiplying inputs by `10^PDP` where PDP is the configured position decimal places for the market.
-* Wherever notional sizes, margins, fees, valuations, etc. are calculated in the core, to also ensure the input quantity if divided by `10^PDP`. This may be done centrally e.g. for positions so that trading/position management are dealing with integer sizes but fees, margins, valuation calculations use the "true" position size.
+- Introduce a new [market framework](./0001-MKTF-market_framework.md) parameter for all markets known as `Position Decimal Places` that specifies the precision allowable on that market.
+- Convert at API boundaries OR instruct clients to do so by dividing outputs and multiplying inputs by `10^PDP` where PDP is the configured position decimal places for the market.
+- Wherever notional sizes, margins, fees, valuations, etc. are calculated in the core, to also ensure the input quantity if divided by `10^PDP`. This may be done centrally e.g. for positions so that trading/position management are dealing with integer sizes but fees, margins, valuation calculations use the "true" position size.
 
 Specs affected by this change (Note: in many cases the implementation may not change):
 

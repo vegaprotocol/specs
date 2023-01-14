@@ -7,19 +7,21 @@ There are certain parameters within Vega that influence the behaviour of the sys
 A constant (or an array of constants) in the system whose values are able to be changed by on-chain governance. Not all constants are network parameters.
 
 A network parameter is defined by:
-* Name
-* Type
-* Value
-* Constraints
-* Governance update policy
+
+- Name
+- Type
+- Value
+- Constraints
+- Governance update policy
 
 ### Name
 
-* Editable by governance
+- Editable by governance
 
 ### Type
 
 Types available to network parameters:
+
 - JSON as string
 - string
 - number
@@ -46,34 +48,34 @@ In some cases network parameters cannot be changed without a corresponding code 
 
 Therefore, Vega needs to know for each network parameter what governance thresholds should be applied for ascertaining a proposal to change the parameter's value. Specifically, these thresholds:
 
-* proposal minimum close period
-* proposal maximum close period
-* proposal minimum enactment period
-* proposal maximum enactment period
-* proposal required participation to pass
-* proposal required majority to pass
-* proposal minimum proposer balance
-* proposal minimum voter balance
+- proposal minimum close period
+- proposal maximum close period
+- proposal minimum enactment period
+- proposal maximum enactment period
+- proposal required participation to pass
+- proposal required majority to pass
+- proposal minimum proposer balance
+- proposal minimum voter balance
 
 There are groups of network parameters that will use the same values for the thresholds. The parameters can be set for the following groups:
 
-* governance market proposal
-* governance asset proposal
-* governance update market proposal
-* governance update asset proposal
-* governance update network parameter proposal
-* governance freeform proposal (with the exception of enactment periods)
+- governance market proposal
+- governance asset proposal
+- governance update market proposal
+- governance update asset proposal
+- governance update network parameter proposal
+- governance freeform proposal (with the exception of enactment periods)
 
 Importantly, these Minimum Levels are themselves network parameters, and therefore subject to change. They should be self referential in terms of ascertaining the success of changing them.
 
 For example, consider a network parameter that specifies the proportion of fees that goes to market makers (`MarketFeeFactorsMakerFee`), with change thresholds:
 
-* `GovernanceProposalUpdateNetParamMinClose` = 30 days
-* `GovernanceProposalUpdateNetParamMinEnact` = 10 days
-* `GovernanceProposalUpdateNetParamRequiredParticipation` = 60%
-* `GovernanceProposalUpdateNetParamRequiredMajority` = 80%
-* `GovernanceProposalUpdateNetParamMinProposerBalance` = 100 (of the governance token)
-* `GovernanceProposalUpdateNetParamMinVoterBalance` = 10 (of the governance token)
+- `GovernanceProposalUpdateNetParamMinClose` = 30 days
+- `GovernanceProposalUpdateNetParamMinEnact` = 10 days
+- `GovernanceProposalUpdateNetParamRequiredParticipation` = 60%
+- `GovernanceProposalUpdateNetParamRequiredMajority` = 80%
+- `GovernanceProposalUpdateNetParamMinProposerBalance` = 100 (of the governance token)
+- `GovernanceProposalUpdateNetParamMinVoterBalance` = 10 (of the governance token)
 
 Then a proposal that attempted to change the `market.fee.factors.makerFee` would need to pass all of the thresholds listed above. It would have to run for 30 days, would be enacted 10 days after a sucessful vote.. etc.
 

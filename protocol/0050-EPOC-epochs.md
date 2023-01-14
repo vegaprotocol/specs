@@ -136,7 +136,7 @@ Furthermore, the validators watch the smart contract, and observe the following 
 Change wanted stake: Define a new parameter of `wanted_stake[validator]`, valid at the epoch
 following the one in which the command is put into a block.
 
-## Fringe Cases:
+## Fringe Cases
 
 A delegator can delegate some stake, and immediately undelegate it before the next
 epoch starts. This is fine with us.
@@ -151,7 +151,7 @@ If several delegators change the delegation within the same block, some of them 
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
 block creator has the responsibility to filter out these transactions.
 
-## Commands:
+## Commands
 
 ```javascript
 delegate(delegator_ID, validator_ID, amount/'all')
@@ -164,7 +164,7 @@ undelegate(delegator_ID, validator_ID, amount/'all')
 undelegate_now(delegator_ID, validator_ID, amount/'all')
 ```
 
-# General Fringe Cases:
+## General Fringe Cases
 
 Due to the various parameters, we have a setting where an inconsistent view of the settings
 can cause trouble - if one validator things a transaction is valid and another one does not,
@@ -183,7 +183,7 @@ the chain can still go on.
 
 In mainnet alpha this is sufficient as the chain dies relatively quickly anyhow. In later versions, we'd need a simple resync protocol (e.g., all validators put on the block what they think the parameters are; the majority of the first n-t blocks wins).
 
-# Network Parameters
+## Network Parameters
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
@@ -197,18 +197,23 @@ All parameters that are changed through a governance vote are valid starting the
 
 ## Acceptance Criteria
 
-1. Epochs change at the end of the first block that is after the epoch expiry has passed
-   - Given an epoch length of `1d`, with a block time of `1h`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
-   - Given an epoch length of `1d`, with a block time of `1h`, at end of block 23 the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
-   - Given an epoch length of `1d`, with a block time of `1h`, at end of block 24 the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
-2. Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>)
-   - Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1`
-   - Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61`
-3. Nomination takes effect at epoch changeover
-   - During epoch 1, `party 1` nominates any valid amount to `validator 1`
-     - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>) (note: this can be tested by trying to delegate again, which will be rejected)
-     - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
-     - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
+Epochs change at the end of the first block that is after the epoch expiry has passed:
+
+- Given an epoch length of `1d`, with a block time of `1h`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
+- Given an epoch length of `1d`, with a block time of `1h`, at end of block 23 the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
+- Given an epoch length of `1d`, with a block time of `1h`, at end of block 24 the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
+  
+Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>):
+
+- Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1`
+- Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61`
+  
+Nomination takes effect at epoch changeover:
+
+- During epoch 1, `party 1` nominates any valid amount to `validator 1`
+  - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>) (note: this can be tested by trying to delegate again, which will be rejected)
+  - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
+  - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
 
 ## See also
 

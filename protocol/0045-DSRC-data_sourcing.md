@@ -48,7 +48,8 @@ Data sources will be specified by providing:
 1. Data source specific details (for signed message, public key of sender; for Ethereum, contract address, method name; etc.)
 
 Data sources may refer to other data sources, for example:
-1. A data source that takes a source of structured data records as input and emits only the value of a named field (e.g. to return "BTCUSD_PRICE" from a record containing many prices, for instance)
+
+1. A data source that takes a source of structured data records as input and emits only the value of a named field (e.g. to return `BTCUSD_PRICE` from a record containing many prices, for instance)
 1. A data source that takes another data source as input and emits only data that matches a set of defined filters (e.g. to return only records with specific values in the timestamp and ticket symbol fields)
 
 NB: the above could be composed, so filter the stream and then select a field.
@@ -56,6 +57,7 @@ NB: the above could be composed, so filter the stream and then select a field.
 ## 3. Specifying a new data source
 
 When defining a data source, the specification for that data source must describe:
+
 1. What parameters (input data) are required to create a data source of that type
 1. How the data source interprets those parameters to emit one or more values
 1. Any additional requirements needed for the data source to work (such as external "bridge" infrastructure to other blockchains)
@@ -65,6 +67,7 @@ When defining a data source, the specification for that data source must describ
 ### Allowable types:
 
 Data sources must be able to emit the following data types:
+
 1. Number (for MVP these can be used for prices or in filter comparisons)
 1. String (for MVP these would only be used to compare against in filters)
 1. Date/Time (for MVP these would only be used to compare against in filters)

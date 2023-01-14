@@ -12,11 +12,9 @@ Every piece of data that is not provided by the Vega core and is not part of the
 
 Product parameters my be one of two types:
 
-* **Explicit value:** for example a number (0.1, 500, ...), date, duration, string, list of values, etc. that is specified when the Product is created along with the Instrument and Market.
-
-* **Data source reference:** this is a reference as defined in the [Data Sourcing Framework](./0045-DSRC-data_sourcing.md) for a value or stream of values which will be used by the Product logic.
-
-* **Settlement asset:** settlement asset parameters may either be one of more single [asset references](./0040-ASSF-asset_framework.md), e.g. ("base_asset" and "quote_asset" or "settlement_asset" if there's just one), or in the case of a more advanced product could be a single parameter that holds a list of assets, which may or may not have a required length.
+- **Explicit value:** for example a number (0.1, 500, ...), date, duration, string, list of values, etc. that is specified when the Product is created along with the Instrument and Market.
+- **Data source reference:** this is a reference as defined in the [Data Sourcing Framework](./0045-DSRC-data_sourcing.md) for a value or stream of values which will be used by the Product logic.
+- **Settlement asset:** settlement asset parameters may either be one of more single [asset references](./0040-ASSF-asset_framework.md), e.g. ("base_asset" and "quote_asset" or "settlement_asset" if there's just one), or in the case of a more advanced product could be a single parameter that holds a list of assets, which may or may not have a required length.
 
 ### Changing product parameters
 
@@ -31,7 +29,6 @@ The Product definition must also provide validation logic for each *explicit val
 Validation of values can occur in two phases:
 
 1. Generic "stateless" logic that can be checked before a transaction is accepted by Vega (for examples `funding_rate < 1`). These validations can be used to reject a transaction before it is considered for inclusion by the network (e.g. pre-consensus) and are preferred wherever possible as a result.
-
 1. Logic that requires access to the Vega state which includes, for example, the current date/time, market data from another Vega market, or values from a data source reference. These validations occur once a transaction is confirmed and could cause an market proposal to fail even though it is accepted by the network and processed.
 
 ## Settlement assets
@@ -113,18 +110,23 @@ See the [built-in Futures spec](../protocol/0016-PFUT-product_builtin_future.md)
 ## APIs
 
 APIS should be available to:
+
 - Emit an event bus event any time a product lifecycle trigger is triggered
 - Emit an event bus event any time a product lifecycle event calls `settle(...)`
 - Emit an event bus event any time a product lifecycle event changes a market's status
 
 ## Acceptance criteria
 
-1. Settlement assets
-  1. A product of any type cannot be created without specifying at least one settlement asset (<a name="0051-PROD-001" href="#0051-PROD-001">0051-PROD-001</a>)
-  2. The settlement asset or assets must exist at the time when the product is created (<a name="0051-PROD-002" href="#0051-PROD-002">0051-PROD-002</a>)
-2. Product updates via governance
-  1. The settlement asset / settlement assets cannot be changed on a product via governance  (<a name="0051-PROD-003" href="#0051-PROD-003">0051-PROD-003</a>)
+Settlement assets:
+
+- A product of any type cannot be created without specifying at least one settlement asset (<a name="0051-PROD-001" href="#0051-PROD-001">0051-PROD-001</a>)
+- The settlement asset or assets must exist at the time when the product is created (<a name="0051-PROD-002" href="#0051-PROD-002">0051-PROD-002</a>)
+
+Product updates via governance:
+
+- The settlement asset / settlement assets cannot be changed on a product via governance  (<a name="0051-PROD-003" href="#0051-PROD-003">0051-PROD-003</a>)
 
 ## See also
+
 - [Product: Built In Futures](./016-PFUT-product_builtin_future.md)
 - [Product: Cash settled Perpetual Future](./0053-PERP-product_builtin_perpetual_future.md)
