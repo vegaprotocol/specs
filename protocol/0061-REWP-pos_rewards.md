@@ -46,8 +46,7 @@ This is to ensure that validators (all validators) have incentive to pay Ethereu
 
  The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively).
 
-
-## For each validator we then do:
+## For each validator we then do
 
 1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is  both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`.
 Here `allDelegatedTokens` is the count of the tokes delegated to this validator.
@@ -103,7 +102,6 @@ For ersatz validators, the same formula is used.
 1. One of the Tendermint validators goes offline forever and is removed from the set of Tendermint validators but their key still stays on multisig (no-one updated).
 1. Epoch ends and multisig hasn't been updated.
 1. Tendermint validators get no rewards. Ersatz validators still receive rewards.
-
 
 - A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)
 - With `delegator_share` set to `0`, a validator keeps 100% of their own rewards, and a delegator receives no reward (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>)

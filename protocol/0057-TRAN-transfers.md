@@ -4,6 +4,7 @@ This spec introduces a mechanism to transfer funds from one account to another, 
 These transfers are not to be confused with the internal concept of transfers which results from event happening inside the protocol, which are covered in spec [0005-COLL](./0005-COLL-collateral.md).
 
 Allowing users to initiate transfers allows for the following capabilities:
+
 - A user can transfer funds from a public key A to a public key B.
 - A user can transfer funds from and to a locked account used for staking (yet to be specified) [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md).
 - A user can set up a recurring transfer.
@@ -33,6 +34,7 @@ In order to do this the request for transfer should contain a field indicating w
 ## Spam protection
 
 In order to prevent the abuse of user-initiated transfers as spam attack there will be:
+
 - `spam.protection.maxUserTransfersPerEpoch` that will limit the number of transfers that a user can initiate within an epoch, see [network parameter](#network-parameters).
 
 ## Minimum transfer amount
@@ -81,13 +83,10 @@ To be able to dispatch rewards to reward pools of multiple markets pro-rata to t
 
 - When transferring to a reward account, the transaction must also include the following:
 
-   - `reward metric` — the type of reward (see [rewards](./0056-REWA-rewards_overview.md))
-
-   - `reward metric asset` — (the settlement asset of all markets that will be in scope for the transfer)
-
-   - `market scope` — a subset of markets in which parties are eligible to be rewarded from this transfer.
-   If the market scope is not defined / an empty list, it is taken as all the markets that settle in the reward metric asset.
-
+- `reward metric` — the type of reward (see [rewards](./0056-REWA-rewards_overview.md))
+- `reward metric asset` — (the settlement asset of all markets that will be in scope for the transfer)
+- `market scope` — a subset of markets in which parties are eligible to be rewarded from this transfer.
+  - If the market scope is not defined / an empty list, it is taken as all the markets that settle in the reward metric asset.
 - At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market to the sum total reward metric for all markets in the `market scope` and then distributes the transfer amount to the corresponding accounts of the markets pro-rata by their contribution to the total.
 
 Where the reward metric type is "market creation rewards", it is important that no market creator will receive more than one market creation reward paid in the same asset from the same source account (reward funder).
@@ -210,62 +209,70 @@ message CancelTransfer {
 ### Recurring transfers
 
 As a user I can create a recurring transfer _which expires after a specified epoch_ (<a name="0057-TRAN-050" href="#0057-TRAN-050">0057-TRAN-050</a>)
-  - I specify a start and end epoch, and a factor of `1`, start epoch in the future, until the start epoch is reached no transfers are executed.
-  - Once I reach the start epoch, the first transfer happens.
-  - The same amount is transfered every epoch.
-  - In the epoch after the `end epoch`, no transfers are executed.
+
+- I specify a start and end epoch, and a factor of `1`, start epoch in the future, until the start epoch is reached no transfers are executed.
+- Once I reach the start epoch, the first transfer happens.
+- The same amount is transfered every epoch.
+- In the epoch after the `end epoch`, no transfers are executed.
 
 As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-051" href="#0057-TRAN-051">0057-TRAN-051</a>)
-  - I specify a start and end epoch, and a factor of `0.7`
-  - Until the start epoch is reached not transfers are executed
-  - Once I reach the start epoch transfers happen and the first tranfer is for the `start amount`. The fee amount taken from the source account is `start amount x transfer.fee.factor` and transferred to the infrastructure fee account for the asset.
-  - The transfer at end of  `start epoch + 1` is `0.7 x start amount` and the fee amount is `0.7 x start amount x transfer.fee.factor`.
-  - The amount transfered every epoch decreases.
-  - After I reach the epoch `?`, no transfers are executed anymore
+
+- I specify a start and end epoch, and a factor of `0.7`
+- Until the start epoch is reached not transfers are executed
+- Once I reach the start epoch transfers happen and the first tranfer is for the `start amount`. The fee amount taken from the source account is `start amount x transfer.fee.factor` and transferred to the infrastructure fee account for the asset.
+- The transfer at end of  `start epoch + 1` is `0.7 x start amount` and the fee amount is `0.7 x start amount x transfer.fee.factor`.
+- The amount transfered every epoch decreases.
+- After I reach the epoch `?`, no transfers are executed anymore
 
 As a user I can create a recurring transfer that recurs forever, with the same balance transferred each time (<a name="0057-TRAN-052" href="#0057-TRAN-052">0057-TRAN-052</a>)
-  - I specify a start and no end epoch, and a factor of `1`
-  - Until the start epoch is reached not transfers are executed
-  - Once I reach the start epoch transfers happens.
-  - The amount transfered every epoch is the same
-  - The transfers happen forever
+
+- I specify a start and no end epoch, and a factor of `1`
+- Until the start epoch is reached not transfers are executed
+- Once I reach the start epoch transfers happens.
+- The amount transfered every epoch is the same
+- The transfers happen forever
 
 As a user I can create a recurring transfer that recurs as long as the amount is `transfer.minTransferQuantumMultiple x quantum`, with the amount transfer decreasing. (<a name="0057-TRAN-053" href="#0057-TRAN-053">0057-TRAN-053</a>)
-  - I specify a start and no end epoch, and a factor of `0.1`
-  - Until the start epoch is reached not transfers are executed
-  - In subsequent epochs the amount transfered every epoch `n` is `0.1` times the amount transferred in epoch `n-1`.
-  - Once I reach the end of start epoch transfers happens.
-  - The transfers happen as long as the amount transferred is >  `transfer.minTransferQuantumMultiple x quantum`.
-  - After a sufficiently large number of epochs the transfers stops and the recurring transfer is deleted.
+
+- I specify a start and no end epoch, and a factor of `0.1`
+- Until the start epoch is reached not transfers are executed
+- In subsequent epochs the amount transfered every epoch `n` is `0.1` times the amount transferred in epoch `n-1`.
+- Once I reach the end of start epoch transfers happens.
+- The transfers happen as long as the amount transferred is >  `transfer.minTransferQuantumMultiple x quantum`.
+- After a sufficiently large number of epochs the transfers stops and the recurring transfer is deleted.
 
 As a user I can cancel a recurring transfer (<a name="0057-TRAN-054" href="#0057-TRAN-054">0057-TRAN-054</a>)
-  - I specify a start and no end epoch, and a factor of 1
-  - Once I reach the start epoch transfers happens.
-  - I cancel the recurring transfer after the start epoch, before the end epoch
-  - No transfer are executed anymore
+
+- I specify a start and no end epoch, and a factor of 1
+- Once I reach the start epoch transfers happens.
+- I cancel the recurring transfer after the start epoch, before the end epoch
+- No transfer are executed anymore
 
 As a user I can cancel a recurring transfer before any transfers have executed (<a name="0057-TRAN-055" href="#0057-TRAN-055">0057-TRAN-055</a>)
-  - I specify a start and no end epoch, and a factor of 1
-  - I cancel the transfer after the start epoch, before the end epoch
-  - No transfer are executed at all
+
+- I specify a start and no end epoch, and a factor of 1
+- I cancel the transfer after the start epoch, before the end epoch
+- No transfer are executed at all
 
 A user's recurring transfer is cancelled if any transfer fails due to insufficient funds (<a name="0057-TRAN-056" href="#0057-TRAN-056">0057-TRAN-056</a>)
-  - I specify a start and no end epoch, and a factor of 1
-  - Until the epoch is reached not transfers are executed
-  - Once I reach the start epoch transfers happens.
-  - The account runs out of funds
-  - The transfer is cancelled
-  - No more transfers are executed.
+
+- I specify a start and no end epoch, and a factor of 1
+- Until the epoch is reached not transfers are executed
+- Once I reach the start epoch transfers happens.
+- The account runs out of funds
+- The transfer is cancelled
+- No more transfers are executed.
 
 A recurring transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-058" href="#0057-TRAN-058">0057-TRAN-058</a>)
 
 A user's recurring transfer to a reward account does not occur if there are no parties eligible for a reward in the current epoch (<a name="0057-TRAN-057" href="#0057-TRAN-057">0057-TRAN-057</a>)
-  - I set up a market `ETHUSDT` settling in USDT.
-  - The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`.
-  - I specify a start and no end epoch, and a factor of 1 to a reward account `ETHUSDT | market creation | $VEGA`
-  - In the first epoch no trading occurs and nothing is transferred to the reward account at the end of the epoch
-  - In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
-  - At the end of the third epoch, no transfer occurs
+
+- I set up a market `ETHUSDT` settling in USDT.
+- The value of `marketCreationQuantumMultiple` is `10^6` and `quantum` for `USDT` is `1`.
+- I specify a start and no end epoch, and a factor of 1 to a reward account `ETHUSDT | market creation | $VEGA`
+- In the first epoch no trading occurs and nothing is transferred to the reward account at the end of the epoch
+- In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
+- At the end of the third epoch, no transfer occurs
 
 If the network parameter `transfer.minTransferFeeFactor` is modified, this modification is applied
 immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-062" href="#0057-TRAN-062">0057-TRAN-062</a>)

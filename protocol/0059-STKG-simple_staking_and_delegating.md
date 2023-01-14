@@ -7,19 +7,20 @@ Validators and delegators receive incentives from the network, depending on vari
 ## Note on terminology
 
 Staking requires the combined action of:
+
 - Associating tokens on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md); and
 - Nominating these tokens to one or more validators
 - Delegation in some contexts is used to mean `associate + nominate`. For the purposes of this document, once it's clear from context that association has happened `delegate` and `nominate` may be used interchangeably.
 
 Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can associate a token in the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), which is then available for
 nomination. To this end, a Vega token (or a fraction thereof) can be:
+
 - Unassociated: The tokenholder is free to do with the token as they want, but cannot nominate it
 - Associated: The token is locked in the staking and delegation smart contract and associated to a Vega key. It can be used on the Vega chain for governance and it can be nominated to a validator.
 
 ## Smart Contract / Staking Bridge Interaction
 
-It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) through the validators; thus, all actions regarding associating
-and dissociating of stake are initiated by the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), not by the Vega chain.
+It is important that no action triggered on Vega needs to directly invoke the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) through the validators; thus, all actions regarding associating and dissociating of stake are initiated by the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), not by the Vega chain.
 
 In order to delegate, users require tokens that will be associated in a smart contract (see [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md)). Vega will be made aware of how many tokens a given party has associated through bridge events. When the same tokens are dissociated, a corresponding event will be emitted:
 
@@ -32,11 +33,11 @@ Note that the bridge contract uses `deposited` and `removed` instead of `associa
 
 This provides the information the core needs to keep track of:
 
-* Total Delegatable Stake
-* Undelegated Stake
-* Stake delegated per validator
-* Stake marked for delegation per validator in the next [epoch](./0050-EPOC-epochs.md).
-* Total stake (should be the sum of all those listed immediately above).
+- Total Delegatable Stake
+- Undelegated Stake
+- Stake delegated per validator
+- Stake marked for delegation per validator in the next [epoch](./0050-EPOC-epochs.md).
+- Total stake (should be the sum of all those listed immediately above).
 
 There is no interaction with the smart contract that is initiated by Vega.
 
@@ -98,30 +99,35 @@ At the top level, `Stake_Deposited` simply adds `amount` of tokens to the accoun
 
 *Option-1*
 A first heuristic would be to take from the highest delegation first and then go down, e.g.
-	* If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we first take from the richest ones until they are no longer the richest:
-	* Free 10, delegation is 90, 90, 80, 70
-	* Free 30, delegation is 80, 80, 80, 70
+
+- If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we first take from the richest ones until they are no longer the richest:
+- Free 10, delegation is 90, 90, 80, 70
+- Free 30, delegation is 80, 80, 80, 70
+
 This has the benefit of lowering the probability that a single withdrawal will leave any one validator with zero delegated stake.
 
 *Option-2*
 Another option would be to withdraw stake proportionally from the validators.
-	* If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we split the withdrawal across all validators proportionately:
-	* Free from delegator-1 (to whom the participant has delegated 100) an amount equal to 30 * (100/(100+90+80+70)) etc. Not sure how to deal with rounding.
+
+- If the delegation is 100, 90, 80, 70, and we need to free 30 stake, we split the withdrawal across all validators proportionately:
+- Free from delegator-1 (to whom the participant has delegated 100) an amount equal to 30 * (100/(100+90+80+70)) etc. Not sure how to deal with rounding.
 
 #### Types of undelegations
 
 _Undelegate towards the end of the epoch_
+
 - The action is announced in the next available block, but the delegator keeps the delegation alive till the last block of the epoch. The delegator can then re-delegate the stake, which then be valid once the next epoch starts. The delegator cannot move the tokens before the epoch ends, they remain locked.
 
-_Undelegate Now_
-`UndelegateNow`:
-The action can be announced at any time and is executed immediately following the block it is announced in.
-The user is marked to not receive any reward from the validator in that epoch. The reward should instead go into the [on-chain treasury account for that asset](./0055-TREA-on_chain_treasury.md). The stake is marked as free for the delegator, but is not yet removed from the validator stake (this happens at the end of the epoch).
+_Undelegate Now_ `UndelegateNow`:
+
+- The action can be announced at any time and is executed immediately following the block it is announced in.
+- The user is marked to not receive any reward from the validator in that epoch. - The reward should instead go into the [on-chain treasury account for that asset](./0055-TREA-on_chain_treasury.md). The stake is marked as free for the delegator, but is not yet removed from the validator stake (this happens at the end of the epoch).
 
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring any interaction between the smart contract and the details of the delegation system. This also allows the delegator to change their mind about a delegation before it is activated.
 
-`UndelegateInAnger`:
-This is not strictly a type of undelegation but it's effect is quite similar to undelegate now. This is expressed by unstaking rather than by un-delegating. When removing the stake, the corresponding stake will automatically be undelegated.
+_Undelegate in Anger_ `UndelegateInAnger`:
+
+- This is not strictly a type of undelegation but it's effect is quite similar to undelegate now. This is expressed by unstaking rather than by un-delegating. When removing the stake, the corresponding stake will automatically be undelegated.
 
 ### Auto [Un]delegation
 
@@ -164,21 +170,26 @@ See the [network paramters spec](./0054-NETP-network_parameters.md#current-netwo
 
 ### Staking for the first time
 
-- To lock tokens, a participant must:
-  - Have some balance of vested or unvested governance asset in an Ethereum wallet. These assets must not be locked to another smart contract (including the [Vega collateral bridge](./0031-ETHB-ethereum_bridge_spec.md)).
-  - Have a Vega wallet
-  - Lock the tokens on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md),
-- To delegate the locked tokens, a participant must:
-  - Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" (<a name="0059-STKG-001" href="#0059-STKG-001">0059-STKG-001</a>)
-  - Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).(<a name="0059-STKG-002" href="#0059-STKG-002">0059-STKG-002</a>)
-- These accounts will be created:
-  - A [staking account](./0013-ACCT-accounts.md#staking-accounts) denominated in the governance asset is created(<a name="0059-STKG-003" href="#0059-STKG-003">0059-STKG-003</a>)
-  - When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards) (<a name="0059-STKG-004" href="#0059-STKG-004">0059-STKG-004</a>)
-  - It is possible that a separate reward function will cause an account to be created for the user as a result of rewards.
+To lock tokens, a participant must:
+
+- Have some balance of vested or unvested governance asset in an Ethereum wallet. These assets must not be locked to another smart contract (including the [Vega collateral bridge](./0031-ETHB-ethereum_bridge_spec.md)).
+- Have a Vega wallet
+- Lock the tokens on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md),
+
+To delegate the locked tokens, a participant must:
+
+- Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" (<a name="0059-STKG-001" href="#0059-STKG-001">0059-STKG-001</a>)
+- Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).(<a name="0059-STKG-002" href="#0059-STKG-002">0059-STKG-002</a>)
+
+These accounts will be created:
+
+- A [staking account](./0013-ACCT-accounts.md#staking-accounts) denominated in the governance asset is created(<a name="0059-STKG-003" href="#0059-STKG-003">0059-STKG-003</a>)
+- When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards) (<a name="0059-STKG-004" href="#0059-STKG-004">0059-STKG-004</a>)
+- It is possible that a separate reward function will cause an account to be created for the user as a result of rewards.
 - Timings
-  - Any locked (but undelegated) tokens can be delegated at any time. (<a name="0059-STKG-005" href="#0059-STKG-005">0059-STKG-005</a>)
-  - The delegation only becomes valid at the next [epoch](./0050-EPOC-epochs.md), though it can be undone through undelegate. (<a name="0059-STKG-006" href="#0059-STKG-006">0059-STKG-006</a>)
-  - The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next epoch) (<a name="0059-STKG-007" href="#0059-STKG-007">0059-STKG-007</a>)
+- Any locked (but undelegated) tokens can be delegated at any time. (<a name="0059-STKG-005" href="#0059-STKG-005">0059-STKG-005</a>)
+- The delegation only becomes valid at the next [epoch](./0050-EPOC-epochs.md), though it can be undone through undelegate. (<a name="0059-STKG-006" href="#0059-STKG-006">0059-STKG-006</a>)
+- The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next epoch) (<a name="0059-STKG-007" href="#0059-STKG-007">0059-STKG-007</a>)
 
 ### Adding more stake
 

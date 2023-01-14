@@ -66,7 +66,7 @@ callOption.value(quote) {
 }
 ```
 
-## Quote-to-value function
+## Quote-to-value function (fees)
 
 See [Fees spec](./0029-FEES-fees.md) for context. Fees are calculated based on `trade_value_for_fee_purposes`. Any product *may* provide `product.valueForFeePurposes(quote)` function which returns the value of the product for size of `1` which will be used in calculating fees:
 For many products this will simply be

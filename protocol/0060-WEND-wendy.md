@@ -12,5 +12,6 @@ Clarification: If `market_id` = 0, a transaction isn't touched by Wendy but pass
 Transactions need to be submitted to all validators by the client.
 
 To specify:
-  - `C&R` Integration
-  - Testing with a network simulator
+
+- `C&R` Integration
+- Testing with a network simulator

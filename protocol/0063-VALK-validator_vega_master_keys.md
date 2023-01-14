@@ -32,7 +32,7 @@ Validators to use their public master key as the "destination" when they associa
 
 The public master key has to be added to validators' identities in the genesis configuration.
 
-## Acceptance Criteria:
+## Acceptance Criteria
 
 - There is a function (not necessarily inside core) that takes the master key and an index and computes the corresponding hot key  (<a name="0063-VALK-001" href="#0063-VALK-001">0063-VALK-001</a>)
 - A transaction can be submitted to the network to initiate a Vega key rotation (<a name="0063-VALK-002" href="#0063-VALK-002">0063-VALK-002</a>)
