@@ -48,3 +48,4 @@ jobs:
         with:
           files: .
           config_file: .github/workflows/config/markdownlint.json
+          ignore_path: .github/workflows/config/markdownlintignore
