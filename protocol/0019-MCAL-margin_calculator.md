@@ -15,7 +15,7 @@
 
 ## Summary
 
-The *_*margin calculator*_* returns the set of relevant margin levels for a given position and entry price:
+The *margin calculator* returns the set of relevant margin levels for a given position and entry price:
 
 1. ***Maintenance margin***
 1. ***Collateral search level***
@@ -34,7 +34,7 @@ In future there can be multiple margin calculator implementations that would be 
 
 The calculator takes as inputs:
 
-* position record = [`open_volume`, `buy_orders`, `sell_orders`] where `open_volume` refers to size of open position (`+ve` is long, `-ve` is short), `buy_orders` / `sell_orders` refer to size of all orders on the buy / sell side (+ve is long, -ve is short). See [positions core specification](./0006-POSI-positions_core.md).
+- position record = [`open_volume`, `buy_orders`, `sell_orders`] where `open_volume` refers to size of open position (`+ve` is long, `-ve` is short), `buy_orders` / `sell_orders` refer to size of all orders on the buy / sell side (+ve is long, -ve is short). See [positions core specification](./0006-POSI-positions_core.md).
 - `mark price`
 - `scaling levels` defined in the risk parameters for a market
 - `quantitative risk factors`
@@ -166,7 +166,6 @@ where the scaling factors are set as risk parameters ( see [market framework](./
 ## Positive and Negative numbers
 
 Positive margin numbers represent a liability for a trader. Therefore, if comparing two margin numbers, the greatest liability (i.e. 'worst' margin number for the trader) is the most positive number. All margin levels returned are positive numbers.
-
 
 ## Pseudo-code / Examples
 

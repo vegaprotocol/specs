@@ -46,17 +46,19 @@ Attempt to transfer the full fee from the trader into a temporary bucket, one bu
 If insufficient, then take the remainder (possibly full fee) from the margin account.
 The margin account should have enough left after paying the fees to cover maintenance level of margin for the trades.
 If the transfer fails:
-1) If we are in continuous trading mode, than trades should be discarded, any orders on the book that would have been hit should remain in place with previous remaining size intact and the incoming order should be rejected (not enough fees error).
+
+1. If we are in continuous trading mode, than trades should be discarded, any orders on the book that would have been hit should remain in place with previous remaining size intact and the incoming order should be rejected (not enough fees error).
 This functionality requires to match orders and create trades without changing the state of the order book or passing trades downstream so that the execution of the transaction can be discarded with no impact on the order book if needed.
 Other than the criteria whether to proceed or discard, this is exactly the same functionality required to implement [price monitoring](./0032-PRIM-price_monitoring.md).
-1) If we are in auction mode, ignore the shortfall (and see more details below).
+2. If we are in auction mode, ignore the shortfall (and see more details below).
 
 The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the three components.
 
 Now distribute funds from the "temporary fee bucket" as follows:
-1) Infrastructure_fee is transferred to infrastructure fee pool for that asset. Its distribution is described in [0061 - Proof of Stake rewards](./0061-REWP-pos_rewards.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to validator score and type.
-1) The maker_fee is transferred to the relevant party.
-1) The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+
+1. Infrastructure_fee is transferred to infrastructure fee pool for that asset. Its distribution is described in [0061 - Proof of Stake rewards](./0061-REWP-pos_rewards.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to validator score and type.
+1. The maker_fee is transferred to the relevant party.
+1. The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 ### During Continuous Trading
 
