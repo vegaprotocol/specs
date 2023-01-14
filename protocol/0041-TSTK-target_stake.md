@@ -26,7 +26,7 @@ Example 1:
 the market opened at `t_0 = 1:55`.
 We have the following information about open interest over time:
 
-```
+```math
 [time, OI]
 [3:51, 140]
 [3:57, 120]

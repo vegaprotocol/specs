@@ -27,6 +27,7 @@ First, we produce a list of pairs which capture committed liquidity of each LP t
 ...
 [LP-N-stake, LP-N-liquidity-fee-factor]
 ```
+
 where `N` is the number of liquidity providers who have committed to supply liquidity to this market. Note that `LP-1-liquidity-fee-factor <= LP-2-liquidity-fee-factor <= ... <= LP-N-liquidity-fee-factor` because we demand this list of pairs to be sorted in this way.
 
 We now find the smallest integer `k` such that `[target stake] < sum from i=1 to k of [LP-i-stake]`. In other words we want in this ordered list to find the liquidity providers that supply the liquidity that's required. If no such `k` exists we set `k=N`.
@@ -122,6 +123,7 @@ The equity-like share for each LP is then
 **Warning** the above will be decimal calculations so the above checks will only be true up to a rounding errors.
 
 The average entry valuation (which should be reported by the APIs and could be calculated only by the data node as it doesn't itself impact core state) is defined, at the time of change of an LP commitment as follows:
+
 1. There already is `average entry valuation` for the LP in question (and `average entry valuation = 0` for a new LP). The LP has existing physical stake `S` (and `S=0` for new LP) and wishes to add / remove stake `Delta S`. If `Delta S < 0` then `average entry valuation` is unchanged by the transaction. If `S + Delta S = 0` then the LP is exiting their LP commitment and we do not calculate the `average entry valuation` for them in this case.
 So `Delta S > 0` (and so `S+Delta S > 0`) in what follows.
 2. Calculate the entry valuation at the time stake `Delta S` is added / removed as
@@ -175,24 +177,20 @@ When we say "all orders" we mean their limit orders, [pegged orders](./0037-OPEG
 
 Now calculate the total of the instantenous liquidity scores obtained for each committed LP:
 
-```
-total = the sum of instantenous liquidity scores for all LPs that have an active liquidity commitment
-```
+
+`total = the sum of instantenous liquidity scores for all LPs that have an active liquidity commitment`
 
 Now, if the `total` comes out as `0` then set `fractional instantenous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
 Otherwise calculate fractional instantenous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
 
-```
-fractional instantenous liquidity score = instantenous liquidity score / total
-```
+`fractional instantenous liquidity score = instantenous liquidity score / total`
 
 If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then for each committed LP `liquidity score` is set to `fractional instantenous liquidity score`.
 
 Otherwise whenever a new LP fee distribution period starts set a counter `n=1`.
 Then on every Vega time change, after `fractional instantenous liquidity score` has been obtained for all the committed LPs, update:
-```
-liquidity score <- ((n-1)/n) x liquidity score + (1/n) x fractional instantenous liquidity score
-```
+
+`liquidity score <- ((n-1)/n) x liquidity score + (1/n) x fractional instantenous liquidity score`
 
 The liquidity score should always be rounded to 10 decimal places to prevent spurious accuracy and overly long string representation of a number.
 

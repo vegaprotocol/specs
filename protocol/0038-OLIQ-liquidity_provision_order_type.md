@@ -84,7 +84,7 @@ Calculate the `liquidity-normalised-proportion` for all entries, where for buy a
 
 `liquidity-normalised-proportion = liquidity-proportion-for-entry / sum-all-entries(liquidity-proportion-for-order)`
 
-```
+```math
 Example 1 (from above) where refined-order-list = [buy-entry-1, buy-entry-2, sell-entry-1, sell-entry-2]:
 
 liquidity-normalised-proportion-buy-order-1 = 2 / (2 + 13) = 0.13333...
@@ -170,7 +170,6 @@ and then this
 
 *Note: the actual values of the buy-prices and buy-volumes are dependent on the result of step 2 above and this example is not to test that, so don't try to replicate this with numbers, it's for illustrative purposes only.
 ________________________
-
 
 ### Transfers in / out of margin account
 

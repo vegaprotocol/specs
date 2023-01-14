@@ -207,7 +207,7 @@ NOTE 1: This function expects that the token being used has been whitelisted.
 
 NOTE 2: Before running this function, the user must run the ERC-20-standard `approve` function to authorize the bridge smart contract as a spender of the user's target token. This will only allow a specific amount of that specific token to be spent by the bridge. See: [Ethereum improvement proposal 20](https://eips.ethereum.org/EIPS/eip-20)
 
-##### Other Ethereum Token Standards
+##### Other Ethereum Token Standards (Depositing)
 
 This section will be expanded if additional ethereum based token standards are supported by Vega. New bridges will be expected to implement `IVega_Bridge`.
 
@@ -258,7 +258,7 @@ All withdrawal request contains a common part, in order to identify a party on t
 
 Same process than AssetList. See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
-### Vega Asset Bridges
+### Vega Asset Bridges (Signing)
 
 After signatures are aggregated a user is ready to make the withdrawal transaction. Each asset has a different withdrawal process, but they will primarily be managed by Vega Bridges, a CQRS pattern Vega uses to integrate the various blockchains and asset management APIs.
 Where available, multisignature withdrawal orders will have a built-in and protocol-enforced expiration timestamp.
@@ -291,6 +291,7 @@ Once a withdrawal is complete and the appropriate events/transaction information
 ## Acceptance Criteria
 
 For each asset class to be considered "supported" by Vega, the following must happen:
+
 1. An asset of that class can Be voted into Vega (<a name="0040-ASSF-001" href="#0040-ASSF-001">0040-ASSF-001</a>)
 2. An asset previously voted in can be voted out of Vega (<a name="0040-COSMICELEVATOR-002" href="#0040-COSMICELEVATOR-002">0040-COSMICELEVATOR-002</a>)
 3. A voted-in asset can be deposited into a Vega bridge (<a name="0040-ASSF-003" href="#0040-ASSF-003">0040-ASSF-003</a>)

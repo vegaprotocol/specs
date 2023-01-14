@@ -8,8 +8,9 @@ In particular the proposal has to include [liquidity provision commitment](./003
 see also below.
 
 Important note on wording:
-* liquidity provision / liquidity COMMITMENTs are the amount of stake a liquidity provider places as a bond on the market to earn rewards.
-* the COMMITMENT is converted to a liquidity OBLIGATION, measured in siskas.
+
+- liquidity provision / liquidity COMMITMENTs are the amount of stake a liquidity provider places as a bond on the market to earn rewards.
+- the COMMITMENT is converted to a liquidity OBLIGATION, measured in siskas.
 
 ## Commit liquidity network transaction
 
@@ -21,16 +22,19 @@ Any Vega participant can apply to become a liquidity provider (LP) on a market b
 1. ORDERS: a set of _liquidity buy orders_ and _liquidity sell orders_ ("buy shape" and "sell shape") to meet the liquidity provision obligation, see [MM orders spec](./0038-OLIQ-liquidity_provision_order_type.md).
 
 Accepted if all of the following are true:
+
 - The order is valid - see [0038-OLIQ-Liquidity provision order type spec](./0038-OLIQ-liquidity_provision_order_type.md) for full details
 - The participant has sufficient collateral in their general account to meet the size of their nominated commitment amount as well as the margin requirements
 - The market is in a state that accepts new liquidity provision [market lifecycle spec](./0043-MKTL-market_lifecycle.md).
 
 General notes:
+
 - If market is in auction mode it won't be possible to check the margin requirements for orders generated from LP commitment. If on transition from auction the funds in margin and general accounts are insufficient to cover the margin requirements associated with those orders funds in bond account should be used to cover the shortfall (with no penalty applied as outlined in the [Penalties](#penalties) section). If even the entire bond account balance is insufficient to cover those margin requirement the liquidity commitment transaction should get cancelled.
 
-### Valid submission combinations:
+### Valid submission combinations
 
 Assume MarketID is always submitted, then a participant can submit the following combinations:
+
 1. A transaction containing all fields specified can be submitted at any time to either create or change a commitment (if commitment size is zero, the orders and fee bid cannot be supplied - i.e. tx is invalid)
 1. Any other combination of a subset of fields can be supplied any time a liquidity provider has a non-zero commitment already, to request to amend part of their commitment.
 
@@ -46,15 +50,16 @@ There is an minimum LP stake which is `market.liquidityProvision.minLpStakeQuant
 
 If the participant has sufficient collateral to cover their commitment and margins for the orders generated from their proposed commitment, the commitment amount (stake) is transferred from the participant's general account to their (maybe newly created) [liquidity provision bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts) (new account type, 1 per liquidity provider per market and asset where they are commitment liquidity, created as needed). For clarity, liquidity providers will have a separate [margin account](./0013-ACCT-accounts.md#trader-margin-accounts) and [bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts).
 
-- Liquidity provider bond account:
-    - Each active market has one bond account per liquidity provider, per settlement asset for that market.
-    - When a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
-    - A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment).
-    Transfers to/from this account also occur when it is used for settlement or margin shortfall, when penalties are applied, and if the account is under-collateralised because of these uses and is subsequently topped up to the commitment amount during collateral search (see below)
-    - Collateral withdrawn from this account may only be transferred to either:
-      - The insurance pool of the market (in event of penalties/slashing)
-      - The liquidity provider's margin account or the network's settlement account/other participant's margin acounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
-      - The liquidity provider's general account (in event of liquidity provider reducing their commitment)
+Liquidity provider bond account:
+
+- Each active market has one bond account per liquidity provider, per settlement asset for that market.
+- When a liquidity provider transaction is approved, the size of their staked bond is immediately transferred from their general account to this bond account.
+- A liquidity provider can only prompt a transfer of funds to or from this account by submitting a valid transaction to create, increase, or decrease their commitment to the market, which must be validated and pass all checks (e.g. including those around minimum liquidity commitment required, when trying to reduce commitment).
+  - Transfers to/from this account also occur when it is used for settlement or margin shortfall, when penalties are applied, and if the account is under-collateralised because of these uses and is subsequently topped up to the commitment amount during collateral search (see below)
+- Collateral withdrawn from this account may only be transferred to either:
+  - The insurance pool of the market (in event of penalties/slashing)
+  - The liquidity provider's margin account or the network's settlement account/other participant's margin acounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
+  - The liquidity provider's general account (in event of liquidity provider reducing their commitment)
 
 ### liquidity provider proposes to amend commitment amount
 
@@ -63,13 +68,14 @@ A participant may apply to amend their commitment amount by submitting a transac
 
 `proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
 
-**INCREASING COMMITMENT**
+#### INCREASING COMMITMENT
+
 ***Case:*** `proposed-commitment-variation >= 0`
 A liquidity provider can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount and cover the margins required.
 
 If they do not have sufficient collateral the transaction is rejected in entirety. This means that any data from the fees or orders are not applied. This means that the  `old-commitment-amount` is retained.
 
-**DECREASING COMMITMENT**
+#### DECREASING COMMITMENT
 
 ***Case:*** `proposed-commitment-variation < 0`
 We to calculate whether the liquidity provider may lower their commitment amount and if so, by how much. To do this we first evaluate the maximum amount that the market can reduce by given the current liquidity demand in the market.
@@ -90,7 +96,6 @@ When `actual-reduction-amount > 0`:
 
 - the difference between their actual staked amount and new commitment is transferred back to their general account, i.e.
 `transferred-to-general-account-amount =  actual-stake-amount - new-actual-commitment-amount `
-
 - the revised fee amount and set of orders are processed.
 
 Example: if you have a commitment of 500DAI and your bond account only has 400DAI in it (due to slashing - see below), and you submit a new commitment amount of 300DAI, then we only transfer 100DAI such that your bond account is now square.
@@ -126,9 +131,7 @@ As pegged orders are parked during an auction and not placed on the book, margin
 
 Each liquidity provider supplies an amount of liquidity which is calculated from their commitment (stake) and measured in 'currency siskas' (i.e. USD siskas, ETH siskas, etc.).This is calculated by multiplying the stake by the network parameter `market.liquidity.stakeToCcyVolume` as follows:
 
-```
-lp_liquidity_obligation_in_ccy_volume = market.liquidity.stakeToCcyVolume ⨉ stake.
-```
+`lp_liquidity_obligation_in_ccy_volume = market.liquidity.stakeToCcyVolume ⨉ stake`.
 
 Note here "ccy" stands for "currency". Liquidity measure units are 'currency x volume'. This is because the calculation is basically `volume ⨉ price of the volume` and the price of the volume is in the said currency.
 
@@ -170,9 +173,8 @@ The network will:
 
 Note:
 
-* As mentioned above, closeout should happen as per regular trader account (with the addition of cancelling the liquidity provision and the associated LP rewards & fees consequences). So, if after cancelling all open orders (both manually maintained and the ones created automatically as part of liqudity provision commitment) the party can afford to keep the open positions sufficiently collateralised they should be left open, otherwise the positions should get liquidated.
-
-* Bond account balance should never get directly confiscated. It should only be used to cover margin shortfalls with appropriate penalty applied each time it's done. Once the funds are in margin account they should be treated as per normal rules involving that account.
+- As mentioned above, closeout should happen as per regular trader account (with the addition of cancelling the liquidity provision and the associated LP rewards & fees consequences). So, if after cancelling all open orders (both manually maintained and the ones created automatically as part of liqudity provision commitment) the party can afford to keep the open positions sufficiently collateralised they should be left open, otherwise the positions should get liquidated.
+- Bond account balance should never get directly confiscated. It should only be used to cover margin shortfalls with appropriate penalty applied each time it's done. Once the funds are in margin account they should be treated as per normal rules involving that account.
 
 ### Bond account top up by collateral search
 

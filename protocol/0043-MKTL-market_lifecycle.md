@@ -5,6 +5,7 @@ This spec describes the lifecycle of a market. The market lifecycle begins at ac
 ## Market proposal and creation
 
 Markets on Vega are permissionlessly proposed using the [governance mechanism](./0028-GOVE-governance.md#1-create-market). If a market passes the governance vote, it undergoes various state changes throughout its lifecycle. Aspects of the state that change include:
+
 - trading mode
 - whether the market is open for trading
 - status of settlement
@@ -19,7 +20,6 @@ However, the market may stay in an opening auction past the proposed `enactment`
 
 A market can progress through a number of statuses through its life. The overall market status flow is shown in the diagram below. A market is created in a `proposed` state when a valid market creation governance proposal is `accepted`.
 
-
 | Status              | Accepting LPs[1]  | Trading Mode        | Condition for entry                                                           | Condition for exit
 | ------------------ | -------------- | ------------------- | --------------------------------------------------------------- | -----------------------------------------
 | Proposed           |   Yes          | No trading          | Governance proposal valid and accepted                                       | Governance proposal voting period ends
@@ -31,7 +31,6 @@ A market can progress through a number of statuses through its life. The overall
 | Closed             |   No           | No trading          | Governance vote (to close)                                      | N/A
 | Trading Terminated |   No           | No trading          | Defined by the product (i.e. from a product parameter, specified in market definition, giving close date/time) | Settlement event commences
 | Settled            |   No           | No trading          | Settlement triggered and completed as defined by product                                      | N/A
-
 
 [1] Accepting LPs: it is possible to make or amend [Liquidity Provision Commitments](./0038-OLIQ-liquidity_provision_order_type.md)
 
@@ -92,12 +91,12 @@ Note: this state represents any market that will be created, which currently mea
 
 **Exit:**
 
-- Auction period ends when any of the following occur:
+Auction period ends when any of the following occur:
 
-  - Enactment date is reached and the [conditions for exiting an auction](./0026-AUCT-auctions.md) are met and at least one trade will be generated when uncrossing the auction → Active (the auction is uncrossed during this transition)
-  - Enactment date is passed and the product would trigger the Trading Terminated status  →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
-  - Enactment date is passed by more than the *maximum opening auction extension duration* Network Parameter →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
-  - Market change governance vote approves closure of market → Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
+- Enactment date is reached and the [conditions for exiting an auction](./0026-AUCT-auctions.md) are met and at least one trade will be generated when uncrossing the auction → Active (the auction is uncrossed during this transition)
+- Enactment date is passed and the product would trigger the Trading Terminated status  →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
+- Enactment date is passed by more than the *maximum opening auction extension duration* Network Parameter →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
+- Market change governance vote approves closure of market → Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
 
 **Behaviour:**
 
