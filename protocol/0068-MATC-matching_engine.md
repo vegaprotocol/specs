@@ -14,7 +14,7 @@ An [Immediate or Cancel (IOC)](./0014-ORDT_order_types.md#time-in-force---validi
   - If there is no match the order will be cancelled. (<a name="0068-MATC-004" href="#0068-MATC-004">0068-MATC-004</a>)
   - If there is a partial match then the remaining will be cancelled. (<a name="0068-MATC-005" href="#0068-MATC-005">0068-MATC-005</a>)
 - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-006" href="#0068-MATC-006">0068-MATC-006</a>)
-       
+
 A [Fill or KILL (FOK)](./0014-ORDT-order-types.md#time-in-force---validity) order:
 
 - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) MARKET orders will be matched fully if the volume is available, otherwise the order is cancelled. (<a name="0068-MATC-008" href="#0068-MATC-008">0068-MATC-008</a>)
@@ -32,7 +32,7 @@ For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](
 - A market will enter auction if the volume on either side of the book is empty. (<a name="0068-MATC-017" href="#0068-MATC-017">0068-MATC-017</a>)
 - A market will enter auction if the mark price moves by a larger amount than the price monitoring settings allow. (<a name="0068-MATC-018" href="#0068-MATC-018">0068-MATC-018</a>)
 - All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and the aggressive side is STOPPED even if partially filled. The passive side is left untouched. (<a name="0068-MATC-019" href="#0068-MATC-019">0068-MATC-019</a>)
-     
+
 In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md):
 
 - [IOC/FOK/GFN](./0014-ORDT-order-types.md#time-in-force---validity)
@@ -43,19 +43,20 @@ In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md):
   - The indicative price and volume values are updated after every change to the order book. (<a name="0068-MATC-024" href="#0068-MATC-024">0068-MATC-024</a>)
   - [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-025" href="#0068-MATC-025">0068-MATC-025</a>)
   - It is possible to [self trade](./0024-OSTA-order_status.md#wash-trading) to uncross an auction. (<a name="0068-MATC-038" href="#0068-MATC-038">0068-MATC-038</a>)
-       
+
 When a [market moves into an auction](./0026-AUCT-auctions.md#upon-entering-auction-mode):
 
 - All [PEGGED](./0014-ORDT-order_types.md#auction) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-026" href="#0068-MATC-026">0068-MATC-026</a>)
 - All [GFN](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-027" href="#0068-MATC-027">0068-MATC-027</a>)
 - All [GTC/GTT](./0014-ORDT-order-types.md#time-in-force---validity) orders remain on the book untouched. (<a name="0068-MATC-028" href="#0068-MATC-028">0068-MATC-028</a>)
-     
+
 When a market [market exits an auction](./0026-AUCT-auctions.md#upon-exiting-auction-mode):
+
 - The book is uncrossed. (<a name="0068-MATC-029" href="#0068-MATC-029">0068-MATC-029</a>)
   - Self trading is allowed during uncrossing. (<a name="0068-MATC-030" href="#0068-MATC-030">0068-MATC-030</a>)
 - All [GFA](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-031" href="#0068-MATC-031">0068-MATC-031</a>)
 - [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced where possible. (<a name="0068-MATC-032" href="#0068-MATC-032">0068-MATC-032</a>)
-     
+
 - Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [cancelled](./0033-OCAN-cancel_orders.md). (<a name="0068-MATC-033" href="#0068-MATC-033">0068-MATC-033</a>)
 - The price of any persistent order can be updated (<a name="0068-MATC-034" href="#0068-MATC-034">0068-MATC-034</a>)
 - The size of any persistent order can be updated (<a name="0068-MATC-035" href="#0068-MATC-035">0068-MATC-035</a>)

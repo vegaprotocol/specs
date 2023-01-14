@@ -20,7 +20,8 @@ If the network has no stake at all, then all validators would have equal voting 
 2. give each of the validators the following number of self-staked tokens: `2000`
 3. wait for the delegation to become active in the next epoch
 4. when the epoch begins verify that the delegation went through
-5. check that Tendermint weights as follows:-
+5. check that Tendermint weights as follows:
+
 - Node 1 n[`stakedByOperator`]='2000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2066\
 - Node 2 n[`stakedByOperator`]='2000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2066\
 - Node 3 n[`stakedByOperator`]='2000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2066\
@@ -32,7 +33,8 @@ If the network has no stake at all, then all validators would have equal voting 
 1. set up a network with 5 validators
 2. give the first `4` validators `1000` of self-stake each. Give the last validator `500`.
 3. wait for the delegation to become active in the next epoch
-4. check that Tendermint weights as follows:-
+4. check that Tendermint weights as follows:
+
 - Node 1 n[`stakedByOperator`]='500000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=1047\
 - Node 2 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2092\
 - Node 3 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2383\
