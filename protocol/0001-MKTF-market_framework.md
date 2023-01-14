@@ -1,4 +1,6 @@
-# Summary
+# Market framework
+
+## Summary
 
 The market framework is a set of concepts that define the markets available on a Vega network in terms of the product and instrument being traded on each, the trading mode and related parameters, and the risk model being used for margin calculations.
 
@@ -17,33 +19,38 @@ The market framework is essentially a set of data structures that configure and 
 The market data structure collects all of the information required for Vega to operate a market. The component structures tradable instrument, instrument, and product may not exist in a Vega network at all unless defined and used by one (or more, in the case of products) markets. [Risk models](./0018-RSKM-quant_risk_models.ipynb) are a set of instances of a risk model data structure that are external to the market framework and provided by the risk model implementation. They are part of the Vega codebase and in the current version of the protocol, new risk models are not created by governance or configuration on a running Vega node. All structures in the market framework should be fully and unambiguously defined by their parameters.
 
 Data:
-  - **Identifier:** this should unambiguously identify a market
-  - **Status:** Proposed | Pending | Cancelled | Active | Suspended | Closed | Trading Terminated | Settled (see [market lifecycle spec](./0043-MKTL-market_lifecycle.md))
-  - **Tradable instrument:** an instance of or reference to a tradable instrument.
-  - **Mark price methodology:** reference to which [mark price](./0009-MRKP-mark_price.md) calculation methodology will be used.
-  - **Mark price methodology parameters:**
-    - Algorithm 1 / Last Traded Price: initial mark price
-  - **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
-  - **Market activation time**: Read only, set by system when market opens. The date/time at which the opening auction uncrossed and the market first entered it's normal trading mode (empty if this had not happened)
-  - **Quoted Decimal places**: number of decimals places for quote unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents. Only non-negative integer values are allowed.
-  - **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a BTSUSD market.
-  If this is negative e.g. -3 this means that the smalles oder and position is of size 1000.
-  Accepted values are `-6,...,-1,0,1,2,...,6`.
-Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. This also means that, for instance, it would not be possible to create a BTCUSD market that allows order/position sizes equivalent to 1 sat.
+- **Identifier:** this should unambiguously identify a market
+- **Status:** Proposed | Pending | Cancelled | Active | Suspended | Closed | Trading Terminated | Settled (see [market lifecycle spec](./0043-MKTL-market_lifecycle.md))
+- **Tradable instrument:** an instance of or reference to a tradable instrument.
+- **Mark price methodology:** reference to which [mark price](./0009-MRKP-mark_price.md) calculation methodology will be used.
+- **Mark price methodology parameters:**
 
-Note that Vega has hard limit maximum of MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS as a "compile-time" parameter. Typical value be MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS=6. See [0052-FPOS - Fractional Orders & Positions](./0052-FPOS-fractional_orders_positions.md) for more detail.
+   Algorithm 1 / Last Traded Price: initial mark price
+
+- **Price monitoring parameters**: a list of parameters, each specifying one price monitoring auction trigger and the associated auction duration.
+- **Market activation time**: Read only, set by system when market opens. The date/time at which the opening auction uncrossed and the market first entered it's normal trading mode (empty if this had not happened)
+- **Quoted Decimal places**: number of decimals places for quote unit, e.g. if quote unit is USD and decimal places is 2 then prices are quoted in integer numbers of cents. Only non-negative integer values are allowed.
+- **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a BTSUSD market.
+
+   If this is negative e.g. -3 this means that the smalles oder and position is of size 1000.
+   Accepted values are `-6,...,-1,0,1,2,...,6`.
+
+Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. This also means that, for instance, it would not be possible to create a `BTCUSD` market that allows order/position sizes equivalent to 1 sat.
+
+Note that Vega has hard limit maximum of `MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS` as a "compile-time" parameter. Typical value be `MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_ORDERS`=6. See [0052-FPOS - Fractional Orders & Positions](./0052-FPOS-fractional_orders_positions.md) for more detail.
 
 ### Trading mode - continuous trading
 
 Params:
-  - None currently
+- None currently
 
 ### Trading mode - Auctions
 
 Params:
-  - **Call period end:** when the call period ends (date/time), may be empty if indefinite
+- **Call period end:** when the call period ends (date/time), may be empty if indefinite
 
 A market can be in [Auction Mode](./0026-AUCT-auctions.md) for a number of reasons:
+
 - At market creation, markets will start in an [opening auction](./0026-AUCT-auctions.md#opening-auctions-at-creation-of-the-market), as a price discovery mechanism
 - A market can be a [Frequent Batch Auction](./0026-AUCT-auctions.md#frequent-batch-auction), rather than continuous trading
 - Due to [price monitoring](./0032-PRIM-price_monitoring.md) triggering a price discovery auction.
@@ -57,7 +64,7 @@ A tradable instrument is a combination of an instrument and a risk model. An ins
 Data:
 
 - **Instrument:** an instance of or reference to a fully specified instrument.
-- **Risk model:** a reference to a risk model *that is valid for the instrument* (NB: risk models may therefore be expected to expose a mechanism by which to test whether or not it can calculate risk/margins for a given instrument)
+- **Risk model:** a reference to a risk model *that is valid for the instrument* (Note: risk models may therefore be expected to expose a mechanism by which to test whether or not it can calculate risk/margins for a given instrument)
 
 ## Instrument
 
@@ -67,16 +74,15 @@ Instruments are the data structure that provides most of the metadata that allow
 
 Data:
 
- - **Identifier:** a string/binary ID that uniquely identifies an instrument across all instruments now and in the future. Perhaps a hash of all the defining data references and parameters. These should be generated by Vega.
- - **Code:** a short(ish...) code that does not necessarily uniquely identify an instrument, but is meaningful and relatively easy to type, e.g. FX:BTCUSD/DEC18, NYSE:ACN, ... (these will be supplied by humans either through config or as part of the market spec being voted on using the governance protocol.)
- - **Name:** full and fairly descriptive name for the instrument.
- - **Metadata fields:** A series of arbitrary strings that can be used in clients
- - **Product:** a reference to or instance of a fully specified product, including all required product parameters for that product.
-
+- **Identifier:** a string/binary ID that uniquely identifies an instrument across all instruments now and in the future. Perhaps a hash of all the defining data references and parameters. These should be generated by Vega.
+- **Code:** a short(ish...) code that does not necessarily uniquely identify an instrument, but is meaningful and relatively easy to type, e.g. `FX:BTCUSD/DEC18`, `NYSE:ACN`, ... (these will be supplied by humans either through config or as part of the market spec being voted on using the governance protocol.)
+- **Name:** full and fairly descriptive name for the instrument.
+- **Metadata fields:** A series of arbitrary strings that can be used in clients
+- **Product:** a reference to or instance of a fully specified product, including all required product parameters for that product.
 
 ## Product
 
-Products define the behaviour of a position throughout the trade lifecycle. They do this by taking a pre-defined set of product parameters as inputs and emitting a stream of *lifecycle events* which enable Vega to margin, trade and settle the product.
+Products define the behaviour of a position throughout the trade lifecycle. They do this by taking a predefined set of product parameters as inputs and emitting a stream of *lifecycle events* which enable Vega to margin, trade and settle the product.
 
 Products will be of two types:
 
@@ -99,10 +105,11 @@ Products need to re-evaluate their logic when any of their inputs change e.g. or
 Data:
 - **Product name/code/reference/instance:** to be obtained either via a specific string identifying a builtin, e.g. 'Future', 'Option' or in future smart product code OR a reference to a product (e.g. a hash of the compiled smart product) where an existing product is being reused. Stored as a reference to a built-in product instance or a 'compiled' bytecode/AST instance for the smart product language.
 - **Product specific parameters** which can be single values or streams (e.g. events from an oracle), e.g. for a future:
-  - Settlement and margin asset
-  - Oracle / settlement price data reference
-  - Minimum order size
-  - *Note: the specific parameters for a product are defined by the product and will vary between products, so the system needs to be flexible in this regard.*
+
+   - Settlement and margin asset
+   - Oracle / settlement price data reference
+   - Minimum order size
+   - *Note: the specific parameters for a product are defined by the product and will vary between products, so the system needs to be flexible in this regard.*
 
 Note: product definition for futures is out of scope for this ticket.
 
