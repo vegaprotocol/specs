@@ -32,7 +32,6 @@
   - Active buy order, an order initiated by another trader causes the full amount of the existing buy order to trade. (<a name="0006-POSI-023" href="#0006-POSI-023">0006-POSI-023</a>)
   - Active buy orders, an existing order is cancelled (<a name="0006-POSI-024" href="#0006-POSI-024">0006-POSI-024</a>)
   - Active buy orders, an existing order expires (<a name="0006-POSI-025" href="#0006-POSI-025">0006-POSI-025</a>)
-
 - Repeat the above but for sell orders.
 
 ## General
@@ -51,6 +50,7 @@ A position record is comprised of:
 	- Net active short orders: the sum of the short volume for all the trader's active order (will always be <= 0)
 
 This core processes each relevant transaction (in sequential order, as they occur):
+
 - trades
 - new orders
 - size updates to orders
@@ -70,13 +70,10 @@ Note that negative PDP e.g. -2 means the smallest size is 100.
 The Position core functionality processes each trade in the following way:
 
 1. If the buyer and seller are the same (wash trade), do nothing.
-
 1. For each of the buyer and seller, look for a position record for the current market. If either record is not found, create it.
-
 1. Update the position size for each record:
 	- `BuyerPosition.size` += `Trade.size`
 	- `SellerPosition.size` -= `Trade.size`
-
 1. If either position record has Position.size == 0 and no active orders, delete it, otherwise save the updated record.
 
 #### Updating net active buy and sell order sizes

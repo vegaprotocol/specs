@@ -79,29 +79,19 @@ Unlike the message sent for a new order or a cancel, the amend message only cont
 The idea behind amends is to allow the client to alter an existing order atomically preserving order priority where possible. Multiple fields can be amended at the same time inside the same amend order message. Fields not specified in the amend message will not be handled as part of the amend.
 Amending an order does not alter the `orderID` and creation time of the original order.
 The fields which can be altered are:
+
 - `Price`
-
-   - Amending the price causes the order to be removed from the book and re-inserted at the new price level. This can result in the order being filled if the price is moved to a level that would cross.
-
+  - Amending the price causes the order to be removed from the book and re-inserted at the new price level. This can result in the order being filled if the price is moved to a level that would cross.
 - `SizeDelta`
-
-   - A size change is specified as a delta to the current amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then SizeDelta must be a whole multiple of 0.01. (NB: SizeDelta may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp). In case PDP is negative this again applies e.g. if PDP = -1 then SizeDelta must be a whole multiple of 10.
-
+  - A size change is specified as a delta to the current amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then SizeDelta must be a whole multiple of 0.01. (NB: SizeDelta may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp). In case PDP is negative this again applies e.g. if PDP = -1 then SizeDelta must be a whole multiple of 10.
 - `TimeInForce`
-
-   - The `TIF` enumeration can only be toggled between `GTT` and `GTC`. Amending to `GTT` requires an `expiryTime` value to be set. Amending to `GTC` removes the `expiryTime` value.
-
+  - The `TIF` enumeration can only be toggled between `GTT` and `GTC`. Amending to `GTT` requires an `expiryTime` value to be set. Amending to `GTC` removes the `expiryTime` value.
 - `ExpiryTime`
-
-   - The Expiry time can be amended to any time in the future but only for orders that have a `TIF` set to `GTT`. Attempting to set the `expiryTime` to a time before the `creationTime` causes the amend to be rejected. Setting the `expiryTime` to a value after `creationTime` but before the current time will cause it to expire.
-
+  - The Expiry time can be amended to any time in the future but only for orders that have a `TIF` set to `GTT`. Attempting to set the `expiryTime` to a time before the `creationTime` causes the amend to be rejected. Setting the `expiryTime` to a value after `creationTime` but before the current time will cause it to expire.
 - `PeggedOrder.Reference`
-
-   - The reference peg to which the order is related
-
+  - The reference peg to which the order is related
 - `PeggedOrder.Offset`
-
-   - The offset of the order from the reference price
+  - The offset of the order from the reference price
 
 ## Version numbering
 
