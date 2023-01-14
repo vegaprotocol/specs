@@ -10,6 +10,7 @@ In a blockchain / decentralized / public world authentication is often done by p
 Creating a signature is often made by using a public key signature system (e.g:`ed25519`), which are composed of a private key (which the user need to keep secure) which will allow a user to sign a payload (basically a blob of bytes), and a public key derived from the private key (meant to be share with any actors in the system) used in order to verify a signature for a given payload. As the private key is meant to be used only by the owner of it, we can assume that if a signature can be verified, the original transaction was emitted by the owner of the private key.
 
 For the purposes of this spec, we use the following terminology:
+
 - A _user_ is a user as registered in the wallet / kms service.
 - A _party_ is one set of key pairs, created by the user.
 - A user can have many key pairs / parties.
@@ -32,6 +33,7 @@ Any transaction with an invalid signature should be rejected by the network.
 - 0 parties exist within the network
 
 The process of adding a new party to the network and placing the first order will be as follows:
+
 - Bob knows the address of a node running a wallet service
 - Bob calls the create user API on that wallet service and creates a wallet service account on that node, receiving an authentication token in return
 - Bob calls the create party API on that wallet service, which creates a public and private key pair for a party belonging to the user 'bob'
@@ -54,22 +56,24 @@ The process of adding a new party to the network and placing the first order wil
 The wallet service should provide the following features:
 
 - Manage users
-	- Create a new user
-	- signin, login, logout to the wallet (authentication method to be defined by implementation)
+  - Create a new user
+  - signin, login, logout to the wallet (authentication method to be defined by implementation)
 - Manage a user's parties and associated key pairs (a party is associated with exactly one key pair)
-	- create a party and associated key pair
-	- list all parties and key pairs
-	- delete a party and its associated key pair
+  - create a party and associated key pair
+  - list all parties and key pairs
+  - delete a party and its associated key pair
 - Sign blob of data
-	- accept a request from a authenticated user containing a blob of data and reference to a party (and therefore a key pair) to be used to sign the blob
+  - accept a request from a authenticated user containing a blob of data and reference to a party (and therefore a key pair) to be used to sign the blob
 
 #### Wallet service: A user
 
 A user in the wallet service consists of:
+
 - The minimum details required to support an authentication such as OAUTH
 - A list of parties consisting of:
   - A private key
   - A public key
+
 The root user ID is not used or represented in the Vega chain. It only exists on the Wallet Service on the node that the user is connecting to the network through, and is used to tie together Parties, the public and private key pairs that are used to make and validate transactions on the network.
 
 #### Wallet service: Signing a blob of user
@@ -80,6 +84,7 @@ The root user ID is not used or represented in the Vega chain. It only exists on
 #### Wallet service: exporting a wallet
 
 A wallet is represented as an encrypted file containing a list of public and private key.
+
 - We want a user of the wallet service to be able to download his wallet.
 - The API should return the full wallet file of the user.
 - The user should be able to use the file locally and decrypt it in order to use the public and private key.
@@ -131,12 +136,12 @@ messge TransactionBundle {
 - As a user, I can send a transaction to the vega network with a signature for it. (<a name="0022-AUTH-008" href="#0022-AUTH-008">0022-AUTH-008</a>)
 - As a vega node, I ensure that all transaction are paired with a signature. (<a name="0022-AUTH-009" href="#0022-AUTH-009">0022-AUTH-009</a>)
   - A signature is verified before the transaction is sent to the chain.
-	- If a signature is valid, the transaction is sent to the chain (<a name="0022-AUTH-010" href="#0022-AUTH-010">0022-AUTH-010</a>)
-	- If a signature is invalid, the transaction is not sent to the chain, an error is returned (<a name="0022-AUTH-011" href="#0022-AUTH-011">0022-AUTH-011</a>)
+  - If a signature is valid, the transaction is sent to the chain (<a name="0022-AUTH-010" href="#0022-AUTH-010">0022-AUTH-010</a>)
+  - If a signature is invalid, the transaction is not sent to the chain, an error is returned (<a name="0022-AUTH-011" href="#0022-AUTH-011">0022-AUTH-011</a>)
   - A transaction with an invalid signature is never sent to the chain and the transaction is discarded. (<a name="0022-AUTH-013" href="#0022-AUTH-013">0022-AUTH-013</a>)
   - A transaction with no signature is rejected (<a name="0022-AUTH-014" href="#0022-AUTH-014">0022-AUTH-014</a>)
 - A `partyId` that is not a valid public key is inherently invalid, and should be rejected (<a name="0022-AUTH-015" href="#0022-AUTH-015">0022-AUTH-015</a>)
-	- _Note:_ In early versions of Vega, the `partyId` was an arbitrary string. This is no longer valid, and should be rejected. This includes the [network party](./0017-PART-party.md#network-party) - that is used where transactions are generated by the system, and it should never be possible to submit a transaction as `network`.
+  - _Note:_ In early versions of Vega, the `partyId` was an arbitrary string. This is no longer valid, and should be rejected. This includes the [network party](./0017-PART-party.md#network-party) - that is used where transactions are generated by the system, and it should never be possible to submit a transaction as `network`.
 
 ## Future work
 

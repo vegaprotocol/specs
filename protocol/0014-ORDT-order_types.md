@@ -11,13 +11,13 @@ Notes on scope of current version of this spec:
 
 ## Guide-level explanation
 
-### Order types
+### Types of order
 
 1. **Immediate:** order is evaluated immediately (this is the default)
-2. **Stop:** order is only evaluated if and when the _stop price_ is reached
+2. **Stop:** order is only evaluated if and when the *stop price* is reached
 3. **Network:** an order triggered by the network. See [Network Orders](#network-orders)
 
-### Order pricing methods:
+### Order pricing methods
 
 *Price type and associated data if required (i.e. limit price, peg reference and offset) must be explicitly provided as one of the below three options and required data, there is no default.*
 
@@ -30,7 +30,7 @@ Notes on scope of current version of this spec:
 *Time in force must be explicitly provided, there is no default.*
 
 **Persistent:**
- 
+
 1. **Good 'Til Time (GTT):** order is valid until the supplied expiry time, which may be supplied either as an absolute date/time or a relative offset from the  timestamp on the order (i.e. the timestamp added by the core when it receives the order, which is deterministically the same on all nodes)
 1. **Good 'Til Cancelled (GTC):** order is valid indefinitely.
 
@@ -70,9 +70,10 @@ Notes on scope of current version of this spec:
 ### Network orders
 
 Network orders are used during [position resolution](./0012-POSR-position_resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders.
-* Network orders have a counterparty of `Network`
-* Network orders are a Fill Or Kill, Market orders
-* Network orders cannot be submitted by any party, they are created during transaction processing.
+
+- Network orders have a counterparty of `Network`
+- Network orders are a Fill Or Kill, Market orders
+- Network orders cannot be submitted by any party, they are created during transaction processing.
 
 ## Acceptance Critieria
 

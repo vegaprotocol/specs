@@ -109,6 +109,7 @@ message amendOrder {
     PeggedOrder *peggedOrder 6;
 }
 ```
+
 An example of using a negative size is shown below:
 
 `Bids: 100@1000 GTC (OrderID V0000000001-0000000001)`
@@ -127,6 +128,7 @@ The resulting order book will be:
 ## Test cases
 
 Test cases that need to be implemented to cover most of the edge cases are:
+
 - Attempt to amend an order that does not exist. The amend is rejected.
 - Amend an order but using the same values as the original order. No order book actions takes place.
 - Reduce-by the size of an order and verify that the order does not lose it's queue position.

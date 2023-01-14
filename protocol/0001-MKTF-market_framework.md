@@ -99,6 +99,7 @@ Product lifecycle events:
 - **Settlement:** this event triggers final settlement of positions and release of margin, e.g. once settlement data is received from a data source/oracle and final settlement cashflows are calculated (see [market lifecycle spec](../protocol/0043-MKTL-market_lifecycle.md)).
 
 Products must expose certain data to Vega WHEN they are instantiated as an instrument by providing parameters:
+
 - **Settlement assets:** one or more assets that can be involved in settlement
 - **Margin assets:** one or more assets that may be required as margin (usually the same set as settlement assets, but not always)
 - **Price / quote units:** the unit in which prices (e.g. on the order book are quoted), usually but not always one of the settlement assets. Usually but not always (e.g. for bonds traded on yield, units = % return or options traded on implied volatility, units = % annualised vol) an asset (currency, commodity, etc.)
@@ -106,6 +107,7 @@ Products must expose certain data to Vega WHEN they are instantiated as an instr
 Products need to re-evaluate their logic when any of their inputs change e.g. oracle publishes a value, change in time, parameter changed etc., so Vega will need to somehow notify of that update.
 
 Data:
+
 - **Product name/code/reference/instance:** to be obtained either via a specific string identifying a builtin, e.g. 'Future', 'Option' or in future smart product code OR a reference to a product (e.g. a hash of the compiled smart product) where an existing product is being reused. Stored as a reference to a built-in product instance or a 'compiled' bytecode/AST instance for the smart product language.
 - **Product specific parameters** which can be single values or streams (e.g. events from an oracle), e.g. for a future:
 

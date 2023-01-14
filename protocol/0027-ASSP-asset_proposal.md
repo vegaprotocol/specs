@@ -33,6 +33,7 @@ As detailed above, the validators will check the validity of the details supplie
 ## Enabling a new asset on the bridge
 
 Once the proposal is accepted, validators will produce a bundle (e.g. transaction plus signature/s) for submission to the asset's originating blockchain. Vega nodes will make this bundle available via an API.
+
 - In the case of Ethereum/EVM ERC20 tokens, this bundle will be an Ethereum transaction to whitelist the asset on the [bridge](./0031-ETHB-ethereum_bridge_spec.md) via [multisig control](./0030-ETHM-multisig_control_spec.md), and a set of signatures to authenticate the transaction with multisig control.
 
 ## Enabling a new asset on vega
@@ -67,9 +68,9 @@ If it changes `quantum` then this new value becomes used immediately on enacteme
 Therefore, it is undefined how to proceed in the event that decimals does change, and the specific, immutable instance of the token smart contract on the Ethereum blockchain must be verified by community members when voting on each new asset that is proposed to ensure that the number of decimals used by the asset is guaranteed to be perpetually invariant for the lifetime of the asset.
 Contracts that do not meet this guarantee are not suitable as a basis for Vega bridge assets.
 
-# Pseudo-code / Examples
+## Pseudo-code / Examples
 
-Changes to the voting:
+### Changes to the voting
 
 ```proto
 
@@ -142,7 +143,7 @@ message ProposalTerms {
 }
 ```
 
-## An ERC20 example
+### An ERC20 example
 
 ```json
 {

@@ -20,10 +20,10 @@ As mentioned earlier, this specification introduces new trading modes.
 
 All auctions have a `min_auction_length` (which is a single network parameter for all auctions), which defines the minimum `call period` for an auction.
 
-* Any auction that would be less than `min_auction_length` seconds (network parameter) should not be started (e.g. if the market is nearing the end of its open period / active trading). This is to prevent auction calls that are too short given the network latency/granularity, so should be some multiple of the worst case expected block time at some confidence level, which is best maintained by governance voting (hence being a network parameter).
-* a proposal should be rejected if it would require an auction shorter `min_auction_length`
-* for price/liquidity monitoring, etc. the auction must last for at least the `min_auction_length` and therefore we can avoid checking other conditions until that length is reached
-* if the parameter is changed it needs to be re-applied to any current auctions, this means that shortening it could trigger an auction ending
+- Any auction that would be less than `min_auction_length` seconds (network parameter) should not be started (e.g. if the market is nearing the end of its open period / active trading). This is to prevent auction calls that are too short given the network latency/granularity, so should be some multiple of the worst case expected block time at some confidence level, which is best maintained by governance voting (hence being a network parameter).
+- a proposal should be rejected if it would require an auction shorter `min_auction_length`
+- for price/liquidity monitoring, etc. the auction must last for at least the `min_auction_length` and therefore we can avoid checking other conditions until that length is reached
+- if the parameter is changed it needs to be re-applied to any current auctions, this means that shortening it could trigger an auction ending
 
 ### Opening auctions (at creation of the market)
 
@@ -57,6 +57,7 @@ Initially we will use the mid price within this range. For example, if the volum
 ### New APIs
 
 These new APIs need to expose data, some of which will be re-calculated each time the state of the book changes and will expose information about the market in auction mode:
+
 - how long the market has been in auction mode
 - when does the next auction period start
 - how long is a period
@@ -167,13 +168,18 @@ message Market {
   - Why it is in that period (e.g. Auction at open, liquidity sourcing, price monitoring)
   - When the auction will next attempt to uncross or if the auction period ended and the auction cannot be resolved for whatever reason then this should come blank or otherwise indicating that the system doesn't know when the auction ought to end.
 - A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run from the close of voting on the market proposal (assumed to pass successfully) until:
-	1) the enactment time assuming there are orders crossing on the book, [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-009" href="#0026-AUCT-009">0026-AUCT-009</a>)
-	2) past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed and we have limit orders such that after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-010" href="#0026-AUCT-010">0026-AUCT-010</a>)
-	3) past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md0041). It will only end if
+
+  1. the enactment time assuming there are orders crossing on the book, [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-009" href="#0026-AUCT-009">0026-AUCT-009</a>)
+  1. past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed and we have limit orders such that after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-010" href="#0026-AUCT-010">0026-AUCT-010</a>)
+  1. past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md0041). It will only end if
+  
 		- more liquidity is committed (<a name="0026-AUCT-011" href="#0026-AUCT-011">0026-AUCT-011</a>)
 		- or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-012" href="#0026-AUCT-012">0026-AUCT-012</a>)
-	4) past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
+	
+  1. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
+
 		- best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>)
 		- or best ask;  it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-014" href="#0026-AUCT-014">0026-AUCT-014</a>)
+
 - When entering an auction, all GFN orders will be cancelled. (<a name="0026-AUCT-015" href="#0026-AUCT-015">0026-AUCT-015</a>)
 - When leaving an auction, all GFA orders will be cancelled. (<a name="0026-AUCT-016" href="#0026-AUCT-016">0026-AUCT-016</a>)

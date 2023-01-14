@@ -15,7 +15,8 @@
 
 ## Summary
 
-The _margin calculator_ returns the set of relevant margin levels for a given position and entry price:
+The *_*margin calculator*_* returns the set of relevant margin levels for a given position and entry price:
+
 1. ***Maintenance margin***
 1. ***Collateral search level***
 1. ***Initial margin***
@@ -68,7 +69,7 @@ The protocol calculates the margin requirements for the `riskiest long` and `ris
 
 In this simple methodology, a linearised margin formula is used to return the margin requirement levels, using risk factors returned by the [quantitative model](./0018-RSKM-quant_risk_models.ipynb).
 
-**Step 1**
+### **Step 1**
 
 If `riskiest long == 0` then `maintenance_margin_long = 0`.
 
@@ -80,7 +81,7 @@ with
 
 `maintenance_margin_long_open_position = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
 
-`maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] `,
+`maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
 
 where
 
@@ -102,15 +103,14 @@ where
 
 `exit_price` is the price that would be achieved on the order book if the trader's position size on market were exited. Specifically:
 
-* **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the open long position (not riskiest long position) on the order book (i.e. by selling to the bids on the order book). If there is no open long position, the slippage per unit is zero.
-
-* **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the open short position (not riskiest short position) on the order book (i.e. by buying from the offers (asks) on the order book). If there is no open short position, the slippage per unit is zero.
+- **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the open long position (not riskiest long position) on the order book (i.e. by selling to the bids on the order book). If there is no open long position, the slippage per unit is zero.
+- **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the open short position (not riskiest short position) on the order book (i.e. by buying from the offers (asks) on the order book). If there is no open short position, the slippage per unit is zero.
 
 Note, if there is insufficient order book volume for this `exit_price` to be calculated (per position), the `exit_price` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
 
 If there is zero order book volume on the relevant side of the order book to calculate the `exit_price`, the most recent calculation of the mark price, should be used instead.
 
-**Step 2**
+### **Step 2**
 
 If `riskiest short == 0` then `maintenance_margin_short = 0`.
 
@@ -130,7 +130,7 @@ where meanings of terms in Step 1 apply except for:
 
 `slippage_per_unit = -1 * (Product.value(market_observable) - Product.value(exit_price) )`
 
-**Step 3**
+### **Step 3**
 
 `maintenance_margin = max ( maintenance_margin_long, maintenance_margin_short)`
 
@@ -151,7 +151,7 @@ Use the same calculation as above with the following re-defined:
 
 ## Scaling other margin levels
 
-**Step 4**
+### **Step 4**
 
 The other three margin levels are scaled relative to the maintenance margin level, using scaling levels defined in the risk parameters for a market.
 
@@ -243,8 +243,7 @@ Given the following trader positions:
 | case-2      | -1 | 2| 0
 | case-3 | 1 | 0 | -2
 
-
-*case-1*
+#### *case-1*
 
 riskiest long: 2
 
@@ -254,7 +253,7 @@ slippage volume long: 1
 
 slippage volume short: 0
 
-*case-2*
+#### *case-2*
 
 riskiest long: 1
 
@@ -264,7 +263,7 @@ slippage volume long: 0
 
 slippage volume short: -1
 
-*case-3*
+#### *case-3*
 
 riskiest long: 1
 
@@ -274,9 +273,6 @@ slippage volume long: 1
 
 slippage volume short: 0
 
-
-
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
-
