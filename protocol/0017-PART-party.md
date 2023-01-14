@@ -30,7 +30,7 @@ There is currently one 'special' party in Vega. They are controlled by the Vega 
 
 ### 'network' party
 
-The `network` party is a pseudoparty. It is used in [position resolution](./0012-POSR-position_resolution.md) to close distressed [positions](./0006-POSI-positions_core.md) or [orders](./0024-OSTA-order_status.md). See [Order Types: Network Orders](./0014-ORDT-order_types.md#network-orders) for more detail on how these orders are used.
+The `network` party is a pseudo party. It is used in [position resolution](./0012-POSR-position_resolution.md) to close distressed [positions](./0006-POSI-positions_core.md) or [orders](./0024-OSTA-order_status.md). See [Order Types: Network Orders](./0014-ORDT-order_types.md#network-orders) for more detail on how these orders are used.
 
 ## Acceptance Criteria
 

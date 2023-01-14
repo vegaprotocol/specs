@@ -19,6 +19,7 @@ The market framework is essentially a set of data structures that configure and 
 The market data structure collects all of the information required for Vega to operate a market. The component structures tradable instrument, instrument, and product may not exist in a Vega network at all unless defined and used by one (or more, in the case of products) markets. [Risk models](./0018-RSKM-quant_risk_models.ipynb) are a set of instances of a risk model data structure that are external to the market framework and provided by the risk model implementation. They are part of the Vega codebase and in the current version of the protocol, new risk models are not created by governance or configuration on a running Vega node. All structures in the market framework should be fully and unambiguously defined by their parameters.
 
 Data:
+
 - **Identifier:** this should unambiguously identify a market
 - **Status:** Proposed | Pending | Cancelled | Active | Suspended | Closed | Trading Terminated | Settled (see [market lifecycle spec](./0043-MKTL-market_lifecycle.md))
 - **Tradable instrument:** an instance of or reference to a tradable instrument.
@@ -42,11 +43,13 @@ Note that Vega has hard limit maximum of `MAX_DECIMAL_PLACES_FOR_POSITIONS_AND_O
 ### Trading mode - continuous trading
 
 Params:
+
 - None currently
 
 ### Trading mode - Auctions
 
 Params:
+
 - **Call period end:** when the call period ends (date/time), may be empty if indefinite
 
 A market can be in [Auction Mode](./0026-AUCT-auctions.md) for a number of reasons:
@@ -106,10 +109,10 @@ Data:
 - **Product name/code/reference/instance:** to be obtained either via a specific string identifying a builtin, e.g. 'Future', 'Option' or in future smart product code OR a reference to a product (e.g. a hash of the compiled smart product) where an existing product is being reused. Stored as a reference to a built-in product instance or a 'compiled' bytecode/AST instance for the smart product language.
 - **Product specific parameters** which can be single values or streams (e.g. events from an oracle), e.g. for a future:
 
-   - Settlement and margin asset
-   - Oracle / settlement price data reference
-   - Minimum order size
-   - *Note: the specific parameters for a product are defined by the product and will vary between products, so the system needs to be flexible in this regard.*
+  - Settlement and margin asset
+  - Oracle / settlement price data reference
+  - Minimum order size
+  - *Note: the specific parameters for a product are defined by the product and will vary between products, so the system needs to be flexible in this regard.*
 
 Note: product definition for futures is out of scope for this ticket.
 
