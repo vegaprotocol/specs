@@ -177,7 +177,6 @@ When we say "all orders" we mean their limit orders, [pegged orders](./0037-OPEG
 
 Now calculate the total of the instantenous liquidity scores obtained for each committed LP:
 
-
 `total = the sum of instantenous liquidity scores for all LPs that have an active liquidity commitment`
 
 Now, if the `total` comes out as `0` then set `fractional instantenous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.

@@ -54,7 +54,7 @@ on: {
 ## 1.3 Vega time changed
 
 This data source will emit the current Vega time *once* (and once only) whenever the Vega time changes.
-This can be used directly as a data source supplying a time feed, or wrapped in a filter to trigger a simple event (i.e. one that does not need to consume a value from another data source, such as the [trading terminated trigger]() for cash settled futures, as only the Vega time will be supplied).
+This can be used directly as a data source supplying a time feed, or wrapped in a filter to trigger a simple event (i.e. one that does not need to consume a value from another data source, such as the trading terminated trigger for cash settled futures, as only the Vega time will be supplied).
 
 Pseudocode example: (block time feed - not useful with Oregon Trail feature set)
 
@@ -78,8 +78,7 @@ filter {
 
 Usage of internal oracle data are specified using properties prefixed with `vegaprotocol.builtin`, on the oracle spec.
 
-Currently (as of Oregon Trail), only the _Vega time changed (1.3 above)_ internal data source is implemented, through the property name `vegaprotocol.builtin.timestamp`.
-
+Currently (as of Oregon Trail), only the *Vega time changed (1.3 above)* internal data source is implemented, through the property name `vegaprotocol.builtin.timestamp`.
 
 ### Example with current implementation
 

@@ -1,6 +1,5 @@
 # [Data Source](./0045-DSRC-data_sourcing.md): Filtered data
 
-
 ## Overview
 
 Filtered data defines a type of data source that is a compound data source. That is, it includes another data source definition in its definition and outputs a modified stream of data. Specifically, a filtered data source contains one or more conditions that are applied to data from the input data source to determine whether that data is output by the compound (filtered) data source.
@@ -64,7 +63,7 @@ To specify a filtered data source the following parameters can be specified:
 
 ### Parameter: data
 
-This can be *any* other data source within the data sourcing framework.
+This can be _any_ other data source within the data sourcing framework.
 
 ### Parameter: filters
 
@@ -92,7 +91,7 @@ To be clear, this also means that if the input data is the wrong "shape" or type
 1. All filter conditions are applied
 	1. Create a filter with multiple "AND" conditions and ensure that data is only passed through if all conditions are met. (<a name="0047-DSRF-003" href="#0047-DSRF-003">0047-DSRF-003</a>)
 	1. Create a filter using an "OR" sub-filter (if implemented) and ensure that data is passed through if any of the OR conditions are met. (<a name="0047-COSMICELEVATOR-004" href="#0047-COSMICELEVATOR-004">0047-COSMICELEVATOR-004</a>)
-	1. Create a "greater than or equal" filter on the "timestamp" field of the signed message (*not* on the timestamp when oracle transaction is  submitted) (e.g. greater than or equal "2022-04-01" *and* on "equal" filter on the "asset" field (e.g. equals ETH) of the signed message from Coinbase oracle. Ensure these are applied correctly (<a name="0047-DSRF-0041" href="#0047-DSRF-0041">0047-DSRF-0041</a>).
+	1. Create a "greater than or equal" filter on the "timestamp" field of the signed message (_not_ on the timestamp when oracle transaction is  submitted) (e.g. greater than or equal "2022-04-01" _and_ on "equal" filter on the "asset" field (e.g. equals ETH) of the signed message from Coinbase oracle. Ensure these are applied correctly (<a name="0047-DSRF-0041" href="#0047-DSRF-0041">0047-DSRF-0041</a>).
 1. Data that is filtered out does not result in a data event but is recorded
 	1. No data source event is emitted for a data source if the triggering event (`SubmitData` transaction, internal source, etc.) does not pass through the filter for that source. (<a name="0047-DSRF-005" href="#0047-DSRF-005">0047-DSRF-005</a>)
 	1. No product/market processings is triggered by a data source when the event does not pass through the filters. (<a name="0047-DSRF-006" href="#0047-DSRF-006">0047-DSRF-006</a>)

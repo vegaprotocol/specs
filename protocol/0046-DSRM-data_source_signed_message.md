@@ -5,16 +5,17 @@ Signed messages are the first type of data from external data sources to be supp
 Signed message data sources introduce a Vega transaction that represents a data result that is validated by ensuring it is signed by a set of signing keys/addresses (signers) provided as part of the _data source definition_. Note the data supplied by the data source can be used when [settling a market at expiry](./0002-STTL-settlement.md) and in the future for any other purpose that requires a data source (such as risk or mark to market functionality), and as inputs to compounds/aggregate data sources.
 
 This spec adds:
+
 - a transaction that allows arbitrary signed data to be submitted to the Vega blockchain (creating a stream of data that can be matched against a data source definition or discarded if not matched)
 - a way to define a data source that validates these messages against the predefined set of allowable signers and emits the data received by such a stream
 
 Data can be submitted at any time. Not all data provided by the source needs to be used by a given consumer as the stream can be an input to a [filter data source definition](./0047-DSRF-data_source_filter.md) that will emit only wanted values, allowing a single stream of data from a signer to supply, for example, many markets.
 
-For instance, the Coinbase oracle API provides a stream of signed messages for many different crypto prices, so for one source we could be receiving many messages that aren't used by any given market, for instance if someone set a bot to submit the latest Coinbase oracle signed messages to the Vega chain once per hour. Note it is an explicit goal of this functionality that the signed data made available by the Coinbase oracle can be submitted as a data transaction and validated as a signed message data source *against Coinbase's public key* (rather than the pubkey of the submitter). That is, it should only be necessary to trust Coinbase.
+For instance, the Coinbase oracle API provides a stream of signed messages for many different crypto prices, so for one source we could be receiving many messages that aren't used by any given market, for instance if someone set a bot to submit the latest Coinbase oracle signed messages to the Vega chain once per hour. Note it is an explicit goal of this functionality that the signed data made available by the Coinbase oracle can be submitted as a data transaction and validated as a signed message data source _against Coinbase's public key_ (rather than the pubkey of the submitter). That is, it should only be necessary to trust Coinbase.
 
 Note: With this type of oracle there’s no incentive in the Vega data source system, you’re trusting the keyholder(s) and any modifiers or verification applied through the [data source framework](./0045-DSRC-data_sourcing.md) at settlement.
 
-*NOTE: This is the only external oracle available initially in Vega, and initially requires only one of the specified keys to sign and submit the data transaction. This means that initially it will only be possible to construct external oracles on Vega in which one or more third party entities/systems must be trusted. This will change with modifiers that allow combinations of data sources, verification of data stream via governance votes, and data sources that bridge to events included on other blockchains.*
+_NOTE: This is the only external oracle available initially in Vega, and initially requires only one of the specified keys to sign and submit the data transaction. This means that initially it will only be possible to construct external oracles on Vega in which one or more third party entities/systems must be trusted. This will change with modifiers that allow combinations of data sources, verification of data stream via governance votes, and data sources that bridge to events included on other blockchains._
 
 ## Defining the data source
 
@@ -88,25 +89,25 @@ Where possible, this should be done before the transaction is included in a bloc
 ### Criteria
 
 1. An [instrument can be created](./0028-GOVE-governance.md) to rely on a signed message data source
-    1. The instrument must specify a valid signed message data source (<a name="0046-DSRM-001" href="#0046-DSRM-001">0046-DSRM-001</a>)
-    1. A market proposal specifying an invalid data source will be rejected (<a name="0046-DSRM-002" href="#0046-DSRM-002">0046-DSRM-002</a>)
-        1. This rejection will happen at *the [creation of the proposal](./0028-GOVE-governance.md)*  (<a name="0046-DSRM-003" href="#0046-DSRM-003">0046-DSRM-003</a>)
-    1. Multiple instruments can rely on the same data source:
-        1. Multiple instruments can settle based on the same `SubmitData` message.  (<a name="0046-DSRM-004" href="#0046-DSRM-004">0046-DSRM-004</a>)
-        1. Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
-        1. Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
+-The instrument must specify a valid signed message data source (<a name="0046-DSRM-001" href="#0046-DSRM-001">0046-DSRM-001</a>)
+- A market proposal specifying an invalid data source will be rejected (<a name="0046-DSRM-002" href="#0046-DSRM-002">0046-DSRM-002</a>)
+  - This rejection will happen at _the [creation of the proposal](./0028-GOVE-governance.md)_  (<a name="0046-DSRM-003" href="#0046-DSRM-003">0046-DSRM-003</a>)
+- Multiple instruments can rely on the same data source:
+  - Multiple instruments can settle based on the same `SubmitData` message.  (<a name="0046-DSRM-004" href="#0046-DSRM-004">0046-DSRM-004</a>)
+  - Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
+  - Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
 1. `SubmitData` transactions can be submitted by any public key as long as the data included in the transaction is signed by at least one of the keys included in an active signed message data source definition
-    1. `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)
-    1. `SubmitData` transactions by inactive data sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
-    1. `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)
+- `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)
+- `SubmitData` transactions by inactive data sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
+- `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)
 1. To be valid, a `SubmitData` transaction must:
-    1. Contain correctly signed data from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)
-    1. Invalid `SubmitData` transactions must be rejected.  (<a name="0046-DSRM-011" href="#0046-DSRM-011">0046-DSRM-011</a>)
+- Contain correctly signed data from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)
+- Invalid `SubmitData` transactions must be rejected.  (<a name="0046-DSRM-011" href="#0046-DSRM-011">0046-DSRM-011</a>)
 1. Must work with Coinbase oracle  (<a name="0046-DSRM-012" href="#0046-DSRM-012">0046-DSRM-012</a>)
 1. Ignore any data source tx that is not explicitly required, so this would include a tx:
-    - For a pubkey never used in a data source  (<a name="0046-DSRM-013" href="#0046-DSRM-013">0046-DSRM-013</a>)
-    - For a data source where a filter ignores the message based on its contents  (<a name="0046-DSRM-014" href="#0046-DSRM-014">0046-DSRM-014</a>)
-    - For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal (<a name="0046-DSRM-015" href="#0046-DSRM-015">0046-DSRM-015</a>)
+- For a pubkey never used in a data source  (<a name="0046-DSRM-013" href="#0046-DSRM-013">0046-DSRM-013</a>)
+- For a data source where a filter ignores the message based on its contents  (<a name="0046-DSRM-014" href="#0046-DSRM-014">0046-DSRM-014</a>)
+- For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal (<a name="0046-DSRM-015" href="#0046-DSRM-015">0046-DSRM-015</a>)
 1. Ignore any SubmitData tx that is a duplicate (i.e. contains exactly the same data payload and is for the same data source), even if it is signed by a different signer (assuming the source has multiple configured signers) or was submitted by a different Vega key. (<a name="0046-DSRM-016" href="#0046-DSRM-016">0046-DSRM-016</a>)
 1. Messages are accepted that contain the data and the signature (conforming to the Open Oracle specification) Note: do not support (or need to) direct connections to REST APIs, Ethereum smart contracts, etc. conforming to the open oracle spec. (<a name="0046-DSRM-017" href="#0046-DSRM-017">0046-DSRM-017</a>)
 

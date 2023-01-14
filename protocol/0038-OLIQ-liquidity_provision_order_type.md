@@ -93,6 +93,7 @@ liquidity-normalised-proportion-sell-order-1 = 5 / (5 + 5) = 0.5
 liquidity-normalised-proportion-sell-order-2 = 5 / (5 + 5) = 0.5
 
 ```
+
 The sum of all normalised proportions must = 1 on each side.
 
 #### Calculating volumes for a set of market making orders (step 6)

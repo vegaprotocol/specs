@@ -70,14 +70,14 @@ A participant may apply to amend their commitment amount by submitting a transac
 
 #### INCREASING COMMITMENT
 
-***Case:*** `proposed-commitment-variation >= 0`
+_Case:_ `proposed-commitment-variation >= 0`
 A liquidity provider can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount and cover the margins required.
 
 If they do not have sufficient collateral the transaction is rejected in entirety. This means that any data from the fees or orders are not applied. This means that the  `old-commitment-amount` is retained.
 
 #### DECREASING COMMITMENT
 
-***Case:*** `proposed-commitment-variation < 0`
+_Case:_ `proposed-commitment-variation < 0`
 We to calculate whether the liquidity provider may lower their commitment amount and if so, by how much. To do this we first evaluate the maximum amount that the market can reduce by given the current liquidity demand in the market.
 
 `maximum-reduction-amount = total_stake - target_stake`
@@ -95,7 +95,7 @@ i.e. liquidity providers are allowed to decrease the liquidity commitment subjec
 When `actual-reduction-amount > 0`:
 
 - the difference between their actual staked amount and new commitment is transferred back to their general account, i.e.
-`transferred-to-general-account-amount =  actual-stake-amount - new-actual-commitment-amount `
+`transferred-to-general-account-amount =  actual-stake-amount - new-actual-commitment-amount`
 - the revised fee amount and set of orders are processed.
 
 Example: if you have a commitment of 500DAI and your bond account only has 400DAI in it (due to slashing - see below), and you submit a new commitment amount of 300DAI, then we only transfer 100DAI such that your bond account is now square.
@@ -156,20 +156,20 @@ Calculating the penalty:
 
 The above simple formula defines the amount by which the bond account will be 'slashed', where:
 
--  `market.liquidity.bondPenaltyParameter` is a network parameter
--  `shortfall` refers to the absolute value of the funds that the liquidity provider was unable to cover through their margin and general accounts, that are needed for settlement (mark to market or [product](./0051-PROD-product.md) driven) or to meet their margin requirements.
+- `market.liquidity.bondPenaltyParameter` is a network parameter
+- `shortfall` refers to the absolute value of the funds that the liquidity provider was unable to cover through their margin and general accounts, that are needed for settlement (mark to market or [product](./0051-PROD-product.md) driven) or to meet their margin requirements.
 
-**Auctions:** if this occurs at the transition from auction mode to continuous trading, the `market.liquidity.bondPenaltyParameter` will not be applied / will always be set to zero.
+_Auctions:_ if this occurs at the transition from auction mode to continuous trading, the `market.liquidity.bondPenaltyParameter` will not be applied / will always be set to zero.
 
 The network will:
 
-1. **As part of the normal collateral "search" process:** Access the liquidity provider's bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of the bond account will be used. Note that this means that the transfer request should include the liquidity provider's bond account in the list of accounts to search, and that the bond account would always be emptied before any insurance pool funds are used or loss socialisation occurs.
+1. _As part of the normal collateral "search" process:_ Access the liquidity provider's bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of the bond account will be used. Note that this means that the transfer request should include the liquidity provider's bond account in the list of accounts to search, and that the bond account would always be emptied before any insurance pool funds are used or loss socialisation occurs.
 
-1. **If there was a shortfall and the bond account was accessed:** Transfer an amount equal to the `market.liquidity.bondPenaltyParameter` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
+1. _If there was a shortfall and the bond account was accessed:_ Transfer an amount equal to the `market.liquidity.bondPenaltyParameter` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
 
 1. Initiate closeout of the LPs order and/or positions as normal if their margin does not meet the minimum maintenance margin level required. (NB: this should involve no change)
 
-1. **If the liquidity provider's orders or positions were closed out, and they are therefore no longer supplying the liquidity implied by their Commitment:** In this case the liquidity provider's Commitment size is set to zero and they are no longer a liquidity provider for fee/reward purposes, and their commitment can no longer be counted towards the supplied liquidity in the market. (From a Core perspective, it is as if the liquidity provider has exited their commitment entirely and they no longer need to be tracked as an LP.)
+1. _If the liquidity provider's orders or positions were closed out, and they are therefore no longer supplying the liquidity implied by their Commitment:_ In this case the liquidity provider's Commitment size is set to zero and they are no longer a liquidity provider for fee/reward purposes, and their commitment can no longer be counted towards the supplied liquidity in the market. (From a Core perspective, it is as if the liquidity provider has exited their commitment entirely and they no longer need to be tracked as an LP.)
 
 Note:
 

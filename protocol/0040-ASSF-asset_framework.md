@@ -65,6 +65,7 @@ message DevAssets {
   repeated AssetSource sources = 1;
 }
 ```
+
 See:
 
 - [assets proto](https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/assets.proto)

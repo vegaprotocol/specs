@@ -25,7 +25,7 @@ b) Things that are explicitly NOT goals of the data sourcing framework at this t
 
 1. Calculations or processing of data other than selecting the value of a specific field and filtering events in the data stream are out of scope.
 1. Processing arbitrary message formats is out-of-scope. Each required format should be specified explicitly. For instance we may specify that "Vega native protobuf message of key/value pairs" or "ABI encoded data in the OpenOracle format" must be valid data (and there may be more than one required format), but do not require general consumption of arbitrary data.
-1. Whilst we do need to build a framework that will be *extensible* with new sources and transformation/aggregation options, and *composable* by combining options, we are not aiming to build a large library of such features for unproven use cases initially. The MVP can be built and will be very useful with a small number of features.
+1. Whilst we do need to build a framework that will be _extensible_ with new sources and transformation/aggregation options, and _composable_ by combining options, we are not aiming to build a large library of such features for unproven use cases initially. The MVP can be built and will be very useful with a small number of features.
 
 Note that this approach means:
 
@@ -37,7 +37,7 @@ Note that this approach means:
 
 ## 2. Data sourcing framework
 
-Any part of Vega requiring a an external or internal data source should be able to use any type of data source. **This means that there is a single common method for specifying a data source where one is required.**
+Any part of Vega requiring a an external or internal data source should be able to use any type of data source. _This means that there is a single common method for specifying a data source where one is required._
 
 The types of data sources that are supported are listed towards the end of this spec.
 
@@ -75,8 +75,9 @@ Note that for number types the system should convert appropriately when these ar
 Additionally, for number types where the data source value cannot be interpreted without decimal place conversion (e.g. it is a number from Ethereum represented as a very large integer, perhaps as a string, with 18 or some other number of implicit decimals), it must be possible to specify the number of implicit decimals, when specifying the data source (e.g. in a market proposal or wherever the data source is to be used). Strings and numbers with decimal points and numbers after them should be interpreted correctly.
 
 For example: this means that if a data source with specified 18 decimal places is used to settle a market with 4 market decimals then:
-* Data with a value of `103500000000000000000` implies an actual value of `103.5`
-* This value would end up being represented on Vega as `1035000`
+
+- Data with a value of `103500000000000000000` implies an actual value of `103.5`
+- This value would end up being represented on Vega as `1035000`
 
 Vega should support sufficient number types to enable processing of any reasonably expected message for each format. For instance if we are building JSON we might expect both Number and String fields to be allowable.
 
@@ -106,16 +107,19 @@ This would emit just the value of the price field, i.e.
 ```json
 { "ticker": "GOLD", "price": 27.2 }
 ```
+
 The above JSON gives output of `27.2`.
 
 ## 6. Types of data source
 
 The following data sources have been defined:
+
 1. [Internal basic data sources](./0048-DSRI-data_source_internal.md)
 1. [signed message](./0046-DSRM-data_source_signed_message.md)
 1. [Filters](./0047-DSRF-data_source_filter.md) (exclude certain events based on conditions and boolean logic against the fields on the data such as equals, simple comparisons). An MVP of this functionality is needed to allow signed message data sources to be practical, more complex filters are included in the "future work" section below.
 
-Future (needed sooner than the others listed in 9 below)
+Future (needed sooner than the others listed in 9 below):
+
 1. Ethereum oracles (events, contract read methods)
 1. Repeating time triggers
 1. Vega market data (i.e. prices from other markets on Vega)
@@ -131,6 +135,7 @@ Data sources that are no longer active as defined above will be ignored, as well
 ## 8. APIs
 
 APIs should be available to:
+
 1. List active data sources and their configuration
 1. Emit an event on the event bus when a data source value is emitted.
 
@@ -139,6 +144,7 @@ APIs should be available to:
 The following are expected to be implemented in future.
 
 a) New base data source types:
+
 1. Internal market parameters
 1. Internal market data (prices)
 1. Internal network parameters and metrics
@@ -147,6 +153,7 @@ a) New base data source types:
 1. Other formats for messages received via, e.g. signed data sources/HTTPS/... (e.g. JSON)
 
 b) Composable modifiers/combinators for data sources:
+
 1. Repeating time triggers (every n hours, every dat at 14:00, etc.)
 1. Aggregation (m of n and/or averaging, etc.) of multiple other data sources
 1. Verification of outputs of another data source by governance vote

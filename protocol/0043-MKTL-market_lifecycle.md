@@ -115,9 +115,9 @@ All data sources that are only referenced by this market should be unregistered.
 
 **Entry:**
 
-  - Enactment date is passed and the product would trigger the Trading Terminated status  →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
-  - Enactment date is passed by more than the *maximum opening auction extension duration* Network Parameter →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
-  - Market change governance vote approves closure of market → Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
+- Enactment date is passed and the product would trigger the Trading Terminated status  →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
+- Enactment date is passed by more than the *maximum opening auction extension duration* Network Parameter →  Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
+- Market change governance vote approves closure of market → Cancelled (the market ceases to exist, auction orders are cancelled, and no uncrossing occurs)
 
 **Exit:**
 
