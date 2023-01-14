@@ -78,8 +78,8 @@ The state will be restored in this order:
 - Restore network parameters.
 - Load the asset definitions.
   - The network will compare the asset coming from the restore file with the genesis assets, one by one. If there is an exact match on asset id:
-  -  either the rest of the asset definition matches exactly in which case move to next asset coming from restore file.
-  -  or any of the part of the definition differ, in which case ignore the entire restore transaction, the node should stop with an error.
+  - either the rest of the asset definition matches exactly in which case move to next asset coming from restore file.
+  - or any of the part of the definition differ, in which case ignore the entire restore transaction, the node should stop with an error.
   - If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then restore the asset.
 - Load the accepted market proposals. If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
 - Replay events from bridged chains
@@ -274,7 +274,7 @@ The check the following sub-cases:
 - Load the checkpoint into a new network
 - Assert that at every epoch, the recurring transfers to the reward pool continues to happen, and that the funds are properly being distributed to the delegator
 
-### Test case 12:
+### Test case 12
 
 1. Enacted, listed ERC-20 asset is remembered in checkpoint (<a name="0073-LIMN-023" href="#0073-LIMN-023">0073-LIMN-023</a>)
 1. An ERC-20 asset loaded from checkpoint can be used in a market loaded from a checkpoint (<a name="0073-LIMN-024" href="#0073-LIMN-024">0073-LIMN-024</a>)

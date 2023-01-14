@@ -16,7 +16,7 @@ Analysis tasks should be prioritised by those taking the lead on specifying the 
 
 1. Create a ticket in the [spec-writing board](https://github.com/orgs/vegaprotocol/projects/78).
 1. When you are ready to commence the spec writing task, move the ticket to a status of _workflow::task-in-progress_.
-1. Create a merge request *from the ticket* - this will ensure they are linked and the ticket is automatically closed when merged.
+1. Create a merge request _from the ticket_ - this will ensure they are linked and the ticket is automatically closed when merged.
 1. Copy `0000-template.md` to `specs/0000-my-feature.md`, (e.g. `specs/0000-example-manager.md`.
 1. Fill in the details, including the acceptance criteria.
 1. Submit a merge request to start soliciting feedback. Ensure that the appropriate team members are notified.
@@ -26,7 +26,7 @@ Analysis tasks should be prioritised by those taking the lead on specifying the 
 
 ## The process for changes to existing component
 
-1. Create an ticket in the [spec-writing board](https://github.com/orgs/vegaprotocol/projects/78). Label this appropriately, including whether it is a _spec-bug_ or _blocking-code_ and assign to a milestone and individual if appropriate. *Only use the already created labels* (see below for the defined list and raise a merge request against this file if you want to edit these).
+1. Create an ticket in the [spec-writing board](https://github.com/orgs/vegaprotocol/projects/78). Label this appropriately, including whether it is a _spec-bug_ or _blocking-code_ and assign to a milestone and individual if appropriate. _Only use the already created labels_ (see below for the defined list and raise a merge request against this file if you want to edit these).
 1. This ticket will be prioritised by the person it is assigned to, in collaboration with the engineering team.
 1. When you are ready to commence the spec writing task, move the ticket to a status of _workflow::task-in-progress_.
 1. Create a merge request from this ticket with a brief description of the changes you need to make.

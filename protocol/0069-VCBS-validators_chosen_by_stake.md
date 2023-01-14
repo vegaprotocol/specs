@@ -477,7 +477,6 @@ d. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch
 - Decrease the number of tendermint validators to 5.
 - Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatzvalidator and an Ersatzvalidator is demoted to pending
 
-
 1. Number of Ersatzvalidators increased (<a name="0069-VCBS-058" href="#0069-VCBS-058">0069-VCBS-058</a>):
 
 - Setup a network with 6 Tendermint validators, 3 ErsatzValidators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 4 pending validators
