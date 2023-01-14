@@ -55,7 +55,6 @@ When a node wants to start up via the snapshot system, we have to pass the requi
 
 A bad node can swamp the network by requesting snapshots from other nodes which will force them to send large chunks of data around the network. This might have a negative effect on the Vega network as CPU and network resources will be consumed for no good reason. Further work needs to be done to reduce the possible impact of such an attack.
 
-
 ## Acceptance Criteria
 
 * A node can be started up so that it generates snapshots at given block intervals (<a name="0077-SNAP-001" href="#0077-SNAP-001">0077-SNAP-001</a>)

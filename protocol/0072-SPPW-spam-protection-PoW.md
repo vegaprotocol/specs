@@ -4,7 +4,7 @@
 
 Vega does not charge fees on transactions. Fees are only charged on trades that execute. The main reason for not charging transaction fees on transactions like limit order submissions or governance votes is that this is an activity that should be encouraged (limit orders provide price information and liquidity, governance votes are essential for smooth running of the system). Because of this Vega has a novel client-side-proof-of-work mechanism to prevent transaction spam.
 
-### Parameters and their defaults:
+### Parameters and their defaults
 
 ```proto
 spam.pow.numberOfPastBlocks = 100  (range: 10-500)
@@ -27,12 +27,12 @@ To this end, the hash of the block and a transaction identifier are fed into a h
 
 Thus, the flow is as follows:
 
-1. The user generates a unique transaction identifier `tid`
-2. The user downloads the hash `H(b)` of the latest block it has seen (or uses any other block hash within `spam.pow.numberOfPastBlocks` of the block to-be-produced), and brute forces values of `x` such that `hash("Vega_SPAM_PoW", H(b), tid, x)` as bytes starts with `spam.pow.difficulty` zeros.
-  1. The user must monitor how many transactions they have sent with PoW tied to a given block.
-    1. If this number is less than or equal to `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros.
-    2. If this number is greater than `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros plus one additional for each `spam.pow.numberOfTxPerBlock` sized batch of transactions beyond the limit (e.g. if `spam.pow.numberOfTxPerBlock` is 10 and `spam.pow.difficulty` is 2 the 1st - 10th transactions will require 2 zeros, the 11th - 20th transactions will require 3 zeros, the 21st-30th 4 zeros, the 31st-40th 5 zeros and so on).
-3. The user then attaches the PoW to a transaction for a block which will be created within `spam.pow.numberOfPastBlocks` blocks of the one used for PoW hash generation, and sends it off together with `x` and `H(b)`.
+- The user generates a unique transaction identifier `tid`
+- The user downloads the hash `H(b)` of the latest block it has seen (or uses any other block hash within `spam.pow.numberOfPastBlocks` of the block to-be-produced), and brute forces values of `x` such that `hash("Vega_SPAM_PoW", H(b), tid, x)` as bytes starts with `spam.pow.difficulty` zeros.
+- The user must monitor how many transactions they have sent with PoW tied to a given block.
+  - If this number is less than or equal to `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros.
+  - If this number is greater than `spam.pow.numberOfTxPerBlock` the hash must start with `spam.pow.difficulty` zeros plus one additional for each `spam.pow.numberOfTxPerBlock` sized batch of transactions beyond the limit (e.g. if `spam.pow.numberOfTxPerBlock` is 10 and `spam.pow.difficulty` is 2 the 1st - 10th transactions will require 2 zeros, the 11th - 20th transactions will require 3 zeros, the 21st-30th 4 zeros, the 31st-40th 5 zeros and so on).
+- The user then attaches the PoW to a transaction for a block which will be created within `spam.pow.numberOfPastBlocks` blocks of the one used for PoW hash generation, and sends it off together with `x` and `H(b)`.
 
 The validators verify that:
 
@@ -51,12 +51,13 @@ Violations of the latter rules cannot lead to a transaction being removed, as di
 Linking a transaction to a too old block will not lead to a banishment, but only to a rejection of the offending transaction.
 
 Notes:
+
 - We do not require feeding the hash of the actual transaction into the hash function;
 this allows users to pre-compute the PoW and thus allows them to perform low
 latency transactions.
 - As for replay protection, there is a danger that a trader communicates with a slow validator, and thus gets a wrong block number. The safest is to check validators worth > 1/3 of the  weight and take the highest block hash.
 - Due to Tendermint constraints, a decision if a transaction is to be rejected or not can only be done based on information that is either synchronized through the chain or contained in the transaction itself, but not based on any other transactions in the mempool. Thus, if a client ties too many transactions to the same block or does not execute the increased difficulty properly, we can not stop this pre-agreement, only detect it post-agreement. This is the reason why some violations are punished with banishment rather than prevented.
-- In the [0062 spam protection spec](./0062-SPAM-spam_protection.md), we want to do anti-spam before verifying signatures; this order, however, cannot be done if the consequence of spam is banishment. 
+- In the [0062 spam protection spec](./0062-SPAM-spam_protection.md), we want to do anti-spam before verifying signatures; this order, however, cannot be done if the consequence of spam is banishment.
 
 Thus, here the order is:
 
@@ -66,10 +67,12 @@ Thus, here the order is:
 4. put the transaction on the blockchain
 5. if the signed transactions violate the conditions, issue the banishment
 6. if the signed transactions in a block violate the conditions, remove the offending ones from the block before calling vega [May need discussion]
-- Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to have a large parameter of `spam.pow.numberOfPastBlocks`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
+
+Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to have a large parameter of `spam.pow.numberOfPastBlocks`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
+
 - The PoW is currently valid for all transactions; a consideration is to use it only for trading related transactions, so even if something goes wrong here delegators can still vote.
 
-## Hash function:
+## Hash function
 
 The initial hash-function used is SHA3. To allow for a more fine-grained control over the difficulty of the PoW (the number of zeros only allows halving/doubling), the parameter `spam.pow.hashFunction` allows increasing the number of rounds of the hash function (currently 24), e.g., `spam.pow.hashFunction` = `sha3_36_rounds`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
 
@@ -105,7 +108,7 @@ The initial hash-function used is SHA3. To allow for a more fine-grained control
   - The new parameter is used for all blocks with a block height higher than the current one, i.e., a number of transactions that was allowed before and is no longer due to the new parameter is rejected (leaving the spam difficulty level constant) (<a name="0072-COSMICELEVATOR-012" href="#0072-COSMICELEVATOR-012">0072-COSMICELEVATOR-012</a>)
 
 - The parameter `spam.pow.numberofTxPerBlock` is increased. Verify that
-  -  If a number of transactions is submitted with the lower lever PoW that would have exceeded the `spam.pow.numberOfTXPerBlock` before the change and not after, no transaction is rejected. (<a name="0072-COSMICELEVATOR-013" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-013</a>)
+  - If a number of transactions is submitted with the lower lever PoW that would have exceeded the `spam.pow.numberOfTXPerBlock` before the change and not after, no transaction is rejected. (<a name="0072-COSMICELEVATOR-013" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-013</a>)
 
 - Repeat tests 008-013,  where in the same block,
   - `Spam.pow.difficulty` is increased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is increased.

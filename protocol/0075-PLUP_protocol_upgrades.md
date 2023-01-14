@@ -5,8 +5,9 @@
 ### Current state of upgrading the vega network
 
 As of today, upgrading the protocol is near impossible when a major changes to the step are possible without proceeding with a [Limited Network Life checkpoint restore](./non-protocol-specs/0005-NP-LIMN-limited_network_life.md). This functionality has the following significant issues:
+
 - A synchronous restart is required
-- All node need to be restarted in a very short time so all state can be restore from ethereum, and the network can start properly with a checkpoint.
+- All node need to be restarted in a very short time so all state can be restore from Ethereum, and the network can start properly with a checkpoint.
 
 Limited Network Life is not the end goal. This spec outlines how the protocol evolves from LNL checkpoints to rolling software updates, controlled by a reasonable set of governance and user controls.
 
@@ -113,10 +114,10 @@ message ProtocolUpgradeEvent {
 
 Proposal will not be accepted as valid if validator:
 
--  (<a name="0075-PLUP-006" href="#0075-PLUP-006">0075-PLUP-006</a>) Proposes a negative upgrade block
--  (<a name="0075-PLUP-007" href="#0075-PLUP-007">0075-PLUP-007</a>) Proposes a 0 upgrade block
--  (<a name="0075-PLUP-008" href="#0075-PLUP-008">0075-PLUP-008</a>) Proposes (string/other upgrade block)
--  (<a name="0075-PLUP-009" href="#0075-PLUP-009">0075-PLUP-009</a>) Proposes without supplying a block height
+- (<a name="0075-PLUP-006" href="#0075-PLUP-006">0075-PLUP-006</a>) Proposes a negative upgrade block
+- (<a name="0075-PLUP-007" href="#0075-PLUP-007">0075-PLUP-007</a>) Proposes a 0 upgrade block
+- (<a name="0075-PLUP-008" href="#0075-PLUP-008">0075-PLUP-008</a>) Proposes (string/other upgrade block)
+- (<a name="0075-PLUP-009" href="#0075-PLUP-009">0075-PLUP-009</a>) Proposes without supplying a block height
 
 ### VISOR
 
@@ -141,7 +142,6 @@ For the purposes of protocol upgrade each validator that participates in consens
 - (<a name="0075-PLUP-020" href="#0075-PLUP-020">0075-PLUP-020</a>) Propose with a validator which is moved to Ersatz by the time the upgrade is enacted. If there are 5 validators, 3 vote yes, 2 vote no: One of the yes voters is kicked in favour of a new one, leaving the vote at 2-2 so the upgrade should not happen as counting votes happens at block height only
 - (<a name="0075-PLUP-036" href="#0075-PLUP-036">0075-PLUP-036</a>) Changing `validators.vote.required` network parameter to a value above two thirds is respected.
 - (<a name="0075-PLUP-037" href="#0075-PLUP-037">0075-PLUP-037</a>) The value of `validators.vote.required` is checked at upgrade block, i.e: vote on a proposal with all validators, then change the `validators.vote.required` net param before upgrade block, to a higher value, which would cause the upgrade to be rejected. Upgrade fails.
-
 
 ### Multiple proposals (<a name="0075-PLUP-021" href="#0075-PLUP-021">0075-PLUP-021</a>)
 

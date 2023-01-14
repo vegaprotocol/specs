@@ -29,6 +29,7 @@ Cost of transaction depends mainly on the state of underlying market and below w
 Vega will capture the needed statistical variables (see below) on a per-market basis (or per-whatever if other dynamically costed transactions are added, for now per-market is sufficient) from the previous block so that they don't need to be looked up dynamically during block creation.
 
 Variables needed:
+
 - `network.transactions.maxgasperblock` - `maxGas`
 - number of price levels on the order book taken, this can count just static volume or static plus dynamic(*) - `levels`
 - number of pegged orders - `pegs`
@@ -38,6 +39,7 @@ Variables needed:
 (*) update after implementation
 
 Constants needed:
+
 - `peg cost factor = 50` nonnegative decimal
 - `LP shape cost factor = 100` nonnegative decimal
 - `position factor = 1` nonnegative integer
@@ -69,6 +71,7 @@ Define `batchFactor` (a hard coded parameter) set to something between `0.0 and 
 Say `batchFactor = 0.5` for now.
 
 Here `gasBatch` is
+
 1. the full cost of the first cancellation (i.e. `gasCancel`)
 1. plus `batchFactor` times sum of all subsequent cancellations added together (each costing `gasOrder`)
 1. plus the full cost of the first amendment at `gasOrder`
@@ -79,7 +82,6 @@ Here `gasBatch` is
 ```go
 gas = min((maxGas/minBlockCapacity)-1,batchGas)
 ```
-
 
 ### LP provision, new or amendment or cancellation
 
@@ -97,10 +99,10 @@ Transactions with higher priorities that are present in the mempool will get pla
 Transactions with the same priority are placed into a block in the default sequencing order (up to maximum gas cost above).
 
 There are three priority categories:
+
 1. "high" which constitue all "protocol transactions" i.e. state variable updates [(floating point consensus)](./0065-FTCO-floating_point_consensus.md), [ethereum events](./0036-BRIE-event_queue.md) , withdrawals, heartbeats (for candidate and ersatz validator performance measurement), see [validators](./0069-VCBS-validators_chosen_by_stake.md) and transactions the protocol uses internally to run.
 1. "medium" which includes all [governance](./0028-GOVE-governance.md) transactions (market proposals, parameter change proposals, votes).
 1. "low" which includes all other transactions.
-
 
 ## Acceptance criteria
 

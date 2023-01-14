@@ -1,4 +1,4 @@
-# Limited network life.
+# Limited network life
 
 Vega networks will at least initially and perhaps always run for a limited time only. This spec covers the necessary features to ensure this works smoothly.
 
@@ -40,11 +40,11 @@ Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_
 - Withdrawal transaction bundles for all bridged chains.
 - Hash of the previous block, block number and transaction id of the block from which the snapshot is derived
 - ERC-20 collateral:
-  - last block height of a confirmed ERC-20 deposit on the ethereum chain with `number_of_confirmations`. [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
-  - all pending ERC-20 deposits (not confirmed before this block) [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#deposits)
+  - last block height of a confirmed ERC-20 deposit on the Ethereum chain with `number_of_confirmations`. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
+  - all pending ERC-20 deposits (not confirmed before this block) [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#deposits)
 - Staking:
-  - last block of a confirmed stake_deposit on the staking contract on the ethereum chain with `number_of_confirmations`. [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
-  - last block of a confirmed stake_deposit on the vesting contract on the ethereum chain with `number_of_confirmations`. [ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
+  - last block of a confirmed stake_deposit on the staking contract on the Ethereum chain with `number_of_confirmations`. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
+  - last block of a confirmed stake_deposit on the vesting contract on the Ethereum chain with `number_of_confirmations`. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
   - all the staking events from both contracts [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
   - all the pending staking events [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
 
@@ -75,14 +75,14 @@ If the genesis file has a previous state hash, all transactions will be rejected
 
 The state will be restored in this order:
 
-1. Restore network parameters.
-2. Load the asset definitions.
-  1. The network will compare the asset coming from the restore file with the genesis assets, one by one. If there is an exact match on asset id:
+- Restore network parameters.
+- Load the asset definitions.
+  - The network will compare the asset coming from the restore file with the genesis assets, one by one. If there is an exact match on asset id:
   -  either the rest of the asset definition matches exactly in which case move to next asset coming from restore file.
   -  or any of the part of the definition differ, in which case ignore the entire restore transaction, the node should stop with an error.
-  2. If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then restore the asset.
-3. Load the accepted market proposals. If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
-4. Replay events from bridged chains
+  - If the asset coming from the restore file is a new asset (asset id not matching any genesis assets) then restore the asset.
+- Load the accepted market proposals. If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
+- Replay events from bridged chains
   - Concerning bridges used to deposit collateral for trading, replay from the last block specified in the checkpoint and reload the pending deposits from the checkpoint so the network can start again to confirm these events.
   - Concerning the staking bridges, all balances will be reconcilied using the staking events from the checkpoint, up to the last seen block store as part of the checkpoint, then apply again the delegations to the validators.
 
@@ -113,10 +113,12 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 2. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
 3. The network is shut down.
 4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
-5. The check the following subcases:
-- If the ethereum replay says withrawal completed. The party has general account balance of 0 USD. The party has "signed for withdrawal" 0.
-- If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 USD. The party has "signed for withdrawal" 100.
-- If the ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 USD.
+
+The check the following sub-cases:
+
+- If the Ethereum replay says withrawal completed. The party has general account balance of 0 USD. The party has "signed for withdrawal" 0.
+- If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 USD. The party has "signed for withdrawal" 100.
+- If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 USD.
 
 ### Test case 2: Orders and positions are *not* maintained across resets, balances are and *accepted* markets are (<a name="0073-LIMN-008" href="#0073-LIMN-008">0073-LIMN-008</a>)
 
@@ -138,7 +140,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The party LP has `LP_bond_bal` committed to market `id_xxx`.
 1. The other party has a `USD` general account balance equal to `other_gen_bal + other_margin_bal`.
 
-### Test case 3: Governance proposals are maintained across resets. Votes are not.
+### Test case 3: Governance proposals are maintained across resets, votes are not
 
 #### Test case 3.1: Market is proposed, accepted, restored (<a name="0073-LIMN-009" href="#0073-LIMN-009">0073-LIMN-009</a>)
 
@@ -193,7 +195,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 USD.
 1. A market is proposed by a party called `LP party`.
-2. Checkpoint is taken during voting period.
+1. Checkpoint is taken during voting period.
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset USD.
@@ -206,7 +208,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 USD.
 1. A market is proposed by a party called `LP party`.
-2. Checkpoint is taken during voting period
+1. Checkpoint is taken during voting period
 1. The network is shut down.
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset USD.
@@ -216,12 +218,12 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 #### Test case 3.6: Market proposals ignored when restoring twice from same checkpoint (<a name="0073-LIMN-014" href="#0073-LIMN-014">0073-LIMN-014</a>)
 
 1. A party has general account balance of 100 USD.
-2. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
-3. The network is shut down.
-4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
-5. A new market is proposed
-6. The network is shut down.
-7. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
+1. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
+1. A new market is proposed
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is no market and there are no market proposals.
 1. The party has general account balance in USD of `0` and The party has "signed for withdrawal" `100`.
 
@@ -262,15 +264,15 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ### Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0073-LIMN-022" href="#0073-LIMN-022">0073-LIMN-022</a>)
 
-1. More than one party deposits stake onto Vega
-1. The parties delegate stake to the validators
-1. Setup the rewards:
+- More than one party deposits stake onto Vega
+- The parties delegate stake to the validators
+- Setup the rewards:
   - A party deposits VEGA funds to their Vega general account
   - The party creates a continuing recurring transfer (for e.g: 1 token) from their general account to the reward pool
-1. Assert that every end of epoch, the funds are distributed, over the parties delegating stake, at end of every epoch
-1. Wait for the next checkpoint, then stop the network
-1. Load the checkpoint into a new network
-1. Assert that at every epoch, the recurring transfers to the reward pool continues to happen, and that the funds are properly being distributed to the delegator
+- Assert that every end of epoch, the funds are distributed, over the parties delegating stake, at end of every epoch
+- Wait for the next checkpoint, then stop the network
+- Load the checkpoint into a new network
+- Assert that at every epoch, the recurring transfers to the reward pool continues to happen, and that the funds are properly being distributed to the delegator
 
 ### Test case 12:
 
@@ -356,11 +358,11 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ### Test case 18: market definition is the same pre and post LNL restore
 
-1. Propose a market
-1. System saves LNL checkpoint.
-1. Restart Vega, load LNL checkpoint.
-1. The market has the same:
-- risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
-- price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>)
-- oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
-- margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
+- Propose a market
+- System saves LNL checkpoint.
+- Restart Vega, load LNL checkpoint.
+- The market has the same:
+  - risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
+  - price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>)
+  - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
+  - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)

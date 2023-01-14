@@ -136,7 +136,7 @@ is a out-of-the ordinary event and should be logged.
 
 At this point, Ersatz validators are not part of the Multisig.
 
-## Restarts from LNL checkpoint:
+## Restarts from LNL checkpoint
 
 See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
@@ -287,8 +287,8 @@ One of the top validators is not registered with the multisig contract (<a name=
 
 - Setup a network with 3 ersatz validators, 3 Tendermint validators with arbitrary delegation, but ensuring the total delegation for each validator is greater than the minimum self-delegation.
 - With `total_delegations_from_all_validators = (0.5 * total_delegation_from_ersatz_validators) + total_delegation_from_tendermint_validators`
-- Verify the total reward given to Tendermint validators is equal to the `total_delegation_from_tendermint_validators` * `reward_balance` / `total_delegation_from_all_validators`.
-- Verify the total reward given to ersatz validators is equal to the `total_delegation_from_ersatz_validators` * `0.5` * `reward_balance` / `total_delegation_from_all_validators`.
+- Verify the total reward given to Tendermint validators is equal to the `total_delegation_from_tendermint_validators * reward_balance` / `total_delegation_from_all_validators`.
+- Verify the total reward given to ersatz validators is equal to the `total_delegation_from_ersatz_validators * 0.5 * reward_balance / total_delegation_from_all_validators`.
 
 1. Pending validators get nothing (<a name="0069-VCBS-023" href="#0069-VCBS-023">0069-VCBS-023</a>):
 
@@ -416,7 +416,7 @@ One of the top validators is not registered with the multisig contract (<a name=
 
 1. 2 empty spots, only one available to replace (<a name="0069-VCBS-043" href="#0069-VCBS-043">0069-VCBS-043</a>):
 
-- Setup a network with 5 slots for 
+- Setup a network with 5 slots for
 - Tendermint validators and 3 actual Tendermint validators.
 - Self-delegate to all of them.
 - Announce 2 new nodes but self-delegate only to one of them.
@@ -432,9 +432,9 @@ One of the top validators is not registered with the multisig contract (<a name=
 - Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted.
 - No validator with stake attached to them is ever completely removed
 
-12. (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>):
+1. (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>):
 
-12.a. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
+a. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - one ersatzvalidator gets the highest delegated stake, but insufficient ownstake (delegates: 10000)
 - 2 validators drop below ownstake, but have relative high delegated stake (7000)
@@ -442,7 +442,7 @@ One of the top validators is not registered with the multisig contract (<a name=
 - 1 ersatzvalidator has 6000 stake and sufficient ownstake
 - Verify that the the first ersatzvalidator is removed (marked as pending in the epoch change and then removed due to continous insufficient ownstake), and one validator with insufficient ownstake is replaced by the other ersatzvalidator.
 
-12.b. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
+b. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - 1 validator drops below ownstake, but has relative high delegated stake (7000)
 - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -450,13 +450,13 @@ One of the top validators is not registered with the multisig contract (<a name=
 - Verify that at the epoch change,  the validator with insufficient ownstake is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatzvalidator due to insufficient ownstake is removed (stops being listed as an ersatzvalidator).
 Verify that the validator that dropped below ownstake is not demoted and removed at the same epoch change.
 
-12.c. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
+c. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - All validators drop below ownstake
 - All erstazvalidators have sufficient ownstake, but lower stake than the validators
 - Verify that 2 validators are replaced, one in each epoch
 
-12.d. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
+d. Setup a network with 5 nodes (3 validators, 2 ersatzvalidators). In one epoch,
 
 - All validators drop below ownstake
 - All erstazvalidators have sufficient ownstake, and higher stake than the validators
@@ -471,7 +471,7 @@ Verify that the validator that dropped below ownstake is not demoted and removed
 - Restart the validator, run until the end of the epoch
 - Verify that this validator is paid reward as ersatz validator and that their stake score under reward is anti-whaled
 
-1.  Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
+1. Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
 
 - Setup a network with 7 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
 - Decrease the number of tendermint validators to 5.

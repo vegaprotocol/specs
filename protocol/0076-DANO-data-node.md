@@ -6,7 +6,6 @@ Users of the protocol often need various data (price history / delegation histor
 
 The job of the data node is to collect and store the events and make those available. Since storing "everything forever" will take up too much data it must be possible to configure (and change at runtime) what the data node stores and for how long (retention policy).
 
-
 ## Working with events
 
 Each chunk of data should contain the `eventID` that created it and the block from which the event was created.
@@ -67,7 +66,6 @@ TransferResponse {
 
 Note that withdrawals and deposits (to / from other chains) are visible from the transfer and balance data.
 
-
 ## Stake / Delegations / Validator Score history
 
 All changes to staking and delegation must be stored. From this, the state at any time can be provided.
@@ -78,11 +76,9 @@ Validator performance metrics.
 
 Rewards per epoch per Vega ID (party, epoch, asset, amount, percentage of total, timestamp).
 
-
 ## Governance proposal history
 
 All proposals ever submitted + votes (asset, network parameter change, market).
-
 
 ## Trading Related Data
 
@@ -146,9 +142,9 @@ It must be possible to augment APIs so data returned is in a shape and size that
 
 It must be possible to add to the data node APIs that return the result of calculations on the data node (in addition ot historical data). These calculations may use historical or real time core data but are not available in the core API as they would hinder performance. e.g. Estimates / Margin / risk calculations
 
-# Acceptance criteria
+## Acceptance criteria
 
-## Data synchronisation
+### Data synchronisation
 
 1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-COSMICELEVATOR-001" href="#0076-COSMICELEVATOR-001">0076-COSMICELEVATOR-001</a>)
 1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network without having to replay the full chain (<a name="0076-DANO-003" href="#0076-DANO-003">0076-DANO-003</a>)
@@ -160,16 +156,16 @@ It must be possible to add to the data node APIs that return the result of calcu
 
 1. Data produced in the core snapshots aligns with the data-node data proving that what is returned by data-node matches core state at any given block height (<a name="0076-DANO-004" href="#0076-DANO-004">0076-DANO-004</a>)
 
-### Data-node decentralized history:
+### Data-node decentralized history
 
-1.  Historical data must be available to load into the datanode and must not be dependent on any centralized entity. (<a name="0076-DANO-005" href="#0076-DANO-005">0076-DANO-005</a>)
-1.  A datanode restored from decentralised history for a given block span must match exactly the state of a datanode that has the same block span of data created by consuming events. (<a name="0076-DANO-012" href="#0076-DANO-012">0076-DANO-012</a>)
-1.  As the network produces more blocks the data should be stored correctly in the data-node after a data-node is restored from decentralized history. For example: Start a data-node from a given history segment for a known block height, ensure the datanode continues to update from that block onwards. (<a name="0076-DANO-007" href="#0076-DANO-007">0076-DANO-007</a>).
-1.  It should not be necessary to restore the full history (i.e. from genesis block) to be able to process new blocks.  Restoring just the most recent history segment should be sufficient for the node to process new blocks. (<a name="0076-DANO-006" href="#0076-DANO-006">0076-DANO-006</a>)
-1.  No data is duplicated as the core emits events when catching up to the later block height. For example: Starting a core node at block height less than the data-node block height must result in no duplicated data (<a name="0076-DANO-008" href="#0076-DANO-008">0076-DANO-008</a>)
-1.  Starting a core node at block height greater than the data-nodes block height must result in an error and a refusal to start (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
-1.  If a data-node snapshot fails during the restore the process, it should error and the node(s) won't start (<a name="0076-DANO-009" href="#0076-DANO-009">0076-DANO-009</a>)
-1.  When queried via the APIs a node restored from decentralized history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-022" href="#0076-DANO-022">0076-DANO-022</a>)
+1. Historical data must be available to load into the datanode and must not be dependent on any centralized entity. (<a name="0076-DANO-005" href="#0076-DANO-005">0076-DANO-005</a>)
+1. A datanode restored from decentralised history for a given block span must match exactly the state of a datanode that has the same block span of data created by consuming events. (<a name="0076-DANO-012" href="#0076-DANO-012">0076-DANO-012</a>)
+1. As the network produces more blocks the data should be stored correctly in the data-node after a data-node is restored from decentralized history. For example: Start a data-node from a given history segment for a known block height, ensure the datanode continues to update from that block onwards. (<a name="0076-DANO-007" href="#0076-DANO-007">0076-DANO-007</a>).
+1. It should not be necessary to restore the full history (i.e. from genesis block) to be able to process new blocks.  Restoring just the most recent history segment should be sufficient for the node to process new blocks. (<a name="0076-DANO-006" href="#0076-DANO-006">0076-DANO-006</a>)
+1. No data is duplicated as the core emits events when catching up to the later block height. For example: Starting a core node at block height less than the data-node block height must result in no duplicated data (<a name="0076-DANO-008" href="#0076-DANO-008">0076-DANO-008</a>)
+1. Starting a core node at block height greater than the data-nodes block height must result in an error and a refusal to start (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
+1. If a data-node snapshot fails during the restore the process, it should error and the node(s) won't start (<a name="0076-DANO-009" href="#0076-DANO-009">0076-DANO-009</a>)
+1. When queried via the APIs a node restored from decentralized history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-022" href="#0076-DANO-022">0076-DANO-022</a>)
 
 ### Data-node network determinism
 
