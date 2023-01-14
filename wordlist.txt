@@ -65,7 +65,7 @@ IOC
 JSON
 keypair
 keystore
-Lifecycle
+lifecycle
 linkings
 linux
 LNL
@@ -77,6 +77,7 @@ MetaMask
 MTM
 mu
 multisig
+OKR
 orderbook
 PDP
 PnL
