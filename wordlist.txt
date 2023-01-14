@@ -119,4 +119,5 @@ vegatools
 vegawallet
 visor
 whitepaper
+Yubikey
 $VEGA

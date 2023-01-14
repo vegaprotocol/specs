@@ -10,7 +10,6 @@
 - [Governance](./0028-GOVE-governance.md)
 - [Network Parameters](./0054-NETP-network_parameters.md)
 
-
 ## Market operation
 
 - [Market Lifecycle](./0043-MKTL-market_lifecycle.md)
@@ -89,8 +88,9 @@
 
 - [Event queue](./0036-BRIE-event_queue.md)
 
-# Tools & APIs
+## Tools & APIs
 
 See also: [non-protocol-specs](../non-protocol-specs) folder.
+
 - [Core APIs](./0020-APIS-core_api.md)
 - [Positions API](./0007-POSN-non_core_positions_api.md)

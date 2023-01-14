@@ -55,6 +55,7 @@ The performance score should be available on all the same API endpoints as the `
 ### Performance score
 
 Tendermint validator with insufficient self-delegation (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>):
+
 - Set up a network with 5 validators
 - Self-delegate to 4 of the nodes **more** than the minimum amount set in `reward.staking.delegation.minimumValidatorStake`.
 - Self-delegate to the 5th node **less** than the minimum amount.
@@ -117,7 +118,7 @@ tendermint and the voting weight on the multisig contract.
 To detect this, validators need to issue tagged signatures from time to time.
 The tagged signature is the original signed message with the tag [TAGGED] associated to it. Thus, the normal signature verification for message m will fail, and the verifier is supposed to verify m|”TAGGED”. The verifier is then required  (if using this signature to validate anything) to flag that the signature pool contains a tagged signature and which one it is. Failure to do so provably shows that the signature was not verified properly.
 
- ## `PM3`: Validator does not run event forwarder
+## `PM3`: Validator does not run event forwarder
 
 This is difficult to detect, as a validator may legitimately see Ethereum events a few seconds after other validators and thus never get an event to forward. Also, eventually EEF will be integrated into core, and thus it will be more effort to not run that part of the code.
 Idea: A validator that forwarded less than 50% of the events of the other validators gets malus on the reward, provided the median validator forwarded at least 100 events in that epoch.
@@ -128,7 +129,6 @@ Block confirmation times.
 
 Should we instead have additional rewards for forwarding events from Ethereum? For each validator we could keep a count of how many events they forwarded first (and that got approved by the others), call this `f` and we also know the total number `n` for an epoch.
 If we had another reward pool we could share it according to `f/n`.
-
 
 ## `PM5`: Validator only acts as a Tendermint leader
 
