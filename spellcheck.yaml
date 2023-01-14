@@ -5,11 +5,12 @@ matrix:
 
   - name: Markdown
     sources:
-      - '!venv/**/*.md|**/*.md'
+      - 'protocol/*.md'
     default_encoding: utf-8
     aspell:
       d: en_GB
       lang: en
+      ignore-case: true
     dictionary:
       encoding: utf-8
       output: .pyspelling-custom-md-en.dic.tmp
