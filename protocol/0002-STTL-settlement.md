@@ -6,7 +6,7 @@ Further to this, the protocol may elect to settle a market at a point in time by
 
 ## Overview
 
-Vega operates as a decentralised "Central Counterparty" (CCP) and facilitates the settlement of markets at various stages of its lifecyle.
+Vega operates as a decentralised "Central Counterparty" (CCP) and facilitates the settlement of markets at various stages of its lifecycle.
 
 Settlement on markets occurs when:
 
@@ -35,7 +35,7 @@ This will result in ledger entries being formulated ( see [collateral](./0005-CO
 
 #### Normal
 
-If all requested amounts are succesfully transferred to the *market settlement account*, then the amount collected will match the amount to be distributed and the settlement function will formulate instructions to *distribute* to the margin accounts of those whose moves have been positive according to the amount they are owed. These transfers will debit from the market's *market settlement account* and credited to the margin accounts of traders who have are due to receive a "cash / asset flow" as a result of the settlement.
+If all requested amounts are successfully transferred to the *market settlement account*, then the amount collected will match the amount to be distributed and the settlement function will formulate instructions to *distribute* to the margin accounts of those whose moves have been positive according to the amount they are owed. These transfers will debit from the market's *market settlement account* and credited to the margin accounts of traders who have are due to receive a "cash / asset flow" as a result of the settlement.
 
 #### Loss socialisation
 
@@ -103,18 +103,18 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 ### Collateral movements
 
 1. For settlement at expiry scenarios, transfers for collateral should be attempted by accessing the trader's margin account first and foremost. (<a name="0002-STTL-006" href="#0002-STTL-006">0002-STTL-006</a>)
-1. If margin account of trader is insuffcient to cover collateral transfers, then trade's general account is accessed next. (<a name="0002-STTL-007" href="#0002-STTL-007">0002-STTL-007</a>)
-1. If margin and general account of trader are insuffcient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
+1. If margin account of trader is insufficient to cover collateral transfers, then trade's general account is accessed next. (<a name="0002-STTL-007" href="#0002-STTL-007">0002-STTL-007</a>)
+1. If margin and general account of trader are insufficient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
 1. If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-009" href="#0002-STTL-009">0002-STTL-009</a>)
 
 ### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)
 
 1. A [cash settled futures](0016-PFUT-product_builtin_future.md) market has a status of ACTIVE and is trading in default trading mode (continuous trading)
 1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated.
-This oracle input retained and market is in the default trading mode (continous trading).
+This oracle input retained and market is in the default trading mode (continuous trading).
 1. At least one party places an order that triggers a trade (just to prove that we can).
 1. An [oracle event occurs *again*](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated.
-This oracle input retained and market is in the default trading mode (continous trading).
+This oracle input retained and market is in the default trading mode (continuous trading).
 1. At least one party places an order that triggers a trade (just to prove that we can again).
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
 The market's status is set to [TRADING TERMINATED](./0043-MKTL-market_lifecycle.md) and accepts no trading but retains the positions and margin balances that were in place after processing the trading terminated trigger. No margin recalculations or mark-to-market settlement occurs.

@@ -6,7 +6,7 @@ The Vega network runs on data. Market settlement, risk models, and other feature
 
 We consider `data` as _any_ type of submitted/delivered payload, examples including asset price, timestamp, orders, user data updates.
 
-External sources bring data from the outside world via trustless or minimal-trust relationships with the Vega blockchain network. They can be blockchain bridges connected to external blockchain systems, oracle bridges, or oracles - services that feed data to the Vega network from external sources (APIs, any type of messaging/queue systems or any closed/open permissioned/permissionless centralized/decentralized systems).
+External sources bring data from the outside world via trustless or minimal-trust relationships with the Vega blockchain network. They can be blockchain bridges connected to external blockchain systems, oracle bridges, or oracles - services that feed data to the Vega network from external sources (APIs, any type of messaging/queue systems or any closed/open permissioned/permissionless centralised/decentralised systems).
 
 The group of external data source entities comprises a separate _logical_ system layer, through which Vega network establishes a persistent inbound/outbound communication process with the outside world. Since the delivered data is external from the perspective of the Vega network, the relationship between the external data sources layer and Vega is trustless and is not related in any way to any type of consensus protocol used for internal Vega segments.
 
@@ -19,7 +19,7 @@ a) The goals of Vega Protocol with regards to data sourcing are:
 1. To provide access to data, being internal or external, to the Vega network in a standardised way, including data and triggers related to the "Vega Time" and market data (prices, etc.)
 1. To support a wide range of third party data sourcing solutions for external data rather than to implement a complete solution in-house.
 1. To be a source of deterministic data for Products and Risk Models that can be trusted by market participants.
-1. To build simple, generic and anti-fragile data sourcing functionality without introducins third party dependencies.
+1. To build simple, generic and anti-fragile data sourcing functionality without introducing third party dependencies.
 
 b) Things that are explicitly NOT goals of the data sourcing framework at this time:
 
@@ -32,8 +32,8 @@ Note that this approach means:
 1. Vega will not integrate directly with data providers at the protocol level. Rather, we provide APIs and protocol capabilities to support a wide range of data sourcing styles and standards (so that data sources that implement these standards will hopefully be compatible with little or no work).
 1. External data sources must be able to provide a measure of finality that is either definitive or a configurable threshold on a probabilistic measure (‘upstream finality’).
 1. Once upstream finality is achieved, Vega may in future provide optional mechanisms for querying, verification or dispute resolution that are independent of the source. These would be composable steps that could be added to any source.
-// TODO: Discuss how is this related to any potential consensus agreement on external data sources level - it is not related.
-1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each. This takes into consideration the fact that external sources could be distributed entitites themselves.
+`// TODO: Discuss how is this related to any potential consensus agreement on external data sources level - it is not related.``
+1. Vega will allow composition of data sources, including those with disparate sources, and may in future provide a variety of methods to aggregate and filter/validate data provided by each. This takes into consideration the fact that external sources could be distributed entities themselves.
 
 ## 2. Data sourcing framework
 
@@ -165,7 +165,7 @@ b) Composable modifiers/combinators for data sources:
 
 In future, we would therefore expect arbitrary compositions of these features to allow market designers to design robust and useful data sources. An visual example of a data source "pipeline" / definition that might eventually be used is below:
 
-![dta source pipeline example](./data-sources.png)
+![data source pipeline example](./data-sources.png)
 
 ## Examples
 
@@ -230,7 +230,7 @@ Vega should reject any data source tx that is not explicitly required, so this w
 
 1. If a data source combines a primary source (like a signed message) with a filter (for instance saying we are only interested in messages where ticker = `GBPUSD` and timestamp = `20211231T23:59:00`) then the complete data source definition defines the source and can be used to accept/reject transactions, so for an active data source is active, transactions from the same provider (pubkey, Ethereum contract/event, URL, etc.) do not form part of the defined data source. If submitted, they should be rejected where possible and must not supply data to the target for the data source if the metadata or data content itself is not selected by the source definition (e.g. because ticker and timestamp do not match a filter). (<a name="0045-DSRC-001" href="#0045-DSRC-001">0045-DSRC-001</a>)
 1. When no reference to a data source remains in any active part of the system (for instance a non-cancelled/settled market), data source no longer needs to be tracked and can be discarded. Any transactions that would previously have matched and been selected by that data source would be rejected/ignored. (<a name="0045-DSRC-002" href="#0045-DSRC-002">0045-DSRC-002</a>)
-1. If the same complete data source (provider and filters, etc.) is referenced in multiple places (e.g. two separate active markets) then it will remain acrtive if any subset of those references remain active. For example 2 markets reference the same data source (full definition must match exactly) and one of those markets is closed/cancelled/settled before the other, either because some other difference in their definition or because of governance action. (<a name="0045-DSRC-003" href="#0045-DSRC-003">0045-DSRC-003</a>)
+1. If the same complete data source (provider and filters, etc.) is referenced in multiple places (e.g. two separate active markets) then it will remain active if any subset of those references remain active. For example 2 markets reference the same data source (full definition must match exactly) and one of those markets is closed/cancelled/settled before the other, either because some other difference in their definition or because of governance action. (<a name="0045-DSRC-003" href="#0045-DSRC-003">0045-DSRC-003</a>)
 1. If multiple data sources share common roots (e.g. the same provider - pubkey etc. but different filters) and at least one of those sources filters out a transaction but at least one other selects it (all filters match), the transaction data must still be supplied for the sources that match and must not be supplied for the sources that don't match. (<a name="0045-DSRC-004" href="#0045-DSRC-004">0045-DSRC-004</a>)
 1. If multiple data sources share common roots (e.g. the same provider - pubkey etc. but different filters) and all of the sources select it (all filters match), the transaction data must be supplied for ALL of the sources that match. (<a name="0045-DSRC-005" href="#0045-DSRC-005">0045-DSRC-005</a>)
 1. If a data source reference is changed (e.g. via governance vote), the old source must be dropped and data/transactions matching that source must not reach the target. (<a name="0045-DSRC-006" href="#0045-DSRC-006">0045-DSRC-006</a>)

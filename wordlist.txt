@@ -2,6 +2,7 @@ ABCI
 ABCI++
 ABI
 Allowlist
+allowlisted
 antiwhaling
 API
 APIs
@@ -19,8 +20,12 @@ blocktime
 BTC
 bytecode
 cancelled
+cashflow
 cashflows
+CCP
 ccy
+ceil
+ceiled
 CSF
 checkpointing
 CLEF
@@ -29,6 +34,8 @@ codebase
 Coinbase
 Coinbase's
 collateralised
+combinators
+composable
 config
 cosmovisor
 counterparty
@@ -41,6 +48,7 @@ customised
 DAI
 datanode
 datatypes
+datetime
 decentralised
 decentralises
 decrypt
@@ -49,6 +57,7 @@ delegateable
 delegator
 delegators
 deterministically
+discoverability
 disincentivise
 DPOS
 durations
@@ -65,9 +74,11 @@ ERC-20
 ERC-721
 ERC-1155
 ETH
+ETH's
 ETHB
 Ethereum
 eventbus
+EVM
 executables
 familiarise
 favour
@@ -92,8 +103,12 @@ GraphQL
 gRPC
 GTC
 GTT
+Gwei
 hardcoded
 HSM
+HTTP
+HTTPS
+IBC
 incentivise
 incentivised
 init
@@ -110,6 +125,7 @@ keypair
 keystore
 KMS
 lifecycle
+linearised
 linkings
 linux
 liveness
@@ -120,6 +136,7 @@ MacOS
 mainnet
 malus
 margined
+margining
 messager
 math
 mempool
@@ -142,6 +159,7 @@ orderbook
 ORDT
 PDP
 performant
+permissioned
 permissionless
 PME
 PnL
@@ -154,6 +172,7 @@ protobuf
 Pseudocode
 pubkey
 rata
+reimplemented
 repo
 reponse
 repurpose
@@ -166,6 +185,7 @@ RPC
 runnable
 runtime
 scalable
+Scholes
 selectable
 sepolia
 serialisation
@@ -195,6 +215,7 @@ tokenholders
 tradable
 trackable
 Tron
+trustless
 tx
 quant
 uint

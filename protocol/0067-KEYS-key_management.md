@@ -119,15 +119,16 @@ i.e., compromise of either the routing or some manipulation on the level of the 
 One additional risk (which holds for all keys) is that an attacker compromises a validator, obtains a copy of the key, and then silently goes after other validators until they get a critical number of keys. Thus, the lifetime of the key should be limited.
 
 As a single double-signing validator is of limited impact (since it requires t+1 to
-pose a meaningful attack), we do not penalize or ban validators for such; thus, if
-a misconfiguration in some parallelization causes a single missing, the damage is
+pose a meaningful attack), we do not penalise or ban validators for such; thus, if
+a misconfiguration in some parallelisation causes a single missing, the damage is
 limited (if the validator in question is the leader, we lose one block; this will be counted against that validator in the performance measurements). This allows validators to have a less strict double signing protection (and as seen in the testnet, too strict double-signing protection can cause a validator failure due to wrongly blocking key access).
 
 ## Future Features
 
 An alarm should be raised if:
 
-- a validator frequently double-signs (this is likely not malicious behehaviour of
+- a validator frequently double-signs (this is likely not malicious behaviour
+ of
    that validator, but a misconfiguration or a leaked key; in either case, it is something
    the validator needs to fix
 - several validators double sign on the same block (especially on the same values). This
@@ -212,7 +213,7 @@ Wrong `Multisigs`
 #### Footnotes
 
 (*) We could time-limit the signatures, but that'd mean that if a user gets a withdrawal signed,
-they have to submit it fast-ish; this is not wanted (though I don't see a big issue with a time
+they have to submit it fairly quickly; this is not wanted (though I don't see a big issue with a time
 limit of a week).
 The alternative is that the individual signatures have a timestamp using the hash of
 the last ETH block, and the block number used for the different components of the multisig
@@ -240,7 +241,7 @@ multisig interaction (<a name="0067-KEYS-001" href="#0067-KEYS-001">0067-KEYS-00
 - The network issues a signature bundle to update that can be submitted to the Ethereum multisig contract to update the key there.
 - This is submitted to Ethereum; the multisig contract is updated.
 - Vega nodes receive the event confirming the key has been updated.
-- Party `p` now issues a withdrawal transaction. A withdrawal bundle is created utilizing `k1,k2,k3_new`.
+- Party `p` now issues a withdrawal transaction. A withdrawal bundle is created utilising `k1,k2,k3_new`.
 - Party `p` submits the withdrawal bundle to Ethereum; multisig contract accepts it and transfers the funds on the Ethereum chain.
 
 Non-tendermint validators rotating keys does not generate signatures (<a name="0067-KEYS-003" href="#0067-KEYS-003">0067-KEYS-003</a>):
