@@ -214,5 +214,5 @@ Don't use any of the pseudocode above!
 1. Bot can participate in an opening auction placing orders around target price (set via params, see above).(<a name="0001-NP-LIQB-003" href="#0001-NP-LIQB-003">0001-NP-LIQB-003</a>)
 1. Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).(<a name="0001-NP-LIQB-004" href="#0001-NP-LIQB-004">0001-NP-LIQB-004</a>)
 1. Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached.(<a name="0001-NP-LIQB-005" href="#0001-NP-LIQB-005">0001-NP-LIQB-005</a>)
- - The repository is public from the start.
- - Bot is not called `Bot Mc BotFace`.
+    1. The repository is public from the start.
+    1. Bot is not called `Bot Mc BotFace`.
