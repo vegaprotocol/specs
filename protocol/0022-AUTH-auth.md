@@ -6,12 +6,12 @@ This specs covers authentication of a user with the vega network.
 We'll introduce a new tool to use with the vega network in order to allow a user to authenticate a transaction.
 No implementation details will be covered.
 
-In a blockchain / decentralized / public world authentication is often done by pairing a payload with the corresponding cryptographic signature (e.g: a submitOrder transaction) that a user is sending to the application (in our case the vega network).
+In a blockchain / decentralized / public world authentication is often done by pairing a payload with the corresponding cryptographic signature (e.g: a `submitOrder` transaction) that a user is sending to the application (in our case the vega network).
 Creating a signature is often made by using a public key signature system (e.g:`ed25519`), which are composed of a private key (which the user need to keep secure) which will allow a user to sign a payload (basically a blob of bytes), and a public key derived from the private key (meant to be share with any actors in the system) used in order to verify a signature for a given payload. As the private key is meant to be used only by the owner of it, we can assume that if a signature can be verified, the original transaction was emitted by the owner of the private key.
 
 For the purposes of this spec, we use the following terminology:
 
-- A _user_ is a user as registered in the wallet / kms service.
+- A _user_ is a user as registered in the wallet / KMS service.
 - A _party_ is one set of key pairs, created by the user.
 - A user can have many key pairs / parties.
 
@@ -49,7 +49,7 @@ The process of adding a new party to the network and placing the first order wil
 ### Core changes
 
 - Uses of the old auth service will no longer exist
-- The existing partyId will be replaced with a public key
+- The existing `partyId` will be replaced with a public key
 
 ### Wallet service
 
@@ -57,7 +57,7 @@ The wallet service should provide the following features:
 
 - Manage users
   - Create a new user
-  - signin, login, logout to the wallet (authentication method to be defined by implementation)
+  - sign-in, login, logout to the wallet (authentication method to be defined by implementation)
 - Manage a user's parties and associated key pairs (a party is associated with exactly one key pair)
   - create a party and associated key pair
   - list all parties and key pairs
@@ -94,9 +94,9 @@ A wallet is represented as an encrypted file containing a list of public and pri
 The network will need to update the existing command in order to add to them a signature or public key.
 
 - Each transaction is paired with a signature, so it can verify the user address/ID from the signature
-- The recovered user address is the partyID
+- The recovered user address is the `partyID`
 
-The network will verify partyID from signature for all transactions.
+The network will verify `partyID` from signature for all transactions.
 When to verify them will need to be decided and profile as verifying transaction will be at some cost for the nodes, but ideally we should:
 
 - Verify a signature for a transaction before it's sent to the chain so we can stop a transaction to be proposed to the chain if it's an invalid signature

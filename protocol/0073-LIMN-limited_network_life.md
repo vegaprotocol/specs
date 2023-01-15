@@ -84,11 +84,11 @@ The state will be restored in this order:
 - Load the accepted market proposals. If the enactment date is in the past then set the enactment date to `now + net_param_min_enact` (so that opening auction can take place) and status to pending.
 - Replay events from bridged chains
   - Concerning bridges used to deposit collateral for trading, replay from the last block specified in the checkpoint and reload the pending deposits from the checkpoint so the network can start again to confirm these events.
-  - Concerning the staking bridges, all balances will be reconcilied using the staking events from the checkpoint, up to the last seen block store as part of the checkpoint, then apply again the delegations to the validators.
+  - Concerning the staking bridges, all balances will be reconciled using the staking events from the checkpoint, up to the last seen block store as part of the checkpoint, then apply again the delegations to the validators.
 
 There should be a tool to extract all assets from the restore file so that they can be added to genesis block manually, should the validators so desire.
 
-## Restoring balancs
+## Restoring balances
 
 - Participants need access to funds after network ends. This will be facilitated by using restoration of balances to allow participants to withdraw or continue to trade with funds during the next iteration of the chain.
 
@@ -116,7 +116,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 The check the following sub-cases:
 
-- If the Ethereum replay says withrawal completed. The party has general account balance of 0 USD. The party has "signed for withdrawal" 0.
+- If the Ethereum replay says withdrawal completed. The party has general account balance of 0 USD. The party has "signed for withdrawal" 0.
 - If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 USD. The party has "signed for withdrawal" 100.
 - If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 USD.
 
@@ -240,7 +240,7 @@ The check the following sub-cases:
 1. There is a Vega token asset.
 1. There are `5` validators on the network.
 1. Each validator party `validator_party_1`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
-1. There are `N` other parties. Each of the other parties has `other_party_i`, `i=1,2,...,N` has locked exactly `i` tokens on that staking Ethereum bridge and these tokens are undelegeated at this point.
+1. There are `N` other parties. Each of the other parties has `other_party_i`, `i=1,2,...,N` has locked exactly `i` tokens on that staking Ethereum bridge and these tokens are undelegated at this point.
 1. Other party `i` delegates all its tokens to `validator_party_j` with `j = i mod 5` (i.e. the remainder after integer division of `j` by `i`.). For example if `N=20000` then party `i=15123` will delegate all its `15123` tokens to validator `validator_party_3` since `15123 mod 5 = 3`.
 1. The `Staking and delegation` rewards are active so that every hour each party that has delegated tokens receives `0.01` of the delegated amount as a reward.
 1. The network runs for 5 hours.
@@ -258,9 +258,9 @@ The check the following sub-cases:
 
 ### Test case 6: Network Parameters / Exceptional case handling
 
-#### Test case 6.1: timeElapsedBetweenCheckpoints not set
+#### Test case 6.1: `timeElapsedBetweenCheckpoints` not set
 
-#### Test case 6.2: timeElapsedBetweenCheckpoints set to value outside acceptable range
+#### Test case 6.2: `timeElapsedBetweenCheckpoints` set to value outside acceptable range
 
 ### Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0073-LIMN-022" href="#0073-LIMN-022">0073-LIMN-022</a>)
 
@@ -308,7 +308,7 @@ The check the following sub-cases:
 1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The market is still in "pending" state.
-1. The market becomes enaced when the enactment time is passed.
+1. The market becomes enacted when the enactment time is passed.
 1. Other parties can trade on the market, and become continuous.
 
 ### Test case 14: Market with trading terminated is not restored, collateral moved correctly
@@ -335,7 +335,7 @@ The check the following sub-cases:
 1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-043" href="#0073-LIMN-043">0073-LIMN-043</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>)
 
-### Test case 16: Markets can be settled and terminated after restore as propposed
+### Test case 16: Markets can be settled and terminated after restore as proposed
 
 1. Propose, enact a market with some trading termination and settlement date setting. Trade in the market creating positions for at least 2 parties.
 1. System saves LNL checkpoint.
@@ -346,7 +346,7 @@ The check the following sub-cases:
 
 ### Test case 17: Markets with internal time trigger for trading terminated that rings between shutdown and restore
 
-1. Propose, enact a market with some traing terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties.
+1. Propose, enact a market with some trading terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties.
 1. System saves LNL checkpoint before the trading terminated trigger rings.
 1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung.
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>); if it exists it in `cancelled` state.
@@ -362,7 +362,7 @@ The check the following sub-cases:
 - System saves LNL checkpoint.
 - Restart Vega, load LNL checkpoint.
 - The market has the same:
-  - risk model and params (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
+  - risk model and parameters (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
   - price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>)
   - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
   - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)

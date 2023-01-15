@@ -38,8 +38,8 @@ Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing.
 
 | Filled State | Resulting status | Reason |
 |--------------|------------------|--------|
-|   Unfilled   |     Stopped     | Order would match with an order with the same partyID |
-|   Partially  |     Partially Filled     | Order has been partially filled but the next partial fill would be with an order with the same partyID |
+|   Unfilled   |     Stopped     | Order would match with an order with the same `partyID` |
+|   Partially  |     Partially Filled     | Order has been partially filled but the next partial fill would be with an order with the same `partyID` |
 
 ## Acceptance Criteria
 
@@ -87,7 +87,7 @@ Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing.
 
 Note: The last row in the table above is added for clarity. If the order was filled, it is marked as Filled and it is removed from the book, so it can't expire after being filled.
 
-### Wash trading ACs
+### Wash trading Acceptance Criterias
 
 - If, during continuous trading, an order would be filled or partially filled with an existing order from the same [party](./0017-PART-party.md) aka "wash" trade, the order is rejected. The reason for rejection should be clear on the order status: "rejected to prevent a wash trade". (<a name="0024-OSTA-005" href="#0024-OSTA-005">0024-OSTA-005</a>)
 - Any existing fills that happen before the wash trade is identified will be kept. The order should be market both "partially filled" and "rejected to prevent wash trade" (<a name="0024-OSTA-006" href="#0024-OSTA-006">0024-OSTA-006</a>)
@@ -100,7 +100,7 @@ Note: The last row in the table above is added for clarity. If the order was fil
 
 ### Reject reasons
 
-- Order reason of `ORDER_ERROR_INSUFFICIENT_ASSET_BALANCE` is given if a position is closed out because they do now hve enough margin to cover the position (<a name="0024-OSTA-010" href="#0024-OSTA-010">0024-OSTA-010</a>)
+- Order reason of `ORDER_ERROR_INSUFFICIENT_ASSET_BALANCE` is given if a position is closed out because they do now have enough margin to cover the position (<a name="0024-OSTA-010" href="#0024-OSTA-010">0024-OSTA-010</a>)
 - Order reason of `ORDER_ERROR_MARGIN_CHECK_FAILED` is given if a new order is placed and the user does not have enough collateral to cover the initial margin requirements (<a name="0024-OSTA-011" href="#0024-OSTA-011">0024-OSTA-011</a>)
 - Order reason of `ORDER_ERROR_NON_PERSISTENT_ORDER_OUT_OF_PRICE_BOUNDS` when a non persistent order would cause the price to move outside of the price bounds (<a name="0024-OSTA-012" href="#0024-OSTA-012">0024-OSTA-012</a>)
 - Order reason of `ORDER_ERROR_GFN_ORDER_DURING_AN_AUCTION` when the market is in auction and a GFN order is sent in (<a name="0024-OSTA-013" href="#0024-OSTA-013">0024-OSTA-013</a>)

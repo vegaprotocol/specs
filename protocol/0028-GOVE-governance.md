@@ -234,10 +234,10 @@ Ideally, it should be possible to not repeat things that are not changing or are
 
 The following are immutable and cannot be changed:
 
-- marketID
+- `marketID`
 - market decimal places
 - position decimal places
-- settlementAsset
+- `settlementAsset`
 - name
 
 ## 3. Change network parameters
@@ -258,7 +258,7 @@ Only some properties of an asset may be modified, this is detailed in [asset fra
 All proposals to modify an existing asset have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`.
 Enactment of an asset modification proposal is:
 
-- For data that must be synchronised with the asset blockchain (e.g. Ehtereum): _only_ the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emmitted by the bridge chain.
+- For data that must be synchronised with the asset blockchain (e.g. Ethereum): _only_ the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emitted by the bridge chain.
 - For any data that is stored only on the Vega chain: the data is updated once the proposal is enacted.
 
 ## 5. Transfers initiated by Governance (post Oregon trail)
@@ -392,7 +392,7 @@ APIs should also exist for clients to:
 
 ## Acceptance Criteria
 
-- As a user, I can create a new proposal, assuming my staking balance matches or exceeds `minProposerBalance` network param for my proposal type (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)
+- As a user, I can create a new proposal, assuming my staking balance matches or exceeds `minProposerBalance` network parameter for my proposal type (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)
 - As a user, I can list the open proposals on the network (<a name="0028-GOVE-002" href="#0028-GOVE-002">0028-GOVE-002</a>)
 - As a user, I can get a list of all proposals I voted for (<a name="0028-GOVE-003" href="#0028-GOVE-003">0028-GOVE-003</a>)
 - As a user, I can receive notification when a new proposal is created and may require attention. (<a name="0028-GOVE-004" href="#0028-GOVE-004">0028-GOVE-004</a>)

@@ -40,10 +40,10 @@ Variables needed:
 
 Constants needed:
 
-- `peg cost factor = 50` nonnegative decimal
-- `LP shape cost factor = 100` nonnegative decimal
-- `position factor = 1` nonnegative integer
-- `level factor = 0.1` nonnegative integer
+- `peg cost factor = 50` non-negative decimal
+- `LP shape cost factor = 100` non-negative decimal
+- `position factor = 1` non-negative integer
+- `level factor = 0.1` non-negative integer
 - `batchFactor = 0.5` decimal between `0.1 and 0.9`.
 
 ### Any type of limit or market order
@@ -100,7 +100,7 @@ Transactions with the same priority are placed into a block in the default seque
 
 There are three priority categories:
 
-1. "high" which constitue all "protocol transactions" i.e. state variable updates [(floating point consensus)](./0065-FTCO-floating_point_consensus.md), [ethereum events](./0036-BRIE-event_queue.md) , withdrawals, heartbeats (for candidate and ersatz validator performance measurement), see [validators](./0069-VCBS-validators_chosen_by_stake.md) and transactions the protocol uses internally to run.
+1. "high" which constitutes all "protocol transactions" i.e. state variable updates [(floating point consensus)](./0065-FTCO-floating_point_consensus.md), [ethereum events](./0036-BRIE-event_queue.md) , withdrawals, heartbeats (for candidate and ersatz validator performance measurement), see [validators](./0069-VCBS-validators_chosen_by_stake.md) and transactions the protocol uses internally to run.
 1. "medium" which includes all [governance](./0028-GOVE-governance.md) transactions (market proposals, parameter change proposals, votes).
 1. "low" which includes all other transactions.
 

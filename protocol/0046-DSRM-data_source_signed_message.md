@@ -23,7 +23,7 @@ _NOTE: This is the only external oracle available initially in Vega, and initial
 
 A data source must define:
 
-- Signers that can sign and submit values for this (external or internal) source. Signers can be different types of keys/addresses that are used by the data source to sign the data. They have different encryption schemes and are treated differently in the DB settings and in codebase level. Examples are public keys used to sign the data, in case of an Open Oracle - Ethereium address.
+- Signers that can sign and submit values for this (external or internal) source. Signers can be different types of keys/addresses that are used by the data source to sign the data. They have different encryption schemes and are treated differently in the DB settings and in codebase level. Examples are public keys used to sign the data, in case of an Open Oracle - Ethereum address.
 - Type of data to be supplied in the transaction. Initially we should support the following types:
   - A simple native Vega transaction (i.e. protobuf message) containing one or more key/value pairs of data fields with values in the types allowable in the main data source spec (keys are strings)
   - ABI encoded encoded data. Specifically for oracles, we want to be able to support at least the OpenOracle standard by this method

@@ -41,8 +41,8 @@ Notes on scope of current version of this spec:
 
 **Market-state:**
 
-1. **Good For Auction (GFA):** This order will only be accepted by the system if it arrives during an auction period, otherwise it will be rejected. The order can act like either a GTC or GTT order depending on whether the expiresAt field is set.
-1. **Good For Normal (GFN):** This order will only be accepted by the system if it arrived during normal trading, otherwise it will be rejected. Normal trading is defined as either continuous trading on a normal market or auction trading in a frequent batch auction market. The order can act like either a GTC or GTT order depending on whether the expiresAt field is set.
+1. **Good For Auction (GFA):** This order will only be accepted by the system if it arrives during an auction period, otherwise it will be rejected. The order can act like either a GTC or GTT order depending on whether the `expiresAt` field is set.
+1. **Good For Normal (GFN):** This order will only be accepted by the system if it arrived during normal trading, otherwise it will be rejected. Normal trading is defined as either continuous trading on a normal market or auction trading in a frequent batch auction market. The order can act like either a GTC or GTT order depending on whether the `expiresAt` field is set.
 
 ### Valid order entry combinations
 
@@ -75,7 +75,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 - Network orders are a Fill Or Kill, Market orders
 - Network orders cannot be submitted by any party, they are created during transaction processing.
 
-## Acceptance Critieria
+## Acceptance Criteria
 
 - Immediate orders, continuous trading:
   - An aggressive persistent (GTT, GTC) limit order that is not crossed with the order book is included on the order book at limit order price at the back of the queue of orders at that price. No trades are generated. (<a name="0014-ORDT-001" href="#0014-ORDT-001">0014-ORDT-001</a>)

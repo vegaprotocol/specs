@@ -1,11 +1,14 @@
 ABCI
 ABCI++
+ABI
 Allowlist
 antiwhaling
 API
 APIs
 AST
 atomicity
+Auth
+authorisable
 behaviour
 bip
 blockchain
@@ -23,9 +26,11 @@ CLEF
 cmd
 codebase
 Coinbase
+Coinbase's
 collateralised
 config
 cosmovisor
+counterparty
 crypto
 cryptographic
 CQRS
@@ -47,6 +52,7 @@ durations
 ECDSA
 EEF
 EIP
+ELS
 encodings
 ENE
 enums
@@ -95,8 +101,10 @@ intrablock
 int64
 IOC
 JSON
+keyholder
 keypair
 keystore
+KMS
 lifecycle
 linkings
 linux
@@ -107,6 +115,7 @@ LPs
 MacOS
 mainnet
 malus
+margined
 messager
 math
 mempool
@@ -119,11 +128,14 @@ multisig
 MultisigControl
 NFTs
 nonfungible
+OAUTH
 OKR
 onwards
+OpenOracle
 orderbook
 ORDT
 PDP
+performant
 permissionless
 PME
 PnL
@@ -139,6 +151,7 @@ rata
 repo
 reponse
 repurpose
+revalidated
 RFQ
 roadmap
 Ropsten
@@ -160,6 +173,7 @@ statesync
 SSD
 SSL
 suboptimal
+subtype
 SweetWater
 tau
 Tendermint
@@ -172,6 +186,7 @@ trackable
 Tron
 tx
 uint
+unamended
 unassociated
 undelegate
 undelegates
@@ -180,6 +195,7 @@ undelegating
 undelegation
 undelegations
 undeployed
+unencrypted
 unitless
 unnominated
 unnormalised
@@ -199,10 +215,12 @@ vegaprotocol
 vegatools
 vegavisor
 vegawallet
+verifiably
 verifier
 visor
 VW
 VWAP
+walkthrough
 walkthroughs
 wei
 whitepaper
