@@ -21,18 +21,20 @@
 
 ### Open orders data
 
-- Verify that the net buy order amounts are correct after the following changes:
-  - No active buy orders, a new buy order is added to the order book (<a name="0006-POSI-016" href="#0006-POSI-016">0006-POSI-016</a>)
-  - Active buy orders, a new buy order is added to the order book (<a name="0006-POSI-017" href="#0006-POSI-017">0006-POSI-017</a>)
-  - Active buy orders, an existing buy order is amended which increases its size. (<a name="0006-POSI-018" href="#0006-POSI-018">0006-POSI-018</a>)
-  - Active buy orders, an existing buy order is amended which decreases its size.  (<a name="0006-POSI-019" href="#0006-POSI-019">0006-POSI-019</a>)
-  - Active buy orders, an existing buy order's price is amended such that it trades a partial amount. (<a name="0006-POSI-020" href="#0006-POSI-020">0006-POSI-020</a>)
-  - Active buy orders, an existing buy order's price is amended such that it trades in full. (<a name="0006-POSI-021" href="#0006-POSI-021">0006-POSI-021</a>)
-  - Active buy order, an order initiated by another trader causes a partial amount of the existing buy order to trade. (<a name="0006-POSI-022" href="#0006-POSI-022">0006-POSI-022</a>)
-  - Active buy order, an order initiated by another trader causes the full amount of the existing buy order to trade. (<a name="0006-POSI-023" href="#0006-POSI-023">0006-POSI-023</a>)
-  - Active buy orders, an existing order is cancelled (<a name="0006-POSI-024" href="#0006-POSI-024">0006-POSI-024</a>)
-  - Active buy orders, an existing order expires (<a name="0006-POSI-025" href="#0006-POSI-025">0006-POSI-025</a>)
-- Repeat the above but for sell orders.
+Verify that the net buy order amounts are correct after the following changes:
+
+- No active buy orders, a new buy order is added to the order book (<a name="0006-POSI-016" href="#0006-POSI-016">0006-POSI-016</a>)
+- Active buy orders, a new buy order is added to the order book (<a name="0006-POSI-017" href="#0006-POSI-017">0006-POSI-017</a>)
+- Active buy orders, an existing buy order is amended which increases its size. (<a name="0006-POSI-018" href="#0006-POSI-018">0006-POSI-018</a>)
+- Active buy orders, an existing buy order is amended which decreases its size.(<a name="0006-POSI-019" href="#0006-POSI-019">0006-POSI-019</a>)
+- Active buy orders, an existing buy order's price is amended such that it trades a partial amount. (<a name="0006-POSI-020" href="#0006-POSI-020">0006-POSI-020</a>)
+- Active buy orders, an existing buy order's price is amended such that it trades in full. (<a name="0006-POSI-021" href="#0006-POSI-021">0006-POSI-021</a>)
+- Active buy order, an order initiated by another trader causes a partial amount of the existing buy order to trade. (<a name="0006-POSI-022" href="#0006-POSI-022">0006-POSI-022</a>)
+- Active buy order, an order initiated by another trader causes the full amount of the existing buy order to trade. (<a name="0006-POSI-023" href="#0006-POSI-023">0006-POSI-023</a>)
+- Active buy orders, an existing order is cancelled (<a name="0006-POSI-024" href="#0006-POSI-024">0006-POSI-024</a>)
+- Active buy orders, an existing order expires (<a name="0006-POSI-025" href="#0006-POSI-025">0006-POSI-025</a>)
+
+Repeat the above but for sell orders.
 
 ## General
 
@@ -72,8 +74,8 @@ The Position core functionality processes each trade in the following way:
 1. If the buyer and seller are the same (wash trade), do nothing.
 1. For each of the buyer and seller, look for a position record for the current market. If either record is not found, create it.
 1. Update the position size for each record:
-	- `BuyerPosition.size` += `Trade.size`
-	- `SellerPosition.size` -= `Trade.size`
+	  - `BuyerPosition.size` += `Trade.size`
+	  - `SellerPosition.size` -= `Trade.size`
 1. If either position record has Position.size == 0 and no active orders, delete it, otherwise save the updated record.
 
 #### Updating net active buy and sell order sizes

@@ -71,5 +71,5 @@ At a minimum on the front end, a trader should know how much money is in each of
 
 ### Acceptance Criteria
 
-* [ ] Collateral engine emits an event on each transfer with source account, destination account and amount (<a name="0005-COLL-001" href="#0005-COLL-001">0005-COLL-001</a>)
-* [ ] In absence of deposits or withdrawals via a bridge the total amount of any asset across all the accounts for the asset remains constant. (<a name="0005-COLL-002" href="#0005-COLL-002">0005-COLL-002</a>)
+* Collateral engine emits an event on each transfer with source account, destination account and amount (<a name="0005-COLL-001" href="#0005-COLL-001">0005-COLL-001</a>)
+* In absence of deposits or withdrawals via a bridge the total amount of any asset across all the accounts for the asset remains constant. (<a name="0005-COLL-002" href="#0005-COLL-002">0005-COLL-002</a>)
