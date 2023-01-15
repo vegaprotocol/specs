@@ -15,21 +15,18 @@ Orders should be rejected if we can’t allocate sufficient margin.
 1. If an order is partially filled then the margin requirements are recalculated reflecting the reduced order size and new position size. (<a name="0011-MARA-005" href="#0011-MARA-005">0011-MARA-005</a>)
 1. If an order is partially filled and if this leads to a reduced position and reduced riskiest long / short then the margin requirements are seen to be reduced and if margin balance is above release level then the excess amount is transferred to the general account. (<a name="0011-MARA-006" href="#0011-MARA-006">0011-MARA-006</a>)
 1. Margin is correctly calculated for [all order types](./0014-ORDT-order_types.md) in continuous trading:
-
-- Limit GTT (<a name="0011-MARA-007" href="#0011-MARA-007">0011-MARA-007</a>)
-- Limit GTC (<a name="0011-MARA-008" href="#0011-MARA-008">0011-MARA-008</a>)
-- Limit GFN (<a name="0011-MARA-009" href="#0011-MARA-009">0011-MARA-009</a>)
-- Pegged GTT (<a name="0011-MARA-010" href="#0011-MARA-010">0011-MARA-010</a>)
-- Pegged GTC (<a name="0011-MARA-011" href="#0011-MARA-011">0011-MARA-011</a>)
-- Pegged GFN (<a name="0011-MARA-012" href="#0011-MARA-012">0011-MARA-012</a>)
-
-1. [ ] Margin is correctly calculated for [all order types](./0014-ORDT-order_types.md) in auction mode:
-
-- Limit GTT (<a name="0011-MARA-013" href="#0011-MARA-013">0011-MARA-013</a>)
-- Limit GTC (<a name="0011-MARA-014" href="#0011-MARA-014">0011-MARA-014</a>)
-- Limit GFA (<a name="0011-MARA-015" href="#0011-MARA-015">0011-MARA-015</a>)
-- Pegged GTT (parked in auction \*) (<a name="0011-MARA-016" href="#0011-MARA-016">0011-MARA-016</a>)
-- Pegged GTC (parked in auction \* ) (<a name="0011-MARA-017" href="#0011-MARA-017">0011-MARA-017</a>)
+    1. Limit GTT (<a name="0011-MARA-007" href="#0011-MARA-007">0011-MARA-007</a>)
+    1. Limit GTC (<a name="0011-MARA-008" href="#0011-MARA-008">0011-MARA-008</a>)
+    1. Limit GFN (<a name="0011-MARA-009" href="#0011-MARA-009">0011-MARA-009</a>)
+    1. Pegged GTT (<a name="0011-MARA-010" href="#0011-MARA-010">0011-MARA-010</a>)
+    1. Pegged GTC (<a name="0011-MARA-011" href="#0011-MARA-011">0011-MARA-011</a>)
+    1. Pegged GFN (<a name="0011-MARA-012" href="#0011-MARA-012">0011-MARA-012</a>)
+1. Margin is correctly calculated for [all order types](./0014-ORDT-order_types.md) in auction mode:
+    1.Limit GTT (<a name="0011-MARA-013" href="#0011-MARA-013">0011-MARA-013</a>)
+    1.Limit GTC (<a name="0011-MARA-014" href="#0011-MARA-014">0011-MARA-014</a>)
+    1.Limit GFA (<a name="0011-MARA-015" href="#0011-MARA-015">0011-MARA-015</a>)
+    1.Pegged GTT (parked in auction \*) (<a name="0011-MARA-016" href="#0011-MARA-016">0011-MARA-016</a>)
+    1.Pegged GTC (parked in auction \* ) (<a name="0011-MARA-017" href="#0011-MARA-017">0011-MARA-017</a>)
 
 ## Pseudocode
 
