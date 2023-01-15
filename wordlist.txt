@@ -38,6 +38,7 @@ cumulated
 customised
 DAI
 datanode
+datatypes
 decentralised
 decentralises
 decrypt
@@ -185,6 +186,7 @@ tradable
 trackable
 Tron
 tx
+quant
 uint
 unamended
 unassociated
