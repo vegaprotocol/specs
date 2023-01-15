@@ -9,7 +9,7 @@ In order for the Vega network to authorise function execution on Ethereum smart 
 ## Guide-level explanation
 
 Vega controls and maintains a number of Ethereum smart contracts which have functions that can only be run once authorised by Vega consensus and are always requested by an interested party.
-For instance, for depositing of settlement instrument assets, such as Ether or DAI, Vega has launched a number of "bridge" smart contracts. These contracts contain functions that are controlled and thus only authorizable from Vega consensus. These functions include withdrawing and whitelisting assets.
+For instance, for depositing of settlement instrument assets, such as Ether or DAI, Vega has launched a number of "bridge" smart contracts. These contracts contain functions that are controlled and thus only authorisable from Vega consensus. These functions include withdrawing and whitelisting assets.
 
 As an example: once a user has requested a withdrawal and Vega consensus has agreed that the withdrawal should happen, the user will be presented with a number of signed orders from validator nodes that exceeds the threshold of signatures required. The user will then submit this "signature bundle" to the withdrawal function on the bridge smart contract along with the asset type and amount.
 This spec covers the format and recovery of proof that the Vega network has authorised the function to be run as it pertains to the smart contract mechanism.
@@ -169,7 +169,7 @@ To ensure complete coverage of public and external smart contract functions, lis
 
 1. `function burn_nonce(uint256 nonce, bytes calldata signatures)`
 
-- must stop speficic nonce from being used despite valid signatures (<a name="0030-ETHM-037" href="#0030-ETHM-037">0030-ETHM-037</a>)
+- must stop specific nonce from being used despite valid signatures (<a name="0030-ETHM-037" href="#0030-ETHM-037">0030-ETHM-037</a>)
 - must fail if bad signatures (<a name="0030-ETHM-038" href="#0030-ETHM-038">0030-ETHM-038</a>)
 - must fail if already redeemed (<a name="0030-ETHM-039" href="#0030-ETHM-039">0030-ETHM-039</a>)
 - must fail if already burned (<a name="0030-ETHM-040" href="#0030-ETHM-040">0030-ETHM-040</a>)

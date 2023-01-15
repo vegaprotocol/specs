@@ -4,13 +4,16 @@ Allowlist
 antiwhaling
 API
 APIs
+AST
 atomicity
 behaviour
+bip
 blockchain
 blockchains
 Blocklist
 blocktime
 BTC
+bytecode
 cancelled
 cashflows
 ccy
@@ -29,6 +32,7 @@ CQRS
 cumulated
 customised
 DAI
+datanode
 decentralised
 decentralises
 decrypt
@@ -39,6 +43,7 @@ delegators
 deterministically
 disincentivise
 DPOS
+durations
 ECDSA
 EEF
 EIP
@@ -53,9 +58,11 @@ ERC-1155
 ETH
 ETHB
 Ethereum
+eventbus
 executables
 familiarise
 favour
+FBAs
 FIFO
 FOK
 FOREX
@@ -75,6 +82,7 @@ GraphQL
 gRPC
 GTC
 GTT
+hardcoded
 HSM
 incentivise
 incentivised
@@ -99,6 +107,7 @@ LPs
 MacOS
 mainnet
 malus
+messager
 math
 mempool
 MetaMask
@@ -113,6 +122,7 @@ nonfungible
 OKR
 onwards
 orderbook
+ORDT
 PDP
 permissionless
 PME
@@ -123,6 +133,7 @@ PoWs
 pre
 pro
 protobuf
+Pseudocode
 pubkey
 rata
 repo
@@ -135,6 +146,7 @@ RPC
 runnable
 runtime
 scalable
+selectable
 sepolia
 serialisation
 SHA
@@ -156,11 +168,13 @@ TIF
 tokenholder
 tokenholders
 tradable
+trackable
 Tron
 tx
 uint
 unassociated
 undelegate
+undelegates
 undelegated
 undelegating
 undelegation
@@ -169,6 +183,7 @@ undeployed
 unitless
 unnominated
 unnormalised
+unstakes
 unstaking
 unvested
 url
@@ -182,6 +197,7 @@ validator's
 vega
 vegaprotocol
 vegatools
+vegavisor
 vegawallet
 verifier
 visor

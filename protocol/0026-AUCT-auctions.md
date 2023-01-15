@@ -97,7 +97,7 @@ Auction periods may be ended with an uncrossing and the creation of any resultin
 - the auction call period end time being reached (if such a time is set); or
 - other functionality (related to the type of auction period) that triggers the end of auction.
 
-Auction periods do not end if the resulting state would immediately cause another auction to occur. Instead the current auction gets extended. For example, if a liquidity monitoring auction would be triggered at the end of an opening auction, then the opening auction continues and the *auction extension trigger* field in the [market data API](./0021-MDAT-market_data_spec.md) is updated to account for the fact that the opening auction has been extended due to insufficent liquidity.
+Auction periods do not end if the resulting state would immediately cause another auction to occur. Instead the current auction gets extended. For example, if a liquidity monitoring auction would be triggered at the end of an opening auction, then the opening auction continues and the *auction extension trigger* field in the [market data API](./0021-MDAT-market_data_spec.md) is updated to account for the fact that the opening auction has been extended due to insufficient liquidity.
 
 ### Ending when a market is going to enter Trading Terminated status
 
@@ -124,7 +124,7 @@ As a first version we expect:
 
 ## Pseudo-code / Examples
 
-Possible changes for the TradingMode configuration.
+Possible changes for the `TradingMode` configuration.
 
 ```proto
 enum PricingAlgorithm {

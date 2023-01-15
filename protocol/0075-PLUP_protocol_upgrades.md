@@ -21,15 +21,15 @@ Cosmos is using a small program called cosmovisor. The cosmovisor is listening t
 
 The idea in this spec is to draw inspiration from the design of cosmovisor and build vega-visor to manage protocol upgrades.
 
-### Prior example of updgrading the nodes asynchronously
+### Prior example of upgrading the nodes asynchronously
 
 Back in December 2021, vega proceeded to a LNL restore. Unfortunately, a bug in the code prevented the dispatch of the network parameters after the restore. This left
 the network in a semi invalid state where the network parameters were defined by the ones from the genesis block instead of the one from the checkpoint from the previous network.
 
 The solution employed at the time was to:
 
-- implement a hotfix
-- keep the hotfix behind a guard until a given time, once the time is reached network parameters would be dispatched.
+- implement a patch fix
+- keep the patch fix behind a guard until a given time, once the time is reached network parameters would be dispatched.
 - distribute the code to the validator so they can test it.
 - then decide of an actual date which would give a week for the validator to asynchronously update their node.
 
@@ -43,7 +43,7 @@ the management of the state, and possible incompatible changes between the state
 
 The following describes the general workflow of upgrades:
 
-1. Vega continuesly make new releases available
+1. Vega continuously make new releases available
 2. Validators can suggest to the network an upgrade with a given release tag and a block height for the upgrade to take place
 3. If a proposal gets enough votes (`validators.vote.required` of the validators, not stake) at the given height vega will take a snapshot automatically and stop processing further blocks until restarted by the vega-visor, the vega process manager.
 4. The validators manually download and build/prepare the new binaries.
@@ -137,11 +137,11 @@ For the purposes of protocol upgrade each validator that participates in consens
 - (<a name="0075-PLUP-015" href="#0075-PLUP-015">0075-PLUP-015</a>) Counting proposal votes to check if required majority has been reached occurs when any proposed target block has been reached
 - (<a name="0075-PLUP-016" href="#0075-PLUP-016">0075-PLUP-016</a>) Only proposals from validators participating in consensus are counted when any proposed target block has been reached.
 - (<a name="0075-PLUP-017" href="#0075-PLUP-017">0075-PLUP-017</a>) Events are emitted for all proposals which fail to reach required majority when target block is reached
-- (<a name="0075-PLUP-018" href="#0075-PLUP-018">0075-PLUP-018</a>) When majority reached during the process of upgrading, those validators which didnt propose will stop producing blocks
+- (<a name="0075-PLUP-018" href="#0075-PLUP-018">0075-PLUP-018</a>) When majority reached during the process of upgrading, those validators which didn't propose will stop producing blocks
 - (<a name="0075-PLUP-019" href="#0075-PLUP-019">0075-PLUP-019</a>) Proposals for multiple versions at same block height will be rejected if majority has not been reached, network continues with the current running version
 - (<a name="0075-PLUP-020" href="#0075-PLUP-020">0075-PLUP-020</a>) Propose with a validator which is moved to Ersatz by the time the upgrade is enacted. If there are 5 validators, 3 vote yes, 2 vote no: One of the yes voters is kicked in favour of a new one, leaving the vote at 2-2 so the upgrade should not happen as counting votes happens at block height only
 - (<a name="0075-PLUP-036" href="#0075-PLUP-036">0075-PLUP-036</a>) Changing `validators.vote.required` network parameter to a value above two thirds is respected.
-- (<a name="0075-PLUP-037" href="#0075-PLUP-037">0075-PLUP-037</a>) The value of `validators.vote.required` is checked at upgrade block, i.e: vote on a proposal with all validators, then change the `validators.vote.required` net param before upgrade block, to a higher value, which would cause the upgrade to be rejected. Upgrade fails.
+- (<a name="0075-PLUP-037" href="#0075-PLUP-037">0075-PLUP-037</a>) The value of `validators.vote.required` is checked at upgrade block, i.e: vote on a proposal with all validators, then change the `validators.vote.required` network parameter before upgrade block, to a higher value, which would cause the upgrade to be rejected. Upgrade fails.
 
 ### Multiple proposals (<a name="0075-PLUP-021" href="#0075-PLUP-021">0075-PLUP-021</a>)
 
@@ -178,7 +178,7 @@ For the purposes of protocol upgrade each validator that participates in consens
 
 - (<a name="0075-PLUP-030" href="#0075-PLUP-030">0075-PLUP-030</a>) Upgrade takes place at block N. Restart with a number of validators whose voting power is <= two thirds. Restart one more validator whose voting power would take the total voting power >= two thirds, with an incorrect version. Consensus is not achieved. Now restart that validator with the correct version. Consensus is achieved.
 - (<a name="0075-PLUP-031" href="#0075-PLUP-031">0075-PLUP-031</a>) 5 validator network. Upgrade takes places at block N. Start 3 validators immediately. Allow several seconds to pass. - no blocks producing as 3 validators do not have enough weight - need 70% weight to produce blocks. Start two remaining validators. (All validators continue to work).
-- (<a name="0075-PLUP-032" href="#0075-PLUP-032">0075-PLUP-032</a>) Upgrade takes place, but insufficient validators are restored for 1, 5, 10, minutes. Validators which are restored immediately patiently wait for consensus to be achieved, and then blocks continue  - concensus acheived
+- (<a name="0075-PLUP-032" href="#0075-PLUP-032">0075-PLUP-032</a>) Upgrade takes place, but insufficient validators are restored for 1, 5, 10, minutes. Validators which are restored immediately patiently wait for consensus to be achieved, and then blocks continue  - consensus achieved
 
 ### Mainnet
 
