@@ -239,7 +239,7 @@ need to be hashed individually).
     - The network issues a signature bundle to update that can be submitted to the Ethereum multisig contract to update the key there.
     - This is submitted to Ethereum; the multisig contract is updated.
     - Vega nodes receive the event confirming the key has been updated.
-- Party `p` now issues a withdrawal transaction. A withdrawal bundle is created utilising `k1,k2,k3_new`.
+    - Party `p` now issues a withdrawal transaction. A withdrawal bundle is created utilising `k1,k2,k3_new`.
     - Party `p` submits the withdrawal bundle to Ethereum; multisig contract accepts it and transfers the funds on the Ethereum chain.
 1. Non-tendermint validators rotating keys does not generate signatures (<a name="0067-KEYS-003" href="#0067-KEYS-003">0067-KEYS-003</a>):
     - A Vega network is running such there is at least 1 ersatz
