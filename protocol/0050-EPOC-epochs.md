@@ -27,11 +27,11 @@ next epoch into that block.
 
 Correction: As we cannot (at this point) control the block into which a particular transaction
 goes, for Sweetwater the epoch changes will be done as described in the
-beginning without a synchronizing block: There is a time (determined by the
+beginning without a synchronising block: There is a time (determined by the
 [network parameter](#network-parameters) `epoch_length`), when a new epoch starts. The last block in every epoch is the
 first block that has a blocktime exceeding the length of its epoch, i.e., the later blocks
 then go into the next epoch. In a later version we will have better control of the mempool,
-and then can add a synchronizing block.
+and then can add a synchronising block.
 
 ## Fringe cases
 
@@ -47,7 +47,7 @@ and then can add a synchronizing block.
  this happens. It also shouldn't have any real effect, though (eventually) it may make sense
  to catch the overflow in the code.
 
- While hopefully not an issue with golang anymore, one thing to watch out for is
+ While hopefully not an issue with Golang anymore, one thing to watch out for is
  the year 2038 problem; this is a bit unrelated, but can easily hit anything that
  works on a second-basis.
 
@@ -75,7 +75,7 @@ To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
 it is put on the chain) that the delegator has sufficient unlocked stake, as
 well as in the beginning of the next epoch just before the command takes effect.
-The amount of delegatable stake is reduced right away once the command is put into
+The amount of delegateable stake is reduced right away once the command is put into
 a block.
 
 As validators (will) have an optimum amount of stake they don't want to exceed,
@@ -119,7 +119,7 @@ Furthermore, the validators watch the smart contract, and observe the following 
 
 - A token gets locked: This token is now available for delegation
 - A token gets unlocked: If the token holder has sufficient undelegated tokens, this stake is
-	used to cover the now unlocked tokens (i.e., the available amount of delegatable
+	used to cover the now unlocked tokens (i.e., the available amount of delegateable
 	tokens is reduced to match the locking status. This could mean that the token-
 	holder has a delegation-command scheduled that is no longer executable; this
 	command will then be ignored at the start of the next epoch.
@@ -193,7 +193,7 @@ See the [network parameters spec](./0054-NETP-network_parameters.md#current-netw
 
 ## Parameter changes
 
-All parameters that are changed through a governance vote are valid starting the epoch following the one the block is in that finalized the vote.
+All parameters that are changed through a governance vote are valid starting the epoch following the one the block is in that finalised the vote.
 
 ## Acceptance Criteria
 

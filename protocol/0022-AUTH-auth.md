@@ -6,7 +6,7 @@ This specs covers authentication of a user with the vega network.
 We'll introduce a new tool to use with the vega network in order to allow a user to authenticate a transaction.
 No implementation details will be covered.
 
-In a blockchain / decentralized / public world authentication is often done by pairing a payload with the corresponding cryptographic signature (e.g: a `submitOrder` transaction) that a user is sending to the application (in our case the vega network).
+In a blockchain / decentralised / public world authentication is often done by pairing a payload with the corresponding cryptographic signature (e.g: a `submitOrder` transaction) that a user is sending to the application (in our case the vega network).
 Creating a signature is often made by using a public key signature system (e.g:`ed25519`), which are composed of a private key (which the user need to keep secure) which will allow a user to sign a payload (basically a blob of bytes), and a public key derived from the private key (meant to be share with any actors in the system) used in order to verify a signature for a given payload. As the private key is meant to be used only by the owner of it, we can assume that if a signature can be verified, the original transaction was emitted by the owner of the private key.
 
 For the purposes of this spec, we use the following terminology:

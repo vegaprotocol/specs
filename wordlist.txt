@@ -6,6 +6,7 @@ antiwhaling
 API
 APIs
 AST
+asynchrony
 atomicity
 Auth
 authorisable
@@ -32,6 +33,7 @@ config
 cosmovisor
 counterparty
 crypto
+cryptocurrencies
 cryptographic
 CQRS
 cumulated
@@ -84,6 +86,7 @@ GFA
 GFN
 Ghz
 GitHub
+Golang
 goveranance
 GraphQL
 gRPC
@@ -123,10 +126,12 @@ mempool
 MetaMask
 microstructure
 midprice
+misconfiguration
 MTM
 mu
 multisig
 MultisigControl
+multisignature
 NFTs
 nonfungible
 OAUTH
@@ -152,6 +157,7 @@ rata
 repo
 reponse
 repurpose
+resync
 revalidated
 RFQ
 roadmap
@@ -166,7 +172,10 @@ serialisation
 SHA
 SHA3
 siskas
+Solana
 src
+stablecoin
+stablecoins
 stakers
 statebridge
 stateful
@@ -175,6 +184,7 @@ SSD
 SSL
 suboptimal
 subtype
+subtypes
 SweetWater
 tau
 Tendermint
@@ -190,6 +200,7 @@ quant
 uint
 unamended
 unassociated
+unbanned
 undelegate
 undelegates
 undelegated
@@ -225,6 +236,7 @@ VWAP
 walkthrough
 walkthroughs
 wei
+wBTC
 whitepaper
 Yubikey
 $VEGA

@@ -6,7 +6,7 @@ of the blockchain. This means, it is unavoidable that one spammer can essentiall
 What we can do is:
 
 - remove the offending transactions after the block is scheduled, i.e., not process them
-- update the state once a block is finalized and block transactions based on the new state
+- update the state once a block is finalised and block transactions based on the new state
 - delete transactions from every (honest) validators mempool based on the new state.
 
 Thus, no matter what the anti-spam policy is, there is a scenario where someone creates
@@ -47,7 +47,7 @@ For Sweetwater, the policies we enforce are relatively simple:
 ```
 
 - Any tokenholder with more than `<min_voting_tokens>` tokens has `<num_votes>` voting attempts per epoch and proposal, i.e., they can change their mind `<num_votes>-1` times in one epoch. This means, a transaction is pre_block rejected, if there are `<num_votes>` or more votes on the same proposal in the blockchain in this epoch, and post_block rejected, if there are `<num_votes>` or more on the same proposal in the blockchain plus earlier in the current block.
-- Any tokenholder that had more than 50% if its post-rejected is banned for max (30 seconds, 1/48 of an epoch) or until the next epoch starts, and all its governance related transactions ( but no no trading related transactions) are immediately rejected. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds (or until the start of the next epoch). The test for 50% of the governance transactions is repeated once the next governance related transaction is post-rejected, so a it is possible for a violating party to get banned quite quickly again; the test is only done in case of a new post-rejection, so the account does not get banned twice just because the 50% quata is still excveeded when the ban ends.
+- Any tokenholder that had more than 50% if its post-rejected is banned for max (30 seconds, 1/48 of an epoch) or until the next epoch starts, and all its governance related transactions ( but no no trading related transactions) are immediately rejected. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds (or until the start of the next epoch). The test for 50% of the governance transactions is repeated once the next governance related transaction is post-rejected, so a it is possible for a violating party to get banned quite quickly again; the test is only done in case of a new post-rejection, so the account does not get banned twice just because the 50% quata is still exceeded when the ban ends.
 
 The voting counters are unaffected by the ban, so voting again on an issue that already had the full number of votes in the epoch will lead to a rejection of the new vote; this is now likely to not trigger a new ban, as this rejection will happen pre-consensus, and thus not affect the 50% rule.
 
@@ -71,7 +71,7 @@ Due to the banning policy this is not doable from one account, but with a sybil 
 
 ### Withdrawal Spam
 
-As unclaimed withdrawals do not automatically expire, an attacker could generate a large number of messages as well as an evergrowing datastructure through [withdrawal requests](0030-ETHM-multisig_control_spec.md).
+As unclaimed withdrawals do not automatically expire, an attacker could generate a large number of messages as well as an ever-growing data structure through [withdrawal requests](0030-ETHM-multisig_control_spec.md).
 
 To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWitdrawalQuantumMultiple`.
 The minimum allowed withdrawal amount is `spam.protection.minimumWitdrawalQuantumMultiple x quantum`, where `quantum` is set per [asset](0040-ASSF-asset_framework.md) and should be thought of as the amount of any vega asset that has roughly value of 1 USD.
@@ -91,7 +91,7 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Changing the value of network parameter `spam.protection.proposal.min.tokens` will immediately change the minimum number of associated tokens needed for any kind of governance proposal. Proposals already active aren't affected.(<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-014</a>)
 - Transaction creating more than `spam.protection.max.proposals` proposals in one epoch are rejected.  (<a name="0062-SPAM-004" href="#0062-SPAM-004">0062-SPAM-004</a>)
 - Transaction submitting votes by parties with less than `spam.protection.voting.min.tokens` vega associated are rejected.  (<a name="0062-SPAM-005" href="#0062-SPAM-005">0062-SPAM-005</a>)
-- Transactions submittting a vote more than `spam.protection.max.votes` times on any one proposal are rejected. (<a name="0062-SPAM-006" href="#0062-SPAM-006">0062-SPAM-006</a>)
+- Transactions submitting a vote more than `spam.protection.max.votes` times on any one proposal are rejected. (<a name="0062-SPAM-006" href="#0062-SPAM-006">0062-SPAM-006</a>)
 - Above thresholds are exceeded in one block, leading to a post-block-reject  (<a name="0062-SPAM-007" href="#0062-SPAM-007">0062-SPAM-007</a>)
 - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again  (<a name="0062-SPAM-008" href="#0062-SPAM-008">0062-SPAM-008</a>)
 - It is possible for spam transactions to fill a block (<a name="0062-SPAM-010" href="#0062-SPAM-010">0062-SPAM-010</a>)

@@ -87,7 +87,7 @@ Wash trading is allowed on [auction](0026-AUCT-auctions.md) uncrossing.
 
 Note: The last row in the table above is added for clarity. If the order was filled, it is marked as Filled and it is removed from the book, so it can't expire after being filled.
 
-### Wash trading Acceptance Criterias
+### Wash trading Acceptance Criteria
 
 - If, during continuous trading, an order would be filled or partially filled with an existing order from the same [party](./0017-PART-party.md) aka "wash" trade, the order is rejected. The reason for rejection should be clear on the order status: "rejected to prevent a wash trade". (<a name="0024-OSTA-005" href="#0024-OSTA-005">0024-OSTA-005</a>)
 - Any existing fills that happen before the wash trade is identified will be kept. The order should be market both "partially filled" and "rejected to prevent wash trade" (<a name="0024-OSTA-006" href="#0024-OSTA-006">0024-OSTA-006</a>)

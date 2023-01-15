@@ -66,7 +66,7 @@ SETTLEMENT_AMT( party ) =  PDPscaling x party.PREV_OPEN_VOLUME x (product.value(
 `product.value(current_price) uses for `current_price` the latest calculation of the [mark price](./0009-MRKP-mark_price.md)
 `party.PREV_OPEN_VOLUME` refers to the party's open volume at the last MTM calculation (NB: this may be less than 1 is the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md) are greater than 0, i.e. fractional positions are allowed on the market).
 `new_trades` refers to any trades that the party has been involved in since the last MTM calculation.
-`volume(party)` is the (signed) volume  of the trade i.e. `+ve` if the party was a buyer and -ve if a seller (NB: this may be less than 1 is the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md) are greater than 0, i.e. fractional positions are allowed on the market).
+`volume(party)` is the (signed) volume  of the trade i.e. `+ve` if the party was a buyer and `-ve` if a seller (NB: this may be less than 1 is the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md) are greater than 0, i.e. fractional positions are allowed on the market).
 
 `SETTLEMENT_AMT < 0` , means the party will have collateral deducted from their accounts to cover their position.  Conversely,  if  `SETTLEMENT_AMT > 0`  the trader will receive collateral  into their account.
 

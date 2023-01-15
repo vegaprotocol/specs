@@ -42,7 +42,7 @@ List of market data fields to be available via the API. All these values can be 
 - **Best offer volume:** the aggregated volume being offered at the _best offer price_.
 - **Mid price:** the arithmetic average of the _best bid price_ and _best offer price_.
 - **Mark price:** the current mark price as calculated by the selected mark price methodology.
-- **Open interest:** the sum of the size of all positions greater than 0. This needs take into account Position Decimal Places, unless raw ints are being used as for prices, in which case, clients will need to take into account the position d.p.s.
+- **Open interest:** the sum of the size of all positions greater than 0. This needs take into account Position Decimal Places, unless raw integers are being used as for prices, in which case, clients will need to take into account the position d.p.s.
 - **Best static bid price:** the highest bid price level on an order book for persistent, non pegged buy orders.
 - **Best static bid volume:** the aggregate volume at the _best static bid price_ excluding pegged orders
 - **Best static offer price:** the lowest offer price level on an order book for persistent, non pegged sell orders.

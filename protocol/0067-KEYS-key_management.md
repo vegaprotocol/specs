@@ -3,7 +3,7 @@
 ## Definitions
 
 The term "key loss" usually refers to both the key becoming unavailable, and the key being obtained
-by a non-authorized party. To distinguish these two cases, we will use the term 'key loss' for the former
+by a non-authorised party. To distinguish these two cases, we will use the term 'key loss' for the former
 (the validator looses access to the key), and 'key compromise' for the later.
 
 For all thresholds, we assume n validators, up to t of them may be malicious. At this point, we do not
@@ -87,19 +87,19 @@ are fully implemented.
 
 ### Vega Key [Event-Forwarder]
 
-This key (which may be the same of the above one) is used by the event forwarder to authorize events seen on  Vega bridge contracts (at this
+This key (which may be the same of the above one) is used by the event forwarder to authorise events seen on  Vega bridge contracts (at this
 point, only Ethereum, ERC20, staking and vesting contracts).
 This key is a hot key, and is constantly used in operations, though in a not very exposed way.
 As events signed with this key come in at Ethereum speed, the latency in accessing this key is of little relevance, and it can easily stay in a remote signer or an HSM.
 
-Compromise of this key is only critical if a significant number of keys are compromised (i.e., 2/3); in this case, it is possible to authorize non-existing events on the Vega chain.
+Compromise of this key is only critical if a significant number of keys are compromised (i.e., 2/3); in this case, it is possible to authorise non-existing events on the Vega chain.
 
 ## Future Features [Tendermint]
 
 Though is not done yet, the authorisation on non-events is easy to detect, and validators are recommended to stop the chain to recover if that happens.
 In the future (i.e., before serious trading happens), this key should be stored in an HSM, and it should be a good policy to frequently update it. The mechanism to this end is the same as for the other vega key specified in the document above.
 
-Loss of this key is (in principle) easy to mitigate, though this functionality is not implemented yet; the same master key that is used for the Vega Identity key could also authorize a new event forwarder key.
+Loss of this key is (in principle) easy to mitigate, though this functionality is not implemented yet; the same master key that is used for the Vega Identity key could also authorise a new event forwarder key.
 
 Eventually, the event forwarder will be reimplemented in a way that this key will not be required anymore.
 

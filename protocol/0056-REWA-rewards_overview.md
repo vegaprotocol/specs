@@ -505,7 +505,7 @@ Market has been trading but not yet eligible for proposer bonus.
 
 #### Expectation 13
 
-At the end of the epoch no payout has been made for the market ETHUSDT and the reward account balances should remain unchanged.
+At the end of the epoch no payout has been made for the market `ETHUSDT` and the reward account balances should remain unchanged.
 
 ### Distributing market creation rewards - eligible are paid no more than once (<a name="0056-REWA-041" href="#0056-REWA-041">0056-REWA-041</a>)
 
@@ -525,7 +525,7 @@ Once a market creator has been paid, they are not paid again from the same rewar
 
 #### Expectation 14
 
-At the end of the epoch 2 the proposer of the market ETHUSDT is paid 10000 `$VEGA` and 20000 `USDC`
+At the end of the epoch 2 the proposer of the market `ETHUSDT` is paid 10000 `$VEGA` and 20000 `USDC`
 
 At the end of epoch 3 make sure that no transfer is made to the reward account as the proposer of the market has already been paid the proposer bonus once and there are no other eligible markets.
 
@@ -609,12 +609,12 @@ A market reward pool funded with the same asset by different parties should pay 
   - Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA`
 - start trading in the market such that traded value for fee purposes in USDT is less than 10^6
 - During the epoch 2 let the traded value be greater than `10^6`
-- During epoch 3, setup and fund multiple reward account for the market ETHUSDT with a different party:
+- During epoch 3, setup and fund multiple reward account for the market `ETHUSDT` with a different party:
   - Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA`
 
 #### Expectation 18
 
-At the end of epoch 2, 10000 VEGA rewards should be distributed to the proposer of the ETHUSDT market, bringing their general `USDT` balance to 10000.
+At the end of epoch 2, 10000 VEGA rewards should be distributed to the proposer of the `ETHUSDT` market, bringing their general `USDT` balance to 10000.
 The reward account balance should be empty.
 
 Then, at the end of epoch 3, the 10000 VEGA rewards should again be distributed to the proposer of `ETHUSDT`, bringing their general `USDT` balance to 20000.
@@ -637,7 +637,7 @@ A market reward pool funded with the same asset by the same party with different
 - Setup and fund recurring reward account transfers using the market_proposer metric and blank metric asset:
   - Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA`
 - start trading in the market such that traded value for fee purposes in USDT is less than 10^6
-- During epoch 2 let the traded value on ETHUSDT and BTCDAI be greater than 10^6
+- During epoch 2 let the traded value on `ETHUSDT` and `BTCDAI` be greater than 10^6
 - During epoch 3, setup and fund recurring reward account transfers using the market_proposer metric and blank metric asset:
   - Transfer 10000 $VEGA to `all | market creation | $VEGA`
 
@@ -683,7 +683,7 @@ A market reward pool funded with the a specific metric asset should not pay out 
 
 #### Expectation 20
 
-At the end of epoch 2, 10000 VEGA rewards should be distributed to only the ETHUSDT creator.
+At the end of epoch 2, 10000 VEGA rewards should be distributed to only the `ETHUSDT` creator.
 
 - The general account balance of the `ETHUSDT` creator should be 10000.
 - The general account balance of the `BTCDAI` creator should be 0.
@@ -717,13 +717,13 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to only the `ETH
 - The general account balance of the `BTCUSDT` creator should be 0.
 - The reward pool balance should be 0.
 
-At the end of epoch 3, 10000 VEGA should be distributed split between the `BTCUSDT` creator and the ETHUSDT creator.
+At the end of epoch 3, 10000 VEGA should be distributed split between the `BTCUSDT` creator and the `ETHUSDT` creator.
 
-- The general account balance of the ETHUSDT creator should be 15000.
-- The general account balance of the BTCUSDT creator should be 5000.
+- The general account balance of the `ETHUSDT` creator should be 15000.
+- The general account balance of the `BTCUSDT` creator should be 5000.
 - The reward pool balance should be 0.
 
-### Updating the network parameter rewards.marketCreationQuantumMultiple (<a name="0056-REWA-050" href="#0056-REWA-050">0056-REWA-050</a>)
+### Updating the network parameter `rewards.marketCreationQuantumMultiple` (<a name="0056-REWA-050" href="#0056-REWA-050">0056-REWA-050</a>)
 
 #### Rationale 22
 

@@ -35,7 +35,7 @@ In future a fee factor (controlled by governance) may be added to allow the trea
 
 ### Funding from inflation or tax (future — placeholder)
 
-In future a tax rate and/or inflation rate (controlled by governance) may be used to allow funding the network treasury with governance tokens. This would either involve transferring a fraction of each staked user's tokens to the network treausry per epoch (it is implied that this fraction would be a significantly lower value than the other assets they receive in fees), or periodic issuance of new tokens into the treasury (this would not be possible before the inflation cut-off date in the token contract).
+In future a tax rate and/or inflation rate (controlled by governance) may be used to allow funding the network treasury with governance tokens. This would either involve transferring a fraction of each staked user's tokens to the network treasury per epoch (it is implied that this fraction would be a significantly lower value than the other assets they receive in fees), or periodic issuance of new tokens into the treasury (this would not be possible before the inflation cut-off date in the token contract).
 
 ### Direct allocation by governance (not for Oregon trail)
 
@@ -62,6 +62,6 @@ A governance proposal may be submitted to transfer funds on enactment from the o
 ### Post Oregon Trail
 
 - If a governance proposal for a single transfer from a network treasury account to some other account is enacted then
-  - if the amount in the proposal greater than or equal amount in network treasury for the asset then the entire balance of the net treasury account is transferred to the destinaiton account (party address). (<a name="0055-COSMICELEVATOR-050" href="#0055-COSMICELEVATOR-050">0055-COSMICELEVATOR-050</a>)
-  - if the balance in the network treasury for the asset is greater than the amount specified in the transfer then the network treasury balance is decreased by the said amount and the destinaiton account (party address) account is incremented by the right amount. (<a name="0055-COSMICELEVATOR-051" href="#0055-COSMICELEVATOR-051">0055-COSMICELEVATOR-051</a>)
+  - if the amount in the proposal greater than or equal amount in network treasury for the asset then the entire balance of the net treasury account is transferred to the destination account (party address). (<a name="0055-COSMICELEVATOR-050" href="#0055-COSMICELEVATOR-050">0055-COSMICELEVATOR-050</a>)
+  - if the balance in the network treasury for the asset is greater than the amount specified in the transfer then the network treasury balance is decreased by the said amount and the destination account (party address) account is incremented by the right amount. (<a name="0055-COSMICELEVATOR-051" href="#0055-COSMICELEVATOR-051">0055-COSMICELEVATOR-051</a>)
 - If a governance proposal for a single periodic transfer from a network treasury account to some other account is enacted then the transfers run as individual transfers as specified by the schedule / amounts until the schedule ends. (<a name="0055-COSMICELEVATOR-060" href="#0055-COSMICELEVATOR-060">0055-COSMICELEVATOR-060</a>)

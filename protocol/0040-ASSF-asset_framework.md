@@ -3,7 +3,7 @@
 ## Summary
 
 Vega uses various digital assets (cryptocurrencies or tokens) to settlement positions in its markets.
-In order to ensure the safety, security, and allocation of these assets, they must be managed in a fully decentralized and extensible way. Here, we lay out a framework for assets in Vega.
+In order to ensure the safety, security, and allocation of these assets, they must be managed in a fully decentralised and extensible way. Here, we lay out a framework for assets in Vega.
 This specification covers how the new asset framework allow users of the vega network to create new asset (Whitelist) to be used in the vega network, also covered is deposits and withdrawal for an asset.
 
 ## Guide-level explanation
@@ -14,7 +14,7 @@ The following code sample lays out the representation for assets being hosted in
 Common to all asset definitions are the basic fields from the Asset message, these are either retrieved from the foreign chain, or submitted through governance proposal.
 
 In the case of an ERC-20 token for example, only the contract address of the token will be submitted via a new asset proposal.
-From there the vega node will retrieve all other information for the token from and ethereum node (name, symbol, totalSupply and decimals).
+From there the vega node will retrieve all other information for the token from and ethereum node (name, symbol, `totalSupply` and decimals).
 
 The asset specific details are contained within the source field, which can be one of the different source of assets supported by vega.
 
@@ -93,9 +93,9 @@ It is in fact allowed and expected to be sufficiently imprecise that it would be
 This convention makes sense because many assets on Vega are expected to be stablecoins, so they can be created with quantum set to 1 (or something around 1 USD if not close enough already) and mostly ignored.
 More volatile assets will require occasional updates via governance, but again, as we can cope with significant variance, this should not need to happen too often, even for volatile assets.
 
-A consequence of this is that quantum should only ever be used to drive aspects of the protocol where an order of mangnitude variance from the $1 "standard" can be comfortably tolerated. For example, the minimum LP commitment on a market, minimum size of a user initiated transfer, or a threshold of significant trading required to be eligible for a market creation reward.
+A consequence of this is that quantum should only ever be used to drive aspects of the protocol where an order of magnitude variance from the $1 "standard" can be comfortably tolerated. For example, the minimum LP commitment on a market, minimum size of a user initiated transfer, or a threshold of significant trading required to be eligible for a market creation reward.
 
-In general, quantum would be expected to be used with a multiplier, often specified as a network paramter for the specific use case, for example:
+In general, quantum would be expected to be used with a multiplier, often specified as a network parameter for the specific use case, for example:
 
 - To reward market creators after a market they created does in the order of magnitude of $10m of lifetime volume, use a threshold of `quantum ✖️ 10^7`
 
@@ -107,9 +107,9 @@ It is recommended that:
 
 - `quantum` **should not be relied on directly without a configurable multiplier**, even if this is initially one, as many assets could experience a significant run-up or drop in value and it is both easier (and less likely to be controversial from a governance perspective) to change a multiplier affecting a specific feature quickly than to change quantum on many assets.
 
-- **`quantum` multipliers should not be shared between unrelated features**, as even if they seem to require roughly the same value initially, it may become apparent that the value implied by the multiplier is too high for one feature and simultaneously too low for another. If they do not have independent multipliers, this problem cannot be sattisfactorily resolved.
+- **`quantum` multipliers should not be shared between unrelated features**, as even if they seem to require roughly the same value initially, it may become apparent that the value implied by the multiplier is too high for one feature and simultaneously too low for another. If they do not have independent multipliers, this problem cannot be satisfactorily resolved.
 
-- **`quantum` should be set to round values**, as it is an imprecise measure and represents an order of magnutude level approximation of value. For example, at the time of writing, BTC is $21,283.44. This implies setting quantum to `46984885901903` for a wBTC (wrapped BTC) asset with 18 decimals. *Don't do this!* A much more reasonable value would be `50000000000000` ($1 if BTC is $20,000) or `40000000000000` ($1 if BTC is $25,000).
+- **`quantum` should be set to round values**, as it is an imprecise measure and represents an order of magnitude level approximation of value. For example, at the time of writing, BTC is $21,283.44. This implies setting quantum to `46984885901903` for a wBTC (wrapped BTC) asset with 18 decimals. *Don't do this!* A much more reasonable value would be `50000000000000` ($1 if BTC is $20,000) or `40000000000000` ($1 if BTC is $25,000).
 
 - If the Solana token is added, try to resist the temptation to set a quantum of SOL to `007`.
 
@@ -118,7 +118,7 @@ It is recommended that:
 This process start with an user submitting a new asset proposal to the vega network. This follows all the normal process for a new proposal (e.g: validation, vote, etc).
 After an asset has been approved and voted in, the proof of that action needs to be submitted to the appropriate asset bridge to whitelist the asset.
 There are many interfaces and protocols to manage cryptocurrencies and other digital assets, so each protocol and asset class that is supported by Vega has a bridge that manages the storage and distribution of deposited assets in a decentralised manner.
-Most of these rely on some form of multisignature security managed either by the protocol itself or via smart contracts.
+Most of these rely on some form of multi-signature security managed either by the protocol itself or via smart contracts.
 In order for the Vega network to hold value via asset bridges, assets must be added to Vega and that order must be propagated to the appropriate Vega bridge smart contract.
 To add a new asset to Vega, a market maker or other interested party will submit the a new asset proposal to the Vega API for a governance vote.
 
@@ -155,7 +155,7 @@ Before an asset can be accepted for deposit by a bridge, it needs to be whitelis
 #### Ethereum-based assets on the bridge
 
 Once an asset is listed, the submitter of the listing will request an aggregated multisig signature bundle from Vega validator nodes. See: [multisig control spec](./0030-ETHM-multisig_control_spec.md).
-All Ethereum assets are managed by a smart contract that supports the IVega_Bridge interface. The interface defines a function to whitelist new assets:
+All Ethereum assets are managed by a smart contract that supports the `IVega_Bridge` interface. The interface defines a function to whitelist new assets:
 
 `function whitelist_asset(address asset_source, uint256 asset_id, uint256 vega_id, bytes memory signatures) public;`
 
@@ -178,7 +178,7 @@ This section will be expanded if additional Ethereum token standards are support
 
 #### Other Assets on the bridge
 
-This section will be expanded when asset bridges to other blockchains are supported by Vega. Since blockhains and their supported asset standards vary significantly, each section will be unique.
+This section will be expanded when asset bridges to other blockchains are supported by Vega. Since blockchains and their supported asset standards vary significantly, each section will be unique.
 
 ### Event Queue
 
@@ -206,7 +206,7 @@ ERC-20 tokens have a token address but no individual token ID, as such, the Vega
 
 NOTE 1: This function expects that the token being used has been whitelisted.
 
-NOTE 2: Before running this function, the user must run the ERC-20-standard `approve` function to authorize the bridge smart contract as a spender of the user's target token. This will only allow a specific amount of that specific token to be spent by the bridge. See: [Ethereum improvement proposal 20](https://eips.ethereum.org/EIPS/eip-20)
+NOTE 2: Before running this function, the user must run the ERC-20-standard `approve` function to authorise the bridge smart contract as a spender of the user's target token. This will only allow a specific amount of that specific token to be spent by the bridge. See: [Ethereum improvement proposal 20](https://eips.ethereum.org/EIPS/eip-20)
 
 ##### Other Ethereum Token Standards (Depositing)
 
@@ -214,11 +214,11 @@ This section will be expanded if additional ethereum based token standards are s
 
 #### Other Assets
 
-This section will be expanded when asset bridges to other blockchains are supported by Vega. Since blockhains and their supported asset standards vary significantly, each section will be unique.
+This section will be expanded when asset bridges to other blockchains are supported by Vega. Since blockchains and their supported asset standards vary significantly, each section will be unique.
 
 ### Event Queue Path
 
-Once a deposit is complete and the appropriate events/transaction information is available on the respective chain, the transaction is recognized by the Vega Event Queue and packaged as an event.
+Once a deposit is complete and the appropriate events/transaction information is available on the respective chain, the transaction is recognised by the Vega Event Queue and packaged as an event.
 This event is submitted to Vega consensus, which will verify the event contents against a trusted node of the appropriate blockchain.
 A consequence of the transaction being verified is the Vega public key submitted in the transaction will be credited with the deposited asset in their Vega account.
 
@@ -226,7 +226,7 @@ A consequence of the transaction being verified is the Vega public key submitted
 
 Once a user decides they would like to remove their assets from the Vega network, they will submit a withdrawal request via the Vega website or API.
 This request, if valid, will be approved and assigned en expiry. This order will then be put through Vega consensus.
-After the order is made and saved to chain, the validators will sign the multi-signature withdrawal order and the aggregate of these will be made available to the user to submit to the appropriate blockchain/asset management API.
+After the order is made and saved to chain, the validators will sign the multisignature withdrawal order and the aggregate of these will be made available to the user to submit to the appropriate blockchain/asset management API.
 
 ### Withdrawal Request
 
@@ -257,7 +257,7 @@ All withdrawal request contains a common part, in order to identify a party on t
 
 ### Validator Signature Aggregation
 
-Same process than AssetList. See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
+Same process as `AssetList`. See: [Ethereum Bridge spec](./0031-ETHB-ethereum_bridge_spec.md).
 
 ### Vega Asset Bridges (Signing)
 
@@ -283,11 +283,11 @@ This section will be expanded if additional ethereum based token standards are s
 
 #### Signing other Assets
 
-This section will be expanded when asset bridges to other blockchains are supported by Vega. Since blockhains and their supported asset standards vary significantly, each section will be unique.
+This section will be expanded when asset bridges to other blockchains are supported by Vega. Since blockchains and their supported asset standards vary significantly, each section will be unique.
 
 ### Event Queue Path (Signing)
 
-Once a withdrawal is complete and the appropriate events/transaction information is available on the respective chain, the transaction is then recognized by the Vega Event Queue and packaged as an event. This event is submitted to Vega consensus, which will verify the event contents against a trusted node of the appropriate blockchain, which completes the cycle.
+Once a withdrawal is complete and the appropriate events/transaction information is available on the respective chain, the transaction is then recognised by the Vega Event Queue and packaged as an event. This event is submitted to Vega consensus, which will verify the event contents against a trusted node of the appropriate blockchain, which completes the cycle.
 
 ## Acceptance Criteria
 
