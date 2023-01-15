@@ -174,7 +174,7 @@ message Market {
 		  + more liquidity is committed (<a name="0026-AUCT-011" href="#0026-AUCT-011">0026-AUCT-011</a>)
 		  + or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-012" href="#0026-AUCT-012">0026-AUCT-012</a>)
     1. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
-		  + best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>)
-		  + or best ask;  it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-014" href="#0026-AUCT-014">0026-AUCT-014</a>)
+		  - best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>)
+		  - or best ask;  it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-014" href="#0026-AUCT-014">0026-AUCT-014</a>)
 - When entering an auction, all GFN orders will be cancelled. (<a name="0026-AUCT-015" href="#0026-AUCT-015">0026-AUCT-015</a>)
 - When leaving an auction, all GFA orders will be cancelled. (<a name="0026-AUCT-016" href="#0026-AUCT-016">0026-AUCT-016</a>)
