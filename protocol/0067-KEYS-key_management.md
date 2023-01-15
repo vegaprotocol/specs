@@ -229,47 +229,37 @@ need to be hashed individually).
 2. After both a Vega and Ethereum key rotation the node still has the ability to self stake/delegate and delegate to other validator nodes (<a name="0067-KEYS-007" href="#0067-KEYS-007">0067-KEYS-007</a>)
 3. After both a Vega and Ethereum key rotation the node still can generate snapshots and checkpoints and these can successfully be used for node restarts and network restoring respectively (<a name="0067-KEYS-008" href="#0067-KEYS-008">0067-KEYS-008</a>)
 4. After both a Vega and Ethereum key rotation ensure there is no impact on node validator scores; meaning that if - the validator has been proposing blocks as expected and thus has a score close to `1` then after key rotation there is no sudden change in score. (<a name="0067-KEYS-009" href="#0067-KEYS-009">0067-KEYS-009</a>)
-
-- If the validator has not been proposing blocks as expected and their score is close to `0` then after the rotation there is no sudden jump in score towards `1`.  (<a name="0067-KEYS-010" href="#0067-KEYS-010">0067-KEYS-010</a>)
+    - If the validator has not been proposing blocks as expected and their score is close to `0` then after the rotation there is no sudden jump in score towards `1`.  (<a name="0067-KEYS-010" href="#0067-KEYS-010">0067-KEYS-010</a>)
 
 ### Ethereum key
 
-multisig interaction (<a name="0067-KEYS-001" href="#0067-KEYS-001">0067-KEYS-001</a>):
-
-- A Vega network is running with 3 validators, `v1,v2,v3` with Ethereum keys `k1, k2, k3_old`; each with equal tendermint and multisig weight.
-- Validator `v3` has Ethereum multisig public key `k3_old`. They submit a transaction to replace by Ethereum multisig public key `k3_new`.
-- The network issues a signature bundle to update that can be submitted to the Ethereum multisig contract to update the key there.
-- This is submitted to Ethereum; the multisig contract is updated.
-- Vega nodes receive the event confirming the key has been updated.
+1. multisig interaction (<a name="0067-KEYS-001" href="#0067-KEYS-001">0067-KEYS-001</a>):
+    - A Vega network is running with 3 validators, `v1,v2,v3` with Ethereum keys `k1, k2, k3_old`; each with equal tendermint and multisig weight.
+    - Validator `v3` has Ethereum multisig public key `k3_old`. They submit a transaction to replace by Ethereum multisig public key `k3_new`.
+    - The network issues a signature bundle to update that can be submitted to the Ethereum multisig contract to update the key there.
+    - This is submitted to Ethereum; the multisig contract is updated.
+    - Vega nodes receive the event confirming the key has been updated.
 - Party `p` now issues a withdrawal transaction. A withdrawal bundle is created utilising `k1,k2,k3_new`.
-- Party `p` submits the withdrawal bundle to Ethereum; multisig contract accepts it and transfers the funds on the Ethereum chain.
-
-Non-tendermint validators rotating keys does not generate signatures (<a name="0067-KEYS-003" href="#0067-KEYS-003">0067-KEYS-003</a>):
-
-- A Vega network is running such there is at least 1 ersatz
-- Submit a transaction to rotate their Ethereum keys.
-- Verify that once `target_block` is reached, the data-node reports that the rotation occurred.
-- Verify that no signatures bundles are emitted from core to add/remove either the new key or the old key.
-- Repeat the above steps for a pending validator
-
-Subsequent rotations cannot be submitted until the previous rotation is resolved on the contract (<a name="0067-KEYS-004" href="#0067-KEYS-004">0067-KEYS-004</a>):
-
-- Start a Vega network and pick a tendermint validator.
-- Submit a transaction to rotate their Ethereum key.
-- Verify that signatures bundles are emitted from core, but do not submit them to the multisig contract.
-- Submit another transactions to their rotate Ethereum keys.
-- Verify that the transaction fails. This is to prevent multiple valid add-signer bundles for the same validator.
-
-Transaction with no proof of ownership of the new Ethereum key fails (<a name="0067-KEYS-005" href="#0067-KEYS-005">0067-KEYS-005</a>):
-
-- Start a Vega network and pick a tendermint validator.
-- Submit a transaction to rotate their Ethereum keys which contains an invalid Ethereum signature.
-- Verify that the transaction fails.
-
-Vega hot key (<a name="0067-KEYS-002" href="#0067-KEYS-002">0067-KEYS-002</a>):
-
-- There is a vega validator `v3` with master key `M` and hot key `h3_old`. See [master and hot vega keys](0063-VALK-validator_vega_master_keys.md).
-- A Vega network is running with 3 validators, `v1,v2,v3` using Vega hot keys `h1,h2,h3_old`.
-- Validator `v3` generates a new hot key `h3_new` using the master key `M`.
-- Validator `v3` submits a transaction to vega chain announcing that they'll be using `h3_new` instead of `h3_old`.
-- Validator `v3` stops their node, restarts with the new key and replays the chain or restore from snapshot.
+    - Party `p` submits the withdrawal bundle to Ethereum; multisig contract accepts it and transfers the funds on the Ethereum chain.
+1. Non-tendermint validators rotating keys does not generate signatures (<a name="0067-KEYS-003" href="#0067-KEYS-003">0067-KEYS-003</a>):
+    - A Vega network is running such there is at least 1 ersatz
+    - Submit a transaction to rotate their Ethereum keys.
+    - Verify that once `target_block` is reached, the data-node reports that the rotation occurred.
+    - Verify that no signatures bundles are emitted from core to add/remove either the new key or the old key.
+    - Repeat the above steps for a pending validator
+1. Subsequent rotations cannot be submitted until the previous rotation is resolved on the contract (<a name="0067-KEYS-004" href="#0067-KEYS-004">0067-KEYS-004</a>):
+    - Start a Vega network and pick a tendermint validator.
+    - Submit a transaction to rotate their Ethereum key.
+    - Verify that signatures bundles are emitted from core, but do not submit them to the multisig contract.
+    - Submit another transactions to their rotate Ethereum keys.
+    - Verify that the transaction fails. This is to prevent multiple valid add-signer bundles for the same validator.
+1. Transaction with no proof of ownership of the new Ethereum key fails (<a name="0067-KEYS-005" href="#0067-KEYS-005">0067-KEYS-005</a>):
+    - Start a Vega network and pick a tendermint validator.
+    - Submit a transaction to rotate their Ethereum keys which contains an invalid Ethereum signature.
+    - Verify that the transaction fails.
+1. Vega hot key (<a name="0067-KEYS-002" href="#0067-KEYS-002">0067-KEYS-002</a>):
+    - There is a vega validator `v3` with master key `M` and hot key `h3_old`. See [master and hot vega keys](0063-VALK-validator_vega_master_keys.md).
+    - A Vega network is running with 3 validators, `v1,v2,v3` using Vega hot keys `h1,h2,h3_old`.
+    - Validator `v3` generates a new hot key `h3_new` using the master key `M`.
+    - Validator `v3` submits a transaction to vega chain announcing that they'll be using `h3_new` instead of `h3_old`.
+    - Validator `v3` stops their node, restarts with the new key and replays the chain or restore from snapshot.

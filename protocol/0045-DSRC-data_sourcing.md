@@ -146,22 +146,19 @@ APIs should be available to:
 
 The following are expected to be implemented in future.
 
-a) New base data source types:
-
-1. Internal market parameters
-1. Internal market data (prices)
-1. Internal network parameters and metrics
-1. Signed or validator verified HTTPS endpoints
-1. Other blockchains that we bridge to
-1. Other formats for messages received via, e.g. signed data sources/HTTPS/... (e.g. JSON)
-
-b) Composable modifiers/combinators for data sources:
-
-1. Repeating time triggers (every n hours, every dat at 14:00, etc.)
-1. Aggregation (m of n and/or averaging, etc.) of multiple other data sources
-1. Verification of outputs of another data source by governance vote
-1. Calculations (i.e. simple maths/stats plus access to quant library functions, product valuation function, including reference to product parameters or arbitrary other data sources)
-1. Additional filter conditions
+1. New base data source types:
+    1. Internal market parameters
+    1. Internal market data (prices)
+    1. Internal network parameters and metrics
+    1. Signed or validator verified HTTPS endpoints
+    1. Other blockchains that we bridge to
+    1. Other formats for messages received via, e.g. signed data sources/HTTPS/... (e.g. JSON)
+1. Composable modifiers/combinators for data sources:
+    1. Repeating time triggers (every n hours, every dat at 14:00, etc.)
+    1. Aggregation (m of n and/or averaging, etc.) of multiple other data sources
+    1. Verification of outputs of another data source by governance vote
+    1. Calculations (i.e. simple maths/stats plus access to quant library functions, product valuation function, including reference to product parameters or arbitrary other data sources)
+    1. Additional filter conditions
 
 In future, we would therefore expect arbitrary compositions of these features to allow market designers to design robust and useful data sources. An visual example of a data source "pipeline" / definition that might eventually be used is below:
 

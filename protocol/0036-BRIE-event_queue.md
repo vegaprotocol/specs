@@ -16,9 +16,7 @@ This message queue will use gRPC to communicate with the Vega network via 3 main
 
 1. `GetSubscribedEventSources` returns a list of smart contract addresses and events that consensus has deemed as a valid source.
 1. `PropagateChainEvent` allows an event queue to send events raised on 3rd party blockchains (deposits, withdrawals, etc) through Vega consensus to ensure an event has been seen by the network. This function must support multiple blockchains as sources of events and multiple sources on a single blockchain (such as multiple deployments of an ERC20 bridge).
-
-  Each validator will individually process and validate the given transaction and process the specified event reported using their local chain node (such as Ethereum).
-
+    - Each validator will individually process and validate the given transaction and process the specified event reported using their local chain node (such as Ethereum).
 1. `GetEventAcceptanceStatus` returns the consensus acceptance status of a requested event. The event queue uses this function to determine if it should attempt to send the event again.
 
 ## Reference-level explanation
