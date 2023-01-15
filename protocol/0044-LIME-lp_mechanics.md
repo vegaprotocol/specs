@@ -33,7 +33,7 @@ General notes:
 
 ### Valid submission combinations
 
-Assume MarketID is always submitted, then a participant can submit the following combinations:
+Assume `MarketID` is always submitted, then a participant can submit the following combinations:
 
 1. A transaction containing all fields specified can be submitted at any time to either create or change a commitment (if commitment size is zero, the orders and fee bid cannot be supplied - i.e. tx is invalid)
 1. Any other combination of a subset of fields can be supplied any time a liquidity provider has a non-zero commitment already, to request to amend part of their commitment.
@@ -58,7 +58,7 @@ Liquidity provider bond account:
   - Transfers to/from this account also occur when it is used for settlement or margin shortfall, when penalties are applied, and if the account is under-collateralised because of these uses and is subsequently topped up to the commitment amount during collateral search (see below)
 - Collateral withdrawn from this account may only be transferred to either:
   - The insurance pool of the market (in event of penalties/slashing)
-  - The liquidity provider's margin account or the network's settlement account/other participant's margin acounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
+  - The liquidity provider's margin account or the network's settlement account/other participant's margin accounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
   - The liquidity provider's general account (in event of liquidity provider reducing their commitment)
 
 ### liquidity provider proposes to amend commitment amount
@@ -173,7 +173,7 @@ The network will:
 
 Note:
 
-- As mentioned above, closeout should happen as per regular trader account (with the addition of cancelling the liquidity provision and the associated LP rewards & fees consequences). So, if after cancelling all open orders (both manually maintained and the ones created automatically as part of liqudity provision commitment) the party can afford to keep the open positions sufficiently collateralised they should be left open, otherwise the positions should get liquidated.
+- As mentioned above, closeout should happen as per regular trader account (with the addition of cancelling the liquidity provision and the associated LP rewards & fees consequences). So, if after cancelling all open orders (both manually maintained and the ones created automatically as part of liquidity provision commitment) the party can afford to keep the open positions sufficiently collateralised they should be left open, otherwise the positions should get liquidated.
 - Bond account balance should never get directly confiscated. It should only be used to cover margin shortfalls with appropriate penalty applied each time it's done. Once the funds are in margin account they should be treated as per normal rules involving that account.
 
 ### Bond account top up by collateral search

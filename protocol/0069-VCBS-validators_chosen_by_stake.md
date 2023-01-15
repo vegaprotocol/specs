@@ -453,13 +453,13 @@ Verify that the validator that dropped below `ownstake` is not demoted and remov
 c. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
 
 - All validators drop below `ownstake`
-- All erstaz validators have sufficient `ownstake`, but lower stake than the validators
+- All ersatz validators have sufficient `ownstake`, but lower stake than the validators
 - Verify that 2 validators are replaced, one in each epoch
 
 d. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
 
 - All validators drop below `ownstake`
-- All erstaz validators have sufficient `ownstake`, and higher stake than the validators
+- All ersatz validators have sufficient `ownstake`, and higher stake than the validators
 - Verify that one validator is replaced the following epoch, one in the epoch after
 
 1. Ersatz validator reward (<a name="0069-VCBS-061" href="#0069-VCBS-061">0069-VCBS-061</a>) Setup a network with 5 validators with the following distribution of delegation: 10%, 10%, 10%, 10%. 60% of the total delegation of tendermint validators

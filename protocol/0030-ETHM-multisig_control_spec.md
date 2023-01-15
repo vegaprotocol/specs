@@ -4,15 +4,15 @@
 
 “Whoever proposes an action aggregates and submits signatures and thus pays gas” - Danny
 
-In order for the Vega network to authorize function execution on Ethereum smart contracts, a mechanism needs to be created to verify that this is the will of Vega while placing the burden of execution costs on the proposer of the function execution. To do this, we have created a multisig process that enables a proposer to aggregate and submit a number of Vega validator node signatures in order to execute any Vega controlled smart contract function.
+In order for the Vega network to authorise function execution on Ethereum smart contracts, a mechanism needs to be created to verify that this is the will of Vega while placing the burden of execution costs on the proposer of the function execution. To do this, we have created a multisig process that enables a proposer to aggregate and submit a number of Vega validator node signatures in order to execute any Vega controlled smart contract function.
 
 ## Guide-level explanation
 
-Vega controls and maintains a number of Ethereum smart contracts which have functions that can only be run once authorized by Vega consensus and are always requested by an interested party.
+Vega controls and maintains a number of Ethereum smart contracts which have functions that can only be run once authorised by Vega consensus and are always requested by an interested party.
 For instance, for depositing of settlement instrument assets, such as Ether or DAI, Vega has launched a number of "bridge" smart contracts. These contracts contain functions that are controlled and thus only authorizable from Vega consensus. These functions include withdrawing and whitelisting assets.
 
 As an example: once a user has requested a withdrawal and Vega consensus has agreed that the withdrawal should happen, the user will be presented with a number of signed orders from validator nodes that exceeds the threshold of signatures required. The user will then submit this "signature bundle" to the withdrawal function on the bridge smart contract along with the asset type and amount.
-This spec covers the format and recovery of proof that the Vega network has authorized the function to be run as it pertains to the smart contract mechanism.
+This spec covers the format and recovery of proof that the Vega network has authorised the function to be run as it pertains to the smart contract mechanism.
 
 ## Reference-level explanation
 
@@ -24,8 +24,8 @@ A signature bundle is a hex string of appended 65 byte ECDSA signatures where ea
 
 Messages to be hashed then signed must be in the following format:
 `abi.encode( abi.encode(target_function_param1, target_function_param2, target_function_param3, ... , msg.sender(if required), nonce, function_name_string), validating_contract_or_submitter_address);`
-NOTE: target_function_params do NOT include nonce or signatures
-NOTE: validating_contract_or_submitter_address is the the submitting party to the `verify_signatures` function. If on MultisigControl contract itself, it's the submitting user's ETH address,
+NOTE: `target_function_params` do NOT include nonce or signatures
+NOTE: `validating_contract_or_submitter_address` is the the submitting party to the `verify_signatures` function. If on MultisigControl contract itself, it's the submitting user's ETH address,
 if function is on a referencing smart contract, such as a bridge that then calls `verify_signatures`, then it's the address of that smart contract as that will be the `msg.sender` when that function is called
 NOTE: the embedded encodings `encode(encode(...))`, this is required to verify what function/contract the function call goes to. There's a possible attack if MultisigControl doesn't explicitly verify that the msg.sender is the intended msg.sender.
 NOTE: when msg.sender is required by function, that account must also be the submitter of the transaction to the Ethereum blockchain
@@ -150,27 +150,27 @@ To ensure complete coverage of public and external smart contract functions, lis
 
 1. `function set_threshold(uint16 new_threshold,uint256 nonce,bytes calldata signatures)`
 
-- must set the vote threshold if params and sigs valid (<a name="0030-ETHM-027" href="#0030-ETHM-027">0030-ETHM-027</a>)
+- must set the vote threshold if parameters and signatures valid (<a name="0030-ETHM-027" href="#0030-ETHM-027">0030-ETHM-027</a>)
 - must fail if bad signatures (<a name="0030-ETHM-028" href="#0030-ETHM-028">0030-ETHM-028</a>)
 - must fail if threshold zero (<a name="0030-ETHM-029" href="#0030-ETHM-029">0030-ETHM-029</a>)
 - must fail if threshold > 1000 (<a name="0030-ETHM-030" href="#0030-ETHM-030">0030-ETHM-030</a>)
 
 1. `function add_signer(address new_signer,uint256 nonce,bytes calldata signatures)`
 
-- must add signer if params and sigs valid (<a name="0030-ETHM-031" href="#0030-ETHM-031">0030-ETHM-031</a>)
-- must fail if bad sigs (<a name="0030-ETHM-032" href="#0030-ETHM-032">0030-ETHM-032</a>)
+- must add signer if parameters and signatures valid (<a name="0030-ETHM-031" href="#0030-ETHM-031">0030-ETHM-031</a>)
+- must fail if bad signatures (<a name="0030-ETHM-032" href="#0030-ETHM-032">0030-ETHM-032</a>)
 - must fail if already signer (<a name="0030-ETHM-033" href="#0030-ETHM-033">0030-ETHM-033</a>)
 
 1. `function remove_signer(address old_signer,uint256 nonce,bytes calldata signatures)`
 
-- must remove signer if params and sigs valid (<a name="0030-ETHM-034" href="#0030-ETHM-034">0030-ETHM-034</a>)
-- must fail if bad sigs (<a name="0030-ETHM-035" href="#0030-ETHM-035">0030-ETHM-035</a>)
+- must remove signer if parameters and signatures valid (<a name="0030-ETHM-034" href="#0030-ETHM-034">0030-ETHM-034</a>)
+- must fail if bad signatures (<a name="0030-ETHM-035" href="#0030-ETHM-035">0030-ETHM-035</a>)
 - must fail if not valid signer (<a name="0030-ETHM-036" href="#0030-ETHM-036">0030-ETHM-036</a>)
 
 1. `function burn_nonce(uint256 nonce, bytes calldata signatures)`
 
-- must stop speficic nonce from being used despite valid sigs (<a name="0030-ETHM-037" href="#0030-ETHM-037">0030-ETHM-037</a>)
-- must fail if bad sigs (<a name="0030-ETHM-038" href="#0030-ETHM-038">0030-ETHM-038</a>)
+- must stop speficic nonce from being used despite valid signatures (<a name="0030-ETHM-037" href="#0030-ETHM-037">0030-ETHM-037</a>)
+- must fail if bad signatures (<a name="0030-ETHM-038" href="#0030-ETHM-038">0030-ETHM-038</a>)
 - must fail if already redeemed (<a name="0030-ETHM-039" href="#0030-ETHM-039">0030-ETHM-039</a>)
 - must fail if already burned (<a name="0030-ETHM-040" href="#0030-ETHM-040">0030-ETHM-040</a>)
 
@@ -178,7 +178,7 @@ To ensure complete coverage of public and external smart contract functions, lis
 
 - must verify if signatures match message and nonce AND pass current threshold with currently valid signers (<a name="0030-ETHM-041" href="#0030-ETHM-041">0030-ETHM-041</a>)
 - must burn nonce to prevent replay attack (<a name="0030-ETHM-042" href="#0030-ETHM-042">0030-ETHM-042</a>)
-- must fail if bad sigs (<a name="0030-ETHM-043" href="#0030-ETHM-043">0030-ETHM-043</a>)
+- must fail if bad signatures (<a name="0030-ETHM-043" href="#0030-ETHM-043">0030-ETHM-043</a>)
 - must fail if nonce already used (<a name="0030-ETHM-044" href="#0030-ETHM-044">0030-ETHM-044</a>)
 
 1. `function get_valid_signer_count() external view override returns (uint8)`

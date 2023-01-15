@@ -27,7 +27,7 @@ let `expected = v*b/t` the number of blocks we expected the validator to propose
 is the number of blocks in which the validator can be expected to be chosen as a leader
 
 The number of blocks a validators is considered to have succeeded in proposing is scaled to allow for
-easier testing using the network parameters `minBlocksTolerance` and validators.performance.scalingfactor, i.e.,
+easier testing using the network parameters `minBlocksTolerance` and `validators.performance.scalingfactor`, i.e.,
 `p' = p + max(minBlocksTolerance, p * validators.performance.scalingfactor`)
 
 This function is primarily for testing purposes to allow for very short epochs without triggering

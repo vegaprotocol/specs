@@ -54,7 +54,7 @@ The API is expected to expose:
 ## Position and PnL test
 
 - When a party has never had a position, the realised PnL and unrealised PnL should be 0 (<a name="0007-POSN-009" href="#0007-POSN-009">0007-POSN-009</a>)
-- When a party has a non-zero postion, and has not closed any part of it, only the unrealised PnL should be changed by increase in position or change of mark price while realised PnL should stay constant in absence of loss socialisation (<a name="0007-POSN-010" href="#0007-POSN-010">0007-POSN-010</a>)
+- When a party has a non-zero position, and has not closed any part of it, only the unrealised PnL should be changed by increase in position or change of mark price while realised PnL should stay constant in absence of loss socialisation (<a name="0007-POSN-010" href="#0007-POSN-010">0007-POSN-010</a>)
 - When a party has a position which gets (partially) closed-out, the unrealised PnL should reflect the change of position while the realised PnL reflect the closed-out position (<a name="0007-POSN-011" href="#0007-POSN-011">0007-POSN-011</a>)
 - During settlement, all the parties' position should become 0, unrealised PnL should become 0 and realised PnL should update based on settlement price (<a name="0007-POSN-012" href="#0007-POSN-012">0007-POSN-012</a>)
 - If a party is subject to loss socialisation (its MTM gains get scaled down) the loss amount (forgone profit) should get recorded in realised PnL(<a name="0007-POSN-013" href="#0007-POSN-013">0007-POSN-013</a>)
@@ -64,7 +64,7 @@ The API is expected to expose:
 | Term        | Definition           |
 | ------------- |-------------|
 | Open Volume     | Traded volume that hasn't been closed out with an offsetting trade, this is positive for a long position and negative for a short position. |
-| Closing Out     | Entering a trade that reduces the absolute size of the open volume (i.e. takes it closer to zero) or switches the sign of the volume (i.e. a net long position (+'ve) becomes a net short position (-'ve)). Close out trades will generate a non-zero P&L if the Trade Price differs from the Open Volume Entry Price. |
+| Closing Out     | Entering a trade that reduces the absolute size of the open volume (i.e. takes it closer to zero) or switches the sign of the volume (i.e. a net long position (`+'ve`) becomes a net short position (`-'ve`)). Close out trades will generate a non-zero P&L if the Trade Price differs from the Open Volume Entry Price. |
 | Unrealised P&L      | The profit/loss on the open volume (dependent on the P&L calculation methodology): `Unrealised P&L [averaged] = (Product.value(Open Volume Entry Price) - Product.Value(mark_price)) *  open volume` |
 | Realised P&L | The total P&L realised across all trades (dependent on the P&L calculation methodology). Note: only trades that close out volume can realise a P&L.  |
 | Trade Realised P&L | The change in Realised P&L caused by a single trade that closes volume (dependent on the P&L calculation methodology) - _this can/will be different for the buyer and seller and must be calculated for each side of the trade_: `Trade Realised P&L [averaged] = Trade Volume * (Product.value(Trade Price) - Product.value(Open Volume Entry Price))`    |

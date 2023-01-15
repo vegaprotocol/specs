@@ -33,7 +33,7 @@ Note that the bridge contract uses `deposited` and `removed` instead of `associa
 
 This provides the information the core needs to keep track of:
 
-- Total delegable Stake
+- Total delegateable Stake
 - Undelegated Stake
 - Stake delegated per validator
 - Stake marked for delegation per validator in the next [epoch](./0050-EPOC-epochs.md).
@@ -49,7 +49,7 @@ This token is now available for delegation.
 
 ### A token gets dissociated
 
-If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegable tokens is reduced to match the (un)locking status).
+If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegateable tokens is reduced to match the (un)locking status).
 
 This could mean that the token-holder has a delegation-command scheduled that is no longer executable; this command will then be ignored at the start of the next epoch.
 
@@ -83,7 +83,7 @@ To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
 it is put on the chain) that the delegator has sufficient unlocked stake, as
 well as in the beginning of the next epoch just before the command takes effect.
-The amount of delegable stake is reduced right away once the command is put into
+The amount of delegateable stake is reduced right away once the command is put into
 a block.
 
 There is not maximum amount of stake that a validator can accept, instead at the end of the epoch when staking rewards are calculated, the stake of each validator (and their delegator) may be penalised if it represents a stake that it more than the optimal stake, i.e. the desired stake to be owned by each validator and its delegators.
