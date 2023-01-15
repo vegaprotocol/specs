@@ -61,7 +61,7 @@ When repricing LP orders, we ensure the price of the orders fall inside the uppe
 
 ### Market data
 
-The market data returns the same min/max prices mentioned above. As the name implies, _"MarketData"_ is clearly market related data... The min/max price values we return from this call should therefore be floored (max) and ceiled (min) in the same way.
+The market data returns the same min/max prices mentioned above. As the name implies, _`MarketData`_ is clearly market related data... The min/max price values we return from this call should therefore be floored (max) and ceiled (min) in the same way.
 
 ### Trades
 

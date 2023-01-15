@@ -11,12 +11,13 @@ asynchrony
 atomicity
 Auth
 authorisable
-behaviour
+AVL
 bip
 blockchain
 blockchains
 Blocklist
 blocktime
+Bootstraping
 BTC
 bytecode
 cancelled
@@ -29,6 +30,7 @@ ceiled
 CSF
 checkpointing
 CLEF
+closedout
 cmd
 codebase
 Coinbase
@@ -81,9 +83,9 @@ eventbus
 EVM
 executables
 familiarise
-favour
 FBAs
 FIFO
+filesystem
 FOK
 FOREX
 freeform
@@ -98,6 +100,7 @@ GFN
 Ghz
 GitHub
 Golang
+GoLevelDB
 goveranance
 GraphQL
 gRPC
@@ -116,6 +119,7 @@ initialisation
 initialise
 initialised
 initialising
+integrations
 intrablock
 int64
 IOC
@@ -130,6 +134,7 @@ linkings
 linux
 liveness
 LNL
+lognormal
 LP
 LPs
 MacOS
@@ -155,8 +160,11 @@ OAUTH
 OKR
 onwards
 OpenOracle
+orchestrator
 orderbook
+orderbooks
 ORDT
+parallelisation
 PDP
 performant
 permissioned
@@ -190,6 +198,7 @@ selectable
 sepolia
 serialisation
 SHA
+sharded
 SHA3
 siskas
 Solana
@@ -219,6 +228,7 @@ trustless
 tx
 quant
 uint
+unmarshal
 unamended
 unassociated
 unbanned
@@ -233,6 +243,8 @@ unencrypted
 unitless
 unnominated
 unnormalised
+unstake
+unstaked
 unstakes
 unstaking
 unvested

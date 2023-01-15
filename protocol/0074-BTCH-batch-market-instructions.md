@@ -1,6 +1,6 @@
 # Batch market instructions
 
-This spec adds a transaction type that allows a user of the protocol to submit multiple market instructions (e.g. SubmitOrder, CancelOrder, AmendOrder) in a single transaction.
+This spec adds a transaction type that allows a user of the protocol to submit multiple market instructions (e.g. `SubmitOrder`, `CancelOrder`, `AmendOrder`) in a single transaction.
 
 ## Rationale
 
@@ -32,7 +32,7 @@ Overall, building the ability to handle batches of market instructions in a sing
 - A batch is considered a single transaction, with a single transaction ID and a single timestamp applying to all instructions within it. Each instruction should be given a sub-identifier and index allowing it to be placed sequentially in the transaction (e.g. by consumers of the event stream). These identifiers must be sufficient for a user to determine which instruction within a batch any result (order updates, trades, errors, etc.) relates to.
 - The batches must be processed in the order **all cancellations, then all amendments, then all submissions**. This is to prevent gaming the system, and to prevent any order being modified by more than one action in the batch.
 - When processing each list, the instructions within the list must be processed in the order they appear in the list (i.e. in the order prescribed by the submitter). (Notwithstanding that each list is processed in its entirety before moving onto the next list, in the order specified above).
-- All instructions within each list must be validated as normal **at the time that the instruction is processed**. That is, instructions cannot be pre-validatted as a batch. If a prior instruction, would create a state that would cause a later instruction to fail validation, the later instruction must fail validation (and vice verse). If validation fails, that instruction must be skipped and the subsequent instructions must still be processed. Any validation or other errors should be returned, as well as a reference to the instruction to which they relate, in the response.
+- All instructions within each list must be validated as normal **at the time that the instruction is processed**. That is, instructions cannot be pre-validated as a batch. If a prior instruction, would create a state that would cause a later instruction to fail validation, the later instruction must fail validation (and vice verse). If validation fails, that instruction must be skipped and the subsequent instructions must still be processed. Any validation or other errors should be returned, as well as a reference to the instruction to which they relate, in the response.
 - Any errors encountered in processing an instruction after it passes validation must cause it to be skipped, and the errors, as well as the instruction to which they relate, must be available in the result of the transaction.
 - In addition to the usual validation and other errors that can occur in processing an instruction, the following also apply:
   - Any second or subsequent Amend Order instruction for the same order ID within a single Batch Instruction transaction is an error
@@ -41,7 +41,7 @@ Overall, building the ability to handle batches of market instructions in a sing
 
 - Processing each instruction within a batch must behave the same way regarding auction triggers as if it were a standalone transaction:
   - Entry to or exit from auctions must happen immediately **before continuing processing the rest of the batch** if that is what would happen were the transactions in the batch submitted individually outside of a batch.
-  - Under some cirucmstances many or all of the remaining instructons in the batch may fail validation / not be accepted or may behave differently when processed. This is normal and expected, and handling such failures is covered in the section "Processing a batch", above.
+  - Under some circumstances many or all of the remaining instructions in the batch may fail validation / not be accepted or may behave differently when processed. This is normal and expected, and handling such failures is covered in the section "Processing a batch", above.
   - Triggers, etc. that are only evaluated after some other condition is met, such as the completion of processing for all concurrently delivered  transactions with the same timestamp, should continue to obey these rules. That is, the evaluation of such triggers should not occur part way through processing a batch, which is considered to be a single transaction, with a single timestamp.
 - The batch is still treated as a single transaction and executed atomically, regardless of state changes such as entering an auction.
 After entering or exiting an auction mid-batch, the full batch must be processed as described above, even if every remaining instruction fails validation, before processing any other transactions.

@@ -54,7 +54,7 @@ Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi
 
 - target stake
   - return current (real-time) target stake when market is in default trading mode.
-  - return theoretical (based on idicative uncrossing volume) target stake when market is in auction mode.
+  - return theoretical (based on indicative uncrossing volume) target stake when market is in auction mode.
 
 ### Acceptance Criteria
 

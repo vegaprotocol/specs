@@ -18,7 +18,7 @@ Event is emitted on each occasion the blockchain time updates. For each chunk of
 
 When initialising a datanode it should be possible to select one of the following data retention modes:
 
-- Lite - the node retains sufficient data to be able to provide that latest state to clients and produce dehistory segments
+- Lite - the node retains sufficient data to be able to provide that latest state to clients and produce network history segments
 - Standard (the default) - retains data according to the default retention policies of the datanode, these should be optionally configurable.
 - Archive - retains all data.
 
@@ -70,7 +70,7 @@ Note that withdrawals and deposits (to / from other chains) are visible from the
 
 All changes to staking and delegation must be stored. From this, the state at any time can be provided.
 
-Validator score changes and state at any time (validatorID, epoch, score, normalised score).
+Validator score changes and state at any time (`validatorID`, epoch, score, normalised score).
 
 Validator performance metrics.
 
@@ -156,26 +156,26 @@ It must be possible to add to the data node APIs that return the result of calcu
 
 1. Data produced in the core snapshots aligns with the data-node data proving that what is returned by data-node matches core state at any given block height (<a name="0076-DANO-004" href="#0076-DANO-004">0076-DANO-004</a>)
 
-### Data-node decentralized history
+### Data-node decentralised history
 
-1. Historical data must be available to load into the datanode and must not be dependent on any centralized entity. (<a name="0076-DANO-005" href="#0076-DANO-005">0076-DANO-005</a>)
+1. Historical data must be available to load into the datanode and must not be dependent on any centralised entity. (<a name="0076-DANO-005" href="#0076-DANO-005">0076-DANO-005</a>)
 1. A datanode restored from decentralised history for a given block span must match exactly the state of a datanode that has the same block span of data created by consuming events. (<a name="0076-DANO-012" href="#0076-DANO-012">0076-DANO-012</a>)
-1. As the network produces more blocks the data should be stored correctly in the data-node after a data-node is restored from decentralized history. For example: Start a data-node from a given history segment for a known block height, ensure the datanode continues to update from that block onwards. (<a name="0076-DANO-007" href="#0076-DANO-007">0076-DANO-007</a>).
+1. As the network produces more blocks the data should be stored correctly in the data-node after a data-node is restored from decentralised history. For example: Start a data-node from a given history segment for a known block height, ensure the datanode continues to update from that block onwards. (<a name="0076-DANO-007" href="#0076-DANO-007">0076-DANO-007</a>).
 1. It should not be necessary to restore the full history (i.e. from genesis block) to be able to process new blocks.  Restoring just the most recent history segment should be sufficient for the node to process new blocks. (<a name="0076-DANO-006" href="#0076-DANO-006">0076-DANO-006</a>)
 1. No data is duplicated as the core emits events when catching up to the later block height. For example: Starting a core node at block height less than the data-node block height must result in no duplicated data (<a name="0076-DANO-008" href="#0076-DANO-008">0076-DANO-008</a>)
 1. Starting a core node at block height greater than the data-nodes block height must result in an error and a refusal to start (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
 1. If a data-node snapshot fails during the restore the process, it should error and the node(s) won't start (<a name="0076-DANO-009" href="#0076-DANO-009">0076-DANO-009</a>)
-1. When queried via the APIs a node restored from decentralized history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-022" href="#0076-DANO-022">0076-DANO-022</a>)
+1. When queried via the APIs a node restored from decentralised history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-022" href="#0076-DANO-022">0076-DANO-022</a>)
 
 ### Data-node network determinism
 
 1. For a given block span, a datanode history segment must be identical across all dat-nodes in the network that are using the recommended hardware and OS versions (<a name="0076-DANO-010" href="#0076-DANO-010">0076-DANO-010</a>)
-1. History segments for the same block span must always match across the network, regardless of whether the producing node was itself restored from decentralized history or not. (<a name="0076-DANO-011" href="#0076-DANO-011">0076-DANO-011</a>)
+1. History segments for the same block span must always match across the network, regardless of whether the producing node was itself restored from decentralised history or not. (<a name="0076-DANO-011" href="#0076-DANO-011">0076-DANO-011</a>)
 
 ### Schema compatibility
 
 1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
-1. Restoring a node from decentralized history should work across schema upgrade boundaries and the state of the datanode should match that of a datanode populated purely by event consumption (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
+1. Restoring a node from decentralised history should work across schema upgrade boundaries and the state of the datanode should match that of a datanode populated purely by event consumption (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
 
 ### Data Retention
 

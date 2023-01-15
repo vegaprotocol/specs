@@ -93,7 +93,7 @@ A(0) <- T(0),
 A(n) <- A(n-1) x n/(n+1) + T(n)/(n+1), for `n=1,2,...
 ```
 
-For `n = 0` set `r=0` and for `n = 1,2,...` the g`r`owth of the market is then
+For `n = 0` set `r=0` and for `n = 1,2,...` the `g"r"owth` of the market is then
 
 ```go
 r = 0
@@ -132,7 +132,7 @@ So `Delta S > 0` (and so `S+Delta S > 0`) in what follows.
 (entry valuation) = sum over j from 1 to N of (LP j virtual stake)
 ```
 
-Note, the `virtual stake` used in the calcuation of `entry valuation` is after the change of the LP commitmnet is applied.
+Note, the `virtual stake` used in the calculation of `entry valuation` is after the change of the LP commitment is applied.
 This in particular means that if this is the first LP commitment on the market then the `(entry valuation) = Delta S`.
 3. Update the average entry valuation to
 
@@ -148,7 +148,7 @@ Currently the sum of all virtual stakes is `900`. A new LP has `0` stake and add
 ```
 
 Example 2:
-A new LP1 has `0` stake and they wish to add `Delta S = 8000` and a new LP2 has `0` stake and they wish to add `Delta S = 2000`. Currently the sum of all virtual stakes is `10000` after the LP commmitments added. The average entry valuations are:
+A new LP1 has `0` stake and they wish to add `Delta S = 8000` and a new LP2 has `0` stake and they wish to add `Delta S = 2000`. Currently the sum of all virtual stakes is `10000` after the LP commitments added. The average entry valuations are:
 
 ```math
 (average entry valuation LP1) <- 0 + 8000 x 8000 / (0 + 8000) = 8000
@@ -172,24 +172,24 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 ### Calculating the liquidity score
 
 At every vega time change calculate the liquidity score for each committed LP.
-This is done by taking into account all orders they have deployed within the `[min_lp_price,max_lp_price]` [range](./0038-OLIQ-liquidity_provision_order_type.md#refining-list-of-orders) and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantenous liquidity score. For orders outside the tightest price monitoring bounds set probability of trading to 0.
+This is done by taking into account all orders they have deployed within the `[min_lp_price,max_lp_price]` [range](./0038-OLIQ-liquidity_provision_order_type.md#refining-list-of-orders) and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantaneous liquidity score. For orders outside the tightest price monitoring bounds set probability of trading to 0.
 When we say "all orders" we mean their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
 
-Now calculate the total of the instantenous liquidity scores obtained for each committed LP:
+Now calculate the total of the instantaneous liquidity scores obtained for each committed LP:
 
-`total = the sum of instantenous liquidity scores for all LPs that have an active liquidity commitment`
+`total = the sum of instantaneous liquidity scores for all LPs that have an active liquidity commitment`
 
-Now, if the `total` comes out as `0` then set `fractional instantenous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
-Otherwise calculate fractional instantenous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
+Now, if the `total` comes out as `0` then set `fractional instantaneous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
+Otherwise calculate fractional instantaneous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
 
-`fractional instantenous liquidity score = instantenous liquidity score / total`
+`fractional instantaneous liquidity score = instantaneous liquidity score / total`
 
-If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then for each committed LP `liquidity score` is set to `fractional instantenous liquidity score`.
+If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then for each committed LP `liquidity score` is set to `fractional instantaneous liquidity score`.
 
 Otherwise whenever a new LP fee distribution period starts set a counter `n=1`.
-Then on every Vega time change, after `fractional instantenous liquidity score` has been obtained for all the committed LPs, update:
+Then on every Vega time change, after `fractional instantaneous liquidity score` has been obtained for all the committed LPs, update:
 
-`liquidity score <- ((n-1)/n) x liquidity score + (1/n) x fractional instantenous liquidity score`
+`liquidity score <- ((n-1)/n) x liquidity score + (1/n) x fractional instantaneous liquidity score`
 
 The liquidity score should always be rounded to 10 decimal places to prevent spurious accuracy and overly long string representation of a number.
 
@@ -259,8 +259,8 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 
 ### CHANGE OF NETWORK PARAMETERS TESTS
 
-- Change of network parameter "market.liquidityProvision.minLpStakeQuantumMultiple" will change the multiplier of the asset quantum that sets the minimum LP commitment amount. If `market.liquidityProvision.minLpStakeQuantumMultiple` is changed then no LP orders that have already been submitted are affected. However any new submissions or amendments must respect the new amount and those not meeting the new minimum will be rejected. (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>)
-- Change of network parameter "market.value.windowLength" will affect equity-like share calculations from the next block. Decreasing it so that the current period is already longer then the new parameter value will end it immediately and the next period will have the length specified by the updated parameter. Increasing it will lengthen the current period up to the the length specified by the updated parameter. (<a name="0042-LIQF-022" href="#0042-LIQF-022">0042-LIQF-022</a>)
+- Change of network parameter `market.liquidityProvision.minLpStakeQuantumMultiple` will change the multiplier of the asset quantum that sets the minimum LP commitment amount. If `market.liquidityProvision.minLpStakeQuantumMultiple` is changed then no LP orders that have already been submitted are affected. However any new submissions or amendments must respect the new amount and those not meeting the new minimum will be rejected. (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>)
+- Change of network parameter `market.value.windowLength` will affect equity-like share calculations from the next block. Decreasing it so that the current period is already longer then the new parameter value will end it immediately and the next period will have the length specified by the updated parameter. Increasing it will lengthen the current period up to the the length specified by the updated parameter. (<a name="0042-LIQF-022" href="#0042-LIQF-022">0042-LIQF-022</a>)
 
 ### SPLITTING FEES BETWEEN liquidity providers
 

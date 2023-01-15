@@ -87,7 +87,7 @@ When a trader's balance in their margin account (for a market) is less than thei
 
 #### Close outs
 
-After a collateral search, if the amount in the margin account is below the closeout level AFTER the collateral transfer request completes (whether successful or not) OR in an async (sharded) environment if the latest view of the trader’s available collateral suggests this will be the case, the trader is considered to be _distressed_ and is added to list of traders that will then undergo [position resolution](./0012-POSR-position_resolution.md).
+After a collateral search, if the amount in the margin account is below the closeout level AFTER the collateral transfer request completes (whether successful or not) OR in an asynchronous (sharded) environment if the latest view of the trader’s available collateral suggests this will be the case, the trader is considered to be _distressed_ and is added to list of traders that will then undergo [position resolution](./0012-POSR-position_resolution.md).
 
 [Position resolution](./0012-POSR-position_resolution.md) is executed simultaneously for ALL traders on a market that have been determined to require it during a single event. That is, the orchestrator ‘batches up’ the traders and runs [position resolution](./0012-POSR-position_resolution.md) once the full set of traders is known for this event. Sometimes that will only be for one trader, sometimes it will be for many.
 

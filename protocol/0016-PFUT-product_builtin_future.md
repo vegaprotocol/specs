@@ -4,7 +4,7 @@ This built-in product provides "direct" futures (i.e. opposite of inverse future
 
 [Background reading](https://www.cmegroup.com/education/courses/introduction-to-futures.html)
 
-Futures are a simple "delta one" product and the first product supported by Vega. Note that in future (hah) there will likely be a number of other products (synthetics, contracts for difference).
+Futures are a simple "delta one" product and the first product supported by Vega. Note that in future there will likely be a number of other products (synthetics, contracts for difference).
 
 ## 1. Product parameters
 

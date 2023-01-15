@@ -68,8 +68,8 @@ On any Vega node, I can:
 | Retrieve a list of votes via REST & GRPC |<a name="0020-APIS-004" href="#0020-APIS-004">0020-APIS-004</a>|
 | Retrieve the governance stake for a specified party via REST & GRPC |<a name="0020-APIS-005" href="#0020-APIS-005">0020-APIS-005</a>|
 | List all markets via REST & GRPC |<a name="0020-APIS-006" href="#0020-APIS-006">0020-APIS-006</a>|
-| Retrive a specific market via REST & GRPC | <a name="0020-APIS-007" href="#0020-APIS-007">0020-APIS-007</a>|
-| Retrive all assets via REST & GRPC | <a name="0020-APIS-008" href="#0020-APIS-008">0020-APIS-008</a>|
+| Retrieve a specific market via REST & GRPC | <a name="0020-APIS-007" href="#0020-APIS-007">0020-APIS-007</a>|
+| Retrieve all assets via REST & GRPC | <a name="0020-APIS-008" href="#0020-APIS-008">0020-APIS-008</a>|
 | List all party IDs via REST & GRPC | <a name="0020-APIS-009" href="#0020-APIS-009">0020-APIS-009</a>|
 | List all network parameters & their current values via REST & GRPC | <a name="0020-APIS-010" href="#0020-APIS-010">0020-APIS-010</a>|
 | Retrieve the current block height REST & GRPC | <a name="0020-APIS-011" href="#0020-APIS-011">0020-APIS-011</a>|

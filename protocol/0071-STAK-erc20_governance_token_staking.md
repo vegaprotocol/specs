@@ -46,7 +46,7 @@ The staking bridge contracts live in [vegaprotocol/staking_bridge](https://githu
 ### Staking interface (`IStake.sol`)
 
 The staking interface defines the events necessary to track all Ethereum-side transactions using the CQRS design pattern.
-Any contract that wants to be recognized by Vega as valid for staking must emit the specified events.
+Any contract that wants to be recognised by Vega as valid for staking must emit the specified events.
 
 These events are:
 
@@ -69,7 +69,7 @@ Functions:
   - Emits the `Stake_Removed` event
 - `Transfer_Stake(uint256 amount, address new_address, bytes32 vega_public_key)` - Transfers staked governance from the sender to the target address
   - This changes the address that can unstake the tokens, and that will receive the tokens from the staking bridge when unstaked
-  - This does not change the Vega public key to which the tokens are staked and will therefore not intterupt delegation
+  - This does not change the Vega public key to which the tokens are staked and will therefore not interrupt delegation
   - Requires that at least `amount` tokens are staked by the sender with the staking bridge (not the vesting or any other contract implementing `IStake`) to the specified Vega public key
   - Emits the `Stake_Transferred` event
 
@@ -100,7 +100,7 @@ Other functionality:
 - Staking Bridge allows only stakers to remove their staked tokens and emits `Stake_Removed` event (<a name="0071-STAK-002" href="#0071-STAK-002">0071-STAK-002</a>)
 - Staking Bridge allows users with staked balance to transfer ownership of stake to new ethereum address that only the new address can remove (<a name="0071-STAK-003" href="#0071-STAK-003">0071-STAK-003</a>)
 - Staking Bridge prohibits users from removing stake they don't own (<a name="0071-STAK-012" href="#0071-STAK-012">0071-STAK-012</a>)
-- Staking Bridge prohibits users from removing stake they have transfered to other ETH address (<a name="0071-STAK-013" href="#0071-STAK-013">0071-STAK-013</a>)
+- Staking Bridge prohibits users from removing stake they have transferred to other ETH address (<a name="0071-STAK-013" href="#0071-STAK-013">0071-STAK-013</a>)
 
 ### Vesting Smart Contract
 

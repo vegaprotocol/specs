@@ -7,7 +7,7 @@
 - One market order is submitted for the net liability (<a name="0012-POSR-003" href="#0012-POSR-003">0012-POSR-003</a>)
 - Mark Price is never updated during position resolution (<a name="0012-POSR-004" href="#0012-POSR-004">0012-POSR-004</a>)
 - Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly. (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
-- When a distressed party has a [staking account](./0013-ACCT-accounts.md) with the same currency as the settlement currency of the market where it's disstressed the staking account is NOT used in margin search and liquidation. (<a name="0012-POSR-006" href="#0012-POSR-006">0012-POSR-006</a>)
+- When a distressed party has a [staking account](./0013-ACCT-accounts.md) with the same currency as the settlement currency of the market where it's distressed the staking account is NOT used in margin search and liquidation. (<a name="0012-POSR-006" href="#0012-POSR-006">0012-POSR-006</a>)
 - When a party is distressed at the point of leaving an auction it should get closed out immediately. (<a name="0012-POSR-007" href="#0012-POSR-007">0012-POSR-007</a>)
 
 ## Summary
@@ -158,7 +158,7 @@ Prior to STEP 3 trades, assume Trader 4 and Trader 5 had the following open posi
 `// OpenPosition of Trader4 =  -3`
 `// OpenPosition of Trader5 =  15`
 
-Trader4 has therefore closed out 2 contracts through the LiquiditySourcingTrade1. These need to be settled against the trade price.
+Trader 4 has therefore closed out 2 contracts through the `LiquiditySourcingTrade` 1. These need to be settled against the trade price.
 
 ```json
 TransferRequest4 {
