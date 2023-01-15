@@ -110,15 +110,13 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 ### Test case 1: Withdrawal status is correctly tracked across resets (<a name="0073-LIMN-007" href="#0073-LIMN-007">0073-LIMN-007</a>)
 
 1. A party has general account balance of 100 USD.
-2. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
-3. The network is shut down.
-4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
-
-The check the following sub-cases:
-
-- If the Ethereum replay says withdrawal completed. The party has general account balance of 0 USD. The party has "signed for withdrawal" 0.
-- If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 USD. The party has "signed for withdrawal" 100.
-- If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 USD.
+1. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint replay transaction is submitted and processed.
+1. The check the following sub-cases:
+    - If the Ethereum replay says withdrawal completed. The party has general account balance of 0 USD. The party has "signed for withdrawal" 0.
+    - If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 USD. The party has "signed for withdrawal" 100.
+    - If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 USD.
 
 ### Test case 2: Orders and positions are *not* maintained across resets, balances are and *accepted* markets are (<a name="0073-LIMN-008" href="#0073-LIMN-008">0073-LIMN-008</a>)
 
