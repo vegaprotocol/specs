@@ -70,7 +70,7 @@ If the reward pool in question is the on-chain treasury for the staking and gove
 The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant receives their due, capped by the max. The unpaid amount remain in the treasury.
 Setting this to `0` means no cap.
 
-## validatorScore functions
+## `validatorScore` functions
 
 This is defined as follows:
 

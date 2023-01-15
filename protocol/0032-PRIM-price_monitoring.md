@@ -86,12 +86,12 @@ Specifically:
   - the associated reference price
 to the risk model and obtains the range of valid up/down price moves per each of the specified triggers. Please note that these can be expressed as either additive offsets or multiplicative factors depending on the risk model used. The reference price is the latest price such that it's at least τ old or the earliest available price should price history be shorter than τ.
 - It holds the history of volume weighted average prices looking back to the maximum τ configured in the market.
-- Everytime a new price is received from the matching engine the price monitoring engine checks all the [τ, up factor, down factor] triplets relevant for the timestamp, looks-up the associated past (volume weighted) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescribed by the risk model.
+- Every time a new price is received from the matching engine the price monitoring engine checks all the [τ, up factor, down factor] triplets relevant for the timestamp, looks-up the associated past (volume weighted) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescribed by the risk model.
 - The bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
 - To give an example, with 3 triggers the price protection auction can be calculated as follows:
   - \>=1% move in 10 min window -> 5 min auction,
-  - \>=2% move in 30 min window -> 15 min auction (i.e. if after 5 min this trigger condition is satisfied by the price we'd uncross at, extend auction by 10 mins),
-  - \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins).
+  - \>=2% move in 30 min window -> 15 min auction (i.e. if after 5 min this trigger condition is satisfied by the price we'd uncross at, extend auction by 10 minutes),
+  - \>=5% move in 2 hour window -> 1 hour auction (if after 15 minutes, this is satisfied by the price we'd uncross at, extend auction by another 45 minutes).
 - At the market start time and after each price-monitoring auction period the bounds will reset
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
 - The resulting auction length should be at least `min_auction_length` (see the [auctions](./0026-AUCT-auctions.md#auction-config) spec). If the auction length implied by the triggers is less than that it should be extended.
@@ -118,7 +118,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - Persistent order results in an auction (one trigger breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>)
 - A maximum of `5` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
 - Persistent order results in an auction (1 out of 2 triggers breached), orders placed during auction result in trade with indicative price outside the price monitoring bounds of the 2nd trigger, hence auction get extended (by extension period specified for the 2nd trigger), additional orders resulting in more trades (indicative price still outside the 2nd trigger bounds) placed, auction concludes. (<a name="0032-PRIM-008" href="#0032-PRIM-008">0032-PRIM-008</a>)
-- If the cumulative extentions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>)
+- If the cumulative extensions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>)
 - Change of `market.monitor.price.defaultParameters` will change the default market parameters used in price monitoring when a new market is proposed and market parameters don't get explicitly specified. (<a name="0032-PRIM-010" href="#0032-PRIM-010">0032-PRIM-010</a>)
 - When market is in its default trading mode, change of `priceMonitoringParameters` results in price monitoring bounds being reset immediately. (<a name="0032-PRIM-011" href="#0032-PRIM-011">0032-PRIM-011</a>)
 - When market is in its default trading mode, change of a risk model or any of its parameters results in price monitoring bounds being reset immediately. (<a name="0032-PRIM-012" href="#0032-PRIM-012">0032-PRIM-012</a>)

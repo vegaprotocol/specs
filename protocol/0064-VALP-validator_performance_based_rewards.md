@@ -27,8 +27,8 @@ let `expected = v*b/t` the number of blocks we expected the validator to propose
 is the number of blocks in which the validator can be expected to be chosen as a leader
 
 The number of blocks a validators is considered to have succeeded in proposing is scaled to allow for
-easier testing using the network paramerters minBlocksTolerance and validators.performance.scalingfactor, i.e.,
-p' = p + max(minBlocksTolerance, p * validators.performance.scalingfactor)
+easier testing using the network parameters `minBlocksTolerance` and validators.performance.scalingfactor, i.e.,
+`p' = p + max(minBlocksTolerance, p * validators.performance.scalingfactor`)
 
 This function is primarily for testing purposes to allow for very short epochs without triggering
 odd effects due to lack of time for performances to average out; for mainnet, the parameters should not
@@ -86,7 +86,7 @@ Non Tendermint validator (<a name="0064-VALP-004" href="#0064-VALP-004">0064-VAL
 - Verify that after enough epochs to represent at least 1000 blocks, the performance score of the joining validator is 0.1.
 - Let the network run for `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) more and at the following epoch check that score is up to 0.2. Keep it running until its performance score of the joining validator reaches 1, then stop it.
 - Verify that for every `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*), the performance score should go down by 0.1 until it reaches zero.
-- **Note:** Every `numBlocks`  the performance score should go up by 0.1. Now the performance score is only visible every epoch so depending on the ratio between `numBlocks`  and epoch duration it may tick once or more per epoch. Guidance is that this test should either be parametrised or, preferably, written with a given epoch duration
+- **Note:** Every `numBlocks`  the performance score should go up by 0.1. Now the performance score is only visible every epoch so depending on the ratio between `numBlocks`  and epoch duration it may tick once or more per epoch. Guidance is that this test should either be parameterised or, preferably, written with a given epoch duration
 
 Insufficient stake (<a name="0064-VALP-005" href="#0064-VALP-005">0064-VALP-005</a>):
 

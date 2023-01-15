@@ -312,7 +312,7 @@ One of the top validators is not registered with the multisig contract (<a name=
 
 1. Verify that at the beginning of epoch an event is emitted for every validator known to Vega with their respective ranking scores. (<a name="0069-VCBS-025" href="#0069-VCBS-025">0069-VCBS-025</a>)
 1. Verify the ranking score is available through the epoch/validator/`rankingScore` API in the data-node. (<a name="0069-VCBS-026" href="#0069-VCBS-026">0069-VCBS-026</a>)
-1. Verify that the `rankingScore` is always equal to `performanceScore` x `stakeScore` x `incumbentBonus` (for tendermint validators and ersatz validators) Note: `network.validators.incumbentBonus` is a network parameter that is applied as a factor (1 + `incumbentBonus` net param) on `performanceScore` x `stakeScore`. (<a name="0069-VCBS-027" href="#0069-VCBS-027">0069-VCBS-027</a>)
+1. Verify that the `rankingScore` is always equal to `performanceScore` x `stakeScore` x `incumbentBonus` (for tendermint validators and ersatz validators) Note: `network.validators.incumbentBonus` is a network parameter that is applied as a factor (1 + `incumbentBonus` network parameter) on `performanceScore` x `stakeScore`. (<a name="0069-VCBS-027" href="#0069-VCBS-027">0069-VCBS-027</a>)
 1. Verify that if a node has a 0 `rankingScore` for 1e6 blocks (corresponding to around 11.5 days) it gets removed from the network and will have to be re-announced. (<a name="0069-VCBS-028" href="#0069-VCBS-028">0069-VCBS-028</a>)
 
 ### Stake scores
@@ -440,7 +440,7 @@ a. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoc
 - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
 - 1 validator drops to the lowest delegated stake (1000)
 - 1 ersatz validator has 6000 stake and sufficient `ownstake`
-- Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
+- Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
 
 b. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
 
@@ -453,13 +453,13 @@ Verify that the validator that dropped below `ownstake` is not demoted and remov
 c. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
 
 - All validators drop below `ownstake`
-- All erstazvalidators have sufficient `ownstake`, but lower stake than the validators
+- All erstaz validators have sufficient `ownstake`, but lower stake than the validators
 - Verify that 2 validators are replaced, one in each epoch
 
 d. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
 
 - All validators drop below `ownstake`
-- All erstazvalidators have sufficient `ownstake`, and higher stake than the validators
+- All erstaz validators have sufficient `ownstake`, and higher stake than the validators
 - Verify that one validator is replaced the following epoch, one in the epoch after
 
 1. Ersatz validator reward (<a name="0069-VCBS-061" href="#0069-VCBS-061">0069-VCBS-061</a>) Setup a network with 5 validators with the following distribution of delegation: 10%, 10%, 10%, 10%. 60% of the total delegation of tendermint validators
@@ -496,9 +496,9 @@ d. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoc
 - Setup a network with 6 Tendermint validators, 3 Ersatz Validators (`network.validators.ersatz.multipleOfTendermintValidators` = 0.5), and 4 pending validators
 - Change the parameter `network.validators.ersatz.multipleOfTendermintValidators` to 0.9
 - In the next epoch, change `network.validators.ersatz.multipleOfTendermintValidators` to 0.1
-- Two epochs lated, change `network.validators.ersatz.multipleOfTendermintValidators` to 0.5
+- Two epochs later, change `network.validators.ersatz.multipleOfTendermintValidators` to 0.5
 - Verify that in the following four epochs, first a pending validator is promoted, then two pending validators are demoted, then one is promoted again (with the highest/lowest scores respectively)
-- Verify that in the fifth epoch, no demotions/promotions happen and the number of Ertsatz validators stays at 3
+- Verify that in the fifth epoch, no demotions/promotions happen and the number of Ersatz validators stays at 3
 
 1. Number of Ersatz Validators oddly defined (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>):
 

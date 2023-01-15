@@ -273,7 +273,7 @@ To ensure complete coverage of public and external smart contract functions, lis
 
 - must return the deployed asset address from Vega asset ID (<a name="0031-ETHB-066" href="#0031-ETHB-066">0031-ETHB-066</a>)
 
-### ERC20 Asset Pool to Vega Integration Tests (Vega System Tests)
+### ERC-20 Asset Pool to Vega Integration Tests (Vega System Tests)
 
 To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on ERC20_Asset_Pool and their corresponding acceptance criteria.
 

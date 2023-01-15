@@ -12,7 +12,7 @@ Staking requires the combined action of:
 - Nominating these tokens to one or more validators
 - Delegation in some contexts is used to mean `associate + nominate`. For the purposes of this document, once it's clear from context that association has happened `delegate` and `nominate` may be used interchangeably.
 
-Delegation and staking are terms that may be used interchangably, since delegation is the act of staking VEGA tokens on a validator. A delegator can associate a token in the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), which is then available for
+Delegation and staking are terms that may be used interchangeably, since delegation is the act of staking VEGA tokens on a validator. A delegator can associate a token in the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md), which is then available for
 nomination. To this end, a Vega token (or a fraction thereof) can be:
 
 - Unassociated: The tokenholder is free to do with the token as they want, but cannot nominate it
@@ -33,7 +33,7 @@ Note that the bridge contract uses `deposited` and `removed` instead of `associa
 
 This provides the information the core needs to keep track of:
 
-- Total Delegatable Stake
+- Total delegable Stake
 - Undelegated Stake
 - Stake delegated per validator
 - Stake marked for delegation per validator in the next [epoch](./0050-EPOC-epochs.md).
@@ -49,7 +49,7 @@ This token is now available for delegation.
 
 ### A token gets dissociated
 
-If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegatable tokens is reduced to match the (un)locking status).
+If the token holder has sufficient undelegated tokens, these are used to cover this request (i.e., the available amount of delegable tokens is reduced to match the (un)locking status).
 
 This could mean that the token-holder has a delegation-command scheduled that is no longer executable; this command will then be ignored at the start of the next epoch.
 
@@ -83,7 +83,7 @@ To delegate stake, a delegator simply puts a command "delegate x stake to y" on
 the chain. It is verified at the beginning (when the command is issued and before
 it is put on the chain) that the delegator has sufficient unlocked stake, as
 well as in the beginning of the next epoch just before the command takes effect.
-The amount of delegatable stake is reduced right away once the command is put into
+The amount of delegable stake is reduced right away once the command is put into
 a block.
 
 There is not maximum amount of stake that a validator can accept, instead at the end of the epoch when staking rewards are calculated, the stake of each validator (and their delegator) may be penalised if it represents a stake that it more than the optimal stake, i.e. the desired stake to be owned by each validator and its delegators.
@@ -154,7 +154,7 @@ If several delegators change the delegation within the same block, some of them 
 execute (as this would exceed the maximum stake the validator wants). To save resources, the
 block creator has the responsibility to filter out these transactions.
 
-Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted proportionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calcualte first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is guaranteed to be less than or equal to the available un-nominated association.
+Another edge case is the following: during the epoch the party had x tokens associated and they requested to nominate no validators 1-5 each x/5. Before the end of the epoch the party withdraws some of the association leaving insufficient to cover all of the nominations. In such a case the nominations are adjusted proportionally to the requests against the available association balance. For example, suppose the party had 500 tokens associated and they requested to nominate 100 to each of validators 1-5. Before the epoch ends the party dissociates 400 leaving only 100 tokens available. In this case each validator would get a nomination of 100/5=20. To be more accurate the way this works is as follows: for each of the validators we calculate first how much of the nomination requested would actually go through, e.g. if the request is for a 100 but the validator would only accept 20, then the effective amount considered is 20. Then we normalise the effective account (divide by total) and apply this factor on the available balance. The sum of these nominations is guaranteed to be less than or equal to the available un-nominated association.
 
 ## Network Parameters
 
@@ -204,7 +204,7 @@ These accounts will be created:
 - Delegation may be fully or partially removed. The amount specified in the [function: Remove](./0071-STAK-erc20_governance_token_staking.md) - is the size by which the existing staked amount will be decremented (<a name="0059-STKG-013" href="#0059-STKG-013">0059-STKG-013</a>)
 - Removal of delegation may happen in the following 2 ways:
   - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator). (<a name="0059-STKG-014" href="#0059-STKG-014">0059-STKG-014</a>)
-  - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the onchain treasury account for that asset. (<a name="0059-STKG-015" href="#0059-STKG-015">0059-STKG-015</a>)
+  - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the on-chain treasury account for that asset. (<a name="0059-STKG-015" href="#0059-STKG-015">0059-STKG-015</a>)
 - Every 30 seconds (and at the end of an epoch) the associated stake is reconciled against the current nomination to ensure that the total nomination is not exceeding the total association. In case it does we proportionally un-nominate from the validators until the nomination is not exceeding the association. It's worth mentioning that this only affects the balance of the current epoch - we don't attempt to reconcile the balance for the next epoch until the epoch ends, so if for example the party had an association of a 100 tokens, then they requested to nominate 100 tokens to `validator1`, their balance for the next epoch would remain 100 until the end of the epoch even if they immediately dissociate the 100 tokens.  (<a name="0059-STKG-016" href="#0059-STKG-016">0059-STKG-016</a>)
 
 ### Changing delegation

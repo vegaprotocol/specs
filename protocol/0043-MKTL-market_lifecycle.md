@@ -4,7 +4,7 @@ This spec describes the lifecycle of a market. The market lifecycle begins at ac
 
 ## Market proposal and creation
 
-Markets on Vega are permissionlessly proposed using the [governance mechanism](./0028-GOVE-governance.md#1-create-market). If a market passes the governance vote, it undergoes various state changes throughout its lifecycle. Aspects of the state that change include:
+Markets on Vega are proposed, permissionless, using the [governance mechanism](./0028-GOVE-governance.md#1-create-market). If a market passes the governance vote, it undergoes various state changes throughout its lifecycle. Aspects of the state that change include:
 
 - trading mode
 - whether the market is open for trading
@@ -129,7 +129,7 @@ All data sources that are only referenced by this market should be unregistered.
 
 ### Active
 
-Once the enactment date is reached and the other conditions specified to exit the Pending state are met, the market becomes Active on conclusion of uncrossing of the opening auction. This status indicates it is trading via its normally configured trading mode according to the market framework (continuous trading, frequent batch auction, RFQ, block only, etc.). The specification for the trading mode should describe which orders are accepted and how trading proceeds. The market will terminate trading according to a product trigger (for futures, if the trading termination date is reached) and can be temporarily suspended automatically by various monitoring systems ([price monitoring](./0032-PRIM-price_monitoring.md), [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)). The market can also be closed via a governance vote (market parameter update) to change the status to closed [TODO: spec.].
+Once the enactment date is reached and the other conditions specified to exit the Pending state are met, the market becomes Active on conclusion of uncrossing of the opening auction. This status indicates it is trading via its normally configured trading mode according to the market framework (continuous trading, frequent batch auction, RFQ, block only, etc.). The specification for the trading mode should describe which orders are accepted and how trading proceeds. The market will terminate trading according to a product trigger (for futures, if the trading termination date is reached) and can be temporarily suspended automatically by various monitoring systems ([price monitoring](./0032-PRIM-price_monitoring.md), [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)). The market can also be closed via a governance vote (market parameter update) to change the status to closed [see the governance spec](./0028-GOVE-governance.md).
 
 **Entry:**
 
@@ -153,7 +153,7 @@ Once the enactment date is reached and the other conditions specified to exit th
 
 A Suspended market occurs when an Active market is temporarily stopped from trading to protect the market or the network from various types of risk. Suspension is used when the system has determined it is either not safe or not reasonable to operate the market at the current time, for example due to extremely low liquidity. No trades may be created while a market is Suspended.
 
-Suspension currently always operates as an auction call period. Depending on the type of suspension, the auction call period may have a defined end (which can also be subject to extension) or may be indefinite in which case the auction will end once the required conditions are met. The auction is uncrossed as part of the transition back to the Active state and normal trading. Alternatively, a Suspended market may become closed in which case the auction does not uncross and the orders are discarded [TODO: spec closed].
+Suspension currently always operates as an auction call period. Depending on the type of suspension, the auction call period may have a defined end (which can also be subject to extension) or may be indefinite in which case the auction will end once the required conditions are met. The auction is uncrossed as part of the transition back to the Active state and normal trading. Alternatively, a Suspended market may become closed in which case the auction does not uncross and the orders are discarded.
 
 **Entry:**
 
@@ -173,7 +173,7 @@ Suspension currently always operates as an auction call period. Depending on the
 
 ### Closed
 
-Note, this governance action is unspecc'd and not MVP.
+Note, this governance action is unspecified and not MVP.
 
 **Entry:**
 
@@ -185,7 +185,7 @@ No exit. This is a terminal state.
 
 **Behaviour:**
 
-- Orders may be cancelled, no new orders accepted. Something will need to be done to unwind positions [TODO: design and spec this]
+- Orders may be cancelled, no new orders accepted. Something will need to be done to unwind positions.
 
 ### Trading Terminated
 
@@ -264,7 +264,7 @@ Market state is `pending`.
 Market state is `active`.
 1. Parties place orders so that a [price monitoring auction is triggered](0032-PRIM-price_monitoring.md).
 Market state is `suspended`.
-1. Price monitoring auction ends and the market is in continous trading again.
+1. Price monitoring auction ends and the market is in continuous trading again.
 The market state is `active`.
 1. Parties cancel orders so that there is no "best static bid" on the order book.
 The market enters [liquidity monitoring auction](0035-LIQM-liquidity_monitoring.md).
@@ -274,7 +274,7 @@ After the specified time the liquidity auction ends.
 The market state is `active`.
 1. Make sure that trades happen so that at least two parties have open positions.
 The mark price is `p`.
-1. The time specified at market proposal by the interal time oracle is reached.
+1. The time specified at market proposal by the internal time oracle is reached.
 Any orders that parties submit get rejected.
 The parties with open position in the immediately preceding step still have open positions.
 Parties with open positions still have non-zero margin account balances.
@@ -287,7 +287,7 @@ The market state is `settled`.
 
 ### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
 
-1. A market is proposed, approved by governace process and enters the opening auction (Pending state).
+1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
 1. Trading terminated data source rings before the market leaves the opening auction (so market never left Pending state so far).
 1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
