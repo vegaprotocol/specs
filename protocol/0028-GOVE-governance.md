@@ -215,7 +215,7 @@ Note the following key points from the market lifecycle spec:
 - A market enters a Pending status as soon as the proposal is Successful (before enactment)
 - A market usually enters Active status at the proposal's enactment date/time, but some conditions may delay this or cause the market to be Cancelled instead
 
-A proposal to create a market contains
+A proposal to create a market contains:
 
 1. a complete market specification as per the Market Framework (see spec) that describes the market to be created.
 1. an enactment time that is at least the _minimum auction duration_ after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))

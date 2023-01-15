@@ -143,65 +143,46 @@ contract MultisigControl {
 To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on MultisigControl and their corresponding acceptance criteria.
 
 1. `mapping(address => bool) public signers;`
-
-- must show "True" for each signer that is currently valid (<a name="0030-ETHM-024" href="#0030-ETHM-024">0030-ETHM-024</a>)
-- must show "False" for non-signers (<a name="0030-ETHM-025" href="#0030-ETHM-025">0030-ETHM-025</a>)
-- must show "False" for removed signers (<a name="0030-ETHM-026" href="#0030-ETHM-026">0030-ETHM-026</a>)
-
+    - must show "True" for each signer that is currently valid (<a name="0030-ETHM-024" href="#0030-ETHM-024">0030-ETHM-024</a>)
+    - must show "False" for non-signers (<a name="0030-ETHM-025" href="#0030-ETHM-025">0030-ETHM-025</a>)
+    - must show "False" for removed signers (<a name="0030-ETHM-026" href="#0030-ETHM-026">0030-ETHM-026</a>)
 1. `function set_threshold(uint16 new_threshold,uint256 nonce,bytes calldata signatures)`
-
-- must set the vote threshold if parameters and signatures valid (<a name="0030-ETHM-027" href="#0030-ETHM-027">0030-ETHM-027</a>)
-- must fail if bad signatures (<a name="0030-ETHM-028" href="#0030-ETHM-028">0030-ETHM-028</a>)
-- must fail if threshold zero (<a name="0030-ETHM-029" href="#0030-ETHM-029">0030-ETHM-029</a>)
-- must fail if threshold > 1000 (<a name="0030-ETHM-030" href="#0030-ETHM-030">0030-ETHM-030</a>)
-
+    - must set the vote threshold if parameters and signatures valid (<a name="0030-ETHM-027" href="#0030-ETHM-027">0030-ETHM-027</a>)
+    - must fail if bad signatures (<a name="0030-ETHM-028" href="#0030-ETHM-028">0030-ETHM-028</a>)
+    - must fail if threshold zero (<a name="0030-ETHM-029" href="#0030-ETHM-029">0030-ETHM-029</a>)
+    - must fail if threshold > 1000 (<a name="0030-ETHM-030" href="#0030-ETHM-030">0030-ETHM-030</a>)
 1. `function add_signer(address new_signer,uint256 nonce,bytes calldata signatures)`
-
-- must add signer if parameters and signatures valid (<a name="0030-ETHM-031" href="#0030-ETHM-031">0030-ETHM-031</a>)
-- must fail if bad signatures (<a name="0030-ETHM-032" href="#0030-ETHM-032">0030-ETHM-032</a>)
-- must fail if already signer (<a name="0030-ETHM-033" href="#0030-ETHM-033">0030-ETHM-033</a>)
-
+    - must add signer if parameters and signatures valid (<a name="0030-ETHM-031" href="#0030-ETHM-031">0030-ETHM-031</a>)
+    - must fail if bad signatures (<a name="0030-ETHM-032" href="#0030-ETHM-032">0030-ETHM-032</a>)
+    - must fail if already signer (<a name="0030-ETHM-033" href="#0030-ETHM-033">0030-ETHM-033</a>)
 1. `function remove_signer(address old_signer,uint256 nonce,bytes calldata signatures)`
-
-- must remove signer if parameters and signatures valid (<a name="0030-ETHM-034" href="#0030-ETHM-034">0030-ETHM-034</a>)
-- must fail if bad signatures (<a name="0030-ETHM-035" href="#0030-ETHM-035">0030-ETHM-035</a>)
-- must fail if not valid signer (<a name="0030-ETHM-036" href="#0030-ETHM-036">0030-ETHM-036</a>)
-
+    - must remove signer if parameters and signatures valid (<a name="0030-ETHM-034" href="#0030-ETHM-034">0030-ETHM-034</a>)
+    - must fail if bad signatures (<a name="0030-ETHM-035" href="#0030-ETHM-035">0030-ETHM-035</a>)
+    - must fail if not valid signer (<a name="0030-ETHM-036" href="#0030-ETHM-036">0030-ETHM-036</a>)
 1. `function burn_nonce(uint256 nonce, bytes calldata signatures)`
-
-- must stop specific nonce from being used despite valid signatures (<a name="0030-ETHM-037" href="#0030-ETHM-037">0030-ETHM-037</a>)
-- must fail if bad signatures (<a name="0030-ETHM-038" href="#0030-ETHM-038">0030-ETHM-038</a>)
-- must fail if already redeemed (<a name="0030-ETHM-039" href="#0030-ETHM-039">0030-ETHM-039</a>)
-- must fail if already burned (<a name="0030-ETHM-040" href="#0030-ETHM-040">0030-ETHM-040</a>)
-
+    - must stop specific nonce from being used despite valid signatures (<a name="0030-ETHM-037" href="#0030-ETHM-037">0030-ETHM-037</a>)
+    - must fail if bad signatures (<a name="0030-ETHM-038" href="#0030-ETHM-038">0030-ETHM-038</a>)
+    - must fail if already redeemed (<a name="0030-ETHM-039" href="#0030-ETHM-039">0030-ETHM-039</a>)
+    - must fail if already burned (<a name="0030-ETHM-040" href="#0030-ETHM-040">0030-ETHM-040</a>)
 1. `function verify_signatures(bytes calldata signatures,bytes memory message,uint256 nonce)`
-
-- must verify if signatures match message and nonce AND pass current threshold with currently valid signers (<a name="0030-ETHM-041" href="#0030-ETHM-041">0030-ETHM-041</a>)
-- must burn nonce to prevent replay attack (<a name="0030-ETHM-042" href="#0030-ETHM-042">0030-ETHM-042</a>)
-- must fail if bad signatures (<a name="0030-ETHM-043" href="#0030-ETHM-043">0030-ETHM-043</a>)
-- must fail if nonce already used (<a name="0030-ETHM-044" href="#0030-ETHM-044">0030-ETHM-044</a>)
-
+    - must verify if signatures match message and nonce AND pass current threshold with currently valid signers (<a name="0030-ETHM-041" href="#0030-ETHM-041">0030-ETHM-041</a>)
+    - must burn nonce to prevent replay attack (<a name="0030-ETHM-042" href="#0030-ETHM-042">0030-ETHM-042</a>)
+    - must fail if bad signatures (<a name="0030-ETHM-043" href="#0030-ETHM-043">0030-ETHM-043</a>)
+    - must fail if nonce already used (<a name="0030-ETHM-044" href="#0030-ETHM-044">0030-ETHM-044</a>)
 1. `function get_valid_signer_count() external view override returns (uint8)`
-
-- must return current valid signer count (<a name="0030-ETHM-045" href="#0030-ETHM-045">0030-ETHM-045</a>)
-- must change to reflect adding of a signer (<a name="0030-ETHM-046" href="#0030-ETHM-046">0030-ETHM-046</a>)
-- must change to reflect removing of a signer (<a name="0030-ETHM-047" href="#0030-ETHM-047">0030-ETHM-047</a>)
-
+    - must return current valid signer count (<a name="0030-ETHM-045" href="#0030-ETHM-045">0030-ETHM-045</a>)
+    - must change to reflect adding of a signer (<a name="0030-ETHM-046" href="#0030-ETHM-046">0030-ETHM-046</a>)
+    - must change to reflect removing of a signer (<a name="0030-ETHM-047" href="#0030-ETHM-047">0030-ETHM-047</a>)
 1. `function get_current_threshold() external view override returns (uint16)`
-
-- must return current threshold (<a name="0030-ETHM-048" href="#0030-ETHM-048">0030-ETHM-048</a>)
-- must change to reflect a change of threshold (<a name="0030-ETHM-049" href="#0030-ETHM-049">0030-ETHM-049</a>)
-
+    - must return current threshold (<a name="0030-ETHM-048" href="#0030-ETHM-048">0030-ETHM-048</a>)
+    - must change to reflect a change of threshold (<a name="0030-ETHM-049" href="#0030-ETHM-049">0030-ETHM-049</a>)
 1. `function is_valid_signer(address signer_address) external view override returns (bool)`
-
-- must return true if valid signer (<a name="0030-ETHM-050" href="#0030-ETHM-050">0030-ETHM-050</a>)
-- must return false for non signer (<a name="0030-ETHM-051" href="#0030-ETHM-051">0030-ETHM-051</a>)
-- must return false for removed (<a name="0030-ETHM-052" href="#0030-ETHM-052">0030-ETHM-052</a>)
-- must change to reflect a removed signer (<a name="0030-ETHM-053" href="#0030-ETHM-053">0030-ETHM-053</a>)
-- must change to reflect added signer (<a name="0030-ETHM-054" href="#0030-ETHM-054">0030-ETHM-054</a>)
-
+    - must return true if valid signer (<a name="0030-ETHM-050" href="#0030-ETHM-050">0030-ETHM-050</a>)
+    - must return false for non signer (<a name="0030-ETHM-051" href="#0030-ETHM-051">0030-ETHM-051</a>)
+    - must return false for removed (<a name="0030-ETHM-052" href="#0030-ETHM-052">0030-ETHM-052</a>)
+    - must change to reflect a removed signer (<a name="0030-ETHM-053" href="#0030-ETHM-053">0030-ETHM-053</a>)
+    - must change to reflect added signer (<a name="0030-ETHM-054" href="#0030-ETHM-054">0030-ETHM-054</a>)
 1. `function is_nonce_used(uint256 nonce) external view override returns (bool)`
-
-- must return true if nonce has been used for normal transaction (<a name="0030-ETHM-055" href="#0030-ETHM-055">0030-ETHM-055</a>)
-- must return true if nonce burned (<a name="0030-ETHM-056" href="#0030-ETHM-056">0030-ETHM-056</a>)
-- must return false if not seen before OR if signatures failed to go over threshold (<a name="0030-ETHM-057" href="#0030-ETHM-057">0030-ETHM-057</a>)
+    - must return true if nonce has been used for normal transaction (<a name="0030-ETHM-055" href="#0030-ETHM-055">0030-ETHM-055</a>)
+    - must return true if nonce burned (<a name="0030-ETHM-056" href="#0030-ETHM-056">0030-ETHM-056</a>)
+    - must return false if not seen before OR if signatures failed to go over threshold (<a name="0030-ETHM-057" href="#0030-ETHM-057">0030-ETHM-057</a>)
