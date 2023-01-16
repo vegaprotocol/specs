@@ -7,6 +7,7 @@ name: "Quality checks"
   pull_request:
     branches:
       - master
+      - cosmicelevator
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
