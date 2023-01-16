@@ -74,27 +74,26 @@ In order to be considered for promotion from ersatz validator to Tendermint vali
 A network parameter, `network.validators.minimumEthereumEventsForNewValidator`, is used to set the acceptable minimum count of times that an ersatz validator was the first to forward a subsequently accepted Ethereum event at least `network.validators.minimumEthereumEventsForNewValidator` times.
 
 
-## Multisig updates (and multisig weight updates if those are used)
+## Ethereum-Side Multisig Control
 
+Vega will know the initial multisig signer list, weights, and threshold and watch for `SignersUpdated(bytes32 new_epoch_hash, uint16 new_threshold)` events to track updates to the signer set. This event covers the signers, their weights, and the overall threshold of weight percentage needed for a multisig transaction to be successful.
 
-TODO: edit this for Multisig v2
+Once issued, the "winning" party of an update to the signer set and weights will run the Ethereum transaction to update the signer set and weights. 
+Thus, for any verification using the multisig contract, the contract can verify validators and their weights.
 
-Vega will know the initial multisig signer list (and weights) and watch for `signer added` and `signer removed` events to track which ethereum keys are present on multisig.
+`network.validators.multisig.signerAddresses` will be represented in Vega as an ordered array of ethereum addresses that correspond to the Vega validators as registered in Multisig Control via the epoch hash.
 
-Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing. 
-Thus for each validator that is on the multisig contract it will know the validator score (weight) the ethereum multisig is using. 
+`network.validators.multisig.signerWeights` is the ORDERED array of weights that correspond to the Vega validators as registered in Multisig Control via the epoch hash.
 
-We will have `network.validators.multisig.numberOfSigners` represented on the multisig (currently `13`) but this could change. 
+In the reward calculation for the top signers by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.signerAddresses` by score.
 
-In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *not* on the multisig contract. 
-
-Thus a validator who is not there but should be has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well. 
+Thus a validator who is not there, but should be, has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well. Given the variable cost of Ethereum gas, during low cost periods, even small changes in weight distribution will be worth updating.
 
 As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) then at the end of the epoch their score will be `0`. They will not get any rewards. 
 
 In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from the Multisig contract. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed.
 
-Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions. 
+Note that this will change as future versions implement strategies to scale the Ethereum-side of the protocol implements threshold signatures, zk rollups, or other methods that allows validators to approve Ethereum actions.
 
 
 ## Ersatz validators
