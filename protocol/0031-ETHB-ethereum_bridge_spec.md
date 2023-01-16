@@ -145,7 +145,7 @@ This example connects the network to Ropsten:
 
 - ERC-20 smart contract specific requirements:
   - A valid multisig bundle can be passed to the withdraw function to successfully withdraw an ERC-20 asset (<a name="0031-ETHB-013" href="#0031-ETHB-013">0031-ETHB-013</a>)
-  - #0031-ETHB-014">0031-ETHB-014</a>)
+  - An invalid multisig bundle will be rejected from withdraw (<a name="0031-ETHB-014" href="#0031-ETHB-014">0031-ETHB-014</a>)
 
 ### Allowlist a token (by eth address)
 
