@@ -20,7 +20,7 @@ These may be ersatz validators (ie getting rewards) or others who just submitted
 If `empty_slots := network.validators.tendermint.number - n > 0` (we have empty consensus (Tendermint) validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to consensus (Tendermint) validators. 
 If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a consensus forming (Tendermint) validator, and the lowest scoring incumbent becomes an ersatz validator. 
 The exception to that rule is if one or more incumbent validators drop below the required ownstake (ownstake < reward.staking.delegation.minimumValidatorStake), either through changing their self-delegation or due to a change of the network parameter. 
-In that case, the validator with the smallest ownstake (which is smaller than reward.staking.delegation.minimumValidatorStake) is demoted, and the validator score is not used for demotion in that epoch. 
+In that case, the validators that have less than the required own stake get a ranking score is 0. If you have two validators with equal ranking score, the one that's been a consensus validator longer will be first in the sorting order (so will be swapped last).
 
 If for any `l,m=1,...,k` we have `w_l == w_m` then we resolve this by giving priority to the one who submitted the transaction to become validator earlier (so this is a mechanism for resolving ties).  
 Note that we only do this check once per epoch so at most one validator can be changed per epoch in the case `empty_slots == 0`.
