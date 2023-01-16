@@ -179,9 +179,9 @@ It must be possible to add to the data node APIs that return the result of calcu
 
 ### Data Retention
 
-1. Lite nodes should have enough state to provide the current state of:  Assets, Parties, Accounts, Balances, Live Orders, Network Limits, Nodes, Delegations, Markets, Margin Levels, Network Parameters, Positions, Liquidity Provisions (<a name="0076-DANO-026" href="#0076-DANO-026">0076-DANO-026</a>)
+1. Lite nodes should have enough state to provide the current state of:  Assets, Parties, Accounts, Balances, Live Orders, Network Limits, Nodes, Delegations, Markets, Margin Levels, Network Parameters, Positions, Liquidity Provisions (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
 2. Standard nodes should retain data in accordance with the configured data retention policy (<a name="0076-DANO-027" href="#0076-DANO-027">0076-DANO-027</a>)
-3. Archival nodes should retain all data from the height at which they joined the network (<a name="0076-DANO-028" href="#0076-DANO-028">0076-DANO-028</a>)
+3. Archival nodes should retain all data from the height at which they joined the network (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
 
 ### General Acceptance
 
