@@ -18,7 +18,6 @@ At the end of each epoch Vega will calculate the unnormalised `validator_score`,
 For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validators.incumbentBonus)`.
 Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance.
 
-
 Vega will sort all current consensus forming (also called Tendermint) validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score.
 If for any `l,m=1,...,n` we have  `v_l == v_m` then we place higher the one who's been validator for longer (so this is a mechanism for resolving ties).
 Vega will sort all those who submitted a transaction wishing to be validators using `validator_score` as `[w_1, ..., w_k]`.
@@ -94,7 +93,6 @@ Vega will know the initial multisig signer list (and weights) and watch for `sig
 
 Once (if) the ethereum multisig contract supports validator weights the vega node will watch for Ethereum events announcing the weight changing.
 Thus for each validator that is on the multisig contract it will know the validator score (weight) the ethereum multisig is using.
-
 
 We will have `network.validators.multisig.numberOfSigners` represented on the multisig (currently `13`) but this could change.
 Note that `network.validators.multisig.numberOfSigners` must always be less than or equal to `network.validators.tendermint.number`.
@@ -396,9 +394,9 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that node 1 is in a pending state and it’s ranking score is ~ 0.006666666667.
 1. 2 empty spots, only one available to replace (<a name="0069-VCBS-043" href="#0069-VCBS-043">0069-VCBS-043</a>):
     - Setup a network with 5 slots for Tendermint validators and 3 actual Tendermint validators.
-  * Self-delegate to all of them.
-  * Announce 2 new nodes but self-delegate only to one of them.
-  * Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator.
+    - Self-delegate to all of them.
+    - Announce 2 new nodes but self-delegate only to one of them.
+    - Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator.
 1. Change `ownstake` requirement (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
     - Network with 5 tendermint validators and 7 ersatz validators
     - In the same epoch, change the network parameter `reward.staking.delegation.minimumValidatorStake` in a way that 3 tendermint validators and 3 ersatz validators drop below the `ownstake` requirement, and change the delegation so that 4 (not affected) Ersatz validators have a higher score than two (not affected) Validators. Also, give one of the Ersatz validators with insufficient `ownstake` the highest stake (delegated) of all Ersatz validators.
@@ -413,7 +411,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
          - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
          - 1 validator drops to the lowest delegated stake (1000)
          - 1 ersatz validator has 6000 stake and sufficient `ownstake`
-         - Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
+         - Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
      1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
          - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
          - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -443,8 +441,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Decrease the number of tendermint validators to 5.
     - Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatz validator and an Ersatz validator is demoted to pending
 1. Number of Ersatz validators increased (<a name="0069-VCBS-058" href="#0069-VCBS-058">0069-VCBS-058</a>):
-    - Setup a network with 4 Tendermint validators, 2 Ersatz Validators (network.validators.ersatz.multipleOfTendermintValidators = 0.5), and 2 pending validators
-    - Change the parameter network.validators.ersatz.multipleOfTendermintValidators to 0.9
+    - Setup a network with 4 Tendermint validators, 2 Ersatz Validators (`network.validators.ersatz.multipleOfTendermintValidators` = 0.5), and 2 pending validators
+    - Change the parameter `network.validators.ersatz.multipleOfTendermintValidators` to 0.9
     - Verify that in the following epoch, the Ersatz Validator with the highest score is promoted to Validator
 1. Number of Ersatz validators decreased (<a name="0069-VCBS-054" href="#0069-VCBS-054">0069-VCBS-054</a>):
     - Setup a network with 5 Tendermint validators, 3 Ersatz Validators (`network.validators.ersatz.multipleOfTendermintValidators` = 0.5)
@@ -458,7 +456,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that in the next epoch the 4 ersatz validators are demoted to pending
     - Two epochs later, change `network.validators.ersatz.multipleOfTendermintValidators` to 0.5
     - Verify that in the next epoch the 2 pending validators are promoted to ersatz
-    - Verify that in the last epoch, no demotions/promotions happen and the number of Ertsatzvalidators stays at 2
+    - Verify that in the last epoch, no demotions/promotions happen and the number of Ersatz validators stays at 2
 1. Number of Ersatz Validators oddly defined (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>)d
     - Set the factor to 0.00000000000000000000000000000000000000001
     - Verify that all Validators round it the same way, and that there are no Ersatz validators
