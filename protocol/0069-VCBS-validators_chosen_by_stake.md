@@ -340,7 +340,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
   * Ensure that the multisig is updated to those 5 validators.
   * Verify that exactly one consensus forming validator with the lowest score is demoted to an ersatz validator at the beginning of the following epoch and we are running with 4 consensus (Tendermint) validators.
   * Ensure that the multisig is *not* updated to those 4 validators, but we have the 5 validators from previous step.
-  * Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 3 consensus (Tendermint) validators. 
+  * Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 4 consensus (Tendermint) validators. 
 
 4. Demote an ersatz validator due to lack of slots (<a name="0069-VCBS-037" href="#0069-VCBS-037">0069-VCBS-037</a>):
   * Setup a network with 4 tendermint validators, and 2 ersatz validators.
