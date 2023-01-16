@@ -39,6 +39,11 @@ Keeping the current `liquidity_fee` selection method implemented for `future` pr
 ```
 target_stake = volume over time-window * mark price * target_stake_scaling_factor
 ```
+#### Advantages
+- Prevents LPs removing a commitment whenever they like, due to mechanics in 0044-LIME.
+- The fee is tied to activity in a market, prevents a whale forcing a high fee by providing a large liquidity commitment where it is not needed (need to clarify the need for liquidity in a Spot market).
+#### Disadvantages
+- Possible there is no need for a high target-stake (and therefore high-fee) just because there has been a high traded volume over the last time-window (again need to clarify the need for liquidity in a Spot market).
 
 ### 4.1 Option 2
 
@@ -66,6 +71,9 @@ LP3 commits 1000 ETH @ 0.03 fee
 
 liquidity_fee_factor = 0.02
 ```
+#### Advantages
+#### Disadvantages
+- With the absence of target-stake, there is nothing currently preventing an LP removing a liquidity commitment (only current reason not to do so is loss of virtual stake from market growth).
 
 
 ## 5. Auctions
