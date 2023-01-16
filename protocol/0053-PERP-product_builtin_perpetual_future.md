@@ -11,8 +11,8 @@ Perpetual futures are a simple "delta one" product. Mark-to-market settlement oc
 1. `settlement_asset (Settlement Asset)`: this is used to specify the single asset that an instrument using this product settles in.
 1. `settlement_cue (Data Source)`: this data is used to indicate that next periodic settlement should happen imminently.
 1. `settlement_data (Data Source: number)`: this data is used by the product to calculate periodic settlement cashflows. The receipt of this data triggers this calculation and the transfers between parties to "true up" to the external reference price.
-1. `settlement_cue_auction_duration`: value expressed in seconds which specifies the duration of an auction started once settlement cue is received. The auction ends when the specified time elapses or when the settlement data is received. A value of `0` indicates no auction.
-1. `max_settlement_gap`: value expressed in seconds which specifies the amount of time without periodic settlement after which the market will go into protective auction and remain in that mode until settlement data is received.
+1. `settlement_cue_auction_duration`: a time interval which specifies the duration of an auction started once settlement cue is received. The auction ends when the specified time elapses or when the settlement data is received. A value of `0s` indicates no auction.
+1. `max_settlement_gap`: a time interval which specifies the amount of time without periodic settlement after which the market will go into protective auction and remain in that mode until settlement data is received.
 1. `settlement_price_monitoring`: a boolean flag indicating if periodic settlement price should go through the [price monitoring](0032-PRIM-price_monitoring.md) logic. If set to `true` any valid `settlement_data` ingested by the market will go through the price monitoring engine and contribute to its price history as well as trigger a price monitoring auction if it falls outside the current valid price bounds.
 
 Validation: none required as these are validated by the asset and data source frameworks.
@@ -65,7 +65,7 @@ An optional auction of predetermined maximum duration which gets triggered when 
 
 ### 4.3.2 Max settlement gap exceeded
 
-If the amount of time in seconds since last [periodic settlement](#41-periodic-settlement-cue) exceeds `max_settlement_gap` set for the market then the market goes into auction mode and remains in it until new settlement data is received. Upon receiving the settlement data the auction uncrosses, positions are updated and then settled using the newly arrived data. It is possible to update the market's data source when it is in protective auction.
+If the amount of time since last [periodic settlement](#41-periodic-settlement-cue) exceeds `max_settlement_gap` set for the market then the market goes into auction mode and remains in it until new settlement data is received. Upon receiving the settlement data the auction uncrosses, positions are updated and then settled using the newly arrived data. It is possible to update the market's data source when it is in protective auction.
 
 ## Acceptance Criteria
 
