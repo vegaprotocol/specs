@@ -524,10 +524,6 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Self-delegate to all of them.
     - Announce 2 new nodes but self-delegate only to one of them.
     - Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator.
-1. Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
-    - Setup a network with 7 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
-    - Decrease the number of tendermint validators to 5.
-    - Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatz validator and an Ersatz validator is demoted to pending
 
 ### Announce Node
 
