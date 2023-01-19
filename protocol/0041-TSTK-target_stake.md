@@ -21,6 +21,8 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 First, `max_oi` is defined  maximum (open interest) measured over a time window,
 `t_window = [max(t-market.stake.target.timeWindow,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction. Note that `max_oi` should be calculated recorded per transaction, so if there are multiple OI changes withing the same block (which implies the same timestamp), we should pick the max one, NOT the last one that was processed.
 
+If the market is in auction mode the `max_oi` can only increase while `auction duration` <= `market.stake.target.timeWindow`. Once the market's been in the auction for more than `market.stake.target.timeWindow` the `max_oi` is whatever the current positions and `indicative_uncrossing_volume` imply - specifically, this allows the `target_stake` to drop as a result of trades generated in the auction so that `target_stake` > `supplied_stake` (even in absence of changes to `supplied_stake`) and the market can go back to its default trading mode.
+
 Example 1:
 `t_market.stake.target.timeWindow = 1 hour`
 the market opened at `t_0 = 1:55`.
