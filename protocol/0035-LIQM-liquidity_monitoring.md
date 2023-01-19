@@ -20,8 +20,6 @@ Note that [target stake](./0041-TSTK-target_stake.md) is defined in a separate s
 
 **c<sub>1</sub>** - constant multiple for [target stake](./0041-TSTK-target_stake.md) triggering the commencement of liquidity auction. In this spec it is referred to as `c_1` but in fact it `triggering_ratio` in `LiquidityMonitoringParameters` in market creation or update proposal.
 
-There is also a network parameter `market.liquidity.targetstake.triggering.ratio` which carries the suggested default value *but has no effect on the running system*.
-
 ## Total stake
 
 `total_stake` is the sum the stake amounts committed by all the LPs in the market (see [LP mechanics](./0044-LIME-lp_mechanics.md)) for how LPs commit stake and what it obliges them to do.
