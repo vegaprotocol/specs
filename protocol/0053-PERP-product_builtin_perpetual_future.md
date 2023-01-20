@@ -4,7 +4,7 @@ This built-in product provides perpetual futures that are cash-settled, i.e. the
 
 [Background reading](https://www.paradigm.xyz/2021/05/everlasting-options/#Perpetual_Futures)
 
-Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md).  Additionally, a settlement using external data is carried out whenever `settlement_cue` is triggered AND the `settlement_data` is received. A number of protective measures can be specified for a market to deal with data scarcity in a predefined way.
+Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md).  Additionally, a settlement using external data is carried out whenever `settlement_cue` is triggered AND the `settlement_data` is received within the specified `data_ingestion_period`. A number of protective measures can be specified for a market to deal with data scarcity in a predefined way.
 
 ## 1. Product parameters
 
@@ -12,6 +12,7 @@ Perpetual futures are a simple "delta one" product. Mark-to-market settlement oc
 1. `settlement_cue (Data Source)`: this data is used to indicate that next periodic settlement should happen imminently.
 1. `settlement_data (Data Source: number)`: this data is used by the product to calculate periodic settlement cashflows. The receipt of this data triggers this calculation and the transfers between parties to "true up" to the external reference price.
 1. `settlement_cue_auction_duration`: a time interval which specifies the duration of an auction started once settlement cue is received. The auction ends when the specified time elapses or when the settlement data is received. A value of `0s` indicates no auction.
+1. `data_ingestion_period`: specifies the length of time window since `settlement_cue` event during which data from `settlement_data` data source will be accepted by the market. Once the first value is received no further data is accepted.
 1. `max_settlement_gap`: a time interval which specifies the amount of time without periodic settlement after which the market will go into protective auction and remain in that mode until settlement data is received.
 1. `settlement_price_monitoring`: a boolean flag indicating if periodic settlement price should go through the [price monitoring](0032-PRIM-price_monitoring.md) logic. If set to `true` any valid `settlement_data` ingested by the market will go through the price monitoring engine and contribute to its price history as well as trigger a price monitoring auction if it falls outside the current valid price bounds.
 
@@ -41,6 +42,8 @@ cash_settled_perpetual_future.settlement_cue(event) {
 ```
 
 ### 4.2 Periodic settlement data received
+
+If the periodic settlement data gets received within specified data ingestion period from the periodic settlement cue, then:
 
 ```javascript
 cash_settled_perpetual_future.settlement_data(event) {
