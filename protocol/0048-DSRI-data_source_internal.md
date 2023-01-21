@@ -24,13 +24,15 @@ value { type: number, value: 1400.5 }
 
 ## 1.2 Time triggered
 
-This data source would be used to emit an event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example.
+### 1.2.1 One-off
+
+This data source would be used to emit a a single event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example.
 
 This trigger will emit the contents of the specified data source (could be omitted if just triggering trading termination, or could be a value as described in 1.1, or another data source in order to implement a delay/ensure the value from the data source is not emitted before a certain time).
 
 Note that trading terminated in the futures definition uses a data source as a trigger intentionally to (a) demonstrate that this is how time based product events would work; and (b) because although the trigger MAY be time based, it could also be another data source such as a signed message oracle, if the trading terminates at an unknown time.
 
-In future, there will be a need to support repeating time based triggers, for example every 2 days or at 04:00, 12:00 and 20:00 every day, etc. (as some products will have triggers that happen regularly).
+Once the data source emits the invent it should become inactive.
 
 Pseudocode example:
 
@@ -50,6 +52,32 @@ on: {
 }
 
 ```
+
+### 1.2.2 Repeating
+
+A repeating time trigger will contain a collection of timestamps and frequency tuples.
+For each tuple:
+
+- as soon as the protocol registers a time which is equal to or higher than the specified `timestamp` an event is emitted,
+- each time an integer multiple of the time period specified by the`frequency` field from the `timestamp` elapses another event should get fired.
+
+The repeating internal time triggered oracles will be used by the [perpetual futures](protocol/0053-PERP-product_builtin_perpetual_future.md) product, hence it must be possible to set them up to model a schedule like: every day at 04:00, 12:00 and 20:00.
+
+```rust
+on: {
+	{
+		timestamp: '202112311T04:00:00'
+		frequency: '24h'
+	},
+	{
+		timestamp: '202112311T12:00:00'
+		frequency: '24h'
+	},
+	{
+		timestamp: '202112311T20:00:00'
+		frequency: '24h'
+	},
+}
 
 ## 1.3 Vega time changed
 
