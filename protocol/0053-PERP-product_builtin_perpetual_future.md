@@ -1,6 +1,6 @@
 # Built-in [Product](./0051-PROD-product.md): Cash Settled Perpetual Futures (CSF)
 
-This built-in product provides perpetual futures that are cash-settled, i.e. they are margined and settled in a single asset.
+This built-in product provides perpetual futures contracts that are cash-settled, i.e. they are margined and settled in a single asset, and they never expire.
 
 [Background reading](https://www.paradigm.xyz/2021/05/everlasting-options/#Perpetual_Futures)
 
@@ -14,7 +14,7 @@ Perpetual futures are a simple "delta one" product. Mark-to-market settlement oc
 1. `settlement_cue_auction_duration`: a time interval which specifies the duration of an auction started once settlement cue is received. The auction ends when the specified time elapses or when the settlement data is received. A value of `0s` indicates no auction.
 1. `data_ingestion_period`: specifies the length of time window since `settlement_cue` event during which data from `settlement_data` data source will be accepted by the market. Once the first value is received no further data is accepted.
 1. `max_settlement_gap`: a time interval which specifies the amount of time without periodic settlement after which the market will go into protective auction and remain in that mode until settlement data is received.
-1. `settlement_price_monitoring`: a boolean flag indicating if periodic settlement price should go through the [price monitoring](0032-PRIM-price_monitoring.md) logic. If set to `true` any valid `settlement_data` ingested by the market will go through the price monitoring engine and contribute to its price history as well as trigger a price monitoring auction if it falls outside the current valid price bounds.
+1. `settlement_data_monitoring`: a boolean flag indicating if periodic settlement price should go through the [price monitoring](0032-PRIM-price_monitoring.md) logic. If set to `true` any valid `settlement_data` ingested by the market will be checked against the market's price monitoring engine. Specifically, the incoming settlement data will be checked against market's active [price monitoring bounds](0021-MDAT-market_data_spec.md#market-data-fields), if it falls within the market the periodic settlement proceeds, otherwise the system behaves as if the data was never received.
 
 Validation: none required as these are validated by the asset and data source frameworks.
 
@@ -43,7 +43,7 @@ cash_settled_perpetual_future.settlement_cue(event) {
 
 ### 4.2 Periodic settlement data received
 
-If the periodic settlement data gets received within specified data ingestion period from the periodic settlement cue, then:
+If the periodic settlement data gets received within specified data ingestion period from the periodic settlement cue and falls within all of market's active [price monitoring bounds](0021-MDAT-market_data_spec.md#market-data-fields), then:
 
 ```javascript
 cash_settled_perpetual_future.settlement_data(event) {
@@ -53,10 +53,15 @@ cash_settled_perpetual_future.settlement_data(event) {
 }
 ```
 
-### 4.2.1 Periodic settlement during auction
+### 4.2.1 Periodic settlement during [auction](0026-AUCT-auctions.md)
 
-TODO: How do we want to handle settlement event occurring during auction? Same for all auctions?
-Do we just wait until the end of auction and try to use the settlement data then? If it's stale we just don't use it, uncross and carry on and count on max settlement gap logic to force the market to eventually have a periodic settlement using fresh data?
+Periodic settlement is not allowed during the opening auction and it's extensions.
+If periodic settlement data happens whilst market is in auction of any other type then:
+
+* uncross the auction at the received settlement price without leaving the auction mode,
+* generate the trades implied by the above and update the positions,
+* carry out settlement based on the updated positions,
+* let the market carry on in the same auction mode it was it before the settlement data was received until relevant auction exit conditions are met and the market returns to its default trading mode.
 
 ### 4.3 Protective auctions
 
