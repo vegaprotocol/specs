@@ -32,25 +32,25 @@ The policy enforcement mechanism rejects governance messages that do not follow 
 The policies enforced are relatively simple:
 
 ```text
-<num_votes> = 3
-<min_voting_tokens> = 1
-<num_proposals> = 3
-<min_proposing_tokens> = 200000
+num_votes = 3
+min_voting_tokens = 1
+num_proposals = 3
+min_proposing_tokens = 200000
 ```
 
-- Any tokenholder with more than `<min_voting_tokens>` tokens on a public key has `<num_votes>` voting attempts per epoch and proposal, i.e., they can change their mind `<num_votes>-1` times in one epoch. This means a transaction is pre-block rejected if there are `<num_votes>` or more on the same proposal in the blockchain in the same epoch, and post_block rejected if there are `<num_votes>` or more on the same proposal in the blockchain plus earlier in the current block.
+- Any tokenholder with more than `min_voting_tokens` tokens on a public key has `num_votes` voting attempts per epoch and proposal, i.e., they can change their mind `num_votes-1` times in one epoch. This means a transaction is pre-block rejected if there are `num_votes` or more on the same proposal in the blockchain in the same epoch, and post_block rejected if there are `num_votes` or more on the same proposal in the blockchain plus earlier in the current block.
 - Any tokenholder that had more than 50% of its governance transactions post-rejected is banned for max (30 seconds, 1/48 of an epoch) or until the next epoch starts, and all of its governance related transactions (but no trading related transactions) are immediately rejected. E.g., if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds (or until the start of the next epoch). The test for 50% of the governance transactions is repeated once the next governance related transaction is post-rejected, so it is possible for a violating party to get banned quite quickly again; the test is only done in case of a new post-rejection, so the account does not get banned twice just because the 50% quota is still exceeded when the ban ends. The voting counters are unaffected by the ban, so voting again on a proposal that already had the full number of votes in the epoch will lead to a rejection of the new vote; this is now unlikely to trigger a new ban, as this rejection will happen pre-consensus, and thus not affect the 50% rule.
-- A proposal can only be issued by a tokenholder with more than `<min_proposing_tokens>` associated with one public key at the start of the epoch. Also (like above), only `<num_proposals>` proposals can be made per tokenholder per epoch. For example, every proposal past `<num_proposals>` in an epoch is rejected by post-block-rejected if the sum of their proposals in past blocks and the ones in the current block exceed `<num_proposals>`, or pre-block rejected if the sum of proposals already in the blockchain for that epoch equals or exceeds `<num_proposals>`. This parameter is the same for **all proposals**. There also is a separate parameter to the same end that is enforced in the core. For Sweetwater, both these parameters had the same value, but the spam protection value can be set lower, as the amplification effect of a proposal (i.e., a proposal resulting in a very large number of votes) would also then be covered by the core.
+- A proposal can only be issued by a tokenholder with more than `min_proposing_tokens` associated with one public key at the start of the epoch. Also (like above), only `num_proposals` proposals can be made per tokenholder per epoch. For example, every proposal past `num_proposals` in an epoch is rejected by post-block-rejected if the sum of their proposals in past blocks and the ones in the current block exceed `num_proposals`, or pre-block rejected if the sum of proposals already in the blockchain for that epoch equals or exceeds `num_proposals`. This parameter is the same for **all proposals**. There also is a separate parameter to the same end that is enforced in the core. For Sweetwater, both these parameters had the same value, but the spam protection value can be set lower, as the amplification effect of a proposal (i.e., a proposal resulting in a very large number of votes) would also then be covered by the core.
 
 ### Notes
 
 - What counts is the number of tokens at the beginning of the epoch. While it is unlikely (given gas prices and ETH speed) that the same token is moved around to different entities, this explicitly doesn't work.
-- Every tokenholder with more than `<min_voting_tokens>` can spam exactly one block.
+- Every tokenholder with more than `min_voting_tokens` can spam exactly one block.
 - There is some likelihood that policies will change. It would thus be good to have a clean separation of policy definition and enforcement, so a change in the policies can be implemented and tested independently of the enforcement code.
 
 ### Increasing thresholds
 
-If on average for the last 10 blocks, more than 30% of all voting and proposal transactions need to be post-rejected, then the network is under spam attack. In this case, the `<min_voting_tokens>` value is doubled, until it reaches 1600. The threshold is then not increased for another 10 blocks. At the beginning of every epoch, the value of `<min_voting_tokens>` is reset to its original.
+If on average for the last 10 blocks, more than 30% of all voting and proposal transactions need to be post-rejected, then the network is under spam attack. In this case, the `min_voting_tokens` value is doubled, until it reaches 1600. The threshold is then not increased for another 10 blocks. At the beginning of every epoch, the value of `min_voting_tokens` is reset to its original.
 
 ### Issues: It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting
 
