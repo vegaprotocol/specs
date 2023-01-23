@@ -14,7 +14,7 @@ For governance votes, that means that there is a minimum amount of tokens requir
 
 The following three policies are specific to governance actions:
 
-- Vote transactions can be rejected if a party has less than `spam.protection.voting.min.tokens`. 
+- Vote transactions can be rejected if a party has less than `spam.protection.voting.min.tokens`.
 - Any governance proposal transaction can be rejected if a party has less than `spam.protection.proposal.min.tokens`. Setting these reasonably high provides some level of protection.
 - Any qualified voter can vote `spam.protection.max.votes` times per epoch per active proposal (e.g., if it's `3` then one initial vote and 2 follow-on votes to change their mind.
 
