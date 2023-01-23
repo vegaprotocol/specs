@@ -11,6 +11,7 @@ What the network can do is:
 Thus, no matter what the anti-spam policy is, there is a scenario where someone creates a lot of identities and spams one block with each. Therefore, we have to enforce a minimum investment to be allowed to send anything to the Vega network.
 
 ## Governance spam
+
 The spam protection enforcement for governance actions require that a public key must have a set minimum amount of tokens to be allowed to issue a proposal or vote on a proposal (`spam.protection.proposal.min.tokens`/`spam.protection.voting.min.tokens`). If the network detects successful spam in spite of this minimum, then the limit can be increased automatically.
 
 The following three policies are also specific to governance actions:
@@ -55,9 +56,9 @@ If on average for the last 10 blocks, more than 30% of all voting and proposal t
 
 ### Issues
 
-It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting
+**It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting.**
 
-Due to the banning policy this is not doable from one account, but with a sybil attack it can be done. If this ends up being a problem, we can address it by increasing the ban-time.
+Due to the banning policy this is not doable from one key, but with a sybil attack it can be done. If this ends up being a problem, we can address it by increasing the ban-time.
 
 ## Withdrawal spam
 
