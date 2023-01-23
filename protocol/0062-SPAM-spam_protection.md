@@ -66,8 +66,13 @@ As unclaimed withdrawals do not automatically expire, an attacker could generate
 
 To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWitdrawalQuantumMultiple`.
 The minimum allowed withdrawal amount is `spam.protection.minimumWitdrawalQuantumMultiple x quantum`, where `quantum` is set per [asset](0040-ASSF-asset_framework.md) and should be thought of as the amount of any Vega asset that has a rough value of 1 USD.
-7
+
 Any withdrawal requests for a smaller amounts are immediately rejected.
+
+### Related topics
+
+- [Spam protection: Proof of work](https://github.com/vegaprotocol/specs/blob/master/protocol/0072-SPPW-spam-protection-PoW.md)
+- [Transaction gas and priority](https://github.com/vegaprotocol/specs/blob/master/protocol/0079-TGAP-transaction_gas_and_priority.md)
 
 ### Acceptance Criteria
 
