@@ -98,6 +98,19 @@ contract MultisigControl {
 }
 ```  
 
+# V1 to V2 Migration
+This spec covers version 2 of Multisig Control.
+Due to function signature changes, deploying v2 will require a full migration and update of the Multisig Control, ERC20 Bridge, and ERC20 asset pool. 
+
+This will neccesitate a temporary migration smart contract that takes the place of the Asset Pool's ERC20 bridge and thus gains control of the "withdrawal" function that it will use to deposit (or transfer) to the v2 bridge (or asset pool)
+
+Migration steps:
+1. Deploy the v2 multisig, bridge, and pool contracts
+2. Halt the v1 ERC20 bridge
+3. Burn any outstanding withdrawals
+4. Assign Migration Contract as the asset pool's ERC20 Bridge
+5. Run migrate function for the entirety of each asset in the Asset Pool to either v2 bridge via deposit function or directly to the v2 asset pool, depending on how things need to be done on the Vega side
+
 # Acceptance Criteria
 ### Vega-Side
 * Every signer set and weight update MUST contain a random dummy signer as nonce. 
