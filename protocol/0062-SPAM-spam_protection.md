@@ -12,10 +12,11 @@ Thus, no matter what the anti-spam policy is, there is a scenario where someone 
 
 For governance votes, that means that there is a minimum amount of tokens required to be allowed to issue a proposal/vote (`spam.protection.proposal.min.tokens`/`spam.protection.voting.min.tokens`). If the network detects successful spam in spite of this minimum, then the limit can be increased automatically.
 
-The following three policies are specific to governance actions: 
-* Vote transactions can be rejected if a party has less than `spam.protection.voting.min.tokens`. 
-* Any governance proposal transaction can be rejected if a party has less than `spam.protection.proposal.min.tokens`. Setting these reasonably high provides some level of protection.
-* Any qualified voter can vote `spam.protection.max.votes` times per epoch per active proposal (e.g., if it's `3` then one initial vote and 2 follow-on votes to change their mind.
+The following three policies are specific to governance actions:
+
+- Vote transactions can be rejected if a party has less than `spam.protection.voting.min.tokens`. 
+- Any governance proposal transaction can be rejected if a party has less than `spam.protection.proposal.min.tokens`. Setting these reasonably high provides some level of protection.
+- Any qualified voter can vote `spam.protection.max.votes` times per epoch per active proposal (e.g., if it's `3` then one initial vote and 2 follow-on votes to change their mind.
 
 If 3 blocks in a row are filled with spam, i.e., parties send substantially more than 3 votes, let's say 50 votes), then the number of required tokens is doubled, up to a maximum of 1600.
 
@@ -30,7 +31,7 @@ The policy enforcement mechanism rejects governance messages that do not follow 
 
 The policies enforced are relatively simple:
 
-```
+```text
 <num_votes> = 3
 <min_voting_tokens> = 1
 <num_proposals> = 3
@@ -61,7 +62,7 @@ As unclaimed withdrawals do not automatically expire, an attacker could generate
 
 To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWitdrawalQuantumMultiple`.
 The minimum allowed withdrawal amount is `spam.protection.minimumWitdrawalQuantumMultiple x quantum`, where `quantum` is set per [asset](0040-ASSF-asset_framework.md) and should be thought of as the amount of any Vega asset that has a rough value of 1 USD.
-
+7
 Any withdrawal requests for a smaller amounts are immediately rejected.
 
 ### Acceptance Criteria
