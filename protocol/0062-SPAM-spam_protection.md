@@ -10,9 +10,10 @@ What the network can do is:
 
 Thus, no matter what the anti-spam policy is, there is a scenario where someone creates a lot of identities and spams one block with each. Therefore, we have to enforce a minimum investment to be allowed to send anything to the Vega network.
 
-For governance votes, that means that there is a minimum amount of tokens required to be allowed to issue a proposal/vote (`spam.protection.proposal.min.tokens`/`spam.protection.voting.min.tokens`). If the network detects successful spam in spite of this minimum, then the limit can be increased automatically.
+## Governance spam
+The spam protection enforcement for governance actions require that a public key must have a set minimum amount of tokens to be allowed to issue a proposal or vote on a proposal (`spam.protection.proposal.min.tokens`/`spam.protection.voting.min.tokens`). If the network detects successful spam in spite of this minimum, then the limit can be increased automatically.
 
-The following three policies are specific to governance actions:
+The following three policies are also specific to governance actions:
 
 - Vote transactions can be rejected if a party has less than `spam.protection.voting.min.tokens`.
 - Any governance proposal transaction can be rejected if a party has less than `spam.protection.proposal.min.tokens`. Setting these reasonably high provides some level of protection.
@@ -22,7 +23,7 @@ If 3 blocks in a row are filled with spam, i.e., parties send substantially more
 
 All are network parameters and thus up for discussion/governance vote. A change of parameters takes effect in the epoch following the acceptance of the corresponding proposal.
 
-## Policy Enforcement
+### Policy Enforcement
 
 The policy enforcement mechanism rejects governance messages that do not follow the anti-spam rules. This can happen in two different ways:
 
@@ -52,11 +53,13 @@ min_proposing_tokens = 200000
 
 If on average for the last 10 blocks, more than 30% of all voting and proposal transactions need to be post-rejected, then the network is under spam attack. In this case, the `min_voting_tokens` value is doubled, until it reaches 1600. The threshold is then not increased for another 10 blocks. At the beginning of every epoch, the value of `min_voting_tokens` is reset to its original.
 
-### Issues: It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting
+### Issues
+
+It is possible for a tokenholder to deliberately spam the network to block poorer parties from voting
 
 Due to the banning policy this is not doable from one account, but with a sybil attack it can be done. If this ends up being a problem, we can address it by increasing the ban-time.
 
-### Withdrawal spam
+## Withdrawal spam
 
 As unclaimed withdrawals do not automatically expire, an attacker could generate a large number of messages as well as an ever-growing data structure through [withdrawal requests](0030-ETHM-multisig_control_spec.md).
 
