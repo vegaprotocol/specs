@@ -215,6 +215,7 @@ Note the following key points from the market lifecycle spec:
 * A market usually enters Active status at the proposal's enactment date/time, but some conditions may delay this or cause the market to be Cancelled instead
 
 A proposal to create a market contains
+
 1. a complete market specification as per the [Market Framework](./0001-MKTF-market_framework.md) that describes the market to be created.
 1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
 1. if the market is meant to be a *sucessor* of a given market then it contains the marketId of the market it's suceeding (parent market) and certain entries in the market proposal must be identical to those of the market it's succeeding OR the proposal should simply not contain the fields that cannot be changed. 
