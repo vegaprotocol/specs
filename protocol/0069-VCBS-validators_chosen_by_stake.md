@@ -76,14 +76,14 @@ A network parameter, `network.validators.minimumEthereumEventsForNewValidator`, 
 
 ## Ethereum-Side Multisig Control
 
-Vega will know the initial multisig signer list, weights, and threshold and watch for `SignersUpdated(bytes32 new_epoch_hash, uint16 new_threshold)` events to track updates to the signer set. This event covers the signers, their weights, and the overall threshold of weight percentage needed for a multisig transaction to be successful.
+Vega will know the initial multisig signer list, weights, and threshold and watch for `SignersUpdated(bytes32 new_signer_set_data_hash, uint16 new_threshold)` events to track updates to the signer set. This event covers the signers, their weights, and the overall threshold of weight percentage needed for a multisig transaction to be successful.
 
 Once issued, the "winning" party of an update to the signer set and weights will run the Ethereum transaction to update the signer set and weights. 
 Thus, for any verification using the multisig contract, the contract can verify validators and their weights.
 
-`network.validators.multisig.signerAddresses` will be represented in Vega as an ordered array of ethereum addresses that correspond to the Vega validators as registered in Multisig Control via the epoch hash.
+`network.validators.multisig.signerAddresses` will be represented in Vega as an ordered array of ethereum addresses that correspond to the Vega validators as registered in Multisig Control via the signer set data hash.
 
-`network.validators.multisig.signerWeights` is the ORDERED array of weights that correspond to the Vega validators as registered in Multisig Control via the epoch hash.
+`network.validators.multisig.signerWeights` is the ORDERED array of weights that correspond to the Vega validators as registered in Multisig Control via the signer set data hash.
 
 In the reward calculation for the top signers by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.signerAddresses` by score.
 
