@@ -524,3 +524,4 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that no rewards are paid out on the first epoch.
     - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
     - Verify that rewards are paid out at the end of the epoch.
+1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` or a vega key that belongs to a validator can submit a request to the vega network to obtain the signature bundle that would update the ethereum multisig signers to be the ethereum keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted once per epoch per vega key. Once multisig uses weights it will also include the correct weights. (<a name="0069-VCBS-068" href="#0069-VCBS-068">0069-VCBS-068</a>)
