@@ -6,7 +6,7 @@ What the network can do is:
 
 - remove the offending transactions after the block is scheduled, i.e., not process them
 - update the state once a block is finalised and block transactions based on the new state
-- delete transactions from every (honest) validators mempool based on the new state.
+- delete transactions from every (honest) validator's mempool based on the new state.
 
 Thus, no matter what the anti-spam policy is, there is a scenario where someone creates a lot of identities and spams one block with each. Therefore, we have to enforce a minimum investment to be allowed to send anything to the Vega network.
 
@@ -64,10 +64,11 @@ Due to the banning policy this is not doable from one key, but with a sybil atta
 
 As unclaimed withdrawals do not automatically expire, an attacker could generate a large number of messages as well as an ever-growing data structure through [withdrawal requests](0030-ETHM-multisig_control_spec.md).
 
-To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWitdrawalQuantumMultiple`.
-The minimum allowed withdrawal amount is `spam.protection.minimumWitdrawalQuantumMultiple x quantum`, where `quantum` is set per [asset](0040-ASSF-asset_framework.md) and should be thought of as the amount of any Vega asset that has a rough value of 1 USD.
+To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWithdrawalQuantumMultiple`.
 
-Any withdrawal requests for a smaller amounts are immediately rejected.
+The minimum allowed withdrawal amount is `spam.protection.minimumWithdrawalQuantumMultiple x quantum`, where `quantum` is set per [asset](0040-ASSF-asset_framework.md) and should be thought of as the amount of any asset on Vega that has a rough value of 1 USD.
+
+Any withdrawal request for a smaller amount is immediately rejected.
 
 ### Related topics
 
@@ -76,7 +77,7 @@ Any withdrawal requests for a smaller amounts are immediately rejected.
 
 ### Acceptance Criteria
 
-A spam attack using votes/governance proposals is detected and the votes transactions are rejected, i.e., a party that issues too many votes/governance proposals gets the follow on transactions rejected. This means (given the original parameters parameters from [0054-NETP-network_parameters.md](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0054-NETP-network_parameters.md))
+A spam attack using votes/governance proposals is detected and the votes transactions are rejected, i.e., a party that issues too many votes/governance proposals gets the follow-on transactions rejected. This means (given the original parameters from [0054-NETP-network_parameters.md](https://github.com/vegaprotocol/specs-internal/blob/master/protocol/0054-NETP-network_parameters.md))
 
 More than 360 delegation changes in one epoch (or, respectively, the value of `spam.protection.max.delegation`). This includes the undelegate transactions. Specifically, verify:
 
@@ -86,8 +87,8 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Delegating while having less than one vega (`10^18` of our smallest unit) (`spam.protection.delegation.min.tokens`)  (<a name="0062-SPAM-002" href="#0062-SPAM-002">0062-SPAM-002</a>)
 - Making a proposal when having less than 100.000 vega (`spam.protection.proposal.min.tokens`)  (<a name="0062-SPAM-003" href="#0062-SPAM-003">0062-SPAM-003</a>)
 - Changing the value of network parameter `spam.protection.proposal.min.tokens` will immediately change the minimum number of associated tokens needed for any kind of governance proposal. Proposals already active aren't affected.(<a name="0062-SPAM-014" href="#0062-SPAM-014">0062-SPAM-014</a>)
-- Transaction creating more than `spam.protection.max.proposals` proposals in one epoch are rejected.  (<a name="0062-SPAM-004" href="#0062-SPAM-004">0062-SPAM-004</a>)
-- Transaction submitting votes by parties with less than `spam.protection.voting.min.tokens` vega associated are rejected.  (<a name="0062-SPAM-005" href="#0062-SPAM-005">0062-SPAM-005</a>)
+- Transactions creating more than `spam.protection.max.proposals` proposals in one epoch are rejected.  (<a name="0062-SPAM-004" href="#0062-SPAM-004">0062-SPAM-004</a>)
+- Transactions submitting votes by parties with less than `spam.protection.voting.min.tokens` of Vega associated are rejected.  (<a name="0062-SPAM-005" href="#0062-SPAM-005">0062-SPAM-005</a>)
 - Transactions submitting a vote more than `spam.protection.max.votes` times on any one proposal are rejected. (<a name="0062-SPAM-006" href="#0062-SPAM-006">0062-SPAM-006</a>)
 - Above thresholds are exceeded in one block, leading to a post-block-rejection  (<a name="0062-SPAM-007" href="#0062-SPAM-007">0062-SPAM-007</a>)
 - If 50% of a parties votes/transactions are post-block-rejected, it is blocked for 4 Epochs and unblocked afterwards again  (<a name="0062-SPAM-008" href="#0062-SPAM-008">0062-SPAM-008</a>)
@@ -101,10 +102,10 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - If a party gets banned several times during an epoch, all banns last for the defined time or until the epoch ends (try with at least three banns) (<a name="0062-SPAM-018" href="#0062-SPAM-018">0062-SPAM-018</a>)
 - During a ban due to too many votes, all governance related transactions are rejected (<a name="0062-SPAM-019" href="#0062-SPAM-019">0062-SPAM-019</a>)
 - After having been banned for too many votes and unbanned, with the maximum number of votes in that epoch exceeded, any additional votes are rejected without a new ban. (<a name="0062-SPAM-020" href="#0062-SPAM-020">0062-SPAM-020</a>)
-- Try to create a withdrawal bundle for an amount smaller than defined by `spam.protection.minimumWitdrawalQuantumMultiple x quantum` and verify that it is rejected (<a name="0062-SPAM-021" href="#0062-SPAM-021">0062-SPAM-021</a>)
-- Try to set `spam.protection.minimumWitdrawalQuantumMultiple` to `0` and verify that the parameter is rejected.(<a name="0062-SPAM-022" href="#0062-SPAM-022">0062-SPAM-022</a>)
-- Increase `spam.protection.minimumWitdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been valid according to the former parameter value is rejected with the new one. (<a name="0062-SPAM-023" href="#0062-SPAM-023">0062-SPAM-023</a>)
-- Decrease `spam.protection.minimumWitdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been invalid with the old parameter and is valid with the new value and is accepted.(<a name="0062-SPAM-024" href="#0062-SPAM-024">0062-SPAM-024</a>)
-- Issue a valid withdrawal bundle. Increase `spam.protection.minimumWitdrawalQuantumMultiple` to a value that that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-COSMICELEVATOR-001" href="#0062-COSMICELEVATOR-001">0062-COSMICELEVATOR-001</a>)
+- Try to create a withdrawal bundle for an amount smaller than defined by `spam.protection.minimumWithdrawalQuantumMultiple x quantum` and verify that it is rejected (<a name="0062-SPAM-021" href="#0062-SPAM-021">0062-SPAM-021</a>)
+- Try to set `spam.protection.minimumWithdrawalQuantumMultiple` to `0` and verify that the parameter is rejected.(<a name="0062-SPAM-022" href="#0062-SPAM-022">0062-SPAM-022</a>)
+- Increase `spam.protection.minimumWithdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been valid according to the former parameter value is rejected with the new one. (<a name="0062-SPAM-023" href="#0062-SPAM-023">0062-SPAM-023</a>)
+- Decrease `spam.protection.minimumWithdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been invalid with the old parameter and is valid with the new value and is accepted.(<a name="0062-SPAM-024" href="#0062-SPAM-024">0062-SPAM-024</a>)
+- Issue a valid withdrawal bundle. Increase `spam.protection.minimumWithdrawalQuantumMultiple` to a value that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-COSMICELEVATOR-001" href="#0062-COSMICELEVATOR-001">0062-COSMICELEVATOR-001</a>)
 
-> **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed on a follow up version.
+> **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
