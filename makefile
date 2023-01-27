@@ -1,4 +1,4 @@
-all: names codes references
+all: names codes references links markdownlint
 
 # Check that all the specifications are named appropriately
 names:
@@ -16,3 +16,7 @@ references:
 links:
 	npx markdown-link-check protocol/*.md
 	npx markdown-link-check non-protocol-specs/*.md
+
+# check the markdown formatting (/protocol specs only at this time)
+markdownlint:
+	@./markdownlint.sh

@@ -5,5 +5,5 @@
     "commands-show-output": false,
     "no-bare-urls": true,
     "no-inline-html": false,
-    "no-hard-tabs": false,
+    "no-hard-tabs": false
 }
