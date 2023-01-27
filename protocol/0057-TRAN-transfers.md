@@ -120,7 +120,7 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0059-simple-POS-rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-The fee is set by the `transfer.fee.factor` [network parameter](#network-parameter) that defines the proportion of each transfer taken as a fee.
+The fee is set by the `transfer.fee.factor` [network parameter](#network-parameters) that defines the proportion of each transfer taken as a fee.
 The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
 It is [paid in to the infrastructure fee pool](./0029-fees.md#collecting-and-distributing-fees).
 Fees are charged in the asset that is being transferred.
