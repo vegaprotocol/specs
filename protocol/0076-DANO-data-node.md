@@ -84,7 +84,7 @@ All proposals ever submitted + votes (asset, network parameter change, market).
 
 ### Market Data
 
-- as [specified in](./0021-market-data-spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this.
+- as [specified in](./0021-MDAT-market_data_spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this.
 
 ### Market lifecycle events
 

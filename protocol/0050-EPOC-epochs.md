@@ -217,4 +217,4 @@ Nomination takes effect at epoch changeover:
 
 ## See also
 
-- [0059 - STKG - Simple staking and delegating](./0059-STKG-simple_staking_and_delegating) - staking and delegation are both calculated in terms of epochs.
+- [0059 - STKG - Simple staking and delegating](./0059-STKG-simple_staking_and_delegating.md) - staking and delegation are both calculated in terms of epochs.

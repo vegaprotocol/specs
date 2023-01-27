@@ -4,7 +4,7 @@
 
 ### Current state of upgrading the vega network
 
-As of today, upgrading the protocol is near impossible when a major changes to the step are possible without proceeding with a [Limited Network Life checkpoint restore](./non-protocol-specs/0005-NP-LIMN-limited_network_life.md). This functionality has the following significant issues:
+As of today, upgrading the protocol is near impossible when a major changes to the step are possible without proceeding with a [Limited Network Life checkpoint restore](./0073-LIMN-limited_network_life.md). This functionality has the following significant issues:
 
 - A synchronous restart is required
 - All node need to be restarted in a very short time so all state can be restore from Ethereum, and the network can start properly with a checkpoint.
