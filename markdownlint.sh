@@ -2,7 +2,7 @@
 
 echo "Installing markdownlint-cli..."
 
-npm install -g markdownlint-cli
+npm install -g markdownlint-cli --yes
 
 echo "Running markdownlint-cli..."
 

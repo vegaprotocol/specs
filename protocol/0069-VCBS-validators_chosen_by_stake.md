@@ -411,13 +411,13 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
         - 1 validator drops to the lowest delegated stake (1000)
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
-        - the pending validator has sufficiemt 'ownstake'
+        - the pending validator has sufficient `ownstake`
         - Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
     1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
         - 2 ersatz validators have 6000 stake and sufficient `ownstake`
-        - the pending validator has sufficient 'ownstake'
+        - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
