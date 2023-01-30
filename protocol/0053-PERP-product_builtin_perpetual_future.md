@@ -18,6 +18,33 @@ Perpetual futures are a simple "delta one" product. Mark-to-market settlement oc
 
 Validation: none required as these are validated by the asset and data source frameworks.
 
+### Example specification
+
+The pseudocode below specifies a possible configuration of the built-in perpetual futures contract product. The emphasis is on modelling required properties of this product, not the exact semantics used as these will most likely differ in the implementation.
+
+```yaml
+	product: built-in perpetual futures contract
+		settlement_asset: XYZ
+		settlement_cue:
+			internal_time_oracle:
+				repeating:
+					- every 24h from 20230201T09:30:00
+					- every 168h from 20230203T12:00:00
+		settlement_data:
+			data_source: SignedMessage{ pubkey=0xA45e...d6 }
+			field: 'price'
+			filters: 
+				- ticker: 'TSLA'
+				- timestamp: 'time >= 09:25:00'
+				- timestamp: 'time <= 10:05:00'
+				- timestamp: 'time >= 11:55:00'
+				- timestamp: 'time <= 12:35:00'
+		settlement_cue_auction_duration: "1h"
+		data_ingestion_period: "30min"
+		max_settlement_gap: "48h"
+		settlement_data_monitoring: true
+```
+
 ## 2. Settlement assets
 
 1. Returns `[cash_settled_perpetual_future.settlement_asset]`
