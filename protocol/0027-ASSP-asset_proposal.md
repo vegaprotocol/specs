@@ -190,7 +190,7 @@ This must be an integer strictly greater than `0`.
 - `validationTimestamp` must occur after the governance proposal opens voting, and before it closes (<a name="0027-ASSP-017" href="#0027-ASSP-017">0027-ASSP-017</a>)
 - `validationTimestamp` must be provided and in the future for all new ERC20 asset proposals (<a name="0027-ASSP-018" href="#0027-ASSP-018">0027-ASSP-018</a>)
 - `quantum` must be an integer strictly greater than `0` (<a name="0027-ASSP-019" href="#0027-ASSP-019">0027-ASSP-019</a>)
-- If there is a proposal for some ERC20 asset already present then another proposal for the same ERC20 asset will be rejected. (<a name="0027-0027-ASSP-020" href="#0027-0027-ASSP-020">0027-0027-ASSP-020</a>)
+- If there is a proposal for some ERC20 asset already present then another proposal for the same ERC20 asset will be rejected. (<a name="0027-ASSP-020" href="#0027-ASSP-020">0027-ASSP-020</a>)
 - There can be multiple concurrent proposals for the same new ERC20 asset (same means identical Ethereum address). Once the nodes agree (based on events from the external blockchain queue), that the asset is enabled on the bridge all the remaining proposals for the same asset are rejected.
 (<a name="0027-COSMICELEVATOR-025" href="#0027-COSMICELEVATOR-025">0027-COSMICELEVATOR-025</a>)
 - An invalid contract address, specified in the ERC20 proposal **must** be rejected(<a name="0027-ASSP-021" href="#0027-ASSP-021">0027-ASSP-021</a>)

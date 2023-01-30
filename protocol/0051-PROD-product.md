@@ -128,5 +128,5 @@ Product updates via governance:
 
 ## See also
 
-- [Product: Built In Futures](./016-PFUT-product_builtin_future.md)
+- [Product: Built In Futures](./0016-PFUT-product_builtin_future.md)
 - [Product: Cash settled Perpetual Future](./0053-PERP-product_builtin_perpetual_future.md)

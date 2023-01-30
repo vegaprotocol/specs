@@ -57,7 +57,7 @@ A party on the Vega network will have a weighting for each type of proposal that
 
 To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` of the governance tokens associated to the Vega network via the [Ethereum staking bridge](0071-STAK-erc20_governance_token_staking.md) (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`.
 
-Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-NP-APIN-api_node.md).
+Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](./0076-DANO-data-node.md).
 
 In future, governance weighting for some proposal types will be based on alternative measures, such as:
 

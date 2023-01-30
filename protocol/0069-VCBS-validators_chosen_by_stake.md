@@ -14,7 +14,7 @@ Note that to be eligible as a potential validator certain criteria need to be me
 1. Own stake >= `reward.staking.delegation.minimumValidatorStake`.
 1. Network has verified key ownership (see below).
 
-At the end of each epoch Vega will calculate the unnormalised `validator_score`, see [rewards spec](./0061-REWP-simple_pos_rewards_sweetwater.md).
+At the end of each epoch Vega will calculate the unnormalised `validator_score`, see [rewards spec](./0061-REWP-pos_rewards.md).
 For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validators.incumbentBonus)`.
 Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance.
 
@@ -406,16 +406,18 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted.
         - No validator with stake attached to them is ever completely removed
 1. (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>)
-    1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
+    1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
         - 1 validator drops to the lowest delegated stake (1000)
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
+        - the pending validator has sufficient `ownstake`
         - Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
-    1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
+    1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
         - 2 ersatz validators have 6000 stake and sufficient `ownstake`
+        - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
@@ -511,3 +513,17 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-COSMICELEVATOR-002" href="#0069-COSMICELEVATOR-002">0069-COSMICELEVATOR-002</a>)
 1. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-COSMICELEVATOR-003" href="#0069-COSMICELEVATOR-003">0069-COSMICELEVATOR-003</a>)
 1. It is possible to submit a transaction to update the weights. (<a name="0069-COSMICELEVATOR-004" href="#0069-COSMICELEVATOR-004">0069-COSMICELEVATOR-004</a>)
+1. Can update multisig for new validator, and expect rewards (<a name="0069-VCBS-066" href="#0069-VCBS-066">0069-VCBS-066</a>)
+    - Arrange a network with N validators and 1 ersatz validator.
+    - Set `network.validators.multisig.numberOfSigners` = N.
+    - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
+    - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
+    - Verify that rewards are paid out at the end of the epoch.
+1. No rewards paid out if multisig not updated. Rewards continued when fixed. (<a name="0069-VCBS-067" href="#0069-VCBS-067">0069-VCBS-067</a>)
+    - Arrange a network with N validators and 1 ersatz validator.
+    - Set `network.validators.multisig.numberOfSigners` = N.
+    - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
+    - Verify that no rewards are paid out on the first epoch.
+    - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
+    - Verify that rewards are paid out at the end of the epoch.
+1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` or a vega key that belongs to a validator can submit a request to the vega network to obtain the signature bundle that would update the ethereum multisig signers to be the ethereum keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted once per epoch per vega key. Once multisig uses weights it will also include the correct weights. (<a name="0069-VCBS-068" href="#0069-VCBS-068">0069-VCBS-068</a>)
