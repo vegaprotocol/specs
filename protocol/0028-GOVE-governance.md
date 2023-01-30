@@ -229,6 +229,7 @@ b) allow the successor market to inherit the insurance pool of the parent market
 Note that each market can have exactly one market as a *sucessor* market. 
 - if there already is a market (possibly pending i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)) naming a parent market which is referenced in the proposal then the proposal is rejected with error parent market no longer available. 
 - if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the sucessor of the named parent; the other proposal is cancelled with reason "parent market no longer available". 
+- if there is a successor market naming a parent market that terminates and settles or is cancelled by governance before the parent market (for whatver reason) then the parent market successor is set to empty and a different successor can be proposed.
 
 
 All _new market proposals_ initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
