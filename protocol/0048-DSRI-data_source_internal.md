@@ -55,29 +55,7 @@ on: {
 
 ### 1.2.2 Repeating
 
-A repeating time trigger will contain a collection of timestamps and frequency tuples.
-For each tuple:
-
-- as soon as the protocol registers a time which is equal to or higher than the specified `timestamp` an event is emitted,
-- each time an integer multiple of the time period specified by the`frequency` field from the `timestamp` elapses another event should get fired.
-
-The repeating internal time triggered oracles will be used by the [perpetual futures](protocol/0053-PERP-product_builtin_perpetual_future.md) product, hence it must be possible to set them up to model a schedule like: every day at 04:00, 12:00 and 20:00.
-
-```rust
-on: {
-	{
-		timestamp: '202112311T04:00:00'
-		frequency: '24h'
-	},
-	{
-		timestamp: '202112311T12:00:00'
-		frequency: '24h'
-	},
-	{
-		timestamp: '202112311T20:00:00'
-		frequency: '24h'
-	},
-}
+The repeating internal time triggered oracles will be used by the [perpetual futures](protocol/0053-PERP-product_builtin_perpetual_future.md) product, hence it must be possible to set them up to model a schedule like: every day at 04:00, 12:00 and 20:00. It should also be possible to model a completely arbitrary time schedule with a fixed number of events (e.g. 01/02/2023 08:52, 11/03/2023 15:45, 20/04/2023 21:37). Appropriate anti-spam measures should be considered to prevent the ability to specify an internal time triggered oracle that puts exceedingly high strain on the resources.
 
 ## 1.3 Vega time changed
 
@@ -156,3 +134,5 @@ Currently (as of Oregon Trail), only the *Vega time changed (1.3 above)* interna
 	- setup 3 markets, all with time based termination with identical signer details, two with the same time, one with a later time
 	- wait to all of them to terminate successfully
 	- assert they all settle successfully
+1. The repeating internal time triggered oracle can be used to model a time schedule of the form: every day at 12:00, 15:00 and 18:00. (<a name="0048-DSRI-015" href="#0048-DSRI-015">0048-DSRI-015</a>)
+1. The repeating internal time triggered oracle can be used to model a time schedule of the form: 01/02/2023 08:52, 11/03/2023 15:45, 20/04/2023 21:37. (<a name="0048-DSRI-016" href="#0048-DSRI-016">0048-DSRI-016</a>)
