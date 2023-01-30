@@ -45,8 +45,8 @@ Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_
 - Staking:
   - last block of a confirmed stake_deposit on the staking contract on the Ethereum chain with `number_of_confirmations`. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
   - last block of a confirmed stake_deposit on the vesting contract on the Ethereum chain with `number_of_confirmations`. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
-  - all the staking events from both contracts [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
-  - all the pending staking events [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
+  - all the staking events from both contracts [staking](./0059-STKG-simple_staking_and_delegating.md)
+  - all the pending staking events [staking](./0059-STKG-simple_staking_and_delegating.md)
 
 When to create a checkpoint:
 

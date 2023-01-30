@@ -1,0 +1,12 @@
+{
+  "ignorePatterns": [
+    {
+      "_comment": "Finds /protocol AC codes e.g. #0001-MKTF-001",
+      "pattern": "^#[0-9]{4}-[A-Z]{4}-[0-9]{3}"
+    },
+    {
+      "_comment": "Finds /non-protocol-specs AC codes e.g. #0001-NP-LIQB-001",
+      "pattern": "^#[0-9]{4}-[A-Z]{2}-[A-Z]{4}-[0-9]{3}"
+    }
+  ]
+}

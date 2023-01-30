@@ -21,8 +21,8 @@ references:
 # Imperfect, but useful - hence not included in ALL
 .PHONY: links
 links:
-	npx --yes markdown-link-check protocol/*.md
-	npx --yes markdown-link-check non-protocol-specs/*.md
+	npx --yes markdown-link-check --config .github/workflows/config/markdownlinkcheckignore.json protocol/*.md
+	npx --yes markdown-link-check --config .github/workflows/config/markdownlinkcheckignore.json non-protocol-specs/*.md
 
 # check the markdown formatting (/protocol specs only at this time)
 .PHONY: markdownlint
