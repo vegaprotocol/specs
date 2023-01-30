@@ -136,3 +136,4 @@ Currently (as of Oregon Trail), only the *Vega time changed (1.3 above)* interna
 	- assert they all settle successfully
 1. The repeating internal time triggered oracle can be used to model a time schedule of the form: every day at 12:00, 15:00 and 18:00. (<a name="0048-DSRI-015" href="#0048-DSRI-015">0048-DSRI-015</a>)
 1. The repeating internal time triggered oracle can be used to model a time schedule of the form: 01/02/2023 08:52, 11/03/2023 15:45, 20/04/2023 21:37. (<a name="0048-DSRI-016" href="#0048-DSRI-016">0048-DSRI-016</a>)
+1. The repeating internal time triggered oracle with a schedule of "every day at 12:00", always sends an event as soon as the block with a timestamp with time of 12:00 or higher is received (the time the oracle sends an event doesn't drift forward even after many days). (<a name="0048-DSRI-017" href="#0048-DSRI-017">0048-DSRI-017</a>)
