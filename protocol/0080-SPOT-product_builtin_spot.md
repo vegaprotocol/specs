@@ -11,7 +11,7 @@ When trading Spot products, parties can only use assets they own - there is no l
 1. `quote_asset (Asset)`: this is used to specify the asset which can be exchanged for the base asset.
 1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status. This trigger would usually be a datetime based trigger but may also use an oracle.
 
-## 2. Network parameters:
+## 2. Network parameters
 
 1. `spot_obligation_calculation_window`: time (in seconds) between recalculation of the amount of the `base_asset` which must be locked in the bond account for the `base_asset`.
 1. `spot_commitment_lock_window`: time (in seconds) which a commitment is "locked" after it is submitted or amended before it can be amended or cancelled.
