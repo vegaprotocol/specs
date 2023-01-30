@@ -8,7 +8,7 @@ Validators and delegators receive incentives from the network, depending on vari
 
 Staking requires the combined action of:
 
-- Associating tokens on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md); and
+- Associating tokens on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md); and
 - Nominating these tokens to one or more validators
 - Delegation in some contexts is used to mean `associate + nominate`. For the purposes of this document, once it's clear from context that association has happened `delegate` and `nominate` may be used interchangeably.
 
@@ -193,7 +193,7 @@ These accounts will be created:
 
 ### Adding more stake
 
-- More tokens may be locked at any time on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)
+- More tokens may be locked at any time on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)
 - More stake may be delegated at any time (see [function: Stake](./0071-STAK-erc20_governance_token_staking.md) - amount refers to size by which to increment existing staked amount) (<a name="0059-STKG-009" href="#0059-STKG-009">0059-STKG-009</a>)
 - Same timings apply as per staking for the first time (<a name="0059-STKG-010" href="#0059-STKG-010">0059-STKG-010</a>)
 
@@ -211,7 +211,7 @@ These accounts will be created:
 
 - Changing the validator to whom a participant wants to validate to involves:
   - Announcing removal of stake for current validator
-  - Staking on the new validator, as per normal [function: Stake](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md)
+  - Staking on the new validator, as per normal [function: Stake](./0071-STAK-erc20_governance_token_staking.md)
   - These can happen concurrently, so that at the next epoch, the stake is removed from the current validator and staked on the new validator
 
 ## Auto delegation scenarios
@@ -255,5 +255,5 @@ These accounts will be created:
 
 - [0013-ACCT Acccounts](./0013-ACCT-accounts.md) - staking accounts are not like other account types, but the differences are covered here.
 - [0028-GOVE Governance](./0028-GOVE-governance.md) - a party's stake controls their ability to participate in governance.
-- [0069-VALW Validators chosen by stake](./0069-VALW-validators_chosen_by_stake.md) - staking and delegation is used to pick validators.
+- [0069-VALW Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md) - staking and delegation is used to pick validators.
 - [0050-EPOC Epochs](./0050-EPOC-epochs.md) - epochs control how frequently validator sets can change as a result of staking and delegation.

@@ -14,7 +14,7 @@ Note that to be eligible as a potential validator certain criteria need to be me
 1. Own stake >= `reward.staking.delegation.minimumValidatorStake`.
 1. Network has verified key ownership (see below).
 
-At the end of each epoch Vega will calculate the unnormalised `validator_score`, see [rewards spec](./0061-REWP-simple_pos_rewards_sweetwater.md).
+At the end of each epoch Vega will calculate the unnormalised `validator_score`, see [rewards spec](./0061-REWP-pos_rewards.md).
 For validators currently in the Vega validator set it will scale the `validator_score` by `(1+network.validators.incumbentBonus)`.
 Note that this number combines own + delegated stake together with `performance_score` which measures basic node performance.
 
@@ -406,16 +406,18 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted.
         - No validator with stake attached to them is ever completely removed
 1. (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>)
-    1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
+    1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
         - 1 validator drops to the lowest delegated stake (1000)
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
+        - the pending validator has sufficient `ownstake`
         - Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
-    1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
+    1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
         - 2 ersatz validators have 6000 stake and sufficient `ownstake`
+        - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
