@@ -72,8 +72,9 @@ Due to the banning policy this is not doable from one key, but with a sybil atta
 
 As unclaimed withdrawals do not automatically expire, an attacker could generate a large number of messages as well as an ever-growing data structure through [withdrawal requests](0030-ETHM-multisig_control_spec.md).
 
-To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWitdrawalQuantumMultiple`.
-The minimum allowed withdrawal amount is `spam.protection.minimumWitdrawalQuantumMultiple x quantum`, where `quantum` is set per [asset](0040-ASSF-asset_framework.md) and should be thought of as the amount of any Vega asset that has a rough value of 1 USD.
+To avoid this, all withdrawal requests need a minimum withdrawal amount controlled by the network parameter `spam.protection.minimumWithdrawalQuantumMultiple`.
+
+The minimum allowed withdrawal amount is `spam.protection.minimumWithdrawalQuantumMultiple x quantum`, where `quantum` is set per [asset](0040-ASSF-asset_framework.md) and should be thought of as the amount of any asset on Vega that has a rough value of 1 USD.
 
 Any withdrawal request for a smaller amount is immediately rejected.
 
