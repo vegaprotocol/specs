@@ -75,7 +75,7 @@ Functions:
 
 ### ERC-20 vesting contract (`ERC20_Vesting.sol`)
 
-The ERC-20 vesting contract implements the [Token V2](./0002-NP-TOKT-token_v2.md) specification and must also support the staking of tokens it holds as specified here. It will [ERC20_Vesting.sol](https://github.com/vegaprotocol/Vega_Token_V2/blob/main/contracts/ERC20_Vesting.sol) emit the `Stake_Deposited` and `Stake_Removed` events.
+The ERC-20 vesting contract implements the [Token V2](../non-protocol-specs/0002-NP-TOKT-token_v2.md) specification and must also support the staking of tokens it holds as specified here. It will [ERC20_Vesting.sol](https://github.com/vegaprotocol/Vega_Token_V2/blob/main/contracts/ERC20_Vesting.sol) emit the `Stake_Deposited` and `Stake_Removed` events.
 
 Functions:
 
