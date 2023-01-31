@@ -21,7 +21,7 @@ When looking to use Vega via a user interface e.g. Dapp (Decentralized web App),
   - if the wallet does NOT have an existing permission with the wallet: **must** prompt user to check wallet app to approve the request to connect wallet: See [Connecting to Dapps](0002-WCON-connect_vega_wallet.md#connect-wallet) for what should happen in wallet app (<a name="0002-WCON-009" href="#0002-WCON-009">0002-WCON-009</a>)
   
   - if new keys are given permission: **must** show the user the keys have been approved (<a name="0002-WCON-010" href="#0002-WCON-010">0002-WCON-010</a>)
-    - **should** see [public key(s)](DATA-data_display.md#public-keys)
+    - **should** see [public key(s)](9001-DATA-data_display.md#public-keys)
     - **should** see alias(es)
     - **could** see assets on key(s)
     - **would like to** see positions on key(s) 
@@ -65,13 +65,13 @@ when looking to do something with a specific key (or set of keys) from my wallet
 - **must** see a list of keys that are approved from the connected wallet (<a name="0002-WCON-026" href="#0002-WCON-026">0002-WCON-026</a>)
 
 - for each key:
-  - **must** see the first and last 6 digits of the [public key](DATA-data_display.md#public-keys). (<a name="0002-WCON-027" href="#0002-WCON-027">0002-WCON-027</a>)
+  - **must** see the first and last 6 digits of the [public key](9001-DATA-data_display.md#public-keys). (<a name="0002-WCON-027" href="#0002-WCON-027">0002-WCON-027</a>)
   - **should** be able to see the whole public key
   - **must** be able to copy to clipboard the whole public key (<a name="0002-WCON-029" href="#0002-WCON-029">0002-WCON-029</a>)
   - **must** see the key name/alias (meta data) (<a name="0002-WCON-030" href="#0002-WCON-030">0002-WCON-030</a>)
   - **should** see what non-zero assets that key has
   - **could** see the total asset balances (including associated)
-  - **would like to see** a breakdown of the accounts. See [collateral / accounts](6001-COLL-collateral.md)
+  - **would like to see** a breakdown of the accounts. See [collateral / accounts](7001-COLL-collateral.md)
   - **would like to** see any active orders or positions. See [collateral / accounts](6001-COLL-collateral.md)
   - **would like to** see my nominations to validators for associated tokens
 
