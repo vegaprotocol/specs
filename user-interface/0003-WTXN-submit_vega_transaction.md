@@ -8,7 +8,7 @@ When submitting a Vega transaction of any kind, I...
 
 if not connected to a Vega wallet:
 
-- **must** be told that I am not connected, so can not submit a transaction, and given the [option to connect](0002-WCON-connect_vega_wallet.md). (Note: this may have happened if the wallet has become disconnected without the user knowing) (<a name="0003-WTXN-001" href="#0003-WTXN-001">0003-WTXN-001</a>)
+- **must** be told that I am not connected, so can not submit a transaction, and given the [option to connect](0012-WCON-connect_vega_wallet.md). (Note: this may have happened if the wallet has become disconnected without the user knowing) (<a name="0003-WTXN-001" href="#0003-WTXN-001">0003-WTXN-001</a>)
 
 if transaction not auto approved by wallet:
 
@@ -17,7 +17,7 @@ if transaction not auto approved by wallet:
 
 if transaction is approved by wallet:
 
-- **must** see A [transaction hash](9001-DATA-data_display.md#transaction-hash) (<a name="0003-WTXN-003" href="#0003-WTXN-003">0003-WTXN-003</a>)
+- **must** see A [transaction hash](DATA-data_display.md#transaction-hash) (<a name="0003-WTXN-003" href="#0003-WTXN-003">0003-WTXN-003</a>)
 - **must** see the public key that this transaction was submitted for (<a name="0003-WTXN-004" href="#0003-WTXN-004">0003-WTXN-004</a>)
 - **should** see the alias for the key that submitted this transaction
 - **could** see a prompt to set this app to [auto approve](0001-WALL-wallet.md#approving-transactions) in wallet app
@@ -36,7 +36,7 @@ if the wallet highlights an issue with the transaction:
 - **should** see the error returned highlighted in context of the form that submitted the transaction in Dapp
 - **must** show error returned by wallet (<a name="0003-WTXN-011" href="#0003-WTXN-011">0003-WTXN-011</a>)
 
-## Track transaction on network
+## Track transaction on network 
 
 - **must** see a link to that transaction in a block explorer for the appropriate network (<a name="0003-WTXN-012" href="#0003-WTXN-012">0003-WTXN-012</a>)
 - **must** see the transaction status - TODO Document these (<a name="0003-WTXN-013" href="#0003-WTXN-013">0003-WTXN-013</a>)

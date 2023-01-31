@@ -1,7 +1,7 @@
 # Vote
 
 Background: [Governance spec](../protocol/0028-GOVE-governance.md)
-and [docs](https://docs.vega.xyz/testnet/concepts/vega-protocol#governance).
+and [docs](https://s.vega.xyz/s/mainnet/concepts/vega-protocol#governance).
 
 There are a few things that can be governed on Vega...
 
@@ -139,7 +139,7 @@ When looking to vote on the proposal, I...
 
 - **must** see an option to [connect to a Vega wallet/key](./0002-WCON-connect_vega_wallet.md) (<a name="3001-VOTE-075" href="#3001-VOTE-075">3001-VOTE-075</a>)
 - **must** be [connected to a Vega wallet/key](./0002-WCON-connect_vega_wallet.md) (<a name="3001-VOTE-076" href="#3001-VOTE-076">3001-VOTE-076</a>)
-  - **must** see sum of tokens I have [associated](1004-ASSO-associate.md) (<a name="3001-VOTE-100" href="#3001-VOTE-100">3001-VOTE-100</a>)
+  - **must** see sum of tokens I have [associated](1027-ASSO-associate.md) (<a name="3001-VOTE-100" href="#3001-VOTE-100">3001-VOTE-100</a>)
   - **should** see what percentage of the total [associated](1027-ASSO-associate.md) tokens I hold
     - **should**, if I have 0 tokens, see link to [associate](1027-ASSO-associate.md)
   - **must** see my current vote for, against, or not voted (<a name="3001-VOTE-079" href="#3001-VOTE-079">3001-VOTE-079</a>)

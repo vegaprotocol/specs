@@ -1,6 +1,6 @@
 # Staking
 
-Staking is the act of securing a Vega network by nominating good validators with the [governance token](https://github.com/vegaprotocol/specs/blob/master/protocol/0071-STAK-erc20_governance_token_staking.md). Staking is rewarded with a share of trading fees (and [treasury rewards](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md)). See the [glossary](../glossaries/staking-and-governance.md) and [these specs](../protocol#delegation-staking-and-rewards) for more on staking.
+Staking is the act of securing a Vega network by nominating good validators with the [governance token](../protocol/0071-STAK-erc20_governance_token_staking.md). Staking is rewarded with a share of trading fees (and [treasury rewards](../0056-REWA-rewards_overview.md)). See the [glossary](../glossaries/staking-and-governance.md) and [these specs](../protocol#delegation-staking-and-rewards) for more on staking.
 
 When staking a user may be motivated to select validators to maximize the rewards they get for the tokens they hold, this means selecting validator(s) who are less likely to be penalized (e.g. over staked, poor performance). Users may wish to stake more than one validator to diversify. Users will want/need to manage their stake over time to ensure they are getting a good return, e.g. move stake between validators. Staking is also important for facilitating protocol upgrades.
 
@@ -25,7 +25,7 @@ Note: Income may come in a range of different tokens, as markets can settle in d
 
 ## Associate tokens
 
-Before I stake, I need to [Associate tokens](./1004-ASSO-associate.md) with a Vega wallet/key...
+Before I stake, I need to [Associate tokens](./1000-ASSO-associate.md) with a Vega wallet/key...
 
 - **must** see link[Associate tokens](./1000-ASSO-associate.md)
 - **should** see that if no further action is taken, newly associated tokens will be nominated to validators based on existing distribution

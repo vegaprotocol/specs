@@ -65,7 +65,7 @@ When wanting to remove governance tokens, I...
 - **must** action the disassociation [Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md) <a name="1004-ASSO-027" href="#1004-ASSO-027">1004-ASSO-027</a>
 - **must** see feedback on the progress of the disassociation on ethereum <a name="1004-ASSO-028" href="#1004-ASSO-028">1004-ASSO-028</a>
 - **must** see new associated balances in Vega (theses should be applied instantly, rather than wait for the 50 eth blocks like associate) <a name="1004-ASSO-029" href="#1004-ASSO-029">1004-ASSO-029</a>
-- on completion (if tokens were returned to vesting contract): **could** be prompted to go on to [redeem](1005-VEST-vesting.md).
+- on completion (if tokens were returned to vesting contract): **could** be prompted to go on to [redeem](1001-VEST-vesting.md).
 
 ...so that I can transfer them to another Ethereum wallet (e.g. sell them on an exchange).
  
