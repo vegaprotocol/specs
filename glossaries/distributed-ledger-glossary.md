@@ -2,7 +2,7 @@
 
 ## ABI
 
-Application Binary Interface - A JSON representation list of a smart contract's functions and arguments. It is used by wallets or clients to produce a transaction that interacts with a contract that exists on the the Ethereum chain - mapping function calls and parameters in to a bytecode form that [EVM](#evm) will execute.
+Application Binary Interface - A JSON representation list of a smart contract's functions and arguments. It is used by wallets or clients to produce a transaction that interacts with a contract that exists on the the Ethereum chain - mapping function calls and parameters in to a bytecode form that the [EVM](#evm) will execute.
 
 ## Algorithm
 
