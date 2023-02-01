@@ -27,6 +27,7 @@ CCP
 ccy
 ceil
 ceiled
+CFD
 CSF
 checkpointing
 CLEF
@@ -54,6 +55,7 @@ datetime
 decentralised
 decentralises
 decrypt
+decrypted
 decrypts
 delegateable
 delegator
@@ -61,6 +63,7 @@ delegators
 deterministically
 discoverability
 disincentivise
+DLT
 DPOS
 durations
 ECDSA
@@ -108,12 +111,14 @@ GTC
 GTT
 Gwei
 hardcoded
+Homomorphic
 HSM
 HTTP
 HTTPS
 IBC
 incentivise
 incentivised
+incrementing
 init
 initialisation
 initialise
@@ -126,12 +131,14 @@ IOC
 JSON
 keyholder
 keypair
+keypairs
 keystore
 KMS
 lifecycle
 linearised
 linkings
 linux
+Liskov
 liveness
 LNL
 lognormal
@@ -145,6 +152,7 @@ margining
 messager
 math
 mempool
+Merkle
 MetaMask
 microstructure
 midprice
@@ -193,6 +201,7 @@ RPC
 runnable
 runtime
 scalable
+scalability
 Scholes
 selectable
 sepolia
@@ -214,10 +223,15 @@ SSL
 suboptimal
 subtype
 subtypes
+SVTs
 SweetWater
+sybil
+sybils
 tau
+TBC
 Tendermint
 testnet
+testnets
 TIF
 tokenholder
 tokenholders
@@ -226,7 +240,9 @@ trackable
 Tron
 trustless
 tx
+TXs
 quant
+UI
 uint
 unmarshal
 unamended

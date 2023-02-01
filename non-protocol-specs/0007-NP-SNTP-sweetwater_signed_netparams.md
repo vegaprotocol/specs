@@ -1,11 +1,12 @@
 # Network Parameters Signed for Sweetwater
 
 There are parameters within Vega that influence the behaviour of the system:
+
 - some are set in genesis block but fixed once network is running,
 - while others are changeable by on-chain [governance](../protocol/0028-GOVE-governance.md) but initialised to genesis values during network launch. For more info see [network paramters](../protocol/0054-NETP-network_parameters.md)
 
-On [Sweetwater Release](../milestones/2.5-Sweetwater.md) Vega Team wishes to control how certain parameters are initialised while letting validators change others as they see fit.
-As the process of decentalisation progresses Vega Team the number of such parameters will be reduced.
+On [Sweetwater (Restricted Mainnet) Release](https://github.com/orgs/vegaprotocol/projects/114) Vega Team wishes to control how certain parameters are initialised while letting validators change others as they see fit.
+As the process of decentralisation progresses Vega Team the number of such parameters will be reduced.
 
 ## Signing
 
@@ -16,8 +17,8 @@ The configuration of the network parameters defined here will be signed and veri
 
 The values to be specified as a PR against ??? repo.
 
-TODO: once the repo is chosen put a link here.
-TODO: find where `validator min balance` is defined and reference correctly.
+`TODO`: once the repo is chosen put a link here.
+`TODO`: find where `validator min balance` is defined and reference correctly.
 
 | Name                                                        | Comment                                                            | Suggested value (optional) |
 |-------------------------------------------------------------|:------------------------------------------------------------------:| :-------------------------:|
@@ -25,7 +26,7 @@ TODO: find where `validator min balance` is defined and reference correctly.
 | `validator min balance`                                     | Not in [network paramters](../protocol/0054-NETP-network_parameters.md) | 3000 VEGA                  |
 | `governance.proposal.updateNetParam.requiredMajority`       | So that what is set in genesis cannot be changed too easily        | 0.5                        |
 | `governance.proposal.updateNetParam.requiredParticipation`  | So that what is set in genesis cannot be changed too easily        | 0.5                        |
-| `validators.epoch.length`                                   | Rewards currently make an assumption on epoch lenght, best fix it. | 1 day                      |
+| `validators.epoch.length`                                   | Rewards currently make an assumption on epoch length, best fix it. | 1 day                      |
 | `genesis asset section`                                     | Only one asset: VEGA                                               |                            |
 | `blockchains.ethereumConfig`                                | Sets collateral and staking bridge addresses.                      |                            |
 | `network.checkpoint.chainEndOfLifeDate`                     | Can enforce code upgrade by setting this not too far ahead.        | 21 days                    |
