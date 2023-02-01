@@ -149,6 +149,8 @@ mainnet
 malus
 margined
 margining
+marketId
+marketID
 messager
 math
 mempool

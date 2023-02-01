@@ -220,10 +220,10 @@ Market {
 
 If a market proposal, see [governance](./0028-GOVE-governance.md), designates an existing market as a *parent market* then it must have the same *product*, *settlement asset(s)* and *margin asset(s)*. 
 It may propose new risk model and parameters, price monitoring parameters, position and market decimal places and oracles, both for trading terminated and for settlement data. 
-Each market can have exactly one market as a *sucessor* market. 
+Each market can have exactly one market as a *successor* market. 
 
 1. if there already is a market (possibly pending i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)) naming a parent market which is referenced in the proposal then the proposal is rejected. 
-1. if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the sucessor of the named parent; the other proposal is cancelled with reason "parent market not available". 
+1. if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the successor of the named parent; the other proposal is cancelled with reason "parent market not available". 
 
 Some markets can be labelled as *perpetual* at the time of proposal; in this case they cannot serve as a parent market. 
 
