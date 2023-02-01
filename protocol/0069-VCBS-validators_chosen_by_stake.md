@@ -420,6 +420,22 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
+        
+ 
+    1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
+        - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
+        - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
+        - 1 validator drops to the lowest delegated stake (1000)
+        - 1 ersatz validator has 6000 stake and sufficient `ownstake`
+        - Verify that the the first ersatz validator is not removed, and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
+    1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
+        - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
+        - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
+        - 2 ersatz validators have 6000 stake and sufficient `ownstake`
+        - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is not removed 
+        
+        
+        
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
