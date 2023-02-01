@@ -26,7 +26,7 @@ Each bridge contains two primary functions and emits two primary events, each ta
 
 ### Block confirmations
 
-It is normal behaviour when validating transfers to wait a certain number of blocks for a deposit to be 'confirmed'. For example, [this is Kraken's wait time](https://support.kraken.com/hc/en-us/articles/203325283-Cryptocurrency-deposit-processing-times). We need to do the same, to be sure that enough time has passed that it is a certainty that the event we saw is included in the chain.
+It is normal behaviour when validating transfers to wait a certain number of blocks for a deposit to be 'confirmed'. We need to do the same, to have acceptably high probability that the event is on the longest chain and there won't be a fork in the future which will invalidate this. We achieve this by ensuring that enough time has passed.
 
 This will need to be configured per chain that we connect to. ETH, ERC-20, ERC-XXX can all share a value, which should be configurable and changeable via governance. For Ethereum, this should be 20 confirmations. It is safe to lower this for development networks.
 

@@ -34,11 +34,19 @@ The policy enforcement mechanism rejects governance messages that do not follow 
 The policies enforced are relatively simple:
 
 ```text
-num_votes = 3
-min_voting_tokens = 1
-num_proposals = 3
-min_proposing_tokens = 200000
+num_votes = 3                         // maximum number of times per epoch a tokenholder van change their vote on an issue
+min_voting_tokens = 1                 // minimum tokens required to be allowed to vote
+num_proposals = 3                     // maximum number of governance proposals per tokenholder per epoch
+min_proposing_tokens = 200000         // minimum amount of tokens required to make governance proposals
+max_delegations = 390                 // maximal number of de-delegations per tokenholder per epioch
+min_tokens_for_delegation = 1         // minimum number of tokens needed to re-delegate
+minimum_withdrawal = 10               // minimum amount of asset withdrawals
+min_transfer = 0.1                    // minimum amount of assets for internal transfers
+max_transfer_commands_per_epoch = 20  // maximal amount of internal asset transfers per epoch per key
+max_batch_size = 15                   // maximal number of transactions allowed in one batch; this is the maximum size of a batch
 ```
+
+(for consistency reasons, the prevailing source for all parameter values is the [defaults](https://github.com/vegaprotocol/vega/blob/develop/core/netparams/defaults.go)code file. In case of differences, the information in that file is the valid one).
 
 - Any tokenholder with more than `min_voting_tokens` tokens on a public key has `num_votes` voting attempts per epoch and proposal, i.e., they can change their mind `num_votes-1` times in one epoch. This means a transaction is pre-block rejected if there are `num_votes` or more on the same proposal in the blockchain in the same epoch, and post_block rejected if there are `num_votes` or more on the same proposal in the blockchain plus earlier in the current block.
 - Any tokenholder that had more than 50% of its governance transactions post-rejected is banned for max (30 seconds, 1/48 of an epoch) or until the next epoch starts, and all of its governance related transactions (but no trading related transactions) are immediately rejected. E.g., if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds (or until the start of the next epoch). The test for 50% of the governance transactions is repeated once the next governance related transaction is post-rejected, so it is possible for a violating party to get banned quite quickly again; the test is only done in case of a new post-rejection, so the account does not get banned twice just because the 50% quota is still exceeded when the ban ends. The voting counters are unaffected by the ban, so voting again on a proposal that already had the full number of votes in the epoch will lead to a rejection of the new vote; this is now unlikely to trigger a new ban, as this rejection will happen pre-consensus, and thus not affect the 50% rule.
