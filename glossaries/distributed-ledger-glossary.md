@@ -2,7 +2,7 @@
 
 ## ABI
 
-Application Binary Interface - A JSON representation list of a smart contract's functions and arguments. It is used by wallets or clients to produce a transaction that interacts with a contract that exists on the the Ethereum chain - mapping function calls and parameters in to a bytecode form that the [EVM](#EVM) will execute.
+Application Binary Interface - A JSON representation list of a smart contract's functions and arguments. It is used by wallets or clients to produce a transaction that interacts with a contract that exists on the the Ethereum chain - mapping function calls and parameters in to a bytecode form that the [EVM](#evm) will execute.
 
 ## Algorithm
 
@@ -12,7 +12,7 @@ A generally understood set of rules and calculations for solving a particular pr
 
 The process of verifying that an actor (person or machine) is who they claim they are.
 
-## Authorization
+## Authorisation
 
 The process of verifying that an actor (person or machine) is allowed to take an action.
 
@@ -47,7 +47,7 @@ Short for [Distributed Ledger Technology](https://en.wikipedia.org/wiki/Distribu
 
 ## Erasure Coding
 
-... TODO but see [here](https://github.com/ethereum/research/wiki/A-note-on-data-availability-and-erasure-coding).
+... `TODO` but see [here](https://github.com/ethereum/research/wiki/A-note-on-data-availability-and-erasure-coding).
 
 ## Eventual consistency
 
@@ -77,7 +77,7 @@ A rule for determining which fork is correct when faced with multiple possibly-v
 
 The [Greedy Heaviest-Observed Subtree](https://eprint.iacr.org/2013/881.pdf), a fork choice rule.
 
-## Hashchain
+## Hash chain
 
 ...
 
@@ -95,7 +95,7 @@ The amount of time before a system can achieve both consensus and finality; it's
 
 ## Longest Chain
 
-The longest chain approach is one way to solve consensus. It consists of a mechanism that (not necessarily uniquely) determinas a leader that can propose the next block in the blockchain. If a node sees a longer chain than the one it knows, it uses that one as its new chain. Longest chain protocols do not offer finallity, i.e., every block can (theoretically) be undone.
+The longest chain approach is one way to solve consensus. It consists of a mechanism that (not necessarily uniquely) determines a leader that can propose the next block in the blockchain. If a node sees a longer chain than the one it knows, it uses that one as its new chain. Longest chain protocols do not offer finality, i.e., every block can (theoretically) be undone.
 
 ## MainNet
 
@@ -137,7 +137,7 @@ There are entire protocols ([Band](https://bandprotocol.com/), [Chainlink](https
 
 ## Reliable Broadcast
 
-A reliable broadcast assures that all receiving of a broadcasr nodes receive the same set of messages, and that a message sent by an honest sender is received. ... see [here](https://www.semanticscholar.org/paper/Asynchronous-consensus-and-broadcast-protocols-Bracha-Toueg/130ce1bcd496a7b9192f5f53dd8d7ef626e40675),
+A reliable broadcast assures that all receiving of a broadcast nodes receive the same set of messages, and that a message sent by an honest sender is received. ... see [here](https://www.semanticscholar.org/paper/Asynchronous-consensus-and-broadcast-protocols-Bracha-Toueg/130ce1bcd496a7b9192f5f53dd8d7ef626e40675),
 [here](https://www.shoup.net/papers/ckps.pdf) or [here](https://arxiv.org/pdf/1510.06882.pdf).
 
 ## State Channels
@@ -162,7 +162,7 @@ The amount of data that can be processed by a system in a given unit of time, e.
 
 ## Validators
 
-From the [Tendermint documentation](https://docs.tendermint.com/master/nodes/validators.html):
-> Validators are responsible for committing new blocks in the blockchain. These validators participate in the consensus protocol by broadcasting votes which contain cryptographic signatures signed by each validator's private key.
+From the [Tendermint documentation](https://docs.tendermint.com/v0.34/tendermint-core/validators.html):
 
-> Some Proof-of-Stake consensus algorithms aim to create a "completely" decentralized system where all stakeholders (even those who are not always available online) participate in the committing of blocks. [Tendermint](#tendermint) has a different approach to block creation. Validators are expected to be online, and the set of validators is permissioned/curated by some external process.
+> Validators are responsible for committing new blocks in the blockchain. These validators participate in the consensus protocol by broadcasting votes which contain cryptographic signatures signed by each validator's private key.
+> Some Proof-of-Stake consensus algorithms aim to create a "completely" decentralised system where all stakeholders (even those who are not always available online) participate in the committing of blocks. [Tendermint](#tendermint) has a different approach to block creation. Validators are expected to be online, and the set of validators is permissioned/curated by some external process.
