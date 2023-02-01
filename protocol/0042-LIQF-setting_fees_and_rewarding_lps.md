@@ -277,4 +277,4 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 
 ### Distribution
 
-- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment and that sees the same trade value. (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)
+- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment (and the traded value is the same in both epochs). (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)
