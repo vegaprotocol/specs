@@ -7,13 +7,13 @@ all: spellcheck markdownlint names codes references links clean
 .PHONY: names
 names:
 	@$(MAKE) clone-sources
-	npx @vegaprotocol/approbation check-filenames
+	npx @vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
 
 # Count how many Acceptance Criteria each specification has
 .PHONY: codes
 codes:
 	@$(MAKE) clone-sources
-	npx @vegaprotocol/approbation check-codes
+	npx @vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
 
 TEMP=./.build
 .PHONY:clone-sources
