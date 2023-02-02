@@ -3,3 +3,6 @@
 .ipynb_checkpoints/
 .obsidian/
 .vscode/
+
+# Used by makefile to clone repos for approbation checks
+.build/
