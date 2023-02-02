@@ -199,7 +199,7 @@ On every trade, liquidity fee should be collected immediately into an account fo
 
 This account is not under control of the LP party (they cannot initiate transfers in or out of the account). The account is under control of the network and funds from this account will be transferred to the owning LP party according to the mechanism below.
 
-A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block.
+A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block.
 
 The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
 
@@ -234,9 +234,9 @@ LP 4 els = 0.33
 When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 
 ```math
-67.275 ETH from LP 1's LP account to LP 1's margin account
-25.875 ETH from LP 2's LP account to LP 2's margin account
-10.350 ETH from LP 3's LP account to LP 3's margin account
+67.275 ETH from LP 1's LP account to LP 1's general account
+25.875 ETH from LP 2's LP account to LP 2's general account
+10.350 ETH from LP 3's LP account to LP 3's general account
 ```
 
 ### APIs for fee splits and payments
@@ -277,4 +277,4 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 
 ### Distribution
 
-- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment (and the traded value is the same in both epochs). (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)
+- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the time interval then they receive roughly 1/2 the fee income compared with the next time interval when they maintain their commitment (and the traded value is the same in both time intervals). (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)
