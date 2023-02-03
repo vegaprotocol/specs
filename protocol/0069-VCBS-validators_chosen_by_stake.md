@@ -434,9 +434,11 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
         - 2 ersatz validators have 6000 stake and sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is not removed 
-    1. Set
-        
-        
+        - Now reduce the ownstake of both ersatzvalidators and one real validator below the ownstake requirement; verify that both ersatzvalidators are not demoted to pending, and that the tendermint validator is not demotet to ersatz (i.e., tendermint validators are not demoted if there is no appropriate ersatz).
+       - Reduce the ownstake of both ersatzvalidators to 0. Verify that both ersatzvalidators are now removed, and that the tendermint validator still stays a tendermint validator (let this run for at least 2 epochs).
+       - Reduce the ownstake of another tendermint validator to 0. Verify that that tendermint validator is demoted, and the other one with insufficient ownstake is not.
+    
+     
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
