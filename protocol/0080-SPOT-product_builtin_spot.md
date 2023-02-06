@@ -9,7 +9,7 @@ When trading Spot products, parties can only use assets they own - there is no l
 1. `base_quote_pair (Explicit Value)`: human readable name/abbreviation of the base/quote pair.
 1. `base_asset (Asset)`: this is used to specify the asset to be purchased or sold on the market.
 1. `quote_asset (Asset)`: this is used to specify the asset which can be exchanged for the base asset.
-1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status. This trigger may be a datetime trigger, oracle, or governance event.
+1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status. This trigger may be a datetime trigger or an oracle. Note: a `Spot` market may also be terminated through governance.
 
 ## 2. Network parameters
 
@@ -35,16 +35,18 @@ When an order is fulfilled or cancelled any remaining funds in the `holding` acc
 When submitting a liquidity commitment, an LP will specify the amount of the `quote_asset` they are willing to stake (the `quote_commitment_amount`). To ensure the LP is providing an equal amount of liquidity on each side of the book, they will also need to have a sufficient amount of the `base_asset` (the `base_commitment_amount`) at the current `spot_price` for the commitment to be valid. Both the `quote_commitment_amount` and the `base_commitment_amount` will then be locked in two separate bond accounts.
 
 ```pseudo
+Example:
+
 quote_asset: USD
 base_asset: ETH
 
 spot_price = 1000 USD
 
-quote_commitment_amount = 10000 usd
+quote_commitment_amount = 10000 USD
 base_commitment_amount = quote_commitment_amount / spot_price = 10000 / 1000 = 10 ETH
 ```
 
-Every `n` seconds (`n` being controlled by the network parameter `spot_obligation_calculation_window`),  the required `base_commitment_amount` to be locked in the bond account will be recalculated using the current 
+Every `n` seconds (`n` being controlled by the network parameter `spot_obligation_calculation_window`),  the required `base_commitment_amount`, to be locked in the bond account, will be recalculated using the current 
 `spot_price`. Funds can then be released from the bond account to the general account or vice versa.
 
 To prevent LPs frequently providing, amending, and cancelling liquidity commitment amounts; all liquidity commitments will be "locked" for a certain period of time before the amount can be amended or the the entire commitment cancelled. This period of time will be controlled with a network parameter `spot_commitment_lock_length`.
@@ -93,3 +95,14 @@ As there is no margin or leverage when dealing with `Spot` products, there is no
 Price-monitoring auctions are still required and should be implemented following the [price-monitoring](./0032-PRIM-price_monitoring.md) spec.
 
 ## 8. Acceptance Criteria
+
+1. Create a `Spot` for any `quote_asset` / `base_asset` pair that are configured in Vega (<a 
+name="0080-COSMICELEVATOR-001" href="#0080-COSMICELEVATOR-001">0080-COSMICELEVATOR-001</a>)
+1. It is not possible to change the `quote_asset` via governance (<a name="0080-COSMICELEVATOR-002" href="#0080-COSMICELEVATOR-002">0080-COSMICELEVATOR-002</a>)
+1. It is not possible to change the `base_asset` via governance (<a name="0080-COSMICELEVATOR-003" href="#0080-COSMICELEVATOR-003">0080-COSMICELEVATOR-003</a>)
+1. A `Spot` market can be terminated through governance (<a name="0080-COSMICELEVATOR-004" href="#0080-COSMICELEVATOR-004">0080-COSMICELEVATOR-004</a>)
+1. Parties are unable to place orders they do not have the necessary funds for (<a name="0080-COSMICELEVATOR-005" href="#0080-COSMICELEVATOR-005">0080-COSMICELEVATOR-005</a>)
+1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-COSMICELEVATOR-006" href="#0080-COSMICELEVATOR-006">0080-COSMICELEVATOR-006</a>)
+1. Market liqudity fees are calculated correctly (<a name="0080-COSMICELEVATOR-007" href="#0080-COSMICELEVATOR-007">0080-COSMICELEVATOR-007</a>)
+
+
