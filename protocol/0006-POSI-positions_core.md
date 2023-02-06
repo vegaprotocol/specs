@@ -1,8 +1,9 @@
 # Positions Core
 
-# Acceptance Criteria
+## Acceptance Criteria
 
-## Open position data
+### Open position data
+
 - Verify that the open position is correct after the following changes:
   - Open long position, trades occur increasing long position (<a name="0006-POSI-001" href="#0006-POSI-001">0006-POSI-001</a>)
   - Open long position, trades occur decreasing long position (<a name="0006-POSI-002" href="#0006-POSI-002">0006-POSI-002</a>)
@@ -18,27 +19,29 @@
 - Opening and closing positions for multiple traders, maintains position size for all open (non-zero) positions (<a name="0006-POSI-013" href="#0006-POSI-013">0006-POSI-013</a>)
 - Does not change position size for a wash trade (buyer = seller) (<a name="0006-POSI-014" href="#0006-POSI-014">0006-POSI-014</a>)
 
-## Open orders data
-- Verify that the net buy order amounts are correct after the following changes:
-  - No active buy orders, a new buy order is added to the order book (<a name="0006-POSI-016" href="#0006-POSI-016">0006-POSI-016</a>)
-  - Active buy orders, a new buy order is added to the order book (<a name="0006-POSI-017" href="#0006-POSI-017">0006-POSI-017</a>)
-  - Active buy orders, an existing buy order is amended which increases its size. (<a name="0006-POSI-018" href="#0006-POSI-018">0006-POSI-018</a>)
-  - Active buy orders, an existing buy order is amended which decreases its size.  (<a name="0006-POSI-019" href="#0006-POSI-019">0006-POSI-019</a>)
-  - Active buy orders, an existing buy order's price is amended such that it trades a partial amount. (<a name="0006-POSI-020" href="#0006-POSI-020">0006-POSI-020</a>)
-  - Active buy orders, an existing buy order's price is amended such that it trades in full. (<a name="0006-POSI-021" href="#0006-POSI-021">0006-POSI-021</a>)
-  - Active buy order, an order initiated by another trader causes a partial amount of the existing buy order to trade. (<a name="0006-POSI-022" href="#0006-POSI-022">0006-POSI-022</a>)
-  - Active buy order, an order initiated by another trader causes the full amount of the existing buy order to trade. (<a name="0006-POSI-023" href="#0006-POSI-023">0006-POSI-023</a>)
-  - Active buy orders, an existing order is cancelled (<a name="0006-POSI-024" href="#0006-POSI-024">0006-POSI-024</a>)
-  - Active buy orders, an existing order expires (<a name="0006-POSI-025" href="#0006-POSI-025">0006-POSI-025</a>)
+### Open orders data
 
-- Repeat the above but for sell orders.
+Verify that the net buy order amounts are correct after the following changes:
+
+- No active buy orders, a new buy order is added to the order book (<a name="0006-POSI-016" href="#0006-POSI-016">0006-POSI-016</a>)
+- Active buy orders, a new buy order is added to the order book (<a name="0006-POSI-017" href="#0006-POSI-017">0006-POSI-017</a>)
+- Active buy orders, an existing buy order is amended which increases its size. (<a name="0006-POSI-018" href="#0006-POSI-018">0006-POSI-018</a>)
+- Active buy orders, an existing buy order is amended which decreases its size.(<a name="0006-POSI-019" href="#0006-POSI-019">0006-POSI-019</a>)
+- Active buy orders, an existing buy order's price is amended such that it trades a partial amount. (<a name="0006-POSI-020" href="#0006-POSI-020">0006-POSI-020</a>)
+- Active buy orders, an existing buy order's price is amended such that it trades in full. (<a name="0006-POSI-021" href="#0006-POSI-021">0006-POSI-021</a>)
+- Active buy order, an order initiated by another trader causes a partial amount of the existing buy order to trade. (<a name="0006-POSI-022" href="#0006-POSI-022">0006-POSI-022</a>)
+- Active buy order, an order initiated by another trader causes the full amount of the existing buy order to trade. (<a name="0006-POSI-023" href="#0006-POSI-023">0006-POSI-023</a>)
+- Active buy orders, an existing order is cancelled (<a name="0006-POSI-024" href="#0006-POSI-024">0006-POSI-024</a>)
+- Active buy orders, an existing order expires (<a name="0006-POSI-025" href="#0006-POSI-025">0006-POSI-025</a>)
+
+Repeat the above but for sell orders.
 
 ## General
 
 - Maintains separate position data for each market a trader is active in (<a name="0006-POSI-026" href="#0006-POSI-026">0006-POSI-026</a>)
 - If there is either one or more of the position record's fields is non zero (i.e. open position size, active buy order size, active sell order size), the position record exists. (<a name="0006-POSI-027" href="#0006-POSI-027">0006-POSI-027</a>)
 
-# Summary
+## Summary
 
 **Vega core** needs to keep basic position data for each trader in each market where they have a *non-zero net open position* and/or *non-zero net active buy orders* and/or *non-zero net active sell orders*.
 
@@ -49,37 +52,35 @@ A position record is comprised of:
 	- Net active short orders: the sum of the short volume for all the trader's active order (will always be <= 0)
 
 This core processes each relevant transaction (in sequential order, as they occur):
+
 - trades
 - new orders
 - size updates to orders
 - cancellation or expiry of orders
 
-and updates the required position record. 
+and updates the required position record.
 
 In the case of trades, as long as the right data is stored, this can be done in both cases without re-iterating over prior trades when ingesting a new trade.
 
-# Reference-level explanation
+### Reference-level explanation
 
-## Updating position size
+#### Updating position size
 
-Position size is a number that represents the net transacted volume of a trader in the market. The position size is therefore only ever updated when a trader is party to a trade. A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). 
+Position size is a number that represents the net transacted volume of a trader in the market. The position size is therefore only ever updated when a trader is party to a trade. A trade (and therefore a position) may be of any size that is a multiple of the smallest number that can be represented given the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md).
 Note that negative PDP e.g. -2 means the smallest size is 100.
 
 The Position core functionality processes each trade in the following way:
 
 1. If the buyer and seller are the same (wash trade), do nothing.
-
 1. For each of the buyer and seller, look for a position record for the current market. If either record is not found, create it.
-
 1. Update the position size for each record:
-	- BuyerPosition.size += Trade.size
-	- SellerPosition.size -= Trade.size
-
+	  - `BuyerPosition.size` += `Trade.size`
+	  - `SellerPosition.size` -= `Trade.size`
 1. If either position record has Position.size == 0 and no active orders, delete it, otherwise save the updated record.
 
-## Updating net active buy and sell order sizes
+#### Updating net active buy and sell order sizes
 
-Net active buy size (and net active sell) size refer to the aggregated size of buy (and sell) orders that a trader has active on the order book at a point in time. 
+Net active buy size (and net active sell) size refer to the aggregated size of buy (and sell) orders that a trader has active on the order book at a point in time.
 
 These numbers are affected by any transaction that alters the net sum of a trader's open orders on the order book, including:
 

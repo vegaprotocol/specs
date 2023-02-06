@@ -30,7 +30,7 @@
     "specs": ["0071-STAK", "0059-STKG", "0061-REWP", "0058-REWS", "0041-TSTK", "0069-VCBS", "0066-VALW", "0065-FTCO", "0064-VALP", "0063-VALK"]
   },
   "Architecture": {
-    "specs": ["0036-BRIE", "0077-SNAP", "0075-PLUP"]
+    "specs": ["0036-BRIE", "0077-SNAP", "0075-PLUP", "0011-NP-CLIE"]
   },
   "Data": {
     "specs": ["0076-DANO", "0020-APIS", "0007-POSN"]

@@ -1,12 +1,12 @@
 # Market decimal places
 
-This document aims to outline how we are to handle the decimal places of a given market, if said market is configured with fewer decimal places than its settlement asset. For example: a market settling in ETH can be configured to use only 9 decimal places (GWei) compared to ETH's 18. A market cannot specify _more_ decimal places than its settlement asset supports.
+This document aims to outline how we are to handle the decimal places of a given market, if said market is configured with fewer decimal places than its settlement asset. For example: a market settling in ETH can be configured to use only 9 decimal places (Gwei) compared to ETH's 18. A market cannot specify _more_ decimal places than its settlement asset supports.
 
 ## Terminology
 
-* Settlement asset: the asset in which transactions for a given market are made (margin balances, fees, settlements, etc...).
-* Market precision: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a GWei has a 9 decimal places, so the market precision is 9). Synonymous with _market tick_.
-* Asset precision: the number of decimal places for a given asset. Again, a market with precision 9 that settles in ETH will have a market precision of 9, whereas the asset precision is 18.
+- Settlement asset: the asset in which transactions for a given market are made (margin balances, fees, settlements, etc...).
+- Market precision: the number of decimal places a market uses (as mentioned previously, a market where the smallest unit of ETH is a Gwei has a 9 decimal places, so the market precision is 9). Synonymous with _market tick_.
+- Asset precision: the number of decimal places for a given asset. Again, a market with precision 9 that settles in ETH will have a market precision of 9, whereas the asset precision is 18.
 
 ## Mechanics
 
@@ -14,7 +14,7 @@ It is possible to configure a market where orders can only be priced in incremen
 
 This effectively means that prices of submitted orders should be treated as a value that is an order of magnitude greater than what the user will submit. This is trivial to calculate, and is done when the market is created by passing in the asset details (which specify how many decimal places any given asset supports):
 
-```
+```go
 priceExponent = 10**(asset_precision - market_precision)
 // for GBP markets with 0 decimal places this is:
 priceExponent = 10 ** (2 - 0) == 100
@@ -24,7 +24,7 @@ priceExponent = 10 ** (18 -9) == 1,000,000,000
 
 When an order is submitted, amended, or otherwise updated, the core emits an event for the data-node (and any other interested parties). The price in this order event should still be represented as a value in market precision. Updating the price on the order internally, for reasons we shall elaborate on later, should not effect the market data on the event bus. To clarify:
 
-```
+```go
 // given market decimal places == 0, settlement precision == 2
 SubmitOrder(Order{
     Size: 10,
@@ -54,7 +54,6 @@ Order submissions and amendments are received, the submitted price (aka market o
 
 When (re-)pricing pegged orders, the offset values are multiplied by the same price factor before we add/subtract them from the reference price. The offsets themselves (as in: the field on the order object) is not updated. Events that contain this data, therefore, will still look exactly the same as they do now.
 
-
 ### Liquidity provisions
 
 Orders created for an LP work pretty much exactly the same as pegged orders. The offsets will, again, be multiplied by the price exponent when the price is calculated, but the LP shape object is not updated.
@@ -62,15 +61,13 @@ When repricing LP orders, we ensure the price of the orders fall inside the uppe
 
 ### Market data
 
-The market data returns the same min/max prices mentioned above. As the name implies, _"MarketData"_ is clearly market related data... The min/max price values we return from this call should therefore be floored (max) and ceiled (min) in the same way.
-
+The market data returns the same min/max prices mentioned above. As the name implies, _`MarketData`_ is clearly market related data... The min/max price values we return from this call should therefore be floored (max) and ceiled (min) in the same way.
 
 ### Trades
 
 Trades of course result in transfers. The amounts transferred (for the trade as well as the MTM) happen at asset precision. The trade events the core sends out, however, are once again market related data. The prices on these trade events will be represented as a value in market precision.
 
 ## Acceptance criteria
-
 
 - As a user, I can propose a market with a different precision than its settlement asset
   - This proposal is valid if the precision is NOT greater than the settlement asset (<a name="0070-MKTD-001" href="#0070-MKTD-001">0070-MKTD-001</a>)
