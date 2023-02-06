@@ -46,8 +46,7 @@ quote_commitment_amount = 10000 USD
 base_commitment_amount = quote_commitment_amount / spot_price = 10000 / 1000 = 10 ETH
 ```
 
-Every `n` seconds (`n` being controlled by the network parameter `spot_obligation_calculation_window`),  the required `base_commitment_amount`, to be locked in the bond account, will be recalculated using the current 
-`spot_price`. Funds can then be released from the bond account to the general account or vice versa.
+Every `n` seconds (`n` being controlled by the network parameter `spot_obligation_calculation_window`), the required `base_commitment_amount`, to be locked in the bond account, will be recalculated using the current `spot_price`. Funds can then be released from the bond account to the general account or vice versa.
 
 To prevent LPs frequently providing, amending, and cancelling liquidity commitment amounts; all liquidity commitments will be "locked" for a certain period of time before the amount can be amended or the the entire commitment cancelled. This period of time will be controlled with a network parameter `spot_commitment_lock_length`.
 
@@ -56,7 +55,6 @@ To prevent LPs frequently providing, amending, and cancelling liquidity commitme
 If at any point in time, a liquidity provider has insufficient capital in their general accounts to cover a transfer arising from a filled liquidity order, the network will utilise the liquidity commitment, held in the relevant bond account to cover the shortfall. As there is no need for an insurance pool in a spot market, there is no need for a bond penalty.
 
 An LPs `quote_commitment_amount` or `base_commitment_amount` must be recalculated whenever funds from a `base_bond_account` or `quote_bond_account` are used to cover a shortfall respectively.
-
 
 ## 7. Liquidity Fees
 
@@ -96,13 +94,10 @@ Price-monitoring auctions are still required and should be implemented following
 
 ## 8. Acceptance Criteria
 
-1. Create a `Spot` for any `quote_asset` / `base_asset` pair that are configured in Vega (<a 
-name="0080-COSMICELEVATOR-001" href="#0080-COSMICELEVATOR-001">0080-COSMICELEVATOR-001</a>)
+1. Create a `Spot` for any `quote_asset` / `base_asset` pair that are configured in Vega (<a name="0080-COSMICELEVATOR-001" href="#0080-COSMICELEVATOR-001">0080-COSMICELEVATOR-001</a>)
 1. It is not possible to change the `quote_asset` via governance (<a name="0080-COSMICELEVATOR-002" href="#0080-COSMICELEVATOR-002">0080-COSMICELEVATOR-002</a>)
 1. It is not possible to change the `base_asset` via governance (<a name="0080-COSMICELEVATOR-003" href="#0080-COSMICELEVATOR-003">0080-COSMICELEVATOR-003</a>)
 1. A `Spot` market can be terminated through governance (<a name="0080-COSMICELEVATOR-004" href="#0080-COSMICELEVATOR-004">0080-COSMICELEVATOR-004</a>)
 1. Parties are unable to place orders they do not have the necessary funds for (<a name="0080-COSMICELEVATOR-005" href="#0080-COSMICELEVATOR-005">0080-COSMICELEVATOR-005</a>)
 1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-COSMICELEVATOR-006" href="#0080-COSMICELEVATOR-006">0080-COSMICELEVATOR-006</a>)
-1. Market liqudity fees are calculated correctly (<a name="0080-COSMICELEVATOR-007" href="#0080-COSMICELEVATOR-007">0080-COSMICELEVATOR-007</a>)
-
-
+1. Market liquidity fees are calculated correctly (<a name="0080-COSMICELEVATOR-007" href="#0080-COSMICELEVATOR-007">0080-COSMICELEVATOR-007</a>)
