@@ -6,6 +6,9 @@ matrix:
   - name: Markdown
     sources:
       - 'protocol/*.md'
+      - 'non-protocol-specs/*.md'
+      - 'glossaries/*.md'
+      - 'README.md'
     default_encoding: utf-8
     aspell:
       d: en_GB
@@ -13,7 +16,7 @@ matrix:
       ignore-case: true
     dictionary:
       encoding: utf-8
-      output: .pyspelling-custom-md-en.dic.tmp
+      # output: .pyspelling-custom-md-en.dic.tmp
       wordlists:
         - wordlist.txt
     pipeline:
@@ -46,30 +49,3 @@ matrix:
             - api-ref-button
             - code
             - pre
-
-  - name: Python
-    sources:
-      - "scripts/*.py"
-    default_encoding: utf-8
-    aspell:
-      d: en_GB
-      lang: en
-    dictionary:
-      encoding: utf-8
-      output: .pyspelling-custom-py.dic.tmp
-      wordlists:
-        - wordlist.txt
-    pipeline:
-      - pyspelling.filters.context:
-          context_visible_first: true
-          escapes: '\\[\\`]'
-          delimiters:
-            # Ignore multiline content between (possibly indented) triple backticks
-            - open: '(?s)^(?P<open>[ ]*```)'
-              close: '^(?P=open)$'
-            # Ignore text between inline back ticks
-            - open: '(?P<open>`)'
-              close: '(?P=open)'
-      - pyspelling.filters.python:
-          strings: false
-          comments: false

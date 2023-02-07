@@ -2,11 +2,12 @@
 
 This spec describes a set of limits and controls that must be supported by deployments of the Vega system to mitigate the risk of loss or misappropriation of funds early in the life of the system while it is relatively less well tested and more likely to contain major bugs or mechanism design issues. The aim is to achieve this by implementing features which reduce both the expected magnitude and the probability of financial loss, from the perspective of participants interacting with the Vega protocol.
 
-These limits are expected to be used in early deployments of Vega and are desiogned to be raised and/or removed over time via the governance protocol as the security and the robustness of the implementation is demonstrated.
+These limits are expected to be used in early deployments of Vega and are designed to be raised and/or removed over time via the governance protocol as the security and the robustness of the implementation is demonstrated.
 
 ## Principles
 
 These features:
+
 - Must not introduce points of centralisation. They are therefore designed to be operated by decentralised governance protocols in keeping with the core Vega protocol.
 - Should be as simple as possible and should operate correctly independent of whether any aspect of the core protocol is functioning as expected (i.e. they should allow recovery from issues in which someone is able to exploit bugs in products, margins, data sourcing, settlement, collateral, etc.).
 - Are designed to be resilient to failure of the Vega chain and operable assuming only the continued existence of an honest quorum of validators (with their private keys) and the multisig control and bridge pool contract holding control over assets on the Ethereum chain.
@@ -21,9 +22,9 @@ These features:
 For Sweetwater, we only require the ability to:
 
 1. Prevent the submission of market creation proposals until a validator initiated and agreed change to the genesis configuration
-2. Prevent the submission of asset addition proposals until a validator initiated and agreed change to the genesis configuration
-3. Set a date/time before which no market creation proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
-4. Set a date/time before which no asset addition proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
+1. Prevent the submission of asset addition proposals until a validator initiated and agreed change to the genesis configuration
+1. Set a date/time before which no market creation proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
+1. Set a date/time before which no asset addition proposal will be enacted as a network parameter (note if the above submission prevention is in place the proposal must still be rejected after this date)
 
 At genesis, Sweetwater will be started with only one asset: VEGA. As no new assets can be proposed (limit 2), only VEGA tokens can be deposited or withdrawn via the bridge. There will be no markets at genesis, and due to point 1 above, no markets can be created.
 
@@ -86,10 +87,10 @@ This is primarily for liquidity providers and other sophisticated participants a
 ## Limitations
 
 - These features do not protect against a malicious validator set.
-- No attempt is made to prevent sybils with these features, although the ratio between gas fees for deposites and withdrawals and the limits per public key will affect the attractiveness of **any** money making scheme whether by intended or unintended behaviour of the protocol, therefore low limits can provide some level of mitigation here.
+- No attempt is made to prevent sybils with these features, although the ratio between gas fees for deposits and withdrawals and the limits per public key will affect the attractiveness of **any** money making scheme whether by intended or unintended behaviour of the protocol, therefore low limits can provide some level of mitigation here.
 - Users could submit multiple small withdrawals to get around the size limits for delays. To mitigate this, sizes can be set such that gas costs of such an approach would be significant, or to zero so that all withdrawals are delayed.
--
-# Network Parameters
+
+## Network Parameters
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
@@ -108,7 +109,7 @@ This is primarily for liquidity providers and other sophisticated participants a
         - Any valid market creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
     - With `propose_market_enabled_from` set to the past
       - Any valid market creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
-2. Asset creation can be restricted using genesis configuration  (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-025">0028-GOVE-025</a>)
+1. Asset creation can be restricted using genesis configuration  (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-025">0028-GOVE-025</a>)
     - With `propose_asset_enabled` set to true in the genesis configuration
     - With `propose_asset_enabled_from` set to the future:
       - Any asset creation proposal is rejected
@@ -116,34 +117,33 @@ This is primarily for liquidity providers and other sophisticated participants a
         - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
     - With `propose_asset_enabled_from` set to the past:
       - Any valid asset creation proposal is allowed, as per [0028-GOVE](./../protocol/0028-GOVE-governance.md)
-3. `propose_market_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
-4. `propose_asset_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
+1. `propose_market_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
+1. `propose_asset_enabled_from` can be changed through a network parameter update proposal (<a href="../protocol/0028-GOVE-governance.md#0028-GOVE-008">0028-GOVE-008</a>)
 
 ### Smart contract criteria
-5. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md) (<a name="0003-NP-LIMI-001" href="#0003-NP-LIMI-001">0003-NP-LIMI-001</a>)
-   - This does not apply to the [governance staking contract](./../glossaries/staking-and-governance.md)
-   - With an Ethereum address that has never deposited to Vega before:
-     - A valid deposit transaction that is less than `max lifetime deposit` is not rejected
-       - A valid second deposit transaction that, in addition to the first TX exceeds `max lifetime deposit` is rejected
-         - This is true even if both TXs target different [Vega public keys](./../protocol/0017-PART-party.md)
-     - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
-     - A single deposit transaction that is more than `max lifetime deposit` rejected
 
-6. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction (<a name="0003-NP-LIMI-002" href="#0003-NP-LIMI-002">0003-NP-LIMI-002</a>)
-   - An ETH address that is listed on the smart contract as exempt can deposit more than `max lifetime deposit`
-   - Any ETH address can use a method on the smart contract to add or remove itself (own ETH address) from the exemption list
-
-7. `max lifetime deposit` can be updated per asset via an Ethereum transaction (<a name="0003-NP-LIMI-003" href="#0003-NP-LIMI-003">0003-NP-LIMI-003</a>)
-8. Validators can, via multisig, stop and recommence processing bridge transactions (<a name="0003-NP-LIMI-004" href="#0003-NP-LIMI-004">0003-NP-LIMI-004</a>)
-   - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
-   - A representative set of validators can produce a multisig transaction that allows the bridge to resume processing future deposits and withdrawals
-   - All withdrawals that are submitted while the bridge is 'stopped' are rejected
-   - All deposits that are submitted while the bridge is 'stopped' are rejected
-9. Withdrawal delay network parameter requires a wait between withdrawals creation & submission if it meets or exceeds a threshold (<a name="0003-NP-LIMI-005" href="#0003-NP-LIMI-005">0003-NP-LIMI-005</a>)
-  - For valid withdrawals that have been approved by validators, when the user submits the TX to the bridge smart contract:
-    - If the withdrawal amount is below or equal to `withdrawal delay threshold`, the withdrawal is accepted by the bridge smart contract
-    - If the withdrawal amount is above `withdrawal delay threshold` for the asset,
-      - If it is submitted before `withdrawal delay period`, it is rejected by the bridge smart contract
-      - If it is submitted after `withdrawal delay period`, it is accepted by the bridge smart contract
-    - `withdrawal delay threshold` can be changed, per asset, by multisig control on the bridge contract
-10. A withdrawal that is subject to delay can be cancelled by a validator (<a name="0003-NP-LIMI-006" href="#0003-NP-LIMI-006">0003-NP-LIMI-006</a>)
+1. `max lifetime deposit` is enforced by the [ERC20 bridge](./../protocol/0031-ETHB-ethereum_bridge_spec.md) (<a name="0003-NP-LIMI-001" href="#0003-NP-LIMI-001">0003-NP-LIMI-001</a>)
+    - This does not apply to the [governance staking contract](./../glossaries/staking-and-governance.md)
+    - With an Ethereum address that has never deposited to Vega before:
+      - A valid deposit transaction that is less than `max lifetime deposit` is not rejected
+        - A valid second deposit transaction that, in addition to the first TX exceeds `max lifetime deposit` is rejected
+        - This is true even if both TXs target different [Vega public keys](./../protocol/0017-PART-party.md)
+      - Withdrawing all funds after the first transaction, then placing a valid second deposit transaction that causes total lifetime deposits to exceed `max lifetime deposit` is still rejected
+      - A single deposit transaction that is more than `max lifetime deposit` rejected
+1. `max lifetime deposit` can be overridden for specific Ethereum addresses through an Ethereum transaction (<a name="0003-NP-LIMI-002" href="#0003-NP-LIMI-002">0003-NP-LIMI-002</a>)
+    - An ETH address that is listed on the smart contract as exempt can deposit more than `max lifetime deposit`
+    - Any ETH address can use a method on the smart contract to add or remove itself (own ETH address) from the exemption list
+1. `max lifetime deposit` can be updated per asset via an Ethereum transaction (<a name="0003-NP-LIMI-003" href="#0003-NP-LIMI-003">0003-NP-LIMI-003</a>)
+1. Validators can, via multisig, stop and recommence processing bridge transactions (<a name="0003-NP-LIMI-004" href="#0003-NP-LIMI-004">0003-NP-LIMI-004</a>)
+    - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
+    - A representative set of validators can produce a multisig transaction that allows the bridge to resume processing future deposits and withdrawals
+    - All withdrawals that are submitted while the bridge is 'stopped' are rejected
+    - All deposits that are submitted while the bridge is 'stopped' are rejected
+1. Withdrawal delay network parameter requires a wait between withdrawals creation & submission if it meets or exceeds a threshold (<a name="0003-NP-LIMI-005" href="#0003-NP-LIMI-005">0003-NP-LIMI-005</a>)
+    - For valid withdrawals that have been approved by validators, when the user submits the TX to the bridge smart contract:
+      - If the withdrawal amount is below or equal to `withdrawal delay threshold`, the withdrawal is accepted by the bridge smart contract
+      - If the withdrawal amount is above `withdrawal delay threshold` for the asset,
+        - If it is submitted before `withdrawal delay period`, it is rejected by the bridge smart contract
+        - If it is submitted after `withdrawal delay period`, it is accepted by the bridge smart contract
+      - `withdrawal delay threshold` can be changed, per asset, by multisig control on the bridge contract
+1. A withdrawal that is subject to delay can be cancelled by a validator (<a name="0003-NP-LIMI-006" href="#0003-NP-LIMI-006">0003-NP-LIMI-006</a>)

@@ -84,7 +84,7 @@ All proposals ever submitted + votes (asset, network parameter change, market).
 
 ### Market Data
 
-- as [specified in](./0021-market-data-spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this.
+- as [specified in](./0021-MDAT-market_data_spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this.
 
 ### Market lifecycle events
 
@@ -190,4 +190,4 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. The event bus stream is available from validators, non validators and the DataNode (<a name="0076-DANO-017" href="#0076-DANO-017">0076-DANO-017</a>)
 1. All events that are emitted on the full unfiltered event stream are processed by the DataNode (no data is lost) (<a name="0076-DANO-018" href="#0076-DANO-018">0076-DANO-018</a>)
 1. If a DataNode loses connection to a Vega node if will attempt to reconnect and if the cached data received from the Vega node is enough to continue working it can resume being a DataNode. (<a name="0076-DANO-019" href="#0076-DANO-019">0076-DANO-019</a>)
-1. The DataNode must provide its current block height and connection status on responses to client requests so the client can determine whether or not the data is stale. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)
+1. The DataNode must provide its current block height and vega time on responses to client requests so the client can determine whether or not the data is stale. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)
