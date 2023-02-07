@@ -426,12 +426,12 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - 1 validator drops to the lowest delegated stake (1000)
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
         - Verify that the the first ersatz validator is not removed, and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
-        - Add a new pending validator with enough `ownstake`; verify that it replaces the ersatzvalidator that had insufficient `ownstake`.
+        - Add a new pending validator with enough `ownstake`; verify that it replaces the ersatz validator that had insufficient `ownstake`.
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
         - 2 ersatz validators have 6000 stake and sufficient `ownstake`
-        - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is not removed 
+        - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is not removed
         - Now reduce the `ownstake` of both ersatz validators and one real validator below the `ownstake` requirement; verify that both ersatz validators are not demoted to pending, and that the tendermint validator is not demoted to ersatz (i.e., tendermint validators are not demoted if there is no appropriate ersatz).
         - Reduce the `ownstake` of both ersatz validators to 0. Verify that both ersatz validators are now removed, and that the tendermint validator still stays a tendermint validator (let this run for at least 2 epochs).
         - Reduce the `ownstake` of another tendermint validator to 0. Verify that that tendermint validator is demoted, and the other one with insufficient `ownstake` is not.
