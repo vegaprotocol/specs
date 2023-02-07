@@ -420,6 +420,21 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
+    1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
+        - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
+        - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
+        - 1 validator drops to the lowest delegated stake (1000)
+        - 1 ersatz validator has 6000 stake and sufficient `ownstake`
+        - Verify that the the first ersatz validator is not removed, and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
+        - Add a new pending validator with enough `ownstake`; verify that it replaces the ersatz validator that had insufficient `ownstake`.
+    1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
+        - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
+        - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
+        - 2 ersatz validators have 6000 stake and sufficient `ownstake`
+        - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is not removed
+        - Now reduce the `ownstake` of both ersatz validators and one real validator below the `ownstake` requirement; verify that both ersatz validators are not demoted to pending, and that the tendermint validator is not demoted to ersatz (i.e., tendermint validators are not demoted if there is no appropriate ersatz).
+        - Reduce the `ownstake` of both ersatz validators to 0. Verify that both ersatz validators are now removed, and that the tendermint validator still stays a tendermint validator (let this run for at least 2 epochs).
+        - Reduce the `ownstake` of another tendermint validator to 0. Verify that that tendermint validator is demoted, and the other one with insufficient `ownstake` is not.
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
@@ -438,8 +453,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Restart the validator, run until the end of the epoch
     - Verify that this validator is paid reward as ersatz validator and that their stake score under reward is anti-whaled
 1. Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
-    - Setup a network with 7 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
-    - Decrease the number of tendermint validators to 5.
+    - Setup a network with 5 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
+    - Decrease the number of tendermint validators to 3.
     - Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatz validator and an Ersatz validator is demoted to pending
 1. Number of Ersatz validators increased (<a name="0069-VCBS-058" href="#0069-VCBS-058">0069-VCBS-058</a>):
     - Setup a network with 4 Tendermint validators, 2 Ersatz Validators (`network.validators.ersatz.multipleOfTendermintValidators` = 0.5), and 2 pending validators
@@ -522,6 +537,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 1. No rewards paid out if multisig not updated. Rewards continued when fixed. (<a name="0069-VCBS-067" href="#0069-VCBS-067">0069-VCBS-067</a>)
     - Arrange a network with N validators and 1 ersatz validator.
     - Set `network.validators.multisig.numberOfSigners` = N.
+
     - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
     - Verify that no rewards are paid out on the first epoch.
     - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
