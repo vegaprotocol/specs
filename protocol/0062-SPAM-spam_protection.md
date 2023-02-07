@@ -110,7 +110,7 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - If the ban of a party ends because the epoch ends, transactions from that party are no longer rejected (<a name="0062-SPAM-016" href="#0062-SPAM-016">0062-SPAM-016</a>)
 - If a party gets banned, the ban ends due to the epoch ending, and it gets banned again at the beginning of the new epoch, the ban still lasts the entire time (or until the next epoch end), i.e., the ban-expiration timer is reset. (<a name="0062-SPAM-017" href="#0062-SPAM-017">0062-SPAM-017</a>)
 - If a party gets banned several times during an epoch, all banns last for the defined time or until the epoch ends (try with at least three banns) (<a name="0062-SPAM-018" href="#0062-SPAM-018">0062-SPAM-018</a>)
-- A ban ony affects transactions of the type that caused the ban, i.e., a voting ban only affects further votes.(<a name="0062-SPAM-019" href="#0062-SPAM-019">0062-SPAM-019</a>)
+- A ban only affects transactions of the type that caused the ban, i.e., a voting ban only affects further votes.(<a name="0062-SPAM-019" href="#0062-SPAM-019">0062-SPAM-019</a>)
 - After having been banned for too many votes and unbanned, with the maximum number of votes in that epoch exceeded, any additional votes are rejected without a new ban. (<a name="0062-SPAM-020" href="#0062-SPAM-020">0062-SPAM-020</a>)
 - Try to create a withdrawal bundle for an amount smaller than defined by `spam.protection.minimumWithdrawalQuantumMultiple x quantum` and verify that it is rejected (<a name="0062-SPAM-021" href="#0062-SPAM-021">0062-SPAM-021</a>)
 - Try to set `spam.protection.minimumWithdrawalQuantumMultiple` to `0` and verify that the parameter is rejected.(<a name="0062-SPAM-022" href="#0062-SPAM-022">0062-SPAM-022</a>)
