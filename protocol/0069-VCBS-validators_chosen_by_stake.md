@@ -457,8 +457,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Restart the validator, run until the end of the epoch
     - Verify that this validator is paid reward as ersatz validator and that their stake score under reward is anti-whaled
 1. Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
-    - Setup a network with 7 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
-    - Decrease the number of tendermint validators to 5.
+    - Setup a network with 5 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
+    - Decrease the number of tendermint validators to 3.
     - Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatz validator and an Ersatz validator is demoted to pending
 1. Number of Ersatz validators increased (<a name="0069-VCBS-058" href="#0069-VCBS-058">0069-VCBS-058</a>):
     - Setup a network with 4 Tendermint validators, 2 Ersatz Validators (`network.validators.ersatz.multipleOfTendermintValidators` = 0.5), and 2 pending validators
