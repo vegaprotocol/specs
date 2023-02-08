@@ -22,15 +22,15 @@
 
 - If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction[1] = 0.25`, `market.maxSlippageFraction[2] = 0.25` and `RF short = 0.1` and order book is
 
-```book
-buy 1 @ 15 000 
-buy 10 @ 14 900 
-and
-sell 1 @ 100 000
-sell 10 @ 100 100 
-```
+    ```book
+    buy 1 @ 15 000 
+    buy 10 @ 14 900 
+    and
+    sell 1 @ 100 000
+    sell 10 @ 100 100 
+    ```
 
-then the maintenance margin for the party is `15 900 x (0.25 x 1 + 0.25 x 1 x 1) + 0.1 x 1 x 15 900 = 9 540`. (<a name="0019-MCAL-011" href="#0019-MCAL-011">0019-MCAL-011</a>)
+    then the maintenance margin for the party is `15 900 x (0.25 x 1 + 0.25 x 1 x 1) + 0.1 x 1 x 15 900 = 9 540`. (<a name="0019-MCAL-011" href="#0019-MCAL-011">0019-MCAL-011</a>)
 
 - In the same situation as above, if `market.maxSlippageFraction[1] = 100`, `market.maxSlippageFraction[2] = 100` (i.e. 10 000% for both) instead, then the margin for the party is `84 100 + 0.1 x 1 x 15900 = 85 690`. (<a name="0019-MCAL-012" href="#0019-MCAL-012">0019-MCAL-012</a>)
 
