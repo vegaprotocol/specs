@@ -38,6 +38,7 @@ The calculator takes as inputs:
 - `mark price`
 - `scaling levels` defined in the risk parameters for a market
 - `quantitative risk factors`
+- `market.maxSlippageFraction` which is an optional market creation parameter with a default of `0.1` i.e. `10%`. 
 
 Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as integers (i.e. int64). In this case, **care must be taken** to ensure that the actual fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actually 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable because outside of margin calculations, and display to end users, the integer values can generally be used as-is.
 Note also that if PDP is negative e.g. PDP = -2 then an integer open volume of 12345  is actually 1234500.
@@ -79,7 +80,13 @@ In this simple methodology, a linearised margin formula is used to return the ma
 
 with
 
-`maintenance_margin_long_open_position = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
+```
+maintenance_margin_long_open_position 
+    = max(min(slippage_volume * slippage_per_unit, slippage_volume * mark_price * market.maxSlippageFraction), 0) 
+    + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
+```
+
+and
 
 `maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
 
@@ -104,11 +111,10 @@ where
 `exit_price` is the price that would be achieved on the order book if the trader's position size on market were exited. Specifically:
 
 - **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the open long position (not riskiest long position) on the order book (i.e. by selling to the bids on the order book). If there is no open long position, the slippage per unit is zero.
+
 - **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the open short position (not riskiest short position) on the order book (i.e. by buying from the offers (asks) on the order book). If there is no open short position, the slippage per unit is zero.
 
-Note, if there is insufficient order book volume for this `exit_price` to be calculated (per position), the `exit_price` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
-
-If there is zero order book volume on the relevant side of the order book to calculate the `exit_price`, the most recent calculation of the mark price, should be used instead.
+If there is zero or insufficient order book volume on the relevant side of the order book to calculate the `exit_price`, then take `slippage_per_unit = +Infinity` which means that `min(slippage_volume * slippage_per_unit, slippage_volume * mark_price * market.maxSlippageFraction) = slippage_volume * mark_price * market.maxSlippageFraction` above.  
 
 ### **Step 2**
 
@@ -120,7 +126,13 @@ Else
 
 with
 
-`maintenance_margin_short_open_position = max(abs(slippage_volume) * slippage_per_unit, 0) + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
+```
+maintenance_margin_short_open_position 
+    = max(min(abs(slippage_volume) * slippage_per_unit, abs(slippage_volume) * mark_price * market.maxSlippageFraction),  0) 
+    + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]
+```
+
+and
 
 `maintenance_margin_short_open_orders = abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`,
 
