@@ -2,17 +2,27 @@
 
 ## Acceptance Criteria
 
-1. Get four margin levels for one or more parties (<a name="0019-MCAL-001" href="#0019-MCAL-001">0019-MCAL-001</a>)
-2. Margin levels are correctly calculated against riskiest long and short positions (<a name="0019-MCAL-002" href="#0019-MCAL-002">0019-MCAL-002</a>)
-3. Zero position and zero orders results in all zero margin levels (<a name="0019-MCAL-003" href="#0019-MCAL-003">0019-MCAL-003</a>)
-4. If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-004" href="#0019-MCAL-004">0019-MCAL-004</a>)
-5. If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to the *volume weighted price of the order book bids*.  (<a name="0019-MCAL-005" href="#0019-MCAL-005">0019-MCAL-005</a>)
-6. If `riskiest short < 0` and there are no offers on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-006" href="#0019-MCAL-006">0019-MCAL-006</a>)
-7. If `riskiest short < 0 && 0 < *sum of absolute volume of order book offers* < riskiest short`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
-8. A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
-9. For each market and each party which has either orders or positions on the market, the API provides the 4 margin levels.  (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
-10. A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-010" href="#0019-MCAL-010">0019-MCAL-010</a>)
-11. If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction = 0.5` and `RF shourt = 0.1` and order book is
+- Get four margin levels for one or more parties (<a name="0019-MCAL-001" href="#0019-MCAL-001">0019-MCAL-001</a>)
+
+- Margin levels are correctly calculated against riskiest long and short positions (<a name="0019-MCAL-002" href="#0019-MCAL-002">0019-MCAL-002</a>)
+
+- Zero position and zero orders results in all zero margin levels (<a name="0019-MCAL-003" href="#0019-MCAL-003">0019-MCAL-003</a>)
+
+- If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-004" href="#0019-MCAL-004">0019-MCAL-004</a>)
+
+- If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to the *volume weighted price of the order book bids*.  (<a name="0019-MCAL-005" href="#0019-MCAL-005">0019-MCAL-005</a>)
+
+- If `riskiest short < 0` and there are no offers on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-006" href="#0019-MCAL-006">0019-MCAL-006</a>)
+
+- If `riskiest short < 0 && 0 < *sum of absolute volume of order book offers* < riskiest short`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
+
+- A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
+
+- For each market and each party which has either orders or positions on the market, the API provides the 4 margin levels.  (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
+
+- A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-010" href="#0019-MCAL-010">0019-MCAL-010</a>)
+
+- If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction = 0.5` and `RF shourt = 0.1` and order book is
 
 ```book
 buy 1 @ 15 000 
@@ -24,8 +34,9 @@ sell 10 @ 100 100
 
 then the maintenance margin for the party is `0.5 x 1 x 15 900 + 0.1 x 1 x 15 900 = 9 540`. (<a name="0019-MCAL-011" href="#0019-MCAL-011">0019-MCAL-011</a>)
 
-12. In the same situation as above, if `market.maxSlippageFraction = 100` (i.e. 10 000%) instead, then the margin for the party is `84 100 + 0.1 x 1 x 15900 = 85 690`. (<a name="0019-MCAL-012" href="#0019-MCAL-012">0019-MCAL-012</a>)
-13. If the `market.maxSlippageFraction` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-013" href="#0019-MCAL-013">0019-MCAL-013</a>)
+- In the same situation as above, if `market.maxSlippageFraction = 100` (i.e. 10 000%) instead, then the margin for the party is `84 100 + 0.1 x 1 x 15900 = 85 690`. (<a name="0019-MCAL-012" href="#0019-MCAL-012">0019-MCAL-012</a>)
+
+- If the `market.maxSlippageFraction` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-013" href="#0019-MCAL-013">0019-MCAL-013</a>)
 
 ## Summary
 
