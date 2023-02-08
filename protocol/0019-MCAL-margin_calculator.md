@@ -22,7 +22,7 @@
 
 - A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-010" href="#0019-MCAL-010">0019-MCAL-010</a>)
 
-- If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction = 0.5` and `RF shourt = 0.1` and order book is
+- If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction[1] = 0.25`, `market.maxSlippageFraction[2] = 0.25` and `RF shourt = 0.1` and order book is
 
 ```book
 buy 1 @ 15 000 
@@ -32,9 +32,9 @@ sell 1 @ 100 000
 sell 10 @ 100 100 
 ```
 
-then the maintenance margin for the party is `0.5 x 1 x 15 900 + 0.1 x 1 x 15 900 = 9 540`. (<a name="0019-MCAL-011" href="#0019-MCAL-011">0019-MCAL-011</a>)
+then the maintenance margin for the party is `15 900 x (0.25 x 1 + 0.25 x 1 x 1) + 0.1 x 1 x 15 900 = 9 540`. (<a name="0019-MCAL-011" href="#0019-MCAL-011">0019-MCAL-011</a>)
 
-- In the same situation as above, if `market.maxSlippageFraction = 100` (i.e. 10 000%) instead, then the margin for the party is `84 100 + 0.1 x 1 x 15900 = 85 690`. (<a name="0019-MCAL-012" href="#0019-MCAL-012">0019-MCAL-012</a>)
+- In the same situation as above, if `market.maxSlippageFraction[1] = 100`, `market.maxSlippageFraction[2] = 100` (i.e. 10 000% for both) instead, then the margin for the party is `84 100 + 0.1 x 1 x 15900 = 85 690`. (<a name="0019-MCAL-012" href="#0019-MCAL-012">0019-MCAL-012</a>)
 
 - If the `market.maxSlippageFraction` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-013" href="#0019-MCAL-013">0019-MCAL-013</a>)
 
@@ -63,7 +63,7 @@ The calculator takes as inputs:
 - `mark price`
 - `scaling levels` defined in the risk parameters for a market
 - `quantitative risk factors`
-- `market.maxSlippageFraction` which is an optional market creation parameter with a default of `0.1` i.e. `10%`.
+- `market.maxSlippageFactors` which is a 2 dimensional decimal optional market creation parameter with a default of `[0.1,0.1]` i.e. `[10%,10]` with the following validation: `0 <= market.maxSlippageFactors[1] <= 1 000 000` and `0 <= market.maxSlippageFactors[2] <= 1 000 000`.
 
 Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as integers (i.e. int64). In this case, **care must be taken** to ensure that the actual fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actually 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable because outside of margin calculations, and display to end users, the integer values can generally be used as-is.
 Note also that if PDP is negative e.g. PDP = -2 then an integer open volume of 12345  is actually 1234500.
@@ -107,7 +107,7 @@ with
 
 ```formula
 maintenance_margin_long_open_position 
-    = max(min(slippage_volume * slippage_per_unit, slippage_volume * mark_price * market.maxSlippageFraction), 0) 
+    = max(min(slippage_volume * slippage_per_unit, mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])), 0) 
     + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
 ```
 
@@ -153,7 +153,7 @@ with
 
 ```formula
 maintenance_margin_short_open_position 
-    = max(min(abs(slippage_volume) * slippage_per_unit, abs(slippage_volume) * mark_price * market.maxSlippageFraction),  0) 
+    = max(min(abs(slippage_volume) * slippage_per_unit, mark_price * (abs(slippage_volume) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0) 
     + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]
 ```
 
