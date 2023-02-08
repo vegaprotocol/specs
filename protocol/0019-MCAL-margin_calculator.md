@@ -20,7 +20,7 @@
 
 - A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-010" href="#0019-MCAL-010">0019-MCAL-010</a>)
 
-- If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction[1] = 0.25`, `market.maxSlippageFraction[2] = 0.25` and `RF shourt = 0.1` and order book is
+- If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction[1] = 0.25`, `market.maxSlippageFraction[2] = 0.25` and `RF short = 0.1` and order book is
 
 ```book
 buy 1 @ 15 000 
