@@ -23,6 +23,7 @@ sell 10 @ 100 100
 ```
 
 then the maintenance margin for the party is `0.5 x 1 x 15 900 + 0.1 x 1 x 15 900 = 9 540`.
+
 12. In the same situation as above, if `market.maxSlippageFraction = 100` (i.e. 10 000%) instead, then the margin for the party is `84 100 + 0.1 x 1 x 15900 = 85 690`.
 13. If the `market.maxSlippageFraction` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update.
 
