@@ -12,8 +12,6 @@
 
 - If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to the *volume weighted price of the order book bids*.  (<a name="0019-MCAL-005" href="#0019-MCAL-005">0019-MCAL-005</a>)
 
-- If `riskiest short < 0` and there are no offers on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-006" href="#0019-MCAL-006">0019-MCAL-006</a>)
-
 - If `riskiest short < 0 && 0 < *sum of absolute volume of order book offers* < riskiest short`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
 
 - A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
