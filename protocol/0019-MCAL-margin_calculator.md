@@ -12,6 +12,17 @@
 8. A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
 9. For each market and each party which has either orders or positions on the market, the API provides the 4 margin levels.  (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
 10. A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-010" href="#0019-MCAL-010">0019-MCAL-010</a>)
+11. If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction = 0.5` and `RF shourt = 0.1` and order book is
+```
+buy 1 @ 15 000 
+buy 10 @ 14 900 
+and
+sell 1 @ 100 000
+sell 10 @ 100 100 
+```
+then the maintenance margin for the party is `0.5 x 1 x 15 900 + 0.1 x 1 x 15 900 = 9 540`. 
+12. In the same situation as above, if `market.maxSlippageFraction = 100` (i.e. 10 000%) instead, then the margin for the party is `84 100 + 0.1 x 1 x 15900 = 85 690`.
+13. If the `market.maxSlippageFraction` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update.
 
 ## Summary
 
