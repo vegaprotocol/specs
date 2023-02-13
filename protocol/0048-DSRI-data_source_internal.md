@@ -32,7 +32,7 @@ This trigger will emit the contents of the specified data source (could be omitt
 
 Note that trading terminated in the futures definition uses a data source as a trigger intentionally to (a) demonstrate that this is how time based product events would work; and (b) because although the trigger MAY be time based, it could also be another data source such as a signed message oracle, if the trading terminates at an unknown time.
 
-Once the data source emits the invent it should become inactive.
+Once the data source emits the event it should become inactive.
 
 Pseudocode example:
 
