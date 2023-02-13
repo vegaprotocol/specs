@@ -276,7 +276,7 @@ A user's recurring transfer to a reward account does not occur if there are no p
 If the network parameter `transfer.minTransferFeeFactor` is modified, this modification is applied
 immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-062" href="#0057-TRAN-062">0057-TRAN-062</a>)
 
-If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified, this modification is applied immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-060" href="#0057-TRAN-060">0057-TRAN-060</a>)
+If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified, this modification is applied immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. In the case of a decrease, existing recurring transfers are not cancelled. (<a name="0057-TRAN-060" href="#0057-TRAN-060">0057-TRAN-060</a>)
 
 If the network parameter `transfer.minTransferQuantumMultiple` is modified, this modification is applied
 immediately on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-061" href="#0057-TRAN-061">0057-TRAN-061</a>)
