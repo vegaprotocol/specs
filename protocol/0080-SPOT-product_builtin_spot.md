@@ -32,23 +32,11 @@ When an order is fulfilled or cancelled any remaining funds in the `holding` acc
 
 ## 5. Liquidity Commitments
 
-When submitting a liquidity commitment, an LP will specify the amount of the `quote_asset` they are willing to stake (the `quote_commitment_amount`). To ensure the LP is providing an equal amount of liquidity on each side of the book, they will also need to have a sufficient amount of the `base_asset` (the `base_commitment_amount`) at the current `spot_price` for the commitment to be valid. Both the `quote_commitment_amount` and the `base_commitment_amount` will then be locked in two separate bond accounts.
+When a Liquidity Provider submits a liquidity commitment to a market, they are able to submit a separate commitment for each side of the market. There is no requirement to submit a commitment on both sides of the market or submit commitments of equal value.
 
-```pseudo
-Example:
+Liquidity commitments on the "BUY" side of the market must be specified in the `quote_asset` and commitments on the "SELL" side of the market must be specified in the `base_asset`. For a commitment to be valid, the LP must have a sufficient amount of the relevant asset. This will be locked in the `bond_account` for that market asset pair.
 
-quote_asset: USD
-base_asset: ETH
-
-spot_price = 1000 USD
-
-quote_commitment_amount = 10000 USD
-base_commitment_amount = quote_commitment_amount / spot_price = 10000 / 1000 = 10 ETH
-```
-
-Every `n` seconds (`n` being controlled by the network parameter `spot_obligation_calculation_window`), the required `base_commitment_amount`, to be locked in the bond account, will be recalculated using the current `spot_price`. Funds can then be released from the bond account to the general account or vice versa.
-
-To prevent LPs frequently providing, amending, and cancelling liquidity commitment amounts; all liquidity commitments will be "locked" for a certain period of time before the amount can be amended or the the entire commitment cancelled. This period of time will be controlled with a network parameter `spot_commitment_lock_length`.
+To prevent LPs frequently reducing or cancelling liquidity commitments; liquidity cancellations or amendments which reduce the committed amount will not be enacted until the end of the current trading window. Liquidity amendments which increase the commitment amount or amend the liquidity shape will be allowed and enacted instantly.
 
 ## 6. Liquidity Shortfalls
 
@@ -85,6 +73,14 @@ LP3 commits 1000 USD @ 0.03 fee
 
 liquidity_fee_factor = 0.02
 ```
+
+As LPs are able to make un-equal commitments on each side of the book, a separate liquidity fee should be calculated for buy and sell orders.
+
+- liquidity fee for **buy** orders should be calculated from the pool of liquidity committed on the **sell** side.
+- the liquidity fee for **sell** orders should be calculated from the pool of liquidity commitments on the **buy** side.
+
+Fees gathered from buy and sell orders should also be transferred to a separate liquidity pool. An LPs share of the buy fees or sell fees is calculating using their **buy** and **sell** commitments respectively.
+
 
 ## 7. Auctions
 
