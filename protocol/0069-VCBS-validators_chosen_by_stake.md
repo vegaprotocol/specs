@@ -561,16 +561,11 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 1. Take three Vega keys V1, V2 and V3. Submit for the same bundle in the same block 2 IssueSignature requests from V1 and one from V2. Verify that all three pass consensus, and that one request from V1 and one from V2 are executed. In a following block, submit one IssueSignature request from V1 and V2 each, and 2 from V3. Verify that the ones from V1 and V2 are rejected pre-consensus, both from V3 pass consensus, and one from V3 is executed.
 (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>)
 
-1. Issue a request from a Vega key with a wrong singature. Verify that it is rejected pre-consensus. Issue a correct request from that key in a following block and verify that it is correctly executed.
+1. Issue a request from a Vega key with a wrong signature. Verify that it is rejected pre-consensus. Issue a correct request from that key in a following block and verify that it is correctly executed.
 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)
 
 1. Issue 5 requests from a vega key in the same block, 4 of which with invalid signatures. Verify that only the one with the correct signature is passed to consensus, and is properly executed.
 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>)
-
-
-
-
-
 
 
 
