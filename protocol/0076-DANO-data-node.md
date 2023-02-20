@@ -192,7 +192,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 5. Limits should be enforced on a per-client basis. Source IP address is a sufficient discriminator (<a name="0076-DANO-031" href="#0076-DANO-031">0076-DANO-031</a>)
 6. Headers or metadata should be included in each API response indicating to the client what the limits are, and how close they currently are to exceeding them (<a name="0076-DANO-032" href="#0076-DANO-032">0076-DANO-032</a>)
 7. If limits are exceeded an API appropriate error response should be returned, containing similar headers or metadata (<a name="0076-DANO-033" href="#0076-DANO-033">0076-DANO-033</a>)
-8. If the client continues to make requests that generate error responses due to rate limiting, eventually the client should banned (<a name="0076-DANO-034" href="#0076-DANO-034">0076-DANO-034</a>)
+8. If the rate of denied (due to rate limiting) requests subsequently exceed the same maximum rate/burst parameters the client should be banned (<a name="0076-DANO-034" href="#0076-DANO-034">0076-DANO-034</a>)
 9. The ban denies all access to the API for a configurable length of time (<a name="0076-DANO-035" href="#0076-DANO-035">0076-DANO-035</a>)
 10. For that time, any requests will receive an API appropriate error response indicating that they are banned (<a name="0076-DANO-036" href="#0076-DANO-036">0076-DANO-036</a>)
 11. The rate limit for the GraphQL API should be configurable separately from the gRPC API and it's REST wrapper since a single GraphQL request can trigger many internal gRPC requests (<a name="0076-DANO-037" href="#0076-DANO-037">0076-DANO-037</a>)
