@@ -63,8 +63,6 @@ The API is expected to expose:
 - If a party is subject to loss socialisation (its MTM gains get scaled down) the loss amount (forgone profit) should get recorded in realised PnL(<a name="0007-POSN-013" href="#0007-POSN-013">0007-POSN-013</a>)
 - If a party is subject to loss socialisation, the profits that could not be paid out due to loss socialisation is logged as "loss socialisation amount" which is accessible from API (<a name="0007-POSN-014" href="#0007-POSN-014">0007-POSN-014</a>)
 
-realised/unrealised PnL will remain the same, but during MTM, if we have to perform loss socialisation, we now keep track of the profits that could not be paid out. Loss soc. amount is the total amount that the party missed out on
-
 ## Definitions / glossary
 
 | Term        | Definition           |
