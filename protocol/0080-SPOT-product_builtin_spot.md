@@ -22,42 +22,70 @@ When trading Spot products, parties can only use assets they own - there is no l
 1. `base_decimal_places`: sets the number of decimal places of the `base` asset when specifying order size (specified in place of `position_decimal_places`).
 1. `quote_decimal_places`: sets the number of decimal places of the `quote` asset when specifying order price (specified in place of `market_decimal_places`).
 
-## 4. Trading
+## 4. Liquidity Commitments
 
-When placing an order, the party should have a sufficient amount of the `quote` asset (for "buy" orders) or `base` asset (for "sell" orders) to cover the value of the order as well as any fees incurred from the order trading instantly.
+A Liquidity Provision submitted to a market must commit liquidity on both sides of the book in a single commitment. The LP can specify a separate commitment amount for the buy side and sell side of the market. These commitment amounts are specified in the `quote_asset` and `base_asset` respectively.
 
-If the order does not immediately trade (or only trades in part) then the party will have to transfer the amount of the `quote` asset (for "buy" orders) or the `base` asset (for "sell" orders) required to cover the value of the outstanding order as well as possible fees to a `holding` account.
+```psuedo
+Example `LiquidityProvisionSubmission` command to an ETH/DAI market:
 
-When an order is fulfilled or cancelled any remaining funds in the `holding` account (after the trade has been executed) can be returned to to the parties `general` account.
+submission = {
+    "liquidityProvisionSubmission": 
+    {
+        marketId: "abcdefghik1lkmopqrstuvwxyz",
+        fee: "0.01",
+        buyCommitmentAmount: 15000
+        buys: [
+            {
+                offset: "1"
+                proportion: "1"
+                reference: "PEGGED_REFERENCE_BEST_BID"
+            }
+        ]
+        sellCommitmentAmount: 10
+        sells: [
+            {
+                offset: "1"
+                proportion: "1"
+                reference: "PEGGED_REFERENCE_BEST_ASK"
+            }
+        ]
+        reference: "example_liquidity_provision_submission"
+    }
+}
+```
 
-## 5. Liquidity Commitments
+As the LP now has a different commitment amount on each side of the book, the following considerations must be made:
 
-When a Liquidity Provider submits a liquidity commitment to a market, they are able to submit a separate commitment for each side of the market. There is no requirement to submit a commitment on both sides of the market or submit commitments of equal value.
+- An LPs `virtual_stake` should be treated separately for each side of the book - call these the `buy_virtual_stake` and `sell_virtual_stake` where the current `virtual_stake` for fee splitting is the smaller of the two values.
+- An LPs `liquidity_score` should be treated separately for each side of the book - call these the `buy_liquidity_score` and the `sell_liquidity_score` where the current `liquidity_score` for fee splitting is the smaller of the two values.
 
-Liquidity commitments on the "BUY" side of the market must be specified in the `quote_asset` and commitments on the "SELL" side of the market must be specified in the `base_asset`. For a commitment to be valid, the LP must have a sufficient amount of the relevant asset. This will be locked in the `bond_account` for that market asset pair.
+The above conditions will incentivise LPs to provide an equal value of liquidity to both sides of the book at comparable levels of competitiveness.
 
 To prevent LPs frequently reducing or cancelling liquidity commitments; liquidity cancellations or amendments which reduce the committed amount will not be enacted until the end of the current trading window. Liquidity amendments which increase the commitment amount or amend the liquidity shape will be allowed and enacted instantly.
 
-## 6. Liquidity Shortfalls
+## 5. Liquidity Shortfalls
 
-If at any point in time, a liquidity provider has insufficient capital in their general accounts to cover a transfer arising from a filled liquidity order, the network will utilise the liquidity commitment, held in the relevant bond account to cover the shortfall. As there is no need for an insurance pool in a spot market, there is no need for a bond penalty.
+If at any point in time, a liquidity provider has insufficient capital in their general accounts to cover a transfer arising from a filled liquidity order, the network will utilise the liquidity commitment, held in the relevant bond account to cover the shortfall.
 
-An LPs `quote_commitment_amount` or `base_commitment_amount` must be recalculated whenever funds from a `base_bond_account` or `quote_bond_account` are used to cover a shortfall respectively.
+As there is no market insurance pool, funds from bond slashing in the result of shortfall will be transferred to the global insurance pool for that asset.
 
-## 7. Liquidity Fees
+## 6. Liquidity Fees
 
 As there is no margin or leverage when dealing with `Spot` products there is no need for a certain level of liquidity to ensure distressed parties can be closed out. There is therefore no need to calculate `target_stake`.
 
 In the absence of a `target_stake` value, the liquidity fee should be determined as the lowest possible fee that a fraction of the committed LPs propose (controlled by the network parameter `spot_liquidity_fee_consensus`).
+
+An LPs influence in the "vote" is weighted by their current equity_like_share and liquidity_score.
 
 ```psuedo
 Example 1:
 
 spot_liquidity_fee_consensus = 0.49
 
-LP1 commits 2000 USD @ 0.01 fee
-LP2 commits 1000 USD @ 0.02 fee
-LP3 commits 1000 USD @ 0.03 fee
+LP1, equity_like_share=0.50 and liquidity_score=0.50, commits @ fee = 0.01
+LP2, equity_like_share=0.25 and liquidity_score=0.25, commits @ fee = 0.02
+LP3, equity_like_share=0.25 and liquidity_score=0.25, commits @ fee = 0.03
 
 liquidity_fee_factor = 0.01
 ```
@@ -67,20 +95,22 @@ Example 2:
 
 spot_liquidity_fee_consensus = 0.51
 
-LP1 commits 2000 USD @ 0.01 fee
-LP2 commits 1000 USD @ 0.02 fee
-LP3 commits 1000 USD @ 0.03 fee
+LP1, equity_like_share=0.50 and liquidity_score=0.50, commits @ fee = 0.01
+LP2, equity_like_share=0.25 and liquidity_score=0.25, commits @ fee = 0.02
+LP3, equity_like_share=0.25 and liquidity_score=0.25, commits @ fee = 0.03
 
 liquidity_fee_factor = 0.02
 ```
 
-As LPs are able to make un-equal commitments on each side of the book, a separate liquidity fee should be calculated for buy and sell orders.
+To stabilise liquidity fees, liquidity fees are calculated using LPs `equity_like_share` and `liquidity_score` values at the end of the last window. The fee is then locked for the duration of the next window.
 
-- liquidity fee for **buy** orders should be calculated from the pool of liquidity committed on the **sell** side.
-- the liquidity fee for **sell** orders should be calculated from the pool of liquidity commitments on the **buy** side.
+## 7. Trading
 
-Fees gathered from buy and sell orders should also be transferred to a separate liquidity pool. An LPs share of the buy fees or sell fees is calculating using their **buy** and **sell** commitments respectively.
+When placing an order, the party should have a sufficient amount of the `quote` asset (for "buy" orders) or `base` asset (for "sell" orders) to cover the value of the order as well as any fees incurred from the order trading instantly.
 
+If the order does not immediately trade (or only trades in part) then the party will have to transfer the amount of the `quote` asset (for "buy" orders) or the `base` asset (for "sell" orders) required to cover the value of the outstanding order as well as possible fees to a `holding` account.
+
+When an order is fulfilled or cancelled any remaining funds in the `holding` account (after the trade has been executed) can be returned to to the parties `general` account.
 
 ## 7. Auctions
 
