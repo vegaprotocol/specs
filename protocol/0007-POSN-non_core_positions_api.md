@@ -15,7 +15,6 @@ The Position API provides access to net position per party per market. Specifica
 - Stores a status field for all the traders, the status field will be set to ORDERS_CLOSED if a trader was distressed based on the margin requirements for their worst possible long/short, but their margin balance was sufficient to maintain their open position (i.e. their active orders will be removed from the book, after which the party was no longer distressed) (<a name="0007-POSN-015" href="#0007-POSN-015">0007-POSN-015</a>)
 - The status field will be set to CLOSED_OUT if the party was closed out (<a name="0007-POSN-016" href="#0007-POSN-016">0007-POSN-016</a>)
 
-
 ## Summary
 
 ## Reference-level explanation
