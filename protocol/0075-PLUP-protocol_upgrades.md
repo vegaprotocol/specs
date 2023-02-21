@@ -156,6 +156,7 @@ For the purposes of protocol upgrade each validator that participates in consens
 - (<a name="0075-PLUP-023" href="#0075-PLUP-023">0075-PLUP-023</a>) Post a validator becoming a consensus-participating validator they should be immediately allowed to propose an upgrade and be included in the overall total count
 - (<a name="0075-PLUP-024" href="#0075-PLUP-024">0075-PLUP-024</a>) Ensure that required majority is not met when enough validators join between validator proposals and target block, i.e: In a network with 5 validators, required majority is two thirds, 4 vote to upgrade, 2 more validators join before upgrade block and do not vote. Upgrade does not take place.
 - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
+- (<a name="0075-PLUP-045" href="#0075-PLUP-045">0075-PLUP-045</a>) Arrange a network where n nodes are required for consensus, and at least n+1 nodes in the network. Schedule a protocol upgrade where n-1 nodes automatically start on the new version after upgrade, i.e: No consensus after upgrade. Start the (n+1)th node and consensus is achieved. For the nth node, clear vega and tm, and restart the node using state-sync at the upgrade block height. All nodes produce blocks.
 
 ## LNL Checkpoints
 
