@@ -33,7 +33,7 @@ Note that we only do this check once per epoch so at most one validator can be c
 
 The same way, if there are free slots for ersatz validators and nodes that have submitted the transaction to join and satisfy all joining conditions, they are added as ersatz validators in the next round.
 
-If a node that submitted the transaction to join and satisfies all other conditions and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is demoted to pending validator. The 'transaction to join' of a validator demoted this way remains active until the delegated stake drops below the required minimum
+If a node that submitted the transaction to join and satisfies all other conditions and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is demoted to pending (also refered to as candidate) validator. The 'transaction to join' of a validator demoted this way remains active until the delegated stake drops below the required minimum
 
 As both these checks are done between epochs, it is possible for a validator to be demoted first from a consensus forming (Tendermint) validator to an ersatz validator, and then from an ersatz validator to a pending validator.
 
@@ -107,9 +107,9 @@ In the case where a node is removed due reduced delegation, or due to not meetin
 
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions.
 
-## Ersatz validators
+## Ersatz/Standby validators
 
-In addition to the normal validators, there is an additional set of Ersatz validators as defined by the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will have
+In addition to the normal validators, there is an additional set of Ersatz validators (also refered to as Standby Validators) as defined by the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will have
 
 `n' := ceil(network.validators.multipleOfTendermintValidators x network.validators.tendermint.number)`
 
