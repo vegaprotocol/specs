@@ -6,10 +6,8 @@ When trading Spot products, parties can only use assets they own - there is no l
 
 ## 1. Product parameters
 
-1. `base_quote_pair (Explicit Value)`: human readable name/abbreviation of the base/quote pair.
 1. `base_asset (Asset)`: this is used to specify the asset to be purchased or sold on the market.
 1. `quote_asset (Asset)`: this is used to specify the asset which can be exchanged for the base asset.
-1. `trading_termination_trigger (Data Source)`: triggers the market to move to `trading terminated` status. This trigger may be a datetime trigger or an oracle. Note: a `Spot` market may also be terminated through governance.
 
 ## 2. Network parameters
 
@@ -19,8 +17,8 @@ When trading Spot products, parties can only use assets they own - there is no l
 
 ## 3. Market parameters
 
-1. `base_decimal_places`: sets the number of decimal places of the `base` asset when specifying order size (specified in place of `position_decimal_places`).
-1. `quote_decimal_places`: sets the number of decimal places of the `quote` asset when specifying order price (specified in place of `market_decimal_places`).
+1. `market_decimal_places` should be used to specify the number of decimal places of the `quote_asset` when specifying order price. Future specs could rename `market_decimal_places` to something more general, e.g. `price_decimal_places`.
+1. `position_decimal_places` should be used to specify the number of decimal places of the `base_asset` asset when specifying order size. Future iterations of specs could rename `position_decimal_places` to something more general, e.g. `position_decimal_places`.
 
 ## 4. Liquidity Commitments
 
