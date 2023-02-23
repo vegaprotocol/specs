@@ -487,6 +487,9 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that at the end of the Epoch, the Ersatz validators get 40% of the reward that the validators get (in total)
     - Set the `rewardFactor` to 0.32832979375934745648654893643856748734895749785943759843759437549837534987593483498
     - Verify that all validators round the value of reward for the Ersatz validators to the same value.
+1. Ensure multisig threshold is set to '999' (require all signatures). Demote one of the original validators and replace with a new validator. Update the multisig. Attempt a withdrawal. (<a name="0069-VCBS-069" href="#0069-VCBS-069">0069-VCBS-069</a>)
+1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>)
+1. Ensure multisig threshold is set to '666'. Request an asset withdrawal (but do not yet exercise this in the smart contract). Demote one of the original validators and replace with a new validator. Update the multisig. Attempt to enact the withdrawal on the same contract. (<a name="0069-VCBS-072" href="#0069-VCBS-072">0069-VCBS-072</a>)
 
 ### Announce Node
 
@@ -543,3 +546,4 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
     - Verify that rewards are paid out at the end of the epoch.
 1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` or a vega key that belongs to a validator can submit a request to the vega network to obtain the signature bundle that would update the ethereum multisig signers to be the ethereum keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted once per epoch per vega key. Once multisig uses weights it will also include the correct weights. (<a name="0069-VCBS-068" href="#0069-VCBS-068">0069-VCBS-068</a>)
+1. Replace a validator with a new node via promotion/demotion. Ensure that rewards are paid out at the end of the epoch if the multisig is updated to match the new validator. (<a name="0069-VCBS-071" href="#0069-VCBS-071">0069-VCBS-071</a>)
