@@ -20,7 +20,7 @@ When trading Spot products, parties can only use assets they own - there is no l
 
 ## 4. Market parameters
 
-1. `market_decimal_places` should be used to specify the number of decimal places of the `quote_asset` when specifying order price. 
+1. `market_decimal_places` should be used to specify the number of decimal places of the `quote_asset` when specifying order price.
 
     The Cash Settled Futures spec could rename `market_decimal_places` to something more general, e.g. `price_decimal_places`.
 
@@ -66,14 +66,14 @@ submission = {
 As the LP now has a different commitment amount on each side of the book, the following considerations must be made:
 
 - Physical Stake:
-    - An LPs `physical_stake` should be treated separately for each side of the book - call these the `buy_physical_stake` and the `sell_physical_stake`.
-    - The current `physical_stake` for market stake calculations is the smaller of the two values, where the `sell_physical_stake` is converted into the `quote_asset` at the current `mark_price`.
+  - An LPs `physical_stake` should be treated separately for each side of the book - call these the `buy_physical_stake` and the `sell_physical_stake`.
+  - The current `physical_stake` for market stake calculations is the smaller of the two values, where the `sell_physical_stake` is converted into the `quote_asset` at the current `mark_price`.
 - Virtual Stake:
-    - An LPs `virtual_stake` should be treated separately for each side of the book - call these the `buy_virtual_stake` and `sell_virtual_stake`. 
-    - The same growth factor - as specified in the [LIQF spec](0042-LIQF-setting_fees_and_rewarding_lps.md) - derived from the `total value for fee purposes` in the quote asset is used to update both buy/sell virtual stakes (still in their respective assets).  
-    - The current `virtual_stake` for fee splitting is the smaller of the two values where the `sell_virtual_stake` is converted to `quote_asset` at the current `mark_price`.  
+  - An LPs `virtual_stake` should be treated separately for each side of the book - call these the `buy_virtual_stake` and `sell_virtual_stake`.
+  - The same growth factor - as specified in the [LIQF spec](0042-LIQF-setting_fees_and_rewarding_lps.md) - derived from the `total value for fee purposes` in the quote asset is used to update both buy/sell virtual stakes (still in their respective assets).
+  - The current `virtual_stake` for fee splitting is the smaller of the two values where the `sell_virtual_stake` is converted to `quote_asset` at the current `mark_price`.
 
-From the above conditions, an LP is incentivised to provide a roughly equal value of liquidity on each side of the book at comparable levels of competitiveness in order to maximise their share of the liquidity fees. 
+From the above conditions, an LP is incentivised to provide a roughly equal value of liquidity on each side of the book at comparable levels of competitiveness in order to maximise their share of the liquidity fees.
 
 ### Amendments and Cancellations
 
@@ -103,8 +103,9 @@ Market Liquidity:
 - reducing the `buy_commitment_amount` only reduces the `buy_virtual_stake`
 - reducing the `sell_commitment_amount` only reduces the `sell_virtual_stake`
 
-A single LP will never be able to reduce their commitment to `0`. They can either keep reducing to a sufficiently small amount they're willing to ignore, or they can submit a governance vote to cancel the market, see the [governance spec](). 
-For market cancellation proposal a sole LP in the market holds all the voting power (unless governance token holders override them). 
+A single LP will never be able to reduce their commitment to `0`. They can either keep reducing to a sufficiently small amount they're willing to ignore, or they can submit a governance vote to cancel the market, see the [governance spec](./0028-GOVE-governance.md).
+
+For market cancellation proposal a sole LP in the market holds all the voting power (unless governance token holders override them).
 
 ### Liquidity Shortfalls
 
@@ -113,6 +114,7 @@ If at any point in time, a liquidity provider has insufficient capital in their 
 As there is no market insurance pool, funds from bond slashing in the result of shortfall will be transferred to the global insurance pool for that asset.
 
 ## 6. Spot Liquidity Mechanisms
+
 ### Market Total Stake
 
 The `total_stake` for a `Spot` market is calculated simply as the sum of each LPs `physical_stake` and should be expressed in the `quote_asset` of the market.
@@ -120,6 +122,7 @@ The `total_stake` for a `Spot` market is calculated simply as the sum of each LP
 ### Market Target Stake
 
 See spec [0041-TSTK](./0041-TSTK-target_stake.md).
+
 ### Market Liquidity Fees
 
 The market liquidity fee is calculated using the same mechanism defined in [0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
@@ -127,12 +130,11 @@ The market liquidity fee is calculated using the same mechanism defined in [0042
 The liquidity fee is re-calculated at the start of a fee distribution epoch and is fixed for that epoch.
 Note: 1. this may later be applied universally to all products. 2. this "fee distribution epoch" is unrelated to blockchain staking and delegation epochs.
 
-
 ## 7. Trading
 
-Both buy and sell orders on a `Spot` market define a size (amount of the `base_asset`) to buy or sell at a given price (amount of the `quote_asset`). An orders "value for fee purposes" is always expressed in the `quote_asset`. 
+Both buy and sell orders on a `Spot` market define a size (amount of the `base_asset`) to buy or sell at a given price (amount of the `quote_asset`). An orders "value for fee purposes" is always expressed in the `quote_asset`.
 
-### Sell Orders:
+### Sell Orders
 
 For a "sell" order to be considered valid, the party must have a sufficient amount of the `base_asset` in the relevant `general_account` to fulfil the size of the order. There is no need to consider trading fees when determining if a "sell" order is valid.
 
@@ -140,7 +142,7 @@ If a "sell" order does not trade immediately (or only trades in part), an amount
 
 If a "sell" order incurs fees through trading (i.e. is the aggressor or trades in an auction), the necessary amount of the `quote_asset` to cover the fees incurred will be deducted from the amount of the `quote_asset` due to the party as a result of the sell of the `base_asset`.
 
-### Buy Orders:
+### Buy Orders
 
 For a "buy" order to be considered valid, the party will need a sufficient amount of the `quote_asset` in the `general_account` to cover both the value of the trade as well as any possible fees incurred.
 

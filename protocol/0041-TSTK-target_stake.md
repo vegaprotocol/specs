@@ -1,6 +1,6 @@
 # Target stake
 
-# Target stake for derivatives markets (cash settled futures / perps...)
+## Target stake for derivatives markets (cash settled futures / perpetuals...)
 
 This spec outlines how to measure how much stake we want committed to a market relative to what is happening on the market (currently open interest).
 The target stake is a calculated quantity, utilised by various mechanisms in the protocol:
@@ -9,7 +9,7 @@ The target stake is a calculated quantity, utilised by various mechanisms in the
 The parameter c_1 is a market parameter (with network parameter `market.liquidity.targetstake.triggering.ratio` providing a default value) defined in the [liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md) spec.
 - It is used to set the fee factor for the LPs: see [Setting fees and rewarding LPs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-## Definitions / Parameters used
+### Definitions / Parameters used
 
 - **Open interest**: the volume of all open positions in a given market.
 - `market.stake.target.timeWindow` is a market parameter defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds.
@@ -18,7 +18,7 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 - `mark_price`, see [mark price](./0009-MRKP-mark_price.md) spec.
 - `indicative_uncrossing_price`, see [auction](./0026-AUCT-auctions.md) spec.
 
-### Current definitions
+#### Current definitions
 
 First, `max_oi` is defined  maximum (open interest) measured over a time window,
 `t_window = [max(t-market.stake.target.timeWindow,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction. Note that `max_oi` should be calculated recorded per transaction, so if there are multiple OI changes withing the same block (which implies the same timestamp), we should pick the max one, NOT the last one that was processed.
@@ -54,13 +54,13 @@ Note that the units of `target_stake` are the settlement currency of the market 
 
 Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi = 120` then `target_stake = 4.8`.
 
-### APIs
+#### APIs
 
 - target stake
   - return current (real-time) target stake when market is in default trading mode.
   - return theoretical (based on indicative uncrossing volume) target stake when market is in auction mode.
 
-### Acceptance Criteria
+#### Acceptance Criteria
 
 - examples showing a growing list (before we hit time window) (<a name="0041-TSTK-001" href="#0041-TSTK-001">0041-TSTK-001</a>)
 - examples showing a list that drops off values (<a name="0041-TSTK-002" href="#0041-TSTK-002">0041-TSTK-002</a>)
@@ -68,8 +68,7 @@ Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi
 - Change of `market.stake.target.scalingFactor` will immediately change the scaling between liquidity demand estimate based on open interest and target stake, hence immediately change the target stake. (<a name="0041-TSTK-004" href="#0041-TSTK-004">0041-TSTK-004</a>)
 - Change of `market.stake.target.timeWindow` will immediately change the length of time window over which open interest is measured, hence will immediately change the value of `max_oi`. (<a name="0041-TSTK-005" href="#0041-TSTK-005">0041-TSTK-005</a>)
 
-
-# Target stake for  spot markets 
+## Target stake for spot markets
 
 See [spot market spec](0080-SPOT-product_builtin_spot.md).3600s
 
@@ -96,6 +95,6 @@ Then: the target stake value is
 
 The above design ensures the `target_stake` of a market is unable to fluctuate dramatically over the window. Controlling the `target_stake` indirectly controls the `total_stake` as the amount an LP is able to reduce their commitment is restricted by the `maximum_reduction_amount`.
 
-### Acceptance criteria 
+### Acceptance criteria
 
 TBD
