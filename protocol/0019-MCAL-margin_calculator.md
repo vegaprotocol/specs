@@ -99,35 +99,17 @@ If `riskiest long == 0` then `maintenance_margin_long = 0`.
 
 In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-RSKM-quant_risk_models.ipynb).
 
-`maintenance_margin_long = maintenance_margin_long_open_position + maintenance_margin_long_open_orders`
-
 with
 
 ```formula
-maintenance_margin_long_open_position 
-    = max(min(slippage_volume * slippage_per_unit, mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])), 0) 
-    + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
+maintenance_margin_long 
+    = max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0) 
+    +  max(open_volume, 0) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
 ```
 
-and
-
-`maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
-
 where
 
-`slippage_volume =  max( open_volume, 0 )`,
-
-and
-
-if `open_volume > 0` then
-
-`slippage_per_unit = Product.value(market_observable) - Product.value(exit_price)`,
-
-else `slippage_per_unit = 0`.
-
-where
-
-`market_observable` = `settlement_mark_price` if in continuous trading and `indicative_uncrossing_price` if in an auction
+`market_observable` = `settlement_mark_price` if in continuous trading, refer to [auction subsection](#margin-calculation-for-auctions) for details of the auction behaviour.
 
 `settlement_mark_price` refers to the mark price most recently utilised in [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.
 
@@ -145,23 +127,15 @@ If `riskiest short == 0` then `maintenance_margin_short = 0`.
 
 Else
 
-`maintenance_margin_short = maintenance_margin_short_open_position + maintenance_margin_short_open_orders`
-
-with
 
 ```formula
-maintenance_margin_short_open_position 
-    = max(min(abs(slippage_volume) * slippage_per_unit, mark_price * (abs(slippage_volume) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0) 
-    + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]
+maintenance_margin_short 
+    = max(min(abs(riskiest short) * slippage_per_unit, mark_price * (abs(riskiest short) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0) 
+    + abs(min( open_volume, 0 )) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ] + abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
 ```
 
-and
-
-`maintenance_margin_short_open_orders = abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`,
 
 where meanings of terms in Step 1 apply except for:
-
-`slippage_volume = min( open_volume, 0 )`,
 
 `slippage_per_unit = -1 * (Product.value(market_observable) - Product.value(exit_price) )`
 
@@ -173,16 +147,15 @@ where meanings of terms in Step 1 apply except for:
 
 We are assuming that:
 
-- `indicative_uncrossing_price` is *not* the mark price, so no mark-to-market transfers happen (update mark-to-market spec)
 - mark price never changes during an auction, so it's the last mark price from before auction,
 - during an auction we never release money from the margin account, however we top-it-up as required,
 - no closeouts during auctions
 
 Use the same calculation as above with the following re-defined:
 
-- in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.
-- For the open position part of the margin use the mark price.
-- For the orders part of the margin: if mark price is not available (as is the case during the opening auction) use `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders.
+- For the orders part of the margin: use `market_observable` =  volume weighted average price of the party's long / short orders.
+
+Note that because the order book is empty during auctions we will always end up with the slippage value implied by the the slippage cap.
 
 ## Scaling other margin levels
 
