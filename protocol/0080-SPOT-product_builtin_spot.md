@@ -16,8 +16,13 @@ When trading Spot products, parties can only use assets they own - there is no l
 
 ## 3. Market parameters
 
-1. `market_decimal_places` should be used to specify the number of decimal places of the `quote_asset` when specifying order price. Future specs could rename `market_decimal_places` to something more general, e.g. `price_decimal_places`.
-1. `position_decimal_places` should be used to specify the number of decimal places of the `base_asset` asset when specifying order size. Future iterations of specs could rename `position_decimal_places` to something more general, e.g. `position_decimal_places`.
+1. `market_decimal_places` should be used to specify the number of decimal places of the `quote_asset` when specifying order price. 
+
+The Cash Settled Futures spec could rename `market_decimal_places` to something more general, e.g. `price_decimal_places`.
+
+1. `position_decimal_places` should be used to specify the number of decimal places of the `base_asset` asset when specifying order size.
+
+The Cash Settled Futures spec could rename `position_decimal_places` to something more general, e.g. `size_decimal_places`.
 
 ## 4. Liquidity Commitments
 
@@ -135,9 +140,11 @@ The market liquidity fee is calculated using the same mechanism defined in [0042
 The liquidity fee is re-calculated at the start of a fee distribution epoch and is fixed for that epoch (Note: this may later be applied universally to all products.)
 
 
-## 7. Trading
+## 6. Trading
 
-When placing an order, the party should have a sufficient amount of the `quote` asset (for "buy" orders) or `base` asset (for "sell" orders) to cover the value of the order as well as any fees incurred from the order trading instantly. For sell orders there is no need for the party to have any `quote` asset as the fees can be subtracted from the general account for their base asset `immediately` after trading.
+Both buy and sell orders on a `Spot` market define an amount of the `base_asset` to buy or sell at a given price of the `quote_asset`. When placing an order, the party should have a sufficient amount of the `quote` asset (for "buy" orders) or `base` asset (for "sell" orders) to cover the value of the order.
+
+(Note: For buy orders the party will need a sufficient amount of the quote asset to cover any fees incurred if the order was to trade instantly. For sell orders, there is no need for the party to have any `quote` asset as the fees can be subtracted from the general account for their base asset immediately after trading).
 
 If the order does not immediately trade (or only trades in part) then the party will have to transfer the amount of the `quote` asset (for "buy" orders) or the `base` asset (for "sell" orders) required to cover the value of the outstanding order as well as possible fees to a `holding` account.
 
