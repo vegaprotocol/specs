@@ -127,13 +127,11 @@ If `riskiest short == 0` then `maintenance_margin_short = 0`.
 
 Else
 
-
 ```formula
 maintenance_margin_short 
     = max(min(abs(riskiest short) * slippage_per_unit, mark_price * (abs(riskiest short) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0) 
     + abs(min( open_volume, 0 )) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ] + abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
 ```
-
 
 where meanings of terms in Step 1 apply except for:
 
@@ -257,7 +255,6 @@ Given the following trader positions:
 riskiest long: 2
 
 riskiest short: -1
-
 
 #### *case-2*
 
