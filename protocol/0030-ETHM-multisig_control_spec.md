@@ -98,11 +98,17 @@ contract MultisigControl {
 }
 ```  
 
+# Vega-side Integration
+The change in structure will require a change in how validators are added and removed on the Vega-side. 
+First, now weights of validators are accounted for on the smart contract, so during the update signer process the weights will need to be gathered and added to the function call. This new update method allows for multiple signers to be swapped in or out, and weights updated, with a single call. 
+Second, before validators sign the command, they will need to verify the entire signer set and weights are what they expect to be, as well as verify that the signer set nonce (see section above) fits the expected format of `0x[8 byte current epoch number][4 bytes 0][8 byte timestamp]`
+Worth noting is the threshold can be adjusted at the same time as a signer set update.
+
 # V1 to V2 Migration
 This spec covers version 2 of Multisig Control.
 Due to function signature changes, deploying v2 will require a full migration and update of the Multisig Control, ERC20 Bridge, and ERC20 asset pool. 
 
-This will neccesitate a temporary migration smart contract that takes the place of the Asset Pool's ERC20 bridge and thus gains control of the "withdrawal" function that it will use to deposit (or transfer) to the v2 bridge (or asset pool)
+This will necessitate a temporary migration smart contract that takes the place of the Asset Pool's ERC20 bridge and thus gains control of the "withdrawal" function that it will use to deposit (or transfer) to the v2 bridge (or asset pool)
 
 Migration steps:
 1. Deploy the v2 multisig, bridge, and pool contracts
