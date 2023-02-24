@@ -8,7 +8,7 @@
 
 - Zero position and zero orders results in all zero margin levels (<a name="0019-MCAL-003" href="#0019-MCAL-003">0019-MCAL-003</a>)
 
-- If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-004" href="#0019-MCAL-004">0019-MCAL-004</a>)
+- If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to initity and hence the slippage cap is used as the slippage component of the margin calculation. (<a name="0019-MCAL-014" href="#0019-MCAL-014">0019-MCAL-014</a>)
 
 - If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to the *volume weighted price of the order book bids*.  (<a name="0019-MCAL-005" href="#0019-MCAL-005">0019-MCAL-005</a>)
 
@@ -194,10 +194,13 @@ bids: [
     {volume: 7, price: $108}
 ]
 
+market.maxSlippageFraction[1] = 0.25
+market.maxSlippageFraction[2] = 0.001
+
 risk_factor_short = 0.11
 risk_factor_long = 0.1
 
-last_trade = $144
+mark_price = $144
 
 search_level_scaling_factor = 1.1
 initial_margin_scaling_factor = 1.2
@@ -207,21 +210,20 @@ Trader1_futures_position = {open_volume: 10, buys: 4,  sells: 8}
 
 getMargins(Trader1_position)
 
-riskiest long  = max( open_volume + buy_orders, 0 ) = max( 10 + 4, 0 ) = 14
-riskiest short = min( open_volume + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
+riskiest_long  = max( open_volume + buy_orders, 0 ) = max( 10 + 4, 0 ) = 14
+riskiest_short = min( open_volume + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
 # Step 1
 
 ## exit price considers what selling the open position (10) on the order book would achieve.
 
-slippage_per_unit =  Product.value(previous_mark_price) - Product.value(exit_price) = Product.value($144) - Product.value((1*120 + 4*110 + 5*108)/10) = 144 - 110  = 34
+slippage_per_unit =  Product.value(market_observable) - Product.value(exit_price) = Product.value($144) - Product.value((1*120 + 4*110 + 5*108)/10) = 144 - 110  = 34
 
-slippage_volume =  max( open_volume, 0 ) = max ( 10, 0 ) = 10
+maintenance_margin_long =max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0) 
+ + max(open_volume, 0 ) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
 
 
-maintenance_margin_long = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
-
-= max(10 * 34, 0) +  10 * 0.1 * 144 + 4 * 0.1 * 144 =  541.6
+=  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 677.6
 
 # Step 2
 
@@ -229,13 +231,13 @@ Since riskiest short == 0 then maintenance_margin_short = 0
 
 # Step 3
 
-maintenance_margin = max ( 541.6, 0) = 541.6
+maintenance_margin = max ( 677.6, 0) = 677.6
 
 # Step 4
 
-collateral_release_level = 541.6 * collateral_release_scaling_factor = 541.6 * 1.1
-initial_margin = 541.6 * initial_margin_scaling_factor = 541.6 * 1.2
-search_level = 541.6 * search_level_scaling_factor = 541.6 * 1.3
+collateral_release_level = 677.6 * collateral_release_scaling_factor = 677.6 * 1.1
+initial_margin = 677.6 * initial_margin_scaling_factor = 677.6 * 1.2
+search_level = 677.6 * search_level_scaling_factor = 677.6 * 1.3
 
 
 ```
@@ -256,9 +258,6 @@ riskiest long: 2
 
 riskiest short: -1
 
-slippage volume long: 1
-
-slippage volume short: 0
 
 #### *case-2*
 
@@ -266,19 +265,11 @@ riskiest long: 1
 
 riskiest short: -1
 
-slippage volume long: 0
-
-slippage volume short: -1
-
 #### *case-3*
 
 riskiest long: 1
 
 riskiest short: -1
-
-slippage volume long: 1
-
-slippage volume short: 0
 
 ## SCENARIOS
 
