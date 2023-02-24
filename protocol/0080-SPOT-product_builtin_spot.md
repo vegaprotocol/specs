@@ -9,16 +9,16 @@ When trading Spot products, parties can only use assets they own - there is no l
 1. `base_asset (Asset)`: this is used to specify the asset to be purchased or sold on the market.
 1. `quote_asset (Asset)`: this is used to specify the asset which can be exchanged for the base asset.
 
-## 1. Network Parameter
+## 2. Network Parameter
 
 1. `spot_trading_enabled`: parameter defines whether markets using Spot products are enabled on the network.
 
-## 2. Liquidity Monitoring parameters
+## 3. Liquidity Monitoring parameters
 
 1. `time_window`: length of rolling window (in seconds) over which the maximum `total_stake` is measured.
 1. `target_stake_factor`: fraction of `total_stake` to be selected as the `target_stake`.
 
-## 3. Market parameters
+## 4. Market parameters
 
 1. `market_decimal_places` should be used to specify the number of decimal places of the `quote_asset` when specifying order price. 
 
@@ -28,7 +28,7 @@ When trading Spot products, parties can only use assets they own - there is no l
 
     The Cash Settled Futures spec could rename `position_decimal_places` to something more general, e.g. `size_decimal_places`.
 
-## 4. Liquidity Commitments
+## 5. Liquidity Commitments
 
 ### Submissions
 
@@ -65,11 +65,13 @@ submission = {
 
 As the LP now has a different commitment amount on each side of the book, the following considerations must be made:
 
-- An LPs `physical_stake` should be treated separately for each side of the book - call these the `buy_physical_stake` and the `sell_physical_stake` where the later is expressed in the `quote_asset` converted at the current `mark_price`. The current `physical_stake` is the smaller of the two values.
-- An LPs `virtual_stake` should be treated separately for each side of the book - call these the `buy_virtual_stake` and `sell_virtual_stake`. 
-- The same growth factor - as specified in the [LIQF spec](0042-LIQF-setting_fees_and_rewarding_lps.md) - derived from the `total value for fee purposes` in the quote asset is used to update both buy/sell virtual stakes (still in their respective assets).  
-- The current `virtual_stake` for fee splitting is the smaller of the two values where the `sell_virtual_stake` is converted to `quote_asset` at the current `mark_price`.  
-- An LPs `liquidity_score` as in [the liquidity score section of the LIQF spec](0042-LIQF-setting_fees_and_rewarding_lps.md).
+- Physical Stake:
+    - An LPs `physical_stake` should be treated separately for each side of the book - call these the `buy_physical_stake` and the `sell_physical_stake`.
+    - The current `physical_stake` for market stake calculations is the smaller of the two values, where the `sell_physical_stake` is converted into the `quote_asset` at the current `mark_price`.
+- Virtual Stake:
+    - An LPs `virtual_stake` should be treated separately for each side of the book - call these the `buy_virtual_stake` and `sell_virtual_stake`. 
+    - The same growth factor - as specified in the [LIQF spec](0042-LIQF-setting_fees_and_rewarding_lps.md) - derived from the `total value for fee purposes` in the quote asset is used to update both buy/sell virtual stakes (still in their respective assets).  
+    - The current `virtual_stake` for fee splitting is the smaller of the two values where the `sell_virtual_stake` is converted to `quote_asset` at the current `mark_price`.  
 
 From the above conditions, an LP is incentivised to provide a roughly equal value of liquidity on each side of the book at comparable levels of competitiveness in order to maximise their share of the liquidity fees. 
 
@@ -110,7 +112,7 @@ If at any point in time, a liquidity provider has insufficient capital in their 
 
 As there is no market insurance pool, funds from bond slashing in the result of shortfall will be transferred to the global insurance pool for that asset.
 
-## 5. Spot Liquidity Mechanisms
+## 6. Spot Liquidity Mechanisms
 ### Market Total Stake
 
 The `total_stake` for a `Spot` market is calculated simply as the sum of each LPs `physical_stake` and should be expressed in the `quote_asset` of the market.
@@ -126,25 +128,33 @@ The liquidity fee is re-calculated at the start of a fee distribution epoch and 
 Note: 1. this may later be applied universally to all products. 2. this "fee distribution epoch" is unrelated to blockchain staking and delegation epochs.
 
 
-## 6. Trading
+## 7. Trading
 
-Both buy and sell orders on a `Spot` market define an amount of the `base_asset` to buy or sell at a given price of the `quote_asset`. 
-When placing an order, the party should have a sufficient amount of the `quote` asset (for "buy" orders) or `base` asset (for "sell" orders) in the general accounts for the respective assets to cover the value of the order.
+Both buy and sell orders on a `Spot` market define a size (amount of the `base_asset`) to buy or sell at a given price (amount of the `quote_asset`). An orders "value for fee purposes" is always expressed in the `quote_asset`. 
 
-For buy orders the party will also need a sufficient amount of the `quote_asset` to cover any fees incurred as if the order was to trade instantly. 
-For sell orders, there is no need for the party to have any `quote_asset` as the fees will be subtracted from the resulting `quote_asset` amount due to the party as a a result from the trade. 
+### Sell Orders:
 
-If the order does not immediately trade (or only trades in part) then the party will have to transfer the amount of the `quote` asset (for "buy" orders) or the `base` asset (for "sell" orders) required to cover the value of the outstanding order as well as possible fees to a `holding` accounts for the market. 
+For a "sell" order to be considered valid, the party must have a sufficient amount of the `base_asset` in the relevant `general_account` to fulfil the size of the order. There is no need to consider trading fees when determining if a "sell" order is valid.
 
-When an order is fulfilled or cancelled any remaining funds in the `holding` account (after the trade has been executed) can be returned to to the parties `general` account.
+If a "sell" order does not trade immediately (or only trades in part), an amount of the `base_asset` to cover the remaining size of the order should be transferred to a `holding_account` for the `base_asset`. If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.
 
-## 7. Auctions
+If a "sell" order incurs fees through trading (i.e. is the aggressor or trades in an auction), the necessary amount of the `quote_asset` to cover the fees incurred will be deducted from the amount of the `quote_asset` due to the party as a result of the sell of the `base_asset`.
+
+### Buy Orders:
+
+For a "buy" order to be considered valid, the party will need a sufficient amount of the `quote_asset` in the `general_account` to cover both the value of the trade as well as any possible fees incurred.
+
+If a "buy" order does not trade immediately (or only trades in part), the necessary amount of the `quote_asset` to cover the remaining size of the order, as well as any possible fees, should be transferred to a `holding_account` for the `quote_asset`. If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.
+
+As limit orders will only incur fees if they trade in an auction - for GFN orders, the possible fees are `"0"`, and for all other existing TIF options, the possible fees are calculated as if the order was to trade in full during an auction at the price of the order (this gives the maximum possible fee).
+
+## 8. Auctions
 
 As there is no margin or leverage when dealing with `Spot` products, there is no need for the supplied liquidity to exceed a threshold to exit an auction. There is therefore no need for liquidity auctions.
 
 Price-monitoring auctions are still required and should be implemented following the [price-monitoring](./0032-PRIM-price_monitoring.md) spec.
 
-## 8. Acceptance Criteria
+## 9. Acceptance Criteria
 
 1. Create a `Spot` for any `quote_asset` / `base_asset` pair that are configured in Vega (<a name="0080-COSMICELEVATOR-001" href="#0080-COSMICELEVATOR-001">0080-COSMICELEVATOR-001</a>)
 1. It is not possible to change the `quote_asset` via governance (<a name="0080-COSMICELEVATOR-002" href="#0080-COSMICELEVATOR-002">0080-COSMICELEVATOR-002</a>)
