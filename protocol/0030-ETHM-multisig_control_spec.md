@@ -104,6 +104,21 @@ First, now weights of validators are accounted for on the smart contract, so dur
 Second, before validators sign the command, they will need to verify the entire signer set and weights are what they expect to be, as well as verify that the signer set nonce (see section above) fits the expected format of `0x[8 byte current epoch number][4 bytes 0][8 byte timestamp]`
 Worth noting is the threshold can be adjusted at the same time as a signer set update.
 
+# Signed Transaction Invalidator
+Any outstanding transactions that have been signed by validators, but not executed, will be invalidated once the signer set changes. This will happen automatically in the smart contract once the signer set change is executed.
+
+## Assumptions
+In order for outstanding Multisig orders to be invalidated the following MUST be true:
+* Vega sees multisig events from ETH
+* Vega sees them in order, or at least knows the order
+* Vega does not reissue a multisig order until it has seen the Sigher Set Updated event AND it has processed all previous events from that and precious blocks
+* Enough ETH blocks have passed to be assured of finality
+
+## Potential Incentivization  
+A potential way to ensure signer sets are regularly updated is to give validators a single Vega epoch to run the update (presumably those who would gail the most share). If they fail to update within the time limit, the block rewards are put up for rewards to whoever runs the transaction. This can be used as incentive against validator laziness. Whoever finally runs the transaction would get awarded the funds on their Vega account, minimizing ETH gas fees.
+
+If those conditions are met, Vega knows if a multisig order has been executed or not, and can respond correctly.
+
 # V1 to V2 Migration
 This spec covers version 2 of Multisig Control.
 Due to function signature changes, deploying v2 will require a full migration and update of the Multisig Control, ERC20 Bridge, and ERC20 asset pool. 
