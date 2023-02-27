@@ -2,16 +2,39 @@
 
 ## Acceptance Criteria
 
-1. Get four margin levels for one or more parties (<a name="0019-MCAL-001" href="#0019-MCAL-001">0019-MCAL-001</a>)
-2. Margin levels are correctly calculated against riskiest long and short positions (<a name="0019-MCAL-002" href="#0019-MCAL-002">0019-MCAL-002</a>)
-3. Zero position and zero orders results in all zero margin levels (<a name="0019-MCAL-003" href="#0019-MCAL-003">0019-MCAL-003</a>)
-4. If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-004" href="#0019-MCAL-004">0019-MCAL-004</a>)
-5. If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to the *volume weighted price of the order book bids*.  (<a name="0019-MCAL-005" href="#0019-MCAL-005">0019-MCAL-005</a>)
-6. If `riskiest short < 0` and there are no offers on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-006" href="#0019-MCAL-006">0019-MCAL-006</a>)
-7. If `riskiest short < 0 && 0 < *sum of absolute volume of order book offers* < riskiest short`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
-8. A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
-9. For each market and each party which has either orders or positions on the market, the API provides the 4 margin levels.  (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
-10. A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-010" href="#0019-MCAL-010">0019-MCAL-010</a>)
+- Get four margin levels for one or more parties (<a name="0019-MCAL-001" href="#0019-MCAL-001">0019-MCAL-001</a>)
+
+- Margin levels are correctly calculated against riskiest long and short positions (<a name="0019-MCAL-002" href="#0019-MCAL-002">0019-MCAL-002</a>)
+
+- Zero position and zero orders results in all zero margin levels (<a name="0019-MCAL-003" href="#0019-MCAL-003">0019-MCAL-003</a>)
+
+- If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-004" href="#0019-MCAL-004">0019-MCAL-004</a>)
+
+- If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to the *volume weighted price of the order book bids*.  (<a name="0019-MCAL-005" href="#0019-MCAL-005">0019-MCAL-005</a>)
+
+- If `riskiest short < 0 && 0 < *sum of absolute volume of order book offers* < riskiest short`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
+
+- A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
+
+- For each market and each party which has either orders or positions on the market, the API provides the 4 margin levels.  (<a name="0019-MCAL-009" href="#0019-MCAL-009">0019-MCAL-009</a>)
+
+- A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-010" href="#0019-MCAL-010">0019-MCAL-010</a>)
+
+- If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction[1] = 0.25`, `market.maxSlippageFraction[2] = 0.25` and `RF short = 0.1` and order book is
+
+    ```book
+    buy 1 @ 15 000 
+    buy 10 @ 14 900 
+    and
+    sell 1 @ 100 000
+    sell 10 @ 100 100 
+    ```
+
+    then the maintenance margin for the party is `15 900 x (0.25 x 1 + 0.25 x 1 x 1) + 0.1 x 1 x 15 900 = 9 540`. (<a name="0019-MCAL-011" href="#0019-MCAL-011">0019-MCAL-011</a>)
+
+- In the same situation as above, if `market.maxSlippageFraction[1] = 100`, `market.maxSlippageFraction[2] = 100` (i.e. 10 000% for both) instead, then the margin for the party is `84 100 + 0.1 x 1 x 15900 = 85 690`. (<a name="0019-MCAL-012" href="#0019-MCAL-012">0019-MCAL-012</a>)
+
+- If the `market.maxSlippageFraction` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-013" href="#0019-MCAL-013">0019-MCAL-013</a>)
 
 ## Summary
 
@@ -38,6 +61,7 @@ The calculator takes as inputs:
 - `mark price`
 - `scaling levels` defined in the risk parameters for a market
 - `quantitative risk factors`
+- `market.maxSlippageFactors` which is a 2 dimensional decimal optional market creation parameter with a default of `[0.1,0.1]` i.e. `[10%,10%]` with the following validation: `0 <= market.maxSlippageFactors[1] <= 1 000 000` and `0 <= market.maxSlippageFactors[2] <= 1 000 000`.
 
 Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as integers (i.e. int64). In this case, **care must be taken** to ensure that the actual fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actually 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable because outside of margin calculations, and display to end users, the integer values can generally be used as-is.
 Note also that if PDP is negative e.g. PDP = -2 then an integer open volume of 12345  is actually 1234500.
@@ -79,7 +103,13 @@ In this simple methodology, a linearised margin formula is used to return the ma
 
 with
 
-`maintenance_margin_long_open_position = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
+```formula
+maintenance_margin_long_open_position 
+    = max(min(slippage_volume * slippage_per_unit, mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])), 0) 
+    + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
+```
+
+and
 
 `maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
 
@@ -104,11 +134,10 @@ where
 `exit_price` is the price that would be achieved on the order book if the trader's position size on market were exited. Specifically:
 
 - **Long positions** are exited by the system considering what the volume weighted price of **selling** the size of the open long position (not riskiest long position) on the order book (i.e. by selling to the bids on the order book). If there is no open long position, the slippage per unit is zero.
+
 - **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the open short position (not riskiest short position) on the order book (i.e. by buying from the offers (asks) on the order book). If there is no open short position, the slippage per unit is zero.
 
-Note, if there is insufficient order book volume for this `exit_price` to be calculated (per position), the `exit_price` is the price that would be achieved for as much of the volume that could theoretically be closed (in general we expect market protection mechanisms make this unlikely to occur).
-
-If there is zero order book volume on the relevant side of the order book to calculate the `exit_price`, the most recent calculation of the mark price, should be used instead.
+If there is zero or insufficient order book volume on the relevant side of the order book to calculate the `exit_price`, then take `slippage_per_unit = +Infinity` which means that `min(slippage_volume * slippage_per_unit, mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])) = mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])` above.  
 
 ### **Step 2**
 
@@ -120,7 +149,13 @@ Else
 
 with
 
-`maintenance_margin_short_open_position = max(abs(slippage_volume) * slippage_per_unit, 0) + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
+```formula
+maintenance_margin_short_open_position 
+    = max(min(abs(slippage_volume) * slippage_per_unit, mark_price * (abs(slippage_volume) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0) 
+    + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]
+```
+
+and
 
 `maintenance_margin_short_open_orders = abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`,
 

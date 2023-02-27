@@ -23,7 +23,7 @@ An [Immediate or Cancel (IOC)](./0014-ORDT-order_types.md#time-in-force--validit
   - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-045" href="#0068-MATC-045">0068-MATC-045</a>)
   - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-046" href="#0068-MATC-046">0068-MATC-046</a>)
   - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-058" href="#0068-MATC-058">0068-MATC-058</a>)
-  - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-038" href="#0068-MATC-038">0068-MATC-038</a>)
+  - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-059" href="#0068-MATC-059">0068-MATC-059</a>)
 
 A [Fill or KILL (FOK)](./0014-ORDT-order_types.md#time-in-force--validity) order:
 
@@ -67,7 +67,7 @@ In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md):
   - [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders are placed into the book and no matching takes place. (<a name="0068-MATC-055" href="#0068-MATC-055">0068-MATC-055</a>)
   - The indicative price and volume values are updated after every change to the order book. (<a name="0068-MATC-024" href="#0068-MATC-024">0068-MATC-024</a>)
   - [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-025" href="#0068-MATC-025">0068-MATC-025</a>)
-  - It is possible to [self trade](./0024-OSTA-order_status.md#wash-trading) to uncross an auction. (<a name="0068-MATC-059" href="#0068-MATC-059">0068-MATC-059</a>)
+  - It is possible to [self trade](./0024-OSTA-order_status.md#wash-trading) to uncross an auction. (<a name="0068-MATC-038" href="#0068-MATC-038">0068-MATC-038</a>)
 
 When a [market moves into an auction](./0026-AUCT-auctions.md#upon-entering-auction-mode):
 
