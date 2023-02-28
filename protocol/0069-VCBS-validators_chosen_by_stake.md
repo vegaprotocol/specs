@@ -531,7 +531,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Restart v1 and announce to pending.
     - Take a checkpoint.
     - Restart the network
-    - Verify that v2-v6 are tendemint validators, v7 is ersatz and v1 is pending.
+    - Verify that v2-v6 are tendermint validators, v7 is ersatz and v1 is pending.
     - Verify that all stakes and delegations are correct for each node.
 
 ### Multisig update
