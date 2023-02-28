@@ -104,8 +104,8 @@ First, now weights of validators are accounted for on the smart contract, so dur
 Second, before validators sign the command, they will need to verify the entire signer set and weights are what they expect to be, as well as verify that the signer set nonce (see section above) fits the expected format of `0x[8 byte current epoch number][4 bytes 0][8 byte timestamp]`
 Worth noting is the threshold can be adjusted at the same time as a signer set update.
 
-# Signed Transaction Invalidator
-Any outstanding transactions that have been signed by validators, but not executed, will be invalidated once the signer set changes. This will happen automatically in the smart contract once the signer set change is executed.
+# Signed Transaction Invalidation
+Any outstanding transactions that have been signed by validators, but not executed, will be invalidated once the signer set changes. This will happen automatically in the smart contract once the signer set change is executed as the signer set hash will not match any prior standing orders.
 
 ## Assumptions
 In order for outstanding Multisig orders to be invalidated the following MUST be true:
