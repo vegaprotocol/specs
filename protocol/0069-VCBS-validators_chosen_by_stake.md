@@ -546,19 +546,19 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 ### Re-Issuing Signature Bundles by non Validators
 
-1. Submit two IssueSignature requests from the same Vega-Key (but for different bundles) for the same block. Verify that only one of the requests is executed, but both pass consensus. (Note: This AC may need replacement with the new Tendermint API). Repeat this test for in the next epoch and verify that the relult is the same.
+1. Submit two `IssueSignature` requests from the same Vega-Key (but for different bundles) for the same block. Verify that only one of the requests is executed, but both pass consensus. (Note: This AC may need replacement with the new Tendermint API). Repeat this test for in the next epoch and verify that the result is the same.
 (<a name="0069-VCBS-069" href="#0069-VCBS-069">0069-VCBS-069</a>)
 
-1. Submit two IssueSignature requests from the same Vega Key (but for different bundles) so that they are proposed for different blocks. Verify that the second one does not make it through consensus, but gets rejected earlier. Repeat this rest in the next epoch and verify that the result is the same.
+1. Submit two `IssueSignature` requests from the same Vega Key (but for different bundles) so that they are proposed for different blocks. Verify that the second one does not make it through consensus, but gets rejected earlier. Repeat this rest in the next epoch and verify that the result is the same.
 (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>)
 
-1. Submit two IssueSignature requests for the same bundle from different Vega keys, in a way that they end up in the same block. Verify that both get executed.
+1. Submit two `IssueSignature` requests for the same bundle from different Vega keys, in a way that they end up in the same block. Verify that both get executed.
 (<a name="0069-VCBS-071" href="#0069-VCBS-071">0069-VCBS-071</a>)
 
-1. Submit two IssueSignature requests for the same bundle from different Vwga keys in different blocks. Verify that both get executed.
+1. Submit two `IssueSignature` requests for the same bundle from different Vega keys in different blocks. Verify that both get executed.
 (<a name="0069-VCBS-072" href="#0069-VCBS-072">0069-VCBS-072</a>)
 
-1. Take three Vega keys V1, V2 and V3. Submit for the same bundle in the same block 2 IssueSignature requests from V1 and one from V2. Verify that all three pass consensus, and that one request from V1 and one from V2 are executed. In a following block, submit one IssueSignature request from V1 and V2 each, and 2 from V3. Verify that the ones from V1 and V2 are rejected pre-consensus, both from V3 pass consensus, and one from V3 is executed.
+1. Take three Vega keys V1, V2 and V3. Submit for the same bundle in the same block 2 `IssueSignature` requests from V1 and one from V2. Verify that all three pass consensus, and that one request from V1 and one from V2 are executed. In a following block, submit one `IssueSignature` request from V1 and V2 each, and 2 from V3. Verify that the ones from V1 and V2 are rejected pre-consensus, both from V3 pass consensus, and one from V3 is executed.
 (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>)
 
 1. Issue a request from a Vega key with a wrong signature. Verify that it is rejected pre-consensus. Issue a correct request from that key in a following block and verify that it is correctly executed.
@@ -566,7 +566,3 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 1. Issue 5 requests from a vega key in the same block, 4 of which with invalid signatures. Verify that only the one with the correct signature is passed to consensus, and is properly executed.
 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>)
-
-
-
-
