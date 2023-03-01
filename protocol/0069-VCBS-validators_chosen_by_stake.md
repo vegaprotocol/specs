@@ -397,22 +397,29 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Self-delegate to all of them.
     - Announce 2 new nodes but self-delegate only to one of them.
     - Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator.
-1. Change `ownstake` requirement (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
-    - Network with 5 tendermint validators and 7 ersatz validators
+
+1. Change `ownstake` requirement and ensure corect swapping occurs due to delegations (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
+    - Network with 3 tendermint validators and 7 ersatz validators
     - In the same epoch, change the network parameter `reward.staking.delegation.minimumValidatorStake` in a way that 3 tendermint validators and 3 ersatz validators drop below the `ownstake` requirement, and change the delegation so that 4 (not affected) Ersatz validators have a higher score than two (not affected) Validators. Also, give one of the Ersatz validators with insufficient `ownstake` the highest stake (delegated) of all Ersatz validators.
         - At the end of the epoch all validators with insufficient own stake will get a ranking score of 0.
         - No ersatz validator with insufficient stake will get unlisted as ersatz validator
         - The 3 tendermint validators would be swapped with the top 3 ersatz validators over the following 3 epochs
         - Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted.
         - No validator with stake attached to them is ever completely removed
-1. (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>)
+
+
+1. Ownstake scenario2  (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>)
     1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
         - 1 validator drops to the lowest delegated stake (1000)
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
         - the pending validator has sufficient `ownstake`
-        - Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
+        - Verify that the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
+
+        
+        
+ 1. Ownstake scenario3 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)
     1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -420,6 +427,9 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
+
+
+1. Ownstake scenario4 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
@@ -427,6 +437,9 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
         - Verify that the the first ersatz validator is not removed, and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
         - Add a new pending validator with enough `ownstake`; verify that it replaces the ersatz validator that had insufficient `ownstake`.
+
+
+1. Ownstake scenario5 (<a name="0069-VCBS-076" href="#0069-VCBS-076">0069-VCBS-076</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -435,14 +448,24 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - Now reduce the `ownstake` of both ersatz validators and one real validator below the `ownstake` requirement; verify that both ersatz validators are not demoted to pending, and that the tendermint validator is not demoted to ersatz (i.e., tendermint validators are not demoted if there is no appropriate ersatz).
         - Reduce the `ownstake` of both ersatz validators to 0. Verify that both ersatz validators are now removed, and that the tendermint validator still stays a tendermint validator (let this run for at least 2 epochs).
         - Reduce the `ownstake` of another tendermint validator to 0. Verify that that tendermint validator is demoted, and the other one with insufficient `ownstake` is not.
+
+
+
+1. Ownstake scenario6 (<a name="0069-VCBS-077" href="#0069-VCBS-077">0069-VCBS-077</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
+
+
+1. Ownstake scenario7 (<a name="0069-VCBS-078" href="#0069-VCBS-078">0069-VCBS-078</a>)
         -Verify that 2 validators are replaced, one in each epoch
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, and higher stake than the validators
         - Verify that one validator is replaced the following epoch, one in the epoch after
+
+
+
 1. Ersatz validator reward (<a name="0069-VCBS-061" href="#0069-VCBS-061">0069-VCBS-061</a>)
     - Setup a network with 5 validators with the following distribution of delegation:
         - 10%, 10%, 10%, 10%. 60% of the total delegation of tendermint validators
