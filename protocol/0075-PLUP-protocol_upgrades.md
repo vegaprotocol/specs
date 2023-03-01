@@ -183,7 +183,8 @@ For the purposes of protocol upgrade each validator that participates in consens
 
 ### Mainnet
 
-- (<a name="0075-PLUP-033" href="#0075-PLUP-033">0075-PLUP-033</a>) Check that we can protocol upgrade a system which has been restarted from mainnet snapshots with current mainnet version, to next intended release version.
+- (<a name="0075-COSMICELEVATOR-033" href="#0075-COSMICELEVATOR-033">0075-COSMICELEVATOR-033</a>) Check that we can protocol upgrade a system which has been restarted from mainnet snapshots with current mainnet version, to next intended release version. Check all data available pre-upgrade is still available.
+- (<a name="0075-PLUP-046" href="#0075-PLUP-046">0075-PLUP-046</a>) Check that we can protocol upgrade a system which has been restarted from latest mainnet checkpoint with current mainnet version, to next intended release version. Check all data available pre-upgrade is still available.
 
 ### Overwriting transactions
 
