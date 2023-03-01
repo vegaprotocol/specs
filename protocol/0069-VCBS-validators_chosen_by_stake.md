@@ -400,7 +400,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 ### `Ownstake` Scenarios
 
-1. 'Ownstake' scenario1  (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
+1. `Ownstake` scenario1  (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
     - Network with 3 tendermint validators and 7 ersatz validators
     - In the same epoch, change the network parameter `reward.staking.delegation.minimumValidatorStake` in a way that 3 tendermint validators and 3 ersatz validators drop below the `ownstake` requirement, and change the delegation so that 4 (not affected) Ersatz validators have a higher score than two (not affected) Validators. Also, give one of the Ersatz validators with insufficient `ownstake` the highest stake (delegated) of all Ersatz validators.
         - At the end of the epoch all validators with insufficient own stake will get a ranking score of 0.
@@ -416,8 +416,8 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
         - the pending validator has sufficient `ownstake`
         - Verify that the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
- 1. `Ownstake` scenario3 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)
- Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
+1. `Ownstake` scenario3 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)
+    1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
         - 2 ersatz validators have 6000 stake and sufficient `ownstake`
@@ -475,7 +475,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Verify that at the end of the Epoch, the Ersatz validators get 40% of the reward that the validators get (in total)
     - Set the `rewardFactor` to 0.32832979375934745648654893643856748734895749785943759843759437549837534987593483498
     - Verify that all validators round the value of reward for the Ersatz validators to the same value.
-    
+
 ### Slot Adjustments
 
 1. Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
