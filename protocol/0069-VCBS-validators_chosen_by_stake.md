@@ -398,7 +398,9 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Announce 2 new nodes but self-delegate only to one of them.
     - Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator.
 
-1. Change `ownstake` requirement and ensure corect swapping occurs due to delegations (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
+### Ownstake Scenarios
+
+1. Ownstake scenario1  (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
     - Network with 3 tendermint validators and 7 ersatz validators
     - In the same epoch, change the network parameter `reward.staking.delegation.minimumValidatorStake` in a way that 3 tendermint validators and 3 ersatz validators drop below the `ownstake` requirement, and change the delegation so that 4 (not affected) Ersatz validators have a higher score than two (not affected) Validators. Also, give one of the Ersatz validators with insufficient `ownstake` the highest stake (delegated) of all Ersatz validators.
         - At the end of the epoch all validators with insufficient own stake will get a ranking score of 0.
