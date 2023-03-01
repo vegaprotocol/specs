@@ -398,7 +398,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Announce 2 new nodes but self-delegate only to one of them.
     - Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator.
 
-### Ownstake Scenarios
+### `Ownstake` Scenarios
 
 1. Ownstake scenario1  (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
     - Network with 3 tendermint validators and 7 ersatz validators
@@ -410,7 +410,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - No validator with stake attached to them is ever completely removed
 
 
-1. Ownstake scenario2  (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>)
+1. `Ownstake` scenario2  (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>)
     1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
@@ -421,7 +421,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
         
         
- 1. Ownstake scenario3 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)
+ 1. `Ownstake` scenario3 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)
     1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -431,7 +431,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
 
 
-1. Ownstake scenario4 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>)
+1. `Ownstake` scenario4 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
@@ -441,7 +441,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - Add a new pending validator with enough `ownstake`; verify that it replaces the ersatz validator that had insufficient `ownstake`.
 
 
-1. Ownstake scenario5 (<a name="0069-VCBS-076" href="#0069-VCBS-076">0069-VCBS-076</a>)
+1. `Ownstake` scenario5 (<a name="0069-VCBS-076" href="#0069-VCBS-076">0069-VCBS-076</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -453,13 +453,13 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 
 
-1. Ownstake scenario6 (<a name="0069-VCBS-077" href="#0069-VCBS-077">0069-VCBS-077</a>)
+1. `Ownstake` scenario6 (<a name="0069-VCBS-077" href="#0069-VCBS-077">0069-VCBS-077</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
 
 
-1. Ownstake scenario7 (<a name="0069-VCBS-078" href="#0069-VCBS-078">0069-VCBS-078</a>)
+1. `Ownstake` scenario7 (<a name="0069-VCBS-078" href="#0069-VCBS-078">0069-VCBS-078</a>)
         -Verify that 2 validators are replaced, one in each epoch
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
