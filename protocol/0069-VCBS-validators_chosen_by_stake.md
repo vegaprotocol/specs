@@ -573,3 +573,26 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Verify that rewards are paid out at the end of the epoch.
 1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` or a vega key that belongs to a validator can submit a request to the vega network to obtain the signature bundle that would update the ethereum multisig signers to be the ethereum keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted once per epoch per vega key. Once multisig uses weights it will also include the correct weights. (<a name="0069-VCBS-068" href="#0069-VCBS-068">0069-VCBS-068</a>)
 1. Replace a validator with a new node via promotion/demotion. Ensure that rewards are paid out at the end of the epoch if the multisig is updated to match the new validator. (<a name="0069-VCBS-071" href="#0069-VCBS-071">0069-VCBS-071</a>)
+
+### Re-Issuing Signature Bundles by non Validators
+
+1. Submit two `IssueSignature` requests from the same Vega-Key (but for different bundles) for the same block. Verify that only one of the requests is executed, but both pass consensus. (Note: This AC may need replacement with the new Tendermint API). Repeat this test for in the next epoch and verify that the result is the same.
+(<a name="0069-VCBS-081" href="#0069-VCBS-081">0069-VCBS-081</a>)
+
+1. Submit two `IssueSignature` requests from the same Vega Key (but for different bundles) so that they are proposed for different blocks. Verify that the second one does not make it through consensus, but gets rejected earlier. Repeat this rest in the next epoch and verify that the result is the same.
+(<a name="0069-VCBS-082" href="#0069-VCBS-082">0069-VCBS-082</a>)
+
+1. Submit two `IssueSignature` requests for the same bundle from different Vega keys, in a way that they end up in the same block. Verify that both get executed.
+(<a name="0069-VCBS-083" href="#0069-VCBS-083">0069-VCBS-083</a>)
+
+1. Submit two `IssueSignature` requests for the same bundle from different Vega keys in different blocks. Verify that both get executed.
+(<a name="0069-VCBS-084" href="#0069-VCBS-084">0069-VCBS-084</a>)
+
+1. Take three Vega keys V1, V2 and V3. Submit for the same bundle in the same block 2 `IssueSignature` requests from V1 and one from V2. Verify that all three pass consensus, and that one request from V1 and one from V2 are executed. In a following block, submit one `IssueSignature` request from V1 and V2 each, and 2 from V3. Verify that the ones from V1 and V2 are rejected pre-consensus, both from V3 pass consensus, and one from V3 is executed.
+(<a name="0069-VCBS-085" href="#0069-VCBS-085">0069-VCBS-085</a>)
+
+1. Issue a request from a Vega key with a wrong signature. Verify that it is rejected pre-consensus. Issue a correct request from that key in a following block and verify that it is correctly executed.
+(<a name="0069-VCBS-086" href="#0069-VCBS-086">0069-VCBS-086</a>)
+
+1. Issue 5 requests from a vega key in the same block, 4 of which with invalid signatures. Verify that only the one with the correct signature is passed to consensus, and is properly executed.
+(<a name="0069-VCBS-087" href="#0069-VCBS-087">0069-VCBS-087</a>)
