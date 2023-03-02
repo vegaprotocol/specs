@@ -183,6 +183,21 @@ It must be possible to add to the data node APIs that return the result of calcu
 2. Standard nodes should retain data in accordance with the configured data retention policy (<a name="0076-DANO-027" href="#0076-DANO-027">0076-DANO-027</a>)
 3. Archival nodes should retain all data from the height at which they joined the network (<a name="0076-DANO-028" href="#0076-DANO-028">0076-DANO-028</a>)
 
+### API Request Rate Limiting
+
+1. Datanode should provide an optional mechanism for limiting the average number of requests per second over on its API
+2. That rate should be specified in the datanode configuration file
+3. A client may, over a short period of time, make requests at a greater frequency than the limit as long as the average rate over a longer period of time is not exceeded. (<a name="0076-DANO-029" href="#0076-DANO-029">0076-DANO-029</a>)
+4. The extent to which clients may of 'burst' requests should also be capped and specified in the datanode configuration file (<a name="0076-DANO-030" href="#0076-DANO-030">0076-DANO-030</a>)
+5. Limits should be enforced on a per-client basis. Source IP address is a sufficient discriminator (<a name="0076-DANO-031" href="#0076-DANO-031">0076-DANO-031</a>)
+6. Headers or metadata should be included in each API response indicating to the client what the limits are, and how close they currently are to exceeding them (<a name="0076-DANO-032" href="#0076-DANO-032">0076-DANO-032</a>)
+7. If limits are exceeded an API appropriate error response should be returned, containing similar headers or metadata (<a name="0076-DANO-033" href="#0076-DANO-033">0076-DANO-033</a>)
+8. If the rate of denied (due to rate limiting) requests subsequently exceed the same maximum rate/burst parameters the client should be banned (<a name="0076-DANO-034" href="#0076-DANO-034">0076-DANO-034</a>)
+9. The ban denies all access to the API for a configurable length of time (<a name="0076-DANO-035" href="#0076-DANO-035">0076-DANO-035</a>)
+10. For that time, any requests will receive an API appropriate error response indicating that they are banned (<a name="0076-DANO-036" href="#0076-DANO-036">0076-DANO-036</a>)
+11. The rate limit for the GraphQL API should be configurable separately from the gRPC API and it's REST wrapper since a single GraphQL request can trigger many internal gRPC requests (<a name="0076-DANO-037" href="#0076-DANO-037">0076-DANO-037</a>)
+12. Where one API makes use of another (e.g. GraphQL making use of gRPC), rate limits should be enforced only once, on the side that faces the client (<a name="0076-DANO-038" href="#0076-DANO-038">0076-DANO-038</a>)
+
 ### General Acceptance
 
 1. The DataNode must be able to handle brief network outages and disconnects from the vega node (<a name="0076-DANO-015" href="#0076-DANO-015">0076-DANO-015</a>)
