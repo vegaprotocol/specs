@@ -506,7 +506,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Verify that all Validators round it the same way, and that there are three Ersatz validators
 
 1. Demote one of the original validators and replace with a new validator. Update the multisig to include the new validator. Ensure multisig threshold is set to '999' (require all signatures). Attempt a withdrawal. (<a name="0069-VCBS-069" href="#0069-VCBS-069">0069-VCBS-069</a>)
-1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>). Restart from checkpoint ((<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)), all validator nodes are still correct.
+1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>). Restart from checkpoint ((<a name="0069-VCBS-080" href="#0069-VCBS-080">0069-VCBS-080</a>)), all validator nodes are still correct.
 1. Ensure multisig threshold is set to '666'. Request an asset withdrawal (but do not yet exercise this in the er20 bridge). Demote one of the original validators and replace with a new validator. Update the multisig. Attempt to enact the withdrawal on the erc20 bridge. Funds are received by the party on eth chain, and are no longer present in vega chain account(s). (<a name="0069-VCBS-072" href="#0069-VCBS-072">0069-VCBS-072</a>)
 
 ### Announce Node
@@ -543,7 +543,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Restart the network starting only 3 of the validators.
     - Restore from the checkpoint.
     - Verify the network is not able to produce blocks.
-1. Checkpoints store validator changes (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>):
+1. Checkpoints store validator changes (<a name="0069-VCBS-079" href="#0069-VCBS-079">0069-VCBS-079</a>):
     - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
     - Stop and relegate one of the original validators (v1) such that v6 is promoted to tendermint validator, and v7 is promoted to ersatz.
     - Restart v1 and announce to pending.
