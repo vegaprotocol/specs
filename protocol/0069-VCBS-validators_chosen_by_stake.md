@@ -33,7 +33,7 @@ Note that we only do this check once per epoch so at most one validator can be c
 
 The same way, if there are free slots for ersatz validators and nodes that have submitted the transaction to join and satisfy all joining conditions, they are added as ersatz validators in the next round.
 
-If a node that submitted the transaction to join and satisfies all other conditions and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is demoted to pending validator. The 'transaction to join' of a validator demoted this way remains active until the delegated stake drops below the required minimum
+If a node that submitted the transaction to join and satisfies all other conditions and has a higher score than the lowest scoring ersatz validator (scaled up by the incumbent factor), then (assuming it did not just become a Tendermint validator), it becomes an ersatz validator and the lowest scoring ersatz validator is demoted to pending (also referred to as candidate) validator. The 'transaction to join' of a validator demoted this way remains active until the delegated stake drops below the required minimum
 
 As both these checks are done between epochs, it is possible for a validator to be demoted first from a consensus forming (Tendermint) validator to an ersatz validator, and then from an ersatz validator to a pending validator.
 
@@ -107,9 +107,9 @@ In the case where a node is removed due reduced delegation, or due to not meetin
 
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions.
 
-## Ersatz validators
+## Ersatz/Standby validators
 
-In addition to the normal validators, there is an additional set of Ersatz validators as defined by the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will have
+In addition to the normal validators, there is an additional set of Ersatz validators (also referred to as Standby Validators) as defined by the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will have
 
 `n' := ceil(network.validators.multipleOfTendermintValidators x network.validators.tendermint.number)`
 
@@ -397,22 +397,26 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Self-delegate to all of them.
     - Announce 2 new nodes but self-delegate only to one of them.
     - Verify that, after 1000 blocks and on the following epoch, only the validator to which we self-delegated got promoted and we now have 4 Tendermint validators and 1 pending validator.
-1. Change `ownstake` requirement (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
-    - Network with 5 tendermint validators and 7 ersatz validators
+
+### `Ownstake` Scenarios
+
+1. `Ownstake` scenario1  (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)
+    - Network with 3 tendermint validators and 7 ersatz validators
     - In the same epoch, change the network parameter `reward.staking.delegation.minimumValidatorStake` in a way that 3 tendermint validators and 3 ersatz validators drop below the `ownstake` requirement, and change the delegation so that 4 (not affected) Ersatz validators have a higher score than two (not affected) Validators. Also, give one of the Ersatz validators with insufficient `ownstake` the highest stake (delegated) of all Ersatz validators.
         - At the end of the epoch all validators with insufficient own stake will get a ranking score of 0.
         - No ersatz validator with insufficient stake will get unlisted as ersatz validator
         - The 3 tendermint validators would be swapped with the top 3 ersatz validators over the following 3 epochs
         - Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted.
         - No validator with stake attached to them is ever completely removed
-1. (Alternative until we can build a large enough network for above AC ) (<a name="0069-VCBS-059" href="#0069-VCBS-059">0069-VCBS-059</a>)
-    1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
+1. `Ownstake` scenario2 (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>)
+Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
         - 1 validator drops to the lowest delegated stake (1000)
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
         - the pending validator has sufficient `ownstake`
-        - Verify that the the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
+        - Verify that the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
+1. `Ownstake` scenario3 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)
     1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -420,6 +424,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
+1. `Ownstake` scenario4 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
@@ -427,6 +432,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
         - Verify that the the first ersatz validator is not removed, and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
         - Add a new pending validator with enough `ownstake`; verify that it replaces the ersatz validator that had insufficient `ownstake`.
+1. `Ownstake` scenario5 (<a name="0069-VCBS-076" href="#0069-VCBS-076">0069-VCBS-076</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -435,14 +441,21 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - Now reduce the `ownstake` of both ersatz validators and one real validator below the `ownstake` requirement; verify that both ersatz validators are not demoted to pending, and that the tendermint validator is not demoted to ersatz (i.e., tendermint validators are not demoted if there is no appropriate ersatz).
         - Reduce the `ownstake` of both ersatz validators to 0. Verify that both ersatz validators are now removed, and that the tendermint validator still stays a tendermint validator (let this run for at least 2 epochs).
         - Reduce the `ownstake` of another tendermint validator to 0. Verify that that tendermint validator is demoted, and the other one with insufficient `ownstake` is not.
+
+1. `Ownstake` scenario6 (<a name="0069-VCBS-077" href="#0069-VCBS-077">0069-VCBS-077</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
+
+1. `Ownstake` scenario7 (<a name="0069-VCBS-078" href="#0069-VCBS-078">0069-VCBS-078</a>)
         -Verify that 2 validators are replaced, one in each epoch
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, and higher stake than the validators
         - Verify that one validator is replaced the following epoch, one in the epoch after
+
+### Ersatz Rewards
+
 1. Ersatz validator reward (<a name="0069-VCBS-061" href="#0069-VCBS-061">0069-VCBS-061</a>)
     - Setup a network with 5 validators with the following distribution of delegation:
         - 10%, 10%, 10%, 10%. 60% of the total delegation of tendermint validators
@@ -452,6 +465,19 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - At the end of the epoch expect the validator with 60% of the stake to be swapped as a tendermint validator for one of the ersatz validators.
     - Restart the validator, run until the end of the epoch
     - Verify that this validator is paid reward as ersatz validator and that their stake score under reward is anti-whaled
+
+1. Change `network.validators.ersatz.rewardFactor` (<a name="0069-VCBS-057" href="#0069-VCBS-057">0069-VCBS-057</a>)
+    - Setup a network with 5 Tendermint validators, 3 Ersatz Validators,  `network.validators.ersatz.rewardfactor` = 0
+    - Verify that at the end of the Epoch, the Ersatz Validators get no reward
+    - Increase the `rewardFactor` to 0.5
+    - Verify that at the end of the Epoch, the Ersatz validators get half the reward that the validators get (in total)
+    - Decrease the `rewardFactor` to 0.4
+    - Verify that at the end of the Epoch, the Ersatz validators get 40% of the reward that the validators get (in total)
+    - Set the `rewardFactor` to 0.32832979375934745648654893643856748734895749785943759843759437549837534987593483498
+    - Verify that all validators round the value of reward for the Ersatz validators to the same value.
+
+### Slot Adjustments
+
 1. Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>):
     - Setup a network with 5 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
     - Decrease the number of tendermint validators to 3.
@@ -478,17 +504,9 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that all Validators round it the same way, and that there are no Ersatz validators
     - Set the factor to 3.00000000000000000000000000000000000000001 and run the network with just one tendermint (consensus) validator.
     - Verify that all Validators round it the same way, and that there are three Ersatz validators
-1. Change `network.validators.ersatz.rewardFactor` (<a name="0069-VCBS-057" href="#0069-VCBS-057">0069-VCBS-057</a>)
-    - Setup a network with 5 Tendermint validators, 3 Ersatz Validators,  `network.validators.ersatz.rewardfactor` = 0
-    - Verify that at the end of the Epoch, the Ersatz Validators get no reward
-    - Increase the `rewardFactor` to 0.5
-    - Verify that at the end of the Epoch, the Ersatz validators get half the reward that the validators get (in total)
-    - Decrease the `rewardFactor` to 0.4
-    - Verify that at the end of the Epoch, the Ersatz validators get 40% of the reward that the validators get (in total)
-    - Set the `rewardFactor` to 0.32832979375934745648654893643856748734895749785943759843759437549837534987593483498
-    - Verify that all validators round the value of reward for the Ersatz validators to the same value.
+
 1. Demote one of the original validators and replace with a new validator. Update the multisig to include the new validator. Ensure multisig threshold is set to '999' (require all signatures). Attempt a withdrawal. (<a name="0069-VCBS-069" href="#0069-VCBS-069">0069-VCBS-069</a>)
-1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>)
+1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>). Restart from checkpoint ((<a name="0069-VCBS-080" href="#0069-VCBS-080">0069-VCBS-080</a>)), all validator nodes are still correct.
 1. Ensure multisig threshold is set to '666'. Request an asset withdrawal (but do not yet exercise this in the er20 bridge). Demote one of the original validators and replace with a new validator. Update the multisig. Attempt to enact the withdrawal on the erc20 bridge. Funds are received by the party on eth chain, and are no longer present in vega chain account(s). (<a name="0069-VCBS-072" href="#0069-VCBS-072">0069-VCBS-072</a>)
 
 ### Announce Node
@@ -525,6 +543,14 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Restart the network starting only 3 of the validators.
     - Restore from the checkpoint.
     - Verify the network is not able to produce blocks.
+1. Checkpoints store validator changes (<a name="0069-VCBS-079" href="#0069-VCBS-079">0069-VCBS-079</a>):
+    - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
+    - Stop and relegate one of the original validators (v1) such that v6 is promoted to tendermint validator, and v7 is promoted to ersatz.
+    - Restart v1 and announce to pending.
+    - Take a checkpoint.
+    - Restart the network
+    - Verify that v2-v6 are tendermint validators, v7 is ersatz and v1 is pending.
+    - Verify that all stakes and delegations are correct for each node.
 
 ### Multisig update
 
@@ -547,3 +573,26 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that rewards are paid out at the end of the epoch.
 1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` or a vega key that belongs to a validator can submit a request to the vega network to obtain the signature bundle that would update the ethereum multisig signers to be the ethereum keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted once per epoch per vega key. Once multisig uses weights it will also include the correct weights. (<a name="0069-VCBS-068" href="#0069-VCBS-068">0069-VCBS-068</a>)
 1. Replace a validator with a new node via promotion/demotion. Ensure that rewards are paid out at the end of the epoch if the multisig is updated to match the new validator. (<a name="0069-VCBS-071" href="#0069-VCBS-071">0069-VCBS-071</a>)
+
+### Re-Issuing Signature Bundles by non Validators
+
+1. Submit two `IssueSignature` requests from the same Vega-Key (but for different bundles) for the same block. Verify that only one of the requests is executed, but both pass consensus. (Note: This AC may need replacement with the new Tendermint API). Repeat this test for in the next epoch and verify that the result is the same.
+(<a name="0069-VCBS-081" href="#0069-VCBS-081">0069-VCBS-081</a>)
+
+1. Submit two `IssueSignature` requests from the same Vega Key (but for different bundles) so that they are proposed for different blocks. Verify that the second one does not make it through consensus, but gets rejected earlier. Repeat this rest in the next epoch and verify that the result is the same.
+(<a name="0069-VCBS-082" href="#0069-VCBS-082">0069-VCBS-082</a>)
+
+1. Submit two `IssueSignature` requests for the same bundle from different Vega keys, in a way that they end up in the same block. Verify that both get executed.
+(<a name="0069-VCBS-083" href="#0069-VCBS-083">0069-VCBS-083</a>)
+
+1. Submit two `IssueSignature` requests for the same bundle from different Vega keys in different blocks. Verify that both get executed.
+(<a name="0069-VCBS-084" href="#0069-VCBS-084">0069-VCBS-084</a>)
+
+1. Take three Vega keys V1, V2 and V3. Submit for the same bundle in the same block 2 `IssueSignature` requests from V1 and one from V2. Verify that all three pass consensus, and that one request from V1 and one from V2 are executed. In a following block, submit one `IssueSignature` request from V1 and V2 each, and 2 from V3. Verify that the ones from V1 and V2 are rejected pre-consensus, both from V3 pass consensus, and one from V3 is executed.
+(<a name="0069-VCBS-085" href="#0069-VCBS-085">0069-VCBS-085</a>)
+
+1. Issue a request from a Vega key with a wrong signature. Verify that it is rejected pre-consensus. Issue a correct request from that key in a following block and verify that it is correctly executed.
+(<a name="0069-VCBS-086" href="#0069-VCBS-086">0069-VCBS-086</a>)
+
+1. Issue 5 requests from a vega key in the same block, 4 of which with invalid signatures. Verify that only the one with the correct signature is passed to consensus, and is properly executed.
+(<a name="0069-VCBS-087" href="#0069-VCBS-087">0069-VCBS-087</a>)

@@ -7,13 +7,13 @@ all: spellcheck markdownlint names codes references links clean
 .PHONY: names
 names:
 	@$(MAKE) clone-sources
-	npx @vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
+	npx github:vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
 
 # Count how many Acceptance Criteria each specification has
 .PHONY: codes
 codes:
 	@$(MAKE) clone-sources
-	npx @vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
+	npx github:vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
 
 TEMP=./.build
 .PHONY:clone-sources
@@ -44,7 +44,7 @@ clone-sources:
 references:
 	@$(MAKE) clone-sources
 
-	cd $(TEMP); npx -y @vegaprotocol/approbation@latest check-references --specs="../*protocol*/*.{md,ipynb}" --tests="./**/*.{js,py,feature}" --categories="../protocol/categories.json" --show-branches --show-mystery --verbose --show-files
+	cd $(TEMP); npx -y github:vegaprotocol/approbation@latest check-references --specs="../*protocol*/*.{md,ipynb}" --tests="./**/*.{js,py,feature}" --categories="../protocol/categories.json" --show-branches --show-mystery --verbose --show-files
 
 # Imperfect, but useful - hence not included in ALL
 .PHONY: links
