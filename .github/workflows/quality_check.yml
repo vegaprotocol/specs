@@ -59,7 +59,7 @@ jobs:
       - name: "Check out"
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.ref_name }}
 
       - name: "Run Check AC codes"
         run: |
