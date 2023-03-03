@@ -22,6 +22,7 @@
 - Attempting to alter details on a filled order will cause the amend to be rejected (<a name="0004-AMND-017" href="#0004-AMND-017">0004-AMND-017</a>)
 - Attempting to alter details on a cancelled order will cause the amend to be rejected (<a name="0004-AMND-018" href="#0004-AMND-018">0004-AMND-018</a>)
 - Attempting to alter details on an expired order will cause the amend to be rejected (<a name="0004-AMND-019" href="#0004-AMND-019">0004-AMND-019</a>)
+- Amending expiry time of an active GTT order to a past time whilst also simultaneously amending the price and size of the GTT order will insert the order at the back of the queue at the new price level with the new size and expiry time causing the order to immediately expire (<a name="0004-AMND-029" href="#0004-AMND-029">0004-AMND-029</a>)
 
 For a party with no position on a given market:
 
