@@ -210,27 +210,28 @@ message ProposalRationale {
 This action differs from from other governance actions in that the market is created and some transactions (namely around liquidity provision) may be accepted for the market before the proposal has successfully passed. The lifecycle of a market and its triggers are covered in the [market lifecycle](./0043-MKTL-market_lifecycle.md) spec.
 
 Note the following key points from the market lifecycle spec:
-* A market is created in Proposed status as soon as the proposal is accepted
-* A market enters a Pending status as soon as the proposal is Successful (before enactment)
-* A market usually enters Active status at the proposal's enactment date/time, but some conditions may delay this or cause the market to be Cancelled instead
+
+- A market is created in Proposed status as soon as the proposal is accepted
+- A market enters a Pending status as soon as the proposal is Successful (before enactment)
+- A market usually enters Active status at the proposal's enactment date/time, but some conditions may delay this or cause the market to be Cancelled instead
 
 A proposal to create a market contains
 
 1. a complete market specification as per the [Market Framework](./0001-MKTF-market_framework.md) that describes the market to be created.
-1. an enactment time that is at least the *minimum auction duration* after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
-1. if the market is meant to be a *successor* of a given market then it contains the marketId of the market it's succeeding (parent market), a parameter called `insurancePoolFraction` which is a decimal in `[0,1]` (i.e. it can be `0` or `1` or anything in between) and certain entries in the market proposal must be identical to those of the market it's succeeding OR the proposal should simply not contain the fields that cannot be changed. 
-In particular instrument, settlement asset, margin asset, and `market.value.windowLength` must match. 
-The parent market must be in one of `active` or `suspended` or `trading terminated` states. 
-If the parent market is `settled` or `proposed` or `pending` or `cancelled` then the proposal should be rejected at validation stage with an error "parent market cannot be in * state" with * being one of the dis-allowed states above. 
-The point of setting up a market to be successor of existing market is to 
+1. an enactment time that is at least the _minimum auction duration_ after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
+1. if the market is meant to be a _successor_ of a given market then it contains the marketId of the market it's succeeding (parent market), a parameter called `insurancePoolFraction` which is a decimal in `[0,1]` (i.e. it can be `0` or `1` or anything in between) and certain entries in the market proposal must be identical to those of the market it's succeeding OR the proposal should simply not contain the fields that cannot be changed.
+In particular instrument, settlement asset, margin asset, and `market.value.windowLength` must match.
+The parent market must be in one of `active` or `suspended` or `trading terminated` states.
+If the parent market is `settled` or `proposed` or `pending` or `cancelled` then the proposal should be rejected at validation stage with an error "parent market cannot be in `*` state" with `*` being one of the dis-allowed states above.
+The point of setting up a market to be successor of existing market is to
 a) allow LPs who wish to continue claim their equity-like-share (ELS) by committing liquidity to the successor market during the pending period and
 b) allow the successor market to inherit the insurance pool of the parent market. When the successor market leaves the opening auction (moves from pending to active) the amount equal to `insurancePoolFraction x parent market insurance pool balance` is transferred to the successor market insurance pool. Once the parent market moves from "trading terminated" to "settled" state the entire remaining insurance pool of the successor market is transferred to the successor market insurance pool.
 
-Note that each market can have exactly one market as a *successor* market. 
-- if there already is a market (possibly pending i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)) naming a parent market which is referenced in the proposal then the proposal is rejected with error parent market no longer available. 
-- if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the successor of the named parent; the other proposal is cancelled with reason "parent market no longer available". 
-- if there is a successor market naming a parent market that terminates and settles or is cancelled by governance before the parent market (for whatever reason) then the parent market successor is set to empty and a different successor can be proposed.
+Note that each market can have exactly one market as a _successor_ market.
 
+- if there already is a market (possibly pending i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)) naming a parent market which is referenced in the proposal then the proposal is rejected with error parent market no longer available.
+- if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the successor of the named parent; the other proposal is cancelled with reason "parent market no longer available".
+- if there is a successor market naming a parent market that terminates and settles or is cancelled by governance before the parent market (for whatever reason) then the parent market successor is set to empty and a different successor can be proposed.
 
 All _new market proposals_ initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 

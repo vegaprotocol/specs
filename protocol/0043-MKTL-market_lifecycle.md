@@ -81,9 +81,9 @@ When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-
 
 ### Pending
 
-When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal if the other conditions for exiting auction period are met (liquidity committed, best static bid / ask present). If, initially,  at the specified enactment date it was not possible to leave the auction period, the auction will conclude as soon as possible once the conditions for auction exit are met. 
+When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal if the other conditions for exiting auction period are met (liquidity committed, best static bid / ask present). If, initially,  at the specified enactment date it was not possible to leave the auction period, the auction will conclude as soon as possible once the conditions for auction exit are met.
 
-Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. 
+Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully.
 
 **Entry:**
 
@@ -215,12 +215,12 @@ A market moves from this termination state to Settled when enough information ex
 
 ### Settled
 
-Once the required data to calculate the settlement cashflows is provided by oracle input for a market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement). 
-The positions are then closed and all orders cleared. 
-All money held in margin accounts after final settlement is returned to traders' general accounts. 
-[Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset for markets that have no successor market, see [governance](./0028-GOVE-governance.md). For markets that have a named successor market the insurance pool balance is transferred to the insurance pool of the successor market. 
-[LP fees](0042-LIQF-setting_fees_and_rewarding_lps.md) that have been cumulated but not yet paid out are distributed to the market LPs as per the LP spec. 
-The market can be deleted entirely at this point, from a core perspective. 
+Once the required data to calculate the settlement cashflows is provided by oracle input for a market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement).
+The positions are then closed and all orders cleared.
+All money held in margin accounts after final settlement is returned to traders' general accounts.
+[Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset for markets that have no successor market, see [governance](./0028-GOVE-governance.md). For markets that have a named successor market the insurance pool balance is transferred to the insurance pool of the successor market.
+[LP fees](0042-LIQF-setting_fees_and_rewarding_lps.md) that have been cumulated but not yet paid out are distributed to the market LPs as per the LP spec.
+The market can be deleted entirely at this point, from a core perspective.
 
 **Entry:**
 

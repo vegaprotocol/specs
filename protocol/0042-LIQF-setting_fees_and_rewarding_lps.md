@@ -21,7 +21,7 @@ The [liquidity fee factor](./0029-FEES-fees.md) is an input to the total taker f
 As part of the [commit liquidity network transaction](./0038-OLIQ-liquidity_provision_order_type.md), the liquidity provider submits their desired level for the [liquidity fee factor](./0042-LIQF-setting_fees_and_rewarding_lps.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market.
 First, we produce a list of pairs which capture committed liquidity of each LP together with their desired liquidity fee factor and arrange this list in an increasing order by fee amount. Thus we have
 
-```math
+```text
 [LP-1-stake, LP-1-liquidity-fee-factor]
 [LP-2-stake, LP-2-liquidity-fee-factor]
 ...
@@ -38,7 +38,7 @@ Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liq
 
 In the example below there are 3 liquidity providers all bidding for their chosen fee level. The LP orders they submit are sorted into increasing fee order so that the lowest fee bid is at the top and the highest is at the bottom. The fee level chosen for the market is derived from the liquidity commitment of the market (`target stake`) and the amount of stake committed from each bidder. Vega processes the LP orders from top to bottom by adding up the commitment stake as it goes until it reaches a level greater than or equal to the `target stake`. When that point is reached the fee used is the fee of the last liquidity order processed.
 
-```math
+```text
 [LP 1 stake = 120 ETH, LP 1 liquidity-fee-factor = 0.5%]
 [LP 2 stake = 20 ETH, LP 2 liquidity-fee-factor = 0.75%]
 [LP 3 stake = 60 ETH, LP 3 liquidity-fee-factor = 3.75%]
@@ -67,33 +67,35 @@ The guiding principle of this section is that by committing stake a liquidity pr
 
 ### Calculating liquidity provider equity-like share
 
-The parameter which determines the period over which market value and hence growth is `market.value.windowLength` which could be e.g. a week. 
-From the end of the opening auction, which we will refer to as `t0` until `t0+market.value.windowLength` is the `0th` or "bootstrap period". Then from `t0+market.value.windowLength` until `t0 + 2 x market.value.windowLength` is the `1st` period and so on. 
-For each LP we track the stake they have and also their virtual stake. 
-For markets that have no "parent" market, see [governance](./0028-GOVE-governance.md)  we postulate that before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake. 
+The parameter which determines the period over which market value and hence growth is `market.value.windowLength` which could be e.g. a week.
+From the end of the opening auction, which we will refer to as `t0` until `t0+market.value.windowLength` is the `0th` or "bootstrap period". Then from `t0+market.value.windowLength` until `t0 + 2 x market.value.windowLength` is the `1st` period and so on.
+For each LP we track the stake they have and also their virtual stake.
+For markets that have no "parent" market, see [governance](./0028-GOVE-governance.md)  we postulate that before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake.
 
 For any period `n >= 1` LP can add stake or remove stake but virtual stake is treated differently or for markets with "parent market":
 
-If the market has a "parent market" then each LP which commits liquidity (to this market) gets the virtual stake copied from the parent market as the 1st step of the process and the stake they are committing here minus the stake on parent market is treated as the `delta` here. 
+If the market has a "parent market" then each LP which commits liquidity (to this market) gets the virtual stake copied from the parent market as the 1st step of the process and the stake they are committing here minus the stake on parent market is treated as the `delta` here.
 
 Say an `LP i` wants increases their commitment by `delta > market.liquidityProvision.minLpStakeQuantumMultiple x quantum` (this could also be the initial commitment). Then we update
-```
+
+```text
 LP i virtual stake <- LP i virtual stake + delta.
 ```
 
-Say an `LP i` wants to decrease their commitment by `delta < 0`. Then we update 
-```
-LP i virtual stake <- LP i virtual stake x (LP i stake + delta)/(LP i stake).
-``` 
+Say an `LP i` wants to decrease their commitment by `delta < 0`. Then we update
 
-Independently of the above we also update all virtual stakes at start of each new period. 
-To that end "total value for fee purposes" is cumulated over the period set by `market.value.windowLength`. For a period `n` call this `T(n)`. 
-We let the `0`th period start the moment the opening auction ends and last for `market.value.windowLength`.   
+```text
+LP i virtual stake <- LP i virtual stake x (LP i stake + delta)/(LP i stake).
+```
+
+Independently of the above we also update all virtual stakes at start of each new period.
+To that end "total value for fee purposes" is cumulated over the period set by `market.value.windowLength`. For a period `n` call this `T(n)`.
+We let the `0`th period start the moment the opening auction ends and last for `market.value.windowLength`.
 We include the volume of the trades that resolved the opening auction in `T(0)` for markets with no parent market.
-For markets with a parent market we take `T(0)` to be the most recent `T_{parent}(latest)`.  
+For markets with a parent market we take `T(0)` to be the most recent `T_{parent}(latest)`.
 From this we calculate the running average trade value for fee purposes:
 
-```math
+```text
 A(0) <- T(0),
 A(n) <- A(n-1) x n/(n+1) + T(n)/(n+1), for `n=1,2,...
 ```
@@ -120,7 +122,7 @@ Moreover, in situations when trading volume was zero in the previous period or i
 
 The equity-like share for each LP is then
 
-```math
+```text
 (LP i equity-like share) = (LP i virtual stake) / (sum over j from 1 to N of (LP j virtual stake)).
 ```
 
@@ -133,7 +135,7 @@ The average entry valuation (which should be reported by the APIs and could be c
 So `Delta S > 0` (and so `S+Delta S > 0`) in what follows.
 2. Calculate the entry valuation at the time stake `Delta S` is added / removed as
 
-```math
+```text
 (entry valuation) = sum over j from 1 to N of (LP j virtual stake)
 ```
 
@@ -141,21 +143,21 @@ Note, the `virtual stake` used in the calculation of `entry valuation` is after 
 This in particular means that if this is the first LP commitment on the market then the `(entry valuation) = Delta S`.
 3. Update the average entry valuation to
 
-```math
+```text
 (average entry valuation) <- (average entry valuation) x S / (S + Delta S) + (entry valuation) x (Delta S) / (S + Delta S)
 ```
 
 Example 1:
 Currently the sum of all virtual stakes is `900`. A new LP has `0` stake and add stake `Delta S = 100`. The sum of all virtual stakes is now `1000`. The average entry valuation is
 
-```math
+```text
 (average entry valuation) <- 0 + 1000 x 100 / (0 + 100) = 1000
 ```
 
 Example 2:
 A new LP1 has `0` stake and they wish to add `Delta S = 8000` and a new LP2 has `0` stake and they wish to add `Delta S = 2000`. Currently the sum of all virtual stakes is `10000` after the LP commitments added. The average entry valuations are:
 
-```math
+```text
 (average entry valuation LP1) <- 0 + 8000 x 8000 / (0 + 8000) = 8000
 (average entry valuation LP2) <- 0 + (8000 + 2000) x 2000 / (0 + 2000) = 10000
 ```
@@ -163,14 +165,14 @@ A new LP1 has `0` stake and they wish to add `Delta S = 8000` and a new LP2 has 
 Example 3:
 An existing LP has `average entry valuation 1000` and `S=100`. Currently the sum of all virtual stakes is `2000`. They wish to add `10` to their stake.
 
-```math
+```text
 (average entry valuation) <- 1000 x 100 / (100 + 10) + 2000 x 10 / (100 + 10) = 1090.9....
 ```
 
 Example 4:
 An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the sum of all virtual stakes is `3000`. They wish to remove `20` from their stake. Their average entry valuation stays the same
 
-```math
+```text
 (average entry valuation) = 1090.9
 ```
 
@@ -214,7 +216,7 @@ The liquidity fees are distributed pro-rata depending on the `LP i equity-like s
 We have `4` LPs with equity-like share shares:
 share as below
 
-```math
+```text
 LP 1 els = 0.65
 LP 2 els = 0.25
 LP 3 els = 0.1
@@ -222,7 +224,7 @@ LP 3 els = 0.1
 
 Trade happened, and the trade value for fee purposes multiplied by the liquidity fee factor is `103.5 ETH`. The following amounts be collected immediately into the LP fee accounts for the market:
 
-```math
+```text
 0.65 x 103.5 = 67.275 ETH to LP 1's LP account
 0.25 x 103.5 = 25.875 ETH to LP 2's LP account
 0.10 x 103.5 = 10.350 ETH to LP 3's LP account
@@ -230,7 +232,7 @@ Trade happened, and the trade value for fee purposes multiplied by the liquidity
 
 Then LP 4 made a delayed LP commitment, and updated share as below:
 
-```math
+```text
 LP 1 els = 0.43
 LP 2 els = 0.17
 LP 3 els = 0.07
@@ -239,7 +241,7 @@ LP 4 els = 0.33
 
 When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 
-```math
+```text
 67.275 ETH from LP 1's LP account to LP 1's general account
 25.875 ETH from LP 2's LP account to LP 2's general account
 10.350 ETH from LP 3's LP account to LP 3's general account
@@ -290,17 +292,17 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - An LP leaves a market that is above target stake when their fee bid is higher than the one currently being used: fee doesn't change (<a name="0042-LIQF-028" href="#0042-LIQF-028">0042-LIQF-028</a>)
 
 ### API
+
 - [ ] Equity-like share of each active LP can be obtained via the API (<a name="0042-LIQF-016" href="#0042-LIQF-016">0042-LIQF-016</a>)
 - [ ] Liquidity score of each active LP can be obtained via the API (<a name="0042-LIQF-017" href="#0042-LIQF-017">0042-LIQF-017</a>)
-### Distribution 
+
+### Distribution
 
 - [ ] If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment and that sees the same trade value. (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)  
 
+### successor market
 
-### successor market
 - [ ] If an LP has virtual stake of `11000` and stake of `10000` on a parent marketId=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `10000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake of `11000` and stake of `10000` on `m2`. (<a name="0042-LIQF-019" href="#0042-LIQF-019">0042-LIQF-019</a>)  
 - [ ] If an LP has virtual stake of `11000` and stake of `10000` on a parent marketId=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `20000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake which must be result of the virtual stake obtained from `m1` with the `delta=10000` added on, so virtual stake of `21000`, assuming all other LPs committed exactly the stake they had on `m1`. (<a name="0042-LIQF-020" href="#0042-LIQF-020">0042-LIQF-020</a>)  
-- [ ] If an LP has virtual stake of `11000` and stake of `10000` on a parent marketId=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `5000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake obtained from `m1` with the `delta=-5000` added on (i.e. 5000 removed). (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>) 
-
-
+- [ ] If an LP has virtual stake of `11000` and stake of `10000` on a parent marketId=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `5000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake obtained from `m1` with the `delta=-5000` added on (i.e. 5000 removed). (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>)
 - If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the time interval then they receive roughly 1/2 the fee income compared with the next time interval when they maintain their commitment (and the traded value is the same in both time intervals). (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)
