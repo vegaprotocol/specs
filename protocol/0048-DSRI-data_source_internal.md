@@ -1,16 +1,14 @@
 # [Data Source](./0045-DSRC-data_sourcing.md): Internal data
 
-
-# 0. Overview
+## 0. Overview
 
 Internal data sources provide data that comes from within Vega rather than an external source. They are defined and used in the same way as other data sources but are triggered by the relevant event in the Vega protocol rather than directly by an incoming transaction.
 
 The internal data sources are defined below.
 
+## 1. Data sources
 
-# 1. Data sources
-
-## 1.1 Value
+### 1.1 Value
 
 This data source provides an immediate value. It would be used either where a data source is required but the value may be known at the time of definition.
 
@@ -19,14 +17,14 @@ Any code expecting to be triggered when a value is received on a data source wou
 Initially the one use case of this is to submit a governance change proposal to update a futures market's settlement data source to a price value. This would happen if the defined data source fails and token holders choose to simply vote to accept a specific value to be used for settlement.
 
 Pseudocode example:
+
 ```rust
 value { type: number, value: 1400.5 }
 ```
 
-
 ## 1.2 Time triggered
 
-This data source would be used to emit an event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example. 
+This data source would be used to emit an event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example.
 
 This trigger will emit the contents of the specified data source (could be omitted if just triggering trading termination, or could be a value as described in 1.1, or another data source in order to implement a delay/ensure the value from the data source is not emitted before a certain time).
 
@@ -35,7 +33,8 @@ Note that trading terminated in the futures definition uses a data source as a t
 In future, there will be a need to support repeating time based triggers, for example every 2 days or at 04:00, 12:00 and 20:00 every day, etc. (as some products will have triggers that happen regularly).
 
 Pseudocode example:
-```
+
+```rust
 on: {
 	timestamp: '20210401T09:00:00'
 	data: value { type: number, value: 420.69 }
@@ -44,42 +43,42 @@ on: {
 ```
 
 Pseudocode example: (no data, just used to trigger event like trading terminated)
-```
+
+```rust
 on: {
 	timestamp: '202112311T23:59:59'
 }
 
 ```
 
-
 ## 1.3 Vega time changed
 
-This data source will emit the current Vega time *once* (and once only) whenever the Vega time changes. 
-This can be used directly as a data source supplying a time feed, or wrapped in a filter to trigger a simple event (i.e. one that does not need to consume a value from another data source, such as the [trading terminated trigger]() for cash settled futures, as only the Vega time will be supplied).
+This data source will emit the current Vega time *once* (and once only) whenever the Vega time changes.
+This can be used directly as a data source supplying a time feed, or wrapped in a filter to trigger a simple event (i.e. one that does not need to consume a value from another data source, such as the trading terminated trigger for cash settled futures, as only the Vega time will be supplied).
 
 Pseudocode example: (block time feed - not useful with Oregon Trail feature set)
+
 ```rust
 vegaprotocol.builtin.timestamp
 
 ```
 
 Pseudocode example: (with filter - i.e. for trading terminated trigger)
+
 ```rust
-filter { 
-	data: vegaprotocol.builtin.timestamp, 
+filter {
+	data: vegaprotocol.builtin.timestamp,
 	filters: [
 		greaterOrEqual { key: 'timestamp', value: '2023-12-31T23:55:00Z' }
 	]
 }
 ```
 
-
 ## Implementation
 
 Usage of internal oracle data are specified using properties prefixed with `vegaprotocol.builtin`, on the oracle spec.
 
-Currently (as of Oregon Trail), only the _Vega time changed (1.3 above)_ internal data source is implemented, through the property name `vegaprotocol.builtin.timestamp`.
-
+Currently (as of Oregon Trail), only the *Vega time changed (1.3 above)* internal data source is implemented, through the property name `vegaprotocol.builtin.timestamp`.
 
 ### Example with current implementation
 
@@ -117,3 +116,15 @@ Currently (as of Oregon Trail), only the _Vega time changed (1.3 above)_ interna
 	1. Create a cash settled futures market with the trading terminated trigger source being a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger.  (<a name="0048-DSRI-010" href="#0048-DSRI-010">0048-DSRI-010</a>)
 	1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger. (<a name="0048-DSRI-011" href="#0048-DSRI-011">0048-DSRI-011</a>)
 	1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the past. The market state changes to trading terminated immediately. (<a name="0048-DSRI-012" href="#0048-DSRI-012">0048-DSRI-012</a>)
+1. Termination oracle updated after market is terminated (<a name="0048-DSRI-015" href="#0048-DSRI-015">0048-DSRI-015</a>)
+	- setup one market with a boolean termination
+	- terminate the market (but do not settle it)
+	- update the market to have a time based termination
+	- update the market to have an earlier time based termination
+	- wait until the first timer to tick
+	- send through valid settlement data
+	- assert the the market settles successfully
+1. Time based termination across multiple markets (<a name="0048-DSRI-014" href="#0048-DSRI-014">0048-DSRI-014</a>)
+	- setup 3 markets, all with time based termination with identical signer details, two with the same time, one with a later time
+	- wait to all of them to terminate successfully
+	- assert they all settle successfully

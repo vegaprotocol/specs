@@ -65,10 +65,20 @@ pipeline {
                             branch 'master'
                         }
                     }
-                    steps {
-                        script {
-                            runApprobation ignoreFailure: !isPRBuild(),
-                                specsInternal: commitHash
+                    parallel {
+                        stage('Core') {
+                            steps {
+                                runApprobation ignoreFailure: !isPRBuild(),
+                                    specsInternal: commitHash,
+                                    type: 'core',
+                            }
+                        }
+                        stage('Frontend') {
+                            steps {
+                                runApprobation ignoreFailure: !isPRBuild(),
+                                    specsInternal: commitHash,
+                                    type: 'frontend',
+                            }
                         }
                     }
                 }

@@ -34,33 +34,38 @@ Likewise, pre-processing transactions will be needed as part of the [fees spec](
 - Once the price protection auction period finishes, the remaining triggers should be examined and if hit the auction period should be extended accordingly.
 - Then the market continues in the regular fashion.
 
-# Reference-level explanation
+## Reference-level explanation
 
-## Parameters
+### Parameters
 
-### Market
+#### Market
 
 - `priceMonitoringParameters` - an array of more price monitoring parameters with the following fields:
   - `horizon` - price projection horizon expressed as a year fraction over which price is to be projected by the risk model and compared to the actual market moves during that period. Must be positive.
-  - `probability` - probability level used in price monitoring. Must be in the (0,1) range.
+  - `probability` - probability level used in price monitoring. Must be in the [0.9,1) range.
   - `auctionExtension` - auction duration (or extension in case market is already in auction mode) per breach of the `horizon`, `probability` trigger pair specified above. Must be greater than 0.
 
-### Network
+If any of the above parameters or the risk model gets modified in any way, the price monitoring engine should get reset (price history gets cleared and bounds get recalculated). If the market is price monitoring auction (or auction extension triggered by price monitoring engine):
+
+- any remaining price monitoring bounds calculated prior to the update should get deactivated,
+- the auction end time implied by the currently running auction/extension should remain unchanged,
+- when auction uncrosses price monitoring should get reset using the updated parameters.
+
+#### Network
 
 - `market.monitor.price.defaultParameters`: Specifies default market parameters outlined in the previous paragraph. These will be used if market parameters don't get explicitly specified.
-- `market.monitor.price.updateFrequency`: Specifies how often (expressed in seconds) the price monitoring scaling factors should be updated by the risk model.
 
-### Hard-coded
-- Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market. 
+#### Hard-coded
 
-There are several reasons why this maximum is enforced. 
+- Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market.
+
+There are several reasons why this maximum is enforced.
 
 1. anything more than `5` triplets makes reasoning about what and when will trigger an auction more difficult and could lead to markets that behave in unexpected ways.
 1. allowing high number of triplets could have performance impact
-1. testing everything works correctly is more manageable if the number is capped. 
+1. testing everything works correctly is more manageable if the number is capped.
 
-
-## View from the Vega side
+### View from the Vega side
 
 - Per each transaction:
   - the matching engine sends the **price monitoring engine** the [arrival price of the next transaction](#guide-level-explanation) along with the current `vega time`
@@ -68,7 +73,7 @@ There are several reasons why this maximum is enforced.
   - if no trigger gets activated then the transaction is processed in a regular fashion, otherwise:
     - the price protection auction commences and the transaction considered should be processed in this way (along with any other orders on the book and pending transactions that are valid for auction).
 
-## View from the price monitoring engine side
+### View from the price monitoring engine side
 
 Price monitoring engine will interface between the matching engine and the risk model. It will communicate with the matching engine every time a new transaction is processed (to check it its' arrival price should trigger an auction). It will communicate with the risk model with a predefined frequency to inform the risk model of the latest price history and obtain a new set of scaling factors used to calculate min/max prices from the reference price.
 
@@ -81,27 +86,26 @@ Specifically:
   - the associated reference price
 to the risk model and obtains the range of valid up/down price moves per each of the specified triggers. Please note that these can be expressed as either additive offsets or multiplicative factors depending on the risk model used. The reference price is the latest price such that it's at least τ old or the earliest available price should price history be shorter than τ.
 - It holds the history of volume weighted average prices looking back to the maximum τ configured in the market.
-- Everytime a new price is received from the matching engine the price monitoring engine checks all the [τ, up factor, down factor] triplets relevant for the timestamp, looks-up the associated past (volume weighted) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescribed by the risk model.
+- Every time a new price is received from the matching engine the price monitoring engine checks all the [τ, up factor, down factor] triplets relevant for the timestamp, looks-up the associated past (volume weighted) price and sends the signal back to the matching engine informing if the received price would breach the min/max move prescribed by the risk model.
 - The bounds corresponding to the current time instant and the arrival price of the next transaction will be used to indicate if the price protection auction should commence, and if so, what should its' period be (see below).
 - To give an example, with 3 triggers the price protection auction can be calculated as follows:
   - \>=1% move in 10 min window -> 5 min auction,
-  - \>=2% move in 30 min window -> 15 min auction (i.e. if after 5 min this trigger condition is satisfied by the price we'd uncross at, extend auction by 10 mins),
-  - \>=5% move in 2 hour window -> 1 hour auction (if after 15 mins, this is satisfied by the price we'd uncross at, extend auction by another 45 mins).
+  - \>=2% move in 30 min window -> 15 min auction (i.e. if after 5 min this trigger condition is satisfied by the price we'd uncross at, extend auction by 10 minutes),
+  - \>=5% move in 2 hour window -> 1 hour auction (if after 15 minutes, this is satisfied by the price we'd uncross at, extend auction by another 45 minutes).
 - At the market start time and after each price-monitoring auction period the bounds will reset
   - hence the bounds between that time and the minimum τ specified in the triggers will be constant (calculated using current price, the minimum τ and α associated with it).
 - The resulting auction length should be at least `min_auction_length` (see the [auctions](./0026-AUCT-auctions.md#auction-config) spec). If the auction length implied by the triggers is less than that it should be extended.
 
-## View from [quant](https://github.com/vegaprotocol/quant) library side
+### View from [quant](https://github.com/vegaprotocol/quant) library side
 
 - The risk model calculates the bounds per reference price, horizon τ and confidence level α beyond which a price monitoring auction should be triggered.
 - The ranges of valid price moves are returned as either additive offsets or multiplicative factors for the up and down move. The price monitoring engine (PME) will know how to cope with either and apply it to the price bounds.
 - These bounds are to be available to other components and included in the market data API
-- Internally the risk model implements a function that takes as input: (reference price, confidence level alpha, time period tau) and returns either: 
+- Internally the risk model implements a function that takes as input: (reference price, confidence level alpha, time period tau) and returns either:
   - the additive offsets: f<sub>min</sub><sup>additive</sup>, f<sub>max</sub><sup>additive</sup> such that S<sub>min</sub>:=S<sub>ref</sub>+f<sub>min</sub><sup>additive</sup> and S<sub>max</sub>:=S<sub>ref</sub>+f<sub>max</sub><sup>additive</sup>  or
-  - the multiplicative factors: f<sub>min</sub><sup>multiplicative</sup>, f<sub>max</sub><sup>multiplicative</sup> such that S<sub>min</sub>:=S<sub>ref</sub>*f<sub>min</sub><sup>multiplicative</sup> and S<sub>max</sub>:=S<sub>ref</sub>*f<sub>max</sub><sup>multiplicative</sup> 
+  - the multiplicative factors: f<sub>min</sub><sup>multiplicative</sup>, f<sub>max</sub><sup>multiplicative</sup> such that S<sub>min</sub>:=S<sub>ref</sub>*f<sub>min</sub><sup>multiplicative</sup> and S<sub>max</sub>:=S<sub>ref</sub>*f<sub>max</sub><sup>multiplicative</sup>
 
   so that P(S<sup>min</sup> < S<sup>τ</sup> < S<sup>max</sup>) ≥ α.
-
 
 ## Acceptance Criteria
 
@@ -114,5 +118,14 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - Persistent order results in an auction (one trigger breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>)
 - A maximum of `5` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>)
 - Persistent order results in an auction (1 out of 2 triggers breached), orders placed during auction result in trade with indicative price outside the price monitoring bounds of the 2nd trigger, hence auction get extended (by extension period specified for the 2nd trigger), additional orders resulting in more trades (indicative price still outside the 2nd trigger bounds) placed, auction concludes. (<a name="0032-PRIM-008" href="#0032-PRIM-008">0032-PRIM-008</a>)
-- If the cumulative extentions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>)   
-- Change of `market.monitor.price.defaultParameters` will change the default market parameters used in price monitoring when a new market is proposed and market parameters don't get explicitly specified. (<a name="0032-PRIM-010" href="#0032-PRIM-010">0032-PRIM-010</a>)   
+- If the cumulative extensions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>)
+- Change of `market.monitor.price.defaultParameters` will change the default market parameters used in price monitoring when a new market is proposed and market parameters don't get explicitly specified. (<a name="0032-PRIM-010" href="#0032-PRIM-010">0032-PRIM-010</a>)
+- When market is in its default trading mode, change of `priceMonitoringParameters` results in price monitoring bounds being reset immediately. (<a name="0032-PRIM-011" href="#0032-PRIM-011">0032-PRIM-011</a>)
+- When market is in its default trading mode, change of a risk model or any of its parameters results in price monitoring bounds being reset immediately. (<a name="0032-PRIM-012" href="#0032-PRIM-012">0032-PRIM-012</a>)
+- When market is in price monitoring auction, change of `priceMonitoringParameters` doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values. (<a name="0032-PRIM-013" href="#0032-PRIM-013">0032-PRIM-013</a>)
+- When market is in price monitoring auction, change of a risk model or any of its parameters doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values. (<a name="0032-PRIM-014" href="#0032-PRIM-014">0032-PRIM-014</a>)
+- Specifying a non-positive horizon results in an error. (<a name="0032-PRIM-015" href="#0032-PRIM-015">0032-PRIM-015</a>)
+- Specifying a probability outside the range [0.9,1) results in an error. (<a name="0032-PRIM-016" href="#0032-PRIM-016">0032-PRIM-016</a>)
+- Specifying a non-positive auction extension results in an error. (<a name="0032-PRIM-017" href="#0032-PRIM-017">0032-PRIM-017</a>)
+- Settlement price outside the current price monitoring bounds does not trigger an auction (<a name="0032-PRIM-018" href="#0032-PRIM-018">0032-PRIM-018</a>)
+- A network trade (during closeout) with a price outside price monitoring bounds does not trigger an auction. (<a name="0032-PRIM-019" href="#0032-PRIM-019">0032-PRIM-019</a>)
