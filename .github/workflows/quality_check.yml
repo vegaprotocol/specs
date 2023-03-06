@@ -51,3 +51,18 @@ jobs:
           files: .
           config_file: .github/workflows/config/markdownlint.json
           ignore_path: .github/workflows/config/markdownlintignore
+
+  checkcodes:
+    name: "Approbation"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Check out"
+        uses: actions/checkout@v3
+
+      - name: "Run Check AC codes"
+        run: |
+          npx github:vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
+
+      - name: "Run Check file names"
+        run: |
+          npx github:vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"

@@ -204,7 +204,8 @@ On every trade, liquidity fee should be collected immediately into an account fo
 
 This account is not under control of the LP party (they cannot initiate transfers in or out of the account). The account is under control of the network and funds from this account will be transferred to the owning LP party according to the mechanism below.
 
-A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's margin account for the market. If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block.
+A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
+If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block.
 
 The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
 
@@ -239,9 +240,9 @@ LP 4 els = 0.33
 When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
 
 ```math
-67.275 ETH from LP 1's LP account to LP 1's margin account
-25.875 ETH from LP 2's LP account to LP 2's margin account
-10.350 ETH from LP 3's LP account to LP 3's margin account
+67.275 ETH from LP 1's LP account to LP 1's general account
+25.875 ETH from LP 2's LP account to LP 2's general account
+10.350 ETH from LP 3's LP account to LP 3's general account
 ```
 
 ### APIs for fee splits and payments
@@ -275,6 +276,19 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
 - All liquidity providers with `average fraction of liquidity provided by committed LP > 0` in the market receive a greater than zero amount of liquidity fee. The only exception is if a non-zero amount is rounded to zero due to integer representation. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
 
+### LP JOINING AND LEAVING MARKETS
+
+- An LP joining a market that is below the target stake with a higher fee bid than the current fee: their fee is used (<a name="0042-LIQF-019" href="#0042-LIQF-019">0042-LIQF-019</a>)
+- An LP joining a market that is below the target stake with a lower fee bid than the current fee: fee doesn't change (<a name="0042-LIQF-020" href="#0042-LIQF-020">0042-LIQF-020</a>)
+- An LP joining a market that is above the target stake with a sufficiently large commitment to push ALL higher bids above the target stake and a lower fee bid than the current fee: their fee is used (<a name="0042-LIQF-029" href="#0042-LIQF-029">0042-LIQF-029</a>)
+- An LP joining a market that is above the target stake with a commitment not large enough to push any higher bids above the target stake, and a lower fee bid than the current fee: the fee doesn't change (<a name="0042-LIQF-030" href="#0042-LIQF-030">0042-LIQF-030</a>)
+- An LP joining a market that is above the target stake with a commitment large enough to push one of two higher bids above the target stake, and a lower fee bid than the current fee: the fee changes to the other lower bid (<a name="0042-LIQF-023" href="#0042-LIQF-023">0042-LIQF-023</a>)
+- An LP joining a market that is above the target stake with a commitment large enough to push one of two higher bids above the target stake, and a higher fee bid than the current fee: the fee doesn't change (<a name="0042-LIQF-024" href="#0042-LIQF-024">0042-LIQF-024</a>)
+- An LP leaves a market that is above target stake when their fee bid is currently being used: fee changes to fee bid by the LP who takes their place in the bidding order (<a name="0042-LIQF-025" href="#0042-LIQF-025">0042-LIQF-025</a>)
+- An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size changes the LP that meets the target stake: fee changes to fee bid by the LP that is now at the place in the bid order to provide the target stake (<a name="0042-LIQF-026" href="#0042-LIQF-026">0042-LIQF-026</a>)
+- An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size doesn't the LP that meets the target stake: fee doesn't change (<a name="0042-LIQF-027" href="#0042-LIQF-027">0042-LIQF-027</a>)
+- An LP leaves a market that is above target stake when their fee bid is higher than the one currently being used: fee doesn't change (<a name="0042-LIQF-028" href="#0042-LIQF-028">0042-LIQF-028</a>)
+
 ### API
 - [ ] Equity-like share of each active LP can be obtained via the API (<a name="0042-LIQF-016" href="#0042-LIQF-016">0042-LIQF-016</a>)
 - [ ] Liquidity score of each active LP can be obtained via the API (<a name="0042-LIQF-017" href="#0042-LIQF-017">0042-LIQF-017</a>)
@@ -289,4 +303,4 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - [ ] If an LP has virtual stake of `11000` and stake of `10000` on a parent marketId=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `5000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake obtained from `m1` with the `delta=-5000` added on (i.e. 5000 removed). (<a name="0042-LIQF-021" href="#0042-LIQF-021">0042-LIQF-021</a>) 
 
 
-- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment (and the traded value is the same in both epochs). (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)
+- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the time interval then they receive roughly 1/2 the fee income compared with the next time interval when they maintain their commitment (and the traded value is the same in both time intervals). (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)
