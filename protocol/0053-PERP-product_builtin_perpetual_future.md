@@ -10,10 +10,10 @@ Perpetual futures are a simple "delta one" product. Mark-to-market settlement oc
 
 1. `settlement_asset (Settlement Asset)`: this is used to specify the single asset that an instrument using this product settles in.
 1. `settlement_cue (Data Source: datetime)`: this data is used to indicate the earliest time at which the next `settlement_data` should be expected.
-1. `settlement_data (Data Source: number)`: this data is used by the product to calculate periodic settlement cashflows. The receipt of this data triggers this calculation and the transfers between parties to "true up" to the external reference price.
+1. `settlement_data (Data Source: number)`: this data is used by the product to calculate periodic settlement cashflows. The receipt of this data triggers that calculation and the transfers between parties to "true up" to the external reference price.
 1. `settlement_cue_auction_duration`: a time interval which specifies the duration of an auction started once settlement cue is received. The auction ends when the specified time elapses or when the settlement data is received. A value of `0s` indicates no auction.
 1. `max_settlement_gap`: a time interval which specifies the amount of time without periodic settlement after which the market will go into protective auction and remain in that mode until settlement data is received.
-1. `settlement_data_monitoring`: if set to `true` any valid `settlement_data` will be checked against the market's [price monitoring](0032-PRIM-price_monitoring.md) engine. Specifically, the incoming settlement data will be checked against market's active [price monitoring bounds](0021-MDAT-market_data_spec.md#market-data-fields), if it falls within the bounds the periodic settlement proceeds, otherwise the system behaves as if the data was never received. This implies that if the oracle serves another valid datapoint which falls within the price monitoring bounds it will be used for periodic settlement.
+1. `settlement_data_monitoring`: if set to `true` any valid `settlement_data` will be checked against the market's [price monitoring](0032-PRIM-price_monitoring.md) engine. Specifically, the incoming settlement data will be checked against market's active [price monitoring bounds](0021-MDAT-market_data_spec.md#market-data-fields), if it falls within the bounds the periodic settlement proceeds, otherwise the system behaves as if the data was never received. This implies that if the oracle serves another valid datapoint which falls within the price monitoring bounds then that datapoint will be used for periodic settlement.
 
 Validation: none required as these are validated by the asset and data source frameworks.
 
@@ -33,8 +33,8 @@ The pseudocode below specifies a possible configuration of the built-in perpetua
             data_source: SignedMessage{ pubkey=0xA45e...d6 }
             field: 'price'
             filters: 
-                - received: >= 'settlement_cue.time'
-                - received: <= 'settlement_cue.time' + "35min"
+                - vegaprotocol.builtin.timestamp: >= 'settlement_cue.time'
+                - vegaprotocol.builtin.timestamp: <= 'settlement_cue.time' + "35min"
                 - 'timestamp': >= 'settlement_cue.time'
                 - 'timestamp': <= 'settlement_cue.time' + "30min"
                 - 'ticker': 'TSLA'
@@ -60,17 +60,17 @@ cash_settled_perpetual_future.value(quote) {
 
 ### 4.1 Periodic settlement cue
 
-Whenever an appropriate event is received the settlement cue returns the current `vega.time` to indicate the time at which the next periodic settlement should happen if other conditions for it are met:
+Whenever an appropriate event is received the settlement cue returns the current `vegaprotocol.builtin.timestamp` to indicate the time at which the next periodic settlement should happen if other conditions for it are met:
 
 ```javascript
 cash_settled_perpetual_future.settlement_cue(event) {
-	return vega.time
+	return vegaprotocol.builtin.timestamp
 }
 ```
 
 ### 4.2 Periodic settlement data received
 
-Once the [periodic settlement cue](#41-periodic-settlement-cue) time is received the specified settlement data oracle gets monitored for incoming data. If must be possible to filter the data by the time it was received at and to use the time provided by the settlement cue as a variable in such filter. If the periodic settlement data received satisfies all the filters that have been specified for it and its value falls within all of market's active [price monitoring bounds](0021-MDAT-market_data_spec.md#market-data-fields) (if `settlement_data_monitoring` flag is set to `true`, otherwise any numerical value is accepted), then:
+Once the [periodic settlement cue](#41-periodic-settlement-cue) time is received the specified settlement data oracle gets monitored for incoming data. It must be possible to filter the data by the time it was received (see [0048-DSRI-data_source_internal](./0048-DSRI-data_source_internal.md#13-vega-time-changed)) at and to use the time provided by the settlement cue as a variable in such filter. If the periodic settlement data received satisfies all the filters that have been specified for it and its value falls within all of market's active [price monitoring bounds](0021-MDAT-market_data_spec.md#market-data-fields) (if `settlement_data_monitoring` flag is set to `true`, otherwise any numerical value is accepted), then:
 
 ```javascript
 cash_settled_perpetual_future.settlement_data(event) {
