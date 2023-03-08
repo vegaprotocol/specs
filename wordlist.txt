@@ -53,6 +53,7 @@ cumulated
 customised
 DAI
 datanode
+datapoint
 datatypes
 datetime
 decentralised
