@@ -200,3 +200,55 @@ For the purposes of protocol upgrade each validator that participates in consens
 - (<a name="0075-PLUP-042" href="#0075-PLUP-042">0075-PLUP-042</a>) Trader balances available prior to upgrade is still available post upgrade.
 - (<a name="0075-PLUP-043" href="#0075-PLUP-043">0075-PLUP-043</a>) Pending and active assets available prior to upgrade is still available post upgrade.
 - (<a name="0075-PLUP-044" href="#0075-PLUP-044">0075-PLUP-044</a>) Network parameter, market and asset proposals can span a protocol upgrade.
+
+
+### Ethereum events during outage
+
+- (<a name="0075-PLUP-045" href="#0075-PLUP-045">0075-PLUP-045</a>) Deposit events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
+  1. Schedule an upgrade on a network that is not using visor.
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Deposit tokens via the ERC20 bridge.
+  1. Start the network using the upgrade binary.
+  1. Balance reported as added in the appropriate account(s).
+- (<a name="0075-PLUP-046" href="#0075-PLUP-046">0075-PLUP-046</a>) Staking events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
+  1. Ensure parties A & B have some stake, which is delegated to a/some node(s).
+  1. Schedule an upgrade on a network that is not using visor.
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Add stake to party A.
+  1. Remove some (not all) stake from party B.
+  1. Start the network using the upgrade binary.
+  1. Additional stake reported for party A and auto-delegated. Stake removed for party B and delegation reduced.
+- (<a name="0075-PLUP-047" href="#0075-PLUP-047">0075-PLUP-047</a>) Multisig events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
+  1. Arrange a network where one validator is promoted to replace another validator. Collect signatures to update the multisig contract, but do not yet update the multisig.
+  1. Schedule an upgrade on the network (should not be using visor).
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Update the multisig contract to reflect the correct validators.
+  1. Start the network using the upgrade binary.
+  1. At the end of the current epoch, rewards are paid out.
+- (<a name="0075-PLUP-048" href="#0075-PLUP-048">0075-PLUP-048</a>) Multisig events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
+  1. Arrange a network where one validator is promoted to replace another validator. Collect signatures to update the multisig contract, but do not yet update the multisig.
+  1. Schedule an upgrade on the network (should not be using visor).
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Do not update the multisig contract to reflect the correct validators.
+  1. Start the network using the upgrade binary.
+  1. At the end of the current epoch, rewards are not paid out.
+  1. Update the multisig contract to reflect the correct validators.
+  1. At the end of the current epoch, rewards are paid out.
+
+
+### Transactions during upgrade
+
+- (<a name="0075-PLUP-049" href="#0075-PLUP-049">0075-PLUP-049</a>) Network handles filled mempool during upgrade.
+  1. Schedule a protocol upgrade in a network with no nodes using visor.
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Start one node on the new binary.
+  1. Send enough transactions to the node to fill the tendermint mempool. (Expect sane rejection once mempool is full)
+  1. Start the other nodes on the correct upgrade binary.
+  1. Expect all transactions that reached the mempool without being rejected to be correctly processed over several blocks.
+- (<a name="0075-PLUP-050" href="#0075-PLUP-050">0075-PLUP-050</a>) Transactions can be made in block immediately before protocol upgrade.
+  1. Schedule a protocol upgrade in a network with no nodes using visor.
+  1. Continuously send transactions as the upgrade block approaches.
+  1. When the nodes stop processing blocks for the upgrade, make a note of all transactions which reached blocks already (transactions which did not are expected to be discarded).
+  1. Shut down the nodes.
+  1. Start all nodes on the new binary.
+  1. Expect all transactions that reached blocks prior to upgrade to have taken effect. None of the other transactions did.
