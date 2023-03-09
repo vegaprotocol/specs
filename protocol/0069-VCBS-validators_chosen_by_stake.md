@@ -446,6 +446,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
+        - Verify that one validator is replaced the following epoch, one in the epoch after
 
 1. `Ownstake` scenario7 (<a name="0069-VCBS-078" href="#0069-VCBS-078">0069-VCBS-078</a>)
         -Verify that 2 validators are replaced, one in each epoch
