@@ -254,7 +254,6 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There are `N-2` other parties and the delegation info in core says that other party `i` has delegated all its tokens to `validator_party_j` with `j = i mod 5`.
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
 
-
 ### Test case 6: Network Parameters / Exceptional case handling
 
 #### Test case 6.1: `timeElapsedBetweenCheckpoints` not set
@@ -374,7 +373,6 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Deposit tokens to a vega party via the ERC20 assert bridge.
 1. Restart the vega network from the checkpoint created earlier.
 1. There party's newly deposited assets are available. (<a name="0073-LIMN-074" href="#0073-LIMN-074">0073-LIMN-074</a>)
-
 
 ### Test case 20: Multisig updates during checkpoint restart.
 

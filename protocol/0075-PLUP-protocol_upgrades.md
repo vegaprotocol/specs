@@ -201,7 +201,6 @@ For the purposes of protocol upgrade each validator that participates in consens
 - (<a name="0075-PLUP-043" href="#0075-PLUP-043">0075-PLUP-043</a>) Pending and active assets available prior to upgrade is still available post upgrade.
 - (<a name="0075-PLUP-044" href="#0075-PLUP-044">0075-PLUP-044</a>) Network parameter, market and asset proposals can span a protocol upgrade.
 
-
 ### Ethereum events during outage
 
 - (<a name="0075-PLUP-045" href="#0075-PLUP-045">0075-PLUP-045</a>) Deposit events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
@@ -234,7 +233,6 @@ For the purposes of protocol upgrade each validator that participates in consens
   1. At the end of the current epoch, rewards are not paid out.
   1. Update the multisig contract to reflect the correct validators.
   1. At the end of the current epoch, rewards are paid out.
-
 
 ### Transactions during upgrade
 
