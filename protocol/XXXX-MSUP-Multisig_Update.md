@@ -28,7 +28,7 @@ replace_hash(h) Allows the voting contract (and that contract only) to replace
 
 Data structures:
 - voting_table: an array (hash, votes) defining all the votes a hash got (keyed by the hash)
-- user_votes: an array (key, hash1, hash2, ...)  defining all the hashes a key voted for (keyed by the users Ethereum key)
+- user_vote: an array (key, hash)  defines the hash a key voted for (keyed by the users Ethereum key)
 - user_weight an array (key, number_of_tokens) defining how many tokens a user locked (keyed by the users Ethereum key)
 
 Functions:
@@ -37,29 +37,31 @@ lock_tokens(): Allows an Ethereum key to lock all itstokens into the voting cont
   if the key already has tokens locked, abort // If you had tokens locked, then transfer new tokens to that
                                               // account, then try to lock them, then you're just strange. 
                                               // We want to keep things simple and not accomondate that.
-  set user_votes (key) to []                  // i.e., no votes issued.
+  set user_vote (key)  to NIL                 // i.e., no votes issued.
   set user_weight(key) to the amount of tokens locked
 
 unlock_tokens: Allows a key to unlock its tokens. This clears all its votes.
   Flow:
   if the key has no tokens locked, abort
-  for each hash in user_votes(key), substract user_weight(key)
-        if a hash now has 0 votes, delete that hash from voting_table
-  delete user_votes(key)
-  delete user_weight(key)
+  for the hash this user voted for, delete the vote: voting_table(user_votes(key) -= user_weight(key)
+        if the hash now has 0 votes, remove that hash from voting_table
+  remove user_vote(key)
+  remove user_weight(key)
 
 vote(hash): Allows a key to vote for a specific hash. What this does:
-  - Verify that that key hasn't voted for that hash before. If it has, abort.
+  - If the key has voted already, delete that vote: voting_table(user_votes(key) -= user_weight(key)
+            if the hash now has 0 votes, remove that hash from voting_table
   - if the hash doesn't exist in the voting table, create
-        voting_table (hash, votes), where votes = 0
+        voting_table (hash, votes), where votes = 0  
   - set voting_table (hash) += user_weight(key)
   - add hash to user_votes(key).
 
 evaluate(hash): Test if there are enough votes for a hash to execute:
+  - if hash == NIL, abort  // don't count the empty votes
   - if votes(hash,votes) > max( min_threshold, max_threshold- (current_block - bridge.last_update())*decay_rate, then
         call bridge.replace_hash(hash)
         set voting_table to []
-        set user_votes to []
+        set user_vote to []
 
 
 
@@ -69,7 +71,6 @@ Comment: Keys cannot lock a part of their tokens; allowing that would cause code
 
 A successfull change deletes all votes in the system. If you don't like it, vote again. This carries a slight risk, but avoids issues if we have two proposals that both have a chance to get the majority.
 
-Option: Allow only one hash; if a new hash is voted for, the old one is deleted.
 
 
 
