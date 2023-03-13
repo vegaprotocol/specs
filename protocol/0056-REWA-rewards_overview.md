@@ -127,6 +127,9 @@ The transfer will be retried the next epoch if it is still active.
 
 Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward metrics for any two parties. All funds will always be paid out.
 
+## Reward Diversion to Incentivize Signer Set Updates
+To ensure signer sets are regularly updated is to give validators a single Vega epoch to run the update (presumably those who would gail the most share). If they fail to update within the time limit, the block rewards are put up for rewards to whoever runs the transaction. This can be used as incentive against validator laziness. Whoever finally runs the transaction would get awarded the funds on their Vega account, minimizing ETH gas fees.
+
 
 ## Acceptance criteria
 

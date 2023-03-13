@@ -52,10 +52,14 @@ This will update the current `signer_set_data_hash` that will be compared to the
 
 This will also update the threshold if necessary.
 
-For details on how signer updating is incentivised [See Here](https://github.com/vegaprotocol/specs/blob/Multisig_v2_spec/protocol/0030-ETHM-multisig_control_spec.md)
+This transaction emits the `Signers_Updated(bytes32 new_signer_set_data_hash, uint16 new_threshold)` event.
+
+For details on how signer updating is incentivised [See Here](https://github.com/vegaprotocol/specs/blob/Multisig_v2_spec/protocol/0030-ETHM-multisig_control_spec.md#potential-incentivization)
 
 ### Signer Set Nonce
 In order to protect against the weights and signers creating the same signer set data hash, every time an update occurs, the signer set must have a dummy signer with a generated fake address and zero weight. This acts as a nonce for the signer set.
+This will prevent the signer set hash from ever reverting to a previous state, and thus resurrecting invalidated signature bundles.
+
 The dummy signer address should be in the following format: `0x[8 byte current epoch number][4 bytes 0][8 byte timestamp]` so for instance on epoch 1 at timestamp 1673365824 it would be `0x0000000000000001000000000000000063BD8940`
 
 ## Burn Hash
@@ -70,8 +74,9 @@ The MultisigControl smart contract contains the following functions and events.
 contract MultisigControl {
    
     /***************************EVENTS****************************/
-    event SignersUpdated(bytes32 new_signer_set_data_hash, uint16 new_threshold);
-    
+    event Signers_Updated(bytes32 new_signer_set_data_hash, uint16 new_threshold);
+    event Final_Hash_Burned(bytes32 bad_final_hash);
+
     /*************************FUNCTIONS***************************/
     function update_signers(
         bytes32 new_signer_set_data_hash, 
@@ -104,20 +109,36 @@ First, now weights of validators are accounted for on the smart contract, so dur
 Second, before validators sign the command, they will need to verify the entire signer set and weights are what they expect to be, as well as verify that the signer set nonce (see section above) fits the expected format of `0x[8 byte current epoch number][4 bytes 0][8 byte timestamp]`
 Worth noting is the threshold can be adjusted at the same time as a signer set update.
 
-# Signed Transaction Invalidation
-Any outstanding transactions that have been signed by validators, but not executed, will be invalidated once the signer set changes. This will happen automatically in the smart contract once the signer set change is executed as the signer set hash will not match any prior standing orders.
+In order to have a full picture of what transactions have been claimed, Vega must monitor for all events that utilize the Multisig Control contract, this includes the following events:
 
-## Assumptions
+* `Multisig_Control_Set(address indexed new_address, uint256 tx_id)`
+* `Bridge_Address_Set(address indexed new_address, uint256 tx_id)`
+* `Asset_Withdrawn(address indexed user_address, address indexed asset_source, uint256 amount, uint256 tx_id)`
+* `Asset_Deposited(address indexed user_address, address indexed asset_source, uint256 amount, bytes32 vega_public_key)`
+* `Asset_Deposit_Minimum_Set(address indexed asset_source,  uint256 new_minimum, uint256 tx_id)`
+* `Asset_Listed(address indexed asset_source,  bytes32 indexed vega_asset_id, uint256 tx_id)`
+* `Asset_Removed(address indexed asset_source,  uint256 tx_id)`
+* `Signers_Updated(bytes32 new_signer_set_data_hash, uint16 new_threshold)`
+* `Final_Hash_Burned(bytes32 bad_final_hash)`
+* `Asset_Migrated(address indexed asset_source, uint amount)`
+
+
+# Signed Transaction Invalidation
+Any outstanding transactions that have been signed by validators, but not executed, will be invalidated once the signer set changes. This will happen automatically in the smart contract once the signer set change is executed as the signer set hash will not match any prior standing orders. 
+
+Vega must account for this by using the `Asset_Withdrawn` events. Once verified to be unclaimed, a new signature bundle can be issued or the user can be credited with the outstanding balance.
+
+# Assumptions
 In order for outstanding Multisig orders to be invalidated the following MUST be true:
-* Vega sees multisig events from ETH
+* Vega sees all relevant multisig events from ETH
 * Vega sees them in order, or at least knows the order
 * Vega does not reissue a multisig order until it has seen the Sigher Set Updated event AND it has processed all previous events from that and precious blocks
 * Enough ETH blocks have passed to be assured of finality
-
-## Potential Incentivization  
-A potential way to ensure signer sets are regularly updated is to give validators a single Vega epoch to run the update (presumably those who would gail the most share). If they fail to update within the time limit, the block rewards are put up for rewards to whoever runs the transaction. This can be used as incentive against validator laziness. Whoever finally runs the transaction would get awarded the funds on their Vega account, minimizing ETH gas fees.
-
+ 
 If those conditions are met, Vega knows if a multisig order has been executed or not, and can respond correctly.
+
+# Potential Incentivization  
+A potential way to ensure signer sets are regularly updated is to give validators a single Vega epoch to run the update (presumably those who would gail the most share). If they fail to update within the time limit, the block rewards are put up for rewards to whoever runs the transaction. This can be used as incentive against validator laziness. Whoever finally runs the transaction would get awarded the funds on their Vega account, minimizing ETH gas fees.
 
 # V1 to V2 Migration
 This spec covers version 2 of Multisig Control.
@@ -127,10 +148,16 @@ This will necessitate a temporary migration smart contract that takes the place 
 
 Migration steps:
 1. Deploy the v2 multisig, bridge, and pool contracts
-2. Halt the v1 ERC20 bridge
-3. Burn any outstanding withdrawals
-4. Assign Migration Contract as the asset pool's ERC20 Bridge
-5. Run migrate function for the entirety of each asset in the Asset Pool to either v2 bridge via deposit function or directly to the v2 asset pool, depending on how things need to be done on the Vega side
+2. Halt the v1 ERC20 bridge, this emits the `Bridge_Stopped` event, after which we know no more withdrawals can be executed 
+3. Deploy Migration Contract
+4. Assign Migration Contract as the asset pool's ERC20 Bridge (a multisig transaction)
+5. Run `migrate_asset` function for the entirety of each asset in the Asset Pool to either v2 bridge via deposit function or directly to the v2 asset pool, depending on how things need to be done on the Vega side
+6. Account for executed withdrawals by using `Asset_Withdrawn` events and either reissue withdrawal bundles, or credit user on Vega with unclaimed invalidated withdrawals
+
+## Migration Contract
+This smart contract replaces the Bridge Logic smart contract when an asset pool migration needs to occur. It contains a single function that migrates a given amount of a given asset.
+
+`function migrate_asset(address asset_source, uint amount)`
 
 # Acceptance Criteria
 ### Vega-Side
