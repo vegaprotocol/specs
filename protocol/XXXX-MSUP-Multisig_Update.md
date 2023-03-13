@@ -26,6 +26,17 @@ These parameters are set at contract deployment and cannot be changed. If there 
 ## Recovery as Staking Bridge
 The Recovery/Vote contract will implement all of the IStake interface in order to allow tokens used for a vote to also be used to stake/delegate VEGA and ensure the continuation of Vega network.
 
+## Recovery Process
+* Proposer deposits VEGA into the recovery contract
+* Proposer makes a proposal and uploads it to IPFS
+* Proposer coordinates with Validators and creates a signer set hash that will update the bridge's signer set
+* Proposer calls `create_proposal` which emits the `Proposal_Created` event
+* Proposer coordinates the community to vote on their proposal
+* Users pull their VEGA off staking bridges and out of vesting (where possible) and deposit them into the Token Recover contract
+* Users run `set_vote` with the `proposal_id` emitted from the `Proposal_Created` event
+* Once the threshold is reached (either through numbers or threshold decay), a user runs `execute_proposal` which automatically updates the signer set hash
+* Vega sees the signer set updated and network is resumed
+
 ## Multisig Control smart contract:
 To enable this token recovery, any multisig smart contract will need to implement the following functions:
 
@@ -36,7 +47,6 @@ To enable this token recovery, any multisig smart contract will need to implemen
                 the hash value defining the validator set and weights
 
 ## Token Recovery smart contract:
-
 ### Data structures:
 - `Proposal`: Struct containing creation time, IPFS hash of the proposal document, the current vote count, and the new signer set hash should the proposal be successful
 - `User`: Struct containing values for deposited VEGA token amount, and the ID of the proposal that the user currently supports, all keyed on user's Ethereum address
