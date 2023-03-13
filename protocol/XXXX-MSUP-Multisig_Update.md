@@ -4,7 +4,7 @@ In case control of the bridge is lost (e.g., too many validators cease operating
 
 
 ## Properties:
-- Only unvested tokens are allowed to vote
+- Only VEGA tokens held in a user's Ethereum wallet can be deposited for a vote.
 - We have a decaying voting threshold - the required votes to change the validator set is lowered if the bridge isn't used.
 - Tokens need to be deposited into the vote smart contract in order to be counted. VEGA tokens that are voting on a recovery proposal cannot be sold unless withdrawn from the vote contract, decrementing the vote count of a supported proposal by the amount removed.
 - Outstanding proposals are invalidated once a proposal is successful
@@ -12,7 +12,7 @@ In case control of the bridge is lost (e.g., too many validators cease operating
 - All-or-nothing all of a user's deposited VEGA tokens count towards only 1 proposal at a time, and the entire amount is counted
 - Proposers must have VEGA deposited into voting smart contract
 - Any proposal whose vote count drops to zero is deleted
-
+- Once proposal goes through, the Token Recovery smart contract becomes the new Staking Bridge to ensure continuation of Vega network without more ETH transactions
 
 ## Parameters:
 These parameters are set at contract deployment and cannot be changed. If there needs to be an update, it needs to be redeployed and Vega needs to recognize the new contract and update it on the multisig contract with a multisig transaction.
@@ -23,6 +23,9 @@ These parameters are set at contract deployment and cannot be changed. If there 
 - `multisig_address`: address of the Multisig Control smart contract
 - `voting_token_address`: the address of VEGA token
    
+## Recovery as Staking Bridge
+The Recovery/Vote contract will implement all of the IStake interface in order to allow tokens used for a vote to also be used to stake/delegate VEGA and ensure the continuation of Vega network.
+
 ## Multisig Control smart contract:
 To enable this token recovery, any multisig smart contract will need to implement the following functions:
 
@@ -73,3 +76,4 @@ To enable this token recovery, any multisig smart contract will need to implemen
 
 ### Events:
 - `Proposal_Created(uint256 indexed proposal_id, uint256 timestamp, string ipfs_hash, bytes32 new_signer_set_hash)`
+
