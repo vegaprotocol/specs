@@ -36,6 +36,7 @@ The Recovery/Vote contract will implement all of the IStake interface in order t
 * Users run `set_vote` with the `proposal_id` emitted from the `Proposal_Created` event
 * Once the threshold is reached (either through numbers or threshold decay), a user runs `execute_proposal` which automatically updates the signer set hash
 * Vega sees the signer set updated and network is resumed
+* Since votes are also credited as stake, users can begin to delegate.
 
 ## Multisig Control smart contract:
 To enable this token recovery, any multisig smart contract will need to implement the following functions:
