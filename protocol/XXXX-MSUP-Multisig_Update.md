@@ -1,80 +1,70 @@
-*Purpose:
+*Multisig Token Recovery:
 
-In case control of the bridge is lost (e.g., too many validators cease operating at the same time), allow for a tokenholder vote to restore the functionality by replacing the hash representing the validator identities in the bridge.
+In case control of the bridge is lost (e.g., too many validators cease operating at the same time), this allows for a tokenholder vote to restore the functionality by replacing the signer set hash, comprised of validator addresses and vote weights, on the Multisig Control smart contract.
 
 
 **Properties:
 - Only unvested tokens are allowed to vote
 - We have a decaying voting threshold - the required votes to change the validator set is lowered if the bridge isn't used.
-- Tokens need to be locked to be allowed to vote, and then cannot be sold unless unlocked (which invalidates the vote)
+- Tokens need to be deposited into the vote smart contract in order to be counted. VEGA tokens that are voting on a recovery proposal cannot be sold unless withdrawn from the vote contract, decrementing the vote count of a supported proposal by the amount removed.
+- Outstanding proposals are invalidated once a proposal is successful
+- Votes for valid proposals can be counted at any time and immediately update the multisig control signer set hash
+- All-or-nothing all of a user's deposited VEGA tokens count towards only 1 proposal at a time, and the entire amount is counted
+- Proposers must have VEGA deposited into voting smart contract
+- Any proposal whose vote count drops to zero is deleted
 
 
 **Variables:
    max_threshold: The maximum threshold required for a valid vote (unit: number of tokens)
    min_threshold: The minimum threshold required for a valid vote (unit: number of tokens)
-   decay_rate: how fast the threshoild decays over time while the bridge is not accessed (unit: numbeer of tokens/Ethereum block)
+   decay_rate: how fast the threshold decays over time while the bridge is not accessed (unit: number of tokens/Ethereum block)
+   
 
-
-**Bridge contract:
+**Multisig Control smart contract:
 
 Functions:
-last_update():  Allows another contract to query the last Ethereum block when
+last_transaction():  Allows another contract to query the last Ethereum timestamp when
                 the multisig was used successfully
-replace_hash(h) Allows the voting contract (and that contract only) to replace
-                the hash value defining the validator set
+emergency_recovery(h): Allows the voting contract (and that contract only) to replace
+                the hash value defining the validator set and weights
 
-
-**Voting Contract:
+**Token Recovery smart contract:
 
 Data structures:
-- voting_table: an array (hash, votes) defining all the votes a hash got (keyed by the hash)
-- user_vote: an array (key, hash)  defines the hash a key voted for (keyed by the users Ethereum key)
-- user_weight an array (key, number_of_tokens) defining how many tokens a user locked (keyed by the users Ethereum key)
+- Proposal: Struct containing creation time, IPFS hash of the proposal document, the current vote count, and the new signer set hash should the proposal be successful
+- User: Struct containing values for deposited VEGA token amount, and the ID of the proposal that the user currently supports, all keyed on user's Ethereum address
 
 Functions:
-lock_tokens(): Allows an Ethereum key to lock all itstokens into the voting contract, provided it has tokens, and they are not already locked to either the vesting contract or the voting contract. This initialises the votes to 0.
-  Flow:
-  if the key already has tokens locked, abort // If you had tokens locked, then transfer new tokens to that
-                                              // account, then try to lock them, then you're just strange. 
-                                              // We want to keep things simple and not accomondate that.
-  set user_vote (key)  to NIL                 // i.e., no votes issued.
-  set user_weight(key) to the amount of tokens locked
+current_threshold(): 
+- The current calculated threshold based on the amount of time since the last successful multisig control transaction.
 
-unlock_tokens: Allows a key to unlock its tokens. This clears all its votes.
-  Flow:
-  if the key has no tokens locked, abort
-  for the hash this user voted for, delete the vote: voting_table(user_votes(key) -= user_weight(key)
-        if the hash now has 0 votes, remove that hash from voting_table
-  remove user_vote(key)
-  remove user_weight(key)
+propose_recovery(string memory ipfs_hash, bytes32 new_signer_set_hash):
+- Creates a new proposal
+- User must have previously deposited VEGA
+- Emits Proposal_Created event containing assigned proposal_id
 
-vote(hash): Allows a key to vote for a specific hash. What this does:
-  - If the key has voted already, delete that vote: voting_table(user_votes(key) -= user_weight(key)
-            if the hash now has 0 votes, remove that hash from voting_table
-  - if the hash doesn't exist in the voting table, create
-        voting_table (hash, votes), where votes = 0  
-  - set voting_table (hash) += user_weight(key)
-  - add hash to user_votes(key).
+deposit(uint256 amount):
+- Deposits amount of tokens
+- Updates user's vote count
+- Updates vote count of user's selected proposal
 
-evaluate(hash): Test if there are enough votes for a hash to execute:
-  - if hash == NIL, abort  // don't count the empty votes
-  - if votes(hash,votes) > max( min_threshold, max_threshold- (current_block - bridge.last_update())*decay_rate, then
-        call bridge.replace_hash(hash)
-        set voting_table to []
-        set user_vote to []
+withdraw(uint256 amount):
+- Removes amount of tokens from contract and transfers them to user
+- Updates user's vote count
+- Updates vote count of user's selected proposal
+- Deletes proposal if vote count goes to zero
 
+set_vote(uint256 proposal_id):
+- Puts user's entire vote count towards the selected proposal
+- Updates user's selected proposal
+- Updates votes of user's previously selected proposal
+- Deletes previously selected proposal if votes drop to zero
+- Updates votes of users newly selected proposal
 
+execute_proposal(uint256 vote_id):
+- Counts current votes on proposal
+- Updates singer set hash via `emergency_recovery(hash)` on Multisig_Control smart contract
+- Invalidates all other outstanding proposals
 
-
-
-Comment: Keys cannot lock a part of their tokens; allowing that would cause code complexity, as locking additional tokens would require weight updates, etc. If you want to use partial tokens, move them to a separate ETH key first.
-
-A successfull change deletes all votes in the system. If you don't like it, vote again. This carries a slight risk, but avoids issues if we have two proposals that both have a chance to get the majority.
-
-
-
-
-
-  - If the hash doesn't exist in the voting table, create
-        voting_table (hash, votes), where votes = 0
-
+Events:
+Proposal_Created(uint256 indexed proposal_id, uint256 timestamp, string ipfs_hash, bytes32 new_signer_set_hash)
