@@ -164,8 +164,31 @@ This smart contract replaces the Bridge Logic smart contract when an asset pool 
 * Every signer set and weight update MUST contain a random dummy signer as nonce. 
 * The dummy signer MUST follow the format `0x[8 byte current epoch number][4 bytes 0][8 byte timestamp]`. 
 * Every validator MUST verify that the epoch number and timestamp are correct.
+* Every node must verify every Withdrawal event
 
-### MultisigControl Smart Contract 
+### Multisig_Control Smart Contract 
+* `verify_signatures` must take in a message hash, byte string of signer set data, and byte string of signatures and make the following checks:
+   * all recovered addresses from signatures match their position in the signer set
+   * signer set hash must match stored signer set hash
+   * summed weights of addresses that signed must be greater than the stored threshold
+* `verify_signatures` must not run if below threshold
+* `verify_signatures` must not allow reuse of signature bundle
+* `verify_signatures` must not allow use of burned final hash
+* `verify_signatures` must not allow use of signature bundle issued by anything other than the current signer set
+* `verify_signatures` must not allow any alterations of the signature bundle
+* `verify_signatures` must not allow any alterations of the signer set
+* `verify_signatures` must not allow any alterations of the message hash
+* `burn_final_hash` must stop a final hash from being used with `verify_signature`
+* `burn_final_hash` must use Multisig Control
+* `update_signers` must update the signer set hash
+* `update_signers` must invalidate previously valid multisig transaction
+* `update_signers` must use Multisig Control
+* `update_signers` must update threshold
+* `is_final_hash_used` must return false for unused final hash
+* `is_final_hash_used` must return true for burned final hash
+* `is_final_hash_used` must return true for used final hash
+* `get_signer_set_data_details` must show signer set data hash and current threshold
 
-### MultisigControl Consuming Smart Contract
- 
+### Multisig_Control Consuming Smart Contract
+* Every Multisig_Control protected function must call `verify_signatures` on Multisig_Control passing in the appropriate parameters
+* Every Multisig_Control protected function must implement some uniqueness in their message_hash 
