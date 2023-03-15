@@ -164,7 +164,7 @@ When wishing to use my wallet to sign arbitrary messages, I...
 
 - **must** enter content to be signed with key  (<a name="0001-WALL-062" href="#0001-WALL-062">0001-WALL-062</a>)
    - **should** only have the option to broadcast valid Vega transactions to a selected network
-- **must** be able to submit/sign the content and am given a hash of the signed content as well as the message (now encoded) (<a name="0001-WALL-065" href="#0001-WALL-065">0001-WALL-065</a>)
+- **must** be able to submit/sign the content (<a name="0001-WALL-065" href="#0001-WALL-065">0001-WALL-065</a>)
   - **must** be able to [track progress](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network) of broadcast transaction either by being given a hash that I can use in block explorer, or see the transaction status (<a name="0001-WALL-071" href="#0001-WALL-071">0001-WALL-071</a>)
 
 .. so I can control of the message being signed, and can use the message elsewhere (for example to prove I own a wallet)
@@ -176,7 +176,7 @@ When seeking to reduce risk of compromise I...
 - **must** be able to switch between wallets (<a name="0001-WALL-067" href="#0001-WALL-067">0001-WALL-067</a>)
 - **must** be able to remove a wallet (<a name="0001-WALL-068" href="#0001-WALL-068">0001-WALL-068</a>)
 - **must** be able to change wallet name (<a name="0001-WALL-069" href="#0001-WALL-069">0001-WALL-069</a>)
-- **must** be able to change wallet passphrase (<a name="0001-WALL-070" href="#0001-WALL-070">0001-WALL-070</a>)
+- **should** be able to change wallet passphrase
 - `TODO:` **should** be able to link some wallets to specific networks
 
 ... so that I must administrate my wallets
