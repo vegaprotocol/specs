@@ -165,7 +165,7 @@ When wishing to use my wallet to sign arbitrary messages, I...
 - **must** enter content to be signed with key  (<a name="0001-WALL-062" href="#0001-WALL-062">0001-WALL-062</a>)
    - **should** only have the option to broadcast valid Vega transactions to a selected network
 - **must** be able to submit/sign the content (<a name="0001-WALL-065" href="#0001-WALL-065">0001-WALL-065</a>)
-  - **must** be able to [track progress](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network) of broadcast transaction either by being given a hash that I can use in block explorer, or see the transaction status (<a name="0001-WALL-071" href="#0001-WALL-071">0001-WALL-071</a>)
+  - **should** be able to [track progress](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network) of broadcast transaction either by being given a hash that I can use in block explorer, or see the transaction status
 
 .. so I can control of the message being signed, and can use the message elsewhere (for example to prove I own a wallet)
 
