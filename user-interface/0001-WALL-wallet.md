@@ -163,7 +163,6 @@ When I want to create an extra level of security for a given key, I...
 When wishing to use my wallet to sign arbitrary messages, I...
 
 - **must** enter content to be signed with key  (<a name="0001-WALL-062" href="#0001-WALL-062">0001-WALL-062</a>)
-- **must** see an option to base64 encode content before signing (<a name="0001-WALL-063" href="#0001-WALL-063">0001-WALL-063</a>)
    - **should** only have the option to broadcast valid Vega transactions to a selected network
 - **must** be able to submit/sign the content and am given a hash of the signed content as well as the message (now encoded) (<a name="0001-WALL-065" href="#0001-WALL-065">0001-WALL-065</a>)
   - **must** be able to [track progress](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network) of broadcast transaction (<a name="0001-WALL-071" href="#0001-WALL-071">0001-WALL-071</a>)
