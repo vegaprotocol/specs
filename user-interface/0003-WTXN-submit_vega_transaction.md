@@ -39,11 +39,10 @@ if the wallet highlights an issue with the transaction:
 ## Track transaction on network 
 
 - **must** see a link to that transaction in a block explorer for the appropriate network (<a name="0003-WTXN-012" href="#0003-WTXN-012">0003-WTXN-012</a>)
-- **must** see the transaction status - TODO Document these (<a name="0003-WTXN-013" href="#0003-WTXN-013">0003-WTXN-013</a>)
-- **must** see the network the transaction was broadcast to (<a name="0003-WTXN-018" href="#0003-WTXN-018">0003-WTXN-018</a>)
-- **must** see the block the transaction was processed in (<a name="0003-WTXN-014" href="#0003-WTXN-014">0003-WTXN-014</a>)
-- **must** show the node the transaction was broadcast to (<a name="0003-WTXN-015" href="#0003-WTXN-015">0003-WTXN-015</a>)
-- **must** see the validator that processed the block the transaction was processed in (<a name="0003-WTXN-016" href="#0003-WTXN-016">0003-WTXN-016</a>)
-- **must** see the content of the transaction as seen by the network (<a name="0003-WTXN-017" href="#0003-WTXN-017">0003-WTXN-017</a>)
+- **should** see an indication transaction status
+- **should** see the network the transaction was broadcast to
+- **should** see the block the transaction was processed in
+- **should** show the node the transaction was broadcast to
+- **could** see the validator that processed the block the transaction was processed in 
 
 ... so I am aware of the transactions status of the transactions my wallet is sending and that are being processed by the network
