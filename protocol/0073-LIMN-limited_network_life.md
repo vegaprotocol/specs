@@ -374,7 +374,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Restart the vega network from the checkpoint created earlier.
 1. There party's newly deposited assets are available. (<a name="0073-LIMN-074" href="#0073-LIMN-074">0073-LIMN-074</a>)
 
-### Test case 20: Multisig updates during checkpoint restart.
+### Test case 20: Multisig updates during checkpoint restart
 
 1. On a vega network where one validator has been promoted in favour of another (do not update multisig conract to reflect this), and there are tokens in reward accounts ready for distribution.
 1. Wait for a checkpoint to be available for checkpoint restart.
@@ -384,7 +384,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Restart the vega network from the checkpoint created earlier.
 1. Vega observes the multisig change and rewards are paid at the end of the current epoch. (<a name="0073-LIMN-075" href="#0073-LIMN-075">0073-LIMN-075</a>)
 
-### Test case 21: Loading from checkpoint with invalid multisig.
+### Test case 21: Loading from checkpoint with invalid multisig
 
 1. On a vega network where one validator has been promoted in favour of another (do not update multisig conract to reflect this), and there are tokens in reward accounts ready for distribution.
 1. Wait for a checkpoint to be available for checkpoint restart.

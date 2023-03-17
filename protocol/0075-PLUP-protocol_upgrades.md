@@ -203,13 +203,13 @@ For the purposes of protocol upgrade each validator that participates in consens
 
 ### Ethereum events during outage
 
-- (<a name="0075-PLUP-045" href="#0075-PLUP-045">0075-PLUP-045</a>) Deposit events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
+- (<a name="0075-PLUP-045" href="#0075-PLUP-045">0075-PLUP-045</a>) Deposit events that take place during protocol upgrade are registered by the network once the upgrade is complete.
   1. Schedule an upgrade on a network that is not using visor.
   1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
   1. Deposit tokens via the ERC20 bridge.
   1. Start the network using the upgrade binary.
   1. Balance reported as added in the appropriate account(s).
-- (<a name="0075-PLUP-046" href="#0075-PLUP-046">0075-PLUP-046</a>) Staking events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
+- (<a name="0075-PLUP-046" href="#0075-PLUP-046">0075-PLUP-046</a>) Staking events that take place during protocol upgrade are registered by the network once the upgrade is complete.
   1. Ensure parties A & B have some stake, which is delegated to a/some node(s).
   1. Schedule an upgrade on a network that is not using visor.
   1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
@@ -217,14 +217,14 @@ For the purposes of protocol upgrade each validator that participates in consens
   1. Remove some (not all) stake from party B.
   1. Start the network using the upgrade binary.
   1. Additional stake reported for party A and auto-delegated. Stake removed for party B and delegation reduced.
-- (<a name="0075-PLUP-047" href="#0075-PLUP-047">0075-PLUP-047</a>) Multisig events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
+- (<a name="0075-PLUP-047" href="#0075-PLUP-047">0075-PLUP-047</a>) Multisig events that take place during protocol upgrade are registered by the network once the upgrade is complete.
   1. Arrange a network where one validator is promoted to replace another validator. Collect signatures to update the multisig contract, but do not yet update the multisig.
   1. Schedule an upgrade on the network (should not be using visor).
   1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
   1. Update the multisig contract to reflect the correct validators.
   1. Start the network using the upgrade binary.
   1. At the end of the current epoch, rewards are paid out.
-- (<a name="0075-PLUP-048" href="#0075-PLUP-048">0075-PLUP-048</a>) Multisig events that take place during protocol upgrade are registered by the network once the upgrade is complete. 
+- (<a name="0075-PLUP-048" href="#0075-PLUP-048">0075-PLUP-048</a>) Multisig events that take place during protocol upgrade are registered by the network once the upgrade is complete.
   1. Arrange a network where one validator is promoted to replace another validator. Collect signatures to update the multisig contract, but do not yet update the multisig.
   1. Schedule an upgrade on the network (should not be using visor).
   1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
