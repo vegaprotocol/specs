@@ -99,7 +99,6 @@ If `riskiest long == 0` then `maintenance_margin_long = 0`.
 
 In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-RSKM-quant_risk_models.ipynb).
 
-
 `maintenance_margin_long = maintenance_margin_long_open_position + maintenance_margin_long_open_orders`
 
 with
@@ -146,7 +145,6 @@ If `riskiest short == 0` then `maintenance_margin_short = 0`.
 
 Else
 
-
 `maintenance_margin_short = maintenance_margin_short_open_position + maintenance_margin_short_open_orders`
 
 with
@@ -174,7 +172,6 @@ where meanings of terms in Step 1 apply except for:
 ## Margin calculation for auctions
 
 We are assuming that:
-
 
 - `indicative_uncrossing_price` is *not* the mark price, so no mark-to-market transfers happen (update mark-to-market spec)
 - mark price never changes during an auction, so it's the last mark price from before auction,
