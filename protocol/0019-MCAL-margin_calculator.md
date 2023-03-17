@@ -241,7 +241,6 @@ collateral_release_level = 677.6 * collateral_release_scaling_factor = 677.6 * 1
 initial_margin = 677.6 * initial_margin_scaling_factor = 677.6 * 1.2
 search_level = 677.6 * search_level_scaling_factor = 677.6 * 1.3
 
-
 ```
 
 ### EXAMPLE 2 - calculating correct slippage volume
