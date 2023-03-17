@@ -376,9 +376,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ### Test case 20: Multisig updates during checkpoint restart
 
-1. On a vega network where one validator has been promoted in favour of another (do not update multisig conract to reflect this), and there are tokens in reward accounts ready for distribution.
+1. On a vega network where one validator has been promoted in favour of another (do not update multisig contract to reflect this), and there are tokens in reward accounts ready for distribution.
 1. Wait for a checkpoint to be available for checkpoint restart.
-1. Retrieve the signatures to update the multisig conract (do not update yet).
+1. Retrieve the signatures to update the multisig contract (do not update yet).
 1. Stop the network.
 1. Update the multisig contract.
 1. Restart the vega network from the checkpoint created earlier.

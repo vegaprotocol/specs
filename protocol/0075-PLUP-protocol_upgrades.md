@@ -203,13 +203,13 @@ For the purposes of protocol upgrade each validator that participates in consens
 
 ### Ethereum events during outage
 
-- (<a name="0075-PLUP-045" href="#0075-PLUP-045">0075-PLUP-045</a>) Deposit events that take place during protocol upgrade are registered by the network once the upgrade is complete.
+- (<a name="0075-PLUP-051" href="#0075-PLUP-051">0075-PLUP-051</a>) Deposit events that take place during protocol upgrade are registered by the network once the upgrade is complete.
   1. Schedule an upgrade on a network that is not using visor.
   1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
   1. Deposit tokens via the ERC20 bridge.
   1. Start the network using the upgrade binary.
   1. Balance reported as added in the appropriate account(s).
-- (<a name="0075-PLUP-046" href="#0075-PLUP-046">0075-PLUP-046</a>) Staking events that take place during protocol upgrade are registered by the network once the upgrade is complete.
+- (<a name="0075-PLUP-052" href="#0075-PLUP-052">0075-PLUP-052</a>) Staking events that take place during protocol upgrade are registered by the network once the upgrade is complete.
   1. Ensure parties A & B have some stake, which is delegated to a/some node(s).
   1. Schedule an upgrade on a network that is not using visor.
   1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
