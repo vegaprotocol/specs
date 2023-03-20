@@ -8,9 +8,9 @@ The primary job(s) of a wallet is to [sign/encrypt transaction](../protocol/0022
 ## Get wallet
 When on the wallet page of Vega.xyz, I...
 
-- **must** see links to the latest version of all the available wallets (e.g. desktop, command line and browser plugin) (inc github repos) (<a name="0001-WALL-001" href="#0001-WALL-001">0001-WALL-001</a>)
-- **must** see a download link for the various operating systems (<a name="0001-WALL-002" href="#0001-WALL-002">0001-WALL-002</a>)
-- **must** be able to use the default wallet version linked/downloadable from this page with the version of Vega currently running on mainnet (<a name="0001-WALL-076" href="#0001-WALL-076">0001-WALL-076</a>)
+- **should** see links to the latest version of all the available wallets (e.g. desktop, command line and browser plugin) (inc github repos) 
+- **should** see a download link for the various operating systems 
+- **should** be able to use the default wallet version linked/downloadable from this page with the version of Vega currently running on mainnet
 
 ...so I can download and run a wallet on my machine and use it to interact with the Vega mainnet
 
@@ -39,7 +39,7 @@ When using the wallet on a network, I...
 ## Update wallet
 When using an older version of a Vega wallet than the current official release, I...
 
-- **must** be prompted to download a newer major release version, and given a link to get latest on github (<a name="0001-WALL-014" href="#0001-WALL-014">0001-WALL-014</a>)
+- **must** be prompted to download a newer major release version, and given a link to get latest on github 
 - **must** be warned if the version I am using is not compatible with the version of Vega on the selected network, and I am given a link to get latest compatible version on github (<a name="0001-WALL-015" href="#0001-WALL-015">0001-WALL-015</a>)
 
 ... so the version of the wallet app I am using works with the network I am using
@@ -94,7 +94,7 @@ When thinking about a recent or specific transaction, I ...
 - **must** see a history of transactions the wallet has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
 - **could** see a history of transactions the selected key has broadcast to a network (e.g. another wallet with the same keys), or from before a key restore
 - **must** see pending transactions (Transactions I have not yet confirmed/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
-- **must** see transactions that have recently been broadcast but not yet seen on the chain (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
+- **should** see transactions that have recently been broadcast but not yet seen on the chain 
 - **must** see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
 - (for tainted keys) **should** see attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions) (<a name="0001-WALL-038" href="#0001-WALL-038">0001-WALL-038</a>)
 
@@ -103,22 +103,22 @@ When thinking about a recent or specific transaction, I ...
 ## Transaction detail
 when looking at a specific transaction...
 
-- **must** see the content of the transaction decoded (<a name="0001-WALL-039" href="#0001-WALL-039">0001-WALL-039</a>)
-- **must** see the time request to sign and send was made (<a name="0001-WALL-040" href="#0001-WALL-040">0001-WALL-040</a>)
+- **should** see the content of the transaction decoded
+- **should** see the time request to sign and send was made
 - **should** see the referrer that made the request (with note that this is not verified)
-- **must** see what wallet / key is being used (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
+- **should** see what wallet / key is being used 
 - **should** be able to select auto-confirm for this dApp (aka don't ask me again) (aka automatic consent)
   - **should** be able to select to auto-confirm for a amount of time that I choose
   - **should** be able to select to auto-confirm for a number of transaction that I choose 
-- **must** be prompted to enter passphrase (when needed to sign + broadcast transaction) (<a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>)
-- **must** see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network). (<a name="0001-WALL-045" href="#0001-WALL-045">0001-WALL-045</a>)
-- **must** be able to follow a link to block explorer for broadcasted transactions (<a name="0001-WALL-046" href="#0001-WALL-046">0001-WALL-046</a>)
+- **should** be prompted to enter passphrase (when needed to sign + broadcast transaction)
+- **should** see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network)
+- **should** be able to follow a link to block explorer for broadcasted transactions 
 - if broadcast: **should** see what node it was broadcast to
 - if broadcast + mined: **could** see what validator mined the block the transaction was included in
-- if broadcast + mined: **must** see at what block and time it was confirmed (<a name="0001-WALL-049" href="#0001-WALL-049">0001-WALL-049</a>)
-- if broadcast but there was an error: **must** see if there was a reported error/issue, and the details of the issue
+- if broadcast + mined: **should** see at what block and time it was confirmed 
+- if broadcast but there was an error: **should** see if there was a reported error/issue, and the details of the issue
 - if broadcast + mined: **must** see if the transaction was rejected, and why
-- if ignored: **must** be able to submit, reject or still ignore the transaction (<a name="0001-WALL-079" href="#0001-WALL-079">0001-WALL-079</a>)
+- if ignored: **should** be able to submit, reject or still ignore the transaction 
 
 .. so I can find all the information about what has happened with mined and un-mined transactions
 ## Key management
