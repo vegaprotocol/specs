@@ -28,11 +28,12 @@ if transaction is rejected by wallet:
 
 if the wallet does not respond:
 
-- **must** be able to cancel attempt to submit transaction (<a name="0003-WTXN-008" href="#0003-WTXN-008">0003-WTXN-008</a>)
+- **must** not be able prevented from using the app, e.g. you can  (<a name="0003-WTXN-008" href="#0003-WTXN-008">0003-WTXN-008</a>)
+- **would** like to be able to cancel the transaction from the dapp so that the wallet is no longer in the state where it is asking user to confirm
 
 if the wallet highlights an issue with the transaction:
 
-- **must** show that the transaction was marked as invalid by the wallet and not broadcast (<a name="0003-WTXN-009" href="#0003-WTXN-009">0003-WTXN-009</a>)
+- **must** show that the transaction was marked as invalid by the wallet and not broadcast (aka an error was returned from Wallet) (<a name="0003-WTXN-009" href="#0003-WTXN-009">0003-WTXN-009</a>)
 - **should** see the error returned highlighted in context of the form that submitted the transaction in Dapp
 - **must** show error returned by wallet (<a name="0003-WTXN-011" href="#0003-WTXN-011">0003-WTXN-011</a>)
 
