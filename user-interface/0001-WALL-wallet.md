@@ -55,11 +55,11 @@ When using a given wallet, I...
 When a dapp requests use of a wallet, I...
 
 - **must** be prompted to either select a wallet or dismiss the prompt  (<a name="0001-WALL-017" href="#0001-WALL-017">0001-WALL-017</a>)
-- **must** select what keys of a wallet to grant access to (<a name="0001-WALL-018" href="#0001-WALL-018">0001-WALL-018</a>)
+- **should** select what keys of a wallet to grant access to
   - **must** be able to select whole wallet (so that new keys are automatically shared) (<a name="0001-WALL-019" href="#0001-WALL-019">0001-WALL-019</a>)
-  - `TODO:` **must** be able to select specific [keys](DATA-data_display.md#public-keys) (<a name="0001-WALL-020" href="#0001-WALL-020">0001-WALL-020</a>)
-  - tainted keys **must** be shown as tainted (<a name="0001-WALL-021" href="#0001-WALL-021">0001-WALL-021</a>)
-  - tainted keys **must** not be selectable (<a name="0001-WALL-073" href="#0001-WALL-073">0001-WALL-073</a>)
+  - **should** be able to select specific [keys](DATA-data_display.md#public-keys)
+  - tainted keys **should** be shown as tainted
+  - tainted keys **should** not be selectable 
 - **must** enter wallet passphrase before wallet details are shared (assuming a password has not recently been entered)(<a name="0001-WALL-022" href="#0001-WALL-022">0001-WALL-022</a>)
 - **must** be able to retrospectively revoke Dapp's access to a Wallet (<a name="0001-WALL-023" href="#0001-WALL-023">0001-WALL-023</a>)
 - **must** be able to retrospectively revoke Dapp's access particular keys in a wallet (<a name="0001-WALL-072" href="#0001-WALL-072">0001-WALL-072</a>)
