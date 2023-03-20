@@ -3,7 +3,7 @@ A Vega wallet is required to prepare and submit transaction on Vega  (place, can
 
 A wallet can contain many public/private key pairs. The public part of each key pair is known the [Party](../protocol/0017-PART-party.md) sometimes just referred to as a key or public key. 
 
-The primary job(s) of a wallet app is to [sign/encrypt transaction](../protocol/0022-AUTH-auth.md) (so the network can be sure they were sent by a given party) and to broadcast these transactions to a node on the network.
+The primary job(s) of a wallet is to [sign/encrypt transaction](../protocol/0022-AUTH-auth.md) (so the network can be sure they were sent by a given party) and to broadcast these transactions to a node on the network.
 
 ## Get wallet
 When on the wallet page of Vega.xyz, I...
@@ -12,12 +12,12 @@ When on the wallet page of Vega.xyz, I...
 - **must** see a download link for the various operating systems (<a name="0001-WALL-002" href="#0001-WALL-002">0001-WALL-002</a>)
 - **must** be able to use the default wallet version linked/downloadable from this page with the version of Vega currently running on mainnet (<a name="0001-WALL-076" href="#0001-WALL-076">0001-WALL-076</a>)
 
-...so I can download and run the wallet app on my machine and use it to interact with the Vega mainnet
+...so I can download and run a wallet on my machine and use it to interact with the Vega mainnet
 
 ## Set up wallet / Restore wallet
 When opening the wallet for the first time, I...
 
-- if the app sends telemetry/analytics: **must** be prompted to opt into (or stay out of) analytics (<a name="0001-WALL-003" href="#0001-WALL-003">0001-WALL-003</a>)
+- if the wallet sends telemetry/analytics: **must** be prompted to opt into (or stay out of) analytics (<a name="0001-WALL-003" href="#0001-WALL-003">0001-WALL-003</a>)
 - **must** be able to restore a wallet from a seed phrase (<a name="0001-WALL-004" href="#0001-WALL-004">0001-WALL-004</a>)
 - **must** be able to create a new wallet (<a name="0001-WALL-005" href="#0001-WALL-005">0001-WALL-005</a>)
   - **must** be shown the back up phrase (<a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>)
@@ -34,7 +34,7 @@ When using the wallet on a network, I...
 - **must** be able refine the configuration for existing networks (including the ones that come pre-configured) (<a name="0001-WALL-011" href="#0001-WALL-011">0001-WALL-011</a>)
 - **must** be able to remove networks (<a name="0001-WALL-013" href="#0001-WALL-013">0001-WALL-013</a>)
 
-...so I can broadcast transactions to, and read information from a vega network in my wallet app
+...so I can broadcast transactions to, and read information from a vega network in my wallet
 
 ## Update wallet
 When using an older version of a Vega wallet than the current official release, I...
@@ -91,7 +91,7 @@ When looking for a specific balance or asset on a given wallet and network, I...
 ## Transactions
 When thinking about a recent or specific transaction, I ...
 
-- **must** see a history of transactions the wallet app has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
+- **must** see a history of transactions the wallet has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
 - **could** see a history of transactions the selected key has broadcast to a network (e.g. another wallet with the same keys), or from before a key restore
 - **must** see pending transactions (Transactions I have not yet approved/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
 - **must** see transactions that have recently been broadcast but not yet seen on the chain (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
@@ -107,7 +107,7 @@ when looking at a specific transaction...
 - **must** see the time request to sign and send was made (<a name="0001-WALL-040" href="#0001-WALL-040">0001-WALL-040</a>)
 - **should** see the referrer that made the request (with note that this is not verified)
 - **must** see what wallet / key is being used (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
-- **should** be able to select auto approve for this app (aka don't ask me again)
+- **should** be able to select auto approve for this dApp (aka don't ask me again)
   - **should** be able to select to auto approve for a amount of time that I choose
   - **should** be able to select to auto approve for a number of transaction that I choose 
 - **must** be prompted to enter passphrase (when needed to sign + broadcast transaction) (<a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>)
@@ -180,6 +180,3 @@ When seeking to reduce risk of compromise I...
 - `TODO:` **should** be able to link some wallets to specific networks
 
 ... so that I must administrate my wallets
-
-## App settings (Not sure if this needs AC?)
-- TODO Link or lock a key to a given network
