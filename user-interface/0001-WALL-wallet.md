@@ -69,9 +69,9 @@ When a dapp requests use of a wallet, I...
 ## Approving transactions
 When a dapp sends a transaction to the wallet for signing and broadcast, I...
 
-- **must** be prompted to approve, reject or ignore the transaction (if auto approve is not on) (<a name="0001-WALL-024" href="#0001-WALL-024">0001-WALL-024</a>)
+- **must** be prompted to confirm, reject or ignore the transaction (if auto-confirm is not on) (<a name="0001-WALL-024" href="#0001-WALL-024">0001-WALL-024</a>)
 - **must** see the details of the transaction. See [details of transaction](#transaction-detail). (<a name="0001-WALL-025" href="#0001-WALL-025">0001-WALL-025</a>)
-- **must** see any ignored/dismissed in a transactions area along with pending, approved and rejected transactions (e.g. history). See [Transactions](#transactions).
+- **must** see any ignored/dismissed in a transactions area along with pending, confirmed/sent and rejected transactions (e.g. history). See [Transactions](#transactions).
 
 ... so I can verify that the transaction being sent is the one I want
 
@@ -93,7 +93,7 @@ When thinking about a recent or specific transaction, I ...
 
 - **must** see a history of transactions the wallet has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
 - **could** see a history of transactions the selected key has broadcast to a network (e.g. another wallet with the same keys), or from before a key restore
-- **must** see pending transactions (Transactions I have not yet approved/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
+- **must** see pending transactions (Transactions I have not yet confirmed/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
 - **must** see transactions that have recently been broadcast but not yet seen on the chain (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
 - **must** see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
 - (for tainted keys) **should** see attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions) (<a name="0001-WALL-038" href="#0001-WALL-038">0001-WALL-038</a>)
@@ -107,9 +107,9 @@ when looking at a specific transaction...
 - **must** see the time request to sign and send was made (<a name="0001-WALL-040" href="#0001-WALL-040">0001-WALL-040</a>)
 - **should** see the referrer that made the request (with note that this is not verified)
 - **must** see what wallet / key is being used (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
-- **should** be able to select auto approve for this dApp (aka don't ask me again)
-  - **should** be able to select to auto approve for a amount of time that I choose
-  - **should** be able to select to auto approve for a number of transaction that I choose 
+- **should** be able to select auto-confirm for this dApp (aka don't ask me again) (aka automatic consent)
+  - **should** be able to select to auto-confirm for a amount of time that I choose
+  - **should** be able to select to auto-confirm for a number of transaction that I choose 
 - **must** be prompted to enter passphrase (when needed to sign + broadcast transaction) (<a name="0001-WALL-044" href="#0001-WALL-044">0001-WALL-044</a>)
 - **must** see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network). (<a name="0001-WALL-045" href="#0001-WALL-045">0001-WALL-045</a>)
 - **must** be able to follow a link to block explorer for broadcasted transactions (<a name="0001-WALL-046" href="#0001-WALL-046">0001-WALL-046</a>)
