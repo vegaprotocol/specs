@@ -61,7 +61,7 @@ When a dapp requests use of a wallet, I...
   - tainted keys **should** be shown as tainted
   - tainted keys **should** not be selectable 
 - **must** enter wallet passphrase before wallet details are shared (assuming a password has not recently been entered)(<a name="0001-WALL-022" href="#0001-WALL-022">0001-WALL-022</a>)
-- **should** be able to retrospectively revoke Dapp's access to a Wallet
+- **should** be able to retrospectively revoke Dapp's access to a Wallet (<a name="0001-WALL-023" href="#0001-WALL-023">0001-WALL-023</a>)
 - **should** be able to retrospectively revoke Dapp's access particular keys in a wallet
 
 ... so that I can control what public keys are shared with a dapp and what dapps can prompt me to sign transactions 
