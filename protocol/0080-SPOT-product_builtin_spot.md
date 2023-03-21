@@ -111,7 +111,7 @@ For market cancellation proposal a sole LP in the market holds all the voting po
 
 If at any point in time, a liquidity provider has insufficient capital in their general accounts to cover a transfer arising from a filled liquidity order, the network will utilise the liquidity commitment, held in the relevant bond account to cover the shortfall, applying the bond penalty factor (slashing the bond).
 
-As there is no market insurance pool, funds from bond slashing in the result of shortfall will be transferred to the global insurance pool for that asset.
+As there is no market insurance pool, funds from bond slashing in the result of shortfall will be transferred to the global network treasury for that asset.
 
 ## 6. Spot Liquidity Mechanisms
 

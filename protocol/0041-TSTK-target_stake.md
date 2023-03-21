@@ -97,4 +97,4 @@ The above design ensures the `target_stake` of a market is unable to fluctuate d
 
 ### Acceptance criteria
 
-TBD
+Too be decided.
