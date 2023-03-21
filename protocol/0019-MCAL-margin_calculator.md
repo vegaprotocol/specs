@@ -113,6 +113,18 @@ maintenance_margin_long
 
 where
 
+`slippage_volume =  max( open_volume, 0 )`,
+
+and
+
+if `open_volume > 0` then
+
+`slippage_per_unit = Product.value(market_observable) - Product.value(exit_price)`,
+
+else `slippage_per_unit = 0`.
+
+where
+
 `market_observable` = `settlement_mark_price` if in continuous trading, refer to [auction subsection](#margin-calculation-for-auctions) for details of the auction behaviour.
 
 `settlement_mark_price` refers to the mark price most recently utilised in [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.

@@ -465,3 +465,8 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - A freeform governance proposal with a description field that is empty, or not between 1 and 10,000 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
 - A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
 - Closed freeform governance proposals can be retrieved from the API along with details of how token holders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
+
+#### Concurrent governance proposals
+
+- Approved governance proposals sharing the same enactment time should be enacted in the order the proposals were created. (<a name="0028-GOVE-067" href="#0028-GOVE-067">0028-GOVE-067</a>)
+- Approved governance proposals sharing the same enactment time and changing the same parameter should all be applied, the oldest proposal will be applied first and the newest will be applied last, overwriting the changes made by the older proposals. (<a name="0028-GOVE-068" href="#0028-GOVE-068">0028-GOVE-068</a>)
