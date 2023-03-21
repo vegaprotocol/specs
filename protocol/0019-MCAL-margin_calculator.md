@@ -8,11 +8,15 @@
 
 - Zero position and zero orders results in all zero margin levels (<a name="0019-MCAL-003" href="#0019-MCAL-003">0019-MCAL-003</a>)
 
-- If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to the initial mark price, as set by a market parameter. (<a name="0019-MCAL-004" href="#0019-MCAL-004">0019-MCAL-004</a>)
+- If `riskiest long > 0` and there are no bids on the order book, the `exit price` is equal to infinity and hence the slippage cap is used as the slippage component of the margin calculation. (<a name="0019-MCAL-014" href="#0019-MCAL-014">0019-MCAL-014</a>)
 
-- If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to the *volume weighted price of the order book bids*.  (<a name="0019-MCAL-005" href="#0019-MCAL-005">0019-MCAL-005</a>)
+- If `riskiest long > 0 && 0 < *sum of volume of order book bids* < riskiest long`, the `exit price` is equal to infinity.  (<a name="0019-MCAL-015" href="#0019-MCAL-015">0019-MCAL-015</a>)
 
-- If `riskiest short < 0 && 0 < *sum of absolute volume of order book offers* < riskiest short`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-007" href="#0019-MCAL-007">0019-MCAL-007</a>)
+- If `riskiest short < 0 && 0 < *sum of absolute volume of order book offers* < abs(riskiest short)`, the `exit price` is equal to infinity. (<a name="0019-MCAL-016" href="#0019-MCAL-016">0019-MCAL-016</a>)
+
+- If `riskiest long > 0 &&  riskiest long < *sum of volume of order book bids*`, the `exit price` is equal to the *volume weighted price of the order book bids* with cumulative volume equal to the riskiest long, starting from best bid.  (<a name="0019-MCAL-017" href="#0019-MCAL-017">0019-MCAL-017</a>)
+
+- If `riskiest short < 0 && 0 abs(riskiest short) == *sum of absolute volume of order book offers* <`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-018" href="#0019-MCAL-018">0019-MCAL-018</a>)
 
 - A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-008" href="#0019-MCAL-008">0019-MCAL-008</a>)
 
@@ -127,7 +131,7 @@ else `slippage_per_unit = 0`.
 
 where
 
-`market_observable` = `settlement_mark_price` if in continuous trading and `indicative_uncrossing_price` if in an auction
+`market_observable` = `settlement_mark_price` if in continuous trading, refer to [auction subsection](#margin-calculation-for-auctions) for details of the auction behaviour.
 
 `settlement_mark_price` refers to the mark price most recently utilised in [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.
 
@@ -173,16 +177,15 @@ where meanings of terms in Step 1 apply except for:
 
 We are assuming that:
 
-- `indicative_uncrossing_price` is *not* the mark price, so no mark-to-market transfers happen (update mark-to-market spec)
 - mark price never changes during an auction, so it's the last mark price from before auction,
 - during an auction we never release money from the margin account, however we top-it-up as required,
 - no closeouts during auctions
 
 Use the same calculation as above with the following re-defined:
 
-- in `slippage_per_unit` we use `indicative_uncrossing_price` instead of `exit_price`. If there is no `indicative_uncrossing_price` then use `slippage_per_unit = 0`.
-- For the open position part of the margin use the mark price.
-- For the orders part of the margin: if mark price is not available (as is the case during the opening auction) use `market_observable = indicative_uncrossing_price`. If there is no current `indicative_uncrossing_price`, then use the volume weighted average price of the party's long / short orders.
+- For the orders part of the margin: use `market_observable` =  volume weighted average price of the party's long / short orders.
+
+Note that because the order book is empty during auctions we will always end up with the slippage value implied by the the slippage cap.
 
 ## Scaling other margin levels
 
