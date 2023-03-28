@@ -46,7 +46,7 @@ When looking at a list of orders, I...
     - Why is the market currently in auction
     - Link to pegged shape (see below)
 
-- **must** see any [reason](https://docs.vega.xyz/mainnet/api/graphql/enums/order-rejection-reason) that has been supplied but the API along with the status status if the order e.g. "Rejected: Due to insufficient margin", "Stopped: Reduce only, would open new volume" (<a name="7003-MORD-018" href="#7003-MORD-018">7003-MORD-018</a>)
+- **must** see any [reason](https://docs.vega.xyz/mainnet/api/graphql/enums/order-rejection-reason) that has been supplied by the API along with the order status e.g. "Rejected: Due to insufficient margin", "Stopped: Reduce only, would open new volume" (<a name="7003-MORD-018" href="#7003-MORD-018">7003-MORD-018</a>)
 
 - **must** see what [market](9001-DATA-data_display.md#market) an order is related to (either code, ID or name, preferable name) (<a name="7003-MORD-002" href="#7003-MORD-002">7003-MORD-002</a>)
   - **should** see what the `status` is of the market (particularly if it is not "normal")
