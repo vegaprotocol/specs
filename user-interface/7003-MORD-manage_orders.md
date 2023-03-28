@@ -64,6 +64,7 @@ When looking at a list of orders, I...
 - if order type = `Market`: **must** not see a price for active or parked orders, a `-`, `Market` or `n/a` is more appropriate (API may return `0`).
 
 - **must** see the [time in force](9001-DATA-data_display.md#time-in-force) applied to the order (can be abbreviated here) (<a name="7003-MORD-006" href="#7003-MORD-006">7003-MORD-006</a>)
+- **must** see if any execution flags (aka conditions. e.g. Post only, Reduce only) were applied to the order (<a name="7003-MORD-019" href="#7003-MORD-019">7003-MORD-019</a>)
 - **should** see "created at" [time](9001-DATA-data_display.md#time)
 - **could** see updated at (this is used by the system when an order is amended, or repriced (in pegged and LP) not sure this in needed)
 
