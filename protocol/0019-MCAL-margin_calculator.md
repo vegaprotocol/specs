@@ -119,7 +119,7 @@ and
 
 if `open_volume > 0` then
 
-`slippage_per_unit = Product.value(market_observable) - Product.value(exit_price)`,
+`slippage_per_unit = max(0, Product.value(market_observable) - Product.value(exit_price))`,
 
 else `slippage_per_unit = 0`.
 

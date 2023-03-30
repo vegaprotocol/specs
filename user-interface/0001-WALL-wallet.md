@@ -12,7 +12,6 @@ When opening the wallet for the first time, I...
 - I can restore a wallet from a seed phrase (<a name="0001-WALL-004" href="#0001-WALL-004">0001-WALL-004</a>)
 - I can create a new wallet (<a name="0001-WALL-005" href="#0001-WALL-005">0001-WALL-005</a>)
   - I can view the back up phrase (<a name="0001-WALL-006" href="#0001-WALL-006">0001-WALL-006</a>)
-  - I can view the version number of the algorithm used to derive key pairs from the back up phrase (<a name="0001-WALL-007" href="#0001-WALL-007">0001-WALL-007</a>)
   - I can see the first key without having to "add key". (i.e. The wallet auto generates the first key from the seed phrase) (<a name="0001-WALL-008" href="#0001-WALL-008">0001-WALL-008</a>)
 
 ...so I can sign transactions
@@ -65,7 +64,6 @@ When thinking about a recent or specific transaction, I ...
 - I can see a history of transactions the wallet has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
 - I can see pending transactions (Transactions I have not yet confirmed/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
 - I can see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
-- (for tainted keys) I can see attempts to use a tainted key (these did not prompt the user, but allows a user to change permissions) (<a name="0001-WALL-038" href="#0001-WALL-038">0001-WALL-038</a>)
 
 ... so that I can ensure my wallet is being used appropriately and find transaction I might have missed
 
@@ -82,8 +80,6 @@ When using a Vega wallet, I...
 - I can create new keys (derived from the source of wallet) (<a name="0001-WALL-052" href="#0001-WALL-052">0001-WALL-052</a>)
 - I can see full public key or be able to copy it to clipboard (<a name="0001-WALL-054" href="#0001-WALL-054">0001-WALL-054</a>)
 - I can change key name/alias (<a name="0001-WALL-055" href="#0001-WALL-055">0001-WALL-055</a>)
-- I can amend other arbitrary key meta data (<a name="0001-WALL-056" href="#0001-WALL-056">0001-WALL-056</a>)
-- I can control whether the wallet app queries for data (e.g. asset balances) on each key (to prevent info leaking about what keys belong to a wallet) (<a name="0001-WALL-078" href="#0001-WALL-078">0001-WALL-078</a>)
 
 ... so I can manage risk (e.g. isolate margin), mitigate the damage of a key being compromised, or use multiple trading strategies 
 
@@ -92,7 +88,6 @@ When protecting myself from use of keys that may be compromised, I..
 
 - I can select a key I wish to taint (<a name="0001-WALL-057" href="#0001-WALL-057">0001-WALL-057</a>)
 - I am prompted to enter wallet password to taint key (<a name="0001-WALL-058" href="#0001-WALL-058">0001-WALL-058</a>)
-- (Dapps that request use of tainted keys **must** not prompt a prompt user to sign transaction) (<a name="0001-WALL-059" href="#0001-WALL-059">0001-WALL-059</a>)
 - I can see tainted keys flagged as tainted (<a name="0001-WALL-060" href="#0001-WALL-060">0001-WALL-060</a>)
 
 ... so that tainted keys must not be used

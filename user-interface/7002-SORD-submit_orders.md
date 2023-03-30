@@ -114,6 +114,22 @@ When populating a deal ticket I...
 
 ... so I can control if and how my order stays on the order book
 
+## Execution flags
+
+... could select some execution flags. When selecting execution flags (aka order conditions)...
+
+- **must** see an option to select "Post only" (<a name="7003-SORD-054" href="#7003-SORD-054">7003-SORD-054</a>)
+  - **should** see explanation of what Post only is/does
+  - **must** see the post only option is unselected and disabled (can not be checked) if the time in force is set to IOC or FOK (<a name="7003-SORD-055" href="#7003-SORD-055">7003-SORD-055</a>)
+    - **must** see an explanation of why the option is disabled (<a name="7003-SORD-056" href="#7003-SORD-056">7003-SORD-056</a>)
+
+- **must** see an option to select "Reduce only" (<a name="7003-SORD-057" href="#7003-SORD-057">7003-SORD-057</a>)
+  - **should** see explanation of what Reduce only is/does (<a name="7003-SORD-058" href="#7003-SORD-058">7003-SORD-058</a>)
+
+- **must** see that selecting "Post only" or "reduce only" de-select the other (if selected). As is it not possibly to apply them both to an order (<a name="7003-SORD-059" href="#7003-SORD-059">7003-SORD-059</a>)
+
+... so I can control in more detail how my order is executed
+
 ## Auto Populating a deal ticket non-manual methods
 
 - TODO Populate by selecting a size/price in the order book
