@@ -74,15 +74,15 @@ The specified method must be defined in the supplied ABI.
 ## Error checking and handling
 
 Errors in the data source specification should be caught where possible during validation. 
-Errors that occur or are detected later (e.g. when data arrives) should not propagate to other parts of the system. 
-That is, they should be contained within the data sourcing subsystem.
+Errors that occur or are detected later (e.g. when data arrives) must not propagate to other parts of the system. 
+That is, they must be contained within the data sourcing subsystem.
 It should be possible to determine if such errors have occurred by listening for events or querying the data source APIs.
 
-- Attempts to select data from non-existent fields or structures in observed data should be recorded as errors on the event bus and in APIs, and no data should be emitted to the reciever.
+- Attempts to select data from non-existent fields or structures in observed data should be recorded as errors on the event bus and in APIs, and the system must not emit data to the reciever.
 
-- Incorrect ABI (where this cannot be validated at the time the ABI is submitted) and/or the inability to decode data with the provided ABI should be recorded as errors on the event bus and in APIs, and no data should be emitted to the reciever.
+- Incorrect ABI (where this cannot be validated at the time the ABI is submitted) and/or the inability to decode data with the provided ABI should be recorded as errors on the event bus and in APIs, and the system must not emit data to the reciever.
 
-- A mismatch in data types between a data field and the data required by the receiver should be recorded as errors on the event bus and in APIs, and no data should be emitted to the reciever.
+- A mismatch in data types between a data field and the data required by the receiver should be recorded as errors on the event bus and in APIs, and the system must not emit data to the reciever.
 
 
 ## Pseudocode examples
