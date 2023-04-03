@@ -21,7 +21,6 @@ An [Immediate or Cancel (IOC)](./0014-ORDT-order_types.md#time-in-force--validit
   - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-044" href="#0068-MATC-044">0068-MATC-044</a>)
   - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-045" href="#0068-MATC-045">0068-MATC-045</a>)
   - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-046" href="#0068-MATC-046">0068-MATC-046</a>)
-  - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-058" href="#0068-MATC-058">0068-MATC-058</a>)
   - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-059" href="#0068-MATC-059">0068-MATC-059</a>)
 
 A [Fill or KILL (FOK)](./0014-ORDT-order_types.md#time-in-force--validity) order:
@@ -38,7 +37,6 @@ A [Fill or KILL (FOK)](./0014-ORDT-order_types.md#time-in-force--validity) order
   - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-049" href="#0068-MATC-049">0068-MATC-049</a>)
   - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-050" href="#0068-MATC-050">0068-MATC-050</a>)
   - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-051" href="#0068-MATC-051">0068-MATC-051</a>)
-  - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-052" href="#0068-MATC-052">0068-MATC-052</a>)
   - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-053" href="#0068-MATC-053">0068-MATC-053</a>)
 
 For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order_types.md#time-in-force--validity) orders:
