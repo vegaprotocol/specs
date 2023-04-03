@@ -25,8 +25,7 @@ Ethereum data sources extend this in three important ways:
 
 Like all data sources, Ethereum oracles may be subject to filters or other processing or aggregation functions. 
 Once observed, the data is treated as any other data source and available to any part of the system that accepts a data source as input.
-The event queue may evaluate filters before submitting the observation to the Vega chain, in order to avoid submitting transactions containing data that will be dropped due to filters in any case.
-Particularly, if the 
+The event queue may evaluate filters before submitting the observation to the Vega chain, in order to avoid submitting transactions containing data that will be dropped due to filters in any case. 
 
 
 ## Functional design
@@ -72,6 +71,20 @@ When the data source is a contract read, the method name and any arguments to be
 The specified method must be defined in the supplied ABI.
 
 
+## Error checking and handling
+
+Errors in the data source specification should be caught where possible during validation. 
+Errors that occur or are detected later (e.g. when data arrives) should not propagate to other parts of the system. 
+That is, they should be contained within the data sourcing subsystem.
+It should be possible to determine if such errors have occurred by listening for events or querying the data source APIs.
+
+- Attempts to select data from non-existent fields or structures in observed data should be recorded as errors on the event bus and in APIs, and no data should be emitted to the reciever.
+
+- Incorrect ABI (where this cannot be validated at the time the ABI is submitted) and/or the inability to decode data with the provided ABI should be recorded as errors on the event bus and in APIs, and no data should be emitted to the reciever.
+
+- A mismatch in data types between a data field and the data required by the receiver should be recorded as errors on the event bus and in APIs, and no data should be emitted to the reciever.
+
+
 ## Pseudocode examples
 
 Event data source specification:
@@ -93,6 +106,6 @@ Select {
 ```
 
 
-## Assessment criteria
+## Acceptance criteria
 
 TBD
