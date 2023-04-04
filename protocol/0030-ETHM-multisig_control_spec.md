@@ -27,7 +27,7 @@ Where `message_hash` is passed in from the caller and is typically created in th
 `abi.encode(target_function_param1, target_function_param2, target_function_param3, ... , tx_id_nonce, function_name_string)`
 
 Validators sign a hash in the following format:
-`keccak256(abi.encode(this_signer_set_data_hash, message_hash, calling_contract))`
+`keccak256(abi.encode(this_signer_set_data_hash, message_hash, calling_contract, chain_id))`
 This is also known as the "Final Hash"
 
 `this_signer_set_data_hash` is defined as:
@@ -134,6 +134,7 @@ In order for outstanding Multisig orders to be invalidated the following MUST be
 * Vega sees them in order, or at least knows the order
 * Vega does not reissue a multisig order until it has seen the Sigher Set Updated event AND it has processed all previous events from that and precious blocks
 * Enough ETH blocks have passed to be assured of finality
+* Vega MUST keep an ordered list of validator nodes and weights that, when hashed, matches the signer set hash stored in the multisig contract.
  
 If those conditions are met, Vega knows if a multisig order has been executed or not, and can respond correctly.
 
