@@ -93,8 +93,6 @@ As a consequence, if a potential validator joined the Vega chain validators but 
 
 In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from the Multisig contract. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed.
 
-A potential way to ensure signer sets are regularly updated is to give validators a single Vega epoch to run the update (presumably those who would gail the most share). If they fail to update within the time limit, the block rewards are put up for rewards to whoever runs the transaction. This can be used as incentive against validator laziness. Whoever finally runs the transaction would get awarded the funds on their Vega account, minimizing ETH gas fees.
-
 Note that this will change as future versions implement strategies to scale the Ethereum-side of the protocol implements threshold signatures, zk rollups, or other methods that allows validators to approve Ethereum actions.
 
 
