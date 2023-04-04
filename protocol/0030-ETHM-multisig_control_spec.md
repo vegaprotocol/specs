@@ -27,7 +27,15 @@ Where `message_hash` is passed in from the caller and is typically created in th
 `abi.encode(target_function_param1, target_function_param2, target_function_param3, ... , tx_id_nonce, function_name_string)`
 
 Validators sign a hash in the following format:
-`keccak256(abi.encode(this_signer_set_data_hash, message_hash, calling_contract, chain_id))`
+```
+keccak256(abi.encode(
+   bytes2("\x19\x00"), 
+   bytes20(address(multisig_address)),
+   this_signer_set_data_hash, 
+   message_hash, 
+   calling_contract, 
+   chain_id))
+```
 This is also known as the "Final Hash"
 
 `this_signer_set_data_hash` is defined as:
@@ -137,9 +145,6 @@ In order for outstanding Multisig orders to be invalidated the following MUST be
 * Vega MUST keep an ordered list of validator nodes and weights that, when hashed, matches the signer set hash stored in the multisig contract.
  
 If those conditions are met, Vega knows if a multisig order has been executed or not, and can respond correctly.
-
-# Potential Incentivization  
-A potential way to ensure signer sets are regularly updated is to give validators a single Vega epoch to run the update (presumably those who would gail the most share). If they fail to update within the time limit, the block rewards are put up for rewards to whoever runs the transaction. This can be used as incentive against validator laziness. Whoever finally runs the transaction would get awarded the funds on their Vega account, minimizing ETH gas fees.
 
 # V1 to V2 Migration
 This spec covers version 2 of Multisig Control.
