@@ -10,7 +10,7 @@
 - Margins must be recalculated after a cancel event (<a name="0033-OCAN-007" href="#0033-OCAN-007">0033-OCAN-007</a>)
 - An order which is partially filled, but still active, can be cancelled. (<a name="0033-OCAN-008" href="#0033-OCAN-008">0033-OCAN-008</a>)
 - Cancelling an order for a party leaves its other orders on the current market unaffected. (<a name="0033-OCAN-009" href="#0033-OCAN-009">0033-OCAN-009</a>)
-- Cancelling all market orders for a party by the "cancel all party orders per market message" leaves orders on other markets unaffected. (<a name="0033-OCAN-010" href="#0033-OCAN-010">0033-OCAN-010</a>)
+- Cancelling all orders on a market for a party by the "cancel all party orders per market message" leaves orders on other markets unaffected. (<a name="0033-OCAN-010" href="#0033-OCAN-010">0033-OCAN-010</a>)
 
 ## Summary
 
