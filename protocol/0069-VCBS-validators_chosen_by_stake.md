@@ -553,6 +553,14 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Restart the network
     - Verify that v2-v6 are tendermint validators, v7 is ersatz and v1 is pending.
     - Verify that all stakes and delegations are correct for each node.
+1. Validator, ersatz and pending node scores for current epoch are persisted in checkpoints (<a name="0069-VCBS-088" href="#0069-VCBS-088">0069-VCBS-088</a>):
+    - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
+    - Take a checkpoint.
+    - Wait until the current epoch will have expired.
+    - Restart the network. (This will result in a 1-block epoch)
+    - Verify that v1-v5 are tendermint validators, v6 is ersatz and v7 is pending.
+    - Verify that all tendermint validators have non-zero performance scores, which will reflect the data that was collected pre-checkpoint to calculate scores at the end of the last epoch.
+    - Verify that ersatz and pending validators have non-zero performance scores.
 
 ### Multisig update
 
