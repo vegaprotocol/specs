@@ -557,7 +557,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Take a checkpoint.
     - Wait until the current epoch will have expired.
 	- Restart the network. (This will result in a 1-block epoch)
-    - Verify that v1-v1 are tendermint validators, v6 is ersatz and v7 is pending.
+    - Verify that v1-v5 are tendermint validators, v6 is ersatz and v7 is pending.
 	- Verify that all tendermint validators have non-zero performance scores, which will reflect the data that was collected pre-checkpoint to calculate scores at the end of the last epoch.
 	- Verify that ersatz and pending validators have non-zero performance scores.
 
