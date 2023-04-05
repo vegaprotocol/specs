@@ -46,6 +46,8 @@ When looking at a list of orders, I...
     - Why is the market currently in auction
     - Link to pegged shape (see below)
 
+- **must** see any [reason (mainnet docs)](https://docs.vega.xyz/mainnet/api/graphql/enums/order-rejection-reason) that has been supplied by the API along with the order status e.g. "Rejected: Due to insufficient margin", "Stopped: Reduce only, would open new volume" (<a name="7003-MORD-018" href="#7003-MORD-018">7003-MORD-018</a>)
+
 - **must** see what [market](9001-DATA-data_display.md#market) an order is related to (either code, ID or name, preferable name) (<a name="7003-MORD-002" href="#7003-MORD-002">7003-MORD-002</a>)
   - **should** see what the `status` is of the market (particularly if it is not "normal")
 - **must** see the [size](9001-DATA-data_display.md#size) of the order (<a name="7003-MORD-003" href="#7003-MORD-003">7003-MORD-003</a>)
@@ -62,6 +64,7 @@ When looking at a list of orders, I...
 - if order type = `Market`: **must** not see a price for active or parked orders, a `-`, `Market` or `n/a` is more appropriate (API may return `0`).
 
 - **must** see the [time in force](9001-DATA-data_display.md#time-in-force) applied to the order (can be abbreviated here) (<a name="7003-MORD-006" href="#7003-MORD-006">7003-MORD-006</a>)
+- **must** see if any execution flags (aka conditions. e.g. Post only, Reduce only) were applied to the order (<a name="7003-MORD-019" href="#7003-MORD-019">7003-MORD-019</a>)
 - **should** see "created at" [time](9001-DATA-data_display.md#time)
 - **could** see updated at (this is used by the system when an order is amended, or repriced (in pegged and LP) not sure this in needed)
 
