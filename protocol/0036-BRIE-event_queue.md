@@ -27,7 +27,7 @@ Once all validators have confirmed the event happened on the external chain, the
 
 ### Smart contracts in use
 
-All the smart contracts monitored by the validator nodes are defined in the `ethereumConfig` network parameter. Along witht hew contract itself, the creation time of the contract is required for the very first launch of the network. This is required in order for the validator nodes to poll all blocks since the creation of the contract.
+All the smart contracts monitored by the validator nodes are defined in the `ethereumConfig` network parameter. Along with the contract itself, the creation time of the contract is required for the very first launch of the network. This is required in order for the validator nodes to poll all blocks since the creation of the contract.
 
 Later on in the life of the network, this information is stored in the snapshot state / checkpoint with last sourced block on Ethereum to avoid interpreting events twice.
 
@@ -38,7 +38,6 @@ Finally, the amount of confirmations expected for Ethereum is specified, this is
 Every validator node needs a constant connection to an Ethereum archival node. This allows the node to poll for Ethereum blocks as they are constructed, and scan for events emitted by the contracts related to the Vega network.
 
 The core node will look for new blocks on Ethereum every 10 to 15 seconds. Once a relevant event is found, the block, log index and transaction hash are extracted from it. A `ChainEvent` transaction is constructed then forwarded to the rest of the nodes through the Vega chain.
-
 
 Simplified chain event transaction:
 
@@ -163,21 +162,20 @@ message NodeVote {
 }
 ```
 
-
 ## Acceptance Criteria
 
 - A valid event is processed by vega (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)
- - A transacton is successfully executed on the bridge (e.g deposit)
- - A validator node successfully source the event and emit a chain event transaction on the vega chain
- - The others validators successfully validates the event on the ethereum chain and send a node vote on chain
- - The required amount of node votes, weighted by validator score is received
- - The processing of the event have effect on the network (e.g: for a deposit funds are deposited on an account)
+  - A transaction is successfully executed on the bridge (e.g deposit)
+  - A validator node successfully source the event and emit a chain event transaction on the vega chain
+  - The others validators successfully validates the event on the ethereum chain and send a node vote on chain
+  - The required amount of node votes, weighted by validator score is received
+  - The processing of the event have effect on the network (e.g: for a deposit funds are deposited on an account)
 - A valid duplicated event is processed (<a name="0036-BRIE-002" href="#0036-BRIE-002">0036-BRIE-002</a>)
- - A transacton is successfully executed on the bridge (e.g deposit) and successfully processed by vega
- - A node sends again the chain event after sourcing it
- - The nodes reject this event as duplicated, nothing else happens
+  - A transaction is successfully executed on the bridge (e.g deposit) and successfully processed by vega
+  - A node sends again the chain event after sourcing it
+  - The nodes reject this event as duplicated, nothing else happens
 - A invalid event is processed (<a name="0036-BRIE-003" href="#0036-BRIE-003">0036-BRIE-003</a>)
- - A malicious node sends a chain event for a non existing transaction on the bridge
- - The node start validating this event on chain, but cannot find it
- - After a given delay this chain event is rejected, no node votes are being sent by the validators
- - This event has no repercussion on the vega state.
+  - A malicious node sends a chain event for a non existing transaction on the bridge
+  - The node start validating this event on chain, but cannot find it
+  - After a given delay this chain event is rejected, no node votes are being sent by the validators
+  - This event has no repercussion on the vega state.
