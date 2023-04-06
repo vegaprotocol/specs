@@ -392,7 +392,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - In the middle of the epoch, shut node 1 down.
     - Verify that at the beginning of the next epoch the announced node replaced node 1 as a Tendermint validator.
     - Restart node 1 again from a snapshot
-    - Verify that node 1 is in a pending state and it’s ranking score is ~ 0.006666666667.
+    - Verify that node 1 is in a pending state.
 1. 2 empty spots, only one available to replace (<a name="0069-VCBS-043" href="#0069-VCBS-043">0069-VCBS-043</a>):
     - Setup a network with 5 slots for Tendermint validators and 3 actual Tendermint validators.
     - Self-delegate to all of them.
