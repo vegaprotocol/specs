@@ -1,1 +1,18 @@
 # Collateral
+
+## Collateral Data Grid
+
+- **Must** be shown grouped by asset (<a name="7001-COLL-001" href="#7001-COLL-001">7001-COLL-001</a>)
+- For each asset:
+  - **Must** show used amount, which is the total of all Margin accounts (<a name="7001-COLL-002" href="#7001-COLL-002">7001-COLL-002</a>)
+  - **Must** show available amount, which is the total of your General account (<a name="7001-COLL-003" href="#7001-COLL-003">7001-COLL-003</a>)
+  - **Must** show total amount, which is the sum of your General account and all Margin accounts (<a name="7001-COLL-004" href="#7001-COLL-004">7001-COLL-004</a>)
+  - **Must** provide a method for depositing asset (<a name="7001-COLL-005" href="#7001-COLL-005">7001-COLL-005</a>)
+  - **Must** provide a method for withdrawing asset (<a name="7001-COLL-006" href="#7001-COLL-006">7001-COLL-006</a>)
+  - **Must** show the asset symbol (<a name="7001-COLL-007" href="#7001-COLL-007">7001-COLL-007</a>)
+  - **Must** provide a way to see the full asset details (<a name="7001-COLL-008" href="#7001-COLL-008">7001-COLL-008</a>)
+  - **Must** provide a way to see all accounts, their type, and their balance for a single asset (<a name="7001-COLL-009" href="#7001-COLL-009">7001-COLL-009</a>)
+
+## In The Deal Ticket
+
+- **Must** see your current total margin available (<a name="7001-COLL-010" href="#7001-COLL-010">7001-COLL-010</a>)
