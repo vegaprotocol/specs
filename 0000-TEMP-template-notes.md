@@ -23,7 +23,7 @@ Chosen option: Option X, because... (include why paramemters are chosen, any dep
 
 ### Limitations
 
-Are there any issues we wanted to address but could not e.g., core rewrite ro CometBFT limtitaion
+Are there any issues we wanted to address but could not e.g., A core rewrite or CometBFT limtitaion
 
 
 ## Context / Problem Statement 2
@@ -49,4 +49,4 @@ Chosen option: Option X, because... (include why paramemters are chosen, any dep
 
 ### Limitations
 
-Are there any issues we wanted to address but could not e.g., core rewrite ro CometBFT limtitaion
+Are there any issues we wanted to address but could not e.g., A core rewrite or CometBFT limtitaion
