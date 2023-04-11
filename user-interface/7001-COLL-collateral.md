@@ -4,7 +4,7 @@
 
 - **Must** be shown grouped by [asset](9001-DATA-data_display.md#asset-balances) (<a name="7001-COLL-001" href="#7001-COLL-001">7001-COLL-001</a>)
 - For each asset:
-  - **Must** show used amount, which is the total of all Margin accounts (<a name="7001-COLL-002" href="#7001-COLL-002">7001-COLL-002</a>)
+  - **Must** show used [amount](9001-DATA-data_display.md#asset-balances), which is the total of all Margin and Liquidity bond accounts (<a name="7001-COLL-002" href="#7001-COLL-002">7001-COLL-002</a>)
   - **Must** show available amount, which is the total of your General account (<a name="7001-COLL-003" href="#7001-COLL-003">7001-COLL-003</a>)
   - **Must** show total amount, which is the sum of your General account and all Margin accounts (<a name="7001-COLL-004" href="#7001-COLL-004">7001-COLL-004</a>)
   - **Must** provide a method for depositing asset (<a name="7001-COLL-005" href="#7001-COLL-005">7001-COLL-005</a>)
