@@ -2,7 +2,7 @@
 
 ## Collateral Data Grid
 
-- **Must** be shown grouped by asset (<a name="7001-COLL-001" href="#7001-COLL-001">7001-COLL-001</a>)
+- **Must** be shown grouped by [asset](9001-DATA-data_display.md#asset-balances) (<a name="7001-COLL-001" href="#7001-COLL-001">7001-COLL-001</a>)
 - For each asset:
   - **Must** show used amount, which is the total of all Margin accounts (<a name="7001-COLL-002" href="#7001-COLL-002">7001-COLL-002</a>)
   - **Must** show available amount, which is the total of your General account (<a name="7001-COLL-003" href="#7001-COLL-003">7001-COLL-003</a>)
