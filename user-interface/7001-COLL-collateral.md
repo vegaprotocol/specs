@@ -15,4 +15,4 @@
 
 ## In The Deal Ticket
 
-- **Must** see your current total margin available (<a name="7001-COLL-010" href="#7001-COLL-010">7001-COLL-010</a>)
+- **Must** see your current total margin (General balance + Margin balance - Maintenance level) available (<a name="7001-COLL-010" href="#7001-COLL-010">7001-COLL-010</a>)
