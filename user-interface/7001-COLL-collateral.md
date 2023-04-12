@@ -12,7 +12,17 @@
   - **Must** show the asset symbol (<a name="7001-COLL-007" href="#7001-COLL-007">7001-COLL-007</a>)
   - **Must** provide a way to see the [full asset details](6501-ASSE-assets.md) (<a name="7001-COLL-008" href="#7001-COLL-008">7001-COLL-008</a>)
   - **Must** provide a way to see all accounts, their type, and their balance for a single asset (<a name="7001-COLL-009" href="#7001-COLL-009">7001-COLL-009</a>)
+    - **Could** have default sort order (<a name="7001-COLL-010" href="#7001-COLL-010">7001-COLL-010</a>)
+      - General
+      - Margin
+      - Bond
+      - Fees - Maker
+      - Fees - Liquidity
+      - Rewards - Maker Paid
+      - Rewards - Maker Received
+      - Rewards - Liquidity Provision Received Fees
+      - Rewards - Market Proposers
 
-## In The Deal Ticket
+## Deal Ticket
 
-- **Must** see your current total margin (General balance + Margin balance - Maintenance level) available (<a name="7001-COLL-010" href="#7001-COLL-010">7001-COLL-010</a>)
+- **Must** see your current total margin (General balance + Margin balance - Maintenance level) available (<a name="7001-COLL-011" href="#7001-COLL-011">7001-COLL-011</a>)
