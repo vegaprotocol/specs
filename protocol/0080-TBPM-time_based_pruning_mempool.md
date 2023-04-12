@@ -40,7 +40,7 @@ For commands using the V4 transaction, the wallet will ensure the `TTL` does not
 
 1. As stated above, validator commands do not expire. The transaction can have a `TTL` value set, it is ignored.
 
-### Pruning the mempool (<a name="0080-TBPM-005 href="#0080-TBPM-995">0080-TBPM-005</a>)
+### Pruning the mempool (<a name="0080-TBPM-005 href="#0080-TBPM-005">0080-TBPM-005</a>)
 
 1. Set `network.transactions.maxttl = 10`
 2. Sign a (non validator) transaction specifying the height and hash of a block that was produced ~10 blocks ago.
