@@ -18,17 +18,31 @@ For commands using the V4 transaction, the wallet will ensure the `TTL` does not
 
 ## Acceptance criteria
 
-### Basic network parameter test (<a name="0080-TBPM-001" href="#0080-TBPM-001">0080-TBPM-001</a>)
+### Network parameter validation (<a name="0080-TBPM-001 href="#0080-TBPM-001">0080-TBPM-001</a>)
+
+1. By default, `network.transactions.maxttl` is set to 50
+2. Setting this parameter to a value less than 10 should fail.
+3. Setting the parameter to a value greater than 50 should fail.
+4. Any value between 10 and 50 should work, and produce the events associated with an update to any network parameter.
+
+### Basic network parameter test (<a name="0080-TBPM-002" href="#0080-TBPM-002">0080-TBPM-002</a>)
 
 1. Set `network.transactions.maxttl = 10`
 2. Create a non-validator transaction V4 setting the `TTL` to a value > 10.
 3. The transaction should have a max `TTL` of 10 (network parameter overrides a user-specified value > network parameter)
 
-### Default network parameter test (<a name="0080-TBPM-002" href="#0080-TBPM-002">0080-TBPM-002</a>)
+### Default network parameter test (<a name="0080-TBPM-003" href="#0080-TBPM-003">0080-TBPM-003</a>)
 
 1. Create a transaction with vegawallet without specifying a `TTL`.
 2. The output should be a transaction that has a `TTL` that equals the `network.transactions.maxttl`.
 
-### Validator commands (<a name="0080-TBPM-003" href="#0080-TBPM-003">0080-TBPM-003</a>)
+### Validator commands (<a name="0080-TBPM-004" href="#0080-TBPM-004">0080-TBPM-004</a>)
 
 1. As stated above, validator commands do not expire. The transaction can have a `TTL` value set, it is ignored.
+
+### Pruning the mempool (<a name="0080-TBPM-005 href="#0080-TBPM-995">0080-TBPM-005</a>)
+
+1. Set `network.transactions.maxttl = 10`
+2. Sign a (non validator) transaction specifying the height and hash of a block that was produced ~10 blocks ago.
+3. This transaction will not be applied.
+4. Perform the same action with a validator command - the transaction will be applied, as validator commands do not expire.
