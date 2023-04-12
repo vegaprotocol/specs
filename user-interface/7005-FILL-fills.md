@@ -9,4 +9,4 @@
 - **Must** see the [price](9001-DATA-data_display.md#quote-price) of the fill (<a name="7005-FILL-005" href="#7004-FILL-005">7005-FILL-005</a>)
 - **Could** see the notional value of the fill (<a name="7005-FILL-006" href="#7004-FILL-006">7005-FILL-006</a>)
 - **Must** see the role of the user for the fill (taker or maker) (<a name="7005-FILL-007" href="#7004-FILL-007">7005-FILL-007</a>)
-- **Must** see the fee that applies for current party for the fill (<a name="7005-FILL-008" href="#7004-FILL-008">7005-FILL-008</a>)
+- **Must** see the [fee](9001-DATA-data_display.md#asset-balances) that applies for current party for the fill (<a name="7005-FILL-008" href="#7004-FILL-008">7005-FILL-008</a>)
