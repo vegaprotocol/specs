@@ -10,7 +10,7 @@
   - **Must** provide a method for depositing asset (<a name="7001-COLL-005" href="#7001-COLL-005">7001-COLL-005</a>)
   - **Must** provide a method for withdrawing asset (<a name="7001-COLL-006" href="#7001-COLL-006">7001-COLL-006</a>)
   - **Must** show the asset symbol (<a name="7001-COLL-007" href="#7001-COLL-007">7001-COLL-007</a>)
-  - **Must** provide a way to see the full asset details (<a name="7001-COLL-008" href="#7001-COLL-008">7001-COLL-008</a>)
+  - **Must** provide a way to see the [full asset details](6501-ASSE-assets.md) (<a name="7001-COLL-008" href="#7001-COLL-008">7001-COLL-008</a>)
   - **Must** provide a way to see all accounts, their type, and their balance for a single asset (<a name="7001-COLL-009" href="#7001-COLL-009">7001-COLL-009</a>)
 
 ## In The Deal Ticket
