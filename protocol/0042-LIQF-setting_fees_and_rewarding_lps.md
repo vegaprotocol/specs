@@ -195,14 +195,16 @@ The liquidity score should always be rounded to 10 decimal places to prevent spu
 
 ### Distributing fees
 
-On every trade, liquidity fee should be collected immediately into an account for each liquidity provider (call it LP fee account). Each party will have an LP fee account on every market on which they committed liquidity by providing LP stake.
+On every trade, liquidity fee should be collected immediately into an account for that market (call it the liquidity fee account). The account is under control of the network and funds from this account will be transferred to a LP party according to the mechanism below.
 
-This account is not under control of the LP party (they cannot initiate transfers in or out of the account). The account is under control of the network and funds from this account will be transferred to the owning LP party according to the mechanism below.
-
-A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
+A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the liquidity fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
 If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block.
 
 The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
+
+Flooring non-zero amounts due to integer representation can result in a remainder in the liquidity fee account. The remainder should be left in the market liquidity fee account and carried over to the next distribution window.
+
+If the fees are being distributed as a part of market settlement and distribution results in a remainder in the liquidity fee account. The remainder should be transferred to the network treasury for that asset.
 
 #### Example
 
@@ -269,7 +271,9 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-all-trades` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
 - Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
 - If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
+- If after fee distribution during market settlement, there is a remainder in the market liquidity fee account, the remainder should be transferred to the network treasury for that asset. (<a name="0042-LIQF-031" href="#0042-LIQF-031">0042-LIQF-014</a>)
 - All liquidity providers with `average fraction of liquidity provided by committed LP > 0` in the market receive a greater than zero amount of liquidity fee. The only exception is if a non-zero amount is rounded to zero due to integer representation. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
+- After fee distribution, if there is a remainder in the liquidity fee account and the market is not being settled, it should be left in the liquidity fee account and carried over to the next distribution window. (<a name="0042-LIQF-032" href="#0042-LIQF-032">0042-LIQF-032</a>)
 
 ### LP JOINING AND LEAVING MARKETS
 
