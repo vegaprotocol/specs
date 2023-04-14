@@ -81,7 +81,7 @@ When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-
 
 ### Pending
 
-When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal if the other conditions for exiting auction period are met (liquidity committed, best static bid / ask present). If, initially,  at the specified enactment date it was not possible to leave the auction period, the auction will conclude as soon as possible once the conditions for auction exit are met.
+When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal if the other conditions for exiting auction period are met (liquidity committed, best static bid / ask present). If, initially, at the specified enactment date it was not possible to leave the auction period, the auction will conclude as soon as possible once the conditions for auction exit are met.
 
 Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully.
 
