@@ -53,7 +53,7 @@ All the actions that pass the vote are enacted immediately.
 
 ## Depositing assets into a fund account
 
-Any public key (that's listed as allowed to make deposits if such list is specified) can deposit funds into the fund account. The first deposit from each key must meet the limit: `fund.minInitialDepositQuantumMultiple` times the quantum of the asset that the fund uses. Desposited funds go into the `unallocated` account of the fund - it's the special account type that is not used by the margining system, funds need to be moved to the `general` account by the fund manager before they can be use to place orders or submit liquidity provision transactions.
+Any public key (that's listed as allowed to make deposits if such list is specified) can deposit funds into the fund account. The first deposit from each key must meet the limit: `fund.minInitialDepositQuantumMultiple` times the quantum of the asset that the fund uses. Deposited funds go into the `unallocated` account of the fund - it's the special account type that is not used by the margining system, funds need to be moved to the `general` account by the fund manager before they can be use to place orders or submit liquidity provision transactions.
 
 If fund account has the maximum total deposit limit specified then a deposit is only allowed if it doesn't bring the deposit total over that limit.
 
@@ -76,7 +76,7 @@ Each withdrawal request must have an enactment date specified. Such date must be
 ### Withdrawal enactment
 
 At the end of the fund epoch which falls at or after the withdrawal request's enactment date the withdrawal amount is calculated based on fund's value at that point in time and the share being withdrawn. Funds are searched for in fund's `unallocated` account. If the amount in that account is insufficient the protocol automatically reduces all of funds holdings by a fixed amount (hardcoded `5%`, unless the value of the entire fund is below `minInitialDeposit` - entire fund should be liquidated in that case). Holdings are reduced across all the markets a fund account has positions in, all it's liquidity provisions (may be rejected by market as per regular liquidity provision) and shares in other funds - these are of course delayed by the withdrawal enactment date.
-The funds raised are used to fullfil the pending withdrawal requests pro rata. Withdrawals requests are automatically adjusted so that they carry over to the next epoch with withdrawal shares adjusted by the amount withdrawn this period.
+The funds raised are used to fullfill the pending withdrawal requests pro rata. Withdrawals requests are automatically adjusted so that they carry over to the next epoch with withdrawal shares adjusted by the amount withdrawn this period.
 
 Withdrawals reduce the value of total deposits pro rata (if a party reduces their share of the fund by 50% the total deposits figure is reduced by 50% of the initial deposit of that party irrespective of the amount being withdrawn).
 
@@ -90,11 +90,11 @@ Fund manager can also initiate transfers between fund account's `general` and `u
 
 At the beginning of each epoch the fund's value gets evaluated and amount equal to `managementFee` times that value gets recorded as the pending compensation.
 
-Everytime a profit is realised (can come from trading, liquidity provision or withdrawing from another fund account which increased in value (net of fees) since the deposit) a `profitFee` fraction of that profit gets recorded as pending compensation.
+Every time a profit is realised (can come from trading, liquidity provision or withdrawing from another fund account which increased in value (net of fees) since the deposit) a `profitFee` fraction of that profit gets recorded as pending compensation.
 
-Everytime a loss is realised a `lossPenalty` fraction of that loss gets recorded as the pending penalty.
+Every time a loss is realised a `lossPenalty` fraction of that loss gets recorded as the pending penalty.
 
-At the end of each epoch the pending compensation amounts are netted off against the pending penalty amounts and the remaining positive part gets transferred from funds `unallocated` account into the general `account` of fund managers public key. If the amount in `unallocated` account is less than that figure then the entire amount of the `unallocated` account gets transferred. The transfer happens after all the pending withdrawal requests have been fulfilled. If withdrawal requests cannot be completed without automatically reducing fund's holding then any compensation (and penalty) amounts due to the fund manager get forgonne. The compensation (and penalty) amounts never get carried over into the next epoch. It is therefore in fund managers best interest to assure that there's always enough funds in the `unallocated` account to meet all the withdrawal requests and the compensation (net of penalties) due to them.
+At the end of each epoch the pending compensation amounts are netted off against the pending penalty amounts and the remaining positive part gets transferred from funds `unallocated` account into the general `account` of fund managers public key. If the amount in `unallocated` account is less than that figure then the entire amount of the `unallocated` account gets transferred. The transfer happens after all the pending withdrawal requests have been fulfilled. If withdrawal requests cannot be completed without automatically reducing fund's holding then any compensation (and penalty) amounts due to the fund manager get forgone. The compensation (and penalty) amounts never get carried over into the next epoch. It is therefore in fund managers best interest to assure that there's always enough funds in the `unallocated` account to meet all the withdrawal requests and the compensation (net of penalties) due to them.
 
 ## Deleting a fund account
 
