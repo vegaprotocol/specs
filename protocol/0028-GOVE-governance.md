@@ -220,7 +220,7 @@ A proposal to create a market contains
 1. a complete market specification as per the [Market Framework](./0001-MKTF-market_framework.md) that describes the market to be created.
 1. an enactment time that is at least the _minimum auction duration_ after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
 1. if the market is meant to be a _successor_ of a given market then it contains the marketId of the market it's succeeding (parent market), a parameter called `insurancePoolFraction` which is a decimal in `[0,1]` (i.e. it can be `0` or `1` or anything in between) and certain entries in the market proposal must be identical to those of the market it's succeeding OR the proposal should simply not contain the fields that cannot be changed.
-In particular instrument, settlement asset, margin asset, and `market.value.windowLength` must match.
+In a particular instrument, the settlement asset, margin asset, and `market.value.windowLength` must match.
 The parent market must be in one of `active` or `suspended` or `trading terminated` states.
 If the parent market is `settled` or `proposed` or `pending` or `cancelled` then the proposal should be rejected at validation stage with an error "parent market cannot be in `*` state" with `*` being one of the dis-allowed states above.
 The point of setting up a market to be successor of existing market is to
