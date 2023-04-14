@@ -222,10 +222,10 @@ A proposal to create a market contains
 1. if the market is meant to be a _successor_ of a given market then it contains the marketId of the market it's succeeding (parent market), a parameter called `insurancePoolFraction` which is a decimal in `[0,1]` (i.e. it can be `0` or `1` or anything in between) and certain entries in the market proposal must be identical to those of the market it's succeeding OR the proposal should simply not contain the fields that cannot be changed.
 In a particular instrument, the settlement asset, margin asset, and `market.value.windowLength` must match.
 The parent market must be in one of `active` or `suspended` or `trading terminated` states.
-If the parent market is `settled` or `proposed` or `pending` or `cancelled` then the proposal should be rejected at validation stage with an error "parent market cannot be in `*` state" with `*` being one of the dis-allowed states above.
-The point of setting up a market to be successor of existing market is to
-a) allow LPs who wish to continue claim their equity-like-share (ELS) by committing liquidity to the successor market during the pending period and
-b) allow the successor market to inherit the insurance pool of the parent market. When the successor market leaves the opening auction (moves from pending to active) the amount equal to `insurancePoolFraction x parent market insurance pool balance` is transferred to the successor market insurance pool. Once the parent market moves from "trading terminated" to "settled" state the entire remaining insurance pool of the successor market is transferred to the successor market insurance pool.
+If the parent market is `settled` or `proposed` or `pending` or `cancelled` then the proposal should be rejected at the validation stage with an error "parent market cannot be in `*` state" with `*` being one of the dis-allowed states above.
+The point of setting up a market to be successor of an existing market is to
+a) allow LPs continue claim their equity-like-share (ELS) by committing liquidity to the successor market during the pending period if they wish to, and
+b) allow the successor market to inherit the insurance pool of the parent market. When the successor market leaves the opening auction (moves from pending to active) the amount equal to `insurancePoolFraction x parent market insurance pool balance` is transferred to the successor market insurance pool. Once the parent market moves from "trading terminated" to "settled" state, the entire remaining insurance pool of the successor market is transferred to the successor market insurance pool.
 
 Note that each market can have exactly one market as a _successor_ market.
 
