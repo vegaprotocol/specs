@@ -22,9 +22,9 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 This applies to the on-chain-treasury for each asset as well as network infrastructure fee pool for each asset. 
 At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated. 
 
-As step *zero*: Vega keeps track of validators currently on the Ethereum multisig contract by knowing the initial state and by observing `validator added` and `validator removed` events emitted by the contract, see [multisig ethereum contract](./0033-OCAN-cancel_orders.md).
+As step *zero*: Vega keeps track of validators and their weights currently on the Ethereum multisig contract by knowing the initial state and by observing the `Signer_Updated` event emitted by the contract, see [multisig ethereum contract](./0030-ETHM-multisig_control_spec.md).
 If there are ethereum public keys on the multisig that do not belong to any of the current Tendermint validator nodes then the reward is zero. 
-The obverse case where a Tendermint validator doesn't have their signature on the multisig is dealt with in [validators joining and leaving](./0069-VCBS-validators_chosen_by_stake.md).
+The obverse case where a Tendermint validator doesn't have their ethereum public key on the multisig is dealt with in [validators joining and leaving](./0069-VCBS-validators_chosen_by_stake.md).
 The reason for this drastic reduction to rewards is that if there are signatures the multisig is expecting that Vega chain isn't providing there is a danger that control of the multisig is lost. 
 This is to ensure that validators (all validators) have incentive to pay Ethereum gas to update the multisig signer list.  
 
@@ -42,7 +42,7 @@ This is to ensure that validators (all validators) have incentive to pay Ethereu
 
 
 ## For each validator we then do:
-1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is  both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`. 
+1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`. 
 Here `allDelegatedTokens` is the count of the tokes delegated to this validator. 
 Note `validatorScore` also depends on the other network parameters, see below where the exact `validatorScore` function is defined.  
 1. Obtain the performance score as per [validator performance specification](./0064-VALP-validator_performance_based_rewards.md). Update `validatorScore <- validatorScore x performance_score`. 
@@ -104,7 +104,7 @@ For ersatz validators, the same formula is used.
 1. There is a one-to-one correspondence between Tendermint validators' ethereum keys and keys on multisig.
 1. Reward pool is funded.
 1. A validator called Bob leaves the set of tendermint validators (for example, reduce own plus delegated tokens so that their score is pushed down). A validator called Alice is promoted to tendermint validator set. 
-1. No-one updated multisig validators so we still have Bob's key on the list of multisig signer. 
+1. No-one updated multisig validators so we still have Bob's key on the list of multisig signers. 
 1. Epoch ends and multisig hasn't been updated.
 1. All Tendermint validators get no rewards. Ersatz validators still receive rewards.
 

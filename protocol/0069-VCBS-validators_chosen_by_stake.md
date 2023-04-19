@@ -76,22 +76,21 @@ A network parameter, `network.validators.minimumEthereumEventsForNewValidator`, 
 
 ## Ethereum-Side Multisig Control
 
-Vega will know the initial multisig signer list, weights, and threshold and watch for `Signers_Updated(bytes32 new_signer_set_data_hash, uint16 new_threshold)` events to track updates to the signer set. This event covers the signers, their weights, and the overall threshold of weight percentage needed for a multisig transaction to be successful.
+The MultisigControl contract will contain a hash of signer addresses and associated weights as described in [./0030-ETHM-multisig_control_spec.md]. A validators weight on the multisig contract should mirror the validators voting power/validator score on the Vega network.
 
-Once issued, the "winning" party of an update to the signer set and weights will run the Ethereum transaction to update the signer set and weights. 
-Thus, for any verification using the multisig contract, the contract can verify validators and their weights.
+As the multisig contract retains no knowledge of the signer set and weights, nor emits that set in the `Signer_Updated` event, the onus is on Vega network to remember the current signer set throughout changes in validator scores.
 
-`network.validators.multisig.signerAddresses` will be represented in Vega as an ordered array of ethereum addresses that correspond to the Vega validators as registered in Multisig Control via the signer set data hash.
+At genesis all nodes will have zero self stake and and so Vega can assume that the initial signer set data will consist of the genesis validators all with equal weights. This can then be verified against the `signer_set_data_hash` events emitted by the multisig contract when the initial signer set data is created. Afterwards the onus is then on the Vega nodes to infer the current signer set by cross-referencing updates to the signer set provisioned by the Vega network and the `Signer_Updated` events from the contract.
 
-`network.validators.multisig.signerWeights` is the ORDERED array of weights that correspond to the Vega validators as registered in Multisig Control via the signer set data hash.
+Consequently any change to the signer set on the multisig control contract that is made externally and deviates from the network's expected signer set hashes, whether malicious or not, will result in the inability to generate any signatures.
 
-In the reward calculation for the top signers by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.signerAddresses` by score.
+### Effect on rewards
 
-Thus a validator who is not there, but should be, has incentive to pay gas to update the multisig. Moreover a validator who's score has gone up substantially will want to do so as well. Given the variable cost of Ethereum gas, during low cost periods, even small changes in weight distribution will be worth updating.
+The network parameter `network.validators.multisig.numberOfSigners` controls the number of validators with the highest `validator_score` whose rewards will be affected if their score mismatches the weight on the multisig contract. Their effective `validator_score` will be `min(validator_score, ethereum_multisig_weight)` will be ` If their ethereum address is not in the signer set on the multisig contract their `ethereum_multisig_weight` will be taken as `0`. Thus a validator who has been promoted, or who's score has gone up substantially, will be incentivised to update the multisig contract. 
 
-As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) then at the end of the epoch their score will be `0`. They will not get any rewards. 
+The value of `network.validators.multisig.numberOfSigners` must be less than or equal to `network.validators.tendermint.number`
 
-In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from the Multisig contract. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed.
+In the case where a node is demoted from the Tendermint validator set for any reason, but their ethereum address remains part of the signer set on the multisig control contract, all remaining Tendermint validators will receive a `validator_score` of `0` and will get no rewards. They are therefore incentivised to update the multisig contract and remove the excess signer.
 
 Note that this will change as future versions implement strategies to scale the Ethereum-side of the protocol implements threshold signatures, zk rollups, or other methods that allows validators to approve Ethereum actions.
 
@@ -479,12 +478,30 @@ Verify that this validator is paid reward as ersatz validator and that their sta
   * Restart the network starting only 3 of the validators. 
   * Restore from the checkpoint. 
   * Verify the network is not able to produce blocks. 
-
+4. Mismatched weights across a checkpoint restore (<a name="0069-COSMICELEVATOR-XXX" href="#0069-COSMICELEVATOR-XXX">0069-COSMICELEVATOR-XXX</a>):
+  * Setup a network with 5 validators with equal delegation ensuring the weights on multisig contract are up to date
+  * Change the delegations across the validators so that they are unequal
+  * Verify that a update-signer signature bundles is available but do not submit it
+  * Restart the network from the next checkpoint
+  * Verify that each that each validators `validator_score` is preserved
+  * Submit the update-signer signature bundle and ensure that each validators `validator_score` is now corrected
 
 
 ## Multisig update
-1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-COSMICELEVATOR-002" href="#0069-COSMICELEVATOR-002">0069-COSMICELEVATOR-002</a>)
-2. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-COSMICELEVATOR-003" href="#0069-COSMICELEVATOR-003">0069-COSMICELEVATOR-003</a>)
-3. It is possible to submit a transaction to update the weights. (<a name="0069-COSMICELEVATOR-004" href="#0069-COSMICELEVATOR-004">0069-COSMICELEVATOR-004</a>)
- 
-
+1. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-COSMICELEVATOR-001" href="#0069-COSMICELEVATOR-001">0069-COSMICELEVATOR-001</a>)
+2. It is possible to submit a transaction to update the weights on the multisig contract. (<a name="0069-COSMICELEVATOR-002" href="#0069-COSMICELEVATOR-002">0069-COSMICELEVATOR-002</a>)
+3. When the signer set is updated on the multisig contract due to a change in weights, any unsubmitted signatures (withdrawals, asset-listing etc) will become invalid and new signatures will be reissued by the network. (<a name="0069-COSMICELEVATOR-003" href="#0069-COSMICELEVATOR-003">0069-COSMICELEVATOR-004</a>)
+4. Signature bundle is valid when one node is missing (<a name="0069-COSMICELEVATOR-004" href="#0069-COSMICELEVATOR-004">0069-COSMICELEVATOR-004</a>)
+  * Setup a network with 5 Tendermint validators with equal delegation to them ensuring that the multisig bundle is up to date.
+  * Stop a validator node so that it will not produce signatures
+  * Submit a Withdrawal transaction to Vega
+  * Verify that signatures are produces and the withdrawal can be completed on ethereum (<a name="0069-COSMICELEVATOR-005" href="#0069-COSMICELEVATOR-005">0069-COSMICELEVATOR-005</a>)
+5. Signature bundles with asymmetric weights
+  * Setup a network with 5 Tendermint validators such that 2 validators have more than the 2/3 of the voting power
+  * Update the weights on the multisig contract to match the voting power
+  * Stop the 3 validators nodes with the lowest voting power
+  * Submit a Withdrawal transaction to Vega
+  * Verify that signatures are produced and the withdrawal can be completed on ethereum i.e the weights are being taken into account
+6. An API exists that allows any party to know when the multisig contract needs updating and the data needed to call `IssueSignatures` is available (<a name="0069-COSMICELEVATOR-006" href="#0069-COSMICELEVATOR-006">0069-COSMICELEVATOR-006</a>)
+7. It is possible to migrate Vega to a new version of the multisig contract through a protocol upgrade(<a name="0069-COSMICELEVATOR-007" href="#0069-COSMICELEVATOR-007">0069-COSMICELEVATOR-007</a>)
+8. Outside of the protocol (create a signature bundles manually), generate signatures to update the multisig contract to have arbitrary and unexpected validator weights. Verify that the network handles this change gracefully, and does not attempt to produce withdrawal signatures (<a name="0069-COSMICELEVATOR-008" href="#0069-COSMICELEVATOR-008">0069-COSMICELEVATOR-007</a>)
