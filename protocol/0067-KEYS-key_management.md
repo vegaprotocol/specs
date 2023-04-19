@@ -40,7 +40,7 @@ Vega ERC20 tokens they use for staking and self-delegation.
 As the verification of signatures done with this key is happening on the Ethereum MultiSig smart
 contract, in the current implementation it is also required to communicate 
 with the smart contract to deactivate or change this key; this is done
-through the add/remove calls to the multisig contract, so a validator cannot do this alone at this point.
+through the update signer calls to the multisig contract, so a validator cannot do this alone at this point.
 
 Signatures issued by the ETH key currently have no expiration for signatures. Thus a possible attack could run as follows: 
 1) an attacker compromises one validator, asks the HSM to sign a transaction that
@@ -266,20 +266,31 @@ need to be hashed individually).
   * A Vega network is running such there is at least 1 ersatz
   * Submit a transaction to rotate their ethereum keys.
   * Verify that once `target_block` is reached, the data-node reports that the rotation occurred.
-  * Verify that no signatures bundles are emitted from core to add/remove either the new key or the old key.
+  * Verify that no update-signer bundles are emitted from core
   * Repeat the above steps for a pending validator
 
-3. Subsequent rotations cannot be submitted until the previous rotation is resolved on the contract (<a name="0067-KEYS-004" href="#0067-KEYS-004">0067-KEYS-004</a>)
-  * Start a Vega network and pick a tendermint validator.
-  * Submit a transaction to rotate their ethereum key.
-  * Verify that signatures bundles are emitted from core, but do not submit them to the multisig contract.
-  * Submit another transactions to their rotate ethereum keys.
-  * Verify that the transaction fails. This is to prevent multiple valid add-signer bundles for the same validator.
-
-4. Transaction with no proof of ownership of the new ethereum key fails (<a name="0067-KEYS-005" href="#0067-KEYS-005">0067-KEYS-005</a>)
+3. Transaction with no proof of ownership of the new ethereum key fails (<a name="0067-KEYS-005" href="#0067-KEYS-005">0067-KEYS-005</a>)
   * Start a Vega network and pick a tendermint validator.
   * Submit a transaction to rotate their ethereum keys which contains an invalid ethereum signature.
   * Verify that the transaction fails.
+
+4. Subsequent rotations invalidate previous update-signer bundles (<a name="0067-COSMICELEVATOR-004" href="#0067-COSMICELEVATOR-004">0067-COSMICELEVATOR-004</a>)
+  * Start a Vega network and pick a tendermint validator.
+  * Submit a transaction to rotate their ethereum key.
+  * Verify that an update-signer bundle can be emitted from core, but do not submit them to the multisig contract.
+  * Submit another transactions to their rotate ethereum keys a second time.
+  * Verify that a new update-signer bundle can be emitted from core, and *do* submit it to the multisig contract
+  * Attempt to submit the first update-signer bundle to the multisig contract, it should fail
+
+5. Subsequent rotations reissued if update-signer bundle changes (<a name="0067-COSMICELEVATOR-005" href="#0067-COSMICELEVATOR-005">0067-COSMICELEVATOR-004</a>)
+  * Start a Vega network and pick a tendermint validator.
+  * Submit a transaction to rotate their ethereum key.
+  * Verify that an update-signer bundle can be emitted from core, but do not submit them to the multisig contract.
+  * Submit another transactions to their rotate ethereum keys a second time.
+  * Verify that a new update-signer bundle can be emitted from core, and do not submit it to the multisig contract
+  * Submit the first update-signer-bundle to the multisig contract
+  * Submit the second update-signer-bundle to the multisig contract, it should fail
+  * Verify that the second update-signer bundle is reissued, and confirm it can be submitted to the multisig contract
 
 ### Vega hot key (<a name="0067-KEYS-002" href="#0067-KEYS-002">0067-KEYS-002</a>)
 

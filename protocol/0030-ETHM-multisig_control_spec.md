@@ -140,7 +140,7 @@ Vega must account for this by using the `Asset_Withdrawn` events. Once verified 
 In order for outstanding Multisig orders to be invalidated the following MUST be true:
 * Vega sees all relevant multisig events from ETH
 * Vega sees them in order, or at least knows the order
-* Vega does not reissue a multisig order until it has seen the Sigher Set Updated event AND it has processed all previous events from that and precious blocks
+* Vega does not reissue a multisig order until it has seen the Sigher Set Updated event AND it has processed all previous events from that and previous blocks
 * Enough ETH blocks have passed to be assured of finality
 * Vega MUST keep an ordered list of validator nodes and weights that, when hashed, matches the signer set hash stored in the multisig contract.
  
