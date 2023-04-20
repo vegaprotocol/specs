@@ -76,6 +76,15 @@ Depending on how things pan out, we may have an issue with the timing; to make s
 
 The initial hash-function used is SHA3. To allow for a more fine-grained control over the difficulty of the PoW (the number of zeros only allows halving/doubling), the parameter `spam.pow.hashFunction` allows increasing the number of rounds of the hash function (currently 24), e.g., `spam.pow.hashFunction` = `sha3_36_rounds`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
 
+## Mempool pruning 
+
+Vega nodes will periodically inspect the mempool. Any transaction sitting in the mempool with PoW tied to a historical block with number `N_old` which satisfies that `N_old + spam.pow.numberOfPastBlocks < N_current` will be removed from the mempool. Here `N_current` is the current block the vega node is processing (has just processed). 
+
+Clients can use this simlulate "time-to-live" for transactions. If the PoW is tied to a very recent block then the transaction will remain valid for (almost) the full `spam.pow.numberOfPastBlocks`. If, on the other hand, the PoW is tied to very old block then the transcation will remain valid only for a few blocks; it will be included in a block soon or not at all. 
+
+All Vega clients that submitted transactions can verify that their transaction has succeeded by waiting that it's been included in a block; if they submitted a transaction with PoW tied to `N_old` and `N_old + spam.pow.numberOfPastBlocks < N_current` then they know the transaction was pruned and will never be included on chain. 
+
+
 ## Acceptance Criteria
 
 - A message with a missing/wrong PoW is rejected (<a name="0072-SPPW-001" href="#0072-SPPW-001">0072-SPPW-001</a>)
@@ -115,3 +124,7 @@ The initial hash-function used is SHA3. To allow for a more fine-grained control
   - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is increased.
   - `Spam.pow.difficulty` is increased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased.
   - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased. (<a name="0072-COSMICELEVATOR-014" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-014</a>)
+
+
+- *Mempool pruning* Cause congestion in the mempool by submitting many transactions (perhaps from several parties). Submit a transaction `T` tied to block number `N_old`. Make sure the transactions causing congestion create sufficiently large `N_current`. At some point we'll have `N_old + spam.pow.numberOfPastBlocks < N_current` and the transaction `T` is removed from the mempool and never scheduled. (<a name="0072-SPPW-012" href="#0072-SPPW-012">0072-SPPW-012</a>)
+
