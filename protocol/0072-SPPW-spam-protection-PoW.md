@@ -76,13 +76,13 @@ Depending on how things pan out, we may have an issue with the timing; to make s
 
 The initial hash-function used is SHA3. To allow for a more fine-grained control over the difficulty of the PoW (the number of zeros only allows halving/doubling), the parameter `spam.pow.hashFunction` allows increasing the number of rounds of the hash function (currently 24), e.g., `spam.pow.hashFunction` = `sha3_36_rounds`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
 
-## Mempool pruning 
+## Mempool pruning
 
-Vega nodes will periodically inspect the mempool. Any transaction sitting in the mempool with PoW tied to a historical block with number `N_old` which satisfies that `N_old + spam.pow.numberOfPastBlocks < N_current` will be removed from the mempool. Here `N_current` is the current block the vega node is processing (has just processed). 
+Vega nodes will periodically inspect the mempool. Any transaction sitting in the mempool with PoW tied to a historical block with number `N_old` which satisfies that `N_old + spam.pow.numberOfPastBlocks < N_current` will be removed from the mempool. Here `N_current` is the current block the vega node is processing (has just processed).
 
-Clients can use this simlulate "time-to-live" for transactions. If the PoW is tied to a very recent block then the transaction will remain valid for (almost) the full `spam.pow.numberOfPastBlocks`. If, on the other hand, the PoW is tied to very old block then the transcation will remain valid only for a few blocks; it will be included in a block soon or not at all. 
+Clients can use this simulate "time-to-live" for transactions. If the PoW is tied to a very recent block then the transaction will remain valid for (almost) the full `spam.pow.numberOfPastBlocks`. If, on the other hand, the PoW is tied to very old block then the transaction will remain valid only for a few blocks; it will be included in a block soon or not at all.
 
-All Vega clients that submitted transactions can verify that their transaction has succeeded by waiting that it's been included in a block; if they submitted a transaction with PoW tied to `N_old` and `N_old + spam.pow.numberOfPastBlocks < N_current` then they know the transaction was pruned and will never be included on chain. 
+All Vega clients that submitted transactions can verify that their transaction has succeeded by waiting that it's been included in a block; if they submitted a transaction with PoW tied to `N_old` and `N_old + spam.pow.numberOfPastBlocks < N_current` then they know the transaction was pruned and will never be included on chain.
 
 
 ## Acceptance Criteria
