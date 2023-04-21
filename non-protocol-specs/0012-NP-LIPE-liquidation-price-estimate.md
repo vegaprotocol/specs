@@ -44,7 +44,7 @@ When including orders we sort the orders in the order they will get filled in (d
 
 - Calculate open volume with including the remaining volume of all the market orders for a given side ($V$) and calculate the liquidation price ($S^{\text{liquidation}}$) using the formula outlined above and the current mark price or indicative uncrossing price if market is in auction ($S^{\text{current}}$).
 - For each limit order:
-  - if the order price ($S^{\text{order}}$) is above (buy side) / below (sell side) ($S^{\text{liquidation}}$):
+  - if the order price ($S^{\text{order}}$) is above (buy side) / below (sell side) the liquidation price ($S^{\text{liquidation}}$):
     - recalculate $V$ to include the order's remaining volume (assumes order gets filled as soon as its price level is filled),
     - update $\text{collateral available}$ to include the MTM gains/losses:  $V(S^{\text{order}}-S^{\text{current}})$,
     - update $S^{\text{current}}$ to equal $S^{\text{order}}$,
