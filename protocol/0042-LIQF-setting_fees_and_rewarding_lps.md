@@ -72,7 +72,7 @@ From the end of the opening auction, which we will refer to as `t0` until `t0+ma
 For each LP we track the stake they have and also their virtual stake.
 For markets that have no "parent" market, see [governance](./0028-GOVE-governance.md)  we postulate that before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake.
 
-For any period `n >= 1` LP can add stake or remove stake but virtual stake is treated differently or for markets with "parent market":
+For any period `n >= 1` LP can add stake or remove stake but virtual stake is treated differently for markets with "parent market":
 
 If the market has a "parent market" then each LP which commits liquidity (to this market) gets the virtual stake copied from the parent market as the 1st step of the process and the stake they are committing here minus the stake on parent market is treated as the `delta` here.
 
