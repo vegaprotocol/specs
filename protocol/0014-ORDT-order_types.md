@@ -32,7 +32,7 @@ Notes on scope of current version of this spec:
 **Persistent:**
 
 1. **Good 'Til Time (GTT):** order is valid until the supplied expiry time, which may be supplied either as an absolute date/time or a relative offset from the  timestamp on the order (i.e. the timestamp added by the core when it receives the order, which is deterministically the same on all nodes)
-1. **Good 'Til Cancelled (GTC):** order is valid indefinitely.
+1. **Good 'Til Cancelled (GTC):** order is valid indefdnitely.
 
 **Non-persistent:**
 
@@ -47,7 +47,54 @@ Notes on scope of current version of this spec:
 ### Execution flags
 
 1. **Post-Only (True/False):** Only valid for Limit orders. Cannot be True at the same time as Reduce-Only. If set to true, once order reaches the orderbook, this order acts identically to a limit order set at the same price. However, prior to being placed a check is run to ensure that the order will not (neither totally nor in any part) immediately cross with anything already on the book. If the order would immediately trade, it is instead immediately `Stopped` with a reason informing the trader that the order was stopped to avoid a trade occurring. As a result, placing a Post-Only order will never incur taker fees, and will not incur fees in general if executed in continuous trading. It is possible for some liquidity and infrastructure fees to be paid if the resultant limit order trades at the uncrossing of an auction, as specified in [0029-FEES](https://github.com/vegaprotocol/specs/blob/master/protocol/0029-FEES-fees.md#normal-auctions-including-market-protection-and-opening-auctions).
+
 1. **Reduce-Only (True/False):** Only valid for Non-Persistent orders. Cannot be True at the same time as Post-Only. If set, order will only be executed if the outcome of the trade moves the trader's position closer to 0. In addition, a Reduce-Only order will not move a position to the opposite side to the trader's current position (e.g. if short, a Reduce-Only order cannot make the trader long as a result). If submitted as IOC, where the full volume would switch sides, only the amount required to move the position to 0 will be executed.
+
+
+### Stop orders
+
+In addition to normal immediately executing order, Vega should accept the submission of stop orders.
+These differ from normal orders in that they sit off the order book until triggered, when they are entered as normal.
+These are generally used to exit positions under pre-defined conditions, either as a "stop loss" order that controls the maximum losses a position may take, a "take profit" order that closes a position once a defined level of profit has been made, or both.
+To prevent traders from "hiding" order book depth behind conditional orders, stop orders can only be used to close some or all of a trader's position, and therefore must be "reduce only" orders.
+
+A stop order submission can be made (stop loss or take profit are probably both just called a stop order internally).
+
+* Stop order submissions must include either a trigger price OR trailing stop distance (which can be a number or % from the reference price) in addition to a normal order submission.
+
+* Stop order submissions must include a trigger direction.
+Direction may be _rises above_ or _falls below_.
+_Rises above_ stops trigger if the last traded price is higher than the trigger level, and _falls below_ stops trigger if the last traded price is lower than the trigger level.
+
+* A stop trigger can have an optional expiry date/time.
+If it has an expiry then it can be set either to cancel on expiry (i.e. it is deleted at that time) or trigger on expiry (i.e. the order wrapped in the submission is placed whether or not the trigger level is breached).
+
+* It is possible to make a single stop order submission or an OCO (One Cancels the Other) stop order submission.
+An OCO contains TWO stop order submissions, and must include one in each trigger direction.
+OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
+An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
+
+* The stop order submission wraps a normal order submission.
+
+* The order within the stop order submission must be reduce only.
+
+* The submission is validated when it is recieved but does not initially interact with the order book unless it is triggered immediately (see below).
+
+* If and when the trigger price is breached in the specified direction the order provided in the stop order submission is created and enters the book or trades as normal, as if it was just submitted.
+
+* The order contained in a stop order submission is entered immediately if the trigger price is already breached on entry, except during an auction. (TODO: confirm we do this and don't just always wait for a trade price)
+
+* When the stop order is a trailing stop, the price at which it is triggered is calculated as the defined distance from the highest price achieved since the order was entered if the direction is to trigger on price below the specified level, or the lowest price achieved since the order was entered if the direction is to trigger above the level.
+Therefore the trigger level of a stop order moves with the market allowing the trader to lock in some amount of gains.
+
+* (TODO: confirm this???) If the trader's position size gets to zero or changes direction all their stop orders are cancelled.
+
+* The order can't be triggered or trade at all during an aucton (even if the current price would normally trigger it immediately on entry).
+
+* A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price, as well as any trades after that.
+
+* GFA is not a valid TIF for a stop order submission.
+
 
 ### Valid order entry combinations
 
