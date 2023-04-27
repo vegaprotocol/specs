@@ -32,7 +32,7 @@ Notes on scope of current version of this spec:
 **Persistent:**
 
 1. **Good 'Til Time (GTT):** order is valid until the supplied expiry time, which may be supplied either as an absolute date/time or a relative offset from the  timestamp on the order (i.e. the timestamp added by the core when it receives the order, which is deterministically the same on all nodes)
-1. **Good 'Til Cancelled (GTC):** order is valid indefdnitely.
+1. **Good 'Til Cancelled (GTC):** order is valid indefinitely.
 
 **Non-persistent:**
 
