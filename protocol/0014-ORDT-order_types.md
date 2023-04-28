@@ -87,13 +87,19 @@ An OCO submission allows a user to have a stop loss and take profit applied to t
 * When the stop order is a trailing stop, the price at which it is triggered is calculated as the defined distance from the highest price achieved since the order was entered if the direction is to trigger on price below the specified level, or the lowest price achieved since the order was entered if the direction is to trigger above the level.
 Therefore the trigger level of a stop order moves with the market allowing the trader to lock in some amount of gains.
 
-* (TODO: confirm this???) If the trader's position size gets to zero or changes direction all their stop orders are cancelled.
-
 * The order can't be triggered or trade at all during an aucton (even if the current price would normally trigger it immediately on entry).
 
 * A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price, as well as any trades after that.
 
 * GFA is not a valid TIF for a stop order submission.
+
+* Spam prevention:
+
+    * Stop orders will only be accepted from keys with either a non-zero open position or at least one active order.
+
+    * A network parameter will control the maximum number of stop orders per party (suggested initial value: between 4 and 10).
+
+    * (TODO: confirm this makes sense) If the trader's position size gets to zero or changes direction all their stop orders are cancelled.
 
 
 ### Valid order entry combinations
