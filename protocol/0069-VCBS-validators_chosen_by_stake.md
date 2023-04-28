@@ -21,7 +21,7 @@ Note that this number combines own + delegated stake together with `performance_
 Vega will sort all current consensus forming (also called Tendermint) validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score.
 If for any `l,m=1,...,n` we have  `v_l == v_m` then we place higher the one who's been validator for longer (so this is a mechanism for resolving ties).
 Vega will sort all those who submitted a transaction wishing to be validators using `validator_score` as `[w_1, ..., w_k]`.
-These may be ersatz validators (ie getting rewards) or others who just submitted the transaction to join.
+These may be ersatz validators (i.e. standy validators who are gettting rewards) or others who just submitted the transaction to join.
 
 If `empty_slots := network.validators.tendermint.number - n > 0` (we have empty consensus (Tendermint) validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to consensus (Tendermint) validators.
 If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a consensus forming (Tendermint) validator, and the lowest scoring incumbent becomes an ersatz validator.

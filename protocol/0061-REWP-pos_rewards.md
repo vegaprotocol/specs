@@ -11,7 +11,7 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `totalStake` - the total number of units of the staking and governance asset (VEGA) associated to the Vega chain (but not necessarily delegated to a specific validator).
 1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake.
-1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes.
+1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator(standy validator) own + delegated stake counts for reward purposes.
 
 ## Other network parameters
 
