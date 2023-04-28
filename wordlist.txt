@@ -25,6 +25,7 @@ cashflow
 cashflows
 CCP
 ccy
+cdot
 ceil
 ceiled
 CFD
@@ -92,6 +93,7 @@ FIFO
 filesystem
 FOK
 FOREX
+frac
 freeform
 frontend
 funder
