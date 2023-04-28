@@ -60,7 +60,7 @@ To prevent traders from "hiding" order book depth behind conditional orders, sto
 
 A stop order submission can be made (stop loss or take profit are probably both just called a stop order internally).
 
-* Stop order submissions must include either a trigger price OR trailing stop distance (which can be a number or % from the reference price) in addition to a normal order submission.
+* Stop order submissions must include either a trigger price OR trailing stop distance as a % move from the reference price in addition to a normal order submission.
 
 * Stop order submissions must include a trigger direction.
 Direction may be _rises above_ or _falls below_.
@@ -84,12 +84,12 @@ An OCO submission allows a user to have a stop loss and take profit applied to t
 
 * The order contained in a stop order submission is entered immediately if the trigger price is already breached on entry, except during an auction. (TODO: confirm we do this and don't just always wait for a trade price)
 
-* When the stop order is a trailing stop, the price at which it is triggered is calculated as the defined distance from the highest price achieved since the order was entered if the direction is to trigger on price below the specified level, or the lowest price achieved since the order was entered if the direction is to trigger above the level.
+* When the stop order is a trailing stop, the price at which it is triggered is calculated as the defined distance as a percentage from the highest price achieved since the order was entered if the direction is to trigger on price below the specified level, or the lowest price achieved since the order was entered if the direction is to trigger above the level.
 Therefore the trigger level of a stop order moves with the market allowing the trader to lock in some amount of gains.
 
 * The order can't be triggered or trade at all during an aucton (even if the current price would normally trigger it immediately on entry).
 
-* A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price, as well as any trades after that.
+* A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
 
 * GFA is not a valid TIF for a stop order submission.
 
