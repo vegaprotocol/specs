@@ -213,45 +213,71 @@ The liquidity fees are transferred from the market LP fee account into the LP-pe
 
 The LP parties don't control the LP-per-market fee account; the fees from there are then tranferred to the LPs' general account at the end epoch as described below.
 
-### Distributing fees from LP-per-market-fee accounts based on meeting SLA commitments
 
 
+### Calculating SLA performance
 
-#### Example
+#### Measuring time spent meeting their commitment
 
-We have `4` LPs with equity-like share shares:
-share as below
+During the epoch, the amount of time in nanoseconds (of Vega time) that each LP spends meeting the SLA is recorded. This can be done by maintaning a counter `s_i` as shown below:
 
-```text
-LP 1 els = 0.65
-LP 2 els = 0.25
-LP 3 els = 0.1
+* At the start of a new epoch, `s_i = 0`
+
+    * If the LP is meeting their commitment, store the Vega time of the start of the epoch as the time the LP began meeting their commitment, otherwise store `nothing`.
+
+* At the end of each block:
+
+    * If LP has started meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
+
+        * Store the current Vega time as the time the LP began meeting their commitment
+
+    * If LP has stopped meeting their committed volume of notional after previously doing so:
+
+        * Add the difference in nanoseconds between the current Vega time and the time the LP began meeting their commitment (stored in the step above) to `s_i`
+        
+        * Store `nothing` as the time the LP began meeting their commitment, to signify the LP not meeting their commitment
+
+* At the end of the epoch, calculate the actual observed epoch length `observed_epoch_length` = the difference in nanoseconds between the Vega time at the start of the epoch and the Vega time at the end of the epoch.
+
+Note that we only need to evaluate each LP's status at the end of each block, as no _Vega time_ passes between transactions in a block.
+
+
+#### Calculating the SLA performance penalty
+
+Calculate the fraction of the time the LP spent on the book:
+
+```
+fraction_of_time_on_book = s_i / observed_epoch_length
 ```
 
-Trade happened, and the trade value for fee purposes multiplied by the liquidity fee factor is `103.5 ETH`. The following amounts be collected immediately into the LP fee accounts for the market:
+For any LP where `fraction_of_time_on_book < market.liquidity.commitmentMinTimeFraction` the SLA penalty fraction `p_i = 1` (that is, the penalty is 100% of their fees).
 
-```text
-0.65 x 103.5 = 67.275 ETH to LP 1's LP account
-0.25 x 103.5 = 25.875 ETH to LP 2's LP account
-0.10 x 103.5 = 10.350 ETH to LP 3's LP account
+For each LP where `fraction_of_time_on_book ≥ market.liquidity.commitmentMinTimeFraction`, the SLA penalty fraction `p_i` is calculated as follow:
+
+```python 
+p_i = (1.0 - (fraction_of_time_on_book - market.liquidity.committmentMinTimeFraction) / (1.0 - market.liquidity.committmentMinTimeFraction)) * market.liqudity.slaCompetitionFactor
 ```
 
-Then LP 4 made a delayed LP commitment, and updated share as below:
+### Applying LP SLA performance penalties to accrued fees
 
-```text
-LP 1 els = 0.43
-LP 2 els = 0.17
-LP 3 els = 0.07
-LP 4 els = 0.33
+As defined above, for each LP for each epoch you have "penalty fraction" `p_i` which is between `[0,1]` with `0` indicating LP has met committment 100% of the time and `1` indicating that LP was below `market.liquidity.committmentMinTimeFraction` of the time. 
+
+Calculate `w_i = LP-per-market fee i / sum over all LP-per-market fee accounts`. 
+For each LP transfer `(1-p_i) x amount in LP-per-market fee account` to their general account with a transfer type that marks this as the "LP net liquidity fee distribution". 
+
+Tranfer all unpaid-out rewards left in LP-per-market fee accounts into a temporary (one per market) bonus distribution account. Record its balance to be `B`. 
+
+Let `b_i := (1-p_i) x w_i` and renormalise `b_i`s so that they sum up to `1` i.e.
 ```
-
-When the time defined by `market.liquidity.providers.fee.calculationTimeStep` elapses we do transfers:
-
-```text
-67.275 ETH from LP 1's LP account to LP 1's general account
-25.875 ETH from LP 2's LP account to LP 2's general account
-10.350 ETH from LP 3's LP account to LP 3's general account
+b_i <- b_i / (sum over i of all b_i).
 ```
+Each LP further gets a performance bonus: `b_i x B` with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
+
+Note that after this process completes the balance of the temporary (one per market) bonus distribution account decscribed above **must be zero** and the account may be destroyed (and recreated again when needed).
+
+There is an example [google sheet for this step](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY/edit#gid=0); once we're sure we're happy let's tranfer this to a fixed example.
+
+
 
 ### APIs for fee splits and payments
 
