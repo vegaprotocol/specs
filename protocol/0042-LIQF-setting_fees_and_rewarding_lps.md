@@ -2,7 +2,7 @@
 
 ## Summary
 
-The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](../protocol/0041-TSTK-target_stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special liquidity provider pegged order type [liquidity provider order spec](./0038-OLIQ-liquidity_provision_order_type.md).
+The aim of this specification is to set out how fees on Vega are set based on committed liquidity provider stake and prevailing open interest on the market leading to [target stake](../protocol/0041-TSTK-target_stake.md). Let us recall that liquidity providers can commit and withdraw stake by submitting / amending a special [liquidity commitment transaction](./0044-LIME-lp_mechanics.md).
 
 ## Definitions / Glossary of terms used
 
@@ -10,7 +10,7 @@ The aim of this specification is to set out how fees on Vega are set based on co
 - **Target stake**: as defined in [target stake spec](./0041-TSTK-target_stake.md). The ideal amount of stake LPs would commit to a market.
 - `market.liquidityProvision.minLpStakeQuantumMultiple`: There is a network wide parameter specifying the minimum LP stake as the `quantum` specified per asset, see [asset framework spec](../protocol/0040-ASSF-asset_framework.md).
 
-## CALCULATING LIQUIDITY FEE FACTOR
+## Calculating liquidity fee factor
 
 The [liquidity fee factor](./0029-FEES-fees.md) is an input to the total taker fee that a price taker of a trade pays:
 
@@ -176,11 +176,12 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 (average entry valuation) = 1090.9
 ```
 
-### Calculating the liquidity score
+### Calculating the instantenaous liquidity score
 
 At every vega time change calculate the liquidity score for each committed LP.
-This is done by taking into account all orders they have deployed within the `[min_lp_price,max_lp_price]` [range](./0038-OLIQ-liquidity_provision_order_type.md#refining-list-of-orders) and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantaneous liquidity score. For orders outside the tightest price monitoring bounds set probability of trading to 0.
-When we say "all orders" we mean their limit orders, [pegged orders](./0037-OPEG-pegged_orders.md) and the volume deployed on their behalf as part of their [liquidity commitment order](./0038-OLIQ-liquidity_provision_order_type.md).
+This is done by taking into account all orders they have deployed within the `[min_lp_price,max_lp_price]` [range](./0044-LIME-lp_mechanics.md) and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantaneous liquidity score. 
+For orders outside the tightest price monitoring bounds set probability of trading to 0.
+Note that parked [pegged orders](./0037-OPEG-pegged_orders.md) and not-yet-triggered [stop orders](./0014-ORDT-order_types.md) are not included. 
 
 Now calculate the total of the instantaneous liquidity scores obtained for each committed LP:
 
@@ -191,7 +192,7 @@ Otherwise calculate fractional instantaneous liquidity score for each committed 
 
 `fractional instantaneous liquidity score = instantaneous liquidity score / total`
 
-If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then for each committed LP `liquidity score` is set to `fractional instantaneous liquidity score`.
+If `market.liquidity.providers.fee.calculationTimeStep` is set to `0` then for each committed LP `liquidity score` is set to `fractional instantaneous liquidity score`.
 
 Otherwise whenever a new LP fee distribution period starts set a counter `n=1`.
 Then on every Vega time change, after `fractional instantaneous liquidity score` has been obtained for all the committed LPs, update:
@@ -200,17 +201,21 @@ Then on every Vega time change, after `fractional instantaneous liquidity score`
 
 The liquidity score should always be rounded to 10 decimal places to prevent spurious accuracy and overly long string representation of a number.
 
-### Distributing fees
+### Distributing fees into LP-per-market fee account
 
-On every trade, liquidity fee should be collected immediately into an account for that market (call it the liquidity fee account). The account is under control of the network and funds from this account will be transferred to a LP party according to the mechanism below.
+On every trade, liquidity fee should be collected immediately into the market LP fee account. 
+The account is under control of the network and funds from this account will be transferred to the owning LP party according to the mechanism below. 
 
-This account is not under control of the LP party (they cannot initiate transfers in or out of the account). The account is under control of the network and funds from this account will be transferred to the owning LP party according to the mechanism below.
+A network parameter `market.liquidity.providers.fee.calculationTimeStep` will control how often fees are distributed from the market LP fee account. 
+Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.calculationTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
 
-A network parameter `market.liquidity.providers.fee.distributionTimeStep` will control how often fees are distributed from the LP fee account. Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.distributionTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
+The liquidity fees are transferred from the market LP fee account into the LP-per-market fee account, pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
 
-If `market.liquidity.providers.fee.distributionTimeStep` is set to `0` then the balance is distributed either immediately upon collection or at then end of a block.
+The LP parties don't control the LP-per-market fee account; the fees from there are then tranferred to the LPs' general account at the end epoch as described below.
 
-The liquidity fees are distributed pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
+### Distributing fees from LP-per-market-fee accounts based on meeting SLA commitments
+
+
 
 Flooring non-zero amounts due to integer representation can result in a remainder in the liquidity fee account. The remainder should be left in the market liquidity fee account and carried over to the next distribution window.
 
@@ -244,7 +249,7 @@ LP 3 els = 0.07
 LP 4 els = 0.33
 ```
 
-When the time defined by `market.liquidity.providers.fee.distributionTimeStep` elapses we do transfers:
+When the time defined by `market.liquidity.providers.fee.calculationTimeStep` elapses we do transfers:
 
 ```text
 67.275 ETH from LP 1's LP account to LP 1's general account
@@ -280,8 +285,7 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - The examples provided result in the given outcomes.  (<a name="0042-LIQF-008" href="#0042-LIQF-008">0042-LIQF-008</a>)
 - The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-all-trades` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
 - Liquidity providers with a commitment of 0 will not receive a share ot the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
-- If a market has `market.liquidity.providers.fee.distributionTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
-- If after fee distribution during market settlement, there is a remainder in the market liquidity fee account, the remainder should be transferred to the network treasury for that asset. (<a name="0042-LIQF-031" href="#0042-LIQF-031">0042-LIQF-031</a>)
+- If a market has `market.liquidity.providers.fee.calculationTimeStep` set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
 - All liquidity providers with `average fraction of liquidity provided by committed LP > 0` in the market receive a greater than zero amount of liquidity fee. The only exception is if a non-zero amount is rounded to zero due to integer representation. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
 - After fee distribution, if there is a remainder in the liquidity fee account and the market is not being settled, it should be left in the liquidity fee account and carried over to the next distribution window. (<a name="0042-LIQF-032" href="#0042-LIQF-032">0042-LIQF-032</a>)
 
@@ -295,21 +299,21 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - An LP joining a market that is above the target stake with a commitment large enough to push one of two higher bids above the target stake, and a higher fee bid than the current fee: the fee doesn't change (<a name="0042-LIQF-024" href="#0042-LIQF-024">0042-LIQF-024</a>)
 - An LP leaves a market that is above target stake when their fee bid is currently being used: fee changes to fee bid by the LP who takes their place in the bidding order (<a name="0042-LIQF-025" href="#0042-LIQF-025">0042-LIQF-025</a>)
 - An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size changes the LP that meets the target stake: fee changes to fee bid by the LP that is now at the place in the bid order to provide the target stake (<a name="0042-LIQF-026" href="#0042-LIQF-026">0042-LIQF-026</a>)
-- An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size doesn't change the LP that meets the target stake: fee doesn't change (<a name="0042-LIQF-027" href="#0042-LIQF-027">0042-LIQF-027</a>)
+- An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size doesn't the LP that meets the target stake: fee doesn't change (<a name="0042-LIQF-027" href="#0042-LIQF-027">0042-LIQF-027</a>)
 - An LP leaves a market that is above target stake when their fee bid is higher than the one currently being used: fee doesn't change (<a name="0042-LIQF-028" href="#0042-LIQF-028">0042-LIQF-028</a>)
 
 ### API
 
-- Equity-like share of each active LP can be obtained via the API (<a name="0042-LIQF-016" href="#0042-LIQF-016">0042-LIQF-016</a>)
-- Liquidity score of each active LP can be obtained via the API (<a name="0042-LIQF-017" href="#0042-LIQF-017">0042-LIQF-017</a>)
+- [ ] Equity-like share of each active LP can be obtained via the API (<a name="0042-LIQF-016" href="#0042-LIQF-016">0042-LIQF-016</a>)
+- [ ] Liquidity score of each active LP can be obtained via the API (<a name="0042-LIQF-017" href="#0042-LIQF-017">0042-LIQF-017</a>)
 
 ### Distribution
 
-- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment and that sees the same trade value. (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)  
+- [ ] If `market.liquidity.providers.fee.calculationTimeStep > 0` and an LP submits a new liquidity commitment halfway through the distribution step then they receive roughly 1/2 the fee income compared with the next epoch when they maintain their commitment and that sees the same trade value. (<a name="0042-LIQF-018" href="#0042-LIQF-018">0042-LIQF-018</a>)  
 
 ### successor market
 
-- If an LP has virtual stake of `11000` and stake of `10000` on a parent `marketID`=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `10000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake of `11000` and stake of `10000` on `m2`. (<a name="0042-LIQF-033" href="#0042-LIQF-033">0042-LIQF-033</a>)  
-- If an LP has virtual stake of `11000` and stake of `10000` on a parent `marketID`=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `20000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake which must be result of the virtual stake obtained from `m1` with the `delta=10000` added on, so virtual stake of `21000`, assuming all other LPs committed exactly the stake they had on `m1`. (<a name="0042-LIQF-034" href="#0042-LIQF-034">0042-LIQF-034</a>)  
-- If an LP has virtual stake of `11000` and stake of `10000` on a parent `marketID`=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `5000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake obtained from `m1` with the `delta=-5000` added on (i.e. 5000 removed). (<a name="0042-LIQF-035" href="#0042-LIQF-035">0042-LIQF-035</a>)
-- If `market.liquidity.providers.fee.distributionTimeStep > 0` and an LP submits a new liquidity commitment halfway through the time interval then they receive roughly 1/2 the fee income compared with the next time interval when they maintain their commitment (and the traded value is the same in both time intervals). (<a name="0042-LIQF-036" href="#0042-LIQF-036">0042-LIQF-036</a>)
+- [ ] If an LP has virtual stake of `11000` and stake of `10000` on a parent marketID=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `10000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake of `11000` and stake of `10000` on `m2`. (<a name="0042-LIQF-031" href="#0042-LIQF-031">0042-LIQF-031</a>)  
+- [ ] If an LP has virtual stake of `11000` and stake of `10000` on a parent marketID=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `20000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake which must be result of the virtual stake obtained from `m1` with the `delta=10000` added on, so virtual stake of `21000`, assuming all other LPs committed exactly the stake they had on `m1`. (<a name="0042-LIQF-032" href="#0042-LIQF-032">0042-LIQF-032</a>)  
+- [ ] If an LP has virtual stake of `11000` and stake of `10000` on a parent marketID=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `5000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake obtained from `m1` with the `delta=-5000` added on (i.e. 5000 removed). (<a name="0042-LIQF-033" href="#0042-LIQF-033">0042-LIQF-033</a>)
+- If `market.liquidity.providers.fee.calculationTimeStep > 0` and an LP submits a new liquidity commitment halfway through the time interval then they receive roughly 1/2 the fee income compared with the next time interval when they maintain their commitment (and the traded value is the same in both time intervals). (<a name="0042-LIQF-034" href="#0042-LIQF-034">0042-LIQF-034</a>)
