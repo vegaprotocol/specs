@@ -30,6 +30,8 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 - `market.liqudity.performanceHysteresisEpochs` (uint) - number of liquidity epochs over which past performance will continue to affect rewards.
 
+- `market.liqudity.slaCompetitionFactor` - the maximum fraction of their accrued fees an LP that meets the SLA implied by `market.liquidity.committmentMinTimeFraction` will lose to LPs that achieved a higher SLA performance than them.
+
 For LP reward calculations based on the SLA see the [0042-LIQF spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 
