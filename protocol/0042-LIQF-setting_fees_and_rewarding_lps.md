@@ -264,9 +264,11 @@ Now, for each LP $i$ take the $p_i$ values calculated over the last `market.liqu
 
 Now calculate $p_i^n$ to be the arithmetic average of $p_i^k$ for $k = 1,2,...,n-1$. 
 Finally set
+
 $$
 p_i^n \leftarrow \max(p_i,p_i^n)\,.
 $$
+
 i.e. your penalty is the bigger of current epoch and average over the hysteresis period
 
 ### Applying LP SLA performance penalties to accrued fees
@@ -274,17 +276,21 @@ i.e. your penalty is the bigger of current epoch and average over the hysteresis
 As defined above, for each LP for each epoch you have "penalty fraction" `p_i` which is between `[0,1]` with `0` indicating LP has met committment 100% of the time and `1` indicating that LP was below `market.liquidity.committmentMinTimeFraction` of the time. 
 
 Calculate 
+
 $$
 w_i = \frac{\text{LP-per-market fee account}\, i}{\sum_k \text{LP-per-market fee account}\, k}.
 $$ 
+
 For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution". 
 
 Tranfer all unpaid-out rewards left in LP-per-market fee accounts into a temporary (one per market) bonus distribution account. Record its balance to be `B`. 
 
 Let $b_i := (1-p_i^n) \times w_i$ and renormalise $b_i$s so that they sum up to $1$ i.e.
+
 $$
 b_i \leftarrow \frac{b_i}{\sum_k b_k}\,.
 $$
+
 Each LP further gets a performance bonus: $b_i \times B$ with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
 
 Note that after this process completes the balance of the temporary (one per market) bonus distribution account decscribed above **must be zero** and the account may be destroyed (and recreated again when needed).

@@ -184,9 +184,11 @@ Let $t$ be `fraction_of_time_on_book` and let $s$ be `market.liquidity.committme
 Let $p$ be `market.liquidity.sla.nonPerformanceBondPenaltySlope`.
 Let $m$ be `nonPerformanceBondPenaltyMax`. 
 Let
+
 $$
 f = \min\left(m,p - \frac{p}{s}t\right)\,.
 $$
+
 Once you have $f$ transfer $f \times B$ into the insurance pool of the market, where $B$ is the LP bond account balance. 
 Moreover, as this reduced the LP stake, update the ELS as per [Calculating liquidity provider equity-like share section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
