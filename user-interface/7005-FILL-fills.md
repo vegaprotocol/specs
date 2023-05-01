@@ -12,7 +12,7 @@
 
 ### Continuous Trading
 
-- **Must** see the role of the user (taker or maker) (<a name="7005-FILL-008" href="#7005-FILL-008">7005-FILL-008</a>)
+- **Must** see the role of the user (taker, maker or n/a) (<a name="7005-FILL-008" href="#7005-FILL-008">7005-FILL-008</a>)
 
 ### Auction
 
