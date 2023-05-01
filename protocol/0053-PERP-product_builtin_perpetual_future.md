@@ -4,7 +4,7 @@ This built-in product provides perpetual futures contracts that are cash-settled
 
 Background reading: [1](https://www.paradigm.xyz/2021/05/everlasting-options/#Perpetual_Futures), [2](https://arxiv.org/pdf/2212.06888.pdf).
 
-Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md).  Additionally, a settlement using external data is carried out whenever `settlement_schedule` is triggered. Data obtained from the `settlement_data_cue` and `settlement_data` oracles between to conecutive `settlement_schedule` events is used to calculate the funding rate and exchange cashflows between parties with open positions in the market. A number of protective measures are defined to deal with data availability issues in a predefined way.
+Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md).  Additionally, a settlement using external data is carried out whenever `settlement_schedule` is triggered. Data obtained from the `settlement_data_cue` and `settlement_data` oracles between to consecutive `settlement_schedule` events is used to calculate the funding rate and exchange cashflows between parties with open positions in the market. A number of protective measures are defined to deal with data availability issues in a predefined way.
 
 ## 1. Product parameters
 
