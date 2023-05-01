@@ -217,7 +217,7 @@ The LP parties don't control the LP-per-market fee account; the fees from there 
 
 ### Calculating SLA performance
 
-#### Measuring time spent meeting their commitment
+#### Measuring time spent meeting their commitment in a single epoch
 
 During the epoch, the amount of time in nanoseconds (of Vega time) that each LP spends meeting the SLA is recorded. This can be done by maintaning a counter `s_i` as shown below:
 
@@ -242,7 +242,7 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 Note that we only need to evaluate each LP's status at the end of each block, as no _Vega time_ passes between transactions in a block.
 
 
-#### Calculating the SLA performance penalty
+#### Calculating the SLA performance penalty for a single epoch 
 
 Calculate the fraction of the time the LP spent on the book:
 
@@ -258,20 +258,34 @@ For each LP where `fraction_of_time_on_book ≥ market.liquidity.commitmentMinTi
 p_i = (1.0 - (fraction_of_time_on_book - market.liquidity.committmentMinTimeFraction) / (1.0 - market.liquidity.committmentMinTimeFraction)) * market.liqudity.slaCompetitionFactor
 ```
 
+#### Calculating the SLA performance penalty for over hysteresis period 
+
+Now, for each LP $i$ take the $p_i$ values calculated over the last `market.liqudity.performanceHysteresisEpochs - 1`, call these $p_i^1, p_i^2, ..., p_i^{n-1}$ (if all the historical ones are not yet available, take as many as there are - i.e. expanding window till you get to the full length).
+
+Now calculate $p_i^n$ to be the arithmetic average of $p_i^k$ for $k = 1,2,...,n-1$. 
+Finally set
+$$
+p_i^n \leftarrow \max(p_i,p_i^n)\,.
+$$
+i.e. your penalty is the bigger of current epoch and average over the hysteresis period
+
 ### Applying LP SLA performance penalties to accrued fees
 
 As defined above, for each LP for each epoch you have "penalty fraction" `p_i` which is between `[0,1]` with `0` indicating LP has met committment 100% of the time and `1` indicating that LP was below `market.liquidity.committmentMinTimeFraction` of the time. 
 
-Calculate `w_i = LP-per-market fee i / sum over all LP-per-market fee accounts`. 
-For each LP transfer `(1-p_i) x amount in LP-per-market fee account` to their general account with a transfer type that marks this as the "LP net liquidity fee distribution". 
+Calculate 
+$$
+w_i = \frac{\text{LP-per-market fee account}\, i}{\sum_k \text{LP-per-market fee account}\, k}.
+$$ 
+For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution". 
 
 Tranfer all unpaid-out rewards left in LP-per-market fee accounts into a temporary (one per market) bonus distribution account. Record its balance to be `B`. 
 
-Let `b_i := (1-p_i) x w_i` and renormalise `b_i`s so that they sum up to `1` i.e.
-```
-b_i <- b_i / (sum over i of all b_i).
-```
-Each LP further gets a performance bonus: `b_i x B` with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
+Let $b_i := (1-p_i^n) \times w_i$ and renormalise $b_i$s so that they sum up to $1$ i.e.
+$$
+b_i \leftarrow \frac{b_i}{\sum_k b_k}\,.
+$$
+Each LP further gets a performance bonus: $b_i \times B$ with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
 
 Note that after this process completes the balance of the temporary (one per market) bonus distribution account decscribed above **must be zero** and the account may be destroyed (and recreated again when needed).
 
