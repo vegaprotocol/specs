@@ -13,8 +13,9 @@ Important note on wording:
 
 ### Network parameters
 
-- `market.liquidity.bondPenaltyParameter` - used to calculate the penalty to liquidity providers when they fail to meet their obligations.
+- `market.liquidity.bondPenaltyParameter` - used to calculate the penalty to liquidity providers when they fail to support their open position through sufficient `general+margin` balance.
 Valid values: any decimal number `>= 0` with a default value of `0.1`.
+- `market.liquidity.sla.nonPerformanceBondPenalty` - use to calculate how much is the LP bond slashed if they fail to reach the minimum SLA. Valid values: any decimal number `>= 0` with a default value of `2.0`.
 - `market.liquidity.maximumLiquidityFeeFactorLevel` - used in validating fee amounts that are submitted as part of [lp order type](./0038-OLIQ-liquidity_provision_order_type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
 - `market.liquidity.stakeToCcyVolume` - used to translate a commitment to an obligation. Any decimal number `>0` with default value `1.0`.
 - `validators.epoch.length` - LP rewards from liquidity fees are paid out once per epoch according to whether they met the "SLA" (implied by `market.liquidity.committmentMinTimeFraction`) and their previous performance (for the last n epochs defined by `market.liqudity.performanceHysteresisEpochs`), see [epoch spec](./0050-EPOC-epochs.md).
@@ -172,7 +173,22 @@ If this is greater than or equal to `liquidity_required` then the LP is meeting 
 Note: we don't evaluate whether LPs meet the SLA during opening auctions so there will always be a mark price. 
 
 
-### Penalties
+### Penalty for not meeting the SLA 
+
+See the [Calculating the SLA performance penalty for a single epoch section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md) for how `fraction_of_time_on_book` is calculated. 
+This is available at the end of each epoch. 
+If, at, the end of the epoch, `fraction_of_time_on_book >= market.liquidity.committmentMinTimeFraction` then let $f=0$.
+Otherwise we calculate a penalty to be applied to the bond as follows. 
+Let $t$ be `fraction_of_time_on_book` and let $s$ be `market.liquidity.committmentMinTimeFraction`.  
+Let $p$ be `market.liquidity.sla.nonPerformanceBondPenalty`.
+Let
+$$
+f = p - \frac{p}{s}t\,.
+$$
+Once you have $f$ transfer $f \times B$ into the insurance pool of the market, where $B$ is the LP bond account balance. 
+Moreover, as this reduced the LP stake, update the ELS as per [Calculating liquidity provider equity-like share section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+
+### Penalty for not supporting open positions
 
 If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall. The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
 
