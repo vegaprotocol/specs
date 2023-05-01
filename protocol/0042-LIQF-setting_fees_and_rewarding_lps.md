@@ -266,7 +266,7 @@ Now calculate $p_i^n$ to be the arithmetic average of $p_i^k$ for $k = 1,2,...,n
 Finally set
 
 $$
-p_i^n \leftarrow \max(p_i,p_i^n)\,.
+p_i^n \leftarrow \max(p_i,p_i^n).
 $$
 
 i.e. your penalty is the bigger of current epoch and average over the hysteresis period
@@ -278,7 +278,7 @@ As defined above, for each LP for each epoch you have "penalty fraction" `p_i` w
 Calculate 
 
 $$
-w_i = \frac{\text{LP-per-market fee account}\, i}{\sum_k \text{LP-per-market fee account}\, k}.
+w_i = \frac{\text{LP-per-market fee account } i}{\sum_k \text{LP-per-market fee account } k}.
 $$ 
 
 For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution". 
