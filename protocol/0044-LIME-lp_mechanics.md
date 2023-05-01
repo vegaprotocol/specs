@@ -18,7 +18,9 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - `market.liquidity.maximumLiquidityFeeFactorLevel` - used in validating fee amounts that are submitted as part of [lp order type](./0038-OLIQ-liquidity_provision_order_type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
 - `market.liquidity.stakeToCcyVolume` - used to translate a commitment to an obligation. Any decimal number `>0` with default value `1.0`.
 - `validators.epoch.length` - LP rewards from liquidity fees are paid out once per epoch according to whether they met the "SLA" (implied by `market.liquidity.committmentMinTimeFraction`) and their previous performance (for the last n epochs defined by `market.liqudity.performanceHysteresisEpochs`), see [epoch spec](./0050-EPOC-epochs.md).
-
+- `market.liquidity.earlyExitPenalty` (decimal between 0 and 1 inclusive), sets how much LP forfeits of their bond in case the market is below target stake and they wish to reduce their commitment. If set to `0` there is no penalty for early exit, if set to `1` their entire bond is forfeited. 
+- `market.liquidity.probabilityOfTrading.tau.scaling` sets how the probability of trading is calculated from the risk model; this is used to [measure the relative competitiveness of LPs supplied volume](0042-LIQF-setting_fees_and_rewarding_lps.md).
+- `market.liquidity.minimum.probabilityOfTrading.lpOrders` sets a lower bound on the result of the probability of trading calculation.
 
 ### Market parameters
 
@@ -62,7 +64,7 @@ Accepted if all of the following are true:
 - The market is in a state that accepts new liquidity provision [market lifecycle spec](./0043-MKTL-market_lifecycle.md).
 
 
-## COMMITMENT AMOUNT
+## Commitment amount
 
 ### Processing the commitment
 
@@ -83,45 +85,45 @@ Liquidity provider bond account:
   - The liquidity provider's margin account or the network's settlement account/other participant's margin accounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
   - The liquidity provider's general account (in event of liquidity provider reducing their commitment)
 
-### liquidity provider proposes to amend commitment amount
+### Liquidity provider proposes to amend commitment amount
 
 The commitment transaction is also used to amend any aspect of their liquidity provision obligations.
 A participant may apply to amend their commitment amount by submitting a transaction for the market with a revised commitment amount.
 
 `proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
 
-#### INCREASING COMMITMENT
+#### Increasing commitment
 
 _Case:_ `proposed-commitment-variation >= 0`
 A liquidity provider can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount and cover the margins required.
 
 If they do not have sufficient collateral the transaction is rejected in entirety. This means that any data from the fees or orders are not applied. This means that the  `old-commitment-amount` is retained.
 
-#### DECREASING COMMITMENT
+#### Decreasing commitment
 
 _Case:_ `proposed-commitment-variation < 0`
-We to calculate whether the liquidity provider may lower their commitment amount and if so, by how much. To do this we first evaluate the maximum amount that the market can reduce by given the current liquidity demand in the market.
+We to calculate how much the LP can reduce commitment without incurring a penalty. 
+To do this we first evaluate the maximum amount that the market can reduce without penalty by given the current liquidity demand in the market.
 
-`maximum-reduction-amount = total_stake - target_stake`
+`maximum-penalty-free-reduction-amount = total_stake - target_stake`
 
 where:
 
 - `total_stake` is the sum of all stake of all liquidity providers bonded to this market.
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
-- `actual-reduction-amount = min(-proposed-commitment-variation, maximum-reduction-amount)`
-- `new-actual-commitment-amount =  old-commitment-amount - actual-reduction-amount`
-- `market.liquidityProvision.shapes.maxSize` is the maximum entry of the LP order shape on liquidity commitment.
 
-i.e. liquidity providers are allowed to decrease the liquidity commitment subject to there being sufficient stake committed to the market so that it stays above the market's required stake threshold. The above formulae result in the fact that if `maximum-reduction-amount = 0`, then `actual-reduction-amount = 0` and therefore the liquidity provider is unable to reduce their commitment amount.
+If `-proposed-commitment-variation <= maximum-penalty-free-reduction-amount` then we're done, the LP reduced commitment, the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-When `actual-reduction-amount > 0`:
+If `-proposed-commitment-variation > maximum-penalty-free-reduction-amount` then first establish
+```
+penalty-incuring-reduction-amount = -proposed-commitment-variation - maximum-penalty-free-reduction-amount
+```
+Transfer `maximum-penalty-free-reduction-amount` to their general account. 
+Now transfer `(1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount` to their general account and transfer `market.liquidity.earlyExitPenalty x penalty-incuring-reduction-amount` to the market insurance pool.
+Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire `proposed-commitment-variation` as the `delta`.
 
-- the difference between their actual staked amount and new commitment is transferred back to their general account, i.e.
-`transferred-to-general-account-amount =  actual-stake-amount - new-actual-commitment-amount`
-- the revised fee amount and set of orders are processed.
+Note that as a consequence the market may land in a liquidity auction the next time the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP reducing their commitment to an immediate liquidity auction evaluation).
 
-Example: if you have a commitment of 500DAI and your bond account only has 400DAI in it (due to slashing - see below), and you submit a new commitment amount of 300DAI, then we only transfer 100DAI such that your bond account is now square.
-When `actual-reduction-amount = 0` the transaction is still processed for any data and actions resulting from the transaction's new fees or order information.
 
 ## Fees
 
@@ -142,17 +144,33 @@ When calculating fees for a trade, the size of a liquidity provider’s commitme
 
 ### Calculating liquidity from commitment
 
-Committed Liqudity Providers are required to provide a multiple of their stake (supplied in the settlement currency of the market) in notional volume of orders within the range defined by TODO: define.
+Committed Liqudity Providers are required to provide a multiple of their stake (supplied in the settlement currency of the market) in notional volume of orders within the range defined below.
 
 The multiple is controlled by a network parameter `market.liquidity.stakeToCcyVolume`:
-
 ```
 liquidity_required = stake_amount ✖️ market.liquidity.stakeToCcyVolume
 ```
 
-**During auction:**
+### Meeting the committed volume of notional 
 
-- Liquidity providers, who wish to meet their SLA, are expected to supply liquidity during auctions. 
+#### During continuous trading
+If there is no mid price then no LP is meeting their committed volume of notional. 
+If there is mid price then we calculate the volume of notional that is in the range
+```
+(1.0-market.liquidity.priceRange) x mid =< price levels that count <= (1+market.liquidity.priceRange)x mid.
+```
+If this is greater than or equal to `liquidity_required` then the LP is meeting the committed volume of notional.
+
+#### During auctions 
+We calculate the volume of notional that is in the range
+```
+(1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) =<  price levels that count <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price). 
+```
+If this is greater than or equal to `liquidity_required` then the LP is meeting the committed volume of notional.
+
+
+Note: we don't evaluate whether LPs meet the SLA during opening auctions so there will always be a mark price. 
+
 
 ### Penalties
 
