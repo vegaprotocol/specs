@@ -11,7 +11,7 @@ Indeed
 
 `lp_liquidity_obligation_in_ccy_volume = market.liquidity.stakeToCcyVolume ⨉ stake`.
 
-Thus it is sufficient to compare `target_stake`.
+Thus it is sufficient to compare `target_stake` with `total_stake`. 
 Note that [target stake](./0041-TSTK-target_stake.md) is defined in a separate spec.
 
 
