@@ -52,7 +52,7 @@ Notes on scope of current version of this spec:
 
 ### 'Glassberg' transparent iceberg orders
 
-On centralised exchanges, icebergs are a type of order that enables a trader to make an order with a relatively small visible "display quantiy" and a larger hidden total size.
+On centralised exchanges, icebergs are a type of order that enables a trader to make an order with a relatively small visible "display quantity" and a larger hidden total size.
 Like an iceberg, most of the order is not visible to other traders.
 After the full size of the visible portion of the order has traded away, the order is "refreshed" and reappears with its maximum display quantity.
 This is repeated until the order is cancelled or expires, or its full volume trades away.
