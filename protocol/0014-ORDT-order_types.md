@@ -102,7 +102,7 @@ Market glassberg orders are not supported, even if with a persistent TIF.
 
 * Glassbergs may be post only.
 
-* `initial peak size` must be greater than TODO
+* `initial peak size` must be greater than or equal to minimum position size (i.e. minimum order size).
 
 * `minimum peak size` must be `>` 0 and `≤ initial peak size`
 
