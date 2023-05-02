@@ -227,6 +227,9 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 
 * At the end of each block:
 
+    * Note that this happens _after_ any glassberg order refreshes, including those with `refresh policy == BLOCK_END`.
+    This means that while a glassberg has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size` of liquidity. 
+
     * If LP has started meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
 
         * Store the current Vega time as the time the LP began meeting their commitment
