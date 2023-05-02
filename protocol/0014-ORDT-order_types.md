@@ -134,7 +134,7 @@ The order will not be refreshed after each trade while `displayed quantity ≥ m
 
     * On refresh `display quantity` is set to `min(remaining, initial peak size)`.
 
-    * A refresh simulate a cancel/replace, which means that on refresh a glassberg order will always lose time priority relative to other orders at the same price.
+    * A refresh simulates a cancel/replace, which means that on refresh a glassberg order will always lose time priority relative to other orders at the same price.
 
     * If multiple glassberg orders need to be refresh at the same time:
 
