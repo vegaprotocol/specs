@@ -49,7 +49,7 @@ We exit if
 
 `total_stake >= target_stake`.
 
-During the liquidity monitoring auction new or existing LPs can commit more stake (and hence liquidity) through the special market making order type and enable this by posting enough margin - see the [liquidity provision mechanics](./0044-LIME-lp_mechanics.md) spec for details. These need to be monitored to see if auction mode can be exitted.
+During the liquidity monitoring auction new or existing LPs can commit more stake (and hence liquidity) through the special market making transaction and enable this by posting enough margin - see the [liquidity provision mechanics](./0044-LIME-lp_mechanics.md) spec for details. These need to be monitored to see if auction mode can be exited.
 
 ## What happens during the auction?
 
