@@ -8,7 +8,9 @@ To allow traders to interact with the market, they must be able to enter an orde
 
 - Orders can be submitted into any market that is active - i.e not in [a protective auction](./0026-AUCT-auctions.md) or [matured/expired/settled](./0043-MKTL-market_lifecycle.md).
 - Orders will only be accepted if sufficient margin can be allocated (see : [Margin Orchestration](./0010-MARG-margin_orchestration.md) and [Margin Calculator](./0019-MCAL-margin_calculator.md))
-- Amendments that change price or increase size will be executed as an atomic cancel/replace (i.e. as if the original order was cancelled and removed from the book and a new order submitted with the modified values - that is, time priority is lost)
+- Amendments that change price or increase available (displayed) quantity will be executed as an atomic cancel/replace (i.e. as if the original order was cancelled and removed from the book and a new order submitted with the modified values - that is, time priority is lost)
+Note that this means that increasing the quantity of a glassberg (transparent iceberg) order can be done without losing time priority, as the current displayed size will not be changed.
+The order will lose time priority on its next refresh in any case (i.e. before the increased size becomes 'displayed' and tradable).
 - Execution of an order during continuous trading will be stopped and the order cancelled and removed (if on the book) if it is about to match with another order on the book for the same party (that is, execution can proceed up to the point a "wash" trade would be generated but stopped before that and the order cancelled).
 Self-trading / "wash" trading is allowed on auction uncrossing (i.e. to leave an auction).
 - Orders may be fractional in size with the maximum number of decimal places allowable being the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md), and any order containing more precision that this being rejected. (NB: orders may end up being specified as integers similar to how prices are, in which case this does not apply and 1 == the smallest increment given the configured position d.p.s for the market).

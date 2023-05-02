@@ -107,7 +107,7 @@ Market glassberg orders are not supported, even if with a persistent TIF.
 * `minimum peak size` must be `>` 0 and `≤ initial peak size`
 
 
-#### Execution
+#### Execution and subsequent refresh
 
 * Glassberg orders trade just like non-glassberg persistent order, as if the order entered the book with quantity = initial peak size on submission and again each time they are refreshed.
 That is:
@@ -134,13 +134,25 @@ The order will not be refreshed after each trade while `displayed quantity ≥ m
 
     * On refresh `display quantity` is set to `min(remaining, initial peak size)`.
 
+    * A refresh simulate a cancel/replace, which means that on refresh a glassberg order will always lose time priority relative to other orders at the same price.
+
+    * If multiple glassberg orders need to be refresh at the same time:
+
+        * `refresh policy == IMMEDIATE` glassbergs are _always_ refreshed before those with `refresh policy == BLOCK_END`
+
+        * within the same `refresh policy`, glassbergs are refreshed in the order that their eligibility for refresh was triggered, so the glassberg that dropped below its `minimum peak size` first is refreshed first (even during the same transaction the sequence of execution must be respected).
+
 * Once the remaning quantity is equal to the displayed quantity, no further refresh is possible.
 The order now behaves like a normal limit order and will leave the book if it trades away completely.
 
 
 #### Amendment
 
-* Amending the size of a glassberg order amends the total remaining quantity and leaves the displayed quantiy unaffected unless the new remaining quanity is smaller than the current displayed quantity, in which case the displayed quantity is reduced to the total remaining quantity.
+* Amending the size of a glassberg order amends the total `remaining` quantity and leaves the `displayed quantity` unaffected unless the new remaining quanity is smaller than the current displayed quantity, in which case the displayed quantity is reduced to the total remaining quantity.
+
+* Amending the size/quantity of a glassberg order does not cause it to lose time priority. 
+This is because the increase applies to the `remaining` quantity and not to the `displayed quantity`.
+This is allowed because the order will lose time priority on refresh, i.e. before the increased quantity is available to trade.
 
 
 #### Auctions
