@@ -86,7 +86,7 @@ The glassberg is refreshed any time the order's displayed quantity less than the
 
 * `refresh policy` - this specifies when a glassberg order that is eligible for refresh and has remaining volume >0 is refreshed:
 
-    * `IMMEDIATE` - the refresh occurs _after_ processing the transaction that depleted the display quantity to zero.
+    * `IMMEDIATE` - the refresh occurs _after_ processing the transaction that depleted the display quantity to less than minimum peak size.
 
     * `BLOCK_END` - the rerresh occurs after processing the _entire block_ containing the transaction that depleted the display quantity to less than minimum peak size.
 
