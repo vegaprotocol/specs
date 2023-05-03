@@ -84,12 +84,6 @@ Glassberg orders are created by populating three additional fields on any valid 
 * `minimum peak size` - this determines when a glassberg order is eligible for refresh.
 The glassberg is refreshed any time the order's displayed quantity less than the minimum peak size.
 
-* `refresh policy` - this specifies when a glassberg order that is eligible for refresh and has remaining volume >0 is refreshed:
-
-    * `IMMEDIATE` - the refresh occurs _after_ processing the transaction that depleted the display quantity to less than minimum peak size.
-
-    * `BLOCK_END` - the rerresh occurs after processing the _entire block_ containing the transaction that depleted the display quantity to less than minimum peak size.
-
 
 #### Validity
 
@@ -109,14 +103,17 @@ Market glassberg orders are not supported, even if with a persistent TIF.
 
 #### Execution and subsequent refresh
 
-* Glassberg orders trade just like non-glassberg persistent order, as if the order entered the book with quantity = initial peak size on submission and again each time they are refreshed.
+* On entry, if a glassberg order is crossed with the best bid/ask, it trades first with its **full quantity**, i.e. the peak sizes do not come into play during aggressive execution.
+This is to prevent a glassberg order ever being crossed after refreshing.
+
+* Once they enter the book passively, Glassberg orders trade just like non-glassberg persistent order, as if the order entered the book with `quantity = initial peak size` on submission, and again each time they are refreshed until `remanining == 0` (or they are cancelled or expired, etc.).
 That is:
 
     * On entry, unlike normal orders, `displayed quantity` is set to `initial peak size` not `quantity`.
     
-    * As for any other order, `remaning == quantity` on entry.
+    * As for any other order, `remaining == quantity` on entry.
 
-* The maximum size for a trade involving a glassberg order is the `displayed quantity` immediataly prior to the trade.
+* The maximum total size for all trades involving a glassberg order in any given transaction (including a batch) is the `displayed quantity` immediataly prior to the trade.
 (This is technically also true for a normal order, given that for non-glassberg orders `displayed quantity == remaining`.)
 
 * When a glassberg order trades, both `remaining` and `displayed quantity` are reduced by the trade size.
@@ -124,25 +121,19 @@ That is:
 * Glassberg orders can trade many times without refresh, reducing `displayed quantity` each time.
 The order will not be refreshed after each trade while `displayed quantity ≥ minimum peak size`.
 
-* The order will also not be refreshed within a block even if multiple trades occur or `displayed quantity == 0` if the refresh policy is set to `BLOCK_END`. 
-
 * Glassberg orders never trade more than their `displayed quantity` at the start of the transaction, as the result of any one transaction.
 
 * When `displayed quantity < minimum peak size` and `remaining > displayed quantity` the order will be refreshed:
 
-    * The refresh either happens at the end of the transaction when the order became eligible for refresh, if the `refresh policy == IMMEDIATE`; or at the end of the block containing that transaction if the `refresh policy == BLOCK_END`
-
+    * The refresh happens at the end of the transaction when the order becomes eligible for refresh.
+    
     * On refresh `display quantity` is set to `min(remaining, initial peak size)`.
 
     * A refresh simulates a cancel/replace, which means that on refresh a glassberg order will always lose time priority relative to other orders at the same price.
 
-    * If multiple glassberg orders need to be refresh at the same time:
+    * If multiple glassberg orders need to be refresh at the same time, they are refreshed in the order that their eligibility for refresh was triggered, so the glassberg that dropped below its `minimum peak size` first is refreshed first (even during the same transaction the sequence of execution must be respected).
 
-        * `refresh policy == IMMEDIATE` glassbergs are _always_ refreshed before those with `refresh policy == BLOCK_END`
-
-        * within the same `refresh policy`, glassbergs are refreshed in the order that their eligibility for refresh was triggered, so the glassberg that dropped below its `minimum peak size` first is refreshed first (even during the same transaction the sequence of execution must be respected).
-
-* Once the remaning quantity is equal to the displayed quantity, no further refresh is possible.
+* Once the remaining quantity is equal to the displayed quantity, no further refresh is possible.
 The order now behaves like a normal limit order and will leave the book if it trades away completely.
 
 
@@ -159,9 +150,9 @@ This is allowed because the order will lose time priority on refresh, i.e. befor
 
 * Glassbergs can be entered or carried into auctions if the underlying TIF is supported. 
 
-* Glassbergs can trade in the auction uncrossing up to their current size as for any other transaxction that would cause a trade.
+* Glassbergs can trade in the auction uncrossing up to their current `displayed quanitity` as for any other transaxction that would cause a trade with a glassberg order.
 
-* Glassbergs are refreshed after an auction uncrossing if they traded away, according to the same rules for the refresh policy as for normal execution.
+* Glassbergs are refreshed after an auction uncrossing if they traded to below their `minimum peak size`, according to the same rules as for normal execution.
 
 
 #### APIs

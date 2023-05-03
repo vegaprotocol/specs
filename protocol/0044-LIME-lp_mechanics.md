@@ -1,7 +1,7 @@
 # Liquidity provision mechanics
 
 The point of liquidity provision on Vega is to incentivise people to place orders on the market that maintain liquidity on the book. 
-This is done via a financial commitment and reward + penalty mechanics, and through the use of a special batch order type that announces that a party is entering the liquidity provision (LP) service level agreement (SLA).
+This is done via a financial commitment and reward + penalty mechanics, and through the LP commitment transaction that announces that a party is entering the liquidity provision (LP) service level agreement (SLA).
 
 
 Important note on wording:
@@ -17,10 +17,10 @@ Important note on wording:
 Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - `market.liquidity.sla.nonPerformanceBondPenaltySlope` - used to calculate how much is the LP bond slashed if they fail to reach the minimum SLA. Valid values: any decimal number `>= 0` with a default value of `2.0`.
 - `market.liquidity.sla.nonPerformanceBondPenaltyMax` - used to calculate how much is the LP bond slashed if they fail to reach the minimum SLA. Valid values: any decimal number `>= 0` and `<=1.0` with a default value of `0.5`.
-- `market.liquidity.maximumLiquidityFeeFactorLevel` - used in validating fee amounts that are submitted as part of [lp order type](./0038-OLIQ-liquidity_provision_order_type.md). Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
+- `market.liquidity.maximumLiquidityFeeFactorLevel` - used in validating fee amounts that are submitted as part of the LP commitment transaction. Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>0` and `<=1`. Default value `1`.
 - `market.liquidity.stakeToCcyVolume` - used to translate a commitment to an obligation. Any decimal number `>0` with default value `1.0`.
 - `validators.epoch.length` - LP rewards from liquidity fees are paid out once per epoch according to whether they met the "SLA" (implied by `market.liquidity.committmentMinTimeFraction`) and their previous performance (for the last n epochs defined by `market.liqudity.performanceHysteresisEpochs`), see [epoch spec](./0050-EPOC-epochs.md).
-- `market.liquidity.earlyExitPenalty` (decimal between 0 and 1 inclusive), sets how much LP forfeits of their bond in case the market is below target stake and they wish to reduce their commitment. If set to `0` there is no penalty for early exit, if set to `1` their entire bond is forfeited. 
+- `market.liquidity.earlyExitPenalty` (decimal ≥0), sets how much LP forfeits of their bond in case the market is below target stake and they wish to reduce their commitment. If set to `0` there is no penalty for early exit, if set to `1` their entire bond is forfeited if they exit their entire commitment, if set >1, their entire bond will be forfeited for exiting `1/earlyExitPenalty` of their commitment amount.  
 - `market.liquidity.probabilityOfTrading.tau.scaling` sets how the probability of trading is calculated from the risk model; this is used to [measure the relative competitiveness of LPs supplied volume](0042-LIQF-setting_fees_and_rewarding_lps.md).
 - `market.liquidity.minimum.probabilityOfTrading.lpOrders` sets a lower bound on the result of the probability of trading calculation.
 
@@ -28,7 +28,7 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 - `market.liquidity.priceRange` (decimal) - this is a percentage price move (e.g. `0.05 = 5%`) from `mid_price` during continuous trading or indicative uncrossing price during auctions. This is set / can be modified as part of [market proposal](0028-GOVE-governance.md) / market change proposal.
 
-- `market.liquidity.committmentMinTimeFraction` (decimal) —  minimum fraction of time LPs must spend "on the book" providing their committed liquidity.
+- `market.liquidity.committmentMinTimeFraction` (decimal) —  minimum fraction of time LPs must spend "on the book" providing their committed liquidity. This is a decimal number in the interval $[0,1]$ i.e. both limits included. When set to $0$ the SLA mechanics are switched off for the market entirely.
 
 - `market.liquidity.providers.fee.calculationTimeStep` (time period e.g. `12h` or `7d`) controls how often LP the quality of liquidity supplied by the LPs is evaluated and fees arising from that period are earmarked for specific parties. 
 
@@ -49,7 +49,7 @@ At a high level, the liqudity mechanism in Vega allows Liquidity Providers (LPs)
 
 - Penalising LPs that commit and do not meet the SLA, to reduce the attractiveness of opportunistically going after rewards with no intention to meet the SLA in more challenging conditions, and of leeching style attacks on the rewards.
 
-Once committed LPs attempt to meet their comitment by placing and maintaining normal orders on the market. They may use pegged or priced limit orders, along with features like post only and iceberg to control their risk. Non-persistent orders, parked pegged orders, and stop-loss orders do not count towards an LP's supplied liquidity and therefore cannot be used to meet the SLA.
+Once committed LPs attempt to meet their comitment by placing and maintaining normal orders on the market. They may use pegged or priced limit orders, along with features like post only and glassberg (transparent iceberg) to control their risk. Non-persistent orders, parked pegged orders, and stop-loss orders do not count towards an LP's supplied liquidity and therefore cannot be used to meet the SLA.
 
 
 ## Commit liquidity network transaction
@@ -76,6 +76,12 @@ There is an minimum LP stake which is `market.liquidityProvision.minLpStakeQuant
 If the participant has sufficient collateral to cover their commitment, the commitment amount (stake) is transferred from the participant's general account to their (maybe newly created) [liquidity provision bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts) (new account type, 1 per liquidity provider per market and asset where they are committing liquidity, created as needed). 
 For clarity, liquidity providers will have a separate [margin account](./0013-ACCT-accounts.md#trader-margin-accounts) and [bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts).
 
+Entering commitment will happen(*) at the beginning of the next epoch (after the rewards / penalties for present LPs have been evaluated). It's the prospective LP's responsibility to have sufficient balance in their general account at the epoch boundary; if not the LP commitment is cancelled. 
+
+(*) The expection is the end of the opening auction of the market. The LPs that submit commitment during the opening auction become the market LPs as soon as the opening auction ends.
+
+The fee for the market is only [updated at the epoch boundary using the "auction" mechanism set here](0042-LIQF-setting_fees_and_rewarding_lps.md). 
+
 Liquidity provider bond account:
 
 - Each active market has one bond account per liquidity provider, per settlement asset for that market.
@@ -94,12 +100,14 @@ A participant may apply to amend their commitment amount by submitting a transac
 
 `proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
 
+The amendment is actioned at the beginning of the next epoch (after the rewards / penalties for present LPs - including the party that's amending - have been evaluated). It's the amending LP's responsibility to have sufficient balance in their general account at the epoch boundary; if not the LP amendment is not actioned.
+
 #### Increasing commitment
 
 _Case:_ `proposed-commitment-variation >= 0`
-A liquidity provider can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount and cover the margins required.
+A liquidity provider can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount.
 
-If they do not have sufficient collateral the transaction is rejected in entirety. This means that any data from the fees or orders are not applied. This means that the  `old-commitment-amount` is retained.
+If they do not have sufficient collateral the transaction is rejected in entirety. This means that any change in fee bid is not applied and that the `old-commitment-amount` is retained.
 
 #### Decreasing commitment
 
@@ -121,7 +129,7 @@ If `-proposed-commitment-variation > maximum-penalty-free-reduction-amount` then
 penalty-incuring-reduction-amount = -proposed-commitment-variation - maximum-penalty-free-reduction-amount
 ```
 Transfer `maximum-penalty-free-reduction-amount` to their general account. 
-Now transfer `(1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount` to their general account and transfer `market.liquidity.earlyExitPenalty x penalty-incuring-reduction-amount` to the market insurance pool.
+Now transfer `min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to their general account and transfer `market.liquidity.earlyExitPenalty x penalty-incuring-reduction-amount` to the market insurance pool.
 Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire `proposed-commitment-variation` as the `delta`.
 
 Note that as a consequence the market may land in a liquidity auction the next time the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP reducing their commitment to an immediate liquidity auction evaluation).
@@ -186,7 +194,7 @@ Let $m$ be `nonPerformanceBondPenaltyMax`.
 Let
 
 $$
-f = \min\left(m,p - \frac{p}{s}t\right)\,.
+f = \max\left[0,\min\left(m,p - \frac{p}{s}t\right)\right]\,.
 $$
 
 Once you have $f$ transfer $f \times B$ into the insurance pool of the market, where $B$ is the LP bond account balance. 
@@ -226,16 +234,19 @@ Note:
 
 In the same way that a collateral search is initiated to attempt to top-up a trader's margin account if it drops below the _collateral search level_, the system must also attempt to top up the bond account if its balance drops below the size of the LP's commitment.
 
-This should happen every time the network is performing a margin calculation and search. The system should prioritise topping up the margin account first, and then the bond account, if there are insufficient funds to do both.
+This should happen every time the network is performing a margin calculation and search. The system should prioritise topping up the margin account first, and then the bond account, if there are insufficient funds to do both. 
+
+If, at the end of an epoch (and before any LP rewards and penalties were applied), the LPs bond account isn't topped up to the level of their commitment then, update the ELS as per [Calculating liquidity provider equity-like share section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+
 
 
 ## What data do we keep relating to liquidity provision?
 
 1. List of all liquidity providers and their commitment sizes and their “equity-like share” for each market [see 0042-setting-fees-and-rewarding-lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
-1. Liquidity provision orders (probably need to be indexed somewhere in addition to the order book)
 1. New account per market holding all committed liquidity provider bonds
 1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb))
 1. Each liquidity provider's actual bond amount (i.e. the balance of their bond account)
+
 
 ## APIs
 

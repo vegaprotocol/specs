@@ -227,14 +227,13 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 
 * At the start of each block generate a pseudorandom integer `k` between `1..N` (inclusive of `1` and `N`) where `N` is the number of transactions in the block (note: transactions not orders, a batch is one transaction for this purpose).
 Use a suitable deterministic seed to minimise the probability of an LP gaming `k` or being able to target transactions around (directly before or after) the point `k`.
-For example, the seed might combinee the hash of all transactions in the block itself with the number of transactions `N`.
-Using only information from the prior block as the seed may allow exploits based on pre-generation of `k`.
+For example, the seed might combine the hash of all transactions in the block itself with the number of transactions `N`.
+Using only information from the prior block as the seed may allow exploits based on pre-generation of `k` and must be avoided.
 
 * In each block, immediately after processing transaction `k`:
 
-    * Note that this happens _before_ any glassberg order refreshes with `refresh policy == BLOCK_END`, even if `k == N`, and after glassbergs refreshed with `refresh policy == IMMEDIATELY` that need refreshing as a result of transaction `k`.
-    This means that while a glassberg has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `initial peak size` of liquidity if it's policy is `IMMEDIATELY`.
-    A `BLOCK_END` glassberg will **never** be refreshed within before the SLA achievement is evaluated for that block, and can therefore only be guaranteed to be contributing at least `minimum peak size` of liquidity, even when it has plenty of remaining volume. 
+    * Note that this happens _after_ glassbergs, that need refreshing as a result of transaction `k` are refreshed.
+    This means that while a glassberg has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`. 
 
     * If LP has started meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
 
@@ -247,8 +246,6 @@ Using only information from the prior block as the seed may allow exploits based
         * Store `nothing` as the time the LP began meeting their commitment, to signify the LP not meeting their commitment.
 
 * At the end of the epoch, calculate the actual observed epoch length `observed_epoch_length` = the difference in nanoseconds between the Vega time at the start of the epoch and the Vega time at the end of the epoch.
-
-Note that we only need to evaluate each LP's status at the end of each block, as no _Vega time_ passes between transactions in a block.
 
 
 #### Calculating the SLA performance penalty for a single epoch 
@@ -280,9 +277,11 @@ $$
 
 i.e. your penalty is the bigger of current epoch and average over the hysteresis period
 
-### Applying LP SLA performance penalties to accrued fees
+### Applying LP SLA performance penalties to accrued fees
 
-As defined above, for each LP for each epoch you have "penalty fraction" `p_i` which is between `[0,1]` with `0` indicating LP has met committment 100% of the time and `1` indicating that LP was below `market.liquidity.committmentMinTimeFraction` of the time. 
+As defined above, for each LP for each epoch you have "penalty fraction" $p_i^n$ which is between `[0,1]` with `0` indicating LP has met committment 100% of the time and `1` indicating that LP was below `market.liquidity.committmentMinTimeFraction` of the time. 
+
+If for all $i$ (all the LPs) have $p_i^n = 1$ then all the fees go into the market insurance pool and we stop.
 
 Calculate 
 
@@ -292,8 +291,8 @@ $$
 
 For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution". 
 
-Tranfer all unpaid-out rewards left in LP-per-market fee accounts into a temporary (one per market) bonus distribution account. Record its balance to be `B`. 
-
+Tranfer all unpaid-out rewards left in LP-per-market fee accounts into a temporary (one per market) bonus distribution account. 
+Record its balance to be $B$. 
 Let $b_i := (1-p_i^n) \times w_i$ and renormalise $b_i$s so that they sum up to $1$ i.e.
 
 $$
