@@ -25,10 +25,12 @@ cashflow
 cashflows
 CCP
 ccy
+cdot
 ceil
 ceiled
 CFD
 CSF
+CSV
 checkpointing
 CLEF
 closedout
@@ -91,6 +93,7 @@ FIFO
 filesystem
 FOK
 FOREX
+frac
 freeform
 frontend
 funder
