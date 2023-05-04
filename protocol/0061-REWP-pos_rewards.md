@@ -11,7 +11,7 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `totalStake` - the total number of units of the staking and governance asset (VEGA) associated to the Vega chain (but not necessarily delegated to a specific validator).
 1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake.
-1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator own + delegated stake counts for reward purposes.
+1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator(standby validator) own + delegated stake counts for reward purposes.
 
 ## Other network parameters
 
@@ -33,7 +33,7 @@ This is to ensure that validators (all validators) have incentive to pay Ethereu
 
 ## Primary (consensus forming) Nodes, Ersatz Nodes, Non-validator nodes
 
-From the point of view of proof of stake rewards three are three types of nodes:
+From the point of view of proof of stake rewards there are three types of nodes:
 
 1. Non-validator nodes that process transactions and can run the [data node](./0076-DANO-data-node.md) for client use but they don't determine which transactions go into blocks and they get no proof of stake rewards. Any such validator [can submit a transaction](./0069-VCBS-validators_chosen_by_stake.md) to join the ersatz nodes / validator nodes set. Once they submit such transaction they become [pending nodes](./0064-VALP-validator_performance_based_rewards.md) and their performance is measured to determine their suitability.  If they meet staking and performance criteria will get "promoted" to the next level.
 1. The [ersatz validators](./0069-VCBS-validators_chosen_by_stake.md) who, from the point of view of consensus protocol are non-validator nodes but they have sufficient stake (own or delegated) and meet performance criteria. Their role is to be readily available if any of the primary (Tendermint) validators was to drop out in which case they become primary validators. They can also become primary validators if the stake composition [changes sufficiently](./0069-VCBS-validators_chosen_by_stake.md). They receive proof of stake rewards. If their performance score or amount of delegated stake drops they can be demoted to a pending non-validator node.
@@ -41,8 +41,8 @@ From the point of view of proof of stake rewards three are three types of nodes:
 
 ### Proof of stake reward split between primary (tendermint) validators and ersatz validators
 
-The reward pool is split into two parts, proportional to the total own+delegated stake the primary- and ersatz validators have.
-Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p/s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
+The reward pool is split into two parts, proportional to the total own+delegated stake the primary and ersatz validators have.
+Thus, if `s_t = network.ersatzvalidators.reward.factor x s_e + s_p` is the total amount of own+delegated stake to both sets (with ersatz scaling taken into account), `s_p` the total stake delegated to the primary / Tendermint validators and `s_e x network.ersatzvalidators.reward.factor` the total stake delegated to the ersatz validators (scaled appropriately), then the primary / Tendermint pool has a fraction of `s_p / s_t` of the total reward, while the ersatz pool has `network.ersatzvalidators.reward.factor x s_e / s_t` (both rounded down appropriately).
 
 The following formulas then apply to both primary and ersatz validators, where 'total available reward' and 'total delegation', total_stake and 'number_of_validators' or `s_total` refer to the corresponding reward pool and the total own+delegated corresponding set of validators (i.e., `s_p` or `s_e`, respectively).
 
