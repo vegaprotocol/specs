@@ -103,19 +103,13 @@ If `riskiest long == 0` then `maintenance_margin_long = 0`.
 
 In this simple methodology, a linearised margin formula is used to return the maintenance margin, using risk factors returned by the [quantitative model](./0018-RSKM-quant_risk_models.ipynb).
 
-`maintenance_margin_long = maintenance_margin_long_open_position + maintenance_margin_long_open_orders`
-
 with
 
 ```formula
-maintenance_margin_long_open_position 
-    = max(min(slippage_volume * slippage_per_unit, mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])), 0) 
-    + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
+maintenance_margin_long 
+    = max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0) 
+    +  max(open_volume, 0) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
 ```
-
-and
-
-`maintenance_margin_long_open_orders = buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
 
 where
 
@@ -149,19 +143,11 @@ If `riskiest short == 0` then `maintenance_margin_short = 0`.
 
 Else
 
-`maintenance_margin_short = maintenance_margin_short_open_position + maintenance_margin_short_open_orders`
-
-with
-
 ```formula
-maintenance_margin_short_open_position 
-    = max(min(abs(slippage_volume) * slippage_per_unit, mark_price * (abs(slippage_volume) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0) 
-    + abs(slippage_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]
+maintenance_margin_short 
+    = max(min(abs(riskiest short) * slippage_per_unit, mark_price * (abs(riskiest short) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0) 
+    + abs(min( open_volume, 0 )) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ] + abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
 ```
-
-and
-
-`maintenance_margin_short_open_orders = abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`,
 
 where meanings of terms in Step 1 apply except for:
 
@@ -224,10 +210,13 @@ bids: [
     {volume: 7, price: $108}
 ]
 
+market.maxSlippageFraction[1] = 0.25
+market.maxSlippageFraction[2] = 0.001
+
 risk_factor_short = 0.11
 risk_factor_long = 0.1
 
-last_trade = $144
+mark_price = $144
 
 search_level_scaling_factor = 1.1
 initial_margin_scaling_factor = 1.2
@@ -246,12 +235,12 @@ riskiest_short = min( open_volume + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
 slippage_per_unit =  max(0, Product.value(previous_mark_price) - Product.value(exit_price)) = max(0, Product.value($144) - Product.value((1*120 + 4*110 + 5*108)/10)) = max(0, 144 - 110)  = 34
 
-slippage_volume =  max( open_volume, 0 ) = max ( 10, 0 ) = 10
+
+maintenance_margin_long =max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0) 
+ + max(open_volume, 0 ) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
 
 
-maintenance_margin_long = max(slippage_volume * slippage_per_unit, 0) + slippage_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
-
-= max(10 * 34, 0) +  10 * 0.1 * 144 + 4 * 0.1 * 144 =  541.6
+=  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 677.6
 
 # Step 2
 
@@ -259,14 +248,13 @@ Since riskiest short == 0 then maintenance_margin_short = 0
 
 # Step 3
 
-maintenance_margin = max ( 541.6, 0) = 541.6
+maintenance_margin = max ( 677.6, 0) = 677.6
 
 # Step 4
 
-collateral_release_level = 541.6 * collateral_release_scaling_factor = 541.6 * 1.1
-initial_margin = 541.6 * initial_margin_scaling_factor = 541.6 * 1.2
-search_level = 541.6 * search_level_scaling_factor = 541.6 * 1.3
-
+collateral_release_level = 677.6 * collateral_release_scaling_factor = 677.6 * 1.1
+initial_margin = 677.6 * initial_margin_scaling_factor = 677.6 * 1.2
+search_level = 677.6 * search_level_scaling_factor = 677.6 * 1.3
 
 ```
 
@@ -286,29 +274,17 @@ riskiest long: 2
 
 riskiest short: -1
 
-slippage volume long: 1
-
-slippage volume short: 0
-
 #### *case-2*
 
 riskiest long: 1
 
 riskiest short: -1
 
-slippage volume long: 0
-
-slippage volume short: -1
-
 #### *case-3*
 
 riskiest long: 1
 
 riskiest short: -1
-
-slippage volume long: 1
-
-slippage volume short: 0
 
 ## SCENARIOS
 
