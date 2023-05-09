@@ -58,4 +58,4 @@ As a wallet user I want to be able to create multiple key pairs in my wallet So 
 
 - I can create a new key pair from the wallet view (<a name="1101-BWAL-028" href="#1101-BWAL-028">1101-BWAL-028</a>)
 - New key pairs are assigned a name automatically "Vega Key 1" "Vega Key 2" etc.(<a name="1101-BWAL-029" href="#1101-BWAL-029">1101-BWAL-029</a>)
-- NNew key pairs are listed in order they were created - oldest first(<a name="1101-BWAL-030" href="#1101-BWAL-030">1101-BWAL-030</a>)
+- New key pairs are listed in order they were created - oldest first(<a name="1101-BWAL-030" href="#1101-BWAL-030">1101-BWAL-030</a>)
