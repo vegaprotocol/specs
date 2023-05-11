@@ -44,3 +44,18 @@ As a wallet user I want to validate I have "recorded" or saved the recovery phra
 - There is a way to go back to see the full recovery phrase if I have written / saved it incorrectly (<a name="1101-BWAL-023" href="#1101-BWAL-023">1101-BWAL-023</a>)
 - I can click to continue to the next step of onboarding once I've successfully entered the relevant parts of the phrase (<a name="1101-BWAL-024" href="#1101-BWAL-024">1101-BWAL-024</a>)
 - There is a way to understand if the details I've entered are incorrect e.g. highlight in red (<a name="1101-BWAL-025" href="#1101-BWAL-025">1101-BWAL-025</a>)
+
+## View network connected to
+
+As a browser wallet user I want to know which vega network my browser wallet is connected to So that I know if I am on the network I expect to be, and whether I am transacting with real or fake assets
+
+- The browser wallet defaults to use the Fairground network (<a name="1101-BWAL-026" href="#1101-BWAL-026">1101-BWAL-026</a>)
+- I can see which vega network the browser wallet is connected to from everywhere in the app(<a name="1101-BWAL-027" href="#1101-BWAL-027">1101-BWAL-027</a>)
+
+## Create key pairs
+
+As a wallet user I want to be able to create multiple key pairs in my wallet So that I can use different keys for different
+
+- I can create a new key pair from the wallet view (<a name="1101-BWAL-028" href="#1101-BWAL-028">1101-BWAL-028</a>)
+- New key pairs are assigned a name automatically "Vega Key 1" "Vega Key 2" etc.(<a name="1101-BWAL-029" href="#1101-BWAL-029">1101-BWAL-029</a>)
+- New key pairs are listed in order they were created - oldest first(<a name="1101-BWAL-030" href="#1101-BWAL-030">1101-BWAL-030</a>)
