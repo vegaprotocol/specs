@@ -128,15 +128,13 @@ If `-1 * proposed-commitment-variation <= maximum-penalty-free-reduction-amount`
 
 If `-1 * proposed-commitment-variation > maximum-penalty-free-reduction-amount` then first establish
 ```
-penalty-incuring-reduction-amount = proposed-commitment-variation - maximum-penalty-free-reduction-amount
+penalty-incuring-reduction-amount = -1 * proposed-commitment-variation - maximum-penalty-free-reduction-amount
 ```
 Transfer `maximum-penalty-free-reduction-amount` to their general account. 
 Now transfer `min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to their general account and transfer `market.liquidity.earlyExitPenalty x penalty-incuring-reduction-amount` to the market insurance pool.
 Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire `proposed-commitment-variation` as the `delta`.
 
 Note that as a consequence the market may land in a liquidity auction the next time the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP reducing their commitment to an immediate liquidity auction evaluation).
-
-
 
 
 ## Fees
