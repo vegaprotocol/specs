@@ -102,6 +102,8 @@ A participant may apply to amend their commitment amount by submitting a transac
 
 The amendment is actioned at the beginning of the next epoch (after the rewards / penalties for present LPs - including the party that's amending - have been evaluated). It's the amending LP's responsibility to have sufficient balance in their general account at the epoch boundary; if not the LP amendment is not actioned.
 
+Commitment amendmends should be processed in the time order of their latest updates within the epoch. For example if an LP places an amendment at time `t1`, followed by LP2 placing an amendment at `t2` and the first LP amending again at `t1`, LP2's amendment will be executed first.
+
 #### Increasing commitment
 
 _Case:_ `proposed-commitment-variation >= 0`
@@ -133,6 +135,8 @@ Now transfer `min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduc
 Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire `proposed-commitment-variation` as the `delta`.
 
 Note that as a consequence the market may land in a liquidity auction the next time the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP reducing their commitment to an immediate liquidity auction evaluation).
+
+
 
 
 ## Fees
@@ -283,4 +287,12 @@ If, at the end of an epoch (and before any LP rewards and penalties were applied
 - A liquidity provider who reduces their liquidity provision such that the total stake on the market is still above the target stake after reduction will have no penalty applied and will receive their full reduction in stake back at the end of the epoch. (<a name="0044-LIME-022" href="#0044-LIME-022">0044-LIME-022</a>)
 - For a market with `market.liquidity.earlyExitPenalty = 0.25` and `target stake < total stake` already, a liquidity provider who reduces their commitment by `100` will only receive `75` back into their general account with `25` transferred into the market's insurance account. (<a name="0044-LIME-023" href="#0044-LIME-023">0044-LIME-023</a>)
 - For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 40` already, a liquidity provider who reduces their commitment by `100` will receive a total of `85` back into their general account with `15` transferred into the market's insurance account (`40` received without penalty, then the remaining `60` receiving a `25%` penalty). (<a name="0044-LIME-023" href="#0044-LIME-023">0044-LIME-023</a>)
+
+- For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if one liquidity provider places a transaction to reduce their stake by `100` followed by a second liquidity provider who reduces their commitment by `100`, the first liquidity provider will receive a full `100` stake back whilst the second will receive a total of `85` back into their general account with `15` transferred into the market's insurance account (`40` received without penalty, then the remaining `60` receiving a `25%` penalty). (<a name="0044-LIME-024" href="#0044-LIME-024">0044-LIME-024</a>)
+- 
+- For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if the following transactions occur:
+  - `LP1` places a transaction to reduce their stake by `30`
+  - `LP2`  places a transaction to reduce their stake by `100`, 
+  - `LP1` places a transaction to update their reduction to `100`
+  `LP2` will receive a full `100` stake back whilst `LP1` will receive a total of `85` back into their general account with `15` transferred into the market's insurance account  (<a name="0044-LIME-025" href="#0044-LIME-025">0044-LIME-025</a>)
 
