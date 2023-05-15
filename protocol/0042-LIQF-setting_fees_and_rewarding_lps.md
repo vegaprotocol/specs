@@ -258,11 +258,18 @@ fraction_of_time_on_book = s_i / observed_epoch_length
 
 For any LP where `fraction_of_time_on_book < market.liquidity.commitmentMinTimeFraction` the SLA penalty fraction `p_i = 1` (that is, the penalty is 100% of their fees).
 
-For each LP where `fraction_of_time_on_book ≥ market.liquidity.commitmentMinTimeFraction`, the SLA penalty fraction `p_i` is calculated as follow:
+For each LP where `fraction_of_time_on_book ≥ market.liquidity.commitmentMinTimeFraction`, the SLA penalty fraction `p_i` is calculated as follows:
 
-```python 
-p_i = (1.0 - (fraction_of_time_on_book - market.liquidity.committmentMinTimeFraction) / (1.0 - market.liquidity.committmentMinTimeFraction)) * market.liqudity.slaCompetitionFactor
-```
+
+Let $t$ be `fraction_of_time_on_book`
+
+Let $s$ be `market.liquidity.committmentMinTimeFraction`.  
+
+Let $c$ be `market.liquidity.slaCompetitionFactor`.
+
+$$ 
+p_i = (1 - \frac{t - s}{1 - s}) \cdot c.
+$$
 
 #### Calculating the SLA performance penalty for over hysteresis period 
 
@@ -368,12 +375,16 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 - If `market.liquidity.providers.fee.calculationTimeStep > 0` and an LP submits a new liquidity commitment halfway through the time interval then they receive roughly 1/2 the fee income compared with the next time interval when they maintain their commitment (and the traded value is the same in both time intervals). (<a name="0042-LIQF-034" href="#0042-LIQF-034">0042-LIQF-034</a>)
 
 ### Calculating SLA Performance
+-  If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.slaCompetitionFactor = 1`, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0.5`. This will be true whether:
+     - Their liquidity is all provided at the start of the epoch and then none is provided for the second half (<a name="0042-LIQF-037" href="#0042-LIQF-037">0042-LIQF-037</a>)
+     - Their liquidity is provided scattered throughout the epoch (<a name="0042-LIQF-038" href="#0042-LIQF-038">0042-LIQF-038</a>)
+  
+-  If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.slaCompetitionFactor = 0`, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0`. (<a name="0042-LIQF-041" href="#0042-LIQF-041">0042-LIQF-041</a>)
+-  If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.slaCompetitionFactor = 0.5`, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0.25`. (<a name="0042-LIQF-042" href="#0042-LIQF-042">0042-LIQF-042</a>)
+
 - When `market.liquidity.performanceHysteresisEpochs = 0`:
   - If an LP has an active liquidity provision at the start of an epoch and throughout the epoch always meets their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` and no penalty will be applied to their liquidity fee payments at the end of the epoch (<a name="0042-LIQF-035" href="#0042-LIQF-035">0042-LIQF-035</a>)
   -  If an LP has an active liquidity provision at the start of an epoch and throughout the epoch meets their liquidity provision requirements less than `market.liquidity.commitmentMinTimeFraction` fraction of the time then they will have a full penalty and will receive `0` liquidity fee payments at the end of the epoch(<a name="0042-LIQF-036" href="#0042-LIQF-036">0042-LIQF-036</a>)
-  -  If an LP has an active liquidity provision at the start of an epoch, `market.liquidity.commitmentMinTimeFraction = 0.5` and throughout the epoch meets their liquidity provision requirements such that the `fraction_of_time_on_book = 0.75` then their penalty from that epoch will be `0.5`. This will be true whether:
-     - Their liquidity is all provided at the start of the epoch and then none is provided for the second half (<a name="0042-LIQF-037" href="#0042-LIQF-037">0042-LIQF-037</a>)
-     - Their liquidity is provided scattered throughout the epoch (<a name="0042-LIQF-038" href="#0042-LIQF-038">0042-LIQF-038</a>)
 - When `market.liquidity.performanceHysteresisEpochs = n`:
   - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.75` and throughout the epoch they always meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` for the latest epoch a penalty rate of `0.75` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-039" href="#0042-LIQF-039">0042-LIQF-039</a>)
   - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.5` and throughout the epoch they always meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` for the latest epoch a penalty rate of `0.5` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-039" href="#0042-LIQF-039">0042-LIQF-039</a>)
