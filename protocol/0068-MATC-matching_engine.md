@@ -34,7 +34,7 @@ A [Fill or KILL (FOK)](./0014-ORDT-order_types.md#time-in-force--validity) order
 - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-039" href="#0068-MATC-039">0068-MATC-039</a>)
 - For Reduce-Only = TRUE orders:
   - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-047" href="#0068-MATC-047">0068-MATC-047</a>)
-    - If not enough volume is available to **fully** fill the order, the remaining will be cancelled (<a name="0068-MATC-048" href="#0068-MATC-048">0068-MATC-048</a>)
+    - If not enough volume is available to **fully** fill the order, the order will be cancelled(<a name="0068-MATC-048" href="#0068-MATC-048">0068-MATC-048</a>)
   - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-049" href="#0068-MATC-049">0068-MATC-049</a>)
   - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-050" href="#0068-MATC-050">0068-MATC-050</a>)
   - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-051" href="#0068-MATC-051">0068-MATC-051</a>)
