@@ -58,17 +58,24 @@ When a dapp sends a transaction to the wallet for signing and broadcast, I...
 
 ... so I can verify that the transaction being sent is the one I want
 
-## Transactions
+## Transaction log
 When thinking about a recent or specific transaction, I ...
 
-- I can see a history of transactions the wallet has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
-- I can see pending transactions (Transactions I have not yet confirmed/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
-- I can see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
+- I can find a single list of all transactions, completed and ongoing, from all keys and wallets, from my current desktop session and network (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
+- I can see transactions that were confirmed by the wallet user (me) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
+- I can see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
+- If I switch network, transactions list changes to show the transactions for that network (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
+- I can click a transaction in the list to see the transaction details (<a name="0001-WALL-038" href="#0001-WALL-038">0001-WALL-038</a>)
+- I can see empty state when there are no transactions for this session (<a name="0001-WALL-039" href="#0001-WALL-039">0001-WALL-039</a>)
 
-... so that I can ensure my wallet is being used appropriately and find transaction I might have missed
+... so that I can ensure my wallet is being used appropriately and find transaction I made
 
-## Transaction detail
+## Transaction details
 when looking at a specific transaction...
+
+- I can see details of specific transactions I opened (<a name="0001-WALL-041" href="#0001-WALL-041">0001-WALL-041</a>)
+- I can find my way to the transaction on block explorer (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
+- I can find my way to the complete transaction history for that key on block explorer (<a name="0001-WALL-043" href="#0001-WALL-043">0001-WALL-043</a>)
 
 - I can see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network)
 
