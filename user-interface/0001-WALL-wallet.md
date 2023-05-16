@@ -61,7 +61,6 @@ When a dapp sends a transaction to the wallet for signing and broadcast, I...
 ## Transaction log
 When thinking about a recent or specific transaction, I ...
 
-- I can navigate between the transaction list and wallet list (tabs) (<a name="0001-WALL-033" href="#0001-WALL-033">0001-WALL-033</a>)
 - I can find a single list of all transactions, completed and ongoing, from all keys and wallets, from my current desktop session and network (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
 - I can see transactions that were confirmed by the wallet user (me) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
 - I can see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
