@@ -22,3 +22,19 @@
 - **Must** show the settlement asset (<a name="6001-MARK-018" href="#6001-MARK-018">6001-MARK-018</a>)
   - **Must** be able to view full asset details (<a name="6001-MARK-019" href="#6001-MARK-019">6001-MARK-019</a>)
 - **Must** provide a way to copy the market ID (<a name="6001-MARK-020" href="#6001-MARK-020">6001-MARK-020</a>)
+
+## Market Selector
+
+- **Must** see market's instrument code (<a name="6001-MARK-021" href="#6001-MARK-021">6001-MARK-021</a>)
+- **Must** see market's instrument name (sometimes labelled 'description') (<a name="6001-MARK-022" href="#6001-MARK-022">6001-MARK-022</a>)
+- **Must** see 24hr price change (<a name="6001-MARK-023" href="#6001-MARK-023">6001-MARK-023</a>)
+- **Must** see current price (<a name="6001-MARK-024" href="#6001-MARK-024">6001-MARK-024</a>)
+- **Must** price movements over last 24hr (sparkline) (<a name="6001-MARK-025" href="#6001-MARK-025">6001-MARK-025</a>)
+- **Must** be linked to all markets page (<a name="6001-MARK-026" href="#6001-MARK-026">6001-MARK-026</a>)
+- **Must** be able to filter by product type (<a name="6001-MARK-027" href="#6001-MARK-027">6001-MARK-027</a>)
+- **Must** be able to filter by settlement asset (<a name="6001-MARK-028" href="#6001-MARK-028">6001-MARK-028</a>)
+- **Must** be able to search by instrument code and instrument name (<a name="6001-MARK-029" href="#6001-MARK-029">6001-MARK-029</a>)
+- **Must** be able to sort
+  - by top gaining market (<a name="6001-MARK-030" href="#6001-MARK-030">6001-MARK-030</a>)
+  - by top losing market (<a name="6001-MARK-031" href="#6001-MARK-031">6001-MARK-031</a>)
+  - by newest markets (opening timestamp) (<a name="6001-MARK-032" href="#6001-MARK-032">6001-MARK-032</a>)
