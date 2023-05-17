@@ -108,4 +108,84 @@ Select {
 
 ## Acceptance criteria
 
-TBD
+### External Oracles - Creation:
+
+1. Create ethereum oracles based on calling a read method of a smart contract (Phase 2 - oracle based on listening for events)
+2. All current governance rules that apply to propose / submit / vote on a proposal should be applicable for the ethereum oracle data source creation / amendment 
+3. Create more than spam.protection.max.proposals oracle data source proposals in an epoch - proposal rejected with error message
+4. Create ethereum oracles based on calling a read method of a smart contract by supplying incorrect ABI (Phase 2 - oracle based on listening for events)
+
+### External Oracles - Amendments:
+1. Amend the oracle data source via governance proposals. Amendments should take effect as soon as the proposal is enacted.
+2. Amend an existing ethereum data source and change the contract address and enact the proposal. Once enacted , the data should be sourced from the new smart contract. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted.
+3. Phase 2 - Amend an existing ethereum data source and change the events that we are listening to and enact the proposal. Once enacted , the data should be sourced from the amended events. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted.
+
+### External Oracles - Deletions:
+1. Ability to delete a data source if and only if the data source is NOT used by any active markets
+2. Should NOT be able to delete a data source if its being actively used by a market
+3. If a single data source is used by multiple markets, then should NOT be able to delete the data source even if one of those markets is actively using the data source
+
+### External Oracles - Validations:
+1. Validate if the smart contract address is valid
+2. Validate if the data elements of the oracle data source is valid - e.g. source for a value thats returned as boolean but have a filter / condition for greater than 0 
+3. Validations for min / max frequency of listening for events / read a smart contract
+4. Create a new market with an inactive external oracle data source, system should throw an error
+5. Validations to be applied - need to be expanded
+6. Any mismatch between expected fields and received fields should emit an error via the TX RESULT event
+
+### New Network parameters:
+
+1. Test min / max values / validations for any new network parameters that are added
+2. Test the impact / behavior of the system, after the changes to the new network params are enacted
+
+### Negative Tests:
+
+1. Set up a new data source with invalid contract address - should fail validations (Phase 2 - listening for invalid event )
+2. Data source returns incorrect data - raise an error via the TX RESULT event. The data source is expected to send a positive price for an asset BUT sends a negative value
+3. Phase 2 - Set up a data source for listening to a particular event sent at a frequency of 2 secs. The oracle data source stops emitting events after emitting a couple of events. Raise and error via the TX RESULT event  if 5 consecutive events are missed - need to ratify / expand on this
+4. Phase 2 - Create an oracle source listening for a particular event and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error
+5. Create an oracle source that calls a read method of a smart contract and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error
+6. Will need some tests around consensus, will require setting up a network and having some nodes receive different values for the same oracle data point and testing that the oracle data point is/is not published depending on voting.
+
+### API:
+
+1. Ability to query oracle data sources via an API endpoint - filters should be available for data source - internal OR external, status - Active / Inactive / Expired / 
+2. Ability to query historic data sent by an oracle data source
+
+### Non Functional:
+
+1. System needs to emit an error via the TX RESULT event if the data source does NOT return data in a timely fashion - e.g. the read method of the smart contract take too long to return data OR times out
+2. Phase 2 - System needs to emit an error via the TX RESULT event if the data source does NOT emit events in a timely fashion. e.g. if the data source is expected to emit events every 5 mins and if we do not receive 3 consecutive events , then raise an error via the TX RESULT event
+3. Phase 2 - Define behavior for missed events / missed scheduled smart contract calls - e.g. if an oracle data source is scheduled to emit events every 10 minutes and we miss 5 events because of protocol upgrade or some other outage - then do we catch up those events or skip those events ? Maybe this is defined in the oracle data source definition.
+4. If an oracle data source is inactive - then any events / any data received from that oracle data source is NOT processed 
+5. SPAM rules if any defined should be tested for
+6. NOT all data sourced should be stored on chain - invalid / incorrect data is filtered out and is NOT processed / stored on chain - understand what the rules are and design the AC's / test accordingly
+7. Any active data sources that aren't used by any markets should not source data until they are being actively used by a market
+
+### Usage:
+
+1. It should be possible to use only ethereum oracle data sources or internal data sources or use a combination of both types of oracles
+2. Create a market to use an internal data source to terminate a market and an ethereum oracle to settle the market
+3. Create a market to use an external data source to terminate a market and an internal / manual oracle to settle the market
+4. Data sourcing should be completely decoupled from data filtering
+
+### Checkpoints:
+
+1. Oracle data sources should be stored in checkpoints and should be restored when restarting a network from checkpoints
+2. Restart a network with an active external data source from checkpoint. Ensure the data source is active and either catches up all missed events or starts processing new events based on config.
+
+### Snapshots:
+
+1. Oracle data sources should be stored on snapshots and should be able to be restored from snapshots.
+2. Restart a network with an active external data source from snapshot. Ensure the data source is active and either catches up all missed events or starts processing new events based on config.
+
+### Protocol Upgrade:
+
+1. Create / amend an external oracle data source and before it is enacted perform a protocol upgrade. The oracle data source should be enacted at the correct time after the upgrade.
+2. Create / amend an external oracle data source with enactment time that falls during a protocol upgrade. The oracle data source should be enacted immediately after the network is up after the protocol upgrade.
+3. Phase 2 - Have a network running g with a mix of internal and external active and inactive oracles. Perform a protocol upgrade. Once the network is up , the state of the various oracles should be the same as before the protocol upgrade and either catch up all missed events or start processing new events based on config. 
+
+### Regression:
+
+1. The ethereum oracles feature ONLY changes the way we source the data BUT does not change the way the sourced data is filtered / processed / used by the system . So in theory all existing oracle data sourcing tests should pass. In addition , it should be possible to run the existing tests by swapping the interval oracle data source for an external one. 
+
