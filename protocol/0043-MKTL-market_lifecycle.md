@@ -219,6 +219,7 @@ The positions are then closed and all orders cleared.
 All money held in margin accounts after final settlement is returned to traders' general accounts.
 [LP fees](0042-LIQF-setting_fees_and_rewarding_lps.md) that have been cumulated but not yet paid out are distributed to the market LPs as per the LP spec.
 After `network.liquidity.successorLaunchWindowLength` has elapsed since the settlement time
+
 - [Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset for markets that have no successor market, see [governance](./0028-GOVE-governance.md). For markets that have a named successor market the insurance pool balance is transferred to the insurance pool of the successor market.
 - The market can be deleted entirely at this point, from a core perspective.
 

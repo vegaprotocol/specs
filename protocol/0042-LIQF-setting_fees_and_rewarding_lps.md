@@ -297,9 +297,6 @@ When the time defined by `market.liquidity.providers.fee.distributionTimeStep` e
 - An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size changes the LP that meets the target stake: fee changes to fee bid by the LP that is now at the place in the bid order to provide the target stake (<a name="0042-LIQF-026" href="#0042-LIQF-026">0042-LIQF-026</a>)
 - An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size doesn't change the LP that meets the target stake: fee doesn't change (<a name="0042-LIQF-027" href="#0042-LIQF-027">0042-LIQF-027</a>)
 - An LP leaves a market that is above target stake when their fee bid is higher than the one currently being used: fee doesn't change (<a name="0042-LIQF-028" href="#0042-LIQF-028">0042-LIQF-028</a>)
-
-### LP JOINING AND LEAVING MARKETS
-
 - An LP joining a market that is below the target stake with a higher fee bid than the current fee: their fee is used (<a name="0042-LIQF-019" href="#0042-LIQF-019">0042-LIQF-019</a>)
 - An LP joining a market that is below the target stake with a lower fee bid than the current fee: fee doesn't change (<a name="0042-LIQF-020" href="#0042-LIQF-020">0042-LIQF-020</a>)
 - An LP joining a market that is above the target stake with a sufficiently large commitment to push ALL higher bids above the target stake and a lower fee bid than the current fee: their fee is used (<a name="0042-LIQF-029" href="#0042-LIQF-029">0042-LIQF-029</a>)
