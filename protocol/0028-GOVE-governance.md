@@ -229,7 +229,7 @@ The point of setting up a market to be successor of an existing market is to
 a) allow LPs continue claim their virtual stake / equity-like-share (ELS) by committing liquidity to the successor market during the pending period if they wish to, and
 b) allow the successor market to inherit the insurance pool of the parent market. When the successor market leaves the opening auction (moves from pending to active) the amount equal to `insurancePoolFraction x parent market insurance pool balance` is transferred to the successor market insurance pool. Once the parent market moves from "trading terminated" to "settled" state, the entire remaining insurance pool of the successor market is transferred to the successor market insurance pool.
 
-If the parent market is `proposed` or `pending` or the opening auction ends after the settlement time / cancellation time plus `network.liquidity.successorLaunchWindowLength` then the parent marketId may no longer exist in core or there may be no virtual stake to claim (copy). In that case the successor market virtual stakes are initialised as if the market has no parent.
+If the parent market is `proposed` or `pending` or the opening auction ends after the settlement time / cancellation time plus `network.liquidity.successorLaunchWindowLength` then the parent marketId may no longer exist in core or there may be no virtual stake to claim (copy). In that case the successor market virtual stakes are initialised as if the market has no parent (and we set the parent market field in market data to null / empty indicating no parent market). 
 
 
 Note that each market can have exactly one market as a _successor_ market.
