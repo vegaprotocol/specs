@@ -60,46 +60,46 @@ To prevent traders from "hiding" order book depth behind conditional orders, sto
 
 A stop order submission can be made (stop loss or take profit are probably both just called a stop order internally).
 
-* Stop order submissions must include either a trigger price OR trailing stop distance as a % move from the reference price in addition to a normal order submission.
+- Stop order submissions must include either a trigger price OR trailing stop distance as a % move from the reference price in addition to a normal order submission.
 
-* Stop order submissions must include a trigger direction.
-Direction may be _rises above_ or _falls below_.
-_Rises above_ stops trigger if the last traded price is higher than the trigger level, and _falls below_ stops trigger if the last traded price is lower than the trigger level.
+- Stop order submissions must include a trigger direction.
+Direction may be **rises above** or **falls below**.
+**Rises above** stops trigger if the last traded price is higher than the trigger level, and **falls below** stops trigger if the last traded price is lower than the trigger level.
 
-* A stop trigger can have an optional expiry date/time.
+- A stop trigger can have an optional expiry date/time.
 If it has an expiry then it can be set either to cancel on expiry (i.e. it is deleted at that time) or trigger on expiry (i.e. the order wrapped in the submission is placed whether or not the trigger level is breached).
 
-* It is possible to make a single stop order submission or an OCO (One Cancels the Other) stop order submission.
+- It is possible to make a single stop order submission or an OCO (One Cancels the Other) stop order submission.
 An OCO contains TWO stop order submissions, and must include one in each trigger direction.
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
 
-* The stop order submission wraps a normal order submission.
+- The stop order submission wraps a normal order submission.
 
-* The order within the stop order submission must be reduce only.
+- The order within the stop order submission must be reduce only.
 
-* The submission is validated when it is recieved but does not initially interact with the order book unless it is triggered immediately (see below).
+- The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
 
-* If and when the trigger price is breached in the specified direction the order provided in the stop order submission is created and enters the book or trades as normal, as if it was just submitted.
+- If and when the trigger price is breached in the specified direction the order provided in the stop order submission is created and enters the book or trades as normal, as if it was just submitted.
 
-* The order contained in a stop order submission is entered immediately if the trigger price is already breached on entry, except during an auction. (TODO: confirm we do this and don't just always wait for a trade price)
+- The order contained in a stop order submission is entered immediately if the trigger price is already breached on entry, except during an auction. (TODO: confirm we do this and don't just always wait for a trade price)
 
-* When the stop order is a trailing stop, the price at which it is triggered is calculated as the defined distance as a percentage from the highest price achieved since the order was entered if the direction is to trigger on price below the specified level, or the lowest price achieved since the order was entered if the direction is to trigger above the level.
+- When the stop order is a trailing stop, the price at which it is triggered is calculated as the defined distance as a percentage from the highest price achieved since the order was entered if the direction is to trigger on price below the specified level, or the lowest price achieved since the order was entered if the direction is to trigger above the level.
 Therefore the trigger level of a stop order moves with the market allowing the trader to lock in some amount of gains.
 
-* The order can't be triggered or trade at all during an aucton (even if the current price would normally trigger it immediately on entry).
+- The order can't be triggered or trade at all during an auction (even if the current price would normally trigger it immediately on entry).
 
-* A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
+- A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
 
-* GFA is not a valid TIF for a stop order submission.
+- GFA is not a valid TIF for a stop order submission.
 
-* Spam prevention:
+- Spam prevention:
 
-    * Stop orders will only be accepted from keys with either a non-zero open position or at least one active order.
+  - Stop orders will only be accepted from keys with either a non-zero open position or at least one active order.
 
-    * A network parameter will control the maximum number of stop orders per party (suggested initial value: between 4 and 10).
+  - A network parameter will control the maximum number of stop orders per party (suggested initial value: between 4 and 10).
 
-    * (TODO: confirm this makes sense) If the trader's position size gets to zero or changes direction all their stop orders are cancelled.
+  - TODO: confirm this makes sense) If the trader's position size gets to zero or changes direction all their stop orders are cancelled.
 
 
 ### Valid order entry combinations
