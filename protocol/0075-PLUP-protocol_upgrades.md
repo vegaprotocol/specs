@@ -108,7 +108,7 @@ message ProtocolUpgradeEvent {
 - (<a name="0075-PLUP-002" href="#0075-PLUP-002">0075-PLUP-002</a>) Validator proposes a protocol upgrade on a block height preceding the current block - should result in an error
 - (<a name="0075-PLUP-003" href="#0075-PLUP-003">0075-PLUP-003</a>) Propose and enact a version downgrade
 - (<a name="0075-PLUP-004" href="#0075-PLUP-004">0075-PLUP-004</a>) Non-validator attempts to propose upgrade
-- (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) Ersatz validator attempts to propose upgrade
+- (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) Ersatz validator (standby validator) attempts to propose upgrade
 
 ### Block height validation
 

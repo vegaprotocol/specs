@@ -151,6 +151,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. Nodes must be able to start processing new blocks having loaded the only the most recent history  (<a name="0076-DANO-023" href="#0076-DANO-023">0076-DANO-023</a>)
 1. Nodes that have been temporarily disconnected from the network should be able to load the missed history to get back up to the current network height (or most recently produced history) and then be able to start processing new blocks  (<a name="0076-DANO-024" href="#0076-DANO-024">0076-DANO-024</a>)
 1. It must be possible to fetch history from the network whilst the node processes new blocks.  So for example, if setting up a new Archive node, the node can keep up to date with the network whilst retrieving history all the way back to the first block.  Once this is done the node should be able to reconcile the fetched history with that produced whilst the history was being retrieved such that the node will have a full history from the first block all the way to the networks current height.  (<a name="0076-DANO-025" href="#0076-DANO-025">0076-DANO-025</a>)
+1. It must be possible to rollback the data-node to a previous block height and have it process events from this height onwards.  The state of the datanode at the rollback height must match exactly the state of the node as it was when it originally reached the given height. (<a name="0076-DANO-039" href="#0076-DANO-039">0076-DANO-039</a>)
 
 ### Data integrity
 
@@ -166,6 +167,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. Starting a core node at block height greater than the data-nodes block height must result in an error and a refusal to start (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
 1. If a data-node snapshot fails during the restore the process, it should error and the node(s) won't start (<a name="0076-DANO-009" href="#0076-DANO-009">0076-DANO-009</a>)
 1. When queried via the APIs a node restored from decentralised history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-022" href="#0076-DANO-022">0076-DANO-022</a>)
+1. All network history retained by a node for a given block span and type must be downloadable in CSV format. (<a name="0076-DANO-040" href="#0076-DANO-040">0076-DANO-040</a>)
 
 ### Data-node network determinism
 
