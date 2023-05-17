@@ -113,6 +113,18 @@ maintenance_margin_long
 
 where
 
+`slippage_volume =  max( open_volume, 0 )`,
+
+and
+
+if `open_volume > 0` then
+
+`slippage_per_unit = max(0, Product.value(market_observable) - Product.value(exit_price))`,
+
+else `slippage_per_unit = 0`.
+
+where
+
 `market_observable` = `settlement_mark_price` if in continuous trading, refer to [auction subsection](#margin-calculation-for-auctions) for details of the auction behaviour.
 
 `settlement_mark_price` refers to the mark price most recently utilised in [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md). If no previous mark to market settlement has occurred, the initial mark price, as defined by a market parameter, should be used.
@@ -223,9 +235,7 @@ slippage_per_unit =  Product.value(market_observable) - Product.value(exit_price
 
 maintenance_margin_long =max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0) 
  + max(open_volume, 0 ) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
-
-
-=  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 677.6
+ =  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 677.6
 
 # Step 2
 
@@ -240,8 +250,6 @@ maintenance_margin = max ( 677.6, 0) = 677.6
 collateral_release_level = 677.6 * collateral_release_scaling_factor = 677.6 * 1.1
 initial_margin = 677.6 * initial_margin_scaling_factor = 677.6 * 1.2
 search_level = 677.6 * search_level_scaling_factor = 677.6 * 1.3
-
-
 ```
 
 ### EXAMPLE 2 - calculating correct slippage volume

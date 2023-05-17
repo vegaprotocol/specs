@@ -21,7 +21,7 @@ Note that this number combines own + delegated stake together with `performance_
 Vega will sort all current consensus forming (also called Tendermint) validators as `[v_1, ..., v_n]` with `v_1` with the highest and `v_n` with the lowest score.
 If for any `l,m=1,...,n` we have  `v_l == v_m` then we place higher the one who's been validator for longer (so this is a mechanism for resolving ties).
 Vega will sort all those who submitted a transaction wishing to be validators using `validator_score` as `[w_1, ..., w_k]`.
-These may be ersatz validators (ie getting rewards) or others who just submitted the transaction to join.
+These may be ersatz validators (i.e. standby validators who are getting rewards) or others who just submitted the transaction to join.
 
 If `empty_slots := network.validators.tendermint.number - n > 0` (we have empty consensus (Tendermint) validator slots) then the top `empty_slots` from `[w_1, ..., w_k]` are promoted to consensus (Tendermint) validators.
 If `w_1>v_n` (i.e. the highest scored potential validator has more than the lowest score incumbent validator) then in the new epoch `w_1` becomes a consensus forming (Tendermint) validator, and the lowest scoring incumbent becomes an ersatz validator.
@@ -104,6 +104,7 @@ Thus a validator who is not there but should be has incentive to pay gas to upda
 As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) then at the end of the epoch their score will be `0`. They will not get any rewards.
 
 In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from the Multisig contract. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed.
+Bear in mind that currently in this situation the unpaid rewards stay in the reward pool and eventually everything gets distributed at the end of any epoch where the multisig is updated.
 
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions.
 
@@ -391,7 +392,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - In the middle of the epoch, shut node 1 down.
     - Verify that at the beginning of the next epoch the announced node replaced node 1 as a Tendermint validator.
     - Restart node 1 again from a snapshot
-    - Verify that node 1 is in a pending state and it’s ranking score is ~ 0.006666666667.
+    - Verify that node 1 is in a pending state.
 1. 2 empty spots, only one available to replace (<a name="0069-VCBS-043" href="#0069-VCBS-043">0069-VCBS-043</a>):
     - Setup a network with 5 slots for Tendermint validators and 3 actual Tendermint validators.
     - Self-delegate to all of them.
@@ -446,6 +447,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
+        - Verify that one validator is replaced the following epoch, one in the epoch after
 
 1. `Ownstake` scenario7 (<a name="0069-VCBS-078" href="#0069-VCBS-078">0069-VCBS-078</a>)
         -Verify that 2 validators are replaced, one in each epoch
@@ -551,6 +553,14 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Restart the network
     - Verify that v2-v6 are tendermint validators, v7 is ersatz and v1 is pending.
     - Verify that all stakes and delegations are correct for each node.
+1. Validator, ersatz and pending node scores for current epoch are persisted in checkpoints (<a name="0069-VCBS-088" href="#0069-VCBS-088">0069-VCBS-088</a>):
+    - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
+    - Take a checkpoint.
+    - Wait until the current epoch will have expired.
+    - Restart the network. (This will result in a 1-block epoch)
+    - Verify that v1-v5 are tendermint validators, v6 is ersatz and v7 is pending.
+    - Verify that all tendermint validators have non-zero performance scores, which will reflect the data that was collected pre-checkpoint to calculate scores at the end of the last epoch.
+    - Verify that ersatz and pending validators have non-zero performance scores.
 
 ### Multisig update
 
