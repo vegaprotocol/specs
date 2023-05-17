@@ -15,6 +15,7 @@ An [Immediate or Cancel (IOC)](./0014-ORDT-order_types.md#time-in-force--validit
   - If there is a partial match then the remaining will be cancelled. (<a name="0068-MATC-005" href="#0068-MATC-005">0068-MATC-005</a>)
 - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-006" href="#0068-MATC-006">0068-MATC-006</a>)
 - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-057" href="#0068-MATC-057">0068-MATC-057</a>)
+
 - For Reduce-Only = True orders:
   - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-056" href="#0068-MATC-056">0068-MATC-056</a>)
     - If not enough volume is available to **fully** fill the order, the remaining will be cancelled (<a name="0068-MATC-043" href="#0068-MATC-043">0068-MATC-043</a>)
@@ -32,6 +33,7 @@ A [Fill or KILL (FOK)](./0014-ORDT-order_types.md#time-in-force--validity) order
   - if a complete fill is not possible the order is stopped without trading at all. (<a name="0068-MATC-010" href="#0068-MATC-010">0068-MATC-010</a>)
 - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-011" href="#0068-MATC-011">0068-MATC-011</a>)
 - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-039" href="#0068-MATC-039">0068-MATC-039</a>)
+
 - For Reduce-Only = TRUE orders:
   - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-047" href="#0068-MATC-047">0068-MATC-047</a>)
     - If not enough volume is available to **fully** fill the order, the order will be cancelled(<a name="0068-MATC-048" href="#0068-MATC-048">0068-MATC-048</a>)
