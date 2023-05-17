@@ -144,11 +144,25 @@ If a "sell" order incurs fees through trading (i.e. is the aggressor or trades i
 
 ### Buy Orders
 
-For a "buy" order to be considered valid, the party will need a sufficient amount of the `quote_asset` in the `general_account` to cover both the value of the trade as well as any possible fees incurred.
+As "buy" orders require a party to hold a sufficient amount of the `quote_asset` to cover possible fees, the individual cases where fees can be incurred must be considered.
 
-If a "buy" order does not trade immediately (or only trades in part), the necessary amount of the `quote_asset` to cover the remaining size of the order, as well as any possible fees, should be transferred to a `holding_account` for the `quote_asset`. If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.
+#### Continuous Trading
 
-As limit orders will only incur fees if they trade in an auction - for GFN orders, the possible fees are `"0"`, and for all other existing TIF options, the possible fees are calculated as if the order was to trade in full during an auction at the price of the order (this gives the maximum possible fee).
+For a "buy" order to be considered valid during continuous trading, the party must have a sufficient amount of the `quote_asset` in the `general_account` to cover the value of the trade as well as any possible fees incurred as a result of the order trading immediately (the aggressor).
+
+If a "buy" order does not trade immediately (or only trades in part), the necessary amount of the `quote_asset` to cover only the remaining size of the order should be transferred to a `holding_account` for the `quote_asset`. As the order can no longer be the aggressor during continuous trading there is no requirement to hold funds to cover fees. If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.
+
+#### Entering an Auction
+
+When entering an auction, for any open "buy" orders, the network must transfer additional funds from the parties `general_account` to the parties `holding_account` to cover any possible fees incurred as a result of the order trading in the auction. If the party does not have sufficient funds in their `general` account to cover this transfer, the order should be cancelled.
+
+For a "buy" order to be considered valid during an auction, the party must have a sufficient amount of the `quote_asset` to cover the size of the order as well as any possible fees occurred as a result of the order trading in the auction.
+
+If the fee rates change for whatever reason within an auction, the amount required to cover fees must be recalculated and the necessary amount transferred to or released from the `holding_account`.
+
+#### Exiting an Auction
+
+When exiting an auction, for any orders which are still open, the funds held in the parties `holding_account` to cover the possible fees can be released to the parties `general_account` so the only amount remaining in the `holding_account` is enough to cover the value of the order.
 
 ## 8. Auctions
 
