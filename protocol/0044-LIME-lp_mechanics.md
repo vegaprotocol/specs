@@ -104,6 +104,8 @@ The amendment is actioned in two steps.
 1) the amount is immediately transferred from the party's general account to a temporary "pending" bond account. This amount counts towards the stake committed to the market and so in particular can get the market out of liquidity auction. 
 2) at the beginning of the next epoch (after the rewards / penalties for present LPs - including the party that's amending - have been evaluated) the amount is transferred from the "pending" bond to the true bond account. ```
 
+Commitment amendmends should be processed in the time order of their latest updates within the epoch. For example if an LP places an amendment at time `t1`, followed by LP2 placing an amendment at `t2` and the first LP amending again at `t1`, LP2's amendment will be executed first.
+
 #### Increasing commitment
 
 _Case:_ `proposed-commitment-variation >= 0`
@@ -124,11 +126,11 @@ where:
 - `total_stake` is the sum of all stake of all liquidity providers bonded to this market.
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
 
-If `-proposed-commitment-variation <= maximum-penalty-free-reduction-amount` then we're done, the LP reduced commitment, the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md).
+If `-1 * proposed-commitment-variation <= maximum-penalty-free-reduction-amount` then we're done, the LP reduced commitment, the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-If `-proposed-commitment-variation > maximum-penalty-free-reduction-amount` then first establish
+If `-1 * proposed-commitment-variation > maximum-penalty-free-reduction-amount` then first establish
 ```
-penalty-incuring-reduction-amount = -proposed-commitment-variation - maximum-penalty-free-reduction-amount
+penalty-incuring-reduction-amount = -1 * proposed-commitment-variation - maximum-penalty-free-reduction-amount
 ```
 Transfer `maximum-penalty-free-reduction-amount` to their general account. 
 Now transfer `min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to their general account and transfer `market.liquidity.earlyExitPenalty x penalty-incuring-reduction-amount` to the market insurance pool.
@@ -156,7 +158,7 @@ When calculating fees for a trade, the size of a liquidity provider’s commitme
 
 ### Calculating liquidity from commitment
 
-Committed Liqudity Providers are required to provide a multiple of their stake (supplied in the settlement currency of the market) in notional volume of orders within the range defined below.
+Committed Liquidity Providers are required to provide a multiple of their stake (supplied in the settlement currency of the market) in notional volume of orders within the range defined below.
 
 The multiple is controlled by a network parameter `market.liquidity.stakeToCcyVolume`:
 ```
@@ -188,15 +190,21 @@ Note: we don't evaluate whether LPs meet the SLA during opening auctions so ther
 
 See the [Calculating the SLA performance penalty for a single epoch section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md) for how `fraction_of_time_on_book` is calculated. 
 This is available at the end of each epoch. 
-If, at, the end of the epoch, `fraction_of_time_on_book >= market.liquidity.committmentMinTimeFraction` then let $f=0$.
+If, at the end of the epoch, `fraction_of_time_on_book >= market.liquidity.committmentMinTimeFraction` then let $f=0$.
 Otherwise we calculate a penalty to be applied to the bond as follows. 
-Let $t$ be `fraction_of_time_on_book` and let $s$ be `market.liquidity.committmentMinTimeFraction`.  
+
+Let $t$ be `fraction_of_time_on_book`
+
+Let $s$ be `market.liquidity.committmentMinTimeFraction`.  
+
 Let $p$ be `market.liquidity.sla.nonPerformanceBondPenaltySlope`.
-Let $m$ be `nonPerformanceBondPenaltyMax`. 
+
+Let $m$ be `market.liquidity.sla.nonPerformanceBondPenaltyMax`. 
+
 Let
 
 $$
-f = \max\left[0,\min\left(m,p - \frac{p}{s}t\right)\right]\,.
+f = \max\left[0,\min\left(m, p \cdot (1 - \frac{t}{s})\right)\right]\,.
 $$
 
 Once you have $f$ transfer $f \times B$ into the insurance pool of the market, where $B$ is the LP bond account balance. 
@@ -230,7 +238,7 @@ The network will:
 Note:
 
 - As mentioned above, closeout should happen as per regular trader account (with the addition of cancelling the liquidity provision and the associated LP rewards & fees consequences). So, if after cancelling all open orders the party can afford to keep the open positions sufficiently collateralised they should be left open, otherwise the positions should get liquidated.
-- Bond account balance should never get directly confiscated. It should only be used to cover margin shortfalls with appropriate penalty applied each time it's done. Once the funds are in margin account they should be treated as per normal rules involving that account.
+
 
 ### Bond account top up by collateral search
 
@@ -265,3 +273,26 @@ If, at the end of an epoch (and before any LP rewards and penalties were applied
 - Change of `market.liquidity.stakeToCcyVolume` will change the liquidity obligation hence change the size of the LP orders on the order book. (<a name="0044-LIME-010" href="#0044-LIME-010">0044-LIME-010</a>)
 - If `market.liquidity.stakeToCcyVolume` is set to `0.0` then the [LP provision order](./0038-OLIQ-liquidity_provision_order_type.md) places `0` volume on the book for the LP regardless of the shape submitted and regardless of the `stake` committed. (<a name="0044-LIME-011" href="#0044-LIME-011">0044-LIME-011</a>)
 - If `market.liquidity.stakeToCcyVolume` is set to `0.0`, there is [target stake](./0041-TSTK-target_stake.md) of `1000` and there are 3 LPs on the market with stake / fee bid submissions of `100, 0.01`, `1000, 0.02` and `200, 0.03` then the liquidity fee is `0.02`. (<a name="0044-LIME-012" href="#0044-LIME-012">0044-LIME-012</a>)
+
+- If a liquidity provider has `fraction_of_time_on_book` >= `market.liquidity.committmentMinTimeFraction`, no penalty will be taken from their bond account (<a name="0044-LIME-013" href="#0044-LIME-013">0044-LIME-013</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `35%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-014" href="#0044-LIME-014">0044-LIME-014</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `60%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-015" href="#0044-LIME-015">0044-LIME-015</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.2`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `20%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-016" href="#0044-LIME-016">0044-LIME-016</a>)
+  
+- If a liquidity provider with an active liquidity provision at the start of an epoch reduces their liquidity provision staked commitment during the epoch the initial committed level at the start of the epoch will remain in effect until the end of the epoch, at which point the protocol will attempt to reduce the bond to the new level. (<a name="0044-LIME-018" href="#0044-LIME-018">0044-LIME-018</a>)
+- If a liquidity provider with an active liquidity provision at the start of an epoch reduces their liquidity provision staked commitment during the epoch the initial committed level at the start of the epoch will remain in effect until the end of the epoch, at which point the protocol will attempt to reduce the bond to the new level. If the reduced level has been changed several times during an epoch, only the latest value will take effect (<a name="0044-LIME-019" href="#0044-LIME-019">0044-LIME-019</a>)
+- If a liquidity provider with an active liquidity provision at the start of an epoch reduces their liquidity provision staked commitment during the epoch the initial committed level at the start of the epoch will remain in effect until the end of the epoch, at which point the protocol will attempt to reduce the bond to the new level. If the bond stake has been slashed to a level lower than the amendment, this slashed level will be retained (i.e. the protocol will not attempt to now increase the commitment) (<a name="0044-LIME-020" href="#0044-LIME-020">0044-LIME-020</a>)
+- If a liquidity provider with an active liquidity provision at the start of an epoch amends the fee level associated to this commitment during the epoch, this change will only take effect at the end of the epoch. (<a name="0044-LIME-021" href="#0044-LIME-021">0044-LIME-021</a>)
+
+- A liquidity provider who reduces their liquidity provision such that the total stake on the market is still above the target stake after reduction will have no penalty applied and will receive their full reduction in stake back at the end of the epoch. (<a name="0044-LIME-022" href="#0044-LIME-022">0044-LIME-022</a>)
+- For a market with `market.liquidity.earlyExitPenalty = 0.25` and `target stake < total stake` already, a liquidity provider who reduces their commitment by `100` will only receive `75` back into their general account with `25` transferred into the market's insurance account. (<a name="0044-LIME-023" href="#0044-LIME-023">0044-LIME-023</a>)
+- For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 40` already, a liquidity provider who reduces their commitment by `100` will receive a total of `85` back into their general account with `15` transferred into the market's insurance account (`40` received without penalty, then the remaining `60` receiving a `25%` penalty). (<a name="0044-LIME-023" href="#0044-LIME-023">0044-LIME-023</a>)
+
+- For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if one liquidity provider places a transaction to reduce their stake by `100` followed by a second liquidity provider who reduces their commitment by `100`, the first liquidity provider will receive a full `100` stake back whilst the second will receive a total of `85` back into their general account with `15` transferred into the market's insurance account (`40` received without penalty, then the remaining `60` receiving a `25%` penalty). (<a name="0044-LIME-024" href="#0044-LIME-024">0044-LIME-024</a>)
+- 
+- For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if the following transactions occur:
+  - `LP1` places a transaction to reduce their stake by `30`
+  - `LP2`  places a transaction to reduce their stake by `100`, 
+  - `LP1` places a transaction to update their reduction to `100`
+  `LP2` will receive a full `100` stake back whilst `LP1` will receive a total of `85` back into their general account with `15` transferred into the market's insurance account  (<a name="0044-LIME-025" href="#0044-LIME-025">0044-LIME-025</a>)
+
