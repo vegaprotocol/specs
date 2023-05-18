@@ -50,7 +50,7 @@ As a wallet user I want to validate I have "recorded" or saved the recovery phra
 As a browser wallet user I want to know which vega network my browser wallet is connected to So that I know if I am on the network I expect to be, and whether I am transacting with real or fake assets
 
 - The browser wallet defaults to use the Fairground network (<a name="1101-BWAL-026" href="#1101-BWAL-026">1101-BWAL-026</a>)
-- I can see which vega network the browser wallet is connected to from everywhere in the app(<a name="1101-BWAL-027" href="#1101-BWAL-027">1101-BWAL-027</a>)
+- I can see which vega network the browser wallet is connected to from the view wallet page(<a name="1101-BWAL-027" href="#1101-BWAL-027">1101-BWAL-027</a>)
 
 ## Create key pairs
 
@@ -116,3 +116,12 @@ As a wallet user I want a way to enter my password when my login has expired So 
 
 - When I have quit my browser, and then reopened, I am asked to enter my browser extension password(<a name="1101-BWAL-056" href="#1101-BWAL-056">1101-BWAL-056</a>)
 - I am informed if I enter my password incorrectly (<a name="1101-BWAL-057" href="#1101-BWAL-057">1101-BWAL-057</a>)
+
+## View wallet and key pairs
+
+As a browser wallet user I want to view my vega wallet (and key pair(s)) So that I can see that I've been successful creating the wallet / see my key ID
+
+- I can see a list of the keys in my wallet (<a name="1101-BWAL-058" href="#1101-BWAL-058">1101-BWAL-058</a>)
+- I can copy the public key ID to my clipboard (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
+- I can see information of where to go to deposit and manage my assets (<a name="1101-BWAL-060" href="#1101-BWAL-060">1101-BWAL-060</a>)
+- I can see where I am in the app when viewing my wallet and key pair(s) (<a name="1101-BWAL-061" href="#1101-BWAL-061">1101-BWAL-061</a>)
