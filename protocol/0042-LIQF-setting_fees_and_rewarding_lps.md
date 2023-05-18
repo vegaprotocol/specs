@@ -232,8 +232,8 @@ Using only information from the prior block as the seed may allow exploits based
 
 * In each block, immediately after processing transaction `k`:
 
-    * Note that this happens _after_ glassbergs, that need refreshing as a result of transaction `k` are refreshed.
-    This means that while a glassberg has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`. 
+    * Note that this happens _after_ iceberg orders, that need refreshing as a result of transaction `k` are refreshed.
+    This means that while an iceberg order has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`. 
 
     * If LP has started meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
 
