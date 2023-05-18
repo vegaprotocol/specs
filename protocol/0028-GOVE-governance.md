@@ -146,7 +146,9 @@ For market change proposals the network will additionally calculate
 1. `LP participation rate = SUM (equity-like share of all LPs who cast a vote)` (no need to divide by anything as equity-like share sums up to `1`).
 1. `LP for rate = SUM (all who voted for) / LP participation rate`.
 
-A market parameter change is passed only when:
+If the market that the proposal is changing is pending at the vote resolution time then only token holder votes are used. 
+
+For a market that's out of the pending state (so the opening auction has concluded) a market parameter change is passed only when:
 
 - either the governance token holder vote is successful i.e. `participation_rate >= governance.proposal.updateMarketParam.requiredParticipation` AND `for_rate > governance.proposal.updateMarketParam.requiredMajority` (in this case the LPs were overridden by governance token holders)
 - or the governance token holder vote does not reach participation threshold but the LP vote does and approves the proposal `participation_rate < governance.proposal.updateMarketParam.requiredParticipation` AND `LP participation rate >= governance.proposal.updateMarketParam.requiredParticipationLP` AND `LP for rate >= governance.proposal.updateMarketParam.requiredMajorityLP`.
@@ -236,7 +238,7 @@ Note that each market can have exactly one market as a _successor_ market.
 
 - if there already is a market (possibly pending, i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)), naming a parent market, then a subsequent proposal referencing that market is rejected.
 - if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the successor of the named parent; the other proposal is cancelled with reason "parent market no longer available".
-- if there is a successor market naming a parent market that terminates and settles or is cancelled by governance before the parent market (for whatever reason) then the parent market successor is set to empty and a different successor can be proposed.
+- if there is a successor market naming a parent market that terminates and settles or is cancelled by governance before the parent market (for whatever reason) then the parent market successor field is set to empty and a different successor can be proposed by a future market proposal.
 
 All _new market proposals_ initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
@@ -464,6 +466,12 @@ APIs should also exist for clients to:
 - Change of the network parameter `governance.proposal.updateMarket.minProposerEquityLikeShare` will immediately change the minimum proposer ELS for a market change proposal for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-064" href="#0028-GOVE-064">0028-GOVE-064</a>)
 - Change of the network parameter `governance.proposal.updateMarket.requiredParticipationLP` will immediately change the required LP vote participation (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-065" href="#0028-GOVE-065">0028-GOVE-065</a>)
 - Change of the network parameter `governance.proposal.updateMarket.requiredMajorityLP` will immediately change the required LP vote majority (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-066" href="#0028-GOVE-066">0028-GOVE-066</a>)
+- A market that's attempting to modify any parameters on a market in `proposed` state (i.e. voting hasn't completed) will be rejected. (<a name="0028-GOVE-069" href="#0028-GOVE-069">0028-GOVE-069</a>)
+- A market change proposal that's to modify any parameters on a market in `pending` state (i.e. voting has sucessfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the proposed modification is enacted. (<a name="0028-GOVE-070" href="#0028-GOVE-070">0028-GOVE-070</a>)
+- In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has sucessfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the propsed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)
+- A market change that's to modify any parameters on a market in `pending` state (i.e. voting has sucessfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)
+
+
 
 #### Network parameter change proposals
 
