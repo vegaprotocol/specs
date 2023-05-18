@@ -7,7 +7,7 @@ This repository contains specifications and RFCs for future changes to the syste
 In order to ensure that there is a clear view on the specification of the protocol, both at the version in mainnet and the version being developed in testnet, the following branching is used:
 
 - `master` branch details the specification of the protocol in mainnet (from Alpha Mainnet onwards)
-- `cosmicelevator` branch is the milestone grouping of features being developed AFTER Alpha Mainnet
+- `cosmicelevator` branch is the milestone grouping of features being developed AFTER Alpha Mainnet. As features are deployed to mainnet by the validators the relevant spec changes will be merged into the `master` branch.
 - Further milestone branches will be created as development progresses and will be updated in this `README.md`
   
 To find out more see the [The specification lifecycle](WORKFLOW.md#the-specification-lifecycle)
