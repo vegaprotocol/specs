@@ -56,7 +56,6 @@ when looking to do something with a specific key (or set of keys) from my wallet
 
 - for each key:
   - **must** see the first and last 6 digits of the [public key](DATA-data_display.md#public-keys). (<a name="0002-WCON-027" href="#0002-WCON-027">0002-WCON-027</a>)
-  - **should** be able to see the whole public key
   - **must** be able to copy to clipboard the whole public key (<a name="0002-WCON-029" href="#0002-WCON-029">0002-WCON-029</a>)
   - **must** see the key name/alias (meta data) (<a name="0002-WCON-030" href="#0002-WCON-030">0002-WCON-030</a>)
 
