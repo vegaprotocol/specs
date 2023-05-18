@@ -49,7 +49,7 @@ At a high level, the liqudity mechanism in Vega allows Liquidity Providers (LPs)
 
 - Penalising LPs that commit and do not meet the SLA, to reduce the attractiveness of opportunistically going after rewards with no intention to meet the SLA in more challenging conditions, and of leeching style attacks on the rewards.
 
-Once committed LPs attempt to meet their comitment by placing and maintaining normal orders on the market. They may use pegged or priced limit orders, along with features like post only and glassberg (transparent iceberg) to control their risk. Non-persistent orders, parked pegged orders, and stop-loss orders do not count towards an LP's supplied liquidity and therefore cannot be used to meet the SLA.
+Once committed LPs attempt to meet their comitment by placing and maintaining normal orders on the market. They may use pegged or priced limit orders, along with features like post only and iceberg (or more accurately, transparent iceberg) to control their risk. Non-persistent orders, parked pegged orders, and stop-loss orders do not count towards an LP's supplied liquidity and therefore cannot be used to meet the SLA.
 
 
 ## Commit liquidity network transaction
