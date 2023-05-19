@@ -125,3 +125,11 @@ As a browser wallet user I want to view my vega wallet (and key pair(s)) So that
 - I can copy the public key ID to my clipboard (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
 - I can see information of where to go to deposit and manage my assets (<a name="1101-BWAL-060" href="#1101-BWAL-060">1101-BWAL-060</a>)
 - I can see where I am in the app when viewing my wallet and key pair(s) (<a name="1101-BWAL-061" href="#1101-BWAL-061">1101-BWAL-061</a>)
+
+## Wallet version number (Settings)
+
+As a wallet user I want to understand the version # I am using So that I can trouble shoot should there be any issues
+
+- I can see the version # of the browser extension (<a name="1101-BWAL-062" href="#1101-BWAL-062">1101-BWAL-062</a>)
+- I can see the feedback link (<a name="1101-BWAL-063" href="#1101-BWAL-063">1101-BWAL-063</a>)
+- I can see a lock button and when I press it I am logged out and redirected to the login page (<a name="1101-BWAL-064" href="#1101-BWAL-064">1101-BWAL-064</a>)
