@@ -65,20 +65,20 @@ As a wallet user I want to be able to create multiple key pairs in my wallet So 
 As a browser wallet user When I have started onboarding in the browser wallet and I close the extension / browser I want to be able to reopen the extension and it remember where I was in the onboarding flow So that I don't have to start again
 
 - I can close the extension and when I reopen it it opens on the same page / view (<a name="1101-BWAL-031" href="#1101-BWAL-031">1101-BWAL-031</a>)
-- When I reopen the extension after last viewing the recovery phrase and hadn't yet acknowledged and moved to the next step, it opens on the recover phrase step with the recovery phrase hidden(<a name="1101-BWAL-032" href="#1101-BWAL-032">1101-BWAL-032</a>)
 
 ## Connect all key(s) only
 
 As a wallet user I want to connect my key(s) to a dapp So that I can verify transactions like orders, transfers etc.
 
-- There is a way to approve or deny a connection request (<a name="1101-BWAL-033" href="#1101-BWAL-033">1101-BWAL-033</a>)
-- I can see a visual representation of the dapp requesting access e.g. the favicon (<a name="1101-BWAL-034" href="#1101-BWAL-034">1101-BWAL-034</a>)
-- I can see what approving a connection request enables the site / dapp to do (<a name="1101-BWAL-035" href="#1101-BWAL-035">1101-BWAL-035</a>)
-- I can see the URL of the site / dapp requesting access(<a name="1101-BWAL-036" href="#1101-BWAL-036">1101-BWAL-036</a>)
-- All new connections are for all keys in a wallet and all future keys added to the wallet(<a name="1101-BWAL-037" href="#1101-BWAL-037">1101-BWAL-037</a>)
-- There is a way to understand that i.e. this connection request gives access to ALL my keys now and in the future (<a name="1101-BWAL-038" href="#1101-BWAL-038">1101-BWAL-038</a>)
-- When I go away from the extension and come back to the connected site, the browser extension remembers the connection and does not ask me to reconnect (<a name="1101-BWAL-039" href="#1101-BWAL-039">1101-BWAL-039</a>)
-- There is a visual way to understand that a connection has been successful(<a name="1101-BWAL-040" href="#1101-BWAL-040">1101-BWAL-040</a>)
+- There is a way to approve or deny a connection request (<a name="1101-BWAL-032" href="#1101-BWAL-032">1101-BWAL-032</a>)
+- I can see a visual representation of the dapp requesting access e.g. the favicon (<a name="1101-BWAL-033" href="#1101-BWAL-033">1101-BWAL-033</a>)
+- I can see what approving a connection request enables the site / dapp to do (<a name="1101-BWAL-034" href="#1101-BWAL-034">1101-BWAL-034</a>)
+- I can see the URL of the site / dapp requesting access(<a name="1101-BWAL-035" href="#1101-BWAL-035">1101-BWAL-035</a>)
+- All new connections are for all keys in a wallet and all future keys added to the wallet(<a name="1101-BWAL-036" href="#1101-BWAL-036">1101-BWAL-036</a>)
+- There is a way to understand that i.e. this connection request gives access to ALL my keys now and in the future (<a name="1101-BWAL-037" href="#1101-BWAL-037">1101-BWAL-037</a>)
+- When I go away from the extension and come back to the connected site, the browser extension remembers the connection and does not ask me to reconnect (<a name="1101-BWAL-038" href="#1101-BWAL-038">1101-BWAL-038</a>)
+- There is a visual way to understand that a connection has been successful(<a name="1101-BWAL-039" href="#1101-BWAL-039">1101-BWAL-039</a>)
+- When I try to connect to the wallet I've made during onboarding but have not "completed" onboarding, I cannot see the connection request until I've completed onboarding (it is queued in the background) (<a name="1101-BWAL-040" href="#1101-BWAL-040">1101-BWAL-040</a>)
 
 ## Approve transaction request
 
@@ -106,30 +106,43 @@ As a user I want to recognise transactions that are not orders or withdraw / tra
 - When the dapp requests a transaction type / or includes transaction details that we don't recognise, we don't present the transaction request in the wallet but provide an error to the dapp that feeds back that the transaction can not be processed (<a name="1101-BWAL-050" href="#1101-BWAL-050">1101-BWAL-050</a>)
 - When the user opens the extension (or it has automatically opened) they can immediately see a transaction request (<a name="1101-BWAL-051" href="#1101-BWAL-051">1101-BWAL-051</a>)
 - If the browser extension is closed during a transaction request, the request persists (<a name="1101-BWAL-052" href="#1101-BWAL-052">1101-BWAL-052</a>)
-- For transactions that are not orders or withdraw / transfers, there is a standard template with the minimum information required i.e. (<a name="1101-BWAL-053" href="#1101-BWAL-053">1101-BWAL-053</a>) -- [ ] Transaction title -- [ ] Where it is from e.g. console.vega.xyz with a favicon -- [ ] The key you are using to sign with a visual identifier -- [ ] When it was received -- [ ] Raw JSON details
+- For transactions that are not orders or withdraw / transfers, there is a standard template with the minimum information required i.e. (<a name="1101-BWAL-053" href="#1101-BWAL-053">1101-BWAL-053</a>)  
+  -- [ ] Transaction title  
+  -- [ ] Where it is from e.g. console.vega.xyz with a favicon  
+  -- [ ] The key you are using to sign with a visual identifier  
+  -- [ ] When it was received  
+  -- [ ] Raw JSON details
 - It is visually similar to other transaction types but essentially has less of the human readable detail(s) (design note) (<a name="1101-BWAL-054" href="#1101-BWAL-054">1101-BWAL-054</a>)
 - I can copy the raw json to my clipboard (<a name="1101-BWAL-055" href="#1101-BWAL-055">1101-BWAL-055</a>)
+- When I try to submit a transaction to the wallet I've made during onboarding but have not "completed" onboarding, I cannot see the transaction request until I've completed onboarding (it is queued in the background) (<a name="1101-BWAL-056" href="#1101-BWAL-056">1101-BWAL-056</a>)
 
 ## Log in (next time password expires)
 
 As a wallet user I want a way to enter my password when my login has expired So that I can continue with my task
 
-- When I have quit my browser, and then reopened, I am asked to enter my browser extension password(<a name="1101-BWAL-056" href="#1101-BWAL-056">1101-BWAL-056</a>)
-- I am informed if I enter my password incorrectly (<a name="1101-BWAL-057" href="#1101-BWAL-057">1101-BWAL-057</a>)
+- When I have quit my browser, and then reopened, I am asked to enter my browser extension password(<a name="1101-BWAL-057" href="#1101-BWAL-057">1101-BWAL-057</a>)
+- I am informed if I enter my password incorrectly (<a name="1101-BWAL-058" href="#1101-BWAL-058">1101-BWAL-058</a>)
 
 ## View wallet and key pairs
 
 As a browser wallet user I want to view my vega wallet (and key pair(s)) So that I can see that I've been successful creating the wallet / see my key ID
 
-- I can see a list of the keys in my wallet (<a name="1101-BWAL-058" href="#1101-BWAL-058">1101-BWAL-058</a>)
-- I can copy the public key ID to my clipboard (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
-- I can see information of where to go to deposit and manage my assets (<a name="1101-BWAL-060" href="#1101-BWAL-060">1101-BWAL-060</a>)
-- I can see where I am in the app when viewing my wallet and key pair(s) (<a name="1101-BWAL-061" href="#1101-BWAL-061">1101-BWAL-061</a>)
+- I can see a list of the keys in my wallet (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
+- I can copy the public key ID to my clipboard (<a name="1101-BWAL-060" href="#1101-BWAL-060">1101-BWAL-060</a>)
+- I can see information of where to go to deposit and manage my assets (<a name="1101-BWAL-061" href="#1101-BWAL-061">1101-BWAL-061</a>)
+- I can see where I am in the app when viewing my wallet and key pair(s) (<a name="1101-BWAL-062" href="#1101-BWAL-062">1101-BWAL-062</a>)
 
 ## Wallet version number (Settings)
 
 As a wallet user I want to understand the version # I am using So that I can trouble shoot should there be any issues
 
-- I can see the version # of the browser extension (<a name="1101-BWAL-062" href="#1101-BWAL-062">1101-BWAL-062</a>)
-- I can see the feedback link (<a name="1101-BWAL-063" href="#1101-BWAL-063">1101-BWAL-063</a>)
-- I can see a lock button and when I press it I am logged out and redirected to the login page (<a name="1101-BWAL-064" href="#1101-BWAL-064">1101-BWAL-064</a>)
+- I can see the version # of the browser extension (<a name="1101-BWAL-063" href="#1101-BWAL-063">1101-BWAL-063</a>)
+- I can see the feedback link (<a name="1101-BWAL-064" href="#1101-BWAL-064">1101-BWAL-064</a>)
+- I can see a lock button and when I press it I am logged out and redirected to the login page (<a name="1101-BWAL-065" href="#1101-BWAL-065">1101-BWAL-065</a>)
+
+## Coming back to the app after onboarding
+
+As a user I want to see my wallet / keys immediately when I open my extension (and not onboarding again) So that I don't need to repeat onboarding unnecessarily and continue my task easily...
+
+- There is a way to determine if user has onboarded (<a name="1101-BWAL-066" href="#1101-BWAL-066">1101-BWAL-066</a>)
+- I want to see the previous page I was on or my wallet page by default (<a name="1101-BWAL-067" href="#1101-BWAL-067">1101-BWAL-067</a>)
