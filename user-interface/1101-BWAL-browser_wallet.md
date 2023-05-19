@@ -139,3 +139,10 @@ As a wallet user I want to understand the version # I am using So that I can tro
 - I can see the version # of the browser extension (<a name="1101-BWAL-063" href="#1101-BWAL-063">1101-BWAL-063</a>)
 - I can see the feedback link (<a name="1101-BWAL-064" href="#1101-BWAL-064">1101-BWAL-064</a>)
 - I can see a lock button and when I press it I am logged out and redirected to the login page (<a name="1101-BWAL-065" href="#1101-BWAL-065">1101-BWAL-065</a>)
+
+## Coming back to the app after onboarding
+
+As a user I want to see my wallet / keys immediately when I open my extension (and not onboarding again) So that I don't need to repeat onboarding unnecessarily and continue my task easily...
+
+- There is a way to determine if user has onboarded (<a name="1101-BWAL-066" href="#1101-BWAL-066">1101-BWAL-066</a>)
+- I want to see the previous page I was on or my wallet page by default (<a name="1101-BWAL-067" href="#1101-BWAL-067">1101-BWAL-067</a>)
