@@ -237,7 +237,7 @@ Note that each market can have exactly one market as a _successor_ market.
 
 - if there already is a market (possibly pending, i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)), naming a parent market, then a subsequent proposal referencing that market is rejected.
 - if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the successor of the named parent; the other proposal is cancelled with reason "parent market no longer available".
-- if there is a successor market naming a parent market that terminates and settles or is cancelled by governance before the parent market (for whatever reason) then the parent market successor field is set to empty and a different successor can be proposed by a future market proposal.
+- if there is a successor market naming a parent market and the parent terminates and settles or is cancelled by governance before the parent market (for whatever reason) then the parent market can again act as successor to  a differnt market proposed by a future market proposal.
 
 All _new market proposals_ initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
