@@ -90,7 +90,7 @@ sd := 0
 st := 0
 for i := 0; i < len(data_points) - 1; i++ {
     t := data_points[i+1].t-data_points[i].t
-    d := data_points[i].x - data_points[i].y
+    d := data_points[i].x - data_points[i].y     // recall that x stands for mark price and y for the external price source input
     sd += d * t
     st += t
 }
