@@ -42,7 +42,7 @@ This data, including any structs should be decoded using the ABI into a JSON-lik
 Note: as with any data source containing JSON formatted (or other arbitrary structured) data, the data required by the consumer of the data source may be a fields or sub-objects (including nested fields and objects).
 The data sourcing framework therefore requires functionality to apply a query/selector extract the relevant subset of the observed data and pass it to the next consumer.
 This would be expected to use `JSONPath`/`JSONPointer` or similar, and be applicable to any arbitrary JSON.
-Regardless, the specification of this functionality is out of scope for this document and the approach must be standardised across the data sourcing framework (for example, specifyng the target of filters must use the same format as selecting data to pass on).
+Regardless, the specification of this functionality is out of scope for this document and the approach must be standardised across the data sourcing framework (for example, specifying the target of filters must use the same format as selecting data to pass on).
 
 
 ### Ethereum chain data enrichment
