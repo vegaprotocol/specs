@@ -519,13 +519,13 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - Transfers cannot occur for settled markets and a transaction result event will show the transfer failing with an appropriate message
 - Transfers cannot occur for pending markets unless they become active on or before the enactment time of the transfer
 
-#####Transferred Amount
+##### Transferred Amount
 
 - If the type of transfer is “All or nothing” then the minimum of either fraction_of_balance * source_balance and the transfer amount is transfers between accounts.  The transfer is recorded in Vega ledger movements even if  the amount is derived as zero.
 - If the type of transfer is “Best effort” then the transfer amount is derived from the minimum of proposal.fraction_of_balance * source.balance, proposal.amount, NETWORK_MAX_AMOUNT, NETWORK_MAX_FRACTION * source.balance. The transfer is recorded in Vega ledger movements even if  the amount is derived as zero
 
 
-#####Transfer Fees
+##### Transfer Fees
 
 - No fees are incurred by the transfer and therefore the the number of tokens deducted from the source account should always equal the tokens added to the destination account
 
@@ -540,6 +540,6 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - At the point of events occur, the transfer proposal is not stored in the binary
 
 
-#####Recurring Governance transfers
+##### Recurring Governance transfers
 
 - Out of scope
