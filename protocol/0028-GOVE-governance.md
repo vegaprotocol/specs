@@ -470,3 +470,76 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 - Approved governance proposals sharing the same enactment time should be enacted in the order the proposals were created. (<a name="0028-GOVE-067" href="#0028-GOVE-067">0028-GOVE-067</a>)
 - Approved governance proposals sharing the same enactment time and changing the same parameter should all be applied, the oldest proposal will be applied first and the newest will be applied last, overwriting the changes made by the older proposals. (<a name="0028-GOVE-068" href="#0028-GOVE-068">0028-GOVE-068</a>)
+
+#### Governance Transfer proposals
+
+
+
+##### Proposer Requirements
+
+- The transfer proposer must have at a staking balance which matches or exceeds minProposerBalance network parameter for this proposal type
+
+
+##### APIs
+
+- Governance transfer proposal and all associated data are returned via the governance APIs
+
+##### Transfer proposal submission validation
+
+- Proposals are either permitted or rejected according to the following source/destination combinations. 
+
+
+
+
+- Transfer amount and fraction of balance are mutually exclusive and will cause the proposal to reject
+- Invalid source and destination account types will cause the proposal to reject
+- Source Type can be any of the predefined types in the above table
+- Source can be left blank for a transfer type of Network Treasury
+- Source can be left blank for a transfer type of Network Insurance Pool
+- For transfer source types of Market Insurance the source must be a valid market ID  else is rejected
+- Type value can only hold “all or nothing" or "best effort”
+- Transfer amounts will be accepted and processed in asset precision
+- Asset specified must be a valid asset address else proposal is rejected
+- Fraction of balance must be submitted as a positive (else will cause the proposal to reject) and will be processed as a fraction of the source accounts balance
+- Destination Type can be any of the predefined types in the above table
+- Source and destination type cannot be the same value else the proposal will be rejected
+- Destination must be a valid Reward Scheme ID for a transfer type of Reward Pool else is rejected
+- Destination must be a valid Vega public key for a transfer type of Party else is rejected
+- Destination can be left blank for a transfer type of Network Insurance Pool
+- For transfer source types of Market Insurance the destination must be a valid market ID  else is rejected
+- The proposal will allow standard proposal fields to control timings on closing the voting period and enactment time, these will be validated in the same way as other proposals.
+- For successor markets we allow transfer between Market insurance pool account of parent market to Market insurance pool account of child market 
+
+
+##### Governance transfer enactment
+
+- For enacted proposals a token transfer will occur at the time of enactment between the source and destination account if sufficient tokens are held in the source account. A transaction result event will show the successful transfer between two accounts.
+- When insufficient tokens are found in the source account at time of transfer (enactment) a transaction result event will show the transfer failing with an appropriate message
+- Transfers can occur for terminated markets
+- Transfers cannot occur for settled markets and a transaction result event will show the transfer failing with an appropriate message
+- Transfers cannot occur for pending markets unless they become active on or before the enactment time of the transfer
+
+#####Transferred Amount
+
+- If the type of transfer is “All or nothing” then the minimum of either fraction_of_balance * source_balance and the transfer amount is transfers between accounts.  The transfer is recorded in Vega ledger movements even if  the amount is derived as zero.
+- If the type of transfer is “Best effort” then the transfer amount is derived from the minimum of proposal.fraction_of_balance * source.balance, proposal.amount, NETWORK_MAX_AMOUNT, NETWORK_MAX_FRACTION * source.balance. The transfer is recorded in Vega ledger movements even if  the amount is derived as zero
+
+
+#####Transfer Fees
+
+- No fees are incurred by the transfer and therefore the the number of tokens deducted from the source account should always equal the tokens added to the destination account
+
+
+
+##### Protocol Upgrade
+
+- Transfer proposals in either a pre or post enactment state are not restored after a protocol upgrade
+
+##### Checkpoints and Snapshots
+
+- At the point of events occur, the transfer proposal is not stored in the binary
+
+
+#####Recurring Governance transfers
+
+- Out of scope
