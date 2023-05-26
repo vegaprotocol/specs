@@ -323,7 +323,7 @@ The proposal specifies:
   - market insurance pool: market ID
 - A proposal can be for a one off transfer or recurring.
 - If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately.
-- If the proposal is recurring it has to define a start epoch and an optional end epoch. In such cast the transfer will be executed every epoch while still active.
+- If the proposal is recurring it has to define a start epoch and an optional end epoch. In such case the transfer will be executed every epoch while still active.
 
 - Plus the standard proposal fields (i.e. voting and enactment dates, etc.)
 
