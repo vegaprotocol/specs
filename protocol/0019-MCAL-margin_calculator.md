@@ -27,11 +27,11 @@
 - If a party is short `1` unit and the mark price is `15 900` and `market.maxSlippageFraction[1] = 0.25`, `market.maxSlippageFraction[2] = 0.25` and `RF short = 0.1` and order book is
 
     ```book
-    buy 1 @ 15 000 
-    buy 10 @ 14 900 
+    buy 1 @ 15 000
+    buy 10 @ 14 900
     and
     sell 1 @ 100 000
-    sell 10 @ 100 100 
+    sell 10 @ 100 100
     ```
 
     then the maintenance margin for the party is `15 900 x (0.25 x 1 + 0.25 x 1 x 1) + 0.1 x 1 x 15 900 = 9 540`. (<a name="0019-MCAL-011" href="#0019-MCAL-011">0019-MCAL-011</a>)
@@ -106,8 +106,8 @@ In this simple methodology, a linearised margin formula is used to return the ma
 with
 
 ```formula
-maintenance_margin_long 
-    = max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0) 
+maintenance_margin_long
+    = max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0)
     +  max(open_volume, 0) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
 ```
 
@@ -135,7 +135,7 @@ where
 
 - **Short positions** are exited by the system considering what the volume weighted price of **buying** the size of the open short position (not riskiest short position) on the order book (i.e. by buying from the offers (asks) on the order book). If there is no open short position, the slippage per unit is zero.
 
-If there is zero or insufficient order book volume on the relevant side of the order book to calculate the `exit_price`, then take `slippage_per_unit = +Infinity` which means that `min(slippage_volume * slippage_per_unit, mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])) = mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])` above.  
+If there is zero or insufficient order book volume on the relevant side of the order book to calculate the `exit_price`, then take `slippage_per_unit = +Infinity` which means that `min(slippage_volume * slippage_per_unit, mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])) = mark_price * (slippage_volume * market.maxSlippageFraction[1] + slippage_volume^2 * market.maxSlippageFraction[2])` above.
 
 ### **Step 2**
 
@@ -144,14 +144,16 @@ If `riskiest short == 0` then `maintenance_margin_short = 0`.
 Else
 
 ```formula
-maintenance_margin_short 
-    = max(min(abs(riskiest short) * slippage_per_unit, mark_price * (abs(riskiest short) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0) 
+maintenance_margin_short
+    = max(min(abs(riskiest short) * slippage_per_unit, mark_price * (abs(riskiest short) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0)
     + abs(min( open_volume, 0 )) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ] + abs(sell_orders) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
 ```
 
 where meanings of terms in Step 1 apply except for:
 
-`slippage_per_unit = -1 * (Product.value(market_observable) - Product.value(exit_price) )`
+
+`slippage_per_unit = -1 * (Product.value(market_observable) - Product.value(exit_price))`
+
 
 ### **Step 3**
 
@@ -233,7 +235,7 @@ riskiest_short = min( open_volume + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
 slippage_per_unit =  Product.value(market_observable) - Product.value(exit_price) = Product.value($144) - Product.value((1*120 + 4*110 + 5*108)/10) = 144 - 110  = 34
 
-maintenance_margin_long =max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0) 
+maintenance_margin_long =max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0)
  + max(open_volume, 0 ) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
  =  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 677.6
 
@@ -250,6 +252,7 @@ maintenance_margin = max ( 677.6, 0) = 677.6
 collateral_release_level = 677.6 * collateral_release_scaling_factor = 677.6 * 1.1
 initial_margin = 677.6 * initial_margin_scaling_factor = 677.6 * 1.2
 search_level = 677.6 * search_level_scaling_factor = 677.6 * 1.3
+
 ```
 
 ### EXAMPLE 2 - calculating correct slippage volume

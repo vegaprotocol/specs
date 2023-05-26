@@ -1,7 +1,7 @@
 # Wallet
-A Vega wallet is required to prepare and submit transaction on Vega  (place, cancel, orders etc). See the [wallet docs](https://docs.vega.xyz/docs/mainnet/concepts/vega-wallet) for more on how "crypto" wallets work. 
+A Vega wallet is required to prepare and submit transaction on Vega  (place, cancel, orders etc). See the [wallet docs](https://docs.vega.xyz/docs/mainnet/concepts/vega-wallet) for more on how "crypto" wallets work.
 
-A wallet can contain many public/private key pairs. The public part of each key pair is known the [Party](../protocol/0017-PART-party.md) sometimes just referred to as a key or public key. 
+A wallet can contain many public/private key pairs. The public part of each key pair is known the [Party](../protocol/0017-PART-party.md) sometimes just referred to as a key or public key.
 
 The primary job(s) of a wallet is to [sign/encrypt transaction](../protocol/0022-AUTH-auth.md) (so the network can be sure they were sent by a given party) and to broadcast these transactions to a node on the network.
 
@@ -48,7 +48,7 @@ When a dapp requests use of a wallet, I...
 - I can enter wallet passphrase before wallet details are shared (assuming a password has not recently been entered)(<a name="0001-WALL-022" href="#0001-WALL-022">0001-WALL-022</a>)
 - I can retrospectively revoke Dapp's access to a Wallet (<a name="0001-WALL-023" href="#0001-WALL-023">0001-WALL-023</a>)
 
-... so that I can control what public keys are shared with a dapp and what dapps can prompt me to sign transactions 
+... so that I can control what public keys are shared with a dapp and what dapps can prompt me to sign transactions
 
 ## Approving transactions
 When a dapp sends a transaction to the wallet for signing and broadcast, I...
@@ -58,17 +58,24 @@ When a dapp sends a transaction to the wallet for signing and broadcast, I...
 
 ... so I can verify that the transaction being sent is the one I want
 
-## Transactions
+## Transaction log
 When thinking about a recent or specific transaction, I ...
 
-- I can see a history of transactions the wallet has signed. As read from the local app (Current "session" only, as persistent data storage has other requirements (see commented out ACs)) (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
-- I can see pending transactions (Transactions I have not yet confirmed/rejected) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
-- I can see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
+- I can find a single list of all transactions, completed and ongoing, from all keys and wallets, from my current desktop session and network (<a name="0001-WALL-034" href="#0001-WALL-034">0001-WALL-034</a>)
+- I can see transactions that were confirmed by the wallet user (me) (<a name="0001-WALL-035" href="#0001-WALL-035">0001-WALL-035</a>)
+- I can see transactions that were rejected by the wallet user (me) (<a name="0001-WALL-036" href="#0001-WALL-036">0001-WALL-036</a>)
+- If I switch network, transactions list changes to show the transactions for that network (<a name="0001-WALL-037" href="#0001-WALL-037">0001-WALL-037</a>)
+- I can click a transaction in the list to see the transaction details (<a name="0001-WALL-038" href="#0001-WALL-038">0001-WALL-038</a>)
+- I can see empty state when there are no transactions for this session (<a name="0001-WALL-039" href="#0001-WALL-039">0001-WALL-039</a>)
 
-... so that I can ensure my wallet is being used appropriately and find transaction I might have missed
+... so that I can ensure my wallet is being used appropriately and find transaction I made
 
-## Transaction detail
+## Transaction details
 when looking at a specific transaction...
+
+- I can see details of specific transactions I opened (<a name="0001-WALL-041" href="#0001-WALL-041">0001-WALL-041</a>)
+- I can find my way to the transaction on block explorer (<a name="0001-WALL-042" href="#0001-WALL-042">0001-WALL-042</a>)
+- I can find my way to the complete transaction history for that key on block explorer (<a name="0001-WALL-043" href="#0001-WALL-043">0001-WALL-043</a>)
 
 - I can see [status of broadcasted transactions](0003-WTXN-submit_vega_transaction.md#track-transaction-on-network)
 
@@ -81,7 +88,7 @@ When using a Vega wallet, I...
 - I can see full public key or be able to copy it to clipboard (<a name="0001-WALL-054" href="#0001-WALL-054">0001-WALL-054</a>)
 - I can change key name/alias (<a name="0001-WALL-055" href="#0001-WALL-055">0001-WALL-055</a>)
 
-... so I can manage risk (e.g. isolate margin), mitigate the damage of a key being compromised, or use multiple trading strategies 
+... so I can manage risk (e.g. isolate margin), mitigate the damage of a key being compromised, or use multiple trading strategies
 
 ## Taint keys
 When protecting myself from use of keys that may be compromised, I..
