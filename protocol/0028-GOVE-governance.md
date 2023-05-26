@@ -360,7 +360,7 @@ This is done as a governance proposal. Takes a transfer ID (which is the proposa
 
 ### Checkpoint/snapshot
 
-Enacted and active transfers (i.e. scheduled one off governance transfers, or recurring governance transfers) must be included in banking checkpoint and resume after the checkpoint restore.
+Enacted and active transfers (i.e. scheduled one off governance transfers, or recurring governance transfers) must be included in LNL banking checkpoint and resume after the checkpoint restore.
 
 All in memory active governance transfers must be included in the snapshot of the banking engine.
 
