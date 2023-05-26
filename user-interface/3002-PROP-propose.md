@@ -25,6 +25,7 @@ When making a proposal, I...
 
 When making a proposal, I...
 
+- **must** be able to see what they are to be used for on this site i.e. "Create proposal and download JSON to share" (<a name="3002-PROP-023" href="#3002-PROP-023">3002-PROP-023</a>)
 - **must** input a rationale title and description (<a name="3002-PROP-006" href="#3002-PROP-006">3002-PROP-006</a>)
 - **must** see the rules (min vote duration and enactment delay) for this proposal type (<a name="3002-PROP-008" href="#3002-PROP-008">3002-PROP-008</a>)
 - **should** see the minimum required tokens or LP vote required to make a proposal Spam protection and network parameters
@@ -59,4 +60,3 @@ Go to the following for detail on each proposal type:
   - **must** see a link to the proposal detail page (<a name="3002-PROP-019" href="#3002-PROP-019">3002-PROP-019</a>)
 
 ...so that the proposal is listed on the chain and I and others can vote for or against it.
- 
