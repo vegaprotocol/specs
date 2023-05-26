@@ -98,16 +98,15 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 2. An iceberg order with either an ordinary or pegged limit price can be submitted.
 3. An iceberg post only order can be submitted.
 4. An iceberg reduce only order is rejected.
-5. Margin requirement for iceberg order - is it based on initial peak size i.e. displayed quantity OR actual quantity ? Assume its displayed quantity - needs confirmation.
-6. For a persistent (GTC, GTT, GFA, GFN) iceberg order that's submitted margin is calculated and deducted correctly both during submission as well as during subsequent refreshes.
-7. For an iceberg order, the orders are refreshed immediately after producing a trade. Every time volume is taken from the displayed quantity , ensure the order is refreshed if if display quantity < minimum peak size.
+5. For an iceberg order that is submitted with total size x and display size y the margin taken should be identical to a regular order of size x rather than one of size y.
+6. For an iceberg order, the orders are refreshed immediately after producing a trade. Every time volume is taken from the displayed quantity , the order is refreshed if display quantity < minimum peak size.
    If the order is successfully refreshed , then the order loses its time priority and is pushed to the back of the queue.
-8. For an iceberg order that's submitted when the market is in auction, only the displayed quantity is filled when coming out of auction. What other attributes need to be checked here ?
+7. For an iceberg order that's submitted when the market is in auction, only the displayed quantity is filled when coming out of auction.
 
 ### Iceberg Order Batch Submission
 
-1. For multiple iceberg orders submitted as a batch of orders with a mix of ordinary limit orders and market orders, the iceberg orders are processed atomically and the order book volume and price, margin calculations , order status are all correct - What else needs checking ?
-2. What other scenarios need testing ?
+1. For multiple iceberg orders submitted as a batch of orders with a mix of ordinary limit orders and market orders, the iceberg orders are processed atomically and the order book volume and price, margin calculations , order status are all correct.
+2. For an iceberg order submitted in a batch that trades against multiple other orders sitting on the book , the iceberg order does not refresh until the end of the batch after it is depleted.
 
 ### Iceberg Order Submission - Negative tests
 
@@ -123,8 +122,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 1. Amending an iceberg order to increase size will increase the total and remaining quantities of the order and time priority of the order is not lost.
 2. Amending an iceberg order to decrease size will decrease the total and remaining quantities and time priority of the order is not lost.
-3. Amend an iceberg order to decrease size so that the displayed quantity is decreased. Total and remaining quantity is decreased, margin is recalculated and released and time priority is not lost.
-4. What other scenarios do we need to consider here ?
+3. Amend an iceberg order to decrease size so that the displayed quantity is decreased. Total, displayed and remaining quantity is decreased, margin is recalculated and released and time priority is not lost.
 
 ### Iceberg Order Cancellation
 
@@ -132,15 +130,14 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 ### Iceberg Order Execution
 
-1. An aggressive iceberg order that crosses with an order where volume > iceberg volume, the iceberg order gets fully filled on entry, the iceberg order status is filled, the remaining quantity = 0. Are atomic trades generated OR one single trade for each display quantity volume ???
+1. An aggressive iceberg order that crosses with an order where volume > iceberg volume, the iceberg order gets fully filled on entry, the iceberg order status is filled, the remaining quantity = 0. Atomic trades are generated if matched against multiple orders.
 2. An aggressive iceberg order that crosses with an order where volume < iceberg volume. The initial display quantity is filled and the remaining volume is unfilled. Status of iceberg order is partially filled , the volume remaining = (quantity - initial volume) and the remaining volume sits on the book. When additional orders thar are submitted which consume the remaining volume on the iceberg order , the volume of the iceberg order is refreshed as and when the volume dips below the minimum peak size.
 3. A passive iceberg order (the only order at a particular price level) when crossed with another order that comes in which consumes the full volume of the iceberg order is fully filled. Status of iceberg order is filled and the remaining = 0. Atomic trades are produced.
 4. A passive iceberg order with a couple of order that sit behind the iceberg order at the same price that crosses with an order where volume > display quantity of iceberg order. After the first trade is produced , the iceberg order is pushed to the back of the queue and gets filled only when the other orders in front get fully filled.
-5. Submit an aggressive iceberg order for say size 100. There are multiple matching orders of size 30,40,50. Ensure the orders are matched and filled in time priority of the orders and any remaining volume on the orders is correctly left behind.
-6. Submit an aggressive iceberg order for say size 100. There are multiple matching orders of size 20,30. Ensure the orders are matched and filled in time priority of the orders. Ensure remaining volume on the iceberg order is (100 - (20+30))
+5. Submit an aggressive iceberg order for say size 100. There are multiple matching orders of size 30,40,50. Ensure the orders are matched and filled in time priority of the orders and any remaining volume on the orders is correctly left behind. (Low Priority AC)
+6. Submit an aggressive iceberg order for say size 100. There are multiple matching orders of size 20,30. Ensure the orders are matched and filled in time priority of the orders. Ensure remaining volume on the iceberg order is (100 - (20+30)) (Low Priority AC)
 7. When a non iceberg order sitting on the book is amended such that it trades with with an iceberg order, then the iceberg order is refreshed.
-8. Try for scenarios for wash trading of iceberg orders - is that even possible ? Or some complex scenarios - same party , one iceberg order that sits at the back of the queue , another normal order in opposite direction , the iceberg at the back slowly comes in front and matches either fully OR partially - is this possible ?
-9. What other cases need adding ?
+8. Wash trading is not permitted for iceberg orders. The same party has one iceberg order that sits at the back of the queue , another normal order in opposite direction , the iceberg at the back comes in front and matches either fully OR partially and gets rejected.
 
 ### Snapshots
 
@@ -153,12 +150,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 ### Protocol Upgrade
 
-1. ???
-
-### Regression
-
-1. All other order types should behave as they were
-
+1. No impact.
 
 ### See also
 
