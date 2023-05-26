@@ -370,6 +370,7 @@ All in memory active governance transfers must be included in the snapshot of th
 2. When a transfer is _made_ an event is emitted with the actual amount being transfers. The status of the transfer will depend on the type of the transfer.
 3. When the transfer reaches a terminal state, being stopped, rejected, done, cancelled an event is emitted indicating the status.
 4. Enacted governance transfers are therefore available to be queried via the regular transfer API in data node.
+5. Governance initiated transfers are subject to neither minimum transfer amounts nor to fees. 
 
 ## 6. Freeform governance proposal
 
