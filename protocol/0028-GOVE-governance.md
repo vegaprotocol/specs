@@ -289,18 +289,14 @@ The below table shows the allowable combinations of source and destination accou
 | Source type | Destination type | Governance transfer permitted |
 | --- | --- | --- |
 | Party account (any type) | Any | No |
-| Network treasury | Reward pool account | Yes  |
+| Network treasury | Network treasury | Yes  |
 | Network treasury | Party general account(s) | Yes |
 | Network treasury | Party other account types | No |
-| Network treasury | Network insurance pool account | Yes |
 | Network treasury | Market insurance pool account | Yes |
 | Network treasury | Any other account | No |
-| Network insurance pool account | Network treasury | Yes |
-| Network insurance pool account | Market insurance pool account | Yes |
-| Network insurance pool account | Any other account | No |
 | Market insurance pool account | Party account(s) | Yes  |
 | Market insurance pool account | Network treasury | Yes  |
-| Market insurance pool account | Network insurance pool account | Yes |
+| Market insurance pool account | Market insurance pool account | Yes |
 | Market insurance pool account | Any other account | No |
 | Any other account | Any | No |
 
@@ -308,7 +304,7 @@ The below table shows the allowable combinations of source and destination accou
 
 The proposal specifies:
 
-- `source_type`: the source account type (i.e. network treasury, network insurance pool, market insurance pool)
+- `source_type`: the source account type (i.e. network treasury, market insurance pool)
 - `source` specifies the account to transfer from, depending on the account type:
   - network treasury: leave blank (only one per asset)
   - network insurance pool: leave blank (only one per asset)
@@ -325,6 +321,10 @@ The proposal specifies:
   - party: the party's public key
   - network insurance pool: leave blank (there's only one per asset)
   - market insurance pool: market ID
+- A proposal can be for a one off transfer or recurring.
+- If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately.
+- If the proposal is recurring it has to define a start epoch and an optional end epoch. In such case the transfer will be executed every epoch while still active.
+
 - Plus the standard proposal fields (i.e. voting and enactment dates, etc.)
 
 ### Transfer proposal enactment
@@ -353,6 +353,24 @@ transfer_amount == min(
     proposal.fraction_of_balance * source.balance,
     proposal.amount )
 ```
+
+### Transfer cancellation
+
+This is done as a governance proposal. Takes a transfer ID (which is the proposal ID of the original transfer) and would cancel a recurring governance transfer. Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.
+
+### Checkpoint/snapshot
+
+Enacted and active transfers (i.e. scheduled one off governance transfers, or recurring governance transfers) must be included in LNL banking checkpoint and resume after the checkpoint restore.
+
+All in memory active governance transfers must be included in the snapshot of the banking engine.
+
+### Additional information
+
+1. When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with different type (i.e. similar to one-off, and recurring of regular transfers, there are governance-one-off and governance-recurring types). At the time of enactment no amount is attached to the transfer and it will show 0.
+2. When a transfer is _made_ an event is emitted with the actual amount being transfers. The status of the transfer will depend on the type of the transfer.
+3. When the transfer reaches a terminal state, being stopped, rejected, done, cancelled an event is emitted indicating the status.
+4. Enacted governance transfers are therefore available to be queried via the regular transfer API in data node.
+5. Governance initiated transfers are subject to neither minimum transfer amounts nor to fees.
 
 ## 6. Freeform governance proposal
 
