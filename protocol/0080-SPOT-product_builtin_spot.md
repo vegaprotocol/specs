@@ -45,20 +45,6 @@ submission = {
         marketId: "abcdefghiklkmnopqrstuvwxyz",
         fee: "0.01",
         commitmentAmount: 15000 (DAI)
-        buys: [
-            {
-                offset: "1"
-                proportion: "1"
-                reference: "PEGGED_REFERENCE_BEST_BID"
-            }
-        ]
-        sells: [
-            {
-                offset: "1"
-                proportion: "1"
-                reference: "PEGGED_REFERENCE_BEST_ASK"
-            }
-        ]
         reference: "example_liquidity_provision_submission"
     }
 }
