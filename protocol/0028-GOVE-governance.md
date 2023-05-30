@@ -581,7 +581,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 
 ##### Recurring Governance transfers
- 
+
 - For a recurring proposal, the proposal is only active from defined start epoch and optional end epoch, the transfer will be executed every epoch while the proposal is active. (<a name="0028-GOVE-104" href="#0028-GOVE-104">0028-GOVE-104</a>)
 
 - Enacted and active recurring governance transfers must be included in LNL banking checkpoint and resume after the checkpoint restore.(<a name="0028-GOVE-105" href="#0028-GOVE-105">0028-GOVE-105</a>)
@@ -592,4 +592,3 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Cancelling governance transfers
 
 - Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
-
