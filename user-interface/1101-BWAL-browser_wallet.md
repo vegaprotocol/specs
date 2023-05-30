@@ -78,7 +78,9 @@ As a wallet user I want to connect my key(s) to a dapp So that I can verify tran
 - All new connections are for all keys in a wallet and all future keys added to the wallet(<a name="1101-BWAL-037" href="#1101-BWAL-037">1101-BWAL-037</a>)
 - There is a way to understand that i.e. this connection request gives access to ALL my keys now and in the future (<a name="1101-BWAL-038" href="#1101-BWAL-038">1101-BWAL-038</a>)
 - When I go away from the extension and come back to the connected site, the browser extension remembers the connection and does not ask me to reconnect (<a name="1101-BWAL-039" href="#1101-BWAL-039">1101-BWAL-039</a>)
-- There is a visual way to understand that a connection has been successful(<a name="1101-BWAL-040" href="#1101-BWAL-040">1101-BWAL-040</a>) If I did not have the browser wallet open when I instigated the connection request, the browser wallet "closes" after approving (connect) or rejecting (deny) the connection request (<a name="1101-BWAL-041" href="#1101-BWAL-041">1101-BWAL-041</a>) If the had the browser wallet open when I instigated the connection request, the browser wallet returns your view to where you were before the request came in (<a name="1101-BWAL-042" href="#1101-BWAL-042">1101-BWAL-042</a>)
+- There is a visual way to understand that a connection has been successful(<a name="1101-BWAL-040" href="#1101-BWAL-040">1101-BWAL-040</a>)
+- If I did not have the browser wallet open when I instigated the connection request, the browser wallet "closes" after approving (connect) or rejecting (deny) the connection request (<a name="1101-BWAL-041" href="#1101-BWAL-041">1101-BWAL-041</a>)
+- If the had the browser wallet open when I instigated the connection request, the browser wallet returns your view to where you were before the request came in (<a name="1101-BWAL-042" href="#1101-BWAL-042">1101-BWAL-042</a>)
 - When I try to connect to the wallet I've made during onboarding but have not "completed" onboarding, I cannot see the connection request until I've completed onboarding (it is queued in the background) (<a name="1101-BWAL-043" href="#1101-BWAL-043">1101-BWAL-043</a>)
 
 ## Approve transaction request
