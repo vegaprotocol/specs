@@ -574,6 +574,9 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 - Transfer proposals in either a pre or post enactment state are not restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)
 
+#### Checkpoints and Snapshots
+
+- Active governance transfer (one-off or recurring) must be included in checkpoint and snapshot (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
 
 ##### Recurring Governance transfers
 
