@@ -575,11 +575,6 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - Transfer proposals in either a pre or post enactment state are not restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)
 
 
-##### Checkpoints and Snapshots
-
-- At the point of events occur, the transfer proposal is not stored in the binary (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
-
-
 ##### Recurring Governance transfers
 
 - For a recurring proposal, the proposal is only active from defined start epoch and optional end epoch, the transfer will be executed every epoch while the proposal is active. (<a name="0028-GOVE-104" href="#0028-GOVE-104">0028-GOVE-104</a>)
