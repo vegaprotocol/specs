@@ -11,7 +11,7 @@ Indeed
 
 `lp_liquidity_obligation_in_ccy_volume = market.liquidity.stakeToCcyVolume ⨉ stake`.
 
-Thus it is sufficient to compare `target_stake` with `total_stake`. 
+Thus it is sufficient to compare `target_stake` with `total_stake`.
 Note that [target stake](./0041-TSTK-target_stake.md) is defined in a separate spec.
 
 
@@ -39,7 +39,7 @@ If an incoming order would match orders on the book resulting in trades increasi
 
 ### Decreasing supplied stake
 
-If the [liquidity provision transaction would decrease](./0044-LIME-lp_mechanics.md#liquidity-provider-proposes-to-amend-commitment-amount) `supplied_stake` so that liquidity auction gets triggered then a liquidity auction is triggered the next time the next time conditions for liquidity auctions are evaluated. 
+If the [liquidity provision transaction would decrease](./0044-LIME-lp_mechanics.md#liquidity-provider-proposes-to-amend-commitment-amount) `supplied_stake` so that liquidity auction gets triggered then a liquidity auction is triggered the next time the next time conditions for liquidity auctions are evaluated.
 
 If the `supplied_stake` decreases as a result of a closeout of an insolvent liquidity provider, then closeout should proceed and market should go into liquidity auction the next time the next time conditions for liquidity auctions are evaluated.
 

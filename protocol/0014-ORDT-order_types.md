@@ -6,8 +6,8 @@ A market using a limit order book will permit orders of various types to be subm
 
 Notes on scope of current version of this spec:
 
-- Includes only detailed specification for orders valid for *continuous trading*, does not specify behaviour of these order types in an auction.
-- Does not include detailed specification for **stop** orders. Inclusion of stops in guide level explanation is a placeholder/indicator of future requirements.
+* Includes only detailed specification for orders valid for *continuous trading*, does not specify behaviour of these order types in an auction.
+* Does not include detailed specification for **stop** orders. Inclusion of stops in guide level explanation is a placeholder/indicator of future requirements.
 
 ## Guide-level explanation
 
@@ -95,7 +95,7 @@ The iceberg is refreshed any time the order's displayed quantity is less than th
 
 * Any persistent TIF (GTC, GTT, GFA, GFN) can be an iceberg order.
 
-* An iceberg order may have either an ordinary or pegged limit price. 
+* An iceberg order may have either an ordinary or pegged limit price.
 Market iceberg orders are not supported, even if with a persistent TIF.
 
 * Icebergs may be post only.
@@ -113,9 +113,9 @@ This is to prevent an iceberg order ever being crossed after refreshing.
 * Once they enter the book passively, iceberg orders trade just like non-iceberg persistent order, as if the order entered the book with `quantity = initial peak size` on submission, and again each time they are refreshed until `remaining == 0` (or they are cancelled or expired, etc.).
 That is:
 
-    * On entry, unlike normal orders, `displayed quantity` is set to `initial peak size` not `quantity`.
-    
-    * As for any other order, `remaining == quantity` on entry.
+  * On entry, unlike normal orders, `displayed quantity` is set to `initial peak size` not `quantity`.
+
+  * As for any other order, `remaining == quantity` on entry.
 
 * The maximum total size for all trades involving an iceberg order in any given transaction (including a batch) is the `displayed quantity` immediately prior to the trade.
 (This is technically also true for a normal order, given that for non-iceberg orders `displayed quantity == remaining`.)
@@ -129,13 +129,13 @@ The order will not be refreshed after each trade while `displayed quantity ≥ m
 
 * When `displayed quantity < minimum peak size` and `remaining > displayed quantity` the order will be refreshed:
 
-    * The refresh happens at the end of the transaction when the order becomes eligible for refresh.
-    
-    * On refresh `display quantity` is set to `min(remaining, initial peak size)`.
+  * The refresh happens at the end of the transaction when the order becomes eligible for refresh.
 
-    * A refresh simulates a cancel/replace, which means that on refresh an iceberg order will always lose time priority relative to other orders at the same price.
+  * On refresh `display quantity` is set to `min(remaining, initial peak size)`.
 
-    * If multiple iceberg orders need to be refreshed at the same time, they are refreshed in the order that their eligibility for refresh was triggered, so the iceberg that dropped below its `minimum peak size` first is refreshed first (even during the same transaction the sequence of execution must be respected).
+  * A refresh simulates a cancel/replace, which means that on refresh an iceberg order will always lose time priority relative to other orders at the same price.
+
+  * If multiple iceberg orders need to be refreshed at the same time, they are refreshed in the order that their eligibility for refresh was triggered, so the iceberg that dropped below its `minimum peak size` first is refreshed first (even during the same transaction the sequence of execution must be respected).
 
 * Once the remaining quantity is equal to the displayed quantity, no further refresh is possible.
 The order now behaves like a normal limit order and will leave the book if it trades away completely.
@@ -143,16 +143,16 @@ The order now behaves like a normal limit order and will leave the book if it tr
 
 #### Amendment
 
-* Amending the size of an iceberg order amends the total `remaining` quantity and leaves the `displayed quantity` unaffected unless the new remaining quanity is smaller than the current displayed quantity, in which case the displayed quantity is reduced to the total remaining quantity.
+* Amending the size of an iceberg order amends the total `remaining` quantity and leaves the `displayed quantity` unaffected unless the new remaining quantity is smaller than the current displayed quantity, in which case the displayed quantity is reduced to the total remaining quantity.
 
-* Amending the size/quantity of an iceberg order does not cause it to lose time priority. 
+* Amending the size/quantity of an iceberg order does not cause it to lose time priority.
 This is because the increase applies to the `remaining` quantity and not to the `displayed quantity`.
 This is allowed because the order will lose time priority on refresh, i.e. before the increased quantity is available to trade.
 
 
 #### Auctions
 
-* Icebergs can be entered or carried into auctions if the underlying TIF is supported. 
+* Icebergs can be entered or carried into auctions if the underlying TIF is supported.
 
 * Icebergs can trade in the auction uncrossing up to their current `displayed quantity` as for any other transaction that would cause a trade with an iceberg order.
 
@@ -164,7 +164,6 @@ This is allowed because the order will lose time priority on refresh, i.e. befor
 * The fields `displayed quantity`, `remaining`, `quantity`, `initial peak size`, `minimum peak size`, `refresh policy` must be exposed by data node APIs in addition to all normal fields for an order.
 
 * An iceberg order refresh must generate an event bus event.
-
 
 
 ### Valid order entry combinations
@@ -194,19 +193,19 @@ This is allowed because the order will lose time priority on refresh, i.e. befor
 
 Network orders are used during [position resolution](./0012-POSR-position_resolution.md#position-resolution-algorithm). Network orders are orders triggered by Vega to close out positions for distressed traders.
 
-- Network orders have a counterparty of `Network`
-- Network orders are a Fill Or Kill, Market orders
-- Network orders cannot be submitted by any party, they are created during transaction processing.
+* Network orders have a counterparty of `Network`
+* Network orders are a Fill Or Kill, Market orders
+* Network orders cannot be submitted by any party, they are created during transaction processing.
 
 ## Acceptance Criteria
 
-- Immediate orders, continuous trading:
-  - An aggressive persistent (GTT, GTC) limit order that is not crossed with the order book is included on the order book at limit order price at the back of the queue of orders at that price. No trades are generated. (<a name="0014-ORDT-001" href="#0014-ORDT-001">0014-ORDT-001</a>)
-  - An aggressive persistent (GTT, GTC) limit order that crosses with trades >= to its volume is filled completely and does not appear on the order book or in the order book volume. Trades are atomically generated for the full volume. (<a name="0014-ORDT-002" href="#0014-ORDT-002">0014-ORDT-002</a>)
-  - An aggressive persistent (GTT, GTC) limit order that is partially filled generates trades commensurate with the filled volume. The remaining volume is placed on the order book at the limit order price, at the back of the queue of orders at that price. (<a name="0014-ORDT-003" href="#0014-ORDT-003">0014-ORDT-003</a>)
-  - Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporates its volume and/or price level. (<a name="0014-ORDT-004" href="#0014-ORDT-004">0014-ORDT-004</a>)
-  - A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>)
-- No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>)
+* Immediate orders, continuous trading:
+  * An aggressive persistent (GTT, GTC) limit order that is not crossed with the order book is included on the order book at limit order price at the back of the queue of orders at that price. No trades are generated. (<a name="0014-ORDT-001" href="#0014-ORDT-001">0014-ORDT-001</a>)
+  * An aggressive persistent (GTT, GTC) limit order that crosses with trades >= to its volume is filled completely and does not appear on the order book or in the order book volume. Trades are atomically generated for the full volume. (<a name="0014-ORDT-002" href="#0014-ORDT-002">0014-ORDT-002</a>)
+  * An aggressive persistent (GTT, GTC) limit order that is partially filled generates trades commensurate with the filled volume. The remaining volume is placed on the order book at the limit order price, at the back of the queue of orders at that price. (<a name="0014-ORDT-003" href="#0014-ORDT-003">0014-ORDT-003</a>)
+  * Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporates its volume and/or price level. (<a name="0014-ORDT-004" href="#0014-ORDT-004">0014-ORDT-004</a>)
+  * A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>)
+* No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>)
 
 ### Iceberg Orders AC's
 
@@ -218,7 +217,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 4. An iceberg reduce only order is rejected (<a name="0014-ORDT-010" href="#0014-ORDT-010">0014-ORDT-010</a>)
 5. For an iceberg order that is submitted with total size x and display size y the margin taken should be identical to a regular order of size `x` rather than one of size `y` (<a name="0014-ORDT-011" href="#0014-ORDT-011">0014-ORDT-011</a>)
 6. For an iceberg order, the orders are refreshed immediately after producing a trade. Every time volume is taken from the displayed quantity , the order is refreshed if display quantity < minimum peak size (<a name="0014-ORDT-012" href="#0014-ORDT-012">0014-ORDT-012</a>)
-   - If the order is successfully refreshed , then the order loses its time priority and is pushed to the back of the queue
+   * If the order is successfully refreshed , then the order loses its time priority and is pushed to the back of the queue
 7. For an iceberg order that's submitted when the market is in auction, only the displayed quantity is filled when coming out of auction (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>)
 
 #### Iceberg Order Batch Submission
@@ -272,4 +271,4 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 ### See also
 
-- [0068-MATC-Matching engine](./0068-MATC-matching_engine.md)
+* [0068-MATC-Matching engine](./0068-MATC-matching_engine.md)
