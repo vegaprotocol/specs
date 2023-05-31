@@ -10,7 +10,7 @@ brew install aspell
 
 echo "Running the spell checker..."
 
-pyspelling --config spellcheck.yaml
+python3 -m pyspelling --config spellcheck.yaml
 
 echo "Remove dictionary binary..."
 
