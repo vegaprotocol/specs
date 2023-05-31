@@ -117,15 +117,10 @@ That is:
 
   * As for any other order, `remaining == quantity` on entry.
 
-* The maximum total size for all trades involving an iceberg order in any given transaction (including a batch) is the `displayed quantity` immediately prior to the trade.
-(This is technically also true for a normal order, given that for non-iceberg orders `displayed quantity == remaining`.)
-
 * When an iceberg order trades, both `remaining` and `displayed quantity` are reduced by the trade size.
 
 * Iceberg orders can trade many times without refresh, reducing `displayed quantity` each time.
 The order will not be refreshed after each trade while `displayed quantity ≥ minimum peak size`.
-
-* Iceberg orders never trade more than their `displayed quantity` at the start of the transaction, as the result of any one transaction.
 
 * When `displayed quantity < minimum peak size` and `remaining > displayed quantity` the order will be refreshed:
 
@@ -139,6 +134,14 @@ The order will not be refreshed after each trade while `displayed quantity ≥ m
 
 * Once the remaining quantity is equal to the displayed quantity, no further refresh is possible.
 The order now behaves like a normal limit order and will leave the book if it trades away completely.
+
+* For an incoming order with size larger than the total displayed quantity at a given price level, the following procedure should be followed:
+  
+  * The incoming order trades with all visible volume at the price level, whether an iceberg order or a vanilla limit order
+
+  * If there is still remaining volume in the order once all visible volume at the price level is used up, the remaining quantity is split between the non-visible components of all iceberg orders at this level according to their remaining volumes. For example if there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. 
+  
+  * If there are still remaining iceberg orders at this point, refresh their volumes and continue trading. If the incoming order uses up all iceberg orders at this level, continue with any remaining volume to the next price level.
 
 
 #### Amendment
@@ -218,12 +221,12 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 5. For an iceberg order that is submitted with total size x and display size y the margin taken should be identical to a regular order of size `x` rather than one of size `y` (<a name="0014-ORDT-011" href="#0014-ORDT-011">0014-ORDT-011</a>)
 6. For an iceberg order, the orders are refreshed immediately after producing a trade. Every time volume is taken from the displayed quantity , the order is refreshed if display quantity < minimum peak size (<a name="0014-ORDT-012" href="#0014-ORDT-012">0014-ORDT-012</a>)
    * If the order is successfully refreshed , then the order loses its time priority and is pushed to the back of the queue
-7. For an iceberg order that's submitted when the market is in auction, only the displayed quantity is filled when coming out of auction (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>)
+7. For an iceberg order that's submitted when the market is in auction, iceberg orders trade according to their behaviour if they were already on the book (trading first the visible size, then additional if the full visible price level is exhausted in the uncrossing) (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>)
 
 #### Iceberg Order Batch Submission
 
 1. For multiple iceberg orders submitted as a batch of orders with a mix of ordinary limit orders and market orders, the iceberg orders are processed atomically and the order book volume and price, margin calculations , order status are all correct (<a name="0014-ORDT-014" href="#0014-ORDT-014">0014-ORDT-014</a>)
-2. For an iceberg order submitted in a batch that trades against multiple other orders sitting on the book , the iceberg order does not refresh until the end of the batch after it is depleted (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>)
+2. For an iceberg order submitted in a batch that trades against multiple other orders sitting on the book, the iceberg order refreshes between each order in the batch (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>)
 
 #### Iceberg Order Submission - Negative tests
 
@@ -251,10 +254,13 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 2. An aggressive iceberg order that crosses with an order where volume < iceberg volume. The initial display quantity is filled and the remaining volume is unfilled. Status of iceberg order is partially filled , the volume remaining = (quantity - initial volume) and the remaining volume sits on the book. When additional orders thar are submitted which consume the remaining volume on the iceberg order , the volume of the iceberg order is refreshed as and when the volume dips below the minimum peak size (<a name="0014-ORDT-028" href="#0014-ORDT-028">0014-ORDT-028</a>)
 3. A passive iceberg order (the only order at a particular price level) when crossed with another order that comes in which consumes the full volume of the iceberg order is fully filled. Status of iceberg order is filled and the remaining = 0. Atomic trades are produced (<a name="0014-ORDT-029" href="#0014-ORDT-029">0014-ORDT-029</a>)
 4. A passive iceberg order with a couple of order that sit behind the iceberg order at the same price that crosses with an order where volume > display quantity of iceberg order. After the first trade is produced , the iceberg order is pushed to the back of the queue and gets filled only when the other orders in front get fully filled (<a name="0014-ORDT-030" href="#0014-ORDT-030">0014-ORDT-030</a>)
-5. Submit an aggressive iceberg order for say size 100. There are multiple matching orders of size 30,40,50. Ensure the orders are matched and filled in time priority of the orders and any remaining volume on the orders is correctly left behind. (Low Priority AC) (<a name="0014-ORDT-031" href="#0014-ORDT-031">0014-ORDT-031</a>)
-6. Submit an aggressive iceberg order for say size 100. There are multiple matching orders of size 20,30. Ensure the orders are matched and filled in time priority of the orders. Ensure remaining volume on the iceberg order is (100 - (20+30)) (Low Priority AC)(<a name="0014-ORDT-032" href="#0014-ORDT-032">0014-ORDT-032</a>)
+5. Submit an aggressive iceberg order for size 100. There are multiple matching orders of size 30,40,50. Ensure the orders are matched and filled in time priority of the orders and any remaining volume on the orders is correctly left behind. (<a name="0014-ORDT-031" href="#0014-ORDT-031">0014-ORDT-031</a>)
+6. Submit an aggressive iceberg order for size 100. There are multiple matching orders of size 20,30. Ensure the orders are matched and filled in time priority of the orders. Ensure remaining volume on the iceberg order is (100 - (20+30)) (<a name="0014-ORDT-032" href="#0014-ORDT-032">0014-ORDT-032</a>)
 7. When a non iceberg order sitting on the book is amended such that it trades with with an iceberg order, then the iceberg order is refreshed (<a name="0014-ORDT-033" href="#0014-ORDT-033">0014-ORDT-033</a>)
 8. Wash trading is not permitted for iceberg orders. The same party has one iceberg order that sits at the back of the queue , another normal order in opposite direction , the iceberg at the back comes in front and matches either fully OR partially and gets rejected( <a name="0014-ORDT-034" href="#0014-ORDT-034">0014-ORDT-034</a>)
+9. For a price level with multiple iceberg orders, if an aggressive order hits this price level, any volume greater than the displayed volume at a level is split proportionally between the hidden components of iceberg orders at that price level
+   1.  If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. (<a name="0014-ORDT-037" href="#0014-ORDT-037">0014-ORDT-037</a>)
+   1.  If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 600 lots would be split 200 to the first order and 100 to the two 100 lot orders, with 200 lots then taking farther price levels. (<a name="0014-ORDT-038" href="#0014-ORDT-038">0014-ORDT-038</a>)
 
 ### Snapshots
 
@@ -264,10 +270,6 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 1. API end points should be available to query initial peak size, minimum peak size, quantity, displayed quantity and remaining (<a name="0014-ORDT-036" href="#0014-ORDT-036">0014-ORDT-036</a>)
 2. The additional fields relating to iceberg orders should be available in the streaming api end points
-
-### Protocol Upgrade
-
-1. No impact.
 
 ### See also
 
