@@ -208,6 +208,68 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
   - A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>)
 - No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>)
 
+### Iceberg Orders AC's
+
+#### Iceberg Order Submission
+
+1. A persistent (GTC, GTT, GFA, GFN) iceberg order that is not crossed with the order book is included in the order book with order book volume == initial peak size. No trades are generated (<a name="0014-ORDT-007" href="#0014-ORDT-007">0014-ORDT-007</a>)
+2. An iceberg order with either an ordinary or pegged limit price can be submitted (<a name="0014-ORDT-008" href="#0014-ORDT-008">0014-ORDT-008</a>)
+3. An iceberg post only order can be submitted  (<a name="0014-ORDT-009" href="#0014-ORDT-009">0014-ORDT-009</a>)
+4. An iceberg reduce only order is rejected (<a name="0014-ORDT-010" href="#0014-ORDT-010">0014-ORDT-010</a>)
+5. For an iceberg order that is submitted with total size x and display size y the margin taken should be identical to a regular order of size `x` rather than one of size `y` (<a name="0014-ORDT-011" href="#0014-ORDT-011">0014-ORDT-011</a>)
+6. For an iceberg order, the orders are refreshed immediately after producing a trade. Every time volume is taken from the displayed quantity , the order is refreshed if display quantity < minimum peak size (<a name="0014-ORDT-012" href="#0014-ORDT-012">0014-ORDT-012</a>)
+   - If the order is successfully refreshed , then the order loses its time priority and is pushed to the back of the queue
+7. For an iceberg order that's submitted when the market is in auction, only the displayed quantity is filled when coming out of auction (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>)
+
+#### Iceberg Order Batch Submission
+
+1. For multiple iceberg orders submitted as a batch of orders with a mix of ordinary limit orders and market orders, the iceberg orders are processed atomically and the order book volume and price, margin calculations , order status are all correct (<a name="0014-ORDT-014" href="#0014-ORDT-014">0014-ORDT-014</a>)
+2. For an iceberg order submitted in a batch that trades against multiple other orders sitting on the book , the iceberg order does not refresh until the end of the batch after it is depleted (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>)
+
+#### Iceberg Order Submission - Negative tests
+
+1. An iceberg order with a non persistent TIF (IOC, FOK) is rejected with a valid error message (<a name="0014-ORDT-016" href="#0014-ORDT-016">0014-ORDT-016</a>)
+2. An iceberg market order with any TIF is rejected with a valid error message (<a name="0014-ORDT-017" href="#0014-ORDT-017">0014-ORDT-017</a>)
+3. A reduce-only iceberg order with any TIF is rejected with a valid error message (<a name="0014-ORDT-018" href="#0014-ORDT-018">0014-ORDT-018</a>)
+4. An iceberg order with initial peak size less than the minimum order size rejected with a valid error message (<a name="0014-ORDT-019" href="#0014-ORDT-019">0014-ORDT-019</a>)
+5. An iceberg order with initial peak size greater than the total order size is rejected with a valid error message (<a name="0014-ORDT-020" href="#0014-ORDT-020">0014-ORDT-020</a>)
+6. An iceberg order with minimum peak size less than 0 is rejected with a valid error message (<a name="0014-ORDT-021" href="#0014-ORDT-021">0014-ORDT-021</a>)
+7. An iceberg order with minimum peak size greater than initial peak size is rejected with a valid error message (<a name="0014-ORDT-022" href="#0014-ORDT-022">0014-ORDT-022</a>)
+
+#### Iceberg Order Amendment
+
+1. Amending an iceberg order to increase size will increase the total and remaining quantities of the order and time priority of the order is not lost (<a name="0014-ORDT-023" href="#0014-ORDT-023">0014-ORDT-023</a>)
+2. Amending an iceberg order to decrease size will decrease the total and remaining quantities and time priority of the order is not lost (<a name="0014-ORDT-024" href="#0014-ORDT-024">0014-ORDT-024</a>)
+3. Amend an iceberg order to decrease size so that the displayed quantity is decreased. Total, displayed and remaining quantity is decreased, margin is recalculated and released and time priority is not lost (<a name="0014-ORDT-025" href="#0014-ORDT-025">0014-ORDT-025</a>)
+
+#### Iceberg Order Cancellation
+
+1. Cancelling an iceberg order will cancel the order, remove it from the order book , release margin and update order book to reflect the change (<a name="0014-ORDT-026" href="#0014-ORDT-026">0014-ORDT-026</a>)
+
+#### Iceberg Order Execution
+
+1. An aggressive iceberg order that crosses with an order where volume > iceberg volume, the iceberg order gets fully filled on entry, the iceberg order status is filled, the remaining quantity = 0. Atomic trades are generated if matched against multiple orders (<a name="0014-ORDT-027" href="#0014-ORDT-027">0014-ORDT-027</a>)
+2. An aggressive iceberg order that crosses with an order where volume < iceberg volume. The initial display quantity is filled and the remaining volume is unfilled. Status of iceberg order is partially filled , the volume remaining = (quantity - initial volume) and the remaining volume sits on the book. When additional orders thar are submitted which consume the remaining volume on the iceberg order , the volume of the iceberg order is refreshed as and when the volume dips below the minimum peak size (<a name="0014-ORDT-028" href="#0014-ORDT-028">0014-ORDT-028</a>)
+3. A passive iceberg order (the only order at a particular price level) when crossed with another order that comes in which consumes the full volume of the iceberg order is fully filled. Status of iceberg order is filled and the remaining = 0. Atomic trades are produced (<a name="0014-ORDT-029" href="#0014-ORDT-029">0014-ORDT-029</a>)
+4. A passive iceberg order with a couple of order that sit behind the iceberg order at the same price that crosses with an order where volume > display quantity of iceberg order. After the first trade is produced , the iceberg order is pushed to the back of the queue and gets filled only when the other orders in front get fully filled (<a name="0014-ORDT-030" href="#0014-ORDT-030">0014-ORDT-030</a>)
+5. Submit an aggressive iceberg order for say size 100. There are multiple matching orders of size 30,40,50. Ensure the orders are matched and filled in time priority of the orders and any remaining volume on the orders is correctly left behind. (Low Priority AC) (<a name="0014-ORDT-031" href="#0014-ORDT-031">0014-ORDT-031</a>)
+6. Submit an aggressive iceberg order for say size 100. There are multiple matching orders of size 20,30. Ensure the orders are matched and filled in time priority of the orders. Ensure remaining volume on the iceberg order is (100 - (20+30)) (Low Priority AC)(<a name="0014-ORDT-032" href="#0014-ORDT-032">0014-ORDT-032</a>)
+7. When a non iceberg order sitting on the book is amended such that it trades with with an iceberg order, then the iceberg order is refreshed (<a name="0014-ORDT-033" href="#0014-ORDT-033">0014-ORDT-033</a>)
+8. Wash trading is not permitted for iceberg orders. The same party has one iceberg order that sits at the back of the queue , another normal order in opposite direction , the iceberg at the back comes in front and matches either fully OR partially and gets rejected( <a name="0014-ORDT-034" href="#0014-ORDT-034">0014-ORDT-034</a>)
+
+### Snapshots
+
+1. All data pertaining to iceberg orders is saved and can be restored using the snapshot (<a name="0014-ORDT-035" href="#0014-ORDT-035">0014-ORDT-035</a>)
+
+### API
+
+1. API end points should be available to query initial peak size, minimum peak size, quantity, displayed quantity and remaining (<a name="0014-ORDT-036" href="#0014-ORDT-036">0014-ORDT-036</a>)
+2. The additional fields relating to iceberg orders should be available in the streaming api end points
+
+### Protocol Upgrade
+
+1. No impact.
+
 ### See also
 
 - [0068-MATC-Matching engine](./0068-MATC-matching_engine.md)
