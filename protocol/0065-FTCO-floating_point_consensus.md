@@ -6,7 +6,7 @@ Any intermediate results originating from 3rd party-libraries relying on floatin
 
 ## Background
 
-Computations within a blockchain-based system [need to be deterministic](https://docs.tendermint.com/master/introduction/what-is-tendermint.html#a-note-on-determinism) as otherwise application state between nodes replicating it can start to differ potentially leading to a consensus failure. This issue has been long known in a different type of a distributed system: [networked games](https://gafferongames.com/post/floating_point_determinism/).
+Computations within a blockchain-based system [need to be deterministic](https://docs.tendermint.com/v0.34/introduction/what-is-tendermint.html#a-note-on-determinism) as otherwise application state between nodes replicating it can start to differ potentially leading to a consensus failure. This issue has been long known in a different type of a distributed system: [networked games](https://gafferongames.com/post/floating_point_determinism/).
 
 The two strategies for dealing with the problem have been to either synchronise the entire game state across all agents or to assure that computations yield identical results irrespective of the platform they run on. While the first strategy might work for games with limited state size due to the use of a central server it cannot be applied to a peer-to-peer application like `vega` which relies on low latency. The second strategy is trivial to implement for `integer` or `decimal` data types, but while still possible, much [more complex](https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html) in case of `floating-point` datatypes as it usually involves rewriting a lot of the tooling and libraries that the application relies on.
 

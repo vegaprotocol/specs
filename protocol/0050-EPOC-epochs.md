@@ -199,15 +199,15 @@ All parameters that are changed through a governance vote are valid starting the
 
 Epochs change at the end of the first block that is after the epoch expiry has passed:
 
-- Given an epoch length of `1d`, with a block time of `1h`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
-- Given an epoch length of `1d`, with a block time of `1h`, at end of block 23 the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
-- Given an epoch length of `1d`, with a block time of `1h`, at end of block 24 the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
+- Given an epoch length of `x`, with a block time arbitrary but `<x`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
+- Given an epoch length of `x`, with a block time `x/y`, at end of block `y-1` the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
+- Given an epoch length of `x`, with a block time of `x/y`, at end of block `y` the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
   
 Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>):
 
-- Given an epoch length of `1s`, with a block time of `1m`, at end of block 1 the current epoch is `1`
-- Given an epoch length of `1s`, with a block time of `1m`, at end of block 61 the current epoch is `61`
-  
+- Given an epoch length of `x`, with a block time of `x*y`, at end of block 1 the current epoch is `1`
+- Given an epoch length of `x`, with a block time of `x*y`, at end of block `y+1` the current epoch is `y+1`
+
 Nomination takes effect at epoch changeover:
 
 - During epoch 1, `party 1` nominates any valid amount to `validator 1`
@@ -217,4 +217,4 @@ Nomination takes effect at epoch changeover:
 
 ## See also
 
-- [0059 - STKG - Simple staking and delegating](./0059-STKG-simple_staking_and_delegating) - staking and delegation are both calculated in terms of epochs.
+- [0059 - STKG - Simple staking and delegating](./0059-STKG-simple_staking_and_delegating.md) - staking and delegation are both calculated in terms of epochs.

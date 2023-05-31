@@ -8,7 +8,7 @@
 - Mark Price is never updated during position resolution (<a name="0012-POSR-004" href="#0012-POSR-004">0012-POSR-004</a>)
 - Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly. (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
 - When a distressed party has a [staking account](./0013-ACCT-accounts.md) with the same currency as the settlement currency of the market where it's distressed the staking account is NOT used in margin search and liquidation. (<a name="0012-POSR-006" href="#0012-POSR-006">0012-POSR-006</a>)
-- When a party is distressed at the point of leaving an auction it should get closed out immediately. (<a name="0012-POSR-007" href="#0012-POSR-007">0012-POSR-007</a>)
+- When a party is distressed at the point of leaving an auction it should get closed out as soon as the market returns to continuous trading mode and all the parked orders (pegged and LP) get added back to the order book. (<a name="0012-POSR-008" href="#0012-POSR-008">0012-POSR-008</a>)
 
 ## Summary
 

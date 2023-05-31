@@ -5,7 +5,7 @@
 The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury.
 
 The rewards are based on their own stake and the amount of stake delegated to them,
-see [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md), as well as their performance score.
+see [validator rewards](./0061-REWP-pos_rewards.md), as well as their performance score.
 
 The purpose of the specification is to define how the validator rewards will be additionally scaled based on their performance.
 
@@ -48,7 +48,7 @@ The message with the signed block hash must be in blocks `b + numBlocks` to `b +
 Initially the performance score is set to `0`.
 Both Tendermint validators and pending validators should be signing and sending these messages but only for the pending validators does this impact their score.
 
-The performance score should be available on all the same API endpoints as the `validatorScore` from [validator rewards](./0061-REWP-simple_pos_rewards_sweetwater.md).
+The performance score should be available on all the same API endpoints as the `validatorScore` from [validator rewards](./0061-REWP-pos_rewards.md).
 
 ## Acceptance criteria
 

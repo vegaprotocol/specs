@@ -2,7 +2,7 @@
 
 ## Sources
 
-- [Paper](https://github.com/vegaprotocol/research-internal/blob/master/Fairness/SBC22/Wendy2b.pdf)
+- [Paper](https://vega.xyz/papers/Wendy_Grows_Up.pdf)
 - [Code so far](https://github.com/vegaprotocol/wendy)
 
 ## Implementation

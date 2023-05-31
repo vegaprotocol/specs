@@ -3,7 +3,9 @@
 ## Introduction
 
 At the moment bots on Vega run on certain markets to make them look "real".
+
 For that purpose they:
+
 1. Are given large amounts of collateral via faucets.
 1. Keep track of current spot or futures price on another exchange (at e.g. 30s, 5 min intervals)
 1. Post GTC limit orders randomly on both sides of the order book at random volumes using the above reference price as mid.
@@ -12,10 +14,12 @@ This achieves the following: the price on the market looks "real" and there is v
 
 The downside is that if the bot is "unlucky" they can run out of even large amount of collateral and their orders / positions are liquidated. To avoid this they need regular collateral top-ups.
 
-From Flamenco Tavern onvards any market on Vega will need a committed liquidity provider, see [LP mechanics spec](../protocol/0044-LIME-lp_mechanics.md) to function. See also [LP order type spec](../protocol/0038-OLIQ-liquidity_provision_order_type.md).
+From Flamenco Tavern onwards any market on Vega will need a committed liquidity provider, see [LP mechanics spec](../protocol/0044-LIME-lp_mechanics.md) to function. See also [LP order type spec](../protocol/0038-OLIQ-liquidity_provision_order_type.md).
 
 If a feature is marked as "optional" then the bot can be configured in such a way that it is not providing this functionality but still doing other tasks.
-The aim of this spec is bots that
+
+The aim of this spec is bots that:
+
 1. submit a market proposal (optional) or connects to an existing market
 1. serve as a liquidity provider for the market by submitting the [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md) (optional).
 1. participate in an opening auction (optional)
@@ -33,15 +37,15 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 - vega Wallet credentials
 - market proposal file
 - market ID (the market to engage with), can come from proposal above
-- reference price source (optional), it is assumed that this is updated in real time. provided by an independent process / bot to keep things simple here. So in particular if a price source has API time limits then a separate bot / process should be accessing the price source and making up random price moves to fill the time(*) and , *not* the bot we are specifying here.
+- reference price source (optional), it is assumed that this is updated in real time. provided by an independent process / bot to keep things simple here. So in particular if a price source has API time limits then a separate bot / process should be accessing the price source and making up random price moves to fill the `time(*)` and , _not_ the bot we are specifying here.
 - `expectedMarkPrice` (optional, can be from the reference price above). This will be used in markets that don't yet have mark price to calculate margin cost of orders meeting liquidity requirement.
 - `auctionVolume`
 - `maxLong` and `maxShort` position limits and `posManagementFraction` controlling size of market order used to manage position
 - `stakeFraction`, `ordersFraction`, these will be used in rule-of-thumb heuristics to decide how the bot should deploy collateral.
-- `shorteningShape`, `longeningShape` both of these are *both* sides of the book (note that the initial shape used will be the buying shape because being long is a little cheaper in position margin than being short)
+- `shorteningShape`, `longeningShape` both of these are _both_ sides of the book (note that the initial shape used will be the buying shape because being long is a little cheaper in position margin than being short)
 - `positionManagementSleep` e.g. 10s and `posManagementFraction` e.g. `0.1`
 - `marketPriceSteeringRate` e.g. 2 per second would be 2
-- `targetLNVol` target log-normal volatility (e.g. 0.5 for 50%),  `limitOrderDistributionParams` (a little data structure which sets the algo and params for how limits orders are generated).
+- `targetLNVol` target log-normal volatility (e.g. 0.5 for 50%),  `limitOrderDistributionParams` (a little data structure which sets the algorithm and parameters for how limits orders are generated).
 
 (*) This separate process will then also need to use correct distributions to make the price moves look plausible.
 
@@ -50,10 +54,8 @@ The bot needs to be able to query Vega to know the risk model and parameters for
 This is only relevant if the option to submit a market proposal is enabled.
 
 The bot will read the required market proposal from a file (configuration option), decide if it has minimum LP stake in the right asset, check it's got enough vote tokens and then submit the proposal and vote for it. They will also need to submit [liquidity shapes](../protocol/0038-OLIQ-liquidity_provision_order_type.md) but that will be treated below.
-To decide that it will ask Vega for `assetBalance`, `quantum` for asset and `min_LP_stake_quantum_multiple` and proceed if
-```
-assetBalance x stakeFraction > min_LP_stake_quantum_multiple x quantum
-```
+To decide that it will ask Vega for `assetBalance`, `quantum` for asset and `min_LP_stake_quantum_multiple` and proceed if `assetBalance x stakeFraction > min_LP_stake_quantum_multiple x quantum`
+
 It will then check whether it has enough collateral for maintaining the commitment but that will be described below as it applies below too.
 
 ### Serving as a liquidity provider for a market
@@ -108,7 +110,7 @@ fi
 This section is only relevant if the option to participate in an opening auction is selected and the relevant market given by the market ID is still in an opening auction.
 
 If the bot has `currentPrice` then it should place  buy / sell limit orders (good till time with duration a bit longer than opening auction length) in the auction at random distance and volume away from `currentPrice` up to total `auctionVolume`.
-The distance and volume should be consistent with market risk parameters (spec work for later, Witold, do you feel like coming up with a formula?)
+The distance and volume should be consistent with market risk parameters.
 
 ### Create markets that look real
 
@@ -129,6 +131,7 @@ limitOrderDistributionParams = {
     numIdenticalBots = 3
 }
 ```
+
 With the above example you can generate the correct orders using the method in the [notebook](./0010-NP-BOTC-bot_parameter_calc_and_test.ipynb) with `delta=tickSize x numTicksFromMid` and `N = 3600 x 2 / 3`.
 
 Another Example:
@@ -145,13 +148,13 @@ limitOrderDistributionParams = {
 }
 ```
 
-Again, the algorithm for choosing the parameters and generating samples is in the [notebook](./BotParameterCalcAndTest.ipynb) with `delta=tickSize x numTicksFromMid` and `N = 3600 x 0.5 / 10`.
+Again, the algorithm for choosing the parameters and generating samples is in the [notebook](./0010-NP-BOTC-bot_parameter_calc_and_test.ipynb) with `delta=tickSize x numTicksFromMid` and `N = 3600 x 0.5 / 10`.
 
-Generate the orders using the above method *but*:
+Generate the orders using the above method _but_:
 
-If the position of the bot is long *only* place sell orders.
+If the position of the bot is long _only_ place sell orders.
 
-If the position of the bot is short *only* place buy orders here.
+If the position of the bot is short _only_ place buy orders here.
 
 ### Manage their position
 
@@ -211,7 +214,7 @@ Don't use any of the pseudocode above!
 
 1. Bot can submit a market proposal (optional), commit liquidity and then manage it's position as described above, see also [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md). (<a name="0001-NP-LIQB-001" href="#0001-NP-LIQB-001">0001-NP-LIQB-001</a>)
 1. Bot can connect to an existing market, submit an [LP order type](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and then manage it's position as described above. (<a name="0001-NP-LIQB-002" href="#0001-NP-LIQB-002">0001-NP-LIQB-002</a>)
-1. Bot can participate in an opening auction placing orders around target price (set via params, see above).(<a name="0001-NP-LIQB-003" href="#0001-NP-LIQB-003">0001-NP-LIQB-003</a>)
+1. Bot can participate in an opening auction placing orders around target price (set via parameters, see above).(<a name="0001-NP-LIQB-003" href="#0001-NP-LIQB-003">0001-NP-LIQB-003</a>)
 1. Can read a price target from external source and and places limit orders that "steer" the price up-or-down as appropriate and have the right `targetLNVol` using one of the methods above (note that this has to take into account other identical bots trying to do the same on the same market).(<a name="0001-NP-LIQB-004" href="#0001-NP-LIQB-004">0001-NP-LIQB-004</a>)
 1. Bot manages its position in such a way that it stays close to zero and starts placing market orders if configured maxima are breached.(<a name="0001-NP-LIQB-005" href="#0001-NP-LIQB-005">0001-NP-LIQB-005</a>)
     1. The repository is public from the start.

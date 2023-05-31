@@ -4,7 +4,7 @@
 
 ### Current state of upgrading the vega network
 
-As of today, upgrading the protocol is near impossible when a major changes to the step are possible without proceeding with a [Limited Network Life checkpoint restore](./non-protocol-specs/0005-NP-LIMN-limited_network_life.md). This functionality has the following significant issues:
+As of today, upgrading the protocol is near impossible when a major changes to the step are possible without proceeding with a [Limited Network Life checkpoint restore](./0073-LIMN-limited_network_life.md). This functionality has the following significant issues:
 
 - A synchronous restart is required
 - All node need to be restarted in a very short time so all state can be restore from Ethereum, and the network can start properly with a checkpoint.
@@ -108,7 +108,7 @@ message ProtocolUpgradeEvent {
 - (<a name="0075-PLUP-002" href="#0075-PLUP-002">0075-PLUP-002</a>) Validator proposes a protocol upgrade on a block height preceding the current block - should result in an error
 - (<a name="0075-PLUP-003" href="#0075-PLUP-003">0075-PLUP-003</a>) Propose and enact a version downgrade
 - (<a name="0075-PLUP-004" href="#0075-PLUP-004">0075-PLUP-004</a>) Non-validator attempts to propose upgrade
-- (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) Ersatz validator attempts to propose upgrade
+- (<a name="0075-PLUP-005" href="#0075-PLUP-005">0075-PLUP-005</a>) Ersatz validator (standby validator) attempts to propose upgrade
 
 ### Block height validation
 
@@ -156,6 +156,7 @@ For the purposes of protocol upgrade each validator that participates in consens
 - (<a name="0075-PLUP-023" href="#0075-PLUP-023">0075-PLUP-023</a>) Post a validator becoming a consensus-participating validator they should be immediately allowed to propose an upgrade and be included in the overall total count
 - (<a name="0075-PLUP-024" href="#0075-PLUP-024">0075-PLUP-024</a>) Ensure that required majority is not met when enough validators join between validator proposals and target block, i.e: In a network with 5 validators, required majority is two thirds, 4 vote to upgrade, 2 more validators join before upgrade block and do not vote. Upgrade does not take place.
 - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
+- (<a name="0075-PLUP-045" href="#0075-PLUP-045">0075-PLUP-045</a>) Arrange a network where n nodes are required for consensus, and at least n+1 nodes in the network. Schedule a protocol upgrade where n-1 nodes automatically start on the new version after upgrade, i.e: No consensus after upgrade. Start the (n+1)th node and consensus is achieved. For the nth node, clear vega and tm, and restart the node using state-sync at the upgrade block height. All nodes produce blocks.
 
 ## LNL Checkpoints
 
@@ -182,7 +183,8 @@ For the purposes of protocol upgrade each validator that participates in consens
 
 ### Mainnet
 
-- (<a name="0075-PLUP-033" href="#0075-PLUP-033">0075-PLUP-033</a>) Check that we can protocol upgrade a system which has been restarted from mainnet snapshots with current mainnet version, to next intended release version.
+- (<a name="0075-COSMICELEVATOR-033" href="#0075-COSMICELEVATOR-033">0075-COSMICELEVATOR-033</a>) Check that we can protocol upgrade a system which has been restarted from mainnet snapshots with current mainnet version, to next intended release version. Check all data available pre-upgrade is still available.
+- (<a name="0075-PLUP-046" href="#0075-PLUP-046">0075-PLUP-046</a>) Check that we can protocol upgrade a system which has been restarted from latest mainnet checkpoint with current mainnet version, to next intended release version. Check all data available pre-upgrade is still available.
 
 ### Overwriting transactions
 
@@ -198,3 +200,53 @@ For the purposes of protocol upgrade each validator that participates in consens
 - (<a name="0075-PLUP-042" href="#0075-PLUP-042">0075-PLUP-042</a>) Trader balances available prior to upgrade is still available post upgrade.
 - (<a name="0075-PLUP-043" href="#0075-PLUP-043">0075-PLUP-043</a>) Pending and active assets available prior to upgrade is still available post upgrade.
 - (<a name="0075-PLUP-044" href="#0075-PLUP-044">0075-PLUP-044</a>) Network parameter, market and asset proposals can span a protocol upgrade.
+
+### Ethereum events during outage
+
+- (<a name="0075-PLUP-051" href="#0075-PLUP-051">0075-PLUP-051</a>) Deposit events that take place during protocol upgrade are registered by the network once the upgrade is complete.
+  1. Schedule an upgrade on a network that is not using visor.
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Deposit tokens via the ERC20 bridge.
+  1. Start the network using the upgrade binary.
+  1. Balance reported as added in the appropriate account(s).
+- (<a name="0075-PLUP-052" href="#0075-PLUP-052">0075-PLUP-052</a>) Staking events that take place during protocol upgrade are registered by the network once the upgrade is complete.
+  1. Ensure parties A & B have some stake, which is delegated to a/some node(s).
+  1. Schedule an upgrade on a network that is not using visor.
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Add stake to party A.
+  1. Remove some (not all) stake from party B.
+  1. Start the network using the upgrade binary.
+  1. Additional stake reported for party A and auto-delegated. Stake removed for party B and delegation reduced.
+- (<a name="0075-PLUP-047" href="#0075-PLUP-047">0075-PLUP-047</a>) Multisig events that take place during protocol upgrade are registered by the network once the upgrade is complete.
+  1. Arrange a network where one validator is promoted to replace another validator. Collect signatures to update the multisig contract, but do not yet update the multisig.
+  1. Schedule an upgrade on the network (should not be using visor).
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Update the multisig contract to reflect the correct validators.
+  1. Start the network using the upgrade binary.
+  1. At the end of the current epoch, rewards are paid out.
+- (<a name="0075-PLUP-048" href="#0075-PLUP-048">0075-PLUP-048</a>) Multisig events that take place during protocol upgrade are registered by the network once the upgrade is complete.
+  1. Arrange a network where one validator is promoted to replace another validator. Collect signatures to update the multisig contract, but do not yet update the multisig.
+  1. Schedule an upgrade on the network (should not be using visor).
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Do not update the multisig contract to reflect the correct validators.
+  1. Start the network using the upgrade binary.
+  1. At the end of the current epoch, rewards are not paid out.
+  1. Update the multisig contract to reflect the correct validators.
+  1. At the end of the current epoch, rewards are paid out.
+
+### Transactions during upgrade
+
+- (<a name="0075-PLUP-049" href="#0075-PLUP-049">0075-PLUP-049</a>) Network handles filled mempool during upgrade.
+  1. Schedule a protocol upgrade in a network with no nodes using visor.
+  1. When the nodes stop processing blocks for the upgrade, shut down the nodes.
+  1. Start one node on the new binary.
+  1. Send enough transactions to the node to fill the tendermint mempool. (Expect sane rejection once mempool is full)
+  1. Start the other nodes on the correct upgrade binary.
+  1. Expect all transactions that reached the mempool without being rejected to be correctly processed over several blocks.
+- (<a name="0075-PLUP-050" href="#0075-PLUP-050">0075-PLUP-050</a>) Transactions can be made in block immediately before protocol upgrade.
+  1. Schedule a protocol upgrade in a network with no nodes using visor.
+  1. Continuously send transactions as the upgrade block approaches.
+  1. When the nodes stop processing blocks for the upgrade, make a note of all transactions which reached blocks already (transactions which did not are expected to be discarded).
+  1. Shut down the nodes.
+  1. Start all nodes on the new binary.
+  1. Expect all transactions that reached blocks prior to upgrade to have taken effect. None of the other transactions did.

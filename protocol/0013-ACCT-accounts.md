@@ -10,7 +10,7 @@ Any party can submit a withdrawal transaction to withdraw assets from the genera
 
 Any party can set up a transfer from their general account to other Vega accounts as described by the [transfer spec](./0057-TRAN-transfers.md).
 
-Note that a party can also associate the governance / staking asset via the [Vega staking bridge contract](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md) but this number is *not* an account balance because it *cannot* be used as [collateral](./0005-COLL-collateral.md) for trading and it cannot be transferred.
+Note that a party can also associate the governance / staking asset via the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) but this number is *not* an account balance because it *cannot* be used as [collateral](./0005-COLL-collateral.md) for trading and it cannot be transferred.
 
 ## Accounts controlled by Vega
 
@@ -81,13 +81,13 @@ Every market will have at least one insurance pool account that holds collateral
 
 **Creation/Deletion:**
 
-When a [market launches](./0043-MKTL_market_livecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md).
+When a [market launches](./0043-MKTL-market_lifecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md).
 
 When a market is finalised / closed remaining funds are distributed to the on chain treasury.  This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
 
 ## Staking accounts
 
-In Vega governance is controlled by a [governance token](./0029-GOVE-governance.md#governance-asset) which is [nominated and staked](./0059-STKG-simple_staking_and_governance.md), and is held in a smart contract on Ethereum. As the assets are held off-chain, a party's staking balance is treated differently to the account types above.
+In Vega governance is controlled by a [governance token](./0028-GOVE-governance.md#governance-asset) which is [nominated and staked](./0059-STKG-simple_staking_and_delegating.md), and is held in a smart contract on Ethereum. As the assets are held off-chain, a party's staking balance is treated differently to the account types above.
 
 - Like [margin accounts](#margin-accounts), a party cannot transfer or place orders with the balance in staking accounts
 
@@ -129,7 +129,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 ### Special case: Staking accounts
 
-One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain. For more information on staking and stake delegation see [Simple staking and delegation](./0050-STKG-simple_staking_and_delegating.md).
+One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain. For more information on staking and stake delegation see [Simple staking and delegation](./0059-STKG-simple_staking_and_delegating.md).
 
 ### Party staking accounts
 

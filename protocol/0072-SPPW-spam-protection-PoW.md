@@ -45,7 +45,7 @@ The validators verify that:
 Furthermore, the validators check that:
 
 - The same identifier has not been used for another transaction from a previously committed block. If the same identifier is used for several transactions in the same block, these transactions need to be removed during post-processing, and the initiator blocked as a spammer.
-- The same block has not been used for more than `spam.pow.numberOfTxPerBlock` transactions by the same party per spam difficulty level (i.e., if `spam.pow.increaseDifficulty` is `> 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
+- The same block has not been used for more than `spam.pow.numberOfTxPerBlock` transactions by the same party per spam difficulty level (i.e., if `spam.pow.increaseDifficulty` is `= 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
 
 Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on this; however, they can be verified post-agreement, and the offending vega-key can be banished for the duration of 1/48 of an Epoch with a minimum duration of 30 seconds. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds; this is measured starting at the blocktime in which the violation occurs, and transactions are allowed again in the first block after. Validators should return a meaningful error message to the wallet to let it know that/why a transaction got rejected.
 Linking a transaction to a too old block will not lead to a banishment, but only to a rejection of the offending transaction.
@@ -75,6 +75,15 @@ Depending on how things pan out, we may have an issue with the timing; to make s
 ## Hash function
 
 The initial hash-function used is SHA3. To allow for a more fine-grained control over the difficulty of the PoW (the number of zeros only allows halving/doubling), the parameter `spam.pow.hashFunction` allows increasing the number of rounds of the hash function (currently 24), e.g., `spam.pow.hashFunction` = `sha3_36_rounds`. The parameter can in the future also be used to replace the SHA-3 through a governance vote (assuming other functions have been made available by then) should this prove necessary.
+
+## Mempool pruning
+
+Vega nodes will periodically inspect the mempool. Any transaction sitting in the mempool with PoW tied to a historical block with number `N_old` which satisfies that `N_old + spam.pow.numberOfPastBlocks < N_current` will be removed from the mempool. Here `N_current` is the current block the vega node is processing (has just processed).
+
+Clients can use this simulate "time-to-live" for transactions. If the PoW is tied to a very recent block then the transaction will remain valid for (almost) the full `spam.pow.numberOfPastBlocks`. If, on the other hand, the PoW is tied to very old block then the transaction will remain valid only for a few blocks; it will be included in a block soon or not at all.
+
+All Vega clients that submitted transactions can verify that their transaction has succeeded by waiting that it's been included in a block; if they submitted a transaction with PoW tied to `N_old` and `N_old + spam.pow.numberOfPastBlocks < N_current` then they know the transaction was pruned and will never be included on chain.
+
 
 ## Acceptance Criteria
 
@@ -115,3 +124,7 @@ The initial hash-function used is SHA3. To allow for a more fine-grained control
   - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is increased.
   - `Spam.pow.difficulty` is increased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased.
   - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased. (<a name="0072-COSMICELEVATOR-014" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-014</a>)
+
+
+- *Mempool pruning* Cause congestion in the mempool by submitting many transactions (perhaps from several parties). Submit a transaction `T` tied to block number `N_old`. Make sure the transactions causing congestion create sufficiently large `N_current`. At some point we'll have `N_old + spam.pow.numberOfPastBlocks < N_current` and the transaction `T` is removed from the mempool and never scheduled. (<a name="0072-SPPW-012" href="#0072-SPPW-012">0072-SPPW-012</a>)
+

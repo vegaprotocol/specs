@@ -6,7 +6,7 @@ The matching engine co-ordinates the trading of incoming orders with existing or
 
 ### In a market that is in [Continuous Trading](./0001-MKTF-market_framework.md#trading-mode---continuous-trading)
 
-An [Immediate or Cancel (IOC)](./0014-ORDT_order_types.md#time-in-force---validity) order:
+An [Immediate or Cancel (IOC)](./0014-ORDT-order_types.md#time-in-force--validity) order:
 
 - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book (<a name="0068-MATC-001" href="#0068-MATC-001">0068-MATC-001</a>)
   - If not enough volume is available to **fully** fill the order, the remaining will be cancelled (<a name="0068-MATC-002" href="#0068-MATC-002">0068-MATC-002</a>)
@@ -14,32 +14,57 @@ An [Immediate or Cancel (IOC)](./0014-ORDT_order_types.md#time-in-force---validi
   - If there is no match the order will be cancelled. (<a name="0068-MATC-004" href="#0068-MATC-004">0068-MATC-004</a>)
   - If there is a partial match then the remaining will be cancelled. (<a name="0068-MATC-005" href="#0068-MATC-005">0068-MATC-005</a>)
 - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-006" href="#0068-MATC-006">0068-MATC-006</a>)
+- Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-057" href="#0068-MATC-057">0068-MATC-057</a>)
 
-A [Fill or KILL (FOK)](./0014-ORDT-order-types.md#time-in-force---validity) order:
+- For Reduce-Only = True orders:
+  - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-056" href="#0068-MATC-056">0068-MATC-056</a>)
+    - If not enough volume is available to **fully** fill the order, the remaining will be cancelled (<a name="0068-MATC-043" href="#0068-MATC-043">0068-MATC-043</a>)
+  - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-044" href="#0068-MATC-044">0068-MATC-044</a>)
+  - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-045" href="#0068-MATC-045">0068-MATC-045</a>)
+  - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-046" href="#0068-MATC-046">0068-MATC-046</a>)
+  - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-058" href="#0068-MATC-058">0068-MATC-058</a>)
+  - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-059" href="#0068-MATC-059">0068-MATC-059</a>)
+
+A [Fill or KILL (FOK)](./0014-ORDT-order_types.md#time-in-force--validity) order:
 
 - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) MARKET orders will be matched fully if the volume is available, otherwise the order is cancelled. (<a name="0068-MATC-008" href="#0068-MATC-008">0068-MATC-008</a>)
 - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will either be:
   - Fully matched if possible to the other side of the book    (<a name="0068-MATC-009" href="#0068-MATC-009">0068-MATC-009</a>)
   - if a complete fill is not possible the order is stopped without trading at all. (<a name="0068-MATC-010" href="#0068-MATC-010">0068-MATC-010</a>)
 - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-011" href="#0068-MATC-011">0068-MATC-011</a>)
+- Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-039" href="#0068-MATC-039">0068-MATC-039</a>)
 
-For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order-types.md#time-in-force---validity) orders:
+- For Reduce-Only = TRUE orders:
+  - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-047" href="#0068-MATC-047">0068-MATC-047</a>)
+    - If not enough volume is available to **fully** fill the order, the order will be cancelled(<a name="0068-MATC-048" href="#0068-MATC-048">0068-MATC-048</a>)
+  - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-049" href="#0068-MATC-049">0068-MATC-049</a>)
+  - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which reduce the trader's absolute position will be matched against the opposite side of the book (<a name="0068-MATC-050" href="#0068-MATC-050">0068-MATC-050</a>)
+  - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders which increase the trader's absolute position will be stopped (<a name="0068-MATC-051" href="#0068-MATC-051">0068-MATC-051</a>)
+  - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-052" href="#0068-MATC-052">0068-MATC-052</a>)
+  - Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-053" href="#0068-MATC-053">0068-MATC-053</a>)
+
+For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](./0014-ORDT-order_types.md#time-in-force--validity) orders:
 
 - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected by the wallet validation layer. (<a name="0068-MATC-013" href="#0068-MATC-013">0068-MATC-013</a>)
 - Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders match if possible, any remaining is placed on the book. (<a name="0068-MATC-014" href="#0068-MATC-014">0068-MATC-014</a>)
 - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced and placed on the book if the price is valid, except GFN which are rejected by the wallet validation layer. (<a name="0068-MATC-015" href="#0068-MATC-015">0068-MATC-015</a>)
   - otherwise they are parked. (<a name="0068-MATC-016" href="#0068-MATC-016">0068-MATC-016</a>)
+- Incoming [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders will be placed fully on the book if no orders currently cross. (<a name="0068-MATC-040" href="#0068-MATC-040">0068-MATC-040</a>)
+  - An order which totally crosses with an existing order on the book will be STOPPED in full with none executed.  (<a name="0068-MATC-041" href="#0068-MATC-041">0068-MATC-041</a>)
+  - An order partially crossing with an existing order on the book will be STOPPED in full with none executed.  (<a name="0068-MATC-042" href="#0068-MATC-042">0068-MATC-042</a>)
 - A market will enter auction if the volume on either side of the book is empty. (<a name="0068-MATC-017" href="#0068-MATC-017">0068-MATC-017</a>)
 - A market will enter auction if the mark price moves by a larger amount than the price monitoring settings allow. (<a name="0068-MATC-018" href="#0068-MATC-018">0068-MATC-018</a>)
 - All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and the aggressive side is STOPPED even if partially filled. The passive side is left untouched. (<a name="0068-MATC-019" href="#0068-MATC-019">0068-MATC-019</a>)
+- All orders with Reduce-Only set to TRUE are rejected as invalid. (<a name="0068-MATC-054" href="#0068-MATC-054">0068-MATC-054</a>)
 
 In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md):
 
-- [IOC/FOK/GFN](./0014-ORDT-order-types.md#time-in-force---validity)
+- [IOC/FOK/GFN](./0014-ORDT-order_types.md#time-in-force--validity)
   - Incoming orders have their status set to REJECTED and are not processed further. (<a name="0068-MATC-021" href="#0068-MATC-021">0068-MATC-021</a>)
-- GTC/GTT/GFA](./0014-ORDT-order-types.md#time-in-force---validity)
+- [GTC/GTT/GFA](./0014-ORDT-order_types.md#time-in-force--validity)
   - All [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders are rejected. (<a name="0068-MATC-022" href="#0068-MATC-022">0068-MATC-022</a>)
   - [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders are placed into the book and no matching takes place. (<a name="0068-MATC-023" href="#0068-MATC-023">0068-MATC-023</a>)
+  - [LIMIT: POST-ONLY TRUE](./0014-ORDT-order_types.md#order-pricing-methods) orders are placed into the book and no matching takes place. (<a name="0068-MATC-055" href="#0068-MATC-055">0068-MATC-055</a>)
   - The indicative price and volume values are updated after every change to the order book. (<a name="0068-MATC-024" href="#0068-MATC-024">0068-MATC-024</a>)
   - [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-025" href="#0068-MATC-025">0068-MATC-025</a>)
   - It is possible to [self trade](./0024-OSTA-order_status.md#wash-trading) to uncross an auction. (<a name="0068-MATC-038" href="#0068-MATC-038">0068-MATC-038</a>)
@@ -47,14 +72,14 @@ In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md):
 When a [market moves into an auction](./0026-AUCT-auctions.md#upon-entering-auction-mode):
 
 - All [PEGGED](./0014-ORDT-order_types.md#auction) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-026" href="#0068-MATC-026">0068-MATC-026</a>)
-- All [GFN](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-027" href="#0068-MATC-027">0068-MATC-027</a>)
-- All [GTC/GTT](./0014-ORDT-order-types.md#time-in-force---validity) orders remain on the book untouched. (<a name="0068-MATC-028" href="#0068-MATC-028">0068-MATC-028</a>)
+- All [GFN](./0014-ORDT-order_types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-027" href="#0068-MATC-027">0068-MATC-027</a>)
+- All [GTC/GTT](./0014-ORDT-order_types.md#time-in-force---validity) orders remain on the book untouched. (<a name="0068-MATC-028" href="#0068-MATC-028">0068-MATC-028</a>)
 
 When a market [market exits an auction](./0026-AUCT-auctions.md#upon-exiting-auction-mode):
 
 - The book is uncrossed. (<a name="0068-MATC-029" href="#0068-MATC-029">0068-MATC-029</a>)
   - Self trading is allowed during uncrossing. (<a name="0068-MATC-030" href="#0068-MATC-030">0068-MATC-030</a>)
-- All [GFA](./0014-ORDT-order-types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-031" href="#0068-MATC-031">0068-MATC-031</a>)
+- All [GFA](./0014-ORDT-order_types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-031" href="#0068-MATC-031">0068-MATC-031</a>)
 - [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders are repriced where possible. (<a name="0068-MATC-032" href="#0068-MATC-032">0068-MATC-032</a>)
 
 - Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [cancelled](./0033-OCAN-cancel_orders.md). (<a name="0068-MATC-033" href="#0068-MATC-033">0068-MATC-033</a>)

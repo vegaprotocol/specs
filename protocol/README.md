@@ -61,7 +61,6 @@
 - [Market insurance pool](./0015-INSR-market_insurance_pool_collateral.md)
 - [Margin calculator](./0019-MCAL-margin_calculator.md)
 - [Quant risk models (Python notebook)](./0018-RSKM-quant_risk_models.ipynb)
-- [Quant risk model Calibrators](./0023-CALI-calibrators.md)
 
 ## Data Sourcing
 
@@ -81,7 +80,7 @@
 
 - [Staking & Delegating](./0059-STKG-simple_staking_and_delegating.md)
 - [Rewards Overview](./0056-REWA-rewards_overview.md)
-- [Simple Proof Of Stake rewards](./0058-REWS-simple_pos_rewards.md)
+- [Simple Proof Of Stake rewards](./0061-REWP-pos_rewards.md)
 - [On chain treasury](./0055-TREA-on_chain_treasury.md)
 
 ## Architecture

@@ -17,9 +17,9 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 ### Governance
 
 - List all [governance proposals](./0028-GOVE-governance.md), regardless of state
-- List all proposals, filtered by the [party identitifier](./0016-PART-party.md) of the party that created it.
+- List all proposals, filtered by the [party identitifier](./0017-PART-party.md) of the party that created it.
 - Retrieve a specified proposal
-- List all [votes](./0027-GOVE-governance.md#voting-for-a-proposal)
+- List all [votes](./0028-GOVE-governance.md#voting-for-a-proposal)
 - List [governance stake](./0059-STKG-simple_staking_and_delegating.md) for a specific party
 - List [delegations](./0059-STKG-simple_staking_and_delegating.md) for a specific party
 
@@ -35,7 +35,7 @@ To *observe the operation, and validate the state of the protocol, we must be ab
 
 ### Party
 
-- List all known [parties](./0016-PART-party.md).
+- List all known [parties](./0017-PART-party.md).
 
 ### [Network wide limits](./0078-NWLI-network_wide_limits.md)
 

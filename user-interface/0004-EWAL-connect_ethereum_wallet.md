@@ -29,7 +29,6 @@ When wanting or needing to write to Ethereum, I...
 When I'm finished using a connected Ethereum wallet I may wish to disconnect...
 
 - **must** see a link to disconnect  (<a name="0004-EWAL-006" href="#0004-EWAL-006">0004-EWAL-006</a>)
-- **must** destroy all session so that hitting connect again connects as if it is the first use (<a name="0004-EWAL-007" href="#0004-EWAL-007">0004-EWAL-007</a>)
-- **should** see a connect button to start a fresh connection (e.g. to a different wallet but via Wallet connect)
+  - **must** destroy dapp -> ETH wallet session so that hitting connect again triggers the modal that asks what method you'd like to use to connect to an ETH wallet, (note: it is not possible to invalidate the permission the metamask wallet has granted the app, therefore users will need to know that if they want to connect to a new ETH key they will have to do so from the wallet) (<a name="0004-EWAL-007" href="#0004-EWAL-007">0004-EWAL-007</a>)
 
 ... so that I can use a different wallet, or ensure may wallet can not be used by other apps 

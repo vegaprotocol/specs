@@ -12,6 +12,9 @@ The Position API provides access to net position per party per market. Specifica
 - Uses VW methodology to adjust the realised PnL resulting from any trade that caused volume to have been closed out. (<a name="0007-POSN-006" href="#0007-POSN-006">0007-POSN-006</a>)
 - Stores all traders’ realised PnL for every trade that caused volume to have been closed out. (<a name="0007-POSN-007" href="#0007-POSN-007">0007-POSN-007</a>)
 - Stores all traders' total realised PnL. (<a name="0007-POSN-008" href="#0007-POSN-008">0007-POSN-008</a>)
+- Stores a status field for all the traders, the status field will be set to ORDERS_CLOSED if a trader was distressed based on the margin requirements for their worst possible long/short, but their margin balance was sufficient to maintain their open position. They have active orders, their active orders will be removed from the book, after which the party was no longer distressed. (<a name="0007-POSN-015" href="#0007-POSN-015">0007-POSN-015</a>)
+- The status field will be set to DISTRESSED if a trader was distressed based on the margin requirements for their worst possible long/short and they do not have active orders to be closed, however the book currently does not have enough volume to close them out, and will close them out when there is enough volume.(<a name="0007-POSN-017" href="#0007-POSN-017">0007-POSN-017</a>)
+- The status field will be set to CLOSED_OUT if the party was closed out (<a name="0007-POSN-016" href="#0007-POSN-016">0007-POSN-016</a>)
 
 ## Summary
 
@@ -58,6 +61,7 @@ The API is expected to expose:
 - When a party has a position which gets (partially) closed-out, the unrealised PnL should reflect the change of position while the realised PnL reflect the closed-out position (<a name="0007-POSN-011" href="#0007-POSN-011">0007-POSN-011</a>)
 - During settlement, all the parties' position should become 0, unrealised PnL should become 0 and realised PnL should update based on settlement price (<a name="0007-POSN-012" href="#0007-POSN-012">0007-POSN-012</a>)
 - If a party is subject to loss socialisation (its MTM gains get scaled down) the loss amount (forgone profit) should get recorded in realised PnL(<a name="0007-POSN-013" href="#0007-POSN-013">0007-POSN-013</a>)
+- If a party is subject to loss socialisation, the profits that could not be paid out due to loss socialisation is logged as "loss socialisation amount" which is accessible from API (<a name="0007-POSN-014" href="#0007-POSN-014">0007-POSN-014</a>)
 
 ## Definitions / glossary
 

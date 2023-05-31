@@ -45,8 +45,8 @@ Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_
 - Staking:
   - last block of a confirmed stake_deposit on the staking contract on the Ethereum chain with `number_of_confirmations`. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
   - last block of a confirmed stake_deposit on the vesting contract on the Ethereum chain with `number_of_confirmations`. [Ethereum bridge](./0031-ETHB-ethereum_bridge_spec.md#network-parameters)
-  - all the staking events from both contracts [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
-  - all the pending staking events [staking](./protocol/0059-STKG-simple_staking_and_delegating.md)
+  - all the staking events from both contracts [staking](./0059-STKG-simple_staking_and_delegating.md)
+  - all the pending staking events [staking](./0059-STKG-simple_staking_and_delegating.md)
 
 When to create a checkpoint:
 
@@ -233,7 +233,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 5. That party has a USD general account balance of 200 USD
 
-### Test case 5: Delegation (test with N=5, 10, 20000) (<a name="0073-LIMN-017" href="#0073-LIMN-017">0073-LIMN-017</a>)
+### Test case 5: Add or remove stake during checkpoint restart (<a name="0073-LIMN-017" href="#0073-LIMN-017">0073-LIMN-017</a>)
 
 1. There is a Vega token asset.
 1. There are `5` validators on the network.
@@ -241,17 +241,17 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There are `N` other parties. Each of the other parties has `other_party_i`, `i=1,2,...,N` has locked exactly `i` tokens on that staking Ethereum bridge and these tokens are undelegated at this point.
 1. Other party `i` delegates all its tokens to `validator_party_j` with `j = i mod 5` (i.e. the remainder after integer division of `j` by `i`.). For example if `N=20000` then party `i=15123` will delegate all its `15123` tokens to validator `validator_party_3` since `15123 mod 5 = 3`.
 1. The `Staking and delegation` rewards are active so that every hour each party that has delegated tokens receives `0.01` of the delegated amount as a reward.
-1. The network runs for 5 hours.
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
-1. Enough time passes after the 5 hour period so that a checkpoint is created and no party submitted any withdrawal transactions throughout.
+1. Enough time passes so that a checkpoint is created and no party submitted any withdrawal transactions throughout.
 1. The network is shut down.
-1. Validator `1` has freed `500` tokens from the Vega Ethereum staking contract.
+1. One party `1` with stake delegated has freed `500` tokens from the Vega Ethereum staking contract.
+1. One party `2` with stake delegated adds `500` tokens to the Vega Ethereum staking contract.
 1. The network is restarted with the same `5` validators and checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is a Vega token asset.
-1. Validator parties `validator_party_2`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
-1. Validator party `validator_party_1` has `500` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
-1. There are `N` other parties and the delegation info in core says that other party `i` has delegated all its tokens to `validator_party_j` with `j = i mod 5`.
-1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
+1. Validator parties `validator_party_1`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
+1. Other party `1` has `-500` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core, including updated delegation amounts.
+1. Other party `2` has `+500` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core, including updated delegation amounts via auto delegation.
+1. There are `N-2` other parties and the delegation info in core says that other party `i` has delegated all its tokens to `validator_party_j` with `j = i mod 5`.
 1. Each of the `other_party_i` has Vega token general account balance equal to `5 x 0.01 x i`. Note that these are separate from the tokens locked on the staking Ethereum bridge.
 
 ### Test case 6: Network Parameters / Exceptional case handling
@@ -364,3 +364,32 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
   - price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>)
   - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
   - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
+
+### Test case 19: Deposit tokens during checkpoint restore
+
+1. On a vega network which has some ERC20 tokens enabled.
+1. Wait for a checkpoint to be available for checkpoint restart.
+1. Stop the network.
+1. Deposit tokens to a vega party via the ERC20 assert bridge.
+1. Restart the vega network from the checkpoint created earlier.
+1. There party's newly deposited assets are available. (<a name="0073-LIMN-074" href="#0073-LIMN-074">0073-LIMN-074</a>)
+
+### Test case 20: Multisig updates during checkpoint restart
+
+1. On a vega network where one validator has been promoted in favour of another (do not update multisig contract to reflect this), and there are tokens in reward accounts ready for distribution.
+1. Wait for a checkpoint to be available for checkpoint restart.
+1. Retrieve the signatures to update the multisig contract (do not update yet).
+1. Stop the network.
+1. Update the multisig contract.
+1. Restart the vega network from the checkpoint created earlier.
+1. Vega observes the multisig change and rewards are paid at the end of the current epoch. (<a name="0073-LIMN-075" href="#0073-LIMN-075">0073-LIMN-075</a>)
+
+### Test case 21: Loading from checkpoint with invalid multisig
+
+1. On a vega network where one validator has been promoted in favour of another (do not update multisig contract to reflect this), and there are tokens in reward accounts ready for distribution.
+1. Wait for a checkpoint to be available for checkpoint restart.
+1. Retrieve the signatures to update the multisig contract (do not update yet).
+1. Stop the network.
+1. Do not update the multisig contract.
+1. Restart the vega network from the checkpoint created earlier.
+1. Vega observes the incorrect multisig, and rewards are not paid at the end of the current epoch. (<a name="0073-LIMN-076" href="#0073-LIMN-076">0073-LIMN-076</a>)

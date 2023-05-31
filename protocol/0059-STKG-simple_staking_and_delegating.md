@@ -8,7 +8,7 @@ Validators and delegators receive incentives from the network, depending on vari
 
 Staking requires the combined action of:
 
-- Associating tokens on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md); and
+- Associating tokens on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md); and
 - Nominating these tokens to one or more validators
 - Delegation in some contexts is used to mean `associate + nominate`. For the purposes of this document, once it's clear from context that association has happened `delegate` and `nominate` may be used interchangeably.
 
@@ -193,7 +193,7 @@ These accounts will be created:
 
 ### Adding more stake
 
-- More tokens may be locked at any time on the [Vega staking bridge contract](./0071-NP-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)
+- More tokens may be locked at any time on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)
 - More stake may be delegated at any time (see [function: Stake](./0071-STAK-erc20_governance_token_staking.md) - amount refers to size by which to increment existing staked amount) (<a name="0059-STKG-009" href="#0059-STKG-009">0059-STKG-009</a>)
 - Same timings apply as per staking for the first time (<a name="0059-STKG-010" href="#0059-STKG-010">0059-STKG-010</a>)
 
@@ -205,13 +205,13 @@ These accounts will be created:
 - Removal of delegation may happen in the following 2 ways:
   - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator). (<a name="0059-STKG-014" href="#0059-STKG-014">0059-STKG-014</a>)
   - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the on-chain treasury account for that asset. (<a name="0059-STKG-015" href="#0059-STKG-015">0059-STKG-015</a>)
-- Every 30 seconds (and at the end of an epoch) the associated stake is reconciled against the current nomination to ensure that the total nomination is not exceeding the total association. In case it does we proportionally un-nominate from the validators until the nomination is not exceeding the association. It's worth mentioning that this only affects the balance of the current epoch - we don't attempt to reconcile the balance for the next epoch until the epoch ends, so if for example the party had an association of a 100 tokens, then they requested to nominate 100 tokens to `validator1`, their balance for the next epoch would remain 100 until the end of the epoch even if they immediately dissociate the 100 tokens.  (<a name="0059-STKG-016" href="#0059-STKG-016">0059-STKG-016</a>)
+- Every 30 seconds (and at the end of an epoch) the associated stake is reconciled against the current nomination to ensure that the total nomination is not exceeding the total association. In case it does we proportionally un-nominate from the validators until the nomination is not exceeding the association. It's worth mentioning that for the current epoch nomination balance we consider the minimum stake that the party had for the duration of the period evaluated (from the beginning of the epoch). Also, for next epoch's nomination balance we consider the current balance of the association. Have one party stake 100 tokens split 70-30 between two validators. With a an epoch of length 5 minutes, at the beginning of the epoch remove 50 tokens off the stake. Within 30 seconds of the confirmation of updated association, verify that the nomination balances for the current epoch and next has been removed with respect to the 70/30 split, such that it is now 35/15. (<a name="0059-STKG-016" href="#0059-STKG-016">0059-STKG-016</a>)
 
 ### Changing delegation
 
 - Changing the validator to whom a participant wants to validate to involves:
   - Announcing removal of stake for current validator
-  - Staking on the new validator, as per normal [function: Stake](../non-protocol-specs/0006-NP-STAK-erc20_governance_token_staking.md)
+  - Staking on the new validator, as per normal [function: Stake](./0071-STAK-erc20_governance_token_staking.md)
   - These can happen concurrently, so that at the next epoch, the stake is removed from the current validator and staked on the new validator
 
 ## Auto delegation scenarios
@@ -255,5 +255,5 @@ These accounts will be created:
 
 - [0013-ACCT Acccounts](./0013-ACCT-accounts.md) - staking accounts are not like other account types, but the differences are covered here.
 - [0028-GOVE Governance](./0028-GOVE-governance.md) - a party's stake controls their ability to participate in governance.
-- [0069-VALW Validators chosen by stake](./0069-VALW-validators_chosen_by_stake.md) - staking and delegation is used to pick validators.
+- [0069-VALW Validators chosen by stake](./0069-VCBS-validators_chosen_by_stake.md) - staking and delegation is used to pick validators.
 - [0050-EPOC Epochs](./0050-EPOC-epochs.md) - epochs control how frequently validator sets can change as a result of staking and delegation.

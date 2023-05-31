@@ -81,9 +81,9 @@ When a Market Proposal is not successful, see [governance proposal](./0028-GOVE-
 
 ### Pending
 
-When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal.
+When a Market Proposal is successful at the end of the voting period, the Market state becomes "Pending". Currently a Pending Market is always in an [auction call period](./0026-AUCT-auctions.md) that ends at the enactment date as specified in the Market Proposal if the other conditions for exiting auction period are met (liquidity committed, best static bid / ask present). If, initially, at the specified enactment date it was not possible to leave the auction period, the auction will conclude as soon as possible once the conditions for auction exit are met.
 
-Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully. In reasonably near future there will be automated market creation e.g. for a series of markets that is voted on once, market creation from a data source (oracle), etc. so market creation and the market lifecycle should be implemented independently of the governance framework and the lifecycle of a proposal.
+Note: this state represents any market that will be created, which currently means a Market Proposal vote has concluded successfully.
 
 **Entry:**
 
@@ -108,7 +108,7 @@ Auction period ends when any of the following occur:
 
 A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period,
 and the trading terminated data source input rings, see [data sourcing](./0045-DSRC-data_sourcing.md).
-When a market transitions to a cancelled state all orders should be cancelled and collateral returned to respective parties general account for the relevant asset, all LP commitments should be cancelled and their bond returned to the general account for the relevant asset and any insurance pool balance should be transferred into the network treasury account for that asset.
+When a market transitions to a cancelled state all orders should be cancelled and collateral returned to respective parties general account for the relevant asset, all LP commitments should be cancelled and their bond returned to the general account for the relevant asset. After `network.liquidity.successorLaunchWindowLength` has elapsed since cancellation any insurance pool balance should be transferred into the network treasury account for that asset.
 
 Once "cancelled" there must be no open positions tracked by the protocol for the market and any open positions must have been closed including returning all margin and other related collateral if necessary and also notifying downstream event consumers that the positions are closed. Specific position related actions may be unnecessary if the cancelled state is being entered from a state in which there cannot possibly have been any open positions.
 All data sources that are only referenced by this market should be unregistered.
@@ -210,7 +210,6 @@ A market moves from this termination state to Settled when enough information ex
 - During the transition out of this state:
   - All final settlement cashflows are calculated and applied (settled)
   - Margins are transferred back to general accounts
-  - Insurance pool funds are redistributed
 - No risk management or price/liquidity monitoring occurs
 
 ### Settled
@@ -218,9 +217,11 @@ A market moves from this termination state to Settled when enough information ex
 Once the required data to calculate the settlement cashflows is provided by oracle input for a market in status Trading Terminated, these cashflows are calculated and applied to all traders with an open position (settlement).
 The positions are then closed and all orders cleared.
 All money held in margin accounts after final settlement is returned to traders' general accounts.
-[Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset.
 [LP fees](0042-LIQF-setting_fees_and_rewarding_lps.md) that have been cumulated but not yet paid out are distributed to the market LPs as per the LP spec.
-The market can be deleted entirely at this point, from a core perspective.
+After `network.liquidity.successorLaunchWindowLength` has elapsed since the settlement time
+
+- [Insurance pool funds](./0015-INSR-market_insurance_pool_collateral.md) are transferred to the on-chain treasury for the asset for markets that have no successor market, see [governance](./0028-GOVE-governance.md). For markets that have a named successor market the insurance pool balance is transferred to the insurance pool of the successor market.
+- The market can be deleted entirely at this point, from a core perspective.
 
 **Entry:**
 
@@ -237,7 +238,6 @@ The market can be deleted entirely at this point, from a core perspective.
 - During the transition into this state:
   - All final settlement cashflows are calculated and applied (settled)
   - Margins are transferred back to general accounts
-  - All insurance pool funds are redistributed or moved to a network wide insurance fund account
   - All fees are distributed (after a delay/at the next relevant epoch if needed - this means the market may continue to need to be "tracked" by the core until this step is complete)
 - Market is over and can be removed from core data, nothing happens after the final settlement above is complete.
 
@@ -282,8 +282,9 @@ The market state is `trading terminated`.
 1. The settlement price oracle transaction is sent and it is  *not* equal to `p`.
 Parties that had open positions see settlement cash-flows happen.
 Margin account balances are transferred to the general account.
-Any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 The market state is `settled`.
+After `network.liquidity.successorLaunchWindowLength` has passed since market settlement, any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
+
 
 ### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
 
@@ -291,6 +292,6 @@ The market state is `settled`.
 1. Trading terminated data source rings before the market leaves the opening auction (so market never left Pending state so far).
 1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
-1. Any insurance pool balance should be [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
+1. After `network.liquidity.successorLaunchWindowLength` has elapsed since market cancellation, any insurance pool balance should be [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 1. All data sources that are only referenced by that market are unregistered.
 1. The market state is set to cancelled.

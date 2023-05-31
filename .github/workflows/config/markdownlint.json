@@ -1,4 +1,3 @@
-
 {
     "default": true,
     "line-length": false,
@@ -6,4 +5,10 @@
     "no-bare-urls": true,
     "no-inline-html": false,
     "no-hard-tabs": false,
+    "MD012": {
+        "maximum": 2
+    },
+    "MD024": {
+        "siblings_only": true
+    }
 }

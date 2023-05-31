@@ -77,6 +77,11 @@ The protocol compares these levels to the balance in the trader's margin account
 | greater than  _collateral release level_       | Collateral release      | Collateral release
 | greater than _collateral search level_ and less than  _initial margin_  | no action     | No financial risk to network
 
+When posting a new order the initial margin for the overall position including the new order is calculated and order is only allowed to go ahead if party has enough funds to bring their margin account balance to that figure. An exception to this is when a party has an open position and tries to reduce it, but cannot afford the new margin. Then orders from the opposite side (short orders for a long position, long orders for a short position) are accepted as follows:
+
+- limit order: accept order when sum sizes of all the party's order's for that side of the book including the one being posted is less than or equal to the absolute open volume that a party has,
+- market order: accept order as long as its size is less than or equal to the absolute open volume that a party has.
+
 #### Collateral search
 
 When a trader's balance in their margin account (for a market) is less than their position’s collateral search level the protocol will attempt to transfer sufficient collateral from the trader’s main collateral account to top up their margin account to the level of the _initial margin_.

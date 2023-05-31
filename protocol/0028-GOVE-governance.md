@@ -57,7 +57,7 @@ A party on the Vega network will have a weighting for each type of proposal that
 
 To submit a proposal the party has to have more (strictly greater) than a minimum set by a network parameter `governance.proposal.market.minProposerBalance` of the governance tokens associated to the Vega network via the [Ethereum staking bridge](0071-STAK-erc20_governance_token_staking.md) (the network parameter sets the number of tokens). The minimum valid value for this parameter is `0`.
 
-Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](../non-protocol-specs/0004-NP-APIN-api_node.md).
+Weighting will initially be determined by the sum of the locked and staked token balances on the [staking bridge](./0076-DANO-data-node.md).
 
 In future, governance weighting for some proposal types will be based on alternative measures, such as:
 
@@ -146,7 +146,9 @@ For market change proposals the network will additionally calculate
 1. `LP participation rate = SUM (equity-like share of all LPs who cast a vote)` (no need to divide by anything as equity-like share sums up to `1`).
 1. `LP for rate = SUM (all who voted for) / LP participation rate`.
 
-A market parameter change is passed only when:
+If the market that the proposal is changing is pending (so accepted but hasn't left opening auction yet) at the vote resolution time then only token holder votes are used.
+
+For a market that's out of the pending state (so the opening auction has concluded) a market parameter change is passed only when:
 
 - either the governance token holder vote is successful i.e. `participation_rate >= governance.proposal.updateMarketParam.requiredParticipation` AND `for_rate > governance.proposal.updateMarketParam.requiredMajority` (in this case the LPs were overridden by governance token holders)
 - or the governance token holder vote does not reach participation threshold but the LP vote does and approves the proposal `participation_rate < governance.proposal.updateMarketParam.requiredParticipation` AND `LP participation rate >= governance.proposal.updateMarketParam.requiredParticipationLP` AND `LP for rate >= governance.proposal.updateMarketParam.requiredMajorityLP`.
@@ -215,10 +217,27 @@ Note the following key points from the market lifecycle spec:
 - A market enters a Pending status as soon as the proposal is Successful (before enactment)
 - A market usually enters Active status at the proposal's enactment date/time, but some conditions may delay this or cause the market to be Cancelled instead
 
-A proposal to create a market contains:
+A proposal to create a market contains
 
-1. a complete market specification as per the Market Framework (see spec) that describes the market to be created.
+1. a complete market specification as per the [Market Framework](./0001-MKTF-market_framework.md) that describes the market to be created.
 1. an enactment time that is at least the _minimum auction duration_ after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
+1. if the market is meant to be a _successor_ of a given market then it contains the `marketID` of the market it's succeeding (parent market), a parameter called `insurancePoolFraction` which is a decimal in `[0,1]` (i.e. it can be `0` or `1` or anything in between) and certain entries in the market proposal must be identical to those of the market it's succeeding OR the proposal should simply not contain the fields that cannot be changed.
+In a particular instrument, the settlement asset, margin asset, and `market.value.windowLength` must match.
+The parent market must be either: a) in one of `proposed`, `pending`, `active`, `suspended` or `trading terminated`
+or b) `settled` state but with time since settlement less than or equal `network.liquidity.successorLaunchWindowLength`
+or c) `cancelled` (closed by governance) but with the closing time less than or equal `network.liquidity.successorLaunchWindowLength`.
+The point of setting up a market to be successor of an existing market is to
+a) allow LPs continue claim their virtual stake / equity-like-share (ELS) by committing liquidity to the successor market during the pending period if they wish to, and
+b) allow the successor market to inherit the insurance pool of the parent market. When the successor market leaves the opening auction (moves from pending to active) the amount equal to `insurancePoolFraction x parent market insurance pool balance` is transferred to the successor market insurance pool. Once the parent market moves from "trading terminated" to "settled" state, the entire remaining insurance pool of the successor market is transferred to the successor market insurance pool.
+
+If the parent market is `proposed` or `pending` or the opening auction ends after the settlement time / cancellation time plus `network.liquidity.successorLaunchWindowLength` then the parent marketID may no longer exist in core or there may be no virtual stake to claim (copy). In that case the successor market virtual stakes are initialised as if the market has no parent (and we set the parent market field in market data to null / empty indicating no parent market).
+
+
+Note that each market can have exactly one market as a _successor_ market.
+
+- if there already is a market (possibly pending, i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)), naming a parent market, then a subsequent proposal referencing that market is rejected.
+- if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the successor of the named parent; the other proposal is cancelled with reason "parent market no longer available".
+- if there is a successor market naming a parent market and the parent terminates and settles or is cancelled by governance before the parent market (for whatever reason) then the parent market can again act as successor to  a different market proposed by a future market proposal.
 
 All _new market proposals_ initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
@@ -270,18 +289,14 @@ The below table shows the allowable combinations of source and destination accou
 | Source type | Destination type | Governance transfer permitted |
 | --- | --- | --- |
 | Party account (any type) | Any | No |
-| Network treasury | Reward pool account | Yes  |
+| Network treasury | Network treasury | Yes  |
 | Network treasury | Party general account(s) | Yes |
 | Network treasury | Party other account types | No |
-| Network treasury | Network insurance pool account | Yes |
 | Network treasury | Market insurance pool account | Yes |
 | Network treasury | Any other account | No |
-| Network insurance pool account | Network treasury | Yes |
-| Network insurance pool account | Market insurance pool account | Yes |
-| Network insurance pool account | Any other account | No |
 | Market insurance pool account | Party account(s) | Yes  |
 | Market insurance pool account | Network treasury | Yes  |
-| Market insurance pool account | Network insurance pool account | Yes |
+| Market insurance pool account | Market insurance pool account | Yes |
 | Market insurance pool account | Any other account | No |
 | Any other account | Any | No |
 
@@ -289,7 +304,7 @@ The below table shows the allowable combinations of source and destination accou
 
 The proposal specifies:
 
-- `source_type`: the source account type (i.e. network treasury, network insurance pool, market insurance pool)
+- `source_type`: the source account type (i.e. network treasury, market insurance pool)
 - `source` specifies the account to transfer from, depending on the account type:
   - network treasury: leave blank (only one per asset)
   - network insurance pool: leave blank (only one per asset)
@@ -306,6 +321,10 @@ The proposal specifies:
   - party: the party's public key
   - network insurance pool: leave blank (there's only one per asset)
   - market insurance pool: market ID
+- A proposal can be for a one off transfer or recurring.
+- If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately.
+- If the proposal is recurring it has to define a start epoch and an optional end epoch. In such case the transfer will be executed every epoch while still active.
+
 - Plus the standard proposal fields (i.e. voting and enactment dates, etc.)
 
 ### Transfer proposal enactment
@@ -334,6 +353,24 @@ transfer_amount == min(
     proposal.fraction_of_balance * source.balance,
     proposal.amount )
 ```
+
+### Transfer cancellation
+
+This is done as a governance proposal. Takes a transfer ID (which is the proposal ID of the original transfer) and would cancel a recurring governance transfer. Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.
+
+### Checkpoint/snapshot
+
+Enacted and active transfers (i.e. scheduled one off governance transfers, or recurring governance transfers) must be included in LNL banking checkpoint and resume after the checkpoint restore.
+
+All in memory active governance transfers must be included in the snapshot of the banking engine.
+
+### Additional information
+
+1. When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with different type (i.e. similar to one-off, and recurring of regular transfers, there are governance-one-off and governance-recurring types). At the time of enactment no amount is attached to the transfer and it will show 0.
+2. When a transfer is _made_ an event is emitted with the actual amount being transfers. The status of the transfer will depend on the type of the transfer.
+3. When the transfer reaches a terminal state, being stopped, rejected, done, cancelled an event is emitted indicating the status.
+4. Enacted governance transfers are therefore available to be queried via the regular transfer API in data node.
+5. Governance initiated transfers are subject to neither minimum transfer amounts nor to fees.
 
 ## 6. Freeform governance proposal
 
@@ -446,6 +483,11 @@ APIs should also exist for clients to:
 - Change of the network parameter `governance.proposal.updateMarket.minProposerEquityLikeShare` will immediately change the minimum proposer ELS for a market change proposal for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-064" href="#0028-GOVE-064">0028-GOVE-064</a>)
 - Change of the network parameter `governance.proposal.updateMarket.requiredParticipationLP` will immediately change the required LP vote participation (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-065" href="#0028-GOVE-065">0028-GOVE-065</a>)
 - Change of the network parameter `governance.proposal.updateMarket.requiredMajorityLP` will immediately change the required LP vote majority (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-066" href="#0028-GOVE-066">0028-GOVE-066</a>)
+- A market that's attempting to modify any parameters on a market in `proposed` state (i.e. voting hasn't completed) will be rejected. (<a name="0028-GOVE-069" href="#0028-GOVE-069">0028-GOVE-069</a>)
+- A market change proposal that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the proposed modification is enacted. (<a name="0028-GOVE-070" href="#0028-GOVE-070">0028-GOVE-070</a>)
+- In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the proposed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)
+- A market change that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)
+
 
 #### Network parameter change proposals
 
@@ -465,3 +507,86 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - A freeform governance proposal with a description field that is empty, or not between 1 and 10,000 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
 - A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
 - Closed freeform governance proposals can be retrieved from the API along with details of how token holders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
+
+#### Concurrent governance proposals
+
+- Approved governance proposals sharing the same enactment time should be enacted in the order the proposals were created. (<a name="0028-GOVE-067" href="#0028-GOVE-067">0028-GOVE-067</a>)
+- Approved governance proposals sharing the same enactment time and changing the same parameter should all be applied, the oldest proposal will be applied first and the newest will be applied last, overwriting the changes made by the older proposals. (<a name="0028-GOVE-068" href="#0028-GOVE-068">0028-GOVE-068</a>)
+
+
+#### Governance Transfer proposals
+
+
+##### Proposer Requirements
+
+- The transfer proposer must have at a staking balance which matches or exceeds `minProposerBalance` network parameter for this proposal type (<a name="0028-GOVE-073" href="#0028-GOVE-073">0028-GOVE-073</a>)
+
+
+##### APIs
+
+- Governance transfer proposal and all associated data are returned via the governance APIs (<a name="0028-GOVE-074" href="#0028-GOVE-074">0028-GOVE-074</a>)
+
+
+##### Transfer proposal submission validation
+
+- Proposals are either permitted or rejected according to the following source/destination combinations. (<a name="0028-GOVE-075" href="#0028-GOVE-075">0028-GOVE-075</a>)
+- Transfer amount and fraction of balance are mutually exclusive and will cause the proposal to reject (<a name="0028-GOVE-076" href="#0028-GOVE-076">0028-GOVE-076</a>)
+- Invalid source and destination account types will cause the proposal to reject (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
+- Source Type can be any of the predefined types in the above table (<a name="0028-GOVE-078" href="#0028-GOVE-078">0028-GOVE-078</a>)
+- Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
+- Source can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-080" href="#0028-GOVE-080">0028-GOVE-080</a>)
+- For transfer source types of Market Insurance the source must be a valid market ID  else is rejected (<a name="0028-GOVE-081" href="#0028-GOVE-081">0028-GOVE-081</a>)
+- Type value can only hold “all or nothing" or "best effort” (<a name="0028-GOVE-082" href="#0028-GOVE-082">0028-GOVE-082</a>)
+- Transfer amounts will be accepted and processed in asset precision (<a name="0028-GOVE-083" href="#0028-GOVE-083">0028-GOVE-083</a>)
+- Asset specified must be a valid asset address else proposal is rejected (<a name="0028-GOVE-084" href="#0028-GOVE-084">0028-GOVE-084</a>)
+- Fraction of balance must be submitted as a positive (else will cause the proposal to reject) and will be processed as a fraction of the source accounts balance (<a name="0028-GOVE-085" href="#0028-GOVE-085">0028-GOVE-085</a>)
+- Destination Type can be any of the predefined types in the above table (<a name="0028-GOVE-086" href="#0028-GOVE-086">0028-GOVE-086</a>)
+- Source and destination type cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-087" href="#0028-GOVE-087">0028-GOVE-087</a>)
+- Destination must be a valid Reward Scheme ID for a transfer type of Reward Pool else is rejected (<a name="0028-GOVE-088" href="#0028-GOVE-088">0028-GOVE-088</a>)
+- Destination must be a valid Vega public key for a transfer type of Party else is rejected (<a name="0028-GOVE-089" href="#0028-GOVE-089">0028-GOVE-089</a>)
+- Destination can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-090" href="#0028-GOVE-090">0028-GOVE-090</a>)
+- For transfer source types of Market Insurance the destination must be a valid market ID  else is rejected (<a name="0028-GOVE-091" href="#0028-GOVE-091">0028-GOVE-091</a>)
+- The proposal will allow standard proposal fields to control timings on closing the voting period and enactment time, these will be validated in the same way as other proposals  (<a name="0028-GOVE-092" href="#0028-GOVE-092">0028-GOVE-092</a>)
+- For successor markets we allow transfer between Market insurance pool account of parent market to Market insurance pool account of child market (<a name="0028-GOVE-093" href="#0028-GOVE-093">0028-GOVE-093</a>)
+
+
+##### Governance transfer enactment
+
+- For enacted proposals a token transfer will occur at the time of enactment between the source and destination account if sufficient tokens are held in the source account. A transaction result event will show the successful transfer between two accounts  (<a name="0028-GOVE-094" href="#0028-GOVE-094">0028-GOVE-094</a>)
+- When insufficient tokens are found in the source account at time of transfer (enactment) a transaction result event will show the transfer failing with an appropriate message (<a name="0028-GOVE-095" href="#0028-GOVE-095">0028-GOVE-095</a>)
+- Transfers can occur for terminated markets  (<a name="0028-GOVE-096" href="#0028-GOVE-096">0028-GOVE-096</a>)
+- Transfers cannot occur for settled markets and a transaction result event will show the transfer failing with an appropriate message  (<a name="0028-GOVE-097" href="#0028-GOVE-097">0028-GOVE-097</a>)
+- Transfers cannot occur for pending markets unless they become active on or before the enactment time of the transfer (<a name="0028-GOVE-098" href="#0028-GOVE-098">0028-GOVE-098</a>)
+
+
+##### Transferred Amount
+
+- If the type of transfer is “All or nothing” then the minimum of either `fraction_of_balance * source_balance` and the transfer amount is transfers between accounts.  The transfer is recorded in Vega ledger movements even if  the amount is derived as zero (<a name="0028-GOVE-099" href="#0028-GOVE-099">0028-GOVE-099</a>)
+- If the type of transfer is “Best effort” then the transfer amount is derived from the minimum of `proposal.fraction_of_balance * source.balance, proposal.amount, NETWORK_MAX_AMOUNT, NETWORK_MAX_FRACTION * source.balance`. The transfer is recorded in Vega ledger movements even if  the amount is derived as zero (<a name="0028-GOVE-100" href="#0028-GOVE-100">0028-GOVE-100</a>)
+
+
+##### Transfer Fees
+
+- No fees are incurred by the transfer and therefore the the number of tokens deducted from the source account should always equal the tokens added to the destination account (<a name="0028-GOVE-101" href="#0028-GOVE-101">0028-GOVE-101</a>)
+
+
+##### Protocol Upgrade
+
+- Transfer proposals in either a pre or post enactment state are not restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)
+
+#### Checkpoints and Snapshots
+
+- Active governance transfer (one-off or recurring) must be included in checkpoint and snapshot (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
+
+##### Recurring Governance transfers
+
+- For a recurring proposal, the proposal is only active from defined start epoch and optional end epoch, the transfer will be executed every epoch while the proposal is active. (<a name="0028-GOVE-104" href="#0028-GOVE-104">0028-GOVE-104</a>)
+
+- Enacted and active recurring governance transfers must be included in LNL banking checkpoint and resume after the checkpoint restore.(<a name="0028-GOVE-105" href="#0028-GOVE-105">0028-GOVE-105</a>)
+
+- When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
+
+
+##### Cancelling governance transfers
+
+- Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)

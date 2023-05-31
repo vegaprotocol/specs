@@ -84,7 +84,7 @@ All proposals ever submitted + votes (asset, network parameter change, market).
 
 ### Market Data
 
-- as [specified in](./0021-market-data-spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this.
+- as [specified in](./0021-MDAT-market_data_spec.md). This is emitted once per block. This is kept for backward compatibility. Note that below we may duplicate some of this.
 
 ### Market lifecycle events
 
@@ -151,6 +151,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. Nodes must be able to start processing new blocks having loaded the only the most recent history  (<a name="0076-DANO-023" href="#0076-DANO-023">0076-DANO-023</a>)
 1. Nodes that have been temporarily disconnected from the network should be able to load the missed history to get back up to the current network height (or most recently produced history) and then be able to start processing new blocks  (<a name="0076-DANO-024" href="#0076-DANO-024">0076-DANO-024</a>)
 1. It must be possible to fetch history from the network whilst the node processes new blocks.  So for example, if setting up a new Archive node, the node can keep up to date with the network whilst retrieving history all the way back to the first block.  Once this is done the node should be able to reconcile the fetched history with that produced whilst the history was being retrieved such that the node will have a full history from the first block all the way to the networks current height.  (<a name="0076-DANO-025" href="#0076-DANO-025">0076-DANO-025</a>)
+1. It must be possible to rollback the data-node to a previous block height and have it process events from this height onwards.  The state of the datanode at the rollback height must match exactly the state of the node as it was when it originally reached the given height. (<a name="0076-DANO-039" href="#0076-DANO-039">0076-DANO-039</a>)
 
 ### Data integrity
 
@@ -166,6 +167,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. Starting a core node at block height greater than the data-nodes block height must result in an error and a refusal to start (<a name="0076-DANO-014" href="#0076-DANO-014">0076-DANO-014</a>)
 1. If a data-node snapshot fails during the restore the process, it should error and the node(s) won't start (<a name="0076-DANO-009" href="#0076-DANO-009">0076-DANO-009</a>)
 1. When queried via the APIs a node restored from decentralised history should return identical results to a node with the same block span which has been populated by event consumption.  [project front end dApps](https://github.com/vegaprotocol/frontend-monorepo/actions/workflows/generate-queries.yml). (<a name="0076-DANO-022" href="#0076-DANO-022">0076-DANO-022</a>)
+1. All network history retained by a node for a given block span and type must be downloadable in CSV format. (<a name="0076-DANO-040" href="#0076-DANO-040">0076-DANO-040</a>)
 
 ### Data-node network determinism
 
@@ -183,11 +185,25 @@ It must be possible to add to the data node APIs that return the result of calcu
 2. Standard nodes should retain data in accordance with the configured data retention policy (<a name="0076-DANO-027" href="#0076-DANO-027">0076-DANO-027</a>)
 3. Archival nodes should retain all data from the height at which they joined the network (<a name="0076-DANO-028" href="#0076-DANO-028">0076-DANO-028</a>)
 
+### API Request Rate Limiting
+
+1. Datanode should provide an optional mechanism for limiting the average number of requests per second over on its API
+2. That rate should be specified in the datanode configuration file
+3. A client may, over a short period of time, make requests at a greater frequency than the limit as long as the average rate over a longer period of time is not exceeded. (<a name="0076-DANO-029" href="#0076-DANO-029">0076-DANO-029</a>)
+4. The extent to which clients may of 'burst' requests should also be capped and specified in the datanode configuration file (<a name="0076-DANO-030" href="#0076-DANO-030">0076-DANO-030</a>)
+5. Limits should be enforced on a per-client basis. Source IP address is a sufficient discriminator (<a name="0076-DANO-031" href="#0076-DANO-031">0076-DANO-031</a>)
+6. Headers or metadata should be included in each API response indicating to the client what the limits are, and how close they currently are to exceeding them (<a name="0076-DANO-032" href="#0076-DANO-032">0076-DANO-032</a>)
+7. If limits are exceeded an API appropriate error response should be returned, containing similar headers or metadata (<a name="0076-DANO-033" href="#0076-DANO-033">0076-DANO-033</a>)
+8. If the rate of denied (due to rate limiting) requests subsequently exceed the same maximum rate/burst parameters the client should be banned (<a name="0076-DANO-034" href="#0076-DANO-034">0076-DANO-034</a>)
+9. The ban denies all access to the API for a configurable length of time (<a name="0076-DANO-035" href="#0076-DANO-035">0076-DANO-035</a>)
+10. For that time, any requests will receive an API appropriate error response indicating that they are banned (<a name="0076-DANO-036" href="#0076-DANO-036">0076-DANO-036</a>)
+11. The rate limit for the GraphQL API should be configurable separately from the gRPC API and it's REST wrapper since a single GraphQL request can trigger many internal gRPC requests (<a name="0076-DANO-037" href="#0076-DANO-037">0076-DANO-037</a>)
+12. Where one API makes use of another (e.g. GraphQL making use of gRPC), rate limits should be enforced only once, on the side that faces the client (<a name="0076-DANO-038" href="#0076-DANO-038">0076-DANO-038</a>)
+
 ### General Acceptance
 
 1. The DataNode must be able to handle brief network outages and disconnects from the vega node (<a name="0076-DANO-015" href="#0076-DANO-015">0076-DANO-015</a>)
 1. The validator node will only accept requests for event bus subscriptions. All other API subscription requests will be invalid. (<a name="0076-DANO-016" href="#0076-DANO-016">0076-DANO-016</a>)
 1. The event bus stream is available from validators, non validators and the DataNode (<a name="0076-DANO-017" href="#0076-DANO-017">0076-DANO-017</a>)
-1. All events that are emitted on the full unfiltered event stream are processed by the DataNode (no data is lost) (<a name="0076-DANO-018" href="#0076-DANO-018">0076-DANO-018</a>)
 1. If a DataNode loses connection to a Vega node if will attempt to reconnect and if the cached data received from the Vega node is enough to continue working it can resume being a DataNode. (<a name="0076-DANO-019" href="#0076-DANO-019">0076-DANO-019</a>)
-1. The DataNode must provide its current block height and connection status on responses to client requests so the client can determine whether or not the data is stale. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)
+1. The DataNode must provide its current block height and vega time on responses to client requests so the client can determine whether or not the data is stale. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)

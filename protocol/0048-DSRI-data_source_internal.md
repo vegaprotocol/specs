@@ -122,6 +122,7 @@ Currently (as of Oregon Trail), only the *Vega time changed (1.3 above)* interna
 	- update the market to have a time based termination
 	- update the market to have an earlier time based termination
 	- wait until the first timer to tick
+	- send through valid settlement data
 	- assert the the market settles successfully
 1. Time based termination across multiple markets (<a name="0048-DSRI-014" href="#0048-DSRI-014">0048-DSRI-014</a>)
 	- setup 3 markets, all with time based termination with identical signer details, two with the same time, one with a later time

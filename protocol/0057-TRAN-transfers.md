@@ -6,18 +6,18 @@ These transfers are not to be confused with the internal concept of transfers wh
 Allowing users to initiate transfers allows for the following capabilities:
 
 - A user can transfer funds from a public key A to a public key B.
-- A user can transfer funds from and to a locked account used for staking (yet to be specified) [LOCKED_FOR_STAKING](0059-STKG-simple_staking_and_delegating.md).
+- A user can transfer funds from and to a locked account used for staking (yet to be specified) [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md).
 - A user can set up a recurring transfer.
 - A user can set up a recurring transfer to one or more [reward accounts](0056-REWA-rewards_overview.md#reward-accounts).
 
 ## Limits
 
-Transfer can only be initiated by a party using their own funds from [accounts](./0013-accounts.md) that they are in control of:
+Transfer can only be initiated by a party using their own funds from [accounts](./0013-ACCT-accounts.md) that they are in control of:
 
 Here's the list of accounts types from which a user send funds from:
 
 - [GENERAL](0013-ACCT-accounts.md)
-- [LOCKED_FOR_STAKING](./0059-simple-staking-and-delegating.md) (not in Oregon Trail)
+- [LOCKED_FOR_STAKING](./0059-STKG-simple_staking_and_delegating.md) (not in Oregon Trail)
 
 Here's the list of accounts types into which funds can be sent:
 
@@ -39,7 +39,7 @@ In order to prevent the abuse of user-initiated transfers as spam attack there w
 
 ## Minimum transfer amount
 
-This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-asset-framework.md)).
+This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-ASSF-asset_framework.md)).
 The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`.
 
 ## Recurring transfers
@@ -61,7 +61,7 @@ Party1 can have a recurring transfer rt1 from A1 to A2 and another one (call it 
 
 A recurring transfers needs to contain this specific information:
 
-- start amount uint specifying the amount (interpreted according to the number of decimals specified by the [asset](0040-asset-framework.md)).
+- start amount uint specifying the amount (interpreted according to the number of decimals specified by the [asset](0040-ASSF-asset_framework.md)).
 - start epoch: at the end of this epoch the first recurring transfer will be made between
 - end epoch (optional): at the end of this epoch the last recurring transfer will be made between, optional. If not specified the transfer run until cancelled (by its creator or by the network as described below).
 - factor, decimal > 0.0 (a factor used with the amount specified for the transfer).
@@ -118,11 +118,11 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 ## Fees
 
-A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0059-simple-POS-rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
+A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-The fee is set by the `transfer.fee.factor` [network parameter](#network-parameter) that defines the proportion of each transfer taken as a fee.
+The fee is set by the `transfer.fee.factor` [network parameter](#network-parameters) that defines the proportion of each transfer taken as a fee.
 The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
-It is [paid in to the infrastructure fee pool](./0029-fees.md#collecting-and-distributing-fees).
+It is [paid in to the infrastructure fee pool](./0029-FEES-fees.md#collecting-and-distributing-fees).
 Fees are charged in the asset that is being transferred.
 
 ## Proposed command
@@ -273,10 +273,10 @@ A user's recurring transfer to a reward account does not occur if there are no p
 - In the second epoch, 2 * 10^6 trading occurs, and at the end of the epoch the transfer to the reward account occurs
 - At the end of the third epoch, no transfer occurs
 
-If the network parameter `transfer.minTransferFeeFactor` is modified, this modification is applied
+If the network parameter `transfer.fee.factor` is modified, this modification is applied
 immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-062" href="#0057-TRAN-062">0057-TRAN-062</a>)
 
-If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified, this modification is applied from the next Epoch on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-060" href="#0057-TRAN-060">0057-TRAN-060</a>)
+If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified, this modification is applied immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. In the case of a decrease, existing recurring transfers are not cancelled. (<a name="0057-TRAN-060" href="#0057-TRAN-060">0057-TRAN-060</a>)
 
 If the network parameter `transfer.minTransferQuantumMultiple` is modified, this modification is applied
 immediately on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-061" href="#0057-TRAN-061">0057-TRAN-061</a>)

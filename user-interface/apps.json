@@ -2,6 +2,9 @@
     "Desktop-Wallet": {
         "specs": ["0001-WALL"]
     },
+    "Browser-Wallet": {
+        "specs": ["1101-BWAL"]
+    },
     "Token": {
         "specs": ["9001-DATA", "1002-WITH", "1004-ASSO", "1005-VEST", "2001-STKE", "2002-SINC", "7001-COLL", "3001-VOTE", "3002-PROP", "3003-PMAN", "3004-PMAC", "3005-PASN", "3006-PASC", "3007-PNEC", "3008-PFRO", "0002-WCON", "0003-WTXN", "0004-EWAL", "005-ETXN", "0006-NETW" ]
     },

@@ -3,12 +3,12 @@
 The reward framework provides a mechanism for measuring and rewarding a number of key activities on the Vega network.
 These rewards operate in addition to the main protocol economic incentives which come from
 [fees](0029-FEES-fees.md) on every trade.
-These fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](0061-REWP-simple_pos_rewards_sweetwater.md).
+These fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](./0061-REWP-pos_rewards.md).
 
 The additional rewards described here can be funded arbitrarily by users of the network and may be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
 Note that transfers via governance, including to fund rewards, is a post-Oregon Trail feature.
 
-Note that validator rewards (and the reward account for those) is covered in [validator rewards](0061-REWP-simple_pos_rewards_sweetwater.md) and is separate from the trading reward framework described here.
+Note that validator rewards (and the reward account for those) is covered in [validator rewards](./0061-REWP-pos_rewards.md) and is separate from the trading reward framework described here.
 
 ## New network parameter for market creation threshold
 

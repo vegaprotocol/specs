@@ -2,65 +2,46 @@
 
 ## Summary
 
-Latency and throughput is of paramount importance to Vega validator nodes, so monitoring various 3rd party (and notably low transaction speed) blockchains and crypto-assets isn’t possible.
-To counter this problem we have created an event queue management system.
-This event queue allows the standardisation and propagation of transactions from 3rd party asset chains in the Vega event message format.
+The vega network relies solely on other networks for issuing the of coins or tokens that are used for settlement. Because of this, bridges controlled by the Vega network are created on these external chains (as of the first Alpha Mainnet deployment only ERC-20 tokens are supported via a bridge to the Ethereum chain).
+
+In order for these bridges to operate correctly and for Vega to reflect their activity, each validator node embeds mechanisms to source, validate and monitor activity on these bridges.
 
 ## Guide-level explanation
 
-Events and transactions are gathered and processed by the Event Queue from a given 3rd party blockchain, and only the ones subscribed to by Vega nodes will be propagated through consensus and then validated by the validator nodes.
-The Event Queue continually scans local or hosted external blockchain nodes to discover on-chain events that are applicable to Vega.
-Found external blockchain events are then sent to Vega validator nodes.
-This makes the event queue works as a buffer between the slow/complicated world of various blockchains, and the high throughput, low latency of Vega Core.
-This message queue will use gRPC to communicate with the Vega network via 3 main functions:
+As of the first Alpha Mainnet deployment, four contracts are being monitored by the Vega network:
 
-1. `GetSubscribedEventSources` returns a list of smart contract addresses and events that consensus has deemed as a valid source.
-1. `PropagateChainEvent` allows an event queue to send events raised on 3rd party blockchains (deposits, withdrawals, etc) through Vega consensus to ensure an event has been seen by the network. This function must support multiple blockchains as sources of events and multiple sources on a single blockchain (such as multiple deployments of an ERC20 bridge).
-    - Each validator will individually process and validate the given transaction and process the specified event reported using their local chain node (such as Ethereum).
-1. `GetEventAcceptanceStatus` returns the consensus acceptance status of a requested event. The event queue uses this function to determine if it should attempt to send the event again.
+- ERC-20 collateral bridge
+- staking contract
+- vesting contract
+- multisig control contract
+
+Every time a method is being called successfully on these contracts (for example a deposit on the collateral bridge) an event is emitted by the smart contract. The validator nodes will be monitoring all blocks created by Ethereum, and be looking for this event. This process is the sourcing of events.
+
+Once an event has been sourced by a validator, it will be forwarded to the other validators in the network under the form of a vega transaction.
+
+Upon receipt of the event, and confirmation it was sent by a legitimate validator node, the other validators will then try to find and verify the same event on the external chain.
+
+Once all validators have confirmed the event happened on the external chain, the action will be executed on the network (in the case of the deposit, the funds will be deposited into an account).
 
 ## Reference-level explanation
 
-- The event queue calls `GetSubscribedEventSources` on a Vega node to get the list of subscribed smart contracts
-- Using configured external blockchain nodes, the Event Queue filters for specific events provided in `GetSubscribedEventSourcesResponse`
-- For each event it calls `GetEventAcceptanceStatus` on a Vega node
-- Event Queue then creates an `PropagateChainEventRequest` for each applicable event that has yet to be accepted and submits them to `PropagateChainEvent` on a Vega validator node
-- Vega validators each verify each event against local external blockchain nodes as the event is gossiped
-- Consensus agrees and writes event into the Vega chain
+### Smart contracts in use
 
-## Pseudo-code / Examples
+All the smart contracts monitored by the validator nodes are defined in the `ethereumConfig` network parameter. Along with the contract itself, the creation time of the contract is required for the very first launch of the network. This is required in order for the validator nodes to poll all blocks since the creation of the contract.
 
-The protobuf of the service:
+Later on in the life of the network, this information is stored in the snapshot state / checkpoint with last sourced block on Ethereum to avoid interpreting events twice.
+
+Finally, the amount of confirmations expected for Ethereum is specified, this is set to 50 confirmation in mainnet.
+
+### Event sourcing
+
+Every validator node needs a constant connection to an Ethereum archival node. This allows the node to poll for Ethereum blocks as they are constructed, and scan for events emitted by the contracts related to the Vega network.
+
+The core node will look for new blocks on Ethereum every 10 to 15 seconds. Once a relevant event is found, the block, log index and transaction hash are extracted from it. A `ChainEvent` transaction is constructed then forwarded to the rest of the nodes through the Vega chain.
+
+Simplified chain event transaction:
 
 ```proto
-
-service trading{
-  /*....*/
-  rpc PropagateChainEvent(PropagateChainEventRequest) returns (PropagateChainEventResponse);
-  rpc GetSubscribedEventSources() returns (GetSubscribedEventSourcesResponse);
-  rpc GetEventAcceptanceStatus(GetEventAcceptanceStatusRequest) returns (GetEventAcceptanceStatusResponse);
-  /*....*/
-}
-
-message GetSubscribedEventSourcesResponse {
-  repeated string subscribed_event_source = 1;
-}
-
-
-message PropagateChainEventRequest {
-  // The event
-  vega.ChainEvent evt = 1;
-  string pubKey = 2;
-  bytes signature = 3;
-}
-
-// The response for a new event sent to vega
-message PropagateChainEventResponse {
-  // Did the event get accepted by the node successfully
-  bool success = 1;
-}
-
-
 // An event being forwarded to the vega network
 // providing information on things happening on other networks
 message ChainEvent {
@@ -69,10 +50,9 @@ message ChainEvent {
   string txID = 1;
 
   oneof event {
-    BuiltinAssetEvent builtin = 1001;
     ERC20Event erc20 = 1002;
-    BTCEvent btc = 1003;
     ValidatorEvent validator = 1004;
+    // more in the future
   }
 }
 
@@ -125,47 +105,77 @@ message ERC20Withdrawal {
   // The reference nonce used for the transaction
   string referenceNonce = 4;
 }
+```
 
-message GetEventAcceptanceStatusRequest {
-  string transaction_hash = 1;
-  uint32 log_index = 2;
-}
+### Event validation
 
-//can be expanded as needed
-enum EventAcceptanceStatus {
-  EVENT_ACCEPTANCE_STATUS_UNSPECIFIED = 0;
-  EVENT_ACCEPTANCE_STATUS_ACCEPTED = 1;
-  EVENT_ACCEPTANCE_STATUS_REJECTED = 2;
-}
+Once the `ChainEvent` transaction is received by the other validator nodes a routine is started internally to verify the events.
 
-message GetEventAcceptanceStatusResponse {
-  string transaction_hash = 1;
-  uint32 log_index = 2;
-  EventAcceptanceStatus acceptance_status = 3;
+Specifically the nodes will:
+
+- Find the event for the contract address, transaction hash, block and event log.
+- Ensure this event has not been seen before
+- Ensure that the required number of confirmations has been seen on the network
+
+As soon as the validator nodes confirm the event, they emit a new transaction in the Vega network to confirm the event is legitimate and it can be processed.
+
+As soon as the protocol receive 2/3 of the votes for the event, the corresponding action related to this event will be executed (e.g., funding an account in the case of a deposit). The confirmation of each validator is weighted with the validator power.
+
+Example of the node vote transaction:
+
+```proto
+// Used when a node votes for validating that a given resource exists or is valid,
+// for example, an ERC20 deposit is valid and exists on ethereum.
+message NodeVote {
+  // Reference, required field.
+  string reference = 2;
+  // type of NodeVote, also required.
+  Type type = 3;
+  enum Type {
+    // Represents an unspecified or missing value from the input
+    TYPE_UNSPECIFIED = 0;
+    // A node vote a new stake deposit
+    TYPE_STAKE_DEPOSITED = 1;
+    // A node vote for a new stake removed event
+    TYPE_STAKE_REMOVED = 2;
+    // A node vote for new collateral deposited
+    TYPE_FUNDS_DEPOSITED = 3;
+    // A node vote for a new signer added to the erc20 bridge
+    TYPE_SIGNER_ADDED = 4;
+    // A node vote for a signer removed from the erc20 bridge
+	TYPE_SIGNER_REMOVED = 5;
+    // A node vote for a bridge stopped event
+    TYPE_BRIDGE_STOPPED = 6;
+    // A node vote for a bridge resumed event
+    TYPE_BRIDGE_RESUMED = 7;
+    // A node vote for a newly listed asset
+    TYPE_ASSET_LISTED = 8;
+    // A node vote for an asset limits update
+    TYPE_LIMITS_UPDATED = 9;
+    // A node vote to share the total supply of the staking token
+    TYPE_STAKE_TOTAL_SUPPLY = 10;
+    // A node vote to update the threshold of the signer set for the multisig contract
+    TYPE_SIGNER_THRESHOLD_SET = 11;
+    // A node vote to validate a new assert governance proposal
+    TYPE_GOVERNANCE_VALIDATE_ASSET = 12;
+  }
 }
 ```
 
 ## Acceptance Criteria
 
-### Event Queue
-
-- Event Queue calls `GetSubscribedEventSources` and successfully parses the response (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)
-- Event Queue connects to a configured local or hosted external blockchain node (<a name="0036-BRIE-002" href="#0036-BRIE-002">0036-BRIE-002</a>)
-- Event Queue gathers and filters applicable events from configured external blockchain node (<a name="0036-BRIE-003" href="#0036-BRIE-003">0036-BRIE-003</a>)
-- Event Queue calls `GetEventAcceptanceStatus` and marks accepted events internally as complete (<a name="0036-BRIE-004" href="#0036-BRIE-004">0036-BRIE-004</a>)
-- Event Queue propagates unaccepted events to Vega node via `PropagateEvent` (<a name="0036-BRIE-005" href="#0036-BRIE-005">0036-BRIE-005</a>)
-- Event Queue retries sending events that have gone too long without being accepted  (<a name="0036-BRIE-006" href="#0036-BRIE-006">0036-BRIE-006</a>)
-
-### Vega Nodes
-
-- Vega nodes respond to `GetSubscribedEventSources` with a list of valid smart contract events (<a name="0036-BRIE-007" href="#0036-BRIE-007">0036-BRIE-007</a>)
-- Vega nodes accept events submitted to `PropagateEvent` and verifies them against configured external blockchain node (<a name="0036-BRIE-008" href="#0036-BRIE-008">0036-BRIE-008</a>)
-- Vega nodes write events to chain once verified (<a name="0036-BRIE-009" href="#0036-BRIE-009">0036-BRIE-009</a>)
-- Vega nodes respond appropriately to `GetEventAcceptanceStatus` (<a name="0036-BRIE-010" href="#0036-BRIE-010">0036-BRIE-010</a>)
-- Vega nodes verify Event existence and outcomes using local Ethereum node
-  - Verify balance changes (<a name="0036-BRIE-011" href="#0036-BRIE-011">0036-BRIE-011</a>)
-  - Verify account identities (<a name="0036-BRIE-012" href="#0036-BRIE-012">0036-BRIE-012</a>)
-  - Verify transaction hashes (<a name="0036-BRIE-013" href="#0036-BRIE-013">0036-BRIE-013</a>)
-- Vega nodes reject invalid events that fail verification in the previous step (<a name="0036-BRIE-014" href="#0036-BRIE-014">0036-BRIE-014</a>)
-- Vega nodes responds appropriately to event triggers
-  - Users are credited on deposit (see also [0013-ACCT](./0013-ACCT-accounts.md))  (<a name="0036-BRIE-015" href="#0036-BRIE-015">0036-BRIE-015</a>)
+- A valid event is processed by vega (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)
+  - A transaction is successfully executed on the bridge (e.g deposit)
+  - A validator node successfully source the event and emit a chain event transaction on the vega chain
+  - The others validators successfully validates the event on the ethereum chain and send a node vote on chain
+  - The required amount of node votes, weighted by validator score is received
+  - The processing of the event have effect on the network (e.g: for a deposit funds are deposited on an account)
+- A valid duplicated event is processed (<a name="0036-BRIE-002" href="#0036-BRIE-002">0036-BRIE-002</a>)
+  - A transaction is successfully executed on the bridge (e.g deposit) and successfully processed by vega
+  - A node sends again the chain event after sourcing it
+  - The nodes reject this event as duplicated, nothing else happens
+- A invalid event is processed (<a name="0036-BRIE-003" href="#0036-BRIE-003">0036-BRIE-003</a>)
+  - A malicious node sends a chain event for a non existing transaction on the bridge
+  - The node start validating this event on chain, but cannot find it
+  - After a given delay this chain event is rejected, no node votes are being sent by the validators
+  - This event has no repercussion on the vega state.

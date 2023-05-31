@@ -28,22 +28,22 @@ if transaction is rejected by wallet:
 
 if the wallet does not respond:
 
-- **must** be able to cancel attempt to submit transaction (<a name="0003-WTXN-008" href="#0003-WTXN-008">0003-WTXN-008</a>)
+- **must** not be able prevented from using the app, e.g. you can  (<a name="0003-WTXN-008" href="#0003-WTXN-008">0003-WTXN-008</a>)
+- **would** like to be able to cancel the transaction from the dapp so that the wallet is no longer in the state where it is asking user to confirm
 
 if the wallet highlights an issue with the transaction:
 
-- **must** show that the transaction was marked as invalid by the wallet and not broadcast (<a name="0003-WTXN-009" href="#0003-WTXN-009">0003-WTXN-009</a>)
+- **must** show that the transaction was marked as invalid by the wallet and not broadcast (aka an error was returned from Wallet) (<a name="0003-WTXN-009" href="#0003-WTXN-009">0003-WTXN-009</a>)
 - **should** see the error returned highlighted in context of the form that submitted the transaction in Dapp
 - **must** show error returned by wallet (<a name="0003-WTXN-011" href="#0003-WTXN-011">0003-WTXN-011</a>)
 
 ## Track transaction on network 
 
 - **must** see a link to that transaction in a block explorer for the appropriate network (<a name="0003-WTXN-012" href="#0003-WTXN-012">0003-WTXN-012</a>)
-- **must** see the transaction status - TODO Document these (<a name="0003-WTXN-013" href="#0003-WTXN-013">0003-WTXN-013</a>)
-- **must** see the network the transaction was broadcast to (<a name="0003-WTXN-018" href="#0003-WTXN-018">0003-WTXN-018</a>)
-- **must** see the block the transaction was processed in (<a name="0003-WTXN-014" href="#0003-WTXN-014">0003-WTXN-014</a>)
-- **must** show the node the transaction was broadcast to (<a name="0003-WTXN-015" href="#0003-WTXN-015">0003-WTXN-015</a>)
-- **must** see the validator that processed the block the transaction was processed in (<a name="0003-WTXN-016" href="#0003-WTXN-016">0003-WTXN-016</a>)
-- **must** see the content of the transaction as seen by the network (<a name="0003-WTXN-017" href="#0003-WTXN-017">0003-WTXN-017</a>)
+- **should** see an indication transaction status
+- **should** see the network the transaction was broadcast to
+- **should** see the block the transaction was processed in
+- **should** show the node the transaction was broadcast to
+- **could** see the validator that processed the block the transaction was processed in 
 
 ... so I am aware of the transactions status of the transactions my wallet is sending and that are being processed by the network

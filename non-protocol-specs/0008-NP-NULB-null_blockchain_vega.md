@@ -41,9 +41,7 @@ An extra API is added to allow the user to control the time and block start/end 
 - The null blockchain block time does not control the automatic creation of blocks
   - With the block time set to `1 second`, if at block height 1 I perform no actions for 5 seconds, the block height will still be 1 (<a name="0008-NP-NULB-003" href="#0008-NP-NULB-003">0008-NP-NULB-003</a>)
   - With the transactions-per-block configuration set to `2`
-   - If at block height 1 I submit 3 transactions, the block height will have increased to 2 (<a name="0008-NP-NULB-004" href="#0008-NP-NULB-004">0008-NP-NULB-004</a>)
-   - If at block height 1 I submit 1 transaction, the block height will still be 1 (<a name="0008-NP-NULB-005" href="#0008-NP-NULB-005">0008-NP-NULB-005</a>)
+    - If at block height 1 I submit 3 transactions, the block height will have increased to 2 (<a name="0008-NP-NULB-004" href="#0008-NP-NULB-004">0008-NP-NULB-004</a>)
+    - If at block height 1 I submit 1 transaction, the block height will still be 1 (<a name="0008-NP-NULB-005" href="#0008-NP-NULB-005">0008-NP-NULB-005</a>)
   - If at block height 1 I move time forward by 1s, the block height will have increased to 2 (<a name="0008-NP-NULB-006" href="#0008-NP-NULB-006">0008-NP-NULB-006</a>)
 - There is golang example which creates three parties, gives them assets, one party proposes a market and acts as LP, the remaining two parties trade, placing one trade per day for "365 days".  The LP party submits a trading terminated transaction after "365 days" and a subsequent settlement price transaction and the market settles. (<a name="0008-NP-NULB-007" href="#0008-NP-NULB-007">0008-NP-NULB-007</a>)
-
-
