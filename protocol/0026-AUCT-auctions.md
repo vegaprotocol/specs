@@ -172,7 +172,7 @@ message Market {
     2. past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed. (<a name="0026-AUCT-018" href="#0026-AUCT-018">0026-AUCT-018</a>)
     3. past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md). It will only end if
 		  - more liquidity is committed (<a name="0026-AUCT-019" href="#0026-AUCT-019">0026-AUCT-019</a>)
-		  - or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-20" href="#0026-AUCT-020">0026-AUCT-020</a>)
+		  - or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-020" href="#0026-AUCT-020">0026-AUCT-020</a>)
     4. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
 		  - best bid; it will still open. (<a name="0026-AUCT-021" href="#0026-AUCT-021">0026-AUCT-021</a>)
 		  - or best ask; it will still open. (<a name="0026-AUCT-022" href="#0026-AUCT-022">0026-AUCT-022</a>)
