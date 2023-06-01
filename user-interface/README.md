@@ -26,13 +26,13 @@ These files contain generic user needs for interacting with wallets that are tru
 - `0003-WTXN` [Submit Vega transaction](0003-WTXN-submit_vega_transaction.md)
 - `0004-EWAL` [Connect Ethereum wallet to a Dapp](0004-EWAL-connect_ethereum_wallet.md)
 - `0005-ETXN` [Submit Ethereum transaction](0005-ETXN-submit_ethereum_transaction.md)
-- `0006-NETW` [Network and node selection](0006-NETW-network-and-nodes.md) `TODO`
+- `0006-NETW` [Network and node selection](0006-NETW-network-and-nodes.md)
 
 ## `1000` Bridges, Transfers and Vesting
 
 - `1001-DEPO` [Deposit](1001-DEPO-desposit.md)
 - `1002-WITH` [Withdraw](1002-WITH-withdraw.md)
-- `1003-TRAN` [Transfer](1003-TRAN-transfer.md) `TODO`
+- `1003-TRAN` [Transfer](1003-TRAN-transfer.md)
 - `1004-ASSO` [Associate governance token with a Vega key](1004-ASSO-associate.md)
 - `1005-VEST` [View and redeem vested tokens](1005-VEST-vesting.md)
 
@@ -64,7 +64,7 @@ These files contain generic user needs for interacting with wallets that are tru
 
 ## `6000` Markets and analysis
 
-- `6001-MARK` [Find markets](6001-MARK-find_markets.md) `TODO`
+- `6001-MARK` [Find markets](6001-MARK-find_markets.md)
 - `6002-MARD` [View market specification](6002-MDET-market-details.md) `TODO`
 - `6003-ORDB` [Analyze Order book](6003-ORDB-order_book.md) `TODO`
 - `6004-PHIS` [Analyze price history](6004-PHIS-price_history.md) `TODO`
@@ -72,11 +72,11 @@ These files contain generic user needs for interacting with wallets that are tru
 
 ## `7000` Collateral, Orders, Positions and Fills
 
-- `7001-COLL` [View my collateral / accounts](7001-COLL-collateral.md) `TODO`
+- `7001-COLL` [View my collateral / accounts](7001-COLL-collateral.md)
 - `7002-SORD` [Submit an order](7002-SORD-submit_orders.md)
 - `7003-MORD` [Manage my orders](7003-MORD-manage_orders.md)
 - `7004-POSI` [View my positions](7004-POSI-positions.md) `TODO`
-- `7005-FILL` [View my trades/fills](7005-FILL-fills.md) `TODO`
+- `7005-FILL` [View my trades/fills](7005-FILL-fills.md)
 - `7006-FEES` [View my trading fees](7006-FEES-fees.md) `TODO`
 
 ## `8000` Understand transactions and blocks
