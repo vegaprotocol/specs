@@ -7,7 +7,6 @@ A market using a limit order book will permit orders of various types to be subm
 Notes on scope of current version of this spec:
 
 - Includes only detailed specification for orders valid for *continuous trading*, does not specify behaviour of these order types in an auction.
-- Does not include detailed specification for **stop** orders. Inclusion of stops in guide level explanation is a placeholder/indicator of future requirements.
 
 ## Guide-level explanation
 
@@ -142,6 +141,45 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
   - Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporate its volume and/or price level. (<a name="0014-ORDT-004" href="#0014-ORDT-004">0014-ORDT-004</a>)
   - A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>)
 - No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>)
+
+### Stop orders
+- A stop order containing both a trigger price and a trailing stop distance will be rejected.(<a name="0014-ORDT-007" href="#0014-ORDT-007">0014-ORDT-007</a>)
+- A stop order with reduce only set to false will be rejected. (<a name="0014-ORDT-008" href="#0014-ORDT-008">0014-ORDT-008</a>)
+- Once triggered, a stop order is removed from the book and cannot be triggered again. (<a name="0014-ORDT-009" href="#0014-ORDT-009">0014-ORDT-009</a>)
+- A stop order placed by a key with a zero position and no open orders will be rejected. (<a name="0014-ORDT-010" href="#0014-ORDT-010">0014-ORDT-010</a>)
+- A stop order placed by a key with a zero position but open orders will be accepted. (<a name="0014-ORDT-011" href="#0014-ORDT-011">0014-ORDT-011</a>)
+- Attempting to create more stop orders than is allowed by the relevant network parameter will result in the transaction failing to execute. (<a name="0014-ORDT-012" href="#0014-ORDT-012">0014-ORDT-012</a>)
+
+- A stop order wrapping a limit order will, once triggered, place the limit order as if it just arrived as an order without the stop order wrapping. (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>)
+- A stop order wrapping a market order will, once triggered, place the market order as if it just arrived as an order without the stop order wrapping. (<a name="0014-ORDT-014" href="#0014-ORDT-014">0014-ORDT-014</a>)
+  
+- With a last traded price at 50, a stop order placed with `Rises Above` setting at 75 will be triggered by any trade at price 75 or higher. (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>)
+- With a last traded price at 50, a stop order placed with `Rises Above` setting at 25 will be triggered immediately (before another trade is even necessary). (<a name="0014-ORDT-016" href="#0014-ORDT-016">0014-ORDT-016</a>)
+- With a last traded price at 50, a stop order placed with `Falls Below` setting at 25 will be triggered by any trade at price 25 or lower. (<a name="0014-ORDT-017" href="#0014-ORDT-017">0014-ORDT-017</a>)
+- With a last traded price at 50, a stop order placed with `Falls Below` setting at 75 will be triggered immediately (before another trade is even necessary). (<a name="0014-ORDT-018" href="#0014-ORDT-018">0014-ORDT-018</a>)
+
+- With a last traded price at 50, a stop order placed with any trigger price which does not trigger immediately will trigger as soon as a trade occurs at a trigger price, and will not wait until the next mark price update to trigger. (<a name="0014-ORDT-019" href="#0014-ORDT-019">0014-ORDT-019</a>)
+- A stop order with expiration time `T` set to expire at that time will expire at time `T` if reached without being triggered. (<a name="0014-ORDT-020" href="#0014-ORDT-020">0014-ORDT-020</a>)
+- A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-021" href="#0014-ORDT-021">0014-ORDT-021</a>)
+  - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-022" href="#0014-ORDT-022">0014-ORDT-022</a>)
+
+- A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. At this time the order will be placed on the book if and only if it would reduce the trader's absolute position (buying if they are short or selling if they are long) if executed (i.e. will execute as a reduce-only order).  (<a name="0014-ORDT-023" href="#0014-ORDT-023">0014-ORDT-023</a>)
+- If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-024" href="#0014-ORDT-024">0014-ORDT-024</a>)
+- If a pair of stop orders are specified as OCO with the same trigger conditions and directions, if that trigger is hit one will execute and the other will expire. The exact choice of which will execute should not be assumed by the trader. (<a name="0014-ORDT-025" href="#0014-ORDT-025">0014-ORDT-025</a>)
+- If a pair of stop orders are specified as OCO and one triggers but is invalid at time of triggering (e.g. a buy when the trader is already long) the other will still be cancelled. (<a name="0014-ORDT-026" href="#0014-ORDT-026">0014-ORDT-026</a>)
+
+- A trailing stop order for a 5% drop placed when the price is `50`, followed by a price rise to `60` will:
+  - Be triggered by a fall to `57`. (<a name="0014-ORDT-027" href="#0014-ORDT-027">0014-ORDT-027</a>)
+  - Not be triggered by a fall to `58`. (<a name="0014-ORDT-027" href="#0014-ORDT-027">0014-ORDT-027</a>)
+- A trailing stop order for a 5% rise placed when the price is `50`, followed by a drop to `40` will:
+  - Be triggered by a rise to `42`. (<a name="0014-ORDT-028" href="#0014-ORDT-028">0014-ORDT-028</a>)
+  - Not be triggered by a rise to `41`. (<a name="0014-ORDT-029" href="#0014-ORDT-029">0014-ORDT-029</a>)
+- A trailing stop order for a 25% drop placed when the price is `50`, followed by a price rise to `60`, then to `50`, then another rise to `57` will:
+  - Be triggered by a fall to `45`. (<a name="0014-ORDT-030" href="#0014-ORDT-030">0014-ORDT-030</a>)
+  - Not be triggered by a fall to `46`. (<a name="0014-ORDT-031" href="#0014-ORDT-031">0014-ORDT-031</a>)
+
+- A stop order placed either prior to or during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-032" href="#0014-ORDT-032">0014-ORDT-032</a>)
+- A stop order placed either prior to or during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-033" href="#0014-ORDT-033">0014-ORDT-033</a>)
 
 ### See also
 
