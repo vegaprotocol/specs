@@ -88,7 +88,6 @@ As a wallet user I want to connect my key(s) to a dapp So that I can verify tran
 As a browser wallet user I want to be able to approve a transaction request So that I can verify and complete the action I am trying to make on the vega dapp I'm using
 
 - When I view a transaction request I can choose to approve it (<a name="1101-BWAL-044" href="#1101-BWAL-044">1101-BWAL-044</a>)
-- When I approve a transaction I can see confirmation that the transaction has been approved (<a name="1101-BWAL-045" href="#1101-BWAL-045">1101-BWAL-045</a>)
 - When I approve a transaction the transaction gets signed and the approved status gets fed back to the dapp that requested it (<a name="1101-BWAL-046" href="#1101-BWAL-046">1101-BWAL-046</a>)
 - When I approve a transaction after I have approved it we revert to the next transaction if there's a queue OR we revert to the key view (the front / homepage) (<a name="1101-BWAL-047" href="#1101-BWAL-047">1101-BWAL-047</a>)
 
@@ -97,7 +96,6 @@ As a browser wallet user I want to be able to approve a transaction request So t
 As a browser wallet user I want to be able to reject a transaction request So that I can prevent a transaction going through that I don't recognise as mine, or have changed my mind on / identified a mistake etc.
 
 - When I view a transaction request I can choose to reject it(<a name="1101-BWAL-048" href="#1101-BWAL-048">1101-BWAL-048</a>)
-- When I reject a transaction I can see confirmation that the transaction has been rejected (<a name="1101-BWAL-049" href="#1101-BWAL-049">1101-BWAL-049</a>)
 - When I reject a transaction the transaction does not get signed and the rejected status gets fed back to the dapp that requested it (<a name="1101-BWAL-050" href="#1101-BWAL-050">1101-BWAL-050</a>)
 - When I reject a transaction after I have rejected it we revert to the next transaction if there's a queue OR we revert to the key view (start / home page) (<a name="1101-BWAL-051" href="#1101-BWAL-051">1101-BWAL-051</a>)
 
@@ -115,7 +113,6 @@ As a user I want to recognise transactions that are not orders or withdraw / tra
   -- [ ] The key you are using to sign with a visual identifier  
   -- [ ] When it was received  
   -- [ ] Raw JSON details
-- It is visually similar to other transaction types but essentially has less of the human readable detail(s) (design note) (<a name="1101-BWAL-057" href="#1101-BWAL-057">1101-BWAL-057</a>)
 - I can copy the raw json to my clipboard (<a name="1101-BWAL-058" href="#1101-BWAL-058">1101-BWAL-058</a>)
 - When I try to submit a transaction to the wallet I've made during onboarding but have not "completed" onboarding, I cannot see the transaction request until I've completed onboarding (it is queued in the background) (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
 
