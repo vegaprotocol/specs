@@ -307,7 +307,6 @@ The proposal specifies:
 - `source_type`: the source account type (i.e. network treasury, market insurance pool)
 - `source` specifies the account to transfer from, depending on the account type:
   - network treasury: leave blank (only one per asset)
-  - network insurance pool: leave blank (only one per asset)
   - market insurance pool: market ID
 - `type`, which can be either "all or nothing" or "best effort":
   - all or nothing: either transfers the specified amount or does not transfer anything
@@ -317,7 +316,6 @@ The proposal specifies:
 - `fraction_of_balance`: the maximum fraction of the source account's balance to transfer as a decimal (i.e. 0.1 = 10% of the balance)
 - `destination_type` specifies the account type to transfer to (reward pool, party, network insurance pool, market insurance pool)
 - `destination` specifies the account to transfer to, depending on the account type:
-  - reward pool: the reward scheme ID
   - party: the party's public key
   - network insurance pool: leave blank (there's only one per asset)
   - market insurance pool: market ID
