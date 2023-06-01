@@ -139,7 +139,7 @@ The order now behaves like a normal limit order and will leave the book if it tr
   
   * The incoming order trades with all visible volume at the price level, whether an iceberg order or a vanilla limit order
 
-  * If there is still remaining volume in the order once all visible volume at the price level is used up, the remaining quantity is split between the non-visible components of all iceberg orders at this level according to their remaining volumes. For example if there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders.
+  * If there is still remaining volume in the order once all visible volume at the price level is used up, the remaining quantity is split between the non-visible components of all iceberg orders at this level according to their remaining volumes. For example if there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. If the distribution doesn't divide exactly stick the extra onto the iceberg which is first in terms of time priority.
   
   * If there are still remaining iceberg orders at this point, refresh their volumes and continue trading. If the incoming order uses up all iceberg orders at this level, continue with any remaining volume to the next price level.
 
