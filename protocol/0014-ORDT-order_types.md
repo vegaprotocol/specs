@@ -139,7 +139,7 @@ The order now behaves like a normal limit order and will leave the book if it tr
   
   * The incoming order trades with all visible volume at the price level, whether an iceberg order or a vanilla limit order
 
-  * If there is still remaining volume in the order once all visible volume at the price level is used up, the remaining quantity is split between the non-visible components of all iceberg orders at this level according to their remaining volumes. For example if there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. 
+  * If there is still remaining volume in the order once all visible volume at the price level is used up, the remaining quantity is split between the non-visible components of all iceberg orders at this level according to their remaining volumes. For example if there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders.
   
   * If there are still remaining iceberg orders at this point, refresh their volumes and continue trading. If the incoming order uses up all iceberg orders at this level, continue with any remaining volume to the next price level.
 
@@ -259,8 +259,8 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 7. When a non iceberg order sitting on the book is amended such that it trades with with an iceberg order, then the iceberg order is refreshed (<a name="0014-ORDT-033" href="#0014-ORDT-033">0014-ORDT-033</a>)
 8. Wash trading is not permitted for iceberg orders. The same party has one iceberg order that sits at the back of the queue , another normal order in opposite direction , the iceberg at the back comes in front and matches either fully OR partially and gets rejected( <a name="0014-ORDT-034" href="#0014-ORDT-034">0014-ORDT-034</a>)
 9. For a price level with multiple iceberg orders, if an aggressive order hits this price level, any volume greater than the displayed volume at a level is split proportionally between the hidden components of iceberg orders at that price level
-   1.  If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. (<a name="0014-ORDT-037" href="#0014-ORDT-037">0014-ORDT-037</a>)
-   1.  If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 600 lots would be split 200 to the first order and 100 to the two 100 lot orders, with 200 lots then taking farther price levels. (<a name="0014-ORDT-038" href="#0014-ORDT-038">0014-ORDT-038</a>)
+   1. If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. (<a name="0014-ORDT-037" href="#0014-ORDT-037">0014-ORDT-037</a>)
+   1. If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 600 lots would be split 200 to the first order and 100 to the two 100 lot orders, with 200 lots then taking farther price levels. (<a name="0014-ORDT-038" href="#0014-ORDT-038">0014-ORDT-038</a>)
 
 ### Snapshots
 
