@@ -112,7 +112,7 @@ Note that this could become obsolete if a future version of the protocol impleme
 
 In addition to the normal validators, there is an additional set of Ersatz validators (also referred to as Standby Validators) as defined by the corresponding network parameter. These are validators that do not contribute to the chain, but are on standby to jump in if a normal validator drops off. The network will have
 
-`n' := ceil(network.validators.multipleOfTendermintValidators x network.validators.tendermint.number)`
+`n' := floor(network.validators.multipleOfTendermintValidators x network.validators.tendermint.number)`
 
 ersatz validators.
 The value range for the decimal `network.validators.multipleOfTendermintValidators` is `0.0` to `infinity`.
