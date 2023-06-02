@@ -157,7 +157,8 @@ This is allowed because the order will lose time priority on refresh, i.e. befor
 
 * Icebergs can be entered or carried into auctions if the underlying TIF is supported.
 
-* Icebergs can trade in the auction uncrossing up to their current `displayed quantity` as for any other transaction that would cause a trade with an iceberg order.
+* Icebergs can trade in the auction uncrossing up to their full `remaining` amount as for any other transaction that would cause a trade with an iceberg order.
+If the remainders of multiple icebergs sit at the same price and are not fully used up, the traded volume should be split between them pro-rata by their total total size. Any integer remainder should be allocated to the iceberg with the highest time priority.
 
 * Icebergs are refreshed after an auction uncrossing if they traded to below their `minimum peak size`, according to the same rules as for normal execution.
 
