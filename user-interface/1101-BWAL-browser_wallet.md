@@ -88,62 +88,62 @@ As a wallet user I want to connect my key(s) to a dapp So that I can verify tran
 As a browser wallet user I want to be able to approve a transaction request So that I can verify and complete the action I am trying to make on the vega dapp I'm using
 
 - When I view a transaction request I can choose to approve it (<a name="1101-BWAL-044" href="#1101-BWAL-044">1101-BWAL-044</a>)
-- When I approve a transaction the transaction gets signed and the approved status gets fed back to the dapp that requested it (<a name="1101-BWAL-046" href="#1101-BWAL-046">1101-BWAL-046</a>)
-- When I approve a transaction after I have approved it we revert to the next transaction if there's a queue OR we revert to the key view (the front / homepage) (<a name="1101-BWAL-047" href="#1101-BWAL-047">1101-BWAL-047</a>)
+- When I approve a transaction the transaction gets signed and the approved status gets fed back to the dapp that requested it (<a name="1101-BWAL-045" href="#1101-BWAL-045">1101-BWAL-045</a>)
+- When I approve a transaction after I have approved it we revert to the next transaction if there's a queue OR we revert to the key view (the front / homepage) (<a name="1101-BWAL-046" href="#1101-BWAL-046">1101-BWAL-046</a>)
 
 ## Reject transaction request
 
 As a browser wallet user I want to be able to reject a transaction request So that I can prevent a transaction going through that I don't recognise as mine, or have changed my mind on / identified a mistake etc.
 
-- When I view a transaction request I can choose to reject it(<a name="1101-BWAL-048" href="#1101-BWAL-048">1101-BWAL-048</a>)
-- When I reject a transaction the transaction does not get signed and the rejected status gets fed back to the dapp that requested it (<a name="1101-BWAL-050" href="#1101-BWAL-050">1101-BWAL-050</a>)
-- When I reject a transaction after I have rejected it we revert to the next transaction if there's a queue OR we revert to the key view (start / home page) (<a name="1101-BWAL-051" href="#1101-BWAL-051">1101-BWAL-051</a>)
+- When I view a transaction request I can choose to reject it(<a name="1101-BWAL-047" href="#1101-BWAL-047">1101-BWAL-047</a>)
+- When I reject a transaction the transaction does not get signed and the rejected status gets fed back to the dapp that requested it (<a name="1101-BWAL-048" href="#1101-BWAL-048">1101-BWAL-048</a>)
+- When I reject a transaction after I have rejected it we revert to the next transaction if there's a queue OR we revert to the key view (start / home page) (<a name="1101-BWAL-049" href="#1101-BWAL-049">1101-BWAL-049</a>)
 
 ## View trasaction request (generic)
 
 As a user I want to recognise transactions that are not orders or withdraw / transfer requests with at least the bear minimum information needed to proceed So that I can continue my task (e.g. governing, staking)
 
-- When the dapp requests a transaction with a key we don't know about, we don't see a request in the wallet but instead send an error back to the dapp(<a name="1101-BWAL-052" href="#1101-BWAL-052">1101-BWAL-052</a>)
-- When the dapp requests a transaction type / or includes transaction details that we don't recognise, we don't present the transaction request in the wallet but provide an error to the dapp that feeds back that the transaction can not be processed (<a name="1101-BWAL-053" href="#1101-BWAL-053">1101-BWAL-053</a>)
-- When the user opens the extension (or it has automatically opened) they can immediately see a transaction request (<a name="1101-BWAL-054" href="#1101-BWAL-054">1101-BWAL-054</a>)
-- If the browser extension is closed during a transaction request, the request persists (<a name="1101-BWAL-055" href="#1101-BWAL-055">1101-BWAL-055</a>)
-- For transactions that are not orders or withdraw / transfers, there is a standard template with the minimum information required i.e. (<a name="1101-BWAL-056" href="#1101-BWAL-056">1101-BWAL-056</a>)  
+- When the dapp requests a transaction with a key we don't know about, we don't see a request in the wallet but instead send an error back to the dapp(<a name="1101-BWAL-050" href="#1101-BWAL-050">1101-BWAL-050</a>)
+- When the dapp requests a transaction type / or includes transaction details that we don't recognise, we don't present the transaction request in the wallet but provide an error to the dapp that feeds back that the transaction can not be processed (<a name="1101-BWAL-051" href="#1101-BWAL-051">1101-BWAL-051</a>)
+- When the user opens the extension (or it has automatically opened) they can immediately see a transaction request (<a name="1101-BWAL-052" href="#1101-BWAL-052">1101-BWAL-052</a>)
+- If the browser extension is closed during a transaction request, the request persists (<a name="1101-BWAL-053" href="#1101-BWAL-053">1101-BWAL-053</a>)
+- For transactions that are not orders or withdraw / transfers, there is a standard template with the minimum information required i.e. (<a name="1101-BWAL-054" href="#1101-BWAL-054">1101-BWAL-054</a>)  
   -- [ ] Transaction title  
   -- [ ] Where it is from e.g. console.vega.xyz with a favicon  
   -- [ ] The key you are using to sign with a visual identifier  
   -- [ ] When it was received  
   -- [ ] Raw JSON details
-- I can copy the raw json to my clipboard (<a name="1101-BWAL-058" href="#1101-BWAL-058">1101-BWAL-058</a>)
-- When I try to submit a transaction to the wallet I've made during onboarding but have not "completed" onboarding, I cannot see the transaction request until I've completed onboarding (it is queued in the background) (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
+- I can copy the raw json to my clipboard (<a name="1101-BWAL-055" href="#1101-BWAL-055">1101-BWAL-055</a>)
+- When I try to submit a transaction to the wallet I've made during onboarding but have not "completed" onboarding, I cannot see the transaction request until I've completed onboarding (it is queued in the background) (<a name="1101-BWAL-056" href="#1101-BWAL-056">1101-BWAL-056</a>)
 
 ## Log in (next time password expires)
 
 As a wallet user I want a way to enter my password when my login has expired So that I can continue with my task
 
-- When I have quit my browser, and then reopened, I am asked to enter my browser extension password(<a name="1101-BWAL-060" href="#1101-BWAL-060">1101-BWAL-060</a>)
-- I am informed if I enter my password incorrectly (<a name="1101-BWAL-061" href="#1101-BWAL-061">1101-BWAL-061</a>)
-- When entering a correct password decrypts my wallets (<a name="1101-BWAL-062" href="#1101-BWAL-062">1101-BWAL-062</a>)
+- When I have quit my browser, and then reopened, I am asked to enter my browser extension password(<a name="1101-BWAL-057" href="#1101-BWAL-057">1101-BWAL-057</a>)
+- I am informed if I enter my password incorrectly (<a name="1101-BWAL-058" href="#1101-BWAL-058">1101-BWAL-058</a>)
+- When entering a correct password decrypts my wallets (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
 
 ## View wallet and key pairs
 
 As a browser wallet user I want to view my vega wallet (and key pair(s)) So that I can see that I've been successful creating the wallet / see my key ID
 
-- I can see a list of the keys in my wallet (<a name="1101-BWAL-063" href="#1101-BWAL-063">1101-BWAL-063</a>)
-- I can copy the public key ID to my clipboard (<a name="1101-BWAL-064" href="#1101-BWAL-064">1101-BWAL-064</a>)
-- I can see information of where to go to deposit and manage my assets (<a name="1101-BWAL-065" href="#1101-BWAL-065">1101-BWAL-065</a>)
-- I can see where I am in the app when viewing my wallet and key pair(s) (<a name="1101-BWAL-066" href="#1101-BWAL-066">1101-BWAL-066</a>)
+- I can see a list of the keys in my wallet (<a name="1101-BWAL-060" href="#1101-BWAL-060">1101-BWAL-060</a>)
+- I can copy the public key ID to my clipboard (<a name="1101-BWAL-061" href="#1101-BWAL-061">1101-BWAL-061</a>)
+- I can see information of where to go to deposit and manage my assets (<a name="1101-BWAL-062" href="#1101-BWAL-062">1101-BWAL-062</a>)
+- I can see where I am in the app when viewing my wallet and key pair(s) (<a name="1101-BWAL-063" href="#1101-BWAL-063">1101-BWAL-063</a>)
 
 ## Wallet version number (Settings)
 
 As a wallet user I want to understand the version # I am using So that I can trouble shoot should there be any issues
 
-- I can see the version # of the browser extension (<a name="1101-BWAL-067" href="#1101-BWAL-067">1101-BWAL-067</a>)
-- I can see the feedback link (<a name="1101-BWAL-068" href="#1101-BWAL-068">1101-BWAL-068</a>)
-- I can see a lock button and when I press it I am logged out and redirected to the login page (<a name="1101-BWAL-069" href="#1101-BWAL-069">1101-BWAL-069</a>)
+- I can see the version # of the browser extension (<a name="1101-BWAL-064" href="#1101-BWAL-064">1101-BWAL-064</a>)
+- I can see the feedback link (<a name="1101-BWAL-065" href="#1101-BWAL-065">1101-BWAL-065</a>)
+- I can see a lock button and when I press it I am logged out and redirected to the login page (<a name="1101-BWAL-066" href="#1101-BWAL-066">1101-BWAL-066</a>)
 
 ## Coming back to the app after onboarding
 
 As a user I want to see my wallet / keys immediately when I open my extension (and not onboarding again) So that I don't need to repeat onboarding unnecessarily and continue my task easily...
 
-- There is a way to determine if user has onboarded (<a name="1101-BWAL-070" href="#1101-BWAL-070">1101-BWAL-070</a>)
-- I want to see the previous page I was on or my wallet page by default (<a name="1101-BWAL-071" href="#1101-BWAL-071">1101-BWAL-071</a>)
+- There is a way to determine if user has onboarded (<a name="1101-BWAL-067" href="#1101-BWAL-067">1101-BWAL-067</a>)
+- I want to see the previous page I was on or my wallet page by default (<a name="1101-BWAL-068" href="#1101-BWAL-068">1101-BWAL-068</a>)
