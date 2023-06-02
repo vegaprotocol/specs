@@ -74,10 +74,9 @@
   - **Must** see if proposal has enough votes (<a name="6001-MARK-055" href="#6001-MARK-055">6001-MARK-055</a>)
 - **Must** see closing date (<a name="6001-MARK-056" href="#6001-MARK-056">6001-MARK-056</a>)
 - **Must** see enactment date (<a name="6001-MARK-057" href="#6001-MARK-057">6001-MARK-057</a>)
-- **Must** see voting (<a name="6001-MARK-058" href="#6001-MARK-058">6001-MARK-058</a>)
-- **Must** see status action menu (<a name="6001-MARK-059" href="#6001-MARK-059">6001-MARK-059</a>)
-  - **Must** provide a way to view proposal (<a name="6001-MARK-060" href="#6001-MARK-060">6001-MARK-060</a>)
-- **Must** provide a way to propose a new market (<a name="6001-MARK-061" href="#6001-MARK-061">6001-MARK-061</a>)
+- **Must** see status action menu (<a name="6001-MARK-058" href="#6001-MARK-058">6001-MARK-058</a>)
+  - **Must** provide a way to view proposal (<a name="6001-MARK-059" href="#6001-MARK-059">6001-MARK-059</a>)
+- **Must** provide a way to propose a new market (<a name="6001-MARK-060" href="#6001-MARK-060">6001-MARK-060</a>)
 
 - if there is no markets:
-  - **Must** show No data info (<a name="6001-MARK-062" href="#6001-MARK-062">6001-MARK-062</a>)
+  - **Must** show No data info (<a name="6001-MARK-061" href="#6001-MARK-061">6001-MARK-061</a>)
