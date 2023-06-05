@@ -147,3 +147,15 @@ As a user I want to see my wallet / keys immediately when I open my extension (a
 
 - There is a way to determine if user has onboarded (<a name="1101-BWAL-067" href="#1101-BWAL-067">1101-BWAL-067</a>)
 - I want to see the previous page I was on or my wallet page by default (<a name="1101-BWAL-068" href="#1101-BWAL-068">1101-BWAL-068</a>)
+
+## Import existing wallet
+
+As a wallet user When I am using the browser extension for the first time I want to import an existing vega wallet (and key pair(s)) that I created elsewhere i.e. desktop app or CLI So that I can get started using Console / another Vega dapp to trade / take part in governance
+
+- I can choose to import an existing vega wallet (<a name="1101-BWAL-069" href="#1101-BWAL-069">1101-BWAL-069</a>)
+- I can see an explanation of what I am being asked to do (<a name="1101-BWAL-070" href="#1101-BWAL-070">1101-BWAL-070</a>)
+- I can enter the recovery phrase to import my existing vega wallet (<a name="1101-BWAL-071" href="#1101-BWAL-071">1101-BWAL-071</a>)
+- I can submit the recovery phrase I have entered to import the wallet (<a name="1101-BWAL-072" href="#1101-BWAL-072">1101-BWAL-072</a>)
+- I can not hit submit until I have entered 24 words (and given feedback that I haven't met the min number of words) (<a name="1101-BWAL-073" href="#1101-BWAL-073">1101-BWAL-073</a>)
+- If I submit a recovery phrase I am given feedback if the words are invalid i.e. no wallet found with that recovery phrase (and I can try again) (<a name="1101-BWAL-074" href="#1101-BWAL-074">1101-BWAL-074</a>)
+- I am redirected to the next step (<a name="1101-BWAL-075" href="#1101-BWAL-075">1101-BWAL-075</a>)
