@@ -167,7 +167,7 @@ If the remainders of multiple icebergs sit at the same price and are not fully u
 
 * The fields `displayed quantity`, `remaining`, `quantity`, `initial peak size`, `minimum peak size`, `refresh policy` must be exposed by data node APIs in addition to all normal fields for an order.
 
-* An iceberg order refresh must generate an event bus event.
+* An iceberg order refresh must generate an event of the event bus.
 
 
 ### Valid order entry combinations

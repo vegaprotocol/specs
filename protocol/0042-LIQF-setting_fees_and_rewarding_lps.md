@@ -364,7 +364,7 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 - An LP joining a market that is above the target stake with a commitment large enough to push one of two higher bids above the target stake, and a higher fee bid than the current fee: the fee doesn't change (<a name="0042-LIQF-024" href="#0042-LIQF-024">0042-LIQF-024</a>)
 - An LP leaves a market that is above target stake when their fee bid is currently being used: fee changes to fee bid by the LP who takes their place in the bidding order (<a name="0042-LIQF-025" href="#0042-LIQF-025">0042-LIQF-025</a>)
 - An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size changes the LP that meets the target stake: fee changes to fee bid by the LP that is now at the place in the bid order to provide the target stake (<a name="0042-LIQF-026" href="#0042-LIQF-026">0042-LIQF-026</a>)
-- An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used and their commitment size doesn't the LP that meets the target stake: fee doesn't change (<a name="0042-LIQF-027" href="#0042-LIQF-027">0042-LIQF-027</a>)
+- An LP leaves a market that is above target stake when their fee bid is lower than the one currently being used. The loss of their commitment doesn't change which LP meets the target stake: fee doesn't change (<a name="0042-LIQF-027" href="#0042-LIQF-027">0042-LIQF-027</a>)
 - An LP leaves a market that is above target stake when their fee bid is higher than the one currently being used: fee doesn't change (<a name="0042-LIQF-028" href="#0042-LIQF-028">0042-LIQF-028</a>)
 
 ### API
