@@ -265,11 +265,9 @@ Let $s$ be `market.liquidity.commitmentMinTimeFraction`.
 
 Let $c$ be `market.liquidity.slaCompetitionFactor`.
 
-```text
 $$
 p_i = (1 - \frac{t - s}{1 - s}) \cdot c.
 $$
-```
 
 #### Calculating the SLA performance penalty for over hysteresis period
 
@@ -278,11 +276,9 @@ Now, for each LP $i$ take the $p_i$ values calculated over the last `market.liqu
 Now calculate $p_i^n$ to be the arithmetic average of $p_i^k$ for $k = 1,2,...,n-1$.
 Finally set
 
-```text
 $$
 p_i^n \leftarrow \max(p_i,p_i^n).
 $$
-```
 
 i.e. your penalty is the bigger of current epoch and average over the hysteresis period
 

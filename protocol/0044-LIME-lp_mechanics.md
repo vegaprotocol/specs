@@ -30,7 +30,7 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 - `market.liquidity.committmentMinTimeFraction` (decimal) —  minimum fraction of time LPs must spend "on the book" providing their committed liquidity. This is a decimal number in the interval $[0,1]$ i.e. both limits included. When set to $0$ the SLA mechanics are switched off for the market entirely.
 
-- `market.liquidity.providers.fee.calculationTimeStep` (time period e.g. `1m`) controls how often LP the quality of liquidity supplied by the LPs is evaluated and fees arising from that period are earmarked for specific parties.
+- `market.liquidity.providers.fee.calculationTimeStep` (time period e.g. `1m`) controls how often the quality of liquidity supplied by the LPs is evaluated and fees arising from that period are earmarked for specific parties.
 
 - `market.liquidity.performanceHysteresisEpochs` (uint) - number of liquidity epochs over which past performance will continue to affect rewards.
 
@@ -136,7 +136,7 @@ penalty-incuring-reduction-amount = -1 * proposed-commitment-variation - maximum
 ```
 
 Transfer `maximum-penalty-free-reduction-amount` to their general account.
-Now transfer `min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to their general account and transfer `market.liquidity.earlyExitPenalty x penalty-incuring-reduction-amount` to the market insurance pool.
+Now transfer `min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to their general account and transfer `market.liquidity.earlyExitPenalty x min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to the market insurance pool.
 Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire `proposed-commitment-variation` as the `delta`.
 
 Note that as a consequence the market may land in a liquidity auction the next time the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP reducing their commitment to an immediate liquidity auction evaluation).
@@ -161,7 +161,7 @@ When calculating fees for a trade, the size of a liquidity provider’s commitme
 
 ### Calculating liquidity from commitment
 
-Committed Liquidity Providers are required to provide a multiple of their stake (supplied in the settlement currency of the market) in notional volume of orders within the range defined below.
+Committed Liquidity Providers are required to provide a multiple of their stake (supplied in the settlement currency of the market) in notional volume of orders within the range defined below on both sides of the order book.
 
 The multiple is controlled by a network parameter `market.liquidity.stakeToCcyVolume`:
 
@@ -177,7 +177,7 @@ If there is no mid price then no LP is meeting their committed volume of notiona
 If there is mid price then we calculate the volume of notional that is in the range
 
 ```text
-(1.0-market.liquidity.priceRange) x mid =< price levels that count <= (1+market.liquidity.priceRange)x mid.
+(1.0-market.liquidity.priceRange) x mid <= price levels <= (1+market.liquidity.priceRange)x mid.
 ```
 
 If this is greater than or equal to `liquidity_required` then the LP is meeting the committed volume of notional.
@@ -187,7 +187,7 @@ If this is greater than or equal to `liquidity_required` then the LP is meeting 
 We calculate the volume of notional that is in the range
 
 ```text
-(1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) =<  price levels that count <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price).
+(1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) <=  price levels <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price).
 ```
 
 If this is greater than or equal to `liquidity_required` then the LP is meeting the committed volume of notional.
@@ -261,7 +261,7 @@ If, at the end of an epoch (and before any LP rewards and penalties were applied
 
 ## What data do we keep relating to liquidity provision?
 
-1. List of all liquidity providers and their commitment sizes and their “equity-like share” for each market [see 0042-setting-fees-and-rewarding-lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
+1. List of all liquidity providers and their commitment sizes, their “equity-like share” and "liquidity score" for each market [see 0042-setting-fees-and-rewarding-lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
 1. New account per market holding all committed liquidity provider bonds
 1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb))
 1. Each liquidity provider's actual bond amount (i.e. the balance of their bond account)

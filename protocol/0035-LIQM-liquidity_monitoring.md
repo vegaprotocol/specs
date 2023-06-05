@@ -39,9 +39,9 @@ If an incoming order would match orders on the book resulting in trades increasi
 
 ### Decreasing supplied stake
 
-If the [liquidity provision transaction would decrease](./0044-LIME-lp_mechanics.md#liquidity-provider-proposes-to-amend-commitment-amount) `supplied_stake` so that liquidity auction gets triggered then a liquidity auction is triggered the next time the next time conditions for liquidity auctions are evaluated.
+If the [liquidity provision transaction would decrease](./0044-LIME-lp_mechanics.md#liquidity-provider-proposes-to-amend-commitment-amount) `supplied_stake` so that liquidity auction gets triggered then a liquidity auction is triggered the next time conditions for liquidity auctions are evaluated.
 
-If the `supplied_stake` decreases as a result of a closeout of an insolvent liquidity provider, then closeout should proceed and market should go into liquidity auction the next time the next time conditions for liquidity auctions are evaluated.
+If the `supplied_stake` decreases as a result of a closeout of an insolvent liquidity provider, then closeout should proceed and market should go into liquidity auction the next time conditions for liquidity auctions are evaluated.
 
 ## Trigger for exiting the auction
 
