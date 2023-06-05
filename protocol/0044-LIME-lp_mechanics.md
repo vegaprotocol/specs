@@ -118,7 +118,7 @@ If they do not have sufficient collateral the transaction is rejected in entiret
 
 _Case:_ `proposed-commitment-variation < 0`
 We to calculate how much the LP can reduce commitment without incurring a penalty.
-To do this we first evaluate the maximum amount that the market can reduce without penalty by given the current liquidity demand in the market.
+To do this we first evaluate the maximum amount that the market can reduce without penalty given by the current liquidity demand in the market.
 
 `maximum-penalty-free-reduction-amount = total_stake - target_stake`
 
