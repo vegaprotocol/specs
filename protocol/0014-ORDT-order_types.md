@@ -98,7 +98,7 @@ Therefore the trigger level of a stop order moves with the market allowing the t
 
   - A network parameter will control the maximum number of stop orders per party (suggested initial value: between 4 and 10).
 
-  - TODO: confirm this makes sense) If the trader's position size gets to zero or changes direction all their stop orders are cancelled.
+  - If the trader's position size moves to zero exactly, and they have no open orders, all stop orders will be cancelled.
 
 
 ### Valid order entry combinations
@@ -180,6 +180,10 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 - A stop order placed either prior to or during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-032" href="#0014-ORDT-032">0014-ORDT-032</a>)
 - A stop order placed either prior to or during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-033" href="#0014-ORDT-033">0014-ORDT-033</a>)
+
+- If a trader has open stop orders and their position moves to zero whilst they still have open limit orders their stop orders will remain active. (<a name="0014-ORDT-034" href="#0014-ORDT-034">0014-ORDT-034</a>)
+- If a trader has open stop orders and their position moves to zero with no open limit orders their stop orders are cancelled. (<a name="0014-ORDT-035" href="#0014-ORDT-035">0014-ORDT-035</a>)
+
 
 ### See also
 
