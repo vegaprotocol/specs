@@ -143,6 +143,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 - No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>)
 
 ### Stop orders
+
 - A stop order containing both a trigger price and a trailing stop distance will be rejected.(<a name="0014-ORDT-007" href="#0014-ORDT-007">0014-ORDT-007</a>)
 - A stop order with reduce only set to false will be rejected. (<a name="0014-ORDT-008" href="#0014-ORDT-008">0014-ORDT-008</a>)
 - Once triggered, a stop order is removed from the book and cannot be triggered again. (<a name="0014-ORDT-009" href="#0014-ORDT-009">0014-ORDT-009</a>)
@@ -152,7 +153,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 - A stop order wrapping a limit order will, once triggered, place the limit order as if it just arrived as an order without the stop order wrapping. (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>)
 - A stop order wrapping a market order will, once triggered, place the market order as if it just arrived as an order without the stop order wrapping. (<a name="0014-ORDT-014" href="#0014-ORDT-014">0014-ORDT-014</a>)
-  
+
 - With a last traded price at 50, a stop order placed with `Rises Above` setting at 75 will be triggered by any trade at price 75 or higher. (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>)
 - With a last traded price at 50, a stop order placed with `Rises Above` setting at 25 will be triggered immediately (before another trade is even necessary). (<a name="0014-ORDT-016" href="#0014-ORDT-016">0014-ORDT-016</a>)
 - With a last traded price at 50, a stop order placed with `Falls Below` setting at 25 will be triggered by any trade at price 25 or lower. (<a name="0014-ORDT-017" href="#0014-ORDT-017">0014-ORDT-017</a>)
@@ -170,7 +171,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 - A trailing stop order for a 5% drop placed when the price is `50`, followed by a price rise to `60` will:
   - Be triggered by a fall to `57`. (<a name="0014-ORDT-027" href="#0014-ORDT-027">0014-ORDT-027</a>)
-  - Not be triggered by a fall to `58`. (<a name="0014-ORDT-027" href="#0014-ORDT-027">0014-ORDT-027</a>)
+  - Not be triggered by a fall to `58`. (<a name="0014-ORDT-036" href="#0014-ORDT-036">0014-ORDT-036</a>)
 - A trailing stop order for a 5% rise placed when the price is `50`, followed by a drop to `40` will:
   - Be triggered by a rise to `42`. (<a name="0014-ORDT-028" href="#0014-ORDT-028">0014-ORDT-028</a>)
   - Not be triggered by a rise to `41`. (<a name="0014-ORDT-029" href="#0014-ORDT-029">0014-ORDT-029</a>)
