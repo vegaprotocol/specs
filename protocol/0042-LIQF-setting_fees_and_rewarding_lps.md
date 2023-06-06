@@ -258,7 +258,6 @@ For any LP where `fraction_of_time_on_book < market.liquidity.commitmentMinTimeF
 
 For each LP where `fraction_of_time_on_book ≥ market.liquidity.commitmentMinTimeFraction`, the SLA penalty fraction `p_i` is calculated as follows:
 
-
 Let $t$ be `fraction_of_time_on_book`
 
 Let $s$ be `market.liquidity.commitmentMinTimeFraction`.
@@ -290,11 +289,9 @@ If for all $i$ (all the LPs) have $p_i^n = 1$ then all the fees go into the mark
 
 Calculate
 
-```text
 $$
 w_i = \frac{\text{LP-per-market fee account } i}{\sum_k \text{LP-per-market fee account } k}.
 $$
-```
 
 For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution".
 
@@ -302,11 +299,9 @@ Transfer all unpaid-out rewards left in LP-per-market fee accounts into a tempor
 Record its balance to be $B$.
 Let $b_i := (1-p_i^n) \times w_i$ and renormalise $b_i$s so that they sum up to $1$ i.e.
 
-```text
 $$
 b_i \leftarrow \frac{b_i}{\sum_k b_k}\,.
 $$
-```
 
 Each LP further gets a performance bonus: $b_i \times B$ with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
 
