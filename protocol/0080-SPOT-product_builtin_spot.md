@@ -32,7 +32,9 @@ When trading Spot products, parties can only use assets they own - there is no l
 
 ### Submissions
 
-A liquidity provision submitted to a `Spot` market allows a separate commitment amount to be specified for the buy and sell sides of the market. These commitment amounts are specified in the `quote_asset` and `base_asset` respectively.
+Liquidity commitments to a Spot market are made as detailed in [0044-LIME](./0044-LIME-lp_mechanics.md).
+
+A liquidity provision submitted to a `Spot` market specifies a single commitment amount in the `quote` asset.
 
 ```psuedo
 Example `LiquidityProvisionSubmission` command to an ETH/DAI market:
@@ -42,82 +44,29 @@ submission = {
     {
         marketId: "abcdefghiklkmnopqrstuvwxyz",
         fee: "0.01",
-        buyCommitmentAmount: 15000
-        buys: [
-            {
-                offset: "1"
-                proportion: "1"
-                reference: "PEGGED_REFERENCE_BEST_BID"
-            }
-        ]
-        sellCommitmentAmount: 10
-        sells: [
-            {
-                offset: "1"
-                proportion: "1"
-                reference: "PEGGED_REFERENCE_BEST_ASK"
-            }
-        ]
+        commitmentAmount: 15000 (DAI)
         reference: "example_liquidity_provision_submission"
     }
 }
 ```
 
-As the LP now has a different commitment amount on each side of the book, the following considerations must be made:
-
-- Physical Stake:
-  - An LPs `physical_stake` should be treated separately for each side of the book - call these the `buy_physical_stake` and the `sell_physical_stake`.
-  - The current `physical_stake` for market stake calculations is the smaller of the two values, where the `sell_physical_stake` is converted into the `quote_asset` at the current `mark_price`.
-- Virtual Stake:
-  - An LPs `virtual_stake` should be treated separately for each side of the book - call these the `buy_virtual_stake` and `sell_virtual_stake`.
-  - The same growth factor - as specified in the [LIQF spec](0042-LIQF-setting_fees_and_rewarding_lps.md) - derived from the `total value for fee purposes` in the quote asset is used to update both buy/sell virtual stakes (still in their respective assets).
-  - The current `virtual_stake` for fee splitting is the smaller of the two values where the `sell_virtual_stake` is converted to `quote_asset` at the current `mark_price`.
-
-From the above conditions, an LP is incentivised to provide a roughly equal value of liquidity on each side of the book at comparable levels of competitiveness in order to maximise their share of the liquidity fees.
+To receive rewards for this commitment, An LP is then obligated to provide orders with a total value equalling their commitment amount on both the `buy` and `sell` sides of the market. As orders on a Spot market have their price expressed in the `quote` asset and their size expressed in the `base` asset, a trades value will be expressed in the `quote` asset.
 
 ### Amendments and Cancellations
 
 A liquidity amendment or a cancellation is determined as valid following spec [0044-LIME](./0044-LIME-lp_mechanics.md) with the following exceptions:
 
-- the `maximum_reduction_amount` should be expressed in the `quote_asset` when reducing the `buy_commitment_amount` and the `base_asset` when reducing the `sell_commitment_amount`.
-- the `maximum_reduction_amount` should be `INF` in the case where the liquidity `time_window=Os` (Note: this is not strictly necessary but an LP is effectively able to reduce their commitment to zero anyway in this case through multiple commitments.)
+- the `maximum_reduction_amount` should be `INF` in the case where the liquidity `time_window=Os` (Note: this is not strictly necessary but an LP is effectively able to reduce their commitment to zero anyway in this case through multiple commitment amendments)
 
-```pseudo
-Market Data:
-
-    base_asset: ETH
-    quote_asset: DAI
-
-    mark_price = 1000
-
-Market Liquidity:
-
-    total_stake = 100,000 DAI (or 100 ETH)
-    target_stake = 25,000 DAI (or 25 ETH)
-
-    maximum_reduction_amount = 1000,000 - 25,0000 = 75,000 DAI (or 75 ETH)
-```
-
-`virtual_stake` values should be updated during liquidity amendments or cancellations following the mechanisms detailed in spec [0044-LIME](./0044-LIME-lp_mechanics.md) with the following exceptions:
-
-- reducing the `buy_commitment_amount` only reduces the `buy_virtual_stake`
-- reducing the `sell_commitment_amount` only reduces the `sell_virtual_stake`
-
-A single LP will never be able to reduce their commitment to `0`. They can either keep reducing to a sufficiently small amount they're willing to ignore, or they can submit a governance vote to cancel the market, see the [governance spec](./0028-GOVE-governance.md).
+As the target stake (and therefore `maximum_reduction_amount`) is some factor of the total stake (see [Target Stake](./0080-SPOT-product_builtin_spot.md#market-target-stake)), a single LP will never be able to reduce their commitment to `0` if they are the only LP in a market. They can either keep reducing to a sufficiently small amount they're willing to ignore, or they can submit a governance vote to cancel the market, see the [governance spec](./0028-GOVE-governance.md).
 
 For market cancellation proposal a sole LP in the market holds all the voting power (unless governance token holders override them).
-
-### Liquidity Shortfalls
-
-If at any point in time, a liquidity provider has insufficient capital in their general accounts to cover a transfer arising from a filled liquidity order, the network will utilise the liquidity commitment, held in the relevant bond account to cover the shortfall, applying the bond penalty factor (slashing the bond).
-
-As there is no market insurance pool, funds from bond slashing in the result of shortfall will be transferred to the global network treasury for that asset.
 
 ## 6. Spot Liquidity Mechanisms
 
 ### Market Total Stake
 
-The `total_stake` for a `Spot` market is calculated simply as the sum of each LPs `physical_stake` and should be expressed in the `quote_asset` of the market.
+The `total_stake` for a `Spot` market is calculated simply as the sum of each LPs `physical_stake` and therefore should be expressed in the `quote_asset` of the market.
 
 ### Market Target Stake
 

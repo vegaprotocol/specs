@@ -185,7 +185,7 @@ The net riskiest composition of a trader's open positions and live orders.  For 
 
 ### Liquidity Providers
 
-Liquidity providers commit a bond and place a special Liquidity Commitment that automatically maintains orders on the book for a specific market. In return, liquidity providers earn a [fee](#fees) for ensuring that markets always have open volume. See [the liquidity provision spec](./../protocol/0044-LIME-lp_mechanics.md) for more detail.
+Liquidity providers commit a bond which specifies their SLA obligations. In return for meeting these the liquidity providers earn a portion of the trading [fees](#fees) from the market in which they operate. See [the liquidity provision spec](./../protocol/0044-LIME-lp_mechanics.md) for more detail.
 
 ## M
 
