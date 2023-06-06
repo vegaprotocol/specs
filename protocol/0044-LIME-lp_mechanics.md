@@ -105,11 +105,12 @@ The amendment is actioned in two steps.
 1) the amount is immediately transferred from the party's general account to a temporary "pending" bond account. This amount counts towards the stake committed to the market and so in particular can get the market out of liquidity auction.
 2) at the beginning of the next epoch (after the rewards / penalties for present LPs - including the party that's amending - have been evaluated) the amount is transferred from the "pending" bond to the true bond account.
 
-Commitment amendments should be processed in the time order of their latest updates within the epoch. For example if an LP places an amendment at time `t1`, followed by LP2 placing an amendment at `t2` and the first LP amending again at `t1`, LP2's amendment will be executed first.
+For each party only the most recent amendement should be considered. All the amendements get processed simultaneously, hence the relative arrival of amendments made by different LPs within the previous epoch is irrelevant (as far as commitment reduction is concerned, it still has implications for other aspects of the mechanism).
 
 #### Increasing commitment
 
 _Case:_ `proposed-commitment-variation >= 0`
+
 A liquidity provider can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount.
 
 If they do not have sufficient collateral the transaction is rejected in entirety. This means that any change in fee bid is not applied and that the `old-commitment-amount` is retained.
@@ -117,30 +118,45 @@ If they do not have sufficient collateral the transaction is rejected in entiret
 #### Decreasing commitment
 
 _Case:_ `proposed-commitment-variation < 0`
-We to calculate how much the LP can reduce commitment without incurring a penalty.
-To do this we first evaluate the maximum amount that the market can reduce without penalty given by the current liquidity demand in the market.
 
-`maximum-penalty-free-reduction-amount = total_stake - target_stake`
+At the begining of each epoch, calculate actual commitment variation for each LP as: 
+
+$$
+\text{commitment-variation}_i=\min(-\text{proposed-commitment-variation}_i, \text{bond account balance}_i).
+$$
+
+Next, calculate how much the overall commitment within the market can be decreased by without incurring a penalty.
+To do this we first evaluate the maximum amount that the `total_stake` can reduce by without penalty given the current liquidity demand in the market.
+
+`maximum-penalty-free-reduction-amount = max(0,total_stake - target_stake)`
 
 where:
 
-- `total_stake` is the sum of all stake of all liquidity providers bonded to this market.
+- `total_stake` is the sum of all stake of all liquidity providers bonded to this market including the amendments with positive commitment variation submitted in the previous epoch.
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
 
-If `-1 * proposed-commitment-variation <= maximum-penalty-free-reduction-amount` then we're done, the LP reduced commitment, the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md).
+Then, for each $LP_i$ we calculate the pro rata penalty-free reduction amount:
+$$
+\text{maximum-penalty-free-reduction-amount}_i=\frac{\text{commitment-variation}_i}{\sum_{j}\text{commitment-variation}_j} \cdot \text{maximum-penalty-free-reduction-amount}.
+$$
 
-If `-1 * proposed-commitment-variation > maximum-penalty-free-reduction-amount` then first establish
+If $\text{commitment-variation}_i <= \text{maximum-penalty-free-reduction-amount}_i$ then we're done, the LP reduced commitment, the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-```text
-penalty-incuring-reduction-amount = -1 * proposed-commitment-variation - maximum-penalty-free-reduction-amount
-```
+If  $\text{commitment-variation}_i > \text{maximum-penalty-free-reduction-amount}_i$ then first establish
 
-Transfer `maximum-penalty-free-reduction-amount` to their general account.
-Now transfer `min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to their general account and transfer `market.liquidity.earlyExitPenalty x min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to the market insurance pool.
-Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire `proposed-commitment-variation` as the `delta`.
+$$
+\text{penalty-incuring-reduction-amount}_i = \text{commitment-variation}_i - \text{maximum-penalty-free-reduction-amount}_i
+$$
 
-Note that as a consequence the market may land in a liquidity auction the next time the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP reducing their commitment to an immediate liquidity auction evaluation).
+Transfer $\text{maximum-penalty-free-reduction-amount}_i$ to their general account.
 
+Now transfer $(1-\text{market.liquidity.earlyExitPenalty}) \cdot \text{penalty-incuring-reduction-amount}_i$ to their general account and transfer $
+\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incuring-reduction-amount}_i$
+to the market insurance pool.
+
+Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire $\text{commitment-variation}_i$ as the `delta`.
+
+Note that as a consequence the market may land in a liquidity auction the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP(s) reducing their commitment to an immediate liquidity auction evaluation).
 
 ## Fees
 
@@ -222,7 +238,7 @@ Moreover, as this reduced the LP stake, update the ELS as per [Calculating liqui
 
 ### Penalty for not supporting open positions
 
-If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall. The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
+If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _temporary liquidity provider bond account_ and the _liquidity provider bond account_ (accessed in that order) to cover the shortfall. The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
 
 Calculating the penalty:
 
@@ -237,39 +253,29 @@ _Auctions:_ if this occurs at the transition from auction mode to continuous tra
 
 The network will:
 
-1. _As part of the normal collateral "search" process:_ Access the liquidity provider's bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of the bond account will be used. Note that this means that the transfer request should include the liquidity provider's bond account in the list of accounts to search, and that the bond account would always be emptied before any insurance pool funds are used or loss socialisation occurs.
+1. _As part of the normal collateral "search" process:_ Access first the liquidity provider's temporary bond and then (if needed) the actual bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of both bond accounts will be used. Note that this means that the transfer request should include the liquidity provider's temporary bond account and true bond account in the list of accounts to search, and that these accounts would always be emptied before any insurance pool funds are used or loss socialisation occurs.
 
-1. _If there was a shortfall and the bond account was accessed:_ Transfer an amount equal to the `market.liquidity.bondPenaltyParameter` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
+1. _If there was a shortfall and either of the bond accounts was accessed:_ Transfer an amount equal to the `market.liquidity.bondPenaltyParameter` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the temporary bond account and the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
 
 1. Initiate closeout of the LPs order and/or positions as normal if their margin does not meet the minimum maintenance margin level required. (NB: this should involve no change)
 
-1. _If the liquidity provider's orders or positions were closed out, and they are therefore no longer supplying the liquidity implied by their Commitment:_ In this case the liquidity provider's Commitment size is set to zero and they are no longer a liquidity provider for fee/reward purposes, and their commitment can no longer be counted towards the supplied liquidity in the market. (From a Core perspective, it is as if the liquidity provider has exited their commitment entirely and they no longer need to be tracked as an LP.)
+1. _The liquidity provider's bond account balance is always their current commitment level:_ This is strictly their "true" bond account, funds in the "temporary" bond account are not counted as their commitment (though they do get included in market's overall commitment). Since we always search the temporary bond account first their true bond account balance can only drop to zero once the temporary account has already been drained. Once the party's "true" bond account balance drops to zero they are no longer a liquidity provider for fee/reward purposes. (From a Core perspective, it is as if the liquidity provider has exited their commitment entirely and they no longer need to be tracked as an LP.)
 
 Note:
 
 - As mentioned above, closeout should happen as per regular trader account (with the addition of cancelling the liquidity provision and the associated LP rewards & fees consequences). So, if after cancelling all open orders the party can afford to keep the open positions sufficiently collateralised they should be left open, otherwise the positions should get liquidated.
 
 
-### Bond account top up by collateral search
-
-In the same way that a collateral search is initiated to attempt to top-up a trader's margin account if it drops below the _collateral search level_, the system must also attempt to top up the bond account if its balance drops below the size of the LP's commitment.
-
-This should happen every time the network is performing a margin calculation and search. The system should prioritise topping up the margin account first, and then the bond account, if there are insufficient funds to do both.
-
-If, at the end of an epoch (and before any LP rewards and penalties were applied), the LPs bond account isn't topped up to the level of their commitment then, update the ELS as per [Calculating liquidity provider equity-like share section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-
-
 ## What data do we keep relating to liquidity provision?
 
 1. List of all liquidity providers and their commitment sizes, their “equity-like share” and "liquidity score" for each market [see 0042-setting-fees-and-rewarding-lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
-1. New account per market holding all committed liquidity provider bonds
+1. Two new accounts (temporary bond account and bond account) per LP per market
 1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb))
-1. Each liquidity provider's actual bond amount (i.e. the balance of their bond account)
 
 
 ## APIs
 
-- Transfers to and from the bond account, new or changed commitments, and any penalties applied should all be published on the event stream
+- Transfers to and from the temporary bond account and the true bond account, new or changed commitments, and any penalties applied should all be published on the event stream
 - It should be possible to query all details of liquidity providers via an API
 
 ## Acceptance Criteria
