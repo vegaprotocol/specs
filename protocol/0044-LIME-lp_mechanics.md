@@ -241,7 +241,7 @@ Moreover, as this reduced the LP stake, update the ELS as per [Calculating liqui
 
 ### Penalty for not supporting open positions
 
-If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall. The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
+If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _temporary liquidity provider bond account_ and the _liquidity provider bond account_ to cover the shortfall. The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
 
 Calculating the penalty:
 
@@ -256,39 +256,29 @@ _Auctions:_ if this occurs at the transition from auction mode to continuous tra
 
 The network will:
 
-1. _As part of the normal collateral "search" process:_ Access the liquidity provider's bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of the bond account will be used. Note that this means that the transfer request should include the liquidity provider's bond account in the list of accounts to search, and that the bond account would always be emptied before any insurance pool funds are used or loss socialisation occurs.
+1. _As part of the normal collateral "search" process:_ Access first the liquidity provider's temporary bond and then (if needed) the actual bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of both bond accounts will be used. Note that this means that the transfer request should include the liquidity provider's temporary bond account and bond account in the list of accounts to search, and that these accounts would always be emptied before any insurance pool funds are used or loss socialisation occurs.
 
-1. _If there was a shortfall and the bond account was accessed:_ Transfer an amount equal to the `market.liquidity.bondPenaltyParameter` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
+1. _If there was a shortfall and both bond accounts were accessed:_ Transfer an amount equal to the `market.liquidity.bondPenaltyParameter` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the temporary bond account and the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
 
 1. Initiate closeout of the LPs order and/or positions as normal if their margin does not meet the minimum maintenance margin level required. (NB: this should involve no change)
 
-1. _If the liquidity provider's orders or positions were closed out, and they are therefore no longer supplying the liquidity implied by their Commitment:_ In this case the liquidity provider's Commitment size is set to zero and they are no longer a liquidity provider for fee/reward purposes, and their commitment can no longer be counted towards the supplied liquidity in the market. (From a Core perspective, it is as if the liquidity provider has exited their commitment entirely and they no longer need to be tracked as an LP.)
+1. _The liquidity providers bond account balance is always it's current commitment level:_ This is strictly their "true" bond account, funds in the "temporary" bond account are not counted as their commitment (though they do get included in market's overall commitment). Since we always search the temporary bond account first their true bond account balance can only drop to zero ones the temporary account has already been drained. Once the party's "true" bond account balance drops to zero they are no longer a liquidity provider for fee/reward purposes. (From a Core perspective, it is as if the liquidity provider has exited their commitment entirely and they no longer need to be tracked as an LP.)
 
 Note:
 
 - As mentioned above, closeout should happen as per regular trader account (with the addition of cancelling the liquidity provision and the associated LP rewards & fees consequences). So, if after cancelling all open orders the party can afford to keep the open positions sufficiently collateralised they should be left open, otherwise the positions should get liquidated.
 
 
-### Bond account top up by collateral search
-
-In the same way that a collateral search is initiated to attempt to top-up a trader's margin account if it drops below the _collateral search level_, the system must also attempt to top up the bond account if its balance drops below the size of the LP's commitment.
-
-This should happen every time the network is performing a margin calculation and search. The system should prioritise topping up the margin account first, and then the bond account, if there are insufficient funds to do both.
-
-If, at the end of an epoch (and before any LP rewards and penalties were applied), the LPs bond account isn't topped up to the level of their commitment then, update the ELS as per [Calculating liquidity provider equity-like share section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-
-
 ## What data do we keep relating to liquidity provision?
 
 1. List of all liquidity providers and their commitment sizes, their “equity-like share” and "liquidity score" for each market [see 0042-setting-fees-and-rewarding-lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
-1. New account per market holding all committed liquidity provider bonds
+1. Two new accounts (temporary bond account and bond account) per LP per market
 1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb))
-1. Each liquidity provider's actual bond amount (i.e. the balance of their bond account)
 
 
 ## APIs
 
-- Transfers to and from the bond account, new or changed commitments, and any penalties applied should all be published on the event stream
+- Transfers to and from the temporary bond account and the bond account, new or changed commitments, and any penalties applied should all be published on the event stream
 - It should be possible to query all details of liquidity providers via an API
 
 ## Acceptance Criteria
