@@ -42,6 +42,8 @@
   - by top losing market (<a name="6001-MARK-031" href="#6001-MARK-031">6001-MARK-031</a>)
   - by newest markets (opening timestamp) (<a name="6001-MARK-032" href="#6001-MARK-032">6001-MARK-032</a>)
 - **Must** provide a way to see all markets (<a name="6001-MARK-033" href="#6001-MARK-033">6001-MARK-033</a>)
+- **Must** be able to close and open the market selector (<a name="6001-MARK-066" href="#6001-MARK-066">6001-MARK-066</a>)
+- **Must** must change color and have + or negative suffix of the price change and change color for the sparkline (<a name="6001-MARK-067" href="#6001-MARK-067">6001-MARK-067</a>)
 
 ## All Markets
 
@@ -59,6 +61,8 @@
   - **Must** provide a way to copy the market ID (<a name="6001-MARK-045" href="#6001-MARK-045">6001-MARK-045</a>)
   - **Must** provide a way to view on Explorer (<a name="6001-MARK-046" href="#6001-MARK-046">6001-MARK-046</a>)
   - **Must** provide a way to view asset (<a name="6001-MARK-047" href="#6001-MARK-047">6001-MARK-047</a>)
+  - **Must** be able to sort each column by asc and dsc (<a name="6001-MARK-064" href="#6001-MARK-064">6001-MARK-064</a>)
+  - **Must** be able to drag and drop column names to re order (<a name="6001-MARK-065" href="#6001-MARK-065">6001-MARK-065</a>)
 
 - if there is no markets:
   - **Must** show No markets info (<a name="6001-MARK-048" href="#6001-MARK-048">6001-MARK-048</a>)
@@ -77,6 +81,8 @@
 - **Must** see status action menu (<a name="6001-MARK-058" href="#6001-MARK-058">6001-MARK-058</a>)
   - **Must** provide a way to view proposal (<a name="6001-MARK-059" href="#6001-MARK-059">6001-MARK-059</a>)
 - **Must** provide a way to propose a new market (<a name="6001-MARK-060" href="#6001-MARK-060">6001-MARK-060</a>)
+- **Must** be able to sort each column by asc and dsc (<a name="6001-MARK-062" href="#6001-MARK-062">6001-MARK-062</a>)
+- **Must** be able to drag and drop column names to re order (<a name="6001-MARK-063" href="#6001-MARK-063">6001-MARK-063</a>)
 
 - if there is no markets:
   - **Must** show No data info (<a name="6001-MARK-061" href="#6001-MARK-061">6001-MARK-061</a>)
