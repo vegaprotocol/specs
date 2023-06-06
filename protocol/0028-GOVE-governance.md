@@ -528,7 +528,6 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Transfer proposal submission validation
 
 - Proposals are either permitted or rejected according to the following source/destination combinations. (<a name="0028-GOVE-075" href="#0028-GOVE-075">0028-GOVE-075</a>)
-- Transfer amount and fraction of balance are mutually exclusive and will cause the proposal to reject (<a name="0028-GOVE-076" href="#0028-GOVE-076">0028-GOVE-076</a>)
 - Invalid source and destination account types will cause the proposal to reject (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
 - Source Type can be any of the predefined types in the above table (<a name="0028-GOVE-078" href="#0028-GOVE-078">0028-GOVE-078</a>)
 - Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
