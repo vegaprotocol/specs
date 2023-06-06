@@ -93,7 +93,7 @@ Then: the target stake value is
     target_stake = 0.25 * 11000 = 2750 DAI
 ```
 
-The above design ensures the `target_stake` of a market is unable to fluctuate dramatically over the window. Controlling the `target_stake` indirectly controls the `total_stake` as the amount an LP is able to reduce their commitment is restricted by the `maximum_reduction_amount`.
+The above design ensures the `target_stake` of a market is unable to fluctuate dramatically over the window. Controlling the `target_stake` impacts the `total_stake` as reducing the commitment beyond `maximum_reduction_amount` means the LPs will be charged a penalty for doing so.
 
 ### Acceptance criteria
 
