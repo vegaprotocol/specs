@@ -81,7 +81,7 @@ An OCO submission allows a user to have a stop loss and take profit applied to t
 
 - If and when the trigger price is breached in the specified direction the order provided in the stop order submission is created and enters the book or trades as normal, as if it was just submitted.
 
-- The order contained in a stop order submission is entered immediately if the trigger price is already breached on entry, except during an auction. (TODO: confirm we do this and don't just always wait for a trade price)
+- The order contained in a stop order submission is entered immediately if the trigger price is already breached on entry, except during an auction.
 
 - When the stop order is a trailing stop, the price at which it is triggered is calculated as the defined distance as a percentage from the highest price achieved since the order was entered if the direction is to trigger on price below the specified level, or the lowest price achieved since the order was entered if the direction is to trigger above the level.
 Therefore the trigger level of a stop order moves with the market allowing the trader to lock in some amount of gains.
