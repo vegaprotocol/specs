@@ -69,6 +69,7 @@ disincentivise
 DLT
 DPOS
 durations
+earlyExitPenalty
 ECDSA
 EEF
 EIP

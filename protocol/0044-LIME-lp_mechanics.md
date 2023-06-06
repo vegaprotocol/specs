@@ -105,7 +105,7 @@ The amendment is actioned in two steps.
 1) the amount is immediately transferred from the party's general account to a temporary "pending" bond account. This amount counts towards the stake committed to the market and so in particular can get the market out of liquidity auction.
 2) at the beginning of the next epoch (after the rewards / penalties for present LPs - including the party that's amending - have been evaluated) the amount is transferred from the "pending" bond to the true bond account.
 
-For each party only the most recent amendement should be considered. All the amendements get processed simultaneously, hence the relative arrival of amendments made by different LPs within the previous epoch is irrelevant (as far as commitment reduction is concerned, it still has implications for other aspects of the mechanism).
+For each party only the most recent amendment should be considered. All the amendments get processed simultaneously, hence the relative arrival of amendments made by different LPs within the previous epoch is irrelevant (as far as commitment reduction is concerned, it still has implications for other aspects of the mechanism).
 
 #### Increasing commitment
 
@@ -119,7 +119,7 @@ If they do not have sufficient collateral the transaction is rejected in entiret
 
 _Case:_ `proposed-commitment-variation < 0`
 
-At the begining of each epoch, calculate actual commitment variation for each LP as: 
+At the beginning of each epoch, calculate actual commitment variation for each LP as:
 
 $$
 \text{commitment-variation}_i=\min(-\text{proposed-commitment-variation}_i, \text{bond account balance}_i).
@@ -145,14 +145,12 @@ If $\text{commitment-variation}_i <= \text{maximum-penalty-free-reduction-amount
 If  $\text{commitment-variation}_i > \text{maximum-penalty-free-reduction-amount}_i$ then first establish
 
 $$
-\text{penalty-incuring-reduction-amount}_i = \text{commitment-variation}_i - \text{maximum-penalty-free-reduction-amount}_i
+\text{penalty-incurring-reduction-amount}_i = \text{commitment-variation}_i - \text{maximum-penalty-free-reduction-amount}_i
 $$
 
 Transfer $\text{maximum-penalty-free-reduction-amount}_i$ to their general account.
 
-Now transfer $(1-\text{market.liquidity.earlyExitPenalty}) \cdot \text{penalty-incuring-reduction-amount}_i$ to their general account and transfer $
-\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incuring-reduction-amount}_i$
-to the market insurance pool.
+Now transfer $(1-\text{market.liquidity.earlyExitPenalty}) \cdot \text{penalty-incurring-reduction-amount}_i$ to their general account and transfer $\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incurring-reduction-amount}_i$ to the market insurance pool.
 
 Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire $\text{commitment-variation}_i$ as the `delta`.
 

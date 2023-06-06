@@ -210,7 +210,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
   * Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporates its volume and/or price level. (<a name="0014-ORDT-004" href="#0014-ORDT-004">0014-ORDT-004</a>)
   * A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>)
 * No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>)
-* A pegged order (including iceberg pegged orders) never has its price updated during the execution of an incoming aggressive order (even as price levels get consummed so that its reference price changes after the execution). (<a name="0014-ORDT-039" href="#0014-ORDT-039">0014-ORDT-039</a>)
+* A pegged order (including iceberg pegged orders) never has its price updated during the execution of an incoming aggressive order (even as price levels get consumed so that its reference price changes after the execution). (<a name="0014-ORDT-039" href="#0014-ORDT-039">0014-ORDT-039</a>)
 
 ### Iceberg Orders AC's
 
