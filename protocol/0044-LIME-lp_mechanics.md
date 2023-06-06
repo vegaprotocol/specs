@@ -105,7 +105,7 @@ The amendment is actioned in two steps.
 1) the amount is immediately transferred from the party's general account to a temporary "pending" bond account. This amount counts towards the stake committed to the market and so in particular can get the market out of liquidity auction.
 2) at the beginning of the next epoch (after the rewards / penalties for present LPs - including the party that's amending - have been evaluated) the amount is transferred from the "pending" bond to the true bond account.
 
-For each party only the most recent amendement should be considered. All the amendements get processed simultaneously, hence the relative arrival of amendments made by different LPs within the previous epoch is irrelevant.
+For each party only the most recent amendement should be considered. All the amendements get processed simultaneously, hence the relative arrival of amendments made by different LPs within the previous epoch is irrelevant (as far as commitment reduction is concerned, it still has implications for other aspects of the mechanism).
 
 #### Increasing commitment
 
