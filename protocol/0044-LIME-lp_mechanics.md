@@ -105,11 +105,12 @@ The amendment is actioned in two steps.
 1) the amount is immediately transferred from the party's general account to a temporary "pending" bond account. This amount counts towards the stake committed to the market and so in particular can get the market out of liquidity auction.
 2) at the beginning of the next epoch (after the rewards / penalties for present LPs - including the party that's amending - have been evaluated) the amount is transferred from the "pending" bond to the true bond account.
 
-Commitment amendments should be processed in the time order of their latest updates within the epoch. For example if an LP places an amendment at time `t1`, followed by LP2 placing an amendment at `t2` and the first LP amending again at `t1`, LP2's amendment will be executed first.
+For each party only the most recent amendement should be considered. All the amendements get processed simultaneously, hence the relative arrival of amendments made by different LPs within the previous epoch is irrelevant.
 
 #### Increasing commitment
 
 _Case:_ `proposed-commitment-variation >= 0`
+
 A liquidity provider can always increase their commitment amount as long as they have sufficient collateral in the settlement asset of the market to meet the new commitment amount.
 
 If they do not have sufficient collateral the transaction is rejected in entirety. This means that any change in fee bid is not applied and that the `old-commitment-amount` is retained.
@@ -117,31 +118,49 @@ If they do not have sufficient collateral the transaction is rejected in entiret
 #### Decreasing commitment
 
 _Case:_ `proposed-commitment-variation < 0`
-We to calculate how much the LP can reduce commitment without incurring a penalty.
-To do this we first evaluate the maximum amount that the market can reduce without penalty given by the current liquidity demand in the market.
 
-`maximum-penalty-free-reduction-amount = total_stake - target_stake`
+
+
+At the begining of each epoch, calculate actual commitment variation for each LP as: 
+
+$$
+\text{commitment-variation}_i=\min(-\text{proposed-commitment-variation}_i, \text{bond account balance}_i).
+$$
+
+Next, calculate how much the overall commitment within the market can be decreased by without incurring a penalty.
+To do this we first evaluate the maximum amount that the `total_stake` can reduce by without penalty given the current liquidity demand in the market.
+
+`maximum-penalty-free-reduction-amount = max(0,total_stake - target_stake)`
 
 where:
 
 - `total_stake` is the sum of all stake of all liquidity providers bonded to this market.
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
 
-If `-1 * proposed-commitment-variation <= maximum-penalty-free-reduction-amount` then we're done, the LP reduced commitment, the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md).
+Then, for each $LP_i$ we calculate the pro rata penalty-free reduction amount:
+$$
+\text{maximum-penalty-free-reduction-amount}_i=\frac{\text{commitment-variation}_i}{\sum_{j}\text{commitment-variation}_j} \cdot \text{maximum-penalty-free-reduction-amount}.
+$$
 
-If `-1 * proposed-commitment-variation > maximum-penalty-free-reduction-amount` then first establish
+If $\text{commitment-variation}_i <= \text{maximum-penalty-free-reduction-amount}_i$ then we're done, the LP reduced commitment, the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-```text
-penalty-incuring-reduction-amount = -1 * proposed-commitment-variation - maximum-penalty-free-reduction-amount
-```
+If  $\text{commitment-variation}_i > \text{maximum-penalty-free-reduction-amount}_i$ then first establish
 
-Transfer `maximum-penalty-free-reduction-amount` to their general account.
-Now transfer `min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to their general account and transfer `market.liquidity.earlyExitPenalty x min((1-market.liquidity.earlyExitPenalty) x penalty-incuring-reduction-amount, bond account balance remaining)` to the market insurance pool.
-Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire `proposed-commitment-variation` as the `delta`.
+$$
+\text{penalty-incuring-reduction-amount}_i = \text{commitment-variation}_i - \text{maximum-penalty-free-reduction-amount}_i
+$$
 
-Note that as a consequence the market may land in a liquidity auction the next time the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP reducing their commitment to an immediate liquidity auction evaluation).
+Transfer $\text{maximum-penalty-free-reduction-amount}_i$ to their general account.
 
+Now transfer $(1-\text{market.liquidity.earlyExitPenalty}) \cdot \text{penalty-incuring-reduction-amount}_i$ to their general account and transfer $
+\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incuring-reduction-amount}_i$
+to the market insurance pool.
 
+Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire $\text{commitment-variation}_i$ as the `delta`.
+
+Note that as a consequence the market may land in a liquidity auction the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP(s) reducing their commitment to an immediate liquidity auction evaluation).
+
+ 
 ## Fees
 
 ### Nominating and amending fee amounts
