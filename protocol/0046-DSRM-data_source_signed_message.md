@@ -122,6 +122,8 @@ Other acceptance:
 - Must work with Coinbase oracle  (<a name="0046-DSRM-012" href="#0046-DSRM-012">0046-DSRM-012</a>)
 - Ignore any `SubmitData` tx that is a duplicate (i.e. contains exactly the same data payload and is for the same data source), even if it is signed by a different signer (assuming the source has multiple configured signers) or was submitted by a different Vega key. (<a name="0046-DSRM-016" href="#0046-DSRM-016">0046-DSRM-016</a>)
 - Messages are accepted that contain the data and the signature (conforming to the Open Oracle specification) Note: do not support (or need to) direct connections to REST APIs, Ethereum smart contracts, etc. conforming to the open oracle spec. (<a name="0046-DSRM-017" href="#0046-DSRM-017">0046-DSRM-017</a>)
+- Set up a [builtin product futures](./0016-PFUT-product_builtin_future.md) market with vega (internal) time triggered trading terminated oracle and an settlement oracle with a with key `k1`. Wait for time to pass for the market to move to trading terminated. Now submit a market change proposal to change the oracle to key `k2`. Wait for the vote to pass and enact. Now settle the market and verify it settled at the correct price. (<a name="0046-DSRM-018" href="#0046-DSRM-018">0046-DSRM-018</a>).
+
 
 ## Notes
 
