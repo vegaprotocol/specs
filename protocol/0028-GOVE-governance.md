@@ -532,7 +532,6 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - Invalid source and destination account types will not be included in the transaction and will cause the transaction to be rejected (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
 - Source Type can be any of the predefined types in the above table (<a name="0028-GOVE-078" href="#0028-GOVE-078">0028-GOVE-078</a>)
 - Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
-- Source can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-080" href="#0028-GOVE-080">0028-GOVE-080</a>)
 - For transfer source types of Market Insurance the source must be a valid market ID  else is rejected (<a name="0028-GOVE-081" href="#0028-GOVE-081">0028-GOVE-081</a>)
 - Type value can only hold “all or nothing" or "best effort” (<a name="0028-GOVE-082" href="#0028-GOVE-082">0028-GOVE-082</a>)
 - Transfer amounts will be accepted and processed in asset precision (<a name="0028-GOVE-083" href="#0028-GOVE-083">0028-GOVE-083</a>)
