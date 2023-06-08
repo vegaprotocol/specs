@@ -6,7 +6,7 @@ As a trading platform user I want to see all possible information about market.
 ## Market details
 
 When I am on trading platform I **Must** see following market details summary on the top of trading page:
-
+<i> Depending on market data tooltips may be available in some records when hovered.</i>
 - Market name (<a name="6002-MDET-001" href="#6002-MDET-001">6002-MDET-001</a>)
 - Expiry (<a name="6002-MDET-002" href="#6002-MDET-002">6002-MDET-002</a>)
 - Price (<a name="6002-MDET-003" href="#6002-MDET-003">6002-MDET-003</a>)
