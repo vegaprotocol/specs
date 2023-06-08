@@ -273,8 +273,8 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 ### API
 
 1. API end points should be available to query initial peak size, minimum peak size, quantity, displayed quantity and remaining (<a name="0014-ORDT-036" href="#0014-ORDT-036">0014-ORDT-036</a>)
-2. The additional fields relating to iceberg orders should be available in the streaming api end points
-3. API end points showing market-depth or price-level volume should include the full volume of iceberg orders (<a name="0014-ORDT-039" href="#0014-ORDT-039">0014-ORDT-039</a>)
+2. The additional fields relating to iceberg orders should be available in the streaming api end points (<a name="0014-ORDT-040" href="#0014-ORDT-040">0014-ORDT-040</a>)
+3. API end points showing market-depth or price-level volume should include the full volume of iceberg orders (<a name="0014-ORDT-041" href="#0014-ORDT-041">0014-ORDT-041</a>)
 
 ### See also
 
