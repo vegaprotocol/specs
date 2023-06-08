@@ -1,10 +1,11 @@
 # Market 
 
-As a trading platform user I want to see all possible information about market.
+As a trading platform user I want to see all possible information about market.  
+<i>IMPORTANT: Available entries may vary depending on market specifics (e.g. oracle related). Separate ACs may be created for more detailed information.</i>
 
 ## Market details
 
-When I am in trading platform I **Must** see following market details summary:
+When I am on trading platform I **Must** see following market details summary:
 
 - Market name (<a name="6002-MDET-001" href="#6002-MDET-001">6002-MDET-001</a>)
 - Expiry (<a name="6002-MDET-002" href="#6002-MDET-002">6002-MDET-002</a>)
@@ -18,7 +19,7 @@ When I am in trading platform I **Must** see following market details summary:
 
 ## Market data
 
-When I am looking into market info I **Must** see following data:
+When I look into market info I **Must** see following data:
 
 - Current fees: (<a name="6002-MDET-101" href="#6002-MDET-101">6002-MDET-101</a>)
     - Maker Fee
@@ -42,7 +43,7 @@ When I am looking into market info I **Must** see following data:
 
 ## Market specification
 
-When I am looking into market info I **Must** see following specification:
+When I look into market info I **Must** see following specification:
 
 - Key details: (<a name="6002-MDET-201" href="#6002-MDET-201">6002-MDET-201</a>)
     - Name
@@ -56,13 +57,13 @@ When I am looking into market info I **Must** see following specification:
     - Code
     - Product Type
     - Quote  Name
-- Settlement Oracle: (<a name="6002-MDET-203" href="#6002-MDET-203">6002-MDET-203</a>)
-    - oracle information
-    - link to settlement data specification
-- Termination Oracle: (<a name="6002-MDET-204" href="#6002-MDET-204">6002-MDET-204</a>)
-    - oracle information
-    - link to termination specification
-- Settlement asset: (<a name="6002-MDET-205" href="#6002-MDET-205">6002-MDET-205</a>)
+- Oracle: (<a name="6002-MDET-203" href="#6002-MDET-203">6002-MDET-203</a>)
+    - <i>content may vary</i>
+- Settlement Oracle: (<a name="6002-MDET-204" href="#6002-MDET-204">6002-MDET-204</a>)
+    - <i>content may vary</i>
+- Termination Oracle: (<a name="6002-MDET-205" href="#6002-MDET-205">6002-MDET-205</a>)
+    - <i>content may vary</i>
+- Settlement asset: (<a name="6002-MDET-206" href="#6002-MDET-206">6002-MDET-206</a>)
     - ID
     - Type
     - Name
@@ -75,7 +76,7 @@ When I am looking into market info I **Must** see following specification:
     - Lifetime limit
     - Infrastracture fee account balance
     - Global reward pool account balance
-- Metadata: (<a name="6002-MDET-206" href="#6002-MDET-206">6002-MDET-206</a>)
+- Metadata: (<a name="6002-MDET-207" href="#6002-MDET-207">6002-MDET-207</a>)
     - Expiry Date
     - Base
     - Quote
@@ -83,34 +84,34 @@ When I am looking into market info I **Must** see following specification:
     - Sector
     - Enactment
     - Settlement
-- Risk model: (<a name="6002-MDET-207" href="#6002-MDET-207">6002-MDET-207</a>)
+- Risk model: (<a name="6002-MDET-208" href="#6002-MDET-208">6002-MDET-208</a>)
     - Tau
     - Risk Aversion Parameter
-- Risk parameters: (<a name="6002-MDET-208" href="#6002-MDET-208">6002-MDET-208</a>)
+- Risk parameters: (<a name="6002-MDET-209" href="#6002-MDET-209">6002-MDET-209</a>)
     - Sigma
-- Risk factors: (<a name="6002-MDET-209" href="#6002-MDET-209">6002-MDET-209</a>)
+- Risk factors: (<a name="6002-MDET-210" href="#6002-MDET-210">6002-MDET-210</a>)
     - Short
     - Long
-- price monitoring bounds (multiple bounds possible): (<a name="6002-MDET-210" href="#6002-MDET-210">6002-MDET-210</a>)
+- price monitoring bounds <i>(multiple bounds possible)</i>: (<a name="6002-MDET-211" href="#6002-MDET-211">6002-MDET-211</a>)
     - Highest Price
     - Lowest Price
-- Liquidity monitoring parameters: (<a name="6002-MDET-211" href="#6002-MDET-211">6002-MDET-211</a>)
+- Liquidity monitoring parameters: (<a name="6002-MDET-212" href="#6002-MDET-212">6002-MDET-212</a>)
     - Triggering Ratio
     - Time Window
     - Scaling Factor
-- Liquidity: (<a name="6002-MDET-212" href="#6002-MDET-212">6002-MDET-212</a>)
+- Liquidity: (<a name="6002-MDET-213" href="#6002-MDET-213">6002-MDET-213</a>)
     - Target Stake
     - Supplied Stake
     - Market Value Proxy
     - link to liquidity provision table
-- Liquidity price range: (<a name="6002-MDET-213" href="#6002-MDET-213">6002-MDET-213</a>)
+- Liquidity price range: (<a name="6002-MDET-214" href="#6002-MDET-214">6002-MDET-214</a>)
     - Liquidity Price Range
     - Lowest Price
     - Highest Price
 
 ## Market governance
 
-When I am looking into market info I **Must** see following governance information:
+When I look into market info I **Must** see following governance information:
 
 - Proposal: (<a name="6002-MDET-301" href="#6002-MDET-301">6002-MDET-301</a>)
     - link to governance proposal
