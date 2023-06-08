@@ -169,7 +169,7 @@ If the remainders of multiple icebergs sit at the same price and are not fully u
 
 * An iceberg order refresh must generate an event of the event bus.
 
-* Any API that returns information about market-depth or the orderbook volume will include an iceberg orders full volume and not just its `display quantity`.
+* Any API that returns information about market-depth or the orderbook volume will include an iceberg order's full volume and not just its `display quantity`.
 
 
 ### Valid order entry combinations
