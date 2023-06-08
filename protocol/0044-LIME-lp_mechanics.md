@@ -136,6 +136,7 @@ where:
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
 
 Then, for each $LP_i$ we calculate the pro rata penalty-free reduction amount:
+
 ```math
 \text{maximum-penalty-free-reduction-amount}_i=\frac{\text{commitment-variation}_i}{\sum_{j}\text{commitment-variation}_j} \cdot \text{maximum-penalty-free-reduction-amount}.
 ```
