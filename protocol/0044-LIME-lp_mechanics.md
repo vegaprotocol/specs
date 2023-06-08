@@ -119,7 +119,7 @@ If they do not have sufficient collateral the transaction is rejected in entiret
 
 _Case:_ `proposed-commitment-variation < 0`
 
-At the beginning of each epoch, calculate actual commitment variation for each LP as:
+At the beginning of each epoch, calculate actual commitment variation for each LP wishing to reduce their commitment as:
 
 $$
 \text{commitment-variation}_i=\min(-\text{proposed-commitment-variation}_i, \text{bond account balance}_i).
@@ -136,9 +136,9 @@ where:
 - `target_stake` is a measure of the market's current stake requirements, as per the calculation in the [target stake](./0041-TSTK-target_stake.md).
 
 Then, for each $LP_i$ we calculate the pro rata penalty-free reduction amount:
-$$
+```math
 \text{maximum-penalty-free-reduction-amount}_i=\frac{\text{commitment-variation}_i}{\sum_{j}\text{commitment-variation}_j} \cdot \text{maximum-penalty-free-reduction-amount}.
-$$
+```
 
 If $\text{commitment-variation}_i <= \text{maximum-penalty-free-reduction-amount}_i$ then we're done, the LP reduced commitment, the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md).
 
