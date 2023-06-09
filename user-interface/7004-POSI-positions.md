@@ -23,7 +23,7 @@
 
 - **Must** be able to resize the width of the columns([7004-POSI-006](#7004-POSI-006))
 
-- **Must** The columns 'Open volume', 'realised PNL' and 'Unrealised PNL' must change color depending on being positive/negative([7004-POSI-007](#7004-POSI-007))
+- **Must** The columns 'Open volume', 'realised PNL' and 'Unrealised PNL' must change color and have a + or - suffix depending on being positive/negative([7004-POSI-007](#7004-POSI-007))
 
 - **Must** be able to select settlement asset to view asset details([7004-POSI-008](#7004-POSI-008))
 
@@ -34,3 +34,4 @@
 - **Must** be able to see warnings for a market with a tooltip explanation([7004-POSI-011](#7004-POSI-011))
 
 - **Must** retain previous column sizing on refresh ([7004-POSI-012](#7004-POSI-012))
+- **Must** notional column has a tooltip on hover ([7004-POSI-013](#7004-POSI-013))
