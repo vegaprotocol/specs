@@ -72,6 +72,31 @@ A new market proposal sets parent market Id to a market that has settled. The pa
 
 A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.value.windowLength` then no virtual stakes are carried over, there is no transfer into the insurance pool of the new market from the parent and the new market has no parent market Id set (<a name="0081-SUCM-007" href="#0081-SUCM-007">0081-SUCM-007</a>).
 
+Successor markets can't be enacted if the parent market is still in proposed state (<a name="0081-SUCM-008" href="#0081-SUCM-008">0081-SUCM-008</a>)
+
+Successor markets can be enacted when the parent market is in opening auction (<a name="0081-SUCM-009" href="#0081-SUCM-009">0081-SUCM-009</a>)
+
+Successor market proposal can be enacted when the parent market is in one of the following states: Suspended, Active, Trading terminated, Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
+
+When a successor market is enacted, all other proposals (pending or proposed) are automatically rejected. Any LP submissions associated with these proposals are cancelled, and the funds are released (<a name="0081-SUCM-011" href="#0081-SUCM-011">0081-SUCM-011</a>)
+
+With two successor markets in opening auction with the same parent market and one additional market in "Proposed" state. Enact one of the two markets in Opening auction. The other market in auction and the proposed market are both "Rejected". All LP funds are released (<a name="0081-SUCM-014" href="#0081-SUCM-014">0081-SUCM-014</a>)
+
+
+### APIs
+
+It is possible to fetch a market "family tree" containing the initial market and the full successor line (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
+
+When fetching a market that is part of a "family tree", we should see both the parent and each successor `marketID` (<a name="0081-SUCM-013" href="#0081-SUCM-013">0081-SUCM-013</a>)
+
+
+### Snpshots / checkpoints
+
+After a checkpoint restart the child parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-016" href="#0081-SUCM-016">0081-SUCM-016</a>)
+
+After snapshot restart the child parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-017" href="#0081-SUCM-017">0081-SUCM-017</a>)
+
+
 ### Virtual stake
 
 A new market is set with a parent market Id. On the parent there are two parties `A` and `B` with virtual stakes `v1` and `v2` and physical stakes `s1` and `s2`
@@ -81,3 +106,8 @@ If
 - Both `A` and `B` submit a liquidity commitment of `s1` and `s2` to the new market before the opening auction ends. No other LP submits liquidity to the new market. Then, once the opening auction resolved the LPs `A` and `B` have virtual stakes `v1` and `v2` (<a name="0081-SUCM-020" href="#0081-SUCM-020">0081-SUCM-020</a>).
 - As above but `A` submits `s1` and `B` doesn't submit anything. Then `A` has virtual stake `v1` and `B` has virtual stake `0` (<a name="0081-SUCM-021" href="#0081-SUCM-021">0081-SUCM-021</a>).
 - As above but `A` submits more than `s1`. Then `A` has virtual stake larger than `v1`. (<a name="0081-SUCM-022" href="#0081-SUCM-022">0081-SUCM-022</a>)
+
+
+### Equity like share
+
+With parent and child markets running at the same time. Ensure that the child ELS matches the parent at point of child leaving opening auction - trade on both markets and Ensure that markets diverge over subsequent trading (<a name="0081-SUCM-015" href="#0081-SUCM-015">0081-SUCM-015</a>)
