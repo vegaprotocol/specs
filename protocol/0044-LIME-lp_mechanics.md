@@ -271,13 +271,13 @@ Note:
 ## What data do we keep relating to liquidity provision?
 
 1. List of all liquidity providers and their commitment sizes (bond account balance), the commitment at the start of epoch, their “equity-like share” and "liquidity score" for each market [see 0042-setting-fees-and-rewarding-lps](./0042-LIQF-setting_fees_and_rewarding_lps.md)
-1. Two new accounts (temporary bond account and bond account) per LP per market
+1. New bond account per LP per market
 1. Actual amount of liquidity supplied (can be calculated from order book, [see 0034-prob-weighted-liquidity-measure](./0034-PROB-prob_weighted_liquidity_measure.ipynb))
 
 
 ## APIs
 
-- Transfers to and from the temporary bond account and the true bond account, new or changed commitments, and any penalties applied should all be published on the event stream
+- Transfers to and from the bond account, new or changed commitments, and any penalties applied should all be published on the event stream
 - It should be possible to query all details of liquidity providers via an API
 
 ## Acceptance Criteria
