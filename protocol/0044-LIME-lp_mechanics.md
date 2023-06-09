@@ -100,10 +100,12 @@ A participant may apply to amend their commitment amount by submitting a transac
 
 `proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
 
-The amendment is actioned in two steps.
+An increase in amendment is actioned immediately but only has implications for rewards / penalties at start of the current epoch. 
 
-1) the amount is immediately transferred from the party's general account to a temporary "pending" bond account. This amount counts towards the stake committed to the market and so in particular can get the market out of liquidity auction.
-2) at the beginning of the next epoch (after the rewards / penalties for present LPs - including the party that's amending - have been evaluated) the amount is transferred from the "pending" bond to the true bond account.
+1) the amount is immediately transferred from the party's general account to their bond account. However we keep track of commitment at start of epoch and this is used for penalties / rewards.
+2) at the beginning of the next epoch, the rewards / penalties for present LPs - including the party that's amending - are evaluated based on balance of bond account at start of epoch. 
+
+A decrease in commitment is noted but the transfer out of the bond account is only actioned at the end of the current epoch. 
 
 For each party only the most recent amendment should be considered. All the amendments get processed simultaneously, hence the relative arrival of amendments made by different LPs within the previous epoch is irrelevant (as far as commitment reduction is concerned, it still has implications for other aspects of the mechanism).
 
