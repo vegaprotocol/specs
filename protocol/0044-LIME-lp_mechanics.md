@@ -232,7 +232,7 @@ $$
 f = \max\left[0,\min\left(m, p \cdot (1 - \frac{t}{s})\right)\right]\,.
 $$
 
-Once you have $f$ transfer $f \times B$ into the insurance pool of the market, where $B$ is the LP bond account balance.
+Once you have $f$ transfer $f \times B$ into the insurance pool of the market, where $B$ is the LP bond account balance. Note that for the purposes of applying this penalty the temporary bond account should never get accessed.
 Moreover, as this reduced the LP stake, update the ELS as per [Calculating liquidity provider equity-like share section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 ### Penalty for not supporting open positions
