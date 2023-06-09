@@ -51,7 +51,7 @@ In the example below there are 3 liquidity providers all bidding for their chose
 
 ### Timing market's liquidity-fee-factor changes
 
-Once the market opens (opening auction starts) a clock starts ticking. We calculate the `[target stake]` using [target stake](./0041-TSTK-target_stake.md). The fee is re-evaluated using the mechanism above at the start of each epoch using LPs commitments at start of epoch. 
+Once the market opens (opening auction starts) a clock starts ticking. We calculate the `[target stake]` using [target stake](./0041-TSTK-target_stake.md). The fee is re-evaluated using the mechanism above at the start of each epoch using LPs commitments at start of epoch.
 
 ### APIs for fee factor calculations - what should core be exposing?
 

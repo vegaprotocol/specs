@@ -100,12 +100,12 @@ A participant may apply to amend their commitment amount by submitting a transac
 
 `proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
 
-An increase in amendment is actioned immediately but only has implications for rewards / penalties at start of the current epoch. 
+An increase in amendment is actioned immediately but only has implications for rewards / penalties at start of the current epoch.
 
 1) the amount is immediately transferred from the party's general account to their bond account. However we keep track of commitment at start of epoch and this is used for penalties / rewards.
-2) at the beginning of the next epoch, the rewards / penalties for present LPs - including the party that's amending - are evaluated based on balance of bond account at start of epoch. 
+2) at the beginning of the next epoch, the rewards / penalties for present LPs - including the party that's amending - are evaluated based on balance of bond account at start of epoch.
 
-A decrease in commitment is noted but the transfer out of the bond account is only actioned at the end of the current epoch. 
+A decrease in commitment is noted but the transfer out of the bond account is only actioned at the end of the current epoch.
 
 For each party only the most recent amendment should be considered. All the amendments get processed simultaneously, hence the relative arrival of amendments made by different LPs within the previous epoch is irrelevant (as far as commitment reduction is concerned, it still has implications for other aspects of the mechanism).
 
@@ -215,7 +215,7 @@ Note: we don't evaluate whether LPs meet the SLA during opening auctions so ther
 
 ### Penalty for not meeting the SLA
 
-See the [Calculating the SLA performance penalty for a single epoch section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md) for how `fraction_of_time_on_book` is calculated. 
+See the [Calculating the SLA performance penalty for a single epoch section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md) for how `fraction_of_time_on_book` is calculated.
 This is available at the end of each epoch.
 If, at the end of the epoch, `fraction_of_time_on_book >= market.liquidity.committmentMinTimeFraction` then let $f=0$.
 Otherwise we calculate a penalty to be applied to the bond as follows.
@@ -239,7 +239,7 @@ Moreover, as this reduced the LP stake, update the ELS as per [Calculating liqui
 
 ### Penalty for not supporting open positions
 
-If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall. 
+If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall.
 The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
 
 Calculating the penalty:
@@ -261,7 +261,7 @@ The network will:
 
 1. Initiate closeout of the LPs order and/or positions as normal if their margin does not meet the minimum maintenance margin level required. (NB: this should involve no change)
 
-1. _The liquidity provider's bond account balance is always their current commitment level:_ This is strictly their "true" bond account. 
+1. _The liquidity provider's bond account balance is always their current commitment level:_ This is strictly their "true" bond account.
 
 Note:
 
