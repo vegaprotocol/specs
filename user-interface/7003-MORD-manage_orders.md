@@ -4,7 +4,7 @@ Users place orders to describe the trades they would like to make: buy or sell, 
 
 Once a user has placed an order they may wish to confirm it's [status](https://docs.vega.xyz/docs/mainnet/graphql/enums/order-status) in a [list](#orders-list) of other orders. e.g. whether it has been accepted, filled, how close it is to being filled etc. Users may be interested in the price of their orders relative to the price of the market and how much of the order's size has been filled.
 
-Orders can also be placed on behalf of a user/party via [liquidity](#liquidity-order-shapes) or [pegged](#pegged-order-shapes) order shapes. These order cannot be amended on canceled in the same way as other orders.
+Orders can also be placed on behalf of a user/party via [pegged](#pegged-orders) orders.
 
 Markets also have [statuses](https://docs.vega.xyz/docs/mainnet/graphql/enums/market-state) that may affect how a user perceives the state of an order, e.g if the order was placed while in "normal" continuous trading, but the market is now in auction. 
 
@@ -53,9 +53,8 @@ When looking at a list of orders, I...
 - **must** see the [size](9001-DATA-data_display.md#size) of the order (<a name="7003-MORD-003" href="#7003-MORD-003">7003-MORD-003</a>)
 - **must** see the [direction/side](9001-DATA-data_display.md#direction--side) (Long or Short) of the order (this can be implied with a + or negative suffix on the size, + for Long, - for short) (<a name="7003-MORD-004" href="#7003-MORD-004">7003-MORD-004</a>)
 - **must** see [order type](9001-DATA-data_display.md#order-type) (<a name="7003-MORD-005" href="#7003-MORD-005">7003-MORD-005</a>)
-- if order created by [pegged or liquidity provision shape](9001-DATA-data_display.md#order-origin): **should** see order origin
-  - **could** see what part of the liquidity shape or pegged order shape this relates to or it's offset+reference See [pegged orders](#pegged-order-shapes) and [liquidity provisions](#liquidity-order-shapes) shapes below.
-  - **could** see link to full shape
+- if order created by [a pegged order](9001-DATA-data_display.md#order-origin): **should** see order origin
+  - **could** see it's offset+reference. See [pegged orders](#pegged-order-shapes),
 
 - **should** see how much of the order's [size](9001-DATA-data_display.md#size) has been filled e.g. if the order was for `50` but so far only 10 have traded I should see Filled = `10`. Note: this is marked as a should because in the case of Rejected order and some other scenarios it isn't relevant.
 - **should** see how much of the order's [size](9001-DATA-data_display.md#size) remains. 
@@ -70,12 +69,12 @@ When looking at a list of orders, I...
 
 - **should** see time priority (how many orders are before mine at this price)
   
-- if the order is `Active` &amp; **not** part of a liquidity or peg shape: **must** see an option to [amend](#amend-order---price) the individual order (<a name="7003-MORD-007" href="#7003-MORD-007">7003-MORD-007</a>)
-- if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to amend the individual order (<a name="7003-MORD-008" href="#7003-MORD-008">7003-MORD-008</a>)
-  - **could** see a link to amend shape
-- if the order is `Active` &amp; **not** part of a liquidity or peg shape: **must** see an option to [cancel](#cancel-orders) the individual order
-- if the order is `Active` &amp; is part of a liquidity or peg shape: **must** **not** see an option to cancel the individual order
-  - **could** see a link to cancel shape
+- if the order is `Active` &amp; **not** a pegged order: **must** see an option to [amend](#amend-order---price) the individual order (<a name="7003-MORD-007" href="#7003-MORD-007">7003-MORD-007</a>)
+- if the order is `Active` &amp; is a pegged order: **must** **not** see an option to amend the resulting active order at the current price (<a name="7003-MORD-008" href="#7003-MORD-008">7003-MORD-008</a>)
+  - **could** see a link to amend the pegged order itself
+- if the order is `Active` &amp; **not** a pegged order: **must** see an option to [cancel](#cancel-orders) the individual order
+- if the order is `Active` &amp; is a pegged order **must** **not** see an option to cancel the individual order
+  - **could** see a link to cancel the pegged order
 
 ... so I can understand the state of my orders and decide what to do next
 ### Filters
@@ -164,42 +163,20 @@ when looking at an order book, I...
 
 ... so I can see my orders in context of price history
 
-## Pegged order shapes
+## Pegged orders
 
-When looking to understand the state of a pegged order shape...
+When looking to understand the state of a pegged order...
 
-- **should** see the whole shape of a pegged order
 - **must** see the reference, offset and direction for each part pegged order (<a name="7003-MORD-016" href="#7003-MORD-016">7003-MORD-016</a>)
 - **should** see the current price for each buy/sell
 - **should** see the filled/remaining for each part of the order
 - when order is not `Active`: **should** show the order status (perhaps instead of price)
-- **should** be able to cancel the whole pegged order
+- **should** be able to cancel the pegged order
 - **would** like to see link to edit the shape of a pegged order
 - **would** like to see the date submitted/updated
 
-... so I can decide if I wish to amend or cancel my pegged order shape
+... so I can decide if I wish to amend or cancel my pegged order
 
-## Cancel Pegged order shapes
+## Cancel Pegged order
 
 `TODO`
-
-## Liquidity order shapes
-
-When looking to understand the state of a liquidity provision, with a provided shape... 
-
-- **would** like to see the liquidity commitment order status (`pending`, `active`, `parked`, `canceled` etc)
-- **would** like to see the fee bid
-
-- **should** see the whole shape of a liquidity order
-- **must** see the reference, offset and direction for each part liquidity order order (<a name="7003-MORD-017" href="#7003-MORD-017">7003-MORD-017</a>)
-- **should** see the current price for each buy/sell
-- when order is not `Active`: **should** show the order status (perhaps instead of price)
-- **should** see link to cancel the whole liquidity order shape (see [liquidity provision](5002-LIQP-provide_liquidity.md))
-- **would** like to see link to edit the shape of a pegged order (see [liquidity provision](5002-LIQP-provide_liquidity.md))
-- **would** like to see the date submitted/updated
-
-... so I can decide if I wish to amend or cancel my shape
-
-## Cancel or amend Pegged order shapes
-
-See [liquidity provision](5002-LIQP-provide_liquidity.md),

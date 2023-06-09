@@ -274,7 +274,7 @@ The below table shows the allowable combinations of source and destination accou
 | Source type | Destination type | Governance transfer permitted |
 | --- | --- | --- |
 | Party account (any type) | Any | No |
-| Network treasury | Network treasury | Yes  |
+| Network treasury | Network treasury | No  |
 | Network treasury | Party general account(s) | Yes |
 | Network treasury | Party other account types | No |
 | Network treasury | Market insurance pool account | Yes |

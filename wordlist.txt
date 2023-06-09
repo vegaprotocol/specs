@@ -1,6 +1,7 @@
 ABCI
 ABCI++
 ABI
+actioned
 Allowlist
 allowlisted
 antiwhaling
@@ -68,6 +69,7 @@ disincentivise
 DLT
 DPOS
 durations
+earlyExitPenalty
 ECDSA
 EEF
 EIP
@@ -137,6 +139,7 @@ keypair
 keypairs
 keystore
 KMS
+leftarrow
 lifecycle
 linearised
 linkings
@@ -190,10 +193,12 @@ pre
 pro
 protobuf
 Pseudocode
+pseudorandom
 pubkey
 rata
 reimplemented
 repo
+renormalise
 reponse
 repurpose
 resync
@@ -214,6 +219,7 @@ SHA
 sharded
 SHA3
 siskas
+SLA
 Solana
 src
 stablecoin
