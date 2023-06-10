@@ -556,6 +556,9 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - Transfers cannot occur for settled markets and a transaction result event will show the transfer failing with an appropriate message  (<a name="0028-GOVE-097" href="#0028-GOVE-097">0028-GOVE-097</a>)
 - Transfers cannot occur for pending markets unless they become active on or before the enactment time of the transfer (<a name="0028-GOVE-098" href="#0028-GOVE-098">0028-GOVE-098</a>)
 
+##### Delivered On
+
+- If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately (<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
 
 ##### Transferred Amount
 
@@ -582,7 +585,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 - Enacted and active recurring governance transfers must be included in LNL banking checkpoint and resume after the checkpoint restore.(<a name="0028-GOVE-105" href="#0028-GOVE-105">0028-GOVE-105</a>)
 
-- When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
+- When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. (<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>) At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
 
 
 ##### Cancelling governance transfers
