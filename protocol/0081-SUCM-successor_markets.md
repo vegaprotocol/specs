@@ -79,23 +79,23 @@ Successor markets can be enacted when the parent market is in opening auction (<
 
 A successor market proposal can be enacted when the parent market is in one of the following states: Suspended, Active, Trading terminated or Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
 
-When a successor market is enacted, all other proposals (pending or proposed) are automatically rejected. Any LP submissions associated with these proposals are cancelled, and the funds are released (<a name="0081-SUCM-011" href="#0081-SUCM-011">0081-SUCM-011</a>)
+When a successor market is enacted (i.e. leaves the opening auction), all other proposals (pending or proposed) are automatically rejected. Any LP submissions associated with these proposals are cancelled, and the funds are released (<a name="0081-SUCM-011" href="#0081-SUCM-011">0081-SUCM-011</a>)
 
-With two successor markets in opening auction, that have the same parent market, and one additional market in the state "Proposed". Enact one of the two markets in opening auction. The other market in auction and the proposed market should both be "Rejected" and all LP funds will be released (<a name="0081-SUCM-014" href="#0081-SUCM-014">0081-SUCM-014</a>)
+With two successor markets in opening auction, that have the same parent market, and one additional market in the state "Proposed". Get one of the two markets to leave the opening auction (passage of time, LP commitment, crossing trade). The other market in auction and the proposed market should both be "Rejected" and all LP funds will be released (<a name="0081-SUCM-014" href="#0081-SUCM-014">0081-SUCM-014</a>)
 
 
 ### APIs
 
-It is possible to fetch a market "family tree" containing the initial market and the full successor line (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
+It is possible to fetch a market "parent / successor chain" containing the initial market and the full successor line (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
 
-When fetching a market that is part of a "family tree", we should see both the parent and each successor `marketID` (<a name="0081-SUCM-013" href="#0081-SUCM-013">0081-SUCM-013</a>)
+When fetching a market that is part of a "parent / successor chain", we should see both the parent and each successor `marketID` (<a name="0081-SUCM-013" href="#0081-SUCM-013">0081-SUCM-013</a>)
 
 
 ### Snapshots / checkpoints
 
-After a checkpoint restart the child parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-016" href="#0081-SUCM-016">0081-SUCM-016</a>)
+After a LNL checkpoint restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-016" href="#0081-SUCM-016">0081-SUCM-016</a>)
 
-After snapshot restart the child parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-017" href="#0081-SUCM-017">0081-SUCM-017</a>)
+After snapshot restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-017" href="#0081-SUCM-017">0081-SUCM-017</a>)
 
 
 ### Virtual stake
