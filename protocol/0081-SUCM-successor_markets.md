@@ -91,7 +91,7 @@ It is possible to fetch a market "family tree" containing the initial market and
 When fetching a market that is part of a "family tree", we should see both the parent and each successor `marketID` (<a name="0081-SUCM-013" href="#0081-SUCM-013">0081-SUCM-013</a>)
 
 
-### Snpshots / checkpoints
+### Snapshots / checkpoints
 
 After a checkpoint restart the child parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-016" href="#0081-SUCM-016">0081-SUCM-016</a>)
 
