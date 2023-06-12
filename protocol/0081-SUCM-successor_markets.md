@@ -54,6 +54,7 @@ At the end of opening auction, if the parent market still exists, the following 
 
 At the end of opening auction, if the parent market still exists, the fraction of the parent insurance pool balance given by `insurancePoolFraction` is transferred to the successor market.
 
+
 ## Acceptance criteria
 
 ### Proposals and timing
@@ -70,7 +71,33 @@ Two proposals that name the same parent can be submitted. Both can be approved b
 
 A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction before `parent settlement time + market.value.windowLength` then the virtual stakes are carried over and the relevant fraction of the insurance pool is transferred over (<a name="0081-SUCM-006" href="#0081-SUCM-006">0081-SUCM-006</a>).
 
-A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.value.windowLength` then no virtual stakes are carried over, there is no transfer into the insurance pool of the new market from the parent and the new market has no parent market Id set (<a name="0081-SUCM-007" href="#0081-SUCM-007">0081-SUCM-007</a>).
+A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.value.windowLength` then no virtual stakes are carried over, there is no transfer into the insurance pool of the new market from the parent and the new market has no parent market Id set (<a name="0081-SUCM-007" href="#0081-SUCM-007">0081-SUCM-007</a>)
+
+Successor markets can be enacted if the parent market is still in the "proposed" state. There is no virtual stake to copy over and no insurance pool balance to transfer  (<a name="0081-SUCM-008" href="#0081-SUCM-008">0081-SUCM-008</a>)
+
+Successor markets can be enacted when the parent market is in opening auction (<a name="0081-SUCM-009" href="#0081-SUCM-009">0081-SUCM-009</a>)
+
+A successor market proposal can be enacted when the parent market is in one of the following states: Suspended, Active, Trading terminated or Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
+
+When a successor market is enacted (i.e. leaves the opening auction), all other related successor market proposals, in the state "pending" or "proposed", are automatically rejected. Any LP submissions associated with these proposals are cancelled, and the funds are released (<a name="0081-SUCM-011" href="#0081-SUCM-011">0081-SUCM-011</a>)
+
+With two successor markets in opening auction, that have the same parent market, and one additional market in the state "Proposed". Get one of the two markets to leave the opening auction (passage of time, LP commitment, crossing trade). The other market in auction and the proposed market should both be "Rejected" and all LP funds will be released (<a name="0081-SUCM-014" href="#0081-SUCM-014">0081-SUCM-014</a>)
+
+Propose a successor market which specifies a parent which is settled, and for which the successor time window has expired. The proposal is declined. (<a name="0081-SUCM-018" href="#0081-SUCM-018">0081-SUCM-018</a>)
+
+### APIs
+
+It is possible to fetch a market "parent / successor chain" containing the initial market and the full successor line (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
+
+When fetching a market that is part of a "parent / successor chain", we should see both the parent and each successor `marketID` (<a name="0081-SUCM-013" href="#0081-SUCM-013">0081-SUCM-013</a>)
+
+
+### Snapshots / checkpoints
+
+After a LNL checkpoint restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-016" href="#0081-SUCM-016">0081-SUCM-016</a>)
+
+After snapshot restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-017" href="#0081-SUCM-017">0081-SUCM-017</a>)
+
 
 ### Virtual stake
 
