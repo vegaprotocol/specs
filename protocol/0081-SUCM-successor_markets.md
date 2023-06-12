@@ -107,8 +107,3 @@ If
 - Both `A` and `B` submit a liquidity commitment of `s1` and `s2` to the new market before the opening auction ends. No other LP submits liquidity to the new market. Then, once the opening auction resolved the LPs `A` and `B` have virtual stakes `v1` and `v2` (<a name="0081-SUCM-020" href="#0081-SUCM-020">0081-SUCM-020</a>).
 - As above but `A` submits `s1` and `B` doesn't submit anything. Then `A` has virtual stake `v1` and `B` has virtual stake `0` (<a name="0081-SUCM-021" href="#0081-SUCM-021">0081-SUCM-021</a>).
 - As above but `A` submits more than `s1`. Then `A` has virtual stake larger than `v1`. (<a name="0081-SUCM-022" href="#0081-SUCM-022">0081-SUCM-022</a>)
-
-
-### Equity like share
-
-With parent and child markets running at the same time. Ensure that the child ELS matches the parent at point of child leaving opening auction - trade on both markets and Ensure that markets diverge over subsequent trading (<a name="0081-SUCM-015" href="#0081-SUCM-015">0081-SUCM-015</a>)
