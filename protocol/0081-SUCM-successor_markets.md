@@ -83,6 +83,7 @@ When a successor market is enacted (i.e. leaves the opening auction), all other 
 
 With two successor markets in opening auction, that have the same parent market, and one additional market in the state "Proposed". Get one of the two markets to leave the opening auction (passage of time, LP commitment, crossing trade). The other market in auction and the proposed market should both be "Rejected" and all LP funds will be released (<a name="0081-SUCM-014" href="#0081-SUCM-014">0081-SUCM-014</a>)
 
+Propose a successor market which specifies a parent which is settled, and for which the successor time window has expired. The proposal is declined. (<a name="0081-SUCM-018" href="#0081-SUCM-018">0081-SUCM-018</a>)
 
 ### APIs
 
