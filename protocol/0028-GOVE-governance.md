@@ -221,23 +221,8 @@ A proposal to create a market contains
 
 1. a complete market specification as per the [Market Framework](./0001-MKTF-market_framework.md) that describes the market to be created.
 1. an enactment time that is at least the _minimum auction duration_ after the vote closing time (see [auction spec](./0026-AUCT-auctions.md))
-1. if the market is meant to be a _successor_ of a given market then it contains the `marketID` of the market it's succeeding (parent market), a parameter called `insurancePoolFraction` which is a decimal in `[0,1]` (i.e. it can be `0` or `1` or anything in between) and certain entries in the market proposal must be identical to those of the market it's succeeding OR the proposal should simply not contain the fields that cannot be changed.
-In a particular instrument, the settlement asset, margin asset, and `market.value.windowLength` must match.
-The parent market must be either: a) in one of `proposed`, `pending`, `active`, `suspended` or `trading terminated`
-or b) `settled` state but with time since settlement less than or equal `network.liquidity.successorLaunchWindowLength`
-or c) `cancelled` (closed by governance) but with the closing time less than or equal `network.liquidity.successorLaunchWindowLength`.
-The point of setting up a market to be successor of an existing market is to
-a) allow LPs continue claim their virtual stake / equity-like-share (ELS) by committing liquidity to the successor market during the pending period if they wish to, and
-b) allow the successor market to inherit the insurance pool of the parent market. When the successor market leaves the opening auction (moves from pending to active) the amount equal to `insurancePoolFraction x parent market insurance pool balance` is transferred to the successor market insurance pool. Once the parent market moves from "trading terminated" to "settled" state, the entire remaining insurance pool of the successor market is transferred to the successor market insurance pool.
-
-If the parent market is `proposed` or `pending` or the opening auction ends after the settlement time / cancellation time plus `network.liquidity.successorLaunchWindowLength` then the parent marketID may no longer exist in core or there may be no virtual stake to claim (copy). In that case the successor market virtual stakes are initialised as if the market has no parent (and we set the parent market field in market data to null / empty indicating no parent market).
-
-
-Note that each market can have exactly one market as a _successor_ market.
-
-- if there already is a market (possibly pending, i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)), naming a parent market, then a subsequent proposal referencing that market is rejected.
-- if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the successor of the named parent; the other proposal is cancelled with reason "parent market no longer available".
-- if there is a successor market naming a parent market and the parent terminates and settles or is cancelled by governance before the parent market (for whatever reason) then the parent market can again act as successor to  a different market proposed by a future market proposal.
+1. if the market is meant to be a _successor_ of a given market then it contains the `marketID` of the market it's succeeding (parent market), a parameter called `insurancePoolFraction` which is a decimal in `[0,1]` (i.e. it can be `0` or `1` or anything in between) and certain entries in the market proposal must be identical to those of the market it's succeeding.
+See [sucessor markets spec](./0081-SUCM-successor_markets.md for more details).
 
 All _new market proposals_ initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
@@ -289,7 +274,7 @@ The below table shows the allowable combinations of source and destination accou
 | Source type | Destination type | Governance transfer permitted |
 | --- | --- | --- |
 | Party account (any type) | Any | No |
-| Network treasury | Network treasury | Yes  |
+| Network treasury | Network treasury | No  |
 | Network treasury | Party general account(s) | Yes |
 | Network treasury | Party other account types | No |
 | Network treasury | Market insurance pool account | Yes |

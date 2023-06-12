@@ -168,13 +168,13 @@ message Market {
   - Why it is in that period (e.g. Auction at open, liquidity sourcing, price monitoring)
   - When the auction will next attempt to uncross or if the auction period ended and the auction cannot be resolved for whatever reason then this should come blank or otherwise indicating that the system doesn't know when the auction ought to end.
 - A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run from the close of voting on the market proposal (assumed to pass successfully) until:
-    1. the enactment time assuming there are orders crossing on the book, [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-009" href="#0026-AUCT-009">0026-AUCT-009</a>)
-    1. past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed and we have limit orders such that after the auction uncrossing we will have best bid and best ask so that [liquidity can be deployed](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-010" href="#0026-AUCT-010">0026-AUCT-010</a>)
-    1. past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) and after the auction uncrossing we will have best bid and best ask but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md). It will only end if
-		  - more liquidity is committed (<a name="0026-AUCT-011" href="#0026-AUCT-011">0026-AUCT-011</a>)
-		  - or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-012" href="#0026-AUCT-012">0026-AUCT-012</a>)
-    1. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
-		  - best bid; it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-013" href="#0026-AUCT-013">0026-AUCT-013</a>)
-		  - or best ask;  it will only end once an LO providing best bid is supplied. (<a name="0026-AUCT-014" href="#0026-AUCT-014">0026-AUCT-014</a>)
+    1. the enactment time assuming there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-017" href="#0026-AUCT-017">0026-AUCT-017</a>)
+    2. past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed. (<a name="0026-AUCT-018" href="#0026-AUCT-018">0026-AUCT-018</a>)
+    3. past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md). It will only end if
+		  - more liquidity is committed (<a name="0026-AUCT-019" href="#0026-AUCT-019">0026-AUCT-019</a>)
+		  - or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-020" href="#0026-AUCT-020">0026-AUCT-020</a>)
+    4. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
+		  - best bid; it will still open. (<a name="0026-AUCT-021" href="#0026-AUCT-021">0026-AUCT-021</a>)
+		  - or best ask; it will still open. (<a name="0026-AUCT-022" href="#0026-AUCT-022">0026-AUCT-022</a>)
 - When entering an auction, all GFN orders will be cancelled. (<a name="0026-AUCT-015" href="#0026-AUCT-015">0026-AUCT-015</a>)
 - When leaving an auction, all GFA orders will be cancelled. (<a name="0026-AUCT-016" href="#0026-AUCT-016">0026-AUCT-016</a>)

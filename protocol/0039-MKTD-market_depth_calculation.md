@@ -15,8 +15,6 @@
 - Market depth will show a crossed book if the market is in auction and the book is crossed (<a name="0039-MKTD-013" href="#0039-MKTD-013">0039-MKTD-013</a>)
 - Leaving an auction will cause any GFA orders to be removed from the market depth view (<a name="0039-MKTD-014" href="#0039-MKTD-014">0039-MKTD-014</a>)
 - Pegged orders are part of the market depth view and should update the view when their orders are repriced (<a name="0039-MKTD-015" href="#0039-MKTD-015">0039-MKTD-015</a>)
-- Liquidity orders are part of the market depth view and should update the view when commitment sizes change (<a name="0039-MKTD-016" href="#0039-MKTD-016">0039-MKTD-016</a>)
-- Liquidity orders are part of the market depth view and should update the view when their reference prices move (<a name="0039-MKTD-017" href="#0039-MKTD-017">0039-MKTD-017</a>)
 - Each delta update will have the new sequence number along with the previous sequence number which will match the previous delta update (<a name="0039-MKTD-018" href="#0039-MKTD-018">0039-MKTD-018</a>)
 - The sequence number received as part of the market depth snapshot will match the sequence number of a delta update (<a name="0039-MKTD-019" href="#0039-MKTD-019">0039-MKTD-019</a>)
 
