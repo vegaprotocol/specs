@@ -7,6 +7,7 @@
   - **Must** show used [amount](9001-DATA-data_display.md#asset-balances), which is the total of all Margin and Liquidity bond accounts (<a name="7001-COLL-002" href="#7001-COLL-002">7001-COLL-002</a>)
   - **Must** show available [amount](9001-DATA-data_display.md#asset-balances), which is the total of your General account (<a name="7001-COLL-003" href="#7001-COLL-003">7001-COLL-003</a>)
   - **Must** show total [amount](9001-DATA-data_display.md#asset-balances), which is the sum of your General account and all Margin accounts (<a name="7001-COLL-004" href="#7001-COLL-004">7001-COLL-004</a>)
+  - \*\*Must show amounts formatted by quantum (<a name="7001-COLL-012" href="#7001-COLL-012">7001-COLL-012</a>)
   - **Must** provide a method for depositing asset (<a name="7001-COLL-005" href="#7001-COLL-005">7001-COLL-005</a>)
   - **Must** provide a method for withdrawing asset (<a name="7001-COLL-006" href="#7001-COLL-006">7001-COLL-006</a>)
   - **Must** show the asset symbol (<a name="7001-COLL-007" href="#7001-COLL-007">7001-COLL-007</a>)
