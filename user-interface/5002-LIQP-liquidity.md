@@ -21,16 +21,16 @@
 
 ## Liquidity view
 
-- **Must** be able to see the following sections (<a name="5002-LIQP-004" href="#5002-LIQP-004">5002-LIQP-004</a>)
+- **Must** be able to see the following sections
 
-  - name (<a name="5002-LIQP-005" href="#5002-LIQP-005">5002-LIQP-005</a>)
-  - trading page link (<a name="5002-LIQP-006" href="#5002-LIQP-006">5002-LIQP-006</a>)
-  - target stake (<a name="5002-LIQP-007" href="#5002-LIQP-007">5002-LIQP-007</a>)
-  - supplied stake (<a name="5002-LIQP-008" href="#5002-LIQP-008">5002-LIQP-008</a>)
-  - liquidity supplied (<a name="5002-LIQP-009" href="#5002-LIQP-009">5002-LIQP-009</a>)
-  - market id (<a name="5002-LIQP-010" href="#5002-LIQP-010">5002-LIQP-010</a>)
-  - learn more (<a name="5002-LIQP-011" href="#5002-LIQP-011">5002-LIQP-011</a>)
+  - name (<a name="5002-LIQP-004" href="#5002-LIQP-004">5002-LIQP-004</a>)
+  - trading page link (<a name="5002-LIQP-005" href="#5002-LIQP-005">5002-LIQP-005</a>)
+  - target stake (<a name="5002-LIQP-006" href="#5002-LIQP-006">5002-LIQP-006</a>)
+  - supplied stake (<a name="5002-LIQP-007" href="#5002-LIQP-007">5002-LIQP-007</a>)
+  - liquidity supplied (<a name="5002-LIQP-008" href="#5002-LIQP-008">5002-LIQP-008</a>)
+  - market id (<a name="5002-LIQP-009" href="#5002-LIQP-009">5002-LIQP-009</a>)
+  - learn more (<a name="5002-LIQP-010" href="#5002-LIQP-010">5002-LIQP-010</a>)
 
-- **Must** be able to see the following tabs (<a name="5002-LIQP-012" href="#5002-LIQP-012">5002-LIQP-012</a>)
-  - active,
-  - inactive
+- **Must** be able to see the following tabs
+  - active (<a name="5002-LIQP-011" href="#5002-LIQP-011">5002-LIQP-011</a>)
+  - inactive (<a name="5002-LIQP-012" href="#5002-LIQP-012">5002-LIQP-012</a>)
