@@ -125,7 +125,7 @@ As a wallet user I want a way to enter my password when my login has expired So 
 
 ## View wallet and key pairs
 
-As a browser wallet user I want to view my vega wallet (and key pair(s)) So that I can see that I've been successful creating the wallet / see my key ID
+As a browser wallet user I want to view my vega wallet (and key pair(s)) So that I can see that I've been successful creating the wallet / see my key ID g
 
 - I can see a list of the keys in my wallet (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
 - I can copy the public key ID to my clipboard (<a name="1101-BWAL-060" href="#1101-BWAL-060">1101-BWAL-060</a>)
@@ -171,3 +171,11 @@ As a wallet user I want to see which dapps have permission to access my keys So 
 - I can choose to disconnect a dapp connection (and it's pre-approved status i.e. the next time I want to connect the dapp I am asked to approve the connection) (<a name="1101-BWAL-080" href="#1101-BWAL-080">1101-BWAL-080</a>)
 - The dapp is informed of the disconnection via an event handler (<a name="1101-BWAL-081" href="#1101-BWAL-081">1101-BWAL-081</a>)
 - If I have the extension open on the Connections view AND I approve a request to connect to a dapp (and the connection is successful), the connections view should update to show the new connection (<a name="1101-BWAL-082" href="#1101-BWAL-082">1101-BWAL-082</a>)
+
+## Disconnect wallet via dapp
+
+As a dApp developer I want to be able to disconnect from a wallet So a user can be assured the dApp no longer can talk to the wallet
+
+- I can call client.disconnect_wallet after successfully calling client.connect_wallet (<a name="1101-BWAL-083" href="#1101-BWAL-083">1101-BWAL-083</a>)
+- I can call client.disconnect_wallet with no prior connection and get a null response (<a name="1101-BWAL-084" href="#1101-BWAL-084">1101-BWAL-084</a>)
+- A dapp can disconnect the current active connection (not it's pre-approved status i.e. the dapp can re-instate the connection without further approval) (<a name="1101-BWAL-085" href="#1101-BWAL-085">1101-BWAL-085</a>)
