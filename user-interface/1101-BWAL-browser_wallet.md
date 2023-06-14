@@ -125,7 +125,7 @@ As a wallet user I want a way to enter my password when my login has expired So 
 
 ## View wallet and key pairs
 
-As a browser wallet user I want to view my vega wallet (and key pair(s)) So that I can see that I've been successful creating the wallet / see my key ID g
+As a browser wallet user I want to view my vega wallet (and key pair(s)) So that I can see that I've been successful creating the wallet / see my key ID
 
 - I can see a list of the keys in my wallet (<a name="1101-BWAL-059" href="#1101-BWAL-059">1101-BWAL-059</a>)
 - I can copy the public key ID to my clipboard (<a name="1101-BWAL-060" href="#1101-BWAL-060">1101-BWAL-060</a>)
