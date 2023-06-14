@@ -1,6 +1,6 @@
 # Withdraw
 
-Withdrawing funds is a two step process. 
+Withdrawing funds is a two step process.
 
 First the Vega network needs to approve that the funds can be released (not required for margin on open positions or in liquidity bond etc). If they are not, a withdraw is prepared and set aside so that it can not be used for positions etc. This also define what ethereum address will be credited the funds in step 2.
 
@@ -18,12 +18,13 @@ When wishing to withdraw some of an ERC20 asset from Vega, I...
 
 Note: It is better to encourage the completion of started withdraws as soon as possible after preparing them. This is because the validator set could theoretically change enough to make the node signatures that authorize the withdrawal invalid.
 
-- **should** be warned that they will need to pay gas on the withdrawal before starting 
-- **could** show the current gas fees BEFORE preparing the withdrawal (note: shows gas estimate is a general should for all [ethereum transactions](0005-ETXN-submit_ethereum_transaction.md) but this is so a user gets to see the gas costs at step 1 assuming they will do step 2 immediately. ) 
+- **should** be warned that they will need to pay gas on the withdrawal before starting
+- **could** show the current gas fees BEFORE preparing the withdrawal (note: shows gas estimate is a general should for all [ethereum transactions](0005-ETXN-submit_ethereum_transaction.md) but this is so a user gets to see the gas costs at step 1 assuming they will do step 2 immediately. )
 
 Note: A user may want to delay preparing a withdrawal if gas fees on the network are particularly high at the time
 
 - **must** select the asset to withdraw (<a name="1002-WITH-001" href="#1002-WITH-001">1002-WITH-001</a>)
+
   - **should not** see option to select assets where I a zero [total balance](9001-DATA-data_display.md#asset-balances) (note this should also avoid `Pending` assets from appearing in the list)
   - **must** see the general balance I have for that asset (<a name="1002-WITH-002" href="#1002-WITH-002">1002-WITH-002</a>)
   - **should** see balances to the full number of decimal places possible for that asset
@@ -34,14 +35,19 @@ Note: A user may want to delay preparing a withdrawal if gas fees on the network
   - **should** have an easy option (link/button) to input the full amount in general balance
   - **must** be able to specify as many decimal places as the asset supports (<a name="1002-WITH-004" href="#1002-WITH-004">1002-WITH-004</a>)
 - **must** be warned if the amount is greater than general balance (including if the general balance amount changes while the user is looking at the form) (<a name="1002-WITH-005" href="#1002-WITH-005">1002-WITH-005</a>)
+
+- **must** be warned if the amount is lesser than the minimum allowed, where the minimum amount is the selected asset's quantum multiplied by the value of `spam.protection.minimumWithdrawalQuantumMultiple` network parameter (<a name="1002-WITH-026" href="#1002-WITH-026">1002-WITH-026</a>)
+
 - **should** see a link to a faucet on the selected asset (only if there is one)
 
 - **must** specify the Ethereum address that can claim the withdrawal (e.g. where you are withdrawing too) (<a name="1002-WITH-006" href="#1002-WITH-006">1002-WITH-006</a>)
+
   - **should** be able to easily select an Ethereum key the app is already connected to
   - **should** be able to withdraw to a different Ethereum key to the one the app is connected to
   - **should** be warned if the input does not look like an ethereum address (wrong number of characters, not starting with 0x etc)
 
 - if there is a withdraw delay on the selected asset:
+
   - **should** see how large a withdrawal (or sum of withdrawals) needs to be to hit the `withdraw delay threshold`
   - **should** see what the withdraw delay is in hours and mins (if hit)
   - **should** see how much I have withdrawn in the last `withdraw delay period`
@@ -51,14 +57,15 @@ Note: A user may want to delay preparing a withdrawal if gas fees on the network
 - **must** submit a withdraw [vega transaction](0003-WTXN-submit_vega_transaction.md) (<a name="1002-WITH-009" href="#1002-WITH-009">1002-WITH-009</a>)
 
 - if the preparing the withdraw on Vega fails:
+
   - **must** be directed back to the withdraw form (containing the submitted values) and see an explanation of why the transaction failed, so I can fix and resubmit (<a name="1002-WITH-010" href="#1002-WITH-010">1002-WITH-010</a>)
 
 - if the preparing the withdraw on Vega is successful:
-  -  **must** see that withdraw is prepared (<a name="1002-WITH-011" href="#1002-WITH-011">1002-WITH-011</a>)
+  - **must** see that withdraw is prepared (<a name="1002-WITH-011" href="#1002-WITH-011">1002-WITH-011</a>)
   - if this withdraw will not hit the withdrawal threshold:
     - **should** be prompted to complete the transaction on ethereum (see [complete ERC20 withdraw](#complete-erc20-withdraw-from-ethereum-bridge))
     - **could** be directed to a list of incomplete withdrawals
-  - if this withdraw will hit withdrawal threshold: 
+  - if this withdraw will hit withdrawal threshold:
     - **must** see that the withdraw has been complete and is in the list waiting for the delay to pass (<a name="1002-WITH-024" href="#1002-WITH-024">1002-WITH-024</a>)
 
 ...so that I can get the details required to release my funds from the the Ethereum ERC20 bridge.
@@ -97,7 +104,7 @@ When looking to submit the Ethereum transaction to release funds from the Vega b
 - **must** see a link to [submit the ethereum transaction to finish withdrawal](0005-ETXN-submit_ethereum_transaction.md) (<a name="1002-WITH-019" href="#1002-WITH-019">1002-WITH-019</a>)
 - **could** be warned if the connected ethereum wallet is different to the one that the withdraw is going to credit (this is permitted but is a good reminder to the user about what to expect)
 
-- if successful: 
+- if successful:
   - **must** see asset balances have been updated post withdrawal (<a name="1002-WITH-020" href="#1002-WITH-020">1002-WITH-020</a>)
   - **must** see the list of withdrawals (with updated status) (<a name="1002-WITH-021" href="#1002-WITH-021">1002-WITH-021</a>)
   - **could** see prompt to start another transaction or complete another incomplete one
@@ -107,4 +114,4 @@ When looking to submit the Ethereum transaction to release funds from the Vega b
   - **should** see a link to docs about withdrawals for trouble shooting (e.g. if the signer set has changed significantly since the withdraw was prepared)
   - **should** see status of incomplete withdrawals (so I can confirm the withdraw I attempted to complete is incomplete)
 
-... so the funds I withdrew from Vega are credited to my Ethereum key 
+... so the funds I withdrew from Vega are credited to my Ethereum key
