@@ -179,3 +179,9 @@ As a dApp developer I want to be able to disconnect from a wallet So a user can 
 - I can call client.disconnect_wallet after successfully calling client.connect_wallet (<a name="1101-BWAL-083" href="#1101-BWAL-083">1101-BWAL-083</a>)
 - I can call client.disconnect_wallet with no prior connection and get a null response (<a name="1101-BWAL-084" href="#1101-BWAL-084">1101-BWAL-084</a>)
 - A dapp can disconnect the current active connection (not it's pre-approved status i.e. the dapp can re-instate the connection without further approval) (<a name="1101-BWAL-085" href="#1101-BWAL-085">1101-BWAL-085</a>)
+
+## Extension connection notify
+
+As a wallet user I want the app to notify me when I attempt to connect a dapp So that I know what to do next
+
+- I see an indication on my extension icon to show that a dapp has initiated a connection to the wallet (<a name="1101-BWAL-086" href="#1101-BWAL-086">1101-BWAL-086</a>)
