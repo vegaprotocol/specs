@@ -219,6 +219,8 @@ If the remainders of multiple icebergs sit at the same price and are not fully u
 
 - An iceberg order refresh must generate an event of the event bus.
 
+- Any API that returns information about market-depth or the orderbook volume will include an iceberg order's full volume and not just its `display quantity`.
+
 
 ### Valid order entry combinations
 
@@ -321,7 +323,8 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 ### API
 
 1. API end points should be available to query initial peak size, minimum peak size, quantity, displayed quantity and remaining (<a name="0014-ORDT-036" href="#0014-ORDT-036">0014-ORDT-036</a>)
-2. The additional fields relating to iceberg orders should be available in the streaming api end points
+2. The additional fields relating to iceberg orders should be available in the streaming api end points (<a name="0014-ORDT-069" href="#0014-ORDT-069">0014-ORDT-069</a>)
+3. API end points showing market-depth or price-level volume should include the full volume of iceberg orders (<a name="0014-ORDT-070" href="#0014-ORDT-070">0014-ORDT-070</a>)
 
 ### Stop orders
 
