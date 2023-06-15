@@ -148,7 +148,7 @@ Not in scope: minimum participation of active users, i.e. 90% of the _active_ us
 For market change proposals the network will additionally calculate
 
 1. `LP participation rate = SUM (equity-like share of all LPs who cast a vote)` (no need to divide by anything as equity-like share sums up to `1`).
-1. `LP for rate = SUM (equity-like share of all LPs who cast a for vote)) / LP participation rate`.
+1. `LP for rate = SUM (equity-like share of all LPs who cast a for vote))`.
 
 If the market that the proposal is changing is pending (so accepted but hasn't left opening auction yet) at the vote resolution time then only token holder votes are used.
 
