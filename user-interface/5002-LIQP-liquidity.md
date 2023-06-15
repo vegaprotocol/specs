@@ -34,3 +34,4 @@
 - **Must** be able to see the following tabs
   - active (<a name="5002-LIQP-011" href="#5002-LIQP-011">5002-LIQP-011</a>)
   - inactive (<a name="5002-LIQP-012" href="#5002-LIQP-012">5002-LIQP-012</a>)
+- **Must** be able to see the number values formatted using quantum and asset decimals, on hover full value should be displayed (<a name="5002-LIQP-013" href="#5002-LIQP-013">5002-LIQP-013</a>)
