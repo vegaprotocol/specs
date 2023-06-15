@@ -580,7 +580,6 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Governance transfer enactment
 
 - For enacted proposals a token transfer will occur at the time of enactment between the source and destination account if sufficient tokens are held in the source account. A transaction result event will show the successful transfer between two accounts  (<a name="0028-GOVE-094" href="#0028-GOVE-094">0028-GOVE-094</a>)
-- When insufficient tokens are found in the source account at time of transfer (enactment) a transaction result event will show the transfer failing with an appropriate message (<a name="0028-GOVE-095" href="#0028-GOVE-095">0028-GOVE-095</a>)
 - Transfers can occur for terminated markets  (<a name="0028-GOVE-096" href="#0028-GOVE-096">0028-GOVE-096</a>)
 - Transfers cannot occur for settled markets and a transaction result event will show the transfer failing with an appropriate message  (<a name="0028-GOVE-097" href="#0028-GOVE-097">0028-GOVE-097</a>)
 - Transfers cannot occur for pending markets unless they become active on or before the enactment time of the transfer (<a name="0028-GOVE-098" href="#0028-GOVE-098">0028-GOVE-098</a>)
