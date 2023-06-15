@@ -287,10 +287,9 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 1. An iceberg order with a non persistent TIF (IOC, FOK) is rejected with a valid error message (<a name="0014-ORDT-016" href="#0014-ORDT-016">0014-ORDT-016</a>)
 2. An iceberg market order with any TIF is rejected with a valid error message (<a name="0014-ORDT-017" href="#0014-ORDT-017">0014-ORDT-017</a>)
 3. A reduce-only iceberg order with any TIF is rejected with a valid error message (<a name="0014-ORDT-018" href="#0014-ORDT-018">0014-ORDT-018</a>)
-4. An iceberg order with initial peak size less than the minimum order size rejected with a valid error message (<a name="0014-ORDT-019" href="#0014-ORDT-019">0014-ORDT-019</a>)
-5. An iceberg order with initial peak size greater than the total order size is rejected with a valid error message (<a name="0014-ORDT-020" href="#0014-ORDT-020">0014-ORDT-020</a>)
-6. An iceberg order with minimum peak size less than 0 is rejected with a valid error message (<a name="0014-ORDT-021" href="#0014-ORDT-021">0014-ORDT-021</a>)
-7. An iceberg order with minimum peak size greater than initial peak size is rejected with a valid error message (<a name="0014-ORDT-022" href="#0014-ORDT-022">0014-ORDT-022</a>)
+4. An iceberg order with initial peak size greater than the total order size is rejected with a valid error message (<a name="0014-ORDT-020" href="#0014-ORDT-020">0014-ORDT-020</a>)
+5. An iceberg order with minimum peak size less than 0 is rejected with a valid error message (<a name="0014-ORDT-021" href="#0014-ORDT-021">0014-ORDT-021</a>)
+6. An iceberg order with minimum peak size greater than initial peak size is rejected with a valid error message (<a name="0014-ORDT-022" href="#0014-ORDT-022">0014-ORDT-022</a>)
 
 #### Iceberg Order Amendment
 
