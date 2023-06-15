@@ -86,6 +86,8 @@ Anyone can create a proposal if the weighting of their vote on the proposal woul
 
 In a future iteration of the governance system we may restrict proposal submission by type of proposal based on a minimum weighting. e.g: only user with a certain number or percentage of the governance asset are allowed to open a "network parameter change" proposal.
 
+### Market change proposal
+
 Market change proposals additionally require certain minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.updateMarket.minProposerEquityLikeShare`.
 So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` then they cannot submit a market change proposal.
 
@@ -141,10 +143,12 @@ Note: see below for details on minimum participation rate and minimum required m
 
 Not in scope: minimum participation of active users, i.e. 90% of the _active_ users of the vega network have to take part in the vote. Minimum participation is currently always measured against the total possible participation.
 
+### Market change proposal outcome
+
 For market change proposals the network will additionally calculate
 
 1. `LP participation rate = SUM (equity-like share of all LPs who cast a vote)` (no need to divide by anything as equity-like share sums up to `1`).
-1. `LP for rate = SUM (all who voted for) / LP participation rate`.
+1. `LP for rate = SUM (equity-like share of all LPs who cast a for vote))`.
 
 If the market that the proposal is changing is pending (so accepted but hasn't left opening auction yet) at the vote resolution time then only token holder votes are used.
 
@@ -355,7 +359,38 @@ All in memory active governance transfers must be included in the snapshot of th
 4. Enacted governance transfers are therefore available to be queried via the regular transfer API in data node.
 5. Governance initiated transfers are subject to neither minimum transfer amounts nor to fees.
 
-## 6. Freeform governance proposal
+## 6. Change market state
+
+A governance proposal to change the state of the market.
+Multiple concurrent proposals are allowed. If more than one gets successfully voted in the one which arrived last gets used. If a proposal has already been successful then additional market state change proposals are still allowed as long as their enactment date is no later then that of the last successful vote.
+
+Market change proposal [creation](#market-change-proposal) and [voting](#market-change-proposal-outcome) rules apply.
+
+Refer to subsections below for allowed state changes.
+
+### 6.1. Move market to a closed state
+
+Any type of market (either fixed expiry market or perpetual) can be closed via a governance vote.
+
+A proposal to close a market contains:
+
+1. an enactment time
+1. final settlement price (not required for spot markets)
+
+Once market is closed the process cannot be reversed.
+
+### 6.2. Suspend the market
+
+This proposal puts the market into an auction mode which can only be exit with a governance proposal to unsuspend the market. It can be applied to a market that's in any of the active (accepting orders) states including the opening auction.
+
+A market that's been suspended can't have the open volume changed or margin account balances reduced for any of the parties within the market.
+
+
+### 6.3. Unsuspend the market
+
+This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active.
+
+## 7. Freeform governance proposal
 
 The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. The proposal will contain only the fields common to all proposals i.e.
 
@@ -470,7 +505,15 @@ APIs should also exist for clients to:
 - A market change proposal that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the proposed modification is enacted. (<a name="0028-GOVE-070" href="#0028-GOVE-070">0028-GOVE-070</a>)
 - In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the proposed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)
 - A market change that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)
-
+- A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
+- When multiple market closure governance proposals are submitted and accepted then one to be approved by governance last (i.e latest closing date and vote goes through) is the one whose enactment time and final settlement price get used to close the market (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
+- Once a market closure governance proposal has been accepted and was successful another proposal with same enactment date still gets accepted. If the later proposal is unsuccessful then values supplied by the last successful one get used to close the market (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
+- Once a market closure governance proposal has been accepted and was successful another proposal with earlier enactment date still gets accepted. If the later proposal is successful then values supplied within it get used to close the market (if no other proposals were successful after it) (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
+- Once a market closure governance proposal has been accepted and was successful another proposal with later enactment date gets rejected (<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
+- Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to unsuspend the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
+- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
+- Unsuspending a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
+- A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
 
 #### Network parameter change proposals
 

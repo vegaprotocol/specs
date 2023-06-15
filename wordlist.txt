@@ -275,6 +275,9 @@ unstake
 unstaked
 unstakes
 unstaking
+unsuspend
+unsuspended
+unsuspending
 unvested
 url
 USD
