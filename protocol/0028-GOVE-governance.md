@@ -86,6 +86,8 @@ Anyone can create a proposal if the weighting of their vote on the proposal woul
 
 In a future iteration of the governance system we may restrict proposal submission by type of proposal based on a minimum weighting. e.g: only user with a certain number or percentage of the governance asset are allowed to open a "network parameter change" proposal.
 
+### Market change proposal
+
 Market change proposals additionally require certain minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.updateMarket.minProposerEquityLikeShare`.
 So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` then they cannot submit a market change proposal.
 
@@ -141,10 +143,12 @@ Note: see below for details on minimum participation rate and minimum required m
 
 Not in scope: minimum participation of active users, i.e. 90% of the _active_ users of the vega network have to take part in the vote. Minimum participation is currently always measured against the total possible participation.
 
+### Market change proposal outcome
+
 For market change proposals the network will additionally calculate
 
 1. `LP participation rate = SUM (equity-like share of all LPs who cast a vote)` (no need to divide by anything as equity-like share sums up to `1`).
-1. `LP for rate = SUM (all who voted for) / LP participation rate`.
+1. `LP for rate = SUM (equity-like share of all LPs who cast a for vote)) / LP participation rate`.
 
 If the market that the proposal is changing is pending (so accepted but hasn't left opening auction yet) at the vote resolution time then only token holder votes are used.
 
@@ -360,6 +364,8 @@ All in memory active governance transfers must be included in the snapshot of th
 A governance proposal to change the state of the market.
 Multiple concurrent proposals are allowed. If more than one gets successfully voted in the one which arrived last gets used. If a proposal has already been successful then additional market state change proposals are still allowed as long as their enactment date is no later then that of the last successful vote.
 
+Market change proposal [creation](#market-change-proposal) and [voting](#market-change-proposal-outcome) rules apply.
+
 Refer to subsections below for allowed state changes.
 
 ### 6.1. Move market to a closed state
@@ -379,7 +385,6 @@ This proposal puts the market into an auction mode which can only be exit with a
 
 A market that's been suspended can't have the open volume changed or margin account balances reduced for any of the parties within the market.
 
-[Market change proposal](#market-change-proposals) voting rules apply.
 
 ### 6.3. Unsuspend the market
 
