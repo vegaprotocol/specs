@@ -88,8 +88,8 @@ In a future iteration of the governance system we may restrict proposal submissi
 
 ### Market change proposal
 
-Market change proposals additionally require certain minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.updateMarket.minProposerEquityLikeShare`.
-So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` then they cannot submit a market change proposal.
+Market change proposals can also be submitted by any party which has at least the minimum [Equity-like share](0042-LIQF-setting_fees_and_rewarding_lps.md) set by `governance.proposal.updateMarket.minProposerEquityLikeShare`. Note that such a party can submit a proposal even if it doesn't hold any amount of the governance token.
+So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` and no governance tokens then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` and no governance tokens then they cannot submit a market change proposal.
 
 ### Duration of the proposal
 
@@ -514,6 +514,8 @@ APIs should also exist for clients to:
 - Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
 - Unsuspending a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
 - A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
+- Verify that a party with 0 balance of the governance token, but with sufficient ELS can submit a market change proposal successfully. (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)
+- Verify that a party with 0 balance of the governance token and insufficient ELS sees their market change proposal rejected after submission. (<a name="0028-GOVE-118" href="#0028-GOVE-118">0028-GOVE-118</a>)
 
 #### Network parameter change proposals
 
