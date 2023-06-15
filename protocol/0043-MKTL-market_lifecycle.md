@@ -303,7 +303,7 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 1. Any new orders get rejected.
 1. Liquidity commitments cannot be modified or cancelled.
 1. Final settlement is carried out and the transfers reflect the difference in the last mark price and the final settlement price supplied by the governance proposal.
-1. All the funds from market specific accounts get released to appropriate accounts.
+1. All the funds from market specific accounts get released to appropriate accounts; the insurance pool perhaps after the delay to allow for transfer into a successor market.
 1. Market gets deleted.
 
 ### Market gets suspended via a governance proposal
