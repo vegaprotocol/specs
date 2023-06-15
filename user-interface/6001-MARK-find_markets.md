@@ -24,7 +24,7 @@
 - **Must** provide a way to copy the market ID (<a name="6001-MARK-020" href="#6001-MARK-020">6001-MARK-020</a>)
 
 - if there is no markets:
-  - **Must** show No markets info (<a name="6001-MARK-034" href="#6001-MARK-034">6001-MARK-001</a>)
+  - **Must** show No markets info (<a name="6001-MARK-034" href="#6001-MARK-034">6001-MARK-034</a>)
 
 ## Market Selector
 
@@ -41,7 +41,6 @@
   - by top gaining market (<a name="6001-MARK-030" href="#6001-MARK-030">6001-MARK-030</a>)
   - by top losing market (<a name="6001-MARK-031" href="#6001-MARK-031">6001-MARK-031</a>)
   - by newest markets (opening timestamp) (<a name="6001-MARK-032" href="#6001-MARK-032">6001-MARK-032</a>)
-- **Must** provide a way to see all markets (<a name="6001-MARK-033" href="#6001-MARK-033">6001-MARK-033</a>)
 - **Must** be able to close and open the market selector (<a name="6001-MARK-066" href="#6001-MARK-066">6001-MARK-066</a>)
 - **Must** must change color and have + or negative suffix of the price change and change color for the sparkline (<a name="6001-MARK-067" href="#6001-MARK-067">6001-MARK-067</a>)
 
