@@ -13,9 +13,23 @@
 - **Must** see lifetime withdrawal limit (<a name="6501-ASSE-009" href="#6501-ASSE-009">6501-ASSE-009</a>)
 - **Must** see infrastructure fee account balance (<a name="6501-ASSE-010" href="#6501-ASSE-010">6501-ASSE-010</a>)
 - **Must** see global reward pool account balance (<a name="6501-ASSE-011" href="#6501-ASSE-011">6501-ASSE-011</a>)
-- **Must** be able to close the dialog (<a name="6501-ASSE-012" href="#6501-ASSE-012">6501-ASSE-012</a>)
+- **Must** see tooltips on hover for  
+    - Type (value)  
+    - Decimals (label)  
+    - Quantum (label)  
+    - Status (label and value)  
+    - Contract address (label)  
+    - Withdrawal threshold (label)  
+    - Lifetime limit (label)  
+    - Infrastructure fee account balance (label)  
+    - Global reward pool account balance (label)  
+    - Maker paid fees account balance (label)  
+    - Maker received fees account balance (label)  
+    - Liquidity provision fee reward account balance (label)  
+    - Market proposer reward account balance (label)   (<a name="6501-ASSE-012" href="#6501-ASSE-012">6501-ASSE-012</a>)
+- **Must** be able to close the dialog (<a name="6501-ASSE-013" href="#6501-ASSE-013">6501-ASSE-013</a>)
 
 ### Asset types
 
 - ERC20
-  - **Must** see contract address (<a name="6501-ASSE-013" href="#6501-ASSE-013">6501-ASSE-013</a>)
+  - **Must** see contract address (<a name="6501-ASSE-014" href="#6501-ASSE-014">6501-ASSE-014</a>)

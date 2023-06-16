@@ -261,81 +261,7 @@ Enactment of an asset modification proposal is:
 - For data that must be synchronised with the asset blockchain (e.g. Ethereum): _only_ the emission of a signed bundle that can be submitted to the bridge contract; the changed values [asset framework spec](./0040-ASSF-asset_framework.md) only become reflected on the Vega chain once the usual number of confirmations of the effect of this change is emitted by the bridge chain.
 - For any data that is stored only on the Vega chain: the data is updated once the proposal is enacted.
 
-## 5. Transfers initiated by Governance (post Oregon trail)
-
-### Permitted source and destination account types
-
-The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal.
-
-| Source type | Destination type | Governance transfer permitted |
-| --- | --- | --- |
-| Party account (any type) | Any | No |
-| Network treasury | Reward pool account | Yes  |
-| Network treasury | Party general account(s) | Yes |
-| Network treasury | Party other account types | No |
-| Network treasury | Network insurance pool account | Yes |
-| Network treasury | Market insurance pool account | Yes |
-| Network treasury | Any other account | No |
-| Network insurance pool account | Network treasury | Yes |
-| Network insurance pool account | Market insurance pool account | Yes |
-| Network insurance pool account | Any other account | No |
-| Market insurance pool account | Party account(s) | Yes  |
-| Market insurance pool account | Network treasury | Yes  |
-| Market insurance pool account | Network insurance pool account | Yes |
-| Market insurance pool account | Any other account | No |
-| Any other account | Any | No |
-
-### Transfer proposal details
-
-The proposal specifies:
-
-- `source_type`: the source account type (i.e. network treasury, network insurance pool, market insurance pool)
-- `source` specifies the account to transfer from, depending on the account type:
-  - network treasury: leave blank (only one per asset)
-  - network insurance pool: leave blank (only one per asset)
-  - market insurance pool: market ID
-- `type`, which can be either "all or nothing" or "best effort":
-  - all or nothing: either transfers the specified amount or does not transfer anything
-  - best effort: transfers the specified amount or the max allowable amount if this is less than the specified amount
-- `amount`: the maximum amount to transfer
-- `asset`: the asset to transfer
-- `fraction_of_balance`: the maximum fraction of the source account's balance to transfer as a decimal (i.e. 0.1 = 10% of the balance)
-- `destination_type` specifies the account type to transfer to (reward pool, party, network insurance pool, market insurance pool)
-- `destination` specifies the account to transfer to, depending on the account type:
-  - reward pool: the reward scheme ID
-  - party: the party's public key
-  - network insurance pool: leave blank (there's only one per asset)
-  - market insurance pool: market ID
-- Plus the standard proposal fields (i.e. voting and enactment dates, etc.)
-
-### Transfer proposal enactment
-
-If the proposal is successful and enacted, the amount will be transferred from the source account to the destination account on the enactment date.
-
-The amount is calculated by
-
-```go
-  transfer_amount = min(
-    proposal.fraction_of_balance * source.balance,
-    proposal.amount,
-    NETWORK_MAX_AMOUNT,
-    NETWORK_MAX_FRACTION * source.balance )
-```
-
-Where:
-
-- `NETWORK_MAX_AMOUNT` is a network parameter specifying the maximum absolute amount that can be transferred by governance for the source account type
-- `NETWORK_MAX_FRACTION` is a network parameter specifying the maximum fraction of the balance that can be transferred by governance for the source account type (must be <= 1)
-
-If `type` is "all or nothing" then the transfer will only proceed if:
-
-```go
-transfer_amount == min(
-    proposal.fraction_of_balance * source.balance,
-    proposal.amount )
-```
-
-## 6. Freeform governance proposal
+## 5. Freeform governance proposal
 
 The aim of this is to allow community to provide votes on proposals which don't change any of the behaviour of the currently running Vega blockchain. That is to say, at enactment time, no changes are effected on the system, but the record of how token holders voted will be stored on chain. The proposal will contain only the fields common to all proposals i.e.
 
@@ -446,6 +372,7 @@ APIs should also exist for clients to:
 - Change of the network parameter `governance.proposal.updateMarket.minProposerEquityLikeShare` will immediately change the minimum proposer ELS for a market change proposal for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-064" href="#0028-GOVE-064">0028-GOVE-064</a>)
 - Change of the network parameter `governance.proposal.updateMarket.requiredParticipationLP` will immediately change the required LP vote participation (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-065" href="#0028-GOVE-065">0028-GOVE-065</a>)
 - Change of the network parameter `governance.proposal.updateMarket.requiredMajorityLP` will immediately change the required LP vote majority (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-066" href="#0028-GOVE-066">0028-GOVE-066</a>)
+- Set up a [builtin product futures](./0016-PFUT-product_builtin_future.md) market with vega (internal) time triggered trading terminated oracle and an settlement oracle with a filter that requires the price to be both strictly greater than `0` and strictly less than `0`. Verify that after the trading terminates it is impossible to settle the market with various inputs. That's intentional. Now submit a market change proposal to settle the market with a fixed key filtering on a specific value e.g. it's only possible to settle with a price of `1000`. Wait for the vote to pass and enact. Now settle the market and verify it settled at the pre-specified price. (<a name="0028-GOVE-069" href="#0028-GOVE-069">0028-GOVE-069</a>)
 
 #### Network parameter change proposals
 
