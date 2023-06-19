@@ -179,3 +179,15 @@ As a dApp developer I want to be able to disconnect from a wallet So a user can 
 - I can call client.disconnect_wallet after successfully calling client.connect_wallet (<a name="1101-BWAL-083" href="#1101-BWAL-083">1101-BWAL-083</a>)
 - I can call client.disconnect_wallet with no prior connection and get a null response (<a name="1101-BWAL-084" href="#1101-BWAL-084">1101-BWAL-084</a>)
 - A dapp can disconnect the current active connection (not it's pre-approved status i.e. the dapp can re-instate the connection without further approval) (<a name="1101-BWAL-085" href="#1101-BWAL-085">1101-BWAL-085</a>)
+
+## Open browser wallet in new window
+
+As a Browser Wallet User I want the browser wallet to open in a pop-up window when there is a transaction for me to approve So that I don't have to notice the dot and open the extension every time
+
+- When the browser wallet is open in a new window, the window stays on top (<a name="1101-BWAL-086" href="#1101-BWAL-086">1101-BWAL-086</a>)
+- If I have a new window open, if there is a transaction for me to approve or reject this is shown in the new window (<a name="1101-BWAL-087" href="#1101-BWAL-087">1101-BWAL-087</a>)
+- If I approve the transaction the new window stays open (on the last view I was on) (<a name="1101-BWAL-088" href="#1101-BWAL-088">1101-BWAL-088</a>)
+- If I reject the transaction the pop-up window stays open (on the last view I was on) (<a name="1101-BWAL-089" href="#1101-BWAL-089">1101-BWAL-089</a>)
+- If I resize the new window the browser wallet still looks good (<a name="1101-BWAL-090" href="#1101-BWAL-090">1101-BWAL-090</a>)
+- If I have the new window open but then open the extension pop up I see the same thing on both views (<a name="1101-BWAL-091" href="#1101-BWAL-091">1101-BWAL-091</a>)
+- There is a way for me to open the browser wallet in a new window (<a name="1101-BWAL-092" href="#1101-BWAL-092">1101-BWAL-092</a>)
