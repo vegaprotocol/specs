@@ -15,14 +15,14 @@ Moreover, part of the insurance pool of a parent market can be earmarked for tra
 
 ## Relevant network / market parameters
 
-- `market.value.windowLength` is a network parameter specifying how long, after a market has settled, the LPs virtual stakes are retained and the insurance pool is left undistributed to allow a successor to be defined.
+- `market.liquidity.successorLaunchWindowLength` is a network parameter specifying how long, after a market has settled, the LPs virtual stakes are retained and the insurance pool is left undistributed to allow a successor to be defined.
 - `parent market Id` is part of market proposal which can optionally specify a parent market; see [governance](./0028-GOVE-governance.md).
 - `insurancePoolFraction` is is part of market proposal which can optionally specify how much of the insurance pool of the parent is to be transferred to the successor; see [governance](./0028-GOVE-governance.md).
 
 ## Specifying a parent market and timing details
 
 A market [governance] proposal for a successor market must contain all the information of a full proposal with additionally specified `parent market Id` and `insurancePoolFraction`.
-The product, settlement asset, margin asset, and `market.value.windowLength` must match but all other inputs can be different (e.g. position and price decimal places, risk mode, price monitoring, termination and settlement oracles etc.).
+The product, settlement asset, and margin asset must match but all other inputs can be different (e.g. position and price decimal places, risk mode, price monitoring, termination and settlement oracles etc.).
 For [spot markets](./0080-SPOT-product_builtin_spot.md) base and quote assets must match.
 
 The parent market must be either: a) in one of `proposed`, `pending`, `active`, `suspended` or `trading terminated`
@@ -62,16 +62,16 @@ At the end of opening auction, if the parent market still exists, the fraction o
 Market proposal may specify parent market ID. If it does then:
 
 - It must also specify insurance pool fraction (<a name="0081-SUCM-001" href="#0081-SUCM-001">0081-SUCM-001</a>)
-- The product, settlement asset, margin asset, and `market.value.windowLength` must match between parent and successor; if not proposal is rejected (<a name="0081-SUCM-002" href="#0081-SUCM-002">0081-SUCM-002</a>)
+- The product, settlement asset and margin asset must match between parent and successor; if not proposal is rejected (<a name="0081-SUCM-002" href="#0081-SUCM-002">0081-SUCM-002</a>)
 - It is possible for the successor to specify different trading termination and settlement oracle data (<a name="0081-SUCM-003" href="#0081-SUCM-003">0081-SUCM-003</a>).
 
 It is possibly to cancel a [spot market](./0080-SPOT-product_builtin_spot.md) via governance and propose a new spot market as a successor with different `market_decimal_places` and `position_decimal_places` (aka `size_decimal_places` for spot); the LPs virtual stakes are carried over (<a name="0081-SUCM-004" href="#0081-SUCM-004">0081-SUCM-004</a>).
 
 Two proposals that name the same parent can be submitted. Both can be approved by governance. The proposed market that clears the opening auction first gets the share of the insurance pool and the virtual stakes get carried over. Once the first market clears the opening auction the other market's parent market Id field is cleared. When it clears the opening auction it gets no insurance pool from the parent and no virtual stakes get carried over (<a name="0081-SUCM-005" href="#0081-SUCM-005">0081-SUCM-005</a>).
 
-A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction before `parent settlement time + market.value.windowLength` then the virtual stakes are carried over and the relevant fraction of the insurance pool is transferred over (<a name="0081-SUCM-006" href="#0081-SUCM-006">0081-SUCM-006</a>).
+A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction before `parent settlement time + market.liquidity.successorLaunchWindowLength` then the virtual stakes are carried over and the relevant fraction of the insurance pool is transferred over (<a name="0081-SUCM-006" href="#0081-SUCM-006">0081-SUCM-006</a>).
 
-A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.value.windowLength` then no virtual stakes are carried over, there is no transfer into the insurance pool of the new market from the parent and the new market has no parent market Id set (<a name="0081-SUCM-007" href="#0081-SUCM-007">0081-SUCM-007</a>)
+A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.liquidity.successorLaunchWindowLength` then no virtual stakes are carried over, there is no transfer into the insurance pool of the new market from the parent and the new market has no parent market Id set (<a name="0081-SUCM-007" href="#0081-SUCM-007">0081-SUCM-007</a>)
 
 Successor markets can be enacted if the parent market is still in the "proposed" state. There is no virtual stake to copy over and no insurance pool balance to transfer  (<a name="0081-SUCM-008" href="#0081-SUCM-008">0081-SUCM-008</a>)
 
