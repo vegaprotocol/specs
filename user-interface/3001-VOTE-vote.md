@@ -9,10 +9,10 @@ There are a few things that can be governed on Vega...
 - Markets (creation and changes to existing)
 - Assets (creation on changes to existing)
 - "Freeform", which has no affect on the network but can be used to to measure token holders views
-  
+
 To make proposal: a user will require an amount of the Governance token [associated](1004-ASSO-associate.md) with their key.
 
-To vote: a user will require [associated](1004-ASSO-associate.md) Governance tokens (or in the case of market change proposals they could have an active liquidity provision). 
+To vote: a user will require [associated](1004-ASSO-associate.md) Governance tokens (or in the case of market change proposals they could have an active liquidity provision).
 
 Each vote has a weight behind it based on the number of associate tokens or the liquidity provision's equity like share at the point in time that the vote closes.
 
@@ -33,7 +33,7 @@ When looking for a particular proposal or wanting to see what proposals are open
 - **must** see link(s) to make proposals (<a name="3001-VOTE-002" href="#3001-VOTE-002">3001-VOTE-002</a>)
 - **must** if there are no proposals, see that there have been no proposals since the last chain checkpoint restore (<a name="3001-VOTE-003" href="#3001-VOTE-003">3001-VOTE-003</a>)
 - **must** see open proposals (and ones due for enactment) distinct from others (e.g grouped by "open", "to enact" "closed") (note: freeform proposals do not enact so should be shown as "closed" when "passed") (<a name="3001-VOTE-004" href="#3001-VOTE-004">3001-VOTE-004</a>)
-- **should** see proposals sorted with the ones closest to enactment first (within each group) 
+- **should** see proposals sorted with the ones closest to enactment first (within each group)
 - **must** see a history of all "closed" proposals (<a name="3001-VOTE-006" href="#3001-VOTE-006">3001-VOTE-006</a>)
 - can search for a proposal by:
   - **should** be able to search by proposal ID
@@ -45,6 +45,8 @@ When looking for a particular proposal or wanting to see what proposals are open
 
 for each proposal:
 
+- **must** see the proposal ID (<a name="3001-VOTE-008" href="#3001-VOTE-008">3001-VOTE-008</a>)
+- **must** see who the proposer is (e.g. their public address) (<a name="3001-VOTE-009" href="#3001-VOTE-009">3001-VOTE-009</a>)
 - **must** see the type of proposal (<a name="3001-VOTE-007" href="#3001-VOTE-007">3001-VOTE-007</a>)
 - **must** see the proposal title (<a name="3001-VOTE-097" href="#3001-VOTE-097">3001-VOTE-097</a>)
 - **should** see a summary of what the type of proposed change is, without looking at details (network, new market etc)
@@ -74,7 +76,10 @@ for each proposal:
   - for asset changes: **should** see the current values for these parameters
   - for freeform: **must** see a summary of the proposal (suggest the first x characters of the proposal blob)
 - **must** see the proposal status e.g. passed, open, waiting for node to vote) (<a name="3001-VOTE-035" href="#3001-VOTE-035">3001-VOTE-035</a>)
-  - for new asset proposals: **must** see if an asset has not yet been whitelisted on the bridge (<a name="3001-VOTE-036" href="#3001-VOTE-036">3001-VOTE-036</a>)
+  - for new asset proposals: **must** see if an asset has not yet been whitelisted on the bridge (<a name="3001-VOTE-036" 
+    href="#3001-VOTE-036">3001-VOTE-036</a>)
+- **must** see the proposal's terms in JSON
+  (<a name="3001-VOTE-010" href="#3001-VOTE-010">3001-VOTE-010</a>)
 - for open proposals: **must** see a summary of how the vote count stands and if it looks like proposal will pass or not (note some of these are repeated in more details in the [details section](#details-of-a-proposal)) (<a name="3001-VOTE-037" href="#3001-VOTE-037">3001-VOTE-037</a>)
   - if the proposal failed (had the status of "failed", because it was an invalid on submission) they **should not** appear in the list (instead the proposer will see this after submission)
   - if the proposal looks like it will fail due to insufficient participation: **should** see "participation not reached"
@@ -104,13 +109,13 @@ When looking at a particular proposal, I...
 - **must** see the rationale title (<a name="3001-VOTE-054" href="#3001-VOTE-054">3001-VOTE-054</a>)
 - **must** see the full rationale description if there is one (<a name="3001-VOTE-055" href="#3001-VOTE-055">3001-VOTE-055</a>)
 - **must** see rationale description rendered with markdown (<a name="3001-VOTE-101" href="#3001-VOTE-101">3001-VOTE-101</a>)
-  
+
 For open proposals:
 
 - **must** show a summary of vote status (base on the current total amount associated tokens, note this could change before the vote ends) (<a name="3001-VOTE-057" href="#3001-VOTE-057">3001-VOTE-057</a>)
 - **must** see if the token vote has met a required participation threshold (<a name="3001-VOTE-058" href="#3001-VOTE-058">3001-VOTE-058</a>)
 - **must** see the sum of tokens that have voted so far (<a name="3001-VOTE-059" href="#3001-VOTE-059">3001-VOTE-059</a>)
-- **should** see sum of tokens that have voted as a percentage of total voted
+- **must** see sum of tokens that have voted as a percentage of total voted (<a name="3001-VOTE-011" href="#3001-VOTE-011">3001-VOTE-011</a>)
 - **should** see what the participation threshold is for this proposal (note this is set per proposal once the proposal hits the chain based on the current network params, incase a proposal is set to enact that changes threshold)
 - **must** see if the Token vote has met the required majority threshold (<a name="3001-VOTE-062" href="#3001-VOTE-062">3001-VOTE-062</a>)
 - **must** see the sum of tokens that have voted in favour of the proposal (<a name="3001-VOTE-064" href="#3001-VOTE-064">3001-VOTE-064</a>)
@@ -127,6 +132,12 @@ For open market change proposals, all of the above and:
 - **must** see the equity like share as percentage that has voted in favour of the proposal (<a name="3001-VOTE-072" href="#3001-VOTE-072">3001-VOTE-072</a>)
 - **must** see what the majority threshold is for this proposal (note this is see per proposal, incase a proposal is set to enact that changes threshold) (<a name="3001-VOTE-073" href="#3001-VOTE-073">3001-VOTE-073</a>)
 
+For update market proposals:
+
+- As a liquidity provider, **must** be able to participate in a liquidity vote on an update market proposal, when the token vote has not reached required participation level in time (<a name="3001-VOTE-015" href="#3001-VOTE-015">3001-VOTE-015</a>)
+- **must** be able to to understand why a liquidity vote has been incurred (<a name="3001-VOTE-016" href="#3001-VOTE-016">3001-VOTE-016</a>)
+- **must** be able to to understand that the result in the end may differ (as the outcome of the vote is based on the number of tokens held by the voters at time of vote close) (<a name="3001-VOTE-017" href="#3001-VOTE-017">3001-VOTE-017</a>)
+
 For `closed` market change proposals, all of the above and:
 
 - **must** see all of above but values at time of vote close (<a name="3001-VOTE-074" href="#3001-VOTE-074">3001-VOTE-074</a>)
@@ -141,17 +152,19 @@ When looking to vote on the proposal, I...
 - **must** be [connected to a Vega wallet/key](./0002-WCON-connect_vega_wallet.md) (<a name="3001-VOTE-076" href="#3001-VOTE-076">3001-VOTE-076</a>)
   - **must** see sum of tokens I have [associated](1027-ASSO-associate.md) (<a name="3001-VOTE-100" href="#3001-VOTE-100">3001-VOTE-100</a>)
   - **should** see what percentage of the total [associated](1027-ASSO-associate.md) tokens I hold
-    - **should**, if I have 0 tokens, see link to [associate](1027-ASSO-associate.md)
+    - **must**, if I have 0 tokens, see link to [associate](1027-ASSO-associate.md) (<a name="3001-VOTE-012" href="#3001-VOTE-012">3001-VOTE-012</a>)
   - **must** see my current vote for, against, or not voted (<a name="3001-VOTE-079" href="#3001-VOTE-079">3001-VOTE-079</a>)
   - **must** see option to vote for or against (<a name="3001-VOTE-080" href="#3001-VOTE-080">3001-VOTE-080</a>)
+    - **must** trigger a transaction that needs to be confirmed in users wallet (<a name="3001-VOTE-013" href="#3001-VOTE-013">3001-VOTE-013</a>)
+    - **must** see that I need to confirm the transaction in my wallet to continue (<a name="3001-VOTE-014" href="#3001-VOTE-014">3001-VOTE-014</a>)
   - **must** see option to change my vote (vote again in same or different direction) (<a name="3001-VOTE-090" href="#3001-VOTE-090">3001-VOTE-090</a>)
 
 For open market change proposals, all of the above and:
-  - **must** see your equity like share on the market you are voting on (<a name="3001-VOTE-092" href="#3001-VOTE-092">3001-VOTE-092</a>)
+
+- **must** see your equity like share on the market you are voting on (<a name="3001-VOTE-092" href="#3001-VOTE-092">3001-VOTE-092</a>)
 
 for both:
 
 - **must** see feedback of my vote [Vega transaction](0003-WTXN-submit_vega_transaction.md) (<a name="3001-VOTE-093" href="#3001-VOTE-093">3001-VOTE-093</a>)
 
 ...so that I can cast my vote and see the impact it might have.
- 
