@@ -236,4 +236,7 @@ Each market can have exactly one market as a *successor* market.
 - It is possible to designate a market as perpetual; this is visible via APIs in market data. <a name="0001-MKTF-005" href="#0001-MKTF-005">0001-MKTF-005</a>
 - A market may have a "parent" market; the parent market is visible via APIs in the form of the `marketID` of the parent market. <a name="0001-MKTF-006" href="#0001-MKTF-006">0001-MKTF-006</a>
 - A market may have a "successor" market; the parent market is visible via APIs in the form of the `marketID` (or `proposalID`) of the successor market. <a name="0001-MKTF-007" href="#0001-MKTF-007">0001-MKTF-007</a>
-- A parent and successor markets must have the same product, settlement asset(s) and margin asset(s). <a name="0001-MKTF-008" href="#0001-MKTF-008">0001-MKTF-008</a>
+- A parent and successor markets must have the same:
+  - product <a name="0001-MKTF-008" href="#0001-MKTF-008">0001-MKTF-008</a>
+  - settlement asset(s) <a name="0001-MKTF-009" href="#0001-MKTF-009">0001-MKTF-009</a>
+  - margin asset(s). <a name="0001-MKTF-010" href="#0001-MKTF-010">0001-MKTF-010</a>
