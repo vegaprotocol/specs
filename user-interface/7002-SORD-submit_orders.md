@@ -164,6 +164,7 @@ When populating a deal ticket I...
 - if not already connected: **must** see a prompt to [connect a Vega wallet](0002-WCON-connect_vega_wallet.md)
 
 - **must** submit the [Vega submit order transaction](0013-WTXN-submit_vega_transaction.md). (<a name="7002-SORD-039" href="#7002-SORD-039">7002-SORD-039</a>)
+- **must** always be able to submit regardless of market state, trading mode or account balances (<a name="7002-SORD-060" href="#7002-SORD-060">7002-SORD-060</a>)
 
 - **must** see feedback on my order [status](https://docs.vega.xyz/docs/mainnet/grpc/vega/vega.proto#orderstatus) (not just transaction status above) (<a name="7002-SORD-040" href="#7002-SORD-040">7002-SORD-040</a>)
   - Active (aka Open) (<a name="7002-SORD-041" href="#7002-SORD-041">7002-SORD-041</a>)
