@@ -34,7 +34,7 @@ The event queue may evaluate filters before submitting the observation to the Ve
 
 An Ethereum oracle has as its subject a smart contract that is deployed on the Ethereum blockchain.
 All such contracts have an address, and an "ABI" that defines the methods an events exposed by the contract.
-In order interpret the oracle specification and interact with the smart contract, both the contract address and Ethereum ABI JSON for the contract (or a subset, covering the relevant parts) must therefore be included in the oracle specification.
+In order to interpret the oracle specification and interact with the smart contract, both the contract address and Ethereum ABI JSON for the contract (or a subset, covering the relevant parts) must therefore be included in the oracle specification.
 
 Event data and data returned from functions will be emitted by the Ethereum node in an ABI-encoded format.
 This data, including any structs should be decoded using the ABI into a JSON-like representation.
