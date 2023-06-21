@@ -144,6 +144,17 @@ Price-monitoring auctions are still required and should be implemented following
   2.4. Trader can join a market by submitting a new trade to a Market , when market is in Trading state
   2.5. Trader can fully fill an order
   2.6. Trader can partially fill an order and cancel remaining order
-  2.7. Wash orders can be filled in trading mode and cancelled in Auction mode 
+  2.7. Wash trades can be filled in trading mode and cancelled in Auction mode
+  2.8. Trades can submit prices and volumes in decimal ranges and rounding logic is applied 
+
+**Liquidity Provider**
+3. Liquidity Provers can join a Spot Market and fill trades
+  3.1. Liquidity Providers can join Spot Market and submit prices
+  3.2. Traders in the Market can match their trades against the liquidity provider 
+  3.3. Traders in the Market can match their trades against the liquidity provider partially 
+  3.4. Maker fee is calculated as per the existing fee calculation specfiication 
+  3.5. Liquidity provider commitment checks are perfored as per the existing Liquidity Provider specification
+
+
 
    
