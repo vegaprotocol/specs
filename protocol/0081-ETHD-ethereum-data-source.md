@@ -54,7 +54,7 @@ All data sourced from Ethereum should be structured as an object containing both
 - Ethereum block timestamp at which the data was observed/event occurred
 
 
-These data can be used as the subject of filters or even extracted as the oracle data of interest.
+This data can be used as the subject of filters or even extracted as the oracle data of interest.
 Filters on Ethereum block height, Ethereum timestamp, or Vega timestamp should be applied prior to submitting the data to the Vega chain, in addition to being re-applied when the data is confirmed on chain.
 This would prevent spamming the Vega chain with event data that is not relevant.
 
