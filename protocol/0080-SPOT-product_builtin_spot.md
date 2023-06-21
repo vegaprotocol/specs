@@ -143,11 +143,12 @@ Price-monitoring auctions are still required and should be implemented following
   2.2. Trader can amend price and volume in Market auction state <br>
   2.3. Trader can amend price and volume in Market Trading state, provided account has balance<br>
   2.3. Trader can cancel a submitted spot order at Market Auction and Trading state<br>
-  2.4. Trader can join a market by submitting a new trade to a Market , when market is in Trading state<br>
+  2.4. Trader can join a market by submitting a new trade to a Market, when the market is in Trading state<br>
   2.5. Trader can fully fill an order<br>
   2.6. Trader can partially fill an order and cancel remaining order<br>
   2.7. Wash trades can be filled in trading mode and cancelled in Auction mode<br>
-  2.8. Trades can submit prices and volumes in decimal ranges and rounding logic is applied<br> 
+  2.8. Trades can submit prices and volumes in decimal ranges and rounding logic is applied<br>
+  2.9. Spot trades can be submitted with order types Limit orders, GTC, GFA etc <br>
 
 **Liquidity Provider**
 3. Liquidity Provers can join a Spot Market and fill trades<br>
@@ -163,6 +164,20 @@ Price-monitoring auctions are still required and should be implemented following
   4.2. Infra Fee is calculated and applied  <br>
   4.3. Maker Fee, Infra Fee are taken into consideration when amending the orders on Trading mode <br>
   4.4. Price amends and final trading price adheres to Weighted Volume Price calculation  <br>
+
+**Governance Transers**
+5. Spot traders are executed end-to-end with governance transfers<br>
+  5.1.Spot Network parameters can be set from Governance transfer proposals <br>
+  5.2.Spot Markets can be created through Governance transfer proposals<br>
+  5.3.Spot Orders are submitted and filled<br>
+  5.4.Spot Markets can be updated via Governance transfer proposals<br>  
+
+**Smart Contracts**
+6. Spot traders can be submitted with assets derived from Smart Contracts<br>
+
+**Algorithmic Trading**
+7. Trading Algorithms such as pegging, stop loss, take profit, iceberg can be used on spot orders
+
 
   
 
