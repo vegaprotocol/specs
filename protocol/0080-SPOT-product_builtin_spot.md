@@ -129,32 +129,42 @@ Price-monitoring auctions are still required and should be implemented following
 1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-SPOT-006" href="#0080-SPOT-006">0080-SPOT-006</a>)
 1. Market liquidity fees are calculated correctly (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>)
 
+
 **Spot Market**
-1. Create a spot market and transition to all market states
-   1.1. When Bid and Ask price matches then Spot Market transitions from Auction Mode to Trading Mode.
-   1.2. When Bid and Ask trade price dont match then Spot Market do not transition to Auction Mode
-   1.3. When Bid and Ask trade price match and trade volume dont match then Market transition to Aution Mode
+1. Create a spot market and transition to all market states<br>
+   1.1. When Bid and Ask price matches then Spot Market transitions from Auction Mode to Trading Mode<br>
+   1.2. When Bid and Ask trade price do not match then Spot Market do not transition to Auction Mode<br>
+   1.3. When Bid and Ask trade price match and trade volume do not match then Market transition to Auction Mode<br>
+   1.4. Cannot change `base_asset` and `quote_asset` in governance proposal market update, when attempted throws error message <br>
 
 **Spot Order**
-2. Trader can submit Spot orders with respective Base and Quoted Asset balance in place 
-  2.1. Trader can submit Spot Orders with price and volume as per the asset balance
-  2.2. Trader can amend price and volume in Market auction state
-  2.3. Trader can amend price and volume in Market Trading state, provided account has balance
-  2.3. Trader can cancel a submitted spot order at Market Auction and Trading state
-  2.4. Trader can join a market by submitting a new trade to a Market , when market is in Trading state
-  2.5. Trader can fully fill an order
-  2.6. Trader can partially fill an order and cancel remaining order
-  2.7. Wash trades can be filled in trading mode and cancelled in Auction mode
-  2.8. Trades can submit prices and volumes in decimal ranges and rounding logic is applied 
+2. Trader can submit Spot orders with respective Base and Quoted Asset balance in place <br>
+  2.1. Trader can submit Spot Orders with price and volume as per the asset balance  <br>
+  2.2. Trader can amend price and volume in Market auction state <br>
+  2.3. Trader can amend price and volume in Market Trading state, provided account has balance<br>
+  2.3. Trader can cancel a submitted spot order at Market Auction and Trading state<br>
+  2.4. Trader can join a market by submitting a new trade to a Market , when market is in Trading state<br>
+  2.5. Trader can fully fill an order<br>
+  2.6. Trader can partially fill an order and cancel remaining order<br>
+  2.7. Wash trades can be filled in trading mode and cancelled in Auction mode<br>
+  2.8. Trades can submit prices and volumes in decimal ranges and rounding logic is applied<br> 
 
 **Liquidity Provider**
-3. Liquidity Provers can join a Spot Market and fill trades
-  3.1. Liquidity Providers can join Spot Market and submit prices
-  3.2. Traders in the Market can match their trades against the liquidity provider 
-  3.3. Traders in the Market can match their trades against the liquidity provider partially 
-  3.4. Maker fee is calculated as per the existing fee calculation specfiication 
-  3.5. Liquidity provider commitment checks are perfored as per the existing Liquidity Provider specification
+3. Liquidity Provers can join a Spot Market and fill trades<br>
+  3.1. Liquidity Providers can join Spot Market and submit prices<br>
+  3.2. Traders in the Market can match their trades against the liquidity provider<br> 
+  3.3. Traders in the Market can match their trades against the liquidity provider partially<br> 
+  3.4. Maker fee is calculated as per the existing fee calculation specification<br>
+  3.5. Liquidity provider commitment checks are performed as per the existing Liquidity Provider specification<br>
 
+**Fee Calculation**
+4. Fees such as Maker fee, Infra Fee and Market Liquidity Fee are calculated for spots <br>
+  4.1. Maker Fee is calculated for spot market makers <br> 
+  4.2. Infra Fee is calculated and applied  <br>
+  4.3. Maker Fee, Infra Fee are taken into consideration when amending the orders on Trading mode <br>
+  4.4. Price amends and final trading price adheres to Weighted Volume Price calculation  <br>
+
+  
 
 
    
