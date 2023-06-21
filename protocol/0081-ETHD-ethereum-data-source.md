@@ -39,7 +39,7 @@ In order to interpret the oracle specification and interact with the smart contr
 Event data and data returned from functions will be emitted by the Ethereum node in an ABI-encoded format.
 This data, including any structs should be decoded using the ABI into a JSON-like representation.
 
-Note: as with any data source containing JSON formatted (or other arbitrary structured) data, the data required by the consumer of the data source may be a fields or sub-objects (including nested fields and objects).
+Note: as with any data source containing JSON formatted (or other arbitrary structured) data, the data required by the consumer of the data source may be a number of fields or sub-objects (including nested fields and objects).
 The data sourcing framework therefore requires functionality to apply a query/selector extract the relevant subset of the observed data and pass it to the next consumer.
 This would be expected to use `JSONPath`/`JSONPointer` or similar, and be applicable to any arbitrary JSON.
 Regardless, the specification of this functionality is out of scope for this document and the approach must be standardised across the data sourcing framework (for example, specifying the target of filters must use the same format as selecting data to pass on).
