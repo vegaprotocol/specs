@@ -128,3 +128,22 @@ Price-monitoring auctions are still required and should be implemented following
 1. Parties are unable to place orders they do not have the necessary funds for (<a name="0080-SPOT-005" href="#0080-SPOT-005">0080-SPOT-005</a>)
 1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-SPOT-006" href="#0080-SPOT-006">0080-SPOT-006</a>)
 1. Market liquidity fees are calculated correctly (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>)
+
+**Spot Market**
+1. Create a spot market and transition to all market states
+   1.1. When Bid and Ask price matches then Spot Market transitions from Auction Mode to Trading Mode.
+   1.2. When Bid and Ask trade price dont match then Spot Market do not transition to Auction Mode
+   1.3. When Bid and Ask trade price match and trade volume dont match then Market transition to Aution Mode
+
+**Spot Order**
+2. Trader can submit Spot orders with respective Base and Quoted Asset balance in place 
+  2.1. Trader can submit Spot Orders with price and volume as per the asset balance
+  2.2. Trader can amend price and volume in Market auction state
+  2.3. Trader can amend price and volume in Market Trading state, provided account has balance
+  2.3. Trader can cancel a submitted spot order at Market Auction and Trading state
+  2.4. Trader can join a market by submitting a new trade to a Market , when market is in Trading state
+  2.5. Trader can fully fill an order
+  2.6. Trader can partially fill an order and cancel remaining order
+  2.7. Wash orders can be filled in trading mode and cancelled in Auction mode 
+
+   
