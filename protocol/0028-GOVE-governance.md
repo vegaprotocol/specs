@@ -585,9 +585,15 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 - Enacted and active recurring governance transfers must be included in LNL banking checkpoint and resume after the checkpoint restore.(<a name="0028-GOVE-105" href="#0028-GOVE-105">0028-GOVE-105</a>)
 
-- When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. (<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>) At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
+- When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. (<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
+
+- At the time of enactment no amount is attached to the transfer and it will show 0 at a pendign state.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
+
+- For active transfers, if there are no source funds available the transfer event will record a transfer of 0 tokens. (<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
+
+- For active transfers, if the source account balance is increased or decreased by another transfer then the source account balance will be updated and subsequent epoch transfers will take into account the updated balance.(<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
 
 
 ##### Cancelling governance transfers
 
-- Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
+- Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
