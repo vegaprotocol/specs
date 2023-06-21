@@ -118,7 +118,7 @@ Select {
 ### External Oracles - Amendments
 
 1. Amend the oracle data source via governance proposals. Amendments should take effect as soon as the proposal is enacted (<a name="0081-ETHD-005" href="#0081-ETHD-005">0081-ETHD-005</a>)
-2. Amend an existing ethereum data source and change the contract address and enact the proposal. Once enacted , the data should be sourced from the new smart contract. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted (<a name="0081-ETHD-006" href="#0081-ETHD-006">0081-ETHD-006</a>)
+2. Amend an existing ethereum data source and change the contract address and enact the proposal. Once enacted, the data should be sourced from the new smart contract. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted (<a name="0081-ETHD-006" href="#0081-ETHD-006">0081-ETHD-006</a>)
 3. Phase 2 - Amend an existing ethereum data source and change the events that we are listening to and enact the proposal. Once enacted , the data should be sourced from the amended events. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted (<a name="0081-ETHD-007" href="#0081-ETHD-007">0081-ETHD-007</a>)
 
 ### External Oracles - Deletions
