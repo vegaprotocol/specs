@@ -195,3 +195,10 @@ As a Browser Wallet User I want the browser wallet to open in a pop-up window wh
 - If I resize the new window the browser wallet still looks good (<a name="1101-BWAL-094" href="#1101-BWAL-094">1101-BWAL-094</a>)
 - If I have the new window open but then open the extension pop up I see the same thing on both views (<a name="1101-BWAL-095" href="#1101-BWAL-095">1101-BWAL-095</a>)
 - There is a way for me to open the browser wallet in a new window (<a name="1101-BWAL-096" href="#1101-BWAL-096">1101-BWAL-096</a>)
+
+## Wallet creation success feedback
+
+As a new wallet user I want visual feedback when creating a new wallet So that I am assured everything has worked correctly
+
+- I am given visual feedback that my wallet was successfully created (<a name="1101-BWAL-097" href="#1101-BWAL-097">1101-BWAL-097</a>)
+- I am given visual feedback that my wallet was successfully imported (<a name="1101-BWAL-098" href="#1101-BWAL-098">1101-BWAL-098</a>)
