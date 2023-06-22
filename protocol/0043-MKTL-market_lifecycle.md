@@ -173,7 +173,7 @@ Suspension currently always operates as an auction call period. Depending on the
 
 ### Closed
 
-Note, this governance action is unspecified and not MVP.
+Market goes into a closed state if a [governance vote to close it](./0028-GOVE-governance.md#6-close-market) passes and its enactment date is reached.
 
 **Entry:**
 
@@ -185,7 +185,7 @@ No exit. This is a terminal state.
 
 **Behaviour:**
 
-- Orders may be cancelled, no new orders accepted. Something will need to be done to unwind positions.
+- If market is in auction that auction gets uncrossed and any orders matched within it result in trades. All other orders get cancelled, no new orders are accepted, liquidity commitments cannot be modified, final settlement is carried out using the price supplied by the governance vote.
 
 ### Trading Terminated
 
@@ -295,3 +295,26 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 1. After `market.liquidity.successorLaunchWindowLength` has elapsed since market cancellation, any insurance pool balance should be [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 1. All data sources that are only referenced by that market are unregistered.
 1. The market state is set to cancelled.
+
+### Market gets closed via a governance proposal (<a name="0043-MKTL-004" href="#0043-MKTL-004">0043-MKTL-004</a>)
+
+1. Once the governance proposal to close the market gets enacted any auction that the market may be in gets uncrossed and trades get generated.
+1. All the other orders are cancelled and no further trades get generated.
+1. Any new orders get rejected.
+1. Liquidity commitments cannot be modified or cancelled.
+1. Final settlement is carried out and the transfers reflect the difference in the last mark price and the final settlement price supplied by the governance proposal.
+1. All the funds from market specific accounts get released to appropriate accounts; the insurance pool perhaps after the delay to allow for transfer into a successor market.
+1. Market gets deleted.
+
+### Market gets suspended via a governance proposal
+
+1. Once the governance proposal to suspend the market gets enacted the market gets immediately put into auction mode, if market was already in auction mode it remains in it.
+1. No cashflows are exchanged when market has been suspended via a governance proposal.
+1. Parties cannot modify their open interest
+1. The prerequisite for a market to go out of auction mode is now a successful enactment of a governance proposal to unsuspend that market.
+
+### Market gets unsuspended via a governance proposal
+
+1. Once the governance proposal to unsuspend the market gets enacted the market can now leave the auction.
+1. If no other auction triggers are active the market goes back into its default trading mode immediately (auction gets uncrossed and trades get generated).
+1. If other auction triggers are active the market remains in auction mode until these allow it to leave it.

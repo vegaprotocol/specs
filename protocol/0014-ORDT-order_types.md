@@ -219,6 +219,8 @@ If the remainders of multiple icebergs sit at the same price and are not fully u
 
 - An iceberg order refresh must generate an event of the event bus.
 
+- Any API that returns information about market-depth or the orderbook volume will include an iceberg order's full volume and not just its `display quantity`.
+
 
 ### Valid order entry combinations
 
@@ -285,10 +287,9 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 1. An iceberg order with a non persistent TIF (IOC, FOK) is rejected with a valid error message (<a name="0014-ORDT-016" href="#0014-ORDT-016">0014-ORDT-016</a>)
 2. An iceberg market order with any TIF is rejected with a valid error message (<a name="0014-ORDT-017" href="#0014-ORDT-017">0014-ORDT-017</a>)
 3. A reduce-only iceberg order with any TIF is rejected with a valid error message (<a name="0014-ORDT-018" href="#0014-ORDT-018">0014-ORDT-018</a>)
-4. An iceberg order with initial peak size less than the minimum order size rejected with a valid error message (<a name="0014-ORDT-019" href="#0014-ORDT-019">0014-ORDT-019</a>)
-5. An iceberg order with initial peak size greater than the total order size is rejected with a valid error message (<a name="0014-ORDT-020" href="#0014-ORDT-020">0014-ORDT-020</a>)
-6. An iceberg order with minimum peak size less than 0 is rejected with a valid error message (<a name="0014-ORDT-021" href="#0014-ORDT-021">0014-ORDT-021</a>)
-7. An iceberg order with minimum peak size greater than initial peak size is rejected with a valid error message (<a name="0014-ORDT-022" href="#0014-ORDT-022">0014-ORDT-022</a>)
+4. An iceberg order with initial peak size greater than the total order size is rejected with a valid error message (<a name="0014-ORDT-020" href="#0014-ORDT-020">0014-ORDT-020</a>)
+5. An iceberg order with minimum peak size less than 0 is rejected with a valid error message (<a name="0014-ORDT-021" href="#0014-ORDT-021">0014-ORDT-021</a>)
+6. An iceberg order with minimum peak size greater than initial peak size is rejected with a valid error message (<a name="0014-ORDT-022" href="#0014-ORDT-022">0014-ORDT-022</a>)
 
 #### Iceberg Order Amendment
 
@@ -309,7 +310,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 5. Submit an aggressive iceberg order for size 100. There are multiple matching orders of size 30,40,50. Ensure the orders are matched and filled in time priority of the orders and any remaining volume on the orders is correctly left behind. (<a name="0014-ORDT-031" href="#0014-ORDT-031">0014-ORDT-031</a>)
 6. Submit an aggressive iceberg order for size 100. There are multiple matching orders of size 20,30. Ensure the orders are matched and filled in time priority of the orders. Ensure remaining volume on the iceberg order is (100 - (20+30)) (<a name="0014-ORDT-032" href="#0014-ORDT-032">0014-ORDT-032</a>)
 7. When a non iceberg order sitting on the book is amended such that it trades with with an iceberg order, then the iceberg order is refreshed (<a name="0014-ORDT-033" href="#0014-ORDT-033">0014-ORDT-033</a>)
-8. Wash trading is not permitted for iceberg orders. The same party has one iceberg order that sits at the back of the queue , another normal order in opposite direction , the iceberg at the back comes in front and matches either fully OR partially and gets rejected( <a name="0014-ORDT-034" href="#0014-ORDT-034">0014-ORDT-034</a>)
+8. Wash trading is not permitted for iceberg orders. The same party has one iceberg order that sits at the back of the queue, another normal order in opposite direction, when the iceberg at the back comes in front the normal order should be stopped. ( <a name="0014-ORDT-034" href="#0014-ORDT-034">0014-ORDT-034</a>)
 9. For a price level with multiple iceberg orders, if an aggressive order hits this price level, any volume greater than the displayed volume at a level is split proportionally between the hidden components of iceberg orders at that price level
    1. If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. (<a name="0014-ORDT-037" href="#0014-ORDT-037">0014-ORDT-037</a>)
    1. If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 600 lots would be split 200 to the first order and 100 to the two 100 lot orders, with 200 lots then taking farther price levels. (<a name="0014-ORDT-038" href="#0014-ORDT-038">0014-ORDT-038</a>)
@@ -321,7 +322,8 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 ### API
 
 1. API end points should be available to query initial peak size, minimum peak size, quantity, displayed quantity and remaining (<a name="0014-ORDT-036" href="#0014-ORDT-036">0014-ORDT-036</a>)
-2. The additional fields relating to iceberg orders should be available in the streaming api end points
+2. The additional fields relating to iceberg orders should be available in the streaming api end points (<a name="0014-ORDT-069" href="#0014-ORDT-069">0014-ORDT-069</a>)
+3. API end points showing market-depth or price-level volume should include the full volume of iceberg orders (<a name="0014-ORDT-070" href="#0014-ORDT-070">0014-ORDT-070</a>)
 
 ### Stop orders
 
