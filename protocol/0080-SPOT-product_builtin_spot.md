@@ -138,13 +138,13 @@ Create a spot market and transition to all market states
    3. When Bid and Ask trade price match and trade volume do not match then Market stays in Auction Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
    4. Market cancellation (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
    5. Price Monitoring can be configured and accessed in spot markets with decimal places (<a href=#0032-PRIM-price_monitoring>0032-PRIM-price_monitoring.md</a>)
-   6. Liquidity Monitoring can be configured and accessed in spot markets (<a href=#0035-LIQM-liquidity_monitoring> 0035-LIQM-liquidity_monitoring <a>)
+   6. Liquidity Monitoring can be configured and accessed in spot markets (<a href=#0035-LIQM-liquidity_monitoring> 0035-LIQM-liquidity_monitoring </a>)
 
 ### Spot Order
 
 Trader can submit Spot orders with respective Base and Quoted Asset balance in place
 
-   1. Traders can amend price and volume in Market auction state, provided that account has sufficient balance (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>) and (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
+   1. Traders can amend price and volume in Market auction state, provided that account has sufficient balance (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
    2. Trader can amend price and volume in Market Trading state, provided account has balance (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
    3. Trader can cancel a submitted spot order at Market Auction and Trading state and balance are transferred back to the accounts (<a href="#0004-AMND-amends">0004-AMND-amends</a>) and (<a href="#0024-OSTA-order_status">0024-OSTA-order_status</a>)
    4. Trader can fully fill an order for requested volume based on order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
