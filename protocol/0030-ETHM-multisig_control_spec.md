@@ -37,28 +37,27 @@ keccak256(abi.encode(
    chain_id))
 ```
 This is also known as the "Final Hash"
-
-`this_signer_set_data_hash` is defined as:
-`keccak256(abi.encode(signer_set_data))`
-where `signer_set_data` is an ABI encoded hex string in the following format:
+* `bytes2("\x19\x00")` for clef compatability
+* `bytes20(address(multisig_address))` to protect from replay attacks with old signatures
+* `this_signer_set_data_hash` is defined as: `keccak256(abi.encode(signer_set_data))`
+ where `signer_set_data` is an ABI encoded hex string in the following format:
 `signer_set_data = "0x" + [signer_address_1, weight_1] + [2] + [3]...`
+* `message_hash` is calculated in the calling function based on the needs of that function
+* `calling_contract` is the contract that calls multisig, this protects against replays and collisions
+* `chain_id` is the Ethereum chain ID that is baked into the protocol, mainnet is `0x1` or just `1`, [here is a list of EVM chains and their IDs](https://chainlist.wtf/)
 
-`calling_contract` is the contract that calls multisig, this protects against replays and collisions
-
-If the signer set data hash matches the current signer set, the signatures resolve to the appropriate signer address provided AND the total summed weights is greater than the current threshold, then the transaction is verified, otherwise this function will revert the EVM and stop the transaction. Once verified, the "final hash" is marked complete to prevent reusing the signature bundle.
-
-### Signer Set Nonce
-In order to protect against the weights and signers creating the same signer set data hash, every time an update occurs, the signer set must have a dummy signer with a generated fake address and zero weight. This acts as a nonce for the signer set.
-The dummy signer address should be in the following format: `0x[8 byte current epoch number][4 bytes 0][8 byte timestamp]` so for instance on epoch 1 at timestamp 1673365824 it would be `0x0000000000000001000000000000000063BD8940`
-
-All signers (and dummy signer) must be included in every call to `verify_signatures`. If a signer is not needed or chooses to not participate in that transaction set the signature to 65 empty bytes which will cause it to be skipped when doing the `ecrecover`.
+If the signer set data hash matches the current signer set hash stored on the contracts, the signatures resolve to the appropriate signer address provided AND the total summed weights is greater than the current threshold, then the transaction is verified, otherwise this function will revert the EVM and stop the transaction. Once verified, the "final hash" is marked complete to prevent reusing the signature bundle.
 
 ## Update Signers
-As Vega validators change staking weight and cycle in or out, the function `update_signers(bytes32 new_signer_set_data_hash, uint32 new_threshold, bytes calldata signer_set_data, bytes calldata signatures)`
+As Vega validators change staking weight and cycle in or out, the signer set will need to be updated using:
+`update_signers(bytes32 new_signer_set_data_hash, uint32 new_threshold, uint256 tx_id, bytes calldata signer_set_data, bytes calldata signatures)`
+* `new_signer_set_data_hash`: the new signer set hash against which incoming signature verification with be compared
+* `new_threshold`: the weight threshold that must be met for a valid signature bundle
+* `tx_id`: a Vega assigned unique identifier for this transaction
 
-This will update the current `signer_set_data_hash` that will be compared to the recovered `signer_set_data_hash` from the `signer_set_data` array passed into `verify_signatures`. This `signer_set_data_hash` represents both the signer set and signer weights.
+This will update the current `signer_set_data_hash` that will be compared to the calculated `signer_set_data_hash` from the `signer_set_data` array passed into `verify_signatures`. This `signer_set_data_hash` represents the signer set, signer weights, and the signer set nonce.
 
-This will also update the threshold if necessary.
+This function will also update the threshold if necessary.
 
 This transaction emits the `Signers_Updated(bytes32 new_signer_set_data_hash, uint16 new_threshold)` event.
 
@@ -70,10 +69,14 @@ This will prevent the signer set hash from ever reverting to a previous state, a
 
 The dummy signer address should be in the following format: `0x[8 byte current epoch number][4 bytes 0][8 byte timestamp]` so for instance on epoch 1 at timestamp 1673365824 it would be `0x0000000000000001000000000000000063BD8940`
 
+All signers (and dummy signer) must be included in every call to `verify_signatures`. If a signer is not needed or chooses to not participate in that transaction set the signature to 65 empty bytes which will cause it to be skipped when doing the `ecrecover`.
+
 ## Burn Hash
 If a transaction needs to be blocked or otherwise invalidated, Vega validators can run the function:
-`burn_final_hash(bytes32 bad_final_hash, uint256 tx_id,bytes calldata signer_set_data,bytes calldata signatures)` 
+`burn_final_hash(bytes32 bad_final_hash, uint256 tx_id, bytes calldata signer_set_data, bytes calldata signatures)` 
 This will invalidate the final hash and thus stop a transaction from going through.
+* `bad_final_hash`: the "final hash" as described above, that is to be invalidated
+* `tx_id`: a Vega assigned unique identifier for this transaction
 
 # Pseudo-code / Examples
 The MultisigControl smart contract contains the following functions and events.
