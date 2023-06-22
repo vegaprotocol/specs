@@ -532,7 +532,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - Governance transfer proposals with invalid source or destination account types will get rejected by the blockchain. (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
 - Source Type can be any of the predefined types in the above table (<a name="0028-GOVE-078" href="#0028-GOVE-078">0028-GOVE-078</a>)
 - Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
-- For proposal source/destination types of Market Insurance the source/destination must be a valid `marketID` else the proposal is rejected (<a name="0028-GOVE-081" href="#0028-GOVE-081">0028-GOVE-081</a>)
+- For proposal source/destination types of Market Insurance the source/destination must be a valid `marketID` else the proposal is rejected by the blockchain. (<a name="0028-GOVE-081" href="#0028-GOVE-081">0028-GOVE-081</a>)
 - Type value can only hold “all or nothing" or "best effort” (<a name="0028-GOVE-082" href="#0028-GOVE-082">0028-GOVE-082</a>)
 - Transfer amounts will be accepted and processed in asset precision (<a name="0028-GOVE-083" href="#0028-GOVE-083">0028-GOVE-083</a>)
 - Asset specified must be a valid asset address else proposal is rejected (<a name="0028-GOVE-084" href="#0028-GOVE-084">0028-GOVE-084</a>)
