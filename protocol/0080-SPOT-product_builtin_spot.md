@@ -136,24 +136,22 @@ Create a spot market and transition to all market states
    1. When Bid and Ask price matches then Spot Market transitions from Auction Mode to Trading Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
    2. When Bid and Ask trade price do not match then Spot Market do not transition to Trading Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
    3. When Bid and Ask trade price match and trade volume do not match then Market stays in Auction Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
-   4. Cannot change `base_asset` and `quote_asset` in governance proposal market update, when attempted throws error message (<a name="0080-SPOT-002" href="#0080-SPOT-002">0080-SPOT-002</a>)
-   5. Market cancellation (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
-   6. Price Monitoring can be configured and accessed in spot markets with decimal places (<a href=#0032-PRIM-price_monitoring>0032-PRIM-price_monitoring.md</a>)
-   7. Liquidity Monitoring can be configured and accessed in spot markets (<a href=#0035-LIQM-liquidity_monitoring> 0035-LIQM-liquidity_monitoring <a>)
+   4. Market cancellation (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
+   5. Price Monitoring can be configured and accessed in spot markets with decimal places (<a href=#0032-PRIM-price_monitoring>0032-PRIM-price_monitoring.md</a>)
+   6. Liquidity Monitoring can be configured and accessed in spot markets (<a href=#0035-LIQM-liquidity_monitoring> 0035-LIQM-liquidity_monitoring <a>)
 
 ### Spot Order
 
 Trader can submit Spot orders with respective Base and Quoted Asset balance in place
 
-   1. Traders with sufficient `quote_asset` and `base_asset` can submit Spot Bid and Ask Orders for a price and volume (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>)
-   2. Traders can amend price and volume in Market auction state, provided that account has sufficient balance (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>) and (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
-   3. Trader can amend price and volume in Market Trading state, provided account has balance (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>) and (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
-   4. Trader can cancel a submitted spot order at Market Auction and Trading state and balance are transferred back to the accounts (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>) and (<a href="#0004-AMND-amends">0004-AMND-amends</a>) and (<a href="#0024-OSTA-order_status">0024-OSTA-order_status</a>)
-   5. Trader can fully fill an order for requested volume based on order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
-   6. Trader can partially fill an order and cancel remaining order as per the order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
-   7. Wash trades can be filled in trading mode and cancelled in Auction mode
-   8. Trades can submit prices and volumes in decimal ranges and rounding logic is applied (<a href="#0070-MKTD-market-decimal-places"> 0070-MKTD-market-decimal-places</a>)
-   9. Spot trades can be submitted with order types Limit orders, GTC, GFA etc  and Time In Force (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
+   1. Traders can amend price and volume in Market auction state, provided that account has sufficient balance (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>) and (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
+   2. Trader can amend price and volume in Market Trading state, provided account has balance (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
+   3. Trader can cancel a submitted spot order at Market Auction and Trading state and balance are transferred back to the accounts (<a href="#0004-AMND-amends">0004-AMND-amends</a>) and (<a href="#0024-OSTA-order_status">0024-OSTA-order_status</a>)
+   4. Trader can fully fill an order for requested volume based on order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
+   5. Trader can partially fill an order and cancel remaining order as per the order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
+   6. Wash trades can be filled in trading mode and cancelled in Auction mode
+   7. Trades can submit prices and volumes in decimal ranges and rounding logic is applied (<a href="#0070-MKTD-market-decimal-places"> 0070-MKTD-market-decimal-places</a>)
+   8. Spot trades can be submitted with order types Limit orders, GTC, GFA etc  and Time In Force (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
 
 ### Liquidity Provider
 
