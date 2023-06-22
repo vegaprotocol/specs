@@ -129,57 +129,74 @@ Price-monitoring auctions are still required and should be implemented following
 1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-SPOT-006" href="#0080-SPOT-006">0080-SPOT-006</a>)
 1. Market liquidity fees are calculated correctly (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>)
 
+### Spot Market
 
-**Spot Market**
-1. Create a spot market and transition to all market states<br>
-   1.1. When Bid and Ask price matches then Spot Market transitions from Auction Mode to Trading Mode<br>
-   1.2. When Bid and Ask trade price do not match then Spot Market do not transition to Auction Mode<br>
-   1.3. When Bid and Ask trade price match and trade volume do not match then Market transition to Auction Mode<br>
-   1.4. Cannot change `base_asset` and `quote_asset` in governance proposal market update, when attempted throws error message <br>
+Create a spot market and transition to all market states
 
-**Spot Order**
-2. Trader can submit Spot orders with respective Base and Quoted Asset balance in place <br>
-  2.1. Trader can submit Spot Orders with price and volume as per the asset balance  <br>
-  2.2. Trader can amend price and volume in Market auction state <br>
-  2.3. Trader can amend price and volume in Market Trading state, provided account has balance<br>
-  2.3. Trader can cancel a submitted spot order at Market Auction and Trading state<br>
-  2.4. Trader can join a market by submitting a new trade to a Market, when the market is in Trading state<br>
-  2.5. Trader can fully fill an order<br>
-  2.6. Trader can partially fill an order and cancel remaining order<br>
-  2.7. Wash trades can be filled in trading mode and cancelled in Auction mode<br>
-  2.8. Trades can submit prices and volumes in decimal ranges and rounding logic is applied<br>
-  2.9. Spot trades can be submitted with order types Limit orders, GTC, GFA etc <br>
+   1. When Bid and Ask price matches then Spot Market transitions from Auction Mode to Trading Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
+   2. When Bid and Ask trade price do not match then Spot Market do not transition to Trading Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
+   3. When Bid and Ask trade price match and trade volume do not match then Market stays in Auction Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
+   4. Cannot change `base_asset` and `quote_asset` in governance proposal market update, when attempted throws error message (<a name="0080-SPOT-002" href="#0080-SPOT-002">0080-SPOT-002</a>)
+   5. Market cancellation (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
+   6. Price Monitoring can be configured and accessed in spot markets with decimal places (<a href=#0032-PRIM-price_monitoring>0032-PRIM-price_monitoring.md</a>)
+   7. Liquidity Monitoring can be configured and accessed in spot markets (<a href=#0035-LIQM-liquidity_monitoring> 0035-LIQM-liquidity_monitoring <a>)
 
-**Liquidity Provider**
-3. Liquidity Provers can join a Spot Market and fill trades<br>
-  3.1. Liquidity Providers can join Spot Market and submit prices<br>
-  3.2. Traders in the Market can match their trades against the liquidity provider<br> 
-  3.3. Traders in the Market can match their trades against the liquidity provider partially<br> 
-  3.4. Maker fee is calculated as per the existing fee calculation specification<br>
-  3.5. Liquidity provider commitment checks are performed as per the existing Liquidity Provider specification<br>
+### Spot Order
 
-**Fee Calculation**
-4. Fees such as Maker fee, Infra Fee and Market Liquidity Fee are calculated for spots <br>
-  4.1. Maker Fee is calculated for spot market makers <br> 
-  4.2. Infra Fee is calculated and applied  <br>
-  4.3. Maker Fee, Infra Fee are taken into consideration when amending the orders on Trading mode <br>
-  4.4. Price amends and final trading price adheres to Weighted Volume Price calculation  <br>
+Trader can submit Spot orders with respective Base and Quoted Asset balance in place
 
-**Governance Transers**
-5. Spot traders are executed end-to-end with governance transfers<br>
-  5.1.Spot Network parameters can be set from Governance transfer proposals <br>
-  5.2.Spot Markets can be created through Governance transfer proposals<br>
-  5.3.Spot Orders are submitted and filled<br>
-  5.4.Spot Markets can be updated via Governance transfer proposals<br>  
+   1. Traders with sufficient `quote_asset` and `base_asset` can submit Spot Bid and Ask Orders for a price and volume (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>)
+   2. Traders can amend price and volume in Market auction state, provided that account has sufficient balance (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>) and (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
+   3. Trader can amend price and volume in Market Trading state, provided account has balance (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>) and (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
+   4. Trader can cancel a submitted spot order at Market Auction and Trading state and balance are transferred back to the accounts (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>) and (<a href="#0004-AMND-amends">0004-AMND-amends</a>) and (<a href="#0024-OSTA-order_status">0024-OSTA-order_status</a>)
+   5. Trader can fully fill an order for requested volume based on order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
+   6. Trader can partially fill an order and cancel remaining order as per the order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
+   7. Wash trades can be filled in trading mode and cancelled in Auction mode
+   8. Trades can submit prices and volumes in decimal ranges and rounding logic is applied (<a href="#0070-MKTD-market-decimal-places"> 0070-MKTD-market-decimal-places</a>)
+   9. Spot trades can be submitted with order types Limit orders, GTC, GFA etc  and Time In Force (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
 
-**Smart Contracts**
-6. Spot traders can be submitted with assets derived from Smart Contracts<br>
+### Liquidity Provider
 
-**Algorithmic Trading**
-7. Trading Algorithms such as pegging, stop loss, take profit, iceberg can be used on spot orders
+Liquidity Providers can join a Spot Market and fill trades
 
+   1. Liquidity Providers can join Spot Market and stream prices
+   2. Traders in the Market can match their trades against the liquidity provider
+   3. Traders in the Market can match their trades against the liquidity provider partially
+   4. Maker fee is calculated as per the existing fee calculation specification
+   5. Liquidity provider commitment checks are performed as per the existing Liquidity Provider specification
+   6. Liquidity provider amendment submission
+   7. Liquidity provider cancellation
+   8. LP cannot reduce their commitment to zero
+   9. question - LP with enough voting power call for market cancellation
 
-  
+### Liquidity Provision
 
+   1. A liquidity provision submitted to a `Spot` market in the `quote` asset
 
-   
+### Fee Calculation
+
+Fees such as Maker fee, Infra Fee and Market Liquidity Fee are calculated for spots
+
+   1. Maker Fee is calculated for spot market makers
+   2. Infra Fee is calculated for spot trades
+   3. Maker Fee, Infra Fee are taken into consideration when amending the orders on Trading mode
+   4. Price amends and final trading price adheres to Weighted Volume Price calculation
+   5. Fee rate changes during auction
+   6. Transfer of funds from general account to trader account can happen during spot market trading
+
+### Governance Proposal
+
+Spot traders are executed end-to-end with governance transfers
+
+   1. Spot Network parameters can be set from Governance proposals workflow
+   2. Spot Markets can be created through Governance proposals workflow
+   3. Spot Markets can be updated via Governance  proposals workflow
+   4. Spot Market can transition through all states (<a name="" href="0043-MKTL-market_lifecycle">0043-MKTL-market_lifecycle</a>)
+
+### Smart Contracts
+
+Spot traders can be submitted with assets derived from Smart Contracts
+
+### Algorithmic Trading
+
+Trading Algorithms such as pegging, stop loss, take profit, iceberg can be used on spot orders
