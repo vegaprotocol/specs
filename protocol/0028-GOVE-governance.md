@@ -430,6 +430,14 @@ Notes:
 - The categorisation of parameters is liable to change and be added to as the protocol evolves.
 - As these are themselves network parameters, a set of parameters will control these parameters for the actions that update these parameters (including being self-referential), i.e. the parameter `Governance.UpdateNetwork.GovernanceProposalValidation.MinimumRequiredParticipation` would control the amount of voting participation needed to change these parameters. See the Network Parameters spec.
 
+## Batch Proposals
+
+A `BatchProposalSubmission` is a top-level proposal type (living at the same level in a `Transaction` object as a standard `ProposalSubmission` ) which allows grouping of several related changes into a single proposal, ensuring that all changes will pass or fail governance voting together. The batch proposal is a wrapper containing the same `reference` and `rationale` fields as a standard `ProposalSubmission` alongside a repeated list of `ProposalSubmission`s.
+
+Validation should be applied by the protocol when accepting such a transaction that all proposals within the batch are of the same category for the purposes of ensuring voting thresholds and minimum voting periods can be uniquely determined. Additionally, the closing time of each proposal's voting period must be identical to ensure that a single voting period can be run to determine the result of all. The enactment timestamp, however, should be customisable and can be different for each proposal within the batch.
+
+Once submitted, a single voting period should be run in which participants may place a single vote to approve/disapprove of the entire batch. It should not be possible to vote for components in the batch separately. If the batch fails to pass the vote, the entire batch should be discarded as with any other proposal. If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp does not need to be defined and should be considered indeterminate from a user's point-of-view.
+
 ## APIs
 
 The core should expose via core APIs:
@@ -617,3 +625,15 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Cancelling governance transfers
 
 - Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
+
+
+##### Batch Proposals
+
+- A batch proposal can be submitted and is accepted containing two or more component submissions for each type of proposal term. (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
+  
+- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
+  
+- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
+  
+- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
+   - If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
