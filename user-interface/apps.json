@@ -37,10 +37,10 @@
       "6000-COLL",
       "6001-MARK",
       "6002-MDET",
-      "6001-MARK",
-      "6002-MDET",
       "6003-ORDB",
       "6005-THIS",
+      "6006-MARK",
+      "6501-ASSE",
       "7001-COLL",
       "7002-SORD",
       "7003-MORD",
@@ -49,9 +49,8 @@
       "0002-WCON",
       "0003-WTXN",
       "0004-EWAL",
-      "005-ETXN",
-      "0006-NETW",
-      "5002-LIQP"
+      "5002-LIQP",
+      "0006-NETW"
     ]
   },
   "Block-explorer": {
