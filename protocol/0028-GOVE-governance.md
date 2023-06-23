@@ -629,11 +629,11 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 ##### Batch Proposals
 
-- A batch proposal can be submitted and is accepted containing two or more component submissions for each type of proposal term. (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
+- A batch proposal can be submitted and is accepted containing two or more component submissions for each type of proposal term. (<a name="0028-GOVE-123" href="#0028-GOVE-123">0028-GOVE-123</a>)
   
-- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
+- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-119" href="#0028-GOVE-119">0028-GOVE-119</a>)
   
-- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
+- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-120" href="#0028-GOVE-120">0028-GOVE-120</a>)
   
-- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
-   - If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
+- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-121" href="#0028-GOVE-121">0028-GOVE-121</a>)
+   1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-122" href="#0028-GOVE-122">0028-GOVE-122</a>)
