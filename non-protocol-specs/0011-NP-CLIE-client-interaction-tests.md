@@ -50,7 +50,7 @@ This acts as a guideline to implement network-based (remote) wallet management a
 
 #### API v1
 
-DEPRECATED: The wallet API v1 is no longer officially supported.
+DEPRECATED: The wallet API v1 is no longer officially supported. The desktop wallet not longer support sending transaction using the API v1. The CLI wallet still expose this API, but updates to the API V2 are not back ported to API V1. Once the browser wallet is officially released, the API v1 will be removed from all wallet software.
 
 - As a user, I can create a new account on the Wallet service (account creation requirement to be implementation details)  (<a name="0022-AUTH-001" href="#0022-AUTH-001">0022-AUTH-001</a>)
 - As a user, I can login to the Wallet service with my wallet name and password (<a name="0022-AUTH-002" href="#0022-AUTH-002">0022-AUTH-002</a>)

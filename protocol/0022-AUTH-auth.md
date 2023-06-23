@@ -43,7 +43,8 @@ The process of sending the first transaction for a user is as follows:
 2. Bob requests to his wallet management application a signature of a transaction by submitting the transaction and the public key of the party to use.
 3. The transaction is checked, signed, and bundled with the signature and the public key by the wallet management application.
 4. The signed transaction is then submitted to the Vega network, which verify the authenticity of the transaction and its content to ensure the transaction was signed on behalf of the correct party.
-5. If correct, the transaction is executed.
+5. The network also verifies the transaction is not an attempt to replay an old transaction.
+6. If correct, the transaction is executed.
 
 There is no prior announcement of the party required for the party to be used. As long as the party has enough resources to execute the transaction, the Vega network welcomes it.
 
