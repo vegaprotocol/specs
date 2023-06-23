@@ -51,6 +51,7 @@ cryptographic
 CQRS
 cumulated
 customised
+customisable
 DAI
 datanode
 datatypes
