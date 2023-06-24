@@ -568,7 +568,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - Asset specified must be a valid asset address else proposal is rejected (<a name="0028-GOVE-084" href="#0028-GOVE-084">0028-GOVE-084</a>)
 - Fraction of balance must be submitted as a positive (else will cause the proposal to reject) and will be processed as a fraction of the source accounts balance (<a name="0028-GOVE-085" href="#0028-GOVE-085">0028-GOVE-085</a>)
 - Destination Type can be any of the predefined types in the above table (<a name="0028-GOVE-086" href="#0028-GOVE-086">0028-GOVE-086</a>)
-- Source and destination type cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-087" href="#0028-GOVE-087">0028-GOVE-087</a>)
+- Transfers can be proposed between market insurance accounts but source and destination accounts cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-087" href="#0028-GOVE-087">0028-GOVE-087</a>)
 - Destination must be a valid Reward Scheme ID for a transfer type of Reward Pool else is rejected (<a name="0028-GOVE-088" href="#0028-GOVE-088">0028-GOVE-088</a>)
 - Destination must be a valid Vega public key for a transfer type of Party else is rejected (<a name="0028-GOVE-089" href="#0028-GOVE-089">0028-GOVE-089</a>)
 - Destination can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-090" href="#0028-GOVE-090">0028-GOVE-090</a>)
