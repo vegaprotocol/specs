@@ -172,6 +172,8 @@ multisignature
 NFTs
 nonfungible
 OAUTH
+OCO
+OCOs
 OKR
 onwards
 OpenOracle
@@ -273,6 +275,9 @@ unstake
 unstaked
 unstakes
 unstaking
+unsuspend
+unsuspended
+unsuspending
 unvested
 url
 USD
