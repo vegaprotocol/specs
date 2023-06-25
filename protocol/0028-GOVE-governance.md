@@ -617,3 +617,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Cancelling governance transfers
 
 - Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
+- Cancellation of a governance transfer can only be done by the proposer of the original proposal to create the recurring transfer (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
+- No cancellation transactions/events wil be produced after the block/seq which contained the cancellation transaction (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
+- Attempts to cancel a recurring transfer which has ended will result in a transaction rejection which states the transfer does not exist (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
+- A public key which attempts to cancel a recurring transfer which they did not propose will result in a transaction rejection which states the transfer cannot be cancelled by the party (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
