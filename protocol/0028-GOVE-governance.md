@@ -623,3 +623,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
 
 
+##### Network History
+
+- A datanode restored from network history will contain all any recurring and one-off transfers created prior to the restore.(<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
+
