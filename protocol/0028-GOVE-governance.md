@@ -388,7 +388,7 @@ A market that's been suspended can't have the open volume changed or margin acco
 
 ### 6.3. Unsuspend the market
 
-This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active.
+This proposal removes the restrictions put in place by a successful [market suspension proposal](#62-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active.
 
 ## 7. Freeform governance proposal
 
