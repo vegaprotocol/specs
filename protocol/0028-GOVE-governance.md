@@ -617,8 +617,9 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Cancelling governance transfers
 
 - Only recurring governance transfers can be cancelled by proposing a governance transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
-- No cancellation transactions/events wil be produced after the block/seq which contained the cancellation transaction (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
+- After a transfer is cancelled there will be no more transfers occuring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
 - Using a governance proposal to cancel, attempts to cancel a recurring transfer which has yet to start or has completed will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
 - Using a governance proposal to cancel, attempts to cancel an using an invalid transferID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
+- When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
 
 
