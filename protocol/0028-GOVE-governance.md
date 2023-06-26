@@ -558,10 +558,10 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Transfer proposal submission validation
 
 - A proposal to transfer tokens between Network treasury and Party general account(s) is valid (<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
-- A proposal to transfer tokens between Network treasury and arket insurance pool account is valid (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
-- A proposal to transfer tokens between Market insurance pool account and Party account(s) is valid (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
-- A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
-- A proposal to transfer tokens between Market insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
+- A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)
+- A proposal to transfer tokens between Market insurance pool account and Party account(s) is valid (<a name="0028-GOVE-118" href="#0028-GOVE-118">0028-GOVE-118</a>)
+- A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-119" href="#0028-GOVE-119">0028-GOVE-119</a>)
+- A proposal to transfer tokens between Market insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-120" href="#0028-GOVE-121">0028-GOVE-121</a>)
 - Governance transfer proposals with invalid source or destination account types will get rejected by the blockchain. (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
 - Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
 - Source can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-080" href="#0028-GOVE-080">0028-GOVE-080</a>)
@@ -620,10 +620,10 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Cancelling governance transfers
 
 - Only recurring governance transfers can be cancelled by proposing a governance transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
-- After a transfer is cancelled there will be no more transfers occuring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
-- Using a governance proposal to cancel, attempts to cancel a recurring transfer which has yet to start or has completed will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
-- Using a governance proposal to cancel, attempts to cancel an using an invalid transferID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
-- When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
+- After a transfer is cancelled there will be no more transfers occuring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-122" href="#0028-GOVE-122">0028-GOVE-122</a>)
+- Using a governance proposal to cancel, attempts to cancel a recurring transfer which has yet to start or has completed will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-123" href="#0028-GOVE-123">0028-GOVE-123</a>)
+- Using a governance proposal to cancel, attempts to cancel an using an invalid transferID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)
+- When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-125" href="#0028-GOVE-125">0028-GOVE-125</a>)
 
 
 ##### Network History
