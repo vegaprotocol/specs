@@ -625,5 +625,5 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 ##### Network History
 
-- A datanode restored from network history will contain all any recurring and one-off transfers created prior to the restore.(<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
+- A datanode restored from network history will contain any recurring and one-off transfers created prior to the restore and these can be retrieved via APIs on the new datanode.(<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
 
