@@ -561,7 +561,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-119" href="#0028-GOVE-119">0028-GOVE-119</a>)
 - A proposal to transfer tokens between Market insurance pool account and Party account(s) is valid (<a name="0028-GOVE-120" href="#0028-GOVE-120">0028-GOVE-120</a>)
 - A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-121" href="#0028-GOVE-121">0028-GOVE-121</a>)
-- A proposal to transfer tokens between Market insurance pool account and Network treasury is valid (<a name="0028-GOVE-128" href="#0028-GOVE-128">0028-GOVE-128</a>)
+- A proposal to transfer tokens between Market insurance pool account and Network treasury is valid (<a name="0028-GOVE-132" href="#0028-GOVE-132">0028-GOVE-132</a>)
 - A proposal to transfer tokens between Market insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-122" href="#0028-GOVE-122">0028-GOVE-122</a>)
 - Governance transfer proposals with invalid source or destination account types will get rejected by the blockchain. (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
 - Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
