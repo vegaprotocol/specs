@@ -13,7 +13,7 @@ The purpose of the specification is to define how the validator rewards will be 
 
 ### Tendermint validators
 
-Goal: Detect how long a validator is offline and punish them
+Goal 1: Detect how long a validator is offline and punish them
 Detection: Validator does not act as a leader
 
 For each block tendermint provides information about who is the proposer. The selection of the proposer is deterministic and is proportional roughly to the voting power of the validator. Therefore we can calculate the performance of a validator in the following way:
@@ -23,7 +23,7 @@ let `b` be the number of blocks in the previous epoch
 let `v` be the voting power of the validator in the previous epoch
 let `t` be the total voting power in the previous epoch
 
-let `expected = v*b/t` the number of blocks we expected the validator to propose. This
+let `expected_p = v*b/t` the number of blocks we expected the validator to propose. This
 is the number of blocks in which the validator can be expected to be chosen as a leader
 
 The number of blocks a validators is considered to have succeeded in proposing is scaled to allow for
@@ -34,7 +34,24 @@ This function is primarily for testing purposes to allow for very short epochs w
 odd effects due to lack of time for performances to average out; for mainnet, the parameters should not
 be modified and set to neutral defaults (i.e., 0)
 
-Then `validator_performance = max(0.05, min((p'/expected, 1))`
+The calculation only based on this would be `validator_performance = max(0.05, min((p'/expected_p, 1))`; however
+another factor is added:
+
+Goal 2: Detect unforwarded Ethereum events and punish the validator that does not forward them
+Detection: Events forwarded by some validators are not forwarded by others.
+
+At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; 
+Events not counted are all events that had been forwarded in a previous epoch by another Validator, as 
+well as Events only forwarded by any validator during the last 6 minutes of the Epoch (measuring by Vegatime), 
+so Validators are not motivated to be agressive on confirmations.
+(The 6 min could be a network parameter to make testing easier)
+
+Let expected_f be the maximum number of Ethereum events forwarded by any Validator given above conditions, and 
+f be the number of blocks a given validator has forwarded.
+If no blocks have been forwarded by anyone in that epoch, both f and expected_f are set to 1.
+
+Then `validator_performance = max(0.05, min((p'/expected*f/expected_f, 1))`
+
 
 ### Ersatz and pending validators
 
