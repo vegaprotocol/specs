@@ -259,6 +259,7 @@ undelegation
 undelegations
 undeployed
 unencrypted
+unforwarded
 unitless
 unnominated
 unnormalised

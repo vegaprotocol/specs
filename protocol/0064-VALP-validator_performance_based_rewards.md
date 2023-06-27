@@ -40,15 +40,9 @@ another factor is added:
 Goal 2: Detect unforwarded Ethereum events and punish the validator that does not forward them
 Detection: Events forwarded by some validators are not forwarded by others.
 
-At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; 
-Events not counted are all events that had been forwarded in a previous epoch by another Validator, as 
-well as Events only forwarded by any validator during the last 6 minutes of the Epoch (measuring by Vegatime), 
-so Validators are not motivated to be agressive on confirmations.
-(The 6 min could be a network parameter to make testing easier)
+At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; Events not counted are all events that had been forwarded in a previous epoch by another Validator, as well as Events only forwarded by any validator during the last 6 minutes of the Epoch (measuring by `Vegatime`), so Validators are not motivated to be aggressive on confirmations. (The 6 min could be a network parameter to make testing easier)
 
-Let expected_f be the maximum number of Ethereum events forwarded by any Validator given above conditions, and 
-f be the number of blocks a given validator has forwarded.
-If no blocks have been forwarded by anyone in that epoch, both f and expected_f are set to 1.
+Let `expected_f` be the maximum number of Ethereum events forwarded by any Validator given above conditions, and `f` be the number of blocks a given validator has forwarded. If no blocks have been forwarded by anyone in that epoch, both f and expected_f are set to 1.
 
 Then `validator_performance = max(0.05, min((0.8*p'/expected+0.2*f/expected_f, 1))`,
 
