@@ -50,7 +50,9 @@ Let expected_f be the maximum number of Ethereum events forwarded by any Validat
 f be the number of blocks a given validator has forwarded.
 If no blocks have been forwarded by anyone in that epoch, both f and expected_f are set to 1.
 
-Then `validator_performance = max(0.05, min((p'/expected*f/expected_f, 1))`
+Then `validator_performance = max(0.05, min((0.8*p'/expected+0.2*f/expected_f, 1))`,
+
+i.e., the event forwarding is weighted less to reflect that there are fewer events (and we want to avoid a single missed event causing halving of the reward)
 
 
 ### Ersatz and pending validators
