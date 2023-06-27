@@ -608,7 +608,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - One off delivery transfers proposed before an upgrade which are due to start during or after an upgrade should complete either when the network is available again or at the proposed delivery date/time (<a name="0028-GOVE-131" href="#0028-GOVE-131">0028-GOVE-131</a>)
 
 
-#### Checkpoints and Snapshots
+##### Checkpoints and Snapshots
 
 - Active governance transfer (one-off or recurring) must be included in checkpoint and where the network is down during the proposed delivery time, the transfer will occur as soon as the network is available. For recurring transfers the transfers spanning the restore will continue until the end epoch. (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
 - Active governance transfer (one-off or recurring) must be included snapshots and datanodes which join the network will support retrieval of the transfer data (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
@@ -617,7 +617,6 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### One Off Delivery transfers
 
 If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately. (<a name="0028-GOVE-129" href="#0028-GOVE-129">0028-GOVE-129</a>)
-
 
 
 ##### Recurring Governance transfers
@@ -641,4 +640,3 @@ If the proposal is one off it can define a time for delivery. Whenever the block
 ##### Network History
 
 - A datanode restored from network history will contain any recurring and one-off transfers created prior to the restore and these can be retrieved via APIs on the new datanode.(<a name="0028-GOVE-127" href="#0028-GOVE-127">0028-GOVE-127</a>)
-
