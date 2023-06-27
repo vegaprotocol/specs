@@ -610,7 +610,8 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 #### Checkpoints and Snapshots
 
-- Active governance transfer (one-off or recurring) must be included in checkpoint and snapshot (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
+- Active governance transfer (one-off or recurring) must be included in checkpoint and where the network is down during the proposed delivery time, the transfer will occur as soon as the network is available. For recurring transfers the transfers spanning the restore will continue until the end epoch. (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
+- Active governance transfer (one-off or recurring) must be included snapshots and datanodes which join the network will support retrieval of the transfer data (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
 
 
 ##### One Off Delivery transfers
