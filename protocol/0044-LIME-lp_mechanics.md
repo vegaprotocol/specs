@@ -100,7 +100,7 @@ A participant may apply to amend their commitment amount by submitting a transac
 
 `proposed-commitment-variation = new-proposed-commitment-amount - old-commitment-amount`
 
-An increase in amendment is actioned immediately but only has implications for rewards / penalties at start of the current epoch.
+An increase in amendment is actioned immediately but only has implications for rewards / penalties at start of the next epoch.
 
 1) the amount is immediately transferred from the party's general account to their bond account. However we keep track of commitment at start of epoch and this is used for penalties / rewards.
 2) at the beginning of the next epoch, the rewards / penalties for present LPs - including the party that's amending - are evaluated based on balance of bond account at start of epoch.
