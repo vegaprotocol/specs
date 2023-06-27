@@ -316,14 +316,15 @@ Note:
 
 - When LP is committed they are obliged to provide liquidity equal to their commitment size on both sides of the order book (<a name="0044-LIME-027" href="#0044-LIME-027">0044-LIME-027</a>)
 
-#### Qualifying Order Types
+### Qualifying Order Types
+
 - Once liquidity is committed LPs can meet their commitment by placing pegged, limit, post only and iceberg (only the visible peak counts towards the commitment) orders (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>)
 - Parked pegged and stop-loss orders do not count towards an LPs liquidity commitment (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>)
 
-#### Checkpoint
+### Checkpoint
 
 - Snapshot for the bond account and fee account are captured so that when a new validator node joins the network they can use the two accounts types Bond and Fee account (<a name="0044-LIME-030" href="#0044-LIME-030">0044-LIME-030</a>)
 
-#### Protocol upgrade
+### Protocol upgrade
 
 - After a protocol upgrade the bond and fee accounts and their balances are maintained (<a name="0044-LIME-031" href="#0044-LIME-031">0044-LIME-031</a>)
