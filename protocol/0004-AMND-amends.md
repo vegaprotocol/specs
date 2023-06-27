@@ -27,9 +27,9 @@
 For a party with no position on a given market:
 
 - Amending an order in a way that increases the volume sufficiently leads to margin account balance increasing (<a name="0004-AMND-021" href="#0004-AMND-021">0004-AMND-021</a>)
-- In Spot market amending an order in a way that increases the volume sufficiently leads to holding account balance increasing (<a name="0004-SP-AMND-021" href="#0004-AMND-021">0004-AMND-021</a>)
+- In Spot market amending an order in a way that increases the volume sufficiently leads to holding account balance increasing (<a name="0004-SP-AMND-021" href="#0004-SP-AMND-021">0004-SP-AMND-021</a>)
 - Amending an order in a way that decreases the volume sufficiently leads to margin account balance decreasing (<a name="0004-AMND-022" href="#0004-AMND-022">0004-AMND-022</a>)
-- In Spot market amending an order in a way that decreases the volume sufficiently leads to holding account balance decreasing (<a name="0004-SP-AMND-022" href="#0004-AMND-022">0004-AMND-022</a>)
+- In Spot market amending an order in a way that decreases the volume sufficiently leads to holding account balance decreasing (<a name="0004-SP-AMND-022" href="#0004-SP-AMND-022">0004-SP-AMND-022</a>)
 - It is possible to amend a fractional size order (<a name="0004-AMND-025" href="#0004-AMND-025">0004-AMND-025</a>)(<a name="0004-SP-AMND-025" href="#0004-SP-AMND-025">0004-SP-AMND-025</a>)
 - It is possible to amend a partially filled limit order (<a name="0004-AMND-026" href="#0004-AMND-026">0004-AMND-026</a>)(<a name="0004-SP-AMND-026" href="#0004-SP-AMND-026">0004-SP-AMND-026</a>)
 - It is possible to amend a versioned order (already amended several times) (<a name="0004-AMND-027" href="#0004-AMND-027">0004-AMND-027</a>)(<a name="0004-AMND-027" href="#0004-SP-AMND-027">0004-SP-AMND-027</a>)
