@@ -328,3 +328,7 @@ Note:
 ### Protocol upgrade
 
 - After a protocol upgrade the bonus and fee accounts and their balances are maintained (<a name="0044-LIME-031" href="#0044-LIME-031">0044-LIME-031</a>)
+
+### Network history
+
+- A datanode restored from network history will contain any transfers created prior to the restore and these can be retrieved via APIs on the new datanode (<a name="0044-LIME-034" href="#0044-LIME-034">0044-LIME-034</a>)
