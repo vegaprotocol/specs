@@ -11,7 +11,7 @@ When trading Spot products, parties can only use assets they own - there is no l
 
 ## 2. Network Parameter
 
-1. `spot_trading_enabled`: parameter defines whether markets using Spot products are enabled on the network.
+1. `limits.markets.proposeSpotEnabled`: parameter defines whether markets using Spot products are enabled on the network.
 
 ## 3. Liquidity Monitoring parameters
 
