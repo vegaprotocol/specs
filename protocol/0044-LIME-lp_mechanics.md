@@ -323,7 +323,7 @@ Note:
 
 ### Checkpoint
 
-- Snapshot for the bonus account and fee account are captured so that when a new validator node joins the network they can use the two accounts types Bonus and Fee account (<a name="0044-LIME-030" href="#0044-LIME-030">0044-LIME-030</a>)
+- Snapshot for the Bonus account and Fee account are captured so that when a new validator node joins the network they can use the two account types Bonus and Fee account (<a name="0044-LIME-030" href="#0044-LIME-030">0044-LIME-030</a>)
 
 ### Protocol upgrade
 
