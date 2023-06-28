@@ -153,6 +153,7 @@ LP
 LPs
 MacOS
 mainnet
+maint
 malus
 margined
 margining
@@ -253,6 +254,7 @@ tradable
 trackable
 Tron
 trustless
+TWAP
 tx
 TXs
 quant
