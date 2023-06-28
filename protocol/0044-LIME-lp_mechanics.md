@@ -323,12 +323,8 @@ Note:
 
 ### Checkpoint
 
-- Snapshot for the Bonus account and Fee account are captured so that when a new validator node joins the network they can use the two account types Bonus and Fee account (<a name="0044-LIME-030" href="#0044-LIME-030">0044-LIME-030</a>)
+- Snapshot for the bond account and fee account are captured so that when a new validator node joins the network they can use the two accounts types Bond and Fee account (<a name="0044-LIME-030" href="#0044-LIME-030">0044-LIME-030</a>)
 
 ### Protocol upgrade
 
-- After a protocol upgrade the bonus and fee accounts and their balances are maintained (<a name="0044-LIME-031" href="#0044-LIME-031">0044-LIME-031</a>)
-
-### Network history
-
-- A datanode restored from network history will contain any transfers created prior to the restore and these can be retrieved via APIs on the new datanode (<a name="0044-LIME-034" href="#0044-LIME-034">0044-LIME-034</a>)
+- After a protocol upgrade the bond and fee accounts and their balances are maintained (<a name="0044-LIME-031" href="#0044-LIME-031">0044-LIME-031</a>)
