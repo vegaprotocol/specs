@@ -561,6 +561,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-119" href="#0028-GOVE-119">0028-GOVE-119</a>)
 - A proposal to transfer tokens between Market insurance pool account and Party account(s) is valid (<a name="0028-GOVE-120" href="#0028-GOVE-120">0028-GOVE-120</a>)
 - A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-121" href="#0028-GOVE-121">0028-GOVE-121</a>)
+- A proposal to transfer tokens between Market insurance pool account and Network treasury is valid (<a name="0028-GOVE-132" href="#0028-GOVE-132">0028-GOVE-132</a>)
 - A proposal to transfer tokens between Market insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-122" href="#0028-GOVE-122">0028-GOVE-122</a>)
 - Governance transfer proposals with invalid source or destination account types will get rejected by the blockchain. (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
 - Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
@@ -602,11 +603,21 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 ##### Protocol Upgrade
 
-- Transfer proposals in either a pre or post enactment state are not restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)
+- Transfer proposals in either a pre or post enactment state are restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)
+- Recurring transfers proposed before an upgrade which start before, during or after an upgrade should complete on the proposed end epoch (<a name="0028-GOVE-130" href="#0028-GOVE-130">0028-GOVE-130</a>)
+- One off delivery transfers proposed before an upgrade which are due to start during or after an upgrade should complete either when the network is available again or at the proposed delivery date/time (<a name="0028-GOVE-131" href="#0028-GOVE-131">0028-GOVE-131</a>)
 
-#### Checkpoints and Snapshots
 
-- Active governance transfer (one-off or recurring) must be included in checkpoint and snapshot (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
+##### Checkpoints and Snapshots
+
+- Active or dormant governance transfer (one-off or recurring) must be included in checkpoint and where the network is down during the proposed delivery time, the transfer will occur as soon as the network is available. For recurring transfers the transfers spanning the restore will continue until the end epoch. (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
+- Active or dormant governance transfer (one-off or recurring) must be included in snapshots and data nodes which join the network will support retrieval of the transfer data (<a name="0028-GOVE-133" href="#0028-GOVE-133">0028-GOVE-133</a>)
+
+
+##### One Off Delivery transfers
+
+If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately. (<a name="0028-GOVE-129" href="#0028-GOVE-129">0028-GOVE-129</a>)
+
 
 ##### Recurring Governance transfers
 
@@ -629,4 +640,3 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### Network History
 
 - A datanode restored from network history will contain any recurring and one-off transfers created prior to the restore and these can be retrieved via APIs on the new datanode.(<a name="0028-GOVE-127" href="#0028-GOVE-127">0028-GOVE-127</a>)
-
