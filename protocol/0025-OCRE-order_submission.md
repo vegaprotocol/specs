@@ -37,10 +37,12 @@ Self-trading / "wash" trading is allowed on auction uncrossing (i.e. to leave an
 
 ## Acceptance Criteria
 
-- An order's size must be valid according to the [Fractional Order Size spec](./0052-FPOS-fractional_orders_positions.md)  (<a name="0025-OCRE-001" href="#0025-OCRE-001">0025-OCRE-001</a>)
+- An order's size must be valid according to the [Fractional Order Size spec](./0052-FPOS-fractional_orders_positions.md)  (<a name="0025-OCRE-001" href="#0025-OCRE-001">0025-OCRE-001</a>)(<a name="0025-SP-OCRE-001" href="#0025-SP-OCRE-001">0025-SP-OCRE-001</a>)
 - Margin will taken before the order is entered into the book (<a name="0025-OCRE-002" href="#0025-OCRE-002">0025-OCRE-002</a>)
   - If sufficient margin cannot be reserved, the order will have a status of `REJECTED` (<a name="0025-OCRE-003" href="#0025-OCRE-003">0025-OCRE-003</a>)
 - Fees are charged as per [0029-FEES](./0029-FEES-fees.md).
+- In Spot market, holding will taken before the order is entered into the book(<a name="0025-SP-OCRE-002" href="#0025-SP-OCRE-002">0025-SP-OCRE-002</a>)
+  - If sufficient holding cannot be reserved, the order will have a status of `REJECTED` (<a name="0025-SP-OCRE-003" href="#0025-SP-OCRE-003">0025-SP-OCRE-003</a>)
 
 ## Future Work
 
