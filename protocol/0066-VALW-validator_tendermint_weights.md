@@ -14,7 +14,7 @@ If the network has no stake at all, then all validators would have equal voting 
 
 ## Acceptance criteria
 
-### Basic sanity check (<a name="0066-VALW-001" href="#0066-VALW-001">0066-VALW-001</a>)
+### Basic sanity check (<a name="0066-VALW-001" href="#0066-VALW-001">0066-VALW-001</a>)(<a name="0066-SP-VALW-001" href="#0066-SP-VALW-001">0066-SP-VALW-001</a>)
 
 1. set up a network with 5 validators
 1. give each of the validators the following number of self-staked tokens: `2000`
@@ -27,7 +27,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='2000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2066\
     - Node 5 n[`stakedByOperator`]='2000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=1735
 
-### Non-uniform stake check (<a name="0066-VALW-002" href="#0066-VALW-002">0066-VALW-002</a>)
+### Non-uniform stake check (<a name="0066-VALW-002" href="#0066-VALW-002">0066-VALW-002</a>)(<a name="0066-SP-VALW-002" href="#0066-SP-VALW-002">0066-SP-VALW-002</a>)
 
 1. set up a network with 5 validators
 1. give the first `4` validators `1000` of self-stake each. Give the last validator `500`.
@@ -39,7 +39,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2092\
     - Node 5 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2383
 
-### Zero stake check  (<a name="0066-VALW-003" href="#0066-VALW-003">0066-VALW-003</a>)
+### Zero stake check  (<a name="0066-VALW-003" href="#0066-VALW-003">0066-VALW-003</a>)(<a name="0066-SP-VALW-003" href="#0066-SP-VALW-003">0066-SP-VALW-003</a>)
 
 1. set up a network with 5 validators
 1. give the first `4` validators `1000` of self-stake each. Give the last validator `0`.
@@ -51,7 +51,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2419\
     - Node 5 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' ``n_voting_power``=2741
 
-### Changes to delegation during the epoch are reflected in the next epoch’s voting power (<a name="0066-VALW-004" href="#0066-VALW-004">0066-VALW-004</a>)
+### Changes to delegation during the epoch are reflected in the next epoch’s voting power (<a name="0066-SP-VALW-004" href="#0066-SP-VALW-004">0066-SP-VALW-004</a>)(<a name="0066-VALW-004" href="#0066-VALW-004">0066-VALW-004</a>)
 
 1. set up a network with 5 validators
 1. give the first `4` validators `1000` of self-stake each. Give the last validator `0`.
@@ -71,7 +71,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2564\
     - Node 5 n[`stakedByOperator`]='500000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=64
 
-### Sanity check if everyone unstakes and undelegates (<a name="0066-VALW-005" href="#0066-VALW-005">0066-VALW-005</a>)
+### Sanity check if everyone unstakes and undelegates (<a name="0066-VALW-005" href="#0066-SP-VALW-005">0066-SP-VALW-005</a>)(<a name="0066-SP-VALW-005" href="#0066-VALW-005">0066-VALW-005</a>)
 
 1. set up a network with 5 validators
 1. give each of the validators the following number of self-staked tokens: `2000`
@@ -86,7 +86,7 @@ If the network has no stake at all, then all validators would have equal voting 
 1. wait for 1000 blocks to pass
 1. the Tendermint weights for each validator are `10` each as there is no stake in the network.
 
-### Validator has 1000 stake but 500 delegated (<a name="0066-VALW-006" href="#0066-VALW-006">0066-VALW-006</a>)
+### Validator has 1000 stake but 500 delegated (<a name="0066-VALW-006" href="#0066-VALW-006">0066-VALW-006</a>)(<a name="0066-SP-VALW-006" href="#0066-SP-VALW-006">0066-SP-VALW-006</a>)
 
 1. set up a network with 5 validators
 1. give each of the validators the following number of self-staked tokens: `1000`
@@ -99,7 +99,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='500000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2033\
     - Node 5 n[`stakedByOperator`]='500000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=1830
 
-### Validators without self-delegated, check  (<a name="0066-VALW-007" href="#0066-VALW-007">0066-VALW-007</a>)
+### Validators without self-delegated, check  (<a name="0066-VALW-007" href="#0066-VALW-007">0066-VALW-007</a>)(<a name="0066-SP-VALW-007" href="#0066-SP-VALW-007">0066-SP-VALW-007</a>)
 
 1. set up a network with 5 validators
 1. give each of the validators the following number of self-staked tokens: `0`
@@ -112,7 +112,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='0' n[`stakedByDelegates`]='4000000000000000000' `n_voting_power`=3113\
     - Node 5 n[`stakedByOperator`]='0' n[`stakedByDelegates`]='0' `n_voting_power`=1
 
-### Validators delegating to other validators (<a name="0066-VALW-008" href="#0066-VALW-008">0066-VALW-008</a>)
+### Validators delegating to other validators (<a name="0066-VALW-008" href="#0066-VALW-008">0066-VALW-008</a>)(<a name="0066-SP-VALW-008" href="#0066-SP-VALW-008">0066-SP-VALW-008</a>)
 
 1. set up a network with 5 validators
 1. give each of the validators the following number of self-staked tokens: `1000`
@@ -125,7 +125,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2551\
     - Node 5 n[`stakedByOperator`]='0' n[`stakedByDelegates`]='0' `n_voting_power`=1
 
-### Validator delegate and undelegate in the same epoch (<a name="0066-VALW-009" href="#0066-VALW-009">0066-VALW-009</a>)
+### Validator delegate and undelegate in the same epoch (<a name="0066-VALW-009" href="#0066-VALW-009">0066-VALW-009</a>)(<a name="0066-SP-VALW-009" href="#0066-SP-VALW-009">0066-SP-VALW-009</a>)
 
 1. set up a network with 5 validators
 1. give each of the validators the following number of self-staked tokens: `1000`
