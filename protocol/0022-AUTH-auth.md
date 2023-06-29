@@ -124,23 +124,23 @@ messge TransactionBundle {
 
 ### Wallet service acceptance criteria
 
-- As a user, I can create a new account on the Wallet service (account creation requirement to be implementation details)  (<a name="0022-AUTH-001" href="#0022-AUTH-001">0022-AUTH-001</a>)
-- As a user, I can login to the Wallet service with my wallet name and password (<a name="0022-AUTH-002" href="#0022-AUTH-002">0022-AUTH-002</a>)
-- As a user, I can logout of the Wallet service with a token given to me at login (<a name="0022-AUTH-003" href="#0022-AUTH-003">0022-AUTH-003</a>)
-- As a user, if I'm logged in, I can create a new party (with a key pair) for for my account on the Wallet service. (<a name="0022-AUTH-004" href="#0022-AUTH-004">0022-AUTH-004</a>)
-- As a user, if I'm logged in, I can list all my parties (and their key pairs) on the Wallet service (<a name="0022-AUTH-005" href="#0022-AUTH-005">0022-AUTH-005</a>)
-- As a user, if I'm logged in, I can create a signature for a blob of data, using one of my parties (and its key pair). (<a name="0022-AUTH-007" href="#0022-AUTH-007">0022-AUTH-007</a>)
+- As a user, I can create a new account on the Wallet service (account creation requirement to be implementation details)  (<a name="0022-AUTH-001" href="#0022-AUTH-001">0022-AUTH-001</a>)(<a name="0022-SP-AUTH-001" href="#0022-SP-AUTH-001">0022-SP-AUTH-001</a>)
+- As a user, I can login to the Wallet service with my wallet name and password (<a name="0022-AUTH-002" href="#0022-AUTH-002">0022-AUTH-002</a>)(<a name="0022-SP-AUTH-002" href="#0022-SP-AUTH-002">0022-SP-AUTH-002</a>)
+- As a user, I can logout of the Wallet service with a token given to me at login (<a name="0022-AUTH-003" href="#0022-AUTH-003">0022-AUTH-003</a>)(<a name="0022-SP-AUTH-003" href="#0022-SP-AUTH-003">0022-SP-AUTH-003</a>)
+- As a user, if I'm logged in, I can create a new party (with a key pair) for for my account on the Wallet service. (<a name="0022-AUTH-004" href="#0022-AUTH-004">0022-AUTH-004</a>)(<a name="0022-SP-AUTH-004" href="#0022-SP-AUTH-004">0022-SP-AUTH-004</a>)
+- As a user, if I'm logged in, I can list all my parties (and their key pairs) on the Wallet service (<a name="0022-AUTH-005" href="#0022-AUTH-005">0022-AUTH-005</a>)(<a name="0022-SP-AUTH-005" href="#0022-SP-AUTH-005">0022-SP-AUTH-005</a>)
+- As a user, if I'm logged in, I can create a signature for a blob of data, using one of my parties (and its key pair). (<a name="0022-AUTH-007" href="#0022-AUTH-007">0022-AUTH-007</a>)(<a name="0022-SP-AUTH-007" href="#0022-SP-AUTH-007">0022-SP-AUTH-007</a>)
 
 ### Vega network acceptance criteria
 
-- As a user, I can send a transaction to the vega network with a signature for it. (<a name="0022-AUTH-008" href="#0022-AUTH-008">0022-AUTH-008</a>)
-- As a vega node, I ensure that all transaction are paired with a signature. (<a name="0022-AUTH-009" href="#0022-AUTH-009">0022-AUTH-009</a>)
+- As a user, I can send a transaction to the vega network with a signature for it. (<a name="0022-AUTH-008" href="#0022-AUTH-008">0022-AUTH-008</a>)(<a name="0022-SP-AUTH-008" href="#0022-SP-AUTH-008">0022-SP-AUTH-008</a>)
+- As a vega node, I ensure that all transaction are paired with a signature. (<a name="0022-AUTH-009" href="#0022-AUTH-009">0022-AUTH-009</a>)(<a name="0022-SP-AUTH-009" href="#0022-SP-AUTH-009">0022-SP-AUTH-009</a>)
   - A signature is verified before the transaction is sent to the chain.
-  - If a signature is valid, the transaction is sent to the chain (<a name="0022-AUTH-010" href="#0022-AUTH-010">0022-AUTH-010</a>)
-  - If a signature is invalid, the transaction is not sent to the chain, an error is returned (<a name="0022-AUTH-011" href="#0022-AUTH-011">0022-AUTH-011</a>)
-  - A transaction with an invalid signature is never sent to the chain and the transaction is discarded. (<a name="0022-AUTH-013" href="#0022-AUTH-013">0022-AUTH-013</a>)
-  - A transaction with no signature is rejected (<a name="0022-AUTH-014" href="#0022-AUTH-014">0022-AUTH-014</a>)
-- A `partyId` that is not a valid public key is inherently invalid, and should be rejected (<a name="0022-AUTH-015" href="#0022-AUTH-015">0022-AUTH-015</a>)
+  - If a signature is valid, the transaction is sent to the chain (<a name="0022-AUTH-010" href="#0022-AUTH-010">0022-AUTH-010</a>)(<a name="0022-SP-AUTH-010" href="#0022-SP-AUTH-010">0022-SP-AUTH-010</a>)
+  - If a signature is invalid, the transaction is not sent to the chain, an error is returned (<a name="0022-AUTH-011" href="#0022-AUTH-011">0022-AUTH-011</a>)(<a name="0022-SP-AUTH-011" href="#0022-SP-AUTH-011">0022-SP-AUTH-011</a>)
+  - A transaction with an invalid signature is never sent to the chain and the transaction is discarded. (<a name="0022-AUTH-013" href="#0022-AUTH-013">0022-AUTH-013</a>) (<a name="0022-SP-AUTH-013" href="#0022-SP-AUTH-013">0022-SP-AUTH-013</a>)
+  - A transaction with no signature is rejected (<a name="0022-AUTH-014" href="#0022-AUTH-014">0022-AUTH-014</a>)(<a name="0022-SP-AUTH-014" href="#0022-SP-AUTH-014">0022-SP-AUTH-014</a>)
+- A `partyId` that is not a valid public key is inherently invalid, and should be rejected (<a name="0022-AUTH-015" href="#0022-AUTH-015">0022-AUTH-015</a>)(<a name="0022-AUTH-SP-015" href="#0022-AUTH-SP-015">0022-SP-AUTH-015</a>)
   - _Note:_ In early versions of Vega, the `partyId` was an arbitrary string. This is no longer valid, and should be rejected. This includes the [network party](./0017-PART-party.md#network-party) - that is used where transactions are generated by the system, and it should never be possible to submit a transaction as `network`.
 
 ## Future work
