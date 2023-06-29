@@ -90,38 +90,38 @@ Where possible, this should be done before the transaction is included in a bloc
 
 An [instrument can be created](./0028-GOVE-governance.md) to rely on a signed message data source:
 
-- The instrument must specify a valid signed message data source (<a name="0046-DSRM-001" href="#0046-DSRM-001">0046-DSRM-001</a>)
-- A market proposal specifying an invalid data source will be rejected (<a name="0046-DSRM-002" href="#0046-DSRM-002">0046-DSRM-002</a>)
-  - This rejection will happen at _the [creation of the proposal](./0028-GOVE-governance.md)_  (<a name="0046-DSRM-003" href="#0046-DSRM-003">0046-DSRM-003</a>)
+- The instrument must specify a valid signed message data source (<a name="0046-DSRM-001" href="#0046-DSRM-001">0046-DSRM-001</a>)(<a name="0046-SP-DSRM-001" href="#0046-SP-DSRM-001">0046-SP-DSRM-001</a>)
+- A market proposal specifying an invalid data source will be rejected (<a name="0046-DSRM-002" href="#0046-DSRM-002">0046-DSRM-002</a>)(<a name="0046-SP-DSRM-002" href="#0046-SP-DSRM-002">0046-SP-DSRM-002</a>)
+  - This rejection will happen at _the [creation of the proposal](./0028-GOVE-governance.md)_  (<a name="0046-DSRM-003" href="#0046-DSRM-003">0046-DSRM-003</a>)(<a name="0046-SP-DSRM-003" href="#0046-SP-DSRM-003">0046-SP-DSRM-003</a>)
 
 Multiple instruments can rely on the same data source:
 
-- Multiple instruments can settle based on the same `SubmitData` message.  (<a name="0046-DSRM-004" href="#0046-DSRM-004">0046-DSRM-004</a>)
-- Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)
-- Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)
+- Multiple instruments can settle based on the same `SubmitData` message.  (<a name="0046-DSRM-004" href="#0046-DSRM-004">0046-DSRM-004</a>)(<a name="0046-SP-DSRM-004" href="#0046-SP-DSRM-004">0046-SP-DSRM-004</a>)
+- Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different `SubmitData` messages.  (<a name="0046-DSRM-005" href="#0046-DSRM-005">0046-DSRM-005</a>)(<a name="0046-SP-DSRM-005" href="#0046-SP-DSRM-005">0046-SP-DSRM-005</a>)
+- Multiple products can [filter](./0047-DSRF-data_source_filter.md) the same data source differently and settle based on different fields from the same `SubmitData` message.  (<a name="0046-DSRM-006" href="#0046-DSRM-006">0046-DSRM-006</a>)(<a name="0046-SP-DSRM-006" href="#0046-SP-DSRM-006">0046-SP-DSRM-006</a>)
 
 `SubmitData` transactions can be submitted by any public key as long as the data included in the transaction is signed by at least one of the keys included in an active signed message data source definition:
 
-- `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)
-- `SubmitData` transactions by inactive data sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)
-- `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)
+- `SubmitData` transactions for active ([see data sourcing framework](./0045-DSRC-data_sourcing.md)) data sources will be accepted regardless of the transaction signer.  (<a name="0046-DSRM-007" href="#0046-DSRM-007">0046-DSRM-007</a>)(<a name="0046-SP-DSRM-007" href="#0046-SP-DSRM-007">0046-SP-DSRM-007</a>)
+- `SubmitData` transactions by inactive data sources will be rejected.  (<a name="0046-DSRM-008" href="#0046-DSRM-008">0046-DSRM-008</a>)(<a name="0046-SP-DSRM-008" href="#0046-SP-DSRM-008">0046-SP-DSRM-008</a>)
+- `SubmitData` transactions that are invalid will be rejected.  (<a name="0046-DSRM-009" href="#0046-DSRM-009">0046-DSRM-009</a>)(<a name="0046-SP-DSRM-009" href="#0046-SP-DSRM-009">0046-SP-DSRM-009</a>)
 
 To be valid, a `SubmitData` transaction must:
 
-- Contain correctly signed data from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)
-- Invalid `SubmitData` transactions must be rejected.  (<a name="0046-DSRM-011" href="#0046-DSRM-011">0046-DSRM-011</a>)
+- Contain correctly signed data from an active signed message data source,  (<a name="0046-DSRM-010" href="#0046-DSRM-010">0046-DSRM-010</a>)(<a name="0046-SP-DSRM-010" href="#0046-SP-DSRM-010">0046-SP-DSRM-010</a>)
+- Invalid `SubmitData` transactions must be rejected.  (<a name="0046-DSRM-011" href="#0046-DSRM-011">0046-DSRM-011</a>)(<a name="0046-SP-DSRM-011" href="#0046-SP-DSRM-011">0046-SP-DSRM-011</a>)
 
 Ignore any data source tx that is not explicitly required, so this would include a tx:
 
-- For a pubkey never used in a data source  (<a name="0046-DSRM-013" href="#0046-DSRM-013">0046-DSRM-013</a>)
-- For a data source where a filter ignores the message based on its contents  (<a name="0046-DSRM-014" href="#0046-DSRM-014">0046-DSRM-014</a>)
-- For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal (<a name="0046-DSRM-015" href="#0046-DSRM-015">0046-DSRM-015</a>)
+- For a pubkey never used in a data source  (<a name="0046-DSRM-013" href="#0046-DSRM-013">0046-DSRM-013</a>)(<a name="0046-SP-DSRM-013" href="#0046-SP-DSRM-013">0046-SP-DSRM-013</a>)
+- For a data source where a filter ignores the message based on its contents  (<a name="0046-DSRM-014" href="#0046-DSRM-014">0046-DSRM-014</a>)(<a name="0046-SP-DSRM-014" href="#0046-SP-DSRM-014">0046-SP-DSRM-014</a>)
+- For a pubkey only used in data sources referenced by markets (or other things) that are no longer being managed by the core (i.e. once a marked is in Closed or Settled or Cancelled state according to the market framework) or before the enactment date of the market proposal (<a name="0046-DSRM-015" href="#0046-DSRM-015">0046-DSRM-015</a>)(<a name="0046-SP-DSRM-015" href="#0046-SP-DSRM-015">0046-SP-DSRM-015</a>)
 
 Other acceptance:
 
-- Must work with Coinbase oracle  (<a name="0046-DSRM-012" href="#0046-DSRM-012">0046-DSRM-012</a>)
-- Ignore any `SubmitData` tx that is a duplicate (i.e. contains exactly the same data payload and is for the same data source), even if it is signed by a different signer (assuming the source has multiple configured signers) or was submitted by a different Vega key. (<a name="0046-DSRM-016" href="#0046-DSRM-016">0046-DSRM-016</a>)
-- Messages are accepted that contain the data and the signature (conforming to the Open Oracle specification) Note: do not support (or need to) direct connections to REST APIs, Ethereum smart contracts, etc. conforming to the open oracle spec. (<a name="0046-DSRM-017" href="#0046-DSRM-017">0046-DSRM-017</a>)
+- Must work with Coinbase oracle  (<a name="0046-DSRM-012" href="#0046-DSRM-012">0046-DSRM-012</a>)(<a name="0046-SP-DSRM-012" href="#0046-SP-DSRM-012">0046-SP-DSRM-012</a>)
+- Ignore any `SubmitData` tx that is a duplicate (i.e. contains exactly the same data payload and is for the same data source), even if it is signed by a different signer (assuming the source has multiple configured signers) or was submitted by a different Vega key. (<a name="0046-DSRM-016" href="#0046-DSRM-016">0046-DSRM-016</a>)(<a name="0046-SP-DSRM-016" href="#0046-SP-DSRM-016">0046-SP-DSRM-016</a>)
+- Messages are accepted that contain the data and the signature (conforming to the Open Oracle specification) Note: do not support (or need to) direct connections to REST APIs, Ethereum smart contracts, etc. conforming to the open oracle spec. (<a name="0046-DSRM-017" href="#0046-DSRM-017">0046-DSRM-017</a>)(<a name="0046-SP-DSRM-017" href="#0046-SP-DSRM-017">0046-SP-DSRM-017</a>)
 
 ## Notes
 
