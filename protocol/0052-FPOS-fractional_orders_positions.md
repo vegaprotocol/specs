@@ -20,8 +20,8 @@ Specs affected by this change (Note: in many cases the implementation may not ch
 
 ## Acceptance Criteria
 
-- All proposed markets will have a decimal places property available via the API (<a name="0052-FPOS-001" href="#0052-FPOS-001">0052-FPOS-001</a>)
-- An order created on the client with a price of `1` results in an order being created with a price of `1 * 10^[Market.DecimalPlaces]` (<a name="0052-FPOS-002" href="#0052-FPOS-002">0052-FPOS-002</a>)
+- All proposed markets will have a decimal places property available via the API (<a name="0052-FPOS-001" href="#0052-FPOS-001">0052-FPOS-001</a>)(<a name="0052-SP-FPOS-001" href="#0052-SP-FPOS-001">0052-SP-FPOS-001</a>)
+- An order created on the client with a price of `1` results in an order being created with a price of `1 * 10^[Market.DecimalPlaces]` (<a name="0052-FPOS-002" href="#0052-FPOS-002">0052-FPOS-002</a>)(<a name="0052-SP-FPOS-002" href="#0052-SP-FPOS-002">0052-SP-FPOS-002</a>)
 - Fees are calculated as per ([0029-FEES-013](./0029-FEES-fees.md#0029-FEES-013))
 - LP order volume is implied correctly using fractional volume amounts as per ([0038-OLIQ-006](./0038-OLIQ-liquidity_provision_order_type.md#0038-OLIQ-006))
 - Mark-to-market settlement happens correctly with PDP > 0 ([0003-MTMK-0015](./0003-MTMK-mark_to_market_settlement.md#0003-MTMK-015))
