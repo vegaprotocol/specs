@@ -62,20 +62,20 @@ On any Vega node, I can:
 
 | Requirement | Acceptance Criteria code |
 |-----------|:------------------------:|
-| List all governance proposals via REST & GRPC |<a name="0020-APIS-001" href="#0020-APIS-001">0020-APIS-001</a>|
-| List all governance proposals by a specified party via REST & GRPC             |<a name="0020-APIS-002" href="#0020-APIS-002">0020-APIS-002</a> |
-| Retrieve a specific governance proposals by id via REST & GRPC             |<a name="0020-APIS-003" href="#0020-APIS-003">0020-APIS-003</a> |
-| Retrieve a list of votes via REST & GRPC |<a name="0020-APIS-004" href="#0020-APIS-004">0020-APIS-004</a>|
-| Retrieve the governance stake for a specified party via REST & GRPC |<a name="0020-APIS-005" href="#0020-APIS-005">0020-APIS-005</a>|
-| List all markets via REST & GRPC |<a name="0020-APIS-006" href="#0020-APIS-006">0020-APIS-006</a>|
-| Retrieve a specific market via REST & GRPC | <a name="0020-APIS-007" href="#0020-APIS-007">0020-APIS-007</a>|
-| Retrieve all assets via REST & GRPC | <a name="0020-APIS-008" href="#0020-APIS-008">0020-APIS-008</a>|
-| List all party IDs via REST & GRPC | <a name="0020-APIS-009" href="#0020-APIS-009">0020-APIS-009</a>|
-| List all network parameters & their current values via REST & GRPC | <a name="0020-APIS-010" href="#0020-APIS-010">0020-APIS-010</a>|
-| Retrieve the current block height REST & GRPC | <a name="0020-APIS-011" href="#0020-APIS-011">0020-APIS-011</a>|
-| Retrieve the current vega time REST & GRPC | <a name="0020-APIS-012" href="#0020-APIS-012">0020-APIS-012</a>|
-| Retrieve statistics about the network via REST & GRPC | <a name="0020-APIS-013" href="#0020-APIS-013">0020-APIS-013</a>|
-| Submit a valid transaction via REST & GRPC | <a name="0020-APIS-014" href="#0020-APIS-014">0020-APIS-014</a>|
+| List all governance proposals via REST & GRPC |<a name="0020-APIS-001" href="#0020-APIS-001">0020-APIS-001</a><a name="0020-SP-APIS-001" href="#0020-SP-APIS-001">0020-SP-APIS-001</a>|
+| List all governance proposals by a specified party via REST & GRPC             |<a name="0020-APIS-002" href="#0020-APIS-002">0020-APIS-002</a> <a name="0020-SP-APIS-002" href="#0020-SP-APIS-002">0020-SP-APIS-002</a>|
+| Retrieve a specific governance proposals by id via REST & GRPC             |<a name="0020-APIS-003" href="#0020-APIS-003">0020-APIS-003</a> <a name="0020-SP-APIS-003" href="#0020-SP-APIS-003">0020-SP-APIS-003</a>|
+| Retrieve a list of votes via REST & GRPC |<a name="0020-APIS-004" href="#0020-APIS-004">0020-APIS-004</a><a name="0020-SP-APIS-004" href="#0020-SP-APIS-004">0020-SP-APIS-004</a>|
+| Retrieve the governance stake for a specified party via REST & GRPC |<a name="0020-APIS-005" href="#0020-APIS-005">0020-APIS-005</a><a name="0020-SP-APIS-005" href="#0020-SP-APIS-005">0020-SP-APIS-005</a>|
+| List all markets via REST & GRPC |<a name="0020-APIS-006" href="#0020-APIS-006">0020-APIS-006</a><a name="0020-SP-APIS-006" href="#0020-SP-APIS-006">0020-SP-APIS-006</a>|
+| Retrieve a specific market via REST & GRPC | <a name="0020-APIS-007" href="#0020-APIS-007">0020-APIS-007</a><a name="0020-SP-APIS-007" href="#0020-SP-APIS-007">0020-SP-APIS-007</a>|
+| Retrieve all assets via REST & GRPC | <a name="0020-APIS-008" href="#0020-APIS-008">0020-APIS-008</a><a name="0020-SP-APIS-008" href="#0020-SP-APIS-008">0020-SP-APIS-008</a>|
+| List all party IDs via REST & GRPC | <a name="0020-APIS-009" href="#0020-APIS-009">0020-APIS-009</a><a name="0020-SP-APIS-009" href="#0020-SP-APIS-009">0020-SP-APIS-009</a>|
+| List all network parameters & their current values via REST & GRPC | <a name="0020-APIS-010" href="#0020-APIS-010">0020-APIS-010</a><a name="0020-SP-APIS-010" href="#0020-SP-APIS-010">0020-SP-APIS-010</a>|
+| Retrieve the current block height REST & GRPC | <a name="0020-APIS-011" href="#0020-APIS-011">0020-APIS-011</a><a name="0020-SP-APIS-011" href="#0020-SP-APIS-011">0020-SP-APIS-011</a>|
+| Retrieve the current vega time REST & GRPC | <a name="0020-APIS-012" href="#0020-APIS-012">0020-APIS-012</a><a name="0020-SP-APIS-012" href="#0020-SP-APIS-012">0020-SP-APIS-012</a>|
+| Retrieve statistics about the network via REST & GRPC | <a name="0020-APIS-013" href="#0020-APIS-013">0020-APIS-013</a><a name="0020-SP-APIS-013" href="#0020-SP-APIS-013">0020-SP-APIS-013</a>|
+| Submit a valid transaction via REST & GRPC | <a name="0020-APIS-014" href="#0020-APIS-014">0020-APIS-014</a><a name="0020-SP-APIS-014" href="#0020-SP-APIS-014">0020-SP-APIS-014</a>|
 
 ## See also
 
