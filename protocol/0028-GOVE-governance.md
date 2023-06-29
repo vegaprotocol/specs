@@ -362,7 +362,7 @@ All in memory active governance transfers must be included in the snapshot of th
 ## 6. Change market state
 
 A governance proposal to change the state of the market.
-Multiple concurrent proposals are allowed. If more than one gets successfully voted in the one which arrived last gets used. If a proposal has already been successful then additional market state change proposals are still allowed as long as their enactment date is no later then that of the last successful vote.
+Multiple concurrent proposals are allowed.
 
 Market change proposal [creation](#market-change-proposal) and [voting](#market-change-proposal-outcome) rules apply.
 
@@ -374,10 +374,9 @@ Any type of market (either fixed expiry market or perpetual) can be closed via a
 
 A proposal to close a market contains:
 
-1. an enactment time
 1. final settlement price (not required for spot markets)
 
-Once market is closed the process cannot be reversed.
+Once market is closed the process cannot be reversed. Note that this implies that once a governance proposal to close the market has been voted in the market will definitely close at the enactment time of that vote at the latest. While the market is still open it's still possible to submit additional governance votes to close the market, however they'll only have any effect if their enactment date is prior to that of the market closure proposal which has already passed.
 
 ### 6.2. Suspend the market
 
@@ -385,10 +384,13 @@ This proposal puts the market into an auction mode which can only be exit with a
 
 A market that's been suspended can't have the open volume changed or margin account balances reduced for any of the parties within the market.
 
+If the market is already suspended via governance when another vote gets enacted then that vote has no effect.
 
 ### 6.3. Unsuspend the market
 
 This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active.
+
+If the market is not suspended when the vote to unsuspend the market gets enacted then that vote has no effect.
 
 ## 7. Freeform governance proposal
 
