@@ -178,34 +178,34 @@ To lock tokens, a participant must:
 
 To delegate the locked tokens, a participant must:
 
-- Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" (<a name="0059-STKG-001" href="#0059-STKG-001">0059-STKG-001</a>)
-- Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).(<a name="0059-STKG-002" href="#0059-STKG-002">0059-STKG-002</a>)
+- Have enough tokens to satisfy the network parameter: "Minimum delegateable stake" (<a name="0059-STKG-001" href="#0059-STKG-001">0059-STKG-001</a>)(<a name="0059-SP-STKG-001" href="#0059-SP-STKG-001">0059-SP-STKG-001</a>)
+- Delegate the locked tokens to one of the eligible validators (fixed set for Alpha mainnet).(<a name="0059-STKG-002" href="#0059-STKG-002">0059-STKG-002</a>)(<a name="0059-SP-STKG-002" href="#0059-SP-STKG-002">0059-SP-STKG-002</a>)
 
 These accounts will be created:
 
-- A [staking account](./0013-ACCT-accounts.md#staking-accounts) denominated in the governance asset is created(<a name="0059-STKG-003" href="#0059-STKG-003">0059-STKG-003</a>)
-- When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards) (<a name="0059-STKG-004" href="#0059-STKG-004">0059-STKG-004</a>)
+- A [staking account](./0013-ACCT-accounts.md#staking-accounts) denominated in the governance asset is created(<a name="0059-STKG-003" href="#0059-STKG-003">0059-STKG-003</a>)(<a name="0059-SP-STKG-003" href="#0059-SP-STKG-003">0059-SP-STKG-003</a>)
+- When first fees are received as a staking reward, a general account for each settlement currency (so they can receive infrastructure fee rewards) (<a name="0059-STKG-004" href="#0059-STKG-004">0059-STKG-004</a>)(<a name="0059-SP-STKG-004" href="#0059-SP-STKG-004">0059-SP-STKG-004</a>)
 - It is possible that a separate reward function will cause an account to be created for the user as a result of rewards.
 - Timings
-- Any locked (but undelegated) tokens can be delegated at any time. (<a name="0059-STKG-005" href="#0059-STKG-005">0059-STKG-005</a>)
-- The delegation only becomes valid at the next [epoch](./0050-EPOC-epochs.md), though it can be undone through undelegate. (<a name="0059-STKG-006" href="#0059-STKG-006">0059-STKG-006</a>)
-- The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next epoch) (<a name="0059-STKG-007" href="#0059-STKG-007">0059-STKG-007</a>)
+- Any locked (but undelegated) tokens can be delegated at any time. (<a name="0059-STKG-005" href="#0059-STKG-005">0059-STKG-005</a>)(<a name="0059-SP-STKG-005" href="#0059-SP-STKG-005">0059-SP-STKG-005</a>)
+- The delegation only becomes valid at the next [epoch](./0050-EPOC-epochs.md), though it can be undone through undelegate. (<a name="0059-STKG-006" href="#0059-STKG-006">0059-STKG-006</a>)(<a name="0059-SP-STKG-006" href="#0059-SP-STKG-006">0059-SP-STKG-006</a>)
+- The balance of "delegateable stake" is reduced immediately (prior to it coming into effect in the next epoch) (<a name="0059-STKG-007" href="#0059-STKG-007">0059-STKG-007</a>)(<a name="0059-SP-STKG-007" href="#0059-SP-STKG-007">0059-SP-STKG-007</a>)
 
 ### Adding more stake
 
-- More tokens may be locked at any time on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)
-- More stake may be delegated at any time (see [function: Stake](./0071-STAK-erc20_governance_token_staking.md) - amount refers to size by which to increment existing staked amount) (<a name="0059-STKG-009" href="#0059-STKG-009">0059-STKG-009</a>)
-- Same timings apply as per staking for the first time (<a name="0059-STKG-010" href="#0059-STKG-010">0059-STKG-010</a>)
+- More tokens may be locked at any time on the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) (<a name="0059-STKG-008" href="#0059-STKG-008">0059-STKG-008</a>)(<a name="0059-SP-STKG-008" href="#0059-SP-STKG-008">0059-SP-STKG-008</a>)
+- More stake may be delegated at any time (see [function: Stake](./0071-STAK-erc20_governance_token_staking.md) - amount refers to size by which to increment existing staked amount) (<a name="0059-STKG-009" href="#0059-STKG-009">0059-STKG-009</a>)(<a name="0059-SP-STKG-009" href="#0059-SP-STKG-009">0059-SP-STKG-009</a>)
+- Same timings apply as per staking for the first time (<a name="0059-STKG-010" href="#0059-STKG-010">0059-STKG-010</a>)(<a name="0059-SP-STKG-010" href="#0059-SP-STKG-010">0059-SP-STKG-010</a>)
 
 ### Removing stake
 
-- Any stake may be withdrawn from the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) at any time (<a name="0059-STKG-011" href="#0059-STKG-011">0059-STKG-011</a>)
-  - Unlocking your tokens in the bridge contract will effectively "remove" them from any delegation they're doing (unless you have remaining undelegated tokens that could fulfil your delegation) (<a name="0059-STKG-012" href="#0059-STKG-012">0059-STKG-012</a>)
-- Delegation may be fully or partially removed. The amount specified in the [function: Remove](./0071-STAK-erc20_governance_token_staking.md) - is the size by which the existing staked amount will be decremented (<a name="0059-STKG-013" href="#0059-STKG-013">0059-STKG-013</a>)
+- Any stake may be withdrawn from the [Vega staking bridge contract](./0071-STAK-erc20_governance_token_staking.md) at any time (<a name="0059-STKG-011" href="#0059-STKG-011">0059-STKG-011</a>)(<a name="0059-SP-STKG-011" href="#0059-SP-STKG-011">0059-SP-STKG-011</a>)
+  - Unlocking your tokens in the bridge contract will effectively "remove" them from any delegation they're doing (unless you have remaining undelegated tokens that could fulfil your delegation) (<a name="0059-STKG-012" href="#0059-STKG-012">0059-STKG-012</a>)(<a name="0059-SP-STKG-012" href="#0059-SP-STKG-012">0059-SP-STKG-012</a>)
+- Delegation may be fully or partially removed. The amount specified in the [function: Remove](./0071-STAK-erc20_governance_token_staking.md) - is the size by which the existing staked amount will be decremented (<a name="0059-STKG-013" href="#0059-STKG-013">0059-STKG-013</a>)(<a name="0059-SP-STKG-013" href="#0059-SP-STKG-013">0059-SP-STKG-013</a>)
 - Removal of delegation may happen in the following 2 ways:
-  - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator). (<a name="0059-STKG-014" href="#0059-STKG-014">0059-STKG-014</a>)
-  - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the on-chain treasury account for that asset. (<a name="0059-STKG-015" href="#0059-STKG-015">0059-STKG-015</a>)
-- Every 30 seconds (and at the end of an epoch) the associated stake is reconciled against the current nomination to ensure that the total nomination is not exceeding the total association. In case it does we proportionally un-nominate from the validators until the nomination is not exceeding the association. It's worth mentioning that for the current epoch nomination balance we consider the minimum stake that the party had for the duration of the period evaluated (from the beginning of the epoch). Also, for next epoch's nomination balance we consider the current balance of the association. Have one party stake 100 tokens split 70-30 between two validators. With a an epoch of length 5 minutes, at the beginning of the epoch remove 50 tokens off the stake. Within 30 seconds of the confirmation of updated association, verify that the nomination balances for the current epoch and next has been removed with respect to the 70/30 split, such that it is now 35/15. (<a name="0059-STKG-016" href="#0059-STKG-016">0059-STKG-016</a>)
+  - Announcing removal, but maintaining stake until last block of the current epoch. This "announced stake" may be then (re)delegated (e.g. to a different validator). (<a name="0059-STKG-014" href="#0059-STKG-014">0059-STKG-014</a>)(<a name="0059-SP-STKG-014" href="#0059-SP-STKG-014">0059-SP-STKG-014</a>)
+  - Announcing removal and withdrawing stake immediately. Rewards are still collected for this stake until the end of the epoch, but they are sent to the on-chain treasury account for that asset. (<a name="0059-STKG-015" href="#0059-STKG-015">0059-STKG-015</a>)(<a name="0059-SP-STKG-015" href="#0059-SP-STKG-015">0059-SP-STKG-015</a>)
+- Every 30 seconds (and at the end of an epoch) the associated stake is reconciled against the current nomination to ensure that the total nomination is not exceeding the total association. In case it does we proportionally un-nominate from the validators until the nomination is not exceeding the association. It's worth mentioning that for the current epoch nomination balance we consider the minimum stake that the party had for the duration of the period evaluated (from the beginning of the epoch). Also, for next epoch's nomination balance we consider the current balance of the association. Have one party stake 100 tokens split 70-30 between two validators. With a an epoch of length 5 minutes, at the beginning of the epoch remove 50 tokens off the stake. Within 30 seconds of the confirmation of updated association, verify that the nomination balances for the current epoch and next has been removed with respect to the 70/30 split, such that it is now 35/15. (<a name="0059-SP-STKG-016" href="#0059-SP-STKG-016">0059-SP-STKG-016</a>)(<a name="0059-STKG-016" href="#0059-STKG-016">0059-STKG-016</a>)
 
 ### Changing delegation
 
@@ -216,21 +216,21 @@ These accounts will be created:
 
 ## Auto delegation scenarios
 
-### Normal scenario auto undelegation:  (<a name="0059-STKG-018" href="#0059-STKG-018">0059-STKG-018</a>)
+### Normal scenario auto undelegation:  (<a name="0059-STKG-018" href="#0059-STKG-018">0059-STKG-018</a>)(<a name="0059-SP-STKG-018" href="#0059-SP-STKG-018">0059-SP-STKG-018</a>)
 
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
 - epoch 1: party dissociated 200 VEGA
 - at the end of epoch 1: `party1` would have left 160 tokens nominated to validators 1-5 (for both epoch 1 and onwards - the former is important so that they don't get rewarded for 200 per validator)
 
-### Normal scenario auto delegation: (<a name="0059-STKG-019" href="#0059-STKG-019">0059-STKG-019</a>)
+### Normal scenario auto delegation: (<a name="0059-STKG-019" href="#0059-STKG-019">0059-STKG-019</a>)(<a name="0059-SP-STKG-019" href="#0059-SP-STKG-019">0059-SP-STKG-019</a>)
 
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
 - epoch 1: party associated 200 VEGA
 - end of epoch 1: there's sufficient space on each validator 1-5 to accept the delegation of 40 VEGA from `party1` and `party1` now has delegation of 240 for validators 1-5 for epoch 2.
 
-### Edge case 1: manual delegation for party eligible for auto delegation:  (<a name="0059-STKG-020" href="#0059-STKG-020">0059-STKG-020</a>)
+### Edge case 1: manual delegation for party eligible for auto delegation:  (<a name="0059-STKG-020" href="#0059-STKG-020">0059-STKG-020</a>)(<a name="0059-SP-STKG-020" href="#0059-SP-STKG-020">0059-SP-STKG-020</a>)
 
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
@@ -239,7 +239,7 @@ These accounts will be created:
 - end of epoch1: party1 has 300 delegated to validator1, 200 delegated to validators 2-5 and 100 remain undelegated.
 - end of epoch2: the remaining associated undelegated 100 VEGA get auto-delegated and distributed such that `validator1` gets 27 (100 * 300/1100) and validators 2-5 get each 18 - and 1 token remains undelegated
 
-### Edge case 2: manual undelegation for party eligible for auto delegation: (<a name="0059-STKG-021" href="#0059-STKG-021">0059-STKG-021</a>)
+### Edge case 2: manual undelegation for party eligible for auto delegation: (<a name="0059-STKG-021" href="#0059-STKG-021">0059-STKG-021</a>)(<a name="0059-SP-STKG-021" href="#0059-SP-STKG-021">0059-SP-STKG-021</a>)
 
 - epoch 0: party associated 1000 VEGA
 - epoch 0: party nominated 200 VEGA to validators 1-5
