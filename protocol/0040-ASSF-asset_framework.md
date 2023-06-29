@@ -293,11 +293,11 @@ Once a withdrawal is complete and the appropriate events/transaction information
 
 For each asset class to be considered "supported" by Vega, the following must happen:
 
-1. An asset of that class can Be voted into Vega (<a name="0040-ASSF-001" href="#0040-ASSF-001">0040-ASSF-001</a>)
-2. An asset previously voted in can be voted out of Vega (<a name="0040-COSMICELEVATOR-002" href="#0040-COSMICELEVATOR-002">0040-COSMICELEVATOR-002</a>)
-3. A voted-in asset can be deposited into a Vega bridge (<a name="0040-ASSF-003" href="#0040-ASSF-003">0040-ASSF-003</a>)
-4. A properly deposited asset is credited to the appropriate user (<a name="0040-ASSF-004" href="#0040-ASSF-004">0040-ASSF-004</a>)
-5. A withdrawal can be requested and verified by Vega validator nodes (<a name="0040-ASSF-005" href="#0040-ASSF-005">0040-ASSF-005</a>)
-6. multisig withdrawal order signatures from Vega validator nodes can be aggregated at the request of the user (<a name="0040-ASSF-006" href="#0040-ASSF-006">0040-ASSF-006</a>)
-7. A user can submit the withdrawal order and receive their asset (<a name="0040-ASSF-007" href="#0040-ASSF-007">0040-ASSF-007</a>)
-8. Every asset must specify `quantum` and this must be an integer strictly greater than `0` (<a name="0040-ASSF-008" href="#0040-ASSF-008">0040-ASSF-008</a>)
+1. An asset of that class can Be voted into Vega (<a name="0040-ASSF-001" href="#0040-ASSF-001">0040-ASSF-001</a>)(<a name="0040-SP-ASSF-001" href="#0040-SP-ASSF-001">0040-SP-ASSF-001</a>)
+2. An asset previously voted in can be voted out of Vega (<a name="0040-COSMICELEVATOR-002" href="#0040-COSMICELEVATOR-002">0040-COSMICELEVATOR-002</a>)(<a name="0040-SP-COSMICELEVATOR-002" href="#0040-SP-COSMICELEVATOR-002">0040-SP-COSMICELEVATOR-002</a>)
+3. A voted-in asset can be deposited into a Vega bridge (<a name="0040-ASSF-003" href="#0040-ASSF-003">0040-ASSF-003</a>)(<a name="0040-SP-ASSF-003" href="#0040-SP-ASSF-003">0040-SP-ASSF-003</a>)
+4. A properly deposited asset is credited to the appropriate user (<a name="0040-ASSF-004" href="#0040-ASSF-004">0040-ASSF-004</a>)(<a name="0040-SP-ASSF-004" href="#0040-SP-ASSF-004">0040-SP-ASSF-004</a>)
+5. A withdrawal can be requested and verified by Vega validator nodes (<a name="0040-ASSF-005" href="#0040-ASSF-005">0040-ASSF-005</a>)(<a name="0040-SP-ASSF-005" href="#0040-SP-ASSF-005">0040-SP-ASSF-005</a>)
+6. multisig withdrawal order signatures from Vega validator nodes can be aggregated at the request of the user (<a name="0040-ASSF-006" href="#0040-ASSF-006">0040-ASSF-006</a>)(<a name="0040-SP-ASSF-006" href="#0040SP--ASSF-006">0040-SP-ASSF-006</a>)
+7. A user can submit the withdrawal order and receive their asset (<a name="0040-ASSF-007" href="#0040-ASSF-007">0040-ASSF-007</a>)(<a name="0040-SP-ASSF-007" href="#0040-SP-ASSF-007">0040-SP-ASSF-007</a>)
+8. Every asset must specify `quantum` and this must be an integer strictly greater than `0` (<a name="0040-ASSF-008" href="#0040-ASSF-008">0040-ASSF-008</a>)(<a name="0040-SP-ASSF-008" href="#0040-SP-ASSF-008">0040-SP-ASSF-008</a>)

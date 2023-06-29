@@ -164,17 +164,17 @@ message NodeVote {
 
 ## Acceptance Criteria
 
-- A valid event is processed by vega (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)
+- A valid event is processed by vega (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)(<a name="0036-SP-BRIE-001" href="#0036-SP-BBRIE-001">0036-SP-BBRIE-001</a>)
   - A transaction is successfully executed on the bridge (e.g deposit)
   - A validator node successfully source the event and emit a chain event transaction on the vega chain
   - The others validators successfully validates the event on the ethereum chain and send a node vote on chain
   - The required amount of node votes, weighted by validator score is received
   - The processing of the event have effect on the network (e.g: for a deposit funds are deposited on an account)
-- A valid duplicated event is processed (<a name="0036-BRIE-002" href="#0036-BRIE-002">0036-BRIE-002</a>)
+- A valid duplicated event is processed (<a name="0036-BRIE-002" href="#0036-BRIE-002">0036-BRIE-002</a>)(<a name="0036-SP-BBRIE-002" href="#0036-SP-BBRIE-002">0036-SP-BBRIE-002</a>)
   - A transaction is successfully executed on the bridge (e.g deposit) and successfully processed by vega
   - A node sends again the chain event after sourcing it
   - The nodes reject this event as duplicated, nothing else happens
-- A invalid event is processed (<a name="0036-BRIE-003" href="#0036-BRIE-003">0036-BRIE-003</a>)
+- A invalid event is processed (<a name="0036-BRIE-003" href="#0036-BRIE-003">0036-BRIE-003</a>)(<a name="0036-SP-BBRIE-003" href="#0036-SP-BBRIE-003">0036-SP-BBRIE-003</a>)
   - A malicious node sends a chain event for a non existing transaction on the bridge
   - The node start validating this event on chain, but cannot find it
   - After a given delay this chain event is rejected, no node votes are being sent by the validators
