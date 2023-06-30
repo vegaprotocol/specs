@@ -106,18 +106,18 @@ There are three priority categories:
 
 ## Acceptance criteria
 
-### Basic happy path test (<a name="0079-TGAP-001" href="#0079-TGAP-001">0079-TGAP-001</a>)
+### Basic happy path test (<a name="0079-TGAP-001" href="#0079-TGAP-001">0079-TGAP-001</a>)(<a name="0079-SP-TGAP-001" href="#0079-SP-TGAP-001">0079-SP-TGAP-001</a>)
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 20`.
 1. Send `100` transactions with default gas cost to a node (e.g. votes on a proposal) and observe that most block have 5 of these transactions each.
 
-### Test max with a market (<a name="0079-TGAP-002" href="#0079-TGAP-002">0079-TGAP-002</a>)
+### Test max with a market (<a name="0079-TGAP-002" href="#0079-TGAP-002">0079-TGAP-002</a>)(<a name="0079-SP-TGAP-002" href="#0079-SP-TGAP-002">0079-SP-TGAP-002</a>)
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position.
 1. Another party submits a transaction to place a limit order. A block will be created containing the transaction (even though the gas cost of a limit order is `1 + 100 x 4 + 2 + 0.1 x 6` which is well over `100`.)
 
-### Test we don't overfill a block with a market (<a name="0079-TGAP-003" href="#0079-TGAP-003">0079-TGAP-003</a>)
+### Test we don't overfill a block with a market (<a name="0079-TGAP-003" href="#0079-TGAP-003">0079-TGAP-003</a>)(<a name="0079-SP-TGAP-003" href="#0079-SP-TGAP-003">0079-SP-TGAP-003</a>)
 
 1. Set `network.transactions.maxgasperblock = 500` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position.
