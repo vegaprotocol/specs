@@ -560,24 +560,24 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-119" href="#0028-GOVE-119">0028-GOVE-119</a>)(<a name="0028-SP-GOVE-119" href="#0028-SP-GOVE-119">0028-SP-GOVE-119</a>)
 - A proposal to transfer tokens between Market insurance pool account and Party account(s) is valid (<a name="0028-GOVE-120" href="#0028-GOVE-120">0028-GOVE-120</a>)(<a name="0028-SP-GOVE-120" href="#0028-SP-GOVE-120">0028-SP-GOVE-120</a>)
 - A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-121" href="#0028-GOVE-121">0028-GOVE-121</a>)(<a name="0028-SP-GOVE-121" href="#0028-SP-GOVE-121">0028-SP-GOVE-121</a>)
+- A proposal to transfer tokens between Market insurance pool account and Network treasury is valid (<a name="0028-GOVE-132" href="#0028-GOVE-132">0028-GOVE-132</a>)(<a name="0028-SP-GOVE-132" href="#0028-SP-GOVE-132">0028-SP-GOVE-132</a>)
 - A proposal to transfer tokens between Market insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-122" href="#0028-GOVE-122">0028-GOVE-122</a>)(<a name="0028-SP-GOVE-122" href="#0028-SP-GOVE-122">0028-SP-GOVE-122</a>)
 - Governance transfer proposals with invalid source or destination account types will get rejected by the blockchain. (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)(<a name="0028-SP-GOVE-077" href="#0028-SP-GOVE-077">0028-SP-GOVE-077</a>)
 - Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)(<a name="0028-SP-GOVE-079" href="#0028-SP-GOVE-079">0028-SP-GOVE-079</a>)
 - Source can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-080" href="#0028-GOVE-080">0028-GOVE-080</a>)(<a name="0028-SP-GOVE-080" href="#0028-SP-GOVE-080">0028-SP-GOVE-080</a>)
 - For proposal source/destination types of Market Insurance the source/destination must be a valid `marketID` else the proposal is rejected by the blockchain. (<a name="0028-GOVE-081" href="#0028-GOVE-081">0028-GOVE-081</a>)(<a name="0028-SP-GOVE-081" href="#0028-SP-GOVE-081">0028-SP-GOVE-081</a>)
 - Type value can only hold “all or nothing" or "best effort” (<a name="0028-GOVE-082" href="#0028-GOVE-082">0028-GOVE-082</a>)(<a name="0028-SP-GOVE-082" href="#0028-SP-GOVE-082">0028-SP-GOVE-082</a>)
-- Transfer amounts will be accepted and processed in asset precision (<a name="0028-GOVE-083" href="#0028-GOVE-083">0028-GOVE-083</a>)(<a name="0028-SP-GOVE-083" href="#0028-SP-GOVE-083">0028-SP-GOVE-083</a>))
+- Transfer amounts will be accepted and processed in asset precision (<a name="0028-GOVE-083" href="#0028-GOVE-083">0028-GOVE-083</a>)(<a name="0028-SP-GOVE-083" href="#0028-SP-GOVE-083">0028-SP-GOVE-083</a>)
 - Asset specified must be a valid asset address else proposal is rejected (<a name="0028-GOVE-084" href="#0028-GOVE-084">0028-GOVE-084</a>)(<a name="0028-SP-GOVE-084" href="#0028-SP-GOVE-084">0028-SP-GOVE-084</a>)
 - Fraction of balance must be submitted as a positive (else will cause the proposal to reject) and will be processed as a fraction of the source accounts balance (<a name="0028-GOVE-085" href="#0028-GOVE-085">0028-GOVE-085</a>)(<a name="0028-SP-GOVE-085" href="#0028-SP-GOVE-085">0028-SP-GOVE-085</a>)
 - Destination Type can be any of the predefined types in the above table (<a name="0028-GOVE-086" href="#0028-GOVE-086">0028-GOVE-086</a>)(<a name="0028-SP-GOVE-086" href="#0028-SP-GOVE-086">0028-SP-GOVE-086</a>)
 - Source and destination type cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-087" href="#0028-GOVE-087">0028-GOVE-087</a>)(<a name="0028-SP-GOVE-087" href="#0028-SP-GOVE-087">0028-SP-GOVE-087</a>)
-- Transfers can be proposed between market insurance accounts but source and destination accounts cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-088" href="#0028-GOVE-088">0028-GOVE-088</a>)(<a name="0028-SP-GOVE-088" href="#0028-SP-GOVE-088">0028SP--GOVE-088</a>)
+- Transfers can be proposed between market insurance accounts but source and destination accounts cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-088" href="#0028-GOVE-088">0028-GOVE-088</a>)(<a name="0028-SP-GOVE-088" href="#0028-SP-GOVE-088">0028-SP-GOVE-088</a>)
 - Destination must be a valid Vega public key for a transfer type of Party else is rejected (<a name="0028-GOVE-089" href="#0028-GOVE-089">0028-GOVE-089</a>)(<a name="0028-SP-GOVE-089" href="#0028-SP-GOVE-089">0028-SP-GOVE-089</a>)
 - Destination can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-090" href="#0028-GOVE-090">0028-GOVE-090</a>)(<a name="0028-SP-GOVE-090" href="#0028-SP-GOVE-090">0028-SP-GOVE-090</a>)
 - For transfer source types of Market Insurance the destination must be a valid market ID  else is rejected (<a name="0028-GOVE-091" href="#0028-GOVE-091">0028-GOVE-091</a>)(<a name="0028-SP-GOVE-091" href="#0028-SP-GOVE-091">0028-SP-GOVE-091</a>)
 - The proposal will allow standard proposal fields to control timings on closing the voting period and enactment time, these will be validated in the same way as other proposals  (<a name="0028-GOVE-092" href="#0028-GOVE-092">0028-GOVE-092</a>)(<a name="0028-SP-GOVE-092" href="#0028-SP-GOVE-092">0028-SP-GOVE-092</a>)
 - For successor markets we allow transfer between Market insurance pool account of parent market to Market insurance pool account of child market (<a name="0028-GOVE-093" href="#0028-GOVE-093">0028-GOVE-093</a>)(<a name="0028-SP-GOVE-093" href="#0028-SP-GOVE-093">0028-SP-GOVE-093</a>)
-
 
 ##### Governance transfer enactment
 
@@ -601,11 +601,14 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 ##### Protocol Upgrade
 
-- Transfer proposals in either a pre or post enactment state are not restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)(<a name="0028-SP-GOVE-102" href="#0028-SP-GOVE-102">0028-SP-GOVE-102</a>)
+- Transfer proposals in either a pre or post enactment state are restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)(<a name="0028-SP-GOVE-102" href="#0028-SP-GOVE-102">0028-SP-GOVE-102</a>)
+- Recurring transfers proposed before an upgrade which start before, during or after an upgrade should complete on the proposed end epoch (<a name="0028-GOVE-130" href="#0028-GOVE-130">0028-GOVE-130</a>)(<a name="0028-SP-GOVE-130" href="#0028-SP-GOVE-130">0028-SP-GOVE-130</a>)
+- One off delivery transfers proposed before an upgrade which are due to start during or after an upgrade should complete either when the network is available again or at the proposed delivery date/time (<a name="0028-GOVE-131" href="#0028-GOVE-131">0028-GOVE-131</a>)(<a name="0028-SP-GOVE-131" href="#0028-SP-GOVE-131">0028-SP-GOVE-131</a>)
 
 #### Checkpoints and Snapshots
 
-- Active governance transfer (one-off or recurring) must be included in checkpoint and snapshot (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)(<a name="0028-SP-GOVE-103" href="#0028-SP-GOVE-103">0028-SP-GOVE-103</a>)
+- Active or dormant governance transfer (one-off or recurring) must be included in checkpoint and where the network is down during the proposed delivery time, the transfer will occur as soon as the network is available. For recurring transfers the transfers spanning the restore will continue until the end epoch. (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)(<a name="0028-SP-GOVE-103" href="#0028-SP-GOVE-103">0028-SP-GOVE-103</a>)
+- Active or dormant governance transfer (one-off or recurring) must be included in snapshots and data nodes which join the network will support retrieval of the transfer data (<a name="0028-GOVE-133" href="#0028-GOVE-133">0028-GOVE-133</a>)(<a name="0028-SP-GOVE-133" href="#0028-SP-GOVE-133">0028-SP-GOVE-133</a>)
 
 ##### Recurring Governance transfers
 
