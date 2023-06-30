@@ -70,11 +70,11 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
 ## Acceptance criteria
 
 - As a user, I can propose a market with a different precision than its settlement asset
-  - This proposal is valid if the precision is NOT greater than the settlement asset (<a name="0070-MKTD-001" href="#0070-MKTD-001">0070-MKTD-001</a>)
-  - This proposal is NOT valid if the precision is greater than the settlement asset (<a name="0070-MKTD-002" href="#0070-MKTD-002">0070-MKTD-002</a>)
-- As a user all orders placed (either directly or through LP) are shown in events with prices in market precision (<a name="0070-MKTD-003" href="#0070-MKTD-003">0070-MKTD-003</a>)
-- As a user all transfers (margin top-up, release, MTM settlement) are calculated and communicated (via events) in asset precision (<a name="0070-MKTD-004" href="#0070-MKTD-004">0070-MKTD-004</a>)
-- As a user I should see the market data prices using market precision. (<a name="0070-MKTD-005" href="#0070-MKTD-005">0070-MKTD-005</a>)
-- Price bounds are calculated in asset precision, but enforced rounded to the closest value in market precision in range (<a name="0070-MKTD-006" href="#0070-MKTD-006">0070-MKTD-006</a>)
-- As a user, offsets specified in pegged orders and LP shapes represent the smallest value according to the market precision (<a name="0070-MKTD-007" href="#0070-MKTD-007">0070-MKTD-007</a>)
-- Trades prices, like orders, are shown in market precision. The transfers and margin requirements are in asset precision. ( <a name="0070-MKTD-008" href="#0070-MKTD-008">0070-MKTD-008</a>)
+  - This proposal is valid if the precision is NOT greater than the settlement asset (<a name="0070-MKTD-001" href="#0070-MKTD-001">0070-MKTD-001</a>)(<a name="0070-SP-MKTD-001" href="#0070-SP-MKTD-001">0070-SP-MKTD-001</a>)
+  - This proposal is NOT valid if the precision is greater than the settlement asset (<a name="0070-MKTD-002" href="#0070-MKTD-002">0070-MKTD-002</a>)(<a name="0070-SP-MKTD-002" href="#0070-SP-MKTD-002">0070-SP-MKTD-002</a>)
+- As a user all orders placed (either directly or through LP) are shown in events with prices in market precision (<a name="0070-MKTD-003" href="#0070-MKTD-003">0070-MKTD-003</a>)(<a name="0070-SP-MKTD-003" href="#0070-SP-MKTD-003">0070-SP-MKTD-003</a>)
+- As a user all transfers (margin top-up, release, MTM settlement) are calculated and communicated (via events) in asset precision (<a name="0070-MKTD-004" href="#0070-MKTD-004">0070-MKTD-004</a>)(<a name="0070-SP-MKTD-004" href="#0070-SP-MKTD-004">0070-SP-MKTD-004</a>)
+- As a user I should see the market data prices using market precision. (<a name="0070-MKTD-005" href="#0070-MKTD-005">0070-MKTD-005</a>)(<a name="0070-SP-MKTD-005" href="#0070-SP-MKTD-005">0070-SP-MKTD-005</a>)
+- Price bounds are calculated in asset precision, but enforced rounded to the closest value in market precision in range (<a name="0070-MKTD-006" href="#0070-MKTD-006">0070-MKTD-006</a>)(<a name="0070-SP-MKTD-006" href="#0070-SP-MKTD-006">0070-SP-MKTD-006</a>)
+- As a user, offsets specified in pegged orders and LP shapes represent the smallest value according to the market precision (<a name="0070-MKTD-007" href="#0070-MKTD-007">0070-MKTD-007</a>)(<a name="0070-SP-MKTD-007" href="#0070-SP-MKTD-007">0070-SP-MKTD-007</a>)
+- Trades prices, like orders, are shown in market precision. The transfers and margin requirements are in asset precision. ( <a name="0070-MKTD-008" href="#0070-MKTD-008">0070-MKTD-008</a>)( <a name="0070-MKTD-008" href="#0070-SP-MKTD-008">0070-SP-MKTD-008</a>)
