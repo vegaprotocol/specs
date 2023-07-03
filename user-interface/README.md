@@ -7,8 +7,9 @@ The acceptance criteria are organized into files, with each file representing a 
 Each file contains blocks that relate to a low level user task. The block states what the user is trying to do or the context they are in, has a bullet for each thing they need, then states why they are doing it...
 
 > When doing a thing, I...
->  - **must** be able to see some particular number [0000-CODE-000]
-> ...so I can decide if I want to continue.
+>
+> - **must** be able to see some particular number [0000-CODE-000]
+>   ...so I can decide if I want to continue.
 
 Each bullet is worded so that it contains a **must**, **should**, **could**, or **would like to**. This gives app developers some indication of the priority of user needs. At the end of each bullet is a code that can be referenced in tests etc.
 
@@ -69,6 +70,7 @@ These files contain generic user needs for interacting with wallets that are tru
 - `6003-ORDB` [Analyze Order book](6003-ORDB-order_book.md) `TODO`
 - `6004-PHIS` [Analyze price history](6004-PHIS-price_history.md) `TODO`
 - `6005-THIS` [Analyze trade history](6005-THIS-trade_history.md) `TODO`
+- `6006-CHAR` [View chart](6006-CHAR-chart.md)
 
 ## `7000` Collateral, Orders, Positions and Fills
 
@@ -83,6 +85,7 @@ These files contain generic user needs for interacting with wallets that are tru
 
 - `8001-BLOX` [Transaction and block content](8001-BLOX-transaction_and_blocks.md) `TODO`
 -
+
 ## Appendixes
 
 - [Display display rules](9001-DATA-data_display.md)
