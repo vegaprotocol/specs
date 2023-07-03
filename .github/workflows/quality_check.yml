@@ -68,8 +68,8 @@ jobs:
 
       - name: "Run Check AC codes"
         run: |
-          docker run -v $PWD:/workspace ghcr.io/vegaprotocol/approbation:main check-filenames --specs="{/workspace/non-protocol-specs/**/*.md,/workspace/protocol/**/*.md}"
+          docker run -v $PWD:/workspace ghcr.io/vegaprotocol/approbation:main check-codes --specs="{/workspace/non-protocol-specs/**/*.md,/workspace/protocol/**/*.md}"
 
       - name: "Run Check file names"
         run: |
-          docker run -v $PWD:/workspace ghcr.io/vegaprotocol/approbation:main check-codes --specs="{/workspace/non-protocol-specs/**/*.md,/workspace/protocol/**/*.md}"
+          docker run -v $PWD:/workspace ghcr.io/vegaprotocol/approbation:main check-filenames --specs="{/workspace/non-protocol-specs/**/*.md,/workspace/protocol/**/*.md}"
