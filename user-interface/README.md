@@ -70,7 +70,8 @@ These files contain generic user needs for interacting with wallets that are tru
 - `6003-ORDB` [Analyze Order book](6003-ORDB-order_book.md) `TODO`
 - `6004-PHIS` [Analyze price history](6004-PHIS-price_history.md) `TODO`
 - `6005-THIS` [Analyze trade history](6005-THIS-trade_history.md) `TODO`
-- `6006-CHAR` [View chart](6006-CHAR-chart.md)
+- `6006-DEPC` [View depth chart](6006-DEPC-chart.md)
+- `6007-CHAR` [View chart](6007-CHAR-chart.md)
 
 ## `7000` Collateral, Orders, Positions and Fills
 
