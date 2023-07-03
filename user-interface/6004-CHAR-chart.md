@@ -64,80 +64,80 @@
 
 - **Must** body is green if the close is higher than the open (<a name="6004-CHAR-017" href="#6004-CHAR-017">6004-CHAR-017</a>)
 - **Must** body is red if the close is lower than the open (<a name="6004-CHAR-018" href="#6004-CHAR-018">6004-CHAR-018</a>)
-- **Must** show open price (<a name="6004-CHAR-020" href="#6004-CHAR-020">6004-CHAR-020</a>)
-- **Must** show high price (<a name="6004-CHAR-021" href="#6004-CHAR-021">6004-CHAR-021</a>)
-- **Must** show low price (<a name="6004-CHAR-022" href="#6004-CHAR-022">6004-CHAR-022</a>)
-- **Must** show close price (<a name="6004-CHAR-023" href="#6004-CHAR-023">6004-CHAR-023</a>)
+- **Must** show open price (<a name="6004-CHAR-019" href="#6004-CHAR-019">6004-CHAR-019</a>)
+- **Must** show high price (<a name="6004-CHAR-020" href="#6004-CHAR-020">6004-CHAR-020</a>)
+- **Must** show low price (<a name="6004-CHAR-021" href="#6004-CHAR-021">6004-CHAR-021</a>)
+- **Must** show close price (<a name="6004-CHAR-022" href="#6004-CHAR-022">6004-CHAR-022</a>)
 
 ## Line
 
-- **Must** show line on the chart with the line being the the last price (<a name="6004-CHAR-024" href="#6004-CHAR-024">6004-CHAR-024</a>)
+- **Must** show line on the chart with the line being the the last price (<a name="6004-CHAR-023" href="#6004-CHAR-023">6004-CHAR-023</a>)
 
 ## OHLC
 
-- **Must** show open price (<a name="6004-CHAR-026" href="#6004-CHAR-026">6004-CHAR-026</a>)
-- **Must** show high price (<a name="6004-CHAR-027" href="#6004-CHAR-027">6004-CHAR-027</a>)
-- **Must** show low price (<a name="6004-CHAR-028" href="#6004-CHAR-028">6004-CHAR-028</a>)
-- **Must** show close price (<a name="6004-CHAR-029" href="#6004-CHAR-029">6004-CHAR-029</a>)
-- **Must** show in green if the close is higher than the open (<a name="6004-CHAR-030" href="#6004-CHAR-030">6004-CHAR-030</a>)
-- **Must** show in red if the close is lower than the open (<a name="6004-CHAR-031" href="#6004-CHAR-031">6004-CHAR-031</a>)
+- **Must** show open price (<a name="6004-CHAR-024" href="#6004-CHAR-024">6004-CHAR-024</a>)
+- **Must** show high price (<a name="6004-CHAR-025" href="#6004-CHAR-025">6004-CHAR-025</a>)
+- **Must** show low price (<a name="6004-CHAR-026" href="#6004-CHAR-026">6004-CHAR-026</a>)
+- **Must** show close price (<a name="6004-CHAR-027" href="#6004-CHAR-027">6004-CHAR-027</a>)
+- **Must** show in green if the close is higher than the open (<a name="6004-CHAR-28" href="#6004-CHAR-028">6004-CHAR-028</a>)
+- **Must** show in red if the close is lower than the open (<a name="6004-CHAR-029" href="#6004-CHAR-029">6004-CHAR-029</a>)
 
 # Overlays
 
 ## Bollinger bands
 
-- **Must** show upper band (<a name="6004-CHAR-032" href="#6004-CHAR-032">6004-CHAR-032</a>)
-- **Must** show lower band (<a name="6004-CHAR-033" href="#6004-CHAR-033">6004-CHAR-033</a>)
-- **Must** show band values at time of cursor position (<a name="6004-CHAR-034" href="#6004-CHAR-034">6004-CHAR-034</a>)
+- **Must** show upper band (<a name="6004-CHAR-030" href="#6004-CHAR-030">6004-CHAR-030</a>)
+- **Must** show lower band (<a name="6004-CHAR-031" href="#6004-CHAR-031">6004-CHAR-031</a>)
+- **Must** show band values at time of cursor position (<a name="6004-CHAR-032" href="#6004-CHAR-032">6004-CHAR-032</a>)
 
 ## Envelope
 
-- **Must** show upper line (<a name="6004-CHAR-035" href="#6004-CHAR-035">6004-CHAR-035</a>)
-- **Must** show lower line (<a name="6004-CHAR-036" href="#6004-CHAR-036">6004-CHAR-036</a>)
-- **Must** show line values at time of cursor position (<a name="6004-CHAR-037" href="#6004-CHAR-037">6004-CHAR-037</a>)
+- **Must** show upper line (<a name="6004-CHAR-033" href="#6004-CHAR-033">6004-CHAR-033</a>)
+- **Must** show lower line (<a name="6004-CHAR-034" href="#6004-CHAR-034">6004-CHAR-034</a>)
+- **Must** show line values at time of cursor position (<a name="6004-CHAR-035" href="#6004-CHAR-035">6004-CHAR-035</a>)
 
 ## EMA
+
+- **Must** show line (<a name="6004-CHAR-036" href="#6004-CHAR-036">6004-CHAR-036</a>)
+- **Must** show line value at time of cursor position (<a name="6004-CHAR-037" href="#6004-CHAR-037">6004-CHAR-037</a>)
+
+## Moving Average
 
 - **Must** show line (<a name="6004-CHAR-038" href="#6004-CHAR-038">6004-CHAR-038</a>)
 - **Must** show line value at time of cursor position (<a name="6004-CHAR-039" href="#6004-CHAR-039">6004-CHAR-039</a>)
 
-## Moving Average
-
-- **Must** show line (<a name="6004-CHAR-040" href="#6004-CHAR-040">6004-CHAR-040</a>)
-- **Must** show line value at time of cursor position (<a name="6004-CHAR-041" href="#6004-CHAR-041">6004-CHAR-041</a>)
-
 ## Price monitoring bounds
 
-- **Must** show upper line (<a name="6004-CHAR-042" href="#6004-CHAR-042">6004-CHAR-042</a>)
-- **Must** show lower line (<a name="6004-CHAR-043" href="#6004-CHAR-043">6004-CHAR-043</a>)
-- **Must** show line values at time of cursor position (<a name="6004-CHAR-044" href="#6004-CHAR-044">6004-CHAR-044</a>)
+- **Must** show upper line (<a name="6004-CHAR-040" href="#6004-CHAR-040">6004-CHAR-040</a>)
+- **Must** show lower line (<a name="6004-CHAR-041" href="#6004-CHAR-041">6004-CHAR-041</a>)
+- **Must** show line values at time of cursor position (<a name="6004-CHAR-042" href="#6004-CHAR-042">6004-CHAR-042</a>)
 
 # Studies
 
 ## Eldar-ray
 
-- **Must** show bear power line (<a name="6004-CHAR-045" href="#6004-CHAR-045">6004-CHAR-045</a>)
-- **Must** show bull power line (<a name="6004-CHAR-046" href="#6004-CHAR-046">6004-CHAR-046</a>)
-- **Must** show line values at time of cursor position (<a name="6004-CHAR-047" href="#6004-CHAR-047">6004-CHAR-047</a>)
+- **Must** show bear power line (<a name="6004-CHAR-043" href="#6004-CHAR-043">6004-CHAR-043</a>)
+- **Must** show bull power line (<a name="6004-CHAR-044" href="#6004-CHAR-044">6004-CHAR-044</a>)
+- **Must** show line values at time of cursor position (<a name="6004-CHAR-045" href="#6004-CHAR-045">6004-CHAR-045</a>)
 
 ## Force index
 
-- **Must** show force line (<a name="6004-CHAR-048" href="#6004-CHAR-048">6004-CHAR-048</a>)
-- **Must** show line value at time of cursor position (<a name="6004-CHAR-049" href="#6004-CHAR-049">6004-CHAR-049</a>)
+- **Must** show force line (<a name="6004-CHAR-046" href="#6004-CHAR-046">6004-CHAR-046</a>)
+- **Must** show line value at time of cursor position (<a name="6004-CHAR-047" href="#6004-CHAR-047">6004-CHAR-047</a>)
 
 ## MACD
 
-- **Must** show MACD line (<a name="6004-CHAR-050" href="#6004-CHAR-050">6004-CHAR-050</a>)
-- **Must** show signal line (<a name="6004-CHAR-051" href="#6004-CHAR-051">6004-CHAR-051</a>)
-- **Must** show histogram (<a name="6004-CHAR-052" href="#6004-CHAR-052">6004-CHAR-052</a>)
-- **Must** show line values at time of cursor position (<a name="6004-CHAR-053" href="#6004-CHAR-053">6004-CHAR-053</a>)
+- **Must** show MACD line (<a name="6004-CHAR-048" href="#6004-CHAR-048">6004-CHAR-048</a>)
+- **Must** show signal line (<a name="6004-CHAR-049" href="#6004-CHAR-049">6004-CHAR-049</a>)
+- **Must** show histogram (<a name="6004-CHAR-050" href="#6004-CHAR-050">6004-CHAR-050</a>)
+- **Must** show line values at time of cursor position (<a name="6004-CHAR-051" href="#6004-CHAR-051">6004-CHAR-051</a>)
 
 ## RSI
 
-- **Must** show RSI line (<a name="6004-CHAR-054" href="#6004-CHAR-054">6004-CHAR-054</a>)
-- **Must** show line value at time of cursor position (<a name="6004-CHAR-055" href="#6004-CHAR-055">6004-CHAR-055</a>)
+- **Must** show RSI line (<a name="6004-CHAR-052" href="#6004-CHAR-052">6004-CHAR-052</a>)
+- **Must** show line value at time of cursor position (<a name="6004-CHAR-053" href="#6004-CHAR-053">6004-CHAR-053</a>)
 
 ## Volume
 
-- **Must** show volume bars (<a name="6004-CHAR-056" href="#6004-CHAR-056">6004-CHAR-056</a>)
-- **Must** show bar value at time of cursor position (<a name="6004-CHAR-057" href="#6004-CHAR-057">6004-CHAR-057</a>)
+- **Must** show volume bars (<a name="6004-CHAR-054" href="#6004-CHAR-054">6004-CHAR-054</a>)
+- **Must** show bar value at time of cursor position (<a name="6004-CHAR-055" href="#6004-CHAR-055">6004-CHAR-055</a>)

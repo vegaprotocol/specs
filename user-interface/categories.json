@@ -36,7 +36,7 @@
     "specs": ["5001-LIQF", "5002-LIQP", "5003-LIQI"]
   },
   "Markets & Analysis": {
-    "specs": ["6001-MARK", "6002-MDET", "6003-ORDB", "6004-PHIS", "6005-THIS"]
+    "specs": ["6001-MARK", "6002-MDET", "6003-ORDB", "6004-PHIS", "6005-THIS", "6004-TRAN"]
   },
   "Collateral & Orders & Positions & Fills": {
     "specs": ["7001-COLL", "7002-SORD", "7003-MORD", "7004-POSI", "7005-FILL", "7006-FEES"]
