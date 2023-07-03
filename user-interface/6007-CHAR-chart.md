@@ -2,30 +2,30 @@
 
 ## Display options
 
-- **Must** be able to change time interval from a list of intervals (<a name="6007-CHAR-001" href="#6007-CHAR-001">6007-CHAR-001</a>) :
+- **Must** be able to change time interval from a list of intervals (<a name="6007-CHAR-001" href="#6007-CHAR-001">6007-CHAR-001</a>)
   - 1m
   - 5m
   - 15m
   - 1H
   - 6H
   - 1D
-- **Must** be able to change display type from a list of display types (<a name="6007-CHAR-002" href="#6007-CHAR-002">6007-CHAR-002</a>):
+- **Must** be able to change display type from a list of display types (<a name="6007-CHAR-002" href="#6007-CHAR-002">6007-CHAR-002</a>)
   - Mountain
   - Candlestick
   - Line
   - OHLC
-- **Must** icon will change depending on the display type selected (<a name="6007-CHAR-003" href="#6007-CHAR-003">6007-CHAR-003</a>):
+- **Must** icon will change depending on the display type selected (<a name="6007-CHAR-003" href="#6007-CHAR-003">6007-CHAR-003</a>)
   - Mountain
   - Candlestick
   - Line
   - OHLC
-- **Must** be able to add overlays by selecting from a list of overlays (<a name="6007-CHAR-004" href="#6007-CHAR-004">6007-CHAR-004</a>):
+- **Must** be able to add overlays by selecting from a list of overlays (<a name="6007-CHAR-004" href="#6007-CHAR-004">6007-CHAR-004</a>)
   - Bollinger bands
   - Envelope
   - EMA
   - Moving Average
   - Price monitoring bounds
-- **Must** be able to add studies by selecting from a list of studies (<a name="6007-CHAR-005" href="#6007-CHAR-005">6007-CHAR-005</a>):
+- **Must** be able to add studies by selecting from a list of studies (<a name="6007-CHAR-005" href="#6007-CHAR-005">6007-CHAR-005</a>)
   - Eldar-ray
   - Force index
   - MACD
@@ -38,7 +38,7 @@
 
 ## Price and Time
 
-- **Must** see details of price from where my mouse cursor is on the chart(<a name="6007-CHAR-010" href="#6007-CHAR-010">6007-CHAR-010</a>):
+- **Must** see details of price from where my mouse cursor is on the chart(<a name="6007-CHAR-010" href="#6007-CHAR-010">6007-CHAR-010</a>)
 
   - Time (24h)
   - Date (dd/MMM/yyyy)
@@ -79,7 +79,7 @@
 - **Must** show high price (<a name="6007-CHAR-025" href="#6007-CHAR-025">6007-CHAR-025</a>)
 - **Must** show low price (<a name="6007-CHAR-026" href="#6007-CHAR-026">6007-CHAR-026</a>)
 - **Must** show close price (<a name="6007-CHAR-027" href="#6007-CHAR-027">6007-CHAR-027</a>)
-- **Must** show in green if the close is higher than the open (<a name="6007-CHAR-28" href="#6007-CHAR-028">6007-CHAR-028</a>)
+- **Must** show in green if the close is higher than the open (<a name="6007-CHAR-028" href="#6007-CHAR-028">6007-CHAR-028</a>)
 - **Must** show in red if the close is lower than the open (<a name="6007-CHAR-029" href="#6007-CHAR-029">6007-CHAR-029</a>)
 
 # Overlays
