@@ -331,4 +331,12 @@ Note:
 
 ### Checkpoint
 
-- When a checkpoint is restored the bonus account, bond account and fee account are included and when so that when a new validator node joins the network they can use the two accounts types Bond and Fee account (<a name="0044-LIME-032" href="#0044-LIME-032">0044-LIME-032</a>)
+- SLA bonus and fee accounts must be included in the checkpoint and where the network is down any rewards accrued or fees to be paid during the down time will be actioned when the network is available  (<a name="0044-LIME-032" href="#0044-LIME-032">0044-LIME-032</a>)
+
+#### Network History - Data node restored from network history segments
+
+- A datanode restored from network history will contain any bonus and fee accounts created prior to the restore and these can be retrieved via APIs on the new datanode. (<a name="0044-LIME-032" href="#0044-LIME-032">0044-LIME-032</a>)
+- 
+#### Network param validation
+
+- boundary values are respected
