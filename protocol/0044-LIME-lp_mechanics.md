@@ -327,24 +327,24 @@ Note:
 
 ### Protocol upgrade
 
-- After a protocol upgrade the bonus accounts, fee accounts and their balances are retained (<a name="0044-LIME-032" href="#0044-LIME-032">0044-LIME-032</a>)
+- After a protocol upgrade the bonus accounts, fee accounts and their balances are retained (<a name="0044-LIME-033" href="#0044-LIME-033">0044-LIME-033</a>)
 
 ### Checkpoint
 
-- Bonus and fee accounts must be included in the checkpoint and where the network is down 
-  - Rewards accrued during the down time will be actioned when the network is available (<a name="0044-LIME-033" href="#0044-LIME-033">0044-LIME-033</a>)
-  - Fees to be paid during the down time will be actioned when the network is available  (<a name="0044-LIME-034" href="#0044-LIME-034">0044-LIME-034</a>)
+- Bonus and fee accounts must be included in the checkpoint and where the network is down
+  - Rewards accrued during the down time will be actioned when the network is available (<a name="0044-LIME-034" href="#0044-LIME-034">0044-LIME-034</a>)
+  - Fees to be paid during the down time will be actioned when the network is available  (<a name="0044-LIME-035" href="#0044-LIME-035">0044-LIME-035</a>)
 
 #### Network History - Data node restored from network history segments
 
-- A datanode restored from network history will contain any bonus and fee accounts created prior to the restore and these can be retrieved via APIs on the new datanode. (<a name="0044-LIME-032" href="#0044-LIME-032">0044-LIME-032</a>)
- 
-#### Network param validation
+- A datanode restored from network history will contain any bonus and fee accounts created prior to the restore and these can be retrieved via APIs on the new datanode. (<a name="0044-LIME-036" href="#0044-LIME-036">0044-LIME-036</a>)
+
+#### Network parameters validation
 
 - Boundary values are respected for the network parameters
-  - `market.liquidityV2.bondPenaltyParameter` valid values: `>=0`, `<=1000` default value of `0.1` (<a name="0044-LIME-035" href="#0044-LIME-035">0044-LIME-035</a>)
-  - `market.liquidityV2.earlyExitPenalty` valid values: `>=0`, `<=1000` default value of `0.1`  (<a name="0044-LIME-036" href="#0044-LIME-036">0044-LIME-036</a>)
-  - `market.liquidityV2.maximumLiquidityFeeFactorLevel` valid values: `>=0`, `<=1` default value of `1`  (<a name="0044-LIME-037" href="#0044-LIME-037">0044-LIME-037</a>)
-  - `market.liquidityV2.sla.nonPerformanceBondPenaltySlope` valid values: `>=0`, `<=1000` default value of `2`  (<a name="0044-LIME-038" href="#0044-LIME-038">0044-LIME-038</a>)
-  - `market.liquidityV2.sla.nonPerformanceBondPenaltyMax` valid values: `>=0`, `<=1` default value of `0.5`  (<a name="0044-LIME-039" href="#0044-LIME-039">0044-LIME-039</a>)
-  - `market.liquidityV2.stakeToCcyVolume` valid values: `>=0`, `<=100` default value of `1`   (<a name="0044-LIME-040" href="#0044-LIME-040">0044-LIME-040</a>)
+  - `market.liquidityV2.bondPenaltyParameter` valid values: `>=0`, `<=1000` default value of `0.1` (<a name="0044-LIME-037" href="#0044-LIME-037">0044-LIME-037</a>)
+  - `market.liquidityV2.earlyExitPenalty` valid values: `>=0`, `<=1000` default value of `0.1`  (<a name="0044-LIME-038" href="#0044-LIME-038">0044-LIME-038</a>)
+  - `market.liquidityV2.maximumLiquidityFeeFactorLevel` valid values: `>=0`, `<=1` default value of `1`  (<a name="0044-LIME-039" href="#0044-LIME-039">0044-LIME-039</a>)
+  - `market.liquidityV2.sla.nonPerformanceBondPenaltySlope` valid values: `>=0`, `<=1000` default value of `2`  (<a name="0044-LIME-040" href="#0044-LIME-040">0044-LIME-040</a>)
+  - `market.liquidityV2.sla.nonPerformanceBondPenaltyMax` valid values: `>=0`, `<=1` default value of `0.5`  (<a name="0044-LIME-041" href="#0044-LIME-041">0044-LIME-041</a>)
+  - `market.liquidityV2.stakeToCcyVolume` valid values: `>=0`, `<=100` default value of `1`   (<a name="0044-LIME-042" href="#0044-LIME-042">0044-LIME-042</a>)
