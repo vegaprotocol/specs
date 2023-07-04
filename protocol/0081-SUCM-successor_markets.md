@@ -77,6 +77,8 @@ A new market proposal sets parent market Id to a market that has settled. The pa
 
 Successor markets cannot be enacted if the parent market is still in the "proposed" state. Successor market proposals can be submitted when the parent market is still in proposed state. When the voting period for the successor market ends then either: a) the parent market is already enacted in which case the successor market moves from "proposed" in to opening auction/"pending" state. Or the parent market is still in "proposed" state in which case successor market is rejected. (<a name="0081-SUCM-008" href="#0081-SUCM-008">0081-SUCM-008</a>)
 
+Successor markets which are proposed whilst the parent is also still in a "proposed" state, will be rejected if the parent is rejected. (<a name="0081-SUCM-027" href="#0081-SUCM-027">0081-SUCM-027</a>)
+
 Successor markets can be enacted when the parent market is in opening auction. There is no virtual stake to copy over, and no insurance pool balance to transfer. (<a name="0081-SUCM-009" href="#0081-SUCM-009">0081-SUCM-009</a>)
 
 A successor market proposal can be enacted when the parent market is in one of the following states: Suspended, Active, Trading terminated or Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
@@ -89,16 +91,23 @@ Propose a successor market which specifies a parent which is settled, and for wh
 
 ### APIs
 
-It is possible to fetch a market "parent / successor chain" containing the initial market and the full successor line (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
+It is possible to fetch a market "parent / successor chain" containing the initial market and the full successor line via:
+- GRPC (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
+- GraphQL (<a name="0081-SUCM-023" href="#0081-SUCM-023">0081-SUCM-023</a>)
+- REST (<a name="0081-SUCM-024" href="#0081-SUCM-024">0081-SUCM-024</a>)
 
 When fetching a market that is part of a "parent / successor chain", we should see both the parent and each successor `marketID` (<a name="0081-SUCM-013" href="#0081-SUCM-013">0081-SUCM-013</a>)
 
 
-### Snapshots / checkpoints
+### Snapshots / checkpoints / Protocol Upgrade / Network History
 
 After a LNL checkpoint restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-016" href="#0081-SUCM-016">0081-SUCM-016</a>)
 
 After snapshot restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-017" href="#0081-SUCM-017">0081-SUCM-017</a>)
+
+A market which has expired before a protocol upgrade is still eligible to be used as a successor market after the upgrade, if it is inside the successor time window (<a name="0081-SUCM-025" href="#0081-SUCM-025">0081-SUCM-025</a>)
+
+A data node restored from network history includes the full succession chain for a market. (<a name="0081-SUCM-026" href="#0081-SUCM-026">0081-SUCM-026</a>)
 
 
 ### Virtual stake
