@@ -342,10 +342,10 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Submit the trading terminated transaction and settlement date transaction as set out in the proposal and observe the final settlement cashflows for the parties with positions.  (<a name="0073-LIMN-050" href="#0073-LIMN-050">0073-LIMN-050</a>)
 1. It's not possible to submit orders or LP provisions to this market).  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>)
 
-### Test case 17: Markets with internal time trigger for trading terminated that rings between shutdown and restore
+### Test case 17: Markets with internal time trigger for trading terminated that fires between shutdown and restore
 
 1. Propose, enact a market with some trading terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties.
-1. System saves LNL checkpoint before the trading terminated trigger rings.
+1. System saves LNL checkpoint before the trading terminated trigger is set off.
 1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung.
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>); if it exists it in `cancelled` state.
 1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>)
