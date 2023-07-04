@@ -58,7 +58,7 @@ A governance proposal may be submitted to transfer funds on enactment from the o
   - The Network Treasury accounts API returns the correct balance for the new account (<a name="0055-TREA-007" href="#0055-TREA-007">0055-TREA-007</a>)
 - The network treasury account balances [are restored after a network restart](./0073-LIMN-limited_network_life.md)  (<a name="0055-TREA-010" href="#0055-TREA-010">0055-TREA-010</a>)
 
-### Cosmic Elevator 
+### Cosmic Elevator
 
 - If a governance proposal for a single transfer from a network treasury account to some other account is enacted then
   - if the amount in the proposal greater than or equal amount in network treasury for the asset then the entire balance of the net treasury account is transferred to the destination account (party address). (<a name="0055-COSMICELEVATOR-050" href="#0055-COSMICELEVATOR-050">0055-COSMICELEVATOR-050</a>)
