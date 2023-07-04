@@ -275,7 +275,7 @@ Enactment of an asset modification proposal is:
 
 The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal.
 
-| Source type | Destination type | Governance initiated transfer permitted |
+| Source type | Destination type | Transfer permitted |
 | --- | --- | --- |
 | Party account (any type) | Any | No |
 | Network treasury | Network treasury | No  |
