@@ -12,7 +12,7 @@ Markets on Vega are proposed, permissionless, using the [governance mechanism](.
 
 Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-market) undergo certain additional validations. Note the distinctions between a proposal that is `valid` or `accepted` and a proposal that is `sucessful`. A `valid` proposal has passed or will pass validation checks; an `accepted` proposal has been received in a Vega transaction and passed validation checks; and a `successful` proposal has been voted for and won. The proposal becomes `enacted` when the action specified (i.e. for the purposes of this spec, market creation/update/close).
 
-All markets are proposed without any [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md).
+All markets are proposed without any [liquidity commitment](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction).
 If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date.
 However, the market may stay in an opening auction past the proposed `enactment` date until at least on party makes a liquidity commitment that meets criteria for exiting [liquidity auction](./0035-LIQM-liquidity_monitoring.md).
 
@@ -32,7 +32,7 @@ A market can progress through a number of statuses through its life. The overall
 | Trading Terminated |   No           | No trading          | Defined by the product (i.e. from a product parameter, specified in market definition, giving close date/time) | Settlement event commences
 | Settled            |   No           | No trading          | Settlement triggered and completed as defined by product                                      | N/A
 
-[1] Accepting LPs: it is possible to make or amend [Liquidity Provision Commitments](./0038-OLIQ-liquidity_provision_order_type.md)
+[1] Accepting LPs: it is possible to make or amend [Liquidity Provision Commitments](./0044-LIME-lp_mechanics.md).
 
 ![Life cycle flow diagram](./0043-market-lifecycle-flow-diagram.svg)
 
@@ -42,7 +42,7 @@ Note that there is no governance proposal to cancel a market. However it is poss
 
 ### Proposed
 
-All Markets are first [proposed via the governance mechanism](./0028-GOVE-governance.md#1-create-market). Once the valid Market Proposal is accepted *the Market (see [market framework](./0001-MKTF-market_framework.md)) is created* and can accept [Liquidity Provision Commitments](./0038-OLIQ-liquidity_provision_order_type.md), voting begins and its state is `proposed`.
+All Markets are first [proposed via the governance mechanism](./0028-GOVE-governance.md#1-create-market). Once the valid Market Proposal is accepted *the Market (see [market framework](./0001-MKTF-market_framework.md)) is created* and can accept [Liquidity Provision Commitments](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction), voting begins and its state is `proposed`.
 
 **Entry:**
 
