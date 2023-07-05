@@ -21,13 +21,13 @@ This data is a snapshot of the state of the market at a point in time.
 
 ## Guide-level explanation
 
-Due to supporting dynamic orders such as [pegged orders](0037-OPEG-pegged_orders.md) and [LP provision orders](0038-OLIQ-liquidity_provision_order_type.md) the main market data fields are split up into two parts. Normal values and static values. Normal values for **Mid price**, **Best bid price** and **Best offer price** take into account all orders on the book (both normal and dynamic). Static values are calculated using only non-dynamic orders and so will not count any pegged orders in the calculation.
+Due to supporting dynamic orders such as [pegged orders](0037-OPEG-pegged_orders.md), the main market data fields are split up into two parts. Normal values and static values. Normal values for **Mid price**, **Best bid price** and **Best offer price** take into account all orders on the book (both normal and dynamic). Static values are calculated using only non-dynamic orders and so will not count any pegged orders in the calculation.
 
 ## Reference-level explanation
 
 ### Definition of dynamic orders
 
-A "dynamic" order is either a [pegged order](0037-OPEG-pegged_orders.md) or orders that are placed on the book by Vega as part of the [LP liquidity provision order](0038-OLIQ-liquidity_provision_order_type.md).
+A "dynamic" order is a [pegged order](0037-OPEG-pegged_orders.md).
 
 ### Market data fields
 
