@@ -374,13 +374,13 @@ Any type of market (either fixed expiry market or perpetual) can be closed via a
 
 A proposal to close a market contains:
 
-1. final settlement price (not required for spot markets)
+1. final settlement price (not required for spot markets) formatted accounting for market's decimal places
 
 Once market is closed the process cannot be reversed. Note that this implies that once a governance proposal to close the market has been voted in the market will definitely close at the enactment time of that vote at the latest. While the market is still open it's still possible to submit additional governance votes to close the market, however they'll only have any effect if their enactment date is prior to that of the market closure proposal which has already passed.
 
 If the market is in an auction of any type excluding the opening auction at the time the market closure governance proposal gets enacted, then the auction should uncross immediately, any trades resulting from it should be generated at the auction uncrossing price and then the system should proceed to close the market using the price (if applicable) provided by the proposal being enacted. If the market is in opening auction when the governance proposal to close it gets enacted then auction shouldn't uncross, market closes trivially as no trades have yet been generated.
 
-Attempting to enact the market closure governance proposal on a market in a `settled` [state](./0043-MKTL-market_lifecycle.md#market-status-descriptions) has no effect. When closing a market which needs the final price with a governance vote it's always the price supplied with the governance vote being enacted that gets used, even if the oracle price is available at that time.
+Attempting to enact the market closure governance proposal on a market in a `settled` [state](./0043-MKTL-market_lifecycle.md#market-status-descriptions) has no effect. When closing a market which needs the final price with a governance vote it's always the price supplied with the governance vote being enacted that gets used, even if the oracle price is available at that time. Please note that the price supplied with the vote needs no further conversion as it's already specified in market decimal places.
 
 The state of a market successfully closed by the governance vote should be `closed`.
 
