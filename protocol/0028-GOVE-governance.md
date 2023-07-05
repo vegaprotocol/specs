@@ -562,12 +562,10 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - A proposal to transfer tokens between Network treasury and Party general account(s) is valid (<a name="0028-GOVE-128" href="#0028-GOVE-128">0028-GOVE-128</a>)
 - A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-119" href="#0028-GOVE-119">0028-GOVE-119</a>)
 - A proposal to transfer tokens between Market insurance pool account and Party account(s) is valid (<a name="0028-GOVE-120" href="#0028-GOVE-120">0028-GOVE-120</a>)
-- A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-121" href="#0028-GOVE-121">0028-GOVE-121</a>)
 - A proposal to transfer tokens between Market insurance pool account and Network treasury is valid (<a name="0028-GOVE-132" href="#0028-GOVE-132">0028-GOVE-132</a>)
 - A proposal to transfer tokens between Market insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-122" href="#0028-GOVE-122">0028-GOVE-122</a>)
 - Governance initiated transfer proposals with invalid source or destination account types will get rejected by the blockchain. (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
 - Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
-- Source can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-080" href="#0028-GOVE-080">0028-GOVE-080</a>)
 - For proposal source/destination types of Market Insurance the source/destination must be a valid `marketID` else the proposal is rejected by the blockchain. (<a name="0028-GOVE-081" href="#0028-GOVE-081">0028-GOVE-081</a>)
 - Type value can only hold “all or nothing" or "best effort” (<a name="0028-GOVE-082" href="#0028-GOVE-082">0028-GOVE-082</a>)
 - Transfer amounts will be accepted and processed in asset precision (<a name="0028-GOVE-083" href="#0028-GOVE-083">0028-GOVE-083</a>)
@@ -577,7 +575,6 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - Source and destination type cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-087" href="#0028-GOVE-087">0028-GOVE-087</a>)
 - Transfers can be proposed between market insurance accounts but source and destination accounts cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-088" href="#0028-GOVE-088">0028-GOVE-088</a>)
 - Destination must be a valid Vega public key for a transfer type of Party else is rejected (<a name="0028-GOVE-089" href="#0028-GOVE-089">0028-GOVE-089</a>)
-- Destination can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-090" href="#0028-GOVE-090">0028-GOVE-090</a>)
 - For transfer source types of Market Insurance the destination must be a valid market ID  else is rejected (<a name="0028-GOVE-091" href="#0028-GOVE-091">0028-GOVE-091</a>)
 - The proposal will allow standard proposal fields to control timings on closing the voting period and enactment time, these will be validated in the same way as other proposals  (<a name="0028-GOVE-092" href="#0028-GOVE-092">0028-GOVE-092</a>)
 - For successor markets we allow transfer between Market insurance pool account of parent market to Market insurance pool account of child market (<a name="0028-GOVE-093" href="#0028-GOVE-093">0028-GOVE-093</a>)
@@ -587,9 +584,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 
 - For enacted proposals a token transfer will occur at the time of enactment between the source and destination account if sufficient tokens are held in the source account. A transaction result event will show the successful transfer between two accounts  (<a name="0028-GOVE-094" href="#0028-GOVE-094">0028-GOVE-094</a>)
 - A governance approved recurring transfer will continue even if the source account balance is `0`. In such case the amount transferred will be seen to be `0`. (<a name="0028-GOVE-095" href="#0028-GOVE-095">0028-GOVE-095</a>)
-- Transfers can occur for terminated markets  (<a name="0028-GOVE-096" href="#0028-GOVE-096">0028-GOVE-096</a>)
-- Transfers cannot occur for settled markets and a transaction result event will show the transfer failing with an appropriate message  (<a name="0028-GOVE-097" href="#0028-GOVE-097">0028-GOVE-097</a>)
-- Transfers cannot occur for pending markets unless they become active on or before the enactment time of the transfer (<a name="0028-GOVE-098" href="#0028-GOVE-098">0028-GOVE-098</a>)
+- Transfers can occur for pending, terminated markets, settled markets (<a name="0028-GOVE-096" href="#0028-GOVE-096">0028-GOVE-096</a>)
 
 
 ##### Transferred Amount
