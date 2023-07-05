@@ -87,7 +87,7 @@ Good for normal trading (GFN) orders are rejected during an auction.
 
 ### Upon exiting auction mode
 
-- [Pegged orders](./0037-OPEG-pegged_orders.md) (all kinds, including the ones placed by [Liquidity Provision](./0038-OLIQ-liquidity_provision_order_type.md)) get reinstated in the order book they were originally submitted in.
+- [Pegged orders](./0037-OPEG-pegged_orders.md) get reinstated in the order book they were originally submitted in.
 - Limit orders stay on the book (unless they have a `TIF:GFA` only good for auction, in this case they are removed from the book and have their status set to cancelled).
 
 ## Exiting the auction mode
@@ -168,12 +168,12 @@ message Market {
   - Why it is in that period (e.g. Auction at open, liquidity sourcing, price monitoring)
   - When the auction will next attempt to uncross or if the auction period ended and the auction cannot be resolved for whatever reason then this should come blank or otherwise indicating that the system doesn't know when the auction ought to end.
 - A market with default trading mode "continuous trading" will start with an opening auction. The opening auction will run from the close of voting on the market proposal (assumed to pass successfully) until:
-    1. the enactment time assuming there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md). (<a name="0026-AUCT-017" href="#0026-AUCT-017">0026-AUCT-017</a>) for product spot, the enactment time assuming there are orders crossing on the book, there is no need for the supplied liquidity to exceed a threshold to exit an auction: (<a name="0026-AUCT-029" href="#0026-AUCT-029">0026-AUCT-029</a>)
-    2. past the enactment time if there is no [liquidity supplied](./0038-OLIQ-liquidity_provision_order_type.md). The auction won't end until sufficient liquidity is committed. (<a name="0026-AUCT-018" href="#0026-AUCT-018">0026-AUCT-018</a>)
-    3. past the enactment time if [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md). It will only end if
+    1. the enactment time assuming there are orders crossing on the book and [liquidity is supplied](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction). (<a name="0026-AUCT-017" href="#0026-AUCT-017">0026-AUCT-017</a>) for product spot, the enactment time assuming there are orders crossing on the book, there is no need for the supplied liquidity to exceed a threshold to exit an auction: (<a name="0026-AUCT-029" href="#0026-AUCT-029">0026-AUCT-029</a>)
+    2. past the enactment time if there is no [liquidity supplied](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction). The auction won't end until sufficient liquidity is committed. (<a name="0026-AUCT-018" href="#0026-AUCT-018">0026-AUCT-018</a>)
+    3. past the enactment time if [liquidity is supplied](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction) but the uncrossing volume will create open interest that is larger than what the [supplied stake can support](./0041-TSTK-target_stake.md). It will only end if
 		  - more liquidity is committed (<a name="0026-AUCT-019" href="#0026-AUCT-019">0026-AUCT-019</a>)
 		  - or if orders are cancelled such that the uncrossing volume will create open interest sufficiently small so that the original stake can support it. (<a name="0026-AUCT-020" href="#0026-AUCT-020">0026-AUCT-020</a>)
-    4. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0038-OLIQ-liquidity_provision_order_type.md) but after the auction uncrossing we will not have
+    4. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction) but after the auction uncrossing we will not have
 		  - best bid; it will still open. (<a name="0026-AUCT-021" href="#0026-AUCT-021">0026-AUCT-021</a>)
 		  - or best ask; it will still open. (<a name="0026-AUCT-022" href="#0026-AUCT-022">0026-AUCT-022</a>)
 - When entering an auction, all GFN orders will be cancelled. (<a name="0026-AUCT-015" href="#0026-AUCT-015">0026-AUCT-015</a>) for product spot: (<a name="0026-AUCT-031" href="#0026-AUCT-031">0026-AUCT-031</a>)
