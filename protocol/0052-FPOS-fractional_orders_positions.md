@@ -16,7 +16,6 @@ Specs affected by this change (Note: in many cases the implementation may not ch
 - [0003 - Mark to mark settlement](./0003-MTMK-mark_to_market_settlement.md)
 - [0019 - Margin Caculator](./0019-MCAL-margin_calculator.md)
 - [0029 - Fees](./0029-FEES-fees.md)
-- [0038 - Liquidity Provision order type](./0038-OLIQ-liquidity_provision_order_type.md)
 
 ## Acceptance Criteria
 
