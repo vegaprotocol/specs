@@ -388,13 +388,13 @@ The state of a market successfully closed by the governance vote should be `clos
 
 This proposal puts the market into an auction mode which can only be exit with a governance proposal to unsuspend the market. It can be applied to a market that's in any of the active (accepting orders) states including the opening auction.
 
-A market that's been suspended can't have the open volume changed or margin account balances reduced for any of the parties within the market.
+A market that's been suspended can't have the open volume changed or margin account balances reduced for any of the parties within the market. Parties can submit the relevant order types just like in an other auction.
 
 If the market is already suspended via governance when another vote gets enacted then that vote has no effect.
 
 ### 6.3. Unsuspend the market
 
-This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active.
+This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active. When the market leaves the auction any trades resulting from it should be generated at the auction uncrossing price as is done for any other auction type.
 
 If the market is not suspended when the vote to unsuspend the market gets enacted then that vote has no effect.
 
