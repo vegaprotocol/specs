@@ -71,6 +71,7 @@ If it has an expiry then it can be set either to cancel on expiry (i.e. it is de
 An OCO contains TWO stop order submissions, and must include one in each trigger direction.
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
+  - An OCO submission cannot be set to execute at expiry.
 
 - The stop order submission wraps a normal order submission.
 
@@ -348,7 +349,6 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 - A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. At this time the order will be placed on the book if and only if it would reduce the trader's absolute position (buying if they are short or selling if they are long) if executed (i.e. will execute as a reduce-only order).  (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>)
 - If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>)
-- If a pair of stop orders are specified as OCO with the same trigger conditions and directions, if that trigger is hit one will execute and the other will expire. The exact choice of which will execute should not be assumed by the trader. (<a name="0014-ORDT-057" href="#0014-ORDT-057">0014-ORDT-057</a>)
 - If a pair of stop orders are specified as OCO and one triggers but is invalid at time of triggering (e.g. a buy when the trader is already long) the other will still be cancelled. (<a name="0014-ORDT-058" href="#0014-ORDT-058">0014-ORDT-058</a>)
 
 - A trailing stop order for a 5% drop placed when the price is `50`, followed by a price rise to `60` will:
@@ -367,6 +367,25 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 - If a trader has open stop orders and their position moves to zero whilst they still have open limit orders their stop orders will remain active. (<a name="0014-ORDT-067" href="#0014-ORDT-067">0014-ORDT-067</a>)
 - If a trader has open stop orders and their position moves to zero with no open limit orders their stop orders are cancelled. (<a name="0014-ORDT-068" href="#0014-ORDT-068">0014-ORDT-068</a>)
 
+- A Stop order that hasn't been triggered can be cancelled. (<a name="0014-ORDT-071" href="#0014-ORDT-071">0014-ORDT-071</a>)
+- All stop orders for a specific party can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-072" href="#0014-ORDT-072">0014-ORDT-072</a>)
+- All stop orders for a specific party for a specific market can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-073" href="#0014-ORDT-073">0014-ORDT-073</a>)
+
+## Stop Orders - Negative Cases
+
+- Stop orders submitted with post_only=True are rejected. (<a name="0014-ORDT-074" href="#0014-ORDT-074">0014-ORDT-074</a>)
+- Stop orders submitted with invalid values for trigger price (0, negative values) and trailing percentage (0, negative values) are rejected. (<a name="0014-ORDT-075" href="#0014-ORDT-075">0014-ORDT-075</a>)
+- Stop orders submitted with expiry in the past are rejected. (<a name="0014-ORDT-076" href="#0014-ORDT-076">0014-ORDT-076</a>)
+- GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>)
+- Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>)
+
+## Stop Orders - Snapshots
+
+- Stop orders are saved and can be restored using the snapshot and will be triggered once the trigger conditions are met. (<a name="0014-ORDT-079" href="#0014-ORDT-079">0014-ORDT-079</a>)
+
+## Stop Orders - API
+
+- API end points should be available to query stop orders with all relevant fields. (<a name="0014-ORDT-080" href="#0014-ORDT-080">0014-ORDT-080</a>)
 
 ### See also
 
