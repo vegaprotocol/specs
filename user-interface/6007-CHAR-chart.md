@@ -108,36 +108,37 @@
 
 ## Price monitoring bounds
 
-- **Must** show upper line (<a name="6007-CHAR-040" href="#6007-CHAR-040">6007-CHAR-040</a>)
-- **Must** show lower line (<a name="6007-CHAR-041" href="#6007-CHAR-041">6007-CHAR-041</a>)
-- **Must** show line values at time of cursor position (<a name="6007-CHAR-042" href="#6007-CHAR-042">6007-CHAR-042</a>)
+- **Must** show min line (<a name="6007-CHAR-040" href="#6007-CHAR-040">6007-CHAR-040</a>)
+- **Must** show max line (<a name="6007-CHAR-041" href="#6007-CHAR-041">6007-CHAR-041</a>)
+- **Must** show reference line (<a name="6007-CHAR-042" href="#6007-CHAR-042">6007-CHAR-042</a>)
+- **Must** show line values at time of cursor position (<a name="6007-CHAR-043" href="#6007-CHAR-043">6007-CHAR-043</a>)
 
 # Studies
 
 ## Eldar-ray
 
-- **Must** show bear power line (<a name="6007-CHAR-043" href="#6007-CHAR-043">6007-CHAR-043</a>)
-- **Must** show bull power line (<a name="6007-CHAR-044" href="#6007-CHAR-044">6007-CHAR-044</a>)
-- **Must** show line values at time of cursor position (<a name="6007-CHAR-045" href="#6007-CHAR-045">6007-CHAR-045</a>)
+- **Must** show bear power line (<a name="6007-CHAR-044" href="#6007-CHAR-044">6007-CHAR-044</a>)
+- **Must** show bull power line (<a name="6007-CHAR-045" href="#6007-CHAR-045">6007-CHAR-045</a>)
+- **Must** show line values at time of cursor position (<a name="6007-CHAR-046" href="#6007-CHAR-046">6007-CHAR-046</a>)
 
 ## Force index
 
-- **Must** show force line (<a name="6007-CHAR-046" href="#6007-CHAR-046">6007-CHAR-046</a>)
-- **Must** show line value at time of cursor position (<a name="6007-CHAR-047" href="#6007-CHAR-047">6007-CHAR-047</a>)
+- **Must** show force line (<a name="6007-CHAR-047" href="#6007-CHAR-047">6007-CHAR-047</a>)
+- **Must** show line value at time of cursor position (<a name="6007-CHAR-048" href="#6007-CHAR-048">6007-CHAR-048</a>)
 
 ## MACD
 
-- **Must** show MACD line (<a name="6007-CHAR-048" href="#6007-CHAR-048">6007-CHAR-048</a>)
-- **Must** show signal line (<a name="6007-CHAR-049" href="#6007-CHAR-049">6007-CHAR-049</a>)
-- **Must** show histogram (<a name="6007-CHAR-050" href="#6007-CHAR-050">6007-CHAR-050</a>)
-- **Must** show line values at time of cursor position (<a name="6007-CHAR-051" href="#6007-CHAR-051">6007-CHAR-051</a>)
+- **Must** show MACD line (<a name="6007-CHAR-049" href="#6007-CHAR-049">6007-CHAR-049</a>)
+- **Must** show signal line (<a name="6007-CHAR-050" href="#6007-CHAR-050">6007-CHAR-050</a>)
+- **Must** show histogram (<a name="6007-CHAR-051" href="#6007-CHAR-051">6007-CHAR-051</a>)
+- **Must** show line values at time of cursor position (<a name="6007-CHAR-052" href="#6007-CHAR-052">6007-CHAR-052</a>)
 
 ## RSI
 
-- **Must** show RSI line (<a name="6007-CHAR-052" href="#6007-CHAR-052">6007-CHAR-052</a>)
-- **Must** show line value at time of cursor position (<a name="6007-CHAR-053" href="#6007-CHAR-053">6007-CHAR-053</a>)
+- **Must** show RSI line (<a name="6007-CHAR-053" href="#6007-CHAR-053">6007-CHAR-053</a>)
+- **Must** show line value at time of cursor position (<a name="6007-CHAR-054" href="#6007-CHAR-054">6007-CHAR-054</a>)
 
 ## Volume
 
-- **Must** show volume bars (<a name="6007-CHAR-054" href="#6007-CHAR-054">6007-CHAR-054</a>)
-- **Must** show bar value at time of cursor position (<a name="6007-CHAR-055" href="#6007-CHAR-055">6007-CHAR-055</a>)
+- **Must** show volume bars (<a name="6007-CHAR-055" href="#6007-CHAR-055">6007-CHAR-055</a>)
+- **Must** show bar value at time of cursor position (<a name="6007-CHAR-056" href="#6007-CHAR-056">6007-CHAR-056</a>)
