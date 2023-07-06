@@ -11,3 +11,4 @@ As a market user I want to see information about orders existing in the market.
 - I **Must** see prices sorted descending (<a name="6003-ORDB-007" href="#6003-ORDB-007">6003-ORDB-007</a>)
 - I **Must** be able to set a resolution of data (<a name="6003-ORDB-008" href="#6003-ORDB-008">6003-ORDB-008</a>)
 - When I click specific price, it **Must** be copied to deal ticket form (<a name="6003-ORDB-009" href="#6003-ORDB-009">6003-ORDB-009</a>)
+- Order is removed from orderbook if traded away(<a name="6003-ORDB-010" href="#6003-ORDB-010">6003-ORDB-010</a>)
