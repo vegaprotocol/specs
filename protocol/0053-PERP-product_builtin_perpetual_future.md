@@ -100,6 +100,10 @@ m^{\text{maint (perps)}}_t = m^{\text{maint}}_t + \text{margin funding factor} \
 
 where $m^{\text{maint}}_t$ is the current maintenance margin as per the [margin spec](./0019-MCAL-margin_calculator.md)
 
+### 6. Market closure
+
+Should a perpetual futures market get closed using the [governance proposal](./0028-GOVE-governance.md#61-move-market-to-a-closed-state) an final funding payment should be calculated using the data available at that time and exchanged right before the final settlement using the price contained in the proposal is carried out.
+
 ### API considerations
 
 It should be possible to query the market for the list of current funding payment data points as well as history of calculated funding payment values.
