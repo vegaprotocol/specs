@@ -60,7 +60,7 @@ gas = min((maxGas/minBlockCapacity)-1,gasOrder)
 
 ```go
 gasCancel = network.transaction.defaultgas + peg cost factor x pegs
-                                        + stop cost factor x stop orders
+                                        + stop cost factor x stops
                                         + level factor x levels
 gas = min((maxGas/minBlockCapacity)-1,gasCancel)
 ```
@@ -77,7 +77,7 @@ Here `gasBatch` is
 1. plus the full cost of the first amendment at `gasOrder`
 1. plus `batchFactor` sum of all subsequent amendments added together (each costing `gasOrder`)
 1. plus the full cost of the first limit order at `gasOrder`
-1. plus `batchFactor` sum of all subsequent limit orders added together (each costing `gasOrder`)
+1. plus `batchFactor` sum of all subsequent submissions added together (each costing `gasOrder`)
 
 ```go
 gas = min((maxGas/minBlockCapacity)-1,batchGas)
