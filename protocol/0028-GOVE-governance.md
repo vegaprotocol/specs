@@ -384,6 +384,8 @@ Attempting to enact the market closure governance proposal on a market in a `set
 
 The state of a market successfully closed by the governance vote should be `closed`.
 
+Please note that certain types of markets like [perpetual futures](./0053-PERP-product_builtin_perpetual_future.md) may perform additional actions during governance closure, refer to their specs for details.
+
 ### 6.2. Suspend the market
 
 This proposal puts the market into an auction mode which can only be exit with a governance proposal to resume the market. It can be applied to a market that's in any of the active (accepting orders) states including the opening auction.
