@@ -319,25 +319,25 @@ Note:
 ### Qualifying Order Types
 
 - Once liquidity is committed LPs can meet their commitment by placing limit orders, pegged limit orders and iceberg orders. For iceberg orders only the visible peak counts towards the commitment. (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>)
-- Parked pegged limit orders and stop-loss orders do not count towards an LPs liquidity commitment (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>)
+- Parked pegged limit orders and stop-loss orders do not count towards an LPs liquidity commitment. (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>)
 
 ### Snapshot
 
-- A snapshot must include the bonus accounts, fee accounts and their balances so that after a node is started using the snapshot they can retain the two accounts and their balances (<a name="0044-LIME-032" href="#0044-LIME-032">0044-LIME-032</a>)
+- A snapshot must include the per-market LP fee accounts and their balances so that after a node is started using the snapshot it can retain the LP fee accounts and their balances for each market. (<a name="0044-LIME-032" href="#0044-LIME-032">0044-LIME-032</a>)
 
 ### Protocol upgrade
 
-- After a protocol upgrade the bonus accounts, fee accounts and their balances are retained (<a name="0044-LIME-033" href="#0044-LIME-033">0044-LIME-033</a>)
+- After a protocol upgrade the per-market LP fee accounts and their balances are retained (<a name="0044-LIME-033" href="#0044-LIME-033">0044-LIME-033</a>)
 
 ### Checkpoint
 
-- Bonus and fee accounts must be included in the checkpoint and where the network is down
+- Per-market LP fee accounts must be included in the checkpoint and where the network is down
   - Rewards accrued during the down time will be actioned when the network is available (<a name="0044-LIME-034" href="#0044-LIME-034">0044-LIME-034</a>)
   - Fees to be paid during the down time will be actioned when the network is available  (<a name="0044-LIME-035" href="#0044-LIME-035">0044-LIME-035</a>)
 
 #### Network History - Data node restored from network history segments
 
-- A datanode restored from network history will contain any bonus and fee accounts created prior to the restore and these can be retrieved via APIs on the new datanode. (<a name="0044-LIME-036" href="#0044-LIME-036">0044-LIME-036</a>)
+- A datanode restored from network history will contain any per-market LP fee accounts created prior to the restore and these can be retrieved via APIs on the new datanode. (<a name="0044-LIME-036" href="#0044-LIME-036">0044-LIME-036</a>)
 
 #### Network parameters validation
 

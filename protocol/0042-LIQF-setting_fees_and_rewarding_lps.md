@@ -295,8 +295,7 @@ $$
 
 For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution".
 
-Transfer all unpaid-out rewards left in LP-per-market fee accounts into a temporary (one per market) bonus distribution account.
-Record its balance to be $B$.
+Record the remaining balance of market LP fee account as $B$.
 Let $b_i := (1-p_i^n) \times w_i$ and renormalise $b_i$s so that they sum up to $1$ i.e.
 
 $$
@@ -305,7 +304,7 @@ $$
 
 Each LP further gets a performance bonus: $b_i \times B$ with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
 
-Note that after this process completes the balance of the temporary (one per market) bonus distribution account described above **must be zero** and the account may be destroyed (and recreated again when needed).
+Note that after this process completes the balance of the market LP fee account **must be zero**.
 
 There is an example [google sheet for this step](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY/edit#gid=0); once we're sure we're happy let's transfer this to a fixed example.
 
@@ -396,7 +395,7 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 
 ### SLA Performance bonus transfers
 
-- The balance of the per-market liquidity fee bonus distribution account should always be zero after bonus distribution is completed (<a name="0042-LIQF-043" href="#0042-LIQF-043">0042-LIQF-043</a>)
-- With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should be transferred to the bonus account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
+- The balance of the per-market liquidity fee account should always be zero after bonus distribution is completed (<a name="0042-LIQF-043" href="#0042-LIQF-043">0042-LIQF-043</a>)
+- With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should left in the LP fee account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
 - With two liquidity providers, one with an effective penalty rate of `1` and earned fees of `n`, and the other with an effective rate of `0` and earned fees of `m`, the entirety of `n` should be transferred to the second liquidity provider as a bonus payment (<a name="0042-LIQF-045" href="#0042-LIQF-045">0042-LIQF-045</a>)
 - With only one liquidity provider, with an effective penalty rate of `0.5`, `50%` of their initially earned fees will be taken initially but will be entirely paid back to them as a bonus payment (<a name="0042-LIQF-046" href="#0042-LIQF-046">0042-LIQF-046</a>)
