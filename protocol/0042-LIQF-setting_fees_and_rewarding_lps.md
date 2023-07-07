@@ -203,13 +203,13 @@ The liquidity score should always be rounded to 10 decimal places to prevent spu
 
 ### Distributing fees into LP-per-market fee account
 
-On every trade, liquidity fee should be collected immediately into the market LP fee account.
+On every trade, liquidity fee should be collected immediately into the market's aggregate LP fee account.
 The account is under control of the network and funds from this account will be transferred to the owning LP party according to the mechanism below.
 
-A network parameter `market.liquidity.providers.fee.calculationTimeStep` will control how often fees are distributed from the market LP fee account.
+A network parameter `market.liquidity.providers.fee.calculationTimeStep` will control how often fees are distributed from the market's aggregate LP fee account.
 Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.calculationTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
 
-The liquidity fees are transferred from the market LP fee account into the LP-per-market fee account, pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
+The liquidity fees are transferred from the market's aggregate LP fee account into the LP-per-market fee account, pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
 
 The LP parties don't control the LP-per-market fee account; the fees from there are then transferred to the LPs' general account at the end epoch as described below.
 
@@ -295,7 +295,7 @@ $$
 
 For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution".
 
-Record the remaining balance of market LP fee account as $B$.
+Transfer the remaining account from each LP-per-market fee account back into the market's aggregate LP fee account. Record the total inflow as a result of that operation as $B$.
 Let $b_i := (1-p_i^n) \times w_i$ and renormalise $b_i$s so that they sum up to $1$ i.e.
 
 $$
@@ -303,8 +303,6 @@ b_i \leftarrow \frac{b_i}{\sum_k b_k}\,.
 $$
 
 Each LP further gets a performance bonus: $b_i \times B$ with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
-
-Note that after this process completes the balance of the market LP fee account **must be zero**.
 
 There is an example [google sheet for this step](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY/edit#gid=0); once we're sure we're happy let's transfer this to a fixed example.
 
@@ -395,7 +393,7 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 
 ### SLA Performance bonus transfers
 
-- The balance of the per-market liquidity fee account should always be zero after bonus distribution is completed (<a name="0042-LIQF-043" href="#0042-LIQF-043">0042-LIQF-043</a>)
-- With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should left in the LP fee account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
+- The net inflow and outflow into and out of the market's aggregate LP fee account should be zero as a result of penalty collection and bonus distribution. (<a name="0042-LIQF-043" href="#0042-LIQF-043">0042-LIQF-043</a>)
+- With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should be transferred back into market's aggregate LP fee account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
 - With two liquidity providers, one with an effective penalty rate of `1` and earned fees of `n`, and the other with an effective rate of `0` and earned fees of `m`, the entirety of `n` should be transferred to the second liquidity provider as a bonus payment (<a name="0042-LIQF-045" href="#0042-LIQF-045">0042-LIQF-045</a>)
 - With only one liquidity provider, with an effective penalty rate of `0.5`, `50%` of their initially earned fees will be taken initially but will be entirely paid back to them as a bonus payment (<a name="0042-LIQF-046" href="#0042-LIQF-046">0042-LIQF-046</a>)
