@@ -9,4 +9,4 @@ As a wallet user, when I am using the browser extension for the first time I wan
 - If I have opted in and am using the wallet app, all keys are obscured and replaced with something appropriate in Sentry (<a name="1111-TELE-006" href="#1111-TELE-006">1111-TELE-006</a>)
 - If I have opted out and am using the wallet app, telemetry errors / analytics are NOT recorded / reported in Sentry (<a name="1111-TELE-007" href="#1111-TELE-007">1111-TELE-007</a>)
 - There is a way to change whether I want to opt in / out of error reporting later (e.g. in settings) (<a name="1111-TELE-008" href="#1111-TELE-008">1111-TELE-008</a>)
-- If I leave the app during onboarding I am taken back to the telemetry page (<a name="1111-TELE-009" href="#1111-TELE-009">1111-TELE-009</a>)
+- If I am on the telemetry page and leave the app without completing it I am taken back to the telemetry page (<a name="1111-TELE-009" href="#1111-TELE-009">1111-TELE-009</a>)
