@@ -67,7 +67,7 @@ Market proposal may specify parent market ID. If it does then:
 
 It is possibly to cancel a [spot market](./0080-SPOT-product_builtin_spot.md) via governance and propose a new spot market as a successor with different `market_decimal_places` and `position_decimal_places` (aka `size_decimal_places` for spot); the LPs virtual stakes are carried over (<a name="0081-SUCM-004" href="#0081-SUCM-004">0081-SUCM-004</a>).
 
-It is possibly to cancel a [perpetual futures](./0053-PERP-product_builtin_perpetual_future.md) market via governance and propose a new perpetual futures market as a successor with different `market_decimal_places` and `position_decimal_places` (aka `size_decimal_places` for spot); the LPs virtual stakes are carried over (<a name="0081-SUCM-015" href="#0081-SUCM-015">0081-SUCM-015</a>).
+It is possibly to cancel a [perpetual futures](./0053-PERP-product_builtin_perpetual_future.md) market via governance and propose a new perpetual futures market as a successor of the aforementioned cancelled / to be cancelled with different `market_decimal_places` and `position_decimal_places`; the LPs virtual stakes are carried over (<a name="0081-SUCM-015" href="#0081-SUCM-015">0081-SUCM-015</a>).
 
 Two proposals that name the same parent can be submitted. Both can be approved by governance. The proposed market that clears the opening auction first gets the share of the insurance pool and the virtual stakes get carried over. Once the first market clears the opening auction the other market's parent market Id field is cleared. When it clears the opening auction it gets no insurance pool from the parent and no virtual stakes get carried over (<a name="0081-SUCM-005" href="#0081-SUCM-005">0081-SUCM-005</a>).
 
