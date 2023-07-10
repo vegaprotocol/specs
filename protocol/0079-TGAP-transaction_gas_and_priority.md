@@ -46,7 +46,7 @@ Constants needed:
 - `level factor = 0.1` non-negative decimal
 - `batchFactor = 0.5` decimal between `0.1 and 0.9`.
 
-### Any type of limit or market order
+### Any type of limit or market order, or liquidity provision transaction
 
 ```go
 gasOrder = network.transaction.defaultgas + peg cost factor x pegs
@@ -56,7 +56,7 @@ gasOrder = network.transaction.defaultgas + peg cost factor x pegs
 gas = min((maxGas/minBlockCapacity)-1,gasOrder)
 ```
 
-### Cancellation of any single order
+### Cancellation of any single order or liquidity provision transaction
 
 ```go
 gasCancel = network.transaction.defaultgas + peg cost factor x pegs
@@ -81,16 +81,6 @@ Here `gasBatch` is
 
 ```go
 gas = min((maxGas/minBlockCapacity)-1,batchGas)
-```
-
-### LP provision, new or amendment or cancellation
-
-```go
-gasOliq = network.transaction.defaultgas + peg cost factor x pegs
-                                    + stop cost factor x stop orders
-                                    + position factor x positions
-                                    + level factor x levels
-gas = min((maxGas/minBlockCapacity)-1,gasOliq)
 ```
 
 ## Transaction priorities
