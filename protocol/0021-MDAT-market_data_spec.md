@@ -59,6 +59,10 @@ List of market data fields to be available via the API. All these values can be 
 - **Price monitoring bounds** one or more price monitoring bounds for the current timestamp.
 - **Liquidity provider fee share** share of the accrued fees each liquidity provider is eligible to.
 
+### Market data events
+
+Market data events should be emitted with sufficient frequency so that each mark price change happening in the market can be captured by just observing the market data events.
+
 ## Pseudo-code / Examples
 
 See Test cases
