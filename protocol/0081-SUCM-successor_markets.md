@@ -22,7 +22,7 @@ Moreover, part of the insurance pool of a parent market can be earmarked for tra
 ## Specifying a parent market and timing details
 
 A market [governance] proposal for a successor market must contain all the information of a full proposal with additionally specified `parent market Id` and `insurancePoolFraction`.
-The product, settlement asset, and margin asset must match but all other inputs can be different (e.g. position and price decimal places, risk mode, price monitoring, termination and settlement oracles etc.).
+The product, settlement asset, and margin asset must match but all other inputs can be different (e.g. position and price decimal places, risk model, price monitoring, termination and settlement oracles etc.).
 For [spot markets](./0080-SPOT-product_builtin_spot.md) base and quote assets must match.
 
 The parent market must be either: a) in one of `proposed`, `pending`, `active`, `suspended` or `trading terminated`
@@ -66,6 +66,8 @@ Market proposal may specify parent market ID. If it does then:
 - It is possible for the successor to specify different trading termination and settlement oracle data (<a name="0081-SUCM-003" href="#0081-SUCM-003">0081-SUCM-003</a>).
 
 It is possibly to cancel a [spot market](./0080-SPOT-product_builtin_spot.md) via governance and propose a new spot market as a successor with different `market_decimal_places` and `position_decimal_places` (aka `size_decimal_places` for spot); the LPs virtual stakes are carried over (<a name="0081-SUCM-004" href="#0081-SUCM-004">0081-SUCM-004</a>).
+
+It is possibly to cancel a [perpetual futures](./0053-PERP-product_builtin_perpetual_future.md) market via governance and propose a new perpetual futures market as a successor of the aforementioned cancelled / to be cancelled with different `market_decimal_places` and `position_decimal_places`; the LPs virtual stakes are carried over (<a name="0081-SUCM-015" href="#0081-SUCM-015">0081-SUCM-015</a>).
 
 Two proposals that name the same parent can be submitted. Both can be approved by governance. The proposed market that clears the opening auction first gets the share of the insurance pool and the virtual stakes get carried over. Once the first market clears the opening auction the other market's parent market Id field is cleared. When it clears the opening auction it gets no insurance pool from the parent and no virtual stakes get carried over (<a name="0081-SUCM-005" href="#0081-SUCM-005">0081-SUCM-005</a>).
 
