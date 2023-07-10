@@ -22,7 +22,7 @@ Moreover, part of the insurance pool of a parent market can be earmarked for tra
 ## Specifying a parent market and timing details
 
 A market [governance] proposal for a successor market must contain all the information of a full proposal with additionally specified `parent market Id` and `insurancePoolFraction`.
-The product, settlement asset, and margin asset must match but all other inputs can be different (e.g. position and price decimal places, risk model, price monitoring, termination and settlement oracles etc.).
+The product type, settlement asset, and margin asset must match but all other inputs can be different (e.g. position and price decimal places, risk model, price monitoring, termination and settlement oracles etc.).
 For [spot markets](./0080-SPOT-product_builtin_spot.md) base and quote assets must match.
 
 The parent market must be either: a) in one of `proposed`, `pending`, `active`, `suspended` or `trading terminated`
@@ -62,7 +62,7 @@ At the end of opening auction, if the parent market still exists, the fraction o
 Market proposal may specify parent market ID. If it does then:
 
 - It must also specify insurance pool fraction (<a name="0081-SUCM-001" href="#0081-SUCM-001">0081-SUCM-001</a>)
-- The product, settlement asset and margin asset must match between parent and successor; if not proposal is rejected (<a name="0081-SUCM-002" href="#0081-SUCM-002">0081-SUCM-002</a>)
+- The product type, settlement asset and margin asset must match between parent and successor; if not proposal is rejected (<a name="0081-SUCM-002" href="#0081-SUCM-002">0081-SUCM-002</a>)
 - It is possible for the successor to specify different trading termination and settlement oracle data (<a name="0081-SUCM-003" href="#0081-SUCM-003">0081-SUCM-003</a>).
 
 It is possibly to cancel a [spot market](./0080-SPOT-product_builtin_spot.md) via governance and propose a new spot market as a successor with different `market_decimal_places` and `position_decimal_places` (aka `size_decimal_places` for spot); the LPs virtual stakes are carried over (<a name="0081-SUCM-004" href="#0081-SUCM-004">0081-SUCM-004</a>).
