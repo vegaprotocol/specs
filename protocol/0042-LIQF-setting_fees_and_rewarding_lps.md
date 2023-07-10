@@ -295,7 +295,7 @@ $$
 
 For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution".
 
-Transfer the remaining account from each LP-per-market fee account back into the market's aggregate LP fee account. Record the total inflow as a result of that operation as $B$.
+Transfer the remaining amount from each LP-per-market fee account back into the market's aggregate LP fee account. Record the total inflow as a result of that operation as $B$.
 Let $b_i := (1-p_i^n) \times w_i$ and renormalise $b_i$s so that they sum up to $1$ i.e.
 
 $$
