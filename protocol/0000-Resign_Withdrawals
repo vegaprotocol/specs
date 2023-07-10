@@ -1,0 +1,56 @@
+Resign Bundles
+
+Workflow (Oregon Trail):
+
+Signing:
+- Whenever a withdrawal is first created, the entire transaction is stored in 
+  a permanent data structure that survives restarts, snapshots, etc. Entering and deleting entries from this datastructure
+  is synchronized through the Vega chain. A unique nonce is created for that transaction and stored with the transaction data.
+  This should be paret of LNL Checkpoints (https://github.com/vegaprotocol/specs-internal/blob/master/non-protocol-specs/0005-NP-LIMN-limited_network_life.md)
+  <NEEDS VERIFICATION>
+  
+  The nonce comprises a hash of all relevant transaction data (which includes a serial/random number to assure uniqueness)
+  If a serial number is used, it has to be assured it is counted forward even through restarts.
+  
+  The recipient of the signature receives as many signatures as feasible (i.e., not just 2/3, but it waits a reasonalbe time
+  to obtain more signatures, e.g., twice the time it took to get to 2/3). This will prevent requiring a re-sign for minor weight-shifts.
+  
+  Transactions require a minimum asset value to be first created; thus, it is not possible to generfate 10^18 withdrawal requests using one Vega.
+  This can be defined through a govenrance parameter.
+
+Withdrawal:
+  If a transaction is executed on Ethereum, the nonce used in this transaction is permanently stored in the smart contract, and no transaction with
+  the same nonce will ever be executed again. If transactions are bundeled, it has to be assured all transaction in the bundle
+  are covered by this.
+  As we have no timeout mechanim yet, the used nonces need to be stored forever.
+  
+  Validators that observe a sufficiently confirmed withdrawal (i.e., for the event and waited for the defined number of confirmations) on Ethereum can delete the corresponding transaction from their
+  datastructure (i.e., the vega chain side of withdrawal bundles). This deletion should be coordinated via the Vega chain to maintain consistency.
+
+Resigning:
+  Any party can apply through a re-signing of their nonce through a re-sign transaction. The flow is as follows:
+  - A party has at most 1 resigning request per Epoch; if the same Ethereum key/vega key was already used that epoch, the transaction is rejected.
+  - The re-signing request needs to be authorized either by the Vega key of the corresponding wallet, or by the receiving Ethereum key. This is done by signing a
+    unique message of the form <VEGA_RESIGN_REQUEST, key_used, NONCE>
+  - If the nonce is not present in the permanent datastructure, the re-signing transaction is rejected (this should happen implicitely, as without
+    the data in the data-structure, it is not possible to verify the authorisation)
+  - If above tests pass, all validators reset the bundle form their permanent data structure, verify the nonce matches the data, and issue a new signature on exactly that bundle.
+  - All else is done just as for the signing request (apart from the check for minimum value).
+  
+ Question: What's the API currently ? Do we go via the chain or through direct communication ? 
+
+
+
+
+
+
+Post Trading (Cosmic Elevator) : Garbage Collection and Timeout:
+Motivation: Avoid the 'non-executed transactions' datastructure to grow indefinitely
+
+- The transaction data also cointains a 'last Ethereum block'; The withdrawal is only executed if Ethereums blockheit is <= that value.
+- If a transaction has not been executed after tha blockheight has been safely confirmed, the value is restored to the corresponding
+  vega account, and the transaction is deleted from the permanent data structure.
+
+- There is a governance vote to dispose of all transactions smaller than <x> issued before block <y>
+
+
