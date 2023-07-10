@@ -128,73 +128,42 @@ Price-monitoring auctions are still required and should be implemented following
 1. Parties are unable to place orders they do not have the necessary funds for (<a name="0080-SPOT-005" href="#0080-SPOT-005">0080-SPOT-005</a>)
 1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-SPOT-006" href="#0080-SPOT-006">0080-SPOT-006</a>)
 1. Market liquidity fees are calculated correctly (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>)
-
-### Spot Market
-
-Create a spot market and transition to all market states
-
-   1. When Bid and Ask price matches then Spot Market transitions from Auction Mode to Trading Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
-   2. When Bid and Ask trade price do not match then Spot Market do not transition to Trading Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
-   3. When Bid and Ask trade price match and trade volume do not match then Market stays in Auction Mode (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
-   4. Market cancellation (<a href=#0001-MKTF-market_framework> 0001-MKTF-market_framework </a>)
-   5. Price Monitoring can be configured and accessed in spot markets with decimal places (<a href=#0032-PRIM-price_monitoring>0032-PRIM-price_monitoring.md</a>)
-   6. Liquidity Monitoring can be configured and accessed in spot markets (<a href=#0035-LIQM-liquidity_monitoring> 0035-LIQM-liquidity_monitoring </a>)
-
-### Spot Order
-
-Trader can submit Spot orders with respective Base and Quoted Asset balance in place
-
-   1. Traders can amend price and volume in Market auction state, provided that account has sufficient balance (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
-   2. Trader can amend price and volume in Market Trading state, provided account has balance (<a href="#0004-AMND-amends">0004-AMND-amends</a>)
-   3. Trader can cancel a submitted spot order at Market Auction and Trading state and balance are transferred back to the accounts (<a href="#0004-AMND-amends">0004-AMND-amends</a>) and (<a href="#0024-OSTA-order_status">0024-OSTA-order_status</a>)
-   4. Trader can fully fill an order for requested volume based on order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
-   5. Trader can partially fill an order and cancel remaining order as per the order types and TIF (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
-   6. Wash trades can be filled in trading mode and cancelled in Auction mode
-   7. Trades can submit prices and volumes in decimal ranges and rounding logic is applied (<a href="#0070-MKTD-market-decimal-places"> 0070-MKTD-market-decimal-places</a>)
-   8. Spot trades can be submitted with order types Limit orders, GTC, GFA etc  and Time In Force (<a name=0014-ORDT-order_types href=#0014-ORDT-order_types>0014-ORDT-order_types</a>)
-
-### Liquidity Provider
-
-Liquidity Providers can join a Spot Market and fill trades
-
-   1. Liquidity Providers can join Spot Market and stream prices
-   2. Traders in the Market can match their trades against the liquidity provider
-   3. Traders in the Market can match their trades against the liquidity provider partially
-   4. Maker fee is calculated as per the existing fee calculation specification
-   5. Liquidity provider commitment checks are performed as per the existing Liquidity Provider specification
-   6. Liquidity provider amendment submission
-   7. Liquidity provider cancellation
-   8. LP cannot reduce their commitment to zero
-   9. question - LP with enough voting power call for market cancellation
-
-### Liquidity Provision
-
-   1. A liquidity provision submitted to a `Spot` market in the `quote` asset
-
-### Fee Calculation
-
-Fees such as Maker fee, Infra Fee and Market Liquidity Fee are calculated for spots
-
-   1. Maker Fee is calculated for spot market makers
-   2. Infra Fee is calculated for spot trades
-   3. Maker Fee, Infra Fee are taken into consideration when amending the orders on Trading mode
-   4. Price amends and final trading price adheres to Weighted Volume Price calculation
-   5. Fee rate changes during auction
-   6. Transfer of funds from general account to trader account can happen during spot market trading
-
-### Governance Proposal
-
-Spot traders are executed end-to-end with governance transfers
-
-   1. Spot Network parameters can be set from Governance proposals workflow
-   2. Spot Markets can be created through Governance proposals workflow
-   3. Spot Markets can be updated via Governance  proposals workflow
-   4. Spot Market can transition through all states (<a name="" href="0043-MKTL-market_lifecycle">0043-MKTL-market_lifecycle</a>)
-
-### Smart Contracts
-
-Spot traders can be submitted with assets derived from Smart Contracts
-
-### Algorithmic Trading
-
-Trading Algorithms such as pegging, stop loss, take profit, iceberg can be used on spot orders
+1. Spot Order Amend with increase in Size and party has sufficient cover. Given that Market is in Continuous Trading Mode. (<a name="0080-SPOT-008" href="#0080-SPOT-0008">0080-SPOT-008</a>)
+   1. Top up Party1 general account by 10,000 ETH (units), Party2 general account by 15 BTC (units) and perform following steps and expected conditions
+   2. Submit a buy order as Party1@ETC/BTC@Buy@Size5@Price500. 
+   3. After order submission, Holding Account is  2,500 ETH (or units). 
+   4. Amend the order as  Party1@Buy@Size15@Price500.
+   5. After amend, the Holding Account balance is 2,500 ETH(units)
+   6. Submit Sell order as Party2@Sell@BTC/ETH@Size15@Price500
+   7. Trade is matched 
+   8. Party1 balance 2,500 and Party2 balance 0 BTC 
+1. Amend by Decreasing the Size in Continuous Trading Mode and party has sufficient cover, given that BTC/ETH Spot Market is in Continuous Trading Mode and maker fee 0.004 and infra fee 0.001  (<a name="0080-SPOT-009" href="#0080-SPOT-0009">0080-SPOT-009</a>)
+   1. Party1 has general account balance of 1000 BTC (units) and 9000 ETH(units)
+   2. Party2 has general account balance of 100,000 ETH (units)
+   3. Submit sell order as Party1@ETH/BTC@100BTC@1000, holding balance after submit is 100 units (BTC)
+   4. Submit Buy order as Party2@ETH/BTC@100BTC@800 , holding balance after submit is (80000)
+   5. Amend Buy order as Party2@ETH/BTC@70BTC@1000  
+   6. Party2 should have general account balance of 29510 for asset "ETH" and 70 for asset "BTC" (maker fee 345 and infra fee 145 )
+   7. Party1 should have general account balance of 79450 for asset "ETH" and 900 for asset "BTC"
+1. Perform above steps for Order Amend in Opening Auction Trading Mode (<a name="0080-SPOT-010" href="#0080-SPOT-0010">0080-SPOT-010</a>)
+1. Perform above steps for Order Amend in Price Monitoring Auction Mode (<a name="0080-SPOT-011" href="#0080-SPOT-0011">0080-SPOT-011</a>)
+1. No fees paid when orders are amended in Opening Auction Mode (<a name="0080-SPOT-012" href="#0080-SPOT-0012">0080-SPOT-012</a>)
+1. Fee Calculation in Continuous Trading Mode and Buyer is Aggressor (<a name="0080-SPOT-013" href="#0080-SPOT-0013">0080-SPOT-013</a>)
+   1. Set default as Infra Fee-10%, Maker Fee 20%
+   2. Party1 submits order SELL@BTC/ETH@Volume 5 @Price 100
+   2. Party2 submits order BUY@BTC/ETH@Volume 5@ Price 100
+   3. Party2 general account balance of ETH is 350  ( infra fee 50, maker fee 100 )
+   4. Party1 general account balance of ETH is 600  ( infra fee 50, gets maker fee 100)
+   5. Infra Fee is 50 
+1. Fee calculation in Continuous Trading Mode and Seller is Aggressor (<a name="0080-SPOT-014" href="#0080-SPOT-0014">0080-SPOT-014</a>)
+   1. Party1  - BID@BTC/ETH@Volume 5@ Price 100  and account balance as  1000 ETH
+   1. Party2  - ASK@BTC/ETH@Volume 5@ Price 100  and account balance as 0 ETH 
+   2. Infra fee - 10% and Maker fee - 20%
+   3. Party 1 - Buyer Account Balance  - 500 + 100 (maker fee ) = 600
+   4. Party2 - Seller Account Balance - (500- 100 (maker fee ) - infra free 50 ) = 350  
+1. Price monitoring auction - No maker fee during the auction mode and while trading prices move beyond the price monitoring bounds) (<a name="0080-SPOT-014" href="#0080-SPOT-0014">0080-SPOT-014</a>)
+   1. Party1 submits order ASK@BTC/ETH@Volume 5@ Price 100  having account balance of 0 ETH
+   2. Party2 submits order BID@BTC/ETH@Volume 5@ Price 100  having account balance of  1000 ETH 
+   3. Infra fee - 10%  (each pay 5% of the fee )
+   4. Party 1   - account balance =  500 - 25 = 475 ETH 
+   5. Party 2   - account balance =  500 - 25 = 475 (totally paid 525) ETH
