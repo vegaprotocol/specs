@@ -40,22 +40,97 @@
 
 - If the `market.maxSlippageFraction` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-013" href="#0019-MCAL-013">0019-MCAL-013</a>)
 
+
 ## Summary
 
-The *margin calculator* returns the set of relevant margin levels for a given position and entry price:
+The *margin calculator* returns the set of margin levels for a given _actual position_, along with the amount of additional margin (if any) required to support the party's _potential position_ (i.e. active orders including any that are parked/untriggered/undeployed).
 
-1. ***Maintenance margin***
-1. ***Collateral search level***
-1. ***Initial margin***
-1. ***Collateral release level***
 
-The protocol is designed such that ***Maintenance margin < Collateral search level < Initial margin < Collateral release level***.
+### Margining modes
+
+The system can operate in one of two margining modes for each position.
+The current mode will be stored alongside of party's position record.
+
+1. **Cross-margin mode (default)**: this is the mode used by all newly created positions.
+When in cross-margin mode, margin is dynamically acquired and released as a position is marked to market, allowing profitable positions to offset losing positions for higher capital efficiency (especially with e.g. pairs trades).
+
+1. **Isolated margin mode**: this mode sacrifices capital efficiency for predictability and risk management by segregating positions.
+In this mode, the entire margin for any newly opened position volume is transferred to the margin account when the trade is executed. 
+This includes completely new positions and increases to position size.
+
+
+### Actual position margin levels:
+
+1. **Maintenance margin**: the minimum margin a party must have in their margin account to avoid the position being liquidated.
+
+1. **Collateral search level**: when in cross-margin mode, the margin account balance below which the system will seek to recollateralise the margin account back to the initial margin level.
+
+1. **Initial margin**: when in cross-margin mode, the margin account balance initially allocated for the position, and the balance to which the margin account will be returned after collateral search and release, if possible.
+
+1. **Collateral release level**: when in cross-margin mode, the margin account balance above which the system will return collateral from a profitable position to the party's general account for potential use elsewhere.
+
+
+It is always the case that:
+
+```
+maintenance margin < collateral search level < initial margin < collateral release level
+```
+
+
+### Potential position margin level:
+
+1. **Order margin**: the amouht of additional margin on top of the amount in the margin account that is required for the party's current active orders.
+Note that this may be zero if the active orders can only decrease the position size. 
+
+
 
 Margin levels are used by the protocol to ascertain whether a trader has sufficient collateral to maintain a margined trade. When the trader enters an open position, this required amount is equal to the *initial margin*. Subsequently, throughout the life of this open position, the minimum required amount is the *maintenance margin*. As a trader's collateral level dips below the *collateral search level* the protocol will automatically search for more collateral to be assigned to support this open position from the trader's general collateral accounts. In the event that a trader has collateral that is above the *collateral release level* the protocol will automatically release collateral to a trader's general collateral account for the relevant asset.
 
 **Whitepaper reference:** 6.1, section "Margin Calculation"
 
 In future there can be multiple margin calculator implementations that would be configurable in the market framework. This spec describes one implementation.
+
+
+
+## Isolated margin mode
+
+When in isolated margin mode, the position on the market has an associated margin factor.
+The margin factor must be greater than 0 and less than or equal to 1.
+
+Isolated margin mode can be enabled by placing an _update margin mode_ transaction.
+This transaction may be placed as a standalone transaction or may be included with an order.
+The default when placing an order with no change to margin mode specifid must be to retain the current margin mode of the position.
+
+When submitting, amending, or deleting an order in isolated margin mode, the worst case order margin for the current open orders must be calculated.
+This is the largest amount of the extra margin required if all the party's bids or asks were to trade simultaneously at their limit price.
+
+If the worst case order margin does not cover the initial margin for any additional volume then an order cannot be placed
+
+TODO: margin factor must cover at least initial margin - is this correct, what happens when flipping a position? how do we accont for margin account balance as well as order margin balance? 
+
+The balance of the order account must be made equal to this worst case margin amount by transferring to or from the general account.
+
+In isolated margin mode when, trades occur that open a new position — including by flipping the direction of the position — or increase the absolute position size, the margin to add is calculated:
+
+```math
+margin to add = margin factor * VWAP of new trades * total size of new trades
+```
+
+This `margin to add` amount is transferred from the order margin account to the margin account.
+NB: In implementation, for any volume that trades immediately on entry, the additional margin may be transferred directly from the general account to the margin account.
+
+TODO: when reducing a position's size, how much margin to return to general
+
+
+
+
+### Setting margin mode
+
+
+
+When isolated margin mode is enabled,  amount to be transferred is a fraction of the position's notional size that must be specified by the user when enabling isolated margin mode.
+
+
 
 ## Reference Level Explanation
 
