@@ -2,20 +2,6 @@
   "Desktop-Wallet": {
     "specs": ["0001-WALL"]
   },
-  "Browser-Wallet": {
-    "specs": [
-      "1101-ONBD",
-      "1102-LGIN",
-      "1103-CONN",
-      "1104-DCON",
-      "1105-TRAN",
-      "1106-KEYS",
-      "1107-SETT",
-      "1108-NTWK",
-      "1109-VCON",
-      "1110-RMST"
-    ]
-  },
   "Token": {
     "specs": [
       "9001-DATA",
