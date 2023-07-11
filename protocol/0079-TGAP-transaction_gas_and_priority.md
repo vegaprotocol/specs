@@ -106,7 +106,7 @@ There are three priority categories:
 
 ## Acceptance criteria
 
-### Basic happy path test (<a name="0079-TGAP-001" href="#0079-TGAP-001">0079-TGAP-001</a>)(<a name="0079-SP-TGAP-001" href="#0079-SP-TGAP-001">0079-SP-TGAP-001</a>)
+### Basic happy path test (<a name="0079-TGAP-001" href="#0079-TGAP-001">0079-TGAP-001</a>)
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 20`.
 1. Send `100` transactions with default gas cost to a node (e.g. votes on a proposal) and observe that most block have 5 of these transactions each.
