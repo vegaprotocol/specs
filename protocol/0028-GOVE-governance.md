@@ -275,7 +275,7 @@ Enactment of an asset modification proposal is:
 
 The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal.
 
-| Source type | Destination type | Governance transfer permitted |
+| Source type | Destination type | Governance initiated transfer permitted |
 | --- | --- | --- |
 | Party account (any type) | Any | No |
 | Network treasury | Network treasury | No  |
@@ -343,26 +343,26 @@ transfer_amount == min(
 
 ### Transfer cancellation
 
-This is done as a governance proposal. Takes a transfer ID (which is the proposal ID of the original transfer) and would cancel a recurring governance transfer. Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.
+This is done as a governance proposal. Takes a transfer ID (which is the proposal ID of the original transfer) and would cancel a recurring governance initiated transfer. Only recurring governance initiated transfers can be cancelled via governance initiated transfer cancellation proposal. Trying to cancel any other transfer should fail upon validation of the proposal.
 
 ### Checkpoint/snapshot
 
-Enacted and active transfers (i.e. scheduled one off governance transfers, or recurring governance transfers) must be included in LNL banking checkpoint and resume after the checkpoint restore.
+Enacted and active transfers (i.e. scheduled one off governance initiated transfers, or recurring governance initiated transfers) must be included in LNL banking checkpoint and resume after the checkpoint restore.
 
-All in memory active governance transfers must be included in the snapshot of the banking engine.
+All in memory active governance initiated transfers must be included in the snapshot of the banking engine.
 
 ### Additional information
 
 1. When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with different type (i.e. similar to one-off, and recurring of regular transfers, there are governance-one-off and governance-recurring types). At the time of enactment no amount is attached to the transfer and it will show 0.
 2. When a transfer is _made_ an event is emitted with the actual amount being transfers. The status of the transfer will depend on the type of the transfer.
 3. When the transfer reaches a terminal state, being stopped, rejected, done, cancelled an event is emitted indicating the status.
-4. Enacted governance transfers are therefore available to be queried via the regular transfer API in data node.
+4. Enacted governance initiated transfers are therefore available to be queried via the regular transfer API in data node.
 5. Governance initiated transfers are subject to neither minimum transfer amounts nor to fees.
 
 ## 6. Change market state
 
 A governance proposal to change the state of the market.
-Multiple concurrent proposals are allowed. If more than one gets successfully voted in the one which arrived last gets used. If a proposal has already been successful then additional market state change proposals are still allowed as long as their enactment date is no later then that of the last successful vote.
+Multiple concurrent proposals are allowed.
 
 Market change proposal [creation](#market-change-proposal) and [voting](#market-change-proposal-outcome) rules apply.
 
@@ -374,21 +374,31 @@ Any type of market (either fixed expiry market or perpetual) can be closed via a
 
 A proposal to close a market contains:
 
-1. an enactment time
-1. final settlement price (not required for spot markets)
+1. final settlement price (not required for spot markets) formatted accounting for market's decimal places
 
-Once market is closed the process cannot be reversed.
+Once market is closed the process cannot be reversed. Note that this implies that once a governance proposal to close the market has been voted in the market will definitely close at the enactment time of that vote at the latest. While the market is still open it's still possible to submit additional governance votes to close the market, however they'll only have any effect if their enactment date is prior to that of the market closure proposal which has already passed.
+
+If the market is in an auction of any type excluding the opening auction at the time the market closure governance proposal gets enacted, then the auction should uncross immediately, any trades resulting from it should be generated at the auction uncrossing price and then the system should proceed to close the market using the price (if applicable) provided by the proposal being enacted. If the market is in opening auction when the governance proposal to close it gets enacted then auction shouldn't uncross, market closes trivially as no trades have yet been generated.
+
+Attempting to enact the market closure governance proposal on a market in a `settled` [state](./0043-MKTL-market_lifecycle.md#market-status-descriptions) has no effect. When closing a market which needs the final price with a governance vote it's always the price supplied with the governance vote being enacted that gets used, even if the oracle price is available at that time. Please note that the price supplied with the vote needs no further conversion as it's already specified in market decimal places.
+
+The state of a market successfully closed by the governance vote should be `closed`.
+
+Please note that certain types of markets like [perpetual futures](./0053-PERP-product_builtin_perpetual_future.md) may perform additional actions during governance closure, refer to their specs for details.
 
 ### 6.2. Suspend the market
 
-This proposal puts the market into an auction mode which can only be exit with a governance proposal to unsuspend the market. It can be applied to a market that's in any of the active (accepting orders) states including the opening auction.
+This proposal puts the market into an auction mode which can only be exit with a governance proposal to resume the market. It can be applied to a market that's in any of the active (accepting orders) states including the opening auction.
 
-A market that's been suspended can't have the open volume changed or margin account balances reduced for any of the parties within the market.
+A market that's been suspended can't have the open volume changed or margin account balances reduced for any of the parties within the market. Parties can submit the relevant order types just like in an other auction.
 
+If the market is already suspended via governance when another vote gets enacted then that vote has no effect.
 
-### 6.3. Unsuspend the market
+### 6.3. Resume the market
 
-This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active.
+This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active. When the market leaves the auction any trades resulting from it should be generated at the auction uncrossing price as is done for any other auction type.
+
+If the market is not suspended when the vote to resume the market gets enacted then that vote has no effect.
 
 ## 7. Freeform governance proposal
 
@@ -447,25 +457,25 @@ APIs should also exist for clients to:
 
 ## Acceptance Criteria
 
-- As a user, I can create a new proposal, assuming my staking balance matches or exceeds `minProposerBalance` network parameter for my proposal type (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)(<a name="0028-SP-GOVE-001" href="#0028-SP-GOVE-001">0028-SP-GOVE-001</a>)
-- As a user, I can list the open proposals on the network (<a name="0028-GOVE-002" href="#0028-GOVE-002">0028-GOVE-002</a>)(<a name="0028-SP-GOVE-002" href="#0028-SP-GOVE-002">0028-SP-GOVE-002</a>)
-- As a user, I can get a list of all proposals I voted for (<a name="0028-GOVE-003" href="#0028-GOVE-003">0028-GOVE-003</a>)(<a name="0028-SP-GOVE-003" href="#0028-SP-GOVE-003">0028-SP-GOVE-003</a>)
-- As a user, I can receive notification when a new proposal is created and may require attention. (<a name="0028-GOVE-004" href="#0028-GOVE-004">0028-GOVE-004</a>)(<a name="0028-SP-GOVE-004" href="#0028-SP-GOVE-004">0028-SP-GOVE-004</a>)
-- As the vega network, all votes from eligible users for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)(<a name="0028-SP-GOVE-005" href="#0028-SP-GOVE-005">0028-SP-GOVE-005</a>)
-- As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are _rejected_ (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)(<a name="0028-SP-GOVE-006" href="#0028-GSP-OVE-006">0028-SP-GOVE-006</a>)
-- As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it. (<a name="0028-GOVE-007" href="#0028-GOVE-007">0028-GOVE-007</a>)(<a name="0028-SP-GOVE-007" href="#0028-SP-GOVE-007">0028-SP-GOVE-007</a>)
-- As the vega network, proposals that set enactment time before closing time are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)(<a name="0028-SP-GOVE-009" href="#0028-SP-GOVE-009">0028-SP-GOVE-009</a>)
-- As the vega network, proposals that set closing time beyond the relevant `maxClose` parameter are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)(<a name="0028-SP-GOVE-010" href="#0028-SP-GOVE-010">0028-SP-GOVE-010</a>)
-- As a user, I can vote for an existing proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)(<a name="0028-SP-GOVE-014" href="#0028-SP-GOVE-014">0028-SP-GOVE-014</a>)
-- As a user, my vote for an existing proposal is rejected if I have less the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-015" href="#0028-GOVE-015">0028-GOVE-015</a>)(<a name="0028-SP-GOVE-015" href="#0028-SP-GOVE-015">0028-SP-GOVE-015</a>)
-- As a user, my vote for an existing proposal is rejected if I have less than the relevant `minVoterBalance` governance tokens in my staking account even if I have more than `minVoterBalance` governance tokens in my general or margin accounts (<a name="0028-GOVE-016" href="#0028-GOVE-016">0028-GOVE-016</a>)(<a name="0028-SP-GOVE-016" href="#0028-SP-GOVE-016">0028-SP-GOVE-016</a>)
+- As a user, I can create a new proposal, assuming my staking balance matches or exceeds `minProposerBalance` network parameter for my proposal type (<a name="0028-GOVE-001" href="#0028-GOVE-001">0028-GOVE-001</a>)
+- As a user, I can list the open proposals on the network (<a name="0028-GOVE-002" href="#0028-GOVE-002">0028-GOVE-002</a>)
+- As a user, I can get a list of all proposals I voted for (<a name="0028-GOVE-003" href="#0028-GOVE-003">0028-GOVE-003</a>)
+- As a user, I can receive notification when a new proposal is created and may require attention. (<a name="0028-GOVE-004" href="#0028-GOVE-004">0028-GOVE-004</a>)
+- As the vega network, all votes from eligible users for an existing proposal are accepted when the proposal is still open (<a name="0028-GOVE-005" href="#0028-GOVE-005">0028-GOVE-005</a>)
+- As the vega network, all votes received before the proposal is [active](#lifecycle-of-a-proposal), or once the proposal voting period is finished, are _rejected_ (<a name="0028-GOVE-006" href="#0028-GOVE-006">0028-GOVE-006</a>)
+- As the vega network, once the voting period is finished, I validate the result based on the parameters of the proposal used to decide the outcome of it. (<a name="0028-GOVE-007" href="#0028-GOVE-007">0028-GOVE-007</a>)
+- As the vega network, proposals that set enactment time before closing time are rejected as invalid (<a name="0028-GOVE-009" href="#0028-GOVE-009">0028-GOVE-009</a>)
+- As the vega network, proposals that set closing time beyond the relevant `maxClose` parameter are rejected as invalid (<a name="0028-GOVE-010" href="#0028-GOVE-010">0028-GOVE-010</a>)
+- As a user, I can vote for an existing proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-014" href="#0028-GOVE-014">0028-GOVE-014</a>)
+- As a user, my vote for an existing proposal is rejected if I have less the relevant `minVoterBalance` governance tokens in my staking account. (<a name="0028-GOVE-015" href="#0028-GOVE-015">0028-GOVE-015</a>)
+- As a user, my vote for an existing proposal is rejected if I have less than the relevant `minVoterBalance` governance tokens in my staking account even if I have more than `minVoterBalance` governance tokens in my general or margin accounts (<a name="0028-GOVE-016" href="#0028-GOVE-016">0028-GOVE-016</a>)
 - As a user, I can vote multiple times for the same proposal if I have more than the relevant `minVoterBalance` governance tokens in my staking account
-  - Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)(<a name="0028-SP-GOVE-017" href="#0028-SP-GOVE-017">0028-SP-GOVE-017</a>)
-- When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)(<a name="0028-SP-GOVE-018" href="#0028-SP-GOVE-018">0028-SP-GOVE-018</a>)
-- If a new proposal is successfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal and can be queried via APIs separately from the general network parameters. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)(<a name="0028-SP-GOVE-036" href="#0028-SP-GOVE-036">0028-SP-GOVE-036</a>)
-- If a new proposal "P" is successfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)(<a name="0028-SP-GOVE-037" href="#0028-SP-GOVE-037">0028-SP-GOVE-037</a>)
-- All proposals with a title field that is empty, or not between 1 and 100 characters, will be rejected (<a name="0028-GOVE-039" href="#0028-GOVE-039">0028-GOVE-039</a>)(<a name="0028-SP-GOVE-039" href="#0028-SP-GOVE-039">0028-SP-GOVE-039</a>)
-- Reject any proposal that defines a risk parameter outside it's intended boundaries (<a name="0028-GOVE-040" href="#0028-GOVE-040">0028-GOVE-040</a>)(<a name="0028-SP-GOVE-040" href="#0028-SP-GOVE-040">0028-GSP-OVE-040</a>)
+  - Only my most recent vote is counted (<a name="0028-GOVE-017" href="#0028-GOVE-017">0028-GOVE-017</a>)
+- When calculating the participation rate of a proposal, the participation rate of the votes takes into account the total supply of the governance asset. (<a name="0028-GOVE-018" href="#0028-GOVE-018">0028-GOVE-018</a>)
+- If a new proposal is successfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal and can be queried via APIs separately from the general network parameters. (<a name="0028-GOVE-036" href="#0028-GOVE-036">0028-GOVE-036</a>)
+- If a new proposal "P" is successfully submitted to the network (passing initial validation) the required participation rate and majority for success are defined and copied to the proposal. If an independent network parameter change proposal is enacted changing either required participation of majority then proposal "P" uses its own values for participation and majority; not the newly enacted ones.  (<a name="0028-GOVE-037" href="#0028-GOVE-037">0028-GOVE-037</a>)
+- All proposals with a title field that is empty, or not between 1 and 100 characters, will be rejected (<a name="0028-GOVE-039" href="#0028-GOVE-039">0028-GOVE-039</a>)
+- Reject any proposal that defines a risk parameter outside it's intended boundaries (<a name="0028-GOVE-040" href="#0028-GOVE-040">0028-GOVE-040</a>)
   - risk aversion lambda: 1e-8 <= x < 0.1
   - tau: 1e-8 <= x <= 1
   - mu: -1e-6 <= x <= 1e-6
@@ -476,159 +486,168 @@ APIs should also exist for clients to:
 
 #### New Asset proposals
 
-- New asset proposals cannot be created before [`limits.assets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-063" href="#0028-GOVE-063">0028-GOVE-063</a>)(<a name="0028-SP-GOVE-063" href="#0028-SP-GOVE-063">0028-SP-GOVE-063</a>)
-- An asset proposal with a negative or non-integer value supplied for asset decimal places gets rejected. (<a name="0028-GOVE-059" href="#0028-GOVE-059">0028-GOVE-059</a>)(<a name="0028-SP-GOVE-059" href="#0028-SP-GOVE-059">0028-SP-GOVE-059</a>)
+- New asset proposals cannot be created before [`limits.assets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-063" href="#0028-GOVE-063">0028-GOVE-063</a>)
+- An asset proposal with a negative or non-integer value supplied for asset decimal places gets rejected. (<a name="0028-GOVE-059" href="#0028-GOVE-059">0028-GOVE-059</a>)
 
 #### New Market proposals
 
-- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)(<a name="0028-SP-GOVE-008" href="#0028-SP-GOVE-008">0028-SP-GOVE-008</a>)
-- New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)(<a name="0028-SP-GOVE-024" href="#0028-SP-GOVE-024">0028-SP-GOVE-024</a>)
-- A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md). (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)(<a name="0028-SP-GOVE-025" href="#0028-SP-GOVE-025">0028-SP-GOVE-025</a>)
-- A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)(<a name="0028-SP-GOVE-061" href="#0028-SP-GOVE-061">0028-SP-GOVE-061</a>)
-- A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)(<a name="0028-SP-GOVE-062" href="#0028-SP-GOVE-062">0028-SP-GOVE-062</a>)
+- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
+- New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
+- A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md). (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
+- A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
+- A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
 
 #### Market change proposals
 
-- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)(<a name="0028-SP-GOVE-033" href="#0028-SP-GOVE-033">0028-SP-GOVE-033</a>)
-- Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)(<a name="0028-SP-GOVE-027" href="#0028-SP-GOVE-027">0028-SP-GOVE-027</a>)
-- Verify that a market change proposal does _not_ get enacted if enough LPs participate and vote for _BUT_ governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)(<a name="0028-SP-GOVE-032" href="#0028-SP-GOVE-032">0028-SP-GOVE-032</a>)
-- Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)(<a name="0028-SP-GOVE-035" href="#0028-SP-GOVE-035">0028-SP-GOVE-035</a>)
-- Verify that an enacted market which uses trading terminated key `ktt1` and settlement price key `ksp1` which is changed via governance proposal to use trading terminated key `ktt2` and settlement price key `ksp2` can terminate trading using `ktt2` but cannot terminate trading using `ktt1` and `ksp2` can submit the settlement price causing market to settle but the key `ksp1` cannot settle the market. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)(<a name="0028-SP-GOVE-012" href="#0028-SP-GOVE-012">0028-SP-GOVE-012</a>)
-- Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the _new_ bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)(<a name="0028-SP-GOVE-034" href="#0028-SP-GOVE-034">0028-SP-GOVE-034</a>)
-- Verify that an enacted market change proposal that reduces `market.stake.target.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)(<a name="0028-SP-GOVE-031" href="#0028-SP-GOVE-031">0028-SP-GOVE-031</a>)
-- Attempts to update immutable market parameter(s) cause the market change proposal to be rejected with an appropriate rejection message (<a name="0028-GOVE-058" href="#0028-GOVE-058">0028-GOVE-058</a>)(<a name="0028-SP-GOVE-058" href="#0028-SP-GOVE-058">0028-SP-GOVE-058</a>)
-- Verify that if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0` and if a party meets the `governance.proposal.updateMarket.minProposerBalance` threshold then said party can submit a market change proposal. (<a name="0028-GOVE-060" href="#0028-GOVE-060">0028-GOVE-060</a>)(<a name="0028-SP-GOVE-060" href="#0028-SP-GOVE-060">0028-SP-GOVE-060</a>)
-- Change of the network parameter `governance.proposal.updateMarket.minProposerEquityLikeShare` will immediately change the minimum proposer ELS for a market change proposal for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-064" href="#0028-GOVE-064">0028-GOVE-064</a>)(<a name="0028-SP-GOVE-064" href="#0028-SP-GOVE-064">0028-SP-GOVE-064</a>)
-- Change of the network parameter `governance.proposal.updateMarket.requiredParticipationLP` will immediately change the required LP vote participation (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-065" href="#0028-GOVE-065">0028-GOVE-065</a>)(<a name="0028-SP-GOVE-065" href="#0028-SP-GOVE-065">0028-SP-GOVE-065</a>)
-- Change of the network parameter `governance.proposal.updateMarket.requiredMajorityLP` will immediately change the required LP vote majority (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-066" href="#0028-GOVE-066">0028-GOVE-066</a>)(<a name="0028-SP-GOVE-066" href="#0028-SP-GOVE-066">0028-SP-GOVE-066</a>)
-- A market that's attempting to modify any parameters on a market in `proposed` state (i.e. voting hasn't completed) will be rejected. (<a name="0028-GOVE-069" href="#0028-GOVE-069">0028-GOVE-069</a>)(<a name="0028-SP-GOVE-069" href="#0028-SP-GOVE-069">0028-SP-GOVE-069</a>)
-- A market change proposal that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the proposed modification is enacted. (<a name="0028-GOVE-070" href="#0028-GOVE-070">0028-GOVE-070</a>)(<a name="0028-SP-GOVE-070" href="#0028-SP-GOVE-070">0028-SP-GOVE-070</a>)
-- In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the proposed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)(<a name="0028SP--GOVE-071" href="#0028-SP-GOVE-071">0028-SP-GOVE-071</a>)
-- A market change that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)(<a name="0028-SP-GOVE-072" href="#0028-SP-GOVE-072">0028-SP-GOVE-072</a>)
-- A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)(<a name="0028-SP-GOVE-108" href="#0028-SP-GOVE-108">0028-SP-GOVE-108</a>)
-- When multiple market closure governance proposals are submitted and accepted then one to be approved by governance last (i.e latest closing date and vote goes through) is the one whose enactment time and final settlement price get used to close the market (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)(<a name="0028-SP-GOVE-109" href="#0028-SP-GOVE-109">0028-SP-GOVE-109</a>)
-- Once a market closure governance proposal has been accepted and was successful another proposal with same enactment date still gets accepted. If the later proposal is unsuccessful then values supplied by the last successful one get used to close the market (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)(<a name="0028-SP-GOVE-110" href="#0028-SP-GOVE-110">0028-SP-GOVE-110</a>)
-- Once a market closure governance proposal has been accepted and was successful another proposal with earlier enactment date still gets accepted. If the later proposal is successful then values supplied within it get used to close the market (if no other proposals were successful after it) (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)(<a name="0028-SP-GOVE-111" href="#0028-SP-GOVE-111">0028-SP-GOVE-111</a>)
-- Once a market closure governance proposal has been accepted and was successful another proposal with later enactment date gets rejected (<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)(<a name="0028-SP-GOVE-112" href="#0028-GOVE-SP-112">0028-SP-GOVE-112</a>)
-- Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to unsuspend the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)(<a name="0028-SP-GOVE-113" href="#0028-SP-GOVE-113">0028-SP-GOVE-113</a>)
-- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)(<a name="0028-SP-GOVE-114" href="#0028-SP-GOVE-114">0028-SP-GOVE-114</a>)
-- Unsuspending a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)(<a name="0028-SP-GOVE-115" href="#0028-SP-GOVE-115">0028-SP-GOVE-115</a>)
-- A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)(<a name="0028-SP-GOVE-116" href="#0028-SP-GOVE-116">0028-SP-GOVE-116</a>)
-- Verify that a party with 0 balance of the governance token, but with sufficient ELS can submit a market change proposal successfully. (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)(<a name="0028-SP-GOVE-117" href="#0028-SP-GOVE-117">0028-SP-GOVE-117</a>)
-- Verify that a party with 0 balance of the governance token and insufficient ELS sees their market change proposal rejected after submission. (<a name="0028-GOVE-118" href="#0028-GOVE-118">0028-GOVE-118</a>)(<a name="0028-SP-GOVE-118" href="#0028-SP-GOVE-118">0028-SP-GOVE-118</a>)
+- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-033" href="#0028-GOVE-033">0028-GOVE-033</a>)
+- Verify that a market change proposal gets enacted if enough LPs participate and vote for. (<a name="0028-GOVE-027" href="#0028-GOVE-027">0028-GOVE-027</a>)
+- Verify that a market change proposal does _not_ get enacted if enough LPs participate and vote for _BUT_ governance tokens holders participate beyond threshold and vote against (majority not reached). (<a name="0028-GOVE-032" href="#0028-GOVE-032">0028-GOVE-032</a>)
+- Verify that an enacted market change proposal that doubles the risk model volatility sigma leads to increased margin requirement for all parties. (<a name="0028-GOVE-035" href="#0028-GOVE-035">0028-GOVE-035</a>)
+- Verify that an enacted market which uses trading terminated key `ktt1` and settlement price key `ksp1` which is changed via governance proposal to use trading terminated key `ktt2` and settlement price key `ksp2` can terminate trading using `ktt2` but cannot terminate trading using `ktt1` and `ksp2` can submit the settlement price causing market to settle but the key `ksp1` cannot settle the market. (<a name="0028-GOVE-012" href="#0028-GOVE-012">0028-GOVE-012</a>)
+- Verify that an enacted market change proposal that changes price monitoring bounds enters a price monitoring auction upon the _new_ bound being breached (<a name="0028-GOVE-034" href="#0028-GOVE-034">0028-GOVE-034</a>)
+- Verify that an enacted market change proposal that reduces `market.stake.target.timeWindow` leads to a reduction in target stake if recent open interest is less than historical open interest (<a name="0028-GOVE-031" href="#0028-GOVE-031">0028-GOVE-031</a>)
+- Attempts to update immutable market parameter(s) cause the market change proposal to be rejected with an appropriate rejection message (<a name="0028-GOVE-058" href="#0028-GOVE-058">0028-GOVE-058</a>)
+- Verify that if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.00001` and if a party has no equity-like share in the market, but meets the `governance.proposal.updateMarket.minProposerBalance` threshold then said party can submit a market change proposal. (<a name="0028-GOVE-134" href="#0028-GOVE-134">0028-GOVE-134</a>)
+- Change of the network parameter `governance.proposal.updateMarket.minProposerEquityLikeShare` will immediately change the minimum proposer ELS for a market change proposal for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-064" href="#0028-GOVE-064">0028-GOVE-064</a>)
+- Change of the network parameter `governance.proposal.updateMarket.requiredParticipationLP` will immediately change the required LP vote participation (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-065" href="#0028-GOVE-065">0028-GOVE-065</a>)
+- Change of the network parameter `governance.proposal.updateMarket.requiredMajorityLP` will immediately change the required LP vote majority (measured in ELS) a market change proposal requires for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-066" href="#0028-GOVE-066">0028-GOVE-066</a>)
+- A market that's attempting to modify any parameters on a market in `proposed` state (i.e. voting hasn't completed) will be rejected. (<a name="0028-GOVE-069" href="#0028-GOVE-069">0028-GOVE-069</a>)
+- A market change proposal that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the proposed modification is enacted. (<a name="0028-GOVE-070" href="#0028-GOVE-070">0028-GOVE-070</a>)
+- In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the proposed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)
+- A market change that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)
+- A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
+- When multiple market closure governance proposals are submitted and accepted then one to be approved by governance last (i.e latest closing date and vote goes through) is the one whose enactment time and final settlement price get used to close the market (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
+- Once a market closure governance proposal has been accepted and was successful another proposal with same enactment date still gets accepted. If the later proposal is unsuccessful then values supplied by the last successful one get used to close the market (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
+- Once a market closure governance proposal has been accepted and was successful another proposal with earlier enactment date still gets accepted. If the later proposal is successful then values supplied within it get used to close the market (if no other proposals were successful after it) (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
+- Once a market closure governance proposal has been accepted and was successful another proposal with later enactment date gets rejected (<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
+- Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to resume the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
+- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
+- Resuming a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
+- A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
+- Verify that a party with 0 balance of the governance token, but with sufficient ELS can submit a market change proposal successfully. (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)
+- Verify that a party with 0 balance of the governance token and insufficient ELS sees their market change proposal rejected after submission. (<a name="0028-GOVE-118" href="#0028-GOVE-118">0028-GOVE-118</a>)
+- Enacting a market closure governance proposal on a market which is in opening auction closes it immediately without generating any trades. (<a name="0028-GOVE-135" href="#0028-GOVE-135">0028-GOVE-135</a>)
+- Enacting a market closure governance proposal on a market which is in auction (of any type except the opening auction) uncrosses that auction at the current uncrossing price, generates the trades and then proceeds to close it using the final price (if applicable to the market type). (<a name="0028-GOVE-136" href="#0028-GOVE-136">0028-GOVE-136</a>)
+- Enacting a market closure governance proposal on a market that is in a settled state has no effect. (<a name="0028-GOVE-137" href="#0028-GOVE-137">0028-GOVE-137</a>)
+- Enacting a market closure governance proposal on a market that is not in a settled state always uses the final price supplied with the proposal, even when the oracle settlement price is available at that time. (<a name="0028-GOVE-138" href="#0028-GOVE-138">0028-GOVE-138</a>)
+- Successful enactment of a market closure proposal changes the state of the market to `closed`. (<a name="0028-GOVE-139" href="#0028-GOVE-139">0028-GOVE-139</a>)
+
 #### Network parameter change proposals
 
-- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)(<a name="0028-SP-GOVE-026" href="#0028-SP-GOVE-026">0028-SP-GOVE-026</a>)
-- Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)(<a name="0028-SP-GOVE-013" href="#0028-SP-GOVE-013">0028-GOVE-013</a>)
+- As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-026" href="#0028-GOVE-026">0028-GOVE-026</a>)
+- Network parameter change proposals can only propose a change to a single parameter (<a name="0028-GOVE-013" href="#0028-GOVE-013">0028-GOVE-013</a>)
 Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeForm`.
-- Change of the network parameter `governance.proposal.*.minEnact` will immediately change the minimum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-051" href="#0028-GOVE-051">0028-GOVE-051</a>)(<a name="0028-SP-GOVE-051" href="#0028-SP-GOVE-051">0028-SP-GOVE-051</a>)
-- Change of the network parameter `governance.proposal.*.maxEnact` will immediately change the maximum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-052" href="#0028-GOVE-052">0028-GOVE-052</a>)(<a name="0028-SP-GOVE-052" href="#0028-SP-GOVE-052">0028-SP-GOVE-052</a>)
-- Change of the network parameter `governance.proposal.*.maxClose` will immediately change the maximum vote closing time for all future proposals.  Proposals that have already been submitted are not affected.  (<a name="0028-GOVE-053" href="#0028-GOVE-053">0028-GOVE-053</a>)(<a name="0028-SP-GOVE-053" href="#0028-SP-GOVE-053">0028-SP-GOVE-053</a>)
-- Change of the network parameter `governance.proposal.*.minClose` will immediately change the minimum vote closing time for all future proposals.  Proposals that have already been submitted are not affected.  (<a name="0028-GOVE-054" href="#0028-GOVE-054">0028-GOVE-054</a>)(<a name="0028-SP-GOVE-054" href="#0028-GSP-OVE-054">0028-SP-GOVE-054</a>)
-- Change of the network parameter `governance.proposal.*.requiredMajority` or `governance.proposal.*.requiredParticipation` will immediately change the majority (or participation) required for the proposal to pass for all proposals submitted in the future. Proposals that have already been submitted are not affected as they have their own copy of this value.  (<a name="0028-GOVE-055" href="#0028-GOVE-055">0028-GOVE-055</a>)(<a name="0028-SP-GOVE-055" href="#0028-SP-GOVE-055">0028-SP-GOVE-055</a>)
-- Change of the network parameter `governance.proposal.*.minVoterBalance` will immediately change the minimum governance token balance required to vote on any proposal submitted in the future. Proposals that have already been submitted are unaffected as they have their own copy of this parameter. (<a name="0028-GOVE-056" href="#0028-GOVE-056">0028-GOVE-056</a>)(<a name="0028-SP-GOVE-056" href="#0028-SP-GOVE-056">0028-SP-GOVE-056</a>)
-- Change of the network parameter `governance.proposal.*.minProposerBalance` will immediately change minimum governance token balance required to submit any future proposal. Proposals that have already been submitted are unaffected . (<a name="0028-GOVE-057" href="#0028-GOVE-057">0028-GOVE-057</a>)(<a name="0028-SP-GOVE-057" href="#0028-SP-GOVE-057">0028-SP-GOVE-057</a>)
+- Change of the network parameter `governance.proposal.*.minEnact` will immediately change the minimum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-051" href="#0028-GOVE-051">0028-GOVE-051</a>)
+- Change of the network parameter `governance.proposal.*.maxEnact` will immediately change the maximum enactment time for all future proposals. Proposals that have already been submitted are not affected. (<a name="0028-GOVE-052" href="#0028-GOVE-052">0028-GOVE-052</a>)
+- Change of the network parameter `governance.proposal.*.maxClose` will immediately change the maximum vote closing time for all future proposals.  Proposals that have already been submitted are not affected.  (<a name="0028-GOVE-053" href="#0028-GOVE-053">0028-GOVE-053</a>)
+- Change of the network parameter `governance.proposal.*.minClose` will immediately change the minimum vote closing time for all future proposals.  Proposals that have already been submitted are not affected.  (<a name="0028-GOVE-054" href="#0028-GOVE-054">0028-GOVE-054</a>)
+- Change of the network parameter `governance.proposal.*.requiredMajority` or `governance.proposal.*.requiredParticipation` will immediately change the majority (or participation) required for the proposal to pass for all proposals submitted in the future. Proposals that have already been submitted are not affected as they have their own copy of this value.  (<a name="0028-GOVE-055" href="#0028-GOVE-055">0028-GOVE-055</a>)
+- Change of the network parameter `governance.proposal.*.minVoterBalance` will immediately change the minimum governance token balance required to vote on any proposal submitted in the future. Proposals that have already been submitted are unaffected as they have their own copy of this parameter. (<a name="0028-GOVE-056" href="#0028-GOVE-056">0028-GOVE-056</a>)
+- Change of the network parameter `governance.proposal.*.minProposerBalance` will immediately change minimum governance token balance required to submit any future proposal. Proposals that have already been submitted are unaffected . (<a name="0028-GOVE-057" href="#0028-GOVE-057">0028-GOVE-057</a>)
 
 #### Freeform governance proposals
 
-- A freeform governance proposal with a description field that is empty, or not between 1 and 10,000 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)(<a name="0028-SP-GOVE-019" href="#0028-SP-GOVE-019">0028-SP-GOVE-019</a>)
-- A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)(<a name="0028-SP-GOVE-022" href="#0028-SP-GOVE-022">0028-SP-GOVE-022</a>)
-- Closed freeform governance proposals can be retrieved from the API along with details of how token holders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)(<a name="0028-SP-GOVE-023" href="#0028-SP-GOVE-023">0028-SP-GOVE-023</a>)
+- A freeform governance proposal with a description field that is empty, or not between 1 and 10,000 characters, will be rejected (<a name="0028-GOVE-019" href="#0028-GOVE-019">0028-GOVE-019</a>)
+- A freeform governance proposal does not have an enactment period set, and after it closes no action is taken on the system (<a name="0028-GOVE-022" href="#0028-GOVE-022">0028-GOVE-022</a>)
+- Closed freeform governance proposals can be retrieved from the API along with details of how token holders voted. (<a name="0028-GOVE-023" href="#0028-GOVE-023">0028-GOVE-023</a>)
 
 #### Concurrent governance proposals
 
-- Approved governance proposals sharing the same enactment time should be enacted in the order the proposals were created. (<a name="0028-GOVE-067" href="#0028-GOVE-067">0028-GOVE-067</a>)(<a name="0028-SP-GOVE-067" href="#0028-SP-GOVE-067">0028-SP-GOVE-067</a>)
-- Approved governance proposals sharing the same enactment time and changing the same parameter should all be applied, the oldest proposal will be applied first and the newest will be applied last, overwriting the changes made by the older proposals. (<a name="0028-GOVE-068" href="#0028-GOVE-068">0028-GOVE-068</a>)(<a name="0028-SP-GOVE-068" href="#0028-SP-GOVE-068">0028-SP-GOVE-068</a>)
+- Approved governance proposals sharing the same enactment time should be enacted in the order the proposals were created. (<a name="0028-GOVE-067" href="#0028-GOVE-067">0028-GOVE-067</a>)
+- Approved governance proposals sharing the same enactment time and changing the same parameter should all be applied, the oldest proposal will be applied first and the newest will be applied last, overwriting the changes made by the older proposals. (<a name="0028-GOVE-068" href="#0028-GOVE-068">0028-GOVE-068</a>)
 
 
-#### Governance Transfer proposals
+#### Governance initiated transfer proposals
 
 
 ##### Proposer Requirements
 
-- The transfer proposer must have at a staking balance which matches or exceeds `minProposerBalance` network parameter for this proposal type (<a name="0028-GOVE-073" href="#0028-GOVE-073">0028-GOVE-073</a>)(<a name="0028-SP-GOVE-073" href="#0028-SP-GOVE-073">0028-SP-GOVE-073</a>)
+- The transfer proposer must have at a staking balance which matches or exceeds `minProposerBalance` network parameter for this proposal type (<a name="0028-GOVE-073" href="#0028-GOVE-073">0028-GOVE-073</a>)
 
 
 ##### APIs
 
-- Governance transfer proposal and all associated data are returned via the governance APIs (<a name="0028-GOVE-074" href="#0028-GOVE-074">0028-GOVE-074</a>)(<a name="0028-SP-GOVE-074" href="#0028-SP-GOVE-074">0028-SP-GOVE-074</a>)
+- Governance initiated transfer proposal and all associated data are returned via the governance APIs (<a name="0028-GOVE-074" href="#0028-GOVE-074">0028-GOVE-074</a>)
 
 
 ##### Transfer proposal submission validation
 
-- A proposal to transfer tokens between Network treasury and Party general account(s) is valid (<a name="0028-GOVE-128" href="#0028-GOVE-128">0028-GOVE-128</a>)(<a name="0028-SP-GOVE-128" href="#0028-SP-GOVE-128">0028-SP-GOVE-128</a>)
-- A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-119" href="#0028-GOVE-119">0028-GOVE-119</a>)(<a name="0028-SP-GOVE-119" href="#0028-SP-GOVE-119">0028-SP-GOVE-119</a>)
-- A proposal to transfer tokens between Market insurance pool account and Party account(s) is valid (<a name="0028-GOVE-120" href="#0028-GOVE-120">0028-GOVE-120</a>)(<a name="0028-SP-GOVE-120" href="#0028-SP-GOVE-120">0028-SP-GOVE-120</a>)
-- A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-121" href="#0028-GOVE-121">0028-GOVE-121</a>)(<a name="0028-SP-GOVE-121" href="#0028-SP-GOVE-121">0028-SP-GOVE-121</a>)
-- A proposal to transfer tokens between Market insurance pool account and Network treasury is valid (<a name="0028-GOVE-132" href="#0028-GOVE-132">0028-GOVE-132</a>)(<a name="0028-SP-GOVE-132" href="#0028-SP-GOVE-132">0028-SP-GOVE-132</a>)
-- A proposal to transfer tokens between Market insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-122" href="#0028-GOVE-122">0028-GOVE-122</a>)(<a name="0028-SP-GOVE-122" href="#0028-SP-GOVE-122">0028-SP-GOVE-122</a>)
-- Governance transfer proposals with invalid source or destination account types will get rejected by the blockchain. (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)(<a name="0028-SP-GOVE-077" href="#0028-SP-GOVE-077">0028-SP-GOVE-077</a>)
-- Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)(<a name="0028-SP-GOVE-079" href="#0028-SP-GOVE-079">0028-SP-GOVE-079</a>)
-- Source can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-080" href="#0028-GOVE-080">0028-GOVE-080</a>)(<a name="0028-SP-GOVE-080" href="#0028-SP-GOVE-080">0028-SP-GOVE-080</a>)
-- For proposal source/destination types of Market Insurance the source/destination must be a valid `marketID` else the proposal is rejected by the blockchain. (<a name="0028-GOVE-081" href="#0028-GOVE-081">0028-GOVE-081</a>)(<a name="0028-SP-GOVE-081" href="#0028-SP-GOVE-081">0028-SP-GOVE-081</a>)
-- Type value can only hold “all or nothing" or "best effort” (<a name="0028-GOVE-082" href="#0028-GOVE-082">0028-GOVE-082</a>)(<a name="0028-SP-GOVE-082" href="#0028-SP-GOVE-082">0028-SP-GOVE-082</a>)
-- Transfer amounts will be accepted and processed in asset precision (<a name="0028-GOVE-083" href="#0028-GOVE-083">0028-GOVE-083</a>)(<a name="0028-SP-GOVE-083" href="#0028-SP-GOVE-083">0028-SP-GOVE-083</a>)
-- Asset specified must be a valid asset address else proposal is rejected (<a name="0028-GOVE-084" href="#0028-GOVE-084">0028-GOVE-084</a>)(<a name="0028-SP-GOVE-084" href="#0028-SP-GOVE-084">0028-SP-GOVE-084</a>)
-- Fraction of balance must be submitted as a positive (else will cause the proposal to reject) and will be processed as a fraction of the source accounts balance (<a name="0028-GOVE-085" href="#0028-GOVE-085">0028-GOVE-085</a>)(<a name="0028-SP-GOVE-085" href="#0028-SP-GOVE-085">0028-SP-GOVE-085</a>)
-- Destination Type can be any of the predefined types in the above table (<a name="0028-GOVE-086" href="#0028-GOVE-086">0028-GOVE-086</a>)(<a name="0028-SP-GOVE-086" href="#0028-SP-GOVE-086">0028-SP-GOVE-086</a>)
-- Source and destination type cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-087" href="#0028-GOVE-087">0028-GOVE-087</a>)(<a name="0028-SP-GOVE-087" href="#0028-SP-GOVE-087">0028-SP-GOVE-087</a>)
-- Transfers can be proposed between market insurance accounts but source and destination accounts cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-088" href="#0028-GOVE-088">0028-GOVE-088</a>)(<a name="0028-SP-GOVE-088" href="#0028-SP-GOVE-088">0028-SP-GOVE-088</a>)
-- Destination must be a valid Vega public key for a transfer type of Party else is rejected (<a name="0028-GOVE-089" href="#0028-GOVE-089">0028-GOVE-089</a>)(<a name="0028-SP-GOVE-089" href="#0028-SP-GOVE-089">0028-SP-GOVE-089</a>)
-- Destination can be left blank for a transfer type of Network Insurance Pool (<a name="0028-GOVE-090" href="#0028-GOVE-090">0028-GOVE-090</a>)(<a name="0028-SP-GOVE-090" href="#0028-SP-GOVE-090">0028-SP-GOVE-090</a>)
-- For transfer source types of Market Insurance the destination must be a valid market ID  else is rejected (<a name="0028-GOVE-091" href="#0028-GOVE-091">0028-GOVE-091</a>)(<a name="0028-SP-GOVE-091" href="#0028-SP-GOVE-091">0028-SP-GOVE-091</a>)
-- The proposal will allow standard proposal fields to control timings on closing the voting period and enactment time, these will be validated in the same way as other proposals  (<a name="0028-GOVE-092" href="#0028-GOVE-092">0028-GOVE-092</a>)(<a name="0028-SP-GOVE-092" href="#0028-SP-GOVE-092">0028-SP-GOVE-092</a>)
-- For successor markets we allow transfer between Market insurance pool account of parent market to Market insurance pool account of child market (<a name="0028-GOVE-093" href="#0028-GOVE-093">0028-GOVE-093</a>)(<a name="0028-SP-GOVE-093" href="#0028-SP-GOVE-093">0028-SP-GOVE-093</a>)
+- A proposal to transfer tokens between Network treasury and Party general account(s) is valid (<a name="0028-GOVE-128" href="#0028-GOVE-128">0028-GOVE-128</a>)
+- A proposal to transfer tokens between Network treasury and market insurance pool account is valid (<a name="0028-GOVE-119" href="#0028-GOVE-119">0028-GOVE-119</a>)
+- A proposal to transfer tokens between Market insurance pool account and Party account(s) is valid (<a name="0028-GOVE-120" href="#0028-GOVE-120">0028-GOVE-120</a>)
+- A proposal to transfer tokens between Market insurance pool account and Network treasury is valid (<a name="0028-GOVE-132" href="#0028-GOVE-132">0028-GOVE-132</a>)
+- A proposal to transfer tokens between Market insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-122" href="#0028-GOVE-122">0028-GOVE-122</a>)
+- Governance initiated transfer proposals with invalid source or destination account types will get rejected by the blockchain. (<a name="0028-GOVE-077" href="#0028-GOVE-077">0028-GOVE-077</a>)
+- Source can be left blank for a transfer type of Network Treasury (<a name="0028-GOVE-079" href="#0028-GOVE-079">0028-GOVE-079</a>)
+- For proposal source/destination types of Market Insurance the source/destination must be a valid `marketID` else the proposal is rejected by the blockchain. (<a name="0028-GOVE-081" href="#0028-GOVE-081">0028-GOVE-081</a>)
+- Type value can only hold “all or nothing" or "best effort” (<a name="0028-GOVE-082" href="#0028-GOVE-082">0028-GOVE-082</a>)
+- Transfer amounts will be accepted and processed in asset precision (<a name="0028-GOVE-083" href="#0028-GOVE-083">0028-GOVE-083</a>)
+- Asset specified must be a valid asset address else proposal is rejected (<a name="0028-GOVE-084" href="#0028-GOVE-084">0028-GOVE-084</a>)
+- Fraction of balance must be submitted as a positive (else will cause the proposal to reject) and will be processed as a fraction of the source accounts balance (<a name="0028-GOVE-085" href="#0028-GOVE-085">0028-GOVE-085</a>)
+- Destination Type can be any of the predefined types in the above table (<a name="0028-GOVE-086" href="#0028-GOVE-086">0028-GOVE-086</a>)
+- Source and destination type cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-087" href="#0028-GOVE-087">0028-GOVE-087</a>)
+- Transfers can be proposed between market insurance accounts but source and destination accounts cannot be the same value else the proposal will be rejected (<a name="0028-GOVE-088" href="#0028-GOVE-088">0028-GOVE-088</a>)
+- Destination must be a valid Vega public key for a transfer type of Party else is rejected (<a name="0028-GOVE-089" href="#0028-GOVE-089">0028-GOVE-089</a>)
+- For transfer source types of Market Insurance the destination must be a valid market ID  else is rejected (<a name="0028-GOVE-091" href="#0028-GOVE-091">0028-GOVE-091</a>)
+- The proposal will allow standard proposal fields to control timings on closing the voting period and enactment time, these will be validated in the same way as other proposals  (<a name="0028-GOVE-092" href="#0028-GOVE-092">0028-GOVE-092</a>)
+- For successor markets we allow transfer between Market insurance pool account of parent market to Market insurance pool account of child market (<a name="0028-GOVE-093" href="#0028-GOVE-093">0028-GOVE-093</a>)
 
-##### Governance transfer enactment
 
-- For enacted proposals a token transfer will occur at the time of enactment between the source and destination account if sufficient tokens are held in the source account. A transaction result event will show the successful transfer between two accounts  (<a name="0028-GOVE-094" href="#0028-GOVE-094">0028-GOVE-094</a>)(<a name="0028-SP-GOVE-094" href="#0028-SP-GOVE-094">0028-SP-GOVE-094</a>)
-- A governance approved recurring transfer will continue even if the source account balance is `0`. In such case the amount transferred will be seen to be `0`. (<a name="0028-GOVE-095" href="#0028-GOVE-095">0028-GOVE-095</a>)(<a name="0028-SP-GOVE-095" href="#0028-SP-GOVE-095">0028-SP-GOVE-095</a>)
-- Transfers can occur for terminated markets  (<a name="0028-GOVE-096" href="#0028-GOVE-096">0028-GOVE-096</a>) (<a name="0028-SP-GOVE-096" href="#0028-SP-GOVE-096">0028-SP-GOVE-096</a>)
-- Transfers cannot occur for settled markets and a transaction result event will show the transfer failing with an appropriate message  (<a name="0028-GOVE-097" href="#0028-GOVE-097">0028-GOVE-097</a>)(<a name="0028-SP-GOVE-097" href="#0028-SP-GOVE-097">0028-SP-GOVE-097</a>)
-- Transfers cannot occur for pending markets unless they become active on or before the enactment time of the transfer (<a name="0028-GOVE-098" href="#0028-GOVE-098">0028-GOVE-098</a>)(<a name="0028-SP-GOVE-098" href="#0028-SP-GOVE-098">0028-SP-GOVE-098</a>)
+##### Governance initiated transfer enactment
+
+- For enacted proposals a token transfer will occur at the time of enactment between the source and destination account if sufficient tokens are held in the source account. A transaction result event will show the successful transfer between two accounts  (<a name="0028-GOVE-094" href="#0028-GOVE-094">0028-GOVE-094</a>)
+- A governance approved recurring transfer will continue even if the source account balance is `0`. In such case the amount transferred will be seen to be `0`. (<a name="0028-GOVE-095" href="#0028-GOVE-095">0028-GOVE-095</a>)
+- Transfers can occur for pending, terminated markets, settled markets (<a name="0028-GOVE-096" href="#0028-GOVE-096">0028-GOVE-096</a>)
 
 
 ##### Transferred Amount
 
-- If the type of transfer is “All or nothing” then the minimum of either `fraction_of_balance * source_balance` and the transfer amount is transfers between accounts.  The transfer is recorded in Vega ledger movements even if  the amount is derived as zero (<a name="0028-GOVE-099" href="#0028-GOVE-099">0028-GOVE-099</a>)(<a name="0028-SP-GOVE-099" href="#0028-SP-GOVE-099">0028-SP-GOVE-099</a>)
-- If the type of transfer is “Best effort” then the transfer amount is derived from the minimum of `proposal.fraction_of_balance * source.balance, proposal.amount, NETWORK_MAX_AMOUNT, NETWORK_MAX_FRACTION * source.balance`. The transfer is recorded in Vega ledger movements even if  the amount is derived as zero (<a name="0028-GOVE-100" href="#0028-GOVE-100">0028-GOVE-100</a>)(<a name="0028-SP-GOVE-100" href="#0028-SP-GOVE-100">0028-SP-GOVE-100</a>)
+- If the type of transfer is “All or nothing” then the minimum of either `fraction_of_balance * source_balance` and the transfer amount is transfers between accounts.  The transfer is recorded in Vega ledger movements even if  the amount is derived as zero (<a name="0028-GOVE-099" href="#0028-GOVE-099">0028-GOVE-099</a>)
+- If the type of transfer is “Best effort” then the transfer amount is derived from the minimum of `proposal.fraction_of_balance * source.balance, proposal.amount, NETWORK_MAX_AMOUNT, NETWORK_MAX_FRACTION * source.balance`. The transfer is recorded in Vega ledger movements even if  the amount is derived as zero (<a name="0028-GOVE-100" href="#0028-GOVE-100">0028-GOVE-100</a>)
 
 
 ##### Transfer Fees
 
-- No fees are incurred by the transfer and therefore the the number of tokens deducted from the source account should always equal the tokens added to the destination account (<a name="0028-GOVE-101" href="#0028-GOVE-101">0028-GOVE-101</a>)(<a name="0028-SP-GOVE-101" href="#0028-SP-GOVE-101">0028-SP-GOVE-101</a>)
+- No fees are incurred by the transfer and therefore the the number of tokens deducted from the source account should always equal the tokens added to the destination account (<a name="0028-GOVE-101" href="#0028-GOVE-101">0028-GOVE-101</a>)
 
 
 ##### Protocol Upgrade
 
-- Transfer proposals in either a pre or post enactment state are restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)(<a name="0028-SP-GOVE-102" href="#0028-SP-GOVE-102">0028-SP-GOVE-102</a>)
-- Recurring transfers proposed before an upgrade which start before, during or after an upgrade should complete on the proposed end epoch (<a name="0028-GOVE-130" href="#0028-GOVE-130">0028-GOVE-130</a>)(<a name="0028-SP-GOVE-130" href="#0028-SP-GOVE-130">0028-SP-GOVE-130</a>)
-- One off delivery transfers proposed before an upgrade which are due to start during or after an upgrade should complete either when the network is available again or at the proposed delivery date/time (<a name="0028-GOVE-131" href="#0028-GOVE-131">0028-GOVE-131</a>)(<a name="0028-SP-GOVE-131" href="#0028-SP-GOVE-131">0028-SP-GOVE-131</a>)
-
-#### Checkpoints and Snapshots
-
-- Active or dormant governance transfer (one-off or recurring) must be included in checkpoint and where the network is down during the proposed delivery time, the transfer will occur as soon as the network is available. For recurring transfers the transfers spanning the restore will continue until the end epoch. (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)(<a name="0028-SP-GOVE-103" href="#0028-SP-GOVE-103">0028-SP-GOVE-103</a>)
-- Active or dormant governance transfer (one-off or recurring) must be included in snapshots and data nodes which join the network will support retrieval of the transfer data (<a name="0028-GOVE-133" href="#0028-GOVE-133">0028-GOVE-133</a>)(<a name="0028-SP-GOVE-133" href="#0028-SP-GOVE-133">0028-SP-GOVE-133</a>)
-
-##### Recurring Governance transfers
-
-- For a recurring proposal, the proposal is only active from defined start epoch and optional end epoch, the transfer will be executed every epoch while the proposal is active. (<a name="0028-GOVE-104" href="#0028-GOVE-104">0028-GOVE-104</a>)(<a name="0028-SP-GOVE-104" href="#0028-SP-GOVE-104">0028-SP-GOVE-104</a>)
-
-- Enacted and active recurring governance transfers must be included in LNL banking checkpoint and resume after the checkpoint restore.(<a name="0028-GOVE-105" href="#0028-GOVE-105">0028-GOVE-105</a>)(<a name="0028-SP-GOVE-105" href="#0028-SP-GOVE-105">0028-SP-GOVE-105</a>)
-
-- When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)(<a name="0028-SP-GOVE-106" href="#0028-SP-GOVE-106">0028-SP-GOVE-106</a>)
+- Transfer proposals in either a pre or post enactment state are restored after a protocol upgrade (<a name="0028-GOVE-102" href="#0028-GOVE-102">0028-GOVE-102</a>)
+- Recurring transfers proposed before an upgrade which start before, during or after an upgrade should complete on the proposed end epoch (<a name="0028-GOVE-130" href="#0028-GOVE-130">0028-GOVE-130</a>)
+- One off delivery transfers proposed before an upgrade which are due to start during or after an upgrade should complete either when the network is available again or at the proposed delivery date/time (<a name="0028-GOVE-131" href="#0028-GOVE-131">0028-GOVE-131</a>)
 
 
-##### Cancelling governance transfers
+##### Checkpoints and Snapshots
 
-- Only recurring governance transfers can be cancelled by proposing a governance transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)(<a name="0028-SP-GOVE-107" href="#0028-SP-GOVE-107">0028-SP-GOVE-107</a>)
-- After a transfer is cancelled there will be no more transfers occurring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-123" href="#0028-GOVE-123">0028-GOVE-123</a>)(<a name="0028-SP-GOVE-123" href="#0028-SP-GOVE-123">0028-SP-GOVE-123</a>)
-- Using a governance proposal to cancel, attempts to cancel a recurring transfer which has yet to start or has completed will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)(<a name="0028-SP-GOVE-124" href="#0028-SP-GOVE-124">0028-SP-GOVE-124</a>)
-- Using a governance proposal to cancel, attempts to cancel an using an invalid transfer ID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-125" href="#0028-GOVE-125">0028-GOVE-125</a>)(<a name="0028-SP-GOVE-125" href="#0028-SP-GOVE-125">0028-GSP-OVE-125</a>)
-- When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-126" href="#0028-GOVE-126">0028-GOVE-126</a>)(<a name="0028-SP-GOVE-126" href="#0028-SP-GOVE-126">0028-SP-GOVE-126</a>)
+- Active or dormant governance initiated transfer (one-off or recurring) must be included in checkpoint and where the network is down during the proposed delivery time, the transfer will occur as soon as the network is available. For recurring transfers the transfers spanning the restore will continue until the end epoch. (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
+- Active or dormant governance initiated transfer (one-off or recurring) must be included in snapshots and data nodes which join the network will support retrieval of the transfer data (<a name="0028-GOVE-133" href="#0028-GOVE-133">0028-GOVE-133</a>)
+
+
+##### One Off Delivery transfers
+
+If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately. (<a name="0028-GOVE-129" href="#0028-GOVE-129">0028-GOVE-129</a>)
+
+
+##### Recurring governance initiated transfers
+
+- For a recurring proposal, the proposal is only active from defined start epoch and optional end epoch, the transfer will be executed every epoch while the proposal is active. (<a name="0028-GOVE-104" href="#0028-GOVE-104">0028-GOVE-104</a>)
+
+- Enacted and active recurring governance initiated transfers must be included in LNL banking checkpoint and resume after the checkpoint restore.(<a name="0028-GOVE-105" href="#0028-GOVE-105">0028-GOVE-105</a>)
+
+- When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
+
+
+##### Cancelling governance initiated transfers
+
+- Only recurring governance initiated transfers can be cancelled by proposing a governance initiated transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
+- After a transfer is cancelled there will be no more transfers occurring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-123" href="#0028-GOVE-123">0028-GOVE-123</a>)
+- Using a governance proposal to cancel, attempts to cancel a recurring transfer which has yet to start or has completed will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)
+- Using a governance proposal to cancel, attempts to cancel an using an invalid transfer ID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-125" href="#0028-GOVE-125">0028-GOVE-125</a>)
+- When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-126" href="#0028-GOVE-126">0028-GOVE-126</a>)
 
 
 ##### Network History
 
-- A datanode restored from network history will contain any recurring and one-off transfers created prior to the restore and these can be retrieved via APIs on the new datanode.(<a name="0028-GOVE-127" href="#0028-GOVE-127">0028-GOVE-127</a>)(<a name="0028-SP-GOVE-127" href="#0028-SP-GOVE-127">0028-SP-GOVE-127</a>)
+- A datanode restored from network history will contain any recurring and one-off transfers created prior to the restore and these can be retrieved via APIs on the new datanode.(<a name="0028-GOVE-127" href="#0028-GOVE-127">0028-GOVE-127</a>)
 
