@@ -650,4 +650,3 @@ If the proposal is one off it can define a time for delivery. Whenever the block
 ##### Network History
 
 - A datanode restored from network history will contain any recurring and one-off transfers created prior to the restore and these can be retrieved via APIs on the new datanode.(<a name="0028-GOVE-127" href="#0028-GOVE-127">0028-GOVE-127</a>)
-

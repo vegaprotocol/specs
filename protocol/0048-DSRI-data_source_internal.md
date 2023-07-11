@@ -24,13 +24,15 @@ value { type: number, value: 1400.5 }
 
 ## 1.2 Time triggered
 
-This data source would be used to emit an event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example.
+### 1.2.1 One-off
+
+This data source would be used to emit a a single event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example.
 
 This trigger will emit the contents of the specified data source (could be omitted if just triggering trading termination, or could be a value as described in 1.1, or another data source in order to implement a delay/ensure the value from the data source is not emitted before a certain time).
 
 Note that trading terminated in the futures definition uses a data source as a trigger intentionally to (a) demonstrate that this is how time based product events would work; and (b) because although the trigger MAY be time based, it could also be another data source such as a signed message oracle, if the trading terminates at an unknown time.
 
-In future, there will be a need to support repeating time based triggers, for example every 2 days or at 04:00, 12:00 and 20:00 every day, etc. (as some products will have triggers that happen regularly).
+Once the data source emits the event it should become inactive.
 
 Pseudocode example:
 
@@ -50,6 +52,10 @@ on: {
 }
 
 ```
+
+### 1.2.2 Repeating
+
+The repeating internal time triggered oracles will be used by the [perpetual futures](protocol/0053-PERP-product_builtin_perpetual_future.md) product, hence it must be possible to set them up to model a schedule like: every day at 04:00, 12:00 and 20:00. It should also be possible to model a completely arbitrary time schedule with a fixed number of events (e.g. 01/02/2023 08:52, 11/03/2023 15:45, 20/04/2023 21:37). Appropriate anti-spam measures should be considered to prevent the ability to specify an internal time triggered oracle that puts exceedingly high strain on the resources.
 
 ## 1.3 Vega time changed
 
@@ -128,3 +134,6 @@ Currently (as of Oregon Trail), only the *Vega time changed (1.3 above)* interna
 	- setup 3 markets, all with time based termination with identical signer details, two with the same time, one with a later time
 	- wait to all of them to terminate successfully
 	- assert they all settle successfully
+1. The repeating internal time triggered oracle can be used to model a time schedule of the form: every day at 12:00, 15:00 and 18:00. (<a name="0048-DSRI-018" href="#0048-DSRI-018">0048-DSRI-018</a>)
+1. The repeating internal time triggered oracle can be used to model a time schedule of the form: 01/02/2023 08:52, 11/03/2023 15:45, 20/04/2023 21:37. (<a name="0048-DSRI-016" href="#0048-DSRI-016">0048-DSRI-016</a>)
+1. The repeating internal time triggered oracle with a schedule of "every day at 12:00", always sends an event as soon as the block with a timestamp with time of 12:00 or higher is received (the time the oracle sends an event doesn't drift forward even after many days). (<a name="0048-DSRI-017" href="#0048-DSRI-017">0048-DSRI-017</a>)
