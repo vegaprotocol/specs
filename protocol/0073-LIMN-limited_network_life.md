@@ -102,10 +102,10 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ## Acceptance criteria
 
-- Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. (<a name="0073-LIMN-001" href="#0073-LIMN-001">0073-LIMN-001</a>)(<a name="0073-SP-LIMN-001" href="#0073-SP-LIMN-001">0073-SP-LIMN-001</a>)
-- Checkpoint is created every time a party requests a withdrawal transaction on any chain. (<a name="0073-LIMN-002" href="#0073-LIMN-002">0073-LIMN-002</a>)(<a name="0073-SP-LIMN-002" href="#0073-SP-LIMN-002">0073-SP-LIMN-002</a>)
-- We can launch a network with any valid checkpoint file. (<a name="0073-LIMN-003" href="#0073-LIMN-003">0073-LIMN-003</a>)(<a name="0073-SP-LIMN-003" href="#0073-SP-LIMN-003">0073-SP-LIMN-003</a>)
-- Hash of the checkpoint file is agreed via consensus. (<a name="0073-LIMN-005" href="#0073-LIMN-005">0073-LIMN-005</a>)(<a name="0073-SP-LIMN-005" href="#0073-SP-LIMN-005">0073-SP-LIMN-005</a>)
+- Checkpoints are created every `network.checkpoint.timeElapsedBetweenCheckpoints` period of time passes. (<a name="0073-LIMN-001" href="#0073-LIMN-001">0073-LIMN-001</a>)
+- Checkpoint is created every time a party requests a withdrawal transaction on any chain. (<a name="0073-LIMN-002" href="#0073-LIMN-002">0073-LIMN-002</a>)
+- We can launch a network with any valid checkpoint file. (<a name="0073-LIMN-003" href="#0073-LIMN-003">0073-LIMN-003</a>)
+- Hash of the checkpoint file is agreed via consensus. (<a name="0073-LIMN-005" href="#0073-LIMN-005">0073-LIMN-005</a>)
 
 ### Test case 1: Withdrawal status is correctly tracked across resets (<a name="0073-LIMN-007" href="#0073-LIMN-007">0073-LIMN-007</a>)(<a name="0073-SP-LIMN-007" href="#0073-SP-LIMN-007">0073-SP-LIMN-007</a>)
 
@@ -226,13 +226,21 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is no market and there are no market proposals.
 1. The party has general account balance in USD of `0` and The party has "signed for withdrawal" `100`.
 
-### Test case 4: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-016" href="#0073-LIMN-016">0073-LIMN-016</a>)(<a name="0073-SP-LIMN-SP-016" href="#0073-SP-LIMN-016">0073-SP-LIMN-016</a>)
+### Test case 4a: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-016" href="#0073-LIMN-016">0073-LIMN-016</a>)
 
 1. A party has USD general account balance of 100 USD.
 2. That party has USD margin account balance of 100 USD.
 3. The network is shut down.
 4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 5. That party has a USD general account balance of 200 USD
+
+### Test case 4b: In Spot market, party's Holding Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-SP-LIMN-016" href="#0073-SP-LIMN-016">0073-SP-LIMN-016</a>)
+
+1. A party has USD general account balance of 100 USD.
+2. That party has USD holding account balance of 50 USD.
+3. The network is shut down.
+4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
+5. That party has a USD general account balance of 150 USD
 
 ### Test case 5: Add or remove stake during checkpoint restart (<a name="0073-LIMN-017" href="#0073-LIMN-017">0073-LIMN-017</a>)(<a name="0073-SP-LIMN-017" href="#0073-SP-LIMN-017">0073-SP-LIMN-017</a>)
 
@@ -261,7 +269,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 #### Test case 6.2: `timeElapsedBetweenCheckpoints` set to value outside acceptable range
 
-### Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0073-LIMN-022" href="#0073-LIMN-022">0073-LIMN-022</a>)(<a name="0073-SP-LIMN-022" href="#0073-SP-LIMN-022">0073-SP-LIMN-022</a>)
+### Test case 11: Rewards are distributed correctly every epoch including with the use of recurring transfers (<a name="0073-LIMN-022" href="#0073-LIMN-022">0073-LIMN-022</a>)
 
 - More than one party deposits stake onto Vega
 - The parties delegate stake to the validators
@@ -275,9 +283,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ### Test case 12
 
-1. Enacted, listed ERC-20 asset is remembered in checkpoint (<a name="0073-LIMN-023" href="#0073-LIMN-023">0073-LIMN-023</a>)(<a name="0073-SP-LIMN-023" href="#0073-SP-LIMN-023">0073-SP-LIMN-023</a>)
-1. An ERC-20 asset loaded from checkpoint can be used in a market loaded from a checkpoint (<a name="0073-LIMN-024" href="#0073-LIMN-024">0073-LIMN-024</a>)(<a name="0073-SP-LIMN-024" href="#0073-SP-LIMN-024">0073-SP-LIMN-024</a>)
-1. An ERC-20 asset loaded from checkpoint can be updated (<a name="0073-LIMN-025" href="#0073-LIMN-025">0073-LIMN-025</a>)(<a name="0073-SP-LIMN-025" href="#0073-SP-LIMN-025">0073-SP-LIMN-025</a>)
+1. Enacted, listed ERC-20 asset is remembered in checkpoint (<a name="0073-LIMN-023" href="#0073-LIMN-023">0073-LIMN-023</a>)
+1. An ERC-20 asset loaded from checkpoint can be used in a market loaded from a checkpoint (<a name="0073-LIMN-024" href="#0073-LIMN-024">0073-LIMN-024</a>)
+1. An ERC-20 asset loaded from checkpoint can be updated (<a name="0073-LIMN-025" href="#0073-LIMN-025">0073-LIMN-025</a>)
 1. An ERC-20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>)(<a name="0073-SP-LIMN-026" href="#0073-SP-LIMN-026">0073-SP-LIMN-026</a>)
 1. Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a name="0073-LIMN-027" href="#0073-LIMN-027">0073-LIMN-027</a>)(<a name="0073-SP-LIMN-027" href="#0073-SP-LIMN-027">0073-SP-LIMN-027</a>)
 
@@ -317,8 +325,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. System saves LNL checkpoint at a time when undistributed LP fees for the market are > 0.
 1. Restart Vega, load LNL checkpoint.
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>)(<a name="0073-SP-LIMN-029" href="#0073-SP-LIMN-029">0073-SP-LIMN-029</a>)
-1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-030" href="#0073-LIMN-030">0073-LIMN-030</a>)(<a name="0073-SP-LIMN-030" href="#0073-SP-LIMN-030">0073-SP-LIMN-030</a>)
-1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-031" href="#0073-LIMN-031">0073-LIMN-031</a>)(<a name="0073-SP-LIMN-031" href="#0073-SP-LIMN-031">0073-SP-LIMN-031</a>)
+1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-030" href="#0073-LIMN-030">0073-LIMN-030</a>)
+1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-031" href="#0073-LIMN-031">0073-LIMN-031</a>)
+1. In Spot market, for parties that had holdings in the holding account on the market this is now in their general account for the asset.  (<a name="0073-SP-LIMN-031" href="#0073-SP-LIMN-031">0073-SP-LIMN-031</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>)(<a name="0073-SP-LIMN-032" href="#0073-SP-LIMN-032">0073-SP-LIMN-032</a>)
 1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-033" href="#0073-LIMN-033">0073-LIMN-033</a>)(<a name="0073-SP-LIMN-033" href="#0073-SP-LIMN-033">0073-SP-LIMN-033</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-034" href="#0073-LIMN-034">0073-LIMN-034</a>)(<a name="0073-SP-LIMN-034" href="#0073-SP-LIMN-034">0073-SP-LIMN-034</a>)
@@ -330,8 +339,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Restart Vega, load LNL checkpoint.
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>)(<a name="0073-SP-LIMN-040" href="#0073-SP-LIMN-040">0073-SP-LIMN-040</a>)
 1. If the market exists in the data node it is marked as settled with correct settlement data. (<a name="0073-LIMN-041" href="#0073-LIMN-041">0073-LIMN-041</a>)(<a name="0073-SP-LIMN-041" href="#0073-SP-LIMN-041">0073-SP-LIMN-041</a>)
-1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>)(<a name="0073-SP-LIMN-042" href="#0073-SP-LIMN-042">0073-SP-LIMN-042</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-043" href="#0073-LIMN-043">0073-LIMN-043</a>)(<a name="0073-SP-LIMN-043" href="#0073-SP-LIMN-043">0073-SP-LIMN-043</a>)
+1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>)
+1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset.  (<a name="0073-SP-LIMN-042" href="#0073-SP-LIMN-042">0073-SP-LIMN-042</a>)
+1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-043" href="#0073-LIMN-043">0073-LIMN-043</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>)(<a name="0073-SP-LIMN-044" href="#0073-SP-LIMN-044">0073-SP-LIMN-044</a>)
 
 ### Test case 16: Markets can be settled and terminated after restore as proposed
@@ -340,7 +350,8 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. System saves LNL checkpoint.
 1. Restart Vega, load LNL checkpoint.
 1. A party submits liquidity provision to the market, orders are submitted to the opening auction to allow uncrossing; at least two parties now have a position.
-1. Submit the trading terminated transaction and settlement date transaction as set out in the proposal and observe the final settlement cashflows for the parties with positions.  (<a name="0073-LIMN-050" href="#0073-LIMN-050">0073-LIMN-050</a>)(<a name="0073-SP-LIMN-050" href="#0073-SP-LIMN-050">0073-SP-LIMN-050</a>)
+1. Submit the trading terminated transaction and settlement date transaction as set out in the proposal and observe the final settlement cashflows for the parties with positions.  (<a name="0073-LIMN-050" href="#0073-LIMN-050">0073-LIMN-050</a>)
+1. In Spot market, market can be closed after a restore. (<a name="0073-SP-LIMN-050" href="#0073-SP-LIMN-050">0073-SP-LIMN-050</a>)
 1. It's not possible to submit orders or LP provisions to this market.  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>)(<a name="0073-SP-LIMN-051" href="#0073-SP-LIMN-051">0073-SP-LIMN-051</a>)
 
 ### Test case 17: Markets with internal time trigger for trading terminated that rings between shutdown and restore
@@ -350,9 +361,10 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung.
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>)(<a name="0073-SP-LIMN-060" href="#0073-SP-LIMN-060">0073-SP-LIMN-060</a>); if it exists it in `cancelled` state.
 1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>)(<a name="0073-SP-LIMN-061" href="#0073-SP-LIMN-061">0073-SP-LIMN-061</a>)
-1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)(<a name="0073-SP-LIMN-062" href="#0073-SP-LIMN-062">0073-SP-LIMN-062</a>)
+1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
+1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset. (<a name="0073-SP-LIMN-062" href="#0073-SP-LIMN-062">0073-SP-LIMN-062</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>)(<a name="0073-SP-LIMN-063" href="#0073-SP-LIMN-063">0073-SP-LIMN-063</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-064" href="#0073-LIMN-064">0073-LIMN-064</a>)(<a name="0073-SP-LIMN-064" href="#0073-SP-LIMN-064">0073-SP-LIMN-064</a>)
+1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-064" href="#0073-LIMN-064">0073-LIMN-064</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>)(<a name="0073-SP-LIMN-065" href="#0073-SP-LIMN-065">0073-SP-LIMN-065</a>)
 
 ### Test case 18: market definition is the same pre and post LNL restore
@@ -383,7 +395,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Stop the network.
 1. Update the multisig contract.
 1. Restart the vega network from the checkpoint created earlier.
-1. Vega observes the multisig change and rewards are paid at the end of the current epoch. (<a name="0073-LIMN-075" href="#0073-LIMN-075">0073-LIMN-075</a>)(<a name="0073-SP-LIMN-075" href="#0073-SP-LIMN-075">0073-SP-LIMN-075</a>)
+1. Vega observes the multisig change and rewards are paid at the end of the current epoch. (<a name="0073-LIMN-075" href="#0073-LIMN-075">0073-LIMN-075</a>)
 
 ### Test case 21: Loading from checkpoint with invalid multisig
 
@@ -393,4 +405,4 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Stop the network.
 1. Do not update the multisig contract.
 1. Restart the vega network from the checkpoint created earlier.
-1. Vega observes the incorrect multisig, and rewards are not paid at the end of the current epoch. (<a name="0073-LIMN-076" href="#0073-LIMN-076">0073-LIMN-076</a>)(<a name="0073-SP-LIMN-076" href="#0073-SP-LIMN-076">0073-SP-LIMN-076</a>)
+1. Vega observes the incorrect multisig, and rewards are not paid at the end of the current epoch. (<a name="0073-LIMN-076" href="#0073-LIMN-076">0073-LIMN-076</a>)
