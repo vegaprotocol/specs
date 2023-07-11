@@ -649,7 +649,7 @@ If the proposal is one off it can define a time for delivery. Whenever the block
 ##### Cancelling governance initiated transfers
 
 - Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
-- Only recurring governance initiated transfers can be cancelled by proposing a governance initiated transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
+- Only recurring governance initiated transfers can be cancelled by proposing a governance initiated transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
 - After a transfer is cancelled there will be no more transfers occurring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-123" href="#0028-GOVE-123">0028-GOVE-123</a>)
 - Using a governance proposal to cancel, attempts to cancel a recurring transfer which has yet to start or has completed will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)
 - Using a governance proposal to cancel, attempts to cancel an using an invalid transfer ID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-125" href="#0028-GOVE-125">0028-GOVE-125</a>)
@@ -658,14 +658,14 @@ If the proposal is one off it can define a time for delivery. Whenever the block
 
 ##### Batch Proposals
 
-- A batch proposal containing one or more component submissions for each type of proposal term can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-132" href="#0028-GOVE-132">0028-GOVE-132</a>)
+- A batch proposal containing one or more component submissions for each type of proposal term can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-141" href="#0028-GOVE-141">0028-GOVE-141</a>)
 
-- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-128" href="#0028-GOVE-128">0028-GOVE-128</a>)
+- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-142" href="#0028-GOVE-142">0028-GOVE-142</a>)
   
-- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-129" href="#0028-GOVE-129">0028-GOVE-129</a>)
+- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-143" href="#0028-GOVE-143">0028-GOVE-143</a>)
   
-- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-130" href="#0028-GOVE-130">0028-GOVE-130</a>)
-   1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-131" href="#0028-GOVE-131">0028-GOVE-131</a>)
+- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-144" href="#0028-GOVE-144">0028-GOVE-144</a>)
+   1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
 
 ##### Network History
 
