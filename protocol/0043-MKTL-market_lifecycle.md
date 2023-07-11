@@ -311,10 +311,10 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 1. Once the governance proposal to suspend the market gets enacted the market gets immediately put into auction mode, if market was already in auction mode it remains in it.
 1. No cashflows are exchanged when market has been suspended via a governance proposal.
 1. Parties cannot modify their open interest
-1. The prerequisite for a market to go out of auction mode is now a successful enactment of a governance proposal to unsuspend that market.
+1. The prerequisite for a market to go out of auction mode is now a successful enactment of a governance proposal to resume that market.
 
-### Market gets unsuspended via a governance proposal
+### Market gets resumed via a governance proposal
 
-1. Once the governance proposal to unsuspend the market gets enacted the market can now leave the auction.
+1. Once the governance proposal to resumed the market gets enacted the market can now leave the auction.
 1. If no other auction triggers are active the market goes back into its default trading mode immediately (auction gets uncrossed and trades get generated).
 1. If other auction triggers are active the market remains in auction mode until these allow it to leave it.
