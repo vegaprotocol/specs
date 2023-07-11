@@ -223,10 +223,7 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 
   - If the LP is meeting their commitment, store the Vega time of the start of the epoch as the time the LP began meeting their commitment, otherwise store `nothing`.
 
-- At the start of each block generate a pseudorandom integer `k` between `1..N` (inclusive of `1` and `N`) where `N` is the number of transactions in the block (note: transactions not orders, a batch is one transaction for this purpose).
-Use a suitable deterministic seed to minimise the probability of an LP gaming `k` or being able to target transactions around (directly before or after) the point `k`.
-For example, the seed might combine the hash of all transactions in the block itself with the number of transactions `N`.
-Using only information from the prior block as the seed may allow exploits based on pre-generation of `k` and must be avoided.
+- At start of block, set `k` to `0` and then after every `market.liquidity.sla.evalEveryNumOfTransactions` transactions have been processed set `k` to the transaction number of the just processed transaction.
 
 - In each block, immediately after processing transaction `k`:
 
@@ -245,6 +242,7 @@ Using only information from the prior block as the seed may allow exploits based
 
 - At the end of the epoch, calculate the actual observed epoch length `observed_epoch_length` = the difference in nanoseconds between the Vega time at the start of the epoch and the Vega time at the end of the epoch.
 
+Note that because vega time won't be progressing intra-block the above mechanism should ensure that `s_i` gets incremented only if the LP was meeting their commitment at every point this was checked within the block. 
 
 #### Calculating the SLA performance penalty for a single epoch
 
