@@ -54,16 +54,16 @@ The performance score should be available on all the same API endpoints as the `
 
 ### Performance score
 
-1. Tendermint validator with insufficient self-delegation (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>)(<a name="0064-SP-VALP-001" href="#0064-SP-VALP-001">0064-SP-VALP-001</a>):
+1. Tendermint validator with insufficient self-delegation (<a name="0064-VALP-001" href="#0064-VALP-001">0064-VALP-001</a>):
     - Set up a network with 5 validators
     - Self-delegate to 4 of the nodes **more** than the minimum amount set in `reward.staking.delegation.minimumValidatorStake`.
     - Self-delegate to the 5th node **less** than the minimum amount.
     - Verify that at the beginning of the next epoch the performance score of the 5th validator is 0.
-1. Tendermint validator with sufficient self-delegation (<a name="0064-VALP-002" href="#0064-VALP-002">0064-VALP-002</a>)(<a name="0064-SP-VALP-002" href="#0064-SP-VALP-002">0064-SP-VALP-002</a>):
+1. Tendermint validator with sufficient self-delegation (<a name="0064-VALP-002" href="#0064-VALP-002">0064-VALP-002</a>):
     - Setup a network with 5 validators.
     - Self-delegate to all of them more than the minimum required.
     - Verify that after an epoch has passed, the performance score of all of them is close to 1.
-1. Tendermint validator down (<a name="0064-VALP-003" href="#0064-VALP-003">0064-VALP-003</a>)(<a name="0064-SP-VALP-003" href="#0064-SP-VALP-003">0064-SP-VALP-003</a>):
+1. Tendermint validator down (<a name="0064-VALP-003" href="#0064-VALP-003">0064-VALP-003</a>):
     - Setup a network with 5 validators.
     - Self-delegate to all of them more than the minimum required in `reward.staking.delegation.minimumValidatorStake` and ensure the validators self-stake is an equal amount across all.
     - Run the network for one epoch.
@@ -71,7 +71,7 @@ The performance score should be available on all the same API endpoints as the `
     - Run the network for half an epoch then shut down validator 5.
     - Verify that at the beginning of the next epoch the performance score for validator 5 is close to 0.5.
     - Verify that, with validator 5 still down for the next epoch, at the beginning of the following epoch the performance score for validator 5 is 0.
-1. Non Tendermint validator (<a name="0064-VALP-004" href="#0064-VALP-004">0064-VALP-004</a>)(<a name="0064-SP-VALP-004" href="#0064-SP-VALP-004">0064-SP-VALP-004</a>):
+1. Non Tendermint validator (<a name="0064-VALP-004" href="#0064-VALP-004">0064-VALP-004</a>):
     - Set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0.
     - Setup a network with 5 validators and self-delegate to them.
     - Announce a new node to the network and self-delegate to them.
@@ -80,12 +80,12 @@ The performance score should be available on all the same API endpoints as the `
     - Let the network run for `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*) more and at the following epoch check that score is up to 0.2. Keep it running until its performance score of the joining validator reaches 1, then stop it.
     - Verify that for every `numBlocks` blocks (*where `numBlocks = max(min(50, epochDurationSeconds), epochDurationSeconds x 0.01)`*), the performance score should go down by 0.1 until it reaches zero.
     - **Note:** Every `numBlocks`  the performance score should go up by 0.1. Now the performance score is only visible every epoch so depending on the ratio between `numBlocks`  and epoch duration it may tick once or more per epoch. Guidance is that this test should either be parameterised or, preferably, written with a given epoch duration
-1. Insufficient stake (<a name="0064-VALP-005" href="#0064-VALP-005">0064-VALP-005</a>)(<a name="0064-SP-VALP-005" href="#0064-SP-VALP-005">0064-SP-VALP-005</a>):
+1. Insufficient stake (<a name="0064-VALP-005" href="#0064-VALP-005">0064-VALP-005</a>):
     - Setup a network with 5 validators, self-delegate to each more than the required minimum as set out in `reward.staking.delegation.minimumValidatorStake`.
     - Verify that at the beginning of the next epoch the validator has non 0 performance score, and voting power is greater than 10.
     - Update the network parameter `reward.staking.delegation.minimumValidatorStake` for minimum self-stake to be more than is self-delegated.
     - Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes were removed from Tendermint.
-1. Scores are restored after a snapshot restart (<a name="0064-VALP-006" href="#0064-VALP-006">0064-VALP-006</a>)(<a name="0064-SP-VALP-006" href="#0064-SP-VALP-006">0064-SP-VALP-006</a>):
+1. Scores are restored after a snapshot restart (<a name="0064-VALP-006" href="#0064-VALP-006">0064-VALP-006</a>):
     - With a snapshot that was taken at a block-height that falls in the middle of an epoch, restart a node from that snapshot. Ensure that at the end of the epoch the node remains in consensus and has produced the correct performance scores.
 
 ## Future Stuff (in here for discussion purposes, not yet to be implemented)

@@ -199,11 +199,11 @@ All parameters that are changed through a governance vote are valid starting the
 
 Epochs change at the end of the first block that is after the epoch expiry has passed:
 
-- Given an epoch length of `x`, with a block time arbitrary but `<x`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)(<a name="0050-SP-EPOC-001" href="#0050-SP-EPOC-001">0050-SP-EPOC-001</a>)
-- Given an epoch length of `x`, with a block time `x/y`, at end of block `y-1` the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)(<a name="0050-SP-EPOC-002" href="#0050-SP-EPOC-002">0050-SP-EPOC-002</a>)
-- Given an epoch length of `x`, with a block time of `x/y`, at end of block `y` the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)(<a name="0050-SP-EPOC-003" href="#0050-SP-EPOC-003">0050-SP-EPOC-003</a>)
+- Given an epoch length of `x`, with a block time arbitrary but `<x`, at block 1 the current epoch is `1` (<a name="0050-EPOC-001" href="#0050-EPOC-001">0050-EPOC-001</a>)
+- Given an epoch length of `x`, with a block time `x/y`, at end of block `y-1` the current epoch is `1` (<a name="0050-EPOC-002" href="#0050-EPOC-002">0050-EPOC-002</a>)
+- Given an epoch length of `x`, with a block time of `x/y`, at end of block `y` the current epoch is `2` (<a name="0050-EPOC-003" href="#0050-EPOC-003">0050-EPOC-003</a>)
   
-Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>)(<a name="0050-SP-EPOC-004" href="#0050-SP-EPOC-004">0050-SP-EPOC-004</a>):
+Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-004" href="#0050-EPOC-004">0050-EPOC-004</a>):
 
 - Given an epoch length of `x`, with a block time of `x*y`, at end of block 1 the current epoch is `1`
 - Given an epoch length of `x`, with a block time of `x*y`, at end of block `y+1` the current epoch is `y+1`
@@ -211,9 +211,9 @@ Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-00
 Nomination takes effect at epoch changeover:
 
 - During epoch 1, `party 1` nominates any valid amount to `validator 1`
-  - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)(<a name="0050-SP-EPOC-005" href="#0050-SP-EPOC-005">0050-SP-EPOC-005</a>) (note: this can be tested by trying to delegate again, which will be rejected)
-  - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)(<a name="0050-SP-EPOC-006" href="#0050-SP-EPOC-006">0050-SP-EPOC-006</a>)
-  - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)(<a name="0050-SP-EPOC-007" href="#0050-SP-EPOC-007">0050-SP-EPOC-007</a>)
+  - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)(note: this can be tested by trying to delegate again, which will be rejected)
+  - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
+  - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
 
 ## See also
 

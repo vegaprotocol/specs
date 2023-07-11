@@ -93,7 +93,7 @@ For ersatz validators, the same formula is used.
 
 ## Acceptance criteria
 
-### Spare key on multisig (<a name="0061-REWP-001" href="#0061-REWP-001">0061-REWP-001</a>)(<a name="0061-SP-REWP-001" href="#0061-SP-REWP-001">0061-SP-REWP-001</a>)
+### Spare key on multisig (<a name="0061-REWP-001" href="#0061-REWP-001">0061-REWP-001</a>)
 
 1. Four or more Tendermint validators with equal own+delegated stake and some ersatz validators are running.
 1. Reward pool is funded.
@@ -101,12 +101,12 @@ For ersatz validators, the same formula is used.
 1. One of the Tendermint validators goes offline forever and is removed from the set of Tendermint validators but their key still stays on multisig (no-one updated).
 1. Epoch ends and multisig hasn't been updated.
 1. Tendermint validators get no rewards. Ersatz validators still receive rewards.
-    - A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)(<a name="0061-SP-REWP-002" href="#0061-SP-REWP-002">0061-SP-REWP-002</a>)
-    - With `delegator_share` set to `0`, a validator keeps 100% of their own rewards, and a delegator receives no reward (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>)(<a name="0061-SP-REWP-003" href="#0061-SP-REWP-003">0061-SP-REWP-003</a>)
-    - With `delegator_share` set to `1`, a validator receives no reward, and their delegators receive a proportional amount of 100% (<a name="0061-REWP-004" href="#0061-REWP-004">0061-REWP-004</a>)(<a name="0061-SP-REWP-004" href="#0061-SP-REWP-004">0061-SP-REWP-004</a>)
-    - With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proportional amount of the remaining 50% (<a name="0061-REWP-005" href="#0061-REWP-005">0061-REWP-005</a>)(<a name="0061-SP-REWP-005" href="#0061-SP-REWP-005">0061-SP-REWP-005</a>)
+    - A validator with less than `minOwnStake` tokens staked to themselves will earn 0 rewards at the end of an epoch (<a name="0061-REWP-002" href="#0061-REWP-002">0061-REWP-002</a>)
+    - With `delegator_share` set to `0`, a validator keeps 100% of their own rewards, and a delegator receives no reward (<a name="0061-REWP-003" href="#0061-REWP-003">0061-REWP-003</a>)
+    - With `delegator_share` set to `1`, a validator receives no reward, and their delegators receive a proportional amount of 100% (<a name="0061-REWP-004" href="#0061-REWP-004">0061-REWP-004</a>)
+    - With `delegator_share` set to `0.5`, a validator keeps 50% of their own reward, and their delegators receives a proportional amount of the remaining 50% (<a name="0061-REWP-005" href="#0061-REWP-005">0061-REWP-005</a>)
 
-### Rewards distribution corresponds to the signers on the multisig contract in the case that it hasn’t been updated after a validator set change (<a name="0061-REWP-006" href="#0061-REWP-006">0061-REWP-006</a>)(<a name="0061-SP-REWP-006" href="#0061-SP-REWP-006">0061-SP-REWP-006</a>)
+### Rewards distribution corresponds to the signers on the multisig contract in the case that it hasn’t been updated after a validator set change (<a name="0061-REWP-006" href="#0061-REWP-006">0061-REWP-006</a>)
 
 1. Four or more Tendermint validators with equal own+delegated stake and some ersatz validators are running.
 1. There is a one-to-one correspondence between Tendermint validators' ethereum keys and keys on multisig.
@@ -116,7 +116,7 @@ For ersatz validators, the same formula is used.
 1. Epoch ends and multisig hasn't been updated.
 1. All Tendermint validators get no rewards. Ersatz validators still receive rewards.
 
-### Rewards from trading fees are calculated and distributed (<a name="0061-REWP-007" href="#0061-REWP-007">0061-REWP-007</a>)(<a name="0061-SP-REWP-007" href="#0061-SP-REWP-007">0061-SP-REWP-007</a>)
+### Rewards from trading fees are calculated and distributed (<a name="0061-REWP-007" href="#0061-REWP-007">0061-REWP-007</a>)
 
 1. Run Vega with at least 3 tendermint validator nodes and at least 5 ersatz validator nodes each with different self-stake and delegation.
 1. A market is launched with settlement asset A, infrastructure fee of `0.01 = 1%`. Market leaves opening auction and at least 10 trades occur with a total traded notable for fee purposes of at least 10000000 A.
@@ -126,7 +126,7 @@ For ersatz validators, the same formula is used.
 
 ### Change of network parameters
 
-1. Change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>)(<a name="0061-SP-REWP-008" href="#0061-SP-REWP-008">0061-SP-REWP-008</a>)
-1. Change of network parameter `reward.staking.delegation.minimumValidatorStake` will change minimum amount required of own stake a validator has. Minimum stake applies to all validators. it’s referred to as a prerequisite to being considered a validator. Validators not met with the minimum stake will not be all thrown, and in fact unless there’s someone who can replace them no one will be kicked out. If there is an ersatz ready to replace them only one will be replaced every epoch. (<a name="0061-REWP-009" href="#0061-REWP-009">0061-REWP-009</a>)(<a name="0061-SP-REWP-009" href="#0061-SP-REWP-009">0061-SP-REWP-009</a>)
-1. Change of the network parameter `reward.staking.delegation.optstakemultiplier` is changed to 0 (the reward curve is flat for a validator that exceeds optimal stake), to 0.5 (the reward curve goes down), and 0.1 (the reward curve goes down slightly).(<a name="0061-REWP-010" href="#0061-REWP-010">0061-REWP-010</a>)(<a name="0061-SP-REWP-010" href="#0061-SP-REWP-010">0061-SP-REWP-010</a>)
-1. Change of network parameter `reward.staking.delegation.delegatorShare` to 0 (no reward for delegators), 0.99, and 0.5. The share for delegators at the end of the epochs changes accordingly.  (<a name="0061-REWP-011" href="#0061-REWP-011">0061-REWP-011</a>)(<a name="0061-SP-REWP-011" href="#0061-SP-REWP-011">0061-SP-REWP-011</a>)
+1. Change of network parameter `reward.staking.delegation.competitionLevel` will change the level of competition of the validators (influences how much stake is be needed for all validators to reach optimal revenue) at the end of the next epoch. Default value 3.1. Minimum value 1 (inclusive). (<a name="0061-REWP-008" href="#0061-REWP-008">0061-REWP-008</a>)
+1. Change of network parameter `reward.staking.delegation.minimumValidatorStake` will change minimum amount required of own stake a validator has. Minimum stake applies to all validators. it’s referred to as a prerequisite to being considered a validator. Validators not met with the minimum stake will not be all thrown, and in fact unless there’s someone who can replace them no one will be kicked out. If there is an ersatz ready to replace them only one will be replaced every epoch. (<a name="0061-REWP-009" href="#0061-REWP-009">0061-REWP-009</a>)
+1. Change of the network parameter `reward.staking.delegation.optstakemultiplier` is changed to 0 (the reward curve is flat for a validator that exceeds optimal stake), to 0.5 (the reward curve goes down), and 0.1 (the reward curve goes down slightly).(<a name="0061-REWP-010" href="#0061-REWP-010">0061-REWP-010</a>)
+1. Change of network parameter `reward.staking.delegation.delegatorShare` to 0 (no reward for delegators), 0.99, and 0.5. The share for delegators at the end of the epochs changes accordingly.  (<a name="0061-REWP-011" href="#0061-REWP-011">0061-REWP-011</a>)
