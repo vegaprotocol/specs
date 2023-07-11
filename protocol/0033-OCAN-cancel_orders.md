@@ -86,3 +86,4 @@ Cancelling an order triggers a margin recalculation for a party. This is true fo
 - Insert a single order from 2 different traders and cancel one via `partyID`
 - Insert a single order from 2 different traders and cancel one via `marketID+partyID` and `MarketID`
 - Insert an order which is not for auction and enter into an auction to force the order to be parked. Cancel the order using all three methods and validate the order is cancelled.
+

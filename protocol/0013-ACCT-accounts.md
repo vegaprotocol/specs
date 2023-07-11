@@ -145,3 +145,4 @@ One key difference with staking accounts is that the collateral is not held in a
   - The balance can only be delegated to Validators (<a name="0013-ACCT-015" href="#0013-ACCT-015">0013-ACCT-015</a>)
   - The balance cannot be traded, or used as margin, or transferred, or withdrawn (<a name="0013-ACCT-016" href="#0013-ACCT-016">0013-ACCT-016</a>)
   - Delegated stake remains in the trader's staking account (<a name="0013-ACCT-017" href="#0013-ACCT-017">0013-ACCT-017</a>)
+
