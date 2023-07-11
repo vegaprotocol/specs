@@ -406,3 +406,4 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Do not update the multisig contract.
 1. Restart the vega network from the checkpoint created earlier.
 1. Vega observes the incorrect multisig, and rewards are not paid at the end of the current epoch. (<a name="0073-LIMN-076" href="#0073-LIMN-076">0073-LIMN-076</a>)
+
