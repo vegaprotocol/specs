@@ -57,9 +57,10 @@ A bad node can swamp the network by requesting snapshots from other nodes which 
 
 ## Acceptance Criteria
 
-- A node can be started up so that it generates snapshots at given block intervals (<a name="0077-SNAP-001" href="#0077-SNAP-001">0077-SNAP-001</a>)(<a name="0077-SP-SNAP-001" href="#0077-SP-SNAP-001">0077-SP-SNAP-001</a>)
-- A node will generate snapshots files on the local filesystem (most likely using GOLevelDB) (<a name="0077-SNAP-002" href="#0077-SNAP-002">0077-SNAP-002</a>)(<a name="0077-SP-SNAP-002" href="#0077-SP-SNAP-002">0077-SSP-NAP-002</a>)
-- A node will have a maximum amount of snapshots file on the filesystem. Older ones will be to be removed before a new one can be created. How many snapshots we keep may be something that can be configured. (<a name="0077-SNAP-003" href="#0077-SNAP-003">0077-SNAP-003</a>)(<a name="0077-SP-SNAP-003" href="#0077-SP-SNAP-003">0077-SP-SNAP-003</a>)
-- The state of a node that is started from a snapshot should be identical to a node that had reached the same block height via replay. (<a name="0077-SNAP-004" href="#0077-SNAP-004">0077-SNAP-004</a>)(<a name="0077-SP-SNAP-004" href="#0077-SP-SNAP-004">0077-SP-SNAP-004</a>)
-- Post a checkpoint restore we see snapshots continuing to be produced as before and can be used to add a node to the network (<a name="0077-SNAP-005" href="#0077-SNAP-005">0077-SNAP-005</a>)(<a name="0077-SP-SNAP-005" href="#0077-SP-SNAP-005">0077-SP-SNAP-005</a>)
-- With  `snapshot.interval.length` set to `k` all the nodes in a network will create a snapshot at block height `k`, `2k`, `3k`, ... (<a name="0077-SNAP-006" href="#0077-SNAP-006">0077-SNAP-006</a>)(<a name="0077-SP-SNAP-006" href="#0077-SP-SNAP-006">0077-SP-SNAP-006</a>)
+- A node can be started up so that it generates snapshots at given block intervals (<a name="0077-SNAP-001" href="#0077-SNAP-001">0077-SNAP-001</a>)
+- A node will generate snapshots files on the local filesystem (most likely using GOLevelDB) (<a name="0077-SNAP-002" href="#0077-SNAP-002">0077-SNAP-002</a>)
+- A node will have a maximum amount of snapshots file on the filesystem. Older ones will be to be removed before a new one can be created. How many snapshots we keep may be something that can be configured. (<a name="0077-SNAP-003" href="#0077-SNAP-003">0077-SNAP-003</a>)
+- The state of a node that is started from a snapshot should be identical to a node that had reached the same block height via replay. (<a name="0077-SNAP-004" href="#0077-SNAP-004">0077-SNAP-004</a>)
+- Post a checkpoint restore we see snapshots continuing to be produced as before and can be used to add a node to the network (<a name="0077-SNAP-005" href="#0077-SNAP-005">0077-SNAP-005</a>)
+- With  `snapshot.interval.length` set to `k` all the nodes in a network will create a snapshot at block height `k`, `2k`, `3k`, ... (<a name="0077-SNAP-006" href="#0077-SNAP-006">0077-SNAP-006</a>)
+
