@@ -8,8 +8,7 @@ Each file contains blocks that relate to a low level user task. The block states
 
 > When doing a thing, I...
 >
-> - **must** be able to see some particular number [0000-CODE-000]
->   ...so I can decide if I want to continue.
+> - **must** be able to see some particular number [0000-CODE-000] ...so I can decide if I want to continue.
 
 Each bullet is worded so that it contains a **must**, **should**, **could**, or **would like to**. This gives app developers some indication of the priority of user needs. At the end of each bullet is a code that can be referenced in tests etc.
 
@@ -36,6 +35,10 @@ These files contain generic user needs for interacting with wallets that are tru
 - `1003-TRAN` [Transfer](1003-TRAN-transfer.md)
 - `1004-ASSO` [Associate governance token with a Vega key](1004-ASSO-associate.md)
 - `1005-VEST` [View and redeem vested tokens](1005-VEST-vesting.md)
+
+## `1101` Browser Wallet
+
+The specs no longer exist in this repo and can be found [here](https://github.com/vegaprotocol/vegawallet-browser/tree/main/specs)
 
 ## `2000` Staking
 
