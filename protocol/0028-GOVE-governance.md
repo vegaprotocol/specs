@@ -396,7 +396,7 @@ If the market is already suspended via governance when another vote gets enacted
 
 ### 6.3. Resume the market
 
-This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active. When the market leaves the auction any trades resulting from it should be generated at the auction uncrossing price as is done for any other auction type.
+This proposal removes the restrictions put in place by a successful [market suspension proposal](#62-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active.
 
 If the market is not suspended when the vote to resume the market gets enacted then that vote has no effect.
 

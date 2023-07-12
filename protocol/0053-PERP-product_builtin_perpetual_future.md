@@ -13,7 +13,7 @@ Unlike traditional futures contracts, the perpetual futures never expire. Withou
 1. `settlement_asset (Settlement Asset)`: this is used to specify the single asset that an instrument using this product settles in.
 1. `settlement_schedule (Data Source: datetime)`: this data is used to indicate when the next periodic settlement should be carried out.
 1. `settlement_data (Data Source: number)`: this data is used by the product to calculate periodic settlement cashflows.
-1. `margin_funding_factor`: a parameter in the range $[0, 1]$ controlling how much the upcoming funding rate liability contributes to party's margin.
+1. `margin_funding_factor`: a parameter in the range $[0, 1]$ controlling how much the upcoming funding payment liability contributes to party's margin.
 
 Validation: none required as these are validated by the asset and data source frameworks.
 
@@ -31,11 +31,14 @@ The pseudocode below specifies a possible configuration of the built-in perpetua
                     - every 168h from 20230203T12:00:00
        settlement_data:
             data_source: SignedMessage{ pubkey=0xA45e...d6 }
-            field: 'price'
             filters: 
                 - 'timestamp': >= vegaprotocol.builtin.timestamp
                 - 'timestamp': <= vegaprotocol.builtin.timestamp + "10s"
                 - 'ticker': 'TSLA'
+            price:
+                field: 'price'
+            timestamp:
+                field: 'timestamp'
 ```
 
 ## 2. Settlement assets
@@ -53,33 +56,102 @@ cash_settled_perpetual_future.value(quote) {
 
 ## 4. Lifecycle triggers
 
+No data relating to periodic settlement gets stored by the market prior to a successful uncrossing of the opening auction. Once the auction uncrosses an internal `funding_period_start` field gets populated with the current vega time (`vegaprotocol.builtin.timestamp`)
+
 ### 4.1. Periodic settlement data point received
 
-If the periodic settlement data received satisfies all the filters that have been specified for it then that data point (`y`) along with the current `mark_price` (`x`) for the market and the current `vegaprotocol.builtin.timestamp` (`t`) gets stored as the funding payment data point.
+If the periodic settlement data received satisfies all the filters that have been specified for it then a data point containing price (`s`) along with timestamp (`t`) gets stored as the oracle data point within the market. Note that both the price and timestamp should come from the same oracle. The implementation has to allow specifying the following types of timestamps:
+
+- a field on the oracle payload,
+- a timestamp from the oracle's blockchain,
+- an internal vega time.
 
 ### 4.2. Mark to market settlement
 
-Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md) is carried out the value of the last periodic settlement data point received along with the price used for MTM settlement and the current `vegaprotocol.builtin.timestamp` gets stored as the funding payment data point. If no periodic settlement data has been received yet then the funding payment data point should not be created.
+Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md) is carried out the value of mark price (`f`) and the current `vegaprotocol.builtin.timestamp` gets stored as an internal data point within the market.
 
 ### 4.3. Periodic settlement
 
-When the `settlement_schedule` event is received the latest funding payment data point gets repeated with the timestamp set to the current value of `vegaprotocol.builtin.timestamp`.
+When the `settlement_schedule` event is received we need to calculated the funding payment. Store the current vega time as `funding_period_end`.
 
-The next step is to calculate the periodic settlement funding payment. If there are no periodic settlement data points then the periodic settlement is skipped. Otherwise, consider all the periodic settlement data points and calculate the time-weighted average price difference as:
+If there are no oracle data points with a timestamp less than `funding_period_end` available then funding payment is skipped and `funding_period_start` gets overwritten with `funding_period_end`.
+
+If such points available then the calculations discussed in the following subsections get executed and funding payments get exchanged.
+
+#### TWAP spot price calculation
+
+Traverse all the available oracle data point tuples `(s,t)` and calculate the time-weighted average spot price (`s_twap`) as:
 
 ```go
-sd := 0
-st := 0
-for i := 0; i < len(data_points) - 1; i++ {
-    t := data_points[i+1].t-data_points[i].t
-    d := data_points[i].x - data_points[i].y     // recall that x stands for mark price and y for the external price source input
-    sd += d * t
-    st += t
+var previous_point
+sum_product := 0
+
+for p := range oracle_data_points {
+    if p.t <= funding_period_start {
+        previous_point = p
+        continue
+    }
+    if p.t >= funding_period_end {
+        break
+    }
+    if previous_point != nil {
+        sum_product += previous_point*(p.t-max(funding_period_start,previous_point.t))
+    }
+    previous_point = p
 }
-funding_payment = sd / st
+
+sum_product += previous_point.s*(funding_period_end-max(funding_period_start,previous_point.t))
+s_twap = sum_product / (funding_period_end - max(funding_period_start, oracle_data_points[0].t))
 ```
 
-All the funding payment data points except for the last one (it should get carried over as the first data point for the next period) can then be deleted.
+Only the oracle data point with largest timestamp that's less than or equal to `funding_period_end` (and any data points with larger timestamps) need to be kept from that point on.
+
+#### TWAP mark price calculation
+
+Traverse all the available internal data point tuples `(f,t)` and calculated the time-weighted average mark price (`f_twap`) as:
+
+```go
+var previous_point
+sum_product := 0
+
+for p := range internal_data_points {
+    if p.t <= funding_period_start {
+        previous_point = p
+        continue
+    }
+    if previous_point != nil {
+        sum_product += previous_point*(p.t-max(funding_period_start,previous_point.t))
+    }
+    previous_point = p
+}
+
+sum_product += previous_point.f*(funding_period_end-max(funding_period_start,previous_point.t))
+f_twap = sum_product / (funding_period_end - max(funding_period_start, internal_data_points[0].t))
+```
+
+Only the internal data point with largest timestamp needs to be kept from that point on.
+
+#### Funding payment calculation
+
+The next step is to calculate the periodic settlement funding payment
+
+```go
+funding_payment = f_twap - s_twap
+```
+
+#### Funding rate calculation
+
+While not needed for calculation of cashflows to be exchanged by market participants, the funding rate is useful for tracking market's relation to the underlying spot market over time.
+
+Funding rate should be calculated as:
+
+```go
+funding_rate = (f_twap - s_twap) / s_twap
+```
+
+and emitted as an event.
+
+#### Exchanging funding payments between parties
 
 Last step is to calculate each party's cash flows as $-\text{open volume} * \text{funding payment}$ where cashflows are first collected from parties that are making the payment (negative value of the cashflow, i.e. longs when the funding payment is positive) and distributed to those receiving it. Any shortfall should be made-up from the insurance pool and if that's not possible loss socialisation should be applied (exactly as per mark-to-market settlement methodology).
 
@@ -119,5 +191,6 @@ It should be possible to query the market for the list of current funding paymen
 1. Receiving correctly formatted data from settlement data oracles and settlement schedule oracles during continuous trading results in periodic settlement. (<a name="0053-PERP-007" href="#0053-PERP-007">0053-PERP-007</a>)
 1. Receiving correctly formatted data from the settlement data and settlement schedule oracles during liquidity monitoring auction results in the exchange of periodic settlement cashflows. Market remains in liquidity monitoring auction until enough additional liquidity gets committed to the market. (<a name="0053-PERP-008" href="#0053-PERP-008">0053-PERP-008</a>)
 1. Receiving correctly formatted data from the settlement data and settlement schedule oracles during price monitoring auction results in the exchange of periodic settlement cashflows. Market remains in price monitoring auction until its original duration elapses, uncrosses the auction and goes back to continuous trading mode. (<a name="0053-PERP-009" href="#0053-PERP-009">0053-PERP-009</a>)
-1. When the funding rate is positive the margin levels of parties with long positions are larger than what the basic margin calculations imply. Moreover, the additional amount grows as the funding payment nears and drops right after the payment. Parties with short positions are not impacted. (<a name="0053-PERP-015" href="#0053-PERP-015">0053-PERP-015</a>)
-1. When the funding rate is negative the margin levels of parties with short positions are larger than what the basic margin calculations imply. Moreover, the additional amount grows as the funding payment nears and drops right after the payment. Parties with long positions are not impacted. (<a name="0053-PERP-016" href="#0053-PERP-016">0053-PERP-016</a>)
+1. When the funding payment is positive the margin levels of parties with long positions are larger than what the basic margin calculations imply. Moreover, the additional amount grows as the funding payment nears and drops right after the payment. Parties with short positions are not impacted. (<a name="0053-PERP-015" href="#0053-PERP-015">0053-PERP-015</a>)
+1. When the funding payment is negative the margin levels of parties with short positions are larger than what the basic margin calculations imply. Moreover, the additional amount grows as the funding payment nears and drops right after the payment. Parties with long positions are not impacted. (<a name="0053-PERP-016" href="#0053-PERP-016">0053-PERP-016</a>)
+1. An event containing funding rate should be emitted each time the funding payment is calculated (<a name="0053-PERP-017" href="#0053-PERP-017">0053-PERP-017</a>)
