@@ -92,6 +92,7 @@ Propose a successor market which specifies a parent which is settled, and for wh
 ### APIs
 
 It is possible to fetch a market "parent / successor chain" containing the initial market and the full successor line via:
+
 - GRPC (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
 - GraphQL (<a name="0081-SUCM-023" href="#0081-SUCM-023">0081-SUCM-023</a>)
 - REST (<a name="0081-SUCM-024" href="#0081-SUCM-024">0081-SUCM-024</a>)
