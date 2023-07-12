@@ -266,6 +266,7 @@ for product spot: (<a name="0073-LIMN-079" href="#0073-LIMN-079">0073-LIMN-079</
 5. That party has a USD general account balance of 150 USD
 
 ### Test case 5: Add or remove stake during checkpoint restart (<a name="0073-LIMN-017" href="#0073-LIMN-017">0073-LIMN-017</a>)
+
 1. There is a Vega token asset.
 1. There are `5` validators on the network.
 1. Each validator party `validator_party_1`,...,`validator_party_5` has `1000` Vega tokens locked on the staking Ethereum bridge and this is reflected in Vega core.
