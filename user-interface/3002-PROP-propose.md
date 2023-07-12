@@ -30,8 +30,9 @@ When making a proposal, I...
 - **should** see the minimum required tokens or LP vote required to make a proposal Spam protection and network parameters
 - if anything except market change: **must** be warned if the amount I have associated is less the the minimum required to propose for this proposal type (due to Spam protection or network parm, whichever is greater) (<a name="3002-PROP-009" href="#3002-PROP-009">3002-PROP-009</a>)
 - if market change: **must** be warned if the amount of tokens I have less than the minimum tokens required to propose a change (due to Spam protection or network params) (<a name="3002-PROP-020" href="#3002-PROP-020">3002-PROP-020</a>)
-- if market change: **must** be warned if the amount of I have less than the minimum required equity like share to propose a change (due to Spam protection or network params) (<a name="3002-PROP-022" href="#3002-PROP-022">3002-PROP-022</a>)
 - **should** see the balance of associated Governance tokens
+- if market change: **must** be warned if the amount equity like share I have is less than the minimum required equity like share to propose a change (due to Spam protection or network params) (<a name="3002-PROP-022" href="#3002-PROP-022">3002-PROP-022</a>)
+- **should** see my equity like share in that market
 
 ### Detail on specific proposals
 
