@@ -112,14 +112,13 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 - Every party that submits an order on a market will have a margin account for that market created. (<a name="0013-ACCT-007" href="#0013-ACCT-007">0013-ACCT-007</a>)
 - Each party should only have one margin account per market. (<a name="0013-ACCT-008" href="#0013-ACCT-008">0013-ACCT-008</a>)
-- In Spot market, each party should only have one margin account per market. (<a name="0013-SP-ACCT-008" href="#0013-SP-ACCT-008">0013-SP-ACCT-008</a>)
 - Cannot have a non-zero balance on a margin account where there's no position / position size = 0 and no active orders. (<a name="0013-ACCT-009" href="#0013-ACCT-009">0013-ACCT-009</a>)
 - Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders. (<a name="0013-ACCT-010" href="#0013-ACCT-010">0013-ACCT-010</a>)
 
 ### Party holding accounts in Spot market
 
 - Every party that submits an order on a market will have a holding account for that market created. (<a name="0013-SP-ACCT-007" href="#0013-SP-ACCT-007">0013-SP-ACCT-007</a>)
-- Each party should only have one holding account per market. (<a name="0013-SP-ACCT-008" href="#0013-SP-ACCT-008">0013-SP-ACCT-008</a>)
+- Each party should only have two holding accounts per market: one for the the base_asset and one for the quote_asset. (<a name="0013-SP-ACCT-008" href="#0013-SP-ACCT-008">0013-SP-ACCT-008</a>)
 
 ### Liquidity Provider bond accounts
 
