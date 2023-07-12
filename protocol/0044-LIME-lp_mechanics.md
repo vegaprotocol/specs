@@ -319,7 +319,7 @@ In the case of spot markets it will be transferred into the network treasury for
 
 - For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if one liquidity provider places a transaction to reduce their stake by `100` followed by a second liquidity provider who reduces their commitment by `100`, the first liquidity provider will receive a full `100` stake back whilst the second will receive a total of `85` back into their general account with `15` transferred into the market's insurance account (`40` received without penalty, then the remaining `60` receiving a `25%` penalty). (<a name="0044-LIME-025" href="#0044-LIME-025">0044-LIME-025</a>)
 
-In the case of spot markets it will be transferred into the network treasury for the asset (<a name="0044-LIME-032" href="#0044-LIME-032">0044-LIME-032</a>)
+In the case of spot markets it will be transferred into the network treasury for the asset (<a name="0044-LIME-043" href="#0044-LIME-043">0044-LIME-043</a>)
 
 
 - For a futures market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if the following transactions occur:
