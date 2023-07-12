@@ -243,7 +243,7 @@ After `market.liquidity.successorLaunchWindowLength` has elapsed since the settl
 
 ## Acceptance Criteria
 
-### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)(<a name="0043-SP-MKTL-001" href="#0043-SP-MKTL-001">0043-SP-MKTL-001</a>)
+### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)(<a name="1043-MKTL-001" href="#1043-MKTL-001">1043-MKTL-001</a>)
 
 1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
 Market state is `proposed`.
@@ -285,7 +285,7 @@ Margin account balances are transferred to the general account.
 The market state is `settled`.
 After `market.liquidity.successorLaunchWindowLength` has passed since market settlement, any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 
-### Lifecycle happy path in Spot market (<a name="0043-SP-MKTL-002" href="#0043-SP-MKTL-002">0043-SP-MKTL-002</a>)
+### Lifecycle happy path in Spot market (<a name="1043-MKTL-002" href="#1043-MKTL-002">1043-MKTL-002</a>)
 
 1. Market `m1` is proposed. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
 Market state is `proposed`.
@@ -310,7 +310,7 @@ The market state is `active`.
 1. All data sources that are only referenced by that market are unregistered.
 1. The market state is set to cancelled.
 
-### Market (Spot) never leaves opening auction, market cancelled by governance proposal(<a name="0043-SP-MKTL-003" href="#0043-SP-MKTL-003">0043-SP-MKTL-003</a>)
+### Market (Spot) never leaves opening auction, market cancelled by governance proposal(<a name="1043-MKTL-003" href="#1043-MKTL-003">1043-MKTL-003</a>)
 
 1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
 1. Market cancelled before the market leaves the opening auction (so market never left Pending state so far).
@@ -328,7 +328,7 @@ The market state is `active`.
 1. All the funds from market specific accounts get released to appropriate accounts; the insurance pool perhaps after the delay to allow for transfer into a successor market.
 1. Market gets deleted.
 
-### Market (Spot) gets closed via a governance proposal (<a name="0043-SP-MKTL-004" href="#0043-SP-MKTL-004">0043-SP-MKTL-004</a>)
+### Market (Spot) gets closed via a governance proposal (<a name="1043-MKTL-004" href="#1043-MKTL-004">1043-MKTL-004</a>)
 
 1. Once the governance proposal to close the market gets enacted any auction that the market may be in gets uncrossed and trades get generated.
 1. All the other orders are cancelled and no further trades get generated.

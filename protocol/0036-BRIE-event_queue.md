@@ -164,7 +164,7 @@ message NodeVote {
 
 ## Acceptance Criteria
 
-- A valid event is processed by vega (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)(<a name="0036-SP-BRIE-001" href="#0036-SP-BBRIE-001">0036-SP-BBRIE-001</a>)
+- A valid event is processed by vega (<a name="0036-BRIE-001" href="#0036-BRIE-001">0036-BRIE-001</a>)(<a name="1036-BRIE-001" href="#0036-SP-BBRIE-001">0036-SP-BBRIE-001</a>)
   - A transaction is successfully executed on the bridge (e.g deposit)
   - A validator node successfully source the event and emit a chain event transaction on the vega chain
   - The others validators successfully validates the event on the ethereum chain and send a node vote on chain

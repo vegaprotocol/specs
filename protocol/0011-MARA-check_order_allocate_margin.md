@@ -9,14 +9,14 @@ Orders should be rejected if we can’t allocate sufficient margin.
 ## Acceptance criteria
 
 1. If an order is amended such that margin requirement is increased and user has sufficient balance in the general account to top up their margin account then the amendment is executed successfully. (<a name="0011-MARA-001" href="#0011-MARA-001">0011-MARA-001</a>)
-1. In Spot market, if an order is amended such that holding requirement is increased and user has sufficient balance in the general account to top up their holding account then the amendment is executed successfully. (<a name="0011-SP-MARA-001" href="#0011-SP-MARA-001">0011-SP-MARA-001</a>)
+1. In Spot market, if an order is amended such that holding requirement is increased and user has sufficient balance in the general account to top up their holding account then the amendment is executed successfully. (<a name="1011-MARA-001" href="#1011-MARA-001">1011-MARA-001</a>)
 1. If an order is amended such that margin requirement is increased and user doesn't have sufficient balance in the general account to top up their margin account then their amend is not executed but the unamended order stays on the book. (<a name="0011-MARA-002" href="#0011-MARA-002">0011-MARA-002</a>)
-1. In Spot market, if an order is amended such that holding requirement is increased and user doesn't have sufficient balance in the general account to top up their holding account then their amend is not executed but the unamended order stays on the book. (<a name="0011-SP-MARA-002" href="#0011-SP-MARA-002">0011-SP-MARA-002</a>)
+1. In Spot market, if an order is amended such that holding requirement is increased and user doesn't have sufficient balance in the general account to top up their holding account then their amend is not executed but the unamended order stays on the book. (<a name="1011-MARA-002" href="#1011-MARA-002">1011-MARA-002</a>)
 1. Cancelling an order releases the margin amount back to user's general account, provided the user has no other orders or positions (<a name="0011-MARA-003" href="#0011-MARA-003">0011-MARA-003</a>)
-In Spot market, cancelling an order releases the holding amount back to user's general account. (<a name="0011-SP-MARA-003" href="#0011-SP-MARA-003">0011-SP-MARA-003</a>)
+In Spot market, cancelling an order releases the holding amount back to user's general account. (<a name="1011-MARA-003" href="#1011-MARA-003">1011-MARA-003</a>)
 1. If an order is amended such that margin requirement is decreased then the amendment is executed successfully. (<a name="0011-MARA-004" href="#0011-MARA-004">0011-MARA-004</a>)
 1. If an order is partially filled then the margin requirements are recalculated reflecting the reduced order size and new position size. (<a name="0011-MARA-005" href="#0011-MARA-005">0011-MARA-005</a>)
-In Spot market, if an order is partially filled then the holding requirements are recalculated reflecting the reduced order size. (<a name="0011-SP-MARA-005" href="#0011-SP-MARA-005">0011-SP-MARA-005</a>)
+In Spot market, if an order is partially filled then the holding requirements are recalculated reflecting the reduced order size. (<a name="1011-MARA-005" href="#1011-MARA-005">1011-MARA-005</a>)
 1. If an order is partially filled and if this leads to a reduced position and reduced riskiest long / short then the margin requirements are seen to be reduced and if margin balance is above release level then the excess amount is transferred to the general account. (<a name="0011-MARA-006" href="#0011-MARA-006">0011-MARA-006</a>)
 1. Margin is correctly calculated for [all order types](./0014-ORDT-order_types.md) in continuous trading:
     1. Limit GTT (<a name="0011-MARA-007" href="#0011-MARA-007">0011-MARA-007</a>)
@@ -32,18 +32,18 @@ In Spot market, if an order is partially filled then the holding requirements ar
     1.Pegged GTT (parked in auction \*) (<a name="0011-MARA-016" href="#0011-MARA-016">0011-MARA-016</a>)
     1.Pegged GTC (parked in auction \* ) (<a name="0011-MARA-017" href="#0011-MARA-017">0011-MARA-017</a>)
 1. In Spot market, holding in holding account is correctly calculated for [all order types](./0014-ORDT-order_types.md) in continuous trading:
-    1. Limit GTT (<a name="0011-SP-MARA-007" href="#0011-SP-MARA-007">0011-SP-MARA-007</a>)
-    1. Limit GTC (<a name="0011-SP-MARA-008" href="#0011-SP-MARA-008">0011-SP-MARA-008</a>)
-    1. Limit GFN (<a name="0011-SP-MARA-009" href="#0011-SP-MARA-009">0011-SP-MARA-009</a>)
-    1. Pegged GTT (<a name="0011-SP-MARA-010" href="#0011-SP-MARA-010">0011-SP-MARA-010</a>)
-    1. Pegged GTC (<a name="0011-SP-MARA-011" href="#0011-SP-MARA-011">0011-SP-MARA-011</a>)
-    1. Pegged GFN (<a name="0011-SP-MARA-012" href="#0011-SP-MARA-012">0011-SP-MARA-012</a>)
+    1. Limit GTT (<a name="1011-MARA-007" href="#1011-MARA-007">1011-MARA-007</a>)
+    1. Limit GTC (<a name="1011-MARA-008" href="#1011-MARA-008">1011-MARA-008</a>)
+    1. Limit GFN (<a name="1011-MARA-009" href="#1011-MARA-009">1011-MARA-009</a>)
+    1. Pegged GTT (<a name="1011-MARA-010" href="#1011-MARA-010">1011-MARA-010</a>)
+    1. Pegged GTC (<a name="1011-MARA-011" href="#1011-MARA-011">1011-MARA-011</a>)
+    1. Pegged GFN (<a name="1011-MARA-012" href="#1011-MARA-012">1011-MARA-012</a>)
 1. In Spot market, holding in holding account is correctly calculated for [all order types](./0014-ORDT-order_types.md) in auction mode:
-    1.Limit GTT (<a name="0011-SP-MARA-013" href="#0011-SP-MARA-013">0011-SP-MARA-013</a>)
-    1.Limit GTC (<a name="0011-SP-MARA-014" href="#0011-SP-MARA-014">0011-SP-MARA-014</a>)
-    1.Limit GFA (<a name="0011-SP-MARA-015" href="#0011-SP-MARA-015">0011-SP-MARA-015</a>)
-    1.Pegged GTT (parked in auction \*) (<a name="0011-SP-MARA-016" href="#0011-SP-MARA-016">0011-SP-MARA-016</a>)
-    1.Pegged GTC (parked in auction \* ) (<a name="0011-SP-MARA-017" href="#0011-SP-MARA-017">0011-SP-MARA-017</a>)
+    1.Limit GTT (<a name="1011-MARA-013" href="#1011-MARA-013">1011-MARA-013</a>)
+    1.Limit GTC (<a name="1011-MARA-014" href="#1011-MARA-014">1011-MARA-014</a>)
+    1.Limit GFA (<a name="1011-MARA-015" href="#1011-MARA-015">1011-MARA-015</a>)
+    1.Pegged GTT (parked in auction \*) (<a name="1011-MARA-016" href="#1011-MARA-016">1011-MARA-016</a>)
+    1.Pegged GTC (parked in auction \* ) (<a name="1011-MARA-017" href="#1011-MARA-017">1011-MARA-017</a>)
 
 ## Pseudocode
 

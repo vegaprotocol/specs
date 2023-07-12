@@ -2,21 +2,21 @@
 
 ## Acceptance Criteria
 
-- The market depth builder must be able to handle all available order types (<a name="0039-MKTD-001" href="#0039-MKTD-001">0039-MKTD-001</a>)(<a name="0039-SP-MKTD-001" href="#0039-SP-MKTD-001">0039-SP-MKTD-001</a>)
-- Entering and leaving auctions must be handled correctly (<a name="0039-MKTD-003" href="#0039-MKTD-003">0039-MKTD-003</a>)(<a name="0039-SP-MKTD-003" href="#0039-SP-MKTD-003">0039-SP-MKTD-003</a>)
-- All subscribed clients must receive all the data necessary to build their own view of the market depth (<a name="0039-MKTD-004" href="#0039-MKTD-004">0039-MKTD-004</a>)(<a name="0039-SP-MKTD-004" href="#0039-SP-MKTD-004">0039-SP-MKTD-004</a>)
-- Adding a new limit order to the book updates the market depth at the corresponding price and volume (<a name="0039-MKTD-005" href="#0039-MKTD-005">0039-MKTD-005</a>)(<a name="0039-SP-MKTD-005" href="#0039-SP-MKTD-005">0039-SP-MKTD-005</a>)
-- Cancelling an existing order reduces the volume in the market depth view and removes the price level if the volume reaches zero (<a name="0039-MKTD-006" href="#0039-MKTD-006">0039-MKTD-006</a>)(<a name="0039-SP-MKTD-006" href="#0039-SP-MKTD-006">0039-SP-MKTD-006</a>)
-- Fully or partially filling an order will reduce the market depth volume at that given price level (<a name="0039-MKTD-007" href="#0039-MKTD-007">0039-MKTD-007</a>)(<a name="0039-SP-MKTD-007" href="#0039-SP-MKTD-007">0039-SP-MKTD-007</a>)
-- A GTT order that expires will cause the volume at its price to be reduced in the market depth view (<a name="0039-MKTD-008" href="#0039-MKTD-008">0039-MKTD-008</a>)(<a name="0039-SP-MKTD-008" href="#0039-SP-MKTD-008">0039-SP-MKTD-008</a>)
-- Amending an order in place (price stays the same but the volume is reduced) will cause the volume at the given price to be reduced in the market depth view (<a name="0039-MKTD-009" href="#0039-MKTD-009">0039-MKTD-009</a>)(<a name="0039-SP-MKTD-009" href="#0039-SP-MKTD-009">0039-SP-MKTD-009</a>)
-- Amending an order such that a cancel replace is performed will cause the volume in the market depth to be updated correctly (<a name="0039-MKTD-010" href="#0039-MKTD-010">0039-MKTD-010</a>)(<a name="0039-SP-MKTD-010" href="#0039-SP-MKTD-010">0039-SP-MKTD-010</a>)
-- Entering an auction will cause any GFN orders to be removed from the market depth volume view (<a name="0039-MKTD-012" href="#0039-MKTD-012">0039-MKTD-012</a>)(<a name="0039-SP-MKTD-012" href="#0039-SP-MKTD-012">0039-SP-MKTD-012</a>)
-- Market depth will show a crossed book if the market is in auction and the book is crossed (<a name="0039-MKTD-013" href="#0039-MKTD-013">0039-MKTD-013</a>)(<a name="0039-SP-MKTD-013" href="#0039-SP-MKTD-013">0039-SP-MKTD-013</a>)
-- Leaving an auction will cause any GFA orders to be removed from the market depth view (<a name="0039-MKTD-014" href="#0039-MKTD-014">0039-MKTD-014</a>)(<a name="0039-SP-MKTD-014" href="#0039-SP-MKTD-014">0039-SP-MKTD-014</a>)
+- The market depth builder must be able to handle all available order types (<a name="0039-MKTD-001" href="#0039-MKTD-001">0039-MKTD-001</a>)(<a name="1039-MKTD-001" href="#1039-MKTD-001">1039-MKTD-001</a>)
+- Entering and leaving auctions must be handled correctly (<a name="0039-MKTD-003" href="#0039-MKTD-003">0039-MKTD-003</a>)(<a name="1039-MKTD-003" href="#1039-MKTD-003">1039-MKTD-003</a>)
+- All subscribed clients must receive all the data necessary to build their own view of the market depth (<a name="0039-MKTD-004" href="#0039-MKTD-004">0039-MKTD-004</a>)(<a name="1039-MKTD-004" href="#1039-MKTD-004">1039-MKTD-004</a>)
+- Adding a new limit order to the book updates the market depth at the corresponding price and volume (<a name="0039-MKTD-005" href="#0039-MKTD-005">0039-MKTD-005</a>)(<a name="1039-MKTD-005" href="#1039-MKTD-005">1039-MKTD-005</a>)
+- Cancelling an existing order reduces the volume in the market depth view and removes the price level if the volume reaches zero (<a name="0039-MKTD-006" href="#0039-MKTD-006">0039-MKTD-006</a>)(<a name="1039-MKTD-006" href="#1039-MKTD-006">1039-MKTD-006</a>)
+- Fully or partially filling an order will reduce the market depth volume at that given price level (<a name="0039-MKTD-007" href="#0039-MKTD-007">0039-MKTD-007</a>)(<a name="1039-MKTD-007" href="#1039-MKTD-007">1039-MKTD-007</a>)
+- A GTT order that expires will cause the volume at its price to be reduced in the market depth view (<a name="0039-MKTD-008" href="#0039-MKTD-008">0039-MKTD-008</a>)(<a name="1039-MKTD-008" href="#1039-MKTD-008">1039-MKTD-008</a>)
+- Amending an order in place (price stays the same but the volume is reduced) will cause the volume at the given price to be reduced in the market depth view (<a name="0039-MKTD-009" href="#0039-MKTD-009">0039-MKTD-009</a>)(<a name="1039-MKTD-009" href="#1039-MKTD-009">1039-MKTD-009</a>)
+- Amending an order such that a cancel replace is performed will cause the volume in the market depth to be updated correctly (<a name="0039-MKTD-010" href="#0039-MKTD-010">0039-MKTD-010</a>)(<a name="1039-MKTD-010" href="#1039-MKTD-010">1039-MKTD-010</a>)
+- Entering an auction will cause any GFN orders to be removed from the market depth volume view (<a name="0039-MKTD-012" href="#0039-MKTD-012">0039-MKTD-012</a>)(<a name="1039-MKTD-012" href="#1039-MKTD-012">1039-MKTD-012</a>)
+- Market depth will show a crossed book if the market is in auction and the book is crossed (<a name="0039-MKTD-013" href="#0039-MKTD-013">0039-MKTD-013</a>)(<a name="1039-MKTD-013" href="#1039-MKTD-013">1039-MKTD-013</a>)
+- Leaving an auction will cause any GFA orders to be removed from the market depth view (<a name="0039-MKTD-014" href="#0039-MKTD-014">0039-MKTD-014</a>)(<a name="1039-MKTD-014" href="#1039-MKTD-014">1039-MKTD-014</a>)
 - Pegged orders are part of the market depth view and should update the view when their orders are repriced (<a name="0039-MKTD-015" href="#0039-MKTD-015">0039-MKTD-015</a>)
-- Each delta update will have the new sequence number along with the previous sequence number which will match the previous delta update (<a name="0039-MKTD-018" href="#0039-MKTD-018">0039-MKTD-018</a>)(<a name="0039-SP-MKTD-018" href="#0039-SP-MKTD-018">0039-SP-MKTD-018</a>)
-- The sequence number received as part of the market depth snapshot will match the sequence number of a delta update (<a name="0039-MKTD-019" href="#0039-MKTD-019">0039-MKTD-019</a>)(<a name="0039-SP-MKTD-019" href="#0039-SP-MKTD-019">0039-SP-MKTD-019</a>)
+- Each delta update will have the new sequence number along with the previous sequence number which will match the previous delta update (<a name="0039-MKTD-018" href="#0039-MKTD-018">0039-MKTD-018</a>)(<a name="1039-MKTD-018" href="#1039-MKTD-018">1039-MKTD-018</a>)
+- The sequence number received as part of the market depth snapshot will match the sequence number of a delta update (<a name="0039-MKTD-019" href="#0039-MKTD-019">0039-MKTD-019</a>)(<a name="1039-MKTD-019" href="#1039-MKTD-019">1039-MKTD-019</a>)
 
 ## Summary
 
