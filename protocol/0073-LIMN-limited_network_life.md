@@ -118,7 +118,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
     - If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal hasn't passed yet. Then the party has general account balance of 0 USD. The party has "signed for withdrawal" 100.
     - If the Ethereum replay hasn't seen withdrawal transaction processed and the expiry time of the withdrawal has passed. Then the party has general account balance of 100 USD.
 
-### Test case 2: Orders and positions are *not* maintained across resets, balances are and *accepted* markets are (<a name="0073-LIMN-008" href="#0073-LIMN-008">0073-LIMN-008</a>)(<a name="0073-SP-LIMN-008" href="#0073-SP-LIMN-008">0073-SP-LIMN-008</a>)
+### Test case 2: Orders and positions are *not* maintained across resets, balances are and *accepted* markets are (<a name="0073-LIMN-008" href="#0073-LIMN-008">0073-LIMN-008</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There is a market `id_xxx` with status active, no other markets and no market proposals.
@@ -379,10 +379,10 @@ for product spot: (<a name="0073-LIMN-082" href="#0073-LIMN-082">0073-LIMN-082</
 1. In Spot market, market can be closed after a restore. (<a name="0073-LIMN-090" href="#0073-LIMN-090">0073-LIMN-090</a>)
 1. It's not possible to submit orders or LP provisions to this market.  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>) for product spot: (<a name="0073-LIMN-091" href="#0073-LIMN-091">0073-LIMN-091</a>)
 
-### Test case 17: Markets with internal time trigger for trading terminated that rings between shutdown and restore
+### Test case 17: Markets with internal time trigger for trading terminated that fires between shutdown and restore
 
 1. Propose, enact a market with some trading terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties.
-1. System saves LNL checkpoint before the trading terminated trigger rings.
+1. System saves LNL checkpoint before the trading terminated trigger is set off.
 1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung.
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>) for product spot: (<a name="0073-LIMN-092" href="#0073-LIMN-092">0073-LIMN-092</a>); if it exists it in `cancelled` state.
 1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>) for product spot: (<a name="0073-LIMN-093" href="#0073-LIMN-093">0073-LIMN-093</a>)

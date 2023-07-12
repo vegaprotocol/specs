@@ -8,9 +8,9 @@ On every market liquidity is provided by various parties, liquidity providers (L
 As part of this process the LPs build-up virtual stake on the market, which may be higher than the stake they committed if the market grew.
 For [details of virtual stake calculation see how LPs are rewarded](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-Many derivative markets would terminate and settle periodically but would be part of a sequence.
+Many derivative markets would terminate and settle periodically but would be part of a lineage.
 Think e.g. of a [cash-settled future](./0016-PFUT-product_builtin_future.md) written on the same underlying that settles every three months.
-Successor markets are a feature that allows this sequencing but most importantly allows LPs to keep their virtual stake built up on one market (parent) in the sequence to be transferred to the next one (successor).
+Successor markets are a feature that allows for markets to have a lineage, but most importantly allows LPs to keep their virtual stake built up on one market (parent) in the lineage to be transferred to the next one (successor).
 Moreover, part of the insurance pool of a parent market can be earmarked for transfer to the successor market instead of being distributed network wide (other markets in same settlement asset, network treasury).
 
 ## Relevant network / market parameters
