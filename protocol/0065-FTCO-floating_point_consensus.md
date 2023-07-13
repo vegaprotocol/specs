@@ -84,7 +84,7 @@ This section outlines floating-point quantities `vega` currently relies on:
 
 ## Acceptance criteria
 
-1. Floating-point values get initialised and updated correctly (<a name="0065-FTCO-001" href="#0065-FTCO-001">0065-FTCO-001</a>)(<a name="0065-SP-FTCO-001" href="#0065-SP-FTCO-001">0065-SP-FTCO-001</a>)
+1. Floating-point values get initialised and updated correctly (<a name="0065-FTCO-001" href="#0065-FTCO-001">0065-FTCO-001</a>) for product spot: (<a name="0065-FTCO-005" href="#0065-FTCO-005">0065-FTCO-005</a>)
     - A market is proposed and initially it has the following default values:
         - Risk factors:
             - Short: 1.0
@@ -100,12 +100,12 @@ This section outlines floating-point quantities `vega` currently relies on:
     - When the time-based trigger elapses price monitoring bounds and probability of trading get recalculated.
     - When the market goes into liquidity monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
 
-1. Event announcing diverging values gets emitted (<a name="0065-FTCO-004" href="#0065-FTCO-004">0065-FTCO-004</a>)(<a name="0065-SP-FTCO-004" href="#0065-SP-FTCO-004">0065-SP-FTCO-004</a>)
+1. Event announcing diverging values gets emitted (<a name="0065-FTCO-004" href="#0065-FTCO-004">0065-FTCO-004</a>) for product spot: (<a name="0065-FTCO-006" href="#0065-FTCO-006">0065-FTCO-006</a>)
    - For all the state variables nodes submit candidate values that differ by up to half the tolerance.
    - The event announcing the fact that at least one of the values differed gets emitted.
    - Since differences are within tolerance the consensus successfully chooses a consensus value and systems keeps running as expected (market goes into continuous trading mode accepts orders and generates trades).
 
-1. Consensus failure event gets emitted (<a name="0065-FTCO-002" href="#0065-FTCO-002">0065-FTCO-002</a>)(<a name="0065-SP-FTCO-002" href="#0065-SP-FTCO-002">0065-SP-FTCO-002</a>)
+1. Consensus failure event gets emitted (<a name="0065-FTCO-002" href="#0065-FTCO-002">0065-FTCO-002</a>) for product spot: (<a name="0065-FTCO-007" href="#0065-FTCO-007">0065-FTCO-007</a>)
    - A market is proposed and initially has default values specified in the scenario above.
    - Upon market enactment risk factors get submitted by nodes, one of the nodes submits a value that is higher than tolerance.
    - An appropriate event is sent to signal that at least one of the values differed.
@@ -115,7 +115,7 @@ This section outlines floating-point quantities `vega` currently relies on:
    - Situation continues for 2 more risk factor update attempts (can be time-based or auction).
    - Market still runs with previously calculated risk factors, but an event informing that the market is using stale values gets emitted.
 
-1. Market cannot leave opening auction with default values (<a name="0065-FTCO-003" href="#0065-FTCO-003">0065-FTCO-003</a>)(<a name="0065-SP-FTCO-003" href="#0065-SP-FTCO-003">0065-SP-FTCO-003</a>)
+1. Market cannot leave opening auction with default values (<a name="0065-FTCO-003" href="#0065-FTCO-003">0065-FTCO-003</a>) for product spot: (<a name="0065-FTCO-008" href="#0065-FTCO-008">0065-FTCO-008</a>)
    - A market is proposed and initially has default values specified in the scenario above.
    - Upon market enactment risk factors get calculated (their values change from defaults).
    - When the opening auction sees uncrossing price for the first time (there are two overlapping orders from buy and sell side on the order book) price monitoring bounds get calculated, but probability of trading get doesn't pass consensus (all nodes submit conflicting values)

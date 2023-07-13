@@ -107,7 +107,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 - We can launch a network with any valid checkpoint file. (<a name="0073-LIMN-003" href="#0073-LIMN-003">0073-LIMN-003</a>)
 - Hash of the checkpoint file is agreed via consensus. (<a name="0073-LIMN-005" href="#0073-LIMN-005">0073-LIMN-005</a>)
 
-### Test case 1: Withdrawal status is correctly tracked across resets (<a name="0073-LIMN-007" href="#0073-LIMN-007">0073-LIMN-007</a>)(<a name="0073-SP-LIMN-007" href="#0073-SP-LIMN-007">0073-SP-LIMN-007</a>)
+### Test case 1: Withdrawal status is correctly tracked across resets (<a name="0073-LIMN-007" href="#0073-LIMN-007">0073-LIMN-007</a>)
+
+for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</a>)
 
 1. A party has general account balance of 100 USD.
 1. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
@@ -158,7 +160,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_margin_bal`.
 
-#### Test case 3.1: Spot market is proposed, accepted, restored (<a name="0073-SP-LIMN-009" href="#0073-SP-LIMN-009">0073-SP-LIMN-009</a>)
+#### Test case 3.1: Spot market is proposed, accepted, restored (<a name="0073LIMN-102" href="#0073-LIMN-102">0073-LIMN-102</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -176,7 +178,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_hold_bal`.
 
-#### Test case 3.2: Market is proposed, voting hasn't closed, not restored (<a name="0073-LIMN-010" href="#0073-LIMN-010">0073-LIMN-010</a>)(<a name="0073-SP-LIMN-010" href="#0073-SP-LIMN-010">0073-SP-LIMN-010</a>)
+#### Test case 3.2: Market is proposed, voting hasn't closed, not restored (<a name="0073-LIMN-010" href="#0073-LIMN-010">0073-LIMN-010</a>)
+
+for product spot: (<a name="0073-LIMN-103" href="#0073-LIMN-103">0073-LIMN-103</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -190,7 +194,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is an asset USD.
 1. There is no market and there are no market proposals.
 
-#### Test case 3.3: Market is proposed, voting has closed, market rejected, proposal not restored (<a name="0073-LIMN-011" href="#0073-LIMN-011">0073-LIMN-011</a>)(<a name="0073-SP-LIMN-011" href="#0073-SP-LIMN-011">0073-SP-LIMN-011</a>)
+#### Test case 3.3: Market is proposed, voting has closed, market rejected, proposal not restored (<a name="0073-LIMN-011" href="#0073-LIMN-011">0073-LIMN-011</a>)
+
+for product spot:(<a name="0073-LIMN-104" href="#0073-LIMN-104">0073-LIMN-104</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.

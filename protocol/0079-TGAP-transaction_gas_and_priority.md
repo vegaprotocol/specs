@@ -102,7 +102,9 @@ There are three priority categories:
 1. Send `100` transactions with default gas cost to a node (e.g. votes on a proposal) and observe that most block have 5 of these transactions each.
 
 
-### Test max with a market (<a name="0079-TGAP-004" href="#0079-TGAP-004">0079-TGAP-004</a>)(<a name="0079-SP-TGAP-004" href="#0079-SP-TGAP-004">0079-SP-TGAP-004</a>)
+### Test max with a market (<a name="0079-TGAP-004" href="#0079-TGAP-004">0079-TGAP-004</a>)
+
+for product spot: (<a name="0079-TGAP-006" href="#0079-TGAP-006">0079-TGAP-006</a>)
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 1`.
 1. Create a market with 1 LP
@@ -111,7 +113,9 @@ There are three priority categories:
 1. Another party submits a transaction to place a limit order. A block will be created containing the transaction (even though the gas cost of a limit order is `1 + 50 x 3 + 2 x 1 + 0.1 x 5` which is well over `100`.)
 
 
-### Test we don't overfill a block with a market (<a name="0079-TGAP-005" href="#0079-TGAP-005">0079-TGAP-005</a>)(<a name="0079-SP-TGAP-005" href="#0079-SP-TGAP-005">0079-SP-TGAP-005</a>)
+### Test we don't overfill a block with a market (<a name="0079-TGAP-005" href="#0079-TGAP-005">0079-TGAP-005</a>)
+
+for product spot: (<a name="0079-TGAP-007" href="#0079-TGAP-007">0079-TGAP-007</a>)
 
 1. Set `network.transactions.maxgasperblock = 500` and `network.transaction.defaultgas = 1`.
 1. Place 2 matching orders, 1 buy order below the matching price and 1 sell order above the matching price. Uncross the opening auction.

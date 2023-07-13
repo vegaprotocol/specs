@@ -51,7 +51,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2419\
     - Node 5 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' ``n_voting_power``=2741
 
-### Changes to delegation during the epoch are reflected in the next epoch’s voting power (<a name="0066-SP-VALW-004" href="#0066-SP-VALW-004">0066-SP-VALW-004</a>)
+### Changes to delegation during the epoch are reflected in the next epoch’s voting power (<a name="0066-VALW-004" href="#0066-VALW-004">0066-VALW-004</a>)
 
 1. set up a network with 5 validators
 1. give the first `4` validators `1000` of self-stake each. Give the last validator `0`.
@@ -71,7 +71,7 @@ If the network has no stake at all, then all validators would have equal voting 
     - Node 4 n[`stakedByOperator`]='1000000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=2564\
     - Node 5 n[`stakedByOperator`]='500000000000000000000' n[`stakedByDelegates`]='0' `n_voting_power`=64
 
-### Sanity check if everyone unstakes and undelegates (<a name="0066-VALW-005" href="#0066-SP-VALW-005">0066-SP-VALW-005</a>)
+### Sanity check if everyone unstakes and undelegates (<a name="0066-VALW-005" href="#0066-VALW-005">0066-VALW-005</a>)
 
 1. set up a network with 5 validators
 1. give each of the validators the following number of self-staked tokens: `2000`

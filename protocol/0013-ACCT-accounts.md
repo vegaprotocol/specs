@@ -117,7 +117,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 ### Party holding accounts in Spot market
 
-- Every party that submits an order on a market will have a holding account for that market created. (<a name="0013-ACCT-030" href="#0013-ACCT-030">0013-SP-ACCT-007</a>)
+- Every party that submits an order on a market will have a holding account for that market created. (<a name="0013-ACCT-030" href="#0013-ACCT-030">0013-ACCT-030</a>)
 - Each party should only have two holding accounts per market: one for the the base_asset and one for the quote_asset. (<a name="0013-ACCT-031" href="#0013-ACCT-031">0013-ACCT-031</a>)
 
 ### Liquidity Provider bond accounts

@@ -161,7 +161,9 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 ## Acceptance criteria
 
-### Joining / leaving VEGA chain (<a name="0069-VCBS-001" href="#0069-VCBS-001">0069-VCBS-001</a>)(<a name="0069-SP-VCBS-001" href="#0069-SP-VCBS-001">0069-SP-VCBS-001</a>)
+### Joining / leaving VEGA chain (<a name="0069-VCBS-001" href="#0069-VCBS-001">0069-VCBS-001</a>)
+
+for product spot: (<a name="0069-VCBS-089" href="#0069-VCBS-089">0069-VCBS-089</a>)
 
 1. A running Vega node which isn't a "pending" or "ersatz" or "validator" node already can submit a transaction to become a validator.
 2. Their performance score will be calculated. See [performance score](./0064-VALP-validator_performance_based_rewards.md).
@@ -174,20 +176,20 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 **Setup a network for each test** with 5 Tendermint validators and 2 ersatz validators. Verify the value of the min.validators network parameter is 5. Delegate 1000 tokens to each Tendermint validator and 500 to each ersatz validator (where minimum is defined as 500). Transfer 1000 tokens to the reward account. The test assumes that the validators are already in their state (i.e. 5 are Tendermint, 2 are ersatz).
 
-1. Base case for Tendermint validators (<a name="0069-VCBS-005" href="#0069-VCBS-005">0069-VCBS-005</a>)(<a name="0069-SP-VCBS-005" href="#0069-SP-VCBS-005">0069-SP-VCBS-005</a>):
+1. Base case for Tendermint validators (<a name="0069-VCBS-005" href="#0069-VCBS-005">0069-VCBS-005</a>) for product spot: (<a name="0069-VCBS-090" href="#0069-VCBS-090">0069-VCBS-090</a>):
     - Verify that the `stakeScore` for each of the Tendermint validators is 0.2
-1. Base case for ersatz validators (<a name="0069-VCBS-006" href="#0069-VCBS-006">0069-VCBS-006</a>)(<a name="0069-SP-VCBS-006" href="#0069-SP-VCBS-006">0069-SP-VCBS-006</a>):
+1. Base case for ersatz validators (<a name="0069-VCBS-006" href="#0069-VCBS-006">0069-VCBS-006</a>) for product spot: (<a name="0069-VCBS-091" href="#0069-VCBS-091">0069-VCBS-091</a>):
     - Verify that the `stakeScore` for each of the ersatz validator is 0.5
-1. No antiwhaling for ersatz `stakeScore` (<a name="0069-VCBS-007" href="#0069-VCBS-007">0069-VCBS-007</a>)(<a name="0069-SP-VCBS-007" href="#0069-SP-VCBS-007">0069-SP-VCBS-007</a>):
+1. No antiwhaling for ersatz `stakeScore` (<a name="0069-VCBS-007" href="#0069-VCBS-007">0069-VCBS-007</a>) for product spot: (<a name="0069-VCBS-092" href="#0069-VCBS-092">0069-VCBS-092</a>):
     - Delegate to one of the ersatz validators 4000 more tokens.
     - Run for an epoch with the new delegation (i.e. one ersatz with 500 one with 4500) and transfer 1000 tokens to the reward account.
     - Verify that at the end of the epoch the stake score of the validator with 4500 tokens is 0.9 and the one with 500 tokens is 0.1
-1. Antiwhaling for Tendermint validators (<a name="0069-VCBS-008" href="#0069-VCBS-008">0069-VCBS-008</a>)(<a name="0069-SP-VCBS-008" href="#0069-SP-VCBS-008">0069-SP-VCBS-008</a>):
+1. Antiwhaling for Tendermint validators (<a name="0069-VCBS-008" href="#0069-VCBS-008">0069-VCBS-008</a>) for product spot: (<a name="0069-VCBS-093" href="#0069-VCBS-093">0069-VCBS-093</a>):
     - **Additional setup:** in addition to the 1000 delegated for each node, delegate 500 more to node 1.
     - **Additional setup:** ensure that the network parameter for `reward.staking.delegation.competitionLevel` is set to 1
     - Once it becomes active let it run for a full epoch during which transfer 1000 tokens to the reward account.
     - Verify that at the end of the epoch node 1 should have a stake score of 0.2 where all other nodes get stake score of 0.1818181818
-1. Full antiwhaling for Tendermint validators (<a name="0069-VCBS-009" href="#0069-VCBS-009">0069-VCBS-009</a>)(<a name="0069-SP-VCBS-009" href="#0069-SP-VCBS-009">0069-SP-VCBS-009</a>):
+1. Full antiwhaling for Tendermint validators (<a name="0069-VCBS-009" href="#0069-VCBS-009">0069-VCBS-009</a>) for product spot: (<a name="0069-VCBS-094" href="#0069-VCBS-094">0069-VCBS-094</a>):
     - **Additional setup:** ensure that the network parameter for `reward.staking.delegation.optimalStakeMultiplier` is set to 3
     - **Additional setup:** ensure that the network parameter for `reward.staking.delegation.competitionLevel` is set to 1
     - **Additional setup:** in addition to the 1000 tokens delegated to each node, delegate 10000 tokens to node1 to get a total delegation of 11000 to it.
@@ -196,20 +198,20 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 #### Multisig score
 
-1. Verify that for all ersatz validators their multisig score is 1 (<a name="0069-VCBS-010" href="#0069-VCBS-010">0069-VCBS-010</a>)(<a name="0069-SP-VCBS-010" href="#0069-SP-VCBS-010">0069-SP-VCBS-010</a>)
-1. Tendermint validators excess signature (<a name="0069-VCBS-011" href="#0069-VCBS-011">0069-VCBS-011</a>)(<a name="0069-SP-VCBS-011" href="#0069-SP-VCBS-011">0069-SP-VCBS-011</a>):
+1. Verify that for all ersatz validators their multisig score is 1 (<a name="0069-VCBS-010" href="#0069-VCBS-010">0069-VCBS-010</a>) for product spot: (<a name="0069-VCBS-095" href="#0069-VCBS-095">0069-VCBS-095</a>)
+1. Tendermint validators excess signature (<a name="0069-VCBS-011" href="#0069-VCBS-011">0069-VCBS-011</a>) for product spot: (<a name="0069-VCBS-096" href="#0069-VCBS-096">0069-VCBS-096</a>):
     - Setup a network with 5 Tendermint validators but with only 4 validators that have sufficient self-delegation. Call the one without enough self-delegation Bob.
     - Announce a new node (Alice) and self-delegate to them, allow some time to replace the validator with no self-delegation (Bob) as a Tendermint validator by Alice. Note: At this point the signature of Bob IS still on the multisig contract.
     - Transfer 1000 tokens to the VEGA reward account.
     - Verify that at the end of the epoch all of the Tendermint validators should have a multisig score = 0 since Bob is still on the contract.
-1. Tendermint validators missing signature test 1 (<a name="0069-VCBS-012" href="#0069-VCBS-012">0069-VCBS-012</a>)(<a name="0069-SP-VCBS-012" href="#0069-SP-VCBS-012">0069-SP-VCBS-012</a>):
+1. Tendermint validators missing signature test 1 (<a name="0069-VCBS-012" href="#0069-VCBS-012">0069-VCBS-012</a>) for product spot: (<a name="0069-VCBS-097" href="#0069-VCBS-097">0069-VCBS-097</a>):
     - Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators network parameter set to 5.
     - **Additional setup:** ensure that the network parameter `network.validators.multisig.numberOfSigners` is set to **5**.
     - Announce a new node and self-delegate to it 1000 tokens.
     - Allow some time for the performance score to be greater than 0. Note: When this happens the validator will be promoted to Tendermint validator at the beginning of the following epoch.
     - When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account.
     - Verify that the joining validator has a multisig score of 0 and therefore would not get a reward.
-1. Tendermint validators missing signature test 2 (<a name="0069-VCBS-013" href="#0069-VCBS-013">0069-VCBS-013</a>)(<a name="0069-SP-VCBS-013" href="#0069-SP-VCBS-013">0069-SP-VCBS-013</a>):
+1. Tendermint validators missing signature test 2 (<a name="0069-VCBS-013" href="#0069-VCBS-013">0069-VCBS-013</a>) for product spot: (<a name="0069-VCBS-098" href="#0069-VCBS-098">0069-VCBS-098</a>):
     - Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators network parameter set to 5.
     - **Additional setup:** ensure that the network parameter `network.validators.multisig.numberOfSigners` is set to 4.
     - Announce a new node and self-delegate to it 10000 tokens.
@@ -217,7 +219,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account.
     - Assert that the new validator has a score (stake score x performance score) in the top 4 - this can be verified in data node with: `rewardScore.stakeScore` x `rewardScore.performanceScore`.
     - Verify that the joining validator would have a multisig score of 0 and therefore would not get a reward.
-1. Tendermint validators missing signature test 3 (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>)(<a name="0069-SP-VCBS-050" href="#0069-SP-VCBS-050">0069-SP-VCBS-050</a>):
+1. Tendermint validators missing signature test 3 (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>) for product spot: (<a name="0069-VCBS-99" href="#0069-VCBS-099">0069-VCBS-099</a>):
     - Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators network parameter set to 5.
     - **Additional setup:** ensure that the network parameter `network.validators.multisig.numberOfSigners`is set to 4.
     - Delegate 10000 to the existing validators (can be self or party delegation)
@@ -227,50 +229,50 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account.
     - Assert that the new validator has a score (stake score x performance score) **NOT** in the top 4 - this can be verified in data node with: `rewardScore.stakeScore` x `rewardScore.performanceScore`.
     - Verify that the joining validator would have a multisig score of 1 and therefore gets a reward.
-1. One of the top validators is not registered with the multisig contract (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>)(<a name="0069-SP-VCBS-051" href="#0069-SP-VCBS-051">0069-SP-VCBS-051</a>):
+1. One of the top validators is not registered with the multisig contract (<a name="0069-VCBS-051" href="#0069-VCBS-051">0069-VCBS-051</a>) for product spot: (<a name="0069-VCBS-100" href="#0069-VCBS-100">0069-VCBS-100</a>):
     - Run a Vega network where a validator joins and gets a lot delegated in order for it to become one of the top `network.validators.multisig.numberOfSigners`
     - Ensure its ethereum key is **NOT** put on the multisig contract.
     - Verify the validator has 0 for their multisig score and receives no staking reward.
 
 #### Validator Score
 
-1. Verify that the validator score is always equal to the `stakeScore` x `perfScore` x `multisigScore` when the validator is a Tendermint validator (<a name="0069-VCBS-014" href="#0069-VCBS-014">0069-VCBS-014</a>)(<a name="0069-SP-VCBS-014" href="#0069-SP-VCBS-014">0069-SP-VCBS-014</a>)
-2. Verify that the validator score is always equal to the `stakeScore` x `perfScore` when the validator is an ersatz validator (<a name="0069-VCBS-015" href="#0069-VCBS-015">0069-VCBS-015</a>)(<a name="0069-SP-VCBS-015" href="#0069-SP-VCBS-015">0069-SP-VCBS-015</a>)
+1. Verify that the validator score is always equal to the `stakeScore` x `perfScore` x `multisigScore` when the validator is a Tendermint validator (<a name="0069-VCBS-014" href="#0069-VCBS-014">0069-VCBS-014</a>) for product spot: (<a name="0069-VCBS-101" href="#0069-VCBS-101">0069-VCBS-101</a>)
+2. Verify that the validator score is always equal to the `stakeScore` x `perfScore` when the validator is an ersatz validator (<a name="0069-VCBS-015" href="#0069-VCBS-015">0069-VCBS-015</a>) for product spot: (<a name="0069-VCBS-102" href="#0069-VCBS-102">0069-VCBS-102</a>)
 
 #### Normalised Score
 
-1. The sum of normalised scores must always equal 1 (<a name="0069-VCBS-016" href="#0069-VCBS-016">0069-VCBS-016</a>)(<a name="0069-SP-VCBS-016" href="#0069-SP-VCBS-016">0069-SP-VCBS-016</a>)
-2. The normalised score for validator i must equal `validatorScore_{i}` / `total_validator_score`. Note: the total validator score is calculated over the relevant set separately (i.e. Tendermint and ersatz) (<a name="0069-VCBS-017" href="#0069-VCBS-017">0069-VCBS-017</a>)(<a name="0069-SP-VCBS-017" href="#0069-SP-VCBS-017">0069-SP-VCBS-017</a>)
+1. The sum of normalised scores must always equal 1 (<a name="0069-VCBS-016" href="#0069-VCBS-016">0069-VCBS-016</a>) for product spot: (<a name="0069-VCBS-103" href="#0069-VCBS-103">0069-VCBS-103</a>)
+2. The normalised score for validator i must equal `validatorScore_{i}` / `total_validator_score`. Note: the total validator score is calculated over the relevant set separately (i.e. Tendermint and ersatz) (<a name="0069-VCBS-017" href="#0069-VCBS-017">0069-VCBS-017</a>) for product spot: (<a name="0069-VCBS-104" href="#0069-VCBS-104">0069-VCBS-104</a>)
 
 ### Rewards split between tendermint and ersatz validators
 
-1. Base scenario (<a name="0069-VCBS-018" href="#0069-VCBS-018">0069-VCBS-018</a>)(<a name="0069-SP-VCBS-018" href="#0069-SP-VCBS-018">0069-SP-VCBS-018</a>):
+1. Base scenario (<a name="0069-VCBS-018" href="#0069-VCBS-018">0069-VCBS-018</a>) for product spot: (<a name="0069-VCBS-105" href="#0069-VCBS-105">0069-VCBS-105</a>):
     - There are no ersatz validators in the network.
     - Verify that, regardless of `ersatzRewardFactor` value, all rewards are being paid out to the validators as expected given the reward scores.
-1. Ersatz validators where ersatz reward factor equals 0 (<a name="0069-VCBS-019" href="#0069-VCBS-019">0069-VCBS-019</a>)(<a name="0069-SP-VCBS-019" href="#0069-SP-VCBS-019">0069-SP-VCBS-019</a>):
+1. Ersatz validators where ersatz reward factor equals 0 (<a name="0069-VCBS-019" href="#0069-VCBS-019">0069-VCBS-019</a>) for product spot: (<a name="0069-VCBS-106" href="#0069-VCBS-106">0069-VCBS-106</a>):
     - Ensure that the `ersatzRewardFactor` is set to 0
     - Setup an ersatz validator with delegation greater than the minimum. The delegation can be equal to the delegation of the other Tendermint validators
     - Verify the ersatz validators and their delegators get no rewards.
-1. Ersatz validators where reward factor equals 1 (<a name="0069-VCBS-020" href="#0069-VCBS-020">0069-VCBS-020</a>)(<a name="0069-SP-VCBS-020" href="#0069-SP-VCBS-020">0069-SP-VCBS-020</a>):
+1. Ersatz validators where reward factor equals 1 (<a name="0069-VCBS-020" href="#0069-VCBS-020">0069-VCBS-020</a>) for product spot: (<a name="0069-VCBS-107" href="#0069-VCBS-107">0069-VCBS-107</a>):
     - Setup an ersatz validator with self and party delegation making them eligible for reward for a whole epoch. For example, such that the total delegation to each node is 1000 Vega. (3 Tendermint validators, 1 ersatz validator all having a delegation of 1000 Vega).
     - Make sure there is balance of 1000 Vega in the reward pool account for the epoch.
     - Verify the reward pool is distributed equally between the validators.
-1. Ersatz validators where reward factor equals 0.5 (<a name="0069-VCBS-021" href="#0069-VCBS-021">0069-VCBS-021</a>)(<a name="0069-SP-VCBS-021" href="#0069-SP-VCBS-021">0069-SP-VCBS-021</a>):
+1. Ersatz validators where reward factor equals 0.5 (<a name="0069-VCBS-021" href="#0069-VCBS-021">0069-VCBS-021</a>) for product spot: (<a name="0069-VCBS-108" href="#0069-VCBS-108">0069-VCBS-108</a>):
     - Setup an ersatz validator with self and party delegation making them eligible for reward for a whole epoch. For example, such that the total delegation to each node is 1000 Vega. (3 tendermint validators, 1 ersatz validator all having a delegation of 1000 Vega).
     - Make sure there is balance of 3500 Vega in the reward account for the epoch.
     - Verify that 3000 is distributed between the Tendermint validators and 500 is rewarded to the ersatz validator.
-1. Multiple ersatz validators, reward factor equals 0.5 (<a name="0069-VCBS-022" href="#0069-VCBS-022">0069-VCBS-022</a>)(<a name="0069-SP-VCBS-022" href="#0069-SP-VCBS-022">0069-SP-VCBS-022</a>):
+1. Multiple ersatz validators, reward factor equals 0.5 (<a name="0069-VCBS-022" href="#0069-VCBS-022">0069-VCBS-022</a>) for product spot: (<a name="0069-VCBS-109" href="#0069-VCBS-109">0069-VCBS-109</a>):
     - Setup a network with 3 ersatz validators, 3 Tendermint validators with arbitrary delegation, but ensuring the total delegation for each validator is greater than the minimum self-delegation.
     - With `total_delegations_from_all_validators = (0.5 * total_delegation_from_ersatz_validators) + total_delegation_from_tendermint_validators`
     - Verify the total reward given to Tendermint validators is equal to the `total_delegation_from_tendermint_validators * reward_balance` / `total_delegation_from_all_validators`.
     - Verify the total reward given to ersatz validators is equal to the `total_delegation_from_ersatz_validators * 0.5 * reward_balance / total_delegation_from_all_validators`.
-1. Pending validators get nothing (<a name="0069-VCBS-023" href="#0069-VCBS-023">0069-VCBS-023</a>)(<a name="0069-SP-VCBS-023" href="#0069-SP-VCBS-023">0069-SP-VCBS-023</a>):
+1. Pending validators get nothing (<a name="0069-VCBS-023" href="#0069-VCBS-023">0069-VCBS-023</a>) for product spot: (<a name="0069-VCBS-110" href="#0069-VCBS-110">0069-VCBS-110</a>):
     - Setup a network with 5 tendermint validators, set number of ersatz validators (through network parameter) to 0.
     - Delegate to each node 1000 tokens (including self-delegation).
     - Announce 2 new nodes, verify that they are in pending state, delegate to them 1000 tokens each.
     - Run the network for a full epoch with the delegation, during which transfer 1000 tokens to the reward account.
     - Verify that, at the end of the epoch, none of the pending validators receive a reward.
-1. Pending validators do not get promoted (<a name="0069-VCBS-024" href="#0069-VCBS-024">0069-VCBS-024</a>)(<a name="0069-SP-VCBS-024" href="#0069-SP-VCBS-024">0069-SP-VCBS-024</a>):
+1. Pending validators do not get promoted (<a name="0069-VCBS-024" href="#0069-VCBS-024">0069-VCBS-024</a>) for product spot: (<a name="0069-VCBS-111" href="#0069-VCBS-111">0069-VCBS-111</a>):
     - Setup a network with 5 tendermint validators, 2 ersatz validators and set number of ersatz validators (through factor) to 2.
     - Delegate to each node 1000 tokens (including self-delegation).
     - Announce 2 new nodes, verify that they are in pending state, delegate to them 1000 tokens each.
@@ -281,47 +283,47 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 #### General
 
-1. Verify that at the beginning of epoch an event is emitted for every validator known to Vega with their respective ranking scores. (<a name="0069-VCBS-025" href="#0069-VCBS-025">0069-VCBS-025</a>)(<a name="0069-SP-VCBS-025" href="#0069-SP-VCBS-025">0069-SP-VCBS-025</a>)
-1. Verify the ranking score is available through the epoch/validator/`rankingScore` API in the data-node. (<a name="0069-VCBS-026" href="#0069-VCBS-026">0069-VCBS-026</a>)(<a name="0069-SP-VCBS-026" href="#0069-SP-VCBS-026">0069-SP-VCBS-026</a>)
-1. Verify that the `rankingScore` is always equal to `performanceScore` x `stakeScore` x `incumbentBonus` (for tendermint validators and ersatz validators) Note: `network.validators.incumbentBonus` is a network parameter that is applied as a factor (1 + `incumbentBonus` network parameter) on `performanceScore` x `stakeScore`. (<a name="0069-VCBS-027" href="#0069-VCBS-027">0069-VCBS-027</a>)(<a name="0069-SP-VCBS-027" href="#0069-SP-VCBS-027">0069-SP-VCBS-027</a>)
-1. Verify that if a node has a 0 `rankingScore` for 1e6 blocks (corresponding to around 11.5 days) it gets removed from the network and will have to be re-announced. (<a name="0069-VCBS-028" href="#0069-VCBS-028">0069-VCBS-028</a>)(<a name="0069-SP-VCBS-028" href="#0069-SP-VCBS-028">0069-SP-VCBS-028</a>)
+1. Verify that at the beginning of epoch an event is emitted for every validator known to Vega with their respective ranking scores. (<a name="0069-VCBS-025" href="#0069-VCBS-025">0069-VCBS-025</a>) for product spot: (<a name="0069-VCBS-112" href="#0069-VCBS-112">0069-VCBS-112</a>)
+1. Verify the ranking score is available through the epoch/validator/`rankingScore` API in the data-node. (<a name="0069-VCBS-026" href="#0069-VCBS-026">0069-VCBS-026</a>) for product spot: (<a name="0069-VCBS-113" href="#0069-VCBS-113">0069-VCBS-113</a>)
+1. Verify that the `rankingScore` is always equal to `performanceScore` x `stakeScore` x `incumbentBonus` (for tendermint validators and ersatz validators) Note: `network.validators.incumbentBonus` is a network parameter that is applied as a factor (1 + `incumbentBonus` network parameter) on `performanceScore` x `stakeScore`. (<a name="0069-VCBS-027" href="#0069-VCBS-027">0069-VCBS-027</a>) for product spot: (<a name="0069-VCBS-114" href="#0069-VCBS-114">0069-VCBS-114</a>)
+1. Verify that if a node has a 0 `rankingScore` for 1e6 blocks (corresponding to around 11.5 days) it gets removed from the network and will have to be re-announced. (<a name="0069-VCBS-028" href="#0069-VCBS-028">0069-VCBS-028</a>) for product spot: (<a name="0069-VCBS-115" href="#0069-VCBS-115">0069-VCBS-115</a>)
 
 ### Stake scores
 
-1. No stake (<a name="0069-VCBS-029" href="#0069-VCBS-029">0069-VCBS-029</a>)(<a name="0069-SP-VCBS-029" href="#0069-SP-VCBS-029">0069-SP-VCBS-029</a>):
+1. No stake (<a name="0069-VCBS-029" href="#0069-VCBS-029">0069-VCBS-029</a>) for product spot: (<a name="0069-VCBS-116" href="#0069-VCBS-116">0069-VCBS-116</a>):
     - Setup a network with 5 validators with no delegation
     - Verify that the `stakeScore` for all of validators is 0
-1. Equal stake (<a name="0069-VCBS-030" href="#0069-VCBS-030">0069-VCBS-030</a>)(<a name="0069-SP-VCBS-030" href="#0069-SP-VCBS-030">0069-SP-VCBS-030</a>):
+1. Equal stake (<a name="0069-VCBS-030" href="#0069-VCBS-030">0069-VCBS-030</a>) for product spot: (<a name="0069-VCBS-117" href="#0069-VCBS-117">0069-VCBS-117</a>):
     - Setup a network with 5 validators, delegate to each of validator an equal stake
     - Verify that the `stakeScore` of each of them is 0.2.
-1. Stake change (<a name="0069-VCBS-031" href="#0069-VCBS-031">0069-VCBS-031</a>)(<a name="0069-SP-VCBS-031" href="#0069-SP-VCBS-031">0069-SP-VCBS-031</a>):
+1. Stake change (<a name="0069-VCBS-031" href="#0069-VCBS-031">0069-VCBS-031</a>) for product spot: (<a name="0069-VCBS-118" href="#0069-VCBS-118">0069-VCBS-118</a>):
     - Setup a network with 5 validators with 1000 tokens delegated to each.
     - Verify `stakeScore` at the end of the epoch is 0.2.
     - Change the stake of each validator by adding 100 * the index of the validator (i=1..5).
     - Verify that at the end of the epoch the `stakeScore` of each validator equals (1000 + i * 100)/5500
-1. Stake change 2 (<a name="0069-VCBS-032" href="#0069-VCBS-032">0069-VCBS-032</a>)(<a name="0069-SP-VCBS-032" href="#0069-SP-VCBS-032">0069-SP-VCBS-032</a>):
+1. Stake change 2 (<a name="0069-VCBS-032" href="#0069-VCBS-032">0069-VCBS-032</a>) for product spot: (<a name="0069-VCBS-119" href="#0069-VCBS-119">0069-VCBS-119</a>):
     - Setup a network with 5 validators with 1000 tokens delegated to each
     - Undelegate from one validator 1000 tokens.
     - Verify that, at the end of the epoch, each of the 4 validators with tokens still delegated has a `stakeScore` of 0.25 and the validator with no tokens delegated has a 0 `stakeScore`.
-1. Node joining (<a name="0069-VCBS-033" href="#0069-VCBS-033">0069-VCBS-033</a>)(<a name="0069-SP-VCBS-033" href="#0069-SP-VCBS-033">0069-SP-VCBS-033</a>):
+1. Node joining (<a name="0069-VCBS-033" href="#0069-VCBS-033">0069-VCBS-033</a>) for product spot: (<a name="0069-VCBS-120" href="#0069-VCBS-120">0069-VCBS-120</a>):
     - Setup a network with 4 validators, each with 1000 tokens delegated.
     - Announce a new node and delegate it 1000 tokens
     - Verify that the `stakeScore` of all nodes is 0.2 at the beginning of the next epoch. Note: for the first 4 validators this is changing from 0.25 in the previous epoch to 0.2 in the next.
 
 ## Promotions/Demotions
 
-1. Announce node (<a name="0069-VCBS-034" href="#0069-VCBS-034">0069-VCBS-034</a>)(<a name="0069-SP-VCBS-034" href="#0069-SP-VCBS-034">0069-SP-VCBS-034</a>):
+1. Announce node (<a name="0069-VCBS-034" href="#0069-VCBS-034">0069-VCBS-034</a>) for product spot: (<a name="0069-VCBS-121" href="#0069-VCBS-121">0069-VCBS-121</a>):
     - Verify that a node node, once added successfully to the topology, is shown on data-node API with the status pending
-1. Promote a node to become an ersatz validator (<a name="0069-VCBS-035" href="#0069-VCBS-035">0069-VCBS-035</a>)(<a name="0069-SP-VCBS-035" href="#0069-SP-VCBS-035">0069-SP-VCBS-035</a>):
+1. Promote a node to become an ersatz validator (<a name="0069-VCBS-035" href="#0069-VCBS-035">0069-VCBS-035</a>) for product spot: (<a name="0069-VCBS-122" href="#0069-VCBS-122">0069-VCBS-122</a>):
     - Set up a network with no existing ersatz validators
     - Ensure that the number of ersatz validators allowed in the network is is greater than 0 using the network parameter `network.validators.ersatz.multipleOfTendermintValidators`
     - Announce a new node on the network
     - Verify the new node gets promoted to an ersatz validator Note: ensure there are no available slots for Tendermint validators so the new node doesn’t get promoted directly to become a Tendermint validator.
-1. Demote a Tendermint validator due to lack of slots (<a name="0069-VCBS-036" href="#0069-VCBS-036">0069-VCBS-036</a>)(<a name="0069-SP-VCBS-036" href="#0069-SP-VCBS-036">0069-SP-VCBS-036</a>):
+1. Demote a Tendermint validator due to lack of slots (<a name="0069-VCBS-036" href="#0069-VCBS-036">0069-VCBS-036</a>) for product spot: (<a name="0069-VCBS-123" href="#0069-VCBS-123">0069-VCBS-123</a>):
     - Setup a network with 4 Tendermint validators
     - Change the network parameter `network.validators.tendermint.number` to 3 Tendermint validators
     - Verify that the Tendermint validator with the lowest score is demoted to an ersatz validator at the beginning of the next epoch
-1. Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-062" href="#0069-VCBS-062">0069-VCBS-062</a>)(<a name="0069-SP-VCBS-062" href="#0069-SP-VCBS-062">0069-SP-VCBS-062</a>):
+1. Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-062" href="#0069-VCBS-062">0069-VCBS-062</a>) for product spot: (<a name="0069-VCBS-124" href="#0069-VCBS-124">0069-VCBS-124</a>):
     - Run with `network.validators.ersatz.multipleOfTendermintValidators = 1`
     - Setup a network with 6 consensus forming (Tendermint) validators
     - Ensure that the multisig is updated to those 6 validators.
@@ -332,20 +334,20 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that exactly one consensus forming validator with the lowest score is demoted to an ersatz validator at the beginning of the following epoch and we are running with 4 consensus (Tendermint) validators.
     - Ensure that the multisig is updated to those 4 validators.
     - Finally verify that exactly one consensus forming validator with the lowest score is demoted to an ersatz validator at the beginning of the following epoch and we are running with 3 consensus (Tendermint) validators.
-1. Try to demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-063" href="#0069-VCBS-063">0069-VCBS-063</a>)(<a name="0069-SP-VCBS-063" href="#0069-SP-VCBS-063">0069-SP-VCBS-063</a>):
+1. Try to demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-063" href="#0069-VCBS-063">0069-VCBS-063</a>) for product spot: (<a name="0069-VCBS-125" href="#0069-VCBS-125">0069-VCBS-125</a>):
     - Run with `network.validators.ersatz.multipleOfTendermintValidators = 1`
     - Setup a network with 6 consensus forming (Tendermint) validators
     - Ensure that the multisig is updated to those 6 validators.
     - Ensure that the threshold on the multisig is set to `900`.
     - Change the network parameter `network.validators.tendermint.number` to 3 Tendermint validators.
     - Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 6 consensus (Tendermint) validators.
-1. Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-064" href="#0069-VCBS-064">0069-VCBS-064</a>)(<a name="0069-SP-VCBS-064" href="#0069-SP-VCBS-064">0069SP--VCBS-064</a>):
+1. Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-064" href="#0069-VCBS-064">0069-VCBS-064</a>) for product spot: (<a name="0069-VCBS-126" href="#0069-VCBS-126">0069-VCBS-126</a>):
     - Setup a network with 3 consensus forming (Tendermint) validators
     - Ensure that the multisig is updated to those 3 validators.
     - Ensure that the threshold on the multisig is set to `666`.
     - Change the network parameter `network.validators.tendermint.number` to 2 Tendermint validators.
     - Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 3 consensus (Tendermint) validators.
-1. Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-065" href="#0069-VCBS-065">0069-VCBS-065</a>)(<a name="0069-SP-VCBS-065" href="#0069-SP-VCBS-065">0069-SP-VCBS-065</a>):
+1. Demote a number of consensus forming (Tendermint) validators due to lack of slots (<a name="0069-VCBS-065" href="#0069-VCBS-065">0069-VCBS-065</a>) for product spot: (<a name="0069-VCBS-127" href="#0069-VCBS-127">0069-VCBS-127</a>):
     - Run with `network.validators.ersatz.multipleOfTendermintValidators = 1`
     - Setup a network with 6 consensus forming (Tendermint) validators
     - Ensure that the multisig is updated to those 6 validators.
@@ -356,28 +358,28 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that exactly one consensus forming validator with the lowest score is demoted to an ersatz validator at the beginning of the following epoch and we are running with 4 consensus (Tendermint) validators.
     - Ensure that the multisig is *not* updated to those 4 validators, but we have the 5 validators from previous step.
     - Verify that no consensus forming validator is removed at the start of the next epoch and we are running with 4 consensus (Tendermint) validators.
-1. Demote an ersatz validator due to lack of slots (<a name="0069-VCBS-037" href="#0069-VCBS-037">0069-VCBS-037</a>)(<a name="0069-SP-VCBS-037" href="#0069-SP-VCBS-037">0069-SP-VCBS-037</a>):
+1. Demote an ersatz validator due to lack of slots (<a name="0069-VCBS-037" href="#0069-VCBS-037">0069-VCBS-037</a>) for product spot: (<a name="0069-VCBS-128" href="#0069-VCBS-128">0069-VCBS-128</a>):
     - Setup a network with 4 tendermint validators, and 2 ersatz validators.
     - Change the ersatz network parameter `network.validators.ersatz.multipleOfTendermintValidators` to 0.25 of the Tendermint validators
     - Verify that the ersatz validator with the lowest score is demoted to pending at the beginning of the next epoch
-1. Promotion a node to become a Tendermint validator (<a name="0069-VCBS-038" href="#0069-VCBS-038">0069-VCBS-038</a>)(<a name="0069-SP-VCBS-038" href="#0069-SP-VCBS-038">0069-SP-VCBS-038</a>):
+1. Promotion a node to become a Tendermint validator (<a name="0069-VCBS-038" href="#0069-VCBS-038">0069-VCBS-038</a>) for product spot: (<a name="0069-VCBS-129" href="#0069-VCBS-129">0069-VCBS-129</a>):
     - Setup a network with 5 validators (and 5 slots for tendermint validators).
     - Do not self-delegate to them.
     - Announce a new node and self-delegate to them.
     - Verify that at the beginning of the next epoch one of the validators which were Tendermint validators before is chosen at random and is demoted to ersatz validator.
     - Verify the announced validator is promoted to be Tendermint validator with voting power = 10000.
-1. Promotion + swap (<a name="0069-VCBS-039" href="#0069-VCBS-039">0069-VCBS-039</a>)(<a name="0069-SP-VCBS-039" href="#0069-SP-VCBS-039">0069-SP-VCBS-039</a>):
+1. Promotion + swap (<a name="0069-VCBS-039" href="#0069-VCBS-039">0069-VCBS-039</a>) for product spot: (<a name="0069-VCBS-130" href="#0069-VCBS-130">0069-VCBS-130</a>):
     - Setup a network with 4 validators with self-delegation such that the number of Tendermint nodes (with the `network.validators.tendermint.number` parameter set to 5).
     - In the following epoch, remove the self-delegation from node 1, and announce 2 nodes.
     - During the epoch self-delegate to the two nodes.
     - Wait for 3 epochs to allow performance of the new nodes to be greater than 0.
     - Verify that, once the performance is greater than zero, the two nodes should be promoted to Tendermint validators and their voting power should be equal to their relative stake x their performance score x 10000.
-1. Swap last due to performance (<a name="0069-VCBS-040" href="#0069-VCBS-040">0069-VCBS-040</a>)(<a name="0069-SP-VCBS-040" href="#0069-SP-VCBS-040">0069-SP-VCBS-040</a>):
+1. Swap last due to performance (<a name="0069-VCBS-040" href="#0069-VCBS-040">0069-VCBS-040</a>) for product spot: (<a name="0069-VCBS-131" href="#0069-VCBS-131">0069-VCBS-131</a>):
     - Setup a network with 5 validators with self-delegation.
     - Announce a new node and self-delegate to it.
     - Once it gets to a performance score of 0.2, shut down two of the 5 Tendermint validators after 0.1 of the duration of the epoch, e.g. if the epoch is 5 minutes, that means after 30 seconds of the epoch they should be stopped.
     - Verify that at the beginning of the next epoch, expect the performance score of the two stopped validators is <= 0.1, and one of them chosen at random is demoted to ersatz validator and is replaced by the announced nodes as a Tendermint validator with voting power =~ 0.2 * `stake_of_validator` / `total_stake_network`
-1. Number of slots increased (<a name="0069-VCBS-041" href="#0069-VCBS-041">0069-VCBS-041</a>)(<a name="0069-SP-VCBS-041" href="#0069-SP-VCBS-041">0069-SP-VCBS-041</a>):
+1. Number of slots increased (<a name="0069-VCBS-041" href="#0069-VCBS-041">0069-VCBS-041</a>) for product spot: (<a name="0069-VCBS-132" href="#0069-VCBS-132">0069-VCBS-132</a>):
     - Setup a network with 5 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
     - Announce a new node, DO NOT self-delegate to it.
     - Run for an epoch and assert the validator is shown as pending.
@@ -385,7 +387,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that at the beginning of the next epoch the pending validator is still pending as their performance score is 0 (no self-stake).
     - Self-delegate to the pending validator
     - Verify that at the end of the epoch they are promoted to Tendermint validator.
-1. Swap due to better score (<a name="0069-VCBS-042" href="#0069-VCBS-042">0069-VCBS-042</a>)(<a name="0069-SP-VCBS-042" href="#0069-SP-VCBS-042">0069-SP-VCBS-042</a>):
+1. Swap due to better score (<a name="0069-VCBS-042" href="#0069-VCBS-042">0069-VCBS-042</a>) for product spot: (<a name="0069-VCBS-133" href="#0069-VCBS-133">0069-VCBS-133</a>):
     - Setup a network with 5 Tendermint validators and self-delegate 1000 tokens to each of them.
     - Announce a new node at the beginning of the epoch, self-delegate to them a total that is 10000 tokens.
     - At the beginning of the next epoch the new validator should have ranking score *equal or lower* to all of the Tendermint validators so it doesn’t get promoted. The parameter <incubent_factor> is set sufficiently high to assure this (e.g., 1.1).
@@ -393,7 +395,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Verify that at the beginning of the next epoch the announced node replaced node 1 as a Tendermint validator.
     - Restart node 1 again from a snapshot
     - Verify that node 1 is in a pending state.
-1. 2 empty spots, only one available to replace (<a name="0069-VCBS-043" href="#0069-VCBS-043">0069-VCBS-043</a>)(<a name="0069-SP-VCBS-043" href="#0069-SP-VCBS-043">0069-SP-VCBS-043</a>):
+1. 2 empty spots, only one available to replace (<a name="0069-VCBS-043" href="#0069-VCBS-043">0069-VCBS-043</a>) for product spot: (<a name="0069-VCBS-134" href="#0069-VCBS-134">0069-VCBS-134</a>):
     - Setup a network with 5 slots for Tendermint validators and 3 actual Tendermint validators.
     - Self-delegate to all of them.
     - Announce 2 new nodes but self-delegate only to one of them.
@@ -401,7 +403,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 
 ### `Ownstake` Scenarios
 
-1. `Ownstake` scenario1  (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>)(<a name="0069-SP-VCBS-053" href="#0069-SP-VCBS-053">0069-SP-VCBS-053</a>)
+1. `Ownstake` scenario1  (<a name="0069-VCBS-053" href="#0069-VCBS-053">0069-VCBS-053</a>) for product spot: (<a name="0069-VCBS-135" href="#0069-VCBS-135">0069-VCBS-135</a>)
     - Network with 3 tendermint validators and 7 ersatz validators
     - In the same epoch, change the network parameter `reward.staking.delegation.minimumValidatorStake` in a way that 3 tendermint validators and 3 ersatz validators drop below the `ownstake` requirement, and change the delegation so that 4 (not affected) Ersatz validators have a higher score than two (not affected) Validators. Also, give one of the Ersatz validators with insufficient `ownstake` the highest stake (delegated) of all Ersatz validators.
         - At the end of the epoch all validators with insufficient own stake will get a ranking score of 0.
@@ -409,7 +411,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
         - The 3 tendermint validators would be swapped with the top 3 ersatz validators over the following 3 epochs
         - Also verify that the ersatz validator with the insufficient own but the most delegated stake has a ranking score of 0 and doesn't get promoted.
         - No validator with stake attached to them is ever completely removed
-1. `Ownstake` scenario2 (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>)(<a name="0069-SP-VCBS-073" href="#0069-SP-VCBS-073">0069-SP-VCBS-073</a>)
+1. `Ownstake` scenario2 (<a name="0069-VCBS-073" href="#0069-VCBS-073">0069-VCBS-073</a>) for product spot: (<a name="0069-VCBS-136" href="#0069-VCBS-136">0069-VCBS-136</a>)
 Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
@@ -417,7 +419,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
         - the pending validator has sufficient `ownstake`
         - Verify that the first ersatz validator is removed (marked as pending in the epoch change and then removed due to continuous insufficient `ownstake`), and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
-1. `Ownstake` scenario3 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>)(<a name="0069-SP-VCBS-074" href="#0069-SP-VCBS-074">0069-SP-VCBS-074</a>)
+1. `Ownstake` scenario3 (<a name="0069-VCBS-074" href="#0069-VCBS-074">0069-VCBS-074</a>) for product spot: (<a name="0069-VCBS-137" href="#0069-VCBS-137">0069-VCBS-137</a>)
     1. Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -425,7 +427,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
         - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
-1. `Ownstake` scenario4 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>)(<a name="0069-SP-VCBS-075" href="#0069-SP-VCBS-075">0069-SP-VCBS-075</a>)
+1. `Ownstake` scenario4 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>) for product spot: (<a name="0069-VCBS-0138" href="#0069-VCBS-138">0069-VCBS-138</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
@@ -433,7 +435,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
         - 1 ersatz validator has 6000 stake and sufficient `ownstake`
         - Verify that the the first ersatz validator is not removed, and one validator with insufficient `ownstake` is replaced by the other ersatz validator.
         - Add a new pending validator with enough `ownstake`; verify that it replaces the ersatz validator that had insufficient `ownstake`.
-1. `Ownstake` scenario5 (<a name="0069-VCBS-076" href="#0069-VCBS-076">0069-VCBS-076</a>)(<a name="0069-SP-VCBS-076" href="#0069-SP-VCBS-076">0069-SP-VCBS-076</a>)
+1. `Ownstake` scenario5 (<a name="0069-VCBS-076" href="#0069-VCBS-076">0069-VCBS-076</a>) for product spot: (<a name="0069-VCBS-139" href="#0069-VCBS-139">0069-VCBS-139</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - 1 validator drops below `ownstake`, but has relative high delegated stake (7000)
         - 2 validators drop to the lowest delegated stake (1000 and 1500, respectively)
@@ -443,13 +445,13 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
         - Reduce the `ownstake` of both ersatz validators to 0. Verify that both ersatz validators are now removed, and that the tendermint validator still stays a tendermint validator (let this run for at least 2 epochs).
         - Reduce the `ownstake` of another tendermint validator to 0. Verify that that tendermint validator is demoted, and the other one with insufficient `ownstake` is not.
 
-1. `Ownstake` scenario6 (<a name="0069-VCBS-077" href="#0069-VCBS-077">0069-VCBS-077</a>)(<a name="0069-SP-VCBS-077" href="#0069-SP-VCBS-077">0069-SP-VCBS-077</a>)
+1. `Ownstake` scenario6 (<a name="0069-VCBS-077" href="#0069-VCBS-077">0069-VCBS-077</a>) for product spot: (<a name="0069-VCBS-140" href="#0069-VCBS-140">0069-VCBS-140</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
         - All ersatz validators have sufficient `ownstake`, but lower stake than the validators
         - Verify that one validator is replaced the following epoch, one in the epoch after
 
-1. `Ownstake` scenario7 (<a name="0069-VCBS-078" href="#0069-VCBS-078">0069-VCBS-078</a>)(<a name="0069-SP-VCBS-078" href="#0069-SP-VCBS-078">0069-SP-VCBS-078</a>)
+1. `Ownstake` scenario7 (<a name="0069-VCBS-078" href="#0069-VCBS-078">0069-VCBS-078</a>) for product spot: (<a name="0069-VCBS-141" href="#0069-VCBS-141">0069-VCBS-141</a>)
         -Verify that 2 validators are replaced, one in each epoch
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators). In one epoch,
         - All validators drop below `ownstake`
@@ -458,7 +460,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 
 ### Ersatz Rewards
 
-1. Ersatz validator reward (<a name="0069-VCBS-061" href="#0069-VCBS-061">0069-VCBS-061</a>)(<a name="0069-SP-VCBS-061" href="#0069-SP-VCBS-061">0069-SP-VCBS-061</a>)
+1. Ersatz validator reward (<a name="0069-VCBS-061" href="#0069-VCBS-061">0069-VCBS-061</a>) for product spot: (<a name="0069-VCBS-142" href="#0069-VCBS-142">0069-VCBS-142</a>)
     - Setup a network with 5 validators with the following distribution of delegation:
         - 10%, 10%, 10%, 10%. 60% of the total delegation of tendermint validators
     - Setup 5 ersatz validators each with the minimum delegation at the end of the epoch verify that the stake score of the validator with 60% of the delegation (under reward) is anti-whaled
@@ -468,7 +470,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Restart the validator, run until the end of the epoch
     - Verify that this validator is paid reward as ersatz validator and that their stake score under reward is anti-whaled
 
-1. Change `network.validators.ersatz.rewardFactor` (<a name="0069-VCBS-057" href="#0069-VCBS-057">0069-VCBS-057</a>)(<a name="0069-SP-VCBS-057" href="#0069-SP-VCBS-057">0069-SP-VCBS-057</a>)
+1. Change `network.validators.ersatz.rewardFactor` (<a name="0069-VCBS-057" href="#0069-VCBS-057">0069-VCBS-057</a>) for product spot: (<a name="0069-VCBS-143" href="#0069-VCBS-143">0069-VCBS-143</a>)
     - Setup a network with 5 Tendermint validators, 3 Ersatz Validators,  `network.validators.ersatz.rewardfactor` = 0
     - Verify that at the end of the Epoch, the Ersatz Validators get no reward
     - Increase the `rewardFactor` to 0.5
@@ -480,19 +482,19 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 
 ### Slot Adjustments
 
-1. Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>)(<a name="0069-SP-VCBS-052" href="#0069-SP-VCBS-052">0069-SP-VCBS-052</a>):
+1. Number of slots decreased (<a name="0069-VCBS-052" href="#0069-VCBS-052">0069-VCBS-052</a>) for product spot: (<a name="0069-VCBS-144" href="#0069-VCBS-144">0069-VCBS-144</a>):
     - Setup a network with 5 Tendermint validators, self-delegate to them (set the parameter `network.validators.tendermint.number` to 5, set the `network.validators.ersatz.multipleOfTendermintValidators` parameter to 0 so there are no ersatz validators allowed).
     - Decrease the number of tendermint validators to 3.
     - Verify that in each of the following two epochs, the validator with the lowest score is demoted to Ersatz validator and an Ersatz validator is demoted to pending
-1. Number of Ersatz validators increased (<a name="0069-VCBS-058" href="#0069-VCBS-058">0069-VCBS-058</a>)(<a name="0069-SP-VCBS-058" href="#0069-SP-VCBS-058">0069-SP-VCBS-058</a>):
+1. Number of Ersatz validators increased (<a name="0069-VCBS-058" href="#0069-VCBS-058">0069-VCBS-058</a>) for product spot: (<a name="0069-VCBS-145" href="#0069-VCBS-145">0069-VCBS-145</a>):
     - Setup a network with 4 Tendermint validators, 2 Ersatz Validators (`network.validators.ersatz.multipleOfTendermintValidators` = 0.5), and 2 pending validators
     - Change the parameter `network.validators.ersatz.multipleOfTendermintValidators` to 0.9
     - Verify that in the following epoch, the Ersatz Validator with the highest score is promoted to Validator
-1. Number of Ersatz validators decreased (<a name="0069-VCBS-054" href="#0069-VCBS-054">0069-VCBS-054</a>)(<a name="0069-SP-VCBS-054" href="#0069-SP-VCBS-054">0069-SP-VCBS-054</a>):
+1. Number of Ersatz validators decreased (<a name="0069-VCBS-054" href="#0069-VCBS-054">0069-VCBS-054</a>) for product spot: (<a name="0069-VCBS-146" href="#0069-VCBS-146">0069-VCBS-146</a>):
     - Setup a network with 5 Tendermint validators, 3 Ersatz Validators (`network.validators.ersatz.multipleOfTendermintValidators` = 0.5)
     - Change the parameter `network.validators.ersatz.multipleOfTendermintValidators` to 0.1
     - Verify that in the following to epoch, all the Ersatz Validators are demoted to pending
-1. Number of Ersatz validators Erratic (<a name="0069-VCBS-055" href="#0069-VCBS-055">0069-VCBS-055</a>)(<a name="0069-SP-VCBS-055" href="#0069-SP-VCBS-055">0069-SP-VCBS-055</a>):
+1. Number of Ersatz validators Erratic (<a name="0069-VCBS-055" href="#0069-VCBS-055">0069-VCBS-055</a>) for product spot: (<a name="0069-VCBS-147" href="#0069-VCBS-147">0069-VCBS-147</a>):
     - Setup a network with 5 Tendermint validators, 2 Ersatz Validators (`network.validators.ersatz.multipleOfTendermintValidators` = 0.5), and 2 pending validators
     - Change the parameter `network.validators.ersatz.multipleOfTendermintValidators` to 0.9
     - Verify that in the next epoch the 2 pending validators are promoted to ersatz
@@ -501,51 +503,52 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Two epochs later, change `network.validators.ersatz.multipleOfTendermintValidators` to 0.5
     - Verify that in the next epoch the 2 pending validators are promoted to ersatz
     - Verify that in the last epoch, no demotions/promotions happen and the number of Ersatz validators stays at 2
-1. Number of Ersatz Validators oddly defined (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>)(<a name="0069-SP-VCBS-056" href="#0069-SP-VCBS-056">0069-SP-VCBS-056</a>)
+1. Number of Ersatz Validators oddly defined (<a name="0069-VCBS-056" href="#0069-VCBS-056">0069-VCBS-056</a>) for product spot: (<a name="0069-VCBS-148" href="#0069-VCBS-148">0069-VCBS-148</a>)
     - Set the factor to 0.00000000000000000000000000000000000000001
     - Verify that all Validators round it the same way, and that there are no Ersatz validators
     - Set the factor to 3.00000000000000000000000000000000000000001 and run the network with just one tendermint (consensus) validator.
     - Verify that all Validators round it the same way, and that there are three Ersatz validators
 
-1. Demote one of the original validators and replace with a new validator. Update the multisig to include the new validator. Ensure multisig threshold is set to '999' (require all signatures). Attempt a withdrawal. (<a name="0069-VCBS-069" href="#0069-VCBS-069">0069-VCBS-069</a>)(<a name="0069-SP-VCBS-069" href="#0069-SP-VCBS-069">0069-SP-VCBS-069</a>)
-1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>)(<a name="0069-SP-VCBS-070" href="#0069-SP-VCBS-070">0069-VCBS-070</a>). Restart from checkpoint ((<a name="0069-SP-VCBS-080" href="#0069-SP-VCBS-080">0069-VCBS-080</a>)(<a name="0069-SP-VCBS-080" href="#0069-SP-VCBS-080">0069-SP-VCBS-080</a>)), all validator nodes are still correct.
-1. Ensure multisig threshold is set to '666'. Request an asset withdrawal (but do not yet exercise this in the er20 bridge). Demote one of the original validators and replace with a new validator. Update the multisig. Attempt to enact the withdrawal on the erc20 bridge. Funds are received by the party on eth chain, and are no longer present in vega chain account(s). (<a name="0069-VCBS-072" href="#0069-VCBS-072">0069-VCBS-072</a>)(<a name="0069-SP-VCBS-072" href="#0069-SP-VCBS-072">0069-SP-VCBS-072</a>)
+1. Demote one of the original validators and replace with a new validator. Update the multisig to include the new validator. Ensure multisig threshold is set to '999' (require all signatures). Attempt a withdrawal. (<a name="0069-VCBS-069" href="#0069-VCBS-069">0069-VCBS-069</a>) for product spot: (<a name="0069-VCBS-149" href="#0069-VCBS-149">0069-VCBS-149</a>)
+1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>) for product spot: (<a name="0069-VCBS-150" href="#0069-VCBS-150">0069-VCBS-150</a>).
+    1. Restart from checkpoint ((<a name="0069-VCBS-080" href="#0069-VCBS-080">0069-VCBS-080</a>) for product spot: (<a name="0069-VCBS-151" href="#0069-VCBS-151">0069-VCBS-151</a>)), all validator nodes are still correct.
+1. Ensure multisig threshold is set to '666'. Request an asset withdrawal (but do not yet exercise this in the er20 bridge). Demote one of the original validators and replace with a new validator. Update the multisig. Attempt to enact the withdrawal on the erc20 bridge. Funds are received by the party on eth chain, and are no longer present in vega chain account(s). (<a name="0069-VCBS-072" href="#0069-VCBS-072">0069-VCBS-072</a>) for product spot: (<a name="0069-VCBS-152" href="#0069-VCBS-152">0069-VCBS-152</a>)
 
 ### Announce Node
 
-1. Invalid announce node command (<a name="0069-VCBS-044" href="#0069-VCBS-044">0069-VCBS-044</a>)(<a name="0069-SP-VCBS-044" href="#0069-SP-VCBS-044">0069-SP-VCBS-044</a>):
+1. Invalid announce node command (<a name="0069-VCBS-044" href="#0069-VCBS-044">0069-VCBS-044</a>) for product spot: (<a name="0069-VCBS-153" href="#0069-VCBS-153">0069-VCBS-153</a>):
     - Send an announce node command from a non validator node should fail
-1. Valid announce node command (<a name="0069-VCBS-045" href="#0069-VCBS-045">0069-VCBS-045</a>)(<a name="0069-SP-VCBS-045" href="#0069-SP-VCBS-045">0069-SP-VCBS-045</a>):
+1. Valid announce node command (<a name="0069-VCBS-045" href="#0069-VCBS-045">0069-VCBS-045</a>) for product spot: (<a name="0069-VCBS-156" href="#0069-VCBS-156">0069-VCBS-156</a>):
     - Send a valid announce node from a validator node should result in a validator update event with the details of the validator and a validator ranking event.
-1. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-060" href="#0069-VCBS-060">0069-VCBS-060</a>)(<a name="0069-SP-VCBS-060" href="#0069-SP-VCBS-060">0069-SP-VCBS-060</a>):
+1. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-060" href="#0069-VCBS-060">0069-VCBS-060</a>) for product spot: (<a name="0069-VCBS-157" href="#0069-VCBS-157">0069-VCBS-157</a>):
     - Should be rejected
 
 ### Checkpoints
 
-1. Base case (<a name="0069-VCBS-046" href="#0069-VCBS-046">0069-VCBS-046</a>)(<a name="0069-SP-VCBS-046" href="#0069-SP-VCBS-046">0069-SP-VCBS-046</a>):
+1. Base case (<a name="0069-VCBS-046" href="#0069-VCBS-046">0069-VCBS-046</a>) for product spot: (<a name="0069-VCBS-158" href="#0069-VCBS-158">0069-VCBS-158</a>):
     - Setup a network with 5 Tendermint validators
     - Take a checkpoint
     - Restore from checkpoint with the 5 same validators, which should pass.
     - Verify that after the network is restarted, the validators have voting power as per the checkpoint until the end of the epoch.
-1. Base + ersatz (<a name="0069-VCBS-047" href="#0069-VCBS-047">0069-VCBS-047</a>)(<a name="0069-SP-VCBS-047" href="#0069-SP-VCBS-047">0069-SP-VCBS-047</a>):
+1. Base + ersatz (<a name="0069-VCBS-047" href="#0069-VCBS-047">0069-VCBS-047</a>) for product spot: (<a name="0069-VCBS-159" href="#0069-VCBS-159">0069-VCBS-159</a>):
     - Setup a network with 5 Tendermint validators (where 5 is also the number of allowed Tendermint validators)
     - Announce 2 new nodes and wait for them to become ersatz validators (set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0).
     - Take a checkpoint and verify it includes the ersatz validators.
     - Restore from the checkpoint (all nodes are running)
     - Verify that the validators have the voting power as per the checkpoint and that the ersatz validators are shown on data node having status ersatz.
-1. Missing validators (<a name="0069-VCBS-048" href="#0069-VCBS-048">0069-VCBS-048</a>)(<a name="0069-SP-VCBS-048" href="#0069-SP-VCBS-048">0069-SP-VCBS-048</a>):
+1. Missing validators (<a name="0069-VCBS-048" href="#0069-VCBS-048">0069-VCBS-048</a>) for product spot: (<a name="0069-VCBS-160" href="#0069-VCBS-160">0069-VCBS-160</a>):
     - Setup a network with 5 validators such that 3 of them have 70% of the voting power. Note: this is done by delegating 70% of the total stake to them.
     - Take a checkpoint
     - Restore from the checkpoint – starting only the 3 nodes with the 70% stake.
     - Verify that after the restore the network should be able to proceed generating blocks although with slower pace.
-1. Missing validators stop the network (<a name="0069-VCBS-049" href="#0069-VCBS-049">0069-VCBS-049</a>)(<a name="0069-SP-VCBS-049" href="#0069-SP-VCBS-049">0069-SP-VCBS-049</a>):
+1. Missing validators stop the network (<a name="0069-VCBS-049" href="#0069-VCBS-049">0069-VCBS-049</a>) for product spot: (<a name="0069-VCBS-161" href="#0069-VCBS-161">0069-VCBS-161</a>):
     - Setup a network with 5 validators with equal delegation to them.
     - Verify before the checkpoint that the voting power of all of them is equal.
     - Take a checkpoint.
     - Restart the network starting only 3 of the validators.
     - Restore from the checkpoint.
     - Verify the network is not able to produce blocks.
-1. Checkpoints store validator changes (<a name="0069-VCBS-079" href="#0069-VCBS-079">0069-VCBS-079</a>)(<a name="0069-SP-VCBS-079" href="#0069-SP-VCBS-079">0069-SP-VCBS-079</a>):
+1. Checkpoints store validator changes (<a name="0069-VCBS-079" href="#0069-VCBS-079">0069-VCBS-079</a>) for product spot: (<a name="0069-VCBS-162" href="#0069-VCBS-162">0069-VCBS-162</a>):
     - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
     - Stop and relegate one of the original validators (v1) such that v6 is promoted to tendermint validator, and v7 is promoted to ersatz.
     - Restart v1 and announce to pending.
@@ -553,7 +556,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Restart the network
     - Verify that v2-v6 are tendermint validators, v7 is ersatz and v1 is pending.
     - Verify that all stakes and delegations are correct for each node.
-1. Validator, ersatz and pending node scores for current epoch are persisted in checkpoints (<a name="0069-VCBS-088" href="#0069-VCBS-088">0069-VCBS-088</a>)(<a name="0069-SP-VCBS-088" href="#0069-SP-VCBS-088">0069-SP-VCBS-088</a>):
+1. Validator, ersatz and pending node scores for current epoch are persisted in checkpoints (<a name="0069-VCBS-088" href="#0069-VCBS-088">0069-VCBS-088</a>) for product spot: (<a name="0069-VCBS-163" href="#0069-VCBS-163">0069-VCBS-163</a>):
     - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
     - Take a checkpoint.
     - Wait until the current epoch will have expired.
@@ -564,44 +567,44 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 
 ### Multisig update
 
-1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-COSMICELEVATOR-002" href="#0069-COSMICELEVATOR-002">0069-COSMICELEVATOR-002</a>)(<a name="0069-SP-COSMICELEVATOR-002" href="#0069-SP-COSMICELEVATOR-002">0069-SP-COSMICELEVATOR-002</a>)
-1. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-COSMICELEVATOR-003" href="#0069-COSMICELEVATOR-003">0069-COSMICELEVATOR-003</a>)(<a name="0069-SP-COSMICELEVATOR-003" href="#0069-SP-COSMICELEVATOR-003">0069-SP-COSMICELEVATOR-003</a>)
-1. It is possible to submit a transaction to update the weights. (<a name="0069-COSMICELEVATOR-004" href="#0069-COSMICELEVATOR-004">0069-COSMICELEVATOR-004</a>)(<a name="0069-SP-COSMICELEVATOR-004" href="#0069-SP-COSMICELEVATOR-004">0069-SP-COSMICELEVATOR-004</a>)
-1. Can update multisig for new validator, and expect rewards (<a name="0069-VCBS-066" href="#0069-VCBS-066">0069-VCBS-066</a>)(<a name="0069-SP-VCBS-066" href="#0069-SP-VCBS-066">0069-SP-VCBS-066</a>)
+1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-VCBS-002" href="#0069-VCBS-002">0069-VCBS-002</a>) for product spot: (<a name="0069-VCBS-164" href="#0069-VCBS-164">0069-VCBS-164</a>)
+1. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-VCBS-003" href="#0069-VCBS-003">0069-VCBS-003</a>) for product spot: (<a name="0069-VCBS-165" href="#0069-VCBS-165">0069-VCBS-165</a>)
+1. It is possible to submit a transaction to update the weights. (<a name="0069-VCBS-004" href="#0069-VCBS-004">0069-VCBS-004</a>) for product spot: (<a name="0069-VCBS-165" href="#0069-VCBS-165">0069-VCBS-165</a>)
+1. Can update multisig for new validator, and expect rewards (<a name="0069-VCBS-066" href="#0069-VCBS-066">0069-VCBS-066</a>) for product spot: (<a name="0069-VCBS-166" href="#0069-VCBS-166">0069-VCBS-166</a>)
     - Arrange a network with N validators and 1 ersatz validator.
     - Set `network.validators.multisig.numberOfSigners` = N.
     - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
     - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
     - Verify that rewards are paid out at the end of the epoch.
-1. No rewards paid out if multisig not updated. Rewards continued when fixed. (<a name="0069-VCBS-067" href="#0069-VCBS-067">0069-VCBS-067</a>)(<a name="0069-SP-VCBS-067" href="#0069-SP-VCBS-067">0069-SP-VCBS-067</a>)
+1. No rewards paid out if multisig not updated. Rewards continued when fixed. (<a name="0069-VCBS-067" href="#0069-VCBS-067">0069-VCBS-067</a>) for product spot: (<a name="0069-VCBS-167" href="#0069-VCBS-167">0069-VCBS-167</a>)
     - Arrange a network with N validators and 1 ersatz validator.
     - Set `network.validators.multisig.numberOfSigners` = N.
     - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
     - Verify that no rewards are paid out on the first epoch.
     - Update the multisig contract by removing the demoted validator, and adding the new tendermint validator.
     - Verify that rewards are paid out at the end of the epoch.
-1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` or a vega key that belongs to a validator can submit a request to the vega network to obtain the signature bundle that would update the ethereum multisig signers to be the ethereum keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted once per epoch per vega key. Once multisig uses weights it will also include the correct weights. (<a name="0069-VCBS-068" href="#0069-VCBS-068">0069-VCBS-068</a>)(<a name="0069-SP-VCBS-068" href="#0069-SP-VCBS-068">0069-SP-VCBS-068</a>)
-1. Replace a validator with a new node via promotion/demotion. Ensure that rewards are paid out at the end of the epoch if the multisig is updated to match the new validator. (<a name="0069-VCBS-071" href="#0069-VCBS-071">0069-VCBS-071</a>)(<a name="0069-SP-VCBS-071" href="#0069-SP-VCBS-071">0069-SP-VCBS-071</a>)
+1. Any vega key with number of governance tokens more than or equal to `spam.protection.minMultisigUpdates` or a vega key that belongs to a validator can submit a request to the vega network to obtain the signature bundle that would update the ethereum multisig signers to be the ethereum keys of the current consensus (tendermint) validators up to `network.validators.multisig.numberOfSigners`. This request can only be submitted once per epoch per vega key. Once multisig uses weights it will also include the correct weights. (<a name="0069-VCBS-068" href="#0069-VCBS-068">0069-VCBS-068</a>) for product spot: (<a name="0069-VCBS-168" href="#0069-VCBS-168">0069-VCBS-168</a>)
+1. Replace a validator with a new node via promotion/demotion. Ensure that rewards are paid out at the end of the epoch if the multisig is updated to match the new validator. (<a name="0069-VCBS-071" href="#0069-VCBS-071">0069-VCBS-071</a>) for product spot: (<a name="0069-VCBS-169" href="#0069-VCBS-169">0069-VCBS-169</a>)
 
 ### Re-Issuing Signature Bundles by non Validators
 
 1. Submit two `IssueSignature` requests from the same Vega-Key (but for different bundles) for the same block. Verify that only one of the requests is executed, but both pass consensus. (Note: This AC may need replacement with the new Tendermint API). Repeat this test for in the next epoch and verify that the result is the same.
-(<a name="0069-VCBS-081" href="#0069-VCBS-081">0069-VCBS-081</a>)(<a name="0069-SP-VCBS-081" href="#0069-SP-VCBS-081">0069-SP-VCBS-081</a>)
+(<a name="0069-VCBS-081" href="#0069-VCBS-081">0069-VCBS-081</a>) for product spot: (<a name="0069-VCBS-170" href="#0069-VCBS-170">0069-VCBS-170</a>)
 
 1. Submit two `IssueSignature` requests from the same Vega Key (but for different bundles) so that they are proposed for different blocks. Verify that the second one does not make it through consensus, but gets rejected earlier. Repeat this rest in the next epoch and verify that the result is the same.
-(<a name="0069-VCBS-082" href="#0069-VCBS-082">0069-VCBS-082</a>)(<a name="0069-SP-VCBS-082" href="#0069-SP-VCBS-082">0069-SP-VCBS-082</a>)
+(<a name="0069-VCBS-082" href="#0069-VCBS-082">0069-VCBS-082</a>) for product spot: (<a name="0069-VCBS-171" href="#0069-VCBS-171">0069-VCBS-171</a>)
 
 1. Submit two `IssueSignature` requests for the same bundle from different Vega keys, in a way that they end up in the same block. Verify that both get executed.
-(<a name="0069-VCBS-083" href="#0069-VCBS-083">0069-VCBS-083</a>)(<a name="0069-SP-VCBS-083" href="#0069-SP-VCBS-083">0069-SP-VCBS-083</a>)
+(<a name="0069-VCBS-083" href="#0069-VCBS-083">0069-VCBS-083</a>) for product spot: (<a name="0069-VCBS-172" href="#0069-VCBS-172">0069-VCBS-172</a>)
 
 1. Submit two `IssueSignature` requests for the same bundle from different Vega keys in different blocks. Verify that both get executed.
-(<a name="0069-VCBS-084" href="#0069-VCBS-084">0069-VCBS-084</a>)(<a name="0069-SP-VCBS-084" href="#0069-SP-VCBS-084">0069-SP-VCBS-084</a>)
+(<a name="0069-VCBS-084" href="#0069-VCBS-084">0069-VCBS-084</a>) for product spot: (<a name="0069-VCBS-173" href="#0069-VCBS-173">0069-VCBS-173</a>)
 
 1. Take three Vega keys V1, V2 and V3. Submit for the same bundle in the same block 2 `IssueSignature` requests from V1 and one from V2. Verify that all three pass consensus, and that one request from V1 and one from V2 are executed. In a following block, submit one `IssueSignature` request from V1 and V2 each, and 2 from V3. Verify that the ones from V1 and V2 are rejected pre-consensus, both from V3 pass consensus, and one from V3 is executed.
-(<a name="0069-VCBS-085" href="#0069-VCBS-085">0069-VCBS-085</a>)(<a name="0069-SP-VCBS-085" href="#0069-SP-VCBS-085">0069-SP-VCBS-085</a>)
+(<a name="0069-VCBS-085" href="#0069-VCBS-085">0069-VCBS-085</a>) for product spot: (<a name="0069-VCBS-174" href="#0069-VCBS-174">0069-VCBS-174</a>)
 
 1. Issue a request from a Vega key with a wrong signature. Verify that it is rejected pre-consensus. Issue a correct request from that key in a following block and verify that it is correctly executed.
-(<a name="0069-VCBS-086" href="#0069-VCBS-086">0069-VCBS-086</a>)(<a name="0069-SP-VCBS-086" href="#0069SP-VCBS-086">0069-SP-VCBS-086</a>)
+(<a name="0069-VCBS-086" href="#0069-VCBS-086">0069-VCBS-086</a>) for product spot: (<a name="0069-VCBS-175" href="#0069-VCBS-175">0069-VCBS-175</a>)
 
 1. Issue 5 requests from a vega key in the same block, 4 of which with invalid signatures. Verify that only the one with the correct signature is passed to consensus, and is properly executed.
-(<a name="0069-VCBS-087" href="#0069-VCBS-087">0069-VCBS-087</a>)(<a name="0069-SP-VCBS-087" href="#0069-SP-VCBS-087">0069-SP-VCBS-087</a>)
+(<a name="0069-VCBS-087" href="#0069-VCBS-087">0069-VCBS-087</a>) for product spot: (<a name="0069-VCBS-176" href="#0069-VCBS-176">0069-VCBS-176</a>)
