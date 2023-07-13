@@ -102,10 +102,10 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 ### Party asset accounts
 
-- Every party that deposits an asset on Vega will have an asset account created for that asset. (<a name="0013-ACCT-003" href="#0013-ACCT-003">0013-ACCT-003</a>) for product spot: (<a name="0013-ACCT-026" href="#0013-ACCT-026">0013-ACCT-026</a>)
-  - Only one general asset account exists per party per asset. (<a name="0013-ACCT-004" href="#0013-ACCT-004">0013-ACCT-004</a>) for product spot: (<a name="0013-ACCT-027" href="#0013-ACCT-027">0013-ACCT-027</a>)
-  - When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. (<a name="0013-ACCT-005" href="#0013-ACCT-005">0013-ACCT-005</a>) for product spot: (<a name="0013-ACCT-028" href="#0013-ACCT-028">0013-ACCT-028</a>)
-  - When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. (<a name="0013-ACCT-006" href="#0013-ACCT-006">0013-ACCT-006</a>) for product spot: (<a name="0013-ACCT-029" href="#0013-ACCT-029">0013-ACCT-029</a>)
+- Every party that deposits an asset on Vega will have an asset account created for that asset. (<a name="0013-ACCT-003" href="#0013-ACCT-003">0013-ACCT-003</a>) 
+  - Only one general asset account exists per party per asset. (<a name="0013-ACCT-004" href="#0013-ACCT-004">0013-ACCT-004</a>) 
+  - When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. (<a name="0013-ACCT-005" href="#0013-ACCT-005">0013-ACCT-005</a>) 
+  - When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. (<a name="0013-ACCT-006" href="#0013-ACCT-006">0013-ACCT-006</a>) 
   - [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are paid in to this account. (<a name="0013-ACCT-011" href="#0013-ACCT-011">0013-ACCT-011</a>)
 
 ### Party margin accounts
@@ -117,7 +117,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 ### Party holding accounts in Spot market
 
-- Every party that submits an order on a market will have a holding account for that market created. (<a name="0013-ACCT-030" href="#0013-ACCT-030">0013-ACCT-030</a>)
+- Every party that submits an order on a Spot market will have a holding account created for the relevant market asset pair. (<a name="0013-ACCT-030" href="#0013-ACCT-030">0013-ACCT-030</a>)
 - Each party should only have two holding accounts per market: one for the the base_asset and one for the quote_asset. (<a name="0013-ACCT-031" href="#0013-ACCT-031">0013-ACCT-031</a>)
 
 ### Liquidity Provider bond accounts
