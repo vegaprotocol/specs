@@ -6,7 +6,7 @@ Background reading: [1](https://www.paradigm.xyz/2021/05/everlasting-options/#Pe
 
 Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md). Additionally, a settlement using external data is carried out whenever `settlement_schedule` is triggered. Data obtained from the `settlement_data` oracle between to consecutive `settlement_schedule` events is used to calculate the funding payment and exchange cashflows between parties with open positions in the market.
 
-Unlike traditional futures contracts, the perpetual futures never expire. Without the settlement at expiry there would be nothing in the fixed-expiry futures to tether the contract price to the underlying spot market it's based on. To assure that the perpetuals market tracks the underlying spot market sufficiently well a periodic cashflow is exchanged based on the relative prices in the two markets. Such payment covering the time period $t_{i-1}$ to $t_i$ takes the form $G_i = \frac{1}{t_i-t_{i-1}} \int_{t_{i-1}}^{t_i}(F_u-S_u)du$, where $F_u$ and $S_u$ are respectively: the perpetual futures price and the spot price at time $u$. We choose to use the mark price to approximate $F_u$ and oracle to approximate $S_u$, so this is effectively the difference between the time-weighted average prices (TWAP) of the two.
+Unlike traditional futures contracts, the perpetual futures never expire. Without the settlement at expiry there would be nothing in the fixed-expiry futures to tether the contract price to the underlying spot market it's based on. To assure that the perpetuals market tracks the underlying spot market sufficiently well a periodic cashflow is exchanged based on the relative prices in the two markets. Such payment covering the time period $t_{i-1}$ to $t_i$ takes the basic form $G_i = \frac{1}{t_i-t_{i-1}} \int_{t_{i-1}}^{t_i}(F_u-S_u)du$, where $F_u$ and $S_u$ are respectively: the perpetual futures price and the spot price at time $u$. We choose to use the mark price to approximate $F_u$ and oracle to approximate $S_u$, so this is effectively the difference between the time-weighted average prices (TWAP) of the two. An optional interest rate and clamp function are included in the funding rate calculation, see the [funding payment calculation](#funding-payment-calculation) section for details.
 
 ## 1. Product parameters
 
@@ -14,8 +14,11 @@ Unlike traditional futures contracts, the perpetual futures never expire. Withou
 1. `settlement_schedule (Data Source: datetime)`: this data is used to indicate when the next periodic settlement should be carried out.
 1. `settlement_data (Data Source: number)`: this data is used by the product to calculate periodic settlement cashflows.
 1. `margin_funding_factor`: a parameter in the range $[0, 1]$ controlling how much the upcoming funding payment liability contributes to party's margin.
+1. `interest_rate`: a continuously compounded interest rate used in funding rate calculation.
+1. `clamp_lower_bound`: a lower bound for the clamp function used as part of the funding rate calculation.
+1. `clamp_upper_bound`: an lower bound for the clamp function used as part of the funding rate calculation.
 
-Validation: none required as these are validated by the asset and data source frameworks.
+Validation: `clamp_upper_bound` >= `clamp_lower_bound`.
 
 ### Example specification
 
@@ -133,10 +136,11 @@ Only the internal data point with largest timestamp needs to be kept from that p
 
 #### Funding payment calculation
 
-The next step is to calculate the periodic settlement funding payment
+The next step is to calculate the periodic settlement funding payment. We allow the optional interest rate and clamp component, where $\text{clamp}(a,b;x)=min(b,max(a, x))$. The funding payment then takes the form:
 
 ```go
-funding_payment = f_twap - s_twap
+delta_t = funding_period_end - max(funding_period_start, internal_data_points[0].t)
+funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower_bound*s_twap, exp(interest_rate*delta_t)*s_twap-f_twap))
 ```
 
 #### Funding rate calculation
