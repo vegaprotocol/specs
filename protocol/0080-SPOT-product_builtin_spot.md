@@ -85,33 +85,32 @@ Both buy and sell orders on a `Spot` market define a size (amount of the `base_a
 
 ### Sell Orders
 
-For a "sell" order to be considered valid, the party must have a sufficient amount of the `base_asset` in the relevant `general_account` to fulfil the size of the order. There is no need to consider trading fees when determining if a "sell" order is valid.(<a name="0080-SPOT-008" href="#0080-SPOT-008">0080-SPOT-008</a>)
+For a "sell" order to be considered valid, the party must have a sufficient amount of the `base_asset` in the relevant `general_account` to fulfil the size of the order. There is no need to consider trading fees when determining if a "sell" order is valid.
 
-If a "sell" order does not trade immediately (or only trades in part), an amount of the `base_asset` to cover the remaining size of the order should be transferred to a `holding_account` for the `base_asset`. If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.(<a name="0080-SPOT-009" href="#0080-SPOT-009">0080-SPOT-009</a>)
+If a "sell" order does not trade immediately (or only trades in part), an amount of the `base_asset` to cover the remaining size of the order should be transferred to a `holding_account` for the `base_asset`. If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.
 
-If a "sell" order incurs fees through trading (i.e. is the aggressor or trades in an auction), the necessary amount of the `quote_asset` to cover the fees incurred will be deducted from the amount of the `quote_asset` due to the party as a result of the sell of the `base_asset`.(<a name="0080-SPOT-010" href="#0080-SPOT-010">0080-SPOT-010</a>)
+If a "sell" order incurs fees through trading (i.e. is the aggressor or trades in an auction), the necessary amount of the `quote_asset` to cover the fees incurred will be deducted from the amount of the `quote_asset` due to the party as a result of the sell of the `base_asset`.
 
 ### Buy Orders
 
-As "buy" orders require a party to hold a sufficient amount of the `quote_asset` to cover possible fees, the individual cases where fees can be incurred must be considered.(<a name="0080-SPOT-011" href="#0080-SPOT-011">0080-SPOT-011</a>)
+As "buy" orders require a party to hold a sufficient amount of the `quote_asset` to cover possible fees, the individual cases where fees can be incurred must be considered.
 
 #### Continuous Trading
 
-For a "buy" order to be considered valid during continuous trading, the party must have a sufficient amount of the `quote_asset` in the `general_account` to cover the value of the trade as well as any possible fees incurred as a result of the order trading immediately (the aggressor).(<a name="0080-SPOT-012" href="#0080-SPOT-012">0080-SPOT-012</a>)
+For a "buy" order to be considered valid during continuous trading, the party must have a sufficient amount of the `quote_asset` in the `general_account` to cover the value of the trade as well as any possible fees incurred as a result of the order trading immediately (the aggressor).
 
-If a "buy" order does not trade immediately (or only trades in part), the necessary amount of the `quote_asset` to cover only the remaining size of the order should be transferred to a `holding_account` for the `quote_asset`(<a name="0080-SPOT-013" href="#0080-SPOT-013">0080-SPOT-013</a>). As the order can no longer be the aggressor during continuous trading there is no requirement to hold funds to cover fees(<a name="0080-SPOT-014" href="#0080-SPOT-014">0080-SPOT-014</a>). If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.(<a name="0080-SPOT-015" href="#0080-SPOT-015">0080-SPOT-015</a>)
+If a "buy" order does not trade immediately (or only trades in part), the necessary amount of the `quote_asset` to cover only the remaining size of the order should be transferred to a `holding_account` for the `quote_asset`. As the order can no longer be the aggressor during continuous trading there is no requirement to hold funds to cover fees. If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.
 
 #### Entering an Auction
 
-When entering an auction, for any open "buy" orders, the network must transfer additional funds from the parties `general_account` to the parties `holding_account` to cover any possible fees incurred as a result of the order trading in the auction(<a name="0080-SPOT-016" href="#0080-SPOT-016">0080-SPOT-016</a>). If the party does not have sufficient funds in their `general` account to cover this transfer, the order should be cancelled(<a name="0080-SPOT-017" href="#0080-SPOT-017">0080-SPOT-017</a>).
+When entering an auction, for any open "buy" orders, the network must transfer additional funds from the parties `general_account` to the parties `holding_account` to cover any possible fees incurred as a result of the order trading in the auction. If the party does not have sufficient funds in their `general` account to cover this transfer, the order should be cancelled.
+For a "buy" order to be considered valid during an auction, the party must have a sufficient amount of the `quote_asset` to cover the size of the order as well as any possible fees occurred as a result of the order trading in the auction.
 
-For a "buy" order to be considered valid during an auction, the party must have a sufficient amount of the `quote_asset` to cover the size of the order as well as any possible fees occurred as a result of the order trading in the auction(<a name="0080-SPOT-018" href="#0080-SPOT-018">0080-SPOT-018</a>).
-
-If the fee rates change for whatever reason within an auction, the amount required to cover fees must be recalculated and the necessary amount transferred to or released from the `holding_account`(<a name="0080-SPOT-019" href="#0080-SPOT-019">0080-SPOT-019</a>).
+If the fee rates change for whatever reason within an auction, the amount required to cover fees must be recalculated and the necessary amount transferred to or released from the `holding_account`.
 
 #### Exiting an Auction
 
-When exiting an auction, for any orders which are still open, the funds held in the parties `holding_account` to cover the possible fees can be released to the parties `general_account` so the only amount remaining in the `holding_account` is enough to cover the value of the order(<a name="0080-SPOT-020" href="#0080-SPOT-020">0080-SPOT-020</a>).
+When exiting an auction, for any orders which are still open, the funds held in the parties `holding_account` to cover the possible fees can be released to the parties `general_account` so the only amount remaining in the `holding_account` is enough to cover the value of the order.
 
 ## 8. Auctions
 
@@ -125,6 +124,19 @@ Price-monitoring auctions are still required and should be implemented following
 1. It is not possible to change the `quote_asset` via governance (<a name="0080-SPOT-002" href="#0080-SPOT-002">0080-SPOT-002</a>)
 1. It is not possible to change the `base_asset` via governance (<a name="0080-SPOT-003" href="#0080-SPOT-003">0080-SPOT-003</a>)
 1. A `Spot` market can be closed through governance (<a name="0080-SPOT-004" href="#0080-SPOT-004">0080-SPOT-004</a>)
-1. Parties are unable to place orders they do not have the necessary funds for (<a name="0080-SPOT-005" href="#0080-SPOT-005">0080-SPOT-005</a>)
 1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-SPOT-006" href="#0080-SPOT-006">0080-SPOT-006</a>)
-1. Market liquidity fees are calculated correctly (<a name="0080-SPOT-007" href="#0080-SPOT-007">0080-SPOT-007</a>)
+1. If a "sell" order does not trade immediately (or only trades in part), an amount of the `base_asset` to cover the remaining size of the order should be transferred to a `holding_account` for the `base_asset`.(<a name="0080-SPOT-009" href="#0080-SPOT-009">0080-SPOT-009</a>)
+1. As "sell" orders require a party to hold a sufficient amount of the `base_asset` to fulfil the size of the order, the individual cases where fees can be incurred do not need to be considered as if a "sell" order incurs fees through trading (i.e. is the aggressor or trades in an auction), the necessary amount of the `quote_asset` to cover the fees incurred will be deducted from the amount of the `quote_asset` due to the party as a result of the sell of the `base_asset`.(<a name="0080-SPOT-010" href="#0080-SPOT-010">0080-SPOT-010</a>)
+1. As "buy" orders require a party to hold a sufficient amount of the `quote_asset` to cover possible fees, the individual cases where fees can be incurred must be considered.(<a name="0080-SPOT-011" href="#0080-SPOT-011">0080-SPOT-011</a>)
+1. For a "buy" order to be considered valid during continuous trading, the party must have a sufficient amount of the `quote_asset` in the `general_account` to cover the value of the trade as well as any possible fees incurred as a result of the order trading immediately (the aggressor).(<a name="0080-SPOT-012" href="#0080-SPOT-012">0080-SPOT-012</a>)
+1. If a "buy" order does not trade immediately (or only trades in part), the necessary amount of the `quote_asset` to cover only the remaining size of the order should be transferred to a `holding_account` for the `quote_asset`(<a name="0080-SPOT-013" href="#0080-SPOT-013">0080-SPOT-013</a>). 
+1. As the order can no longer be the aggressor during continuous trading there is no requirement to hold funds to cover fees(<a name="0080-SPOT-014" href="#0080-SPOT-014">0080-SPOT-014</a>). 
+1. If the order is cancelled or the size is reduced through an order amendment, funds should be released from the `holding_account` and returned to the `general_account`.(<a name="0080-SPOT-015" href="#0080-SPOT-015">0080-SPOT-015</a>) 
+1. When entering an auction, for any open "buy" orders, the network must transfer additional funds from the parties `general_account` to the parties `holding_account` to cover any possible fees incurred as a result of the order trading in the auction(<a name="0080-SPOT-016" href="#0080-SPOT-016">0080-SPOT-016</a>). 
+1. If the party does not have sufficient funds in their `general` account to cover this transfer, the order should be cancelled(<a name="0080-SPOT-017" href="#0080-SPOT-017">0080-SPOT-017</a>).
+1. For a "buy" order to be considered valid during an auction, the party must have a sufficient amount of the `quote_asset` to cover the size of the order as well as any possible fees occurred as a result of the order trading in the auction(<a name="0080-SPOT-018" href="#0080-SPOT-018">0080-SPOT-018</a>).
+1. If the fee rates change for whatever reason within an auction, the amount required to cover fees must be recalculated and the necessary amount transferred to or released from the `holding_account`(<a name="0080-SPOT-019" href="#0080-SPOT-019">0080-SPOT-019</a>).
+1. When exiting an auction, for any orders which are still open, the funds held in the parties `holding_account` to cover the possible fees can be released to the parties `general_account` so the only amount remaining in the `holding_account` is enough to cover the value of the order(<a name="0080-SPOT-020" href="#0080-SPOT-020">0080-SPOT-020</a>).
+
+
+
