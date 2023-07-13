@@ -108,86 +108,74 @@ Select {
 
 ## Acceptance criteria
 
-### External Oracles - Creation
+### External Oracles - Market Creation
 
-1. Create ethereum oracles based on calling a read method of a smart contract (Phase 2 - oracle based on listening for events) (<a name="0082-ETHD-001" href="#0082-ETHD-001">0082-ETHD-001</a>)
-2. All current governance rules that apply to propose / submit / vote on a proposal should be applicable for the ethereum oracle data source creation / amendment (<a name="0082-ETHD-002" href="#0082-ETHD-002">0082-ETHD-002</a>)
-3. Create more than spam.protection.max.proposals oracle data source proposals in an epoch - proposal rejected with error message (<a name="0082-ETHD-003" href="#0082-ETHD-003">0082-ETHD-003</a>)
-4. Create ethereum oracles based on calling a read method of a smart contract by supplying incorrect ABI (Phase 2 - oracle based on listening for events) (<a name="0082-ETHD-004" href="#0082-ETHD-004">0082-ETHD-004</a>)
+1. Proposing and create a market with an ethereum oracle based on calling a read method of a smart contract should be successful (<a name="0082-ETHD-001" href="#0082-ETHD-001">0082-ETHD-001</a>)
+2. Phase 2 - Proposing and creating a market with an ethereum oracle based on listening for ethereum chain events should be successful (<a name="0082-ETHD-002" href="#0082-ETHD-002">0082-ETHD-002</a>)
+3. All current governance rules that apply to propose / submit / vote on a market proposal should be applicable for a market created using ethereum oracles (<a name="0082-ETHD-003" href="#0082-ETHD-003">0082-ETHD-003</a>)
 
-### External Oracles - Amendments
+### External Oracles - Market Amendments
 
-1. Amend the oracle data source via governance proposals. Amendments should take effect as soon as the proposal is enacted (<a name="0082-ETHD-005" href="#0082-ETHD-005">0082-ETHD-005</a>)
-2. Amend an existing ethereum data source and change the contract address and enact the proposal. Once enacted, the data should be sourced from the new smart contract. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted (<a name="0082-ETHD-006" href="#0082-ETHD-006">0082-ETHD-006</a>)
-3. Phase 2 - Amend an existing ethereum data source and change the events that we are listening to and enact the proposal. Once enacted , the data should be sourced from the amended events. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted (<a name="0082-ETHD-007" href="#0082-ETHD-007">0082-ETHD-007</a>)
-
-### External Oracles - Deletions
-
-1. Ability to delete a data source if and only if the data source is NOT used by any active markets (<a name="0082-ETHD-008" href="#0082-ETHD-008">0082-ETHD-008</a>)
-2. Should NOT be able to delete a data source if its being actively used by a market (<a name="0082-ETHD-009" href="#0082-ETHD-009">0082-ETHD-009</a>)
-3. If a single data source is used by multiple markets, then should NOT be able to delete the data source even if one of those markets is actively using the data source (<a name="0082-ETHD-010" href="#0082-ETHD-010">0082-ETHD-010</a>)
+1. Update an existing market using the market update proposal to change the smart contract address and read method. The changes take effect after the market update proposal is enacted and data is sourced from the new smart contract.  (<a name="0082-ETHD-004" href="#0082-ETHD-004">0082-ETHD-004</a>)
+3. Phase 2 - Update an existing market using the market update proposal to change the events that the market is listening to. The changes take effect after the market update proposal is enacted and data is sourced from the new events. (<a name="0082-ETHD-005" href="#0082-ETHD-005">0082-ETHD-005</a>)
 
 ### External Oracles - Validations
 
-1. Validate if the smart contract address is valid (<a name="0082-ETHD-011" href="#0082-ETHD-011">0082-ETHD-011</a>)
-2. Validate if the data elements of the oracle data source is valid - e.g. source for a value that's returned as boolean but have a filter / condition for greater than 0 (<a name="0082-ETHD-012" href="#0082-ETHD-012">0082-ETHD-012</a>)
-3. Validations for min / max frequency of listening for events / read a smart contract (<a name="0082-ETHD-013" href="#0082-ETHD-013">0082-ETHD-013</a>)
-4. Create a new market with an inactive external oracle data source, system should throw an error (<a name="0082-ETHD-014" href="#0082-ETHD-014">0082-ETHD-014</a>)
-5. Validations to be applied - need to be expanded (<a name="0082-ETHD-015" href="#0082-ETHD-015">0082-ETHD-015</a>)
-6. Any mismatch between expected fields and received fields should emit an error via the TX RESULT event (<a name="0082-ETHD-016" href="#0082-ETHD-016">0082-ETHD-016</a>)
+1. Validate if the smart contract address is valid (<a name="0082-ETHD-006" href="#0082-ETHD-006">0082-ETHD-006</a>)
+2. Validate if the data elements of the oracle data source is valid (<a name="0082-ETHD-007" href="#0082-ETHD-007">0082-ETHD-007</a>)
+3. Validations for min / max frequency of listening for events / read a smart contract (<a name="0082-ETHD-008" href="#0082-ETHD-008">0082-ETHD-008</a>)
+4. Create a new market with an inactive external oracle data source, system should throw an error (<a name="0082-ETHD-009" href="#0082-ETHD-009">0082-ETHD-009</a>)
+5. Validations to be applied - need to be expanded (<a name="0082-ETHD-010" href="#0082-ETHD-010">0082-ETHD-010</a>)
+6. Any mismatch between expected fields and received fields should emit an error via the TX RESULT event (<a name="0082-ETHD-011" href="#0082-ETHD-011">0082-ETHD-011</a>)
 
 ### New Network parameters
 
-1. Test min / max values / validations for any new network parameters that are added (<a name="0082-ETHD-017" href="#0082-ETHD-017">0082-ETHD-017</a>)
-2. Test the impact / behaviour of the system, after the changes to the new network parameters are enacted (<a name="0082-ETHD-018" href="#0082-ETHD-018">0082-ETHD-018</a>)
+1. New network parameter - ethereum.oracles.enabled. Setting this to 0 should NOT allow market creation and market updates with ethereum oracles. (<a name="0082-ETHD-012" href="#0082-ETHD-012">0082-ETHD-012</a>)
+2. New network parameter - ethereum.oracles.enabled. Setting this to 1 should allow market creation amd market updates with ethereum oracles. (<a name="0082-ETHD-013" href="#0082-ETHD-013">0082-ETHD-013</a>)
 
 ### Negative Tests
 
-1. Set up a new data source with invalid contract address - should fail validations (Phase 2 - listening for invalid event ) (<a name="0082-ETHD-019" href="#0082-ETHD-019">0082-ETHD-019</a>)
-2. Data source returns incorrect data - raise an error via the TX RESULT event. The data source is expected to send a positive price for an asset BUT sends a negative value (<a name="0082-ETHD-020" href="#0082-ETHD-020">0082-ETHD-020</a>)
-3. Phase 2 - Set up a data source for listening to a particular event sent at a frequency of 2 secs. The oracle data source stops emitting events after emitting a couple of events. Raise and error via the TX RESULT event  if 5 consecutive events are missed - need to ratify / expand on this (<a name="0082-ETHD-021" href="#0082-ETHD-021">0082-ETHD-021</a>)
-4. Phase 2 - Create an oracle source listening for a particular event and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error (<a name="0082-ETHD-022" href="#0082-ETHD-022">0082-ETHD-022</a>)
-5. Create an oracle source that calls a read method of a smart contract and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error (<a name="0082-ETHD-023" href="#0082-ETHD-023">0082-ETHD-023</a>)
-6. Will need some tests around consensus, will require setting up a network and having some nodes receive different values for the same oracle data point and testing that the oracle data point is/is not published depending on voting (<a name="0082-ETHD-024" href="#0082-ETHD-024">0082-ETHD-024</a>)
+1. Proposing a new market with invalid contract address should fail validations and return an appropriate error message (<a name="0082-ETHD-014" href="#0082-ETHD-014">0082-ETHD-014</a>)
+2. Phase 2 - Proposing a new market with listening for an invalid event should fail validations and return an appropriate error message (<a name="0082-ETHD-015" href="#0082-ETHD-015">0082-ETHD-015</a>)
+3. If the ethereum oracle returns incorrect data - raise an error via the TX RESULT event. Set up a market with an ethereum oracle calling a read method of a smart contract and expects a positive price for an asset. Should register ann error if it receives negative value (<a name="0082-ETHD-016" href="#0082-ETHD-016">0082-ETHD-016</a>)
+4. Phase 2 - Set up a data source for listening to a particular event sent at a frequency of 2 secs. The oracle data source stops emitting events after emitting a couple of events. Raise and error via the TX RESULT event  if 5 consecutive events are missed - need to ratify / expand on this (<a name="0082-ETHD-017" href="#0082-ETHD-017">0082-ETHD-017</a>)
+5. Phase 2 - Create an oracle source listening for a particular event and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error (<a name="0082-ETHD-018" href="#0082-ETHD-018">0082-ETHD-018</a>)
+6. Create an oracle source that calls a read method of a smart contract and specify an incorrect ABI format for the read method. Proposal should fail validation and should return an error (<a name="0082-ETHD-019" href="#0082-ETHD-019">0082-ETHD-019</a>)
+7. Will need some tests around consensus, will require setting up a network and having some nodes receive different values for the same oracle data point and testing that the oracle data point is/is not published depending on voting (<a name="0082-ETHD-020" href="#0082-ETHD-020">0082-ETHD-020</a>)
 
 ### API
 
-1. Ability to query oracle data sources via an API endpoint - filters should be available for data source - internal OR external, status - Active / Inactive / Expired (<a name="0082-ETHD-025" href="#0082-ETHD-025">0082-ETHD-025</a>)
-2. Ability to query historic data sent by an oracle data source (<a name="0082-ETHD-026" href="#0082-ETHD-026">0082-ETHD-026</a>)
+1. Ability to query ethereum oracle data sources fields via existing API endpoint for proposals and markets (<a name="0082-ETHD-021" href="#0082-ETHD-021">0082-ETHD-021</a>)
+2. Ability to query historic data stored on the vega network sent by an oracle data source (<a name="0082-ETHD-022" href="#0082-ETHD-022">0082-ETHD-022</a>)
 
 ### Non Functional
 
-1. System needs to emit an error via the TX RESULT event if the data source does NOT return data in a timely fashion - e.g. the read method of the smart contract take too long to return data OR times out (<a name="0082-ETHD-027" href="#0082-ETHD-027">0082-ETHD-027</a>)
-2. Phase 2 - System needs to emit an error via the TX RESULT event if the data source does NOT emit events in a timely fashion. e.g. if the data source is expected to emit events every 5 minutes and if we do not receive 3 consecutive events , then raise an error via the TX RESULT event (<a name="0082-ETHD-028" href="#0082-ETHD-028">0082-ETHD-028</a>)
-3. Phase 2 - Define behaviour for missed events / missed scheduled smart contract calls - e.g. if an oracle data source is scheduled to emit events every 10 minutes and we miss 5 events because of protocol upgrade or some other outage - then do we catch up those events or skip those events ? Maybe this is defined in the oracle data source definition (<a name="0082-ETHD-029" href="#0082-ETHD-029">0082-ETHD-029</a>)
-4. If an oracle data source is inactive - then any events / any data received from that oracle data source is NOT processed (<a name="0082-ETHD-030" href="#0082-ETHD-030">0082-ETHD-030</a>)
-5. SPAM rules if any defined should be tested for (<a name="0082-ETHD-031" href="#0082-ETHD-031">0082-ETHD-031</a>)
-6. NOT all data sourced should be stored on chain - invalid / incorrect data is filtered out and is NOT processed / stored on chain - understand what the rules are and design the AC's / test accordingly (<a name="0082-ETHD-032" href="#0082-ETHD-032">0082-ETHD-032</a>)
-7. Any active data sources that aren't used by any markets should not source data until they are being actively used by a market (<a name="0082-ETHD-033" href="#0082-ETHD-033">0082-ETHD-033</a>)
+1. System needs to emit an error via the TX RESULT event if the data source does NOT return data in a timely fashion - e.g. the read method of the smart contract take too long to return data OR times out (<a name="0082-ETHD-023" href="#0082-ETHD-023">0082-ETHD-023</a>)
+2. Phase 2 - System needs to emit an error via the TX RESULT event if the data source does NOT emit events in a timely fashion. e.g. if the data source is expected to emit events every 5 minutes and if we do not receive 3 consecutive events , then raise an error via the TX RESULT event (<a name="0082-ETHD-024" href="#0082-ETHD-024">0082-ETHD-024/a>)
+3. Phase 2 - Define behaviour for missed events / missed scheduled smart contract calls - e.g. if an oracle data source is scheduled to emit events every 10 minutes and we miss 5 events because of protocol upgrade or some other outage - then do we catch up those events or skip those events ? Maybe this is defined in the oracle data source definition (<a name="0082-ETHD-025" href="#0082-ETHD-025">0082-ETHD-025</a>)
+4. If the underlying market using the ethereum oracle is termimated and settled, then we do not actively source / retrieve data from the etherum oracles. Any events / any data received from that oracle data source is NOT processed (<a name="0082-ETHD-026" href="#0082-ETHD-026">0082-ETHD-026</a>)
+5. SPAM rules if any defined should be tested for (<a name="0082-ETHD-027" href="#0082-ETHD-027">0082-ETHD-027</a>)
+6. NOT all data sourced should be stored on chain - invalid / incorrect data is filtered out and is NOT processed / stored on chain - understand what the rules are and design the AC's / test accordingly (<a name="0082-ETHD-028" href="#0082-ETHD-028">0082-ETHD-028</a>)
+7. Any ethereum oracles specified as part of a market creation should actively source data only after the market becomes active (<a name="0082-ETHD-029" href="#0082-ETHD-029">0082-ETHD-029</a>)
 
 ### Usage
 
-1. It should be possible to use only ethereum oracle data sources or internal data sources or use a combination of both types of oracles (<a name="0082-ETHD-034" href="#0082-ETHD-034">0082-ETHD-034</a>)
-2. Create a market to use an internal data source to terminate a market and an ethereum oracle to settle the market (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
-3. Create a market to use an external data source to terminate a market and an internal / manual oracle to settle the market (<a name="0082-ETHD-036" href="#0082-ETHD-036">0082-ETHD-036</a>)
-4. Data sourcing should be completely decoupled from data filtering (<a name="0082-ETHD-037" href="#0082-ETHD-037">0082-ETHD-037</a>)
+1. It should be possible to use only ethereum oracle data sources or internal data sources or use a combination of both types of oracles to settle and terminate a market (<a name="0082-ETHD-030" href="#0082-ETHD-030">0082-ETHD-030</a>)
+2. Create a market to use an internal data source to terminate a market and an ethereum oracle to settle the market (<a name="0082-ETHD-031" href="#0082-ETHD-031">0082-ETHD-031</a>)
+3. Create a market to use an external data source to terminate a market and an internal / manual oracle to settle the market (<a name="0082-ETHD-032" href="#0082-ETHD-032">0082-ETHD-032</a>)
+4. Data sourcing should be completely decoupled from data filtering (<a name="0082-ETHD-033" href="#0082-ETHD-033">0082-ETHD-033</a>)
 
 ### Checkpoints
 
-1. Oracle data sources should be stored in checkpoints and should be restored when restarting a network from checkpoints (<a name="0082-ETHD-038" href="#0082-ETHD-038">0082-ETHD-038</a>)
-2. Restart a network with an active external data source from checkpoint. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
+1. Oracle data sources should be stored in checkpoints and should be restored when restarting a network from checkpoints (<a name="0082-ETHD-034" href="#0082-ETHD-034">0082-ETHD-034</a>)
+2. Restart a network with an active external data source from checkpoint. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
 
 ### Snapshots
 
-1. Oracle data sources should be stored on snapshots and should be able to be restored from snapshots (<a name="0082-ETHD-040" href="#0082-ETHD-040">0082-ETHD-040</a>)
-2. Restart a network with an active external data source from snapshot. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-041" href="#0082-ETHD-041">0082-ETHD-041</a>)
+1. Oracle data sources should be stored on snapshots and should be able to be restored from snapshots (<a name="0082-ETHD-036" href="#0082-ETHD-036">0082-ETHD-036</a>)
+2. Restart a network with an active external data source from snapshot. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-037" href="#0082-ETHD-037">0082-ETHD-037</a>)
 
 ### Protocol Upgrade
 
-1. Create / amend an external oracle data source and before it is enacted perform a protocol upgrade. The oracle data source should be enacted at the correct time after the upgrade (<a name="0082-ETHD-042" href="#0082-ETHD-042">0082-ETHD-042</a>)
-2. Create / amend an external oracle data source with enactment time that falls during a protocol upgrade. The oracle data source should be enacted immediately after the network is up after the protocol upgrade (<a name="0082-ETHD-043" href="#0082-ETHD-043">0082-ETHD-043</a>)
-3. Phase 2 - Have a network running g with a mix of internal and external active and inactive oracles. Perform a protocol upgrade. Once the network is up , the state of the various oracles should be the same as before the protocol upgrade and either catch up all missed events or start processing new events based on config (<a name="0082-ETHD-044" href="#0082-ETHD-044">0082-ETHD-044</a>)
-
-### Regression
-
-1. The ethereum oracles feature ONLY changes the way we source the data BUT does not change the way the sourced data is filtered / processed / used by the system . So in theory all existing oracle data sourcing tests should pass. In addition , it should be possible to run the existing tests by swapping the interval oracle data source for an external one (<a name="0082-ETHD-045" href="#0082-ETHD-045">0082-ETHD-045</a>)
+1. Protocol upgrade should have no impact on a market using an ethereum oracle for settlement and/or termination (<a name="0082-ETHD-038" href="#0082-ETHD-038">0082-ETHD-038</a>)
+2. Phase 2 - Have a network running with a markets with a mix of internal and ethereum oracles. Perform a protocol upgrade. Once the network is up , the state of the various oracles should be the same as before the protocol upgrade and either catch up all missed events or start processing new events based on config (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
