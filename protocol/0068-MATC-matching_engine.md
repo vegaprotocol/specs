@@ -10,7 +10,7 @@ An [Immediate or Cancel (IOC)](./0014-ORDT-order_types.md#time-in-force--validit
 
 - Incoming [MARKET](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book (<a name="0068-MATC-001" href="#0068-MATC-001">0068-MATC-001</a>) for product spot: (<a name="0068-MATC-061" href="#0068-MATC-061">0068-MATC-061</a>)
   - If not enough volume is available to **fully** fill the order, the remaining will be cancelled (<a name="0068-MATC-002" href="#0068-MATC-002">0068-MATC-002</a>) for product spot: (<a name="0068-MATC-062" href="#0068-MATC-062">0068-MATC-062</a>)
-- Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book, (<a name="0068-MATC-003" href="#0068-MATC-003">0068-MATC-003</a>) for product spot: (<a name="0068-MATC-003" href="#0068-MATC-063">0068-MATC-063</a>)
+- Incoming [LIMIT](./0014-ORDT-order_types.md#order-pricing-methods) orders will be matched against the opposite side of the book, (<a name="0068-MATC-003" href="#0068-MATC-003">0068-MATC-003</a>) for product spot: (<a name="0068-MATC-063" href="#0068-MATC-063">0068-MATC-063</a>)
   - If there is no match the order will be cancelled. (<a name="0068-MATC-004" href="#0068-MATC-004">0068-MATC-004</a>) for product spot: (<a name="0068-MATC-064" href="#0068-MATC-064">0068-MATC-064</a>)
   - If there is a partial match then the remaining will be cancelled. (<a name="0068-MATC-005" href="#0068-MATC-005">0068-MATC-005</a>) for product spot: (<a name="0068-MATC-065" href="#0068-MATC-065">0068-MATC-065</a>)
 - Incoming [PEGGED](./0014-ORDT-order_types.md#order-pricing-methods) orders will be rejected by the wallet as they are not valid. (<a name="0068-MATC-006" href="#0068-MATC-006">0068-MATC-006</a>)
@@ -85,7 +85,7 @@ When a market [market exits an auction](./0026-AUCT-auctions.md#upon-exiting-auc
 - Any persistent order that is currently [ACTIVE or PARKED](./0024-OSTA-order_status.md) can be [cancelled](./0033-OCAN-cancel_orders.md). (<a name="0068-MATC-033" href="#0068-MATC-033">0068-MATC-033</a>) for product spot: (<a name="0068-MATC-060" href="#0068-MATC-060">0068-MATC-060</a>)
 - The price of any persistent order can be updated (<a name="0068-MATC-034" href="#0068-MATC-034">0068-MATC-034</a>) for product spot: (<a name="0068-MATC-089" href="#0068-MATC-089">0068-MATC-089</a>)
 - The size of any persistent order can be updated (<a name="0068-MATC-035" href="#0068-MATC-035">0068-MATC-035</a>) for product spot: (<a name="0068-MATC-090" href="#0068-MATC-090">0068-MATC-090</a>)
-- The TIF of any persistent order can be updated to and from GTC and GTT only. Expiry time is required if amending to GTT and must not be given if amending to GTC. (<a name="0068-MATC-036" href="#0068-MATC-036">0068-MATC-036</a>) for product spot: (<a name="0068-MATC-090" href="#0068-MATC-090">0068-MATC-090</a>)
+- The TIF of any persistent order can be updated to and from GTC and GTT only. Expiry time is required if amending to GTT and must not be given if amending to GTC. (<a name="0068-MATC-036" href="#0068-MATC-036">0068-MATC-036</a>) for product spot: (<a name="0068-MATC-092" href="#0068-MATC-092">0068-MATC-092</a>)
 - An update to an order that is not [ACTIVE or PARKED](./0024-OSTA-order_status.md) (Stopped, Cancelled, Expired, Filled) will be rejected (<a name="0068-MATC-037" href="#0068-MATC-037">0068-MATC-037</a>) for product spot: (<a name="0068-MATC-091" href="#0068-MATC-091">0068-MATC-091</a>)
 
 ## Summary

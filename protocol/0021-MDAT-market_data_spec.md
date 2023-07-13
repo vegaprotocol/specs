@@ -13,7 +13,7 @@
 - The Open interest returns 0 if there are no positions on the market (<a name="0021-MDAT-009" href="#0021-MDAT-009">0021-MDAT-009</a>)
 - Pegged orders are excluded from the best static price and best static volume calculations. (<a name="0021-MDAT-010" href="#0021-MDAT-010">0021-MDAT-010</a>)
 - Dynamic orders should be ignored when calculating the static values (<a name="0021-MDAT-011" href="#0021-MDAT-011">0021-MDAT-011</a>)
-- The auction uncrossing price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the auction uncrossing price has not been set (for example in continuous trading or auction with no bids / offers). (<a name="0021-MDAT-012" href="#0021-MDAT-012">0021-MDAT-012</a>) for product spot: (<a name="0021-MDAT-010" href="#0021-MDAT-010">0021-MDAT-010</a>)
+- The auction uncrossing price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the auction uncrossing price has not been set (for example in continuous trading or auction with no bids / offers). (<a name="0021-MDAT-012" href="#0021-MDAT-012">0021-MDAT-012</a>) for product spot: (<a name="0021-MDAT-020" href="#0021-MDAT-020">0021-MDAT-020</a>)
 
 ## Summary
 
