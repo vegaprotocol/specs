@@ -23,7 +23,7 @@ On-chain referral programs can be created and updated through [governance propos
 
 ## Governance Proposals
 
-An on-chain referral program can be proposed via governance. As part of the proposal, the proposer specifies the following fields:
+Enabling or changing the terms of the on-chain referral program can be proposed via governance. As part of the proposal, the proposer specifies the following fields:
 
 - `name`: name of the referral program
 - `benefit_tiers`: a list of dictionaries with the following fields
