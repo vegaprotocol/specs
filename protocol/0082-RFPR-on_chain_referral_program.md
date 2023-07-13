@@ -18,7 +18,7 @@ On-chain referral programs can be created and updated through [governance propos
 - `referralProgram.maxBenefitTiers` - limits the maximum number of [benefit tiers](#benefit-tiers) which can be specified as part of a referral program
 - `referralProgram.maxReferralRewardFactor` - limits the maximum reward factor which can be specified as part of a referral program
 - `referralProgram.maxReferralDiscountFactor` - limits the maximum discount factor which can be specified as part of a referral program governance proposal
-- `referralProgram.maxPartyVolumePerEpoch` - limits the volume which is eligible each epoch for referral program mechanisms
+- `referralProgram.maxPartyVolumePerEpoch` - limits the volume in quantum units which is eligible each epoch for referral program mechanisms
 - `referralProgram.minStakedVegaTokens` - limits team creation to parties staking at least this number of tokens
 
 ## Governance Proposals
@@ -27,7 +27,7 @@ Enabling or changing the terms of the on-chain referral program can be proposed 
 
 - `name`: name of the referral program
 - `benefit_tiers`: a list of dictionaries with the following fields
-  - `minimum_running_volume`: the required `running_team_volume` for a team to access this tier
+  - `minimum_running_volume`: the required `running_team_volume` in quantum units for a team to access this tier
   - `referral_reward_factor`: the proportion of the referees taker fees to be rewarded to the referrer
   - `referral_discount_factor`: the proportion of the referees taker fees to be discounted
 - `start_epoch`: the first epoch the program will become `STATE_ACTIVE` and benefits will be enabled
@@ -66,9 +66,9 @@ When submitting a referral program proposal through governance the following con
 - a proposer cannot set a `start_epoch` or `end_epoch` less than or equal to the current epoch.
 - a proposer cannot set an `end_epoch` less than or equal to the `start_epoch`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
-- all `referral_reward_factor` values must be less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
-- all `referral_discount_factor` values must be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
-- `window_length` must be an integer greater than zero.
+- all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
+- all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
+- `window_length` must be an integer strictly greater than zero.
 
 After a referral program has been passed, the referral program must be assigned an `id` by the network and exposed through an API. A program can then be updated through a governance proposal using this `id`.
 . 
@@ -224,11 +224,8 @@ Note the rewards and discounts are floored rather than raised to ensure the fina
 The network can then carry out the normal fee transfers using the updated fee amounts followed by additional transfers from the referees general account to the referrers general account. These transfers will use the following new transfer types.
 
 - `TRANSFER_TYPE_MAKER_FEE_REWARD_PAY`
-- `TRANSFER_TYPE_MAKER_FEE_REWARD_DISTRIBUTE`
 - `TRANSFER_TYPE_LIQUIDITY_FEE_REWARD_PAY`
-- `TRANSFER_TYPE_LIQUIDITY_FEE_REWARD_DISTRIBUTE`
 - `TRANSFER_TYPE_INFRASTRUCTURE_FEE_REWARD_PAY`
-- `TRANSFER_TYPE_INFRASTRUCTURE_FEE_REWARD_DISTRIBUTE`
 
 ## Acceptance Criteria
 
