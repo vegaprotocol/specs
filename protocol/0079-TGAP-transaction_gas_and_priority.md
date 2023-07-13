@@ -33,7 +33,7 @@ Variables needed:
 - `network.transactions.maxgasperblock` - `maxGas`
 - number of price levels on the order book taken, this can count just static volume or static plus dynamic(*) - `levels`
 - number of pegged orders - `pegs`
-- number of LP shape levels on the market - `shapes` (this means that if LP A has 3 pegs on buy and 2 on sell and LP B has 1 buy peg and 4 sell pegs and they're the only LPs then this value is 10 )
+- number of stop orders on the market - `stops`
 - number of positions on the market - `positions`
 
 (*) update after implementation
@@ -41,26 +41,26 @@ Variables needed:
 Constants needed:
 
 - `peg cost factor = 50` non-negative decimal
-- `LP shape cost factor = 100` non-negative decimal
-- `position factor = 1` non-negative integer
-- `level factor = 0.1` non-negative integer
+- `stop cost factor = 0.2` non-negative decimal
+- `position factor = 1` non-negative decimal
+- `level factor = 0.1` non-negative decimal
 - `batchFactor = 0.5` decimal between `0.1 and 0.9`.
 
-### Any type of limit or market order
+### Any type of limit or market order, or liquidity provision transaction
 
 ```go
 gasOrder = network.transaction.defaultgas + peg cost factor x pegs
-                                        + LP shape cost factor x shapes
+                                        + stop cost factor x stops
                                         + position factor x positions
                                         + level factor x levels
 gas = min((maxGas/minBlockCapacity)-1,gasOrder)
 ```
 
-### Cancellation of any single order
+### Cancellation of any single order or liquidity provision transaction
 
 ```go
 gasCancel = network.transaction.defaultgas + peg cost factor x pegs
-                                        + LP shape cost factor x shapes
+                                        + stop cost factor x stops
                                         + level factor x levels
 gas = min((maxGas/minBlockCapacity)-1,gasCancel)
 ```
@@ -77,20 +77,10 @@ Here `gasBatch` is
 1. plus the full cost of the first amendment at `gasOrder`
 1. plus `batchFactor` sum of all subsequent amendments added together (each costing `gasOrder`)
 1. plus the full cost of the first limit order at `gasOrder`
-1. plus `batchFactor` sum of all subsequent limit orders added together (each costing `gasOrder`)
+1. plus `batchFactor` sum of all subsequent submissions added together (each costing `gasOrder`)
 
 ```go
 gas = min((maxGas/minBlockCapacity)-1,batchGas)
-```
-
-### LP provision, new or amendment or cancellation
-
-```go
-gasOliq = network.transaction.defaultgas + peg cost factor x pegs
-                                    + LP shape cost factor x shapes
-                                    + position factor x positions
-                                    + level factor x levels
-gas = min((maxGas/minBlockCapacity)-1,gasOliq)
 ```
 
 ## Transaction priorities
@@ -111,14 +101,17 @@ There are three priority categories:
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 20`.
 1. Send `100` transactions with default gas cost to a node (e.g. votes on a proposal) and observe that most block have 5 of these transactions each.
 
-### Test max with a market (<a name="0079-TGAP-002" href="#0079-TGAP-002">0079-TGAP-002</a>)
+### Test max with a market (<a name="0079-TGAP-004" href="#0079-TGAP-004">0079-TGAP-004</a>)
 
 1. Set `network.transactions.maxgasperblock = 100` and `network.transaction.defaultgas = 1`.
-1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position.
-1. Another party submits a transaction to place a limit order. A block will be created containing the transaction (even though the gas cost of a limit order is `1 + 100 x 4 + 2 + 0.1 x 6` which is well over `100`.)
+1. Create a market with 1 LP
+1. Place 2 matching orders, 1 buy order below the matching price and 1 sell order above the matching price. Uncross the opening auction.
+1. Place 3 pegged orders with different non-zero offsets.
+1. Another party submits a transaction to place a limit order. A block will be created containing the transaction (even though the gas cost of a limit order is `1 + 50 x 3 + 2 x 1 + 0.1 x 5` which is well over `100`.)
 
-### Test we don't overfill a block with a market (<a name="0079-TGAP-003" href="#0079-TGAP-003">0079-TGAP-003</a>)
+### Test we don't overfill a block with a market (<a name="0079-TGAP-005" href="#0079-TGAP-005">0079-TGAP-005</a>)
 
 1. Set `network.transactions.maxgasperblock = 500` and `network.transaction.defaultgas = 1`.
-1. Create a market with 1 LP using 2 shape offsets on each side, just best static bid / ask on the book and 2 parties with a position.
-1. Another party submits 10 transaction to place 10 limit order. A separate party submits `100` transactions with default gas cost. Block will be created but each only containing one limit order placement transaction and including some number of vote transactions.
+1. Place 2 matching orders, 1 buy order below the matching price and 1 sell order above the matching price. Uncross the opening auction.
+1. Place 3 pegged orders with different non-zero offsets.
+1. Another party submits 10 transaction to place 10 limit order. A separate party submits `100` transactions with default gas cost. Blocks will be created but each only containing one limit order placement transaction and including some number of vote transactions.

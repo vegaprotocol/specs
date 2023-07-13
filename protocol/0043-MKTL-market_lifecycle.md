@@ -106,8 +106,7 @@ Auction period ends when any of the following occur:
 
 ### Cancelled
 
-A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period,
-and the trading terminated data source input rings, see [data sourcing](./0045-DSRC-data_sourcing.md).
+A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period, and the trading terminated data source input is triggered, see [data sourcing](./0045-DSRC-data_sourcing.md).
 When a market transitions to a cancelled state all orders should be cancelled and collateral returned to respective parties general account for the relevant asset, all LP commitments should be cancelled and their bond returned to the general account for the relevant asset. After `market.liquidity.successorLaunchWindowLength` has elapsed since cancellation any insurance pool balance should be transferred into the network treasury account for that asset.
 
 Once "cancelled" there must be no open positions tracked by the protocol for the market and any open positions must have been closed including returning all margin and other related collateral if necessary and also notifying downstream event consumers that the positions are closed. Specific position related actions may be unnecessary if the cancelled state is being entered from a state in which there cannot possibly have been any open positions.
@@ -286,10 +285,10 @@ The market state is `settled`.
 After `market.liquidity.successorLaunchWindowLength` has passed since market settlement, any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 
 
-### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
+### Market never leaves opening auction, trading terminated triggered, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
 
 1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
-1. Trading terminated data source rings before the market leaves the opening auction (so market never left Pending state so far).
+1. Trading terminated data source triggers before the market leaves the opening auction (so market never left Pending state so far).
 1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
 1. After `market.liquidity.successorLaunchWindowLength` has elapsed since market cancellation, any insurance pool balance should be [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
@@ -311,10 +310,10 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 1. Once the governance proposal to suspend the market gets enacted the market gets immediately put into auction mode, if market was already in auction mode it remains in it.
 1. No cashflows are exchanged when market has been suspended via a governance proposal.
 1. Parties cannot modify their open interest
-1. The prerequisite for a market to go out of auction mode is now a successful enactment of a governance proposal to unsuspend that market.
+1. The prerequisite for a market to go out of auction mode is now a successful enactment of a governance proposal to resume that market.
 
-### Market gets unsuspended via a governance proposal
+### Market gets resumed via a governance proposal
 
-1. Once the governance proposal to unsuspend the market gets enacted the market can now leave the auction.
+1. Once the governance proposal to resumed the market gets enacted the market can now leave the auction.
 1. If no other auction triggers are active the market goes back into its default trading mode immediately (auction gets uncrossed and trades get generated).
 1. If other auction triggers are active the market remains in auction mode until these allow it to leave it.

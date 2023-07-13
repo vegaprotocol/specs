@@ -54,7 +54,7 @@ Notes on scope of current version of this spec:
 In addition to normal immediately executing order, Vega should accept the submission of stop orders.
 These differ from normal orders in that they sit off the order book until triggered, when they are entered as normal.
 These are generally used to exit positions under pre-defined conditions, either as a "stop loss" order that controls the maximum losses a position may take, a "take profit" order that closes a position once a defined level of profit has been made, or both.
-To prevent traders from "hiding" order book depth behind conditional orders, stop orders can only be used to close some or all of a trader's position, and therefore must be "reduce only" orders.
+
 
 A stop order submission can be made (stop loss or take profit are probably both just called a stop order internally).
 
@@ -71,10 +71,9 @@ If it has an expiry then it can be set either to cancel on expiry (i.e. it is de
 An OCO contains TWO stop order submissions, and must include one in each trigger direction.
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
+  - An OCO submission cannot be set to execute at expiry.
 
 - The stop order submission wraps a normal order submission.
-
-- The order within the stop order submission must be reduce only.
 
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
 
@@ -327,7 +326,6 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 
 ### Stop orders
 
-- A stop order with reduce only set to false will be rejected. (<a name="0014-ORDT-040" href="#0014-ORDT-040">0014-ORDT-040</a>)
 - Once triggered, a stop order is removed from the book and cannot be triggered again. (<a name="0014-ORDT-041" href="#0014-ORDT-041">0014-ORDT-041</a>)
 - A stop order placed by a key with a zero position and no open orders will be rejected. (<a name="0014-ORDT-042" href="#0014-ORDT-042">0014-ORDT-042</a>)
 - A stop order placed by a key with a zero position but open orders will be accepted. (<a name="0014-ORDT-043" href="#0014-ORDT-043">0014-ORDT-043</a>)
@@ -346,9 +344,8 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 - A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-053" href="#0014-ORDT-053">0014-ORDT-053</a>)
   - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-054" href="#0014-ORDT-054">0014-ORDT-054</a>)
 
-- A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. At this time the order will be placed on the book if and only if it would reduce the trader's absolute position (buying if they are short or selling if they are long) if executed (i.e. will execute as a reduce-only order).  (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>)
+- A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>)
 - If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>)
-- If a pair of stop orders are specified as OCO with the same trigger conditions and directions, if that trigger is hit one will execute and the other will expire. The exact choice of which will execute should not be assumed by the trader. (<a name="0014-ORDT-057" href="#0014-ORDT-057">0014-ORDT-057</a>)
 - If a pair of stop orders are specified as OCO and one triggers but is invalid at time of triggering (e.g. a buy when the trader is already long) the other will still be cancelled. (<a name="0014-ORDT-058" href="#0014-ORDT-058">0014-ORDT-058</a>)
 
 - A trailing stop order for a 5% drop placed when the price is `50`, followed by a price rise to `60` will:

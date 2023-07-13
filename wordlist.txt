@@ -53,6 +53,7 @@ cumulated
 customised
 DAI
 datanode
+datapoint
 datatypes
 datetime
 decentralised
@@ -152,6 +153,7 @@ LP
 LPs
 MacOS
 mainnet
+maint
 malus
 margined
 margining
@@ -246,12 +248,14 @@ Tendermint
 testnet
 testnets
 TIF
+TODO
 tokenholder
 tokenholders
 tradable
 trackable
 Tron
 trustless
+TWAP
 tx
 TXs
 quant
@@ -276,9 +280,6 @@ unstake
 unstaked
 unstakes
 unstaking
-unsuspend
-unsuspended
-unsuspending
 unvested
 url
 USD
