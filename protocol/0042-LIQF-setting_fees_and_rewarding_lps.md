@@ -223,18 +223,21 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 
   - If the LP is meeting their commitment, store the Vega time of the start of the epoch as the time the LP began meeting their commitment, otherwise store `nothing`.
 
-- At start of block, set `k` to `0` and then after every `market.liquidity.sla.evalEveryNumOfTransactions` transactions have been processed set `k` to the transaction number of the just processed transaction.
+- At start of block, set `block_sla_met = true` and `k` to `0` and then after every `market.liquidity.sla.evalEveryNumOfTransactions` transactions have been processed set `k` to the transaction number of the just processed transaction.
 
 - In each block, immediately after processing transaction `k`:
 
   - Note that this happens _after_ iceberg orders, that need refreshing as a result of transaction `k` are refreshed.
     This means that while an iceberg order has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`.
 
-  - If LP has started meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
+  - if an LP is *not* meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") set `block_sla_met = false` 
+
+- At the end of each block:
+  - If `block_sla_met = true` and if an LP has started meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
 
     - Store the current Vega time attached to the block being processed as the time the LP began meeting their commitment.
 
-  - If LP has stopped meeting their committed volume of notional after previously doing so:
+  - If `block_sla_met = false ` and an LP has stopped meeting their committed volume of notional after previously doing so:
 
     - Add the difference in nanoseconds between the current Vega time attached to the block being processed and the time the LP began meeting their commitment (stored in the step above) to `s_i`.
 
