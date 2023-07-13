@@ -23,7 +23,7 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - `market.liquidity.earlyExitPenalty` (decimal ≥0), sets how much LP forfeits of their bond in case the market is below target stake and they wish to reduce their commitment. If set to `0` there is no penalty for early exit, if set to `1` their entire bond is forfeited if they exit their entire commitment, if set >1, their entire bond will be forfeited for exiting `1/earlyExitPenalty` of their commitment amount.
 - `market.liquidity.probabilityOfTrading.tau.scaling` sets how the probability of trading is calculated from the risk model; this is used to [measure the relative competitiveness of LPs supplied volume](0042-LIQF-setting_fees_and_rewarding_lps.md).
 - `market.liquidity.minimum.probabilityOfTrading.lpOrders` sets a lower bound on the result of the probability of trading calculation.
-- `market.liquidity.sla.evalEveryNumOfTransactions` sets how many transactions in a block are processed before each party that's committed to providing liquidty is evaluated for meeting (or not) their commitment.  
+- `market.liquidity.sla.evalEveryNumOfTransactions` sets how many transactions in a block are processed before each party that's committed to providing liquidity is evaluated for meeting (or not) their commitment.  
 
 ### Market parameters
 
