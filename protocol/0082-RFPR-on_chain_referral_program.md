@@ -9,7 +9,7 @@ Whilst a referral program is active, the following benefits may be available to 
 - a **referrer** will receive a proportion of all referee taker fees as a **reward**.
 - a **referee** will be eligible for a **discount** on any taker fees they incur.
 
-The size of the reward or discount will be dependent on the benefit tier the referees [team](#team-mechanics) is currently placed in. A team becomes eligible for greater benefits by reaching a minimum running volume over a number of epochs. Both referrers and referees contribute to their teams running volume.
+The size of the reward or discount will be dependent on the benefit tier the referee's [team](#team-mechanics) is currently placed in. A team becomes eligible for greater benefits by reaching a minimum running volume over a number of epochs. Both referrers and referees contribute to their team's running volume.
 
 On-chain referral programs can be created and updated through [governance proposals](#governance-proposals).
 
