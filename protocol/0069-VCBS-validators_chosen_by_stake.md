@@ -219,7 +219,7 @@ for product spot: (<a name="0069-VCBS-089" href="#0069-VCBS-089">0069-VCBS-089</
     - When the validator has been promoted to a Tendermint validator, transfer 1000 tokens to the reward account.
     - Assert that the new validator has a score (stake score x performance score) in the top 4 - this can be verified in data node with: `rewardScore.stakeScore` x `rewardScore.performanceScore`.
     - Verify that the joining validator would have a multisig score of 0 and therefore would not get a reward.
-1. Tendermint validators missing signature test 3 (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>) for product spot: (<a name="0069-VCBS-99" href="#0069-VCBS-099">0069-VCBS-099</a>):
+1. Tendermint validators missing signature test 3 (<a name="0069-VCBS-050" href="#0069-VCBS-050">0069-VCBS-050</a>) for product spot: (<a name="0069-VCBS-099" href="#0069-VCBS-099">0069-VCBS-099</a>):
     - Setup a network with 4 Tendermint validators with self-delegation and number of Tendermint validators network parameter set to 5.
     - **Additional setup:** ensure that the network parameter `network.validators.multisig.numberOfSigners`is set to 4.
     - Delegate 10000 to the existing validators (can be self or party delegation)
@@ -427,7 +427,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
         - the pending validator has sufficient `ownstake`
         - Verify that at the epoch change,  the validator with insufficient `ownstake` is replaced; in the next epoch, the second validator with the lowest score is replaced, and the validator that was demoted to ersatz validator due to insufficient `ownstake` is removed (stops being listed as an ersatz validator).
         - Verify that the validator that dropped below `ownstake` is not demoted and removed at the same epoch change.
-1. `Ownstake` scenario4 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>) for product spot: (<a name="0069-VCBS-0138" href="#0069-VCBS-138">0069-VCBS-138</a>)
+1. `Ownstake` scenario4 (<a name="0069-VCBS-075" href="#0069-VCBS-075">0069-VCBS-075</a>) for product spot: (<a name="0069-VCBS-138" href="#0069-VCBS-138">0069-VCBS-138</a>)
     1. Setup a network with 5 nodes (3 validators, 2 ersatz validators, no pending validator). In one epoch,
         - one ersatz validator gets the highest delegated stake, but insufficient `ownstake` (delegates: 10000)
         - 2 validators drop below `ownstake`, but have relative high delegated stake (7000)
@@ -569,7 +569,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 
 1. Vega network receives the ethereum events updating the weights and stores them (`key`,`value`). (<a name="0069-VCBS-002" href="#0069-VCBS-002">0069-VCBS-002</a>) for product spot: (<a name="0069-VCBS-164" href="#0069-VCBS-164">0069-VCBS-164</a>)
 1. For validators up to `network.validators.multisig.numberOfSigners` the `validator_score` is capped by the value on `Ethereum`, if available and it's `0` for those who should have value on Ethereum but don't (they are one of the top `network.validators.multisig.numberOfSigners` by `validator_score` on VEGA). (<a name="0069-VCBS-003" href="#0069-VCBS-003">0069-VCBS-003</a>) for product spot: (<a name="0069-VCBS-165" href="#0069-VCBS-165">0069-VCBS-165</a>)
-1. It is possible to submit a transaction to update the weights. (<a name="0069-VCBS-004" href="#0069-VCBS-004">0069-VCBS-004</a>) for product spot: (<a name="0069-VCBS-165" href="#0069-VCBS-165">0069-VCBS-165</a>)
+1. It is possible to submit a transaction to update the weights. (<a name="0069-VCBS-004" href="#0069-VCBS-004">0069-VCBS-004</a>) for product spot: (<a name="0069-VCBS-177" href="#0069-VCBS-177">0069-VCBS-177</a>)
 1. Can update multisig for new validator, and expect rewards (<a name="0069-VCBS-066" href="#0069-VCBS-066">0069-VCBS-066</a>) for product spot: (<a name="0069-VCBS-166" href="#0069-VCBS-166">0069-VCBS-166</a>)
     - Arrange a network with N validators and 1 ersatz validator.
     - Set `network.validators.multisig.numberOfSigners` = N.

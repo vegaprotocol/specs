@@ -160,7 +160,7 @@ for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_margin_bal`.
 
-#### Test case 3.1: Spot market is proposed, accepted, restored (<a name="0073LIMN-102" href="#0073-LIMN-102">0073-LIMN-102</a>)
+#### Test case 3.1: Spot market is proposed, accepted, restored (<a name="0073-LIMN-102" href="#0073-LIMN-102">0073-LIMN-102</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.

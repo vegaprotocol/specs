@@ -197,7 +197,7 @@ At the end of epoch 2:
 
 ### Distributing fees paid rewards - unfunded account (<a name="0056-REWA-011" href="#0056-REWA-011">0056-REWA-011</a>)
 
-for product spot: (<a name="0056-REWA-59" href="#0056-REWA-059">0056-REWA-059</a>)
+for product spot: (<a name="0056-REWA-059" href="#0056-REWA-059">0056-REWA-059</a>)
 
 #### Rationale 2
 
