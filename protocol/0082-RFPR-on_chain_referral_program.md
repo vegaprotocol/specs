@@ -4,7 +4,7 @@
 
 The aim of the on-chain referral program is to allow users of the protocol to incentivise users and community members to refer new traders by voting to provide benefits for referrers and/or referees. 
 
-Whilst a referral program is active, the following benefits will be available to eligible parties:
+Whilst a referral program is active, the following benefits may be available to eligible parties:
 
 - a **referrer** will receive a proportion of all referee taker fees as a **reward**.
 - a **referee** will be eligible for a **discount** on any taker fees they incur.
