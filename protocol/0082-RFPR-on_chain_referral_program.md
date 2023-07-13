@@ -187,7 +187,7 @@ And:
 
 Then:
     referral_reward_factor=0.005
-    referral_reward_factor=0.005
+    referral_discount_factor=0.005
 ```
 
 These benefit factors are then fixed for the duration of the next epoch.
