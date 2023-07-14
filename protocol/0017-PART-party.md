@@ -38,6 +38,7 @@ The `network` party is a pseudo party. It is used in [position resolution](./001
 
 1. [x] When a [standard party](#standard-party) must be uniquely identified, it must be identified by the public key of an ed25519 keypair (<a name="0017-PART-001" href="#0017-PART-001">0017-PART-001</a>)
 
+
 Note that when and how a party can submit transactions is set out and restricted in:
 
 - [Transactions](./0049-TVAL-validate_transaction_preconsensus.md)
