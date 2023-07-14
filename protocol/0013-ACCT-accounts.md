@@ -102,10 +102,10 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 ### Party asset accounts
 
-- Every party that deposits an asset on Vega will have an asset account created for that asset. (<a name="0013-ACCT-003" href="#0013-ACCT-003">0013-ACCT-003</a>) 
-  - Only one general asset account exists per party per asset. (<a name="0013-ACCT-004" href="#0013-ACCT-004">0013-ACCT-004</a>) 
-  - When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. (<a name="0013-ACCT-005" href="#0013-ACCT-005">0013-ACCT-005</a>) 
-  - When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. (<a name="0013-ACCT-006" href="#0013-ACCT-006">0013-ACCT-006</a>) 
+- Every party that deposits an asset on Vega will have an asset account created for that asset. (<a name="0013-ACCT-003" href="#0013-ACCT-003">0013-ACCT-003</a>)
+  - Only one general asset account exists per party per asset. (<a name="0013-ACCT-004" href="#0013-ACCT-004">0013-ACCT-004</a>)
+  - When a party deposits collateral onto Vega, the asset account will increase in balance by the same amount. (<a name="0013-ACCT-005" href="#0013-ACCT-005">0013-ACCT-005</a>)
+  - When a party withdraws collateral onto Vega, the asset account for that asset will decrease in balance by the same amount. (<a name="0013-ACCT-006" href="#0013-ACCT-006">0013-ACCT-006</a>)
   - [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are paid in to this account. (<a name="0013-ACCT-011" href="#0013-ACCT-011">0013-ACCT-011</a>)
 
 ### Party margin accounts
