@@ -606,3 +606,4 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 
 1. Issue 5 requests from a vega key in the same block, 4 of which with invalid signatures. Verify that only the one with the correct signature is passed to consensus, and is properly executed.
 (<a name="0069-VCBS-087" href="#0069-VCBS-087">0069-VCBS-087</a>)
+
