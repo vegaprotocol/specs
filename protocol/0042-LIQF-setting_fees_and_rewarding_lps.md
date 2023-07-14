@@ -223,7 +223,7 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 
   - If the LP is meeting their commitment, store the Vega time of the start of the epoch as the time the LP began meeting their commitment, otherwise store `nothing`.
 
-- At start of block, for LP `i`, first reset the running minimim valid volume an LP is providing and across the block and then keep updating the minimum volume that the LP is providing that is [within the valid range](./0044-LIME-lp_mechanics.md) (section "Meeting the committed volume of notional").
+- At start of block, for LP `i`, first reset the running minimum valid volume an LP is providing and across the block and then keep updating the minimum volume that the LP is providing that is [within the valid range](./0044-LIME-lp_mechanics.md) (section "Meeting the committed volume of notional").
 - Note that the volume check must only happen _after_ iceberg orders, that need refreshing as a result of a transaction are refreshed. This means that while an iceberg order has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`.
 
 - At the end of each block:
@@ -236,7 +236,7 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 
 - At the end of the epoch, calculate the actual observed epoch length `observed_epoch_length` = the difference in nanoseconds between the Vega time at the start of the epoch and the Vega time at the end of the epoch.
 
-Note that because vega time won't be progressing intra-block the above mechanism should ensure that `s_i` gets incremented only if the LP was meeting their commitment at every point this was checked within the block. 
+Note that because vega time won't be progressing inside a block the above mechanism should ensure that `s_i` gets incremented only if the LP was meeting their commitment at every point this was checked within the block.
 
 #### Calculating the SLA performance penalty for a single epoch
 
