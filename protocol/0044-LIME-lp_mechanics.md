@@ -332,7 +332,7 @@ In the case of spot markets it will be transferred into the network treasury for
 - For a market that is in opening auction and LP has committed provision:
   - LP can increase their provision and it will take affect immediately (<a name="0044-LIME-050" href="#0044-LIME-050">0044-LIME-050</a>)
   - LP can decrease their provision and it will take affect immediately without incurring penalties (<a name="0044-LIME-051" href="#0044-LIME-051">0044-LIME-051</a>)
-  - LP cannot cancel their commitment but instead submit governace vote to cancel the market (<a name="0044-LIME-052" href="#0044-LIME-052">0044-LIME-052</a>)
+  - LP cannot cancel their commitment but instead submit governance vote to cancel the market (<a name="0044-LIME-052" href="#0044-LIME-052">0044-LIME-052</a>)
   - If multiple LPs committed provision then an LP can cancel their commitment by decreasing to `0` commitment without incurring penalties (<a name="0044-LIME-053" href="#0044-LIME-053">0044-LIME-053</a>)
 
 ### Qualifying Order Types
