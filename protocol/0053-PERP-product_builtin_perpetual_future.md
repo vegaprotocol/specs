@@ -163,7 +163,7 @@ If periodic settlement data happens whilst market is in auction of any other typ
 ### 5. Margin considerations
 
 To assure adequate solvency we need to include the estimate of the upcoming funding payment in maintenance margin estimate for the party. Let $t_{k-1}$ be the time of the last funding payment. Let $t$ be current time ($t < t_k$).
-Calculate $G_t$ as the [funding payment](#431-periodic-settlement-during-auction) between $t_{k-1}$ and $t$.
+Calculate $G_t$ as the [funding payment](#43-periodic-settlement) between $t_{k-1}$ and $t$.
 For perpetual futures markets set the maintenance margin as:
 
 ```math
