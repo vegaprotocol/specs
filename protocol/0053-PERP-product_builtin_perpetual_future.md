@@ -140,8 +140,10 @@ The next step is to calculate the periodic settlement funding payment. We allow 
 
 ```go
 delta_t = funding_period_end - max(funding_period_start, internal_data_points[0].t)
-funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower_bound*s_twap, exp(interest_rate*delta_t)*s_twap-f_twap))
+funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap))
 ```
+
+where `(1 + delta_t * interest_rate)` is the linearisation of  `exp(delta_t*interest_rate)`.
 
 #### Funding rate calculation
 
