@@ -142,6 +142,7 @@ keystore
 KMS
 leftarrow
 lifecycle
+linearisation
 linearised
 linkings
 linux

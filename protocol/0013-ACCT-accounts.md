@@ -97,8 +97,8 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 ### All ordinary accounts
 
-- Double entry accounting is maintained at all points i.e. every transfer event has a source account and destination account and the balance of the source account before the transfer equals to the balance of source account minus the transfer amount after the transfer and balance of the destination account before the transfer plus the transfer amount equals to the balance of the destination account after the transfer. (<a name="0013-ACCT-001" href="#0013-ACCT-001">0013-ACCT-001</a>)
-- Only transfer requests move money between accounts. (<a name="0013-ACCT-002" href="#0013-ACCT-002">0013-ACCT-002</a>)
+- Double entry accounting is maintained at all points i.e. every transfer event has a source account and destination account and the balance of the source account before the transfer equals to the balance of source account minus the transfer amount after the transfer and balance of the destination account before the transfer plus the transfer amount equals to the balance of the destination account after the transfer. (<a name="0013-ACCT-001" href="#0013-ACCT-001">0013-ACCT-001</a>) for product spot: (<a name="0013-ACCT-024" href="#0013-ACCT-024">0013-ACCT-024</a>)
+- Only transfer requests move money between accounts. (<a name="0013-ACCT-002" href="#0013-ACCT-002">0013-ACCT-002</a>) for product spot: (<a name="0013-ACCT-025" href="#0013-ACCT-025">0013-ACCT-025</a>)
 
 ### Party asset accounts
 
@@ -114,6 +114,11 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 - Each party should only have one margin account per market. (<a name="0013-ACCT-008" href="#0013-ACCT-008">0013-ACCT-008</a>)
 - Cannot have a non-zero balance on a margin account where there's no position / position size = 0 and no active orders. (<a name="0013-ACCT-009" href="#0013-ACCT-009">0013-ACCT-009</a>)
 - Cannot transfer into or out of a margin account where there's no position / position size = 0 and no active orders. (<a name="0013-ACCT-010" href="#0013-ACCT-010">0013-ACCT-010</a>)
+
+### Party holding accounts in Spot market
+
+- Every party that submits an order on a Spot market will have a holding account created for the relevant market asset pair. (<a name="0013-ACCT-030" href="#0013-ACCT-030">0013-ACCT-030</a>)
+- Each party should only have two holding accounts per market: one for the the base_asset and one for the quote_asset. (<a name="0013-ACCT-031" href="#0013-ACCT-031">0013-ACCT-031</a>)
 
 ### Liquidity Provider bond accounts
 

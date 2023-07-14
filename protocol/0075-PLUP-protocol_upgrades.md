@@ -250,3 +250,4 @@ For the purposes of protocol upgrade each validator that participates in consens
   1. Shut down the nodes.
   1. Start all nodes on the new binary.
   1. Expect all transactions that reached blocks prior to upgrade to have taken effect. None of the other transactions did.
+

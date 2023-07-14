@@ -223,28 +223,20 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 
   - If the LP is meeting their commitment, store the Vega time of the start of the epoch as the time the LP began meeting their commitment, otherwise store `nothing`.
 
-- At the start of each block generate a pseudorandom integer `k` between `1..N` (inclusive of `1` and `N`) where `N` is the number of transactions in the block (note: transactions not orders, a batch is one transaction for this purpose).
-Use a suitable deterministic seed to minimise the probability of an LP gaming `k` or being able to target transactions around (directly before or after) the point `k`.
-For example, the seed might combine the hash of all transactions in the block itself with the number of transactions `N`.
-Using only information from the prior block as the seed may allow exploits based on pre-generation of `k` and must be avoided.
+- At start of block, for LP `i`, first reset the running minimum valid volume an LP is providing and across the block and then keep updating the minimum volume that the LP is providing that is [within the valid range](./0044-LIME-lp_mechanics.md) (section "Meeting the committed volume of notional").
+- Note that the volume check must only happen _after_ iceberg orders, that need refreshing as a result of a transaction are refreshed. This means that while an iceberg order has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`.
 
-- In each block, immediately after processing transaction `k`:
-
-  - Note that this happens _after_ iceberg orders, that need refreshing as a result of transaction `k` are refreshed.
-    This means that while an iceberg order has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`.
-
-  - If LP has started meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
-
+- At the end of each block:
+  - If an LP has started meeting their [committed volume of notional based on the minimum volume recorded during the block](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
     - Store the current Vega time attached to the block being processed as the time the LP began meeting their commitment.
 
-  - If LP has stopped meeting their committed volume of notional after previously doing so:
-
+  - If an LP has stopped meeting their committed volume of notional after previously doing so:
     - Add the difference in nanoseconds between the current Vega time attached to the block being processed and the time the LP began meeting their commitment (stored in the step above) to `s_i`.
-
     - Store `nothing` as the time the LP began meeting their commitment, to signify the LP not meeting their commitment.
 
 - At the end of the epoch, calculate the actual observed epoch length `observed_epoch_length` = the difference in nanoseconds between the Vega time at the start of the epoch and the Vega time at the end of the epoch.
 
+Note that because vega time won't be progressing inside a block the above mechanism should ensure that `s_i` gets incremented only if the LP was meeting their commitment at every point this was checked within the block.
 
 #### Calculating the SLA performance penalty for a single epoch
 

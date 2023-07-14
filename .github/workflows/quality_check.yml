@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Check out"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.3
 
       - name: "Run Yamllint"
         uses: ibiqlik/action-yamllint@v3.1.1
@@ -31,10 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Check out"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.3
 
       - name: "Run PySpelling"
-        uses: rojopolis/spellcheck-github-actions@0.24.0
+        uses: rojopolis/spellcheck-github-actions@0.33.1
         with:
           task_name: Markdown
 
@@ -43,10 +43,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Check out"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.3
 
       - name: "Run Markdownlint"
-        uses: nosborn/github-action-markdown-cli@v3.1.0
+        uses: nosborn/github-action-markdown-cli@v3.3.0
         with:
           files: .
           config_file: .github/workflows/config/markdownlint.json
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Check out"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.3
 
       - name: "Run Check AC codes"
         run: |
