@@ -72,3 +72,4 @@ The mark price is set to the higher / lower of the last traded price, bid/offer.
 ### 5. Defined as part of the product
 
   The *Mark Price* may be calculated using an algorithm defined by the product -- and 'selected' by a market parameter.
+

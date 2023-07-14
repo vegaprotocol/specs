@@ -74,9 +74,9 @@ Contracts that do not meet this guarantee are not suitable as a basis for Vega b
 ```proto
 
 message ERC20 {
-	// contract address of an ERC20 token
-	string contractAddress = 1;
-	string maximumLifetimeDeposit = 2; // note that e.g: 100000 in here will be interpreted against the asset decimals
+  // contract address of an ERC20 token
+  string contractAddress = 1;
+  string maximumLifetimeDeposit = 2; // note that e.g: 100000 in here will be interpreted against the asset decimals
     string withdrawalDelayThreshold = 3;  // this is will be interpreted against the asset decimals
 }
 
@@ -90,10 +90,10 @@ message AssetSource {
   string name = 4;
 
   oneof source {
-	// vega internal assets
-	BuiltinAsset builtinAsset = 100;
-	// foreign chains assets
-	ERC20 erc20 = 200;
+  // vega internal assets
+  BuiltinAsset builtinAsset = 100;
+  // foreign chains assets
+  ERC20 erc20 = 200;
   }
 
 }
@@ -135,9 +135,9 @@ message ProposalTerms {
     UpdateMarket  updateMarket  = 101;
     NewMarket     newMarket     = 102;
     UpdateNetwork updateNetwork = 103;
-	// new field:
-	NewAsset = newAsset = 104;
-	UpdateAsset = updateAsset = 105;
+  // new field:
+  NewAsset = newAsset = 104;
+  UpdateAsset = updateAsset = 105;
 };
 }
 ```
@@ -146,12 +146,12 @@ message ProposalTerms {
 
 ```json
 {
-	"newAsset": {
-		"changes": {
-			"contractAddress": "0xsomething"
-		},
-		"quantum": "10000000" // if the asset supports 5 decimals = 100.00000
-	}
+  "newAsset": {
+    "changes": {
+      "contractAddress": "0xsomething"
+    },
+    "quantum": "10000000" // if the asset supports 5 decimals = 100.00000
+  }
 }
 ```
 
@@ -200,3 +200,4 @@ This must be an integer strictly greater than `0`.
 
 - There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. Withdrawal in asset `X` below `t1` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t1` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-023" href="#0027-ASSP-023">0027-ASSP-023</a>)
 - There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. An asset update proposal is submitted to change these to `t2`; it passes voting and is submitted to Ethereum bridge contract. The new thresholds now apply i.e. withdrawal in asset `X` below `t2` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t2` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-024" href="#0027-ASSP-024">0027-ASSP-024</a>)
+
