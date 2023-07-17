@@ -25,19 +25,16 @@ On-chain referral programs can be created and updated through [governance propos
 
 Enabling or changing the terms of the on-chain referral program can be proposed via governance. As part of the proposal, the proposer specifies the following fields:
 
-- `name`: name of the referral program
 - `benefit_tiers`: a list of dictionaries with the following fields
   - `minimum_running_volume`: the required `running_team_volume` in quantum units for a team to access this tier
   - `referral_reward_factor`: the proportion of the referees taker fees to be rewarded to the referrer
   - `referral_discount_factor`: the proportion of the referees taker fees to be discounted
-- `start_epoch`: the first epoch the program will become `STATE_ACTIVE` and benefits will be enabled
-- `end_epoch`: the first epoch the program will become `STATE_CLOSED` and benefits will be disabled
+- `closing_timestamp`: the timestamp after which when the current epoch ends, the programs status will become `STATE_CLOSED` and benefits will be disabled
 - `window_length`:  the number of epochs over which to evaluate a teams running volume
 
 ```protobuf
-message NewReferralProgram{
-    changes: ReferralProgramConfiguration{
-        name: "Vega Protocol Q4 Referral Program"
+message UpdateReferralProgram{
+    changes: UpdateReferralProgramConfiguration{
         benefit_tiers: [
             {
                 "minimum_running_volume": 10000,
@@ -55,57 +52,32 @@ message NewReferralProgram{
                 "referral_discount_factor": 0.010,
             },
         ],
-        start_epoch: 100,
-        end_epoch: 128,
+        closing_timestamp: 123456789,
         window_length: 7,
     }
 }
 ```
 
 When submitting a referral program proposal through governance the following conditions apply:
-- a proposer cannot set a `start_epoch` or `end_epoch` less than or equal to the current epoch.
-- a proposer cannot set an `end_epoch` less than or equal to the `start_epoch`.
+- a proposer cannot set an `closing_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
 - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
 - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
 
-After a referral program has been passed, the referral program must be assigned an `id` by the network and exposed through an API. A program can then be updated through a governance proposal using this `id`.
-. 
-```protobuf
-message UpdateReferralProgram{
-    id: "abcd3fgh1jklmn0pqf5tuvwzyz"
-    changes: UpdateReferralProgramConfiguration{
-        benefit_tiers: [
-            {
-                "minimum_running_volume": 10000,
-                "referral_reward_factor": 0.001,
-                "referral_discount_factor": 0.002,
-            }
-        ],
-        start_epoch: 107
-        end_epoch: 114,
-        window_length: 1,
-    }
-}
-```
-In addition to the conditions which apply when creating a referral program, the following apply:
-- a proposer cannot update a program if its state is `STATUS_REJECTED`, `STATUS_STOPPED`, or `STATUS_CLOSED`.
-- a proposer cannot update the `name` of a program.
-- a proposer cannot update the `start_epoch` if the program is `STATUS_ACTIVE`
+The referral program will start the epoch after the `enactment_timestamp` is reached.
 
 ## Referral Program Lifecycle:
 
-After a referral program [proposal](#governance-proposals) is validated and accepted by the network, a referral program is created and can be one of the following states. The current state of a program should be exposed via an API.
+After a referral program [proposal](#governance-proposals) is validated and accepted by the network, the network referral program is created / updated and can be one of the following states. The current state of the network referral program should be exposed via an API.
 
-| Status             | Benefits Enabled | Condition for entry                                       | Condition for exit                                   |
-| ------------------ | ---------------- | --------------------------------------------------------- | ---------------------------------------------------- |
-| `STATUS_PROPOSED`  | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends               |
-| `STATUS_REJECTED`  | No               | Governance vote fails                                     | na                                                   |
-| `STATUS_PENDING`   | No               | Governance vote passes                                    | Current epoch greater than or equal to `start_epoch` |
-| `STATUS_STOPPED`   | No               | There is already an existing program with `STATUS_ACTIVE` | na                                                   |
-| `STATUS_ACTIVE`    | Yes              | Previously `STATUS_PENDING`                               | Current epoch less than or equal to `end_epoch`      |
-| `STATUS_CLOSED`    | No               | Previously `STATUS_ACTIVE`                                | na                                                   |              
+| Status               | Benefits Enabled | Condition for entry                                       | Condition for exit                                                |
+| -------------------- | ---------------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
+| `STATUS_PROPOSED`    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
+| `STATUS_REJECTED`    | No               | Governance vote fails (or is invalid)                     | New governance proposal submitted to the network                 |
+| `STATUS_PENDING`     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
+| `STATUS_ACTIVE`      | Yes              | Previously `STATUS_PENDING`                               | End of epoch after network reaches proposal `closing_timestamp`   |
+| `STATUS_CLOSED`      | No               | Previously `STATUS_ACTIVE`                                | New governance proposal submitted to the network                  |              
 
 ## Team Mechanics
 A team is comprised of a referrer and all their referees. There can only ever be one referrer per team but the number of referees is unlimited.
