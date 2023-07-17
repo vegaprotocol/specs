@@ -92,10 +92,7 @@ To create a team and generate a referral code, a party must fulfil the following
 - party must not currently be a **referrer**
 - party must not currently be a **referee**
 - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
-- party must not have a liquidity provision in any of the following states:
-    - `STATUS_ACTIVE`
-    - `STATUS_PENDING`
-    - `STATUS_UNDEPLOYED`
+- party must not have an active liquidity provision
 
 The staking requirement is constant. If a referrer un-stakes enough tokens to fall below the requirement, they and their referees will no long be eligible for program benefits. If the referrer re-stakes enough tokens to fulfil the staking requirement, the team will become eligible for referral program benefits. Note, referees will be able to "move team" by submitting a new team.
 
@@ -121,10 +118,7 @@ If a party which is already a referrer submits a `CreateTeam` transaction, their
 To join a team the party must fulfil the following criteria:
 
 - party must not currently be a **referrer**
-- party must not have a liquidity provision in any of the following states:
-    - `STATUS_ACTIVE`
-    - `STATUS_PENDING`
-    - `STATUS_UNDEPLOYED`
+- party must not have an active liquidity provision
 
 The liquidity provision restriction is constant, once a party has become a referee they will be restricted from committing liquidity. Any liquidity provision transactions from a referee should be rejected.
 
@@ -259,10 +253,8 @@ The network can then carry out the normal fee transfers using the updated fee am
 1. If one or more of the following conditions are not met, any `CreateParty` transaction should be rejected.
     - party must not currently be a **referee**
     - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
-    - party must not have a liquidity provision in any of the following states:
-        - `STATUS_ACTIVE`
-        - `STATUS_PENDING`
-        - `STATUS_UNDEPLOYED`
+    - party must not have an active liquidity provision
+
 
 #### Joining a team
 
@@ -270,10 +262,8 @@ The network can then carry out the normal fee transfers using the updated fee am
 1. If one or more of the following conditions are not met,  any `JoinParty` transaction should be rejected.
     - a party must not currently be a **referrer**
     - a party must not currently be a **referee**
-    - party must not have a liquidity provision in any of the following states:
-        - `STATUS_ACTIVE`
-        - `STATUS_PENDING`
-        - `STATUS_UNDEPLOYED`
+    - party must not have an active liquidity provision
+
 
 #### Team epoch and running volumes
 
