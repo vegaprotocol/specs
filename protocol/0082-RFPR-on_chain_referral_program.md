@@ -85,7 +85,7 @@ After a referral program [proposal](#governance-proposals) is validated and acce
 
 A team is comprised of a referrer and all their referees. There can only ever be one referrer per team but the number of referees is unlimited.
 
-### Creating / updating a team
+### Creating / updating teams
 
 To create a team and generate a referral code, a party must fulfil the following criteria:
 
@@ -97,13 +97,15 @@ To create a team and generate a referral code, a party must fulfil the following
     - `STATUS_PENDING`
     - `STATUS_UNDEPLOYED`
 
-This staking requirement is constant. If a referrer un-stakes enough tokens to fall below the requirement, they and their referees will no long be eligible for program benefits. If the referrer re-stakes enough tokens to fulfil the staking requirement, the team will become eligible for referral program benefits.
+The staking requirement is constant. If a referrer un-stakes enough tokens to fall below the requirement, they and their referees will no long be eligible for program benefits. If the referrer re-stakes enough tokens to fulfil the staking requirement, the team will become eligible for referral program benefits. Note, referees will be able to "move team" by submitting a new team.
+
+The liquidity provision restriction is constant, once a party has become a referrer they will be restricted from committing liquidity. Any liquidity provision transactions from a referrer should be rejected.
 
 To generate a team id / referral code, the party must submit a signed `CreateTeam` transaction with the following optional team information.
 
-- name: an optional team name to be added to the referral banner.
-- teamUrl: an optional link to a team forum, discord, etc.
-- avatarUrl: an optional url to an image to be used as the teams avatar
+- `name`: an optional team name to be added to the referral banner.
+- `teamUrl`: an optional link to a team forum, discord, etc.
+- `avatarUrl`: an optional url to an image to be used as the teams avatar
 
 ```protobuf
 message CreateTeam
@@ -114,16 +116,17 @@ message CreateTeam
 
 If a party which is already a referrer submits a `CreateTeam` transaction, their team metadata is simply updated.
 
-### Joining a team
+### Joining / moving teams
 
 To join a team the party must fulfil the following criteria:
 
 - party must not currently be a **referrer**
-- party must not currently be a **referee**
 - party must not have a liquidity provision in any of the following states:
     - `STATUS_ACTIVE`
     - `STATUS_PENDING`
     - `STATUS_UNDEPLOYED`
+
+The liquidity provision restriction is constant, once a party has become a referee they will be restricted from committing liquidity. Any liquidity provision transactions from a referee should be rejected.
 
 To become a referee, a referee must submit a signed `JoinTeam` transaction with the following fields:
 
@@ -135,15 +138,17 @@ message JoinTeam{
 }
 ```
 
-A user should also be able to do this process by approving a transaction from a dApp.
+If a party is already a referee, and submits another `JoinTeam` transaction, their membership will be transferred to the new team at the end of the epoch. Note, if the referee has submitted multiple transactions in an epoch, the referee will be transferred using the latest valid transaction.
 
 ### Team epoch and running volumes
 
-Whilst a referral program is `STATUS_ACTIVE`, the network must track the cumulative volume of trades for each party in that epoch, call this value `party_epoch_volume`. Each time a trade is generated, the network should increment a parties `party_epoch_volume` by the quantum volume of the trade. Note, for a spot market, the quantum is the quantum of the asset used to express the price (i.e. the [quote_asset](./0080-SPOT-product_builtin_spot.md/#1-product-parameters)).
+Whilst a referral program is `STATUS_ACTIVE`, the network must track the cumulative volume of trades for each party in that epoch, call this value `party_epoch_volume`. Each time a trade is generated, the network should increment a parties `party_epoch_volume` by the quantum volume of the trade. For a spot market, the quantum is the quantum of the asset used to express the price (i.e. the [quote_asset](./0080-SPOT-product_builtin_spot.md/#1-product-parameters)).
 
 ```pseudo
 party_epoch_volume = party_epoch_volume + (trade_price * trade_size * settlement_asset_quantum)
 ```
+
+Note, to prevent participants "wash trading" within a team to boost their teams volume, trades where both the maker and taker are a member of the same party do not contribute to each parties `party_epoch_volume`.
 
 At the end of an epoch, for each team, a `team_epoch_volume` is calculated by summing each team members `party_epoch_volume`. The amount a party can contribute to their teams volume however is capped by the network parameter `referralProgram.maxPartyVolumePerEpoch`. (Note this cap should not be directly to `party_epoch_volume` in case the network parameter is updated during an epoch).
 
@@ -154,20 +159,6 @@ team_epoch_volume = sum[min(party_epoch_volume, referralProgram.maxPartyVolumePe
 After the values are calculated, the `team_epoch_volume` is stored by the network and each parties `party_epoch_volume` is reset to `0` ready for the next epoch.
 
 The network can then calculate the teams `team_running_volume` by summing a teams team_epoch_volume values over the last n epochs where n is the `window_length` set in the [governance proposal](#governance-proposals).
-
-### Removing liquidity providers
-
-As stated in [creating a team](#creating--updating-a-team) and [joining a team](#joining-a-team), referrers and referees are restricted from having a liquidity provision in one of the following states:
-
-- `STATUS_ACTIVE`
-- `STATUS_PENDING`
-- `STATUS_UNDEPLOYED`.
-
-This rule is constant and cannot be broken even after becoming a referrer of referee.
-
-If a current referee becomes a liquidity provider they are simply removed from their team and are no longer eligible for benefits from the referral program.
-
-If a current referrer becomes a liquidity provider, the following actions happen each referees `referral_reward_factor` is set to `0`. At the end of the each epoch, the network should check if the referrer has cancelled their liquidity provision. If they have set each referees `referral_reward_factor` as detailed in [setting benefit factors](#setting-benefit-factors) 
 
 ## Benefit mechanics
 
@@ -290,18 +281,6 @@ The network can then carry out the normal fee transfers using the updated fee am
 1. At the end of the epoch, the `team_epoch_volume` should be calculated by summing each team members `party_epoch_volume`.
 1. A party cannot contribute more than the current network parameter `referralProgram.maxPartyVolumePerEpoch` to their teams `team_epoch_volume`.
 1. A teams `team_running_volume` is calculated as the sum of all `team_epoch_volumes` over the last `epoch_window` epochs.
-
-#### Reviewing team members
-
-1. If a **referrer** de-stakes enough tokens to no longer fulfil the `referralProgram.minStakedVegaTokens` requirement, the following actions are taken:
-    - volume from any trades involving the party no longer contribute to `party_epoch_volume`
-    - the `referral_reward_factor` of all **referees** is set to `0`
-    - at the start of the next epoch, the network will evaluate if the **referrer** has re-staked enough tokens. 
-1. If a **referrer** becomes a liquidity provider, the following actions are taken.
-    - volume from any trades involving the party no longer contribute to `party_epoch_volume`
-    - the `referral_reward_factor` of all **referees** is set to `0`
-    - at the start of the next epoch, the network will evaluate if the **referrer** has cancelled their liquidity commitment. 
-1. If a **referee** becomes a liquidity provider, they are removed from the team.
 
 ### Benefit Mechanics
 
