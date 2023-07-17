@@ -21,6 +21,8 @@
 - **Must** show the settlement asset (<a name="6001-MARK-018" href="#6001-MARK-018">6001-MARK-018</a>)
   - **Must** be able to view full asset details (<a name="6001-MARK-019" href="#6001-MARK-019">6001-MARK-019</a>)
 - **Must** provide a way to copy the market ID (<a name="6001-MARK-020" href="#6001-MARK-020">6001-MARK-020</a>)
+- **Must** show when a closed market has a successor market (<a name="6001-MARK-068" href="#6001-MARK-068">6001-MARK-068</a>)
+- **Must** get to a successor market from a closed market i.e. there is a link (<a name="6001-MARK-069" href="#6001-MARK-069">6001-MARK-069</a>)
 
 - if there is no markets:
   - **Must** show No markets info (<a name="6001-MARK-034" href="#6001-MARK-034">6001-MARK-034</a>)
