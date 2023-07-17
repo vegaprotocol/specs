@@ -253,39 +253,46 @@ The Trades API should now also expose the following additional information for e
 
 1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
     - the `closing_timestamp` must be less than or equal to the proposals `enactment_time`.
-    - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`
-    - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`
-    - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`
+    - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
+    - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
+    - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
     - the `window_length` must be an integer strictly greater than zero.
 1. A referral program should be started the first epoch change after the `enactment_datetime` is reached.
 1. A referral program should be closed the first epoch change after the `closing_timestamp` is reached.
 1. If a referral program is already active and a proposal `enactment_datetime` is reached, the referral program is updated at the next epoch change.
-    - Propose program A with `enactment_timestamp` 1st Jan and `closing_timestamp` 31st Dec
-    - Proposal for program A accepted and begins first epoch after 1st Jan
-    - Propose program B with `enactment_timestamp` 1st June and `closing_timestamp` 31st Aug
-    - Proposal for program B accepted and overrides program A the first epoch after 1st June
+    - Propose program A with `enactment_timestamp` 1st Jan and `closing_timestamp` 31st Dec.
+    - Proposal for program A accepted and begins first epoch after 1st Jan.
+    - Propose program B with `enactment_timestamp` 1st June and `closing_timestamp` 31st Aug.
+    - Proposal for program B accepted and overrides program A the first epoch after 1st June.
     - Program is closed first epoch after 31st Aug, there should be no active proposals.
 
 ### Team Mechanics
 
-#### Creating / updating a team
+#### Creating / updating teams
 
 1. If a party **is not** currently a referrer, the party can **create** a team, by submitting a signed `CreateParty` transaction.
 1. If a party **is** currently a referrer, the party can **update** a team, by submitting a signed `CreateParty` transaction.
 1. If one or more of the following conditions are not met, any `CreateParty` transaction should be rejected.
-    - party must not currently be a **referee**
+    - party must not currently be a **referee**.
     - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
-    - party must not have an active liquidity provision
+    - party must not have an active liquidity provision.
+1. If a referrer removes sufficient stake to not meet the required tokens, the referrers team should not be eligible for the following referral program benefits:
+    - team member trades should not contribute to their teams volume.
+    - the referrer should not be rewarded for any referee taker fees.
+    - referees should not receive any discount on their taker fees.
+1. If the referrer of a team currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the next epoch. 
 
+1. If a party has created a team (i.e. is a referrer) any future liquidity provision transactions from the party should be rejected.
 
-#### Joining a team
+#### Joining / moving teams
 
 1. If a party **is not** currently a **referee**, the party can join a team by submitting a signed `JoinParty` transaction.
+1. If a party **is** currently a **referee**, the party can move team (at the start of the next epoch) by submitting a signed `JoinParty` transaction.
+1. If a party **is** currently a **referee** and submits multiple `JoinParty` transactions in an epoch, the latest valid `JoinParty` transaction will be applied.
 1. If one or more of the following conditions are not met,  any `JoinParty` transaction should be rejected.
-    - a party must not currently be a **referrer**
-    - a party must not currently be a **referee**
-    - party must not have an active liquidity provision
-
+    - a party must not currently be a **referrer**.
+    - party must not have an active liquidity provision.
+1. If a party has joined a team (i.e. is a referee) any future liquidity provision transactions from the party should be rejected.
 
 #### Team epoch and running volumes
 
@@ -306,18 +313,18 @@ The Trades API should now also expose the following additional information for e
 #### Applying benefit factors
 
 1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading.
-    - infrastructure fee 
-    - liquidity fee
-    - maker fee
+    - `infrastructure_fee_discount` 
+    - `liquidity_fee_discount`
+    - `maker_fee_discount`
 1. Referee discounts are correctly calculated and applied for each taker fee component when exiting an auction.
-    - infrastructure fee 
-    - liquidity fee
-    - maker fee
+    - `infrastructure_fee_discount` 
+    - `liquidity_fee_discount`
+    - `maker_fee_discount`
 1. Referrer rewards are correctly calculated and transferred for each taker fee component during continuous trading.
-    - infrastructure fee 
-    - liquidity fee
-    - maker fee
+    - `infrastructure_fee_reward` 
+    - `liquidity_fee_reward`
+    - `maker_fee_reward`
 1. Referrer rewards are correctly calculated and transferred for each taker fee component when exiting an auction.
-    - infrastructure fee 
-    - liquidity fee
-    - maker fee
+    - `infrastructure_fee_reward` 
+    - `liquidity_fee_reward`
+    - `maker_fee_reward`
