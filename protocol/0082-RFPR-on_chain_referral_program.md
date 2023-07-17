@@ -59,6 +59,7 @@ message UpdateReferralProgram{
 ```
 
 When submitting a referral program proposal through governance the following conditions apply:
+
 - a proposer cannot set an `closing_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
 - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
@@ -79,7 +80,9 @@ After a referral program [proposal](#governance-proposals) is validated and acce
 | `STATUS_ACTIVE`      | Yes              | Previously `STATUS_PENDING`                               | End of epoch after network reaches proposal `closing_timestamp`   |
 | `STATUS_CLOSED`      | No               | Previously `STATUS_ACTIVE`                                | New governance proposal submitted to the network                  |              
 
+
 ## Team Mechanics
+
 A team is comprised of a referrer and all their referees. There can only ever be one referrer per team but the number of referees is unlimited.
 
 ### Creating / updating a team
@@ -114,6 +117,7 @@ If a party which is already a referrer submits a `CreateTeam` transaction, their
 ### Joining a team
 
 To join a team the party must fulfil the following criteria:
+
 - party must not currently be a **referrer**
 - party must not currently be a **referee**
 - party must not have a liquidity provision in any of the following states:
@@ -122,6 +126,7 @@ To join a team the party must fulfil the following criteria:
     - `STATUS_UNDEPLOYED`
 
 To become a referee, a referee must submit a signed `JoinTeam` transaction with the following fields:
+
 - `id`: the id of the team they want to join (same as the referral code)
 
 ```protobuf
@@ -133,6 +138,7 @@ message JoinTeam{
 A user should also be able to do this process by approving a transaction from a dApp.
 
 ### Team epoch and running volumes
+
 Whilst a referral program is `STATUS_ACTIVE`, the network must track the cumulative volume of trades for each party in that epoch, call this value `party_epoch_volume`. Each time a trade is generated, the network should increment a parties `party_epoch_volume` by the quantum volume of the trade. Note, for a spot market, the quantum is the quantum of the asset used to express the price (i.e. the [quote_asset](./0080-SPOT-product_builtin_spot.md/#1-product-parameters)).
 
 ```pseudo
@@ -152,6 +158,7 @@ The network can then calculate the teams `team_running_volume` by summing a team
 ### Removing liquidity providers
 
 As stated in [creating a team](#creating--updating-a-team) and [joining a team](#joining-a-team), referrers and referees are restricted from having a liquidity provision in one of the following states:
+
 - `STATUS_ACTIVE`
 - `STATUS_PENDING`
 - `STATUS_UNDEPLOYED`.
