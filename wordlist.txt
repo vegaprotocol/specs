@@ -233,6 +233,7 @@ stakers
 statebridge
 stateful
 statesync
+structs
 SSD
 SSL
 suboptimal
