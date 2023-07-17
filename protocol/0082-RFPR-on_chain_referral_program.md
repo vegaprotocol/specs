@@ -225,6 +225,28 @@ The network can then carry out the normal fee transfers using the updated fee am
 - `TRANSFER_TYPE_LIQUIDITY_FEE_REWARD_PAY`
 - `TRANSFER_TYPE_INFRASTRUCTURE_FEE_REWARD_PAY`
 
+## APIs
+
+The Teams API should expose the following information:
+
+- a list of all **teams** (by `id`), their founding **referrer**, and any current **referees**
+- a list of all **teams** (by `id`) and the following metrics:
+    - current `team_running_volume` (value at the start of the epoch)
+    - current `referral_reward_factor` applied to referee taker fees
+    - current `referral_discount_factor` applied to referee taker fees
+    - any data required for additional reward metrics
+
+The Trades API should now also expose the following additional information for every trade:
+
+- Referral program rewards
+    - `infrastructure_fee_reward`
+    - `liquidity_fee_reward`
+    - `maker_fee_reward`
+- Referral program discounts
+    - `infrastructure_fee_discount`
+    - `liquidity_fee_discount`
+    - `maker_fee_discount`
+
 ## Acceptance Criteria
 
 ### Governance Proposals
@@ -299,9 +321,3 @@ The network can then carry out the normal fee transfers using the updated fee am
     - infrastructure fee 
     - liquidity fee
     - maker fee
-
-### APIs
-The following must be exposed via an API.
-1. A list of teams and there comprising **referrer** and **referees**
-1. Previous `team_epoch_volume` values and the current `team_running_volume` value for each team
-1. The `referral_reward` and `referral_discount` for every trade
