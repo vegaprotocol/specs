@@ -138,7 +138,7 @@ Select {
 ### New Network parameters
 
 1. Test min / max values / validations for any new network parameters that are added (<a name="0082-ETHD-017" href="#0082-ETHD-017">0082-ETHD-017</a>)
-2. Test the successful disabling / enabling of ethereum oracles when the new network parameter "ethereum.oracles.enabled" is set to false or true repsectively (<a name="0082-ETHD-018" href="#0082-ETHD-018">0082-ETHD-018</a>)
+2. Test the successful disabling / enabling of ethereum oracles when the new network parameter "ethereum.oracles.enabled" is set to false or true respectively (<a name="0082-ETHD-018" href="#0082-ETHD-018">0082-ETHD-018</a>)
 
 ### Negative Tests
 
