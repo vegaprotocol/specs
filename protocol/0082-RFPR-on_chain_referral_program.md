@@ -117,6 +117,10 @@ To create a team and generate a referral code, a party must fulfil the following
 - party must not currently be a **referrer**
 - party must not currently be a **referee**
 - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
+- party must not have a liquidity provision in any of the following states:
+    - `STATUS_ACTIVE`
+    - `STATUS_PENDING`
+    - `STATUS_UNDEPLOYED`
 
 This staking requirement is constant. If a referrer un-stakes enough tokens to fall below the requirement, they and their referees will no long be eligible for program benefits. If the referrer re-stakes enough tokens to fulfil the staking requirement, the team will become eligible for referral program benefits.
 
@@ -140,6 +144,10 @@ If a party which is already a referrer submits a `CreateTeam` transaction, their
 To join a team the party must fulfil the following criteria:
 - party must not currently be a **referrer**
 - party must not currently be a **referee**
+- party must not have a liquidity provision in any of the following states:
+    - `STATUS_ACTIVE`
+    - `STATUS_PENDING`
+    - `STATUS_UNDEPLOYED`
 
 To become a referee, a referee must submit a signed `JoinTeam` transaction with the following fields:
 - `id`: the id of the team they want to join (same as the referral code)
@@ -168,6 +176,19 @@ team_epoch_volume = sum[min(party_epoch_volume, referralProgram.maxPartyVolumePe
 After the values are calculated, the `team_epoch_volume` is stored by the network and each parties `party_epoch_volume` is reset to `0` ready for the next epoch.
 
 The network can then calculate the teams `team_running_volume` by summing a teams team_epoch_volume values over the last n epochs where n is the `window_length` set in the [governance proposal](#governance-proposals).
+
+### Removing liquidity providers
+
+As stated in [creating a team](#creating--updating-a-team) and [joining a team](#joining-a-team), referrers and referees are restricted from having a liquidity provision in one of the following states:
+- `STATUS_ACTIVE`
+- `STATUS_PENDING`
+- `STATUS_UNDEPLOYED`.
+
+This rule is constant and cannot be broken even after becoming a referrer of referee.
+
+If a current referee becomes a liquidity provider they are simply removed from their team and are no longer eligible for benefits from the referral program.
+
+If a current referrer becomes a liquidity provider, the following actions happen each referees `referral_reward_factor` is set to `0`. At the end of the each epoch, the network should check if the referrer has cancelled their liquidity provision. If they have set each referees `referral_reward_factor` as detailed in [setting benefit factors](#setting-benefit-factors) 
 
 ## Benefit mechanics
 
