@@ -235,4 +235,97 @@ The network can then carry out the normal fee transfers using the updated fee am
 
 ## Acceptance Criteria
 
-WIP
+### Governance Proposals
+
+1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
+    - the `closing_timestamp` must be less than or equal to the proposals `enactment_time`.
+    - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`
+    - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`
+    - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`
+    - the `window_length` must be an integer strictly greater than zero.
+1. A referral program should be started the first epoch change after the `enactment_datetime` is reached.
+1. A referral program should be closed the first epoch change after the `closing_timestamp` is reached.
+1. If a referral program is already active and a proposal `enactment_datetime` is reached, the referral program is updated at the next epoch change.
+    - Propose program A with `enactment_timestamp` 1st Jan and `closing_timestamp` 31st Dec
+    - Proposal for program A accepted and begins first epoch after 1st Jan
+    - Propose program B with `enactment_timestamp` 1st June and `closing_timestamp` 31st Aug
+    - Proposal for program B accepted and overrides program A the first epoch after 1st June
+    - Program is closed first epoch after 31st Aug, there should be no active proposals.
+
+### Team Mechanics
+
+#### Creating / updating a team
+
+1. If a party **is not** currently a referrer, the party can **create** a team, by submitting a signed `CreateParty` transaction.
+1. If a party **is** currently a referrer, the party can **update** a team, by submitting a signed `CreateParty` transaction.
+1. If one or more of the following conditions are not met, any `CreateParty` transaction should be rejected.
+    - party must not currently be a **referee**
+    - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
+    - party must not have a liquidity provision in any of the following states:
+        - `STATUS_ACTIVE`
+        - `STATUS_PENDING`
+        - `STATUS_UNDEPLOYED`
+
+#### Joining a team
+
+1. If a party **is not** currently a **referee**, the party can join a team by submitting a signed `JoinParty` transaction.
+1. If one or more of the following conditions are not met,  any `JoinParty` transaction should be rejected.
+    - a party must not currently be a **referrer**
+    - a party must not currently be a **referee**
+    - party must not have a liquidity provision in any of the following states:
+        - `STATUS_ACTIVE`
+        - `STATUS_PENDING`
+        - `STATUS_UNDEPLOYED`
+
+#### Team epoch and running volumes
+
+1. Each trade should increment both the maker and taker parties `party_epoch_volume` by the volume of the trade (expressed in quantum units) providing both parties are not members of the same team.
+1. At the end of the epoch, the `team_epoch_volume` should be calculated by summing each team members `party_epoch_volume`.
+1. A party cannot contribute more than the current network parameter `referralProgram.maxPartyVolumePerEpoch` to their teams `team_epoch_volume`.
+1. A teams `team_running_volume` is calculated as the sum of all `team_epoch_volumes` over the last `epoch_window` epochs.
+
+#### Reviewing team members
+
+1. If a **referrer** de-stakes enough tokens to no longer fulfil the `referralProgram.minStakedVegaTokens` requirement, the following actions are taken:
+    - volume from any trades involving the party no longer contribute to `party_epoch_volume`
+    - the `referral_reward_factor` of all **referees** is set to `0`
+    - at the start of the next epoch, the network will evaluate if the **referrer** has re-staked enough tokens. 
+1. If a **referrer** becomes a liquidity provider, the following actions are taken.
+    - volume from any trades involving the party no longer contribute to `party_epoch_volume`
+    - the `referral_reward_factor` of all **referees** is set to `0`
+    - at the start of the next epoch, the network will evaluate if the **referrer** has cancelled their liquidity commitment. 
+1. If a **referee** becomes a liquidity provider, they are removed from the team.
+
+### Benefit Mechanics
+
+#### Setting benefit factors
+
+1. At the start of an epoch, each referees `referral_reward_factor` and `referral_discount_factor` is reevaluated and fixed for the epoch.
+1. A referees `referral_reward_factor` and `referral_discount_factor` is set equal to the factors in the highest benefit tier their team qualifies for.
+1. If a referees team does not qualify for the lowest tier, their `referral_reward_factor` and `referral_discount_factor` are both set to `0`.
+1. If a referees `referral_reward_factor` or `referral_discount_factor` is set to `0` during an epoch, their factors are not reevaluated until the start of the next epoch.
+
+#### Applying benefit factors
+
+1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading.
+    - infrastructure fee 
+    - liquidity fee
+    - maker fee
+1. Referee discounts are correctly calculated and applied for each taker fee component when exiting an auction.
+    - infrastructure fee 
+    - liquidity fee
+    - maker fee
+1. Referrer rewards are correctly calculated and transferred for each taker fee component during continuous trading.
+    - infrastructure fee 
+    - liquidity fee
+    - maker fee
+1. Referrer rewards are correctly calculated and transferred for each taker fee component when exiting an auction.
+    - infrastructure fee 
+    - liquidity fee
+    - maker fee
+
+### APIs
+The following must be exposed via an API.
+1. A list of teams and there comprising **referrer** and **referees**
+1. Previous `team_epoch_volume` values and the current `team_running_volume` value for each team
+1. The `referral_reward` and `referral_discount` for every trade
