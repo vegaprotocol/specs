@@ -137,3 +137,43 @@ Price-monitoring auctions are still required and should be implemented following
 1. For a "buy" order to be considered valid during an auction, the party must have a sufficient amount of the quote_asset to cover the order size, as well as any potential fees that may be incurred due to the order trading in the auction.(<a name="0080-SPOT-018" href="#0080-SPOT-018">0080-SPOT-018</a>).
 1. If the fee rates change for any reason within an auction, the amount required to cover fees must be recalculated, and the necessary amount should be transferred to or released from the holding_account.(<a name="0080-SPOT-019" href="#0080-SPOT-019">0080-SPOT-019</a>).
 1. When exiting an auction, for any orders that are still open, the funds held in the parties' holding_account to cover potential fees can be released to their respective general_account, so that the remaining amount in the holding_account is only sufficient to cover the value of the order.(<a name="0080-SPOT-020" href="#0080-SPOT-020">0080-SPOT-020</a>).
+1. Spot Order Amend with increase in Size and party has sufficient cover. Given that Market is in Continuous Trading Mode. (<a name="0080-SPOT-0021" href="#0080-SPOT-0021">0080-SPOT-021</a>)
+   1. Top up Party1 general account by 10,000 ETH (units), Party2 general account by 15 BTC (units) and perform following steps and expected conditions
+   2. Submit a buy order as Party1@ETC/BTC@Buy@Size5@Price500.
+   3. After order submission, Holding Account is  2,500 ETH (or units).
+   4. Amend the order as  Party1@Buy@Size15@Price500.
+   5. After amend, the Holding Account balance is 2,500 ETH(units)
+   6. Submit Sell order as Party2@Sell@BTC/ETH@Size15@Price500
+   7. Trade is matched
+   8. Party1 balance 2,500 and Party2 balance 0 BTC
+1. Amend by Decreasing the Size in Continuous Trading Mode and party has sufficient cover, given that BTC/ETH Spot Market is in Continuous Trading Mode and maker fee 0.004 and infra fee 0.001  (<a name="0080-SPOT-022" href="#0080-SPOT-022">0080-SPOT-022</a>)
+   1. Party1 has general account balance of 1000 BTC (units) and 9000 ETH(units)
+   2. Party2 has general account balance of 100,000 ETH (units)
+   3. Submit sell order as Party1@ETH/BTC@100BTC@1000, holding balance after submit is 100 units (BTC)
+   4. Submit Buy order as Party2@ETH/BTC@100BTC@800 , holding balance after submit is (80000)
+   5. Amend Buy order as Party2@ETH/BTC@70BTC@1000  
+   6. Party2 should have general account balance of 29510 for asset "ETH" and 70 for asset "BTC" (maker fee 345 and infra fee 145 )
+   7. Party1 should have general account balance of 79450 for asset "ETH" and 900 for asset "BTC"
+1. Perform Order Amend in Opening Auction Trading Mode (<a name="0080-SPOT-023" href="#0080-SPOT-023">0080-SPOT-023</a>)
+1. Perform Order Amend in Price Monitoring Auction Mode (<a name="0080-SPOT-024" href="#0080-SPOT-024">0080-SPOT-024</a>)
+1. No fees paid when orders are amended in Opening Auction Mode (<a name="0080-SPOT-025" href="#0080-SPOT-025">0080-SPOT-025</a>)
+1. Fee Calculation in Continuous Trading Mode and Buyer is Aggressor (<a name="0080-SPOT-026" href="#0080-SPOT-026">0080-SPOT-026</a>)
+   1. Set default as Infra Fee-10%, Maker Fee 20%
+   2. Party1 submits order SELL@BTC/ETH@Volume 5 @Price 100
+   3. Party2 submits order BUY@BTC/ETH@Volume 5@ Price 100
+   4. Party2 general account balance of ETH is 350  ( infra fee 50, maker fee 100 )
+   5. Party1 general account balance of ETH is 600  ( infra fee 50, gets maker fee 100)
+   6. Infra Fee is 50
+1. Fee calculation in Continuous Trading Mode and Seller is Aggressor (<a name="0080-SPOT-027" href="#0080-SPOT-027">0080-SPOT-027</a>)
+   1. Party1  - BID@BTC/ETH@Volume 5@ Price 100  and account balance as  1000 ETH
+   2. Party2  - ASK@BTC/ETH@Volume 5@ Price 100  and account balance as 0 ETH
+   3. Infra fee - 10% and Maker fee - 20%
+   4. Party 1 - Buyer Account Balance  - 500 + 100 (maker fee ) = 600
+   5. Party2 - Seller Account Balance - (500- 100 (maker fee ) - infra free 50 ) = 350
+1. Price monitoring auction - No maker fee during the auction mode and while trading prices move beyond the price monitoring bounds) (<a name="0080-SPOT-028" href="#0080-SPOT-028">0080-SPOT-028</a>)
+   1. Party1 submits order ASK@BTC/ETH@Volume 5@ Price 100  having account balance of 0 ETH
+   2. Party2 submits order BID@BTC/ETH@Volume 5@ Price 100  having account balance of  1000 ETH
+   3. Infra fee - 10%  (each pay 5% of the fee )
+   4. Party 1   - account balance =  500 - 25 = 475 ETH
+   5. Party 2   - account balance =  500 - 25 = 475 (totally paid 525) ETH
+1. Spot governance proposal fails with asset error, when `quote_asset` and `base_asset` has same assets. Alternatively, it signifies that `quote_asset` is `base_asset` and `base_asset` is also a `base_asset`.(<a name="0080-SPOT-029" href="#0080-SPOT-029">0080-SPOT-029</a>)
