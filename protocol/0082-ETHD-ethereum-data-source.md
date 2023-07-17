@@ -110,8 +110,8 @@ Select {
 
 ### External Oracles - Creation
 
-1. Create ethereum oracles based on calling a read method of a smart contract (Phase 2 - oracle based on listening for events) (<a name="0082-ETHD-001" href="#0082-ETHD-001">0082-ETHD-001</a>)
-2. All current governance rules that apply to propose / submit / vote on a proposal should be applicable for the ethereum oracle data source creation / amendment (<a name="0082-ETHD-002" href="#0082-ETHD-002">0082-ETHD-002</a>)
+1. Using the existing ways to create or update a market via governance proposals, define data sources for settlement and termination as the result of calling a read method of a smart contract on ethereum network. (Phase 2 of this step would be defining an oracle that is based on listening for events on ethereum network) (<a name="0082-ETHD-001" href="#0082-ETHD-001">0082-ETHD-001</a>)
+2. All current governance rules that apply to propose / submit / vote on a proposal should be applicable for the ethereum oracle data source creation / amendment  (<a name="0082-ETHD-002" href="#0082-ETHD-002">0082-ETHD-002</a>)
 3. Create more than spam.protection.max.proposals oracle data source proposals in an epoch - proposal rejected with error message (<a name="0082-ETHD-003" href="#0082-ETHD-003">0082-ETHD-003</a>)
 4. Create ethereum oracles based on calling a read method of a smart contract by supplying incorrect ABI (Phase 2 - oracle based on listening for events) (<a name="0082-ETHD-004" href="#0082-ETHD-004">0082-ETHD-004</a>)
 
@@ -123,8 +123,8 @@ Select {
 
 ### External Oracles - Deletions
 
-1. Ability to delete a data source if and only if the data source is NOT used by any active markets (<a name="0082-ETHD-008" href="#0082-ETHD-008">0082-ETHD-008</a>)
-2. Should NOT be able to delete a data source if its being actively used by a market (<a name="0082-ETHD-009" href="#0082-ETHD-009">0082-ETHD-009</a>)
+1. Aligned with the existing logic, when no market listens to a data source, whatever that source is, it is automatically disregarded / deleted from the engine. Same applies for ethereum oracles (<a name="0082-ETHD-008" href="#0082-ETHD-008">0082-ETHD-008</a>)
+2. When ethereum oracle is referenced / used by an existing market, it should not be deleted (<a name="0082-ETHD-009" href="#0082-ETHD-009">0082-ETHD-009</a>)
 3. If a single data source is used by multiple markets, then should NOT be able to delete the data source even if one of those markets is actively using the data source (<a name="0082-ETHD-010" href="#0082-ETHD-010">0082-ETHD-010</a>)
 
 ### External Oracles - Validations
@@ -132,14 +132,13 @@ Select {
 1. Validate if the smart contract address is valid (<a name="0082-ETHD-011" href="#0082-ETHD-011">0082-ETHD-011</a>)
 2. Validate if the data elements of the oracle data source is valid - e.g. source for a value that's returned as boolean but have a filter / condition for greater than 0 (<a name="0082-ETHD-012" href="#0082-ETHD-012">0082-ETHD-012</a>)
 3. Validations for min / max frequency of listening for events / read a smart contract (<a name="0082-ETHD-013" href="#0082-ETHD-013">0082-ETHD-013</a>)
-4. Create a new market with an inactive external oracle data source, system should throw an error (<a name="0082-ETHD-014" href="#0082-ETHD-014">0082-ETHD-014</a>)
-5. Validations to be applied - need to be expanded (<a name="0082-ETHD-015" href="#0082-ETHD-015">0082-ETHD-015</a>)
-6. Any mismatch between expected fields and received fields should emit an error via the TX RESULT event (<a name="0082-ETHD-016" href="#0082-ETHD-016">0082-ETHD-016</a>)
+4. When a proposal that uses ethereum oracles, defines incorrect data (contract address, ABI) the system should throw an error and the proposal should not pass validation (<a name="0082-ETHD-014" href="#0082-ETHD-014">0082-ETHD-014</a>)
+5. Any mismatch between expected fields and received fields should emit an error via the TX RESULT event (<a name="0082-ETHD-016" href="#0082-ETHD-016">0082-ETHD-016</a>)
 
 ### New Network parameters
 
 1. Test min / max values / validations for any new network parameters that are added (<a name="0082-ETHD-017" href="#0082-ETHD-017">0082-ETHD-017</a>)
-2. Test the impact / behaviour of the system, after the changes to the new network parameters are enacted (<a name="0082-ETHD-018" href="#0082-ETHD-018">0082-ETHD-018</a>)
+2. Test the successful disabling / enabling of ethereum oracles when the new network parameter "ethereum.oracles.enabled" is set to false or true repsectively (<a name="0082-ETHD-018" href="#0082-ETHD-018">0082-ETHD-018</a>)
 
 ### Negative Tests
 
@@ -147,7 +146,7 @@ Select {
 2. Data source returns incorrect data - raise an error via the TX RESULT event. The data source is expected to send a positive price for an asset BUT sends a negative value (<a name="0082-ETHD-020" href="#0082-ETHD-020">0082-ETHD-020</a>)
 3. Phase 2 - Set up a data source for listening to a particular event sent at a frequency of 2 secs. The oracle data source stops emitting events after emitting a couple of events. Raise and error via the TX RESULT event  if 5 consecutive events are missed - need to ratify / expand on this (<a name="0082-ETHD-021" href="#0082-ETHD-021">0082-ETHD-021</a>)
 4. Phase 2 - Create an oracle source listening for a particular event and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error (<a name="0082-ETHD-022" href="#0082-ETHD-022">0082-ETHD-022</a>)
-5. Create an oracle source that calls a read method of a smart contract and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error (<a name="0082-ETHD-023" href="#0082-ETHD-023">0082-ETHD-023</a>)
+5. Create an oracle that calls a read method of a smart contract and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error (<a name="0082-ETHD-023" href="#0082-ETHD-023">0082-ETHD-023</a>)
 6. Will need some tests around consensus, will require setting up a network and having some nodes receive different values for the same oracle data point and testing that the oracle data point is/is not published depending on voting (<a name="0082-ETHD-024" href="#0082-ETHD-024">0082-ETHD-024</a>)
 
 ### API
@@ -163,13 +162,12 @@ Select {
 4. If an oracle data source is inactive - then any events / any data received from that oracle data source is NOT processed (<a name="0082-ETHD-030" href="#0082-ETHD-030">0082-ETHD-030</a>)
 5. SPAM rules if any defined should be tested for (<a name="0082-ETHD-031" href="#0082-ETHD-031">0082-ETHD-031</a>)
 6. NOT all data sourced should be stored on chain - invalid / incorrect data is filtered out and is NOT processed / stored on chain - understand what the rules are and design the AC's / test accordingly (<a name="0082-ETHD-032" href="#0082-ETHD-032">0082-ETHD-032</a>)
-7. Any active data sources that aren't used by any markets should not source data until they are being actively used by a market (<a name="0082-ETHD-033" href="#0082-ETHD-033">0082-ETHD-033</a>)
 
 ### Usage
 
-1. It should be possible to use only ethereum oracle data sources or internal data sources or use a combination of both types of oracles (<a name="0082-ETHD-034" href="#0082-ETHD-034">0082-ETHD-034</a>)
+1. It should be possible to use only ethereum oracle data sources in a market proposal, or create any combination with any of the other types of currently existing external or internal data sources (<a name="0082-ETHD-034" href="#0082-ETHD-034">0082-ETHD-034</a>)
 2. Create a market to use an internal data source to terminate a market and an ethereum oracle to settle the market (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
-3. Create a market to use an external data source to terminate a market and an internal / manual oracle to settle the market (<a name="0082-ETHD-036" href="#0082-ETHD-036">0082-ETHD-036</a>)
+3. Create a market to use an external data source to terminate a market and a manual oracle to settle the market (<a name="0082-ETHD-036" href="#0082-ETHD-036">0082-ETHD-036</a>)
 4. Data sourcing should be completely decoupled from data filtering (<a name="0082-ETHD-037" href="#0082-ETHD-037">0082-ETHD-037</a>)
 
 ### Checkpoints
