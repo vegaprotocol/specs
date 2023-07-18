@@ -16,7 +16,7 @@ Unlike traditional futures contracts, the perpetual futures never expire. Withou
 1. `margin_funding_factor`: a parameter controlling how much the upcoming funding payment liability contributes to party's margin.
 1. `interest_rate`: a continuously compounded interest rate used in funding rate calculation.
 1. `clamp_lower_bound`: a lower bound for the clamp function used as part of the funding rate calculation.
-1. `clamp_upper_bound`: an lower bound for the clamp function used as part of the funding rate calculation.
+1. `clamp_upper_bound`: an upper bound for the clamp function used as part of the funding rate calculation.
 
 Validation:
 
