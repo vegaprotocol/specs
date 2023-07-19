@@ -282,10 +282,12 @@ The below table shows the allowable combinations of source and destination accou
 | Network treasury | Party general account(s) | Yes |
 | Network treasury | Party other account types | No |
 | Network treasury | Market insurance pool account | Yes |
+| Network treasury | Reward account | Yes |
 | Network treasury | Any other account | No |
 | Market insurance pool account | Party account(s) | Yes  |
 | Market insurance pool account | Network treasury | Yes  |
 | Market insurance pool account | Market insurance pool account | Yes |
+| Market insurance pool account | Reward account | Yes |
 | Market insurance pool account | Any other account | No |
 | Any other account | Any | No |
 
@@ -627,7 +629,9 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### One Off Delivery transfers
 
 If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately. (<a name="0028-GOVE-129" href="#0028-GOVE-129">0028-GOVE-129</a>)
-
+It is possible to submit a one off governance transfer proposal from network treasury into any reward account (including staking rewards). (<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
+It is possible to submit a one off governance transfer proposal from market's insurance pool into any reward account (including staking rewards). (<a name="0028-GOVE-141" href="#0028-GOVE-141">0028-GOVE-141</a>)
+It is NOT possible to submit a governance proposal where the source account is the reward account. (<a name="0028-GOVE-144" href="#0028-GOVE-144">0028-GOVE-144</a>)
 
 ##### Recurring governance initiated transfers
 
@@ -637,6 +641,8 @@ If the proposal is one off it can define a time for delivery. Whenever the block
 
 - When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
 
+- It is possible to submit a recurring governance transfer proposal from network treasury into any reward account (including staking rewards). (<a name="0028-GOVE-142" href="#0028-GOVE-142">0028-GOVE-142</a>)
+- It is possible to submit a recurring governance transfer proposal from market's insurance pool into any reward account (including staking rewards). (<a name="0028-GOVE-143" href="#0028-GOVE-143">0028-GOVE-143</a>)
 
 ##### Cancelling governance initiated transfers
 

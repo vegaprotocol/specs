@@ -72,7 +72,7 @@ Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi
 
 See [spot market spec](0080-SPOT-product_builtin_spot.md).3600s
 
-The target stake of a market is calculated as a fraction of the maximum `total_stake` over a rolling time window. The fraction is controlled by the parameter `consensus_factor` and the length of the window is controlled by the parameter `time_window`.
+The target stake of a market is calculated as a fraction of the maximum `total_stake` over a rolling time window. The fraction is controlled by the parameter `scaling_factor` and the length of the window is controlled by the parameter `time_window`.
 
 ```pseudo
 e.g.

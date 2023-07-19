@@ -13,12 +13,18 @@ Unlike traditional futures contracts, the perpetual futures never expire. Withou
 1. `settlement_asset (Settlement Asset)`: this is used to specify the single asset that an instrument using this product settles in.
 1. `settlement_schedule (Data Source: datetime)`: this data is used to indicate when the next periodic settlement should be carried out.
 1. `settlement_data (Data Source: number)`: this data is used by the product to calculate periodic settlement cashflows.
-1. `margin_funding_factor`: a parameter in the range $[0, 1]$ controlling how much the upcoming funding payment liability contributes to party's margin.
+1. `margin_funding_factor`: a parameter controlling how much the upcoming funding payment liability contributes to party's margin.
 1. `interest_rate`: a continuously compounded interest rate used in funding rate calculation.
 1. `clamp_lower_bound`: a lower bound for the clamp function used as part of the funding rate calculation.
-1. `clamp_upper_bound`: an lower bound for the clamp function used as part of the funding rate calculation.
+1. `clamp_upper_bound`: an upper bound for the clamp function used as part of the funding rate calculation.
 
-Validation: `clamp_upper_bound` >= `clamp_lower_bound`.
+Validation:
+
+- `margin_funding_factor` in range `[0,1]`,
+- `interest_rate` in range `[-1,1]`,
+- `clamp_lower_bound` in range `[-1,1]`,
+- `clamp_upper_bound` in range `[-1,1]`,
+- `clamp_upper_bound` >= `clamp_lower_bound`.
 
 ### Example specification
 
