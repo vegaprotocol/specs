@@ -13,10 +13,10 @@ When trading Spot products, parties can only use assets they own - there is no l
 
 1. `limits.markets.proposeSpotEnabled`: parameter defines whether markets using Spot products are enabled on the network.
 
-## 3. Liquidity Monitoring parameters
+## 3. Target Stake parameters
 
 1. `time_window`: length of rolling window (in seconds) over which the maximum `total_stake` is measured.
-1. `target_stake_factor`: fraction of `total_stake` to be selected as the `target_stake`.
+1. `scaling_factor`: fraction of `total_stake` to be selected as the `target_stake`.
 
 ## 4. Market parameters
 
