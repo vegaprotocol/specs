@@ -106,8 +106,7 @@ Auction period ends when any of the following occur:
 
 ### Cancelled
 
-A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period,
-and the trading terminated data source input rings, see [data sourcing](./0045-DSRC-data_sourcing.md).
+A market becomes Cancelled when a Market Proposal is successful and conditions are not met to transition the Market to the Active state during the Pending period, and the trading terminated data source input is triggered, see [data sourcing](./0045-DSRC-data_sourcing.md).
 When a market transitions to a cancelled state all orders should be cancelled and collateral returned to respective parties general account for the relevant asset, all LP commitments should be cancelled and their bond returned to the general account for the relevant asset. After `market.liquidity.successorLaunchWindowLength` has elapsed since cancellation any insurance pool balance should be transferred into the network treasury account for that asset.
 
 Once "cancelled" there must be no open positions tracked by the protocol for the market and any open positions must have been closed including returning all margin and other related collateral if necessary and also notifying downstream event consumers that the positions are closed. Specific position related actions may be unnecessary if the cancelled state is being entered from a state in which there cannot possibly have been any open positions.
@@ -245,6 +244,8 @@ After `market.liquidity.successorLaunchWindowLength` has elapsed since the settl
 
 ### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)
 
+also for for product spot: (<a name="0043-MKTL-005" href="#0043-MKTL-005">0043-MKTL-005</a>)
+
 1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
 Market state is `proposed`.
 1. Parties vote against the market proposal.
@@ -285,15 +286,37 @@ Margin account balances are transferred to the general account.
 The market state is `settled`.
 After `market.liquidity.successorLaunchWindowLength` has passed since market settlement, any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 
+### Lifecycle happy path in Spot market (<a name="0043-MKTL-006" href="#0043-MKTL-006">0043-MKTL-006</a>)
 
-### Market never leaves opening auction, trading terminated trigger rings, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
+1. Market `m1` is proposed. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
+Market state is `proposed`.
+The LP bond of the party that proposed the market is transferred from general to bond account.
+1. Market `m1` is accepted and enters opening auction.
+Market state is `pending`.
+1. Parties place orders and at least one trade happens in continuous trading mode.
+Market state is `active`.
+1. Parties place orders so that a [price monitoring auction is triggered](0032-PRIM-price_monitoring.md).
+Market state is `suspended`.
+1. Price monitoring auction ends and the market is in continuous trading again.
+The market state is `active`.
+1. When a new governance proposal for "closing" the Spot market, then market state is `trading terminated`.
+
+### Market never leaves opening auction, trading terminated triggered, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
 
 1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
-1. Trading terminated data source rings before the market leaves the opening auction (so market never left Pending state so far).
+1. Trading terminated data source triggers before the market leaves the opening auction (so market never left Pending state so far).
 1. All orders should be cancelled and collateral returned to respective parties general account for the relevant asset.
 1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
 1. After `market.liquidity.successorLaunchWindowLength` has elapsed since market cancellation, any insurance pool balance should be [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 1. All data sources that are only referenced by that market are unregistered.
+1. The market state is set to cancelled.
+
+### Market (Spot) never leaves opening auction, market cancelled by governance proposal(<a name="0043-MKTL-007" href="#0043-MKTL-007">0043-MKTL-007</a>)
+
+1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
+1. Market cancelled before the market leaves the opening auction (so market never left Pending state so far).
+1. All orders should be cancelled and holdings returned to respective parties general account for the relevant asset.
+1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
 1. The market state is set to cancelled.
 
 ### Market gets closed via a governance proposal (<a name="0043-MKTL-004" href="#0043-MKTL-004">0043-MKTL-004</a>)
@@ -306,15 +329,24 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 1. All the funds from market specific accounts get released to appropriate accounts; the insurance pool perhaps after the delay to allow for transfer into a successor market.
 1. Market gets deleted.
 
+### Market (Spot) gets closed via a governance proposal (<a name="0043-MKTL-008" href="#0043-MKTL-008">0043-MKTL-008</a>)
+
+1. Once the governance proposal to close the market gets enacted any auction that the market may be in gets uncrossed and trades get generated.
+1. All the other orders are cancelled and no further trades get generated.
+1. Any new orders get rejected.
+1. Liquidity commitments cannot be modified or cancelled.
+1. All the funds from market specific accounts get released to appropriate accounts.
+1. Market gets deleted.
+
 ### Market gets suspended via a governance proposal
 
 1. Once the governance proposal to suspend the market gets enacted the market gets immediately put into auction mode, if market was already in auction mode it remains in it.
 1. No cashflows are exchanged when market has been suspended via a governance proposal.
 1. Parties cannot modify their open interest
-1. The prerequisite for a market to go out of auction mode is now a successful enactment of a governance proposal to unsuspend that market.
+1. The prerequisite for a market to go out of auction mode is now a successful enactment of a governance proposal to resume that market.
 
-### Market gets unsuspended via a governance proposal
+### Market gets resumed via a governance proposal
 
-1. Once the governance proposal to unsuspend the market gets enacted the market can now leave the auction.
+1. Once the governance proposal to resumed the market gets enacted the market can now leave the auction.
 1. If no other auction triggers are active the market goes back into its default trading mode immediately (auction gets uncrossed and trades get generated).
 1. If other auction triggers are active the market remains in auction mode until these allow it to leave it.

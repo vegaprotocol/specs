@@ -211,7 +211,7 @@ Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-00
 Nomination takes effect at epoch changeover:
 
 - During epoch 1, `party 1` nominates any valid amount to `validator 1`
-  - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>) (note: this can be tested by trying to delegate again, which will be rejected)
+  - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)(note: this can be tested by trying to delegate again, which will be rejected)
   - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
   - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
 

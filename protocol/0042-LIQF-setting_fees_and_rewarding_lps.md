@@ -203,13 +203,13 @@ The liquidity score should always be rounded to 10 decimal places to prevent spu
 
 ### Distributing fees into LP-per-market fee account
 
-On every trade, liquidity fee should be collected immediately into the market LP fee account.
+On every trade, liquidity fee should be collected immediately into the market's aggregate LP fee account.
 The account is under control of the network and funds from this account will be transferred to the owning LP party according to the mechanism below.
 
-A network parameter `market.liquidity.providers.fee.calculationTimeStep` will control how often fees are distributed from the market LP fee account.
+A network parameter `market.liquidity.providers.fee.calculationTimeStep` will control how often fees are distributed from the market's aggregate LP fee account.
 Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.calculationTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
 
-The liquidity fees are transferred from the market LP fee account into the LP-per-market fee account, pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
+The liquidity fees are transferred from the market's aggregate LP fee account into the LP-per-market fee account, pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
 
 The LP parties don't control the LP-per-market fee account; the fees from there are then transferred to the LPs' general account at the end epoch as described below.
 
@@ -223,28 +223,20 @@ During the epoch, the amount of time in nanoseconds (of Vega time) that each LP 
 
   - If the LP is meeting their commitment, store the Vega time of the start of the epoch as the time the LP began meeting their commitment, otherwise store `nothing`.
 
-- At the start of each block generate a pseudorandom integer `k` between `1..N` (inclusive of `1` and `N`) where `N` is the number of transactions in the block (note: transactions not orders, a batch is one transaction for this purpose).
-Use a suitable deterministic seed to minimise the probability of an LP gaming `k` or being able to target transactions around (directly before or after) the point `k`.
-For example, the seed might combine the hash of all transactions in the block itself with the number of transactions `N`.
-Using only information from the prior block as the seed may allow exploits based on pre-generation of `k` and must be avoided.
+- At start of block, for LP `i`, first reset the running minimum valid volume an LP is providing and across the block and then keep updating the minimum volume that the LP is providing that is [within the valid range](./0044-LIME-lp_mechanics.md) (section "Meeting the committed volume of notional").
+- Note that the volume check must only happen _after_ iceberg orders, that need refreshing as a result of a transaction are refreshed. This means that while an iceberg order has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`.
 
-- In each block, immediately after processing transaction `k`:
-
-  - Note that this happens _after_ iceberg orders, that need refreshing as a result of transaction `k` are refreshed.
-    This means that while an iceberg order has sufficient `remaining` quantity, it will **never** be considered to be contributing less than its `minimum peak size`.
-
-  - If LP has started meeting their [committed volume of notional](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
-
+- At the end of each block:
+  - If an LP has started meeting their [committed volume of notional based on the minimum volume recorded during the block](./0044-LIME-lp_mechanics.md) (section "Calculating liquidity from commitment") after previously not doing so (i.e. `nothing` is stored as the time the LP began meeting their commitment):
     - Store the current Vega time attached to the block being processed as the time the LP began meeting their commitment.
 
-  - If LP has stopped meeting their committed volume of notional after previously doing so:
-
+  - If an LP has stopped meeting their committed volume of notional after previously doing so:
     - Add the difference in nanoseconds between the current Vega time attached to the block being processed and the time the LP began meeting their commitment (stored in the step above) to `s_i`.
-
     - Store `nothing` as the time the LP began meeting their commitment, to signify the LP not meeting their commitment.
 
 - At the end of the epoch, calculate the actual observed epoch length `observed_epoch_length` = the difference in nanoseconds between the Vega time at the start of the epoch and the Vega time at the end of the epoch.
 
+Note that because vega time won't be progressing inside a block the above mechanism should ensure that `s_i` gets incremented only if the LP was meeting their commitment at every point this was checked within the block.
 
 #### Calculating the SLA performance penalty for a single epoch
 
@@ -295,8 +287,7 @@ $$
 
 For each LP transfer $(1-p_i^n) \times \text{ amount in LP-per-market fee account}$ to their general account with a transfer type that marks this as the "LP net liquidity fee distribution".
 
-Transfer all unpaid-out rewards left in LP-per-market fee accounts into a temporary (one per market) bonus distribution account.
-Record its balance to be $B$.
+Transfer the remaining amount from each LP-per-market fee account back into the market's aggregate LP fee account. Record the total inflow as a result of that operation as $B$.
 Let $b_i := (1-p_i^n) \times w_i$ and renormalise $b_i$s so that they sum up to $1$ i.e.
 
 $$
@@ -304,8 +295,6 @@ b_i \leftarrow \frac{b_i}{\sum_k b_k}\,.
 $$
 
 Each LP further gets a performance bonus: $b_i \times B$ with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
-
-Note that after this process completes the balance of the temporary (one per market) bonus distribution account described above **must be zero** and the account may be destroyed (and recreated again when needed).
 
 There is an example [google sheet for this step](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY/edit#gid=0); once we're sure we're happy let's transfer this to a fixed example.
 
@@ -396,7 +385,7 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 
 ### SLA Performance bonus transfers
 
-- The balance of the per-market liquidity fee bonus distribution account should always be zero after bonus distribution is completed (<a name="0042-LIQF-043" href="#0042-LIQF-043">0042-LIQF-043</a>)
-- With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should be transferred to the bonus account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
+- The net inflow and outflow into and out of the market's aggregate LP fee account should be zero as a result of penalty collection and bonus distribution. (<a name="0042-LIQF-043" href="#0042-LIQF-043">0042-LIQF-043</a>)
+- With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should be transferred back into market's aggregate LP fee account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
 - With two liquidity providers, one with an effective penalty rate of `1` and earned fees of `n`, and the other with an effective rate of `0` and earned fees of `m`, the entirety of `n` should be transferred to the second liquidity provider as a bonus payment (<a name="0042-LIQF-045" href="#0042-LIQF-045">0042-LIQF-045</a>)
 - With only one liquidity provider, with an effective penalty rate of `0.5`, `50%` of their initially earned fees will be taken initially but will be entirely paid back to them as a bonus payment (<a name="0042-LIQF-046" href="#0042-LIQF-046">0042-LIQF-046</a>)
