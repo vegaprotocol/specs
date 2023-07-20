@@ -187,16 +187,26 @@ After submitting orders I'll want to [manage orders](7003-MORD-manage_orders.md)
 
 _____
 
-# Typical order scenarios to design/test for
+# Iceberg Orders
+- **Must** Once Iceberg checkbox has been selected. Peak size and Minimum display size inputs will appear (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
 
-Market in continuous trading:
-- Limit order, Long, GTC, with a price that is lower than the current price
-- Limit order, Short, GFN, that crosses the book but only gets a partial fill when order is processed
-- Market order, IOC, that increases open volume (aka size of position)
-- a limit order GFA when market is in Auction
-- an limit that reduces exposure from something to 0
-- a limit order, FOK, that squares and reverses e.g. I'm long 10, I short 20 to end short 10
+- **Must** Type will show (Iceberg) for iceberg orders (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
 
-Market in auction:
-- Attempt Market order in Auction mode: should warn order is invalid
-- Attempt limit order GFN when market is normally Continuous (but currently in auction), should warn that GFN will not work
+## Tooltips
+- **Must** display a tooltip when "Iceberg" is hovered over (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
+
+- **Must** display a tooltip when "Peak Size" is hovered over (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
+
+- **Must** display a tooltip when "Minimum Size" is hovered over (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
+
+## Validations
+- **Must** display error "You need to provide a peak size" if place order is selected when peak size has not been provided (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
+
+- **Must** display error "You need to provide a minimum visible size" if place order is selected when minimum visible size has not been provided (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
+
+- **Must** display error "Peak size cannot be greater than the size({Size})" if place order is selected when peak size is greater than size (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
+
+- **Must** display error "Minimum visible size cannot be greater than the peak size({Size})" if place order is selected when minimum visible size is greater than size (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
+
+- **Must** display error "Minimum visible size cannot be lower than 'x' if place order is selected when minimum visible size is lower than 'x' (<a name="7002-SORD-053" href="#7002-SORD-053">7002-SORD-053</a>)
+
