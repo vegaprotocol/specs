@@ -112,7 +112,7 @@ A market which has been settled, and beyond the successor expiry window, is not 
 
 A market which has been settled, and already has a child which has succeeded it, is retained in a checkpoint, and can be found after restart. Both child and parent retain child/parent links in the API(<a name="0081-SUCM-031" href="#0081-SUCM-031">0081-SUCM-031</a>)
 
-For a parent/child (explicitly: the child has left opening auction), after a checkpoint restart, parent/child enter opening auction again. It is not possible to propose a new market which attempts to succeed that parent.(<a name="0081-SUCM-032" href="#0081-SUCM-032">0081-SUCM-032</a>)
+For a parent and child (explicitly: the child has left opening auction), after a checkpoint restart, parent and child both enter opening auction again. It is not possible to propose a new market which attempts to succeed that parent.(<a name="0081-SUCM-032" href="#0081-SUCM-032">0081-SUCM-032</a>)
 
 After snapshot restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-017" href="#0081-SUCM-017">0081-SUCM-017</a>)
 
