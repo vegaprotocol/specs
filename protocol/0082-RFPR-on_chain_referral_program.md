@@ -131,7 +131,7 @@ message JoinTeam{
 }
 ```
 
-If a party is already a referee, and submits another `JoinTeam` transaction, their membership will be transferred to the new team at the end of the epoch (after any [team disbandments](#disbanding-a-team) are enacted). Note, if the referee has submitted multiple transactions in an epoch, the referee will be transferred using the latest valid transaction.
+If a party is already a referee, and submits another `JoinTeam` transaction, their membership will be transferred to the new team at the end start of the next epoch. Note, if the referee has submitted multiple transactions in an epoch, the referee will be transferred using the latest valid transaction.
 
 ## Disbanding a team
 
@@ -167,7 +167,7 @@ The network can then calculate the teams `team_running_volume` by summing a team
 
 ### Setting benefit factors
 
-Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee. This is done by identifying a referees team and identifying the teams current benefit tier. A teams benefit tier is defined as the highest tier for which their `team_running_volume` is greater or equal to the tiers `minimum_running_volume`. If a party does not qualify for any tier, both values are set to `0`.
+Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch (after pending `JoinTeam` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee. This is done by identifying a referees team and identifying the teams current benefit tier. A teams benefit tier is defined as the highest tier for which their `team_running_volume` is greater or equal to the tiers `minimum_running_volume`. If a party does not qualify for any tier, both values are set to `0`.
 
 ```pseudo
 Given:
@@ -280,6 +280,7 @@ The Trades API should now also expose the following additional information for e
 1. If a party **is not** currently a **referrer**, they should be able to create a new team after disbanding a team, their `Create` transaction should be accepted (providing it is valid).
 1. If a party **is not** currently a **referee**, they should not be able to join a disbanded team, their `JoinTeam` transaction should be rejected.
 1. If a party **is** currently a **referee**, they should not be able to move to a disbanded team, their `JoinTeam` transaction should be rejected.
+
 #### Team epoch and running volumes
 
 1. Each trade should increment both the maker and taker parties `party_epoch_volume` by the volume of the trade (expressed in quantum units) providing both parties are not members of the same team.
