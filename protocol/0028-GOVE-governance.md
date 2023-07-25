@@ -528,7 +528,7 @@ APIs should also exist for clients to:
 - Enacting a market closure governance proposal on a market which is in opening auction closes it immediately without generating any trades. (<a name="0028-GOVE-135" href="#0028-GOVE-135">0028-GOVE-135</a>)
 - Enacting a market closure governance proposal on a market which is in auction (of any type except the opening auction) uncrosses that auction at the current uncrossing price, generates the trades and then proceeds to close it using the final price (if applicable to the market type). (<a name="0028-GOVE-136" href="#0028-GOVE-136">0028-GOVE-136</a>)
 - Enacting a market closure governance proposal on a market that is in a settled state has no effect. (<a name="0028-GOVE-137" href="#0028-GOVE-137">0028-GOVE-137</a>)
-- Enacting a market closure governance proposal on a market that is not in a settled state always uses the final price supplied with the proposal, even when the oracle settlement price is available at that time. (<a name="0028-GOVE-138" href="#0028-GOVE-138">0028-GOVE-138</a>)
+- Enacting a market closure governance proposal on a market that is not in a settled state always uses the price supplied with the proposal for final settlement, even when the oracle settlement price is available at that time. (<a name="0028-GOVE-138" href="#0028-GOVE-138">0028-GOVE-138</a>)
 - Successful enactment of a market closure proposal changes the state of the market to `closed`. (<a name="0028-GOVE-139" href="#0028-GOVE-139">0028-GOVE-139</a>)
 - Attempt to enact a market closure proposal on a closed market has no effect. (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
 
