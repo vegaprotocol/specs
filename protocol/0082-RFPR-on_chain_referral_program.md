@@ -241,9 +241,9 @@ The Trades API should now also expose the following additional information for e
 
 #### Creating / updating teams
 
-1. If a party **is not** currently a referrer, the party can **create** a team, by submitting a signed `CreateParty` transaction.
-1. If a party **is** currently a referrer, the party can **update** a team, by submitting a signed `CreateParty` transaction.
-1. If one or more of the following conditions are not met, any `CreateParty` transaction should be rejected.
+1. If a party **is not** currently a referrer, the party can **create** a team, by submitting a signed `CreateTeam` transaction.
+1. If a party **is** currently a referrer, the party can **update** a team, by submitting a signed `CreateTeam` transaction.
+1. If one or more of the following conditions are not met, any `CreateTeam` transaction should be rejected.
     - party must not currently be a **referee**.
     - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
     - party must not have an active liquidity provision.
