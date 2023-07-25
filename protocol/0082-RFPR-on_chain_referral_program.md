@@ -257,10 +257,10 @@ The Trades API should now also expose the following additional information for e
 
 #### Joining / moving teams
 
-1. If a party **is not** currently a **referee**, the party can join a team by submitting a signed `JoinParty` transaction.
-1. If a party **is** currently a **referee**, the party can move team (at the start of the next epoch) by submitting a signed `JoinParty` transaction.
-1. If a party **is** currently a **referee** and submits multiple `JoinParty` transactions in an epoch, the latest valid `JoinParty` transaction will be applied.
-1. If one or more of the following conditions are not met,  any `JoinParty` transaction should be rejected.
+1. If a party **is not** currently a **referee**, the party can join a team by submitting a signed `JoinTeam` transaction.
+1. If a party **is** currently a **referee**, the party can move team (at the start of the next epoch) by submitting a signed `JoinTeam` transaction.
+1. If a party **is** currently a **referee** and submits multiple `JoinTeam` transactions in an epoch, the latest valid `JoinTeam` transaction will be applied.
+1. If one or more of the following conditions are not met,  any `JoinTeam` transaction should be rejected.
     - a party must not currently be a **referrer**.
     - party must not have an active liquidity provision.
 1. If a party has joined a team (i.e. is a referee) any future liquidity provision transactions from the party should be rejected.
