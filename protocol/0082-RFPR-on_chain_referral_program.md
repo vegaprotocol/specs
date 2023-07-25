@@ -131,7 +131,15 @@ message JoinTeam{
 }
 ```
 
-If a party is already a referee, and submits another `JoinTeam` transaction, their membership will be transferred to the new team at the end of the epoch. Note, if the referee has submitted multiple transactions in an epoch, the referee will be transferred using the latest valid transaction.
+If a party is already a referee, and submits another `JoinTeam` transaction, their membership will be transferred to the new team at the end of the epoch (after any [team disbandments](#disbanding-a-team) are enacted). Note, if the referee has submitted multiple transactions in an epoch, the referee will be transferred using the latest valid transaction.
+
+## Disbanding a team
+
+If a referrer needs to to disband a `Team` (either to join a team themselves or to become a liquidity provider without creating a new key) they are able to submit a `DisbandTeam` transaction. If a party submits a `DisbandTeam` transaction and is not currently a referrer then the transaction should be rejected.
+
+If a referrer disbands a team, the transaction is only enacted at the end of the current epoch. Referees are still eligible for discounts for the duration of the current epoch. At the end of the epoch, all referees are disassociated from the team and if they have any pending `JoinTeam` proposals then these are applied.
+
+Note, once a team disbandment message is submitted and accepted by the network, it cannot be cancelled.
 
 ### Party epoch volumes
 
@@ -265,6 +273,13 @@ The Trades API should now also expose the following additional information for e
     - party must not have an active liquidity provision.
 1. If a party has joined a team (i.e. is a referee) any future liquidity provision transactions from the party should be rejected.
 
+#### Disbanding teams
+
+1. If a party **is** currently a **referrer**, the party can disband a team by submitting a signed `DisbandTeam` transaction.
+1. The party will be disbanded at the end of the current epoch at which point all referees and referrers will be disassociated from the team.
+1. If a party **is not** currently a **referrer**, they should be able to create a new team after disbanding a team, their `Create` transaction should be accepted (providing it is valid).
+1. If a party **is not** currently a **referee**, they should not be able to join a disbanded team, their `JoinTeam` transaction should be rejected.
+1. If a party **is** currently a **referee**, they should not be able to move to a disbanded team, their `JoinTeam` transaction should be rejected.
 #### Team epoch and running volumes
 
 1. Each trade should increment both the maker and taker parties `party_epoch_volume` by the volume of the trade (expressed in quantum units) providing both parties are not members of the same team.
