@@ -293,7 +293,7 @@ The Trades API should now also expose the following additional information for e
     - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
     - party must not have an active liquidity provision.
 1. If a referrer removes sufficient stake to not meet the required tokens, the referrers team should not be eligible for the following referral program benefits:
-    - the party should not be eligible for team based rewards (not yet specced)
+    - the party should not be eligible for team based rewards (spec not started)
     - the referrer should not be rewarded for any referee taker fees.
     - referees should not receive any discount on their taker fees.
 1. If the referrer of a team currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the next epoch.
