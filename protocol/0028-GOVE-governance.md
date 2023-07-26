@@ -653,7 +653,6 @@ It is NOT possible to submit a governance proposal where the source account is t
 ##### Cancelling governance initiated transfers
 
 - Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
-- Only recurring governance initiated transfers can be cancelled by proposing a governance initiated transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
 - After a transfer is cancelled there will be no more transfers occurring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-123" href="#0028-GOVE-123">0028-GOVE-123</a>)
 - Recurring transfers can be cancelled only after the transfer proposal reached an enacted state. Attempts to cancel before the recurring transfer proposal has enacted will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)
 - Using a governance proposal to cancel, attempts to cancel an using an invalid transfer ID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-125" href="#0028-GOVE-125">0028-GOVE-125</a>)
@@ -668,7 +667,7 @@ It is NOT possible to submit a governance proposal where the source account is t
   
 - A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
   
-- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-144" href="#0028-GOVE-144">0028-GOVE-144</a>)
+- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-149" href="#0028-GOVE-149">0028-GOVE-149</a>)
    1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
 
 ##### Network History

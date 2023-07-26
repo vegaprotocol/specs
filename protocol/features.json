@@ -673,7 +673,13 @@
 
   "Batch Change Proposals": {
     "milestone": "deployment-2",
-    "acs": ["0028-GOVE-145", "0028-GOVE-146", "0028-GOVE-147", "0028-GOVE-148"]
+    "acs": [
+      "0028-GOVE-145",
+      "0028-GOVE-146",
+      "0028-GOVE-147",
+      "0028-GOVE-148",
+      "0028-GOVE-149"
+    ]
   },
 
   "Unknown": {
