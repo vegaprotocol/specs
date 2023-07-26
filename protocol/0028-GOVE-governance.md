@@ -539,6 +539,7 @@ APIs should also exist for clients to:
 - Enacting a market closure governance proposal on a market that is not in a settled state always uses the price supplied with the proposal for final settlement, even when the oracle settlement price is available at that time. (<a name="0028-GOVE-138" href="#0028-GOVE-138">0028-GOVE-138</a>)
 - Successful enactment of a market closure proposal changes the state of the market to `closed`. (<a name="0028-GOVE-139" href="#0028-GOVE-139">0028-GOVE-139</a>)
 - Attempt to enact a market closure proposal on a closed market has no effect. (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
+- Markets in suspension can be resumed or terminated after a protocol upgrade restarts the network. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
 
 #### Network parameter change proposals
 
