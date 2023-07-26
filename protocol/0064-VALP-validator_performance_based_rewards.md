@@ -40,7 +40,14 @@ another factor is added:
 Goal 2: Detect unforwarded Ethereum events and punish the validator that does not forward them
 Detection: Events forwarded by some validators are not forwarded by others.
 
-At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; Events not counted are all events that had been forwarded in a previous epoch by another Validator, as well as Events only forwarded by any validator during the last 6 minutes of the Epoch (measuring by `Vegatime`), so Validators are not motivated to be aggressive on confirmations. (The 6 min could be a network parameter to make testing easier)
+#### Ethereum Heartbeat
+For the Ethereum Heartbeat, we use the system parameter <ethereum_heartbeat_period>. This parameter should be either 0 or a value bigger than the number of validators.
+
+For every Ethereum block, if the hash of this block mod <ethereum_heartbeat_period>+1 equals the identity of the a validator, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators as usual, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms.
+If the parameter is set to 0, the heartbeats are effectively turned off.
+
+#### Performance Measurements
+At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; this term should be dominated by the heartbeat period.
 
 Let `expected_f` be the maximum number of Ethereum events forwarded by any Validator given above conditions, and `f` be the number of blocks a given validator has forwarded. If no blocks have been forwarded by anyone in that epoch, both f and expected_f are set to 1.
 
