@@ -27,6 +27,7 @@ Enabling or changing the terms of the on-chain referral program can be proposed 
 
 - `benefit_tiers`: a list of dictionaries with the following fields
   - `minimum_running_volume`: the required `running_team_volume` in quantum units for a team to access this tier
+  - `minimum_epochs_in_team`: the required number of epochs a referee must have been in a team to access this tier
   - `referral_reward_factor`: the proportion of the referees taker fees to be rewarded to the referrer
   - `referral_discount_factor`: the proportion of the referees taker fees to be discounted
 - `closing_timestamp`: the timestamp after which when the current epoch ends, the programs status will become `STATE_CLOSED` and benefits will be disabled
@@ -38,16 +39,19 @@ message UpdateReferralProgram{
         benefit_tiers: [
             {
                 "minimum_running_volume": 10000,
-                "referral_reward_factor": 0.000,
-                "referral_discount_factor": 0.000,
+                "minimum_epochs_in_team": 0,
+                "referral_reward_factor": 0.001,
+                "referral_discount_factor": 0.001,
             },
             {
                 "minimum_running_volume": 20000,
+                "minimum_epochs_in_team": 7,
                 "referral_reward_factor": 0.005,
                 "referral_discount_factor": 0.005,
             },
             {
                 "minimum_running_volume": 30000,
+                "minimum_epochs_in_team": 31,
                 "referral_reward_factor": 0.010,
                 "referral_discount_factor": 0.010,
             },
@@ -62,6 +66,7 @@ When submitting a referral program proposal through governance the following con
 
 - a proposer cannot set an `closing_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
+- all `minimum_epochs_in_team` values must be an integer strictly greater than 0
 - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
 - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
@@ -167,23 +172,45 @@ The network can then calculate the teams `team_running_volume` by summing a team
 
 ### Setting benefit factors
 
-Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch (after pending `JoinTeam` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee. This is done by identifying a referees team and identifying the teams current benefit tier. A teams benefit tier is defined as the highest tier for which their `team_running_volume` is greater or equal to the tiers `minimum_running_volume`. If a party does not qualify for any tier, both values are set to `0`.
+Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch (after pending `JoinTeam` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee.
+
+#### Setting the referral reward factor
+
+The `referral_reward_factor` should be set by identifying the "highest" benefit tier where the following conditions are fulfilled.
+
+- `team_running_volume` is greater than the tiers `minimum_running_volume`.
+
+The referees `referral_reward_factor` is then set to the `referral_reward_factor` defined in the selected benefit tier.
+
+#### Setting the referral discount factor
+
+The `referral_discount_factor` should be set by identifying the "highest" benefit tier where **BOTH** the following conditions are fulfilled.
+
+- `team_running_volume` is greater than the tiers `minimum_running_volume`.
+- the referee has been a member of the team for more than the tiers `minimum_epochs_in_team`.
+
+The referees `referral_discount_factor` is then set to the `referral_discount_factor` defined in the selected benefit tier.
+
+#### Example
 
 ```pseudo
 Given:
-    benefit_tiers=[
+    benefit_tiers: [
         {
             "minimum_running_volume": 10000,
+            "minimum_epochs_in_team": 0,
             "referral_reward_factor": 0.001,
             "referral_discount_factor": 0.001,
         },
         {
             "minimum_running_volume": 20000,
+            "minimum_epochs_in_team": 7,
             "referral_reward_factor": 0.005,
             "referral_discount_factor": 0.005,
         },
         {
             "minimum_running_volume": 30000,
+            "minimum_epochs_in_team": 31,
             "referral_reward_factor": 0.010,
             "referral_discount_factor": 0.010,
         },
@@ -191,10 +218,11 @@ Given:
 
 And:
     team_running_volume=22353
+    party_epochs_in_team=4
 
 Then:
     referral_reward_factor=0.005
-    referral_discount_factor=0.005
+    referral_discount_factor=0.001
 ```
 
 These benefit factors are then fixed for the duration of the next epoch.
@@ -208,7 +236,9 @@ Referral program benefit factors are applied by modifying [the fees](./0029-FEES
 
 The Teams API should expose the following information:
 
-- a list of all **teams** (by `id`), their founding **referrer**, and any current **referees**
+- a list of all **teams** (by `id`) and the following information:
+  - the teams founding **referrer**
+  - the teams **referees** and their current number of epochs in the team
 - a list of all **teams** (by `id`) and the following metrics:
   - current `team_running_volume` (value at the start of the epoch)
   - current `referral_reward_factor` applied to referee taker fees
@@ -233,6 +263,7 @@ The Trades API should now also expose the following additional information for e
 1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
     - the `closing_timestamp` must be less than or equal to the proposals `enactment_time`.
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
+    - all `minimum_epochs_in_team` values must be an integer strictly greater than 0.
     - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
     - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
     - the `window_length` must be an integer strictly greater than zero.
@@ -293,6 +324,8 @@ The Trades API should now also expose the following additional information for e
 #### Setting benefit factors
 
 1. At the start of an epoch, each referees `referral_reward_factor` and `referral_discount_factor` is reevaluated and fixed for the epoch.
-1. A referees `referral_reward_factor` and `referral_discount_factor` is set equal to the factors in the highest benefit tier their team qualifies for.
-1. If a referees team does not qualify for the lowest tier, their `referral_reward_factor` and `referral_discount_factor` are both set to `0`.
-1. If a referees `referral_reward_factor` or `referral_discount_factor` is set to `0` during an epoch, their factors are not reevaluated until the start of the next epoch.
+1. At the start of an epoch, a referees `referral_reward_factor` is set equal to the factor in the highest benefit tier they qualify for.
+1. At the start of an epoch, a referees `referral_discount_factor` is set equal to the factor in the highest benefit tier they qualify for.
+1. If when evaluating the tier to set the `referral_reward_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0`.
+1. If when evaluating the tier to set the `referral_discount_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0`.
+
