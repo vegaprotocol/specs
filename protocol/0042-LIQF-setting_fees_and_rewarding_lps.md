@@ -351,6 +351,10 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 
 - Equity-like share of each active LP can be obtained via the API (<a name="0042-LIQF-016" href="#0042-LIQF-016">0042-LIQF-016</a>)
 - Liquidity score of each active LP can be obtained via the API (<a name="0042-LIQF-017" href="#0042-LIQF-017">0042-LIQF-017</a>)
+- Through the `LiquidityProviders` API, liquidity score, average entry valuation and equity-like share of each active LP can be obtained
+  - GRPC (<a name="0042-LIQF-050" href="#0042-LIQF-050">0042-LIQF-050</a>)
+  - GRAPHQL (<a name="0042-LIQF-051" href="#0042-LIQF-051">0042-LIQF-051</a>)
+  - REST (<a name="0042-LIQF-052" href="#0042-LIQF-052">0042-LIQF-052</a>)
 
 
 ### Successor markets

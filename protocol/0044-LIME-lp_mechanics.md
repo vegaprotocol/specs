@@ -285,7 +285,11 @@ Note:
 
 ## Acceptance Criteria
 
-- Through the API, I can list all active liquidity providers for a market (<a name="0044-LIME-001" href="#0044-LIME-001">0044-LIME-001</a>)
+- Through the `LiquidityProvisions` API, I can list all active liquidity providers for a market (<a name="0044-LIME-001" href="#0044-LIME-001">0044-LIME-001</a>)
+- Through the `LiquidityProviders` API, I can list all active liquidity providers fee share information
+  - GRPC (<a name="0044-LIME-057" href="#0044-LIME-057">0044-LIME-057</a>)
+  - GRAPHQL (<a name="0044-LIME-058" href="#0044-LIME-058">0044-LIME-058</a>)
+  - REST (<a name="0044-LIME-059" href="#0044-LIME-059">0044-LIME-059</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIME-002" href="#0044-LIME-002">0044-LIME-002</a>).
 - Change of network parameter `market.liquidity.bondPenaltyParameter` will immediately change the amount by which the bond account will be 'slashed' when a liquidity provider has insufficient capital for Vega to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIME-003" href="#0044-LIME-003">0044-LIME-003</a>)
 - Change of `market.liquidity.maximumLiquidityFeeFactorLevel` will change the maximum liquidity fee factor. Any LP orders that have already been submitted are unaffected but any new submission or amendments must respect the new maximum (those that don't get rejected). (<a name="0044-LIME-006" href="#0044-LIME-006">0044-LIME-006</a>)
