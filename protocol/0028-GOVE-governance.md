@@ -662,11 +662,11 @@ It is NOT possible to submit a governance proposal where the source account is t
 
 ##### Batch Proposals
 
-- A batch proposal containing one or more component submissions for each type of proposal term can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-141" href="#0028-GOVE-141">0028-GOVE-141</a>)
+- A batch proposal containing one or more component submissions for each type of proposal term can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-146" href="#0028-GOVE-146">0028-GOVE-146</a>)
 
-- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-142" href="#0028-GOVE-142">0028-GOVE-142</a>)
+- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-147" href="#0028-GOVE-147">0028-GOVE-147</a>)
   
-- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-143" href="#0028-GOVE-143">0028-GOVE-143</a>)
+- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
   
 - A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-144" href="#0028-GOVE-144">0028-GOVE-144</a>)
    1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
