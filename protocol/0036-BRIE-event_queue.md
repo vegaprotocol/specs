@@ -37,7 +37,7 @@ Finally, the amount of confirmations expected for Ethereum is specified, this is
 
 Every validator node needs a constant connection to an Ethereum archival node. This allows the node to poll for Ethereum blocks as they are constructed, and scan for events emitted by the contracts related to the Vega network.
 
-The core node will look for new blocks on Ethereum every 10 to 15 seconds. Once a relevant event is found, the block, log index and transaction hash are extracted from it. A `ChainEvent` transaction is constructed then forwarded to the rest of the nodes through the Vega chain.
+The core node will look for new blocks on Ethereum every 10 to 15 seconds. Once a relevant event is found, the block, log index and transaction hash are extracted from it. A `ChainEvent` transaction is constructed then forwarded to the rest of the nodes through the Vega chain. The Validator responsible for forwarding an event is determined through a hash of the event details and Vega time, i.e., every event is usually only forwarded by one validator.
 
 Simplified chain event transaction:
 
