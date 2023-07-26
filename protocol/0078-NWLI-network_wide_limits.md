@@ -13,8 +13,6 @@ Default value: `1,500`.
 If the network parameter gets increased via a governance vote no further actions are needed.
 If it gets decreased below the current total number of pegged orders across all active markets then no further actions are needed. Specifically: all pegged orders already present in the markets remain unaffected, but no new pegged orders are allowed until the **total pegged order count** drops below the new limit.
 
-[Liquidity provision orders](./0038-OLIQ-liquidity_provision_order_type.md) do not get counted towards the limit.
-
 ## Acceptance Criteria
 
 ### Pegged order tests

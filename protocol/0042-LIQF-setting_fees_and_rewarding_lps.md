@@ -188,7 +188,7 @@ Now calculate the total of the instantaneous liquidity scores obtained for each 
 `total = the sum of instantaneous liquidity scores for all LPs that have an active liquidity commitment`
 
 Now, if the `total` comes out as `0` then set `fractional instantaneous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
-Otherwise calculate fractional instantaneous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
+Otherwise calculate fractional instantaneous liquidity score for each committed LP.
 
 `fractional instantaneous liquidity score = instantaneous liquidity score / total`
 
