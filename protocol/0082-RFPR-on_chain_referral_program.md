@@ -243,18 +243,20 @@ The Teams API should expose the following information:
   - current `team_running_volume` (value at the start of the epoch)
   - current `referral_reward_factor` applied to referee taker fees
   - current `referral_discount_factor` applied to referee taker fees
+  - the total amount rewarded to the referrer during the referral program
+  - the total amount discounted for all referees during the referral program
   - any data required for additional reward metrics
 
 The Trades API should now also expose the following additional information for every trade:
 
 - Referral program rewards
-  - `infrastructure_fee_reward`
-  - `liquidity_fee_reward`
-  - `maker_fee_reward`
+  - `infrastructure_fee_referral_reward`
+  - `liquidity_fee_referral_reward`
+  - `maker_fee_referral_reward`
 - Referral program discounts
-  - `infrastructure_fee_discount`
-  - `liquidity_fee_discount`
-  - `maker_fee_discount`
+  - `infrastructure_fee_referral_discount`
+  - `liquidity_fee_referral_discount`
+  - `maker_fee_referral_discount`
 
 ## Acceptance Criteria
 

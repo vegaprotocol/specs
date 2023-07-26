@@ -104,7 +104,7 @@ The Parties API should expose the following information:
 - a list of all **parties** (by `id`) and the following metrics:
   - current `party_running_volume` (value at the start of the epoch)
   - current `volume_discount_factor` applied to fees
-  - any data required for additional reward metrics
+  - the total amount discounted for the party
 
 The Trades API should now also expose the following additional information for every trade:
 
