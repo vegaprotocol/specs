@@ -143,6 +143,7 @@ keystore
 KMS
 leftarrow
 lifecycle
+linearisation
 linearised
 linkings
 linux
@@ -233,6 +234,7 @@ stakers
 statebridge
 stateful
 statesync
+structs
 SSD
 SSL
 suboptimal

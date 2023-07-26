@@ -2,18 +2,18 @@
 
 ## Acceptance Criteria
 
-- If there are no buy orders on the order book, the best bid price is empty / nothing. (<a name="0021-MDAT-001" href="#0021-MDAT-001">0021-MDAT-001</a>)
-- If there are no sell orders on the order book, the best offer price is empty / nothing. (<a name="0021-MDAT-002" href="#0021-MDAT-002">0021-MDAT-002</a>)
-- If there are multiple buy orders on the order book with a price equal to the best bid price, the best bid volume equals the sum of the sizes of these orders. (<a name="0021-MDAT-003" href="#0021-MDAT-003">0021-MDAT-003</a>)
-- If there are multiple sell orders on the order book with a price equal to the best bid price, the best offer volume equals the sum of the sizes of these orders. (<a name="0021-MDAT-004" href="#0021-MDAT-004">0021-MDAT-004</a>)
-- The mid price is empty / nothing if there is either no buy order or no sell orders. (<a name="0021-MDAT-005" href="#0021-MDAT-005">0021-MDAT-005</a>)
-- The mid price is the arithmetic average of the best bid price and best offer price. (<a name="0021-MDAT-006" href="#0021-MDAT-006">0021-MDAT-006</a>)
-- The mark price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the mark price has not yet been set (for example market in opening auction that's not seen any trades yet). (<a name="0021-MDAT-007" href="#0021-MDAT-007">0021-MDAT-007</a>)
+- If there are no buy orders on the order book, the best bid price is empty / nothing. (<a name="0021-MDAT-001" href="#0021-MDAT-001">0021-MDAT-001</a>) for product spot: (<a name="0021-MDAT-013" href="#0021-MDAT-013">0021-MDAT-013</a>)
+- If there are no sell orders on the order book, the best offer price is empty / nothing. (<a name="0021-MDAT-002" href="#0021-MDAT-002">0021-MDAT-002</a>) for product spot: (<a name="0021-MDAT-014" href="#0021-MDAT-014">0021-MDAT-014</a>)
+- If there are multiple buy orders on the order book with a price equal to the best bid price, the best bid volume equals the sum of the sizes of these orders. (<a name="0021-MDAT-003" href="#0021-MDAT-003">0021-MDAT-003</a>) for product spot: (<a name="0021-MDAT-015" href="#0021-MDAT-015">0021-MDAT-015</a>)
+- If there are multiple sell orders on the order book with a price equal to the best bid price, the best offer volume equals the sum of the sizes of these orders. (<a name="0021-MDAT-004" href="#0021-MDAT-004">0021-MDAT-004</a>) for product spot: (<a name="0021-MDAT-016" href="#0021-MDAT-016">0021-MDAT-016</a>)
+- The mid price is empty / nothing if there is either no buy order or no sell orders. (<a name="0021-MDAT-005" href="#0021-MDAT-005">0021-MDAT-005</a>) for product spot: (<a name="0021-MDAT-017" href="#0021-MDAT-017">0021-MDAT-017</a>)
+- The mid price is the arithmetic average of the best bid price and best offer price. (<a name="0021-MDAT-006" href="#0021-MDAT-006">0021-MDAT-006</a>) for product spot: (<a name="0021-MDAT-018" href="#0021-MDAT-018">0021-MDAT-018</a>)
+- The mark price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the mark price has not yet been set (for example market in opening auction that's not seen any trades yet). (<a name="0021-MDAT-007" href="#0021-MDAT-007">0021-MDAT-007</a>) for product spot: (<a name="0021-MDAT-019" href="#0021-MDAT-019">0021-MDAT-019</a>)
 - The Open interest returns the sum of the size for all open positions where positions size is greater than 0. (<a name="0021-MDAT-008" href="#0021-MDAT-008">0021-MDAT-008</a>)
 - The Open interest returns 0 if there are no positions on the market (<a name="0021-MDAT-009" href="#0021-MDAT-009">0021-MDAT-009</a>)
 - Pegged orders are excluded from the best static price and best static volume calculations. (<a name="0021-MDAT-010" href="#0021-MDAT-010">0021-MDAT-010</a>)
 - Dynamic orders should be ignored when calculating the static values (<a name="0021-MDAT-011" href="#0021-MDAT-011">0021-MDAT-011</a>)
-- The auction uncrossing price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the auction uncrossing price has not been set (for example in continuous trading or auction with no bids / offers). (<a name="0021-MDAT-012" href="#0021-MDAT-012">0021-MDAT-012</a>)
+- The auction uncrossing price, if it has been set in the market, is available on APIs returning market data. The returned object makes clear if the auction uncrossing price has not been set (for example in continuous trading or auction with no bids / offers). (<a name="0021-MDAT-012" href="#0021-MDAT-012">0021-MDAT-012</a>) for product spot: (<a name="0021-MDAT-020" href="#0021-MDAT-020">0021-MDAT-020</a>)
 
 ## Summary
 
@@ -21,13 +21,13 @@ This data is a snapshot of the state of the market at a point in time.
 
 ## Guide-level explanation
 
-Due to supporting dynamic orders such as [pegged orders](0037-OPEG-pegged_orders.md) and [LP provision orders](0038-OLIQ-liquidity_provision_order_type.md) the main market data fields are split up into two parts. Normal values and static values. Normal values for **Mid price**, **Best bid price** and **Best offer price** take into account all orders on the book (both normal and dynamic). Static values are calculated using only non-dynamic orders and so will not count any pegged orders in the calculation.
+Due to supporting dynamic orders such as [pegged orders](0037-OPEG-pegged_orders.md), the main market data fields are split up into two parts. Normal values and static values. Normal values for **Mid price**, **Best bid price** and **Best offer price** take into account all orders on the book (both normal and dynamic). Static values are calculated using only non-dynamic orders and so will not count any pegged orders in the calculation.
 
 ## Reference-level explanation
 
 ### Definition of dynamic orders
 
-A "dynamic" order is either a [pegged order](0037-OPEG-pegged_orders.md) or orders that are placed on the book by Vega as part of the [LP liquidity provision order](0038-OLIQ-liquidity_provision_order_type.md).
+A "dynamic" order is a [pegged order](0037-OPEG-pegged_orders.md).
 
 ### Market data fields
 

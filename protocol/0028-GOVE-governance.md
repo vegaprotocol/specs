@@ -230,7 +230,7 @@ See [sucessor markets spec](./0081-SUCM-successor_markets.md for more details).
 
 All _new market proposals_ initially have their validation configured by the network parameters `Governance.CreateMarket.All.*`. These may be split from `All` to subtypes in future, for instance when other market types like RFQ are created.
 
-A market in Proposed state accepts [liquidity commitments](./0038-OLIQ-liquidity_provision_order_type.md) from any party. The LP commitments can be added / amended / removed.
+A market in Proposed state accepts [liquidity commitments](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction) from any party. The LP commitments can be added / amended / removed.
 
 ## 2. Change market parameters
 
@@ -275,17 +275,19 @@ Enactment of an asset modification proposal is:
 
 The below table shows the allowable combinations of source and destination account types for a transfer that's initiated by a governance proposal.
 
-| Source type | Destination type | Governance initiated transfer permitted |
+| Source type | Destination type | Transfer permitted |
 | --- | --- | --- |
 | Party account (any type) | Any | No |
 | Network treasury | Network treasury | No  |
 | Network treasury | Party general account(s) | Yes |
 | Network treasury | Party other account types | No |
 | Network treasury | Market insurance pool account | Yes |
+| Network treasury | Reward account | Yes |
 | Network treasury | Any other account | No |
 | Market insurance pool account | Party account(s) | Yes  |
 | Market insurance pool account | Network treasury | Yes  |
 | Market insurance pool account | Market insurance pool account | Yes |
+| Market insurance pool account | Reward account | Yes |
 | Market insurance pool account | Any other account | No |
 | Any other account | Any | No |
 
@@ -396,7 +398,7 @@ If the market is already suspended via governance when another vote gets enacted
 
 ### 6.3. Resume the market
 
-This proposal removes the restrictions put in place by a successful [market suspension proposal](#61-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active. When the market leaves the auction any trades resulting from it should be generated at the auction uncrossing price as is done for any other auction type.
+This proposal removes the restrictions put in place by a successful [market suspension proposal](#62-suspend-the-market). Note that this does not necessarily mean the market that's in auction mode should leave it immediately, as other auction triggers may still be active.
 
 If the market is not suspended when the vote to resume the market gets enacted then that vote has no effect.
 
@@ -501,7 +503,7 @@ APIs should also exist for clients to:
 
 - As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
-- A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0038-OLIQ-liquidity_provision_order_type.md) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md). (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
+- A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md). (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
 - A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
 - A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
 
@@ -524,10 +526,7 @@ APIs should also exist for clients to:
 - In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the proposed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)
 - A market change that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)
 - A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
-- When multiple market closure governance proposals are submitted and accepted then one to be approved by governance last (i.e latest closing date and vote goes through) is the one whose enactment time and final settlement price get used to close the market (<a name="0028-GOVE-109" href="#0028-GOVE-109">0028-GOVE-109</a>)
-- Once a market closure governance proposal has been accepted and was successful another proposal with same enactment date still gets accepted. If the later proposal is unsuccessful then values supplied by the last successful one get used to close the market (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
-- Once a market closure governance proposal has been accepted and was successful another proposal with earlier enactment date still gets accepted. If the later proposal is successful then values supplied within it get used to close the market (if no other proposals were successful after it) (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
-- Once a market closure governance proposal has been accepted and was successful another proposal with later enactment date gets rejected (<a name="0028-GOVE-112" href="#0028-GOVE-112">0028-GOVE-112</a>)
+- When there's already been a market closure governance proposal successfully voted in for a given market, but not yet enacted it is still possible to submit additional market closure governance proposals for that market. If another market closure governance proposal gets voted it and it has an earlier enactment time then it's the final settlement price of that proposal which gets used. (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
 - Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to resume the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
 - Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
 - Resuming a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
@@ -537,8 +536,9 @@ APIs should also exist for clients to:
 - Enacting a market closure governance proposal on a market which is in opening auction closes it immediately without generating any trades. (<a name="0028-GOVE-135" href="#0028-GOVE-135">0028-GOVE-135</a>)
 - Enacting a market closure governance proposal on a market which is in auction (of any type except the opening auction) uncrosses that auction at the current uncrossing price, generates the trades and then proceeds to close it using the final price (if applicable to the market type). (<a name="0028-GOVE-136" href="#0028-GOVE-136">0028-GOVE-136</a>)
 - Enacting a market closure governance proposal on a market that is in a settled state has no effect. (<a name="0028-GOVE-137" href="#0028-GOVE-137">0028-GOVE-137</a>)
-- Enacting a market closure governance proposal on a market that is not in a settled state always uses the final price supplied with the proposal, even when the oracle settlement price is available at that time. (<a name="0028-GOVE-138" href="#0028-GOVE-138">0028-GOVE-138</a>)
+- Enacting a market closure governance proposal on a market that is not in a settled state always uses the price supplied with the proposal for final settlement, even when the oracle settlement price is available at that time. (<a name="0028-GOVE-138" href="#0028-GOVE-138">0028-GOVE-138</a>)
 - Successful enactment of a market closure proposal changes the state of the market to `closed`. (<a name="0028-GOVE-139" href="#0028-GOVE-139">0028-GOVE-139</a>)
+- Attempt to enact a market closure proposal on a closed market has no effect. (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
 
 #### Network parameter change proposals
 
@@ -635,7 +635,9 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### One Off Delivery transfers
 
 If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately. (<a name="0028-GOVE-129" href="#0028-GOVE-129">0028-GOVE-129</a>)
-
+It is possible to submit a one off governance transfer proposal from network treasury into any reward account (including staking rewards). (<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
+It is possible to submit a one off governance transfer proposal from market's insurance pool into any reward account (including staking rewards). (<a name="0028-GOVE-141" href="#0028-GOVE-141">0028-GOVE-141</a>)
+It is NOT possible to submit a governance proposal where the source account is the reward account. (<a name="0028-GOVE-144" href="#0028-GOVE-144">0028-GOVE-144</a>)
 
 ##### Recurring governance initiated transfers
 
@@ -645,13 +647,15 @@ If the proposal is one off it can define a time for delivery. Whenever the block
 
 - When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
 
+- It is possible to submit a recurring governance transfer proposal from network treasury into any reward account (including staking rewards). (<a name="0028-GOVE-142" href="#0028-GOVE-142">0028-GOVE-142</a>)
+- It is possible to submit a recurring governance transfer proposal from market's insurance pool into any reward account (including staking rewards). (<a name="0028-GOVE-143" href="#0028-GOVE-143">0028-GOVE-143</a>)
 
 ##### Cancelling governance initiated transfers
 
 - Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
 - Only recurring governance initiated transfers can be cancelled by proposing a governance initiated transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
 - After a transfer is cancelled there will be no more transfers occurring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-123" href="#0028-GOVE-123">0028-GOVE-123</a>)
-- Using a governance proposal to cancel, attempts to cancel a recurring transfer which has yet to start or has completed will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)
+- Recurring transfers can be cancelled only after the transfer proposal reached an enacted state. Attempts to cancel before the recurring transfer proposal has enacted will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)
 - Using a governance proposal to cancel, attempts to cancel an using an invalid transfer ID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-125" href="#0028-GOVE-125">0028-GOVE-125</a>)
 - When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-126" href="#0028-GOVE-126">0028-GOVE-126</a>)
 
