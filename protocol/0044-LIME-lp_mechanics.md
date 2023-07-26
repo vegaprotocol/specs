@@ -239,11 +239,12 @@ Once you have $f$ transfer $f \times B$ into the insurance pool of the market, w
 For spot markets, the transfer is to go into the network treasury account for the asset.
 Moreover, as this reduced the LP stake, update the ELS as per [Calculating liquidity provider equity-like share section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
+In the case of spot markets the transfer goes into the network treasury account for the asset.
+
 ### Penalty for not supporting open positions
 
 If at any point in time, a liquidity provider has insufficient capital to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions, the network will utilise their liquidity provision commitment, held in the _liquidity provider bond account_ to cover the shortfall.
 The protocol will also apply a penalty proportional to the size of the shortfall, which will be transferred to the market's insurance pool.
-In the case of spot markets the transfer goes into the network treasury account for the asset.
 
 Calculating the penalty:
 
