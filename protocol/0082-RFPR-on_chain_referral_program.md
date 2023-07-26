@@ -104,18 +104,22 @@ The liquidity provision restriction is constant, once a party has become a refer
 
 To generate a team id / referral code, the party must submit a signed `CreateTeam` transaction with the following optional team information.
 
+- `enable_rewards`: a boolean value which specifies whether the team should be eligible for team based rewards (spec not started).
 - `name`: an optional team name to be added to the referral banner.
 - `teamUrl`: an optional link to a team forum, discord, etc.
 - `avatarUrl`: an optional url to an image to be used as the teams avatar
 
 ```protobuf
 message CreateTeam
+    enable_rewards: True,
     name: "VegaRocks",
-    teamUrl: https://discord.com/channels/vegarocks
-    avatarUrl: https://vega-rocks/logo-360x360.jpg
+    team_url: "https://discord.com/channels/vegarocks"
+    avatar_url: "https://vega-rocks/logo-360x360.jpg"
 ```
 
-If a party which is already a referrer submits a `CreateTeam` transaction, their team metadata is simply updated.
+The `name`, `team_url` and `avatar_url` fields are only optional if a party has wishes to enabled rewards for their team.
+
+If a party which is already a referrer submits a `CreateTeam` transaction, their team data is simply updated.
 
 ### Joining / moving teams
 
@@ -289,7 +293,7 @@ The Trades API should now also expose the following additional information for e
     - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
     - party must not have an active liquidity provision.
 1. If a referrer removes sufficient stake to not meet the required tokens, the referrers team should not be eligible for the following referral program benefits:
-    - team member trades should not contribute to their teams volume.
+    - the party should not be eligible for team based rewards (not yet specced)
     - the referrer should not be rewarded for any referee taker fees.
     - referees should not receive any discount on their taker fees.
 1. If the referrer of a team currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the next epoch.
