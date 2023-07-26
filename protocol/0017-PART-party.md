@@ -18,7 +18,7 @@ A standard party can:
 - [Cancel an order](./0033-OCAN-cancel_orders.md)
 - [Submit a governance proposal](./0028-GOVE-governance.md)
 - [Vote on a governance proposal](./0028-GOVE-governance.md)
-- [Commit to provide liquidity on a market](./0038-OLIQ-liquidity_provision_order_type.md)
+- [Commit to provide liquidity on a market](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction)
 
 ## Guide-level explanation
 

@@ -18,7 +18,7 @@ The [liquidity fee factor](./0029-FEES-fees.md) is an input to the total taker f
 
 `liquidity_fee = fee_factor[liquidity] x trade_value_for_fee_purposes`
 
-As part of the [commit liquidity network transaction](./0038-OLIQ-liquidity_provision_order_type.md), the liquidity provider submits their desired level for the [liquidity fee factor](./0042-LIQF-setting_fees_and_rewarding_lps.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market.
+As part of the [commit liquidity network transaction](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction), the liquidity provider submits their desired level for the [liquidity fee factor](./0042-LIQF-setting_fees_and_rewarding_lps.md) for the market. Here we describe how this fee factor is set from the values submitted by all liquidity providers for a given market.
 First, we produce a list of pairs which capture committed liquidity of each LP together with their desired liquidity fee factor and arrange this list in an increasing order by fee amount. Thus we have
 
 ```text
@@ -188,7 +188,7 @@ Now calculate the total of the instantaneous liquidity scores obtained for each 
 `total = the sum of instantaneous liquidity scores for all LPs that have an active liquidity commitment`
 
 Now, if the `total` comes out as `0` then set `fractional instantaneous liquidity score` to `1.0/n`, where `n` is the number of committed LPs.
-Otherwise calculate fractional instantaneous liquidity score for each committed LP (i.e. a party that successfully submitted [LP order](./0038-OLIQ-liquidity_provision_order_type.md) as:
+Otherwise calculate fractional instantaneous liquidity score for each committed LP.
 
 `fractional instantaneous liquidity score = instantaneous liquidity score / total`
 

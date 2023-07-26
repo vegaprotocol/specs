@@ -16,7 +16,7 @@ Note that a party can also associate the governance / staking asset via the [Veg
 
 1. Mark-to-market settlement account per market: this is used for collecting and distributing mark-to-market settlement cashflows and is *zero* at the end of each mark-to-market settlement run.
 1. Margin accounts for each party with open orders or positions on any [market](./0043-MKTL-market_lifecycle.md).
-1. Bond account for any party that's an [LP on any market](0038-OLIQ-liquidity_provision_order_type.md).
+1. Bond account for any party that's an [LP on any market](0044-LIME-lp_mechanics_type.md).
 1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md) for any market.
 1. [Liquidity fee pool](0042-LIQF-setting_fees_and_rewarding_lps.md) for any market.
 1. [Infrastructure fee pool](0029-FEES-fees.md) for any asset.
@@ -73,7 +73,7 @@ If there is a positive balance in an account that is being deleted, that balance
 
 ## Bond accounts
 
-Bond accounts are opened when a party opens a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md). The bond is held by the network to ensure that the Liquidity Provider meets their SLA obligations. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management.
+Bond accounts are opened when a party opens a [Liquidity Provision order](./0044-LIME-lp_mechanics.mdd). The bond is held by the network to ensure that the Liquidity Provider meets their SLA obligations. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management.
 
 ## Insurance pools
 
@@ -123,7 +123,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 ### Liquidity Provider bond accounts
 
 - A bond account holds collateral to maintain collateral for [Liquidity Providers](./0044-LIME-lp_mechanics.md). (<a name="0013-ACCT-023" href="#0013-ACCT-023">0013-ACCT-023</a>)
-- Each party that has placed a [Liquidity Provision order](./0038-OLIQ-liquidity_provision_order_type.md) will have one bond account per market they have provided liquidity to (<a name="0013-ACCT-018" href="#0013-ACCT-018">0013-ACCT-018</a>)
+- Each party that has placed a [Liquidity Provision order](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction) will have one bond account per market they have provided liquidity to (<a name="0013-ACCT-018" href="#0013-ACCT-018">0013-ACCT-018</a>)
 - [Fees earned from liquidity provision](./0044-LIME-lp_mechanics.md#fees) are *not* paid in to this bond account - [they are paid in to the *margin* account for this trader](./0042-LIQF-setting_fees_and_rewarding_lps.md#distributing-fees) (<a name="0013-ACCT-019" href="#0013-ACCT-019">0013-ACCT-019</a>)
 
 ### Insurance pool accounts
