@@ -99,17 +99,17 @@ Isolated margin mode can be enabled by placing an _update margin mode_ transacti
 
 The default when placing an order with no change to margin mode specified must be to retain the current margin mode of the position.
 
-The margin mode cannot be changed whilst an account has open positions or orders on a market.
-
-
-
 ### Placing an order
 
-When submitting, amending, or deleting an order in isolated margin mode, the worst case order margin for the current open orders must be calculated.
-This is the largest amount of the extra margin required if all the party's bids or asks were to trade simultaneously at their limit price.
+When submitting, amending, or deleting an order in isolated margin mode, a two step process will be followed:
+   1. First, the core will check whether the order will trade, either fully or in part, immediately upon entry. If so:
+      1. If the trade would increase the party's position, their general account will be checked for sufficient funds as defined in the Increasing Position section.
+         1. If they have sufficient, that amount will be moved into their margin account and the immediately matching portion of the order will trade.
+         2. If they do not have sufficient, the order will be rejected in it's entirety for not meeting margin requirements.
+      2. If the trade would decrease the party's position, that portion will trade and margin will be released as in the Decreasing Position section
+   2. If the order is not persistent this is the end, if it is persistent any portion of the order which has not traded in step 1 will move to being placed on the order book. At this point, the party's general account will be checked for sufficient margin to cover `limit price * remaining size * margin factor`, as this is the worst-case trade price of the remaining component. If there is sufficient, this amount will be moved into the party's Order Margin account and the order will be placed on the book. If there is insufficient, the remaining portion of the order will be `stopped`.
 
-If the worst case order margin does not cover the initial margin for any additional volume then an order cannot be placed.
-The current difference, if positive, between initial margin implied by current position and orders, and the margin in the trader's margin account, will be placed in an order margin account.
+NB: This means that a party's order could partially match, with a trade executed and some funds moved to the margin account with correct leverage whilst the rest of the order is immediately stopped.
 
 ### Increasing Position
 
@@ -120,10 +120,9 @@ margin to add = margin factor * VWAP of new trades * total size of new trades
 ```
 
 This will be taken by performing three steps:
- 1. First, the required order margin account balance after the trade is calculated
- 1. Then, the difference between this and the current balance is transferred into the margin account
- 1. Finally, any amount remaining from `margin to add` and the amount transferred so far will be taken from the general account
-    - This further amount will be taken to whatever degree it can be, but there will not be an error if the entire amount cannot be taken. i.e. if the trader has less than `margin to add - balance taken from order margin account` left in their general account the entire quantity will be taken and trading will continue.
+ 1. The margin to add as calculated here is compared to the margin which would have been placed into the order margin account for this order, `limit price * remaining size * margin factor`. 
+ 2. If it is equal, this amount is taken from the order margin account and placed into the margin account
+ 3. If the order traded at a price which means less margin should be taken then the amount `margin to add` above is taken from the order margin account into the margin account and the excess is returned from the order margin account to the general account
 
 NB: In implementation, for any volume that trades immediately on entry, the additional margin may be transferred directly from the general account to the margin account. 
 
@@ -144,12 +143,21 @@ A single order could move a trader from a short to a long position (or vice vers
 
 When isolated margin mode is enabled,  amount to be transferred is a fraction of the position's notional size that must be specified by the user when enabling isolated margin mode.
 
-Margin mode cannot be changed whilst a key has any non-zero position on a market.
+The transaction to update/change margin mode can be included in a batch transaction in order to allow updates when placing an order. 
 
 When in isolated margin mode, it is possible to request to both increase or decrease the margin factor setting:
  - The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`. This value must be above the `initial margin` for the current position or the transaction will be rejected.
    - If this is less than the balance currently in the margin account, the difference will be moved from the margin account to the general account
    - If this is larger than the balance currently in the margin account, the difference will be moved from the general account to the margin account. If there are not enough funds to complete this transfer, the transaction will be rejected and no change of margin factor will occur.
+
+When switching to isolated margin mode, the following steps will be taken:
+  1. For any active position, calculate `average entry price * abs(position) * margin factor`. Calculate the amount of funds which will be added to, or subtracted from, the general account in order to do this. If additional funds must be added which are not available, reject the transaction immediately.
+  2. For any active orders, calculate the quantity `limit price * remaining size * margin factor` which needs to be placed in the order margin account. Add this amount to the difference calculated in step 1. If this amount is less than or equal to the amount in the general account, perform the transfers (first move funds into/out of margin account, then move funds into the order margin account). If there are insufficient funds, reject the transaction.
+  3. Move account to isolated margin mode on this market
+
+When switching from isolated margin mode to cross margin mode, the following steps will be taken:
+   1. Any funds in the order margin account will be moved to the cross margin account.
+   2. At this point trading can continue with the account switched to the cross margining account type. If there are excess funds in the margin account they will be freed at the next margin release cycle.
 
 ## Reference Level Explanation
 
