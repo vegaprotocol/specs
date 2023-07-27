@@ -50,6 +50,7 @@ cryptocurrencies
 cryptographic
 CQRS
 cumulated
+customisable
 customised
 DAI
 datanode

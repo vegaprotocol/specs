@@ -442,6 +442,14 @@ Notes:
 - The categorisation of parameters is liable to change and be added to as the protocol evolves.
 - As these are themselves network parameters, a set of parameters will control these parameters for the actions that update these parameters (including being self-referential), i.e. the parameter `Governance.UpdateNetwork.GovernanceProposalValidation.MinimumRequiredParticipation` would control the amount of voting participation needed to change these parameters. See the Network Parameters spec.
 
+## Batch Proposals
+
+A `BatchProposalSubmission` is a top-level proposal type (living at the same level in a `Transaction` object as a standard `ProposalSubmission` ) which allows grouping of several related changes into a single proposal, ensuring that all changes will pass or fail governance voting together. The batch proposal is a wrapper containing the same `reference` and `rationale` fields as a standard `ProposalSubmission` alongside a repeated list of `ProposalSubmission`s.
+
+Validation should be applied by the protocol when accepting such a transaction that all proposals within the batch are of the same category for the purposes of ensuring voting thresholds and minimum voting periods can be uniquely determined. Additionally, the closing time of each proposal's voting period must be identical to ensure that a single voting period can be run to determine the result of all. The enactment timestamp, however, should be customisable and can be different for each proposal within the batch.
+
+Once submitted, a single voting period should be run in which participants may place a single vote to approve/disapprove of the entire batch. It should not be possible to vote for components in the batch separately. If the batch fails to pass the vote, the entire batch should be discarded as with any other proposal. If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp does not need to be defined and should be considered indeterminate from a user's point-of-view.
+
 ## APIs
 
 The core should expose via core APIs:
@@ -644,12 +652,23 @@ It is NOT possible to submit a governance proposal where the source account is t
 
 ##### Cancelling governance initiated transfers
 
-- Only recurring governance initiated transfers can be cancelled by proposing a governance initiated transfer cancellation. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
+- Only recurring governance transfers can be cancelled via governance cancel transfer proposal. Trying to cancel any other transfer should fail upon validation of the proposal.(<a name="0028-GOVE-107" href="#0028-GOVE-107">0028-GOVE-107</a>)
 - After a transfer is cancelled there will be no more transfers occurring in the block/seq following the cancellation. This applies to one off and recurring transfers. (<a name="0028-GOVE-123" href="#0028-GOVE-123">0028-GOVE-123</a>)
 - Recurring transfers can be cancelled only after the transfer proposal reached an enacted state. Attempts to cancel before the recurring transfer proposal has enacted will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)
 - Using a governance proposal to cancel, attempts to cancel an using an invalid transfer ID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-125" href="#0028-GOVE-125">0028-GOVE-125</a>)
 - When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-126" href="#0028-GOVE-126">0028-GOVE-126</a>)
 
+
+##### Batch Proposals
+
+- A batch proposal containing one or more component submissions for each type of proposal term can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-146" href="#0028-GOVE-146">0028-GOVE-146</a>)
+
+- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-147" href="#0028-GOVE-147">0028-GOVE-147</a>)
+  
+- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
+  
+- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-149" href="#0028-GOVE-149">0028-GOVE-149</a>)
+   1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
 
 ##### Network History
 
