@@ -182,7 +182,7 @@ Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch (after pe
 
 The `referral_reward_factor` should be set by identifying the "highest" benefit tier where the following conditions are fulfilled.
 
-- `team_running_volume` is greater than the tiers `minimum_running_volume`.
+- `team_running_volume` is greater than or equal to the tiers `minimum_running_volume`.
 
 The referees `referral_reward_factor` is then set to the `referral_reward_factor` defined in the selected benefit tier.
 
@@ -190,8 +190,8 @@ The referees `referral_reward_factor` is then set to the `referral_reward_factor
 
 The `referral_discount_factor` should be set by identifying the "highest" benefit tier where **BOTH** the following conditions are fulfilled.
 
-- `team_running_volume` is greater than the tiers `minimum_running_volume`.
-- the referee has been a member of the team for more than the tiers `minimum_epochs_in_team`.
+- `team_running_volume` is greater than or equal to the tiers `minimum_running_volume`.
+- the referee has been a member of the team for at least the tiers `minimum_epochs_in_team`.
 
 The referees `referral_discount_factor` is then set to the `referral_discount_factor` defined in the selected benefit tier.
 
