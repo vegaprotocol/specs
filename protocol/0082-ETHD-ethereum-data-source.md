@@ -169,6 +169,7 @@ Select {
 2. Create a market to use an internal data source to terminate a market and an ethereum oracle to settle the market (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
 3. Create a market to use an external data source to terminate a market and a manual oracle to settle the market (<a name="0082-ETHD-036" href="#0082-ETHD-036">0082-ETHD-036</a>)
 4. Data sourcing should be completely decoupled from data filtering (<a name="0082-ETHD-037" href="#0082-ETHD-037">0082-ETHD-037</a>)
+4. Ethereum oracle data sources should only forward data after a configurable number of confirmations (<a name="0082-ETHD-046" href="#0082-ETHD-046">0082-ETHD-046</a>)
 
 ### Checkpoints
 
