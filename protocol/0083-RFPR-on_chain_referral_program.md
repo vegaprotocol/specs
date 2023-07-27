@@ -89,7 +89,7 @@ After a referral program [proposal](#governance-proposals) is validated and acce
 
 A team is comprised of a referrer and all their referees. There can only ever be one referrer per team but the number of referees is unlimited.
 
-### Creating / updating teams
+### Creating teams
 
 To create a team and generate a referral code, a party must fulfil the following criteria:
 
@@ -119,7 +119,27 @@ message CreateTeam
 
 The `name`, `team_url` and `avatar_url` fields are only optional if a party has wishes to enabled rewards for their team.
 
-If a party which is already a referrer submits a `CreateTeam` transaction, their team data is simply updated.
+### Updating teams
+
+If a party is already a referrer, they can update their team by submitting an `UpdateTeam` transaction with the following fields:
+
+- `team_id`: id of the team to be updated (this must be the id of the team they created)
+- `enable_rewards`: a boolean value which specifies whether the team should be eligible for team based rewards (spec not started).
+- `name`: an optional team name to be added to the referral banner.
+- `teamUrl`: an optional link to a team forum, discord, etc.
+- `avatarUrl`: an optional url to an image to be used as the teams avatar
+
+Note, in an `UpdateTeam` transaction all fields other than `team_id` are optional, if a value is not specified for a field then that field is simply not updated.
+
+```protobuf
+message UpdateTeam
+    team_id: "abcdefghijklmnopqrstuvqxyz"
+    name: "VegaRocks2",
+    team_url: "https://discord.com/channels/vegarocks2"
+    avatar_url: "https://vega-rocks2/logo-360x360.jpg"
+```
+
+Note, only the creator of a team can submit an `UpdateTeam` transaction for the team they created. If any other party attempts to submit an `UpdateTeam` message, their transaction should be rejected.
 
 ### Joining / moving teams
 
@@ -284,11 +304,11 @@ The Trades API should now also expose the following additional information for e
 
 ### Team Mechanics
 
-#### Creating / updating teams
+#### Creating teams
 
 1. If a party **is not** currently a referrer, the party can **create** a team, by submitting a signed `CreateTeam` transaction.
-1. If a party **is** currently a referrer, the party can **update** a team, by submitting a signed `CreateTeam` transaction.
 1. If one or more of the following conditions are not met, any `CreateTeam` transaction should be rejected.
+    - party must not currently be a **referrer**.
     - party must not currently be a **referee**.
     - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
     - party must not have an active liquidity provision.
@@ -299,6 +319,15 @@ The Trades API should now also expose the following additional information for e
 1. If the referrer of a team currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the next epoch.
 
 1. If a party has created a team (i.e. is a referrer) any future liquidity provision transactions from the party should be rejected.
+
+#### Updating teams
+
+1. If a party **is** currently a referrer, the party can **update** a team, by submitting a signed `UpdateTeam` transaction.
+1. If one or more of the following conditions are not met, any `UpdateTeam` transaction should be rejected.
+    - party does not specify a valid `team_id`
+    - party is not the creator of the team specified
+1. If a party enables rewards for a team, rewards will be enabled at the start of the next epoch.
+1. If a party disables rewards for a team, rewards will be disabled at the start of the next epoch.
 
 #### Joining / moving teams
 
