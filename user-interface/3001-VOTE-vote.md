@@ -42,6 +42,11 @@ When looking for a particular proposal or wanting to see what proposals are open
   - **should** be able to search by asset name/symbol
   - **should** be able to search by network parameter
   - **should** be able to search by content of proposal description
+- **must** see the closing date and time on the tile (<a name="3001-VOTE-018" href="#3001-VOTE-018">3001-VOTE-018</a>)
+- **must** see how long is left to vote (<a name="3001-VOTE-019" href="#3001-VOTE-019">3001-VOTE-019</a>)
+- **must** see colourful / shouty things that prompt me to vote urgently on things "CLOSING SOON" (<a name="3001-VOTE-019" href="#3001-VOTE-019">3001-VOTE-019</a>)
+- **must** see the current voting status and whether it will pass
+- **must** see the current participation and whether it will pass
 
 for each proposal:
 
