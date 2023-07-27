@@ -101,15 +101,17 @@ The default when placing an order with no change to margin mode specified must b
 
 ### Placing an order
 
-When submitting, amending, or deleting an order in isolated margin mode, a two step process will be followed:
+When submitting, amending, or deleting an order in isolated margin mode and continuous trading, a two step process will be followed:
    1. First, the core will check whether the order will trade, either fully or in part, immediately upon entry. If so:
-      1. If the trade would increase the party's position, their general account will be checked for sufficient funds as defined in the Increasing Position section.
+      1. If the trade would increase the party's position, the required additional funds as specified in the Increasing Position section will be calculated. The total expected margin balance (current plus new funds) will then be compared to the `maintenance margin` for the expected position, if the margin balance would be less than maintenance, instead reject the order in it's entirety. If the margin will be greater than the maintenance margin their general account will be checked for sufficient funds.
          1. If they have sufficient, that amount will be moved into their margin account and the immediately matching portion of the order will trade.
          2. If they do not have sufficient, the order will be rejected in it's entirety for not meeting margin requirements.
-      2. If the trade would decrease the party's position, that portion will trade and margin will be released as in the Decreasing Position section
+      3. If the trade would decrease the party's position, that portion will trade and margin will be released as in the Decreasing Position section
    2. If the order is not persistent this is the end, if it is persistent any portion of the order which has not traded in step 1 will move to being placed on the order book. At this point, the party's general account will be checked for sufficient margin to cover `limit price * remaining size * margin factor`, as this is the worst-case trade price of the remaining component. If there is sufficient, this amount will be moved into the party's Order Margin account and the order will be placed on the book. If there is insufficient, the remaining portion of the order will be `stopped`.
 
 NB: This means that a party's order could partially match, with a trade executed and some funds moved to the margin account with correct leverage whilst the rest of the order is immediately stopped.
+
+When submitting, amending, or deleting an order in isolated margin mode and an auction is active there is no concept of an order trading immediately on entry, however the case of someone putting in a sell order for a very low price must be handled (as it is likely to execute at a much higher price). To handle this, when in an auction the amount taken into the order margin account should be the larger of either `limit price * size * margin factor` or `max(mark price, indicative uncrossing price) * size * margin factor`. All other steps are as above.
 
 ### Increasing Position
 
