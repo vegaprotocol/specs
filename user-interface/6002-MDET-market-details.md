@@ -119,10 +119,10 @@ When I look into market info I **Must** see following governance information:
 
 ## Market successor
 
-When I'm tranding on the market, I **Must** to see there are:
+When I'm tranding on the market, I **Must** see there are:
 - Market successor: (<a name="6002-MDET-401" href="#6002-MDET-401">6002-MDET-401</a>)
     - link to the successor market
-    - 24 volume of the successor market
+    - 24 h volume of the successor market
     - Remaining time until parent market expires
 - Proposal for the market successor : (<a name="6002-MDET-402" href="#6002-MDET-402">6002-MDET-402</a>)
     - link to governance proposal
