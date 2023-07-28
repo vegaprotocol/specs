@@ -107,7 +107,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. If margin and general account of trader are insufficient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
 1. If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-009" href="#0002-STTL-009">0002-STTL-009</a>)
 
-### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)(Expiring Future: <a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>, Perpetual Future: <a name="0002-STTL-015" href="#0002-STTL-015">0002-STTL-015</a>)
+### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)(Perpetual Future: <a name="0002-STTL-015" href="#0002-STTL-015">0002-STTL-015</a>)
 
 1. A [cash settled futures](0016-PFUT-product_builtin_future.md) market has a status of ACTIVE and is trading in default trading mode (continuous trading)
 1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated.
