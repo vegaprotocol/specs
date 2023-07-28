@@ -592,7 +592,8 @@
       "0082-ETHD-042",
       "0082-ETHD-043",
       "0082-ETHD-044",
-      "0082-ETHD-045"
+      "0082-ETHD-045",
+      "0082-ETHD-046"
     ]
   },
   "SLA": {
@@ -672,7 +673,6 @@
       "0026-AUCT-022"
     ]
   },
-
   "Batch Change Proposals": {
     "milestone": "deployment-2",
     "acs": [
@@ -683,7 +683,31 @@
       "0028-GOVE-149"
     ]
   },
-
+  "Referral program": {
+    "milestone": "deployment-2",
+    "acs": [
+      "0083-RFPR-000",
+      "0084-VDPR-000"
+    ]
+  },
+  "Market governance": {
+    "milestone": "deployment-2",
+    "acs": [
+      "0028-GOVE-064",
+      "0028-GOVE-069",
+      "0028-GOVE-070",
+      "0028-GOVE-072",
+      "0028-GOVE-110",
+      "0028-GOVE-113",
+      "0028-GOVE-118",
+      "0028-GOVE-135",
+      "0028-GOVE-136",
+      "0028-GOVE-137",
+      "0028-GOVE-138",
+      "0028-GOVE-139",
+      "0028-GOVE-111"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
