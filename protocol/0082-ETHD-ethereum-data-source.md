@@ -156,19 +156,17 @@ Select {
 
 ### Non Functional
 
-1. System needs to emit an error via the TX RESULT event if the data source does NOT return data in a timely fashion - e.g. the read method of the smart contract take too long to return data OR times out (<a name="0082-ETHD-027" href="#0082-ETHD-027">0082-ETHD-027</a>)
+1. Network wide contract error should be reported via oracle data events (<a name="0082-ETHD-027" href="#0082-ETHD-027">0082-ETHD-027</a>)
 2. Phase 2 - System needs to emit an error via the TX RESULT event if the data source does NOT emit events in a timely fashion. e.g. if the data source is expected to emit events every 5 minutes and if we do not receive 3 consecutive events , then raise an error via the TX RESULT event (<a name="0082-ETHD-028" href="#0082-ETHD-028">0082-ETHD-028</a>)
 3. Phase 2 - Define behaviour for missed events / missed scheduled smart contract calls - e.g. if an oracle data source is scheduled to emit events every 10 minutes and we miss 5 events because of protocol upgrade or some other outage - then do we catch up those events or skip those events ? Maybe this is defined in the oracle data source definition (<a name="0082-ETHD-029" href="#0082-ETHD-029">0082-ETHD-029</a>)
 4. If an oracle data source is inactive - then any events / any data received from that oracle data source is NOT processed (<a name="0082-ETHD-030" href="#0082-ETHD-030">0082-ETHD-030</a>)
-5. SPAM rules if any defined should be tested for (<a name="0082-ETHD-031" href="#0082-ETHD-031">0082-ETHD-031</a>)
-6. NOT all data sourced should be stored on chain - invalid / incorrect data is filtered out and is NOT processed / stored on chain - understand what the rules are and design the AC's / test accordingly (<a name="0082-ETHD-032" href="#0082-ETHD-032">0082-ETHD-032</a>)
 
 ### Usage
 
 1. It should be possible to use only ethereum oracle data sources in a market proposal, or create any combination with any of the other types of currently existing external or internal data sources (<a name="0082-ETHD-034" href="#0082-ETHD-034">0082-ETHD-034</a>)
 2. Create a market to use an internal data source to terminate a market and an ethereum oracle to settle the market (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
 3. Create a market to use an external data source to terminate a market and a manual oracle to settle the market (<a name="0082-ETHD-036" href="#0082-ETHD-036">0082-ETHD-036</a>)
-4. Data sourcing should be completely decoupled from data filtering (<a name="0082-ETHD-037" href="#0082-ETHD-037">0082-ETHD-037</a>)
+4. Chain events should only be sent when the  filter is matched (<a name="0082-ETHD-037" href="#0082-ETHD-037">0082-ETHD-037</a>)
 5. Ethereum oracle data sources should only forward data after a configurable number of confirmations (<a name="0082-ETHD-046" href="#0082-ETHD-046">0082-ETHD-046</a>)
 
 ### Checkpoints
