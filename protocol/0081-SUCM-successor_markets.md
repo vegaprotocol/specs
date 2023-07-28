@@ -81,7 +81,7 @@ Successor markets which are proposed whilst the parent is also still in a "propo
 
 Successor markets can be enacted when the parent market is in opening auction. There is no virtual stake to copy over, and no insurance pool balance to transfer. (<a name="0081-SUCM-009" href="#0081-SUCM-009">0081-SUCM-009</a>)
 
-A successor market proposal can be enacted when the parent market is in one of the following states: Suspended, Active, Trading terminated or Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
+A successor market proposal can be enacted when the parent market is in one of the following states: Pending, Suspended, Active, Trading terminated or Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
 
 When a successor market is enacted (i.e. leaves the opening auction), all other related successor market proposals, in the state "pending" or "proposed", are automatically rejected. Any LP submissions associated with these proposals are cancelled, and the funds are released (<a name="0081-SUCM-011" href="#0081-SUCM-011">0081-SUCM-011</a>)
 
