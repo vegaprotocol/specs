@@ -195,7 +195,7 @@ for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</
 1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_hold_bal`.
-2. 
+
 #### Test case 3.2: Market is proposed, voting hasn't closed, not restored (<a name="0073-LIMN-010" href="#0073-LIMN-010">0073-LIMN-010</a>)
 
 for product spot: (<a name="0073-LIMN-103" href="#0073-LIMN-103">0073-LIMN-103</a>)
