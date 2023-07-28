@@ -671,7 +671,7 @@
       "0026-AUCT-022"
     ]
   },
-  "Batch Change Proposals": {
+  "Batch change proposals": {
     "milestone": "deployment-2",
     "acs": [
       "0028-GOVE-145",
@@ -703,7 +703,9 @@
       "0028-GOVE-137",
       "0028-GOVE-138",
       "0028-GOVE-139",
-      "0028-GOVE-111"
+      "0028-GOVE-111",
+      "0028-GOVE-150",
+      "0028-GOVE-151"
     ]
   },
   "Unknown": {

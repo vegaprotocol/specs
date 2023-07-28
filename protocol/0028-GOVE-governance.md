@@ -539,6 +539,8 @@ APIs should also exist for clients to:
 - Enacting a market closure governance proposal on a market that is not in a settled state always uses the price supplied with the proposal for final settlement, even when the oracle settlement price is available at that time. (<a name="0028-GOVE-138" href="#0028-GOVE-138">0028-GOVE-138</a>)
 - Successful enactment of a market closure proposal changes the state of the market to `closed`. (<a name="0028-GOVE-139" href="#0028-GOVE-139">0028-GOVE-139</a>)
 - Attempt to enact a market closure proposal on a closed market has no effect. (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
+- Markets which have been suspended via a governance proposal can be resumed after a protocol upgrade restarts the network. (<a name="0028-GOVE-150" href="#0028-GOVE-150">0028-GOVE-150</a>)
+- Markets which have been suspended via a governance proposal can be terminated after a protocol upgrade restarts the network. (<a name="0028-GOVE-151" href="#0028-GOVE-151">0028-GOVE-151</a>)
 
 #### Network parameter change proposals
 
@@ -664,9 +666,9 @@ It is NOT possible to submit a governance proposal where the source account is t
 - A batch proposal containing one or more component submissions for each type of proposal term can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-146" href="#0028-GOVE-146">0028-GOVE-146</a>)
 
 - A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-147" href="#0028-GOVE-147">0028-GOVE-147</a>)
-  
+
 - A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
-  
+
 - A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-149" href="#0028-GOVE-149">0028-GOVE-149</a>)
    1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
 
