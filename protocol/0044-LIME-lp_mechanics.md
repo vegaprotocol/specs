@@ -77,7 +77,7 @@ If the participant has sufficient collateral to cover their commitment, the comm
 For clarity, liquidity providers will have a separate [margin account](./0013-ACCT-accounts.md#trader-margin-accounts) and [bond account](./0013-ACCT-accounts.md#liquidity-provider-bond-accounts).
 
 A new or increased commitment will get activated in two stages.(*) First the commitment amount (increase) will get transferred from general to bond account.
-Their obligation for providing liquidity under SLA is the one from the beginning of current epoch (so in particular for a new LP it's `0`).
+Their obligation for providing liquidity under SLA is determined by their commitment from the beginning of the current epoch (so, in particular, for a new LP, it's 0).
 At the beginning of the next epoch (after the rewards / penalties for present LPs have been evaluated) the commitment amount is noted and the LP is expected to provide sufficient liquidity for the epoch.
 
 (*) The expectation is the end of the opening auction of the market. The LPs that submit commitment during the opening auction become the market LPs as soon as the opening auction ends.
