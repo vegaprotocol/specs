@@ -311,3 +311,4 @@ $VEGA
 teamUrl
 avatarUrl
 dApp
+leaderboards
