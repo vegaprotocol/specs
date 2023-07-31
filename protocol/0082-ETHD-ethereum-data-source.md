@@ -111,15 +111,11 @@ Select {
 ### External Oracles - Creation
 
 1. Using the existing ways to create or update a market via governance proposals, define data sources for settlement and termination as the result of calling a read method of a smart contract on ethereum network. (Phase 2 of this step would be defining an oracle that is based on listening for events on ethereum network) (<a name="0082-ETHD-001" href="#0082-ETHD-001">0082-ETHD-001</a>)
-2. All current governance rules that apply to propose / submit / vote on a proposal should be applicable for the ethereum oracle data source creation / amendment  (<a name="0082-ETHD-002" href="#0082-ETHD-002">0082-ETHD-002</a>)
-3. Create more than spam.protection.max.proposals oracle data source proposals in an epoch - proposal rejected with error message (<a name="0082-ETHD-003" href="#0082-ETHD-003">0082-ETHD-003</a>)
-4. Create ethereum oracles based on calling a read method of a smart contract by supplying incorrect ABI (Phase 2 - oracle based on listening for events) (<a name="0082-ETHD-004" href="#0082-ETHD-004">0082-ETHD-004</a>)
 
 ### External Oracles - Amendments
 
-1. Amend the oracle data source via governance proposals. Amendments should take effect as soon as the proposal is enacted (<a name="0082-ETHD-005" href="#0082-ETHD-005">0082-ETHD-005</a>)
-2. Amend an existing ethereum data source and change the contract address and enact the proposal. Once enacted, the data should be sourced from the new smart contract. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted (<a name="0082-ETHD-006" href="#0082-ETHD-006">0082-ETHD-006</a>)
-3. Phase 2 - Amend an existing ethereum data source and change the events that we are listening to and enact the proposal. Once enacted , the data should be sourced from the amended events. Try amending the other fields in the oracle data source and the changes should take effect after the proposals are enacted (<a name="0082-ETHD-007" href="#0082-ETHD-007">0082-ETHD-007</a>)
+1. Update an existing market using the market update proposal to change the smart contract address and read method. The changes take effect after the market update proposal is enacted and data is sourced from the new smart contract. (<a name="0082-ETHD-005" href="#0082-ETHD-005">0082-ETHD-005</a>)
+2. Phase 2 - Update an existing market using the market update proposal to change the events that the market is listening to. The changes take effect after the market update proposal is enacted and data is sourced from the new events. (<a name="0082-ETHD-007" href="#0082-ETHD-007">0082-ETHD-007</a>)
 
 ### External Oracles - Deletions
 
@@ -137,8 +133,8 @@ Select {
 
 ### New Network parameters
 
-1. Test min / max values / validations for any new network parameters that are added (<a name="0082-ETHD-017" href="#0082-ETHD-017">0082-ETHD-017</a>)
-2. Test the successful disabling / enabling of ethereum oracles when the new network parameter "ethereum.oracles.enabled" is set to false or true respectively (<a name="0082-ETHD-018" href="#0082-ETHD-018">0082-ETHD-018</a>)
+1. New network parameter - ethereum.oracles.enabled. Setting this to 0 should NOT allow market creation and market updates with ethereum oracles. (<a name="0082-ETHD-017" href="#0082-ETHD-017">0082-ETHD-017</a>)
+2. New network parameter - ethereum.oracles.enabled. Setting this to 1 should allow market creation amd market updates with ethereum oracles. (<a name="0082-ETHD-018" href="#0082-ETHD-018">0082-ETHD-018</a>)
 
 ### Negative Tests
 
@@ -152,7 +148,7 @@ Select {
 ### API
 
 1. Ability to query oracle data sources via an API endpoint - filters should be available for data source - internal OR external, status - Active / Inactive / Expired (<a name="0082-ETHD-025" href="#0082-ETHD-025">0082-ETHD-025</a>)
-2. Ability to query historic data sent by an oracle data source (<a name="0082-ETHD-026" href="#0082-ETHD-026">0082-ETHD-026</a>)
+2. Ability to query historic data sent by an oracle data source and processed by vega network (<a name="0082-ETHD-026" href="#0082-ETHD-026">0082-ETHD-026</a>)
 
 ### Non Functional
 
@@ -181,9 +177,8 @@ Select {
 
 ### Protocol Upgrade
 
-1. Create / amend an external oracle data source and before it is enacted perform a protocol upgrade. The oracle data source should be enacted at the correct time after the upgrade (<a name="0082-ETHD-042" href="#0082-ETHD-042">0082-ETHD-042</a>)
-2. Create / amend an external oracle data source with enactment time that falls during a protocol upgrade. The oracle data source should be enacted immediately after the network is up after the protocol upgrade (<a name="0082-ETHD-043" href="#0082-ETHD-043">0082-ETHD-043</a>)
-3. Phase 2 - Have a network running g with a mix of internal and external active and inactive oracles. Perform a protocol upgrade. Once the network is up , the state of the various oracles should be the same as before the protocol upgrade and either catch up all missed events or start processing new events based on config (<a name="0082-ETHD-044" href="#0082-ETHD-044">0082-ETHD-044</a>)
+1. Protocol upgrade should have no impact on a market using an ethereum oracle for settlement and/or termination (<a name="0082-ETHD-042" href="#0082-ETHD-042">0082-ETHD-042</a>)
+2. Phase 2 - Have a network running with a markets with a mix of internal and ethereum oracles. Perform a protocol upgrade. Once the network is up , the state of the various oracles should be the same as before the protocol upgrade and either catch up all missed events or start processing new events based on config (<a name="0082-ETHD-044" href="#0082-ETHD-044">0082-ETHD-044</a>)
 
 ### Regression
 
