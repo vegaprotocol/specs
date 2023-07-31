@@ -80,7 +80,7 @@ A new or increased commitment will get activated in two stages.(*) First the com
 Their obligation for providing liquidity under SLA is determined by their commitment from the beginning of the current epoch (so, in particular, for a new LP, it's 0).
 Second, at the beginning of the next epoch (after the rewards/penalties for present LPs have been evaluated), the commitment amount is noted, and the LP is expected to provide sufficient liquidity for the epoch.
 
-(*) The expectation is the end of the opening auction of the market. The LPs that submit commitment during the opening auction become the market LPs as soon as the opening auction ends.
+(*) The exception is the end of the opening auction of the market. The LPs that submit a commitment during the opening auction become the market LPs as soon as the opening auction ends.
 
 The fee for the market is only [updated at the epoch boundary using the "auction" mechanism set here](0042-LIQF-setting_fees_and_rewarding_lps.md).
 
