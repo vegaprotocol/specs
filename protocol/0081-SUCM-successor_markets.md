@@ -110,7 +110,7 @@ A market which has been settled, but is still inside successor expiry window, is
 
 A market which has been settled, and beyond the successor expiry window, is not retained in a checkpoint, and cannot be used by a successor market after restart(<a name="0081-SUCM-030" href="#0081-SUCM-030">0081-SUCM-030</a>)
 
-A market which has been settled, and already has a child which has succeeded it, is retained in a checkpoint, and can be found after restart. Both child and parent retain child/parent links in the API(<a name="0081-SUCM-031" href="#0081-SUCM-031">0081-SUCM-031</a>)
+A market which has been settled, and already has a child which has succeeded it, is retained in a checkpoint. Market can be queried via APIs and settled market state can be retrieved. Both child and parent retain parent/child links in market state, and are listed in "successor chain" API request(<a name="0081-SUCM-031" href="#0081-SUCM-031">0081-SUCM-031</a>)
 
 For a parent and child (explicitly: the child has left opening auction), after a checkpoint restart, parent and child both enter opening auction again. It is not possible to propose a new market which attempts to succeed that parent.(<a name="0081-SUCM-032" href="#0081-SUCM-032">0081-SUCM-032</a>)
 
