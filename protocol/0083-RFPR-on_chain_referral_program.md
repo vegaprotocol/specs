@@ -117,6 +117,7 @@ To create a referral set and generate a referral code, the party must submit a s
   - `name`: mandatory str team name
   - `team_url`: mandatory str of a link to a team forum, discord, etc.
   - `avatar_url`: mandatory str of a link to an image to be used as the teams avatar
+  - `closed`: mandatory bool, defines whether a team is accepting new members
 
 *Example: if party wants to create a simple referral set.*
 
@@ -133,8 +134,9 @@ message CreateReferralSet
     is_team: True
     team_details: {
         name: "VegaRocks",
-        team_url: "https://discord.com/channels/vegarocks"
-        avatar_url: "https://vega-rocks/logo-360x360.jpg"
+        team_url: "https://discord.com/channels/vegarocks",
+        avatar_url: "https://vega-rocks/logo-360x360.jpg",
+        closed: False,
     }
 ```
 
@@ -155,6 +157,7 @@ To update a referral set the party submit a signed `UpdateReferralSet` transacti
   - `name`: optional str team name
   - `team_url`: optional str of a link to a team forum, discord, etc.
   - `avatar_url`: optional str of a link to an image to be used as the teams avatar
+  - `closed`: optional bool, defines whether a team is accepting new members
 
 ```protobuf
 message UpdateReferralSet
@@ -164,8 +167,11 @@ message UpdateReferralSet
         name: "VegaRocks",
         team_url: "https://discord.com/channels/vegarocks"
         avatar_url: "https://vega-rocks/logo-360x360.jpg"
+        closed: True,
     }
 ```
+
+If a referral set is currently designated as a team, a referrer should be able to "close" their team to any new members by setting the `closed` field to `True`. Note, closing a team is the same as closing a referral set and as such all `ApplyReferralCode` transactions applying the referral code associated with the closed referrals set should be rejected. 
 
 If a referral set is currently designated as a team, a party is able to effectively "disband" a team by updating their referral set and setting their `is_team` value to `False`. Note a team should only be "disbanded" and removed from leaderboards at the end of the current epoch after rewards have been distributed.
 
@@ -374,6 +380,7 @@ The Estimate Fees API should now calculate the following additional information:
 1. If a party **is** currently a **referee** and submits multiple `ApplyReferralCode` transactions in an epoch, the latest valid `ApplyReferralCode` transaction will be applied.
 1. If one or more of the following conditions are not met,  any `ApplyReferralCode` transaction should be rejected.
     - a party must not currently be a **referrer**.
+1. If the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the `team` to closed.
 
 #### Epoch and running volumes
 
