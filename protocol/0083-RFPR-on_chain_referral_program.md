@@ -107,11 +107,8 @@ To create a new referral set and become a referrer, a party must fulfil the foll
 - party must not currently be a **referrer**
 - party must not currently be a **referee**
 - party must be staking at least `referralProgram.minStakedVegaTokens` tokens
-- party must not have an active liquidity provision
 
 The staking requirement is constant. If a referrer un-stakes enough tokens to fall below the requirement, they and their referees will immediately no longer be eligible for referral benefits. If the referrer re-stakes enough tokens to fulfil the staking requirement, they and their referees will become eligible for referral benefits **at the start of the next epoch**. Note, for the case where a party does not re-stake, the protocol will allow referees will to "move" referral sets by [applying](#applying-a-referral-code) a new referral code.
-
-The liquidity provision restriction is constant, once a party has become a referrer they will be restricted from committing liquidity. Any liquidity provision transactions from a referrer should be rejected.
 
 To create a referral set and generate a referral code, the party must submit a signed `CreateReferralSet` transaction. When creating a referral set, a party can optionally designate it as a [team](#glossary) and provide additional team details. When designated as a team a referral set will be visible on leaderboards and in future releases will be eligible for team rewards.  A `CreateReferralSet` transaction has the following fields:
 
@@ -177,9 +174,6 @@ If a referral set is currently designated as a team, a party is able to effectiv
 To apply a referral code and become a referee, a party must fulfil the following criteria:
 
 - party must not currently be a **referrer**
-- party must not have an active liquidity provision
-
-The liquidity provision restriction is constant, once a party has become a referee they will be restricted from committing liquidity. Any liquidity provision transactions from a referee should be rejected.
 
 To become a referee, a referee must submit a signed `ApplyReferralCode` transaction with the following fields:
 
@@ -361,12 +355,10 @@ The Estimate Fees API should now calculate the following additional information:
     - party must not currently be a **referrer**.CreateReferralSet
     - party must not currently be a **referee**.
     - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
-    - party must not have an active liquidity provision.
 1. If a referrer removes sufficient stake to not meet the required tokens, the referral set should not be eligible for the following referral benefits:
     - the referrer should not be rewarded for any referee taker fees.
     - all referees should not receive any discount on their taker fees.
 1. If the referrer of a referral set currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the start of the next epoch.
-1. If a party has created a referral code any future liquidity provision transactions from the party should be rejected.
 1. When creating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory.
 
 #### Updating a referral set
@@ -382,8 +374,6 @@ The Estimate Fees API should now calculate the following additional information:
 1. If a party **is** currently a **referee** and submits multiple `ApplyReferralCode` transactions in an epoch, the latest valid `ApplyReferralCode` transaction will be applied.
 1. If one or more of the following conditions are not met,  any `ApplyReferralCode` transaction should be rejected.
     - a party must not currently be a **referrer**.
-    - party must not have an active liquidity provision.
-1. If a party is associated with a referral set any future liquidity provision transactions from the party should be rejected.
 
 #### Epoch and running volumes
 
