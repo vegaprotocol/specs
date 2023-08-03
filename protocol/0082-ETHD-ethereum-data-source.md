@@ -165,7 +165,7 @@ Select {
 
 ### API
 
-1. Ability to query oracle data sources via an API endpoint - filters should be available for data source - internal OR external, status - Active / Inactive / Expired (<a name="0082-ETHD-025" href="#0082-ETHD-025">0082-ETHD-025</a>)
+1. Ability to query oracle data sources via an API endpoint (REST, gRPC and graphQL) - filters should be available for data source - internal OR external, status - Active / Inactive / Expired (<a name="0082-ETHD-025" href="#0082-ETHD-025">0082-ETHD-025</a>)
 2. Ability to query historic data sent by an oracle data source and processed by vega network (<a name="0082-ETHD-026" href="#0082-ETHD-026">0082-ETHD-026</a>)
 
 ### Non Functional
