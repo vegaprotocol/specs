@@ -161,6 +161,7 @@ Select {
 5. Create an oracle that calls a read method of a smart contract and specify an incorrect ABI format for the event. Proposal should fail validation and should return an error (<a name="0082-ETHD-023" href="#0082-ETHD-023">0082-ETHD-023</a>)
 6. Will need some tests around consensus, will require setting up a network and having some nodes receive different values for the same oracle data point and testing that the oracle data point is/is not published depending on voting (<a name="0082-ETHD-024" href="#0082-ETHD-024">0082-ETHD-024</a>)
 7. Create 2 markets with exactly the same ethereum oracle data sources for termination and settlement. Verify that the data spec ID are the same and the data sources are ACTIVE. Now terminate and settlement Market1 using governance proposals. Now the status of the data sources should still be ACTIVE as MArket2 is still using them.
+8. Ensure that when a market is suspended and then resumed via a governance proposal we can still terminate and settle the market using ethereum oracle.
 
 ### API
 
