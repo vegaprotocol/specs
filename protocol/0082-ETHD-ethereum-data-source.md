@@ -123,7 +123,7 @@ Select {
 ### External Oracles - Deactivation
 
 1. Aligned with the existing logic, when no market listens to a data source, whatever that source is, it is automatically disregarded by the engine and the status of the data source is set to DEACTIVATED. Same applies for ethereum oracles (<a name="0082-ETHD-008" href="#0082-ETHD-008">0082-ETHD-008</a>)
-2. When ethereum oracle is referenced / used by an existing market, it should not be possible to DEACTIVATE that ethereum oracle data source. (<a name="0082-ETHD-009" href="#0082-ETHD-009">0082-ETHD-009</a>)
+2. When ethereum oracle is referenced / used by an existing market, it should not be possible to DEACTIVATE that ethereum oracle data source without either a termination or settlement transaction being sent to the core and successfully processed.(<a name="0082-ETHD-009" href="#0082-ETHD-009">0082-ETHD-009</a>)
 3. If a single data source is used by multiple markets, then it should NOT be possible to DEACTIVATE the data source even if one of those markets is actively using the data source (<a name="0082-ETHD-010" href="#0082-ETHD-010">0082-ETHD-010</a>)
 
 ### External Oracles - Validations
