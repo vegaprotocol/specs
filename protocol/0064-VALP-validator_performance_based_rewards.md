@@ -51,15 +51,20 @@ If the parameter is set to 0, the heartbeats are effectively turned off.
 At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; this is (number_of_ethereum_blocks_per_epoch)/ethereum_heartbeat_period)+number_of_ethereum_events_per_validator
 
 Let `expected_f` be the maximum number of Ethereum events forwarded by any Validator given above conditions, and `f` be the number of blocks a given validator has forwarded. If `expected_f` equals zero, then all scores are set to 1. 
+Let `low_volume_correction` be `abs(3-expected_f)`.
 
-Else, validator_ethereum_performance = `(min((f)/(expected_f)*1.1, 1)))`,
+Else, validator_ethereum_performance = `(min((f+low_volume_correction)/(expected_f)*1.1, 1)))`,
+
+Explanation: low_volume_correction handle the case that the number of events is very low, and a validator might just by bad luck never get anything to forward (which also would only happen if the heartbeat is deactivated). Thus, if a validator is expected to forward 2 or less events, it is not penalised if it didn't forward any.
+The multiplication with 1.1 is adding preventing a validator to get penalised if they got slightly less than others (which always can happen due to the random distribution). Thus, a validator that forwards 95% of the events that others do is not penalised. We could get more precision here (differentiating between the heartbeat and the expected real events etc), but that'd be overthinking. 
+In the end, we make sure no score is bigger than 1 (which might happen due to the multiplicative bonus).
 
 ### Total Performance
 As we have several performance measurements, they need to be combined to a total score. To this end, we have a system variable performance weights, 
 which has n+1 parameters (weight_0,.. weight_n) for n measurements (currently 2, the tendermint-performance and the ethereum-performance.Weights are normalised, so the sum of all weights needs to be 1. Also, all individual performance measurements are normalised to be between 0 and 1.
 
 The total performance then is
-weight_0*(validator_ethereum_performance*validator_tendermint_performance)+weight_1*(validator_tendermint_performance)+weight_2*(validator_ethereum_performance)
+`weight_0*(validator_ethereum_performance*validator_tendermint_performance)+weight_1*(validator_tendermint_performance)+weight_2*(validator_ethereum_performance)`
 
 The initial values for the weights are {0,0.8,0.2}.
 
