@@ -1,6 +1,7 @@
 # Volume Discount Program
 
 The volume discount program provides tiered discounts on taker fees to traders. A trader accesses greater discounts by increasing their taker volume over a specified number of epochs.
+
 ## Network parameters
 
 - `volumeDiscountProgram.maxBenefitTiers` - limits the maximum number of [benefit tiers](#governance-proposals) which can be specified as part of a volume discount program

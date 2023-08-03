@@ -114,30 +114,31 @@ To create a referral set and generate a referral code, the party must submit a s
 
 - `is_team`: a boolean defining whether the referral set should be designated as a team
 - `team_details`: an optional dictionary defining the teams details (non-optional if `is_team` is `True`)
-  - `name`: mandatory str team name
-  - `team_url`: mandatory str of a link to a team forum, discord, etc.
-  - `avatar_url`: mandatory str of a link to an image to be used as the teams avatar
-  - `closed`: mandatory bool, defines whether a team is accepting new members
+  - `name`: mandatory string team name
+  - `team_url`: mandatory string of a link to a team forum, discord, etc.
+  - `avatar_url`: mandatory string of a link to an image to be used as the teams avatar
+  - `closed`: mandatory boolean, defines whether a team is accepting new members
 
 *Example: if party wants to create a simple referral set.*
 
 ```protobuf
-message CreateReferralSet
+message CreateReferralSet{
     is_team: False
     team_details: None
+}
 ```
 
 *Example: if party wants to create a referral set and designate it as a team.*
 
 ```protobuf
-message CreateReferralSet
+message CreateReferralSet{
     is_team: True
     team_details: {
         name: "VegaRocks",
         team_url: "https://discord.com/channels/vegarocks",
         avatar_url: "https://vega-rocks/logo-360x360.jpg",
         closed: False,
-    }
+}
 ```
 
 When the network receives a valid `CreateReferralSet` transaction, the network will create a referral set with the referral set `id` as the referral code. Any future parties who [apply](#applying-a-referral-code) the referral code will be added to the referral set.
@@ -154,13 +155,13 @@ To update a referral set the party submit a signed `UpdateReferralSet` transacti
 - `id`: id of the referral set to update
 - `is_team`: a boolean defining whether the party should made into a team visible on leaderboards
 - `team_details`: an optional dictionary defining the team
-  - `name`: optional str team name
-  - `team_url`: optional str of a link to a team forum, discord, etc.
-  - `avatar_url`: optional str of a link to an image to be used as the teams avatar
-  - `closed`: optional bool, defines whether a team is accepting new members
+  - `name`: optional string team name
+  - `team_url`: optional string of a link to a team forum, discord, etc.
+  - `avatar_url`: optional string of a link to an image to be used as the teams avatar
+  - `closed`: optional boolean, defines whether a team is accepting new members
 
 ```protobuf
-message UpdateReferralSet
+message UpdateReferralSet{
     id: "mYr3f3rra15et1d"
     is_team: True
     team_details: {
@@ -168,10 +169,10 @@ message UpdateReferralSet
         team_url: "https://discord.com/channels/vegarocks"
         avatar_url: "https://vega-rocks/logo-360x360.jpg"
         closed: True,
-    }
+}
 ```
 
-If a referral set is currently designated as a team, a referrer should be able to "close" their team to any new members by setting the `closed` field to `True`. Note, closing a team is the same as closing a referral set and as such all `ApplyReferralCode` transactions applying the referral code associated with the closed referrals set should be rejected. 
+If a referral set is currently designated as a team, a referrer should be able to "close" their team to any new members by setting the `closed` field to `True`. Note, closing a team is the same as closing a referral set and as such all `ApplyReferralCode` transactions applying the referral code associated with the closed referrals set should be rejected.
 
 If a referral set is currently designated as a team, a party is able to effectively "disband" a team by updating their referral set and setting their `is_team` value to `False`. Note a team should only be "disbanded" and removed from leaderboards at the end of the current epoch after rewards have been distributed.
 

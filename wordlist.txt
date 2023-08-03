@@ -312,3 +312,5 @@ teamUrl
 avatarUrl
 dApp
 leaderboards
+ReferralSet
+CreateReferralSet
