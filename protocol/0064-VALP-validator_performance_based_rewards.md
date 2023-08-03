@@ -52,10 +52,18 @@ At the end of each epoch, it is counted how many Ethereum events have been forwa
 
 Let `expected_f` be the maximum number of Ethereum events forwarded by any Validator given above conditions, and `f` be the number of blocks a given validator has forwarded. 
 
-Then `validator_performance = max(0.05, min((0.8*p'/expected+0.2*(min((f+10)/(expected_f+10), 1)))`,
+Then, validator_ethereum_performance = `(min((f+20)/(expected_f+10), 1)))`,
 
 i.e., the event forwarding is weighted less to reflect that there are fewer events (and we want to avoid a single missed event causing halving of the reward)
 
+### Total Performance
+As we have several performance measurements, they need to be combined to a total score. To this end, we have a system variable performance weights, 
+which has n+1 parameters (weight_0,.. weight_n) for n measurements (currently 2, the tendermint-performance and the ethereum-performance.Weights are normalised, so the sum of all weights needs to be 1. Also, all individual performance measurements are normalised to be between 0 and 1.
+
+The total performance then is
+weight_0*(validator_ethereum_performance*validator_tendermint_performance)+weight_1*(validator_tendermint_performance)+weight_2*(validator_ethereum_performance)
+
+The initial values for the weights are {0,0.8,0.2}.
 
 ### Ersatz and pending validators
 
