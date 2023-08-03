@@ -115,21 +115,35 @@ Select {
 ### External Oracles - Amendments
 
 1. Update an existing market using the market update proposal to change the smart contract address and read method. The changes take effect after the market update proposal is enacted and data is sourced from the new smart contract. (<a name="0082-ETHD-005" href="#0082-ETHD-005">0082-ETHD-005</a>)
-2. Phase 2 - Update an existing market using the market update proposal to change the events that the market is listening to. The changes take effect after the market update proposal is enacted and data is sourced from the new events. (<a name="0082-ETHD-007" href="#0082-ETHD-007">0082-ETHD-007</a>)
+2. Using the market update proposal all data elements for the ethereum oracles can be updated. On successful enactment , a new oracle data source is created for the market. In case any existing data source matches the new data source , then a new data source is not created and the existing one is used.
+3. Phase 2 - Update an existing market using the market update proposal to change the events that the market is listening to. The changes take effect after the market update proposal is enacted and data is sourced from the new events. (<a name="0082-ETHD-007" href="#0082-ETHD-007">0082-ETHD-007</a>)
+4. Create 2 markets to use different ethereum oracles for termination and settlement. Two sets of ethereum oracles are created and are ACTIVE. Then amend Market 2 to use exactly the same ethereum oracles for termination and settlement as Market1. Now ,the ethereum oracles originally created for for Market2 should be set to DEACTIVATED. No new ethereum oracles should be created and the Market2 should use the existing ethereum oracles created for Market1.
 
-### External Oracles - Deletions
+### External Oracles - Deactivation
 
-1. Aligned with the existing logic, when no market listens to a data source, whatever that source is, it is automatically disregarded / deleted from the engine. Same applies for ethereum oracles (<a name="0082-ETHD-008" href="#0082-ETHD-008">0082-ETHD-008</a>)
-2. When ethereum oracle is referenced / used by an existing market, it should not be deleted (<a name="0082-ETHD-009" href="#0082-ETHD-009">0082-ETHD-009</a>)
-3. If a single data source is used by multiple markets, then should NOT be able to delete the data source even if one of those markets is actively using the data source (<a name="0082-ETHD-010" href="#0082-ETHD-010">0082-ETHD-010</a>)
+1. Aligned with the existing logic, when no market listens to a data source, whatever that source is, it is automatically disregarded by the engine and the status of the data source is set to DEACTIVATED. Same applies for ethereum oracles (<a name="0082-ETHD-008" href="#0082-ETHD-008">0082-ETHD-008</a>)
+2. When ethereum oracle is referenced / used by an existing market, it should not be possible to DEACTIVATE that ethereum oracle data source. (<a name="0082-ETHD-009" href="#0082-ETHD-009">0082-ETHD-009</a>)
+3. If a single data source is used by multiple markets, then it should NOT be possible to DEACTIVATE the data source even if one of those markets is actively using the data source (<a name="0082-ETHD-010" href="#0082-ETHD-010">0082-ETHD-010</a>)
 
 ### External Oracles - Validations
 
 1. Validate if the smart contract address is valid (<a name="0082-ETHD-011" href="#0082-ETHD-011">0082-ETHD-011</a>)
 2. Validate if the data elements of the oracle data source is valid - e.g. source for a value that's returned as boolean but have a filter / condition for greater than 0 (<a name="0082-ETHD-012" href="#0082-ETHD-012">0082-ETHD-012</a>)
 3. Validations for min / max frequency of listening for events / read a smart contract (<a name="0082-ETHD-013" href="#0082-ETHD-013">0082-ETHD-013</a>)
-4. When a proposal that uses ethereum oracles, defines incorrect data (contract address, ABI) the system should throw an error and the proposal should not pass validation (<a name="0082-ETHD-014" href="#0082-ETHD-014">0082-ETHD-014</a>)
-5. Any mismatch between expected fields and received fields should emit an error via the TX RESULT event (<a name="0082-ETHD-016" href="#0082-ETHD-016">0082-ETHD-016</a>)
+4. When a proposal that uses ethereum oracles, defines incorrect data (contract address, ABI) the system should return an error and the proposal should not pass validation (<a name="0082-ETHD-014" href="#0082-ETHD-014">0082-ETHD-014</a>)
+5. Any mismatch between expected fields/field types and received fields/field types should emit an error event (<a name="0082-ETHD-016" href="#0082-ETHD-016">0082-ETHD-016</a>)
+
+### Usage
+
+1. It should be possible to use only ethereum oracle data sources in a market proposal, or create any combination with any of the other types of currently existing external or internal data sources (<a name="0082-ETHD-034" href="#0082-ETHD-034">0082-ETHD-034</a>)
+2. Create a market to use an internal data source to terminate a market and an ethereum oracle to settle the market (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
+3. Create a market to use an external data source to terminate a market and an ethereum oracle to settle the market (<a name="0082-ETHD-036" href="#0082-ETHD-036">0082-ETHD-036</a>)
+4. Chain events should only be sent when the  filter is matched (<a name="0082-ETHD-037" href="#0082-ETHD-037">0082-ETHD-037</a>)
+5. Ethereum oracle data sources should only forward data after a configurable number of confirmations (<a name="0082-ETHD-046" href="#0082-ETHD-046">0082-ETHD-046</a>)
+6. Create 2 markets to use the same ethereum oracle for termination say DS-T1 but two different ethereum oracles for settlement DS-S1 and DS-S2. Now trigger the termination ethereum oracle data source. Both markets should be terminated and the data source DS-T1 is set to DEACTIVATED and the data sources DS-S1 and DS-S2 are still ACTIVE. Now settle market1. DS-S1 is set to DEACTIVATED and DS-S2 is still active.
+7. Create a market to use an ethereum oracle for termination configured such that - it expects a boolean value True for termination and the contract supplying the termination value is polled every 5 seconds. Set the contract to return False for termination. The market is not terminated. The data source is still ACTIVE and no BUS_EVENT_TYPE_ORACLE_DATA events for that ethereum oracle spec are emitted. Then set the contract to return True for termination. The market is terminated and an event for BUS_EVENT_TYPE_ORACLE_DATA for the ethereum oracle data spec is received and the ethereum oracle is set to DEACTIVATED.
+8. One oracle data event for multiple matching spec id's - Create 2 markets with ethereum oracle settlement specs that use the same settlement key such that - the first settlement spec expects settlement data to be greater than 100 and the second expects greater than 200. Now send it a settlement data of 300. One single event BUS_EVENT_TYPE_ORACLE_DATA for the settlement data is emitted with both matching ethereum oracle data sources. Both markets are settled and both the data sources are DEACTIVATED.
+9. Different oracle data events for multiple spec id's with non matching filter values - Create 2 markets with ethereum oracle settlement specs that use the same settlement key such that - the first settlement spec expects settlement data to be greater than 100 and the second expects greater than 200. Now send it a settlement data of 50. NO data events for BUS_EVENT_TYPE_ORACLE_DATA. Send settlement data of 150. One single event BUS_EVENT_TYPE_ORACLE_DATA emitted for the settlement data is emitted with matching ethereum oracle data spec for Market1, market1 is settled and the data source is set to DEACTIVATED. Send settlement data of 250. One single event BUS_EVENT_TYPE_ORACLE_DATA emitted for the settlement data is emitted with matching ethereum oracle data spec for Market2, Market2 is settled and the data source is set to DEACTIVATED.
 
 ### New Network parameters
 
@@ -141,9 +155,10 @@ Select {
 1. Set up a new data source with invalid contract address - should fail validations (Phase 2 - listening for invalid event ) (<a name="0082-ETHD-019" href="#0082-ETHD-019">0082-ETHD-019</a>)
 2. Data source returns incorrect data - raise an error via the TX RESULT event. The data source is expected to send a positive price for an asset BUT sends a negative value (<a name="0082-ETHD-020" href="#0082-ETHD-020">0082-ETHD-020</a>)
 3. Phase 2 - Set up a data source for listening to a particular event sent at a frequency of 2 secs. The oracle data source stops emitting events after emitting a couple of events. Raise and error via the TX RESULT event  if 5 consecutive events are missed - need to ratify / expand on this (<a name="0082-ETHD-021" href="#0082-ETHD-021">0082-ETHD-021</a>)
-4. Phase 2 - Create an oracle source listening for a particular event and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error (<a name="0082-ETHD-022" href="#0082-ETHD-022">0082-ETHD-022</a>)
-5. Create an oracle that calls a read method of a smart contract and specify an incorrect ABI format for the event. Proposal should fail validation and should throw an error (<a name="0082-ETHD-023" href="#0082-ETHD-023">0082-ETHD-023</a>)
+4. Phase 2 - Create an oracle source listening for a particular event and specify an incorrect ABI format for the event. Proposal should fail validation and should return an error (<a name="0082-ETHD-022" href="#0082-ETHD-022">0082-ETHD-022</a>)
+5. Create an oracle that calls a read method of a smart contract and specify an incorrect ABI format for the event. Proposal should fail validation and should return an error (<a name="0082-ETHD-023" href="#0082-ETHD-023">0082-ETHD-023</a>)
 6. Will need some tests around consensus, will require setting up a network and having some nodes receive different values for the same oracle data point and testing that the oracle data point is/is not published depending on voting (<a name="0082-ETHD-024" href="#0082-ETHD-024">0082-ETHD-024</a>)
+7. Create 2 markets with exactly the same ethereum oracle data sources for termination and settlement. Verify that the data spec ID are the same and the data sources are ACTIVE. Now terminate and settlement Market1 using governance proposals. Now the status of the data sources should still be ACTIVE as MArket2 is still using them.
 
 ### API
 
@@ -155,31 +170,21 @@ Select {
 1. Network wide contract error should be reported via oracle data events (<a name="0082-ETHD-027" href="#0082-ETHD-027">0082-ETHD-027</a>)
 2. Phase 2 - System needs to emit an error via the TX RESULT event if the data source does NOT emit events in a timely fashion. e.g. if the data source is expected to emit events every 5 minutes and if we do not receive 3 consecutive events , then raise an error via the TX RESULT event (<a name="0082-ETHD-028" href="#0082-ETHD-028">0082-ETHD-028</a>)
 3. Phase 2 - Define behaviour for missed events / missed scheduled smart contract calls - e.g. if an oracle data source is scheduled to emit events every 10 minutes and we miss 5 events because of protocol upgrade or some other outage - then do we catch up those events or skip those events ? Maybe this is defined in the oracle data source definition (<a name="0082-ETHD-029" href="#0082-ETHD-029">0082-ETHD-029</a>)
-4. If an oracle data source is inactive - then any events / any data received from that oracle data source is NOT processed (<a name="0082-ETHD-030" href="#0082-ETHD-030">0082-ETHD-030</a>)
-
-### Usage
-
-1. It should be possible to use only ethereum oracle data sources in a market proposal, or create any combination with any of the other types of currently existing external or internal data sources (<a name="0082-ETHD-034" href="#0082-ETHD-034">0082-ETHD-034</a>)
-2. Create a market to use an internal data source to terminate a market and an ethereum oracle to settle the market (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
-3. Create a market to use an external data source to terminate a market and a manual oracle to settle the market (<a name="0082-ETHD-036" href="#0082-ETHD-036">0082-ETHD-036</a>)
-4. Chain events should only be sent when the  filter is matched (<a name="0082-ETHD-037" href="#0082-ETHD-037">0082-ETHD-037</a>)
-5. Ethereum oracle data sources should only forward data after a configurable number of confirmations (<a name="0082-ETHD-046" href="#0082-ETHD-046">0082-ETHD-046</a>)
+4. If an oracle data source is DEACTIVATED - then that data source is disregarded by the engine and any events / any data received from that oracle data source is NOT processed (<a name="0082-ETHD-030" href="#0082-ETHD-030">0082-ETHD-030</a>)
 
 ### Checkpoints
 
 1. Oracle data sources should be stored in checkpoints and should be restored when restarting a network from checkpoints (<a name="0082-ETHD-038" href="#0082-ETHD-038">0082-ETHD-038</a>)
-2. Restart a network with an active external data source from checkpoint. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
+2. Restart a network with an active ethereum data source from checkpoint. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
 
 ### Snapshots
 
-1. Oracle data sources should be stored on snapshots and should be able to be restored from snapshots (<a name="0082-ETHD-040" href="#0082-ETHD-040">0082-ETHD-040</a>)
+1. Oracle data sources should be stored on snapshots and should be able to be restored from snapshots. The states of the oracle data sources should be maintained. (<a name="0082-ETHD-040" href="#0082-ETHD-040">0082-ETHD-040</a>)
 2. Restart a network with an active external data source from snapshot. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-041" href="#0082-ETHD-041">0082-ETHD-041</a>)
 
 ### Protocol Upgrade
 
-1. Protocol upgrade should have no impact on a market using an ethereum oracle for settlement and/or termination (<a name="0082-ETHD-042" href="#0082-ETHD-042">0082-ETHD-042</a>)
-2. Phase 2 - Have a network running with a markets with a mix of internal and ethereum oracles. Perform a protocol upgrade. Once the network is up , the state of the various oracles should be the same as before the protocol upgrade and either catch up all missed events or start processing new events based on config (<a name="0082-ETHD-044" href="#0082-ETHD-044">0082-ETHD-044</a>)
+1. Have a network running with a couple of markets with a mix of internal and ethereum oracles. Perform a protocol upgrade. Once the network is up , the state of the various oracles should be the same as before the protocol upgrade and either catch up all missed events or start processing new events based on config (<a name="0082-ETHD-044" href="#0082-ETHD-044">0082-ETHD-044</a>)
+2. Create a market with an ethereum oracle for termination such that it triggers at a specific time. Perform a protocol upgrade such that the termination triggers in the middle of the protocol upgrade. Once the network is up , the termination should be triggered and the market should be terminated.
+3. Create a market with an ethereum oracle for settlement such that it triggers at a specific time. Perform a protocol upgrade such that the settlement price matching the filters is triggered in the middle of the protocol upgrade. Once the network is up , the settlement should be triggered and the market should be terminated.
 
-### Regression
-
-1. The ethereum oracles feature ONLY changes the way we source the data BUT does not change the way the sourced data is filtered / processed / used by the system . So in theory all existing oracle data sourcing tests should pass. In addition , it should be possible to run the existing tests by swapping the interval oracle data source for an external one (<a name="0082-ETHD-045" href="#0082-ETHD-045">0082-ETHD-045</a>)
