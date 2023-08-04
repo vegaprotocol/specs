@@ -173,20 +173,19 @@ Select {
 1. Network wide contract error should be reported via oracle data events (<a name="0082-ETHD-027" href="#0082-ETHD-027">0082-ETHD-027</a>)
 2. Phase 2 - System needs to emit an error via the TX RESULT event if the data source does NOT emit events in a timely fashion. e.g. if the data source is expected to emit events every 5 minutes and if we do not receive 3 consecutive events , then raise an error via the TX RESULT event (<a name="0082-ETHD-028" href="#0082-ETHD-028">0082-ETHD-028</a>)
 3. Phase 2 - Define behaviour for missed events / missed scheduled smart contract calls - e.g. if an oracle data source is scheduled to emit events every 10 minutes and we miss 5 events because of protocol upgrade or some other outage - then do we catch up those events or skip those events ? Maybe this is defined in the oracle data source definition (<a name="0082-ETHD-029" href="#0082-ETHD-029">0082-ETHD-029</a>)
-4. If an oracle data source is DEACTIVATED - then that data source is disregarded by the engine and any events / any data received from that oracle data source is NOT processed (<a name="0082-ETHD-030" href="#0082-ETHD-030">0082-ETHD-030</a>)
 
 ### Checkpoints
 
-1. Oracle data sources should be stored in checkpoints and should be restored when restarting a network from checkpoints (<a name="0082-ETHD-038" href="#0082-ETHD-038">0082-ETHD-038</a>)
-2. Restart a network with an active ethereum data source from checkpoint. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
+1. Oracle data sources should be stored in checkpoints and should be restored when restarting a network from checkpoints. Therefore enacted markets with termination or settlement ethereum data sources are able to terminate and settle correctly post restart. (<a name="0082-ETHD-038" href="#0082-ETHD-038">0082-ETHD-038</a>)
+2. Ensure that any etheruem oracle events that were generated during network downtime are correctly processed as soon as the nework is restored and operational. This means that any termination or settlement actions that would of occured during downtime are immediately actioned when network is up and we ensure they are processed in sequenced that they were received by the core polling. (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
 
 ### Snapshots
 
-1. Oracle data sources should be stored on snapshots and should be able to be restored from snapshots. The states of the oracle data sources should be maintained. (<a name="0082-ETHD-040" href="#0082-ETHD-040">0082-ETHD-040</a>)
-2. Restart a network with an active external data source from snapshot. Ensure the data source is active and either catches up all missed events or starts processing new events based on config (<a name="0082-ETHD-041" href="#0082-ETHD-041">0082-ETHD-041</a>)
+1. Oracle data sources linked to markets should be stored on snapshots and should be able to be restored from snapshots. The states of the oracle data sources should be maintained across any markets where they are linked to etheruem data sources. (<a name="0082-ETHD-040" href="#0082-ETHD-040">0082-ETHD-040</a>)
 
 ### Protocol Upgrade
 
-1. Have a network running with a couple of markets with a mix of internal and ethereum oracles. Perform a protocol upgrade. Once the network is up , the state of the various oracles should be the same as before the protocol upgrade and either catch up all missed events or start processing new events based on config (<a name="0082-ETHD-044" href="#0082-ETHD-044">0082-ETHD-044</a>)
-2. Create a market with an ethereum oracle for termination such that it triggers at a specific time. Perform a protocol upgrade such that the termination triggers in the middle of the protocol upgrade. Once the network is up , the termination should be triggered and the market should be terminated.
-3. Create a market with an ethereum oracle for settlement such that it triggers at a specific time. Perform a protocol upgrade such that the settlement price matching the filters is triggered in the middle of the protocol upgrade. Once the network is up , the settlement should be triggered and the market should be terminated.
+1. Have a network running with a couple of markets with a mix of internal, external, open and ethereum oracles. Perform a protocol upgrade. Once the network is up , the state of the various data sources should be the same as before the protocol upgrade (<a name="0082-ETHD-044" href="#0082-ETHD-044">0082-ETHD-044</a>)
+2. Create a market with an ethereum oracle for termination such that it polls at a specific time. Perform a protocol upgrade such that the termination triggers in the middle of the protocol upgrade. Once the network is up , the termination should be triggered and the market should be terminated.
+3. Create a market with an ethereum oracle for settlement such that it polls at a specific time. Perform a protocol upgrade such that the settlement price matching the filters is triggered in the middle of the protocol upgrade. Once the network is up , the settlement should be triggered and the market should be terminated.
+4. Ensure that markets with ethereum termination and settlement data sources continue to successfully terminate and settle markets after the protocol upgrade
