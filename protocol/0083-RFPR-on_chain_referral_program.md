@@ -338,66 +338,65 @@ The Estimate Fees API should now calculate the following additional information:
 ### Governance Proposals
 
 1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
-    - the `closing_timestamp` must be less than or equal to the proposals `enactment_time`.
-    - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
-    - all `minimum_epochs_in_team` values must be an integer strictly greater than 0.
-    - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
-    - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
-    - the `window_length` must be an integer strictly greater than zero.
-1. A referral program should be started the first epoch change after the `enactment_datetime` is reached.
-1. A referral program should be closed the first epoch change after the `closing_timestamp` is reached.
+    - the `closing_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
+    - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers` (<a name="0083-RFPR-002" href="#0083-RFPR-002">0083-RFPR-002</a>).
+    - all `minimum_epochs_in_team` values must be an integer strictly greater than 0 (<a name="0083-RFPR-003" href="#0083-RFPR-003">0083-RFPR-003</a>).
+    - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-004" href="#0083-RFPR-004">0083-RFPR-004</a>).
+    - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-005" href="#0083-RFPR-005">0083-RFPR-005</a>).
+    - the `window_length` must be an integer strictly greater than zero (<a name="0083-RFPR-006" href="#0083-RFPR-006">0083-RFPR-006</a>).
+1. A referral program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0083-RFPR-007" href="#0083-RFPR-007">0083-RFPR-007</a>).
+1. A referral program should be closed the first epoch change after the `closing_timestamp` is reached (<a name="0083-RFPR-008" href="#0083-RFPR-008">0083-RFPR-008</a>).
 1. If a referral program is already active and a proposal `enactment_datetime` is reached, the referral program is updated at the next epoch change.
-    - Propose program A with `enactment_timestamp` 1st Jan and `closing_timestamp` 31st Dec.
-    - Proposal for program A accepted and begins first epoch after 1st Jan.
-    - Propose program B with `enactment_timestamp` 1st June and `closing_timestamp` 31st Aug.
-    - Proposal for program B accepted and overrides program A the first epoch after 1st June.
-    - Program is closed first epoch after 31st Aug, there should be no active proposals.
+    - Propose program A with `enactment_timestamp` 1st Jan and `closing_timestamp` 31st Dec (<a name="0083-RFPR-009" href="#0083-RFPR-009">0083-RFPR-009</a>).
+    - Proposal for program A accepted and begins first epoch after 1st Jan (<a name="0083-RFPR-010" href="#0083-RFPR-010">0083-RFPR-010</a>).
+    - Propose program B with `enactment_timestamp` 1st June and `closing_timestamp` 31st Aug (<a name="0083-RFPR-011" href="#0083-RFPR-011">0083-RFPR-011</a>).
+    - Proposal for program B accepted and overrides program A the first epoch after 1st June (<a name="0083-RFPR-012" href="#0083-RFPR-012">0083-RFPR-012</a>).
+    - Program is closed first epoch after 31st Aug, there should be no active proposals (<a name="0083-RFPR-013" href="#0083-RFPR-013">0083-RFPR-013</a>).
 
 ### Referral set mechanics
 
 #### Creating a referral set
 
-1. If a party **is not** currently a referrer, the party can **create** a referral set, by submitting a signed `CreateReferralSet` transaction.
+1. If a party **is not** currently a referrer, the party can **create** a referral set, by submitting a signed `CreateReferralSet` transaction (<a name="0083-RFPR-014" href="#0083-RFPR-014">0083-RFPR-014</a>).
 1. If one or more of the following conditions are not met, any `CreateReferralCode` transaction should be rejected.
-    - party must not currently be a **referrer**.CreateReferralSet
-    - party must not currently be a **referee**.
-    - party must be staking at least `referralProgram.minStakedVegaTokens` tokens.
+    - party must not currently be a **referrer**.CreateReferralSet (<a name="0083-RFPR-015" href="#0083-RFPR-015">0083-RFPR-015</a>).
+    - party must not currently be a **referee** (<a name="0083-RFPR-016" href="#0083-RFPR-016">0083-RFPR-016</a>).
+    - party must be staking at least `referralProgram.minStakedVegaTokens` tokens (<a name="0083-RFPR-017" href="#0083-RFPR-017">0083-RFPR-017</a>).
 1. If a referrer removes sufficient stake to not meet the required tokens, the referral set should not be eligible for the following referral benefits:
-    - the referrer should not be rewarded for any referee taker fees.
-    - all referees should not receive any discount on their taker fees.
-1. If the referrer of a referral set currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the start of the next epoch.
-1. When creating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory.
+    - the referrer should not be rewarded for any referee taker fees (<a name="0083-RFPR-018" href="#0083-RFPR-018">0083-RFPR-018</a>).
+    - all referees should not receive any discount on their taker fees (<a name="0083-RFPR-019" href="#0083-RFPR-019">0083-RFPR-019</a>).
+1. If the referrer of a referral set currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the start of the next epoch (<a name="0083-RFPR-020" href="#0083-RFPR-020">0083-RFPR-020</a>).
+1. When creating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory (<a name="0083-RFPR-021" href="#0083-RFPR-021">0083-RFPR-021</a>).
 
 #### Updating a referral set
 
-1. If a party is currently a referrer, the party can **update** a referral set by submitting a signed `UpdateReferralSet` transaction.
-1. If a party submits an `UpdateReferralSet` transaction for a referral set they are not the referrer off, the transaction should be rejected.
-1. When updating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory.
+1. If a party is currently a referrer, the party can **update** a referral set by submitting a signed `UpdateReferralSet` transaction (<a name="0083-RFPR-022" href="#0083-RFPR-022">0083-RFPR-022</a>).
+1. If a party submits an `UpdateReferralSet` transaction for a referral set they are not the referrer off, the transaction should be rejected (<a name="0083-RFPR-023" href="#0083-RFPR-023">0083-RFPR-023</a>).
+1. When updating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory (<a name="0083-RFPR-024" href="#0083-RFPR-024">0083-RFPR-024</a>).
 
 #### Applying a referral code
 
-1. If a party **is not** currently a **referee**, the party can immediately become associated with a referral set by submitting a signed `ApplyReferralCode` transaction.
-1. If a party **is** currently a **referee**, the party can become associated with a new referral set (at the start of the next epoch) by submitting a signed `ApplyReferralCode` transaction.
-1. If a party **is** currently a **referee** and submits multiple `ApplyReferralCode` transactions in an epoch, the latest valid `ApplyReferralCode` transaction will be applied.
-1. If one or more of the following conditions are not met,  any `ApplyReferralCode` transaction should be rejected.
-    - a party must not currently be a **referrer**.
-1. If the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the `team` to closed.
+1. If a party **is not** currently a **referee**, the party can immediately become associated with a referral set by submitting a signed `ApplyReferralCode` transaction (<a name="0083-RFPR-025" href="#0083-RFPR-025">0083-RFPR-025</a>).
+1. If a party **is** currently a **referee**, the party can become associated with a new referral set (at the start of the next epoch) by submitting a signed `ApplyReferralCode` transaction (<a name="0083-RFPR-026" href="#0083-RFPR-026">0083-RFPR-026</a>).
+1. If a party **is** currently a **referee** and submits multiple `ApplyReferralCode` transactions in an epoch, the latest valid `ApplyReferralCode` transaction will be applied (<a name="0083-RFPR-027" href="#0083-RFPR-027">0083-RFPR-027</a>).
+1. If one or more of the following conditions are not met,  any `ApplyReferralCode` transaction should be rejected (<a name="0083-RFPR-028" href="#0083-RFPR-028">0083-RFPR-028</a>).
+    - a party must not currently be a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
+1. If the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the `team` to closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
 
 #### Epoch and running volumes
 
-1. Each trade should increment the taker parties `party_epoch_taker_volume` by the volume of the trade (expressed in quantum units).
-1. A trade generated during auction uncrossing should not contribute to either parties `party_epoch_taker_volume`.
-1. At the end of the epoch, the `referral_set_epoch_taker_volume` should be correctly calculated by summing each team members `party_epoch_taker_volume`.
-1. A party cannot contribute more than the current network parameter `referralProgram.maxPartyVolumePerEpoch` to their sets `referral_set_epoch_taker_volume`.
-1. A referral sets `referral_set_running_taker_volume` is calculated as the sum of all `referral_set_epoch_taker_volumes` over the last `epoch_window` epochs.
+1. Each trade should increment the taker parties `party_epoch_taker_volume` by the volume of the trade (expressed in quantum units) (<a name="0083-RFPR-031" href="#0083-RFPR-031">0083-RFPR-031</a>).
+1. A trade generated during auction uncrossing should not contribute to either parties `party_epoch_taker_volume` (<a name="0083-RFPR-032" href="#0083-RFPR-032">0083-RFPR-032</a>).
+1. At the end of the epoch, the `referral_set_epoch_taker_volume` should be correctly calculated by summing each team members `party_epoch_taker_volume` (<a name="0083-RFPR-033" href="#0083-RFPR-033">0083-RFPR-033</a>).
+1. A party cannot contribute more than the current network parameter `referralProgram.maxPartyVolumePerEpoch` to their sets `referral_set_epoch_taker_volume` (<a name="0083-RFPR-034" href="#0083-RFPR-034">0083-RFPR-034</a>).
+1. A referral sets `referral_set_running_taker_volume` is calculated as the sum of all `referral_set_epoch_taker_volumes` over the last `epoch_window` epochs (<a name="0083-RFPR-035" href="#0083-RFPR-035">0083-RFPR-035</a>).
 
 ### Benefit Mechanics
 
 #### Setting benefit factors
 
-1. At the start of an epoch, each referees `referral_reward_factor` and `referral_discount_factor` is reevaluated and fixed for the epoch.
-1. At the start of an epoch, a referees `referral_reward_factor` is set equal to the factor in the highest benefit tier they qualify for.
-1. At the start of an epoch, a referees `referral_discount_factor` is set equal to the factor in the highest benefit tier they qualify for.
-1. If when evaluating the tier to set the `referral_reward_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0`.
-1. If when evaluating the tier to set the `referral_discount_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0`.
-
+1. At the start of an epoch, each referees `referral_reward_factor` and `referral_discount_factor` is reevaluated and fixed for the epoch (<a name="0083-RFPR-036" href="#0083-RFPR-036">0083-RFPR-036</a>).
+1. At the start of an epoch, a referees `referral_reward_factor` is set equal to the factor in the highest benefit tier they qualify for (<a name="0083-RFPR-037" href="#0083-RFPR-037">0083-RFPR-037</a>).
+1. At the start of an epoch, a referees `referral_discount_factor` is set equal to the factor in the highest benefit tier they qualify for (<a name="0083-RFPR-038" href="#0083-RFPR-038">0083-RFPR-038</a>).
+1. If when evaluating the tier to set the `referral_reward_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0` (<a name="0083-RFPR-039" href="#0083-RFPR-039">0083-RFPR-039</a>).
+1. If when evaluating the tier to set the `referral_discount_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0` (<a name="0083-RFPR-040" href="#0083-RFPR-040">0083-RFPR-040</a>).
