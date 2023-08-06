@@ -4,7 +4,7 @@ This is a definition of some common data types and the rules about the displayin
 
 ## Size
 
->aka contracts, volume, amount.
+> aka contracts, volume, amount.
 
 This is set per-market and represent the number of contracts that are being brought or sold.
 
@@ -21,17 +21,34 @@ This is set per-market and represent the "price" of an asset. It can have a 1-1 
 
 `Market...quoteName` is used to tell us what to display next to the quote price. For example the `quoteName` could be `USD` but the settlement asset = `DAI`. The Market framework allows for other types of quote (e.g. %, cm and ETC). When looking at a single market it may not be necessary to show the quote name each time you show the price.
 
+### Mark price
+
+The term mark price is often displayed as the best possible price from which to base calculations on what the current price is of the market. It is used for margin calculations and unrealised Profit/loss estimates.
+
+### Liquidation price
+
+This is a value that is calculated as an indication of what price the market would be at for a position to be liquidated. To do this ti has to make a few assumptions and simulate the Vega topping up the margin balance each time the position hits the search level. More detail in the [this notebook](https://github.com/vegaprotocol/research/blob/master/notebooks/misc/Margin%20level%20price%20approximation.ipynb).
 
 ## Asset balances
 
 > aka Collateral, account balance, Profit and loss, PnL fees, transfers.
 
-The is set per Asset and represents the amount of an asset that is held in the bridge. 
+The is set per Asset and represents the amount of an asset that is held in the bridge.
 
 Once deposited assets appear in a `general account`. Other account types are created when opening positions, providing liquidity etc.
 Vega does not return a `total balance` that is a sum of all accounts in a currency, but users will expect to see one. See the [Collateral spec](../protocol/0005-COLL-collateral.md) for other account types.
 
 `Asset.decimals` tells the UIs where to put the decimal place. Ethereum assets often have 18 decimal places, but can have less. Forms where you deposit, withdraw or transfer assets must show all decimal places. It may be appropriate to truncate at a certain number of DP in many cases (e.g. `0.01` instead of `0.012345678912345678` event though `0.001 wBTC` may be worth as much as than `0.01 ETH`). At the moment Vega does not have a source of information that allows conversion of currencies or way of knowing that the significant value of an asset is.
+
+## Profit and Loss
+
+> aka PnL, P&L
+
+The profit or loss is the difference between what a user paid for a thing and the value of it at any given moment. For future it is the difference between the price
+
+### Unrealised Profit and Loss
+
+### Realised Profit and Loss
 
 ## Market
 
@@ -43,7 +60,7 @@ Markets can have several statuses and it may be sensible when listing markets to
 
 > aka Party
 
-When looking at a public key it is important that the user can get the full public key but it is often appropriate just to show an abbreviated form. The first 6 and last 6 characters are preferable, with an indication that it is truncated e.g. `56d1e6739deac3c5c1ddc6fee876b3217e504a161b5b00fda96b40ed3e8f89b8` as `56d1e6...8f89b8` or just `8f89b8` if enough of a convention has been established. In cases where the key being shows comes from your connected wallet it should also show the name (aka alias) of the key. 
+When looking at a public key it is important that the user can get the full public key but it is often appropriate just to show an abbreviated form. The first 6 and last 6 characters are preferable, with an indication that it is truncated e.g. `56d1e6739deac3c5c1ddc6fee876b3217e504a161b5b00fda96b40ed3e8f89b8` as `56d1e6...8f89b8` or just `8f89b8` if enough of a convention has been established. In cases where the key being shows comes from your connected wallet it should also show the name (aka alias) of the key.
 Vega public keys are hexadecimal, but the convention is to display them without the preceding `0x` as this is what the Vega API returns.
 
 ## Transaction hash
