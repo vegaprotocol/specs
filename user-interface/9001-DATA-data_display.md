@@ -4,7 +4,7 @@ This is a definition of some common data types and the rules about the displayin
 
 ## Size
 
-> aka contracts, volume, amount.
+> aka contracts, volume, amount, quantities.
 
 This is set per-market and represent the number of contracts that are being brought or sold.
 
@@ -31,7 +31,7 @@ This is a value that is calculated as an indication of what price the market wou
 
 ## Asset balances
 
-> aka Collateral, account balance, Profit and loss, PnL fees, transfers.
+> aka Collateral, account balance, Profit and loss, PnL fees, transfers, financial values.
 
 The is set per Asset and represents the amount of an asset that is held in the bridge.
 
@@ -50,6 +50,10 @@ The profit or loss is the difference between what a user paid for a thing and th
 
 ### Realised Profit and Loss
 
+## Quantum
+
+The quantum is a value that is used to define "The minimum economically meaningful amount of this specific asset". It can be used to show only the number of decimal places that are meaningful in summary information. A quantum is defined on each asset.
+
 ## Market
 
 Markets do not have names, technically it is the instrument within a market that has the name. Theoretically the same instrument can be traded in multiple markets. if/when this happens a user needs to be able to disambiguate between markets. Each market does have a unique ID, Note: this is a hash of the definition of the market when it was created.
@@ -62,6 +66,23 @@ Markets can have several statuses and it may be sensible when listing markets to
 
 When looking at a public key it is important that the user can get the full public key but it is often appropriate just to show an abbreviated form. The first 6 and last 6 characters are preferable, with an indication that it is truncated e.g. `56d1e6739deac3c5c1ddc6fee876b3217e504a161b5b00fda96b40ed3e8f89b8` as `56d1e6...8f89b8` or just `8f89b8` if enough of a convention has been established. In cases where the key being shows comes from your connected wallet it should also show the name (aka alias) of the key.
 Vega public keys are hexadecimal, but the convention is to display them without the preceding `0x` as this is what the Vega API returns.
+
+## Party accounts
+
+> aka account balances
+
+A can have a number of different accounts for any given asset.
+
+- General account - For assets that have not been deployed to one of the following
+- Margin accounts - one for each market the part has orders/position
+- Bond accounts - (aka liquidity commitment) one for each market the user has committed to providing liquidity on
+- Locked for withdraw - one for each withdraw that is waiting to be finalised (e.g. where withdrawal limits/time locks are in place)
+
+In the case of the Governance token the party may also have staked balances
+
+When listing markets in a breakdown it may good to see a total exposure to a market, that is then broken down by Margin and Bond
+
+All party accounts should be displayed as an [asset balance](#asset-balances) with the appropriate number of decimal places.
 
 ## Transaction hash
 

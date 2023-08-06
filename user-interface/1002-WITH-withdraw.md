@@ -78,7 +78,7 @@ When looking to either complete a withdraw or view past withdraws, I...
 
 - for each prepared withdraw:
   - **must** see the asset being withdrawn (<a name="1002-WITH-012" href="#1002-WITH-012">1002-WITH-012</a>)
-  - **must** see the [amount](7001-DATA-data_display.md#asset-balances) being withdrawn (<a name="1002-WITH-013" href="#1002-WITH-013">1002-WITH-013</a>)
+  - **must** see the [amount](9001-DATA-data_display.md#asset-balances) being withdrawn (<a name="1002-WITH-013" href="#1002-WITH-013">1002-WITH-013</a>)
   - **must** see the destination of the withdrawal (e.g. Recipient Eth address) (<a name="1002-WITH-014" href="#1002-WITH-014">1002-WITH-014</a>)
   - **should** see the date with withdraw was prepared
   - **could** see the full signature bundle from Vega node (for use on Ethereum)

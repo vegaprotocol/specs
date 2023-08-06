@@ -6,7 +6,7 @@ As a user I want change my exposure on a market (e.g. open a position, increase 
 
 When looking at a market, I...
 
-- **must** see/select the [Market](./7001-DATA-data_display.md#market) I am submitting the order for (<a name="7002-SORD-001" href="#7002-SORD-001">7002-SORD-001</a>)
+- **must** see/select the [Market](./9001-DATA-data_display.md#market) I am submitting the order for (<a name="7002-SORD-001" href="#7002-SORD-001">7002-SORD-001</a>)
 - **must** see the current `status` of the market (<a name="7002-SORD-061" href="#7002-SORD-061">7002-SORD-061</a>)
 
   if the market is in a state of `rejected`, `canceled` or `closed`:
@@ -16,7 +16,7 @@ When looking at a market, I...
   if the market is in a state of `tradingTerminated`:
 
   - **must** see that the market is not accepting orders and never will be (<a name="7002-SORD-063" href="#7002-SORD-063">7002-SORD-063</a>)
-  - **should** see the [price](7001-DATA-data_display.md#quote-price) that was used to settle the market
+  - **should** see the [price](9001-DATA-data_display.md#quote-price) that was used to settle the market
   - **should** see a link to oracle spec and data
 
   if the market is in a state of `settled`:
@@ -57,12 +57,12 @@ When populating a deal ticket I...
 
 ...need to select a size, when selecting a size for my order, I...
 
-- **must** input an order [size](7001-DATA-data_display.md#size) (aka amount or contracts) (<a name="7002-SORD-010" href="#7002-SORD-010">7002-SORD-010</a>)
+- **must** input an order [size](9001-DATA-data_display.md#size) (aka amount or contracts) (<a name="7002-SORD-010" href="#7002-SORD-010">7002-SORD-010</a>)
   - **should** have the previous value for the selected market available e.g. pre-populated (last submitted or last changed)
   - **should** be able to quickly change the size by the market's min-contract size e.g. hit up/down on the keyboard to increase
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows
     - **would** like to be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc.
-- **must** be warned (pre-submit) if input has too many digits after the decimal place for the market's ["position" decimal places](7001-DATA-data_display.md#size) (<a name="7002-SORD-016" href="#7002-SORD-016">7002-SORD-016</a>)
+- **must** be warned (pre-submit) if input has too many digits after the decimal place for the market's ["position" decimal places](9001-DATA-data_display.md#size) (<a name="7002-SORD-016" href="#7002-SORD-016">7002-SORD-016</a>)
 
 ... so I get the size of exposure (open volume) that I want
 
@@ -70,14 +70,14 @@ When populating a deal ticket I...
 
 ... if wanting to place a limit on the price that I trade at, I...
 
-- **must** enter a price (<a name="7002-SORD-017" href="#7002-SORD-017">7002-SORD-017</a>)
+- **must** enter a [price](9001-DATA-data_display.md#quote-price). (<a name="7002-SORD-017" href="#7002-SORD-017">7002-SORD-017</a>)
 - **must** see the price unit (as defined in market) (<a name="7002-SORD-018" href="#7002-SORD-018">7002-SORD-018</a>)
   - **should** be able quickly pre-populate the price with the current mark price (if there is one, 0 if not) e.g. by focusing the input and hitting up/down
   - **should** have the previous value for the selected market pre-populated (last submitted or last changed)
   - **should** be able to hit up/down on the keyboard to increase the price by the market's tick size (if set, or smallest increment)
     - **should** be able to use modifier keys (SHIFT, ALT etc) to increase/decrease in larger increments with arrows
     - **would** like to be able to enter a number followed be "k" or "m" or "e2" etc. to make it thousands or millions or hundreds, etc.
-- **must** be warned (pre-submit) if the input price has too many digits after the decimal place for the market ["quote"](7001-DATA-data_display.md#quote-price) (<a name="7002-SORD-059" href="#7002-SORD-059">7002-SORD-059</a>)
+- **must** be warned (pre-submit) if the input price has too many digits after the decimal place for the market ["quote"](9001-DATA-data_display.md#quote-price) (<a name="7002-SORD-059" href="#7002-SORD-059">7002-SORD-059</a>)
 
 ... so that my order only trades at up/down to a particular price
 
@@ -223,7 +223,7 @@ When populating a deal ticket I...
   - Expired (<a name="7002-SORD-042" href="#7002-SORD-042">7002-SORD-042</a>)
   - Cancelled. see the txn that cancelled it and a link to the block explorer, if cancelled by a user transaction. (<a name="7002-SORD-043" href="#7002-SORD-043">7002-SORD-043</a>)
   - Stopped. see an explanation of why stopped (<a name="7002-SORD-044" href="#7002-SORD-044">7002-SORD-044</a>)
-  - Partially filled. **must** see how much of the [size](7001-DATA-data_display.md#size) if filled/remaining (<a name="7002-SORD-045" href="#7002-SORD-045">7002-SORD-045</a>)
+  - Partially filled. **must** see how much of the [size](9001-DATA-data_display.md#size) if filled/remaining (<a name="7002-SORD-045" href="#7002-SORD-045">7002-SORD-045</a>)
   - Filled. Must be able to see/link to all trades that were created from this order. (<a name="7002-SORD-046" href="#7002-SORD-046">7002-SORD-046</a>)
   - Rejected: **must** see the reason it was rejected (<a name="7002-SORD-047" href="#7002-SORD-047">7002-SORD-047</a>)
   - Parked: **must** see an explanation of why parked orders happen (<a name="7002-SORD-048" href="#7002-SORD-048">7002-SORD-048</a>)
