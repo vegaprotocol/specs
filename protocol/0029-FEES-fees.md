@@ -25,15 +25,9 @@ Note that maker_fee = 0 if there is no maker, taker relationship between the tra
 
 Before fees are transferred, if there is an [active referral program](./0083-RFPR-on_chain_referral_program.md) or [volume discount program](./0085-VDPR-volume_discount_program.md), each parties fee components must be modified as follows.
 
-1. Calculate any referral rewards due to the parties referrer.
+Note, it is important discounts are calculated and applied **before** rewards are calculated and applied.
 
-    ```pseudo
-    infrastructure_fee_referral_reward = floor(infrastructure_fee * referral_reward_factor) 
-    liquidity_fee_referral_reward = floor(liquidity_fee * referral_reward_factor) 
-    maker_fee_referral_reward = floor(maker_fee * referral_reward_factor) 
-    ```
-
-2. Calculate any referral discounts due to the party.
+1. Calculate any referral discounts due to the party.
 
     ```pseudo
     infrastructure_fee_referral_discount = floor(infrastructure_fee * referral_discount_factor)
@@ -41,7 +35,7 @@ Before fees are transferred, if there is an [active referral program](./0083-RFP
     maker_fee_referral_discount = floor(maker_fee * referral_discount_factor)
     ```
 
-3. Calculate any volume discounts due to the party.
+1. Calculate any volume discounts due to the party.
 
     ```pseudo
     infrastructure_fee_volume_discount = floor(infrastructure_fee * volume_discount_factor)
@@ -49,12 +43,28 @@ Before fees are transferred, if there is an [active referral program](./0083-RFP
     maker_fee_volume_discount = floor(maker_fee * volume_discount_factor)
     ```
 
-4. And then update the fees.
+1. Update the fee components by applying the discounts.
 
     ```pseudo
-    infrastructure_fee = infrastructure_fee - infrastructure_fee_referral_reward - infrastructure_fee_referral_discount - infrastructure_fee_volume_discount
-    liquidity_fee = liquidity_fee - liquidity_fee_referral_reward - liquidity_fee_referral_discount - liquidity_fee_volume_discount
-    maker_fee = maker_fee - maker_fee_referral_reward - maker_fee_referral_discount - maker_fee_volume_discount
+    infrastructure_fee = infrastructure_fee - infrastructure_fee_referral_discount - infrastructure_fee_volume_discount
+    liquidity_fee = liquidity_fee - liquidity_fee_referral_discount - liquidity_fee_volume_discount
+    maker_fee = maker_fee - maker_fee_referral_discount - maker_fee_volume_discount
+    ```
+
+1. Calculate any referral rewards due to the parties referrer (Note we are using the updated fee components from step 3)
+
+    ```pseudo
+    infrastructure_fee_referral_reward = floor(infrastructure_fee * referral_reward_factor) 
+    liquidity_fee_referral_reward = floor(liquidity_fee * referral_reward_factor) 
+    maker_fee_referral_reward = floor(maker_fee * referral_reward_factor) 
+    ```
+
+1. Finally, update the fee components by applying the rewards.
+
+    ```pseudo
+    infrastructure_fee = infrastructure_fee - infrastructure_fee_referral_reward
+    liquidity_fee = liquidity_fee - liquidity_fee_referral_reward
+    maker_fee = maker_fee - maker_fee_referral_reward
     ```
 
 (Note the rewards and discounts are floored rather than raised to ensure the final fees cannot be negative.)
