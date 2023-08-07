@@ -1,6 +1,6 @@
 # Reward framework
 
-The reward framework provides a mechanism for measuring and rewarding a number of key activities on the Vega network.
+The reward framework provides a mechanism for measuring and rewarding individuals or [teams](./0083-RFPR-on_chain_referral_program.md#glossary) (collectively referred to within this spec as entities) for a number of key activities on the Vega network.
 These rewards operate in addition to the main protocol economic incentives which come from
 [fees](0029-FEES-fees.md) on every trade.
 These fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](./0061-REWP-pos_rewards.md).
@@ -9,7 +9,6 @@ The additional rewards described here can be funded arbitrarily by users of the 
 Note that transfers via governance, including to fund rewards, is a post-Oregon Trail feature.
 
 Note that validator rewards (and the reward account for those) is covered in [validator rewards](./0061-REWP-pos_rewards.md) and is separate from the trading reward framework described here.
-
 ## New network parameter for market creation threshold
 
 The parameter `rewards.marketCreationQuantumMultiple` will be used together with [quantum](0040-ASSF-asset_framework.md) to asses market size when deciding whether a market qualifies for the payment of market creation rewards.
@@ -20,17 +19,18 @@ Therefore, for example, to reward futures markets when they reach a lifetime tra
 
 At a high level, rewards work as follows:
 
-- Reward metrics are calculated for each combination of [reward type, party, market].
-  - The calculation used for the reward metric is specific to each reward type.
+- Individual reward metrics are calculated for each combination of [reward type, party, market] and team reward metrics for each combination of [reward type, team, market].
 
 At the end of the epoch:
 
 1. Recurring reward transfers (set up by the parties funding the rewards) are made to the reward account(s) for a specific reward type, for one or more markets in scope where the total reward metric is `>0`. See [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts).
-1. Then the entire balance of each reward account is distributed to the parties with a non-zero reward metric for that reward type and market, pro-rata by their reward metric.
+1. Then the entire balance of each reward account is distributed amongst entities with a non-zero reward metric for that reward type and market using the mechanism specified in the recurring transfer.
+1. Distributed rewards are transferred to a [vesting account](./0085-RVST-rewards_vesting.md).
 
-## Reward metrics
+## Individual reward metrics
 
-Fee-based reward metrics are scoped by [`reward type`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
+Individual reward metrics are scoped by [`reward type`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
+
 Therefore a party may be in scope for the same reward type multiple times but no more than once per market per epoch.
 Metrics will be calculated at the end of every epoch, for every eligible party, in each market for each reward type.
 Metrics only need to be calculated where the [market, reward type] reward account has a non-zero balance of at least one asset.
@@ -38,10 +38,9 @@ Metrics only need to be calculated where the [market, reward type] reward accoun
 Reward metrics will be calculated once for each party/market combination in the reward metric asset which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market.
 This is the original precision for the metric source data.
 
-### Market activity (fee based) reward metrics
+### Fee-based reward metrics
 
-There will be three market activity reward metrics calculated based on fees (as a proxy for activity).
-Each of these represents a reward type with its own segregated reward accounts for each market.
+There will be three reward metrics calculated based on fees.
 
 1. Sum of maker fees paid by the party on the market this epoch
 1. Sum of maker fees received by the party on the market this epoch
@@ -51,7 +50,15 @@ These metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
 If the reward account balance is 0 at the end of the epoch for a given market, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
-Market activity (fee based) reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
+Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
+
+### Open interest metrics
+
+
+### Pnl metrics
+
+
+### Volatility metrics
 
 ### Market creation reward metrics
 
@@ -82,6 +89,13 @@ This flag is used to prevent any given funder from funding a creation reward in 
 
 Market creation reward metrics (both each market's `cumulative volume` and the payout record flags to identify [funder, market scope, reward asset] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
 
+## Team reward metrics
+
+All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
+
+A team’s reward metric is the weighted average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
+
+
 ## Reward accounts
 
 Trading reward accounts are defined by the reward asset (the asset in which the reward is paid out), the market, and the reward type (metric).
@@ -98,26 +112,81 @@ Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limi
 
 ## Reward distribution
 
-All rewards are paid out at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed.
-The entire reward account balance is paid out every epoch unless the total value of the metric over all parties is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
-There are no payout delays, rewards are paid out instantly at epoch end.
+All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md) at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed.
 
-Rewards will be distributed pro-rata by the party's reward metric value to all parties that have metric values `>0`. Note that for the market creation reward, the metric is defined to either be `0` or `1`, which will lead to equal payments for each eligible market under the pro-rata calculation. If we have reward account balance `R` and parties `p_1 – p_n` with non-zero metrics `m_1 – m_n` on the market in question:
+The entire reward account balance is paid out every epoch unless the total value of the metric over all entities is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
 
-```math
-[p_1, m_1]
-[p_2, m_2]
-...
-[p_n, m_n]
-```
+Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
-Then calculate `M := m_1 + m_2 + … + m_n` and transfer `R ✖️ m_i / M` to party `p_i` (for each `p_i`) at the end of the epoch.
+### Distributing rewards amongst entities
 
-If `M=0` (no-one incurred or received fees as specified by the metric type for the given market) then no transfer will have been made to the reward account and therefore there are no rewards to pay out.
-The transfer will be retried the next epoch if it is still active.
+Rewards are distributed amongst entities based on the distribution method defined in the recurring transfer.
 
-Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward metrics for any two parties. All funds will always be paid out.
+The protocol currently supports the following distribution strategies:
 
+- [pro-rata](#distributing-pro-rata) by reward metric
+- [exponential-decay](#distributing-with-exponential-decay) by reward metric
+
+#### Distributing pro-rata
+
+Rewards funded using the pro-rata strategy should be distributed pro-rata by each entities reward metric scaled by any active multipliers that party has, i.e.
+
+Let:
+- $d_{i}$ be the payout factor for entity $i$
+- $r_{i}$ be the reward metric value for entity $i$
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$
+- $s_{i}$ be the share of the rewards for entity $i$
+
+$$d_{i}=r_{i} M_{i}$$
+
+Note if the entity is a team, $M_{i}$ is set to zero as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
+
+Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
+
+$$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
+
+#### Distributing with exponential decay
+
+Rewards funded using the exponential-decay strategy should be distributed as follows.
+
+1. Calculate each entities reward metric
+2. Order each entity in a descending list by their reward metric value and determine their "rank" in the list
+3. Calculate each entities share of the rewards using the below formula.
+
+Let:
+- $d_{i}$ be the payout factor for entity $i$
+- $s_{i}$ be the share of the rewards for entity $i$
+- $k$ be the decay factor specified in the recurring transfer funding the reward
+- $R_{i}$ be the rank of entity $i$
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$
+
+$$d_{i}=e^{-k R_{i}} M_{i}$$
+
+Note if the entity is a team, $M_{i}$ is set to zero as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
+
+Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
+
+$$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
+### Distributing rewards amongst team members
+
+If rewards are distributed to a team, rewards must then be distributed between team members.
+
+Let:
+- $d_{i}$ be the payout for team member $i$
+- $s_{i}$ be the share of the rewards for team member $i$
+- $B_{i}$ be the total balance in all of the team members accounts (expressed in quantum)
+- $F$ be the network parameter `rewards.teamDistribution.minimumAccountQuantum`
+- $C$ be the network parameter `rewards.teamDistribution.maximumAccountQuantum`
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$
+
+$$d_{i} = \begin{cases}
+   0 &\text{if } B_{i} < F \\
+   M_{i}\log(\min(B_{i}+1, C+1)) &\text{if } B_{i} \geq F
+\end{cases}$$
+
+Calculate each parties share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
+
+$$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
 ## Acceptance criteria
 
 ### Funding reward accounts (<a name="0056-REWA-001" href="#0056-REWA-001">0056-REWA-001</a>)
