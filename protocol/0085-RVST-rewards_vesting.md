@@ -6,8 +6,8 @@ The aim of the rewards vesting mechanics is to prevent farming rewards by delayi
 
 ## Network Parameters
 
-- `rewards.vesting.baseRate`: the proportion of rewards in a vesting account which are vested each epoch
-- `rewards.vesting.minimumTransfer`: the minimum amount (expressed in quantum) which can be vested each epoch
+- `rewards.vesting.baseRate`: the proportion of rewards in a vesting account which are vested each epoch, value defaults to `0.1` and must be a float strictly greater than 0.
+- `rewards.vesting.minimumTransfer`: the minimum amount (expressed in quantum) which can be vested each epoch, value defaults to 100 and must be an integer greater or equal than `0`.
 
 ## Vesting mechanics
 
@@ -24,9 +24,8 @@ Now, let:
 - $m_{mva}$ be the network parameter `rewards.vesting.minimumTransfer`
 
 The quantum amount to be transferred from each "vesting" account to the relevant "vested" account is defined as:
-$$
-T = min(B_{vested} * r * a, m)
-$$
+
+$$T = max(B_{vesting} * r * a, m)$$
 
 When transferring funds from the vesting account to the vested account, a new transfer type should be used, `TRANSFER_TYPE_REWARDS_VESTED`.
 
