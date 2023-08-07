@@ -108,7 +108,7 @@ To create a new referral set and become a referrer, a party must fulfil the foll
 - party must not currently be a **referee**
 - party must be staking at least `referralProgram.minStakedVegaTokens` tokens
 
-The staking requirement is constant. If a referrer un-stakes enough tokens to fall below the requirement, they and their referees will immediately no longer be eligible for referral benefits. If the referrer re-stakes enough tokens to fulfil the staking requirement, they and their referees will become eligible for referral benefits **at the start of the next epoch**. Note, for the case where a party does not re-stake, the protocol will allow referees will to "move" referral sets by [applying](#applying-a-referral-code) a new referral code.
+The staking requirement is constant. If a referrer un-stakes enough tokens to fall below the requirement, they and their referees will immediately no longer be eligible for referral benefits. If the referrer re-stakes enough tokens to fulfil the staking requirement, they and their referees will become eligible for referral benefits **at the start of the next epoch**. Note, for the case where a party does not re-stake, the protocol will still allow referees to "move" referral sets by [applying](#applying-a-referral-code) a new referral code as normal.
 
 To create a referral set and generate a referral code, the party must submit a signed `CreateReferralSet` transaction. When creating a referral set, a party can optionally designate it as a [team](#glossary) and provide additional team details. When designated as a team a referral set will be visible on leaderboards and in future releases will be eligible for team rewards.  A `CreateReferralSet` transaction has the following fields:
 
