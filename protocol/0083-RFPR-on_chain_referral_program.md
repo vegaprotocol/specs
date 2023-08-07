@@ -114,9 +114,9 @@ To create a referral set and generate a referral code, the party must submit a s
 - `is_team`: a boolean defining whether the referral set should be designated as a team
 - `team_details`: an optional dictionary defining the teams details (non-optional if `is_team` is `True`)
   - `name`: mandatory string team name
-  - `team_url`: mandatory string of a link to a team forum, discord, etc.
-  - `avatar_url`: mandatory string of a link to an image to be used as the teams avatar
-  - `closed`: mandatory boolean, defines whether a team is accepting new members
+  - `team_url`: optional string of a link to a team forum, discord, etc. (defaults to empty string / none-type)
+  - `avatar_url`: mandatory string of a link to an image to be used as the teams avatar (defaults to empty string / none-type)
+  - `closed`: mandatory boolean, defines whether a team is accepting new members (defaults to false)
 
 *Example: if party wants to create a simple referral set.*
 
