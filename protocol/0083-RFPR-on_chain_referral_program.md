@@ -90,11 +90,10 @@ After a referral program [proposal](#governance-proposals) is validated and acce
 
 | Status               | Benefits Enabled | Condition for entry                                       | Condition for exit                                                |
 | -------------------- | ---------------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
+| `STATUS_INACTIVE`    | No               | No proposal ever submitted, or previous proposal ended    | New governance proposal submitted to the network                  |
 | `STATUS_PROPOSED`    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
-| `STATUS_REJECTED`    | No               | Governance vote fails (or is invalid)                     | New governance proposal submitted to the network                 |
 | `STATUS_PENDING`     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
 | `STATUS_ACTIVE`      | Yes              | Previously `STATUS_PENDING`                               | End of epoch after network reaches proposal `closing_timestamp`   |
-| `STATUS_CLOSED`      | No               | Previously `STATUS_ACTIVE`                                | New governance proposal submitted to the network                  |
 
 ## Referral set mechanics
 
