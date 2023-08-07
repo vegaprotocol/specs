@@ -52,13 +52,70 @@ If the reward account balance is 0 at the end of the epoch for a given market, a
 
 Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
 
-### Open interest metrics
+### Open interest metric
+
+The open interest metric, ($m_{oi}$, measures each parties time-weighted average open interest over a number of epochs.
+
+At the start of each epoch, the network must reset each parties time weighted average open interest for the epoch ($\bar{OI}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows.
+
+Let:
+
+- $\bar{OI}$ be the parties time weighted average open interest in the epoch so far
+- $OI_{n}$ be the parties open interest before their open interest changed
+- $t_{n}$ be the time the party held the previous position in seconds
+- $t$ be the amount of time elapsed in the current epoch so far
 
 
-### Pnl metrics
+$$\bar{OI} = \bar{OI} \cdot \left(1 - \frac{t_{n}}{t}\right) + \frac{OI_{n} \cdot t_{n}}{t}$$
 
+At the end of the epoch, the network must store the parties time weighted average open interest and then calculate their open interest reward metric as follows.
 
-### Volatility metrics
+Let:
+
+- $m_{oi}$ be the parties open interest reward metric
+- $\bar{OI_{i}}$ be the parties time weighted average open interest in the ith epoch
+- $N$ be the network parameter `rewards.metrics.openInterestWindow`
+
+$$m_{oi} = \frac{\sum_{i}^{n}\bar{OI_{i}}}{N}$$
+
+### Relative return metric
+
+The relative return metric, $m_{rr}$, measures each parties average relative return, weighted by their [time-weighted average open-interest](#open-interest-metric), over a number of epochs.
+
+At the start of the epoch, the network must store the parties current pnl.
+
+$$p_{0} = p_{realised} + p_{unrealised}$$
+
+At the end of each epoch, the network must calculate and store the parties change in pnl:
+
+Let:
+- $\Delta{p}$ be the parties change in pnl
+- $p_{realised}$ be the parties realised pnl at the end of the epoch
+- $p_{unrealised}$ be the parties unrealised pnl at the end of the epoch
+
+$$\Delta{p} = p_{realised} + p_{unrealised} - p_{0}$$
+
+And calculate their average relative return, weighted by the log of their [time weighted average open interest](#open-interest-metrics), over the last $N$ epochs as follows.
+
+Let:
+- $m_{rr}$ be the parties relative return reward metric
+- $\bar{OI_{i}}$ be the parties time weighted average open interest in the ith epoch
+- $\Delta{p}$ be the parties change in pnl in the ith epoch
+- $N$ be the network parameter `rewards.metrics.relativeReturnsWindow`
+
+$$m_{rr} = \frac{\sum_{i}^{n}{p_{i}\cdot\log(1 + \bar{OI_{i}})}}{N}$$
+
+### Returns volatility metric
+
+The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
+
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the network parameter `rewards.metrics.returnsVolatilityWindow`), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the standard deviation of the set of each parties returns weighted by the log of their [time weighted average open interest](#open-interest-metrics) over the last $N$ epochs.
+
+Given the set:
+
+$$R = \{r_i \cdot \log(1 +\bar{OI_{i}}) \mid i = 1, 2, \ldots, N\}$$
+
+The reward metric $m_{rv}$ is the standard deviation of the set $R$.
 
 ### Market creation reward metrics
 
