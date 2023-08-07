@@ -64,11 +64,11 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 
 ## Acceptance Criteria
 
-### The typical "Happy Path" case (Expiring Future: <a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>, Perpetual Future: <a name="0002-STTL-011" href="#0002-STTL-011">0002-STTL-011</a>)
+### The typical "Happy Path" case (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>,)
 
 - With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market.
 
-### Example 1 - A typical path of a cash settled futures market nearing expiry when market is trading in continuous session (Expiring Future: <a name="0002-STTL-002" href="#0002-STTL-002">0002-STTL-002</a>, Perpetual Future: <a name="0002-STTL-012" href="#0002-STTL-012">0002-STTL-012</a>)
+### Example 1 - A typical path of a cash settled futures market nearing expiry when market is trading in continuous session (<a name="0002-STTL-002" href="#0002-STTL-002">0002-STTL-002</a>)
 
 1. Market has a status of ACTIVE and is trading in default trading mode
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
@@ -82,9 +82,9 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
-1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (Expiring Future: <a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>, Perpetual Future: <a name="0002-STTL-013" href="#0002-STTL-013">0002-STTL-013</a>)
+2. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>)
 
-### Example 2 - A less typical path of such a futures market nearing expiry when market is suspended (Expiring Future: <a name="0002-STTL-004" href="#0002-STTL-004">0002-STTL-004</a>, Perpetual Future: <a name="0002-STTL-014" href="#0002-STTL-014">0002-STTL-014</a>)
+### Example 2 - A less typical path of such a futures market nearing expiry when market is suspended (<a name="0002-STTL-004" href="#0002-STTL-004">0002-STTL-004</a>)
 
 1. Market has a status of SUSPENDED and in a protective auction
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
@@ -107,7 +107,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. If margin and general account of trader are insufficient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
 1. If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-009" href="#0002-STTL-009">0002-STTL-009</a>)
 
-### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)(Perpetual Future: <a name="0002-STTL-015" href="#0002-STTL-015">0002-STTL-015</a>)
+### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)
 
 1. A [cash settled futures](0016-PFUT-product_builtin_future.md) market has a status of ACTIVE and is trading in default trading mode (continuous trading)
 1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated.
