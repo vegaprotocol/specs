@@ -82,7 +82,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
-2. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>)
+1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>)
 
 ### Example 2 - A less typical path of such a futures market nearing expiry when market is suspended (<a name="0002-STTL-004" href="#0002-STTL-004">0002-STTL-004</a>)
 

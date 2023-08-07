@@ -325,7 +325,7 @@ The market state is `active`.
 1. An oracle event arrives which triggers the perpetual market's interim settlement logic, causing cashflow transfers but the market remains open.
 1. Further trades happen, with parties still having different positions to previously. The mark price is `p`.
 1. A market state change proposal is created to terminate the market at a given price that is *not* equal to `p`.
-When this is approved and enacted the market state is `closed`. 
+When this is approved and enacted the market state is `closed`.
 Parties that had open positions see settlement cash-flows happen to settle positions.
 Margin account balances are transferred to the general account.
 After `market.liquidity.successorLaunchWindowLength` has passed since market settlement, any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
