@@ -21,6 +21,54 @@ Fees are calculated and collected in the settlement currency of the market, coll
 
 Note that maker_fee = 0 if there is no maker, taker relationship between the trading parties (in particular auctions).
 
+## Applying benefit factors
+
+Before fees are transferred, if there is an [active referral program](./0083-RFPR-on_chain_referral_program.md) or [volume discount program](./0085-VDPR-volume_discount_program.md), each parties fee components must be modified as follows.
+
+Note, it is important discounts are calculated and applied **before** rewards are calculated and applied.
+
+1. Calculate any referral discounts due to the party.
+
+    ```pseudo
+    infrastructure_fee_referral_discount = floor(infrastructure_fee * referral_discount_factor)
+    liquidity_fee_referral_discount = floor(liquidity_fee * referral_discount_factor)
+    maker_fee_referral_discount = floor(maker_fee * referral_discount_factor)
+    ```
+
+1. Calculate any volume discounts due to the party.
+
+    ```pseudo
+    infrastructure_fee_volume_discount = floor(infrastructure_fee * volume_discount_factor)
+    liquidity_fee_volume_discount = floor(liquidity_fee * volume_discount_factor)
+    maker_fee_volume_discount = floor(maker_fee * volume_discount_factor)
+    ```
+
+1. Update the fee components by applying the discounts.
+
+    ```pseudo
+    infrastructure_fee = infrastructure_fee - infrastructure_fee_referral_discount - infrastructure_fee_volume_discount
+    liquidity_fee = liquidity_fee - liquidity_fee_referral_discount - liquidity_fee_volume_discount
+    maker_fee = maker_fee - maker_fee_referral_discount - maker_fee_volume_discount
+    ```
+
+1. Calculate any referral rewards due to the parties referrer (Note we are using the updated fee components from step 3)
+
+    ```pseudo
+    infrastructure_fee_referral_reward = floor(infrastructure_fee * referral_reward_factor) 
+    liquidity_fee_referral_reward = floor(liquidity_fee * referral_reward_factor) 
+    maker_fee_referral_reward = floor(maker_fee * referral_reward_factor) 
+    ```
+
+1. Finally, update the fee components by applying the rewards.
+
+    ```pseudo
+    infrastructure_fee = infrastructure_fee - infrastructure_fee_referral_reward
+    liquidity_fee = liquidity_fee - liquidity_fee_referral_reward
+    maker_fee = maker_fee - maker_fee_referral_reward
+    ```
+
+(Note the rewards and discounts are floored rather than raised to ensure the final fees cannot be negative.)
+
 ### Factors
 
 - infrastructure: staking/governance system/engine (network wide)
@@ -42,7 +90,7 @@ NB: size of trade needs to take into account Position Decimal Places specified i
 
 ### Collecting and Distributing Fees
 
-We need to calculate the total fee for the transaction.
+We need to calculate the total fee for the transaction (before applying benefit factors).
 Attempt to transfer the full fee from the trader into a temporary bucket, one bucket per trade (so we know who the maker is) from the trader general account.
 If insufficient, then take the remainder (possibly full fee) from the margin account.
 The margin account should have enough left after paying the fees to cover maintenance level of margin for the trades.
@@ -55,11 +103,12 @@ Other than the criteria whether to proceed or discard, this is exactly the same 
 
 The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the three components.
 
-Now distribute funds from the "temporary fee bucket" as follows:
+Now [apply benefit factors](#applying-benefit-factors) and then distribute funds from the "temporary fee bucket" as follows:
 
-1. Infrastructure_fee is transferred to infrastructure fee pool for that asset. Its distribution is described in [0061 - Proof of Stake rewards](./0061-REWP-pos_rewards.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to validator score and type.
-1. The maker_fee is transferred to the relevant party.
-1. The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+1. The `infrastructure_fee` is transferred to infrastructure fee pool for that asset. Its distribution is described in [0061 - Proof of Stake rewards](./0061-REWP-pos_rewards.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to validator score and type.
+1. The `maker_fee` is transferred to the relevant party (the maker).
+1. The `liquidity_fee` is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+1. The referral fee components (if any) can then be individually transferred to the relevant party (the referee).
 
 ### During Continuous Trading
 
@@ -107,3 +156,27 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 - The three component fee rates (fee_factor[infrastructure], fee_factor[maker], fee_factor[liquidity]) are available via an API such as the market data API or market framework. (<a name="0029-FEES-012" href="#0029-FEES-012">0029-FEES-012</a>) for product spot: (<a name="0029-FEES-020" href="#0029-FEES-020">0029-FEES-020</a>)
 - A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to 2. A market order of size 1.23 is placed which is filled at VWAP of 100. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `1.23 x 100 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-013" href="#0029-FEES-013">0029-FEES-013</a>) for product spot: (<a name="0029-FEES-021" href="#0029-FEES-021">0029-FEES-021</a>)
 - A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to -2. A market order of size 12300 is placed which is filled at VWAP of 0.01. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `12300 x 0.01 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-014" href="#0029-FEES-014">0029-FEES-014</a>) for product spot: (<a name="0029-FEES-022" href="#0029-FEES-022">0029-FEES-022</a>)
+
+### Applying benefit factors
+
+1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading.
+    - `infrastructure_referral_fee_discount`
+    - `liquidity_fee_referral_discount`
+    - `maker_fee_referral_discount`
+1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction.
+    - `infrastructure_fee_referral_discount`
+    - `liquidity_fee_referral_discount`
+1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading.
+    - `infrastructure_fee_referral_reward`
+    - `liquidity_fee_referral_reward`
+    - `maker_fee_referral_reward`
+1. Referrer rewards are correctly calculated and transferred for each fee component when exiting an auction.
+    - `infrastructure_fee_referral_reward`
+    - `liquidity_fee_referral_reward`
+1. Volume discount rewards are correctly calculated and transferred for each taker fee component during continuous trading.
+    - `infrastructure_fee_volume_discount`
+    - `liquidity_fee_volume_discount`
+    - `maker_fee_volume_discount`
+1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction.
+    - `infrastructure_fee_volume_discount`
+    - `liquidity_fee_volume_discount`

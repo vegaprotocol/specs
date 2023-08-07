@@ -308,3 +308,9 @@ wBTC
 whitepaper
 Yubikey
 $VEGA
+teamUrl
+avatarUrl
+dApp
+leaderboards
+ReferralSet
+CreateReferralSet
