@@ -309,3 +309,9 @@ whitepaper
 Yubikey
 $VEGA
 DS
+teamUrl
+avatarUrl
+dApp
+leaderboards
+ReferralSet
+CreateReferralSet
