@@ -160,7 +160,7 @@ Select {
 2. Phase 2 - Set up a data source for listening to a particular event sent at a frequency of 2 secs. The oracle data source stops emitting events after emitting a couple of events. Raise and error via the TX RESULT event  if 5 consecutive events are missed - need to ratify / expand on this (<a name="0082-PLAZZO-005" href="#0082-PLAZZO-005">0082-PLAZZO-005</a>)
 3. Phase 2 - Create an oracle source listening for a particular event and specify an incorrect ABI format for the event. Proposal should fail validation and should return an error (<a name="0082-PLAZZO-006" href="#0082-PLAZZO-006">0082-PLAZZO-006</a>)
 4. Create an oracle that calls a read method of a smart contract and specify an incorrect ABI format for the event. Proposal should fail validation and should return an error (<a name="0082-ETHD-034" href="#0082-ETHD-034">0082-ETHD-034</a>)
-5. Set up a network such that different vega nodes recieve conflicting results from an identical ethereum contract call. Attempt to settle a market using that contract. Observe that if there are not enough nodes voting in agreement, the market is not settled (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
+5. Set up a network such that different vega nodes receive conflicting results from an identical ethereum contract call. Attempt to settle a market using that contract. Observe that if there are not enough nodes voting in agreement, the market is not settled (<a name="0082-ETHD-035" href="#0082-ETHD-035">0082-ETHD-035</a>)
 
 ### API
 
