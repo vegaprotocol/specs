@@ -120,18 +120,17 @@ $$R = \{r_i \cdot \log(1 +\bar{OI_{i}}) \mid i = 1, 2, \ldots, N\}$$
 
 The reward metric $m_{rv}$ is the standard deviation of the set $R$.
 
-### Validator power metric
+### Validator ranking metric
 
-The validator power metric, $m_{vp}$, measures the voting power of validators.
+The validator ranking metric, $m_{vr}$, measures the ranking score of consensus and standby validators.
 
-At the end of each epoch, for each party who is a validator set their reward metric as follows.
+At the end of each epoch, for each party who **is** a consensus or standby validator set their reward metric as follows.
 
-$$m_{vp} = validatorScore$$
+$$m_{vr} = rankingScore$$
 
-Note the `validatorScore` is the score **after** any [penalties](./0061-REWP-pos_rewards.md#for-each-validator-we-then-do) have been applied.
-If a party is not a validator, their reward metric is simply:
+If a party **is not** a consensus or standby validator, their reward metric is simply:
 
-$$m_{vp} = 0$$
+$$m_{vr} = 0$$
 
 ### Market creation reward metrics
 
