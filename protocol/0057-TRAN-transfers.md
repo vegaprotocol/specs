@@ -87,6 +87,20 @@ To be able to dispatch rewards to reward pools of multiple markets pro rata to t
 - `reward metric asset` — (the settlement asset of all markets that will be in scope for the transfer)
 - `market scope` — a subset of markets in which parties are eligible to be rewarded from this transfer.
   - If the market scope is not defined / an empty list, it is taken as all the markets that settle in the reward metric asset.
+
+A party can further control their recurring transfer funding the reward pool by defining the entities which are within scope. Entities within scope can be either individual parties or [teams](./0083-RFPR-on_chain_referral_program.md#glossary). When scoping individuals, a subset of keys can be detailed, and when scoping teams a specific set of team ids can be detailed.
+
+To support entity scoping, the transaction include the following fields:
+
+- `entity scope` - mandatory enum which defines the entities within scope.
+    - `ENTITY_SCOPE_INDIVIDUALS` - the rewards must be distributed directly amongst eligible parties
+    - `ENTITY_SCOPE_TEAMS` - the rewards must be distributed amongst directly eligible teams (and then amongst team members)
+- `individual scope` - optional enum if the entity scope is `ENTITY_SCOPE_INDIVIDUALS` which defines the subset of individuals which are eligible to be rewarded.
+    - `INDIVIDUAL_SCOPE_ALL` - all parties on the network are within the scope of this reward
+    - `INDIVIDUAL_SCOPE_IN_TEAM` - all parties which are part of a team are within the scope of this reward
+    - `INDIVIDUAL_SCOPE_NOT_IN_TEAM` - all parties which are not part of a team are within the scope of this reward
+- `team scope` - optional list if the reward type is `ENTITY_SCOPE_TEAMS`, field allows the funder to define a list of team ids which are eligible to be rewarded from this transfer
+
 - At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market to the sum total reward metric for all markets in the `market scope` and then distributes the transfer amount to the corresponding accounts of the markets pro-rata by their contribution to the total.
 
 Where the reward metric type is "market creation rewards", it is important that no market creator will receive more than one market creation reward paid in the same asset from the same source account (reward funder).
