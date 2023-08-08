@@ -117,6 +117,18 @@ $$R = \{r_i \cdot \log(1 +\bar{OI_{i}}) \mid i = 1, 2, \ldots, N\}$$
 
 The reward metric $m_{rv}$ is the standard deviation of the set $R$.
 
+### Validator power metric
+
+The validator power metric, $m_{vp}$, measures the voting power of validators.
+
+At the end of each epoch, for each party who is a validator set their reward metric as follows.
+
+$$m_{vp} = validatorScore$$
+
+Note the `validatorScore` is the score **after** any [penalties](./0061-REWP-pos_rewards.md#for-each-validator-we-then-do) have been applied.
+If a party is not a validator, their reward metric is simply:
+
+$$m_{vp} = 0$$
 ### Market creation reward metrics
 
 There will be a single market creation reward metric and reward type.
@@ -145,6 +157,8 @@ See the [transfers](./0057-TRAN-transfers.md) spec.
 This flag is used to prevent any given funder from funding a creation reward in the same reward asset more than once for any given *market scope*.
 
 Market creation reward metrics (both each market's `cumulative volume` and the payout record flags to identify [funder, market scope, reward asset] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
+
+Note this reward metric **is not** available for team rewards.
 
 ## Team reward metrics
 
