@@ -9,6 +9,7 @@ The additional rewards described here can be funded arbitrarily by users of the 
 Note that transfers via governance, including to fund rewards, is a post-Oregon Trail feature.
 
 Note that validator rewards (and the reward account for those) is covered in [validator rewards](./0061-REWP-pos_rewards.md) and is separate from the trading reward framework described here.
+
 ## New network parameter for market creation threshold
 
 The parameter `rewards.marketCreationQuantumMultiple` will be used together with [quantum](0040-ASSF-asset_framework.md) to asses market size when deciding whether a market qualifies for the payment of market creation rewards.
@@ -54,7 +55,7 @@ Fee-based reward metrics (the total fees paid/received by each party as defined 
 
 ### Open interest metric
 
-The open interest metric, ($m_{oi}$, measures each parties time-weighted average open interest over a number of epochs.
+The open interest metric, $m_{oi}$, measures each parties time-weighted average open interest over a number of epochs.
 
 At the start of each epoch, the network must reset each parties time weighted average open interest for the epoch ($\bar{OI}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows.
 
@@ -89,27 +90,29 @@ $$p_{0} = p_{realised} + p_{unrealised}$$
 At the end of each epoch, the network must calculate and store the parties change in pnl:
 
 Let:
+
 - $\Delta{p}$ be the parties change in pnl
 - $p_{realised}$ be the parties realised pnl at the end of the epoch
 - $p_{unrealised}$ be the parties unrealised pnl at the end of the epoch
 
 $$\Delta{p} = p_{realised} + p_{unrealised} - p_{0}$$
 
-And calculate their average relative return, weighted by the log of their [time weighted average open interest](#open-interest-metrics), over the last $N$ epochs as follows.
+And calculate their average relative return, weighted by the log of their [time weighted average open interest](#open-interest-metric), over the last $N$ epochs as follows.
 
 Let:
+
 - $m_{rr}$ be the parties relative return reward metric
 - $\bar{OI_{i}}$ be the parties time weighted average open interest in the ith epoch
 - $\Delta{p}$ be the parties change in pnl in the ith epoch
 - $N$ be the network parameter `rewards.metrics.relativeReturnsWindow`
 
-$$m_{rr} = \frac{\sum_{i}^{n}{p_{i}\cdot\log(1 + \bar{OI_{i}})}}{N}$$
+$$m_{rr} = \frac{\sum_{i}^{n}{$\Delta{p}$\cdot\log(1 + \bar{OI_{i}})}}{N}$$
 
 ### Returns volatility metric
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
 
-At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the network parameter `rewards.metrics.returnsVolatilityWindow`), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the standard deviation of the set of each parties returns weighted by the log of their [time weighted average open interest](#open-interest-metrics) over the last $N$ epochs.
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the network parameter `rewards.metrics.returnsVolatilityWindow`), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the standard deviation of the set of each parties returns weighted by the log of their [time weighted average open interest](#open-interest-metric) over the last $N$ epochs.
 
 Given the set:
 
@@ -129,6 +132,7 @@ Note the `validatorScore` is the score **after** any [penalties](./0061-REWP-pos
 If a party is not a validator, their reward metric is simply:
 
 $$m_{vp} = 0$$
+
 ### Market creation reward metrics
 
 There will be a single market creation reward metric and reward type.
@@ -203,6 +207,7 @@ The protocol currently supports the following distribution strategies:
 Rewards funded using the pro-rata strategy should be distributed pro-rata by each entities reward metric scaled by any active multipliers that party has, i.e.
 
 Let:
+
 - $d_{i}$ be the payout factor for entity $i$
 - $r_{i}$ be the reward metric value for entity $i$
 - $M_{i}$ be the sum of all reward payout multipliers for entity $i$
@@ -225,6 +230,7 @@ Rewards funded using the exponential-decay strategy should be distributed as fol
 3. Calculate each entities share of the rewards using the below formula.
 
 Let:
+
 - $d_{i}$ be the payout factor for entity $i$
 - $s_{i}$ be the share of the rewards for entity $i$
 - $k$ be the decay factor specified in the recurring transfer funding the reward
@@ -238,11 +244,13 @@ Note if the entity is a team, $M_{i}$ is set to zero as reward payout multiplier
 Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
 
 $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
+
 ### Distributing rewards amongst team members
 
 If rewards are distributed to a team, rewards must then be distributed between team members.
 
 Let:
+
 - $d_{i}$ be the payout for team member $i$
 - $s_{i}$ be the share of the rewards for team member $i$
 - $B_{i}$ be the total balance in all of the team members accounts (expressed in quantum)
@@ -258,6 +266,7 @@ $$d_{i} = \begin{cases}
 Calculate each parties share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
 
 $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
+
 ## Acceptance criteria
 
 ### Funding reward accounts (<a name="0056-REWA-001" href="#0056-REWA-001">0056-REWA-001</a>)

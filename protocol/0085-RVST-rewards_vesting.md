@@ -11,7 +11,7 @@ The aim of the rewards vesting mechanics is to prevent farming rewards by delayi
 
 ## Vesting mechanics
 
-As detailed in [distributing rewards](), each party has their rewards paid into vesting rewards accounts (one for each asset).
+As detailed in [distributing rewards](./0056-REWA-rewards_overview.md#distributing-rewards-amongst-entities), each party has their rewards paid into vesting rewards accounts (one for each asset).
 
 At the end of each epoch, a proportion of the rewards accumulated in each "vesting" account should be released and transferred to the respective "vested" account. The percentage released can be scaled by the account owner increasing their [activity streak](./0086-ASPR-activity_streak_program.md) and a minimum transfer amount will be applied to ensure the account is eventually emptied. The proportion released and minimum applied are controlled for parameters for the asset.
 
@@ -19,9 +19,9 @@ Now, let:
 
 - $T$ be the amount to be "vested" (transferred from the vesting account to the vested account)
 - $B_{vested}$ be the total quantum amount in the vesting account
-- $r_{bvr}$ be the network parameter `rewards.vesting.baseRate`
+- $r$ be the network parameter `rewards.vesting.baseRate`
 - $a$ be the account owners current [`activity_streak_vesting_multiplier`](./0086-ASPR-activity_streak_program.md#setting-activity-benefits)
-- $m_{mva}$ be the network parameter `rewards.vesting.minimumTransfer`
+- $m$ be the network parameter `rewards.vesting.minimumTransfer`
 
 The quantum amount to be transferred from each "vesting" account to the relevant "vested" account is defined as:
 
@@ -46,4 +46,4 @@ Must expose the following:
 
 ## Acceptance Criteria
 
-TBD
+WIP

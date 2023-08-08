@@ -20,10 +20,11 @@ Parties access higher tiers and greater benefits by maintaining an activity stre
 The network parameter [`rewards.activityStreak.benefitTiers`](#network-parameters) can be updated via a `UpdateNetworkParameter` governance proposal. Each tier in the ordered list must have the following fields:
 
 - `minimum_activity_streak`: int greater or equal to `0` defining the minimum activity streak a party must have to access this tier
-- `reward_multiplier`: float greater or equal to `1` defining the factor to scale a parties [reward shares]() by
-- `vesting_multiplier`: float greater or equal to `1` defining the factor to scale a parties [base vesting rate]() by
+- `reward_multiplier`: float greater or equal to `1` defining the factor to scale a parties [reward shares](./0056-REWA-rewards_overview.md#distributing-rewards-amongst-entities) by
+- `vesting_multiplier`: float greater or equal to `1` defining the factor to scale a parties [base vesting rate](./0085-RVST-rewards_vesting.md#vesting-mechanics) by
 
 *Example:*
+
 ```proto
 message UpdateNetworkParameter{
     changes: NetworkParameter{
@@ -49,13 +50,13 @@ For the feature, the network must track each parties "activity streak". At the e
 
 - if a party was "active" in the epoch
 
-    - increment their `activity_streak` by `1`
-    - reset their `inactivity_streak` to `0`.
+  - increment their `activity_streak` by `1`
+  - reset their `inactivity_streak` to `0`.
 
 - if a party was "inactive" in the epoch
 
-    - increment their `inactivity_streak` streak by `1`
-    - if their `inactivity_streak` is greater than or equal to the `rewards.activityStreak.streakLength`, reset their `activity_streak` to `0`.
+  - increment their `inactivity_streak` streak by `1`
+  - if their `inactivity_streak` is greater than or equal to the `rewards.activityStreak.streakLength`, reset their `activity_streak` to `0`.
 
 A party is defined as active if they fulfil **either** of the following criteria:
 
@@ -91,11 +92,11 @@ Then:
 
 #### Applying the activity reward multiplier
 
-The `activity_streak_reward_multiplier` scales the parties [reward share]() for all rewards they are eligible for.
+The `activity_streak_reward_multiplier` scales the parties [reward share](./0056-REWA-rewards_overview.md#distributing-rewards-amongs-entities) for all rewards they are eligible for.
 
 #### Applying the activity vesting multiplier
 
-The `activity_streak_vesting_multiplier` scales the parties [vesting rate]() of all funds locked in the parties vesting accounts.
+The `activity_streak_vesting_multiplier` scales the parties [vesting rate](./0085-RVST-rewards_vesting.md#vesting-mechanics) of all funds locked in the parties vesting accounts.
 
 
 ## APIs
@@ -114,12 +115,12 @@ Must expose the following:
 
 ### Governance proposals
 
-TBD
+WIP
 
 ### Setting activity / inactivity streak
 
-TBD
+WIP
 
 ### Setting activity benefits
 
-TBD
+WIP
