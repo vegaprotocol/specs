@@ -308,6 +308,7 @@ wBTC
 whitepaper
 Yubikey
 $VEGA
+DS
 teamUrl
 avatarUrl
 dApp

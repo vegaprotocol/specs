@@ -541,6 +541,8 @@ APIs should also exist for clients to:
 - Attempt to enact a market closure proposal on a closed market has no effect. (<a name="0028-GOVE-111" href="#0028-GOVE-111">0028-GOVE-111</a>)
 - Markets which have been suspended via a governance proposal can be resumed after a protocol upgrade restarts the network. (<a name="0028-GOVE-150" href="#0028-GOVE-150">0028-GOVE-150</a>)
 - Markets which have been suspended via a governance proposal can be terminated after a protocol upgrade restarts the network. (<a name="0028-GOVE-151" href="#0028-GOVE-151">0028-GOVE-151</a>)
+- Oracle data sources shared between multiple markets are not deactivated if one of the markets sharing the oracle data sources is terminated and settled using governance proposals. Now the status of the data sources should still be ACTIVE as Market2 is still using them. (<a name="0028-GOVE-152" href="#0028-GOVE-152">0028-GOVE-152</a>)
+- Ensure that when a market is suspended and then resumed via a governance proposal we can still terminate and settle the market using ethereum oracle. (<a name="0028-GOVE-153" href="#0028-GOVE-153">0028-GOVE-153</a>)
 
 #### Network parameter change proposals
 
