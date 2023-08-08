@@ -11,7 +11,7 @@ Parties access higher tiers and greater benefits by maintaining an activity stre
 
 - `rewards.activityStreak.benefitTiers`: is an ordered list of dictionaries defining the requirements and benefits for each tier.
 - `rewards.activityStreak.inactivityLimit`: the maximum number of epochs a trader can be inactive before loosing their streak.
-- `rewards.activityStreak.minQuantumOpenVolume`: the minimum open notional volume (expressed in quantum) for a trader to be considered active in an epoch
+- `rewards.activityStreak.minQuantumOpenNotionalVolume`: the minimum open notional volume (expressed in quantum) for a trader to be considered active in an epoch
 - `rewards.activityStreak.minQuantumTradeVolume`: the minimum trade volume (expressed in quantum) for a trader to be considered active in an epoch
 
 
@@ -56,11 +56,11 @@ For the feature, the network must track each parties "activity streak". At the e
 - if a party was "inactive" in the epoch
 
   - increment their `inactivity_streak` streak by `1`
-  - if their `inactivity_streak` is greater than or equal to the `rewards.activityStreak.streakLength`, reset their `activity_streak` to `0`.
+  - if their `inactivity_streak` is greater than or equal to the `rewards.activityStreak.inactivityLimit`, reset their `activity_streak` to `0`.
 
 A party is defined as active if they fulfil **either** of the following criteria:
 
-- their open interest was strictly greater than `rewards.activityStreak.minQuantumOpenVolume` at any point in the epoch
+- their open interest was strictly greater than `rewards.activityStreak.minQuantumOpenNotionalVolume` at any point in the epoch
 - their total trade volume was strictly greater than `rewards.activityStreak.minQuantumTradeVolume` at the end of the epoch
 
 ### Setting activity benefits
