@@ -1,7 +1,7 @@
 # Set default to run all checks if none specified
 .DEFAULT_GOAL := all
 
-all: spellcheck markdownlint names codes references links clean
+all: spellcheck markdownlint names codes references links featureacs clean
 
 # Check that all the specifications are named appropriately
 .PHONY: names
@@ -60,6 +60,11 @@ markdownlint:
 .PHONY: spellcheck
 spellcheck:
 	@./spellcheck.sh
+
+# Checks for duplicated ACs in the features.json file
+.PHONY: featureacs
+featureacs:
+	jq -r '.. | .[] | .acs' -s < protocol/features.json | sort | uniq -d
 
 clean:
 	rm -rf $(TEMP)
