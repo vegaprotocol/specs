@@ -64,7 +64,7 @@ spellcheck:
 # Checks for duplicated ACs in the features.json file
 .PHONY: featureacs
 featureacs:
-	jq -r '.. | .[] | .acs' -s < protocol/features.json | sort | uniq -d
+	jq -r '.. | .[]? | .acs?' -s < protocol/features.json | sort | uniq -d
 
 clean:
 	rm -rf $(TEMP)
