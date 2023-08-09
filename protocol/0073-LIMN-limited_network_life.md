@@ -30,10 +30,11 @@ Information to store:
 
 - All [network parameters](../protocol/0054-NETP-network_parameters.md), including those defined [below](#network-parameters).
 - All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition).
-Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_overview.md), [LP committed liquidity](./0044-LIME-lp_mechanics.md) and [LP fee pool](../protocol/0029-FEES-fees.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market.
+Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_overview.md) and [LP committed liquidity](./0044-LIME-lp_mechanics.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market.
 - All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted* but not those where the market already started trading and reached *trading terminated* state.
 - All [asset proposals](../protocol/0028-GOVE-governance.md) that have been *accepted*.
 - All delegation info.
+- [LP fee pool](../protocol/0029-FEES-fees.md) for undistributed LP fee balances on a market will be added to the into the network treasury for the asset balances.
 - On chain treasury balances and on-chain rewards for staking and delegation [Staking and delegation](../protocol/0056-REWA-rewards_overview.md).
 - [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts.
 - Event ID of the last processed deposit event for all bridged chains
@@ -136,8 +137,7 @@ for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset USD.
 1. There is a market `id_xxx` in status "pending".
-1. The party LP has a `USD` general account balance equal to `LP_gen_bal + LP_margin_bal`.
-1. The party LP has `LP_bond_bal` committed to market `id_xxx`.
+1. The party LP has a `USD` general account balance equal to `LP_gen_bal + LP_margin_bal` + `LP_bond_bal`.
 1. The other party has a `USD` general account balance equal to `other_gen_bal + other_margin_bal`.
 
 ### Test case 3: Governance proposals are maintained across resets, votes are not

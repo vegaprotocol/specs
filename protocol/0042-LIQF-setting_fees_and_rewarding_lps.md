@@ -256,9 +256,10 @@ Let $s$ be `market.liquidity.commitmentMinTimeFraction`.
 
 Let $c$ be `market.liquidity.slaCompetitionFactor`.
 
-$$
-p_i = (1 - \frac{t - s}{1 - s}) \cdot c.
-$$
+$$p_i = \begin{cases}
+    (1 - \frac{t - s}{1 - s}) \cdot c &\text{if } s < 1 \\
+    0 &\text{if } s = 1
+\end{cases}$$
 
 #### Calculating the SLA performance penalty for over hysteresis period
 
