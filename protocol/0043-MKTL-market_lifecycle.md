@@ -301,6 +301,35 @@ Market state is `suspended`.
 The market state is `active`.
 1. When a new governance proposal for "closing" the Spot market, then market state is `trading terminated`.
 
+### Lifecycle happy path in Perpetual market(<a name="0043-MKTL-009" href="#0043-MKTL-009">0043-MKTL-009</a>)
+
+1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
+Market state is `proposed`.
+The LP bond of the party that proposed the market is transferred from general to bond account.
+1. Market `m1` is accepted and enters opening auction.
+Market state is `pending`.
+1. Parties place orders and at least one trade happens in continuous trading mode.
+Market state is `active`.
+1. Parties place orders so that a [price monitoring auction is triggered](0032-PRIM-price_monitoring.md).
+Market state is `suspended`.
+1. Price monitoring auction ends and the market is in continuous trading again.
+The market state is `active`.
+1. Parties cancel orders so that there is no "best static bid" on the order book.
+The market enters [liquidity monitoring auction](0035-LIQM-liquidity_monitoring.md).
+The market state is `suspended`.
+1. A party place bid; this becomes a best static bid.
+After the specified time the liquidity auction ends.
+The market state is `active`.
+1. Make sure that trades happen so that at least two parties have open positions.
+
+1. An oracle event arrives which triggers the perpetual market's interim settlement logic, causing cashflow transfers but the market remains open.
+1. Further trades happen, with parties still having different positions to previously. The mark price is `p`.
+1. A market state change proposal is created to terminate the market at a given price that is *not* equal to `p`.
+When this is approved and enacted the market state is `closed`.
+Parties that had open positions see settlement cash-flows happen to settle positions.
+Margin account balances are transferred to the general account.
+After `market.liquidity.successorLaunchWindowLength` has passed since market settlement, any insurance pool balance is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
+
 ### Market never leaves opening auction, trading terminated triggered, market cancelled (<a name="0043-MKTL-003" href="#0043-MKTL-003">0043-MKTL-003</a>)
 
 1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
