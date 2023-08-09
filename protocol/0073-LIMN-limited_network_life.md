@@ -137,8 +137,7 @@ for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset USD.
 1. There is a market `id_xxx` in status "pending".
-1. The party LP has a `USD` general account balance equal to `LP_gen_bal + LP_margin_bal`.
-1. The party LP has `LP_bond_bal` committed to market `id_xxx`.
+1. The party LP has a `USD` general account balance equal to `LP_gen_bal + LP_margin_bal` + `LP_bond_bal`.
 1. The other party has a `USD` general account balance equal to `other_gen_bal + other_margin_bal`.
 
 ### Test case 3: Governance proposals are maintained across resets, votes are not
@@ -161,7 +160,25 @@ for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_margin_bal`.
 
-#### Test case 3.1: Spot market is proposed, accepted, restored (<a name="0073-LIMN-102" href="#0073-LIMN-102">0073-LIMN-102</a>)
+#### Test case 3.1.1: Spot market is proposed, accepted, restored (<a name="0073-LIMN-102" href="#0073-LIMN-102">0073-LIMN-102</a>)
+
+1. There is an asset USD and no asset proposals.
+1. There are no markets and no market proposals.
+1. There is a party a party called `LP party` with general balance of 10 000 USD.
+1. A market is proposed by a party called `LP party` and has enactment date 1 year in the future. The market has id `id_xxx`.
+1. `LP party` commits a stake of 1000 USD to `id_xxx`.
+1. Other parties vote on the market and the proposal is accepted (passes rules for vote majority and participation). The market has id `id_xxx`.
+1. The market is in `pending` state, see [market lifecycle](../protocol/0043-MKTL-market_lifecycle.md).
+1. Another party places a limit sell order on the market and has `other_gen_bal`, holding balance `other_hold_bal`.
+1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
+1. There is an asset USD.
+1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
+1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
+1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_hold_bal`.
+
+#### Test case 3.1.2: Perpetual market is proposed, accepted, restored (<a name="0073-LIMN-105" href="#0073-LIMN-105">0073-LIMN-105</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -182,6 +199,7 @@ for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</
 #### Test case 3.2: Market is proposed, voting hasn't closed, not restored (<a name="0073-LIMN-010" href="#0073-LIMN-010">0073-LIMN-010</a>)
 
 for product spot: (<a name="0073-LIMN-103" href="#0073-LIMN-103">0073-LIMN-103</a>)
+for product perpetuals: (<a name="0073-LIMN-106" href="#0073-LIMN-106">0073-LIMN-106</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -198,6 +216,8 @@ for product spot: (<a name="0073-LIMN-103" href="#0073-LIMN-103">0073-LIMN-103</
 #### Test case 3.3: Market is proposed, voting has closed, market rejected, proposal not restored (<a name="0073-LIMN-011" href="#0073-LIMN-011">0073-LIMN-011</a>)
 
 for product spot:(<a name="0073-LIMN-104" href="#0073-LIMN-104">0073-LIMN-104</a>)
+
+for product perpetuals:(<a name="0073-LIMN-107" href="#0073-LIMN-107">0073-LIMN-107</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -216,6 +236,8 @@ for product spot:(<a name="0073-LIMN-104" href="#0073-LIMN-104">0073-LIMN-104</a
 
 for product spot: (<a name="0073-LIMN-077" href="#0073-LIMN-077">0073-LIMN-077</a>)
 
+for product perpetuals:(<a name="0073-LIMN-108" href="#0073-LIMN-108">0073-LIMN-108</a>)
+
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 USD.
@@ -230,6 +252,10 @@ for product spot: (<a name="0073-LIMN-077" href="#0073-LIMN-077">0073-LIMN-077</
 #### Test case 3.5: Recovery from proposed Markets with votes, voting is open, proposal not restored (<a name="0073-LIMN-013" href="#0073-LIMN-013">0073-LIMN-013</a>)
 
 for product spot: (<a name="0073-LIMN-078" href="#0073-LIMN-078">0073-LIMN-078</a>)
+
+
+for product perpetuals:(<a name="0073-LIMN-109" href="#0073-LIMN-109">0073-LIMN-109</a>)
+
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -246,6 +272,9 @@ for product spot: (<a name="0073-LIMN-078" href="#0073-LIMN-078">0073-LIMN-078</
 
 for product spot: (<a name="0073-LIMN-079" href="#0073-LIMN-079">0073-LIMN-079</a>)
 
+for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-110</a>)
+
+
 1. A party has general account balance of 100 USD.
 1. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
 1. The network is shut down.
@@ -256,7 +285,7 @@ for product spot: (<a name="0073-LIMN-079" href="#0073-LIMN-079">0073-LIMN-079</
 1. There is no market and there are no market proposals.
 1. The party has general account balance in USD of `0` and The party has "signed for withdrawal" `100`.
 
-### Test case 4a: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-016" href="#0073-LIMN-016">0073-LIMN-016</a>)
+### Test case 4a: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-016" href="#0073-LIMN-016">0073-LIMN-016</a>) (for perpetuals: <a name="0073-LIMN-111" href="#0073-LIMN-111">0073-LIMN-111</a>)
 
 1. A party has USD general account balance of 100 USD.
 2. That party has USD margin account balance of 100 USD.
