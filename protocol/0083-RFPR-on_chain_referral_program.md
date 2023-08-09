@@ -31,6 +31,14 @@ To create an emphasis on community, collaboration, and competition. Referrers wi
 - `referralProgram.maxReferralDiscountFactor` - limits the maximum discount factor which can be specified as part of a referral program governance proposal
 - `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` - limits the notional volume in quantum units which is eligible each epoch for referral program mechanisms
 - `referralProgram.minStakedVegaTokens` - limits referral code generation to parties staking at least this number of tokens
+- `governance.proposal.referralProgram.minClose` - minimum time till closing time
+- `governance.proposal.referralProgram.maxClose` - maximum time till closing time
+- `governance.proposal.referralProgram.minEnact` - minimum time till enactment time
+- `governance.proposal.referralProgram.maxEnact` - maximum time till enactment time
+- `governance.proposal.referralProgram.requiredParticipation` - required proportion of stakers who must participate in the vote
+- `governance.proposal.referralProgram.requiredMajority` - required majority for vote to pass
+- `governance.proposal.referralProgram.minProposerBalance` - minimum stake required to create a referral program proposal
+- `governance.proposal.referralProgram.minVoterBalance` - minimum stake required to vote on a referral program proposal
 
 ## Governance Proposals
 
