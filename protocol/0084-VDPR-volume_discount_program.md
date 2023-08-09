@@ -12,25 +12,25 @@ The volume discount program provides tiered discounts on taker fees to traders. 
 Enabling or changing the terms of the volume discount program can be proposed via governance. As part of the proposal, the proposer specifies the following fields:
 
 - `benefit_tiers`: a list of dictionaries with the following fields
-  - `minimum_party_running_taker_volume`: the required `party_running_taker_volume` in quantum units for a party to access this tier
+  - `minimum_party_running_notional_taker_volume`: the required `party_running_notional_taker_volume` in quantum units for a party to access this tier
   - `volume_discount_factor`: the proportion of the referees taker fees to be rewarded to the referrer
 - `closing_timestamp`: the timestamp after which when the current epoch ends, the programs status will become `STATE_CLOSED` and benefits will be disabled. If this field is empty, the program runs indefinitely.
-- `window_length`:  the number of epochs over which to evaluate a parties running volume
+- `window_length`:  the number of epochs over which to evaluate a parties notional running volume
 
 ```protobuf
 message UpdateVolumeDiscountProgram{
     changes: UpdateReferralProgramConfiguration{
         benefit_tiers: [
             {
-                "minimum_party_running_taker_volume": 1000,
+                "minimum_party_running_notional_taker_volume": 1000,
                 "volume_discount_factor": 0.001,
             },
             {
-                "minimum_party_running_taker_volume": 20000,
+                "minimum_party_running_notional_taker_volume": 20000,
                 "volume_discount_factor": 0.002,
             },
             {
-                "minimum_party_running_taker_volume": 30000,
+                "minimum_party_running_notional_taker_volume": 30000,
                 "volume_discount_factor": 0.003,
             },
         ],
@@ -64,29 +64,29 @@ After a volume discount program [proposal](#governance-proposals) is validated a
 
 ### Setting benefit factors
 
-At the start of an epoch the network should calculate each parties `party_running_taker_volume` by summing each parties `party_epoch_volume` [values](./0082-RFPR-on_chain_referral_program.md#party-epoch-volumes) over the last n epochs where n is the `window_length` set in the volume discount program [governance proposal](#governance-proposals).
+At the start of an epoch the network should calculate each parties `party_running_notional_taker_volume` by summing each parties `party_epoch_notional_volume` [values](./0082-RFPR-on_chain_referral_program.md#party-epoch-volumes) over the last n epochs where n is the `window_length` set in the volume discount program [governance proposal](#governance-proposals).
 
-Each parties `volume_discount_factor` is then fixed to the value in the highest benefit tier they qualify for. A parties benefit tier is defined as the highest tier for which their `party_running_taker_volume` is greater or equal to the tiers `minimum_party_running_taker_volume`. If a party does not qualify for any tier, their `volume_discount_factor` is set to `0`.
+Each parties `volume_discount_factor` is then fixed to the value in the highest benefit tier they qualify for. A parties benefit tier is defined as the highest tier for which their `party_running_notional_taker_volume` is greater or equal to the tiers `minimum_party_running_notional_taker_volume`. If a party does not qualify for any tier, their `volume_discount_factor` is set to `0`.
 
 ```pseudo
 Given:
     benefit_tiers=[
         {
-            "minimum_party_running_taker_volume": 10000,
+            "minimum_party_running_notional_taker_volume": 10000,
             "volume_discount_factor": 0.001,
         },
         {
-            "minimum_party_running_taker_volume": 20000,
+            "minimum_party_running_notional_taker_volume": 20000,
             "volume_discount_factor": 0.005,
         },
         {
-            "minimum_party_running_taker_volume": 30000,
+            "minimum_party_running_notional_taker_volume": 30000,
             "volume_discount_factor": 0.010,
         },
     ]
 
 And:
-    party_running_taker_volume=22353
+    party_running_notional_taker_volume=22353
 
 Then:
     volume_discount_factor=0.005
@@ -103,7 +103,7 @@ Volume discount program benefit factors are applied by modifying [the fees](./00
 The Parties API should expose the following information:
 
 - a list of all **parties** (by `id`) and the following metrics:
-  - current `party_running_taker_volume` (value at the start of the epoch)
+  - current `party_running_notional_taker_volume` (value at the start of the epoch)
   - current `volume_discount_factor` applied to fees
   - the total amount discounted for the party
 
