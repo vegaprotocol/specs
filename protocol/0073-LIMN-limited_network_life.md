@@ -137,8 +137,7 @@ for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset USD.
 1. There is a market `id_xxx` in status "pending".
-1. The party LP has a `USD` general account balance equal to `LP_gen_bal + LP_margin_bal`.
-1. The party LP has `LP_bond_bal` committed to market `id_xxx`.
+1. The party LP has a `USD` general account balance equal to `LP_gen_bal + LP_margin_bal` + `LP_bond_bal`.
 1. The other party has a `USD` general account balance equal to `other_gen_bal + other_margin_bal`.
 
 ### Test case 3: Governance proposals are maintained across resets, votes are not
