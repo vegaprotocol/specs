@@ -34,7 +34,7 @@ Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_
 - All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted* but not those where the market already started trading and reached *trading terminated* state.
 - All [asset proposals](../protocol/0028-GOVE-governance.md) that have been *accepted*.
 - All delegation info.
-- [LP fee pool](../protocol/0029-FEES-fees.md) for undistributed LP fee balances on a market will be added to the LP's general account balances (without applying any SLA penalties). 
+- [LP fee pool](../protocol/0029-FEES-fees.md) for undistributed LP fee balances on a market will be added to the LP's general account balances (without applying any SLA penalties).
 - On chain treasury balances and on-chain rewards for staking and delegation [Staking and delegation](../protocol/0056-REWA-rewards_overview.md).
 - [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts.
 - Event ID of the last processed deposit event for all bridged chains
