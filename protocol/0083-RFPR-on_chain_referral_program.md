@@ -29,7 +29,7 @@ To create an emphasis on community, collaboration, and competition. Referrers wi
 - `referralProgram.maxBenefitTiers` - limits the maximum number of [benefit tiers](#governance-proposals) which can be specified as part of a referral program
 - `referralProgram.maxReferralRewardFactor` - limits the maximum reward factor which can be specified as part of a referral program
 - `referralProgram.maxReferralDiscountFactor` - limits the maximum discount factor which can be specified as part of a referral program governance proposal
-- `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` - limits the volume in quantum units which is eligible each epoch for referral program mechanisms
+- `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` - limits the notional volume in quantum units which is eligible each epoch for referral program mechanisms
 - `referralProgram.minStakedVegaTokens` - limits referral code generation to parties staking at least this number of tokens
 
 ## Governance Proposals
