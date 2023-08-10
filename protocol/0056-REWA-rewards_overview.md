@@ -116,7 +116,7 @@ At the end of an epoch, if a party has had net returns less than or equal to `0`
 
 Given the set:
 
-$$R = \{r_i \cdot \log(1 +\bar{OI_{i}}) \mid i = 1, 2, \ldots, N\}$$
+$$R = \{\Delta{p} \cdot \log(1 +\bar{OI_{i}}) \mid i = 1, 2, \ldots, N\}$$
 
 The reward metric $m_{rv}$ is the standard deviation of the set $R$.
 
