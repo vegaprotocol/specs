@@ -66,7 +66,7 @@ When looking at a list of orders, I...
 - **must** see if any execution flags (aka conditions. e.g. Post only, Reduce only) were applied to the order (<a name="7003-MORD-019" href="#7003-MORD-019">7003-MORD-019</a>)
 - **should** see "created at" [time](9001-DATA-data_display.md#time)
 - **could** see updated at (this is used by the system when an order is amended, or repriced (in pegged and LP) not sure this in needed)
-
+- **must** be able to see all order fields above in the single order view dialog
 - **should** see time priority (how many orders are before mine at this price)
   
 - if the order is `Active` &amp; **not** a pegged order: **must** see an option to [amend](#amend-order---price) the individual order (<a name="7003-MORD-007" href="#7003-MORD-007">7003-MORD-007</a>)
