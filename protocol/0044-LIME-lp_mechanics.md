@@ -357,9 +357,7 @@ In the case of spot markets it will be transferred into the network treasury for
 
 ### Checkpoint
 
-- Each market's aggregate LP fee accounts must be included in the checkpoint and where the network is down
-  - Rewards accrued during the down time will be actioned when the network is available (<a name="0044-LIME-034" href="#0044-LIME-034">0044-LIME-034</a>)
-  - Fees to be paid during the down time will be actioned when the network is available  (<a name="0044-LIME-035" href="#0044-LIME-035">0044-LIME-035</a>)
+- Each market's aggregate LP fee accounts must be included in the checkpoint and where the network is restored, the aggregate LP fee account balance will be transferred to the LP's general account. (<a name="0044-LIME-034" href="#0044-LIME-034">0044-LIME-034</a>)
 
 #### Network History - Data node restored from network history segments
 
