@@ -97,8 +97,8 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 ### All ordinary accounts
 
-- Double entry accounting is maintained at all points i.e. every transfer event has a source account and destination account and the balance of the source account before the transfer equals to the balance of source account minus the transfer amount after the transfer and balance of the destination account before the transfer plus the transfer amount equals to the balance of the destination account after the transfer. (<a name="0013-ACCT-001" href="#0013-ACCT-001">0013-ACCT-001</a>) for product spot: (<a name="0013-ACCT-024" href="#0013-ACCT-024">0013-ACCT-024</a>)
-- Only transfer requests move money between accounts. (<a name="0013-ACCT-002" href="#0013-ACCT-002">0013-ACCT-002</a>) for product spot: (<a name="0013-ACCT-025" href="#0013-ACCT-025">0013-ACCT-025</a>)
+- Double entry accounting is maintained at all points i.e. every transfer event has a source account and destination account and the balance of the source account before the transfer equals to the balance of source account minus the transfer amount after the transfer and balance of the destination account before the transfer plus the transfer amount equals to the balance of the destination account after the transfer. (<a name="0013-ACCT-001" href="#0013-ACCT-001">0013-ACCT-001</a>). For product spot: (<a name="0013-ACCT-024" href="#0013-ACCT-024">0013-ACCT-024</a>)
+- Only transfer requests move money between accounts. (<a name="0013-ACCT-002" href="#0013-ACCT-002">0013-ACCT-002</a>). For product spot: (<a name="0013-ACCT-025" href="#0013-ACCT-025">0013-ACCT-025</a>)
 
 ### Party asset accounts
 
