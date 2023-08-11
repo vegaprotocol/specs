@@ -157,13 +157,13 @@ message Market {
 
 ## Acceptance Criteria
 
-- The duration of the auction period (time between close of voting and enactment time) at market creation cannot be below the minimum auction period defined within the network (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>) for product spot: (<a name="0026-AUCT-023" href="#0026-AUCT-023">0026-AUCT-023</a>)
-- As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period. (<a name="0026-AUCT-004" href="#0026-AUCT-004">0026-AUCT-004</a>) for product spot: (<a name="0026-AUCT-024" href="#0026-AUCT-024">0026-AUCT-024</a>)
+- The duration of the auction period (time between close of voting and enactment time) at market creation cannot be below the minimum auction period defined within the network (<a name="0026-AUCT-003" href="#0026-AUCT-003">0026-AUCT-003</a>). For product spot: (<a name="0026-AUCT-023" href="#0026-AUCT-023">0026-AUCT-023</a>)
+- As the Vega network, in auction mode, all orders are placed in the book but never uncross until the end of the auction period. (<a name="0026-AUCT-004" href="#0026-AUCT-004">0026-AUCT-004</a>). For product spot: (<a name="0026-AUCT-024" href="#0026-AUCT-024">0026-AUCT-024</a>)
 - As a user, I can cancel an order that it either live on the order book or parked. (<a href="./0068-MATC-matching_engine.md#0068-MATC-033">0068-MATC-033</a>) for product spot: (<a href="./0068-MATC-matching_engine.md#0068-MATC-060">0068-MATC-060</a>)
-- As a user, I can get information about the trading mode of the market (through the [market framework](./0001-MKTF-market_framework.md)) (<a name="0026-AUCT-005" href="#0026-AUCT-005">0026-AUCT-005</a>)for product spot:(<a name="0026-AUCT-025" href="#0026-AUCT-025">0026-AUCT-025</a>)
-- As a user, I can get real time information through the API about a market in auction mode: indicative crossing price, indicative crossing volume.  (<a name="0026-AUCT-006" href="#0026-AUCT-006">0026-AUCT-006</a>) for product spot: (<a name="0026-AUCT-026" href="#0026-AUCT-026">0026-AUCT-026</a>)
-- As a user, the market depth API provides the same data that would be sent during continuous trading (<a name="0026-AUCT-007" href="#0026-AUCT-007">0026-AUCT-007</a>) for product spot: (<a name="0026-AUCT-027" href="#0026-AUCT-027">0026-AUCT-027</a>)
-- As an API user, I can identify: (<a name="0026-AUCT-008" href="#0026-AUCT-008">0026-AUCT-008</a>) for product spot: (<a name="0026-AUCT-028" href="#0026-AUCT-028">0026-AUCT-028</a>)
+- As a user, I can get information about the trading mode of the market (through the [market framework](./0001-MKTF-market_framework.md)) (<a name="0026-AUCT-005" href="#0026-AUCT-005">0026-AUCT-005</a>). For product spot:(<a name="0026-AUCT-025" href="#0026-AUCT-025">0026-AUCT-025</a>)
+- As a user, I can get real time information through the API about a market in auction mode: indicative crossing price, indicative crossing volume.  (<a name="0026-AUCT-006" href="#0026-AUCT-006">0026-AUCT-006</a>).For product spot: (<a name="0026-AUCT-026" href="#0026-AUCT-026">0026-AUCT-026</a>)
+- As a user, the market depth API provides the same data that would be sent during continuous trading (<a name="0026-AUCT-007" href="#0026-AUCT-007">0026-AUCT-007</a>). For product spot: (<a name="0026-AUCT-027" href="#0026-AUCT-027">0026-AUCT-027</a>)
+- As an API user, I can identify: (<a name="0026-AUCT-008" href="#0026-AUCT-008">0026-AUCT-008</a>). For product spot: (<a name="0026-AUCT-028" href="#0026-AUCT-028">0026-AUCT-028</a>)
   - If a market is temporarily in an auction period
   - Why it is in that period (e.g. Auction at open, liquidity sourcing, price monitoring)
   - When the auction will next attempt to uncross or if the auction period ended and the auction cannot be resolved for whatever reason then this should come blank or otherwise indicating that the system doesn't know when the auction ought to end.
@@ -176,5 +176,5 @@ message Market {
     4. past the enactment time if there are orders crossing on the book and [liquidity is supplied](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction) but after the auction uncrossing we will not have
 		  - best bid; it will still open. (<a name="0026-AUCT-021" href="#0026-AUCT-021">0026-AUCT-021</a>)
 		  - or best ask; it will still open. (<a name="0026-AUCT-022" href="#0026-AUCT-022">0026-AUCT-022</a>)
-- When entering an auction, all GFN orders will be cancelled. (<a name="0026-AUCT-015" href="#0026-AUCT-015">0026-AUCT-015</a>) for product spot: (<a name="0026-AUCT-031" href="#0026-AUCT-031">0026-AUCT-031</a>)
-- When leaving an auction, all GFA orders will be cancelled. (<a name="0026-AUCT-016" href="#0026-AUCT-016">0026-AUCT-016</a>) for product spot: (<a name="0026-AUCT-032" href="#0026-AUCT-032">0026-AUCT-032</a>)
+- When entering an auction, all GFN orders will be cancelled. (<a name="0026-AUCT-015" href="#0026-AUCT-015">0026-AUCT-015</a>). For product spot: (<a name="0026-AUCT-031" href="#0026-AUCT-031">0026-AUCT-031</a>)
+- When leaving an auction, all GFA orders will be cancelled. (<a name="0026-AUCT-016" href="#0026-AUCT-016">0026-AUCT-016</a>). For product spot: (<a name="0026-AUCT-032" href="#0026-AUCT-032">0026-AUCT-032</a>)
