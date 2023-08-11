@@ -61,12 +61,12 @@ jobs:
 
       - name: "Run Check AC codes"
         run: |
-          npx github:vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
+          npx github:vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}"
 
       - name: "Run Check file names"
         run: |
-          npx github:vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
+          npx github:vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}"
 
       - name: "Run Check Features"
         run: |
-          npx github:vegaprotocol/approbation check-features --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}" --features="./protocol/features.json"
+          npx github:vegaprotocol/approbation check-features --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}" --features="./protocol/features.json"
