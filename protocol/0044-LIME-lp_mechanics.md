@@ -19,7 +19,7 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - `market.liquidity.sla.nonPerformanceBondPenaltyMax` - used to calculate how much is the LP bond slashed if they fail to reach the minimum SLA. Valid values: any decimal number `>= 0` and `<=1.0` with a default value of `0.5`.
 - `market.liquidity.maximumLiquidityFeeFactorLevel` - used in validating fee amounts that are submitted as part of the LP commitment transaction. Note that a value of `0.05 = 5%`. Valid values are: any decimal number `>=0` and `<=1`. Default value `1`.
 - `market.liquidity.stakeToCcyVolume` - used to translate a commitment to an obligation. Any decimal number `>0` with default value `1.0`.
-- `validators.epoch.length` - LP rewards from liquidity fees are paid out once per epoch according to whether they met the "SLA" (implied by `market.liquidity.committmentMinTimeFraction`) and their previous performance (for the last n epochs defined by `market.liquidity.performanceHysteresisEpochs`), see [epoch spec](./0050-EPOC-epochs.md).
+- `validators.epoch.length` - LP rewards from liquidity fees are paid out once per epoch according to whether they met the "SLA" (implied by `market.liquidity.commitmentMinTimeFraction`) and their previous performance (for the last n epochs defined by `market.liquidity.performanceHysteresisEpochs`), see [epoch spec](./0050-EPOC-epochs.md).
 - `market.liquidity.earlyExitPenalty` (decimal ≥0), sets how much LP forfeits of their bond in case the market is below target stake and they wish to reduce their commitment. If set to `0` there is no penalty for early exit, if set to `1` their entire bond is forfeited if they exit their entire commitment, if set >1, their entire bond will be forfeited for exiting `1/earlyExitPenalty` of their commitment amount.
 - `market.liquidity.probabilityOfTrading.tau.scaling` sets how the probability of trading is calculated from the risk model; this is used to [measure the relative competitiveness of LPs supplied volume](0042-LIQF-setting_fees_and_rewarding_lps.md).
 - `market.liquidity.minimum.probabilityOfTrading.lpOrders` sets a lower bound on the result of the probability of trading calculation.
@@ -30,13 +30,13 @@ All market parameters can be set / modified as part of [market proposal](0028-GO
 
 - `market.liquidity.priceRange` (decimal) - this is a percentage price move (e.g. `0.05 = 5%`) from `mid_price` during continuous trading or indicative uncrossing price during auctions.
 
-- `market.liquidity.committmentMinTimeFraction` (decimal) —  minimum fraction of time LPs must spend "on the book" providing their committed liquidity. This is a decimal number in the interval $[0,1]$ i.e. both limits included. When set to $0$ the SLA mechanics are switched off for the market entirely.
+- `market.liquidity.commitmentMinTimeFraction` (decimal) —  minimum fraction of time LPs must spend "on the book" providing their committed liquidity. This is a decimal number in the interval $[0,1]$ i.e. both limits included. When set to $0$ the SLA mechanics are switched off for the market entirely.
 
 - `market.liquidity.providers.fee.calculationTimeStep` (time period e.g. `1m`) controls how often the quality of liquidity supplied by the LPs is evaluated and fees arising from that period are earmarked for specific parties.
 
 - `market.liquidity.performanceHysteresisEpochs` (uint) - number of liquidity epochs over which past performance will continue to affect rewards.
 
-- `market.liquidity.slaCompetitionFactor` - the maximum fraction of their accrued fees an LP that meets the SLA implied by `market.liquidity.committmentMinTimeFraction` will lose to LPs that achieved a higher SLA performance than them.
+- `market.liquidity.slaCompetitionFactor` - the maximum fraction of their accrued fees an LP that meets the SLA implied by `market.liquidity.commitmentMinTimeFraction` will lose to LPs that achieved a higher SLA performance than them.
 
 For LP reward calculations based on the SLA see the [0042-LIQF spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
@@ -222,12 +222,12 @@ Note: we don't evaluate whether LPs meet the SLA during opening auctions so ther
 
 See the [Calculating the SLA performance penalty for a single epoch section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md) for how `fraction_of_time_on_book` is calculated.
 This is available at the end of each epoch.
-If, at the end of the epoch, `fraction_of_time_on_book >= market.liquidity.committmentMinTimeFraction` then let $f=0$.
+If, at the end of the epoch, `fraction_of_time_on_book >= market.liquidity.commitmentMinTimeFraction` then let $f=0$.
 Otherwise we calculate a penalty to be applied to the bond as follows.
 
 Let $t$ be `fraction_of_time_on_book`
 
-Let $s$ be `market.liquidity.committmentMinTimeFraction`.
+Let $s$ be `market.liquidity.commitmentMinTimeFraction`.
 
 Let $p$ be `market.liquidity.sla.nonPerformanceBondPenaltySlope`.
 
@@ -303,14 +303,14 @@ Note:
 - Change of `market.liquidity.stakeToCcyVolume` will change the liquidity obligation hence change the size of the LP orders on the order book. (<a name="0044-LIME-010" href="#0044-LIME-010">0044-LIME-010</a>)
 - If `market.liquidity.stakeToCcyVolume` is set to `0.0`, there is [target stake](./0041-TSTK-target_stake.md) of `1000` and there are 3 LPs on the market with stake / fee bid submissions of `100, 0.01`, `1000, 0.02` and `200, 0.03` then the liquidity fee is `0.02`. (<a name="0044-LIME-012" href="#0044-LIME-012">0044-LIME-012</a>)
 
-- If a liquidity provider has `fraction_of_time_on_book` >= `market.liquidity.committmentMinTimeFraction`, no penalty will be taken from their bond account (<a name="0044-LIME-013" href="#0044-LIME-013">0044-LIME-013</a>)
-- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `35%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-014" href="#0044-LIME-014">0044-LIME-014</a>)
+- If a liquidity provider has `fraction_of_time_on_book` >= `market.liquidity.commitmentMinTimeFraction`, no penalty will be taken from their bond account (<a name="0044-LIME-013" href="#0044-LIME-013">0044-LIME-013</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.commitmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `35%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-014" href="#0044-LIME-014">0044-LIME-014</a>)
 and in the case of spot markets into the network treasury for the asset (<a name="0044-LIME-048" href="#0044-LIME-048">0044-LIME-048</a>)
-- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6`and the market parameter change `market.liquidity.committmentMinTimeFraction = 0.3` is enacted during the epoch then at the end of the current epoch LP will have their bond slashed. If the LP has `fraction_of_time_on_book` = `0.3` at the end of the next epoch, they are meeting their committment and will not forfeit any of their bond stake. (<a name="0044-LIME-069" href="#0044-LIME-069">0044-LIME-069</a>)
-- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.committmentMinTimeFraction = 0.0`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6`and the market parameter change `market.liquidity.committmentMinTimeFraction = 0.6` is enacted during the epoch then at the end of the current epoch LP will not forfeit any of their bond stake. At the end of the next epoch, the LP will have their bond slashed. (<a name="0044-LIME-070" href="#0044-LIME-070">0044-LIME-070</a>)
-- If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `60%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-015" href="#0044-LIME-015">0044-LIME-015</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.commitmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6`and the market parameter change `market.liquidity.commitmentMinTimeFraction = 0.3` is enacted during the epoch then at the end of the current epoch LP will have their bond slashed. If the LP has `fraction_of_time_on_book` = `0.3` at the end of the next epoch, they are meeting their commitment and will not forfeit any of their bond stake. (<a name="0044-LIME-069" href="#0044-LIME-069">0044-LIME-069</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.commitmentMinTimeFraction = 0.0`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6`and the market parameter change `market.liquidity.commitmentMinTimeFraction = 0.6` is enacted during the epoch then at the end of the current epoch LP will not forfeit any of their bond stake. At the end of the next epoch, the LP will have their bond slashed. (<a name="0044-LIME-070" href="#0044-LIME-070">0044-LIME-070</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.commitmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `60%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-015" href="#0044-LIME-015">0044-LIME-015</a>)
 and in the case of spot markets into the network treasury for the asset (<a name="0044-LIME-046" href="#0044-LIME-046">0044-LIME-046</a>)
-- If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.2`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `20%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-016" href="#0044-LIME-016">0044-LIME-016</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.commitmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.2`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `20%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-016" href="#0044-LIME-016">0044-LIME-016</a>)
 and in the case of spot markets into the network treasury for the asset (<a name="0044-LIME-047" href="#0044-LIME-047">0044-LIME-047</a>)
 
 - If a liquidity provider with an active liquidity provision at the start of an epoch reduces their liquidity provision staked commitment during the epoch the initial committed level at the start of the epoch will remain in effect until the end of the epoch, at which point the protocol will attempt to reduce the bond to the new level. (<a name="0044-LIME-018" href="#0044-LIME-018">0044-LIME-018</a>)
@@ -350,7 +350,7 @@ In the case of spot markets it will be transferred into the network treasury for
   - when `market.liquidity.providers.fee.calculationTimeStep` is set to `0` any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>)
   - if `market.liquidity.providers.fee.calculationTimeStep` is set to `15s` and `validators.epoch.length` is set to `10s`, during the current epoch market parameter change `market.liquidity.providers.fee.calculationTimeStep = 5s` is enacted, any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block. For the next epoch the distribution will take place at `5` second (<a name="0044-LIME-061" href="#0044-LIME-061">0044-LIME-061</a>)
   - if `market.liquidity.providers.fee.calculationTimeStep` is set to `10s` and `validators.epoch.length` is set to `15s`, during the current epoch market parameter change `market.liquidity.providers.fee.calculationTimeStep = 3s` is enacted, any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block. For the next epoch the distribution will take place at `3` second (<a name="0044-LIME-062" href="#0044-LIME-062">0044-LIME-062</a>)
-- For a market that is in continuous trading if a new LP submits buy and sell orders on the market then makes a liquidity committment to that market the previous orders will count towards the LPs liquidity commitment. (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>)
+- For a market that is in continuous trading if a new LP submits buy and sell orders on the market then makes a liquidity commitment to that market the previous orders will count towards the LPs liquidity commitment. (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>)
 - For a market with market parameter `market.liquidity.priceRange = 0.05` (5%), is in continuous trading with `mid price` set to `5` and a new LP has committed liquidity:
   - if during the epoch market parameter change `market.liquidity.priceRange = 0.1` (10%) is enacted and the LP has a buy order at price `4.74` and a sell order at price `5.25`, the LP is not meeting their committed volume of notional and a bond penalty will apply. The next epoch the parameter change takes effect, LP will meet their committed volume of notional and no bond penalty will apply. (<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>)
   - if the LP has a buy order at price `4.75` and a sell order at price `5.26`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-073" href="#0044-LIME-073">0044-LIME-073</a>)
@@ -399,7 +399,7 @@ In the case of spot markets it will be transferred into the network treasury for
 
 - Boundary values are respected for the market parameters
   - `market.liquidity.providers.fee.calculationTimeStep` valid values: `>=0`, `<= validators.epoch.length` (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>)
-  - `market.liquidity.committmentMinTimeFraction` valid values: `>=0`, `<=1` (<a name="0044-LIME-064" href="#0044-LIME-064">0044-LIME-064</a>)
+  - `market.liquidity.commitmentMinTimeFraction` valid values: `>=0`, `<=1` (<a name="0044-LIME-064" href="#0044-LIME-064">0044-LIME-064</a>)
   - `market.liquidity.priceRange` valid values: `>=0`, `<=100` (<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>)
   - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
   - `market.liquidity.performanceHysteresisEpochs` valid values: `>=1`, `<=366` (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>)
