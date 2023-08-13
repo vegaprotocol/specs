@@ -26,7 +26,9 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 ### Market parameters
 
-- `market.liquidity.priceRange` (decimal) - this is a percentage price move (e.g. `0.05 = 5%`) from `mid_price` during continuous trading or indicative uncrossing price during auctions. This is set / can be modified as part of [market proposal](0028-GOVE-governance.md) / market change proposal.
+All market parameters can be set / modified as part of [market proposal](0028-GOVE-governance.md) / market change proposal and the new value take effect at at the first new epoch after enactment.
+
+- `market.liquidity.priceRange` (decimal) - this is a percentage price move (e.g. `0.05 = 5%`) from `mid_price` during continuous trading or indicative uncrossing price during auctions.
 
 - `market.liquidity.committmentMinTimeFraction` (decimal) —  minimum fraction of time LPs must spend "on the book" providing their committed liquidity. This is a decimal number in the interval $[0,1]$ i.e. both limits included. When set to $0$ the SLA mechanics are switched off for the market entirely.
 
@@ -293,6 +295,7 @@ Note:
   - GRPC (<a name="0044-LIME-057" href="#0044-LIME-057">0044-LIME-057</a>)
   - GRAPHQL (<a name="0044-LIME-058" href="#0044-LIME-058">0044-LIME-058</a>)
   - REST (<a name="0044-LIME-059" href="#0044-LIME-059">0044-LIME-059</a>)
+- When a LP commits liquidity and places orders on market 1 and on market 2 the LP has no liquidity commitment when I request for all LP orders through `ListLiquidityProvisions` api for this party, then only LP orders for market 1 are returned.  (<a name="0044-LIME-068" href="#0044-LIME-068">0044-LIME-068</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIME-002" href="#0044-LIME-002">0044-LIME-002</a>).
 - Change of network parameter `market.liquidity.bondPenaltyParameter` will immediately change the amount by which the bond account will be 'slashed' when a liquidity provider has insufficient capital for Vega to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIME-003" href="#0044-LIME-003">0044-LIME-003</a>)
 - Change of `market.liquidity.maximumLiquidityFeeFactorLevel` will change the maximum liquidity fee factor. Any LP orders that have already been submitted are unaffected but any new submission or amendments must respect the new maximum (those that don't get rejected). (<a name="0044-LIME-006" href="#0044-LIME-006">0044-LIME-006</a>)
@@ -303,6 +306,8 @@ Note:
 - If a liquidity provider has `fraction_of_time_on_book` >= `market.liquidity.committmentMinTimeFraction`, no penalty will be taken from their bond account (<a name="0044-LIME-013" href="#0044-LIME-013">0044-LIME-013</a>)
 - If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `35%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-014" href="#0044-LIME-014">0044-LIME-014</a>)
 and in the case of spot markets into the network treasury for the asset (<a name="0044-LIME-048" href="#0044-LIME-048">0044-LIME-048</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6`and the market parameter change `market.liquidity.committmentMinTimeFraction = 0.3` is enacted during the epoch then at the end of the current epoch LP will have their bond slashed. If the LP has `fraction_of_time_on_book` = `0.3` at the end of the next epoch, they are meeting their committment and will not forfeit any of their bond stake. (<a name="0044-LIME-069" href="#0044-LIME-069">0044-LIME-069</a>)
+- If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.committmentMinTimeFraction = 0.0`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6`and the market parameter change `market.liquidity.committmentMinTimeFraction = 0.6` is enacted during the epoch then at the end of the current epoch LP will not forfeit any of their bond stake. At the end of the next epoch, the LP will have their bond slashed. (<a name="0044-LIME-070" href="#0044-LIME-070">0044-LIME-070</a>)
 - If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `60%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-015" href="#0044-LIME-015">0044-LIME-015</a>)
 and in the case of spot markets into the network treasury for the asset (<a name="0044-LIME-046" href="#0044-LIME-046">0044-LIME-046</a>)
 - If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.committmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.2`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `20%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-016" href="#0044-LIME-016">0044-LIME-016</a>)
@@ -341,6 +346,23 @@ In the case of spot markets it will be transferred into the network treasury for
   - LP can cancel their commitment without incurring penalties (<a name="0044-LIME-053" href="#0044-LIME-053">0044-LIME-053</a>)
 - For a market that is in continuous trading and a single LP has committed liquidity:
   - The LP cannot cancel their commitment but instead submit governance vote to cancel the market (<a name="0044-LIME-052" href="#0044-LIME-052">0044-LIME-052</a>) for spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
+- For a market that is in continuous trading and LP has committed liquidity
+  - when `market.liquidity.providers.fee.calculationTimeStep` is set to `0` any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>)
+  - if `market.liquidity.providers.fee.calculationTimeStep` is set to `15s` and `validators.epoch.length` is set to `10s`, during the current epoch market parameter change `market.liquidity.providers.fee.calculationTimeStep = 5s` is enacted, any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block. For the next epoch the distribution will take place at `5` second (<a name="0044-LIME-061" href="#0044-LIME-061">0044-LIME-061</a>)
+  - if `market.liquidity.providers.fee.calculationTimeStep` is set to `10s` and `validators.epoch.length` is set to `15s`, during the current epoch market parameter change `market.liquidity.providers.fee.calculationTimeStep = 3s` is enacted, any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block. For the next epoch the distribution will take place at `3` second (<a name="0044-LIME-062" href="#0044-LIME-062">0044-LIME-062</a>)
+- For a market that is in continuous trading if a new LP submits buy and sell orders on the market then makes a liquidity committment to that market the previous orders will count towards the LPs liquidity commitment. (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>)
+- For a market that has market parameter `market.liquidity.priceRange = 0.05` (5%), is in continuous trading with `mid price` set to `5` and a new LP has committed liquidity:
+  - if the LP has a buy order for `4.74` and a sell order for `5.25`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>)
+  - if the LP has a buy order for `4.75` and a sell order for `5.26`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-073" href="#0044-LIME-073">0044-LIME-073</a>)
+  - if the LP has a buy order for `4.75` and a sell order for `5.25`, the LP is meeting their committed volume of notional (<a name="0044-LIME-074" href="#0044-LIME-074">0044-LIME-074</a>)
+- For a market that has market parameter `market.liquidity.priceRange = 0.5` (5%), is in monitoring auction with `last trade price` set to `5` and a new LP has committed liquidity:
+  - if the `indicative uncrossing price` is set to `4`, the LP has a buy order for `3.79` and a sell order for `5.25`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-075" href="#0044-LIME-075">0044-LIME-075</a>)
+  - if the `indicative uncrossing price` is set to `4`, the LP has a buy order for `3.8` and a sell order for `5.25`, the LP is meeting their committed volume of notional (<a name="0044-LIME-076" href="#0044-LIME-076">0044-LIME-076</a>)
+  - if the `indicative uncrossing price` is set to `6`, the LP has a buy order for `4.75` and a sell order for `6.31`, the LP is not meeting their committed volume of notional(<a name="0044-LIME-077" href="#0044-LIME-077">0044-LIME-077</a>)
+  - if the `indicative uncrossing price` is set to `6`, the LP has a buy order for `4.75` and a sell order for `6.3`, the LP is meeting their committed volume of notional(<a name="0044-LIME-078" href="#0044-LIME-078">0044-LIME-078</a>)
+  - if there is no `indicative uncrossing price` and the LP has a buy order for `4.74` and a sell order for `5.25`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-079" href="#0044-LIME-079">0044-LIME-079</a>)
+  - if there is no `indicative uncrossing price` and the LP has a buy order for `4.75` and a sell order for `5.26`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-080" href="#0044-LIME-080">0044-LIME-080</a>)
+  - if there is no `indicative uncrossing price` and the LP has a buy order for `4.75` and a sell order for `5.25`, the LP is meeting their committed volume of notional (<a name="0044-LIME-081" href="#0044-LIME-081">0044-LIME-081</a>)
 
 ### Qualifying Order Types
 
@@ -372,3 +394,12 @@ In the case of spot markets it will be transferred into the network treasury for
   - `market.liquidityV2.sla.nonPerformanceBondPenaltySlope` valid values: `>=0`, `<=1000` default value of `2`  (<a name="0044-LIME-040" href="#0044-LIME-040">0044-LIME-040</a>)
   - `market.liquidityV2.sla.nonPerformanceBondPenaltyMax` valid values: `>=0`, `<=1` default value of `0.5`  (<a name="0044-LIME-041" href="#0044-LIME-041">0044-LIME-041</a>)
   - `market.liquidityV2.stakeToCcyVolume` valid values: `>=0`, `<=100` default value of `1`   (<a name="0044-LIME-042" href="#0044-LIME-042">0044-LIME-042</a>)
+
+#### Market parameters validation
+
+- Boundary values are respected for the market parameters
+  - `market.liquidity.providers.fee.calculationTimeStep` valid values: `>=0`, `<= validators.epoch.length` (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>)
+  - `market.liquidity.committmentMinTimeFraction` valid values: `>=0`, `<=1` (<a name="0044-LIME-064" href="#0044-LIME-064">0044-LIME-064</a>)
+  - `market.liquidity.priceRange` valid values: `>=0`, `<=100` (<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>)
+  - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
+  - `market.liquidity.performanceHysteresisEpochs` valid values: `>=1`, `<=366` (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>)
