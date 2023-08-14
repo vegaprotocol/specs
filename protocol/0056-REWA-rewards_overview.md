@@ -120,15 +120,15 @@ The reward metric $m_{rv}$ is the standard deviation of the set $R$.
 
 ### Validator ranking metric
 
-The validator ranking metric, $m_{vr}$, measures the ranking score of consensus and standby validators.
+The validator ranking metric, $m_v$, measures the ranking score of consensus and standby validators.
 
 At the end of each epoch, for each party who **is** a consensus or standby validator set their reward metric as follows.
 
-$$m_{vr} = rankingScore$$
+$$m_v = ranking_score$$
 
 If a party **is not** a consensus or standby validator, their reward metric is simply:
 
-$$m_{vr} = 0$$
+$$m_v = 0$$
 
 ### Market creation reward metrics
 
@@ -224,7 +224,7 @@ Rewards funded using the exponential-decay strategy should be distributed as fol
 
 1. Calculate each entities reward metric
 2. Order each entity in a descending list by their reward metric value and determine their "rank" in the list
-3. Normalize the rank of each party within a range of 0 to 1, using the highest rank as the upper limit for normalization.
+3. Normalise the rank of each party within a range of 0 to 1, using the highest rank as the upper limit for normalisation.
 4. Calculate each entities share of the rewards using the below formula.
 
 Let:

@@ -115,12 +115,12 @@ Must expose the following:
 
 ### Governance proposals
 
-WIP
+Too be added
 
 ### Setting activity / inactivity streak
 
-WIP
+Too be added
 
 ### Setting activity benefits
 
-WIP
+Too be added
