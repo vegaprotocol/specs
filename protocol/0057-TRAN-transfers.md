@@ -100,6 +100,13 @@ To support entity scoping, the transaction include the following fields:
   - `INDIVIDUAL_SCOPE_IN_TEAM` - all parties which are part of a team are within the scope of this reward
   - `INDIVIDUAL_SCOPE_NOT_IN_TEAM` - all parties which are not part of a team are within the scope of this reward
 - `team scope` - optional list if the reward type is `ENTITY_SCOPE_TEAMS`, field allows the funder to define a list of team ids which are eligible to be rewarded from this transfer
+- `staking_requirement` - the required minimum number of tokens staked for a party to be considered eligible. Defaults to `0`.
+- `notional_time_weighted_average_position_requirement` - the required minimum notional time-weighted averaged position required for a party to be considered eligible. Defaults to `0`.
+
+A party should be able to configure the distribution of rewards by specifying a number of epochs to evaluate the reward metric over and specify a number of epochs to delay vesting by. The transaction should now include the following fields.
+
+- `window_length` - the number of epochs over which to evaluate the reward metric.
+- `lock_period` - the number of epochs after distribution to delay [vesting of rewards](./0085-RVST-rewards_vesting.md#vesting-mechanics) by.
 
 - At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market to the sum total reward metric for all markets in the `market scope` and then distributes the transfer amount to the corresponding accounts of the markets pro-rata by their contribution to the total.
 

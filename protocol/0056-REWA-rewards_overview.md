@@ -30,14 +30,16 @@ At the end of the epoch:
 
 ## Individual reward metrics
 
-Individual reward metrics are scoped by [`reward type`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
+Individual reward metrics are scoped by [`recurring transfer`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
 
-Therefore a party may be in scope for the same reward type multiple times but no more than once per market per epoch.
-Metrics will be calculated at the end of every epoch, for every eligible party, in each market for each reward type.
+Therefore a party may be in scope for the same reward type multiple times per epoch.
+Metrics will be calculated at the end of every epoch, for every eligible party, in each market, for each recurring transfer.
 Metrics only need to be calculated where the [market, reward type] reward account has a non-zero balance of at least one asset.
 
 Reward metrics will be calculated once for each party/market combination in the reward metric asset which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market.
 This is the original precision for the metric source data.
+
+For each reward metric an individual must meet the [staking requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) **AND** [notional time-weighted average position requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts)) set in the recurring transfer. If they do not then their reward metric is set to `0`.
 
 ### Fee-based reward metrics
 
@@ -81,42 +83,38 @@ $$m_{oi} = \frac{\sum_{i}^{n}\bar{OI_{i}}}{N}$$
 
 ### Relative return metric
 
-The relative return metric, $m_{rr}$, measures each parties average relative return, weighted by their [time-weighted average open-interest](#open-interest-metric), over a number of epochs.
+The relative return metric, $m_{rr}$, measures each parties average relative return, weighted by their [time-weighted average position](#average-position-metric), over a number of epochs.
 
-At the start of the epoch, the network must store the parties current pnl.
-
-$$p_{0} = p_{realised} + p_{unrealised}$$
-
-At the end of each epoch, the network must calculate and store the parties change in pnl:
+At the end of each epoch, the network must calculate and store the parties relative returns as follows.
 
 Let:
 
-- $\Delta{p}$ be the parties change in pnl
-- $p_{realised}$ be the parties realised pnl at the end of the epoch
-- $p_{unrealised}$ be the parties unrealised pnl at the end of the epoch
+- $r_i$ be the parties relative returns in the epoch
+- $m2m_{wins}$ be the sum of all mark-to-market win transfers in the epoch
+- $m2m_{losses}$ be the sum of all mark-to-market loss transfers in the epoch
+- $TWAP$ be the parties time-weighted average position in the epoch.
 
-$$\Delta{p} = p_{realised} + p_{unrealised} - p_{0}$$
+$$r = \frac{m2m_{wins} + m2m_{losses}}{TWAP}$$
 
-And calculate their average relative return, weighted by the log of their [time weighted average open interest](#open-interest-metric), over the last $N$ epochs as follows.
+And calculate their average relative returns over the last $N$ epochs as follows.
 
 Let:
 
 - $m_{rr}$ be the parties relative return reward metric
-- $\bar{OI_{i}}$ be the parties time weighted average open interest in the ith epoch
-- $\Delta{p}$ be the parties change in pnl in the ith epoch
-- $N$ be the network parameter `rewards.metrics.relativeReturnsWindow`
+- $r_i$ be the parties change in pnl in the i th epoch
+- $N$ be the window length specified in the recurring transfer.
 
-$$m_{rr} = \frac{\sum_{i}^{n}{$\Delta{p}$\cdot\log(1 + \bar{OI_{i}})}}{N}$$
+$$m_{rr} = \max(\frac{\sum_{i}^{n}{r_{i}}}{N}, 0)$$
 
 ### Returns volatility metric
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
 
-At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the network parameter `rewards.metrics.returnsVolatilityWindow`), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the standard deviation of the set of each parties returns weighted by the log of their [time weighted average open interest](#open-interest-metric) over the last $N$ epochs.
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the standard deviation of the set of each parties returns over the last $N$ epochs.
 
 Given the set:
 
-$$R = \{\Delta{p} \cdot \log(1 +\bar{OI_{i}}) \mid i = 1, 2, \ldots, N\}$$
+$$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
 The reward metric $m_{rv}$ is the standard deviation of the set $R$.
 
@@ -214,7 +212,7 @@ Let:
 
 $$d_{i}=r_{i} M_{i}$$
 
-Note if the entity is a team, $M_{i}$ is set to zero as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
+Note if the entity is a team, $M_{i}$ is set to `1` as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
 
 Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
 
@@ -226,19 +224,24 @@ Rewards funded using the exponential-decay strategy should be distributed as fol
 
 1. Calculate each entities reward metric
 2. Order each entity in a descending list by their reward metric value and determine their "rank" in the list
-3. Calculate each entities share of the rewards using the below formula.
+3. Normalize the rank of each party within a range of 0 to 1, using the highest rank as the upper limit for normalization.
+4. Calculate each entities share of the rewards using the below formula.
 
 Let:
 
 - $d_{i}$ be the payout factor for entity $i$
 - $s_{i}$ be the share of the rewards for entity $i$
-- $k$ be the decay factor specified in the recurring transfer funding the reward
-- $R_{i}$ be the rank of entity $i$
+- $k$ be the decay factor specified in the recurring transfer funding the reward.
+- $R_{i}$ be the normalised rank of entity $i$
 - $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 
-$$d_{i}=e^{-k R_{i}} M_{i}$$
+$$d_{i}=M_{i} e^{-k R_{i}}$$
 
-Note if the entity is a team, $M_{i}$ is set to zero as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
+Note if the entity is a team, $M_{i}$ is set to 1 as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
+
+To avoid exponential formulas in the core implementation, the above exponential equation can be approximated using the following 7th order Taylor expansion. An odd number of terms has intentionally been chosen so the expansion diverges to $-\infty$ rather than $+\infty$.
+
+$$d_{i} = M_{i} e^{-k R_i} \approx M_{i} \min(1- \sum_{j=0}^{7} \frac{(-k R_i)^j}{j!}, 0)$$
 
 Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
 
@@ -246,20 +249,18 @@ $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
 
 ### Distributing rewards amongst team members
 
-If rewards are distributed to a team, rewards must then be distributed between team members.
+If rewards are distributed to a team, rewards must then be distributed between team members who had a reward metric, $m$, greater than `0` based on their payout multipliers.
 
 Let:
 
 - $d_{i}$ be the payout for team member $i$
 - $s_{i}$ be the share of the rewards for team member $i$
-- $B_{i}$ be the total balance in all of the team members accounts (expressed in quantum)
-- $F$ be the network parameter `rewards.teamDistribution.minimumAccountQuantum`
-- $C$ be the network parameter `rewards.teamDistribution.maximumAccountQuantum`
+- $m$ be the reward metric of the team member
 - $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 
 $$d_{i} = \begin{cases}
-   0 &\text{if } B_{i} < F \\
-   M_{i}\log(\min(B_{i}+1, C+1)) &\text{if } B_{i} \geq F
+   0 &\text{if } m = 0 \\
+   M_{i} &\text{if } m > 0
 \end{cases}$$
 
 Calculate each parties share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
