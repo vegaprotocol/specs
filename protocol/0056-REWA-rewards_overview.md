@@ -55,31 +55,31 @@ If the reward account balance is 0 at the end of the epoch for a given market, a
 
 Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
 
-### Open interest metric
+### Average position metric
 
-The open interest metric, $m_{oi}$, measures each parties time-weighted average open interest over a number of epochs.
+The average position metric, $m_{ap}$, measures each parties time-weighted average position over a number of epochs.
 
-At the start of each epoch, the network must reset each parties time weighted average open interest for the epoch ($\bar{OI}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows.
+At the start of each epoch, the network must reset each parties time weighted average position for the epoch ($\bar{P}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows.
 
 Let:
 
-- $\bar{OI}$ be the parties time weighted average open interest in the epoch so far
-- $OI_{n}$ be the parties open interest before their open interest changed
+- $\bar{P}$ be the parties time weighted average position in the epoch so far
+- $P_{n}$ be the parties position before their position changed
 - $t_{n}$ be the time the party held the previous position in seconds
 - $t$ be the amount of time elapsed in the current epoch so far
 
 
-$$\bar{OI} = \bar{OI} \cdot \left(1 - \frac{t_{n}}{t}\right) + \frac{OI_{n} \cdot t_{n}}{t}$$
+$$\bar{P} = \bar{P} \cdot \left(1 - \frac{t_{n}}{t}\right) + \frac{|P_{n}| \cdot t_{n}}{t}$$
 
-At the end of the epoch, the network must store the parties time weighted average open interest and then calculate their open interest reward metric as follows.
+At the end of the epoch, the network must store the parties time weighted average position and then calculate their average position reward metric as follows.
 
 Let:
 
-- $m_{oi}$ be the parties open interest reward metric
-- $\bar{OI_{i}}$ be the parties time weighted average open interest in the ith epoch
-- $N$ be the network parameter `rewards.metrics.openInterestWindow`
+- $m_{ap}$ be the parties average position reward metric
+- $\bar{P_{i}}$ be the parties time weighted average position in the i th epoch
+- $N$ be the window length specified in the recurring transfer.
 
-$$m_{oi} = \frac{\sum_{i}^{n}\bar{OI_{i}}}{N}$$
+$$m_{ap} = \frac{\sum_{i}^{n}\bar{P_{i}}}{N}$$
 
 ### Relative return metric
 
