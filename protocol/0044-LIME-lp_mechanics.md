@@ -400,6 +400,6 @@ In the case of spot markets it will be transferred into the network treasury for
 - Boundary values are respected for the market parameters
   - `market.liquidity.providers.fee.calculationTimeStep` valid values: `>=0`, `<= validators.epoch.length` (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>)
   - `market.liquidity.commitmentMinTimeFraction` valid values: `>=0`, `<=1` (<a name="0044-LIME-064" href="#0044-LIME-064">0044-LIME-064</a>)
-  - `market.liquidity.priceRange` valid values: `>=0`, `<=100` (<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>)
+  - `market.liquidity.priceRange` valid values: `>0`, `<=100` (<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>)
   - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
   - `market.liquidity.performanceHysteresisEpochs` valid values: `>=1`, `<=366` (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>)
