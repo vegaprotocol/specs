@@ -8,7 +8,7 @@ The aim of the rewards vesting mechanics is to prevent farming rewards by delayi
 
 - `rewards.vesting.baseRate`: the proportion of rewards in a vesting account which are vested each epoch, value defaults to `0.1` and must be a float strictly greater than 0.
 - `rewards.vesting.minimumTransfer`: the minimum amount (expressed in quantum) which can be vested each epoch, value defaults to 100 and must be an integer greater or equal than `0`.
-- `rewards.vesting.rewardPayoutMultipliers`: is an ordered list of dictionaries defining the requirements and multipliers for each tier.
+- `rewards.vesting.rewardPayoutTiers`: is an ordered list of dictionaries defining the requirements and multipliers for each tier.
 
 ## Vesting mechanics
 
@@ -30,17 +30,17 @@ $$T = max(B_{vesting} * r * a, m)$$
 
 When transferring funds from the vesting account to the vested account, a new transfer type should be used, `TRANSFER_TYPE_REWARDS_VESTED`.
 
-## Vested bonus
+## Rewards bonus multiplier
 
 Once vested rewards are transferred to the vested account, the party will be able to transfer funds to their general account using a normal transfer.
 
-Alternatively, they can leave their rewards in the vested account to receive a multiplier on their reward payout share. The size of this multiplier is dependent on the balance (expressed in quantum) in the vested account before rewards are distributed.
+Alternatively, they can leave their rewards in the vested account to increase their total rewards balance and receive a multiplier on their reward payout share. The size of this multiplier is dependent on their total rewards balance, i.e. the sum of the parties locked rewards, vesting rewards and vested rewards. Note, funds removed from the vested account are not included in this total.
 
 Note, a party will be unable to transfer funds in to the vested account.
 
-### Determining the vested bonus multiplier
+### Determining the rewards bonus multiplier
 
-Before [distributing rewards](./0056-REWA-rewards_overview.md#distributing-rewards-amongst-entities), each parties `reward_distribution_vested_multiplier` should be set according to the highest tier they qualify for.
+Before [distributing rewards](./0056-REWA-rewards_overview.md#distributing-rewards-amongst-entities), each parties `reward_distribution_bonus_multiplier` should be set according to the highest tier they qualify for.
 
 ```pseudo
 Given:
@@ -53,10 +53,12 @@ Given:
     ]
 
 And:
-    vested_quantum_balance=145231
+    locked_quantum_amount=2
+    vesting_quantum_amount=999
+    vested_quantum_amount=99000
 
 Then:
-    reward_distribution_vested_multiplier=5.0
+    reward_distribution_bonus_multiplier=5.0
 ```
 
 ## APIs

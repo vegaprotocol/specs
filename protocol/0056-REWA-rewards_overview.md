@@ -209,7 +209,7 @@ Let:
 
 - $d_{i}$ be the payout factor for entity $i$
 - $r_{i}$ be the reward metric value for entity $i$
-- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [vested rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-vested-bonus-multiplier)).
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 - $s_{i}$ be the share of the rewards for entity $i$
 
 $$d_{i}=r_{i} M_{i}$$
@@ -234,7 +234,7 @@ Let:
 - $s_{i}$ be the share of the rewards for entity $i$
 - $k$ be the decay factor specified in the recurring transfer funding the reward
 - $R_{i}$ be the rank of entity $i$
-- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [vested rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-vested-bonus-multiplier)).
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 
 $$d_{i}=e^{-k R_{i}} M_{i}$$
 
@@ -255,7 +255,7 @@ Let:
 - $B_{i}$ be the total balance in all of the team members accounts (expressed in quantum)
 - $F$ be the network parameter `rewards.teamDistribution.minimumAccountQuantum`
 - $C$ be the network parameter `rewards.teamDistribution.maximumAccountQuantum`
-- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [vested rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-vested-bonus-multiplier)).
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 
 $$d_{i} = \begin{cases}
    0 &\text{if } B_{i} < F \\
