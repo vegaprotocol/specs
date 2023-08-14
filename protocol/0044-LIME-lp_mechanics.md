@@ -340,7 +340,7 @@ In the case of spot markets it will be transferred into the network treasury for
   - LP can decrease their commitment and it will take affect immediately without incurring penalties (<a name="0044-LIME-051" href="#0044-LIME-051">0044-LIME-051</a>) for spot (<a name="0044-LIME-055" href="#0044-LIME-055">0044-LIME-055</a>)
   - LP can cancel their commitment without incurring penalties (<a name="0044-LIME-053" href="#0044-LIME-053">0044-LIME-053</a>)
 - For a market that is in continuous trading and a single LP has committed liquidity:
-  - The LP cannot cancel their commitment but instead submit governance vote to cancel the market (<a name="0044-LIME-052" href="#0044-LIME-052">0044-LIME-052</a>) for spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
+  - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>) for spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
 
 ### Qualifying Order Types
 
