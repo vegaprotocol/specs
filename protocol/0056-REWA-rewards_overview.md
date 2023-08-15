@@ -248,17 +248,12 @@ Let:
 
 - $d_{i}$ be the payout factor for entity $i$
 - $s_{i}$ be the share of the rewards for entity $i$
-- $k$ be the decay factor specified in the recurring transfer funding the reward. This must be a float in the range $0\leq k \leq 2$. 
-- $R_{i}$ be the normalised rank of entity $i$
+- $r_{i}$ be the share ratio of entity $i$ as determined from the rank table
 - $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 
 $$d_{i}=M_{i} * r_{i}$$
 
 Note if the entity is a team, $M_{i}$ is set to 1 as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
-
-To avoid exponential formulas in the core implementation, the above exponential equation can be approximated using the following 7th order Taylor expansion. An odd number of terms has intentionally been chosen so the expansion diverges to $-\infty$ rather than $+\infty$.
-
-$$d_{i} = M_{i} e^{-k R_i} \approx M_{i} \min(\sum_{j=0}^{7} \frac{(-k R_i)^j}{j!}, 0)$$
 
 Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
 
