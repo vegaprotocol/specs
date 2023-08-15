@@ -69,14 +69,14 @@ Let:
 - $t$ be the amount of time elapsed in the current epoch so far
 
 
-$$\bar{P} = \bar{P} \cdot \left(1 - \frac{t_{n}}{t}\right) + \frac{|P_{n}| \cdot t_{n}}{t}$$
+$$\bar{P}  \leftarrow  \bar{P} \cdot \left(1 - \frac{t_{n}}{t}\right) + \frac{|P_{n}| \cdot t_{n}}{t}$$
 
 At the end of the epoch, the network must store the parties time weighted average position and then calculate their average position reward metric as follows.
 
 Let:
 
 - $m_{ap}$ be the parties average position reward metric
-- $\bar{P_{i}}$ be the parties time weighted average position in the i th epoch
+- $\bar{P_{i}}$ be the parties time weighted average position in the $i$-th epoch
 - $N$ be the window length specified in the recurring transfer.
 
 $$m_{ap} = \frac{\sum_{i}^{n}\bar{P_{i}}}{N}$$
@@ -92,9 +92,9 @@ Let:
 - $r_i$ be the parties relative returns in the epoch
 - $m2m_{wins}$ be the sum of all mark-to-market win transfers in the epoch
 - $m2m_{losses}$ be the sum of all mark-to-market loss transfers in the epoch
-- $TWAP$ be the parties time-weighted average position in the epoch.
+- $\bar{P}$ be the parties time-weighted average position in the epoch.
 
-$$r = \frac{m2m_{wins} + m2m_{losses}}{TWAP}$$
+$$r = \frac{|m2m_{wins}| - |m2m_{losses}|}{\bar{P}}$$
 
 And calculate their average relative returns over the last $N$ epochs as follows.
 
