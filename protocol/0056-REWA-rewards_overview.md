@@ -196,8 +196,8 @@ Rewards are distributed amongst entities based on the distribution method define
 
 The protocol currently supports the following distribution strategies:
 
-- [pro-rata](#distributing-pro-rata) by reward metric
-- [exponential-decay](#distributing-with-exponential-decay) by reward metric
+- [pro-rata]:(#distributing-pro-rata) distributed pro-rata by reward metric
+- [rank]:(#distributing-based-on-rank) distributed by entities rank when ordered by reward metric
 
 #### Distributing pro-rata
 
@@ -218,28 +218,45 @@ Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$,
 
 $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
 
-#### Distributing with exponential decay
+#### Distributing based on rank
 
-Rewards funded using the exponential-decay strategy should be distributed as follows.
+Rewards funded using the rank-distribution strategy should be distributed as follows.
 
-1. Calculate each entities reward metric
-2. Order each entity in a descending list by their reward metric value and determine their "rank" in the list
-3. Normalise the rank of each party within a range of 0 to 1, using the highest rank as the upper limit for normalisation.
-4. Calculate each entities share of the rewards using the below formula.
+1. Calculate each entity's reward metric.
+2. Arrange all entities in a list in descending order based on their reward metric values and determine their rank. If multiple entities share the same reward metric value, they should be assigned the same rank. The next entity's rank should be adjusted to account for the shared rank among the previous entities. For instance, if two entities share rank 2, the next entity should be assigned rank 4 (since there are two entities with rank 2).
+3. Set the entities `share_ratio` based on their position in the `rank_table` specified in the recurring transfer.
+4. Calculate each entities share of the rewards.
+
+```pseudo
+Given:
+    rank_table = [
+        {"start_rank": 1, "share_ratio": 10},
+        {"start_rank": 2, "share_ratio": 5},
+        {"start_rank": 4, "share_ratio": 2},
+        {"start_rank": 10, "share_ratio": 1},
+        {"start_rank": 20, "share_ratio": 0},
+    ]
+    rank=6
+
+Then:
+    share_ratio=2
+```
+
+Calculate each entities share of the rewards as follows.
 
 Let:
 
 - $d_{i}$ be the payout factor for entity $i$
 - $s_{i}$ be the share of the rewards for entity $i$
-- $k$ be the decay factor specified in the recurring transfer funding the reward. This must be a decimal in the range $0\leq k \leq 2$. 
+- $k$ be the decay factor specified in the recurring transfer funding the reward. This must be a float in the range $0\leq k \leq 2$. 
 - $R_{i}$ be the normalised rank of entity $i$
 - $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
 
-$$d_{i}=M_{i} e^{-k R_{i}}$$
+$$d_{i}=M_{i} * r_{i}$$
 
 Note if the entity is a team, $M_{i}$ is set to 1 as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
 
-To avoid exponential formulas in the core implementation, the above exponential function can be approximated using the following 7th order Taylor expansion. An odd number of terms has intentionally been chosen so the expansion diverges to $-\infty$ rather than $+\infty$.
+To avoid exponential formulas in the core implementation, the above exponential equation can be approximated using the following 7th order Taylor expansion. An odd number of terms has intentionally been chosen so the expansion diverges to $-\infty$ rather than $+\infty$.
 
 $$d_{i} = M_{i} e^{-k R_i} \approx M_{i} \min(\sum_{j=0}^{7} \frac{(-k R_i)^j}{j!}, 0)$$
 

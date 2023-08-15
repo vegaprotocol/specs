@@ -103,10 +103,24 @@ To support entity scoping, the transaction include the following fields:
 - `staking_requirement` - the required minimum number of tokens staked for a party to be considered eligible. Defaults to `0`.
 - `notional_time_weighted_average_position_requirement` - the required minimum notional time-weighted averaged position required for a party to be considered eligible. Defaults to `0`.
 
-A party should be able to configure the distribution of rewards by specifying a number of epochs to evaluate the reward metric over and specify a number of epochs to delay vesting by. The transaction should now include the following fields.
+A party should be able to configure the distribution of rewards by specifying the following fields:
 
 - `window_length` - the number of epochs over which to evaluate the reward metric.
 - `lock_period` - the number of epochs after distribution to delay [vesting of rewards](./0085-RVST-rewards_vesting.md#vesting-mechanics) by.
+- `distribution_strategy` - enum defining which [distribution strategy](./0056-REWA-rewards_overview.md#distributing-rewards-between-entities) to use.
+  - `DISTRIBUTION_STRATEGY_PRO_RATA` - rewards should be distributed among entities [pro-rata](./0056-REWA-rewards_overview.md#distributing-pro-rata) by reward-metric.
+  - `DISTRIBUTION_STRATEGY_RANK` - rewards should be distributed among entities [based on their rank](./0056-REWA-rewards_overview.md#distributing-based-on-rank) when ordered by reward-metric.
+- `rank_table` - if the distribution strategy is `DISTRIBUTION_STRATEGY_RANK`, an ordered list dictionaries defining the rank bands and share ratio for each band should be specified. Note, the `start_rank` values must be integers and in an ascending order.
+
+    ```pseudo
+        rank_table = [
+            {"start_rank": 1, "share_ratio": 10},
+            {"start_rank": 2, "share_ratio": 5},
+            {"start_rank": 4, "share_ratio": 2},
+            {"start_rank": 10, "share_ratio": 1},
+            {"start_rank": 20, "share_ratio": 0},
+        ]
+    ```
 
 - At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market to the sum total reward metric for all markets in the `market scope` and then distributes the transfer amount to the corresponding accounts of the markets pro-rata by their contribution to the total.
 
