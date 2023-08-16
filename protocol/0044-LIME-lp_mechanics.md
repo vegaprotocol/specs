@@ -363,6 +363,7 @@ In the case of spot markets it will be transferred into the network treasury for
   - if there is no `indicative uncrossing price` and the LP has a buy order at price `4.74` and a sell order at price `5.25`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-079" href="#0044-LIME-079">0044-LIME-079</a>)
   - if there is no `indicative uncrossing price` and the LP has a buy order at price `4.75` and a sell order at price `5.26`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-080" href="#0044-LIME-080">0044-LIME-080</a>)
   - if there is no `indicative uncrossing price` and the LP has a buy order at price `4.75` and a sell order at price `5.25`, the LP is meeting their committed volume of notional (<a name="0044-LIME-081" href="#0044-LIME-081">0044-LIME-081</a>)
+  - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>) for spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
 
 ### Qualifying Order Types
 
