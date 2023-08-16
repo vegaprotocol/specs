@@ -603,6 +603,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - For transfer source types of Market Insurance the destination must be a valid market ID  else is rejected (<a name="0028-GOVE-091" href="#0028-GOVE-091">0028-GOVE-091</a>)
 - The proposal will allow standard proposal fields to control timings on closing the voting period and enactment time, these will be validated in the same way as other proposals  (<a name="0028-GOVE-092" href="#0028-GOVE-092">0028-GOVE-092</a>)
 - For successor markets we allow transfer between Market insurance pool account of parent market to Market insurance pool account of child market (<a name="0028-GOVE-093" href="#0028-GOVE-093">0028-GOVE-093</a>)
+- During a recurring transfer ensure that the correct tokens continue to be distributed when the source account is funded (<a name="0028-GOVE-154" href="#0028-GOVE-154">0028-GOVE-154</a>)
 
 
 ##### Governance initiated transfer enactment
