@@ -345,11 +345,11 @@ In the case of spot markets it will be transferred into the network treasury for
   - LP can decrease their commitment and it will take affect immediately without incurring penalties (<a name="0044-LIME-051" href="#0044-LIME-051">0044-LIME-051</a>). For spot (<a name="0044-LIME-055" href="#0044-LIME-055">0044-LIME-055</a>)
   - LP can cancel their commitment without incurring penalties (<a name="0044-LIME-053" href="#0044-LIME-053">0044-LIME-053</a>)
 - For a market that is in continuous trading and a single LP has committed liquidity:
-  - The LP cannot cancel their commitment but instead submit governance vote to cancel the market (<a name="0044-LIME-052" href="#0044-LIME-052">0044-LIME-052</a>). For spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
+  - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>) for spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
 - For a market that is in continuous trading and LP has committed liquidity
-  - when `market.liquidity.providers.fee.calculationTimeStep` is set to `0` any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>)
-  - if `market.liquidity.providers.fee.calculationTimeStep` is set to `15s` and `validators.epoch.length` is set to `10s`, during the current epoch market parameter change `market.liquidity.providers.fee.calculationTimeStep = 5s` is enacted, any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block. For the next epoch the distribution will take place at `5` second (<a name="0044-LIME-061" href="#0044-LIME-061">0044-LIME-061</a>)
-  - if `market.liquidity.providers.fee.calculationTimeStep` is set to `10s` and `validators.epoch.length` is set to `15s`, during the current epoch market parameter change `market.liquidity.providers.fee.calculationTimeStep = 3s` is enacted, any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block. For the next epoch the distribution will take place at `3` second (<a name="0044-LIME-062" href="#0044-LIME-062">0044-LIME-062</a>)
+  - when `market.liquidity.providers.fee.calculationTimeStep` is set to `0` any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block (<a name="0044-LIME-082" href="#0044-LIME-082">0044-LIME-082</a>)
+  - if `market.liquidity.providers.fee.calculationTimeStep` is set to `15s` and `validators.epoch.length` is set to `10s`, during the current epoch parameter change `market.liquidity.providers.fee.calculationTimeStep = 5s` is enacted, any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block. For the next epoch the distribution will take place at `5` second (<a name="0044-LIME-061" href="#0044-LIME-061">0044-LIME-061</a>)
+  - if `market.liquidity.providers.fee.calculationTimeStep` is set to `10s` and `validators.epoch.length` is set to `15s`, during the current epoch parameter change `market.liquidity.providers.fee.calculationTimeStep = 3s` is enacted, any funds that are in `ACCOUNT_TYPE_FEES_LIQUIDITY` account will be distributed to `ACCOUNT_TYPE_LP_LIQUIDITY_FEES` on the next block. For the next epoch the distribution will take place at `3` second (<a name="0044-LIME-062" href="#0044-LIME-062">0044-LIME-062</a>)
 - For a market that is in continuous trading if a new LP submits buy and sell orders on the market then makes a liquidity commitment to that market the previous orders will count towards the LPs liquidity commitment. (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>)
 - For a market with market parameter `market.liquidity.priceRange = 0.05` (5%), is in continuous trading with `mid price` set to `5` and a new LP has committed liquidity:
   - if during the epoch market parameter change `market.liquidity.priceRange = 0.1` (10%) is enacted and the LP has a buy order at price `4.74` and a sell order at price `5.25`, the LP is not meeting their committed volume of notional and a bond penalty will apply. The next epoch the parameter change takes effect, LP will meet their committed volume of notional and no bond penalty will apply. (<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>)
@@ -363,7 +363,7 @@ In the case of spot markets it will be transferred into the network treasury for
   - if there is no `indicative uncrossing price` and the LP has a buy order at price `4.74` and a sell order at price `5.25`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-079" href="#0044-LIME-079">0044-LIME-079</a>)
   - if there is no `indicative uncrossing price` and the LP has a buy order at price `4.75` and a sell order at price `5.26`, the LP is not meeting their committed volume of notional (<a name="0044-LIME-080" href="#0044-LIME-080">0044-LIME-080</a>)
   - if there is no `indicative uncrossing price` and the LP has a buy order at price `4.75` and a sell order at price `5.25`, the LP is meeting their committed volume of notional (<a name="0044-LIME-081" href="#0044-LIME-081">0044-LIME-081</a>)
-  - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>) for spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
+
 
 ### Qualifying Order Types
 
@@ -395,11 +395,11 @@ In the case of spot markets it will be transferred into the network treasury for
   - `market.liquidityV2.sla.nonPerformanceBondPenaltySlope` valid values: `>=0`, `<=1000` default value of `2`  (<a name="0044-LIME-040" href="#0044-LIME-040">0044-LIME-040</a>)
   - `market.liquidityV2.sla.nonPerformanceBondPenaltyMax` valid values: `>=0`, `<=1` default value of `0.5`  (<a name="0044-LIME-041" href="#0044-LIME-041">0044-LIME-041</a>)
   - `market.liquidityV2.stakeToCcyVolume` valid values: `>=0`, `<=100` default value of `1`   (<a name="0044-LIME-042" href="#0044-LIME-042">0044-LIME-042</a>)
+  - `market.liquidity.providers.fee.calculationTimeStep` valid values: `>=0`, `<= validators.epoch.length` (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>)
 
 #### Market parameters validation
 
 - Boundary values are respected for the market parameters
-  - `market.liquidity.providers.fee.calculationTimeStep` valid values: `>=0`, `<= validators.epoch.length` (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>)
   - `market.liquidity.commitmentMinTimeFraction` valid values: `>=0`, `<=1` (<a name="0044-LIME-064" href="#0044-LIME-064">0044-LIME-064</a>)
   - `market.liquidity.priceRange` valid values: `>0`, `<=100` (<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>)
   - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
