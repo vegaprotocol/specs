@@ -1,6 +1,6 @@
 {
   "Iceberg Orders": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-deploy-1",
     "acs": [
       "0014-ORDT-039",
       "0014-ORDT-007",
@@ -39,7 +39,7 @@
     ]
   },
   "Stop Orders": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-deploy-1",
     "acs": [
       "0014-ORDT-041",
       "0014-ORDT-042",
@@ -83,7 +83,7 @@
     ]
   },
   "Successor Markets": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-deploy-1",
     "acs": [
       "0001-MKTF-006",
       "0001-MKTF-007",
@@ -127,7 +127,7 @@
     ]
   },
     "Governance Transfers": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-deploy-2",
     "acs": [
       "0028-GOVE-073",
       "0028-GOVE-074",
@@ -179,7 +179,7 @@
     ]
   },
   "Perps": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-deploy-2",
     "acs": [
       "0001-MKTF-005",
       "0053-PERP-001",
@@ -214,7 +214,7 @@
   },
 
   "Ethereum Oracles": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-deploy-2",
     "acs": [
       "0082-ETHD-001",
       "0082-ETHD-002",
@@ -258,7 +258,7 @@
     ]
   },
   "SLA": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-deploy-2",
     "acs": [
       "0042-LIQF-032",
       "0042-LIQF-050",
@@ -343,7 +343,7 @@
     ]
   },
   "Batch change proposals": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-deploy-2",
     "acs": [
       "0028-GOVE-145",
       "0028-GOVE-146",
@@ -353,7 +353,7 @@
     ]
   },
   "Referral program": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-deploy-2",
     "acs": [
       "0083-RFPR-001",
       "0083-RFPR-002",
@@ -412,7 +412,7 @@
     ]
   },
   "Market governance": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-deploy-2",
     "acs": [
       "0028-GOVE-064",
       "0028-GOVE-069",
@@ -438,7 +438,7 @@
     ]
   },
   "Spot": {
-    "milestone": "deployment-3",
+    "milestone": "plazzo-deploy-1",
     "acs": [
       "0080-SPOT-001",
       "0080-SPOT-002",
