@@ -100,7 +100,7 @@ To support entity scoping, the transaction include the following fields:
   - `INDIVIDUAL_SCOPE_IN_TEAM` - all parties which are part of a team are within the scope of this reward
   - `INDIVIDUAL_SCOPE_NOT_IN_TEAM` - all parties which are not part of a team are within the scope of this reward
 - `team scope` - optional list if the reward type is `ENTITY_SCOPE_TEAMS`, field allows the funder to define a list of team ids which are eligible to be rewarded from this transfer
-- `staking_requirement` - the required minimum number of tokens staked for a party to be considered eligible. Defaults to `0`.
+- `staking_requirement` - the required minimum number of governance (e.g. VEGA) tokens staked for a party to be considered eligible. Defaults to `0`.
 - `notional_time_weighted_average_position_requirement` - the required minimum notional time-weighted averaged position required for a party to be considered eligible. Defaults to `0`.
 
 A party should be able to configure the distribution of rewards by specifying the following fields:
