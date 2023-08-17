@@ -396,7 +396,7 @@ In the case of spot markets it will be transferred into the network treasury for
   - `market.liquidityV2.sla.nonPerformanceBondPenaltySlope` valid values: `>=0`, `<=1000` default value of `2`  (<a name="0044-LIME-040" href="#0044-LIME-040">0044-LIME-040</a>)
   - `market.liquidityV2.sla.nonPerformanceBondPenaltyMax` valid values: `>=0`, `<=1` default value of `0.5`  (<a name="0044-LIME-041" href="#0044-LIME-041">0044-LIME-041</a>)
   - `market.liquidityV2.stakeToCcyVolume` valid values: `>=0`, `<=100` default value of `1`   (<a name="0044-LIME-042" href="#0044-LIME-042">0044-LIME-042</a>)
-  - `market.liquidity.providers.fee.calculationTimeStep` valid values: `>=0`, `<= validators.epoch.length` (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>)
+  - `market.liquidity.providers.fee.calculationTimeStep` valid values: `>=0`, `<= validators.epoch.length` default value of `60m` (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>)
 
 #### Market parameters validation
 
