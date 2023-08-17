@@ -26,7 +26,7 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 ### Market parameters
 
-All market parameters can be set / modified as part of [market proposal](0028-GOVE-governance.md) / market change proposal and the new value take effect at at the first new epoch after enactment.
+All market parameters can be set / modified as part of [market proposal](0028-GOVE-governance.md) / market change proposal and the new value take effect at the first new epoch after enactment.
 
 - `market.liquidity.priceRange` (decimal) - this is a percentage price move (e.g. `0.05 = 5%`) from `mid_price` during continuous trading or indicative uncrossing price during auctions.
 
