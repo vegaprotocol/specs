@@ -7,6 +7,10 @@ The volume discount program provides tiered discounts on taker fees to traders. 
 - `volumeDiscountProgram.maxBenefitTiers` - limits the maximum number of [benefit tiers](#governance-proposals) which can be specified as part of a volume discount program
 - `volumeDiscountProgram.maxVolumeDiscountFactor` - limits the maximum volume discount factor which can be specified as part of a volume discount program
 
+Note, if any of the above mentioned network parameters are updated whilst a volume discount program is active, the active program will not be affected in anyway even if the active program breaches the new network parameter value. The new network parameter value however will be checked on any future [volume discount program proposals](#governance-proposals).
+
+If the community wish to update the volume discount program limits **and** apply these to the existing program, they can do so by first updating the network parameters and then submitting a proposal to update the program (adhering to the new limits).
+
 ## Governance proposals
 
 Enabling or changing the terms of the volume discount program can be proposed via governance. As part of the proposal, the proposer specifies the following fields:
