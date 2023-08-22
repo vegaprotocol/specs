@@ -390,7 +390,11 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 ## Perpetuals
 
-- All order types should be placeable and act in the same way on a perpetual market as on an expiring future market. This includes limit orders, market orders, icebergs and all stop order types. (<a name="0014-ORDT-120" href="#0014-ORDT-120">0014-ORDT-120</a>)
+- All order types should be placeable and act in the same way on a perpetual market as on an expiring future market. Specifically this includes:
+  - Limit orders (<a name="0014-ORDT-120" href="#0014-ORDT-120">0014-ORDT-120</a>)
+  - Market orders (<a name="0014-ORDT-121" href="#0014-ORDT-121">0014-ORDT-121</a>)
+  - Icebergs (<a name="0014-ORDT-122" href="#0014-ORDT-122">0014-ORDT-122</a>)
+  - All stop order types (<a name="0014-ORDT-123" href="#0014-ORDT-123">0014-ORDT-123</a>)
 
 ### See also
 
