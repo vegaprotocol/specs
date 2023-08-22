@@ -79,9 +79,9 @@ If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` the
 
 Read this section alongside the [rewards](./0056-REWA-rewards_overview.md) specification.
 
-To be able to dispatch rewards to reward pools of multiple markets pro rata to the contribution of the reward metric (e.g. received maker fees) in the market vs the total of the measured metric across all in scope markets, recurring transfers support auto dispatch in the following way:
+When funding a reward account with a recurring transfer, the reward account funded is the hash of the fields in the recurring transfer specific to funding reward accounts (listed below).
 
-- When transferring to a reward account, the transaction must also include the following:
+When transferring to a reward account, the transaction must include the following:
 
 - `reward metric` — the type of reward (see [rewards](./0056-REWA-rewards_overview.md))
 - `reward metric asset` — (the settlement asset of all markets that will be in scope for the transfer)

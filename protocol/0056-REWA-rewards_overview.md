@@ -41,6 +41,8 @@ This is the original precision for the metric source data.
 
 For reward metrics relating to trading, an individual must meet the [staking requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) **AND** [notional time-weighted average position requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts)) set in the recurring transfer. If they do not then their reward metric is set to `0`. Note, these requirements do not apply to the [validator ranking metric](#returns-volatility-metric) or the [market creation reward metric](#market-creation-reward-metrics).
 
+For reward transfers where the [scope](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) is set to teams, each party must meet the minimum time in team requirement. That is, given a party has been in a team for $N$ epochs, if $N$ is strictly less than the network parameter `rewards.minimumEpochsInTeam` (an integer defaulting to `0`) their reward metric is set to `0`.
+
 ### Fee-based reward metrics
 
 There will be three reward metrics calculated based on fees.
@@ -51,7 +53,7 @@ There will be three reward metrics calculated based on fees.
 
 These metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
-If the reward account balance is 0 at the end of the epoch for a given market, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
+If the reward account balance is `0` at the end of the epoch for a given recurring transfer, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
 Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
 
@@ -170,15 +172,14 @@ A team’s reward metric is the weighted average metric score of the top perform
 
 ## Reward accounts
 
-Trading reward accounts are defined by the reward asset (the asset in which the reward is paid out), the market, and the reward type (metric).
-That is, there can be multiple rewards with the same type paid in different assets for the same market.
+Trading reward accounts are defined by a hash of the fields specified in the recurring transfer funding the reward account (see the [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) spec for relevant details about each field). This allows multiple recurring transfers to fund the same reward pool.
 
-Note that the market settlement asset has nothing to do in particular with the asset used to pay out a reward for a market.
+Note as part of the recurring transfer a user specifies a settlement asset. The market settlement asset has nothing to do in in particular with the asset used to pay out a reward.
+
 That is, a participant might receive rewards in the settlement asset of the market, in VEGA governance tokens, and in any number of other unrelated tokens (perhaps governance of "loyalty"/reward tokens issued by LPs or market creators, or stablecoins like DAI).
 
-Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward.
-These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
-Recurring transfers can target groups of markets, or all markets for a settlement asset, in which case the amount paid to each market is determined pro-rata by the markets' relative total reward metrics for the given reward type. See [transfers](./0057-TRAN-transfers.md) for more detail.
+Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward. These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
+Recurring transfers can target groups of markets, or all markets for a settlement asset. See [transfers](./0057-TRAN-transfers.md) for more detail.
 
 Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for across a restart.
 
