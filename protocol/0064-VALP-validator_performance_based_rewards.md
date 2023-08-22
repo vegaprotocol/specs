@@ -60,8 +60,8 @@ The multiplication with 1.1 is adding preventing a validator to get penalised if
 In the end, we make sure no score is bigger than 1 (which might happen due to the multiplicative bonus).
 
 ### Total Performance
-As we have several performance measurements, they need to be combined to a total score. To this end, we have a system variable performance weights, 
-which has n+1 parameters (weight_0,.. weight_n) for n measurements (currently 2, the tendermint-performance and the ethereum-performance.Weights are normalised, so the sum of all weights needs to be 1. Also, all individual performance measurements are normalised to be between 0 and 1.
+As we have several performance measurements, they need to be combined to a total score. To this end, we have a system variable <performance_weights>, 
+which has n+1 parameters (weight_0,.. weight_n) for n measurements (currently 2, the tendermint-performance and the ethereum-performance. Weights are normalised, so the sum of all weights needs to be 1. Also, all individual performance measurements are normalised to be between 0 and 1.
 
 The total performance then is
 `weight_0*(validator_ethereum_performance*validator_tendermint_performance)+weight_1*(validator_tendermint_performance)+weight_2*(validator_ethereum_performance)`
@@ -134,6 +134,27 @@ In addition, for every epoch for which a node was offline, we can decrease its t
 automatically reduced in influence, even if they have a lot of delegation. Note that this may increase the discrepancy between the voting weight on
 tendermint and the voting weight on the multisig contract.
 
+Acceptance Criteria:
+
+Set up a network with 4 validators, an <ethereum _heartbeat_period> of 0.  Run the network for 2 epochs and test that no events are
+Forwarded by any validator. (<a name="0064-COSMICELEVATOR-001” href="#0064-COSMICELEVATOR-001”>0064-COSMICELEVATOR-001</a>)
+
+Set up a network with 4 validators, an <ethereum_heartbeat_period> of 13. Run the network for 2 epochs and verify that each validator
+forwards roughly 1 event for each two minutes of epoch length. (<a name="0064-COSMICELEVATOR-002” href="#0064-COSMICELEVATOR-002”>0064-COSMICELEVATOR-002</a>)
+
+
+Set up a network with 4 validators, and deactivate ethereal event forwarding for one of them.  Set the < ethereum_heartbeat_periood> to 13.
+Set <performance_weights> to <0.0, 0.8, 0.2>. Verify that the non-performing validator gets 20% less reward than the others. (<a name="0064-COSMICELEVATOR-003” href="#0064-COSMICELEVATOR-003”>0064-COSMICELEVATOR-003</a>)
+
+
+Set up a network with 4 validators, and deactivate ethereal event forwarding for one of them.  Set the < ethereum_heartbeat_periood> to 13.
+Set <performance_weights> to <0.4, 0.4, 0.2>. Verify that the non-performing validator gets 40% of the reward of the others. (<a name="0064-COSMICELEVATOR-004” href="#0064-COSMICELEVATOR-004”>0064-COSMICELEVATOR-004</a>)
+
+
+Set up a network with 4 validators, and deactivate ethereal event forwarding for one of in the middle of an epoch.  Set the 
+<ethereum_heartbeat_periood> to 13. Set <performance_weights> to <0.4, 0.4, 0.2>. Verify that the non-performing validator 
+gets 30% less reward than the others. (<a name="0064-COSMICELEVATOR-005” href="#0064-COSMICELEVATOR-005”>0064-COSMICELEVATOR-005</a>)
+
 ## `PM2`: Validator does not verify signatures
 
 To detect this, validators need to issue tagged signatures from time to time.
@@ -161,3 +182,5 @@ This needs further investigation; it is probably possible to solve this either t
 same way we detect signature verification, or along the lines of the data-node
 (i.e., Validators are required to post some internal state information from time to
 time that they only have if they run the protocol)
+
+
