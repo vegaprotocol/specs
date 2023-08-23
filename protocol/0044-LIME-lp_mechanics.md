@@ -343,17 +343,17 @@ In the case of spot markets it will be transferred into the network treasury for
   - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>) for spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
   - The LP can increase their commitment at any time without incurring fee (<a name="0044-LIME-061" href="#0044-LIME-061">0044-LIME-061</a>) for spot (<a name="0044-LIME-062" href="#0044-LIME-062">0044-LIME-062</a>)
   - When LP increases their commitment higher than their account balance are rejected and old provision persists (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>) for spot (<a name="0044-LIME-064" href="#0044-LIME-064">0044-LIME-064</a>)
-  - When LP decreases their commitment are not charged (<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>) for spot (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
-  - When LP decreases their commitment to zero are rejected (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>) for spot (<a name="0044-LIME-068" href="#0044-LIME-068">0044-LIME-068</a>)
-  - When LP amends the Fee Factor greater than `market.liquidityV2.maximumLiquidityFeeFactorLevel` are rejected (<a name="0044-LIME-070" href="#0044-LIME-070">0044-LIME-070</a>) for spot (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>)
-  - Distressed LP is cancelled automatically or closeout of LP order which doesn't meet minimum margin are cancelled (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>) for spot (<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>)
-  - Party submits LP in multiple markets and multiple bond accounts are created and managed by vega (<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>) for spot (<a name="0044-LIME-073" href="#0044-LIME-073">0044-LIME-073</a>)
+  - When LP decreases their commitment are charged as per `market.liquidity.earlyExitPenalty` (<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>) for spot (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
+  - When LP that creates new provision with zero commitment or amend a provision with zero commitment are rejected with error message that commitment amount is too low (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>) for spot (<a name="0044-LIME-068" href="#0044-LIME-068">0044-LIME-068</a>)
+  - When LP amends the Fee Factor greater than `market.liquidity.maximumLiquidityFeeFactorLevel` are rejected (<a name="0044-LIME-070" href="#0044-LIME-070">0044-LIME-070</a>) for spot (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>)
+  - Distressed LP which doesn't meet minimum margin is not cancelled automatically and stays active (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>) for spot (<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>)
+  - If a party submits LP provisions in multiple markets then multiple bond accounts are created and managed by Vega.(<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>) for spot (<a name="0044-LIME-073" href="#0044-LIME-073">0044-LIME-073</a>)
 
 ### Qualifying Order Types
 
 - Once liquidity is committed LPs can meet their commitment by placing limit orders, pegged limit orders and iceberg orders. For iceberg orders only the visible peak counts towards the commitment. (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>)
 - Parked pegged limit orders and stop-loss orders do not count towards an LPs liquidity commitment. (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>)
-- LPs can submit GFA orders and do not count towards an LPs liquidity commitment (<a name="0044-LIME-069" href="#0044-LIME-069">0044-LIME-069</a>)
+- LPs can submit GFA orders which gets cancelled as soon as market exits opening-auction and do not count towards an LPs liquidity commitment (<a name="0044-LIME-069" href="#0044-LIME-069">0044-LIME-069</a>)
 
 ### Snapshot
 
