@@ -32,7 +32,7 @@ To create an emphasis on community, collaboration, and competition. Referrers wi
 - `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` - limits the notional volume in quantum units which is eligible each epoch for referral program mechanisms
 - `referralProgram.minStakedVegaTokens` - limits referral code generation to parties staking at least this number of tokens
 
-Note, if any of the above mentioned network parameters are updated whilst a referral program is active, the active program will not be affected in anyway even if the active program breaches the new network parameter value. The new network parameter value however will be checked on any future [referral program proposals](#governance-proposals).
+Note, if any of the above mentioned network parameters are updated whilst a referral program is active, the active program will not be affected in any way even if the active program breaches the new network parameter value. The new network parameter value however will be checked on any future [referral program proposals](#governance-proposals).
 
 If the community wish to update the referral program limits **and** apply these to the existing program, they can do so by first updating the network parameters and then submitting a proposal to update the program (adhering to the new limits).
 
