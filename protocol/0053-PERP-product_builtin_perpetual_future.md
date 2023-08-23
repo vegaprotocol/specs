@@ -190,7 +190,28 @@ Should a perpetual futures market get closed using the [governance proposal](./0
 
 ### API considerations
 
-It should be possible to query the market for the list of current funding payment data points as well as history of calculated funding payment values.
+For every completed funding period the following data should be emitted:
+
+- funding period start time,
+- funding period end time,
+- funding rate,
+- funding payment,
+- external (spot) price TWAP,
+- internal (mark) price TWAP.
+
+Furthermore, within the ongoing funding period the following data should be emitted at least every time the mark price is updated:
+
+- funding period start time,
+- estimate time,
+- funding rate estimate,
+- funding payment estimate,
+- external (spot) price TWAP to-date,
+- internal (mark) price TWAP to-date.
+
+ The estimates are obtained assuming the current period ended now. The time for which the estimate was obtained is recorded as `estimate time`.
+ Please note that the above estimates calculated within the ongoing funding period should be available internally for inclusion in the margin calculation as outlined in the [margin considerations](#5-margin-considerations) subsection as well as on the data-node. Only the most recent observation should be kept in both these places.
+
+In both cases the estimates are for a hypothetical position of size 1.
 
 ## Acceptance Criteria
 
@@ -206,3 +227,6 @@ It should be possible to query the market for the list of current funding paymen
 1. When the funding payment is positive the margin levels of parties with long positions are larger than what the basic margin calculations imply. Moreover, the additional amount grows as the funding payment nears and drops right after the payment. Parties with short positions are not impacted. (<a name="0053-PERP-015" href="#0053-PERP-015">0053-PERP-015</a>)
 1. When the funding payment is negative the margin levels of parties with short positions are larger than what the basic margin calculations imply. Moreover, the additional amount grows as the funding payment nears and drops right after the payment. Parties with long positions are not impacted. (<a name="0053-PERP-016" href="#0053-PERP-016">0053-PERP-016</a>)
 1. An event containing funding rate should be emitted each time the funding payment is calculated (<a name="0053-PERP-017" href="#0053-PERP-017">0053-PERP-017</a>)
+1. No data relating to funding payment is available until the perpetual futures market leaves the opening auction. (<a name="0053-PERP-018" href="#0053-PERP-018">0053-PERP-018</a>)
+1. For the ongoing period the following data is available via the API: funding period start time, estimate time, funding rate estimate, funding payment estimate, external (spot) price TWAP to-date, internal (mark) price TWAP to-date. (<a name="0053-PERP-019" href="#0053-PERP-019">0053-PERP-019</a>)
+1. For each of the fully completed past funding periods the following data is available (subject to data-node's retention settings): funding period start time, funding period end time, funding rate, funding payment, external (spot) price TWAP, internal (mark) price TWAP. (<a name="0053-PERP-020" href="#0053-PERP-020">0053-PERP-020</a>)
