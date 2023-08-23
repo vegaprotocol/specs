@@ -1,11 +1,11 @@
 # Validator performance based rewards
 
 ## Network Parameters
-<ethereum_heartbeat_period>: This parameter defines how many ethereum events need to pass (in average) for a validator to have to forward a heartbeat event. If it is set to 0, heartbeats are deactivated.
+1. `ethereum_heartbeat_period`: This parameter defines how many ethereum events need to pass (in average) for a validator to have to forward a heartbeat event. If it is set to 0, heartbeats are deactivated.
 Valid range is any integer >= 0
-The initial value is 128
+The initial value is 128.
 
-<performance_weights> is a vector containing three integer values w0,w1,w2; this parameter defines the weights of the different performance measurements that impact the reward. The weight formular (given performance valuies p1 and p2) is w0*p1*p2 + w1*p1+w2*p2). 
+1. `performance_weights` is a vector containing three integer values w0,w1,w2; this parameter defines the weights of the different performance measurements that impact the reward. The weight formular (given performance valuies p1 and p2) is w0*p1*p2 + w1*p1+w2*p2). 
 If more performance measurements are added later, this vector is expanded correspondingy.
 
 Legal values are all floats that sum up to 1. The initial value is (0,0.8,0.2)
@@ -51,14 +51,14 @@ Goal 2: Detect unforwarded Ethereum events and punish the validator that does no
 Detection: Events forwarded by some validators are not forwarded by others.
 
 #### Ethereum Heartbeat
-For the Ethereum Heartbeat, we use the network parameter <ethereum_heartbeat_period>. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128, which would create a hearbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch). Legal values are all integers larger or equal to 0.
+For the Ethereum Heartbeat, we use the network parameter `ethereum_heartbeat_period`. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128, which would create a hearbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch). Legal values are all integers larger or equal to 0.
 
-For every Ethereum block, if the hash of this block mod <ethereum_heartbeat_period> equals the identity of the a validator (taken mod ethereum_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms.
+For every Ethereum block, if the hash of this block mod `ethereum_heartbeat_period` equals the identity of the a validator (taken mod ethereum_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms.
 If the parameter is set to 0, the heartbeats are effectively turned off.
 
 
 #### Performance Measurements
-At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; this is (number_of_ethereum_blocks_per_epoch)/ethereum_heartbeat_period)+number_of_ethereum_events_per_validator
+At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; this is (number_of_ethereum_blocks_per_epoch)/`ethereum_heartbeat_period`)+number_of_ethereum_events_per_validator
 
 Let `expected_f` be the maximum number of Ethereum events forwarded by any Validator given above conditions, and `f` be the number of blocks a given validator has forwarded. If `expected_f` equals zero, then all scores are set to 1. 
 Let `low_volume_correction` be `abs(3-expected_f)`.
@@ -70,7 +70,7 @@ The multiplication with 1.1 is adding preventing a validator to get penalised if
 In the end, we make sure no score is bigger than 1 (which might happen due to the multiplicative bonus).
 
 ### Total Performance
-As we have several performance measurements, they need to be combined to a total score. To this end, we have a system variable <performance_weights>, 
+As we have several performance measurements, they need to be combined to a total score. To this end, we have a system variable `performance_weights`, 
 which has n+1 parameters (weight_0,.. weight_n) for n measurements (currently 2, the tendermint-performance and the ethereum-performance. Weights are normalised, so the sum of all weights needs to be 1. Also, all individual performance measurements are normalised to be between 0 and 1.
 
 The total performance then is
