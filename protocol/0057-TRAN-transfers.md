@@ -67,6 +67,7 @@ A recurring transfers needs to contain this specific information:
 - start epoch: at the end of this epoch the first recurring transfer will be made between
 - end epoch (optional): at the end of this epoch the last recurring transfer will be made between, optional. If not specified the transfer run until cancelled (by its creator or by the network as described below).
 - factor, decimal > 0.0 (a factor used with the amount specified for the transfer).
+- transfer interval: number of epochs between transfers, i.e. when 4, funds will be transferred every 4 epochs with the first transfer occurring 4 epochs after the transfer is processed. Must be an integer strictly greater than `0`.
 
 The amount paid at the end of each epoch is calculated using the following formula:
 
