@@ -6,7 +6,7 @@ The aim of this specification is to set out how fees on Vega are set based on co
 
 ## Definitions / Glossary of terms used
 
-- **Market value proxy window length `market.value.windowLength`**: sets the length of the window over which we estimate the market value. This is a network parameter.
+- **`market.value.windowLength`**: sets the length of the window over which we estimate the market growth. This is a network parameter.
 - **Target stake**: as defined in [target stake spec](./0041-TSTK-target_stake.md). The ideal amount of stake LPs would commit to a market.
 - `market.liquidityProvision.minLpStakeQuantumMultiple`: There is a network wide parameter specifying the minimum LP stake as the `quantum` specified per asset, see [asset framework spec](../protocol/0040-ASSF-asset_framework.md).
 
@@ -67,7 +67,7 @@ The guiding principle of this section is that by committing stake a liquidity pr
 
 ### Calculating liquidity provider equity-like share
 
-The parameter which determines the period over which market value and hence growth is `market.value.windowLength` which could be e.g. a week.
+The parameter which determines the period over which growth is estimated is `market.value.windowLength` which could be e.g. a week.
 From the end of the opening auction, which we will refer to as `t0` until `t0+market.value.windowLength` is the `0th` or "bootstrap period". Then from `t0+market.value.windowLength` until `t0 + 2 x market.value.windowLength` is the `1st` period and so on.
 For each LP we track the stake they have and also their virtual stake.
 For markets that have no "parent" market, see [governance](./0028-GOVE-governance.md)  we postulate that before and during the 0th (bootstrap) any stake commitment or removal is mirrored in the virtual stake.

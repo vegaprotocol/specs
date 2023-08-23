@@ -107,7 +107,6 @@ All of these should be available at various time resolutions: on every change, o
 
 - LP order submissions
 - Equity-like share changes
-- Market value proxy
 - Target stake
 - Supplied stake
 

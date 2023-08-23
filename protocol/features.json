@@ -126,8 +126,8 @@
       "0081-SUCM-022"
     ]
   },
-    "Governance Transfers": {
-    "milestone": "cosmic-deploy-2",
+  "Governance Transfers": {
+    "milestone": "deployment-2",
     "acs": [
       "0028-GOVE-073",
       "0028-GOVE-074",
@@ -209,7 +209,11 @@
       "0073-LIMN-110",
       "0073-LIMN-111",
       "0081-SUCM-002",
-      "0081-SUCM-015"
+      "0081-SUCM-015",
+      "0014-ORDT-120",
+      "0014-ORDT-121",
+      "0014-ORDT-122",
+      "0014-ORDT-123"
     ]
   },
 
