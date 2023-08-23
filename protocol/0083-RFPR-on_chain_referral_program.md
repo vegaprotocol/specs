@@ -370,6 +370,12 @@ The Estimate Fees API should now calculate the following additional information:
     - all referees should not receive any discount on their taker fees (<a name="0083-RFPR-019" href="#0083-RFPR-019">0083-RFPR-019</a>).
 1. If the referrer of a referral set currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the start of the next epoch (<a name="0083-RFPR-020" href="#0083-RFPR-020">0083-RFPR-020</a>).
 1. When creating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory (<a name="0083-RFPR-021" href="#0083-RFPR-021">0083-RFPR-021</a>).
+1. Updating any of the following network parameters whilst there is an active referral program will not modify or cancel the active program in any way. The updated parameters will however be used to validate future referral program proposals.
+    - `referralProgram.maxBenefitTiers` (<a name="0083-RFPR-041" href="#0083-RFPR-041">0083-RFPR-041</a>)
+    - `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-042" href="#0083-RFPR-042">0083-RFPR-042</a>)
+    - `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-043" href="#0083-RFPR-043">0083-RFPR-043</a>)
+    - `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` (<a name="0083-RFPR-044" href="#0083-RFPR-044">0083-RFPR-044</a>)
+    - `referralProgram.minStakedVegaTokens` (<a name="0083-RFPR-045" href="#0083-RFPR-045">0083-RFPR-045</a>)
 
 #### Updating a referral set
 

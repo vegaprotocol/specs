@@ -135,7 +135,9 @@ The Trades API should now also expose the following additional information for e
     - Propose program B with `enactment_timestamp` 1st June and `closing_timestamp` 31st Aug (<a name="0084-VDPR-009" href="#0084-VDPR-009">0084-VDPR-009</a>).
     - Proposal for program B accepted and overrides program A the first epoch after 1st June (<a name="0084-VDPR-010" href="#0084-VDPR-010">0084-VDPR-010</a>).
     - Program is closed first epoch after 31st Aug, there should be no active proposals (<a name="0084-VDPR-011" href="#0084-VDPR-011">0084-VDPR-011</a>).
-
+1. Updating any of the following network parameters whilst there is an active volume discount program will not modify or cancel the active program in any way. The updated parameters will however be used to validate future volume discount program proposals.
+    - `volumeDiscountProgram.maxBenefitTiers` (<a name="0084-VDPR-015" href="#0084-VDPR-015">0084-VDPR-015</a>).
+    - `volumeDiscountProgram.maxVolumeDiscountFactor` (<a name="0084-VDPR-016" href="#0084-VDPR-016">0084-VDPR-016</a>).
 
 ### Setting benefit factors
 
