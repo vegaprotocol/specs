@@ -1,5 +1,15 @@
 # Validator performance based rewards
 
+## Network Parameters
+<ethereum_heartbeat_period>: This parameter defines how many ethereum events need to pass (in average) for a validator to have to forward a heartbeat event. If it is set to 0, heartbeats are deactivated.
+Valid range is any integer >= 0
+The initial value is 128
+
+<performance_weights> is a vector containing three integer values w0,w1,w2; this parameter defines the weights of the different performance measurements that impact the reward. The weight formular (given performance valuies p1 and p2) is w0*p1*p2 + w1*p1+w2*p2). 
+If more performance measurements are added later, this vector is expanded correspondingy.
+
+Legal values are all floats that sum up to 1. The initial value is (0,0.8,0.2)
+
 ## Adjusting Validator Rewards Based on Performance
 
 The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury.
@@ -41,7 +51,7 @@ Goal 2: Detect unforwarded Ethereum events and punish the validator that does no
 Detection: Events forwarded by some validators are not forwarded by others.
 
 #### Ethereum Heartbeat
-For the Ethereum Heartbeat, we use the system parameter <ethereum_heartbeat_period>. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128, which would create a hearbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch). Legal values are all integers larger or equal to 0.
+For the Ethereum Heartbeat, we use the network parameter <ethereum_heartbeat_period>. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128, which would create a hearbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch). Legal values are all integers larger or equal to 0.
 
 For every Ethereum block, if the hash of this block mod <ethereum_heartbeat_period> equals the identity of the a validator (taken mod ethereum_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms.
 If the parameter is set to 0, the heartbeats are effectively turned off.
