@@ -23,14 +23,13 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 - `market.liquidity.earlyExitPenalty` (decimal ≥0), sets how much LP forfeits of their bond in case the market is below target stake and they wish to reduce their commitment. If set to `0` there is no penalty for early exit, if set to `1` their entire bond is forfeited if they exit their entire commitment, if set >1, their entire bond will be forfeited for exiting `1/earlyExitPenalty` of their commitment amount.
 - `market.liquidity.probabilityOfTrading.tau.scaling` sets how the probability of trading is calculated from the risk model; this is used to [measure the relative competitiveness of LPs supplied volume](0042-LIQF-setting_fees_and_rewarding_lps.md).
 - `market.liquidity.minimum.probabilityOfTrading.lpOrders` sets a lower bound on the result of the probability of trading calculation.
+- `market.liquidity.feeCalculationTimeStep` (time period e.g. `1m`) controls how often the quality of liquidity supplied by the LPs is evaluated and fees arising from that period are earmarked for specific parties. Minimum valid value `0`. Maximum valid value `validators.epoch.length`. 
 
 ### Market parameters
 
 - `market.liquidity.priceRange` (decimal) - this is a percentage price move (e.g. `0.05 = 5%`) from `mid_price` during continuous trading or indicative uncrossing price during auctions. This is set / can be modified as part of [market proposal](0028-GOVE-governance.md) / market change proposal.
 
 - `market.liquidity.committmentMinTimeFraction` (decimal) —  minimum fraction of time LPs must spend "on the book" providing their committed liquidity. This is a decimal number in the interval $[0,1]$ i.e. both limits included. When set to $0$ the SLA mechanics are switched off for the market entirely.
-
-- `market.liquidity.providers.fee.calculationTimeStep` (time period e.g. `1m`) controls how often the quality of liquidity supplied by the LPs is evaluated and fees arising from that period are earmarked for specific parties.
 
 - `market.liquidity.performanceHysteresisEpochs` (uint) - number of liquidity epochs over which past performance will continue to affect rewards.
 
