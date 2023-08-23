@@ -12,7 +12,8 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 1. `compLevel` - This is a Network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.competitionLevel`. Default `1.1`.
 1. `reward.staking.delegation.optimalStakeMultiplier` - another network parameter which together with `compLevel` control how much the validators "compete" for delegated stake.
 1. `network.ersatzvalidators.reward.factor` - a decimal in `[0,1]` with default of `1`. It controls how much the ersatz validator(standby validator) own + delegated stake counts for reward purposes.
-
+1. `decreased_payout` is a vector containing a lenght-factor and increase (both floats). Once a validator exceeds the optimal stake, for an amount of `optimal_stake`*`lenght_factor`, the reward curve does not go flat, but increases with `increase` per stake unit. Both values range between 0 and 1.
+   
 ## Other network parameters
 
 - `delegator_share`: proportion of the validator reward that goes to the delegators. The initial value is 0.883. This is a network parameter that can be changed through a governance vote. Full name: `reward.staking.delegation.delegatorShare`.
@@ -80,8 +81,13 @@ function validatorScore(valStake) {
   optStake = s_total / a
 
   penaltyFlatAmt = Math.max(0.0, valStake - optStake)
+  penaltyLimitDecrease = Math.min( Math.max(0.0, valstake - optStake*) , optStake*decreades_payout.lenghtfactor) * decreased_payout.increase
+
+  (valstake - optstake) + optstake+factor
+   
+
   penaltyDownAmt = Math.max(0.0, valStake - optimalStakeMultiplier*optStake)
-  linearScore = (valStake - penaltyFlatAmt - penaltyDownAmt)/s_total
+  linearScore = (valStake - penaltyFlatAmt + penaltyLimitDecrease - penaltyDownAmt)/s_total
 
   // make sure we're between 0 and 1.
   linearScore = Math.min(1.0, Math.max(0.0,linearScore))
