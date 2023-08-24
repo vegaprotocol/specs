@@ -30,7 +30,7 @@ Note, if a party wants to contribute towards a different referral set or compete
 
 ## Network Parameters
 
-- `referralProgram.maxBenefitTiers` - limits the maximum number of [benefit tiers](#governance-proposals) which can be specified as part of a referral program
+- `referralProgram.maxReferralTiers` - limits the maximum number of [benefit tiers](#governance-proposals) which can be specified as part of a referral program
 - `referralProgram.maxReferralRewardFactor` - limits the maximum reward factor which can be specified as part of a referral program
 - `referralProgram.maxReferralDiscountFactor` - limits the maximum discount factor which can be specified as part of a referral program governance proposal
 - `referralProgram.maxReferralRewardProportion` - limits the proportion (`referee_reward_factor` * `referee_reward_multiplier`) of referee taker fees which can be given to the referrer.
@@ -102,10 +102,10 @@ message UpdateReferralProgram{
 When submitting a referral program proposal through governance the following conditions apply:
 
 - a proposer cannot set an `closing_timestamp` less than the proposals `enactment_time`.
-- the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
+- the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
 - all `minimum_epochs` values must be an integer strictly greater than 0
 - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
-- the number of tiers in `staking_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers`.
+- the number of tiers in `staking_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
 - all `minimum_staked_tokens` values must be an integer value greater than or equal to `0`.
 - all `referral_reward_multiplier` values must be a float value greater than or equal to `1`.
 - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
@@ -404,7 +404,7 @@ The Estimate Fees API should now calculate the following additional information:
 
 1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
     - the `closing_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
-    - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxBenefitTiers` (<a name="0083-RFPR-002" href="#0083-RFPR-002">0083-RFPR-002</a>).
+    - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers` (<a name="0083-RFPR-002" href="#0083-RFPR-002">0083-RFPR-002</a>).
     - all `minimum_epochs_in_team` values must be an integer strictly greater than 0 (<a name="0083-RFPR-003" href="#0083-RFPR-003">0083-RFPR-003</a>).
     - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-004" href="#0083-RFPR-004">0083-RFPR-004</a>).
     - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-005" href="#0083-RFPR-005">0083-RFPR-005</a>).
@@ -433,7 +433,7 @@ The Estimate Fees API should now calculate the following additional information:
 1. If the referrer of a referral set currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the start of the next epoch (<a name="0083-RFPR-020" href="#0083-RFPR-020">0083-RFPR-020</a>).
 1. When creating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory (<a name="0083-RFPR-021" href="#0083-RFPR-021">0083-RFPR-021</a>).
 1. Updating any of the following network parameters whilst there is an active referral program will not modify or cancel the active program in any way. The updated parameters will however be used to validate future referral program proposals.
-    - `referralProgram.maxBenefitTiers` (<a name="0083-RFPR-041" href="#0083-RFPR-041">0083-RFPR-041</a>)
+    - `referralProgram.maxReferralTiers` (<a name="0083-RFPR-041" href="#0083-RFPR-041">0083-RFPR-041</a>)
     - `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-042" href="#0083-RFPR-042">0083-RFPR-042</a>)
     - `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-043" href="#0083-RFPR-043">0083-RFPR-043</a>)
     - `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` (<a name="0083-RFPR-044" href="#0083-RFPR-044">0083-RFPR-044</a>)
