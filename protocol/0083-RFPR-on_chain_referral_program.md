@@ -141,6 +141,7 @@ message CreateReferralSet{
         team_url: "https://discord.com/channels/vegarocks",
         avatar_url: "https://vega-rocks/logo-360x360.jpg",
         closed: False,
+    }
 }
 ```
 
