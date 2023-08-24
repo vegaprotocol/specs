@@ -350,7 +350,7 @@ In the case of spot markets it will be transferred into the network treasury for
 
 ### Qualifying Order Types
 
-- Once liquidity is committed LPs can meet their commitment by placing limit orders, pegged limit orders and iceberg orders. For iceberg orders only the visible peak counts towards the commitment (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>) for spot (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>) 
+- Once liquidity is committed LPs can meet their commitment by placing limit orders, pegged limit orders and iceberg orders. For iceberg orders only the visible peak counts towards the commitment (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>) for spot (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>)
 - Parked pegged limit orders and stop-loss orders do not count towards an LPs liquidity commitment. (<a name="0044-LIME-077" href="#0044-LIME-077">0044-LIME-077</a>) for spot (<a name="0044-LIME-078" href="#0044-LIME-078">0044-LIME-078</a>)
 - GFA orders during auction from LP count towards LPs liquidity commitment (<a name="0044-LIME-079" href="#0044-LIME-079">0044-LIME-079</a>) for spot (<a name="0044-LIME-080" href="#0044-LIME-080">0044-LIME-080</a>)
 - GFA orders during continuous trading mode from LP do not count towards the LP's liquidity commitment (<a name="0044-LIME-081" href="#0044-LIME-081">0044-LIME-081</a>) for spot (<a name="0044-LIME-082" href="#0044-LIME-082">0044-LIME-082</a>)
