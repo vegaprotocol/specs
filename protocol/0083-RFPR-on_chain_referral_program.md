@@ -32,6 +32,10 @@ To create an emphasis on community, collaboration, and competition. Referrers wi
 - `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` - limits the notional volume in quantum units which is eligible each epoch for referral program mechanisms
 - `referralProgram.minStakedVegaTokens` - limits referral code generation to parties staking at least this number of tokens
 
+Note, if any of the above mentioned network parameters are updated whilst a referral program is active, the active program will not be affected in any way even if the active program breaches the new network parameter value. The new network parameter value however will be checked on any future [referral program proposals](#governance-proposals).
+
+If the community wish to update the referral program limits **and** apply these to the existing program, they can do so by first updating the network parameters and then submitting a proposal to update the program (adhering to the new limits).
+
 ## Governance Proposals
 
 Enabling or changing the terms of the on-chain referral program can be proposed via governance. As part of the proposal, the proposer specifies the following fields:
@@ -137,6 +141,7 @@ message CreateReferralSet{
         team_url: "https://discord.com/channels/vegarocks",
         avatar_url: "https://vega-rocks/logo-360x360.jpg",
         closed: False,
+    }
 }
 ```
 
@@ -366,6 +371,12 @@ The Estimate Fees API should now calculate the following additional information:
     - all referees should not receive any discount on their taker fees (<a name="0083-RFPR-019" href="#0083-RFPR-019">0083-RFPR-019</a>).
 1. If the referrer of a referral set currently not eligible for benefits re-stakes enough tokens, their team will become eligible for benefits from the start of the next epoch (<a name="0083-RFPR-020" href="#0083-RFPR-020">0083-RFPR-020</a>).
 1. When creating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory (<a name="0083-RFPR-021" href="#0083-RFPR-021">0083-RFPR-021</a>).
+1. Updating any of the following network parameters whilst there is an active referral program will not modify or cancel the active program in any way. The updated parameters will however be used to validate future referral program proposals.
+    - `referralProgram.maxBenefitTiers` (<a name="0083-RFPR-041" href="#0083-RFPR-041">0083-RFPR-041</a>)
+    - `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-042" href="#0083-RFPR-042">0083-RFPR-042</a>)
+    - `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-043" href="#0083-RFPR-043">0083-RFPR-043</a>)
+    - `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` (<a name="0083-RFPR-044" href="#0083-RFPR-044">0083-RFPR-044</a>)
+    - `referralProgram.minStakedVegaTokens` (<a name="0083-RFPR-045" href="#0083-RFPR-045">0083-RFPR-045</a>)
 
 #### Updating a referral set
 
