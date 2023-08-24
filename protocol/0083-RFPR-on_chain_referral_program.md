@@ -15,6 +15,8 @@ Providing a party has been associated with a referral set for long enough, they 
 
 To create an emphasis on community, collaboration, and competition. Referrers will be able to designate their referral set as a team. Teams will have additional fields which allow them to be visible on leaderboards and later to compete for team based rewards.
 
+Note, if a party wants to contribute towards a different referral set or compete as a member of a different team, a party is able to move between referral sets by "reapplying" a new referral code. However, if they do, their referral rewards will still be paid out to the referrer of the original referral set.
+
 ![referral-set-hierarchy-diagram](./0083-RFPR-on_chain_referral_program_referral_set_hierarchy.png)
 
 ## Glossary
@@ -196,7 +198,9 @@ message ApplyReferralCode{
 }
 ```
 
-If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors updated](#setting-benefit-factors) accordingly. If a party is already a referee, and submits another `ApplyReferralCode` transaction, they will be transferred to the new referral set at the start of the next epoch. Note, if the referee has submitted multiple transactions in an epoch, the referee will be associated with the set specified in the latest valid transaction.
+If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors updated](#setting-benefit-factors) accordingly. Their key must then become associated with the referrers key. All referral rewards will be transferred to this referrers key, regardless of whether the party reapplies a new referral code.
+
+If a party is already a referee, and submits another `ApplyReferralCode` transaction, they will be transferred to the new referral set at the start of the next epoch. Note, if the referee has submitted multiple transactions in an epoch, the referee will be associated with the set specified in the latest valid transaction. When a referee is transferred, the referrer for which they generate referral rewards for **is not** updated.
 
 ### Party volumes
 
@@ -226,22 +230,28 @@ The network can then calculate the sets `referral_set_running_notional_taker_vol
 
 Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch (after pending `ApplyReferralCode` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee.
 
+Note, when setting a referees benefit factors we compare a sets `referral_set_running_notional_taker_volume` to a `minimum_running_notional_taker_volume` value. To prevent parties self-referring and moving teams, this `referral_set_running_notional_taker_volume` is always the value of the referees original referral set.
+
 #### Setting the referral reward factor
 
 The `referral_reward_factor` should be set by identifying the "highest" benefit tier where the following conditions are fulfilled.
 
-- `referral_set_running_notional_taker_volume` is greater than or equal to the tiers `minimum_running_notional_taker_volume`.
+- `referral_set_running_notional_taker_volume` of the referee's **original** referral set is greater than or equal to the tiers `minimum_running_notional_taker_volume`.
 
 The referees `referral_reward_factor` is then set to the `referral_reward_factor` defined in the selected benefit tier.
+
+Note the **original** referrer is defined as the team of the referrer associated with the referee. See section [applying a referral code](#applying-a-referral-code) for more detail.
 
 #### Setting the referral discount factor
 
 The `referral_discount_factor` should be set by identifying the "highest" benefit tier where **BOTH** the following conditions are fulfilled.
 
-- `referral_set_running_notional_taker_volume` is greater than or equal to the tiers `minimum_running_notional_taker_volume`.
+- `referral_set_running_notional_taker_volume` of the referee's **original** referral set is greater than or equal to the tiers `minimum_running_notional_taker_volume`.
 - the referee has been a associated with the referral set for at least the tiers `minimum_epochs`.
 
 The referees `referral_discount_factor` is then set to the `referral_discount_factor` defined in the selected benefit tier.
+
+Note the **original** referrer is defined as the team of the referrer associated with the referee. See section [applying a referral code](#applying-a-referral-code) for more detail.
 
 #### Example
 
@@ -288,7 +298,8 @@ Referral program benefit factors are applied by modifying [the fees](./0029-FEES
 
 The Parties API should now return a list of all **parties** (which can be filtered by party `id`) with the following additional information:
 
-- current `id` of the referral set the party is associated with
+- current `id` of the referral set the party is currently associated with
+- current `id` of the party they pay referral rewards to
 - current `epochs_in_referral_set`
 - current `party_epoch_notional_taker_volume`
 - current `referral_reward_factor`
@@ -303,6 +314,7 @@ The ReferralSet API should now expose a list of all **referral sets** (which can
 - current `referral_set_running_notional_taker_volume`
 - current `referral_reward_factor` applied to referee taker fees
 - current **maximum possible** `referral_discount_factor` applied to referee taker fees
+- for each asset, the total referral rewards paid to the referrer of the referral set
 - for each asset, the total referral rewards generated by all referee taker fees
 - for each asset, the total referral discounts applied to all referee taker fees
 - whether the referral set has been designated as a team
@@ -389,9 +401,10 @@ The Estimate Fees API should now calculate the following additional information:
 1. If a party **is not** currently a **referee**, the party can immediately become associated with a referral set by submitting a signed `ApplyReferralCode` transaction (<a name="0083-RFPR-025" href="#0083-RFPR-025">0083-RFPR-025</a>).
 1. If a party **is** currently a **referee**, the party can become associated with a new referral set (at the start of the next epoch) by submitting a signed `ApplyReferralCode` transaction (<a name="0083-RFPR-026" href="#0083-RFPR-026">0083-RFPR-026</a>).
 1. If a party **is** currently a **referee** and submits multiple `ApplyReferralCode` transactions in an epoch, the latest valid `ApplyReferralCode` transaction will be applied (<a name="0083-RFPR-027" href="#0083-RFPR-027">0083-RFPR-027</a>).
+1. If a party **is** currently a **referee** and becomes associated with a new referral set, their fees should still be paid out to the referrer of the original referral set they were associated with (<a name="0083-RFPR-041" href="#0083-RFPR-041">0083-RFPR-041</a>).
 1. If one or more of the following conditions are not met,  any `ApplyReferralCode` transaction should be rejected (<a name="0083-RFPR-028" href="#0083-RFPR-028">0083-RFPR-028</a>).
     - a party must not currently be a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
-1. If the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the `team` to closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
+    - the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the `team` to closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
 
 #### Epoch and running volumes
 
