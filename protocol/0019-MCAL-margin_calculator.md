@@ -59,6 +59,7 @@
     ```
 
     Where `f_twap` represents the internal mark price TWAP and `s_twap` represents the TWAP from the external oracle feed. When clamp bounds are large we use:
+    
     ```book
     funding_payment = f_twap - s_twap + (1 + delta_t * interest_rate)*s_twap-f_twap
                     = s_twap * delta_t * interest_rate
