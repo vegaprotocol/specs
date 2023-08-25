@@ -52,29 +52,29 @@
     ```
 
     then the dated future maintenance margin component for the party is `15 900 x (0.25 x 1 + 0.25 x 1 x 1) + 0.1 x 1 x 15 900 = 9 540`. The current accrued funding payment for the perpetual component is calculated using
-    
-    ```
+
+    ```book
     delta_t = funding_period_end - max(funding_period_start, internal_data_points[0].t)
     funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap))
     ```
 
     Where `f_twap` represents the internal mark price TWAP and `s_twap` represents the TWAP from the external oracle feed. When clamp bounds are large we use:
-    ```
+    ```book
     funding_payment = f_twap - s_twap + (1 + delta_t * interest_rate)*s_twap-f_twap
                     = s_twap * delta_t * interest_rate
     ```
 
-    - If `s_twap = 1600`, `delta_t = 0.002` and `interest_rate = 0.05` then `funding_payment = 1600 * 0.002 * 0.05 = 0.16`. 
+    - If `s_twap = 1600`, `delta_t = 0.002` and `interest_rate = 0.05` then `funding_payment = 1600 * 0.002 * 0.05 = 0.16`.
       - Thus, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 9540 + 0.5 * 0.16 * 1 = 9540.08` (<a name="0019-MCAL-019" href="#0019-MCAL-019">0019-MCAL-019</a>)
 
-    - If instead 
+    - If instead
       - `clamp_upper_bound*s_twap < max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap)`
       - `funding payment = f_twap - s_twap + clamp_upper_bound*s_twap = f_twap + s_twap * (clamp_upper_bound - 1)`.
       - Then with `s_twap = 1600`, `clamp_upper_bound = 0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (0.05 - 1) = 1590 - 1520 = 70`
       - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 9540 + 0.5 * 70 * 1 = 9575` (<a name="0019-MCAL-020" href="#0019-MCAL-020">0019-MCAL-020</a>)
       - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 9540 + 0.5 * max(0, 70 * -1) = 9540`(<a name="0019-MCAL-021" href="#0019-MCAL-021">0019-MCAL-021</a>)
-      - 
-    - If instead 
+
+    - If instead
       - `clamp_upper_bound*s_twap > clamp_lower_bound*s_twap > (1 + delta_t * interest_rate)*s_twap-f_twap)`
       - `funding payment = f_twap - s_twap + clamp_lower_bound*s_twap = f_twap + s_twap * (clamp_lower_bound - 1)`.
       - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (-0.05 - 1) = 1590 - 1680 = -90`
