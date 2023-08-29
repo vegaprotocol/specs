@@ -341,7 +341,7 @@ In the case of spot markets it will be transferred into the network treasury for
 - When LP is committed they are obliged to provide liquidity equal to their commitment size on both sides of the order book (<a name="0044-LIME-027" href="#0044-LIME-027">0044-LIME-027</a>)
 - For a market that is in opening auction and LP has committed liquidity:
   - LP can increase their commitment and it will take effect immediately (<a name="0044-LIME-050" href="#0044-LIME-050">0044-LIME-050</a>). For spot (<a name="0044-LIME-054" href="#0044-LIME-054">0044-LIME-054</a>)
-  - LP can decrease their commitment and it will take affect immediately without incurring penalties (<a name="0044-LIME-051" href="#0044-LIME-051">0044-LIME-051</a>). For spot (<a name="0044-LIME-055" href="#0044-LIME-055">0044-LIME-055</a>)
+  - LP can decrease their commitment and it will take effect immediately without incurring penalties (<a name="0044-LIME-051" href="#0044-LIME-051">0044-LIME-051</a>). For spot (<a name="0044-LIME-055" href="#0044-LIME-055">0044-LIME-055</a>)
   - LP can cancel their commitment without incurring penalties (<a name="0044-LIME-053" href="#0044-LIME-053">0044-LIME-053</a>)
 - For a market that is in continuous trading and a single LP has committed liquidity:
   - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>) for spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
