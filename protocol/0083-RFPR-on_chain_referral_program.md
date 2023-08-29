@@ -13,7 +13,7 @@ Whilst a referral program is active, the following benefits may be available to 
 
 Providing a party has been associated with a referral set for long enough, they will become eligible for greater benefits as their referral sets running taker volume increases.
 
-Referrers will also the ability to increase the proportion of referee taker fees they receive by staking governance tokens ($VEGA).
+Referrers will also have the ability to increase the proportion of referee taker fees they receive by staking governance tokens ($VEGA).
 
 To create an emphasis on community, collaboration, and competition. Referrers will be able to designate their referral set as a team. Teams will have additional fields which allow them to be visible on leaderboards and later to compete for team based rewards.
 
@@ -47,7 +47,7 @@ Enabling or changing the terms of the on-chain referral program can be proposed 
 
 - `benefit_tiers`: a list of dictionaries (with the below fields) defining the reward and discount factors from referrals
   - `minimum_running_notional_taker_volume`: the required [`referral_set_running_notional_taker_volume`](#referral-set-volumes) in quantum units for parties to access this tier
-  - `minimum_epochs`: the required number of epochs a party must have been in a referral set to access this tier
+  - `minimum_epochs`: the required number of epochs a referee must have been in a referral set to access this tier
   - `referral_reward_factor`: the proportion of the referees taker fees to be rewarded to the referrer
   - `referral_discount_factor`: the proportion of the referees taker fees to be discounted
 - `staking_tiers`: a list of dictionaries (with the below fields) defining the multipliers from staking
