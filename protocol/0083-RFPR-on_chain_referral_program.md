@@ -15,18 +15,16 @@ Providing a party has been associated with a referral set for long enough, they 
 
 Referrers will also have the ability to increase the proportion of referee taker fees they receive by staking governance tokens ($VEGA).
 
-To create an emphasis on community, collaboration, and competition. Referrers will be able to designate their referral set as a team. Teams will have additional fields which allow them to be visible on leaderboards and later to compete for team based rewards.
+To create an emphasis on community, collaboration, and competition. Referrers will be able to create a team from their referral set. Teams will have  fields which allow them to be visible on leaderboards and to compete for team based rewards.
 
-Note, if a party wants to contribute towards a different referral set or compete as a member of a different team, a party is able to move between referral sets by "reapplying" a new referral code. However, if they do, their referral rewards will still be paid out to the referrer of the original referral set.
-
-![referral-set-hierarchy-diagram](./0083-RFPR-on_chain_referral_program_referral_set_hierarchy.png)
+Note, if a referee wants to compete as a member of a different team, they are able to move between teams by "reapplying" a referral code. However, their referral rewards will still be computed based their original referral set performance and, thus, paid out to the their original referrer.
 
 ## Glossary
 
 - `referrer`: a party who has generated a referral code for a referral set
 - `referee`: a party who has applied a referral code to join a referral set
 - `referral_set`: a group comprised of a single referrer and all their referees
-- `team`: a `referral_set` which has been designated as a team and enriched with additional details allowing it to be visible on leaderboards.
+- `team`: a group created from a `referral_set` which was designated as a team. A team will be visible on leaderboards and eligible for team rewards.
 
 ## Network Parameters
 
@@ -138,9 +136,9 @@ To create a new referral set and become a referrer, a party must fulfil the foll
 
 The staking requirement is constant. If a referrer un-stakes enough tokens to fall below the requirement, they and their referees will immediately no longer be eligible for referral benefits. If the referrer re-stakes enough tokens to fulfil the staking requirement, they and their referees will become eligible for referral benefits **at the start of the next epoch**. Note, for the case where a party does not re-stake, the protocol will still allow referees to "move" referral sets by [applying](#applying-a-referral-code) a new referral code as normal.
 
-To create a referral set and generate a referral code, the party must submit a signed `CreateReferralSet` transaction. When creating a referral set, a party can optionally designate it as a [team](#glossary) and provide additional team details. When designated as a team a referral set will be visible on leaderboards and in future releases will be eligible for team rewards.  A `CreateReferralSet` transaction has the following fields:
+To create a referral set and generate a referral code, the party must submit a signed `CreateReferralSet` transaction. When creating a referral set, a party can optionally designate it to as a [team](#glossary) and provide additional team details. When designated as a team a separate team will be created in addition to the referral set. The team will be visible on leaderboards and eligible for team rewards.  A `CreateReferralSet` transaction has the following fields:
 
-- `is_team`: a boolean defining whether the referral set should be designated as a team
+- `is_team`: a boolean defining whether the referral set should be designated as a team (and a team created from it)
 - `team_details`: an optional dictionary defining the teams details (non-optional if `is_team` is `True`)
   - `name`: mandatory string team name
   - `team_url`: optional string of a link to a team forum, discord, etc. (defaults to empty string / none-type)
@@ -156,7 +154,7 @@ message CreateReferralSet{
 }
 ```
 
-*Example: if party wants to create a referral set and designate it as a team.*
+*Example: if party wants to create a referral set and team.*
 
 ```protobuf
 message CreateReferralSet{
@@ -223,7 +221,7 @@ message ApplyReferralCode{
 
 If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors and reward multipliers updated](#setting-benefit-factors-and-reward-multipliers) accordingly. Their key must then become associated with the referrers key. All referral rewards will be transferred to this referrers key, regardless of whether the party reapplies a new referral code.
 
-If a party is already a referee, and submits another `ApplyReferralCode` transaction, they will be transferred to the new referral set at the start of the next epoch. Note, if the referee has submitted multiple transactions in an epoch, the referee will be associated with the set specified in the latest valid transaction. When a referee is transferred, the referrer for which they generate referral rewards for **is not** updated.
+If a party is already a referee, and submits another `ApplyReferralCode` transaction, they will not be transferred to the new referral set but they will be added to the associated team at the start of the next epoch (providing a team exists). Note, if the referee has submitted multiple transactions in an epoch, the referee will be added to the new team specified in the latest valid transaction.
 
 ### Party volumes
 
@@ -348,7 +346,7 @@ Referral program benefit factors are applied by modifying [the fees](./0029-FEES
 The Parties API should now return a list of all **parties** (which can be filtered by party `id`) with the following additional information:
 
 - current `id` of the referral set the party is currently associated with
-- current `id` of the party they pay referral rewards to
+- current `id` of the team the party is currently associated with
 - current `epochs_in_referral_set`
 - current `party_epoch_notional_taker_volume`
 - current `referral_reward_factor`
