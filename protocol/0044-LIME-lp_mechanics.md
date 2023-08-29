@@ -27,7 +27,7 @@ Valid values: any decimal number `>= 0` with a default value of `0.1`.
 
 ### Market parameters
 
-All market parameters can be set / modified as part of [market proposal](0028-GOVE-governance.md) / market change proposal and the new value take effect at the first new epoch after enactment.
+All following market parameters can be set / modified as part of [market proposal](0028-GOVE-governance.md) / market change proposal and the new value take effect at the first new epoch after enactment.
 
 - `market.liquidity.priceRange` (decimal) - this is a percentage price move (e.g. `0.05 = 5%`) from `mid_price` during continuous trading or indicative uncrossing price during auctions.
 
@@ -354,7 +354,7 @@ In the case of spot markets it will be transferred into the network treasury for
 
 - In a market, where the market parameter is `market.liquidity.priceRange = 0.05`, and it is engaged in continuous trading with a mid price set at 5, a new Liquidity Provider (LP) has injected liquidity by placing a buy order at a price of 4.75 and a sell order at a price of 5.25 (with sufficient volume). As the epoch unfolds, if the market parameter is modified to market.liquidity.priceRange = 0.01 (1%), then at the conclusion of the ongoing epoch, the LP will not have met their committed notional volume, resulting in the imposition of a bond penalty. (<a name="0044-LIME-074" href="#0044-LIME-074">0044-LIME-074</a>)
 
-- In a market where the market parameter is `market.liquidity.priceRange = 0.05`, and it is in a monitoring auction with the last trade price set at 5, while the indicative uncrossing price is set at 4, the Liquidity Provider (LP) has committed liquidity by placing a buy order at a price of 3.79 (which is less than 5% of 1-0.05 x min(5, 4) = 3.80), and a sell order at a price of 5.25. However, at the end of the epoch, the LP has not fulfilled their committed notional volume. (<a name="0044-LIME-075" href="#0044-LIME-075">0044-LIME-075</a>)
+- In a market where the market parameter is `market.liquidity.priceRange = 0.05`, and it is in a monitoring auction with the last trade price set at 5, while the indicative uncrossing price is set at 4, the Liquidity Provider (LP) has committed liquidity by placing a buy order at a price of 3.79 (which is less than `5%` of `1-0.05 x min(5, 4) = 3.80`), and a sell order at a price of 5.25. However, at the end of the epoch, the LP has not fulfilled their committed notional volume. (<a name="0044-LIME-075" href="#0044-LIME-075">0044-LIME-075</a>)
 
 - For a market with market parameter `market.liquidity.priceRange = 0.05`, is in monitoring auction with `last trade price` set to `5`, `indicative uncrossing price` is set to `4` and the LP has committed liquidity and orders at buy price `3.8` and a sell price `5.25`, the LP is meeting their committed volume of notional (<a name="0044-LIME-076" href="#0044-LIME-076">0044-LIME-076</a>)
 
