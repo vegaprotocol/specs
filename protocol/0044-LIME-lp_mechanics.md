@@ -366,11 +366,21 @@ In the case of spot markets it will be transferred into the network treasury for
 
 - For a market with market parameter `market.liquidity.priceRange = 0.05`, is in monitoring auction with `last trade price` set to `5` and we do not have `indicative uncrossing price`, the LP has committed liquidity and orders at buy price `4.75` and sell price `5.25`, the LP is meeting their committed volume of notional (<a name="0044-LIME-073" href="#0044-LIME-073">0044-LIME-073</a>)
 
+- When the LP increases its commitment and the increment is higher than its general account balance, the increments are rejected, and the old provision persists. (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>) for spot (<a name="0044-LIME-064" href="#0044-LIME-064">0044-LIME-064</a>)
+- When LP decreases its commitment so that $\text{commitment-variation}_i <= \text{maximum-penalty-free-reduction-amount}_i$, then the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md)(<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>) for spot (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
+- When LP decreases its commitment so that $\text{commitment-variation}_i > \text{maximum-penalty-free-reduction-amount}_i$ , $(1-\text{market.liquidity.earlyExitPenalty}) \cdot \text{penalty-incurring-reduction-amount}_i$ should be transferred into its general account and $\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incurring-reduction-amount}_i$ should be transferred into market insurance pool (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>) for spot $\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incurring-reduction-amount}_i$ should be transferred into the network treasury for the asset (<a name="0044-LIME-068" href="#0044-LIME-068">0044-LIME-068</a>)
+- When an LP creates a new provision with zero commitment, it should be rejected with an error message stating that the commitment amount is zero. (<a name="0044-LIME-069" href="#0044-LIME-069">0044-LIME-069</a>) for spot (<a name="0044-LIME-070" href="#0044-LIME-070">0044-LIME-070</a>)
+- When an LP amends the Fee Factor to a value greater than `market.liquidity.maximumLiquidityFeeFactorLevel`, the amendments are rejected (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>) for spot (<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>)
+- A distressed LP (when `bond account == 0 && general account == 0 && margin account < maintenance margin`) will have their orders cancelled. If the LP remains distressed, the network takes over any positions the LP may hold and zeroes them out (closes them out) (<a name="0044-LIME-073" href="#0044-LIME-073">0044-LIME-073</a>) for spot (<a name="0044-LIME-074" href="#0044-LIME-074">0044-LIME-074</a>)
+- If a party submits LP provisions in multiple markets then multiple bond accounts are created and managed by Vega.(<a name="0044-LIME-075" href="#0044-LIME-075">0044-LIME-075</a>) for spot (<a name="0044-LIME-076" href="#0044-LIME-076">0044-LIME-076</a>)
+
 
 ### Qualifying Order Types
 
-- Once liquidity is committed LPs can meet their commitment by placing limit orders, pegged limit orders and iceberg orders. For iceberg orders only the visible peak counts towards the commitment. (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>)
-- Parked pegged limit orders and stop-loss orders do not count towards an LPs liquidity commitment. (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>)
+- Once liquidity is committed LPs can meet their commitment by placing limit orders, pegged limit orders and iceberg orders. For iceberg orders only the visible peak counts towards the commitment (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>) for spot (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>)
+- Parked pegged limit orders and stop-loss orders do not count towards an LPs liquidity commitment. (<a name="0044-LIME-077" href="#0044-LIME-077">0044-LIME-077</a>) for spot (<a name="0044-LIME-078" href="#0044-LIME-078">0044-LIME-078</a>)
+- GFA orders during auction from LP count towards LPs liquidity commitment (<a name="0044-LIME-079" href="#0044-LIME-079">0044-LIME-079</a>) for spot (<a name="0044-LIME-080" href="#0044-LIME-080">0044-LIME-080</a>)
+- GFA orders during continuous trading mode from LP do not count towards the LP's liquidity commitment (<a name="0044-LIME-081" href="#0044-LIME-081">0044-LIME-081</a>) for spot (<a name="0044-LIME-082" href="#0044-LIME-082">0044-LIME-082</a>)
 
 ### Snapshot
 
@@ -406,3 +416,4 @@ In the case of spot markets it will be transferred into the network treasury for
   - `market.liquidity.priceRange` valid values: `>0`, `<=100` (<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>)
   - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
   - `market.liquidity.performanceHysteresisEpochs` valid values: `>=1`, `<=366` (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>)
+
