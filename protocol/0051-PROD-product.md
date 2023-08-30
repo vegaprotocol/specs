@@ -119,12 +119,12 @@ APIS should be available to:
 
 Settlement assets:
 
-- A product of any type cannot be created without specifying at least one settlement asset (<a name="0051-PROD-001" href="#0051-PROD-001">0051-PROD-001</a>)
-- The settlement asset or assets must exist at the time when the product is created (<a name="0051-PROD-002" href="#0051-PROD-002">0051-PROD-002</a>)
+- A product of any type cannot be created without specifying at least one settlement asset (<a name="0051-PROD-001" href="#0051-PROD-001">0051-PROD-001</a>). For product spot: (<a name="0051-PROD-004" href="#0051-PROD-004">0051-PROD-004</a>). For product perpetual: (<a name="0051-PROD-007" href="#0051-PROD-007">0051-PROD-007</a>)
+- The settlement asset or assets must exist at the time when the product is created (<a name="0051-PROD-002" href="#0051-PROD-002">0051-PROD-002</a>). For product spot: (<a name="0051-PROD-005" href="#0051-PROD-005">0051-PROD-005</a>). For product perpetual: (<a name="0051-PROD-008" href="#0051-PROD-008">0051-PROD-008</a>)
 
 Product updates via governance:
 
-- The settlement asset / settlement assets cannot be changed on a product via governance  (<a name="0051-PROD-003" href="#0051-PROD-003">0051-PROD-003</a>)
+- The settlement asset / settlement assets cannot be changed on a product via governance  (<a name="0051-PROD-003" href="#0051-PROD-003">0051-PROD-003</a>). For product spot: (<a name="0051-PROD-006" href="#0051-PROD-006">0051-PROD-006</a>). F for product perpetual: (<a name="0051-PROD-009" href="#0051-PROD-009">0051-PROD-009</a>)
 
 ## See also
 

@@ -8,9 +8,9 @@ On every market liquidity is provided by various parties, liquidity providers (L
 As part of this process the LPs build-up virtual stake on the market, which may be higher than the stake they committed if the market grew.
 For [details of virtual stake calculation see how LPs are rewarded](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-Many derivative markets would terminate and settle periodically but would be part of a sequence.
+Many derivative markets would terminate and settle periodically but would be part of a lineage.
 Think e.g. of a [cash-settled future](./0016-PFUT-product_builtin_future.md) written on the same underlying that settles every three months.
-Successor markets are a feature that allows this sequencing but most importantly allows LPs to keep their virtual stake built up on one market (parent) in the sequence to be transferred to the next one (successor).
+Successor markets are a feature that allows for markets to have a lineage, but most importantly allows LPs to keep their virtual stake built up on one market (parent) in the lineage to be transferred to the next one (successor).
 Moreover, part of the insurance pool of a parent market can be earmarked for transfer to the successor market instead of being distributed network wide (other markets in same settlement asset, network treasury).
 
 ## Relevant network / market parameters
@@ -62,7 +62,10 @@ At the end of opening auction, if the parent market still exists, the fraction o
 Market proposal may specify parent market ID. If it does then:
 
 - It must also specify insurance pool fraction (<a name="0081-SUCM-001" href="#0081-SUCM-001">0081-SUCM-001</a>)
-- The product type, settlement asset and margin asset must match between parent and successor; if not proposal is rejected (<a name="0081-SUCM-002" href="#0081-SUCM-002">0081-SUCM-002</a>)
+- The product type, settlement asset and margin asset must match between parent and successor; if not proposal is rejected:
+  - futures to perpetuals (<a name="0081-SUCM-002" href="#0081-SUCM-002">0081-SUCM-002</a>)
+  - perpetuals to spot (<a name="0081-SUCM-033" href="#0081-SUCM-033">0081-SUCM-033</a>)
+  - spot to futures (<a name="0081-SUCM-034" href="#0081-SUCM-034">0081-SUCM-034</a>)
 - It is possible for the successor to specify different trading termination and settlement oracle data (<a name="0081-SUCM-003" href="#0081-SUCM-003">0081-SUCM-003</a>).
 
 It is possibly to cancel a [spot market](./0080-SPOT-product_builtin_spot.md) via governance and propose a new spot market as a successor with different `market_decimal_places` and `position_decimal_places` (aka `size_decimal_places` for spot); the LPs virtual stakes are carried over (<a name="0081-SUCM-004" href="#0081-SUCM-004">0081-SUCM-004</a>).
@@ -73,32 +76,52 @@ Two proposals that name the same parent can be submitted. Both can be approved b
 
 A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction before `parent settlement time + market.liquidity.successorLaunchWindowLength` then the virtual stakes are carried over and the relevant fraction of the insurance pool is transferred over (<a name="0081-SUCM-006" href="#0081-SUCM-006">0081-SUCM-006</a>).
 
-A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.liquidity.successorLaunchWindowLength` then no virtual stakes are carried over, there is no transfer into the insurance pool of the new market from the parent and the new market has no parent market Id set (<a name="0081-SUCM-007" href="#0081-SUCM-007">0081-SUCM-007</a>)
+A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.liquidity.successorLaunchWindowLength` then no virtual stakes are carried over, the successor market is not a successor market anymore, it's just a market like any other, and the insurance pool balance will be distributed equally across all markets with the same settlement asset, including those markets which are still in opening auction (<a name="0081-SUCM-007" href="#0081-SUCM-007">0081-SUCM-007</a>)
 
 Successor markets cannot be enacted if the parent market is still in the "proposed" state. Successor market proposals can be submitted when the parent market is still in proposed state. When the voting period for the successor market ends then either: a) the parent market is already enacted in which case the successor market moves from "proposed" in to opening auction/"pending" state. Or the parent market is still in "proposed" state in which case successor market is rejected. (<a name="0081-SUCM-008" href="#0081-SUCM-008">0081-SUCM-008</a>)
 
+Successor markets which are proposed whilst the parent is also still in a "proposed" state, will be rejected if the parent is rejected. (<a name="0081-SUCM-027" href="#0081-SUCM-027">0081-SUCM-027</a>)
+
 Successor markets can be enacted when the parent market is in opening auction. There is no virtual stake to copy over, and no insurance pool balance to transfer. (<a name="0081-SUCM-009" href="#0081-SUCM-009">0081-SUCM-009</a>)
 
-A successor market proposal can be enacted when the parent market is in one of the following states: Suspended, Active, Trading terminated or Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
+A successor market proposal can be enacted when the parent market is in one of the following states: Pending, Suspended, Active, Trading terminated or Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
 
 When a successor market is enacted (i.e. leaves the opening auction), all other related successor market proposals, in the state "pending" or "proposed", are automatically rejected. Any LP submissions associated with these proposals are cancelled, and the funds are released (<a name="0081-SUCM-011" href="#0081-SUCM-011">0081-SUCM-011</a>)
 
 With two successor markets in opening auction, that have the same parent market, and one additional market in the state "Proposed". Get one of the two markets to leave the opening auction (passage of time, LP commitment, crossing trade). The other market in auction and the proposed market should both be "Rejected" and all LP funds will be released (<a name="0081-SUCM-014" href="#0081-SUCM-014">0081-SUCM-014</a>)
 
+Propose two markets which are attempting to succeed the same parent, and which have an overlapping voting period. Ensure the first child passes governance and enters opening auction. Ensure that the second child is also able to enter opening auction. The first to complete opening auction becomes the successor, and the other is rejected.(<a name="0081-SUCM-028" href="#0081-SUCM-028">0081-SUCM-028</a>)
+
 Propose a successor market which specifies a parent which is settled, and for which the successor time window has expired. The proposal is declined. (<a name="0081-SUCM-018" href="#0081-SUCM-018">0081-SUCM-018</a>)
 
 ### APIs
 
-It is possible to fetch a market "parent / successor chain" containing the initial market and the full successor line (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
+It is possible to fetch a market "parent / successor chain" containing the initial market and the full successor line via:
+
+- GRPC (<a name="0081-SUCM-012" href="#0081-SUCM-012">0081-SUCM-012</a>)
+- GraphQL (<a name="0081-SUCM-023" href="#0081-SUCM-023">0081-SUCM-023</a>)
+- REST (<a name="0081-SUCM-024" href="#0081-SUCM-024">0081-SUCM-024</a>)
 
 When fetching a market that is part of a "parent / successor chain", we should see both the parent and each successor `marketID` (<a name="0081-SUCM-013" href="#0081-SUCM-013">0081-SUCM-013</a>)
 
 
-### Snapshots / checkpoints
+### Snapshots / checkpoints / Protocol Upgrade / Network History
 
 After a LNL checkpoint restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-016" href="#0081-SUCM-016">0081-SUCM-016</a>)
 
+A market which has been settled, but is still inside successor expiry window, is retained in a checkpoint, and can be used by a successor market after restart(<a name="0081-SUCM-029" href="#0081-SUCM-029">0081-SUCM-029</a>)
+
+A market which has been settled, and beyond the successor expiry window, is not retained in a checkpoint, and cannot be used by a successor market after restart(<a name="0081-SUCM-030" href="#0081-SUCM-030">0081-SUCM-030</a>)
+
+A market which has been settled, and already has a child which has succeeded it, is retained in a checkpoint. Market can be queried via APIs and settled market state can be retrieved. Both child and parent retain parent/child links in market state, and are listed in "successor chain" API request(<a name="0081-SUCM-031" href="#0081-SUCM-031">0081-SUCM-031</a>)
+
+For a parent and child (explicitly: the child has left opening auction), after a checkpoint restart, parent and child both enter opening auction again. It is not possible to propose a new market which attempts to succeed that parent.(<a name="0081-SUCM-032" href="#0081-SUCM-032">0081-SUCM-032</a>)
+
 After snapshot restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS	(<a name="0081-SUCM-017" href="#0081-SUCM-017">0081-SUCM-017</a>)
+
+A market which has expired before a protocol upgrade is still eligible to be used as a successor market after the upgrade, if it is inside the successor time window (<a name="0081-SUCM-025" href="#0081-SUCM-025">0081-SUCM-025</a>)
+
+A data node restored from network history includes the full succession chain for a market. (<a name="0081-SUCM-026" href="#0081-SUCM-026">0081-SUCM-026</a>)
 
 
 ### Virtual stake

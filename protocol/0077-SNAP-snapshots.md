@@ -63,3 +63,4 @@ A bad node can swamp the network by requesting snapshots from other nodes which 
 - The state of a node that is started from a snapshot should be identical to a node that had reached the same block height via replay. (<a name="0077-SNAP-004" href="#0077-SNAP-004">0077-SNAP-004</a>)
 - Post a checkpoint restore we see snapshots continuing to be produced as before and can be used to add a node to the network (<a name="0077-SNAP-005" href="#0077-SNAP-005">0077-SNAP-005</a>)
 - With  `snapshot.interval.length` set to `k` all the nodes in a network will create a snapshot at block height `k`, `2k`, `3k`, ... (<a name="0077-SNAP-006" href="#0077-SNAP-006">0077-SNAP-006</a>)
+

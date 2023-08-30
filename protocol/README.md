@@ -50,7 +50,6 @@
 - [Order submission](./0025-OCRE-order_submission.md)
 - [Pegged orders](./0037-OPEG-pegged_orders.md)
 - [Cancelling orders](./0033-OCAN-cancel_orders.md)
-- [Liquidity provisions](./0038-OLIQ-liquidity_provision_order_type.md)
 
 ## Margin, collateral & risk
 

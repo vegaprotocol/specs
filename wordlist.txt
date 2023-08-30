@@ -50,6 +50,7 @@ cryptocurrencies
 cryptographic
 CQRS
 cumulated
+customisable
 customised
 DAI
 datanode
@@ -142,6 +143,7 @@ keystore
 KMS
 leftarrow
 lifecycle
+linearisation
 linearised
 linkings
 linux
@@ -232,6 +234,7 @@ stakers
 statebridge
 stateful
 statesync
+structs
 SSD
 SSL
 suboptimal
@@ -305,3 +308,14 @@ wBTC
 whitepaper
 Yubikey
 $VEGA
+DS
+teamUrl
+avatarUrl
+dApp
+leaderboards
+ReferralSet
+CreateReferralSet
+enum
+ldots
+infty
+leq

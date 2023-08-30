@@ -18,7 +18,7 @@ A standard party can:
 - [Cancel an order](./0033-OCAN-cancel_orders.md)
 - [Submit a governance proposal](./0028-GOVE-governance.md)
 - [Vote on a governance proposal](./0028-GOVE-governance.md)
-- [Commit to provide liquidity on a market](./0038-OLIQ-liquidity_provision_order_type.md)
+- [Commit to provide liquidity on a market](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction)
 
 ## Guide-level explanation
 
@@ -37,6 +37,7 @@ The `network` party is a pseudo party. It is used in [position resolution](./001
 ## Acceptance Criteria
 
 1. [x] When a [standard party](#standard-party) must be uniquely identified, it must be identified by the public key of an ed25519 keypair (<a name="0017-PART-001" href="#0017-PART-001">0017-PART-001</a>)
+
 
 Note that when and how a party can submit transactions is set out and restricted in:
 

@@ -64,7 +64,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 
 ## Acceptance Criteria
 
-### The typical "Happy Path" case (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>)
+### The typical "Happy Path" case (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>,)
 
 - With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market.
 

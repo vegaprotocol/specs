@@ -131,3 +131,4 @@ Other acceptance:
 - There is no explicit block list for unreliable signed message data sources or malicious public keys or addresses (signers).
 - There is no API required for signed message data sources except for the APIs defined for all data sources in the data sourcing framework spec.
 - There is no requirement for a party operating a signed message data source (i.e. the holder of the private key) to hold any collateral or any of the governance asset.
+

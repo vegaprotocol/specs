@@ -1,19 +1,19 @@
 # Set default to run all checks if none specified
 .DEFAULT_GOAL := all
 
-all: spellcheck markdownlint names codes references links clean
+all: spellcheck markdownlint names codes references links check-features clean
 
 # Check that all the specifications are named appropriately
 .PHONY: names
 names:
 	@$(MAKE) clone-sources
-	npx github:vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
+	npx github:vegaprotocol/approbation check-filenames --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}"
 
 # Count how many Acceptance Criteria each specification has
 .PHONY: codes
 codes:
 	@$(MAKE) clone-sources
-	npx github:vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md}"
+	npx github:vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}"
 
 TEMP=./.build
 .PHONY:clone-sources
@@ -60,6 +60,11 @@ markdownlint:
 .PHONY: spellcheck
 spellcheck:
 	@./spellcheck.sh
+
+# Checks for duplicated ACs in the features.json file
+.PHONY: check-features
+check-features:
+	npx github:vegaprotocol/approbation check-features --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}" --features="./protocol/features.json"
 
 clean:
 	rm -rf $(TEMP)

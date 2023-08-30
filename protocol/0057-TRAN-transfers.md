@@ -79,14 +79,49 @@ If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` the
 
 Read this section alongside the [rewards](./0056-REWA-rewards_overview.md) specification.
 
-To be able to dispatch rewards to reward pools of multiple markets pro rata to the contribution of the reward metric (e.g. received maker fees) in the market vs the total of the measured metric across all in scope markets, recurring transfers support auto dispatch in the following way:
+When funding a reward account with a recurring transfer, the reward account funded is the hash of the fields in the recurring transfer specific to funding reward accounts (listed below).
 
-- When transferring to a reward account, the transaction must also include the following:
+When transferring to a reward account, the transaction must include the following:
 
 - `reward metric` — the type of reward (see [rewards](./0056-REWA-rewards_overview.md))
 - `reward metric asset` — (the settlement asset of all markets that will be in scope for the transfer)
 - `market scope` — a subset of markets in which parties are eligible to be rewarded from this transfer.
   - If the market scope is not defined / an empty list, it is taken as all the markets that settle in the reward metric asset.
+
+A party can further control their recurring transfer funding the reward pool by defining the entities which are within scope. Entities within scope can be either individual parties or [teams](./0083-RFPR-on_chain_referral_program.md#glossary). When scoping individuals, a subset of keys can be detailed, and when scoping teams a specific set of team ids can be detailed.
+
+To support entity scoping, the transaction include the following fields:
+
+- `entity scope` - mandatory enum which defines the entities within scope.
+  - `ENTITY_SCOPE_INDIVIDUALS` - the rewards must be distributed directly amongst eligible parties
+  - `ENTITY_SCOPE_TEAMS` - the rewards must be distributed amongst directly eligible teams (and then amongst team members)
+- `individual scope` - optional enum if the entity scope is `ENTITY_SCOPE_INDIVIDUALS` which defines the subset of individuals which are eligible to be rewarded.
+  - `INDIVIDUAL_SCOPE_ALL` - all parties on the network are within the scope of this reward
+  - `INDIVIDUAL_SCOPE_IN_TEAM` - all parties which are part of a team are within the scope of this reward
+  - `INDIVIDUAL_SCOPE_NOT_IN_TEAM` - all parties which are not part of a team are within the scope of this reward
+- `team scope` - optional list if the reward type is `ENTITY_SCOPE_TEAMS`, field allows the funder to define a list of team ids which are eligible to be rewarded from this transfer
+- `staking_requirement` - the required minimum number of governance (e.g. VEGA) tokens staked for a party to be considered eligible. Defaults to `0`.
+- `notional_time_weighted_average_position_requirement` - the required minimum notional time-weighted averaged position required for a party to be considered eligible. Defaults to `0`.
+
+A party should be able to configure the distribution of rewards by specifying the following fields:
+
+- `window_length` - the number of epochs over which to evaluate the reward metric. The value should be limited to 100 epochs.
+- `lock_period` - the number of epochs after distribution to delay [vesting of rewards](./0085-RVST-rewards_vesting.md#vesting-mechanics) by.
+- `distribution_strategy` - enum defining which [distribution strategy](./0056-REWA-rewards_overview.md#distributing-rewards-between-entities) to use.
+  - `DISTRIBUTION_STRATEGY_PRO_RATA` - rewards should be distributed among entities [pro-rata](./0056-REWA-rewards_overview.md#distributing-pro-rata) by reward-metric.
+  - `DISTRIBUTION_STRATEGY_RANK` - rewards should be distributed among entities [based on their rank](./0056-REWA-rewards_overview.md#distributing-based-on-rank) when ordered by reward-metric.
+- `rank_table` - if the distribution strategy is `DISTRIBUTION_STRATEGY_RANK`, an ordered list dictionaries defining the rank bands and share ratio for each band should be specified. Note, the `start_rank` values must be integers in an ascending order and the table can have strictly no more than 500 rows.
+
+    ```pseudo
+        rank_table = [
+            {"start_rank": 1, "share_ratio": 10},
+            {"start_rank": 2, "share_ratio": 5},
+            {"start_rank": 4, "share_ratio": 2},
+            {"start_rank": 10, "share_ratio": 1},
+            {"start_rank": 20, "share_ratio": 0},
+        ]
+    ```
+
 - At the end of the epoch when the transfer is about to be distributed, it first calculates the contribution of each market to the sum total reward metric for all markets in the `market scope` and then distributes the transfer amount to the corresponding accounts of the markets pro-rata by their contribution to the total.
 
 Where the reward metric type is "market creation rewards", it is important that no market creator will receive more than one market creation reward paid in the same asset from the same source account (reward funder).
@@ -189,10 +224,12 @@ message CancelTransfer {
 
 - As a user I can transfer funds from a general account I control to an other party's general account. Such transfer can be immediate or delayed. (<a name="0057-TRAN-001" href="#0057-TRAN-001">0057-TRAN-001</a>)
 - As a user I **cannot** transfer funds from a general account I control to reward account with a one-off transfer. (<a name="0057-TRAN-002" href="#0057-TRAN-002">0057-TRAN-002</a>)
-- As a user I can transfer funds from a general account I control to an locked_for_staking. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-COSMICELEVATOR-TRAN-003" href="#0057-COSMICELEVATOR-TRAN-003">0057-COSMICELEVATOR-TRAN-003</a>).
-- As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-COSMICELEVATOR-TRAN-004" href="#0057-COSMICELEVATOR-TRAN-004">0057-COSMICELEVATOR-TRAN-004</a>)
+- As a user I can transfer funds from a general account I control to an locked_for_staking. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-PALAZZO-003" href="#0057-PALAZZO-003">0057-PALAZZO-003</a>).
+- As a user I can transfer funds from a locked_from_staking account under my control to any party's general_account. Such transfer can be immediate or delayed. This functionality is currently not implemented (so don't try to test) (<a name="0057-PALAZZO-004" href="#0057-PALAZZO-004">0057-PALAZZO-004</a>)
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
-- As a user I cannot transfer funds from accounts I own but from the type is not supported (e.g. margin, staking). (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
+- As a user I cannot transfer funds from accounts I own but from the type is not supported:
+  - for accounts created in a futures market, bond and margin (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
+  - for accounts created in a spot market, bond and holding (<a name="0057-TRAN-063" href="#0057-TRAN-063">0057-TRAN-063</a>)
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed. (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
   - The fee cost is correctly calculated using the network parameter
   - If I have enough funds to pay transfer and fees, the transfer happens.
