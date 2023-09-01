@@ -99,18 +99,6 @@ any interaction between the smart contract and the details of the delegation sys
 This also allows the delegator to change their mind about a delegation before it is
 activated.
 
-## Undelegate in anger
-
-This action is announced at any time and is executed immediately following the block it
-is announced in. The delegator loses the delegated stake and the income with it, as well
-as their voting weight. As this is not required for first mainnet, and involves more subtleties
-(weights need to be recalculated on the fly, there may be a mixture of normal undelegated
-and undelegate in anger, ...), this feature does not need to be implemented right away for
-Mainnet alpha.
-
-Rationale: A validator is found to have done something outrageous, and needs to be removed
-right away.
-
 ## Undelegation of locked stake
 
 Furthermore, the validators watch the smart contract, and observe the following actions:
