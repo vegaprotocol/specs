@@ -165,7 +165,7 @@ and emitted as an event.
 
 #### Exchanging funding payments between parties
 
-Last step is to calculate each party's cash flows as $-\text{open volume} * \text{funding payment}$ where cashflows are first collected from parties that are making the payment (negative value of the cashflow, i.e. longs when the funding payment is positive) and distributed to those receiving it. Any shortfall should be made-up from the insurance pool and if that's not possible loss socialisation should be applied (exactly as per mark-to-market settlement methodology).
+Last step is to calculate each party's cash flows as $-\text{open volume} * \text{funding payment}$ where cashflows are first collected from parties that are making the payment (negative value of the cashflow, i.e. longs when the funding payment is positive) and distributed to those receiving it. Any shortfall should be made-up from the market's insurance pool and if that's not possible loss socialisation should be applied (exactly as per mark-to-market settlement methodology).
 
 ### 4.3.1. Periodic settlement during [auction](0026-AUCT-auctions.md)
 

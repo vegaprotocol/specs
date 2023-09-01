@@ -91,10 +91,8 @@ The delegator cannot move the tokens before the epoch ends, they remain locked.
 ## Undelegate now
 
 The action can be announced at any time and is executed immediately following the block
-it is announced in. However, the stake is still counted as delegated to the validator until
-the last block of the epoch, though the delegator rewards are not paid to the delegator, but
-into an appropriate vega pool (the insurance pool, for example). The tokens are
-released though, and the delegator can transfer their tokens in the smart contract.
+it is announced in. The delegator is no longer considered for rewards. The stake is no longer counted as delegated to the previously chosen validator.
+The tokens are released immediately, and the delegator can transfer their tokens in the smart contract.
 
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring
 any interaction between the smart contract and the details of the delegation system.

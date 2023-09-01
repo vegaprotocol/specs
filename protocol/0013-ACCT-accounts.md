@@ -17,11 +17,11 @@ Note that a party can also associate the governance / staking asset via the [Veg
 1. Mark-to-market settlement account per market: this is used for collecting and distributing mark-to-market settlement cashflows and is *zero* at the end of each mark-to-market settlement run.
 1. Margin accounts for each party with open orders or positions on any [market](./0043-MKTL-market_lifecycle.md).
 1. Bond account for any party that's an [LP on any market](0044-LIME-lp_mechanics_type.md).
-1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md) for any market.
+1. [Global insurance pool](0015-INSR-market_insurance_pool_collateral.md#global-insurance-pool) (1 per asset)
+1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md#market-insurance-pool) for any market.
 1. [Liquidity fee pool](0042-LIQF-setting_fees_and_rewarding_lps.md) for any market.
 1. [Infrastructure fee pool](0029-FEES-fees.md) for any asset.
-1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [staking rewards](0061-REWP-pos_rewards.md) account.
-1. [Vega trasury accounts](0055-TREA-on_chain_treasury.md) per Vega asset.
+1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [global rewards account](0056-REWA-rewards_overview.md#validator-ranking-metric) used for supplementary (on top of infrastructure fee split) validator rewards.
 
 One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
@@ -130,7 +130,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 - When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0013-ACCT-020" href="#0013-ACCT-020">0013-ACCT-020</a>)
 - Only protocol-initiated aka internal transfer requests move money in or out of the insurance account. User initiated transfer requests cannot be used to move funds in or out of insurance pool. (<a name="0013-ACCT-021" href="#0013-ACCT-021">0013-ACCT-021</a>)
-- When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds redistributed to the [network treasury](./0055-TREA-on_chain_treasury.md) account for the appropriate asset (if it doesn't exist create it) and other insurance pools using the same asset. (<a name="0013-ACCT-022" href="#0013-ACCT-022">0013-ACCT-022</a>)
+- When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds redistributed to the global insurance pool account for the appropriate asset (if it doesn't exist create it) and other insurance pools using the same asset. (<a name="0013-ACCT-032" href="#0013-ACCT-032">0013-ACCT-032</a>)
 
 ### Special case: Staking accounts
 

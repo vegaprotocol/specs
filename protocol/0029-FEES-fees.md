@@ -132,7 +132,7 @@ Order that entered the book in the current batch are considered aggressive order
 
 The trades that were netted off against each other during position resolution incur no fees.
 During position resolution all of the parties being liquidated share the total fee for the network order, pro-rated by the size of position.
-As for fees in other cases, the fee is taken out of the general + margin account for the liable traders (the insurance pool is not used to top up fees that cannot be paid). If the general + margin account is insufficient to cover the fee then the fee (or part of it) is not going to get paid. In this case we first pay out the maker_fee (or as much as possible), then then infrastructure_fee (or as much as possible) and finally the liquidity_fee.
+As for fees in other cases, the fee is taken out of the general + margin account for the liable traders (the market's insurance pool is not used to top up fees that cannot be paid). If the general + margin account is insufficient to cover the fee then the fee (or part of it) is not going to get paid. In this case we first pay out the maker_fee (or as much as possible), then then infrastructure_fee (or as much as possible) and finally the liquidity_fee.
 
 ### Rounding
 

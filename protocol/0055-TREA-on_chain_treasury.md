@@ -1,10 +1,10 @@
 # Network Treasury
 
-The Network Treasury is a set of accounts (up to 1 per asset supported by the network via the asset framework) that are funded by parties, deposits, or by direct transfers (e.g. a portion of fees, or from insurance pools at market closure).
+The Network Treasury is a set of accounts (up to 1 per asset supported by the network via the asset framework) that are funded by parties, deposits, by direct transfers (e.g. a portion of fees) or [governance transfers](./0028-GOVE-governance.md#5-transfers-initiated-by-governance).
 The purpose of the Network Treasury is to allow funding to be allocated to rewards, grants, etc. by token holder governance.
 
-The funds in the network treasury are spent by being transferred to another account, either by direct governance action (i.e. voting on a specific proposed transfer) or by mechanisms controlled by governance, such as a periodic transfer, which may have network parameters that control the frequency of transfers, calculation of the amount, etc..
-These transfers may be to a party general account, reward pool account, or insurance pool account for a market.
+The funds in the network treasury are spent by being transferred to another account, either by direct governance action (i.e. voting on a specific proposed transfer) or by mechanisms controlled by governance, such as a periodic transfer, which may have network parameters that control the frequency of transfers, calculation of the amount, etc.
+These transfers may be to a party general account, reward pool account, general insurance pool or insurance pool account for a market.
 There is no requirement or expectation of symmetry between funds flowing into the Network Treasury and funds flowing out.
 For example, the treasury account may be seeded by funds held by the team or investors, or through the issuance of tokens at various irregular points in time, and these funds may then be allocated to incentives/rewards, grants, etc. on a different schedule.
 
@@ -17,9 +17,9 @@ Funding is how the on-chain treasury account receives collateral to be allocated
 A transfer may specify the network treasury as the destination of the transfer.
 The funds, if available would be transferred instantly and irrevocably to the network treasury account for the asset in question (the treasury account for the asset will be created if it doesn’t exist).
 
-- Transfer from protocol mechanics: there may be a protocol feature such as the charging of fees or handling of expired insurance pool balances that specifies the Network Treasury as destination in a transfer. (Charging of fees is placeholder, currently not to be implemented.)
+- Transfer from protocol mechanics: there may be a protocol feature such as the charging of fees that specifies the Network Treasury as destination in a transfer. (Charging of fees is placeholder, currently not to be implemented.)
 
-- Transfer by governance: a [governance proposal](./0028-GOVE-governance.md) can be submitted to transfer funds from a market's insurance pool into the on chain treasury account for the asset.
+- Transfer by governance: a [governance proposal](./0028-GOVE-governance.md) can be submitted to transfer funds from the global or a market insurance pool into the on chain treasury account for the asset.
 
 - Transfer transaction: a transaction submitted to the network may request to transfer funds from the general account for an asset, controlled by the owner’s private key, to the Network Treasury. (see [transfers spec](./0057-TRAN-transfers.md))
 
@@ -38,7 +38,7 @@ In future a tax rate and/or inflation rate (controlled by governance) may be use
 
 ### Direct allocation by governance
 
-A governance proposal may be submitted to transfer funds on enactment from the on-chain treasury to certain account types. Please see [the governance spec](./0028-GOVE-governance.md) for a description of this.
+A governance proposal may be submitted to transfer funds on enactment from the on-chain treasury to certain account types. Such a transfer may be one-off or recurring. There is no other way to withdraw the funds from the network treasury account. Please see [the governance spec](./0028-GOVE-governance.md#5-transfers-initiated-by-governance) for a description of this.
 
 ## Acceptance criteria
 
