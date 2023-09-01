@@ -25,6 +25,8 @@ Note that a party can also associate the governance / staking asset via the [Veg
 
 One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
+Note that both the global insurance pool and rewards account use the same `0` address. Account type is used to differentiate where the funds should go into when making a transfer or deposit.
+
 ## Summary
 
 Accounts are used on Vega to maintain a record of the amount of collateral that is deposited and deployed by participants in the market.
