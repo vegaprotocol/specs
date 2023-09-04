@@ -4,7 +4,7 @@ The Network Treasury is a set of accounts (up to 1 per asset supported by the ne
 The purpose of the Network Treasury is to allow funding to be allocated to rewards, grants, etc. by token holder governance.
 
 The funds in the network treasury are spent by being transferred to another account, either by direct governance action (i.e. voting on a specific proposed transfer) or by mechanisms controlled by governance, such as a periodic transfer, which may have network parameters that control the frequency of transfers, calculation of the amount, etc.
-These transfers may be to a party general account, reward pool account, general insurance pool or insurance pool account for a market.
+These transfers may be to a party general account, reward pool account, global insurance pool or insurance pool account for a market.
 There is no requirement or expectation of symmetry between funds flowing into the Network Treasury and funds flowing out.
 For example, the treasury account may be seeded by funds held by the team or investors, or through the issuance of tokens at various irregular points in time, and these funds may then be allocated to incentives/rewards, grants, etc. on a different schedule.
 
