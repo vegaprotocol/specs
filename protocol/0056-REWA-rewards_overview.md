@@ -178,7 +178,6 @@ All metrics (except [market creation](#market-creation-reward-metrics)) can be u
 
 A team’s reward metric is the weighted average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
 
-
 ## Reward accounts
 
 Trading reward accounts are defined by a hash of the fields specified in the recurring transfer funding the reward account (see the [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) spec for relevant details about each field). This allows multiple recurring transfers to fund the same reward pool.

@@ -1,6 +1,6 @@
 # Network Treasury
 
-The Network Treasury is a set of accounts (up to 1 per asset supported by the network via the asset framework) that are funded by parties, deposits, by direct transfers (e.g. a portion of fees) or [governance transfers](./0028-GOVE-governance.md#5-transfers-initiated-by-governance).
+The Network Treasury is a set of accounts (up to 1 per asset supported by the network via the asset framework) that are funded by parties, deposits, by direct transfers (e.g. a portion of fees) or [governance transfers](./0028-GOVE-governance.md#5-transfers-initiated-by-governance). Please note that the network treasury, rewards accounts (including the global rewards account) and the global insurance pool are 3 separate concepts and funds can only flow between any of these 3 accounts via governance transfers. Please refer to the [accounts spec](./0013-ACCT-accounts.md) for more details.
 The purpose of the Network Treasury is to allow funding to be allocated to rewards, grants, etc. by token holder governance.
 
 The funds in the network treasury are spent by being transferred to another account, either by direct governance action (i.e. voting on a specific proposed transfer) or by mechanisms controlled by governance, such as a periodic transfer, which may have network parameters that control the frequency of transfers, calculation of the amount, etc.
