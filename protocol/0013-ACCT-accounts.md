@@ -21,7 +21,7 @@ Note that a party can also associate the governance / staking asset via the [Veg
 1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md#market-insurance-pool) for any market.
 1. [Liquidity fee pool](0042-LIQF-setting_fees_and_rewarding_lps.md) for any market.
 1. [Infrastructure fee pool](0029-FEES-fees.md) for any asset.
-1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [global rewards account](0056-REWA-rewards_overview.md#validator-ranking-metric) used for supplementary (on top of infrastructure fee split) validator rewards.
+1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [global rewards account](0056-REWA-rewards_overview.md#validator-ranking-metric) used for supplementary (on top of infrastructure fee split) validator rewards.
 
 One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
