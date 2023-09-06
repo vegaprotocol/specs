@@ -25,7 +25,7 @@ Note that a party can also associate the governance / staking asset via the [Veg
 
 One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
 
-Note that both the network treasury and the global rewards account use the same `0` address. Account type is used to differentiate where the funds should go into when making a transfer or deposit.
+Note that both the network treasury and the global rewards account use the same `0` address. Account type is used to differentiate where the funds should go into when making a transfer. The deposits made to the `0` account get credited to the global rewards account.
 
 ## Summary
 
@@ -176,10 +176,9 @@ One key difference with staking accounts is that the collateral is not held in a
 
 ### Network treasury
 
-- It is possible to deposit funds from Ethereum directly into the network treasury account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-026" href="#0013-ACCT-026">0013-ACCT-026</a>)
-- It is possible to transfer funds from a Vega general account to the network treasury account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-027" href="#0013-ACCT-027">0013-ACCT-027</a>)
+- It is possible to transfer funds from a Vega general account to the network treasury account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-026" href="#0013-ACCT-026">0013-ACCT-026</a>)
 
 ### Global rewards account
 
-- It is possible to deposit funds from Ethereum directly into the global rewards account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-028" href="#0013-ACCT-028">0013-ACCT-028</a>)
-- It is possible to transfer funds from a Vega general account to the global rewards account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-029" href="#0013-ACCT-029">0013-ACCT-029</a>)
+- It is possible to deposit funds from Ethereum directly into the global rewards account by specifying the `0` Vega address. (<a name="0013-ACCT-027" href="#0013-ACCT-027">0013-ACCT-027</a>)
+- It is possible to transfer funds from a Vega general account to the global rewards account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-028" href="#0013-ACCT-028">0013-ACCT-028</a>)
