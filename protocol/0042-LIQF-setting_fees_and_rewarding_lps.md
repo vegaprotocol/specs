@@ -297,9 +297,6 @@ $$
 
 Each LP further gets a performance bonus: $b_i \times B$ with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
 
-There is an example [google sheet for this step](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY/edit#gid=0); once we're sure we're happy let's transfer this to a fixed example.
-
-
 ### APIs for fee splits and payments
 
 - Each liquidity provider's equity-like share
@@ -396,3 +393,13 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 - With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should be transferred back into market's aggregate LP fee account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
 - With two liquidity providers, one with an effective penalty rate of `1` and earned fees of `n`, and the other with an effective rate of `0` and earned fees of `m`, the entirety of `n` should be transferred to the second liquidity provider as a bonus payment (<a name="0042-LIQF-045" href="#0042-LIQF-045">0042-LIQF-045</a>)
 - With only one liquidity provider, with an effective penalty rate of `0.5`, `50%` of their initially earned fees will be taken initially but will be entirely paid back to them as a bonus payment (<a name="0042-LIQF-046" href="#0042-LIQF-046">0042-LIQF-046</a>)
+
+### Transfers example
+
+Example 1, generated with [supplementary worksheet](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY) [internal only]. Values should match up to rounding used by `core` (<a name="0042-LIQF-055" href="#0042-LIQF-055">0042-LIQF-055</a>):
+| LP	|	penalty fraction | LP-per-market fee accounts balance | 1st transfer amt |	2nd (bonus) transfer amt |
+|	--- |	--------------	 | --------------	                    | --------------	  |	--------------	         |
+|	LP1	|	0	               | 1000	                              | 1000	            |	24673.94095	             |
+|	LP2	|	0.05	           | 100	                              | 95	              |	2344.02439	             |
+|	LP3	|	0.6	             | 7000	                              | 2800	            |	69087.03466	             |
+|	LP4	|	1	               | 91900	                            | 0	              |	0	                       |
