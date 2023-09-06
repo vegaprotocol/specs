@@ -1,6 +1,6 @@
 {
   "Iceberg Orders": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-elevator-1",
     "acs": [
       "0014-ORDT-039",
       "0014-ORDT-007",
@@ -39,7 +39,7 @@
     ]
   },
   "Stop Orders": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-elevator-1",
     "acs": [
       "0014-ORDT-041",
       "0014-ORDT-042",
@@ -83,7 +83,7 @@
     ]
   },
   "Successor Markets": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-elevator-1",
     "acs": [
       "0001-MKTF-006",
       "0001-MKTF-007",
@@ -126,8 +126,8 @@
       "0081-SUCM-035"
     ]
   },
-  "Governance Transfers": {
-    "milestone": "deployment-2",
+  "Transfers by governance": {
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0028-GOVE-073",
       "0028-GOVE-074",
@@ -187,8 +187,8 @@
       "0013-ACCT-028"
     ]
   },
-  "Perps": {
-    "milestone": "deployment-2",
+  "Perpetuals": {
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0001-MKTF-005",
       "0053-PERP-001",
@@ -203,6 +203,9 @@
       "0053-PERP-015",
       "0053-PERP-016",
       "0053-PERP-017",
+      "0053-PERP-018",
+      "0053-PERP-019",
+      "0053-PERP-020",
       "0043-MKTL-009",
       "0051-PROD-007",
       "0051-PROD-008",
@@ -231,7 +234,7 @@
     ]
   },
   "Ethereum Oracles": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0082-ETHD-001",
       "0082-ETHD-002",
@@ -276,7 +279,7 @@
     ]
   },
   "SLA": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0042-LIQF-032",
       "0042-LIQF-050",
@@ -295,6 +298,8 @@
       "0042-LIQF-044",
       "0042-LIQF-045",
       "0042-LIQF-046",
+      "0042-LIQF-053",
+      "0042-LIQF-054",
       "0044-LIME-057",
       "0044-LIME-058",
       "0044-LIME-059",
@@ -324,29 +329,61 @@
       "0044-LIME-032",
       "0044-LIME-033",
       "0044-LIME-034",
-      "0044-LIME-035",
       "0044-LIME-036",
+      "0044-LIME-061",
+      "0044-LIME-062",
       "0044-LIME-063",
+      "0044-LIME-064",
       "0044-LIME-065",
+      "0044-LIME-066",
       "0044-LIME-067",
+      "0044-LIME-068",
       "0044-LIME-069",
+      "0044-LIME-070",
       "0044-LIME-071",
+      "0044-LIME-072",
       "0044-LIME-073",
+      "0044-LIME-074",
       "0044-LIME-075",
+      "0044-LIME-076",
       "0044-LIME-077",
+      "0044-LIME-078",
       "0044-LIME-079",
+      "0044-LIME-080",
       "0044-LIME-081",
+      "0044-LIME-082",
+      "0044-LIME-083",
+      "0044-LIME-084",
+      "0044-LIME-085",
+      "0044-LIME-086",
+      "0044-LIME-087",
+      "0044-LIME-088",
+      "0044-LIME-089",
+      "0044-LIME-090",
+      "0044-LIME-091",
+      "0044-LIME-092",
+      "0044-LIME-093",
+      "0044-LIME-094",
+      "0044-LIME-095",
+      "0044-LIME-096",
+      "0044-LIME-097",
+      "0044-LIME-098",
+      "0044-LIME-099",
+      "0044-LIME-100",
+      "0044-LIME-101",
+      "0044-LIME-102",
       "0026-AUCT-016",
       "0026-AUCT-017",
       "0026-AUCT-018",
       "0026-AUCT-019",
       "0026-AUCT-020",
       "0026-AUCT-021",
-      "0026-AUCT-022"
+      "0026-AUCT-022",
+      "0034-PROB-004"
     ]
   },
   "Batch change proposals": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0028-GOVE-145",
       "0028-GOVE-146",
@@ -356,7 +393,7 @@
     ]
   },
   "Referral program": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0083-RFPR-001",
       "0083-RFPR-002",
@@ -425,7 +462,7 @@
     ]
   },
   "Market governance": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0028-GOVE-064",
       "0028-GOVE-069",
@@ -451,7 +488,7 @@
     ]
   },
   "Spot": {
-    "milestone": "deployment-3",
+    "milestone": "plazzo",
     "acs": [
       "0080-SPOT-001",
       "0080-SPOT-002",
@@ -683,7 +720,7 @@
       "0033-OCAN-015",
       "0033-OCAN-016",
       "0033-OCAN-017",
-      "0034-PROB-002",
+      "0034-PROB-003",
       "0034-PROB-008",
       "0034-PROB-010",
       "0039-MKTD-020",
