@@ -91,27 +91,13 @@ The delegator cannot move the tokens before the epoch ends, they remain locked.
 ## Undelegate now
 
 The action can be announced at any time and is executed immediately following the block
-it is announced in. However, the stake is still counted as delegated to the validator until
-the last block of the epoch, though the delegator rewards are not paid to the delegator, but
-into an appropriate vega pool (the insurance pool, for example). The tokens are
-released though, and the delegator can transfer their tokens in the smart contract.
+it is announced in. The delegator is no longer considered for rewards. The stake is no longer counted as delegated to the previously chosen validator.
+The tokens are released immediately, and the delegator can transfer their tokens in the smart contract.
 
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring
 any interaction between the smart contract and the details of the delegation system.
 This also allows the delegator to change their mind about a delegation before it is
 activated.
-
-## Undelegate in anger
-
-This action is announced at any time and is executed immediately following the block it
-is announced in. The delegator loses the delegated stake and the income with it, as well
-as their voting weight. As this is not required for first mainnet, and involves more subtleties
-(weights need to be recalculated on the fly, there may be a mixture of normal undelegated
-and undelegate in anger, ...), this feature does not need to be implemented right away for
-Mainnet alpha.
-
-Rationale: A validator is found to have done something outrageous, and needs to be removed
-right away.
 
 ## Undelegation of locked stake
 
