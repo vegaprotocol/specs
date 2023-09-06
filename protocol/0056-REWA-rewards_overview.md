@@ -6,7 +6,6 @@ These rewards operate in addition to the main protocol economic incentives which
 These fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](./0061-REWP-pos_rewards.md).
 
 The additional rewards described here can be funded arbitrarily by users of the network and may be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
-Note that transfers via governance, including to fund rewards, is a post-Oregon Trail feature.
 
 Note that validator rewards (and the reward account for those) is covered in [validator rewards](./0061-REWP-pos_rewards.md) and is separate from the trading reward framework described here.
 
@@ -24,7 +23,7 @@ At a high level, rewards work as follows:
 
 At the end of the epoch:
 
-1. Recurring reward transfers (set up by the parties funding the rewards) are made to the reward account(s) for a specific reward type, for one or more markets in scope where the total reward metric is `>0`. See [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts).
+1. Recurring reward transfers (set up by the parties funding the rewards or via governance) are made to the reward account(s) for a specific reward type, for one or more markets in scope where the total reward metric is `>0`. See [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts).
 1. Then the entire balance of each reward account is distributed amongst entities with a non-zero reward metric for that reward type and market using the mechanism specified in the recurring transfer.
 1. Distributed rewards are transferred to a [vesting account](./0085-RVST-rewards_vesting.md).
 
@@ -39,7 +38,7 @@ Metrics only need to be calculated where the [market, reward type] reward accoun
 Reward metrics will be calculated once for each party/market combination in the reward metric asset which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market.
 This is the original precision for the metric source data.
 
-For reward metrics relating to trading, an individual must meet the [staking requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) **AND** [notional time-weighted average position requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts)) set in the recurring transfer. If they do not then their reward metric is set to `0`. Note, these requirements do not apply to the [validator ranking metric](#returns-volatility-metric) or the [market creation reward metric](#market-creation-reward-metrics).
+For reward metrics relating to trading, an individual must meet the [staking requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) **AND** [notional time-weighted average position requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts)) set in the recurring transfer. If they do not then their reward metric is set to `0`. Note, these requirements do not apply to the [validator ranking metric](#validator-ranking-metric) or the [market creation reward metric](#market-creation-reward-metrics).
 
 For reward transfers where the [scope](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) is set to teams, each party must meet the minimum time in team requirement. That is, given a party has been in a team for $N$ epochs, if $N$ is strictly less than the network parameter `rewards.minimumEpochsInTeam` (an integer defaulting to `0`) their reward metric is set to `0`.
 
@@ -132,6 +131,16 @@ If a party **is not** a consensus or standby validator, their reward metric is s
 
 $$m_v = 0$$
 
+A specialised global rewards account type is used for these rewards.
+
+The share of the reward attributed to the given validator gets further split between the validator itself and its delegators as outlined in [PoS rewards spec](./0061-REWP-pos_rewards.md)
+
+#### Maximum payout per participant
+
+For validator ranking metric based rewards the payments are subject to `reward.staking.delegation.maxPayoutPerParticipant`.
+The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant receives their due, capped by the max. The unpaid amount remain in the treasury.
+Setting this to `0` means no cap.
+
 ### Market creation reward metrics
 
 There will be a single market creation reward metric and reward type.
@@ -168,7 +177,6 @@ Note this reward metric **is not** available for team rewards.
 All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
 
 A team’s reward metric is the weighted average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
-
 
 ## Reward accounts
 

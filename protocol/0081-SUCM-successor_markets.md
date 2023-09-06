@@ -11,7 +11,7 @@ For [details of virtual stake calculation see how LPs are rewarded](./0042-LIQF-
 Many derivative markets would terminate and settle periodically but would be part of a lineage.
 Think e.g. of a [cash-settled future](./0016-PFUT-product_builtin_future.md) written on the same underlying that settles every three months.
 Successor markets are a feature that allows for markets to have a lineage, but most importantly allows LPs to keep their virtual stake built up on one market (parent) in the lineage to be transferred to the next one (successor).
-Moreover, part of the insurance pool of a parent market can be earmarked for transfer to the successor market instead of being distributed network wide (other markets in same settlement asset, network treasury).
+Moreover, part of the insurance pool of a parent market can be earmarked for transfer to the successor market instead of being distributed network wide (other markets in same settlement asset, global insurance pool).
 
 ## Relevant network / market parameters
 
@@ -76,7 +76,7 @@ Two proposals that name the same parent can be submitted. Both can be approved b
 
 A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction before `parent settlement time + market.liquidity.successorLaunchWindowLength` then the virtual stakes are carried over and the relevant fraction of the insurance pool is transferred over (<a name="0081-SUCM-006" href="#0081-SUCM-006">0081-SUCM-006</a>).
 
-A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.liquidity.successorLaunchWindowLength` then no virtual stakes are carried over, the successor market is not a successor market anymore, it's just a market like any other, and the insurance pool balance will be distributed equally across all markets with the same settlement asset, including those markets which are still in opening auction (<a name="0081-SUCM-007" href="#0081-SUCM-007">0081-SUCM-007</a>)
+A new market proposal sets parent market Id to a market that has settled. The parent market has non-zero insurance pool balance. If the new market clears the opening auction after `parent settlement time + market.liquidity.successorLaunchWindowLength` then no virtual stakes are carried over, the successor market is not a successor market anymore, it's just a market like any other, and the insurance pool balance will be distributed equally across the global insurance pool and all markets with the same settlement asset, including those markets which are still in opening auction (<a name="0081-SUCM-035" href="#0081-SUCM-035">0081-SUCM-035</a>)
 
 Successor markets cannot be enacted if the parent market is still in the "proposed" state. Successor market proposals can be submitted when the parent market is still in proposed state. When the voting period for the successor market ends then either: a) the parent market is already enacted in which case the successor market moves from "proposed" in to opening auction/"pending" state. Or the parent market is still in "proposed" state in which case successor market is rejected. (<a name="0081-SUCM-008" href="#0081-SUCM-008">0081-SUCM-008</a>)
 

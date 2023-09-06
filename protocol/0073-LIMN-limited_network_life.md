@@ -30,7 +30,7 @@ Information to store:
 
 - All [network parameters](../protocol/0054-NETP-network_parameters.md), including those defined [below](#network-parameters).
 - All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition).
-Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_overview.md) and [LP committed liquidity](./0044-LIME-lp_mechanics.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market.
+- Insurance pool balances (global for each asset and per-market), [Reward account balance](../protocol/0056-REWA-rewards_overview.md) and [LP committed liquidity](./0044-LIME-lp_mechanics.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market.
 - All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted* but not those where the market already started trading and reached *trading terminated* state.
 - All [asset proposals](../protocol/0028-GOVE-governance.md) that have been *accepted*.
 - All delegation info.
@@ -382,7 +382,7 @@ for product spot: (<a name="0073-LIMN-082" href="#0073-LIMN-082">0073-LIMN-082</
 ### Test case 14: Market with trading terminated is not restored, collateral moved correctly
 
 1. Set LP fee distribution time step to non-zero value.
-1. Propose, enact, trade in the market, close out distressed party so that insurance pool balance > 0, submit trading terminated.
+1. Propose, enact, trade in the market, close out distressed party so that market's insurance pool balance > 0, submit trading terminated.
 1. System saves LNL checkpoint at a time when undistributed LP fees for the market are > 0.
 1. Restart Vega, load LNL checkpoint.
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>). For product spot: (<a name="0073-LIMN-083" href="#0073-LIMN-083">0073-LIMN-083</a>)
@@ -390,7 +390,7 @@ for product spot: (<a name="0073-LIMN-082" href="#0073-LIMN-082">0073-LIMN-082</
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-031" href="#0073-LIMN-031">0073-LIMN-031</a>)
 1. In Spot market, for parties that had holdings in the holding account on the market this is now in their general account for the asset.  (<a name="0073-LIMN-084" href="#0073-LIMN-084">0073-LIMN-084</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>). For product spot: (<a name="0073-LIMN-085" href="#0073-LIMN-085">0073-LIMN-085</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-033" href="#0073-LIMN-033">0073-LIMN-033</a>)
+1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-112" href="#0073-LIMN-112">0073-LIMN-112</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-034" href="#0073-LIMN-034">0073-LIMN-034</a>). For product spot: (<a name="0073-LIMN-086" href="#0073-LIMN-086">0073-LIMN-086</a>)
 
 ### Test case 15: Market with trading terminated that settled is not restored, collateral moved correctly
@@ -402,7 +402,7 @@ for product spot: (<a name="0073-LIMN-082" href="#0073-LIMN-082">0073-LIMN-082</
 1. If the market exists in the data node it is marked as settled with correct settlement data. (<a name="0073-LIMN-041" href="#0073-LIMN-041">0073-LIMN-041</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>)
 1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset.  (<a name="0073-LIMN-088" href="#0073-LIMN-088">0073-LIMN-088</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-043" href="#0073-LIMN-043">0073-LIMN-043</a>)
+1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-113" href="#0073-LIMN-113">0073-LIMN-113</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>). For product spot: (<a name="0073-LIMN-089" href="#0073-LIMN-089">0073-LIMN-089</a>)
 
 ### Test case 16: Markets can be settled and terminated after restore as proposed
@@ -425,7 +425,7 @@ for product spot: (<a name="0073-LIMN-082" href="#0073-LIMN-082">0073-LIMN-082</
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
 1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset. (<a name="0073-LIMN-094" href="#0073-LIMN-094">0073-LIMN-094</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>). For product spot: (<a name="0073-LIMN-095" href="#0073-LIMN-095">0073-LIMN-095</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-064" href="#0073-LIMN-064">0073-LIMN-064</a>)
+1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-114" href="#0073-LIMN-114">0073-LIMN-114</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>). For product spot: (<a name="0073-LIMN-096" href="#0073-LIMN-096">0073-LIMN-096</a>)
 
 ### Test case 18: market definition is the same pre and post LNL restore
