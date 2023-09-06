@@ -166,8 +166,8 @@ Select {
 
 ### API
 
-1. Ability to query oracle data sources via an API endpoint (REST, gRPC and graphQL) - filters should be available for data source - internal OR external, status - Active / Inactive / Expired (<a name="0082-ETHD-038" href="#0082-ETHD-038">0082-ETHD-038</a>)
-2. Ability to query historic data sent by an oracle data source and processed by vega network (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
+1. Ability to query data source specs defined for ethereum oracle sources, for settlement and termination, via an API endpoint (REST, gRPC and graphQL) - filters should be available for data source - internal OR external, status - Active / Inactive / Expired (<a name="0082-ETHD-038" href="#0082-ETHD-038">0082-ETHD-038</a>)
+2. Ability to query historic data sent by an ethereum oracle source, for settlement and termination, and processed by a market in vega network (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
 
 ### Checkpoints
 
