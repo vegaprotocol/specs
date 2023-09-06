@@ -230,7 +230,6 @@
       "0019-MCAL-023"
     ]
   },
-
   "Ethereum Oracles": {
     "milestone": "deployment-2",
     "acs": [
@@ -271,7 +270,9 @@
       "0082-ETHD-045",
       "0082-ETHD-047",
       "0082-ETHD-048",
-      "0082-ETHD-049"
+      "0082-ETHD-049",
+      "0082-ETHD-050",
+      "0082-ETHD-051"
     ]
   },
   "SLA": {
