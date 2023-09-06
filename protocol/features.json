@@ -1,6 +1,6 @@
 {
   "Iceberg Orders": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-elevator-1",
     "acs": [
       "0014-ORDT-039",
       "0014-ORDT-007",
@@ -39,7 +39,7 @@
     ]
   },
   "Stop Orders": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-elevator-1",
     "acs": [
       "0014-ORDT-041",
       "0014-ORDT-042",
@@ -83,7 +83,7 @@
     ]
   },
   "Successor Markets": {
-    "milestone": "deployment-1",
+    "milestone": "cosmic-elevator-1",
     "acs": [
       "0001-MKTF-006",
       "0001-MKTF-007",
@@ -126,8 +126,8 @@
       "0081-SUCM-035"
     ]
   },
-  "Governance Transfers": {
-    "milestone": "deployment-2",
+  "Transfers by governance": {
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0028-GOVE-073",
       "0028-GOVE-074",
@@ -187,8 +187,8 @@
       "0013-ACCT-028"
     ]
   },
-  "Perps": {
-    "milestone": "deployment-2",
+  "Perpetuals": {
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0001-MKTF-005",
       "0053-PERP-001",
@@ -203,6 +203,9 @@
       "0053-PERP-015",
       "0053-PERP-016",
       "0053-PERP-017",
+      "0053-PERP-018",
+      "0053-PERP-019",
+      "0053-PERP-020",
       "0043-MKTL-009",
       "0051-PROD-007",
       "0051-PROD-008",
@@ -231,7 +234,7 @@
     ]
   },
   "Ethereum Oracles": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0082-ETHD-001",
       "0082-ETHD-002",
@@ -276,7 +279,7 @@
     ]
   },
   "SLA": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0042-LIQF-032",
       "0042-LIQF-050",
@@ -342,11 +345,12 @@
       "0026-AUCT-019",
       "0026-AUCT-020",
       "0026-AUCT-021",
-      "0026-AUCT-022"
+      "0026-AUCT-022",
+      "0034-PROB-004"
     ]
   },
   "Batch change proposals": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0028-GOVE-145",
       "0028-GOVE-146",
@@ -356,7 +360,7 @@
     ]
   },
   "Referral program": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0083-RFPR-001",
       "0083-RFPR-002",
@@ -425,7 +429,7 @@
     ]
   },
   "Market governance": {
-    "milestone": "deployment-2",
+    "milestone": "cosmic-elevator-2",
     "acs": [
       "0028-GOVE-064",
       "0028-GOVE-069",
@@ -451,7 +455,7 @@
     ]
   },
   "Spot": {
-    "milestone": "deployment-3",
+    "milestone": "plazzo",
     "acs": [
       "0080-SPOT-001",
       "0080-SPOT-002",
@@ -683,7 +687,7 @@
       "0033-OCAN-015",
       "0033-OCAN-016",
       "0033-OCAN-017",
-      "0034-PROB-002",
+      "0034-PROB-003",
       "0034-PROB-008",
       "0034-PROB-010",
       "0039-MKTD-020",
