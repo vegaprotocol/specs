@@ -260,7 +260,7 @@ _Auctions:_ if this occurs at the transition from auction mode to continuous tra
 
 The network will:
 
-1. _As part of the normal collateral "search" process:_ Access first the liquidity provider's bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of both bond accounts will be used. Note that this means that the transfer request should include the liquidity provider's bond account in the list of accounts to search, and that these accounts would always be emptied before any insurance pool funds are used or loss socialisation occurs.
+1. _As part of the normal collateral "search" process:_ Access first the liquidity provider's bond account to make up the shortfall. If there is insufficient funds to cover this amount, the full balance of both bond accounts will be used. Note that this means that the transfer request should include the liquidity provider's bond account in the list of accounts to search, and that these accounts would always be emptied before any market insurance pool funds are used or loss socialisation occurs.
 
 1. _If there was a shortfall and the bond account was accessed:_ Transfer an amount equal to the `market.liquidity.bondPenaltyParameter` calculated above from the liquidity provider's bond account to the market's insurance pool. If there are insufficient funds in the bond account and the bond account, the full amount will be used and the remainder of the penalty (or as much as possible) should be transferred from the liquidity provider's margin account.
 

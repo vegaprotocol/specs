@@ -2,7 +2,7 @@
 
 This describes the SweetWater requirements for calculation and distribution of rewards to delegators and validators. For more information on the overall approach, please see the relevant research document.
 
-This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on_chain_treasury.md) as well rewards resulting from trading via [infrastructure fees](./0029-FEES-fees.md).
+This applies to the rewards resulting from trading via [infrastructure fees](./0029-FEES-fees.md).
 
 ## Network parameters used for `score_val` calculation
 
@@ -22,7 +22,7 @@ This applies both the rewards coming from the [on-chain-treasury](./0055-TREA-on
 
 ## Calculation
 
-This applies to the on-chain-treasury for each asset as well as network infrastructure fee pool for each asset.
+This applies to the network infrastructure fee pool for each asset.
 At the end of an [epoch](./0050-EPOC-epochs.md), payments are calculated.
 
 As step *zero*: Vega keeps track of validators currently on the Ethereum multisig contract by knowing the initial state and by observing `validator added` and `validator removed` events emitted by the contract, see [multisig ethereum contract](./0033-OCAN-cancel_orders.md).
@@ -49,7 +49,7 @@ The following formulas then apply to both primary and ersatz validators, where '
 ## For each validator we then do
 
 1. First, `validatorScore` is calculated to obtain the relative weight of the validator given `stake_val` is  both own and delegated tokens, that is `stake_val = allDelegatedTokens + validatorsOwnTokens`.
-Here `allDelegatedTokens` is the count of the tokes delegated to this validator.
+Here `allDelegatedTokens` is the count of the tokens delegated to this validator.
 Note `validatorScore` also depends on the other network parameters, see below where the exact `validatorScore` function is defined.
 1. Obtain the performance score as per [validator performance specification](./0064-VALP-validator_performance_based_rewards.md). Update `validatorScore <- validatorScore x performance_score`.
 1. The fraction of the total available reward that goes to a node (some of this will be for the validator , some is for their delegators) is then `nodeAmount := stakingRewardAmtForEpoch x validatorScore / sumAllValidatorScores` where `sumAllValidatorScores` is the sum of all scores achieved by the validators. Note that this is subject to `min_own_stake` criteria being met. (see below).
@@ -63,12 +63,6 @@ Each delegator should now receive `delegatorTokens / (allDelegatedTokens + valid
 ### Minimum validator stake
 
 If the validator (i.e. the associated key) does not have sufficient stake self-delegated (at least the network parameter `min_own_stake`), then the reward for the validator is set to zero. The corresponding amount is kept by the network, not distributed among the other validators. Note this only applies to the part of the reward attributable directly to such a validator, its delegators should still receive their rewards. If a Vega key which defines a validator delegates any amount to a different validator then the reward associated with that delegation will be paid out just like for any other delegator.
-
-### Maximum payout per participant
-
-If the reward pool in question is the on-chain treasury for the staking and governance asset then payments are subject to `reward.staking.delegation.maxPayoutPerParticipant`.
-The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant receives their due, capped by the max. The unpaid amount remain in the treasury.
-Setting this to `0` means no cap.
 
 ## `validatorScore` functions
 
