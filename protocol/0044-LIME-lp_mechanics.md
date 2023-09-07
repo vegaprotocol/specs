@@ -334,7 +334,7 @@ In the case of spot markets it will be transferred into the network treasury for
 - For a futures market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if the following transactions occur:
 
   - `LP1` places a transaction to reduce their stake by `30`
-  - `LP2`  places a transaction to reduce their stake by `100`,
+  - `LP2`  places a transaction to reduce their stake by `100`, and then wait till end of the epoch so the engine can pick up the reduction of their stake,
   - `LP1` places a transaction to update their reduction to `100`
   `LP2` will receive a full `100` stake back whilst `LP1` will receive a total of `85` back into their general account with `15` transferred into the market's insurance account  (<a name="0044-LIME-026" href="#0044-LIME-026">0044-LIME-026</a>)
 - When LP is committed they are obliged to provide liquidity equal to their commitment size on both sides of the order book (<a name="0044-LIME-027" href="#0044-LIME-027">0044-LIME-027</a>)
