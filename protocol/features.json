@@ -450,6 +450,33 @@
       "0029-FEES-028"
     ]
   },
+"Rewards": {
+    "milestone": "cosmic-elevator-2",
+    "acs": [
+      "0085-RVST-001",
+      "0085-RVST-002",
+      "0085-RVST-003",
+      "0085-RVST-004",
+      "0085-RVST-005",
+      "0085-RVST-006",
+      "0085-RVST-007",
+      "0085-RVST-008",
+      "0085-RVST-009",
+      "0085-RVST-010",
+      "0085-RVST-011",
+      "0085-RVST-012",
+      "0085-RVST-013",
+      "0086-ASPR-001",
+      "0086-ASPR-002",
+      "0086-ASPR-003",
+      "0086-ASPR-004",
+      "0086-ASPR-005",
+      "0086-ASPR-006",
+      "0086-ASPR-007",
+      "0086-ASPR-008",
+      "0086-ASPR-009"
+    ]
+  },
   "Market governance": {
     "milestone": "deployment-2",
     "acs": [
