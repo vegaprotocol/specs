@@ -94,8 +94,8 @@ Must expose the following:
 
 ### Vesting mechanics
 
-1. If a party has unlocked rewards in a vesting account (expressed in quantum) strictly greater than the network parameter `rewards.vesting.minimumTransfer`. Rewards should be transferred to the respective vested account for the asset at the end of the epoch as per the formula defined in the specification. (<a name="0085-RVST-009" href="#0085-RVST-009">0085-RVST-009</a>)
-1. If a party has unlocked rewards in a vesting account (expressed in quantum) less than or equal to the network parameter `rewards.vesting.minimumTransfer`. The entire balance should be transferred to the respective vested account for the asset at the end of the epoch. (<a name="0085-RVST-010" href="#0085-RVST-010">0085-RVST-010</a>)
+1. If a party has unlocked rewards in a vesting account (expressed in quantum) strictly greater than the network parameter `rewards.vesting.minimumTransfer` then rewards should be transferred to the respective vested account for the asset at the end of the epoch as per the formula defined in the specification. (<a name="0085-RVST-009" href="#0085-RVST-009">0085-RVST-009</a>)
+1. If a party has unlocked rewards in a vesting account (expressed in quantum) less than or equal to the network parameter `rewards.vesting.minimumTransfer` then the entire balance should be transferred to the respective vested account for the asset at the end of the epoch. (<a name="0085-RVST-010" href="#0085-RVST-010">0085-RVST-010</a>)
 1. Locked rewards in the vesting account should not start vesting un till the lock period has expired. (<a name="0085-RVST-011" href="#0085-RVST-011">0085-RVST-011</a>)
 
 ### Rewards bonus multiplier

@@ -128,13 +128,13 @@ Must expose the following:
     - their notional open volume summed across all markets (in quantum) was strictly greater than `rewards.activityStreak.minQuantumOpenNotionalVolume` at any point in the epoch. (<a name="0086-ASPR-004" href="#0086-ASPR-004">0086-ASPR-004</a>)
     - their notional trade volume summed across all markets (in quantum) was strictly greater than `rewards.activityStreak.minQuantumTradeVolume` at the end of the epoch. (<a name="0086-ASPR-005" href="#0086-ASPR-005">0086-ASPR-005</a>)
 
-1. At the end of an epoch, before rewards are distributed, if a party was deemed active, their `inactivity_streak` should be reset to `0`.
+1. At the end of an epoch, before rewards are distributed, if a party was deemed active then their `inactivity_streak` should be reset to `0`.
 1. At the end of an epoch, before rewards are distributed, a parties inactivity streak is incremented if they fulfil **both** of the following conditions: (<a name="0086-ASPR-006" href="#0086-ASPR-006">0086-ASPR-006</a>)
 
     - their notional open volume summed across all markets (in quantum) was less than `rewards.activityStreak.minQuantumOpenNotionalVolume` at any point in the epoch.
     - their notional trade volume summed across all markets (in quantum) was less than `rewards.activityStreak.minQuantumTradeVolume` at the end of the epoch.
 
-1. At the end of an epoch if a party was deemed inactive, their `activity_streak` should be reset to `0` only if after incrementing their `inactivity_streak` it is greater than `rewards.activityStreak.inactivityLimit`. (<a name="0086-ASPR-007" href="#0086-ASPR-007">0086-ASPR-007</a>)
+1. At the end of an epoch if a party was deemed inactive and after incrementing their `inactivity_streak` it is greater than `rewards.activityStreak.inactivityLimit` then their `activity_streak` should be reset to `0`. (<a name="0086-ASPR-007" href="#0086-ASPR-007">0086-ASPR-007</a>)
 
 ### Setting activity benefits
 
