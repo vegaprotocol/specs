@@ -140,3 +140,4 @@ Must expose the following:
 
 1. At the end of the epoch, before rewards are distributed, the parties `reward_distribution_activity_multiplier` should be set equal to the value in the highest tier where their activity streak is greater or equal than the `minimum_activity_streak`. (<a name="0086-ASPR-008" href="#0086-ASPR-008">0086-ASPR-008</a>)
 1. At the end of the epoch, before rewards are distributed, the parties `reward_vesting_activity_multiplier` should be set equal to the value in the highest tier where their `activity_streak` is greater or equal than the `minimum_activity_streak`. (<a name="0086-ASPR-009" href="#0086-ASPR-009">0086-ASPR-009</a>)
+1. Assuming all parties perform equally, a party with a greater `reward_distribution_activity_multiplier` should receive a larger share of a reward pool. (<a name="0085-ASPR-014" href="#0085-ASPR-010">0085-ASPR-010</a>)
