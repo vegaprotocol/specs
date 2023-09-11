@@ -1,6 +1,6 @@
 {
   "Iceberg Orders": {
-    "milestone": "cosmic-elevator-1",
+    "milestone": "deployment-1",
     "acs": [
       "0014-ORDT-039",
       "0014-ORDT-007",
@@ -39,7 +39,7 @@
     ]
   },
   "Stop Orders": {
-    "milestone": "cosmic-elevator-1",
+    "milestone": "deployment-1",
     "acs": [
       "0014-ORDT-041",
       "0014-ORDT-042",
@@ -83,7 +83,7 @@
     ]
   },
   "Successor Markets": {
-    "milestone": "cosmic-elevator-1",
+    "milestone": "deployment-1",
     "acs": [
       "0001-MKTF-006",
       "0001-MKTF-007",
@@ -127,7 +127,7 @@
     ]
   },
   "Transfers by governance": {
-    "milestone": "cosmic-elevator-2",
+    "milestone": "deployment-2",
     "acs": [
       "0028-GOVE-073",
       "0028-GOVE-074",
@@ -188,7 +188,7 @@
     ]
   },
   "Perpetuals": {
-    "milestone": "cosmic-elevator-2",
+    "milestone": "deployment-2",
     "acs": [
       "0001-MKTF-005",
       "0001-MKTF-011",
@@ -236,7 +236,7 @@
     ]
   },
   "Ethereum Oracles": {
-    "milestone": "cosmic-elevator-2",
+    "milestone": "deployment-2",
     "acs": [
       "0082-ETHD-001",
       "0082-ETHD-002",
@@ -281,7 +281,7 @@
     ]
   },
   "SLA": {
-    "milestone": "cosmic-elevator-2",
+    "milestone": "deployment-2",
     "acs": [
       "0042-LIQF-032",
       "0042-LIQF-050",
@@ -375,7 +375,7 @@
     ]
   },
   "Batch change proposals": {
-    "milestone": "cosmic-elevator-2",
+    "milestone": "deployment-2",
     "acs": [
       "0028-GOVE-145",
       "0028-GOVE-146",
@@ -385,7 +385,7 @@
     ]
   },
   "Referral program": {
-    "milestone": "cosmic-elevator-2",
+    "milestone": "deployment-2",
     "acs": [
       "0083-RFPR-001",
       "0083-RFPR-002",
@@ -454,7 +454,7 @@
     ]
   },
   "Market governance": {
-    "milestone": "cosmic-elevator-2",
+    "milestone": "deployment-2",
     "acs": [
       "0028-GOVE-064",
       "0028-GOVE-069",
@@ -480,7 +480,7 @@
     ]
   },
   "Spot": {
-    "milestone": "plazzo",
+    "milestone": "deployment-3",
     "acs": [
       "0080-SPOT-001",
       "0080-SPOT-002",
