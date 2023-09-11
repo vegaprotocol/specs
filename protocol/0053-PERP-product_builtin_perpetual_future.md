@@ -81,11 +81,11 @@ Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.m
 
 ### 4.3. Periodic settlement
 
-When the `settlement_schedule` event is received we need to calculated the funding payment. Store the current vega time as `funding_period_end`.
+When the `settlement_schedule` event is received we need to calculate the funding payment. Store the current vega time as `funding_period_end`.
 
 If there are no oracle data points with a timestamp less than `funding_period_end` available then funding payment is skipped and `funding_period_start` gets overwritten with `funding_period_end`.
 
-If such points available then the calculations discussed in the following subsections get executed and funding payments get exchanged.
+If such points are available then the calculations discussed in the following subsections get executed and funding payments get exchanged.
 
 #### TWAP spot price calculation
 

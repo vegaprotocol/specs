@@ -191,6 +191,8 @@
     "milestone": "cosmic-elevator-2",
     "acs": [
       "0001-MKTF-005",
+      "0001-MKTF-011",
+      "0001-MKTF-012",
       "0053-PERP-001",
       "0053-PERP-002",
       "0053-PERP-003",
