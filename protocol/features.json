@@ -377,16 +377,6 @@
       "0042-LIQF-055"
     ]
   },
-  "Batch change proposals": {
-    "milestone": "deployment-2",
-    "acs": [
-      "0028-GOVE-145",
-      "0028-GOVE-146",
-      "0028-GOVE-147",
-      "0028-GOVE-148",
-      "0028-GOVE-149"
-    ]
-  },
   "Referral program": {
     "milestone": "deployment-2",
     "acs": [
@@ -484,6 +474,16 @@
       "0028-GOVE-150",
       "0028-GOVE-151",
       "0028-GOVE-152"
+    ]
+  },
+    "Batch change proposals": {
+    "milestone": "deployment-3",
+    "acs": [
+      "0028-GOVE-145",
+      "0028-GOVE-146",
+      "0028-GOVE-147",
+      "0028-GOVE-148",
+      "0028-GOVE-149"
     ]
   },
   "Spot": {
