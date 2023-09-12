@@ -159,24 +159,24 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 
 ### Applying benefit factors
 
-1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading.
+1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading. (<a name="0029-FEES-023" href="#0029-FEES-023">0029-FEES-023</a>)
     - `infrastructure_referral_fee_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
-1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction.
+1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction. (<a name="0029-FEES-024" href="#0029-FEES-024">0029-FEES-024</a>)
     - `infrastructure_fee_referral_discount`
     - `liquidity_fee_referral_discount`
-1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading.
+1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading. (<a name="0029-FEES-025" href="#0029-FEES-025">0029-FEES-025</a>)
     - `infrastructure_fee_referral_reward`
     - `liquidity_fee_referral_reward`
     - `maker_fee_referral_reward`
-1. Referrer rewards are correctly calculated and transferred for each fee component when exiting an auction.
+1. Referrer rewards are correctly calculated and transferred for each fee component when exiting an auction. (<a name="0029-FEES-026" href="#0029-FEES-026">0029-FEES-026</a>)
     - `infrastructure_fee_referral_reward`
     - `liquidity_fee_referral_reward`
-1. Volume discount rewards are correctly calculated and transferred for each taker fee component during continuous trading.
+1. Volume discount rewards are correctly calculated and transferred for each taker fee component during continuous trading. (<a name="0029-FEES-027" href="#0029-FEES-027">0029-FEES-027</a>)
     - `infrastructure_fee_volume_discount`
     - `liquidity_fee_volume_discount`
     - `maker_fee_volume_discount`
-1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction.
+1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction. (<a name="0029-FEES-028" href="#0029-FEES-028">0029-FEES-028</a>)
     - `infrastructure_fee_volume_discount`
     - `liquidity_fee_volume_discount`
