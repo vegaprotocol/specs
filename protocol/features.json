@@ -208,6 +208,9 @@
       "0053-PERP-018",
       "0053-PERP-019",
       "0053-PERP-020",
+      "0053-PERP-021",
+      "0053-PERP-022",
+      "0053-PERP-023",
       "0043-MKTL-009",
       "0051-PROD-007",
       "0051-PROD-008",
@@ -374,16 +377,6 @@
       "0042-LIQF-055"
     ]
   },
-  "Batch change proposals": {
-    "milestone": "deployment-2",
-    "acs": [
-      "0028-GOVE-145",
-      "0028-GOVE-146",
-      "0028-GOVE-147",
-      "0028-GOVE-148",
-      "0028-GOVE-149"
-    ]
-  },
   "Referral program": {
     "milestone": "deployment-2",
     "acs": [
@@ -414,7 +407,6 @@
       "0083-RFPR-025",
       "0083-RFPR-026",
       "0083-RFPR-027",
-      "0083-RFPR-028",
       "0083-RFPR-029",
       "0083-RFPR-030",
       "0083-RFPR-031",
@@ -434,7 +426,6 @@
       "0083-RFPR-045",
       "0083-RFPR-046",
       "0083-RFPR-047",
-      "0083-RFPR-048",
       "0084-VDPR-001",
       "0084-VDPR-002",
       "0084-VDPR-003",
@@ -450,7 +441,13 @@
       "0084-VDPR-013",
       "0084-VDPR-014",
       "0084-VDPR-015",
-      "0084-VDPR-016"
+      "0084-VDPR-016",
+      "0029-FEES-023",
+      "0029-FEES-024",
+      "0029-FEES-025",
+      "0029-FEES-026",
+      "0029-FEES-027",
+      "0029-FEES-028"
     ]
   },
   "Market governance": {
@@ -477,6 +474,16 @@
       "0028-GOVE-150",
       "0028-GOVE-151",
       "0028-GOVE-152"
+    ]
+  },
+    "Batch change proposals": {
+    "milestone": "deployment-3",
+    "acs": [
+      "0028-GOVE-145",
+      "0028-GOVE-146",
+      "0028-GOVE-147",
+      "0028-GOVE-148",
+      "0028-GOVE-149"
     ]
   },
   "Spot": {
