@@ -439,19 +439,29 @@ The Estimate Fees API should now calculate the following additional information:
 
 #### Updating a referral set
 
-1. If a party is currently a referrer, the party can **update** a referral set by submitting a signed `UpdateReferralSet` transaction (<a name="0083-RFPR-022" href="#0083-RFPR-022">0083-RFPR-022</a>).
-1. If a party submits an `UpdateReferralSet` transaction for a referral set they are not the referrer off, the transaction should be rejected (<a name="0083-RFPR-023" href="#0083-RFPR-023">0083-RFPR-023</a>).
-1. When updating a referral set a party should be able to designate it as a team. If they do, `team_details` and all nested fields are mandatory (<a name="0083-RFPR-024" href="#0083-RFPR-024">0083-RFPR-024</a>).
+1. If a party is currently the referrer of a referral set from which a team **has not** yet been created, the party can **create** a team by submitting a signed `UpdateReferralSet` transaction and setting `is_team=True` (<a name="0083-RFPR-022" href="#0083-RFPR-022">0083-RFPR-022</a>).
+1. If a party is currently the referrer of a referral set from which a team **has** already been created, the party can **update** a team by submitting a signed `UpdateReferralSet` transaction specifying the fields they want to update (<a name="0083-RFPR-023" href="#0083-RFPR-023">0083-RFPR-023</a>).
+1. If a party submits an `UpdateReferralSet` transaction for a referral set they are not the referrer off, the transaction should be rejected (<a name="0083-RFPR-024" href="#0083-RFPR-024">0083-RFPR-024</a>).
 
 #### Applying a referral code
 
-1. If a party **is not** currently a **referee**, the party can immediately become associated with a referral set by submitting a signed `ApplyReferralCode` transaction (<a name="0083-RFPR-025" href="#0083-RFPR-025">0083-RFPR-025</a>).
-1. If a party **is** currently a **referee**, the party can become associated with a new referral set (at the start of the next epoch) by submitting a signed `ApplyReferralCode` transaction (<a name="0083-RFPR-026" href="#0083-RFPR-026">0083-RFPR-026</a>).
-1. If a party **is** currently a **referee** and submits multiple `ApplyReferralCode` transactions in an epoch, the latest valid `ApplyReferralCode` transaction will be applied (<a name="0083-RFPR-027" href="#0083-RFPR-027">0083-RFPR-027</a>).
-1. If a party **is** currently a **referee** and becomes associated with a new referral set, their fees should still be paid out to the referrer of the original referral set they were associated with (<a name="0083-RFPR-048" href="#0083-RFPR-048">0083-RFPR-048</a>).
-1. If one or more of the following conditions are not met,  any `ApplyReferralCode` transaction should be rejected (<a name="0083-RFPR-028" href="#0083-RFPR-028">0083-RFPR-028</a>).
-    - a party must not currently be a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
-    - the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the `team` to closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
+1. If a party **is not** currently a **referee**, if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-025" href="#0083-RFPR-025">0083-RFPR-025</a>)
+
+    - the party **will** be added to the associated referral set.
+    - the party **will** be added to the associated team (if one exists and the team is not closed).
+
+1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-026" href="#0083-RFPR-026">0083-RFPR-026</a>)
+
+    - the party **will not**  be added to the associated referral set.
+    - the party **will** be added to the associated team (if one exists and the team is not closed).
+
+1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-027" href="#0083-RFPR-027">0083-RFPR-027</a>).
+
+    - the party **will** be added to the associated referral set.
+    - the party **will** be added to the associated team (if one exists and the team is not closed).
+
+1. An `ApplyReferralCode` transaction should be rejected if the party is a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
+1. An `ApplyReferralCode` transaction should be rejected if the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the team to be closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
 
 #### Epoch and running volumes
 
