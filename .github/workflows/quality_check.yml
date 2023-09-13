@@ -59,6 +59,13 @@ jobs:
       - name: "Check out"
         uses: actions/checkout@v3.5.3
 
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: "Run Check AC codes"
         run: |
           npx github:vegaprotocol/approbation check-codes --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}"
