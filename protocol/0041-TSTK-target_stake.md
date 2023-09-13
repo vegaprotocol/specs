@@ -12,8 +12,8 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 ### Definitions / Parameters used
 
 - **Open interest**: the volume of all open positions in a given market.
-- `market.stake.target.timeWindow` is a market parameter defining the length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds.
-- `market.stake.target.scalingFactor` is a market parameter defining scaling between liquidity demand estimate based on open interest and target stake.
+- `market.stake.target.timeWindow` is a network parameter providing the default length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds. A market proposal / update can override this by setting  `timeWindow` in `liquidityMonitoringParameters.targetStakeParameters`.
+- `market.stake.target.scalingFactor` is a network parameter providing the default scaling between liquidity demand estimate based on open interest and target stake. A market proposal / update can override this by setting  `scalingFactor` in  `liquidityMonitoringParameters.targetStakeParameters`.
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see [the Quant Risk Models spec](./0018-RSKM-quant_risk_models.ipynb).
 - `mark_price`, see [mark price](./0009-MRKP-mark_price.md) spec.
 - `indicative_uncrossing_price`, see [auction](./0026-AUCT-auctions.md) spec.
@@ -21,9 +21,9 @@ The parameter c_1 is a market parameter (with network parameter `market.liquidit
 #### Current definitions
 
 First, `max_oi` is defined  maximum (open interest) measured over a time window,
-`t_window = [max(t-market.stake.target.timeWindow,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction. Note that `max_oi` should be calculated recorded per transaction, so if there are multiple OI changes withing the same block (which implies the same timestamp), we should pick the max one, NOT the last one that was processed.
+`t_window = [max(t-market.liquidityMonitoringParameters.targetStakeParameters.timeWindow,t0),t]`. Here `t` is current time with `t0` being the end of market opening auction. Note that `max_oi` should be calculated recorded per transaction, so if there are multiple OI changes withing the same block (which implies the same timestamp), we should pick the max one, NOT the last one that was processed.
 
-If the market is in auction mode the `max_oi` can only increase while `auction duration` <= `market.stake.target.timeWindow`. Once the market's been in the auction for more than `market.stake.target.timeWindow` the `max_oi` is whatever the current positions and `indicative_uncrossing_volume` imply - specifically, this allows the `target_stake` to drop as a result of trades generated in the auction so that `target_stake` > `supplied_stake` (even in absence of changes to `supplied_stake`) and the market can go back to its default trading mode.
+If the market is in auction mode the `max_oi` can only increase while `auction duration` <= `market.stake.target.timeWindow`. Once the market's been in the auction for more than `market.liquidityMonitoringParameters.targetStakeParameters.timeWindow` the `max_oi` is whatever the current positions and `indicative_uncrossing_volume` imply - specifically, this allows the `target_stake` to drop as a result of trades generated in the auction so that `target_stake` > `supplied_stake` (even in absence of changes to `supplied_stake`) and the market can go back to its default trading mode.
 
 Example 1:
 `t_market.stake.target.timeWindow = 1 hour`
@@ -47,7 +47,7 @@ Example 2: As above but the market opened at `t_0 = 4:15`. Then `t_window = [4:1
 
 From `max_oi` we calculate
 
-`target_stake = reference_price x max_oi x market.stake.target.scalingFactor x rf`,
+`target_stake = reference_price x max_oi x market.liquidityMonitoringParameters.targetStakeParameters.scalingFactor x rf`,
 
 where `reference_price` is `mark_price` when market is in continuous trading mode and `indicative_uncrossing_price` during auctions (if it's available, otherwise use `mark_price` which may be 0 in case of an opening auction), and `rf = max(risk_factor_short, risk_factor_long)`. Note that currently we always have that `risk_factor_short >= risk_factor_long` but this could change once we go beyond futures... so safer to take a `max`.
 Note that the units of `target_stake` are the settlement currency of the market as those are the units of the `reference_price`.
