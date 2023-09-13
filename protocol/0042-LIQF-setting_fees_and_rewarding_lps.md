@@ -395,9 +395,9 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
 ### Transfers example
 
 Example 1, generated with [supplementary worksheet](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY) [internal only]. Values should match up to rounding used by `core` (<a name="0042-LIQF-055" href="#0042-LIQF-055">0042-LIQF-055</a>):
-| LP	|	penalty fraction | LP-per-market fee accounts balance | 1st transfer amt |	2nd (bonus) transfer amt |
-|	--- |	--------------	 | --------------	                    | --------------	  |	--------------	         |
-|	LP1	|	0	               | 1000	                              | 1000	            |	24673.94095	             |
-|	LP2	|	0.05	           | 100	                              | 95	              |	2344.02439	             |
-|	LP3	|	0.6	             | 7000	                              | 2800	            |	69087.03466	             |
-|	LP4	|	1	               | 91900	                            | 0	              |	0	                       |
+| LP    |   penalty fraction | LP-per-market fee accounts balance | 1st transfer amt |  2nd (bonus) transfer amt |
+|   --- |   --------------   | --------------                       | --------------      | --------------           |
+|   LP1 |   0                  | 1000                                 | 1000                |   24673.94095              |
+|   LP2 |   0.05               | 100                                  | 95                | 2344.02439               |
+|   LP3 |   0.6              | 7000                               | 2800                |   69087.03466              |
+|   LP4 |   1                  | 91900                              | 0               | 0                          |
