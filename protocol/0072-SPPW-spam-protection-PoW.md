@@ -128,3 +128,6 @@ All Vega clients that submitted transactions can verify that their transaction h
 
 - *Mempool pruning* Cause congestion in the mempool by submitting many transactions (perhaps from several parties). Submit a transaction `T` tied to block number `N_old`. Make sure the transactions causing congestion create sufficiently large `N_current`. At some point we'll have `N_old + spam.pow.numberOfPastBlocks < N_current` and the transaction `T` is removed from the mempool and never scheduled. (<a name="0072-SPPW-012" href="#0072-SPPW-012">0072-SPPW-012</a>)
 
+- Run the network on the borderline of capacity by submitting as many transactions as the network can process (possibly from many processes), causing short congestion spikes in individual blocks, but overall no congestion.  Log all removed transactions removed through pruning, and verify they for all removed transactions `T`, all satisfied the condition that the block `N_t T` was tied to satisfies `N_t + spam.pow.numberOfPastBlocks < N_kickout`, where `N_kickout` is the block number processed when the transaction got pruned.  (<a name="0072-SPPW-013" href="#0072-SPPW-013">0072-SPPW-013</a>)
+
+- Run the network at about 20% capacity, and verify no transaction gets pruned.  (<a name="0072-SPPW-014" href="#0072-SPPW-014">0072-SPPW-014</a>)
