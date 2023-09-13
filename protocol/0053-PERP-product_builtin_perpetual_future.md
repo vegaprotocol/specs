@@ -175,11 +175,11 @@ If periodic settlement data happens whilst market is in auction of any other typ
 ### 5. Margin considerations
 
 To assure adequate solvency we need to include the estimate of the upcoming funding payment in maintenance margin estimate for the party. Let $t_{k-1}$ be the time of the last funding payment. Let $t$ be current time ($t < t_k$).
-Calculate $G_t$ as the [funding payment](#43-periodic-settlement) between $t_{k-1}$ and $t$.
+Calculate $G_t$ as the [funding payment](#43-periodic-settlement) between $t_{k-1}$ and $t$, and consider open volume of the party for which the margin is being calculated.
 For perpetual futures markets set the maintenance margin as:
 
 ```math
-m^{\text{maint (perps)}}_t = m^{\text{maint}}_t + \text{margin funding factor} \cdot \max(0,G_t),
+m^{\text{maint (perps)}}_t = m^{\text{maint}}_t + \text{margin funding factor} \cdot \max(0, \text{open volume}\ cdot G_t),
 ```
 
 where $m^{\text{maint}}_t$ is the current maintenance margin as per the [margin spec](./0019-MCAL-margin_calculator.md)
