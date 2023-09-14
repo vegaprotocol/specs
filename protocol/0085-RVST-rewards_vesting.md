@@ -78,4 +78,29 @@ Must expose the following:
 
 ## Acceptance Criteria
 
-Too be added
+### Network parameters
+
+1. When `rewards.vesting.baseTransfer` is updated, the new value should be applied to rewards vesting at the end of the current epoch. (<a name="0085-RVST-001" href="#0085-RVST-001">0085-RVST-001</a>)
+1. When `rewards.vesting.minimumTransfer` is updated, the new value should be applied to rewards vesting at the end of the current epoch. (<a name="0085-RVST-002" href="#0085-RVST-002">0085-RVST-002</a>)
+1. When `rewards.vesting.rewardPayoutTiers` is updated, the new value should be applied when distributing rewards at the end of the current epoch. (<a name="0085-RVST-003" href="#0085-RVST-003">0085-RVST-003</a>)
+
+### Vesting / vested accounts
+
+1. A party should have one vesting account per asset. Rewards distributed from reward pools should be transferred to the correct vesting account. (<a name="0085-RVST-004" href="#0085-RVST-004">0085-RVST-004</a>)
+1. A party should have one vested account per asset. Rewards distributed from vesting accounts should be transferred to the correct vested account. (<a name="0085-RVST-005" href="#0085-RVST-005">0085-RVST-005</a>)
+1. Funds **cannot** be transferred from a vesting account by a user. (<a name="0085-RVST-006" href="#0085-RVST-006">0085-RVST-006</a>)
+1. Funds **can** be transferred from a vested account by a user. (<a name="0085-RVST-007" href="#0085-RVST-007">0085-RVST-007</a>)
+1. Funds **cannot** be transferred to a vested account by a user. (<a name="0085-RVST-008" href="#0085-RVST-008">0085-RVST-008</a>)
+
+### Vesting mechanics
+
+1. If a party has unlocked rewards in a vesting account (expressed in quantum) strictly greater than the network parameter `rewards.vesting.minimumTransfer` then rewards should be transferred to the respective vested account for the asset at the end of the epoch as per the formula defined in the specification. (<a name="0085-RVST-009" href="#0085-RVST-009">0085-RVST-009</a>)
+1. If a party has unlocked rewards in a vesting account (expressed in quantum) less than or equal to the network parameter `rewards.vesting.minimumTransfer` then the entire balance should be transferred to the respective vested account for the asset at the end of the epoch. (<a name="0085-RVST-010" href="#0085-RVST-010">0085-RVST-010</a>)
+1. Locked rewards in the vesting account should not start vesting un till the lock period has expired. (<a name="0085-RVST-011" href="#0085-RVST-011">0085-RVST-011</a>)
+
+### Rewards bonus multiplier
+
+1. A parties `reward_distribution_bonus_multiplier` should be set equal to the value in the highest tier where they fulfil the `minimum_quantum_balance` required. (<a name="0085-RVST-012" href="#0085-RVST-012">0085-RVST-012</a>)
+1. Funds in both the parties vesting account and vested account should contribute to their `minimum_quantum_balance`. (<a name="0085-RVST-013" href="#0085-RVST-013">0085-RVST-013</a>)
+1. Assuming all parties perform equally, a party with a greater `reward_distribution_bonus_multiplier` should receive a larger share of a reward pool. (<a name="0085-RVST-014" href="#0085-RVST-014">0085-RVST-014</a>)
+
