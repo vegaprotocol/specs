@@ -157,7 +157,8 @@ struct InstrumentMetadata {
 }
 
 enum Product {
-  // maturity should be some sort of DateTime, settlement_asset is however we refer to crypto-assets (collateral) on Vega
+  // Oracle will include both info on how trading terminates and settlement data 
+  // settlement_asset is asset id
   Future { oracle: Oracle, settlement_asset: String },
   // EuropeanOption {},
   // SmartProduct {},
