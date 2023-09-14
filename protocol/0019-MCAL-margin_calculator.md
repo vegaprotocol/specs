@@ -193,9 +193,7 @@ maintenance_margin_short
 
 where meanings of terms in Step 1 apply except for:
 
-
-`slippage_per_unit = -1 * (Product.value(market_observable) - Product.value(exit_price))`
-
+`slippage_per_unit = max(0, Product.value(exit_price)-Product.value(market_observable))`
 
 ### **Step 3**
 
@@ -275,11 +273,14 @@ riskiest_short = min( open_volume + sell_orders, 0 ) =  min( 10 - 8, 0 ) = 0
 
 ## exit price considers what selling the open position (10) on the order book would achieve.
 
-slippage_per_unit =  Product.value(market_observable) - Product.value(exit_price) = Product.value($144) - Product.value((1*120 + 4*110 + 5*108)/10) = 144 - 110  = 34
+slippage_per_unit =  max(0, Product.value(previous_mark_price) - Product.value(exit_price)) = max(0, Product.value($144) - Product.value((1*120 + 4*110 + 5*108)/10)) = max(0, 144 - 110)  = 34
+
 
 maintenance_margin_long =max(min(riskiest_long * slippage_per_unit, product.value(market_observable)  * (riskiest_long * market.maxSlippageFraction[1] + riskiest_long^2 * market.maxSlippageFraction[2])), 0)
  + max(open_volume, 0 ) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
- =  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 677.6
+
+
+=  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 + 4 * 0.1 * 144 = 677.6
 
 # Step 2
 
