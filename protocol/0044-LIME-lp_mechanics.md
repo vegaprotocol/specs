@@ -211,7 +211,7 @@ We calculate the volume of notional that is in the range
 (1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) <=  price levels <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price).
 ```
 
-If there is no 'indicative uncrossing price' then any price should count, and the price range should be
+If there is no 'indicative uncrossing price' then volume placed at any price should count towards the LP's commitment i.e the price range is interpreted as
 
 ```text
 -infinity <=  price levels <= infinity
