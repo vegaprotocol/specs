@@ -78,6 +78,7 @@
       "0014-ORDT-078",
       "0014-ORDT-079",
       "0014-ORDT-080",
+      "0014-ORDT-124",
       "0079-TGAP-004",
       "0079-TGAP-005"
     ]
@@ -450,7 +451,7 @@
       "0029-FEES-028"
     ]
   },
-"Rewards": {
+  "Rewards": {
     "milestone": "cosmic-elevator-2",
     "acs": [
       "0085-RVST-001",
@@ -505,7 +506,7 @@
       "0028-GOVE-152"
     ]
   },
-    "Batch change proposals": {
+  "Batch change proposals": {
     "milestone": "deployment-3",
     "acs": [
       "0028-GOVE-145",
