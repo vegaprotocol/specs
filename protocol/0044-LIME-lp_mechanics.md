@@ -211,6 +211,12 @@ We calculate the volume of notional that is in the range
 (1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) <=  price levels <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price).
 ```
 
+If there is no 'indicative uncrossing price' then volume placed at any price should count towards the LP's commitment i.e the price range is interpreted as
+
+```text
+-infinity <=  price levels <= infinity
+```
+
 If this is greater than or equal to `liquidity_required` then the LP is meeting the committed volume of notional.
 
 
@@ -421,7 +427,7 @@ In the case of spot markets it will be transferred into the network treasury for
 
 - Boundary values are respected for the market parameters
   - `market.liquidity.commitmentMinTimeFraction` valid values: `>=0`, `<=1` (<a name="0044-LIME-083" href="#0044-LIME-083">0044-LIME-083</a>)
-  - `market.liquidity.priceRange` valid values: `>0`, `<=100` (<a name="0044-LIME-084" href="#0044-LIME-084">0044-LIME-084</a>)
+  - `market.liquidity.priceRange` valid values: `>0`, `<=20` (<a name="0044-LIME-084" href="#0044-LIME-084">0044-LIME-084</a>)
   - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-085" href="#0044-LIME-085">0044-LIME-085</a>)
   - `market.liquidity.performanceHysteresisEpochs` valid values: `>=1`, `<=366` (<a name="0044-LIME-086" href="#0044-LIME-086">0044-LIME-086</a>)
 

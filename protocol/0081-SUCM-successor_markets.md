@@ -86,7 +86,7 @@ Successor markets can be enacted when the parent market is in opening auction. T
 
 A successor market proposal can be enacted when the parent market is in one of the following states: Pending, Suspended, Active, Trading terminated or Settled (settled within the successor time window) (<a name="0081-SUCM-010" href="#0081-SUCM-010">0081-SUCM-010</a>)
 
-When a successor market is enacted (i.e. leaves the opening auction), all other related successor market proposals, in the state "pending" or "proposed", are automatically rejected. Any LP submissions associated with these proposals are cancelled, and the funds are released (<a name="0081-SUCM-011" href="#0081-SUCM-011">0081-SUCM-011</a>)
+When a successor market is enacted, all other related successor market proposals, in the state "pending" or "proposed", are automatically rejected. Any LP submissions associated with these proposals are cancelled, and the funds are released (<a name="0081-SUCM-011" href="#0081-SUCM-011">0081-SUCM-011</a>)
 
 With two successor markets in opening auction, that have the same parent market, and one additional market in the state "Proposed". Get one of the two markets to leave the opening auction (passage of time, LP commitment, crossing trade). The other market in auction and the proposed market should both be "Rejected" and all LP funds will be released (<a name="0081-SUCM-014" href="#0081-SUCM-014">0081-SUCM-014</a>)
 
