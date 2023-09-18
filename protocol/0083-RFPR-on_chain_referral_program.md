@@ -465,7 +465,7 @@ The Estimate Fees API should now calculate the following additional information:
 
 #### Epoch and running volumes
 
-1. Each trade should increment the taker parties `party_epoch_notional_taker_volume` by the volume of the trade (expressed in quantum units) (<a name="0083-RFPR-031" href="#0083-RFPR-031">0083-RFPR-031</a>).
+1. Each trade in which a party is the "taker" **should** increment the taker parties `party_epoch_notional_taker_volume` by the volume of the trade (expressed in quantum units) (<a name="0083-RFPR-031" href="#0083-RFPR-031">0083-RFPR-031</a>).
 1. A trade generated during auction uncrossing should not contribute to either parties `party_epoch_notional_taker_volume` (<a name="0083-RFPR-032" href="#0083-RFPR-032">0083-RFPR-032</a>).
 1. At the end of the epoch, the `referral_set_epoch_notional_taker_volume` should be correctly calculated by summing each team members `party_epoch_notional_taker_volume` (<a name="0083-RFPR-033" href="#0083-RFPR-033">0083-RFPR-033</a>).
 1. A party cannot contribute more than the current network parameter `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` to their sets `referral_set_epoch_notional_taker_volume` (<a name="0083-RFPR-034" href="#0083-RFPR-034">0083-RFPR-034</a>).
@@ -481,4 +481,4 @@ The Estimate Fees API should now calculate the following additional information:
 1. At the start of an epoch, a referees `referral_reward_multiplier` is set equal to the multiplier in the highest staking tier they qualify for (<a name="0083-RFPR-046" href="#0083-RFPR-046">0083-RFPR-046</a>).
 1. If when evaluating the tier to set the `referral_reward_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0` (<a name="0083-RFPR-039" href="#0083-RFPR-039">0083-RFPR-039</a>).
 1. If when evaluating the tier to set the `referral_discount_factor`, a referee does not qualify for any tier, their `referral_reward_factor` is set to `0` (<a name="0083-RFPR-040" href="#0083-RFPR-040">0083-RFPR-040</a>).
-1. If when evaluating the tier to set the `referral_reward_multiplier`, a referee does not qualify for any tier, their `referral_reward_multiplier` is set to `0` (<a name="0083-RFPR-047" href="#0083-RFPR-047">0083-RFPR-047</a>).
+1. If when evaluating the tier to set the `referral_reward_multiplier`, a referee does not qualify for any tier, their `referral_reward_multiplier` is set to `1` (<a name="0083-RFPR-047" href="#0083-RFPR-047">0083-RFPR-047</a>).
