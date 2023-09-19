@@ -60,7 +60,7 @@ message UpdateReferralProgram{
         benefit_tiers: [
             {
                 "minimum_running_notional_taker_volume": 10000,
-                "minimum_epochs": 0,
+                "minimum_epochs": 1,
                 "referral_reward_factor": 0.001,
                 "referral_discount_factor": 0.001,
             },
