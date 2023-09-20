@@ -27,13 +27,13 @@ where $V$ is the open volume (negative for a short position) and $S^\text{curren
 We assume margin is calculated as per continuous trading formula (as there are no closeouts in auctions) and that the slippage cap always applies, therefore we get:
 
 $$
-\text{collateral available} + V(S^{\text{liquidation}}-S^\text{current}) = S^{\text{liquidation}} (V \cdot \text{linear slippage factor}+V^2 \cdot \text{quadratic slippage factor}+V \cdot \text{risk factor}) + \text{arbitrary constant},
+\text{collateral available} + V(S^{\text{liquidation}}-S^\text{current}) = S^{\text{liquidation}} (V \cdot \text{linear slippage factor}+V^2 \cdot \text{quadratic slippage factor}+V \cdot \text{risk factor}) + V \cdot \text{constant},
 $$
 
-where $\text{risk factor}$ is the long risk factor when $V>0$ and the short risk factor otherwise. The $\text{arbitrary constant}$ is an optional arbitrary constant added to the maintenance margin, e.g. the funding payment portion of the margin for [perpetual futures](../protocol/0053-PERP-product_builtin_perpetual_future.md#5-margin-considerations). Solving for $S^{\text{liquidation}}$ we get:
+where $\text{risk factor}$ is the long risk factor when $V>0$ and the short risk factor otherwise. The $\text{constant}$ is an optional arbitrary constant scaling with open volume added to the maintenance margin, e.g. the funding payment portion of the margin for [perpetual futures](../protocol/0053-PERP-product_builtin_perpetual_future.md#5-margin-considerations). Solving for $S^{\text{liquidation}}$ we get:
 
 $$
-S^{\text{liquidation}} = \frac{\text{collateral available}-V \cdot S^\text{current} - \text{arbitrary constant}}{V \cdot \text{linear slippage factor}+V^2 \cdot \text{quadratic slippage factor}+V \cdot \text{risk factor}-V}
+S^{\text{liquidation}} = \frac{\text{collateral available}-V \cdot S^\text{current} - V \cdot \text{constant}}{V \cdot \text{linear slippage factor}+V^2 \cdot \text{quadratic slippage factor}+V \cdot \text{risk factor}-V}
 $$
 
 if the denominator in the above expression evaluates to $0$ the liquidation price is undefined and we return an error, otherwise we return the result floored at $0$ (as the negative price is not attainable for any of the currently supported products).
