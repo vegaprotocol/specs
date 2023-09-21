@@ -280,6 +280,7 @@ Any orders that parties submit get rejected.
 The parties with open position in the immediately preceding step still have open positions.
 Parties with open positions still have non-zero margin account balances.
 The market state is `trading terminated`.
+1. A final market-to-market happens with the last mark price.
 1. The settlement price oracle transaction is sent and it is  *not* equal to `p`.
 Parties that had open positions see settlement cash-flows happen.
 Margin account balances are transferred to the general account.
