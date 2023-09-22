@@ -111,13 +111,13 @@ $$m_{rr} = \max(\frac{\sum_{i}^{n}{r_{i}}}{N}, 0)$$
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
 
-At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the standard deviation of the set of each parties returns over the last $N$ epochs.
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs.
 
 Given the set:
 
 $$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
-The reward metric $m_{rv}$ is the standard deviation of the set $R$.
+The reward metric $m_{rv}$ is the variance of the set $R$.
 
 ### Validator ranking metric
 
