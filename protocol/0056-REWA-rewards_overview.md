@@ -981,7 +981,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - If an eligible party held positions in multiple in-scope markets, their average position reward metric should be the sum of the size of their time-weighted-average-position in each market (<a name="0056-REWA-082" href="#0056-REWA-082">0056-REWA-082</a>).
 - If a `window_length>1` is specified in the recurring transfer, an eligible parties average position reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-083" href="#0056-REWA-083">0056-REWA-083</a>).
 
-### Relative returns 
+### Relative returns
 
 - If an eligible party has negative net returns, their relative returns reward metric should be zero (<a name="0056-REWA-084" href="#0056-REWA-084">0056-REWA-084</a>).
 - If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-085" href="#0056-REWA-085">0056-REWA-085</a>).
