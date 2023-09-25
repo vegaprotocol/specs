@@ -654,7 +654,7 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### One Off Delivery transfers
 
 If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately. (<a name="0028-GOVE-129" href="#0028-GOVE-129">0028-GOVE-129</a>)
-It is possible to submit a one off governance transfer proposal from network treasury into any reward account (including staking rewards). (<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
+It is possible to submit a one off governance transfer proposal from network treasury into any non-metric based reward account (including staking rewards). (<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
 It is possible to submit a one off governance transfer proposal from market's insurance pool into any reward account (including staking rewards). (<a name="0028-GOVE-141" href="#0028-GOVE-141">0028-GOVE-141</a>)
 It is NOT possible to submit a governance proposal where the source account is the reward account. (<a name="0028-GOVE-144" href="#0028-GOVE-144">0028-GOVE-144</a>)
 
