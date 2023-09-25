@@ -51,7 +51,7 @@ Enabling or changing the terms of the on-chain referral program can be proposed 
 - `staking_tiers`: a list of dictionaries (with the below fields) defining the multipliers from staking
   - `minimum_staked_tokens`: the required number of governance tokens ($VEGA) a referrer must be staking to receive the multiplier
   - `referral_reward_multiplier`: the multiplier applied to the referral_reward_factor when calculating referral rewards due to the referrer.
-- `closing_timestamp`: the timestamp after which when the current epoch ends, the programs status will become `STATE_CLOSED` and benefits will be disabled
+- `end_of_program_timestamp`: the timestamp after which when the current epoch ends, the programs status will become `STATE_CLOSED` and benefits will be disabled
 - `window_length`:  the number of epochs over which to evaluate a referral sets running notional taker volume
 
 ```protobuf
@@ -91,7 +91,7 @@ message UpdateReferralProgram{
                 "referral_reward_multiplier": 2,
             }
         ],
-        closing_timestamp: 123456789,
+        end_of_program_timestamp: 123456789,
         window_length: 7,
     }
 }
@@ -99,7 +99,7 @@ message UpdateReferralProgram{
 
 When submitting a referral program proposal through governance the following conditions apply:
 
-- a proposer cannot set an `closing_timestamp` less than the proposals `enactment_time`.
+- a proposer cannot set an `end_of_program_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
 - all `minimum_epochs` values must be an integer strictly greater than 0
 - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
@@ -120,7 +120,7 @@ After a referral program [proposal](#governance-proposals) is validated and acce
 | `STATUS_INACTIVE`    | No               | No proposal ever submitted, or previous proposal ended    | New governance proposal submitted to the network                  |
 | `STATUS_PROPOSED`    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
 | `STATUS_PENDING`     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
-| `STATUS_ACTIVE`      | Yes              | Previously `STATUS_PENDING`                               | End of epoch after network reaches proposal `closing_timestamp`   |
+| `STATUS_ACTIVE`      | Yes              | Previously `STATUS_PENDING`                               | End of epoch after network reaches proposal `end_of_program_timestamp`   |
 
 ## Referral set mechanics
 
@@ -401,18 +401,18 @@ The Estimate Fees API should now calculate the following additional information:
 ### Governance Proposals
 
 1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
-    - the `closing_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
+    - the `end_of_program_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers` (<a name="0083-RFPR-002" href="#0083-RFPR-002">0083-RFPR-002</a>).
     - all `minimum_epochs_in_team` values must be an integer strictly greater than 0 (<a name="0083-RFPR-003" href="#0083-RFPR-003">0083-RFPR-003</a>).
     - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-004" href="#0083-RFPR-004">0083-RFPR-004</a>).
     - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-005" href="#0083-RFPR-005">0083-RFPR-005</a>).
     - the `window_length` must be an integer strictly greater than zero (<a name="0083-RFPR-006" href="#0083-RFPR-006">0083-RFPR-006</a>).
 1. A referral program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0083-RFPR-007" href="#0083-RFPR-007">0083-RFPR-007</a>).
-1. A referral program should be closed the first epoch change after the `closing_timestamp` is reached (<a name="0083-RFPR-008" href="#0083-RFPR-008">0083-RFPR-008</a>).
+1. A referral program should be closed the first epoch change after the `end_of_program_timestamp` is reached (<a name="0083-RFPR-008" href="#0083-RFPR-008">0083-RFPR-008</a>).
 1. If a referral program is already active and a proposal `enactment_datetime` is reached, the referral program is updated at the next epoch change.
-    - Propose program A with `enactment_timestamp` 1st Jan and `closing_timestamp` 31st Dec (<a name="0083-RFPR-009" href="#0083-RFPR-009">0083-RFPR-009</a>).
+    - Propose program A with `enactment_timestamp` 1st Jan and `end_of_program_timestamp` 31st Dec (<a name="0083-RFPR-009" href="#0083-RFPR-009">0083-RFPR-009</a>).
     - Proposal for program A accepted and begins first epoch after 1st Jan (<a name="0083-RFPR-010" href="#0083-RFPR-010">0083-RFPR-010</a>).
-    - Propose program B with `enactment_timestamp` 1st June and `closing_timestamp` 31st Aug (<a name="0083-RFPR-011" href="#0083-RFPR-011">0083-RFPR-011</a>).
+    - Propose program B with `enactment_timestamp` 1st June and `end_of_program_timestamp` 31st Aug (<a name="0083-RFPR-011" href="#0083-RFPR-011">0083-RFPR-011</a>).
     - Proposal for program B accepted and overrides program A the first epoch after 1st June (<a name="0083-RFPR-012" href="#0083-RFPR-012">0083-RFPR-012</a>).
     - Program is closed first epoch after 31st Aug, there should be no active proposals (<a name="0083-RFPR-013" href="#0083-RFPR-013">0083-RFPR-013</a>).
 1. Updating any of the following network parameters whilst there is an active referral program will not modify or cancel the active program in any way. The updated parameters will however be used to validate future referral program proposals.
