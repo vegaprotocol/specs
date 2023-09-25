@@ -211,6 +211,12 @@ We calculate the volume of notional that is in the range
 (1.0-market.liquidity.priceRange) x min(last trade price, indicative uncrossing price) <=  price levels <= (1.0+market.liquidity.priceRange) x max(last trade price, indicative uncrossing price).
 ```
 
+If there is no 'indicative uncrossing price' then volume placed at any price should count towards the LP's commitment i.e the price range is interpreted as
+
+```text
+-infinity <=  price levels <= infinity
+```
+
 If this is greater than or equal to `liquidity_required` then the LP is meeting the committed volume of notional.
 
 
@@ -296,8 +302,8 @@ Note:
   - REST (<a name="0044-LIME-059" href="#0044-LIME-059">0044-LIME-059</a>)
 - When a LP commits liquidity on market 1, on market 2 this LP has no liquidity commitment when I request for all LP provisions through `ListLiquidityProvisions` api for this party, then only LP provisions for market 1 is returned.  (<a name="0044-LIME-087" href="#0044-LIME-087">0044-LIME-087</a>)
 - The [bond slashing](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/liquidity-provision-bond-account.feature) works as the feature test claims. (<a name="0044-LIME-002" href="#0044-LIME-002">0044-LIME-002</a>).
-- Change of network parameter `market.liquidity.bondPenaltyParameter` will immediately change the amount by which the bond account will be 'slashed' when a liquidity provider has insufficient capital for Vega to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIME-003" href="#0044-LIME-003">0044-LIME-003</a>)
-- Change of `market.liquidity.maximumLiquidityFeeFactorLevel` will change the maximum liquidity fee factor. Any LP orders that have already been submitted are unaffected but any new submission or amendments must respect the new maximum (those that don't get rejected). (<a name="0044-LIME-006" href="#0044-LIME-006">0044-LIME-006</a>)
+- Change of network parameter `market.liquidity.bondPenaltyParameter` will, as soon as the current epoch ends, change the amount by which the bond account will be 'slashed' when a liquidity provider has insufficient capital for Vega to make the transfers for their mark to market or other settlement movements, and/or margin requirements arising from their orders and open positions. (<a name="0044-LIME-003" href="#0044-LIME-003">0044-LIME-003</a>)
+- Change of `market.liquidity.maximumLiquidityFeeFactorLevel` will change the maximum liquidity fee factor. Any new submission or amendments must respect the new maximum (those that don't get rejected). (<a name="0044-LIME-006" href="#0044-LIME-006">0044-LIME-006</a>)
 - Check that bond slashing works with non-default asset decimals, market decimals, position decimals. This can be done by following a similar story to [bond slashing feature test](https://github.com/vegaprotocol/vega/blob/develop/core/integration/features/verified/liquidity-provision-bond-account.feature). Should test at least three different combinations, each decimal settings different to each other. (<a name="0044-LIME-009" href="#0044-LIME-009">0044-LIME-009</a>)
 - If `market.liquidity.stakeToCcyVolume` is set to `0.0`, there is [target stake](./0041-TSTK-target_stake.md) of `1000` and there are 3 LPs on the market with stake / fee bid submissions of `100, 0.01`, `1000, 0.02` and `200, 0.03` then the liquidity fee is `0.02`. (<a name="0044-LIME-012" href="#0044-LIME-012">0044-LIME-012</a>)
 
@@ -421,7 +427,7 @@ In the case of spot markets it will be transferred into the network treasury for
 
 - Boundary values are respected for the market parameters
   - `market.liquidity.commitmentMinTimeFraction` valid values: `>=0`, `<=1` (<a name="0044-LIME-083" href="#0044-LIME-083">0044-LIME-083</a>)
-  - `market.liquidity.priceRange` valid values: `>0`, `<=100` (<a name="0044-LIME-084" href="#0044-LIME-084">0044-LIME-084</a>)
+  - `market.liquidity.priceRange` valid values: `>0`, `<=20` (<a name="0044-LIME-084" href="#0044-LIME-084">0044-LIME-084</a>)
   - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-085" href="#0044-LIME-085">0044-LIME-085</a>)
   - `market.liquidity.performanceHysteresisEpochs` valid values: `>=1`, `<=366` (<a name="0044-LIME-086" href="#0044-LIME-086">0044-LIME-086</a>)
 
