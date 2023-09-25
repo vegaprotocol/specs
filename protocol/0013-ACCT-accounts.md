@@ -75,7 +75,7 @@ If there is a positive balance in an account that is being deleted, that balance
 
 ## Bond accounts
 
-Bond accounts are opened when a party opens a [Liquidity Provision order](./0044-LIME-lp_mechanics.mdd). The bond is held by the network to ensure that the Liquidity Provider meets their SLA obligations. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management.
+Bond accounts are opened when a party opens a [Liquidity Provision order](./0044-LIME-lp_mechanics.md). The bond is held by the network to ensure that the Liquidity Provider meets their SLA obligations. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management.
 
 ## Market insurance pools
 
