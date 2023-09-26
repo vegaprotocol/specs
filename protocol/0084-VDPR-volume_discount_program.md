@@ -23,7 +23,7 @@ Enabling or changing the terms of the volume discount program can be proposed vi
 
 ```protobuf
 message UpdateVolumeDiscountProgram{
-    changes: UpdateVolumeDiscountProgramConfiguration{
+    changes: VolumeDiscountProgram{
         benefit_tiers: [
             {
                 "minimum_party_running_notional_taker_volume": 1000,
