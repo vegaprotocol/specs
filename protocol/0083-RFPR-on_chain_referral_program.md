@@ -56,7 +56,7 @@ Enabling or changing the terms of the on-chain referral program can be proposed 
 
 ```protobuf
 message UpdateReferralProgram{
-    changes: UpdateReferralProgramConfiguration{
+    changes: ReferralProgram{
         benefit_tiers: [
             {
                 "minimum_running_notional_taker_volume": 10000,
