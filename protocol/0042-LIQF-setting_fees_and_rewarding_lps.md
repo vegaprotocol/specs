@@ -299,7 +299,6 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
 
 - Each liquidity provider's equity-like share
 - Each liquidity provider's average entry valuation
-- The `market-value-proxy`
 
 ## Acceptance Criteria
 
