@@ -429,5 +429,5 @@ In the case of spot markets it will be transferred into the network treasury for
   - `market.liquidity.commitmentMinTimeFraction` valid values: `>=0`, `<=1` (<a name="0044-LIME-083" href="#0044-LIME-083">0044-LIME-083</a>)
   - `market.liquidity.priceRange` valid values: `>0`, `<=20` (<a name="0044-LIME-084" href="#0044-LIME-084">0044-LIME-084</a>)
   - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-085" href="#0044-LIME-085">0044-LIME-085</a>)
-  - `market.liquidity.performanceHysteresisEpochs` valid values: `>=1`, `<=366` (<a name="0044-LIME-086" href="#0044-LIME-086">0044-LIME-086</a>)
+  - `market.liquidity.performanceHysteresisEpochs` valid values: `>=0`, `<=366` (<a name="0044-LIME-086" href="#0044-LIME-086">0044-LIME-086</a>)
 
