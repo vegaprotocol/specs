@@ -23,7 +23,7 @@ Enabling or changing the terms of the volume discount program can be proposed vi
 
 ```protobuf
 message UpdateVolumeDiscountProgram{
-    changes: UpdateReferralProgramConfiguration{
+    changes: UpdateVolumeDiscountProgramConfiguration{
         benefit_tiers: [
             {
                 "minimum_party_running_notional_taker_volume": 1000,
@@ -125,7 +125,7 @@ The Trades API should now also expose the following additional information for e
 1. If an `UpdateVolumeDiscount` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
     - the `end_of_program_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0084-VDPR-001" href="#0084-VDPR-001">0084-VDPR-001</a>).
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `volumeDiscountProgram.maxBenefitTiers` (<a name="0084-VDPR-002" href="#0084-VDPR-002">0084-VDPR-002</a>).
-    - all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxReferralRewardFactor` (<a name="0084-VDPR-003" href="#0084-VDPR-003">0084-VDPR-003</a>).
+    - all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor` (<a name="0084-VDPR-003" href="#0084-VDPR-003">0084-VDPR-003</a>).
     - the `window_length` must be an integer strictly greater than zero (<a name="0084-VDPR-004" href="#0084-VDPR-004">0084-VDPR-004</a>).
 1. A volume discount program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0084-VDPR-005" href="#0084-VDPR-005">0084-VDPR-005</a>).
 1. A volume discount program should be closed the first epoch change after the `end_of_program_timestamp` is reached (<a name="0084-VDPR-006" href="#0084-VDPR-006">0084-VDPR-006</a>).
