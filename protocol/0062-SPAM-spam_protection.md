@@ -80,6 +80,20 @@ The minimum allowed withdrawal amount is `spam.protection.minimumWithdrawalQuant
 
 Any withdrawal request for a smaller amount is immediately rejected.
 
+### Referral spam
+
+The [on-chain referral program](./0083-RFPR-on_chain_referral_program.md) adds three transaction types which can be submitted with no cost/risk to the party:
+
+- `CreateReferralSet`
+- `UpdateReferralSet`
+- `ApplyReferralCode`
+
+To avoid spamming of `CreateReferralSet` and `UpdateReferralSet` transactions, a party must meet the staked governance tokens ($VEGA) threshold set by the network parameter `referralProgram.minStakedVegaTokens`. A party who does not meet this requirement should have any transactions of the aforementioned types pre-block rejected.
+
+To avoid spamming of `ApplyReferralCode`, a party must meet the deposited funds threshold set by the network parameter `spam.protection.applyReferral.min.funds`. A party who does not meet this requirement should have any transactions of the aforementioned type pre-block rejected.
+
+Further, all referral transactions are limited to `n` submissions per epoch per party where n is controlled by the network parameter `spam.protection.max.referrals`. Any party who submits more then `n` of a single referral transaction type should have their transactions pre-block rejected.
+
 ### Related topics
 
 - [Spam protection: Proof of work](https://github.com/vegaprotocol/specs/blob/master/protocol/0072-SPPW-spam-protection-PoW.md)
@@ -117,5 +131,11 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Increase `spam.protection.minimumWithdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been valid according to the former parameter value is rejected with the new one. (<a name="0062-SPAM-023" href="#0062-SPAM-023">0062-SPAM-023</a>)
 - Decrease `spam.protection.minimumWithdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been invalid with the old parameter and is valid with the new value and is accepted.(<a name="0062-SPAM-024" href="#0062-SPAM-024">0062-SPAM-024</a>)
 - Issue a valid withdrawal bundle. Increase `spam.protection.minimumWithdrawalQuantumMultiple` to a value that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-PALAZZO-001" href="#0062-PALAZZO-001">0062-PALAZZO-001</a>)
+- A party staking less than `referralProgram.minStakedTokens` should have any `CreateReferralSet` transactions pre-block rejected (<a name="0062-SPAM-026" href="#0062-SPAM-026">0062-SPAM-026</a>).
+- A party staking less than `referralProgram.minStakedTokens` should have any `UpdateReferral` transactions pre-block rejected (<a name="0062-SPAM-027" href="#0062-SPAM-027">0062-SPAM-027</a>).
+- A party who has less then `spam.protection.applyReferral.min.funds` deposited across all their accounts. Should have any `ApplyReferralCode` transactions pre-block rejected (<a name="0062-SPAM-028" href="#0062-SPAM-028">0062-SPAM-028</a>).
+- A party who has submitted strictly more than `spam.protection.max.referrals` `CreateReferralSet` transactions in an epoch should have any future `CreateReferralSet` transactions in that epoch pre-block rejected (<a name="0062-SPAM-029" href="#0062-SPAM-029">0062-SPAM-029</a>).
+- A party who has submitted strictly more than `spam.protection.max.referrals` `UpdateReferralSet` transactions in an epoch should have any future `UpdateReferralSet` transactions in that epoch pre-block rejected (<a name="0062-SPAM-030" href="#0062-SPAM-030">0062-SPAM-030</a>).
+- A party who has submitted strictly more than `spam.protection.max.referrals` `ApplyReferralCode` transactions in an epoch should have any future `ApplyReferralCode` transactions in that epoch pre-block rejected (<a name="0062-SPAM-031" href="#0062-SPAM-031">0062-SPAM-021</a>).
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
