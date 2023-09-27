@@ -28,7 +28,7 @@ Note, if a referee wants to compete as a member of a different team, they are ab
 
 ## Network Parameters
 
-- `referralProgram.maxReferralTiers` - limits the maximum number of [benefit tiers](#governance-proposals) which can be specified as part of a referral program
+- `referralProgram.maxReferralTiers` - limits the maximum number of [benefit tiers](#governance-proposals) and [staking tiers](#governance-proposals) which can be specified as part of a referral program
 - `referralProgram.maxReferralRewardFactor` - limits the maximum reward factor which can be specified as part of a referral program
 - `referralProgram.maxReferralDiscountFactor` - limits the maximum discount factor which can be specified as part of a referral program governance proposal
 - `referralProgram.maxReferralRewardProportion` - limits the proportion (`referee_reward_factor` * `referee_reward_multiplier`) of referee taker fees which can be given to the referrer.
