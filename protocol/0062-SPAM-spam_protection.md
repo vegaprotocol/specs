@@ -92,7 +92,7 @@ To avoid spamming of `CreateReferralSet` and `UpdateReferralSet` transactions, a
 
 To avoid spamming of `ApplyReferralCode`, a party must meet the deposited funds threshold set by the network parameter `spam.protection.applyReferral.min.funds`.  All non-VEGA assets count towards this threshold and balances should be scaled appropriately by the assets quantum. A party who does not meet this requirement should have any transactions of the aforementioned type pre-block rejected.
 
-Further, all referral transactions are limited to `n` submissions per epoch per party where n is controlled by the network parameter `spam.protection.max.referrals`. Any party who submits more then `n` of a single referral transaction type should have their transactions pre-block rejected.
+Further, each referral transactions is limited to `n` submissions per epoch per party where `n` is controlled by the respective network parameter for the transaction (`spam.protection.max.CreateReferralSet`, `spam.protection.max.UpdateReferralSet`, `spam.protection.max.ApplyReferralCode`). Any party who submits more then `n` of a single referral transaction type should have their transactions pre-block rejected.
 
 ### Related topics
 
@@ -134,8 +134,8 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - A party staking less than `referralProgram.minStakedTokens` should have any `CreateReferralSet` transactions pre-block rejected (<a name="0062-SPAM-026" href="#0062-SPAM-026">0062-SPAM-026</a>).
 - A party staking less than `referralProgram.minStakedTokens` should have any `UpdateReferral` transactions pre-block rejected (<a name="0062-SPAM-027" href="#0062-SPAM-027">0062-SPAM-027</a>).
 - A party who has less then `spam.protection.applyReferral.min.funds` deposited. Should have any `ApplyReferralCode` transactions pre-block rejected. All non-VEGA assets count towards this threshold and balances should be scaled appropriately by the assets quantum. (<a name="0062-SPAM-028" href="#0062-SPAM-028">0062-SPAM-028</a>).
-- A party who has submitted strictly more than `spam.protection.max.referrals` `CreateReferralSet` transactions in an epoch should have any future `CreateReferralSet` transactions in that epoch pre-block rejected (<a name="0062-SPAM-029" href="#0062-SPAM-029">0062-SPAM-029</a>).
-- A party who has submitted strictly more than `spam.protection.max.referrals` `UpdateReferralSet` transactions in an epoch should have any future `UpdateReferralSet` transactions in that epoch pre-block rejected (<a name="0062-SPAM-030" href="#0062-SPAM-030">0062-SPAM-030</a>).
-- A party who has submitted strictly more than `spam.protection.max.referrals` `ApplyReferralCode` transactions in an epoch should have any future `ApplyReferralCode` transactions in that epoch pre-block rejected (<a name="0062-SPAM-031" href="#0062-SPAM-031">0062-SPAM-021</a>).
+- A party who has submitted strictly more than `spam.protection.max.CreateReferralSet` `CreateReferralSet` transactions in an epoch should have any future `CreateReferralSet` transactions in that epoch pre-block rejected (<a name="0062-SPAM-029" href="#0062-SPAM-029">0062-SPAM-029</a>).
+- A party who has submitted strictly more than `spam.protection.max.UpdateReferralSet` `UpdateReferralSet` transactions in an epoch should have any future `UpdateReferralSet` transactions in that epoch pre-block rejected (<a name="0062-SPAM-030" href="#0062-SPAM-030">0062-SPAM-030</a>).
+- A party who has submitted strictly more than `spam.protection.max.ApplyReferralCode` `ApplyReferralCode` transactions in an epoch should have any future `ApplyReferralCode` transactions in that epoch pre-block rejected (<a name="0062-SPAM-031" href="#0062-SPAM-031">0062-SPAM-021</a>).
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
