@@ -419,8 +419,6 @@ The Estimate Fees API should now calculate the following additional information:
     - `referralProgram.maxReferralTiers` (<a name="0083-RFPR-041" href="#0083-RFPR-041">0083-RFPR-041</a>)
     - `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-042" href="#0083-RFPR-042">0083-RFPR-042</a>)
     - `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-043" href="#0083-RFPR-043">0083-RFPR-043</a>)
-    - `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` (<a name="0083-RFPR-044" href="#0083-RFPR-044">0083-RFPR-044</a>)
-    - `referralProgram.minStakedVegaTokens` (<a name="0083-RFPR-045" href="#0083-RFPR-045">0083-RFPR-045</a>)
 
 ### Referral set mechanics
 
@@ -471,7 +469,7 @@ The Estimate Fees API should now calculate the following additional information:
 1. A trader is the taker of two prices in separate markets using settlement assets with different quantum values. Each trades value should be scaled correctly by the assets quantum and added to the parties `party_epoch_notional_taker_volume` (<a name="0083-RFPR-049" href="#0083-RFPR-049">0083-RFPR-049</a>).
 1. At the end of the epoch, the `referral_set_epoch_notional_taker_volume` should be correctly calculated by summing each team members `party_epoch_notional_taker_volume` (<a name="0083-RFPR-033" href="#0083-RFPR-033">0083-RFPR-033</a>).
 1. A party cannot contribute more than the current network parameter `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` to their sets `referral_set_epoch_notional_taker_volume` (<a name="0083-RFPR-034" href="#0083-RFPR-034">0083-RFPR-034</a>).
-1. If `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` is updated during an epoch, the new value should be used to cap party contributions to referral sets **at the end o00f the epoch** (i.e. a parties individual `party_epoch_notional_taker_volume` should not be capped during the epoch) (<a name="0083-RFPR-050" href="#0083-RFPR-050">0083-RFPR-050</a>).
+1. If `referralProgram.maxPartyNotionalVolumeByQuantumPerEpoch` is updated during an epoch, the new value should be used to cap party contributions to referral sets **at the end of the epoch** (i.e. a parties individual `party_epoch_notional_taker_volume` should not be capped during the epoch) (<a name="0083-RFPR-050" href="#0083-RFPR-050">0083-RFPR-050</a>).
 1. A referral sets `referral_set_running_notional_taker_volume` is calculated as the sum of all `referral_set_epoch_notional_taker_volumes` over the last `epoch_window` epochs (<a name="0083-RFPR-035" href="#0083-RFPR-035">0083-RFPR-035</a>).
 
 ### Benefit Mechanics
