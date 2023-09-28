@@ -992,7 +992,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
 - If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
-- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their relative returns reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
 
 ### Validator ranking metric
 
