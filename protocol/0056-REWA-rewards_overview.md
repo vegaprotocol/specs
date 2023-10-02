@@ -111,13 +111,13 @@ $$m_{rr} = \max(\frac{\sum_{i}^{n}{r_{i}}}{N}, 0)$$
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
 
-At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the standard deviation of the set of each parties returns over the last $N$ epochs.
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs.
 
 Given the set:
 
 $$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
-The reward metric $m_{rv}$ is the standard deviation of the set $R$.
+The reward metric $m_{rv}$ is the variance of the set $R$.
 
 ### Validator ranking metric
 
@@ -966,3 +966,40 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - The general account balance of the `ETHUSDT` creator should be 10000.
 - The reward pool balance should be 0.
+
+### Reward Eligibility
+
+- If a parties staked governance tokens ($VEGA) is strictly less than the `staking_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-076" href="#0056-REWA-076">0056-REWA-076</a>).
+- If a parties time-weighted average position (across all in scope-markets) is strictly less than the `notional_time_weighted_average_position_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-077" href="#0056-REWA-077">0056-REWA-077</a>).
+
+### Average Position
+
+- If an eligible party opens a position at the beginning of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-078" href="#0056-REWA-078">0056-REWA-078</a>).
+- If an eligible party held an open position at the start of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-079" href="#0056-REWA-079">0056-REWA-079</a>).
+- If an eligible party opens a position half way through the epoch, their average position reward metric should be half the size of the position at the end of the epoch (<a name="0056-REWA-080" href="#0056-REWA-080">0056-REWA-080</a>).
+- If an eligible party held an open position at the start of the epoch and closes it half-way through the epoch, their average position reward metric should be equal to the size of that position at the end of the epoch (<a name="0056-REWA-081" href="#0056-REWA-081">0056-REWA-081</a>).
+- If an eligible party held positions in multiple in-scope markets, their average position reward metric should be the sum of the size of their time-weighted-average-position in each market (<a name="0056-REWA-082" href="#0056-REWA-082">0056-REWA-082</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties average position reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-083" href="#0056-REWA-083">0056-REWA-083</a>).
+
+### Relative returns
+
+- If an eligible party has negative net returns, their relative returns reward metric should be zero (<a name="0056-REWA-084" href="#0056-REWA-084">0056-REWA-084</a>).
+- If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-085" href="#0056-REWA-085">0056-REWA-085</a>).
+- If an eligible party is participating in multiple in-scope markets, their relative returns reward metric should be the sum of their relative returns from each market (<a name="0056-REWA-086" href="#0056-REWA-086">0056-REWA-086</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-087" href="#0056-REWA-087">0056-REWA-087</a>).
+
+### Returns volatility
+
+- If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+
+### Validator ranking metric
+
+- If a party is a consensus or standby validator their validator ranking reward metric should be set to their ranking score (<a name="0056-REWA-091" href="#0056-REWA-091">0056-REWA-091</a>).
+- If a party is not a consensus or standby validator their validator ranking reward metric should be set to `0` (<a name="0056-REWA-092" href="#0056-REWA-092">0056-REWA-092</a>).
+
+### Distribution Strategy
+
+- If the pro-rata distribution strategy was specified in the recurring transfer, each eligible parties share of the rewards pool should be equal to their reward metric (assuming no other multipliers) (<a name="0056-REWA-093" href="#0056-REWA-093">0056-REWA-093</a>).
+- If the rank distribution strategy was specified in the recurring transfer, each eligible parties share of the reward pool should be equal to the `share_ratio` defined by their position in the `rank_table` (assuming no other multipliers) (<a name="0056-REWA-094" href="#0056-REWA-094">0056-REWA-094</a>).
