@@ -130,19 +130,11 @@ The Trades API should now also expose the following additional information for e
 1. A volume discount program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0084-VDPR-005" href="#0084-VDPR-005">0084-VDPR-005</a>).
 1. A volume discount program should be closed the first epoch change after the `end_of_program_timestamp` is reached (<a name="0084-VDPR-006" href="#0084-VDPR-006">0084-VDPR-006</a>).
 1. If a volume discount program is already active and a proposal `enactment_datetime` is reached, the volume discount program is updated at the next epoch change.
-<<<<<<< HEAD
-    - Propose program A with `enactment_timestamp` 1st Jan and `end_of_program_timestamp` 31st Dec (<a name="0084-VDPR-007" href="#0084-VDPR-007">0084-VDPR-007</a>).
-    - Proposal for program A accepted and begins first epoch after 1st Jan (<a name="0084-VDPR-008" href="#0084-VDPR-008">0084-VDPR-008</a>).
-    - Propose program B with `enactment_timestamp` 1st June and `end_of_program_timestamp` 31st Aug (<a name="0084-VDPR-009" href="#0084-VDPR-009">0084-VDPR-009</a>).
-    - Proposal for program B accepted and overrides program A the first epoch after 1st June (<a name="0084-VDPR-010" href="#0084-VDPR-010">0084-VDPR-010</a>).
-    - Program is closed first epoch after 31st Aug, there should be no active proposals (<a name="0084-VDPR-011" href="#0084-VDPR-011">0084-VDPR-011</a>).
-=======
-    - Propose program A with `enactment_timestamp` ET and `closing_timestamp` CT (<a name="0084-VDPR-007" href="#0084-VDPR-007">0084-VDPR-007</a>).
-    - Proposal for program A accepted and begins first epoch after ET (<a name="0084-VDPR-008" href="#0084-VDPR-008">0084-VDPR-008</a>).
-    - Propose program B with `enactment_timestamp` ET2 (which is strictly > ET) and `closing_timestamp` CT2 (which is smaller then CT) (<a name="0084-VDPR-009" href="#0084-VDPR-009">0084-VDPR-009</a>).
+    - Propose program A with `enactment_timestamp` ET1 and `end_of_program_timestamp` CT1 (<a name="0084-VDPR-007" href="#0084-VDPR-007">0084-VDPR-007</a>).
+    - Proposal for program A accepted and begins first epoch after ET1 (<a name="0084-VDPR-008" href="#0084-VDPR-008">0084-VDPR-008</a>).
+    - Propose program B with `enactment_timestamp` ET2 (ET2 > ET1 && ET2 < CT1) and `end_of_program_timestamp` CT1 (CT1 < CT2) (<a name="0084-VDPR-009" href="#0084-VDPR-009">0084-VDPR-009</a>).
     - Proposal for program B accepted and overrides program A the first epoch after ET2 (<a name="0084-VDPR-010" href="#0084-VDPR-010">0084-VDPR-010</a>).
     - Program is closed first epoch after CT2, there should be no active proposals (<a name="0084-VDPR-011" href="#0084-VDPR-011">0084-VDPR-011</a>).
->>>>>>> 0986a12e (fix: remove specific time from the ACs)
 1. Updating any of the following network parameters whilst there is an active volume discount program will not modify or cancel the active program in any way. The updated parameters will however be used to validate future volume discount program proposals.
     - `volumeDiscountProgram.maxBenefitTiers` (<a name="0084-VDPR-015" href="#0084-VDPR-015">0084-VDPR-015</a>).
     - `volumeDiscountProgram.maxVolumeDiscountFactor` (<a name="0084-VDPR-016" href="#0084-VDPR-016">0084-VDPR-016</a>).
