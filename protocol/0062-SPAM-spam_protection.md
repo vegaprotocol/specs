@@ -92,9 +92,9 @@ To avoid spamming of `CreateReferralSet` and `UpdateReferralSet` transactions, a
 
 To avoid spamming of `ApplyReferralCode`, a party must meet the deposited funds threshold set by the network parameter `spam.protection.applyReferral.min.funds`.  All non-VEGA assets count towards this threshold and balances should be scaled appropriately by the assets quantum. A party who does not meet this requirement should have any transactions of the aforementioned type pre-block rejected. This requirement will be checked against snapshots of account balances taken at a frequency determined by the network parameter `spam.protection.balanceSnapshotFrequency`. This network parameter is a duration (e.g. `5s`, `1m5s`).
 
-Further, each referral transactions is limited to `n` submissions per epoch per party where `n` is controlled by the respective network parameter for the transaction (`spam.protection.max.CreateReferralSet`, `spam.protection.max.UpdateReferralSet`, `spam.protection.max.ApplyReferralCode`).
+Further, each party is allowed to submit up to `n` transactions per epoch where `n` is controlled by the respective network parameter for that transaction type (`spam.protection.max.CreateReferralSet`, `spam.protection.max.UpdateReferralSet`, `spam.protection.max.ApplyReferralCode`). Any party who submits more than `n` transactions of a single referral transaction type in a single epoch will have all future transactions of that type pre-block rejected.
 
-Any party who submits more than `n` transactions of a single referral transaction type in a single epoch will have all future for should have their transactions pre-block rejected.Any party who manages to fit more then `n` of a single referral transaction type into a single block will be banned for 1/48th of an epoch, or un till the end of the current epoch, whichever comes first.
+Any party who manages to fit more then `n` transactions of a single type into a single block will have their excess transactions post-block rejected. A party who has more than 50% of their transactions post-block rejected will be banned for 1/48th of an epoch, or un till the end of the current epoch, whichever comes first.
 
 ### Related topics
 
