@@ -248,7 +248,7 @@ Once you have $f$ transfer $f \times B$ into the insurance pool of the market, w
 For spot markets, the transfer is to go into the network treasury account for the asset.
 Moreover, as this reduced the LP stake, update the ELS as per [Calculating liquidity provider equity-like share section in 0042-LIQF](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
-In the case of if a liquidity provider has `fraction_of_time_on_book` = `0`, and `market.liquidity.commitmentMinTimeFraction = 0`, then 
+In the case of if a liquidity provider has `fraction_of_time_on_book = 0`, and `market.liquidity.commitmentMinTimeFraction = 0`, then 
 `f = max[0,min(m,p)]`
 
 In the case of spot markets the transfer goes into the network treasury account for the asset.
