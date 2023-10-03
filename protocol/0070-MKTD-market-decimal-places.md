@@ -75,7 +75,7 @@ Trades of course result in transfers. The amounts transferred (for the trade as 
 - As a user, I can propose a perpetual market with a different periodic settlement precision than its settlement asset
   - This proposal is valid if the precision is greater than the settlement asset (<a name="0070-MKTD-018" href="#0070-MKTD-018">0070-MKTD-018</a>)
   - This proposal is valid if the precision is less than the settlement asset (<a name="0070-MKTD-019" href="#0070-MKTD-019">0070-MKTD-019</a>)
-  - This proposal is valid if the precision matches that of the settlement asset (<a name="0070-MKTD-019" href="#0070-MKTD-019">0070-MKTD-019</a>)
+  - This proposal is valid if the precision matches that of the settlement asset (<a name="0070-MKTD-020" href="#0070-MKTD-020">0070-MKTD-020</a>)
 - As a user all orders placed (either directly or through LP) are shown in events with prices in market precision (<a name="0070-MKTD-003" href="#0070-MKTD-003">0070-MKTD-003</a>). For product spot: (<a name="0070-MKTD-010" href="#0070-MKTD-010">0070-MKTD-010</a>)
 - As a user all transfers (margin top-up, release, MTM settlement) are calculated and communicated (via events) in asset precision (<a name="0070-MKTD-004" href="#0070-MKTD-004">0070-MKTD-004</a>). For product spot: (<a name="0070-MKTD-011" href="#0070-MKTD-011">0070-MKTD-011</a>)
 - As a user I should see the market data prices using market precision. (<a name="0070-MKTD-005" href="#0070-MKTD-005">0070-MKTD-005</a>). For product spot: (<a name="0070-MKTD-012" href="#0070-MKTD-012">0070-MKTD-012</a>)
