@@ -80,6 +80,22 @@ The minimum allowed withdrawal amount is `spam.protection.minimumWithdrawalQuant
 
 Any withdrawal request for a smaller amount is immediately rejected.
 
+### Referral spam
+
+The [on-chain referral program](./0083-RFPR-on_chain_referral_program.md) adds three transaction types which can be submitted with no cost/risk to the party:
+
+- `CreateReferralSet`
+- `UpdateReferralSet`
+- `ApplyReferralCode`
+
+To avoid spamming of `CreateReferralSet` and `UpdateReferralSet` transactions, a party must meet the staked governance tokens ($VEGA) threshold set by the network parameter `referralProgram.minStakedVegaTokens`. A party who does not meet this requirement should have any transactions of the aforementioned types pre-block rejected.
+
+To avoid spamming of `ApplyReferralCode`, a party must meet the deposited funds threshold set by the network parameter `spam.protection.applyReferral.min.funds`.  All assets count towards this threshold and balances should be scaled appropriately by the assets quantum. A party who does not meet this requirement should have any transactions of the aforementioned type pre-block rejected. This requirement will be checked against snapshots of account balances taken at a frequency determined by the network parameter `spam.protection.balanceSnapshotFrequency`. This network parameter is a duration (e.g. `5s`, `1m5s`).
+
+Further, each party is allowed to submit up to `n` transactions per epoch where `n` is controlled by the respective network parameter for that transaction type (`spam.protection.max.CreateReferralSet`, `spam.protection.max.UpdateReferralSet`, `spam.protection.max.ApplyReferralCode`). Any party who submits more than `n` transactions of a single referral transaction type in a single epoch will have all future transactions of that type pre-block rejected.
+
+Any party who manages to fit more then `n` transactions of a single type into a single block will have their excess transactions post-block rejected. A party who has more than 50% of their transactions post-block rejected will be banned for 1/48th of an epoch, or un till the end of the current epoch, whichever comes first.
+
 ### Related topics
 
 - [Spam protection: Proof of work](https://github.com/vegaprotocol/specs/blob/master/protocol/0072-SPPW-spam-protection-PoW.md)
@@ -117,5 +133,18 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Increase `spam.protection.minimumWithdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been valid according to the former parameter value is rejected with the new one. (<a name="0062-SPAM-023" href="#0062-SPAM-023">0062-SPAM-023</a>)
 - Decrease `spam.protection.minimumWithdrawalQuantumMultiple` and verify that a withdrawal transaction that would have been invalid with the old parameter and is valid with the new value and is accepted.(<a name="0062-SPAM-024" href="#0062-SPAM-024">0062-SPAM-024</a>)
 - Issue a valid withdrawal bundle. Increase `spam.protection.minimumWithdrawalQuantumMultiple` to a value that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-PALAZZO-001" href="#0062-PALAZZO-001">0062-PALAZZO-001</a>)
+- A party staking less than `referralProgram.minStakedTokens` should have any `CreateReferralSet` transactions pre-block rejected (<a name="0062-SPAM-026" href="#0062-SPAM-026">0062-SPAM-026</a>).
+- A party staking less than `referralProgram.minStakedTokens` should have any `UpdateReferral` transactions pre-block rejected (<a name="0062-SPAM-027" href="#0062-SPAM-027">0062-SPAM-027</a>).
+- Given longer than `spam.protection.balanceSnapshotFrequency` has elapsed since a party deposited or transferred funds, a party who has less then `spam.protection.applyReferral.min.funds` in their accounts should have any `ApplyReferralCode` transactions pre-block rejected. All assets count towards this threshold and balances should be scaled appropriately by the assets quantum. (<a name="0062-SPAM-028" href="#0062-SPAM-028">0062-SPAM-028</a>).
+- A party who has submitted strictly more than `spam.protection.max.CreateReferralSet` `CreateReferralSet` transactions in an epoch should have any future `CreateReferralSet` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-029" href="#0062-SPAM-029">0062-SPAM-029</a>).
+- A party who has submitted more than `spam.protection.max.CreateReferralSet` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **post-block** rejected (<a name="0062-SPAM-032" href="#0062-SPAM-032">0062-SPAM-032</a>).
+- A party who has more than 50% of their `CreateReferralSet` transactions post-block rejected should be banned for 1/48th of an epoch or un till the end of the current epoch (whichever comes first). When banned for the above reason, `CreateReferralSet` transactions should be pre-block rejected (<a name="0062-SPAM-033" href="#0062-SPAM-033">0062-SPAM-033</a>).
+- A party who has submitted strictly more than `spam.protection.max.updateReferralSet` `UpdateReferralSet` transactions in an epoch should have any future `UpdateReferralSet` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-030" href="#0062-SPAM-030">0062-SPAM-030</a>).
+- A party who has submitted more than `spam.protection.max.updateReferralSet` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **post-block** rejected (<a name="0062-SPAM-034" href="#0062-SPAM-034">0062-SPAM-034</a>).
+- A party who has more than 50% of their `UpdateReferralSet` transactions post-block rejected should be banned for 1/48th of an epoch or un till the end of the current epoch (whichever comes first). When banned for the above reason, `UpdateReferralSet` transactions should be pre-block rejected (<a name="0062-SPAM-035" href="#0062-SPAM-035">0062-SPAM-035</a>).
+- A party who has submitted strictly more than `spam.protection.max.applyReferralCode` `ApplyReferralCode` transactions in an epoch should have any future `ApplyReferralCode` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-031" href="#0062-SPAM-031">0062-SPAM-031</a>).
+- A party who has submitted more than `spam.protection.max.applyReferralCode` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **post-block** rejected (<a name="0062-SPAM-036" href="#0062-SPAM-036">0062-SPAM-036</a>).
+- A party who has more than 50% of their `ApplyReferralCode` transactions post-block rejected should be banned for 1/48th of an epoch or un till the end of the current epoch (whichever comes first). When banned for the above reason, `ApplyReferralCode` transactions should be pre-block rejected (<a name="0062-SPAM-037" href="#0062-SPAM-037">0062-SPAM-037</a>).
+
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
