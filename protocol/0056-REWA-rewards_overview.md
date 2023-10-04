@@ -176,7 +176,7 @@ Note this reward metric **is not** available for team rewards.
 
 All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
 
-A team’s reward metric is the weighted average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
+A team’s reward metric is the average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
 
 ## Reward accounts
 
@@ -1003,3 +1003,26 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - If the pro-rata distribution strategy was specified in the recurring transfer, each eligible parties share of the rewards pool should be equal to their reward metric (assuming no other multipliers) (<a name="0056-REWA-093" href="#0056-REWA-093">0056-REWA-093</a>).
 - If the rank distribution strategy was specified in the recurring transfer, each eligible parties share of the reward pool should be equal to the `share_ratio` defined by their position in the `rank_table` (assuming no other multipliers) (<a name="0056-REWA-094" href="#0056-REWA-094">0056-REWA-094</a>).
+
+
+### Entity Scope
+
+#### Individuals
+
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, transfers setting the `teams_scope` field should be rejected as invalid (<a name="0056-REWA-095" href="#0056-REWA-095">0056-REWA-095</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, transfers not setting the `individual_scope` field should be rejected as invalid (<a name="0056-REWA-096" href="#0056-REWA-096">0056-REWA-096</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_ALL`, all individual parties should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-097" href="#0056-REWA-097">0056-REWA-097</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_IN_A_TEAM`, only individual parties who are in a team should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-098" href="#0056-REWA-098">0056-REWA-098</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_NOT_IN_A_TEAM`, only individual parties not in a team should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-099" href="#0056-REWA-099">0056-REWA-099</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, rewards should be distributed among eligible individual parties according to each parties reward metric value (<a name="0056-REWA-100" href="#0056-REWA-100">0056-REWA-100</a>).
+
+#### Teams
+
+- If the entity scope is `ENTITY_SCOPE_TEAMS`, transfers setting the `individual_scope` field should be rejected as invalid (<a name="0056-REWA-101" href="#0056-REWA-101">0056-REWA-101</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` transfers not setting the `n_top_performers` field should be rejected as invalid (<a name="0056-REWA-102" href="#0056-REWA-102">0056-REWA-102</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` and the teams scope is not-set, then all teams are eligible for rewards (<a name="0056-REWA-103" href="#0056-REWA-103">0056-REWA-103</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` and the teams scope is set, then only the teams specified in the teams scope are eligible for rewards (<a name="0056-REWA-104" href="#0056-REWA-104">0056-REWA-104</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS`, then rewards should be allocated to teams according to each teams reward metric value (<a name="0056-REWA-105" href="#0056-REWA-105">0056-REWA-105</a>).
+- Each team’s reward metric should be the average metric of the top `n_top_performers` % of team members, e.g. for a team of 100 parties with `n_top_performers=0.1`, the 10 members with the highest metric (<a name="0056-REWA-106" href="#0056-REWA-106">0056-REWA-106</a>).
+- If a team member has a non-zero reward metric, they should receive a share of the rewards proportional to their individual payout multipliers (<a name="0056-REWA-107" href="#0056-REWA-107">0056-REWA-107</a>).
+- If a team member has a zero reward metric, they should receive no share of the rewards allocated to the team (<a name="0056-REWA-108" href="#0056-REWA-108">0056-REWA-108</a>).
