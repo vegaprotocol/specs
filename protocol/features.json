@@ -515,6 +515,25 @@
       "0056-REWA-094"
     ]
   },
+  "Team rewards": {
+    "milestone": "deployment-3",
+    "acs": [
+      "0056-REWA-095",
+      "0056-REWA-096",
+      "0056-REWA-097",
+      "0056-REWA-098",
+      "0056-REWA-099",
+      "0056-REWA-100",
+      "0056-REWA-101",
+      "0056-REWA-102",
+      "0056-REWA-103",
+      "0056-REWA-104",
+      "0056-REWA-105",
+      "0056-REWA-106",
+      "0056-REWA-107",
+      "0056-REWA-108"
+    ]
+  },
   "Market governance": {
     "milestone": "deployment-2",
     "acs": [
