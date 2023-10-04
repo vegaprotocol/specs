@@ -176,7 +176,7 @@ Note this reward metric **is not** available for team rewards.
 
 All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
 
-A team’s reward metric is the weighted average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
+A team’s reward metric is the average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
 
 ## Reward accounts
 
@@ -1023,6 +1023,6 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - If the entity scope is `ENTITY_SCOPE_TEAMS` and the teams scope is not-set, then all teams are eligible for rewards (<a name="0056-REWA-103" href="#0056-REWA-103">0056-REWA-103</a>).
 - If the entity scope is `ENTITY_SCOPE_TEAMS` and the teams scope is set, then only the teams specified in the teams scope are eligible for rewards (<a name="0056-REWA-104" href="#0056-REWA-104">0056-REWA-104</a>).
 - If the entity scope is `ENTITY_SCOPE_TEAMS`, then rewards should be allocated to teams according to each teams reward metric value (<a name="0056-REWA-105" href="#0056-REWA-105">0056-REWA-105</a>).
-- Each team’s reward metric should be the weighted average metric of the top `n_top_performers` % of team members, e.g. for a team of 100 parties with `n_top_performers=0.1`, the 10 members with the highest metric (<a name="0056-REWA-106" href="#0056-REWA-106">0056-REWA-106</a>).
+- Each team’s reward metric should be the average metric of the top `n_top_performers` % of team members, e.g. for a team of 100 parties with `n_top_performers=0.1`, the 10 members with the highest metric (<a name="0056-REWA-106" href="#0056-REWA-106">0056-REWA-106</a>).
 - If a team member has a non-zero reward metric, they should receive a share of the rewards proportional to their individual payout multipliers (<a name="0056-REWA-107" href="#0056-REWA-107">0056-REWA-107</a>).
 - If a team member has a zero reward metric, they should receive no share of the rewards allocated to the team (<a name="0056-REWA-108" href="#0056-REWA-108">0056-REWA-108</a>).
