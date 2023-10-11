@@ -114,8 +114,6 @@ When exiting an auction, for any orders which are still open, the funds held in 
 
 ## 8. Auctions
 
-As there is no margin or leverage when dealing with `Spot` products, there is no need for the supplied liquidity to exceed a threshold to exit an auction. There is therefore no need for liquidity auctions.
-
 Price-monitoring auctions are still required and should be implemented following the [price-monitoring](./0032-PRIM-price_monitoring.md) spec.
 
 ## 9. Acceptance Criteria
