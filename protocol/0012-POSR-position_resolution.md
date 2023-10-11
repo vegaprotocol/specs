@@ -62,4 +62,5 @@ Note that different liquidation strategies with different parameters might be pr
 API requirements:
 
 - create an endpoint to easily identify network's position in any given market,
+- create an endpoint to easily identify network's margin levels in any given market,
 - create an endpoint to easily check time of next liquidation trade attempt.
