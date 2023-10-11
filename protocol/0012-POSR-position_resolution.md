@@ -58,3 +58,8 @@ The liquidation strategy consists of:
 Assume the price range implied by the `market.liquidity.priceRange` is `[a, b]`. Once the network has worked out a size of its immediate or cancel limit order it sets it's price to `a` if it's a sell order or `b` if it's a buy order, and it submits the order.
 
 Note that different liquidation strategies with different parameters might be proposed in the future, hence implementation should allow for easy substitution of strategies.
+
+API requirements:
+
+- create an endpoint to easily identify network's position in any given market,
+- create an endpoint to easily check time of next liquidation trade attempt.
