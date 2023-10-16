@@ -56,6 +56,9 @@ For the Ethereum Heartbeat, we use the network parameter `ethereum_heartbeat_per
 For every Ethereum block, if the hash of this block mod `ethereum_heartbeat_period` equals the identity of the a validator (taken mod ethereum_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms.
 If the parameter is set to 0, the heartbeats are effectively turned off.
 
+#### Ethereum Read Access Heartbeat
+For every Ethereum block, if the hash of [The balance of the key that initiated the first transaction on the block / the randao value of that block] mod `ethereum_heartbeat_period` equals the identity of the a validator (taken mod ethereum_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms.
+
 
 #### Performance Measurements
 At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; this is (number_of_ethereum_blocks_per_epoch)/`ethereum_heartbeat_period`)+number_of_ethereum_events_per_validator
