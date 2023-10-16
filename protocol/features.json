@@ -564,16 +564,6 @@
       "0028-GOVE-152"
     ]
   },
-    "Batch change proposals": {
-    "milestone": "deployment-3",
-    "acs": [
-      "0028-GOVE-145",
-      "0028-GOVE-146",
-      "0028-GOVE-147",
-      "0028-GOVE-148",
-      "0028-GOVE-149"
-    ]
-  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
