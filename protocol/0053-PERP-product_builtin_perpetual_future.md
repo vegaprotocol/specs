@@ -83,9 +83,13 @@ Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.m
 
 When the `settlement_schedule` event is received we need to calculate the funding payment. Store the current vega time as `funding_period_end`.
 
-If there are no oracle data points with a timestamp less than `funding_period_end` available then funding payment is skipped and `funding_period_start` gets overwritten with `funding_period_end`.
+The following conditions must all be met for a funding payment within a given funding period to happen:
 
-If such points are available then the calculations discussed in the following subsections get executed and funding payments get exchanged.
+- there is at least on one oracle data point with timestamp greater than or requal to `funding_period_start` and less than `funding_period_end`,
+- there is at least internal data point with timestamp greater than or requal to `funding_period_start` and less than `funding_period_end`.
+Otherwise the payment is skipped and the next funding period is entered.
+
+Please refer to the following subsections for the details of calculation of the funding payment if both of the above conditions are met.
 
 #### TWAP spot price calculation
 
@@ -110,10 +114,10 @@ for p := range oracle_data_points {
 }
 
 sum_product += previous_point.s*(funding_period_end-max(funding_period_start,previous_point.t))
-s_twap = sum_product / (funding_period_end - max(funding_period_start, oracle_data_points[0].t))
+s_twap = sum_product / (funding_period_end - max(funding_period_start, oracle_data_points[0].t) - time_in_auction)
 ```
 
-Only the oracle data point with largest timestamp that's less than or equal to `funding_period_end` (and any data points with larger timestamps) need to be kept from that point on.
+Where `time_in_auction` is the cumulative time spent within auctions within the funding period being considered. Note that only the oracle data point with largest timestamp that's less than or equal to `funding_period_end` (and any data points with larger timestamps) need to be kept from that point on.
 
 #### TWAP mark price calculation
 
@@ -135,10 +139,10 @@ for p := range internal_data_points {
 }
 
 sum_product += previous_point.f*(funding_period_end-max(funding_period_start,previous_point.t))
-f_twap = sum_product / (funding_period_end - max(funding_period_start, internal_data_points[0].t))
+f_twap = sum_product / (funding_period_end - max(funding_period_start, internal_data_points[0].t) - time_in_auction)
 ```
 
-Only the internal data point with largest timestamp needs to be kept from that point on.
+where `time_in_auction` is the cumulative time spent within auctions within the funding period being considered. Note that only the internal data point with largest timestamp needs to be kept from that point on.
 
 #### Funding payment calculation
 
