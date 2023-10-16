@@ -23,7 +23,7 @@ Note that maker_fee = 0 if there is no maker, taker relationship between the tra
 
 ## Applying benefit factors
 
-Before fees are transferred, if there is an [active referral program](./0083-RFPR-on_chain_referral_program.md) or [volume discount program](./0085-VDPR-volume_discount_program.md), each parties fee components must be modified as follows.
+Before fees are transferred, if there is an active [referral program](./0083-RFPR-on_chain_referral_program.md), [volume discount program](./0085-VDPR-volume_discount_program.md), or [staking discount program](./0087-SDPR-staking_discount_program.md). Each parties fee components must be modified as follows.
 
 Note, it is important discounts are calculated and applied **before** rewards are calculated and applied.
 
@@ -43,12 +43,20 @@ Note, it is important discounts are calculated and applied **before** rewards ar
     maker_fee_volume_discount = floor(maker_fee * volume_discount_factor)
     ```
 
+1. Calculate any staking discounts due to the party.
+
+    ```pseudo
+    infrastructure_fee_staking_discount = floor(infrastructure_fee * staking_discount_factor)
+    liquidity_fee_staking_discount = floor(liquidity_fee * staking_discount_factor)
+    maker_fee_staking_discount = floor(maker_fee * staking_discount_factor)
+    ```
+
 1. Update the fee components by applying the discounts.
 
     ```pseudo
-    infrastructure_fee = infrastructure_fee - infrastructure_fee_referral_discount - infrastructure_fee_volume_discount
-    liquidity_fee = liquidity_fee - liquidity_fee_referral_discount - liquidity_fee_volume_discount
-    maker_fee = maker_fee - maker_fee_referral_discount - maker_fee_volume_discount
+    infrastructure_fee = infrastructure_fee - infrastructure_fee_referral_discount - infrastructure_fee_volume_discount - infrastructure_fee_staking_discount
+    liquidity_fee = liquidity_fee - liquidity_fee_referral_discount - liquidity_fee_volume_discount - liquidity_fee_staking_discount
+    maker_fee = maker_fee - maker_fee_referral_discount - maker_fee_volume_discount - maker_fee_staking_discount
     ```
 
 1. Calculate any referral rewards due to the parties referrer (Note we are using the updated fee components from step 3 and the `referralProgram.maxReferralRewardProportion` is the network parameter described in the [referral program spec](./0083-RFPR-on_chain_referral_program.md#network-parameters))
@@ -181,5 +189,12 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
     - `liquidity_fee_volume_discount`
     - `maker_fee_volume_discount`
 1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction. (<a name="0029-FEES-028" href="#0029-FEES-028">0029-FEES-028</a>)
+    - `infrastructure_fee_volume_discount`
+    - `liquidity_fee_volume_discount`
+1. Staking discounts are correctly calculated and applied for each fee component during continuous trading. (<a name="0029-FEES-029" href="#0029-FEES-029">0029-FEES-029</a>)
+    - `infrastructure_fee_volume_discount`
+    - `liquidity_fee_volume_discount`
+    - `maker_fee_volume_discount`
+1. Staking discounts are correctly calculated and applied for each fee component when exiting an auction. (<a name="0029-FEES-030" href="#0029-FEES-030">0029-FEES-030</a>)
     - `infrastructure_fee_volume_discount`
     - `liquidity_fee_volume_discount`

@@ -534,6 +534,18 @@
       "0056-REWA-108"
     ]
   },
+"Staking discounts": {
+    "milestone": "deployment-3",
+    "acs": [
+      "0087-SDPR-001",
+      "0087-SDPR-002",
+      "0087-SDPR-003",
+      "0087-SDPR-004",
+      "0087-SDPR-005",
+      "0029-FEES-029",
+      "0029-FEES-030"
+    ]
+  },
   "Market governance": {
     "milestone": "deployment-2",
     "acs": [
