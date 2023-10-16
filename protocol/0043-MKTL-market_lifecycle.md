@@ -244,7 +244,6 @@ After `market.liquidity.successorLaunchWindowLength` has elapsed since the settl
 
 ### Market is proposed but rejected (<a name="0043-MKTL-001" href="#0043-MKTL-001">0043-MKTL-001</a>)
 
-For product spot: (<a name="0043-MKTL-005" href="#0043-MKTL-005">0043-MKTL-005</a>)
 
 1. Market `m1` is proposed with an internal trading terminated oracle set for some time in the future. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
 Market state is `proposed`.
