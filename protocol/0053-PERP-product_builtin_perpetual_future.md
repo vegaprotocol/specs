@@ -91,58 +91,9 @@ Otherwise the payment is skipped and the next funding period is entered.
 
 Please refer to the following subsections for the details of calculation of the funding payment if both of the above conditions are met.
 
-#### TWAP spot price calculation
+#### TWAP calculation
 
-Traverse all the available oracle data point tuples `(s,t)` and calculate the time-weighted average spot price (`s_twap`) as:
-
-```go
-var previous_point
-sum_product := 0
-
-for p := range oracle_data_points {
-    if p.t <= funding_period_start {
-        previous_point = p
-        continue
-    }
-    if p.t >= funding_period_end {
-        break
-    }
-    if previous_point != nil {
-        sum_product += previous_point*(p.t-max(funding_period_start,previous_point.t))
-    }
-    previous_point = p
-}
-
-sum_product += previous_point.s*(funding_period_end-max(funding_period_start,previous_point.t))
-s_twap = sum_product / (funding_period_end - max(funding_period_start, oracle_data_points[0].t) - time_in_auction)
-```
-
-Where `time_in_auction` is the cumulative time spent within auctions within the funding period being considered. Note that only the oracle data point with largest timestamp that's less than or equal to `funding_period_end` (and any data points with larger timestamps) need to be kept from that point on.
-
-#### TWAP mark price calculation
-
-Traverse all the available internal data point tuples `(f,t)` and calculated the time-weighted average mark price (`f_twap`) as:
-
-```go
-var previous_point
-sum_product := 0
-
-for p := range internal_data_points {
-    if p.t <= funding_period_start {
-        previous_point = p
-        continue
-    }
-    if previous_point != nil {
-        sum_product += previous_point*(p.t-max(funding_period_start,previous_point.t))
-    }
-    previous_point = p
-}
-
-sum_product += previous_point.f*(funding_period_end-max(funding_period_start,previous_point.t))
-f_twap = sum_product / (funding_period_end - max(funding_period_start, internal_data_points[0].t) - time_in_auction)
-```
-
-where `time_in_auction` is the cumulative time spent within auctions within the funding period being considered. Note that only the internal data point with largest timestamp needs to be kept from that point on.
+Same methodology applies to spot (external) and perps (internal prices). The available prices (spot and perps considered separately of course) should be used to calculate the time weighted average price within the funding period. If no observations at or prior to the funding period start exist then the start of the period used for calculation should be moved forward to the time of the first observation. An observation is assumed to be applying until a subsequent observation is available. Periods spent in auction should be excluded from the calculation.
 
 #### Funding payment calculation
 
