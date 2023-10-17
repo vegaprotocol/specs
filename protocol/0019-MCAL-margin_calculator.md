@@ -117,11 +117,6 @@ The protocol is designed such that ***Maintenance margin < Collateral search lev
 1. **Order margin**: the amount of additional margin on top of the amount in the margin account that is required for the party's current active orders.
 Note that this may be zero if the active orders can only decrease the position size. 
 
-1. ***Maintenance margin***
-1. ***Collateral search level***
-1. ***Initial margin***
-1. ***Collateral release level***
-
 
 Margin levels are used by the protocol to ascertain whether a trader has sufficient collateral to maintain a margined trade. When the trader enters an open position, this required amount is equal to the *initial margin*. Subsequently, throughout the life of this open position, the minimum required amount is the *maintenance margin*. As a trader's collateral level dips below the *collateral search level* the protocol will automatically search for more collateral to be assigned to support this open position from the trader's general collateral accounts. In the event that a trader has collateral that is above the *collateral release level* the protocol will automatically release collateral to a trader's general collateral account for the relevant asset.
 
