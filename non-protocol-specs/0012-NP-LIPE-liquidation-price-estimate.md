@@ -8,7 +8,7 @@ Provide an estimate of the price range at which the liquidation of a specified p
 
 Provide an estimated liquidation price range, where the lower bound assumes no slippage in the [margin level calculation](../protocol/0019-MCAL-margin_calculator.md) and the upper bound assumes that the slippage cap is applied.
 
-This amounts to carrying out the same computation twice, once with both linear and quadratic slippage factor set to `0` and once with the actual values used by the market for which the specified position is being considered.
+This amounts to carrying out the same computation twice, once with slippage factor set to `0` and once with the actual value used by the market for which the specified position is being considered.
 
 The system carries out [position resolution](../protocol/0012-POSR-position_resolution.md) when the available collateral (amount in margin account for the market along with amount in the general account denominated in the same asset) is less than the maintenance margin level for the position. The first step is to cancel any open orders that a distressed party may have. After that the margin requirement is re-evaluated to see if the position is still distressed. Therefore we provide three sets of estimates of a liquidation price range: current open volume only, current open volume with active buy orders, current open volume with active sell orders.
 
@@ -27,13 +27,13 @@ where $V$ is the open volume (negative for a short position) and $S^\text{curren
 We assume margin is calculated as per continuous trading formula (as there are no closeouts in auctions) and that the slippage cap always applies, therefore we get:
 
 $$
-\text{collateral available} + V(S^{\text{liquidation}}-S^\text{current}) = S^{\text{liquidation}} (V \cdot \text{linear slippage factor}+V^2 \cdot \text{quadratic slippage factor}+V \cdot \text{risk factor}) + V \cdot \text{constant},
+\text{collateral available} + V(S^{\text{liquidation}}-S^\text{current}) = S^{\text{liquidation}} (V \cdot \text{linear slippage factor}+V \cdot \text{risk factor}) + V \cdot \text{constant},
 $$
 
 where $\text{risk factor}$ is the long risk factor when $V>0$ and the short risk factor otherwise. The $\text{constant}$ is an optional arbitrary constant scaling with open volume added to the maintenance margin, e.g. the funding payment portion of the margin for [perpetual futures](../protocol/0053-PERP-product_builtin_perpetual_future.md#5-margin-considerations). Solving for $S^{\text{liquidation}}$ we get:
 
 $$
-S^{\text{liquidation}} = \frac{\text{collateral available}-V \cdot S^\text{current} - V \cdot \text{constant}}{V \cdot \text{linear slippage factor}+V^2 \cdot \text{quadratic slippage factor}+V \cdot \text{risk factor}-V}
+S^{\text{liquidation}} = \frac{\text{collateral available}-V \cdot S^\text{current} - V \cdot \text{constant}}{V \cdot \text{linear slippage factor}+V \cdot \text{risk factor}-V}
 $$
 
 if the denominator in the above expression evaluates to $0$ the liquidation price is undefined and we return an error, otherwise we return the result floored at $0$ (as the negative price is not attainable for any of the currently supported products).
