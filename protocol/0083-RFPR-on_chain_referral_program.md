@@ -4,7 +4,7 @@
 
 The aim of the on-chain referral program is to allow users of the protocol to incentivise users and community members to refer new traders by voting to provide benefits for referrers and/or referees.
 
-A party will be able to [create a referral code](#creating-a-referral-set) and share this code with referees. Referees who [apply the code](#applying-a-referral-code) will be added to the referrers "referral set".
+A party will be able to [create a referral code](#creating-a-referral-set) and share this code with referees. Referees who [apply the code](#applying-a-referral-code) will be added to the referrer's "referral set".
 
 Whilst a referral program is active, the following benefits may be available to members of a referral set:
 
@@ -46,13 +46,13 @@ Enabling or changing the terms of the on-chain referral program can be proposed 
 - `benefit_tiers`: a list of dictionaries (with the below fields) defining the reward and discount factors from referrals
   - `minimum_running_notional_taker_volume`: the required [`referral_set_running_notional_taker_volume`](#referral-set-volumes) in quantum units for parties to access this tier
   - `minimum_epochs`: the required number of epochs a referee must have been in a referral set to access this tier
-  - `referral_reward_factor`: the proportion of the referees taker fees to be rewarded to the referrer
-  - `referral_discount_factor`: the proportion of the referees taker fees to be discounted
+  - `referral_reward_factor`: the proportion of the referee's taker fees to be rewarded to the referrer
+  - `referral_discount_factor`: the proportion of the referee's taker fees to be discounted
 - `staking_tiers`: a list of dictionaries (with the below fields) defining the multipliers from staking
   - `minimum_staked_tokens`: the required number of governance tokens ($VEGA) a referrer must be staking to receive the multiplier
   - `referral_reward_multiplier`: the multiplier applied to the referral_reward_factor when calculating referral rewards due to the referrer.
-- `end_of_program_timestamp`: the timestamp after which when the current epoch ends, the programs status will become `STATE_CLOSED` and benefits will be disabled
-- `window_length`:  the number of epochs over which to evaluate a referral sets running notional taker volume
+- `end_of_program_timestamp`: the timestamp after which when the current epoch ends, the program will be closed and benefits will be disabled
+- `window_length`:  the number of epochs over which to evaluate a referral set's running notional taker volume
 
 ```protobuf
 message UpdateReferralProgram{
@@ -102,11 +102,11 @@ When submitting a referral program proposal through governance the following con
 - a proposer cannot set an `end_of_program_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
 - all `minimum_epochs` values must be an integer strictly greater than 0
-- all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
+- all `referral_reward_factor` values must be greater than `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
 - the number of tiers in `staking_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
-- all `minimum_staked_tokens` values must be an integer value greater than or equal to `0`.
+- all `minimum_staked_tokens` values must be an integer value greater than `0`.
 - all `referral_reward_multiplier` values must be a float value greater than or equal to `1`.
-- all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
+- all `referral_discount_factor` values must be greater than `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
 
 The referral program will start the epoch after the `enactment_timestamp` is reached.
@@ -219,7 +219,7 @@ message ApplyReferralCode{
 }
 ```
 
-If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors and reward multipliers updated](#setting-benefit-factors-and-reward-multipliers) accordingly. Their key must then become associated with the referrers key. All referral rewards will be transferred to this referrers key, regardless of whether the party reapplies a new referral code.
+If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors and reward multipliers updated](#setting-benefit-factors-and-reward-multipliers) accordingly. Their key must then become associated with the referrer's key. All referral rewards will be transferred to this referrer's key, regardless of whether the party reapplies a new referral code.
 
 If a party is already a referee, and submits another `ApplyReferralCode` transaction, they will not be transferred to the new referral set but they will be added to the associated team at the start of the next epoch (providing a team exists). Note, if the referee has submitted multiple transactions in an epoch, the referee will be added to the new team specified in the latest valid transaction.
 
@@ -243,7 +243,7 @@ referral_set_epoch_notional_taker_volume = sum[min(party_epoch_notional_taker_vo
 
 After the values are calculated, the `referral_set_epoch_notional_taker_volume` is stored by the network.
 
-The network can then calculate the sets `referral_set_running_notional_taker_volume` by summing the sets `referral_set_epoch_notional_taker_volume` values over the last n epochs where n is the `window_length` set in the [governance proposal](#governance-proposals).
+The network can then calculate the set's `referral_set_running_notional_taker_volume` by summing the set's `referral_set_epoch_notional_taker_volume` values over the last n epochs where n is the `window_length` set in the [governance proposal](#governance-proposals).
 
 ## Benefit mechanics
 
@@ -251,15 +251,15 @@ The network can then calculate the sets `referral_set_running_notional_taker_vol
 
 Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch (after pending `ApplyReferralCode` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee.
 
-Note, when setting a referees benefit factors we compare a sets `referral_set_running_notional_taker_volume` to a `minimum_running_notional_taker_volume` value. To prevent parties self-referring and moving teams, this `referral_set_running_notional_taker_volume` is always the value of the referees original referral set.
+Note, when setting a referee's benefit factors we compare a sets `referral_set_running_notional_taker_volume` to a `minimum_running_notional_taker_volume` value. To prevent parties self-referring and moving teams, this `referral_set_running_notional_taker_volume` is always the value of the referee's original referral set.
 
 #### Setting the referral reward factor
 
 The `referral_reward_factor` should be set by identifying the "highest" benefit tier where the following conditions are fulfilled.
 
-- `referral_set_running_notional_taker_volume` of the referee's **original** referral set is greater than or equal to the tiers `minimum_running_notional_taker_volume`.
+- `referral_set_running_notional_taker_volume` of the referee's **original** referral set is greater than or equal to the tier's `minimum_running_notional_taker_volume`.
 
-The referees `referral_reward_factor` is then set to the `referral_reward_factor` defined in the selected benefit tier.
+The referee's `referral_reward_factor` is then set to the `referral_reward_factor` defined in the selected benefit tier.
 
 Note the **original** referrer is defined as the team of the referrer associated with the referee. See section [applying a referral code](#applying-a-referral-code) for more detail.
 
@@ -267,10 +267,10 @@ Note the **original** referrer is defined as the team of the referrer associated
 
 The `referral_discount_factor` should be set by identifying the "highest" benefit tier where **BOTH** the following conditions are fulfilled.
 
-- `referral_set_running_notional_taker_volume` of the referee's **original** referral set is greater than or equal to the tiers `minimum_running_notional_taker_volume`.
-- the referee has been a associated with the referral set for at least the tiers `minimum_epochs`.
+- `referral_set_running_notional_taker_volume` of the referee's **original** referral set is greater than or equal to the tier's `minimum_running_notional_taker_volume`.
+- the referee has been a associated with the referral set for at least the tier's `minimum_epochs`.
 
-The referees `referral_discount_factor` is then set to the `referral_discount_factor` defined in the selected benefit tier.
+The referee's `referral_discount_factor` is then set to the `referral_discount_factor` defined in the selected benefit tier.
 
 Note the **original** referrer is defined as the team of the referrer associated with the referee. See section [applying a referral code](#applying-a-referral-code) for more detail.
 
@@ -278,9 +278,9 @@ Note the **original** referrer is defined as the team of the referrer associated
 
 The `referral_reward_multiplier` should be set by identifying the "highest" staking tier where the following conditions are fulfilled.
 
-- the referees **original** referrer is staking greater than or equal to the tiers `minimum_staked_tokens`.
+- the referee's **original** referrer is staking greater than or equal to the tier's `minimum_staked_tokens`.
 
-The referees `referral_reward_multiplier` is then set to the `referral_reward_multiplier` defined in the selected benefit tier.
+The referee's `referral_reward_multiplier` is then set to the `referral_reward_multiplier` defined in the selected benefit tier.
 
 Note the **original** referrer is defined as the team of the referrer associated with the referee. See section [applying a referral code](#applying-a-referral-code) for more detail.
 
@@ -356,8 +356,8 @@ The Parties API should now return a list of all **parties** (which can be filter
 
 The ReferralSet API should now expose a list of all **referral sets** (which can be filtered by referral set `id`) with the following information:
 
-- the sets founding **referrer**
-- the sets **referees**
+- the set's founding **referrer**
+- the set's **referees**
 - current `referral_set_running_notional_taker_volume`
 - current `referral_reward_factor` applied to referee taker fees
 - current **maximum possible** `referral_discount_factor` applied to referee taker fees
@@ -401,11 +401,11 @@ The Estimate Fees API should now calculate the following additional information:
 ### Governance Proposals
 
 1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
-    - the `end_of_program_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
+    - the `end_of_program_timestamp` must be less than or equal to the proposal's `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers` (<a name="0083-RFPR-002" href="#0083-RFPR-002">0083-RFPR-002</a>).
     - all `minimum_epochs_in_team` values must be an integer strictly greater than 0 (<a name="0083-RFPR-003" href="#0083-RFPR-003">0083-RFPR-003</a>).
-    - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-004" href="#0083-RFPR-004">0083-RFPR-004</a>).
-    - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-005" href="#0083-RFPR-005">0083-RFPR-005</a>).
+    - all `referral_reward_factor` values must be greater than `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-004" href="#0083-RFPR-004">0083-RFPR-004</a>).
+    - all `referral_discount_factor` values must be greater than `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-005" href="#0083-RFPR-005">0083-RFPR-005</a>).
     - the `window_length` must be an integer strictly greater than zero (<a name="0083-RFPR-006" href="#0083-RFPR-006">0083-RFPR-006</a>).
 1. A referral program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0083-RFPR-007" href="#0083-RFPR-007">0083-RFPR-007</a>).
 1. A referral program should be closed the first epoch change after the `end_of_program_timestamp` is reached (<a name="0083-RFPR-008" href="#0083-RFPR-008">0083-RFPR-008</a>).
