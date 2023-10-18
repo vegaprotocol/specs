@@ -133,6 +133,8 @@ When in isolated margin mode, the position on the market has an associated margi
 The margin factor must be greater than 0 and less than or equal to 1.
 
 Isolated margin mode can be enabled by placing an _update margin mode_ transaction.
+The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`.
+This value must be above the `initial margin` for the current position or the transaction will be rejected.
 
 The default when placing an order with no change to margin mode specified must be to retain the current margin mode of the position.
 
@@ -142,10 +144,17 @@ When submitting, amending, or deleting an order in isolated margin mode and cont
    1. First, the core will check whether the order will trade, either fully or in part, immediately upon entry. If so:
       1. If the trade would increase the party's position, the required additional funds as specified in the Increasing Position section will be calculated. The total expected margin balance (current plus new funds) will then be compared to the `maintenance margin` for the expected position, if the margin balance would be less than maintenance, instead reject the order in it's entirety. If the margin will be greater than the maintenance margin their general account will be checked for sufficient funds.
          1. If they have sufficient, that amount will be moved into their margin account and the immediately matching portion of the order will trade.
-         2. If they do not have sufficient, the order will be rejected in it's entirety for not meeting margin requirements.
-      3. If the trade would decrease the party's position, that portion will trade and margin will be released as in the Decreasing Position section
-   2. If the order is not persistent this is the end, if it is persistent any portion of the order which has not traded in step 1 will move to being placed on the order book. 
-      1. At this point, the party's general account will be checked for sufficient margin to cover `new margin = limit price * remaining size * margin factor`, as this is the worst-case trade price of the remaining component. If there is insufficient, the remaining portion of the order will be `stopped`. If there is sufficient, the order margin will be calculated for the current position plus the party's orders including this potential new order. If this order margin is greater than the sum of `new margin + margin balance + order margin balance` then the order will be rejected. Otherwise, an amount `new margin` will be moved into the party's Order Margin account and the order will be placed on the book.
+         1. If they do not have sufficient, the order will be rejected in it's entirety for not meeting margin requirements.
+      1. If the trade would decrease the party's position, that portion will trade and margin will be released as in the Decreasing Position section
+   1. If the order is not persistent this is the end, if it is persistent any portion of the order which has not traded in step 1 will move to being placed on the order book. 
+      1. At this point, the party's general account will be checked for margin to cover the additional amount required for the new orders. Each side can be checked individually and the maximum for either side taken into the order margin pool. This calculation must be rerun every time the party's orders or position change. For each side:
+         1. Sort all orders by price, starting from first to execute (highest price for buying, lowest price for selling).
+         1. If the party currently has a position `x`, discard the first-to-trade `x` of volume (for example, if a party had a long position `10` and sell orders of `15` at a price of `$100` and `10` at a price of `$150`, the first `10` of the sell order at `$100` would not require any order margin)
+         1. For any remaining volume, sum `side margin = limit price * size * margin factor` for each price level, as this is the worst-case trade price of the remaining component.
+      1. Take the maximum margin from the two `side margin`s as the margin required in the order margin account. Now the full margin requirement for all orders, including any new one, and open position should be run through the full margin calculator to obtain a `maintenance margin` value. If the new `side margin + margin account balance < maintenance margin`, or if the party's `general` account does not contain sufficient funds to cover any increases to the `order margin` account to be equal to `side margin` then:
+         1. If a newly placed order is being evaluated, that order is `stopped`
+         1. If the evaluation is the result of any other position/order update, all open orders are `stopped` and margin re-evaluated.
+      1. The `order margin` account is now updated to the new `side margin` value and any new orders can be placed on the book.
 
 NB: This means that a party's order could partially match, with a trade executed and some funds moved to the margin account with correct leverage whilst the rest of the order is immediately stopped.
 
