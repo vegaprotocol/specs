@@ -34,7 +34,7 @@ This specification outlines:
 
 ### **Background - how margin levels are calculated**
 
-The [margin calculator](./0019-MCAL-margin_calculator.md) will calculate the margin levels when instructed to do so. It will return four margin levels for each trader:
+The [margin calculator](./0019-MCAL-margin_calculator.md) will calculate the margin levels when instructed to do so. It will return five margin levels for each trader:
 
 1. maintenance margin
 1. order margin

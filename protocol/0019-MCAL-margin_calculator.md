@@ -97,8 +97,9 @@ When in cross-margin mode, margin is dynamically acquired and released as a posi
 
 1. **Isolated margin mode**: this mode sacrifices capital efficiency for predictability and risk management by segregating positions.
 In this mode, the entire margin for any newly opened position volume is transferred to the margin account when the trade is executed. 
-This includes completely new positions and increases to position size. 
-
+This includes completely new positions and increases to position size. Other than at time of future trades, the general account will then
+*never* be searched for additional funds (a position will be allowed to be closed out instead), nor will profits be moved into the
+general account from the margin account.
 
 ### Actual position margin levels:
 
@@ -155,7 +156,7 @@ When submitting, amending, or deleting an order in isolated margin mode and an a
 When an order trades which increases the position (increasing the absolute value of the trader's position), the target amount to be transferred is calculated as:
 
 ```math
-margin to add = margin factor * VWAP of new trades * total size of new trades
+margin to add = margin factor * sum across executed trades(abs(trade size) * trade price)
 ```
 
 This will be taken by performing three steps:
@@ -186,7 +187,7 @@ However in addition at each margin calculation update the returned `order margin
 
 ### Setting margin mode
 
-When isolated margin mode is enabled,  amount to be transferred is a fraction of the position's notional size that must be specified by the user when enabling isolated margin mode.
+When isolated margin mode is enabled, amount to be transferred is a fraction of the position's notional size that must be specified by the user when enabling isolated margin mode.
 
 The transaction to update/change margin mode can be included in a batch transaction in order to allow updates when placing an order. 
 
