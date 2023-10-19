@@ -18,7 +18,7 @@ Enabling or changing the terms of the volume discount program can be proposed vi
 - `benefit_tiers`: a list of dictionaries with the following fields
   - `minimum_party_running_notional_taker_volume`: the required `party_running_notional_taker_volume` in quantum units for a party to access this tier
   - `volume_discount_factor`: the proportion of the referees taker fees to be rewarded to the referrer
-- `end_of_program_timestamp`: the timestamp after which when the current epoch ends, the programs status will become `STATE_CLOSED` and benefits will be disabled. If this field is empty, the program runs indefinitely.
+- `end_of_program_timestamp`: the timestamp after which when the current epoch ends, the program will become inactive and benefits will be disabled. If this field is empty, the program runs indefinitely.
 - `window_length`:  the number of epochs over which to evaluate a parties notional running volume
 
 ```protobuf
@@ -48,6 +48,7 @@ When submitting a volume discount program proposal through governance the follow
 
 - a proposer cannot set an `end_of_program_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `volumeDiscountProgram.maxBenefitTiers`.
+- all `minimum_party_running_notional_taker_volume` values must be an integer value strictly greater than `0`.
 - all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
 
@@ -55,14 +56,14 @@ The volume discount program will start the epoch after the `enactment_timestamp`
 
 ## Volume discount program lifecycle
 
-After a volume discount program [proposal](#governance-proposals) is validated and accepted by the network, the network volume discount program is created / updated and can be one of the following states. The current state of the network volume discount program should be exposed via an API.
+After a volume discount program [proposal](#governance-proposals) is validated and accepted by the network, the network volume discount program is created / updated and can be one of the following states.
 
 | Status               | Benefits Enabled | Condition for entry                                       | Condition for exit                                                |
 | -------------------- | ---------------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
-| `STATUS_INACTIVE`    | No               | No proposal ever submitted, or previous proposal ended    | New governance proposal submitted to the network                  |
-| `STATUS_PROPOSED`    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
-| `STATUS_PENDING`     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
-| `STATUS_ACTIVE`      | Yes              | Previously `STATUS_PENDING`                               | End of epoch after network reaches proposal `end_of_program_timestamp`   |
+| Inactive    | No               | No proposal ever submitted, or previous proposal ended    | New governance proposal submitted to the network                  |
+| Proposed    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
+| Pending     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
+| Active      | Yes              | Previously Pending                               | End of epoch after network reaches proposal `end_of_program_timestamp`   |
 
 ## Benefit Mechanics
 
@@ -125,6 +126,7 @@ The Trades API should now also expose the following additional information for e
 1. If an `UpdateVolumeDiscount` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
     - the `end_of_program_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0084-VDPR-001" href="#0084-VDPR-001">0084-VDPR-001</a>).
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `volumeDiscountProgram.maxBenefitTiers` (<a name="0084-VDPR-002" href="#0084-VDPR-002">0084-VDPR-002</a>).
+    - all `minimum_party_running_notional_taker_volume` values must be an integer strictly greater than 0 (<a name="0084-VDPR-017" href="#0084-VDPR-017">0084-VDPR-017</a>).
     - all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor` (<a name="0084-VDPR-003" href="#0084-VDPR-003">0084-VDPR-003</a>).
     - the `window_length` must be an integer strictly greater than zero (<a name="0084-VDPR-004" href="#0084-VDPR-004">0084-VDPR-004</a>).
 1. A volume discount program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0084-VDPR-005" href="#0084-VDPR-005">0084-VDPR-005</a>).
