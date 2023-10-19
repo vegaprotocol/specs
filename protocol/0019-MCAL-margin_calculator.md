@@ -130,7 +130,7 @@ In future there can be multiple margin calculator implementations that would be 
 ## Isolated margin mode
 
 When in isolated margin mode, the position on the market has an associated margin factor.
-The margin factor must be greater than 0 and less than or equal to 1.
+The margin factor must be greater than 0 and less than or equal to 1, and also greater than `max(risk factor long, risk factor short)`.
 
 Isolated margin mode can be enabled by placing an _update margin mode_ transaction.
 The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`.
