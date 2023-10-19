@@ -48,7 +48,7 @@ When submitting a volume discount program proposal through governance the follow
 
 - a proposer cannot set an `end_of_program_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `volumeDiscountProgram.maxBenefitTiers`.
-- all `minimum_party_running_notional_taker_volume` values must be an integer value strictly greater than `1`.
+- all `minimum_party_running_notional_taker_volume` values must be an integer value strictly greater than `0`.
 - all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
 
