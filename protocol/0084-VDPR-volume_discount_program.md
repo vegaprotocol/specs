@@ -48,6 +48,7 @@ When submitting a volume discount program proposal through governance the follow
 
 - a proposer cannot set an `end_of_program_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `volumeDiscountProgram.maxBenefitTiers`.
+- all `minimum_party_running_notional_taker_volume` values must be an integer value strictly greater than `1`.
 - all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
 
@@ -125,6 +126,7 @@ The Trades API should now also expose the following additional information for e
 1. If an `UpdateVolumeDiscount` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
     - the `end_of_program_timestamp` must be less than or equal to the proposals `enactment_time` (<a name="0084-VDPR-001" href="#0084-VDPR-001">0084-VDPR-001</a>).
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `volumeDiscountProgram.maxBenefitTiers` (<a name="0084-VDPR-002" href="#0084-VDPR-002">0084-VDPR-002</a>).
+    - all `minimum_party_running_notional_taker_volume` values must be an integer strictly greater than 0 (<a name="0084-VDPR-017" href="#0084-VDPR-017">0084-VDPR-017</a>).
     - all `volume_discount_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `volumeDiscountProgram.maxVolumeDiscountFactor` (<a name="0084-VDPR-003" href="#0084-VDPR-003">0084-VDPR-003</a>).
     - the `window_length` must be an integer strictly greater than zero (<a name="0084-VDPR-004" href="#0084-VDPR-004">0084-VDPR-004</a>).
 1. A volume discount program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0084-VDPR-005" href="#0084-VDPR-005">0084-VDPR-005</a>).
