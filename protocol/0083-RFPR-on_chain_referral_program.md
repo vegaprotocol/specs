@@ -101,10 +101,11 @@ When submitting a referral program proposal through governance the following con
 
 - a proposer cannot set an `end_of_program_timestamp` less than the proposals `enactment_time`.
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
+- all `minimum_running_notional_taker_volume` values must be an integer value strictly greater than `0`.
 - all `minimum_epochs` values must be an integer strictly greater than 0
 - all `referral_reward_factor` values must be greater than `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
 - the number of tiers in `staking_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
-- all `minimum_staked_tokens` values must be an integer value greater than `0`.
+- all `minimum_staked_tokens` values must be an integer value strictly greater than `0`.
 - all `referral_reward_multiplier` values must be a float value greater than or equal to `1`.
 - all `referral_discount_factor` values must be greater than `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
@@ -113,14 +114,14 @@ The referral program will start the epoch after the `enactment_timestamp` is rea
 
 ## Referral program lifecycle
 
-After a referral program [proposal](#governance-proposals) is validated and accepted by the network, the network referral program is created / updated and can be one of the following states. The current state of the network referral program should be exposed via an API.
+After a referral program [proposal](#governance-proposals) is validated and accepted by the network, the network referral program is created / updated and can be one of the following states.
 
-| Status               | Benefits Enabled | Condition for entry                                       | Condition for exit                                                |
+| State               | Benefits Enabled | Condition for entry                                       | Condition for exit                                                |
 | -------------------- | ---------------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
-| `STATUS_INACTIVE`    | No               | No proposal ever submitted, or previous proposal ended    | New governance proposal submitted to the network                  |
-| `STATUS_PROPOSED`    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
-| `STATUS_PENDING`     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
-| `STATUS_ACTIVE`      | Yes              | Previously `STATUS_PENDING`                               | End of epoch after network reaches proposal `end_of_program_timestamp`   |
+| Inactive    | No               | No proposal ever submitted, or previous proposal ended    | New governance proposal submitted to the network                  |
+| Proposed    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
+| Pending     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
+| Active      | Yes              | Previously `pending`                               | End of epoch after network reaches proposal `end_of_program_timestamp`   |
 
 ## Referral set mechanics
 
@@ -249,7 +250,7 @@ The network can then calculate the set's `referral_set_running_notional_taker_vo
 
 ### Setting benefit factors and reward multipliers
 
-Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch (after pending `ApplyReferralCode` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee.
+Whilst a referral program is active, at the start of an epoch (after pending `ApplyReferralCode` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee.
 
 Note, when setting a referee's benefit factors we compare a sets `referral_set_running_notional_taker_volume` to a `minimum_running_notional_taker_volume` value. To prevent parties self-referring and moving teams, this `referral_set_running_notional_taker_volume` is always the value of the referee's original referral set.
 
@@ -401,8 +402,9 @@ The Estimate Fees API should now calculate the following additional information:
 ### Governance Proposals
 
 1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
-    - the `end_of_program_timestamp` must be less than or equal to the proposal's `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
+    - the `end_of_program_timestamp` must be greater than or equal to the proposal's `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers` (<a name="0083-RFPR-002" href="#0083-RFPR-002">0083-RFPR-002</a>).
+    - all `minimum_running_notional_taker_volume` values must be an integer strictly greater than 0 (<a name="0083-RFPR-051" href="#0083-RFPR-051">0083-RFPR-051</a>).
     - all `minimum_epochs_in_team` values must be an integer strictly greater than 0 (<a name="0083-RFPR-003" href="#0083-RFPR-003">0083-RFPR-003</a>).
     - all `referral_reward_factor` values must be greater than `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-004" href="#0083-RFPR-004">0083-RFPR-004</a>).
     - all `referral_discount_factor` values must be greater than `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-005" href="#0083-RFPR-005">0083-RFPR-005</a>).
