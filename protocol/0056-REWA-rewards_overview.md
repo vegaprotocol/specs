@@ -131,16 +131,6 @@ If a party **is not** a consensus or standby validator, their reward metric is s
 
 $$m_v = 0$$
 
-A specialised global rewards account type is used for these rewards.
-
-The share of the reward attributed to the given validator gets further split between the validator itself and its delegators as outlined in [PoS rewards spec](./0061-REWP-pos_rewards.md)
-
-#### Maximum payout per participant
-
-For validator ranking metric based rewards the payments are subject to `reward.staking.delegation.maxPayoutPerParticipant`.
-The maximum per participant is the maximum a single party (public key) on Vega can receive as a staking and delegation reward for one epoch. Each participant receives their due, capped by the max. The unpaid amount remain in the treasury.
-Setting this to `0` means no cap.
-
 ### Market creation reward metrics
 
 There will be a single market creation reward metric and reward type.
