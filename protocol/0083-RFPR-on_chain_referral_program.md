@@ -402,7 +402,7 @@ The Estimate Fees API should now calculate the following additional information:
 ### Governance Proposals
 
 1. If an `UpdateReferralProgram` proposal does not fulfil one or more of the following conditions, the proposal should be `STATUS_REJECTED`:
-    - the `end_of_program_timestamp` must be less than or equal to the proposal's `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
+    - the `end_of_program_timestamp` must be greater than or equal to the proposal's `enactment_time` (<a name="0083-RFPR-001" href="#0083-RFPR-001">0083-RFPR-001</a>).
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers` (<a name="0083-RFPR-002" href="#0083-RFPR-002">0083-RFPR-002</a>).
     - all `minimum_running_notional_taker_volume` values must be an integer strictly greater than 0 (<a name="0083-RFPR-051" href="#0083-RFPR-051">0083-RFPR-051</a>).
     - all `minimum_epochs_in_team` values must be an integer strictly greater than 0 (<a name="0083-RFPR-003" href="#0083-RFPR-003">0083-RFPR-003</a>).
