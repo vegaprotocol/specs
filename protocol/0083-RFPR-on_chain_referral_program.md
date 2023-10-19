@@ -114,14 +114,14 @@ The referral program will start the epoch after the `enactment_timestamp` is rea
 
 ## Referral program lifecycle
 
-After a referral program [proposal](#governance-proposals) is validated and accepted by the network, the network referral program is created / updated and can be one of the following states. The current state of the network referral program should be exposed via an API.
+After a referral program [proposal](#governance-proposals) is validated and accepted by the network, the network referral program is created / updated and can be one of the following states.
 
-| Status               | Benefits Enabled | Condition for entry                                       | Condition for exit                                                |
+| State               | Benefits Enabled | Condition for entry                                       | Condition for exit                                                |
 | -------------------- | ---------------- | --------------------------------------------------------- | ----------------------------------------------------------------- |
-| `STATUS_INACTIVE`    | No               | No proposal ever submitted, or previous proposal ended    | New governance proposal submitted to the network                  |
-| `STATUS_PROPOSED`    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
-| `STATUS_PENDING`     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
-| `STATUS_ACTIVE`      | Yes              | Previously `STATUS_PENDING`                               | End of epoch after network reaches proposal `end_of_program_timestamp`   |
+| Inactive    | No               | No proposal ever submitted, or previous proposal ended    | New governance proposal submitted to the network                  |
+| Proposed    | No               | Governance proposal valid and accepted                    | Governance proposal voting period ends (or proposal is invalid)   |
+| Pending     | No               | Governance vote passes                                    | End of epoch after network reaches proposal `enactment_timestamp` |
+| Active      | Yes              | Previously `pending`                               | End of epoch after network reaches proposal `end_of_program_timestamp`   |
 
 ## Referral set mechanics
 
@@ -250,7 +250,7 @@ The network can then calculate the set's `referral_set_running_notional_taker_vo
 
 ### Setting benefit factors and reward multipliers
 
-Whilst a referral program is `STATUS_ACTIVE`, at the start of an epoch (after pending `ApplyReferralCode` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee.
+Whilst a referral program is active, at the start of an epoch (after pending `ApplyReferralCode` transactions have been processed) the network must set the `referral_reward_factor` and `referral_discount_factor` for each referee.
 
 Note, when setting a referee's benefit factors we compare a sets `referral_set_running_notional_taker_volume` to a `minimum_running_notional_taker_volume` value. To prevent parties self-referring and moving teams, this `referral_set_running_notional_taker_volume` is always the value of the referee's original referral set.
 
