@@ -343,7 +343,7 @@ The amount is calculated by
 
 Where:
 
-- `NETWORK_MAX_AMOUNT` is a network parameter specifying the maximum absolute amount that can be transferred by governance for the source account type
+- `NETWORK_MAX_AMOUNT` is a network parameter specifying the maximum amount that can be transferred by governance for the source account type, as a multiplier for the transfer asset's quantum
 - `NETWORK_MAX_FRACTION` is a network parameter specifying the maximum fraction of the balance that can be transferred by governance for the source account type (must be <= 1)
 
 If `type` is "all or nothing" then the transfer will only proceed if:
