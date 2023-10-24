@@ -177,11 +177,13 @@ NB: In implementation, for any volume that trades immediately on entry, the addi
 
 ### Reducing Position
 
-When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is calculated as:
+When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is determined by the fraction of the position which is being closed. However, this fraction should also take into account that the entire position's margin may be due to change since the current trading price may have diverged from the last mark price update. As such the margin released should be calculated as:
 
 ```math
-margin to remove = current margin * abs(total size of new trades) / abs(position prior to trade)
+margin to remove = margin required for entire position at VWAP trade price * abs(total size of new trades) / abs(entire position prior to trade)
 ```
+
+Note: This requires a calculation of the position's margin at trade time.
 
 ### Changing Sides
 
