@@ -125,8 +125,6 @@ Margin levels are used by the protocol to ascertain whether a trader has suffici
 
 In future there can be multiple margin calculator implementations that would be configurable in the market framework. This spec describes one implementation.
 
-
-
 ## Isolated margin mode
 
 When in isolated margin mode, the position on the market has an associated margin factor.
@@ -141,6 +139,7 @@ The default when placing an order with no change to margin mode specified must b
 ### Placing an order
 
 When submitting, amending, or deleting an order in isolated margin mode and continuous trading, a two step process will be followed:
+
    1. First, the core will check whether the order will trade, either fully or in part, immediately upon entry. If so:
       1. If the trade would increase the party's position, the required additional funds as specified in the Increasing Position section will be calculated. The total expected margin balance (current plus new funds) will then be compared to the `maintenance margin` for the expected position, if the margin balance would be less than maintenance, instead reject the order in it's entirety. If the margin will be greater than the maintenance margin their general account will be checked for sufficient funds.
          1. If they have sufficient, that amount will be moved into their margin account and the immediately matching portion of the order will trade.
