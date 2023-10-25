@@ -84,7 +84,7 @@
 
 ## Summary
 
-The *margin calculator* returns the set of margin levels for a given _actual position_, along with the amount of additional margin (if any) required to support the party's *potential position* (i.e. active orders including any that are parked/untriggered/undeployed).
+The *margin calculator* returns the set of margin levels for a given *actual position*, along with the amount of additional margin (if any) required to support the party's *potential position* (i.e. active orders including any that are parked/untriggered/undeployed).
 
 
 ### Margining modes
@@ -105,7 +105,7 @@ general account from the margin account.
 
 1. **Maintenance margin**: the minimum margin a party must have in their margin account to avoid the position being liquidated.
 
-1. **Collateral search level**: when in cross-margin mode, the margin account balance below which the system will seek to re-collateralise the margin account back to the initial margin level.
+1. **Collateral search level**: when in cross-margin mode, the margin account balance below which the system will seek to recollateralise the margin account back to the initial margin level.
 
 1. **Initial margin**: when in cross-margin mode, the margin account balance initially allocated for the position, and the balance to which the margin account will be returned after collateral search and release, if possible.
 
