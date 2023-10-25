@@ -295,6 +295,7 @@ unstake
 unstaked
 unstakes
 unstaking
+untriggered
 unvested
 url
 USD
