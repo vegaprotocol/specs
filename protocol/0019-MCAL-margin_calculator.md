@@ -84,7 +84,7 @@
 
 ## Summary
 
-The *margin calculator* returns the set of margin levels for a given _actual position_, along with the amount of additional margin (if any) required to support the party's _potential position_ (i.e. active orders including any that are parked/untriggered/undeployed).
+The *margin calculator* returns the set of margin levels for a given _actual position_, along with the amount of additional margin (if any) required to support the party's *potential position* (i.e. active orders including any that are parked/untriggered/undeployed).
 
 
 ### Margining modes
@@ -96,16 +96,16 @@ The current mode will be stored alongside of party's position record.
 When in cross-margin mode, margin is dynamically acquired and released as a position is marked to market, allowing profitable positions to offset losing positions for higher capital efficiency (especially with e.g. pairs trades).
 
 1. **Isolated margin mode**: this mode sacrifices capital efficiency for predictability and risk management by segregating positions.
-In this mode, the entire margin for any newly opened position volume is transferred to the margin account when the trade is executed. 
+In this mode, the entire margin for any newly opened position volume is transferred to the margin account when the trade is executed.
 This includes completely new positions and increases to position size. Other than at time of future trades, the general account will then
 *never* be searched for additional funds (a position will be allowed to be closed out instead), nor will profits be moved into the
 general account from the margin account.
 
-### Actual position margin levels:
+### Actual position margin levels
 
 1. **Maintenance margin**: the minimum margin a party must have in their margin account to avoid the position being liquidated.
 
-1. **Collateral search level**: when in cross-margin mode, the margin account balance below which the system will seek to recollateralise the margin account back to the initial margin level.
+1. **Collateral search level**: when in cross-margin mode, the margin account balance below which the system will seek to re-collateralise the margin account back to the initial margin level.
 
 1. **Initial margin**: when in cross-margin mode, the margin account balance initially allocated for the position, and the balance to which the margin account will be returned after collateral search and release, if possible.
 
@@ -113,10 +113,10 @@ general account from the margin account.
 
 The protocol is designed such that ***Maintenance margin < Collateral search level < Initial margin < Collateral release level***.
 
-### Potential position margin level:
+### Potential position margin level
 
 1. **Order margin**: the amount of additional margin on top of the amount in the margin account that is required for the party's current active orders.
-Note that this may be zero if the active orders can only decrease the position size. 
+Note that this may be zero if the active orders can only decrease the position size.
 
 
 Margin levels are used by the protocol to ascertain whether a trader has sufficient collateral to maintain a margined trade. When the trader enters an open position, this required amount is equal to the *initial margin*. Subsequently, throughout the life of this open position, the minimum required amount is the *maintenance margin*. As a trader's collateral level dips below the *collateral search level* the protocol will automatically search for more collateral to be assigned to support this open position from the trader's general collateral accounts. In the event that a trader has collateral that is above the *collateral release level* the protocol will automatically release collateral to a trader's general collateral account for the relevant asset.
@@ -130,7 +130,7 @@ In future there can be multiple margin calculator implementations that would be 
 When in isolated margin mode, the position on the market has an associated margin factor.
 The margin factor must be greater than 0 and less than or equal to 1, and also greater than `max(risk factor long, risk factor short)`.
 
-Isolated margin mode can be enabled by placing an _update margin mode_ transaction.
+Isolated margin mode can be enabled by placing an *update margin mode* transaction.
 The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`.
 This value must be above the `initial margin` for the current position or the transaction will be rejected.
 
@@ -145,7 +145,7 @@ When submitting, amending, or deleting an order in isolated margin mode and cont
          1. If they have sufficient, that amount will be moved into their margin account and the immediately matching portion of the order will trade.
          1. If they do not have sufficient, the order will be rejected in it's entirety for not meeting margin requirements.
       1. If the trade would decrease the party's position, that portion will trade and margin will be released as in the Decreasing Position section
-   1. If the order is not persistent this is the end, if it is persistent any portion of the order which has not traded in step 1 will move to being placed on the order book. 
+   1. If the order is not persistent this is the end, if it is persistent any portion of the order which has not traded in step 1 will move to being placed on the order book.
       1. At this point, the party's general account will be checked for margin to cover the additional amount required for the new orders. Each side can be checked individually and the maximum for either side taken into the order margin pool. This calculation must be rerun every time the party's orders or position change. For each side:
          1. Sort all orders by price, starting from first to execute (highest price for buying, lowest price for selling).
          1. If the party currently has a position `x`, assign `0` margin requirement the first-to-trade `x` of volume on the opposite side as this would reduce their position (for example, if a party had a long position `10` and sell orders of `15` at a price of `$100` and `10` at a price of `$150`, the first `10` of the sell order at `$100` would not require any order margin).
@@ -168,11 +168,12 @@ margin to add = margin factor * sum across executed trades(abs(trade size) * tra
 ```
 
 This will be taken by performing three steps:
- 1. The margin to add as calculated here is compared to the margin which would have been placed into the order margin account for this order, `limit price * remaining size * margin factor`. 
+
+ 1. The margin to add as calculated here is compared to the margin which would have been placed into the order margin account for this order, `limit price * remaining size * margin factor`.
  2. If it is equal, this amount is taken from the order margin account and placed into the margin account
  3. If the order traded at a price which means less margin should be taken then the amount `margin to add` above is taken from the order margin account into the margin account and the excess is returned from the order margin account to the general account
 
-NB: In implementation, for any volume that trades immediately on entry, the additional margin may be transferred directly from the general account to the margin account. 
+NB: In implementation, for any volume that trades immediately on entry, the additional margin may be transferred directly from the general account to the margin account.
 
 ### Reducing Position
 
@@ -199,19 +200,22 @@ However in addition at each margin calculation update the returned `order margin
 
 When isolated margin mode is enabled, amount to be transferred is a fraction of the position's notional size that must be specified by the user when enabling isolated margin mode.
 
-The transaction to update/change margin mode can be included in a batch transaction in order to allow updates when placing an order. 
+The transaction to update/change margin mode can be included in a batch transaction in order to allow updates when placing an order.
 
 When in isolated margin mode, it is possible to request to both increase or decrease the margin factor setting:
- - The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`. This value must be above the `initial margin` for the current position or the transaction will be rejected.
-   - If this is less than the balance currently in the margin account, the difference will be moved from the margin account to the general account
-   - If this is larger than the balance currently in the margin account, the difference will be moved from the general account to the margin account. If there are not enough funds to complete this transfer, the transaction will be rejected and no change of margin factor will occur.
+
+- The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`. This value must be above the `initial margin` for the current position or the transaction will be rejected.
+  - If this is less than the balance currently in the margin account, the difference will be moved from the margin account to the general account
+  - If this is larger than the balance currently in the margin account, the difference will be moved from the general account to the margin account. If there are not enough funds to complete this transfer, the transaction will be rejected and no change of margin factor will occur.
 
 When switching to isolated margin mode, the following steps will be taken:
+
   1. For any active position, calculate `average entry price * abs(position) * margin factor`. Calculate the amount of funds which will be added to, or subtracted from, the general account in order to do this. If additional funds must be added which are not available, reject the transaction immediately.
   2. For any active orders, calculate the quantity `limit price * remaining size * margin factor` which needs to be placed in the order margin account. Add this amount to the difference calculated in step 1. If this amount is less than or equal to the amount in the general account, perform the transfers (first move funds into/out of margin account, then move funds into the order margin account). If there are insufficient funds, reject the transaction.
   3. Move account to isolated margin mode on this market
 
 When switching from isolated margin mode to cross margin mode, the following steps will be taken:
+
    1. Any funds in the order margin account will be moved to the margin account.
    2. At this point trading can continue with the account switched to the cross margining account type. If there are excess funds in the margin account they will be freed at the next margin release cycle.
 
@@ -329,6 +333,7 @@ maintenance_margin
     = max(min(abs(open_volume) * slippage_per_unit, mark_price * (abs(open_volume) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0)
     + abs(open_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
 ```
+
 where
 
 `slippage_per_unit = max(0, Product.value(market_observable) - Product.value(exit_price))`
