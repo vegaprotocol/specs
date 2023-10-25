@@ -17,13 +17,15 @@ Note that a party can also associate the governance / staking asset via the [Veg
 1. Mark-to-market settlement account per market: this is used for collecting and distributing mark-to-market settlement cashflows and is *zero* at the end of each mark-to-market settlement run.
 1. Margin accounts for each party with open orders or positions on any [market](./0043-MKTL-market_lifecycle.md).
 1. Bond account for any party that's an [LP on any market](0044-LIME-lp_mechanics_type.md).
-1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md) for any market.
+1. [Global insurance pool](0015-INSR-market_insurance_pool_collateral.md#global-insurance-pool) (1 per asset)
+1. [Insurance pool account](0015-INSR-market_insurance_pool_collateral.md#market-insurance-pool) for any market.
 1. [Liquidity fee pool](0042-LIQF-setting_fees_and_rewarding_lps.md) for any market.
 1. [Infrastructure fee pool](0029-FEES-fees.md) for any asset.
-1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* reward account per every Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [staking rewards](0061-REWP-pos_rewards.md) account.
-1. [Vega trasury accounts](0055-TREA-on_chain_treasury.md) per Vega asset.
+1. [Reward accounts](0056-REWA-rewards_overview.md) which exist for *each* Vega asset (settlement asset) and per every reward metric per every Vega asset (reward asset). There is an additional [global rewards account](0056-REWA-rewards_overview.md#validator-ranking-metric) used for supplementary (on top of infrastructure fee split) validator rewards.
 
 One key difference with staking accounts is that the collateral is not held in an asset bridge, but in the [staking bridge](./0071-STAK-erc20_governance_token_staking.md). The balance is changed by events on Ethereum, rather than actions taken on the Vega chain.
+
+Note that both the network treasury and the global rewards account use the same `0` address. Account type is used to differentiate where the funds should go into when making a transfer. The deposits made to the `0` account get credited to the global rewards account.
 
 ## Summary
 
@@ -73,9 +75,9 @@ If there is a positive balance in an account that is being deleted, that balance
 
 ## Bond accounts
 
-Bond accounts are opened when a party opens a [Liquidity Provision order](./0044-LIME-lp_mechanics.mdd). The bond is held by the network to ensure that the Liquidity Provider meets their SLA obligations. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management.
+Bond accounts are opened when a party opens a [Liquidity Provision order](./0044-LIME-lp_mechanics.md). The bond is held by the network to ensure that the Liquidity Provider meets their SLA obligations. [0044-LIME - LP Mechanics](./0044-LIME-lp_mechanics.md) contains more detail on bond management.
 
-## Insurance pools
+## Market insurance pools
 
 Every market will have at least one insurance pool account that holds collateral that can be used to cover losses in case of unreasonable market events.
 
@@ -83,7 +85,26 @@ Every market will have at least one insurance pool account that holds collateral
 
 When a [market launches](./0043-MKTL-market_lifecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md).
 
-When a market is finalised / closed remaining funds are distributed to the on chain treasury.  This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
+When a market is finalised / closed remaining funds are redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
+
+## General insurance pool
+
+There is a general insurance pool for every asset which has been used by at least one market which was closed and had positive balance in its insurance pool.
+
+**Creation/Deletion:**
+
+When a market gets closed and positive balance remains in its insurance pool then part of the that balance gets moved to the global insurance pool for the asset which market used as its settlement asset. If the insurance pool for that asset doesn't exist yet then it gets created on the fly at the point of that transfer.
+
+Currently these accounts never get deleted.
+
+## Network treasury
+
+Network treasury holds assets which can only be moved to another account via the [governance initiated transfer](./0028-GOVE-governance.md#governance-initiated-transfer-proposals).
+Funds are moved into the network treasury using (external) deposits or (internal) transfers. If the network treasury doesn't exist for an asset supported for deposits and/or transfers then it gets created on the fly at the point of that transfer.
+
+## Fee distribution accounts
+
+Additional accounts (one per each supported asset) associated with distribution of trading fees (infrastructure fees, maker fees, liquidity provision fees) exist. Please refer to the [fees](./0029-FEES-fees.md) and [LP](./0042-LIQF-setting_fees_and_rewarding_lps.md) specs for more details.
 
 ## Staking accounts
 
@@ -92,6 +113,14 @@ In Vega governance is controlled by a [governance token](./0028-GOVE-governance.
 - Like [margin accounts](#margin-accounts), a party cannot transfer or place orders with the balance in staking accounts
 
 Note that it *is* possible to have markets in the governance asset, in which case all of the accounts detailed above will still apply. Staking accounts only relate to the balance of the governance asset that has been staked.
+
+## Global rewards account
+
+A special account type used for distribution of rewards based on validator ranking metric. Funds are moved into the global rewards account using (external) deposits or (internal) transfers. Please refer to the [subsection of the rewards spec](./0056-REWA-rewards_overview.md#validator-ranking-metric) for details around distribution of funds from that account.
+
+## Rewards account
+
+Additional accounts associated with [distribution](./0056-REWA-rewards_overview.md) and [vesting](./0085-RVST-rewards_vesting.md) of other rewards exist, please refer to the relevant spec files for more details.
 
 ## Acceptance Criteria
 
@@ -130,7 +159,7 @@ Note that it *is* possible to have markets in the governance asset, in which cas
 
 - When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0013-ACCT-020" href="#0013-ACCT-020">0013-ACCT-020</a>)
 - Only protocol-initiated aka internal transfer requests move money in or out of the insurance account. User initiated transfer requests cannot be used to move funds in or out of insurance pool. (<a name="0013-ACCT-021" href="#0013-ACCT-021">0013-ACCT-021</a>)
-- When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds redistributed to the [network treasury](./0055-TREA-on_chain_treasury.md) account for the appropriate asset (if it doesn't exist create it) and other insurance pools using the same asset. (<a name="0013-ACCT-022" href="#0013-ACCT-022">0013-ACCT-022</a>)
+- When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds redistributed to the global insurance pool account for the appropriate asset (if it doesn't exist create it) and other insurance pools using the same asset. (<a name="0013-ACCT-032" href="#0013-ACCT-032">0013-ACCT-032</a>)
 
 ### Special case: Staking accounts
 
@@ -144,3 +173,12 @@ One key difference with staking accounts is that the collateral is not held in a
   - The balance can only be delegated to Validators (<a name="0013-ACCT-015" href="#0013-ACCT-015">0013-ACCT-015</a>)
   - The balance cannot be traded, or used as margin, or transferred, or withdrawn (<a name="0013-ACCT-016" href="#0013-ACCT-016">0013-ACCT-016</a>)
   - Delegated stake remains in the trader's staking account (<a name="0013-ACCT-017" href="#0013-ACCT-017">0013-ACCT-017</a>)
+
+### Network treasury
+
+- It is possible to transfer funds from a Vega general account to the network treasury account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-026" href="#0013-ACCT-026">0013-ACCT-026</a>)
+
+### Global rewards account
+
+- It is possible to deposit funds from Ethereum directly into the global rewards account by specifying the `0` Vega address. (<a name="0013-ACCT-027" href="#0013-ACCT-027">0013-ACCT-027</a>)
+- It is possible to transfer funds from a Vega general account to the global rewards account by specifying the `0` address and appropriate account type. (<a name="0013-ACCT-028" href="#0013-ACCT-028">0013-ACCT-028</a>)

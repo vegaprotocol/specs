@@ -6,7 +6,6 @@ These rewards operate in addition to the main protocol economic incentives which
 These fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](./0061-REWP-pos_rewards.md).
 
 The additional rewards described here can be funded arbitrarily by users of the network and may be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
-Note that transfers via governance, including to fund rewards, is a post-Oregon Trail feature.
 
 Note that validator rewards (and the reward account for those) is covered in [validator rewards](./0061-REWP-pos_rewards.md) and is separate from the trading reward framework described here.
 
@@ -24,7 +23,7 @@ At a high level, rewards work as follows:
 
 At the end of the epoch:
 
-1. Recurring reward transfers (set up by the parties funding the rewards) are made to the reward account(s) for a specific reward type, for one or more markets in scope where the total reward metric is `>0`. See [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts).
+1. Recurring reward transfers (set up by the parties funding the rewards or via governance) are made to the reward account(s) for a specific reward type, for one or more markets in scope where the total reward metric is `>0`. See [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts).
 1. Then the entire balance of each reward account is distributed amongst entities with a non-zero reward metric for that reward type and market using the mechanism specified in the recurring transfer.
 1. Distributed rewards are transferred to a [vesting account](./0085-RVST-rewards_vesting.md).
 
@@ -39,7 +38,7 @@ Metrics only need to be calculated where the [market, reward type] reward accoun
 Reward metrics will be calculated once for each party/market combination in the reward metric asset which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market.
 This is the original precision for the metric source data.
 
-For reward metrics relating to trading, an individual must meet the [staking requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) **AND** [notional time-weighted average position requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts)) set in the recurring transfer. If they do not then their reward metric is set to `0`. Note, these requirements do not apply to the [validator ranking metric](#returns-volatility-metric) or the [market creation reward metric](#market-creation-reward-metrics).
+For reward metrics relating to trading, an individual must meet the [staking requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) **AND** [notional time-weighted average position requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts)) set in the recurring transfer. If they do not then their reward metric is set to `0`. Note, these requirements do not apply to the [validator ranking metric](#validator-ranking-metric) or the [market creation reward metric](#market-creation-reward-metrics).
 
 For reward transfers where the [scope](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) is set to teams, each party must meet the minimum time in team requirement. That is, given a party has been in a team for $N$ epochs, if $N$ is strictly less than the network parameter `rewards.minimumEpochsInTeam` (an integer defaulting to `0`) their reward metric is set to `0`.
 
@@ -112,13 +111,13 @@ $$m_{rr} = \max(\frac{\sum_{i}^{n}{r_{i}}}{N}, 0)$$
 
 The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
 
-At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the standard deviation of the set of each parties returns over the last $N$ epochs.
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs.
 
 Given the set:
 
 $$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
 
-The reward metric $m_{rv}$ is the standard deviation of the set $R$.
+The reward metric $m_{rv}$ is the variance of the set $R$.
 
 ### Validator ranking metric
 
@@ -167,8 +166,7 @@ Note this reward metric **is not** available for team rewards.
 
 All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
 
-A team’s reward metric is the weighted average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
-
+A team’s reward metric is the average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
 
 ## Reward accounts
 
@@ -958,3 +956,63 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - The general account balance of the `ETHUSDT` creator should be 10000.
 - The reward pool balance should be 0.
+
+### Reward Eligibility
+
+- If a parties staked governance tokens ($VEGA) is strictly less than the `staking_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-076" href="#0056-REWA-076">0056-REWA-076</a>).
+- If a parties time-weighted average position (across all in scope-markets) is strictly less than the `notional_time_weighted_average_position_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-077" href="#0056-REWA-077">0056-REWA-077</a>).
+
+### Average Position
+
+- If an eligible party opens a position at the beginning of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-078" href="#0056-REWA-078">0056-REWA-078</a>).
+- If an eligible party held an open position at the start of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-079" href="#0056-REWA-079">0056-REWA-079</a>).
+- If an eligible party opens a position half way through the epoch, their average position reward metric should be half the size of the position at the end of the epoch (<a name="0056-REWA-080" href="#0056-REWA-080">0056-REWA-080</a>).
+- If an eligible party held an open position at the start of the epoch and closes it half-way through the epoch, their average position reward metric should be equal to the size of that position at the end of the epoch (<a name="0056-REWA-081" href="#0056-REWA-081">0056-REWA-081</a>).
+- If an eligible party held positions in multiple in-scope markets, their average position reward metric should be the sum of the size of their time-weighted-average-position in each market (<a name="0056-REWA-082" href="#0056-REWA-082">0056-REWA-082</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties average position reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-083" href="#0056-REWA-083">0056-REWA-083</a>).
+
+### Relative returns
+
+- If an eligible party has negative net returns, their relative returns reward metric should be zero (<a name="0056-REWA-084" href="#0056-REWA-084">0056-REWA-084</a>).
+- If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-085" href="#0056-REWA-085">0056-REWA-085</a>).
+- If an eligible party is participating in multiple in-scope markets, their relative returns reward metric should be the sum of their relative returns from each market (<a name="0056-REWA-086" href="#0056-REWA-086">0056-REWA-086</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-087" href="#0056-REWA-087">0056-REWA-087</a>).
+
+### Returns volatility
+
+- If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+
+### Validator ranking metric
+
+- If a party is a consensus or standby validator their validator ranking reward metric should be set to their ranking score (<a name="0056-REWA-091" href="#0056-REWA-091">0056-REWA-091</a>).
+- If a party is not a consensus or standby validator their validator ranking reward metric should be set to `0` (<a name="0056-REWA-092" href="#0056-REWA-092">0056-REWA-092</a>).
+
+### Distribution Strategy
+
+- If the pro-rata distribution strategy was specified in the recurring transfer, each eligible parties share of the rewards pool should be equal to their reward metric (assuming no other multipliers) (<a name="0056-REWA-093" href="#0056-REWA-093">0056-REWA-093</a>).
+- If the rank distribution strategy was specified in the recurring transfer, each eligible parties share of the reward pool should be equal to the `share_ratio` defined by their position in the `rank_table` (assuming no other multipliers) (<a name="0056-REWA-094" href="#0056-REWA-094">0056-REWA-094</a>).
+
+
+### Entity Scope
+
+#### Individuals
+
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, transfers setting the `teams_scope` field should be rejected as invalid (<a name="0056-REWA-095" href="#0056-REWA-095">0056-REWA-095</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, transfers not setting the `individual_scope` field should be rejected as invalid (<a name="0056-REWA-096" href="#0056-REWA-096">0056-REWA-096</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_ALL`, all individual parties should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-097" href="#0056-REWA-097">0056-REWA-097</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_IN_A_TEAM`, only individual parties who are in a team should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-098" href="#0056-REWA-098">0056-REWA-098</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_NOT_IN_A_TEAM`, only individual parties not in a team should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-099" href="#0056-REWA-099">0056-REWA-099</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, rewards should be distributed among eligible individual parties according to each parties reward metric value (<a name="0056-REWA-100" href="#0056-REWA-100">0056-REWA-100</a>).
+
+#### Teams
+
+- If the entity scope is `ENTITY_SCOPE_TEAMS`, transfers setting the `individual_scope` field should be rejected as invalid (<a name="0056-REWA-101" href="#0056-REWA-101">0056-REWA-101</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` transfers not setting the `n_top_performers` field should be rejected as invalid (<a name="0056-REWA-102" href="#0056-REWA-102">0056-REWA-102</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` and the teams scope is not-set, then all teams are eligible for rewards (<a name="0056-REWA-103" href="#0056-REWA-103">0056-REWA-103</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` and the teams scope is set, then only the teams specified in the teams scope are eligible for rewards (<a name="0056-REWA-104" href="#0056-REWA-104">0056-REWA-104</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS`, then rewards should be allocated to teams according to each teams reward metric value (<a name="0056-REWA-105" href="#0056-REWA-105">0056-REWA-105</a>).
+- Each team’s reward metric should be the average metric of the top `n_top_performers` % of team members, e.g. for a team of 100 parties with `n_top_performers=0.1`, the 10 members with the highest metric (<a name="0056-REWA-106" href="#0056-REWA-106">0056-REWA-106</a>).
+- If a team member has a non-zero reward metric, they should receive a share of the rewards proportional to their individual payout multipliers (<a name="0056-REWA-107" href="#0056-REWA-107">0056-REWA-107</a>).
+- If a team member has a zero reward metric, they should receive no share of the rewards allocated to the team (<a name="0056-REWA-108" href="#0056-REWA-108">0056-REWA-108</a>).

@@ -4,7 +4,7 @@ This built-in product provides perpetual futures contracts that are cash-settled
 
 Background reading: [1](https://www.paradigm.xyz/2021/05/everlasting-options/#Perpetual_Futures), [2](https://arxiv.org/pdf/2212.06888.pdf).
 
-Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md). Additionally, a settlement using external data is carried out whenever `settlement_schedule` is triggered. Data obtained from the `settlement_data` oracle between to consecutive `settlement_schedule` events is used to calculate the funding payment and exchange cashflows between parties with open positions in the market.
+Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md). Additionally, a settlement using external data is carried out whenever `settlement_schedule` is triggered. Data obtained from the `settlement_data` oracle between two consecutive `settlement_schedule` events is used to calculate the funding payment and exchange cashflows between parties with open positions in the market.
 
 Unlike traditional futures contracts, the perpetual futures never expire. Without the settlement at expiry there would be nothing in the fixed-expiry futures to tether the contract price to the underlying spot market it's based on. To assure that the perpetuals market tracks the underlying spot market sufficiently well a periodic cashflow is exchanged based on the relative prices in the two markets. Such payment covering the time period $t_{i-1}$ to $t_i$ takes the basic form $G_i = \frac{1}{t_i-t_{i-1}} \int_{t_{i-1}}^{t_i}(F_u-S_u)du$, where $F_u$ and $S_u$ are respectively: the perpetual futures price and the spot price at time $u$. We choose to use the mark price to approximate $F_u$ and oracle to approximate $S_u$, so this is effectively the difference between the time-weighted average prices (TWAP) of the two. An optional interest rate and clamp function are included in the funding rate calculation, see the [funding payment calculation](#funding-payment-calculation) section for details.
 
@@ -81,11 +81,11 @@ Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.m
 
 ### 4.3. Periodic settlement
 
-When the `settlement_schedule` event is received we need to calculated the funding payment. Store the current vega time as `funding_period_end`.
+When the `settlement_schedule` event is received we need to calculate the funding payment. Store the current vega time as `funding_period_end`.
 
 If there are no oracle data points with a timestamp less than `funding_period_end` available then funding payment is skipped and `funding_period_start` gets overwritten with `funding_period_end`.
 
-If such points available then the calculations discussed in the following subsections get executed and funding payments get exchanged.
+If such points are available then the calculations discussed in the following subsections get executed and funding payments get exchanged.
 
 #### TWAP spot price calculation
 
@@ -165,7 +165,7 @@ and emitted as an event.
 
 #### Exchanging funding payments between parties
 
-Last step is to calculate each party's cash flows as $-\text{open volume} * \text{funding payment}$ where cashflows are first collected from parties that are making the payment (negative value of the cashflow, i.e. longs when the funding payment is positive) and distributed to those receiving it. Any shortfall should be made-up from the insurance pool and if that's not possible loss socialisation should be applied (exactly as per mark-to-market settlement methodology).
+Last step is to calculate each party's cash flows as $-\text{open volume} * \text{funding payment}$ where cashflows are first collected from parties that are making the payment (negative value of the cashflow, i.e. longs when the funding payment is positive) and distributed to those receiving it. Any shortfall should be made-up from the market's insurance pool and if that's not possible loss socialisation should be applied (exactly as per mark-to-market settlement methodology).
 
 ### 4.3.1. Periodic settlement during [auction](0026-AUCT-auctions.md)
 
@@ -175,11 +175,11 @@ If periodic settlement data happens whilst market is in auction of any other typ
 ### 5. Margin considerations
 
 To assure adequate solvency we need to include the estimate of the upcoming funding payment in maintenance margin estimate for the party. Let $t_{k-1}$ be the time of the last funding payment. Let $t$ be current time ($t < t_k$).
-Calculate $G_t$ as the [funding payment](#43-periodic-settlement) between $t_{k-1}$ and $t$.
+Calculate $G_t$ as the [funding payment](#43-periodic-settlement) between $t_{k-1}$ and $t$, and consider open volume of the party for which the margin is being calculated.
 For perpetual futures markets set the maintenance margin as:
 
 ```math
-m^{\text{maint (perps)}}_t = m^{\text{maint}}_t + \text{margin funding factor} \cdot \max(0,G_t),
+m^{\text{maint (perps)}}_t = m^{\text{maint}}_t + \text{margin funding factor} \cdot \max(0, \text{open volume}\ cdot G_t),
 ```
 
 where $m^{\text{maint}}_t$ is the current maintenance margin as per the [margin spec](./0019-MCAL-margin_calculator.md)
@@ -224,9 +224,13 @@ In both cases the estimates are for a hypothetical position of size 1.
 1. Receiving correctly formatted data from settlement data oracles and settlement schedule oracles during continuous trading results in periodic settlement. (<a name="0053-PERP-007" href="#0053-PERP-007">0053-PERP-007</a>)
 1. Receiving correctly formatted data from the settlement data and settlement schedule oracles during liquidity monitoring auction results in the exchange of periodic settlement cashflows. Market remains in liquidity monitoring auction until enough additional liquidity gets committed to the market. (<a name="0053-PERP-008" href="#0053-PERP-008">0053-PERP-008</a>)
 1. Receiving correctly formatted data from the settlement data and settlement schedule oracles during price monitoring auction results in the exchange of periodic settlement cashflows. Market remains in price monitoring auction until its original duration elapses, uncrosses the auction and goes back to continuous trading mode. (<a name="0053-PERP-009" href="#0053-PERP-009">0053-PERP-009</a>)
-1. When the funding payment is positive the margin levels of parties with long positions are larger than what the basic margin calculations imply. Moreover, the additional amount grows as the funding payment nears and drops right after the payment. Parties with short positions are not impacted. (<a name="0053-PERP-015" href="#0053-PERP-015">0053-PERP-015</a>)
-1. When the funding payment is negative the margin levels of parties with short positions are larger than what the basic margin calculations imply. Moreover, the additional amount grows as the funding payment nears and drops right after the payment. Parties with long positions are not impacted. (<a name="0053-PERP-016" href="#0053-PERP-016">0053-PERP-016</a>)
+1. When the funding payment is positive the margin levels of parties with long positions are larger than what the basic margin calculations imply. Parties with short positions are not impacted. (<a name="0053-PERP-015" href="#0053-PERP-015">0053-PERP-015</a>)
+1. When the funding payment is negative the margin levels of parties with short positions are larger than what the basic margin calculations imply. Parties with long positions are not impacted. (<a name="0053-PERP-016" href="#0053-PERP-016">0053-PERP-016</a>)
 1. An event containing funding rate should be emitted each time the funding payment is calculated (<a name="0053-PERP-017" href="#0053-PERP-017">0053-PERP-017</a>)
 1. No data relating to funding payment is available until the perpetual futures market leaves the opening auction. (<a name="0053-PERP-018" href="#0053-PERP-018">0053-PERP-018</a>)
 1. For the ongoing period the following data is available via the API: funding period start time, estimate time, funding rate estimate, funding payment estimate, external (spot) price TWAP to-date, internal (mark) price TWAP to-date. (<a name="0053-PERP-019" href="#0053-PERP-019">0053-PERP-019</a>)
 1. For each of the fully completed past funding periods the following data is available (subject to data-node's retention settings): funding period start time, funding period end time, funding rate, funding payment, external (spot) price TWAP, internal (mark) price TWAP. (<a name="0053-PERP-020" href="#0053-PERP-020">0053-PERP-020</a>)
+1. A perpetual market which is active and has open orders, continues to function after protocol upgrade, and preserves all market settings and statistics. (<a name="0053-PERP-021" href="#0053-PERP-021">0053-PERP-021</a>)
+1. A perpetual market which is active and has open orders, after checkpoint restart, is in opening auction. All margin accounts are transferred to general accounts. (<a name="0053-PERP-022" href="#0053-PERP-022">0053-PERP-022</a>)
+1. A perpetual market which is active and has open orders. Wait for a new network history snapshot to be created. Load a new data node from network history. All market data is preserved. (<a name="0053-PERP-023" href="#0053-PERP-023">0053-PERP-023</a>)
+1. When the funding payment does not coincide with mark to market settlement time, a party has insufficient funds to fully cover their funding payment such that the shortfall amount if $x$ and the balance of market's insurance pool is $\frac{x}{3}$, then the entire insurance pool balance gets used to cover the shortfall and the remaining missing amount $\frac{2x}{3}$ gets dealt with using loss socialisation. (<a name="0053-PERP-024" href="#0053-PERP-024">0053-PERP-024</a>)

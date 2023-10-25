@@ -157,7 +157,8 @@ struct InstrumentMetadata {
 }
 
 enum Product {
-  // maturity should be some sort of DateTime, settlement_asset is however we refer to crypto-assets (collateral) on Vega
+  // Oracle will include both info on how trading terminates and settlement data 
+  // settlement_asset is asset id
   Future { oracle: Oracle, settlement_asset: String },
   // EuropeanOption {},
   // SmartProduct {},
@@ -233,7 +234,10 @@ Each market can have exactly one market as a *successor* market.
 - Details of a market's product must be available for each market through the API (<a name="0001-MKTF-002" href="#0001-MKTF-002">0001-MKTF-002</a>)
 - Details of a market's tradable instrument must be available for each market through the API (<a name="0001-MKTF-003" href="#0001-MKTF-003">0001-MKTF-003</a>)
 - Market framework can report position decimal places <a name="0001-MKTF-004" href="#0001-MKTF-004">0001-MKTF-004</a>
-- It is possible to designate a market as perpetual; this is visible via APIs in market data. <a name="0001-MKTF-005" href="#0001-MKTF-005">0001-MKTF-005</a>
+- It is possible to designate a market as perpetual; this is visible via APIs in market data.
+  - GRPC <a name="0001-MKTF-005" href="#0001-MKTF-005">0001-MKTF-005</a>
+  - REST <a name="0001-MKTF-011" href="#0001-MKTF-011">0001-MKTF-011</a>
+  - GraphQL <a name="0001-MKTF-012" href="#0001-MKTF-012">0001-MKTF-012</a>
 - A market may have a "parent" market; the parent market is visible via APIs in the form of the `marketID` of the parent market. <a name="0001-MKTF-006" href="#0001-MKTF-006">0001-MKTF-006</a>
 - A market may have a "successor" market; the parent market is visible via APIs in the form of the `marketID` (or `proposalID`) of the successor market. <a name="0001-MKTF-007" href="#0001-MKTF-007">0001-MKTF-007</a>
 - A parent and successor markets must have the same:

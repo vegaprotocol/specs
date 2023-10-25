@@ -132,7 +132,7 @@ Order that entered the book in the current batch are considered aggressive order
 
 The trades that were netted off against each other during position resolution incur no fees.
 During position resolution all of the parties being liquidated share the total fee for the network order, pro-rated by the size of position.
-As for fees in other cases, the fee is taken out of the general + margin account for the liable traders (the insurance pool is not used to top up fees that cannot be paid). If the general + margin account is insufficient to cover the fee then the fee (or part of it) is not going to get paid. In this case we first pay out the maker_fee (or as much as possible), then then infrastructure_fee (or as much as possible) and finally the liquidity_fee.
+As for fees in other cases, the fee is taken out of the general + margin account for the liable traders (the market's insurance pool is not used to top up fees that cannot be paid). If the general + margin account is insufficient to cover the fee then the fee (or part of it) is not going to get paid. In this case we first pay out the maker_fee (or as much as possible), then then infrastructure_fee (or as much as possible) and finally the liquidity_fee.
 
 ### Rounding
 
@@ -159,24 +159,27 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 
 ### Applying benefit factors
 
-1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading.
+1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading. (<a name="0029-FEES-023" href="#0029-FEES-023">0029-FEES-023</a>)
     - `infrastructure_referral_fee_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
-1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction.
+1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction. (<a name="0029-FEES-024" href="#0029-FEES-024">0029-FEES-024</a>)
     - `infrastructure_fee_referral_discount`
     - `liquidity_fee_referral_discount`
-1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading.
+1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading. (<a name="0029-FEES-025" href="#0029-FEES-025">0029-FEES-025</a>)
     - `infrastructure_fee_referral_reward`
     - `liquidity_fee_referral_reward`
     - `maker_fee_referral_reward`
-1. Referrer rewards are correctly calculated and transferred for each fee component when exiting an auction.
+1. Referrer rewards are correctly calculated and transferred for each fee component when exiting an auction. (<a name="0029-FEES-026" href="#0029-FEES-026">0029-FEES-026</a>)
     - `infrastructure_fee_referral_reward`
     - `liquidity_fee_referral_reward`
-1. Volume discount rewards are correctly calculated and transferred for each taker fee component during continuous trading.
+1. If the referral reward due to the referrer is strictly less than `1`, no reward is transferred (<a name="0029-FEES-029" href="#0029-FEES-029">0029-FEES-029</a>).
+1. If the referral discount due to the referee is strictly less than `1`, no discount is applied (<a name="0029-FEES-030" href="#0029-FEES-030">0029-FEES-030</a>).
+1. The proportion of fees transferred to the referrer as a reward cannot be greater than the network parameter `referralProgram.maxReferralRewardProportion` (<a name="0029-FEES-031" href="#0029-FEES-031">0029-FEES-031</a>).
+1. Volume discount rewards are correctly calculated and transferred for each taker fee component during continuous trading. (<a name="0029-FEES-027" href="#0029-FEES-027">0029-FEES-027</a>)
     - `infrastructure_fee_volume_discount`
     - `liquidity_fee_volume_discount`
     - `maker_fee_volume_discount`
-1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction.
+1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction. (<a name="0029-FEES-028" href="#0029-FEES-028">0029-FEES-028</a>)
     - `infrastructure_fee_volume_discount`
     - `liquidity_fee_volume_discount`

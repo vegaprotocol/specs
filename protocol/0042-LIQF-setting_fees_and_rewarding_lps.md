@@ -192,9 +192,7 @@ Otherwise calculate fractional instantaneous liquidity score for each committed 
 
 `fractional instantaneous liquidity score = instantaneous liquidity score / total`
 
-If `market.liquidity.providers.fee.calculationTimeStep` is set to `0` for a given market, then for each committed LP within that market `liquidity score` is set to `fractional instantaneous liquidity score`.
-
-Otherwise whenever a new LP fee distribution period starts set a counter `n=1`.
+Whenever a new LP fee distribution period starts set a counter `n=1`.
 Then on every Vega time change, after `fractional instantaneous liquidity score` has been obtained for all the committed LPs, update:
 
 `liquidity score <- ((n-1)/n) x liquidity score + (1/n) x fractional instantaneous liquidity score`
@@ -206,8 +204,8 @@ The liquidity score should always be rounded to 10 decimal places to prevent spu
 On every trade, liquidity fee should be collected immediately into the market's aggregate LP fee account.
 The account is under control of the network and funds from this account will be transferred to the owning LP party according to the mechanism below.
 
-A market parameter `market.liquidity.providers.fee.calculationTimeStep` will control how often fees are distributed from the market's aggregate LP fee account.
-Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providers.fee.calculationTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
+A network parameter `market.liquidity.providersFeeCalculationTimeStep` will control how often fees are distributed from the market's aggregate LP fee account.
+Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providersFeeCalculationTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
 
 The liquidity fees are transferred from the market's aggregate LP fee account into the LP-per-market fee account, pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
 
@@ -297,14 +295,10 @@ $$
 
 Each LP further gets a performance bonus: $b_i \times B$ with a transfer type that marks this as the "LP relative SLA performance bonus distribution".
 
-There is an example [google sheet for this step](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY/edit#gid=0); once we're sure we're happy let's transfer this to a fixed example.
-
-
 ### APIs for fee splits and payments
 
 - Each liquidity provider's equity-like share
 - Each liquidity provider's average entry valuation
-- The `market-value-proxy`
 
 ## Acceptance Criteria
 
@@ -330,7 +324,7 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 - The examples provided result in the given outcomes.  (<a name="0042-LIQF-008" href="#0042-LIQF-008">0042-LIQF-008</a>)
 - The total amount of liquidity fee distributed is equal to the most recent `liquidity-fee-factor` x `notional-value-of-all-trades` (<a name="0042-LIQF-011" href="#0042-LIQF-011">0042-LIQF-011</a>)
 - Liquidity providers with a commitment of 0 will not receive a share of the fees (<a name="0042-LIQF-012" href="#0042-LIQF-012">0042-LIQF-012</a>)
-- If a market has its `market.liquidity.providers.fee.calculationTimeStep` parameter set to more than `0` and such market settles then the fees are distributed as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
+- When a market settles any fees from any intermediate fee accounts are distributed as if the epoch ended as part of the settlement process, see [market lifecycle](./0043-MKTL-market_lifecycle.md). Any settled market has zero balances in all the LP fee accounts. (<a name="0042-LIQF-014" href="#0042-LIQF-014">0042-LIQF-014</a>)
 - All liquidity providers with `average fraction of liquidity provided by committed LP > 0` in the market receive a greater than zero amount of liquidity fee. The only exception is if a non-zero amount is rounded to zero due to integer representation. (<a name="0042-LIQF-015" href="#0042-LIQF-015">0042-LIQF-015</a>)
 - After fee distribution, if there is a remainder in the liquidity fee account and the market is not being settled, it should be left in the liquidity fee account and carried over to the next distribution window. (<a name="0042-LIQF-032" href="#0042-LIQF-032">0042-LIQF-032</a>)
 
@@ -363,7 +357,7 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 - If an LP has virtual stake of `11000` and stake of `10000` on a parent marketID=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `10000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake of `11000` and stake of `10000` on `m2`. (<a name="0042-LIQF-031" href="#0042-LIQF-031">0042-LIQF-031</a>)
 - If an LP has virtual stake of `11000` and stake of `10000` on a parent `marketID`=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `20000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake which must be result of the virtual stake obtained from `m1` with the `delta=10000` added on, so virtual stake of `21000`, assuming all other LPs committed exactly the stake they had on `m1`. (<a name="0042-LIQF-048" href="#0042-LIQF-048">0042-LIQF-048</a>)
 - If an LP has virtual stake of `11000` and stake of `10000` on a parent `marketID`=`m1` and a new market is proposed and enacted as `m2` with `m1` as its parent market and the LP submits a commitment of `5000` to `m2` during the "Pending" period, see [lifecycle](./0043-MKTL-market_lifecycle.md) then for the duration of the first `market.value.windowLength` after the opening auction ends the LP has virtual stake obtained from `m1` with the `delta=-5000` added on (i.e. 5000 removed). (<a name="0042-LIQF-033" href="#0042-LIQF-033">0042-LIQF-033</a>)
-- If `market.liquidity.providers.fee.calculationTimeStep > 0` for a given market and an LP submits a new liquidity commitment halfway through the time interval then they receive roughly 1/2 the fee income from that market compared with the next time interval when they maintain their commitment (and the traded value is the same in both time intervals). (<a name="0042-LIQF-034" href="#0042-LIQF-034">0042-LIQF-034</a>)
+- If `market.liquidity.providersFeeCalculationTimeStep > 0` for a given market and an LP submits a new liquidity commitment halfway through the time interval then they receive roughly 1/2 the fee income from that market compared with the next time interval when they maintain their commitment (and the traded value is the same in both time intervals). (<a name="0042-LIQF-034" href="#0042-LIQF-034">0042-LIQF-034</a>)
 
 
 ### Calculating SLA Performance
@@ -380,12 +374,14 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 
   - If an LP has an active liquidity provision at the start of an epoch and throughout the epoch always meets their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` and no penalty will be applied to their liquidity fee payments at the end of the epoch (<a name="0042-LIQF-035" href="#0042-LIQF-035">0042-LIQF-035</a>)
   - If an LP has an active liquidity provision at the start of an epoch and throughout the epoch meets their liquidity provision requirements less than `market.liquidity.commitmentMinTimeFraction` fraction of the time then they will have a full penalty and will receive `0` liquidity fee payments at the end of the epoch (<a name="0042-LIQF-049" href="#0042-LIQF-049">0042-LIQF-049</a>)
+  - An LP has an active liquidity provision at the start of an epoch. The penalty rate for said LP over the previous `2` epochs is `0.75`. During the epoch `market.liquidity.performanceHysteresisEpochs` is set to `3`. Throughout the current epoch the LP meets their liquidity provision requirements so they will have `fraction_of_time_on_book == 1`. The penalty applied to fee distribution at epoch end will be `0` and will not consider the previous epochs. (<a name="0042-LIQF-053" href="#0042-LIQF-053">0042-LIQF-053</a>)
 
 - When `market.liquidity.performanceHysteresisEpochs > 1`:
 
   - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.75` and throughout the epoch they always meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` for the latest epoch a penalty rate of `0.75` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-047" href="#0042-LIQF-047">0042-LIQF-047</a>)
   - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.5` and throughout the epoch they always meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` for the latest epoch a penalty rate of `0.5` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-039" href="#0042-LIQF-039">0042-LIQF-039</a>)
   - If an LP has an active liquidity provision at the start of an epoch, the average `penalty rate` over the previous `n-1` epochs is `0.5` and throughout the epoch they never meet their liquidity provision requirements then they will have a `fraction_of_time_on_book == 0` for the latest epoch a penalty rate of `1` will be applied to liquidity fee payments at the end of the epoch (<a name="0042-LIQF-040" href="#0042-LIQF-040">0042-LIQF-040</a>)
+  - If an LP has an active liquidity provision at the start of an epoch and no previous performance penalties and throughout the epoch always meets their liquidity provision requirements then they will have a `fraction_of_time_on_book == 1` then no penalty will be applied to their liquidity fee payments at the end of the epoch. (<a name="0042-LIQF-054" href="#0042-LIQF-054">0042-LIQF-054</a>)
 
 
 ### SLA Performance bonus transfers
@@ -394,3 +390,13 @@ There is an example [google sheet for this step](https://docs.google.com/spreads
 - With two liquidity providers, one with an effective penalty rate of `0.5` and earned fees of `n`, and the other with an effective rate of `0.75` and earned fees of `m`, `50% * n` and `25% * m` of the second provider's should be transferred back into market's aggregate LP fee account. Then the total provider bonus score should be `b = (m / (n + m)) * 0.25 + (n / (n + m)) * 0.5` and provider 1 should receive `(0.5 * n + 0.25 * m) * (n / (n + m)) * 0.5 / b` and provider 2 should receive `(0.5 * n + 0.25 * m) * (m / (n + m)) * 0.25 / b` as an additional bonus payment (<a name="0042-LIQF-044" href="#0042-LIQF-044">0042-LIQF-044</a>)
 - With two liquidity providers, one with an effective penalty rate of `1` and earned fees of `n`, and the other with an effective rate of `0` and earned fees of `m`, the entirety of `n` should be transferred to the second liquidity provider as a bonus payment (<a name="0042-LIQF-045" href="#0042-LIQF-045">0042-LIQF-045</a>)
 - With only one liquidity provider, with an effective penalty rate of `0.5`, `50%` of their initially earned fees will be taken initially but will be entirely paid back to them as a bonus payment (<a name="0042-LIQF-046" href="#0042-LIQF-046">0042-LIQF-046</a>)
+
+### Transfers example
+
+Example 1, generated with [supplementary worksheet](https://docs.google.com/spreadsheets/d/1PQC2WYv9qRlyjbvvCYpVWCzO5MzwkcEGOR5aS9rWGEY) [internal only]. Values should match up to rounding used by `core` (<a name="0042-LIQF-055" href="#0042-LIQF-055">0042-LIQF-055</a>):
+| LP    |   penalty fraction | LP-per-market fee accounts balance | 1st transfer amt |  2nd (bonus) transfer amt |
+|   --- |   --------------   | --------------                       | --------------      | --------------           |
+|   LP1 |   0                  | 1000                                 | 1000                |   24673.94095              |
+|   LP2 |   0.05               | 100                                  | 95                | 2344.02439               |
+|   LP3 |   0.6              | 7000                               | 2800                |   69087.03466              |
+|   LP4 |   1                  | 91900                              | 0               | 0                          |

@@ -19,11 +19,13 @@ Governance actions can be the end result of a passed proposal. The allowable typ
 The types of governance action are:
 
 1. Create a new market
-2. Change an existing market's parameters
-3. Change network parameters
-4. Add an external asset to Vega (covered in a [separate spec - see 0027](./0027-ASSP-asset_proposal.md))
-5. Authorise a transfer to or from the [Network Treasury](./0055-TREA-on_chain_treasury.md)
-6. Freeform proposals
+1. Change an existing market's parameters
+1. Change network parameters
+1. Add an external asset to Vega (covered in a [separate spec - see 0027](./0027-ASSP-asset_proposal.md))
+1. Authorise a transfer to or from the [Network Treasury](./0055-TREA-on_chain_treasury.md)
+1. Authorise a transfer to or from the [global insurance pool](./0015-INSR-market_insurance_pool_collateral.md#global-insurance-pool)
+1. Authorise a transfer to or from the [market insurance pool](./0015-INSR-market_insurance_pool_collateral.md#market-insurance-pool)
+1. Freeform proposals
 
 ### Lifecycle of a proposal
 
@@ -281,23 +283,31 @@ The below table shows the allowable combinations of source and destination accou
 | Network treasury | Network treasury | No  |
 | Network treasury | Party general account(s) | Yes |
 | Network treasury | Party other account types | No |
+| Network treasury | Global insurance pool account | Yes |
 | Network treasury | Market insurance pool account | Yes |
 | Network treasury | Reward account | Yes |
 | Network treasury | Any other account | No |
 | Market insurance pool account | Party account(s) | Yes  |
 | Market insurance pool account | Network treasury | Yes  |
+| Market insurance pool account | Global insurance pool account | Yes |
 | Market insurance pool account | Market insurance pool account | Yes |
 | Market insurance pool account | Reward account | Yes |
 | Market insurance pool account | Any other account | No |
+| Global insurance pool account | Party account(s) | Yes  |
+| Global insurance pool account | Network treasury | Yes  |
+| Global insurance pool account | Market insurance pool account | Yes |
+| Global insurance pool account | Reward account | Yes |
+| Global insurance pool account | Any other account | No |
 | Any other account | Any | No |
 
 ### Transfer proposal details
 
 The proposal specifies:
 
-- `source_type`: the source account type (i.e. network treasury, market insurance pool)
+- `source_type`: the source account type (i.e. network treasury, global insurance pool, market insurance pool)
 - `source` specifies the account to transfer from, depending on the account type:
   - network treasury: leave blank (only one per asset)
+  - global insurance pool: leave blank (only one per asset)
   - market insurance pool: market ID
 - `type`, which can be either "all or nothing" or "best effort":
   - all or nothing: either transfers the specified amount or does not transfer anything
@@ -309,6 +319,7 @@ The proposal specifies:
 - `destination` specifies the account to transfer to, depending on the account type:
   - network treasury: leave blank (only one per asset)
   - party: the party's public key
+  - global insurance pool: leave blank (only one per asset)
   - market insurance pool: market ID
 - A proposal can be for a one off transfer or recurring.
 - If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately.
@@ -332,7 +343,7 @@ The amount is calculated by
 
 Where:
 
-- `NETWORK_MAX_AMOUNT` is a network parameter specifying the maximum absolute amount that can be transferred by governance for the source account type
+- `NETWORK_MAX_AMOUNT` is a network parameter specifying the maximum amount that can be transferred by governance for the source account type, as a multiplier for the transfer asset's quantum
 - `NETWORK_MAX_FRACTION` is a network parameter specifying the maximum fraction of the balance that can be transferred by governance for the source account type (must be <= 1)
 
 If `type` is "all or nothing" then the transfer will only proceed if:
@@ -533,7 +544,7 @@ APIs should also exist for clients to:
 - A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
 - Verify that a party with 0 balance of the governance token, but with sufficient ELS can submit a market change proposal successfully. (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)
 - Verify that a party with 0 balance of the governance token and insufficient ELS sees their market change proposal rejected after submission. (<a name="0028-GOVE-118" href="#0028-GOVE-118">0028-GOVE-118</a>)
-- Enacting a market closure governance proposal on a market which is in opening auction closes it immediately without generating any trades. (<a name="0028-GOVE-135" href="#0028-GOVE-135">0028-GOVE-135</a>)
+- Enacting a market closure governance proposal on a market which is in opening auction cancels it immediately without generating any trades. The market moves to a cancelled state and any open orders are also cancelled. (<a name="0028-GOVE-135" href="#0028-GOVE-135">0028-GOVE-135</a>)
 - Enacting a market closure governance proposal on a market which is in auction (of any type except the opening auction) uncrosses that auction at the current uncrossing price, generates the trades and then proceeds to close it using the final price (if applicable to the market type). (<a name="0028-GOVE-136" href="#0028-GOVE-136">0028-GOVE-136</a>)
 - Enacting a market closure governance proposal on a market that is in a settled state has no effect. (<a name="0028-GOVE-137" href="#0028-GOVE-137">0028-GOVE-137</a>)
 - Enacting a market closure governance proposal on a market that is not in a settled state always uses the price supplied with the proposal for final settlement, even when the oracle settlement price is available at that time. (<a name="0028-GOVE-138" href="#0028-GOVE-138">0028-GOVE-138</a>)
@@ -604,7 +615,10 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - The proposal will allow standard proposal fields to control timings on closing the voting period and enactment time, these will be validated in the same way as other proposals  (<a name="0028-GOVE-092" href="#0028-GOVE-092">0028-GOVE-092</a>)
 - For successor markets we allow transfer between Market insurance pool account of parent market to Market insurance pool account of child market (<a name="0028-GOVE-093" href="#0028-GOVE-093">0028-GOVE-093</a>)
 - During a recurring transfer ensure that the correct tokens continue to be distributed when the source account is funded (<a name="0028-GOVE-154" href="#0028-GOVE-154">0028-GOVE-154</a>)
-
+- A proposal to transfer tokens between Network treasury and global insurance pool account is valid (<a name="0028-GOVE-155" href="#0028-GOVE-155">0028-GOVE-155</a>)
+- A proposal to transfer tokens between global insurance pool account and Party account(s) is valid (<a name="0028-GOVE-156" href="#0028-GOVE-156">0028-GOVE-156</a>)
+- A proposal to transfer tokens between global insurance pool account and Network treasury is valid (<a name="0028-GOVE-157" href="#0028-GOVE-157">0028-GOVE-157</a>)
+- A proposal to transfer tokens between global insurance pool account and Market insurance pool account is valid (<a name="0028-GOVE-158" href="#0028-GOVE-158">0028-GOVE-158</a>)
 
 ##### Governance initiated transfer enactment
 
@@ -640,8 +654,8 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 ##### One Off Delivery transfers
 
 If the proposal is one off it can define a time for delivery. Whenever the block time is after the delivery time, the transfer will execute. If there is no delivery time the one off transfer will execute immediately. (<a name="0028-GOVE-129" href="#0028-GOVE-129">0028-GOVE-129</a>)
-It is possible to submit a one off governance transfer proposal from network treasury into any reward account (including staking rewards). (<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
-It is possible to submit a one off governance transfer proposal from market's insurance pool into any reward account (including staking rewards). (<a name="0028-GOVE-141" href="#0028-GOVE-141">0028-GOVE-141</a>)
+It is possible to submit a one off governance transfer proposal from network treasury into any non-metric based reward account (including staking rewards). (<a name="0028-GOVE-140" href="#0028-GOVE-140">0028-GOVE-140</a>)
+It is possible to submit a one off governance transfer proposal from market's insurance pool into any non-metric based reward account (including staking rewards). (<a name="0028-GOVE-141" href="#0028-GOVE-141">0028-GOVE-141</a>)
 It is NOT possible to submit a governance proposal where the source account is the reward account. (<a name="0028-GOVE-144" href="#0028-GOVE-144">0028-GOVE-144</a>)
 
 ##### Recurring governance initiated transfers

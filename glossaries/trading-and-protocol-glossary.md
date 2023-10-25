@@ -175,7 +175,9 @@ Parameters:
 
 ### Insurance Pool
 
-A store of capital instantiated with the order book into which fines are contributed.  It is utilised for financially covering [close out trades](#close-out-trades).
+[Market insurance pool](../protocol/0015-INSR-market_insurance_pool_collateral.md#market-insurance-pool): a store of capital instantiated with the order book into which fines are contributed.  It is utilised for financially covering [close out trades](#close-out-trades).
+
+[Global insurance pool](../protocol/0015-INSR-market_insurance_pool_collateral.md#global-insurance-pool): an insurance pool per given asset, not associated with any market. It receives part of remaining funds from insurance pool of the market using the same settlement asset. Funds can be transferred out of the global insurance pool using a governance initiated [transfer](../protocol/0028-GOVE-governance.md).
 
 ## L
 
