@@ -25,7 +25,7 @@ Note that maker_fee = 0 if there is no maker, taker relationship between the tra
 
 Before fees are transferred, if there is an [active referral program](./0083-RFPR-on_chain_referral_program.md) or [volume discount program](./0085-VDPR-volume_discount_program.md), each parties fee components must be modified as follows.
 
-Note, discounts are calculated and applied one after the after and **before** rewards are calculated.
+Note, discounts are calculated and applied one after the other and **before** rewards are calculated.
 
 1. Calculate any referral discounts due to the party.
 
