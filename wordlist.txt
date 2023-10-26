@@ -200,6 +200,7 @@ PDP
 performant
 permissioned
 permissionless
+perps
 PME
 PnL
 PoS

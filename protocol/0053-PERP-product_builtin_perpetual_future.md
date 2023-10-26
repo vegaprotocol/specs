@@ -83,13 +83,12 @@ Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.m
 
 When the `settlement_schedule` event is received we need to calculate the funding payment. Store the current vega time as `funding_period_end`.
 
-The following conditions must all be met for a funding payment within a given funding period to happen:
+Skip the funding payment calculation (set payment to `0`) if any of the following conditions is met:
 
-- there is at least on one oracle data point with timestamp greater than or requal to `funding_period_start` and less than `funding_period_end`,
-- there is at least internal data point with timestamp greater than or requal to `funding_period_start` and less than `funding_period_end`.
-Otherwise the payment is skipped and the next funding period is entered.
+- no spot (external) data has been ingested since market was created,
+- market has been in auction throughout the entire funding period.
 
-Please refer to the following subsections for the details of calculation of the funding payment if both of the above conditions are met.
+Please refer to the following subsections for the details of calculation of the funding payment if none of the above conditions are met.
 
 #### TWAP calculation
 
@@ -189,3 +188,57 @@ In both cases the estimates are for a hypothetical position of size 1.
 1. A perpetual market which is active and has open orders, after checkpoint restart, is in opening auction. All margin accounts are transferred to general accounts. (<a name="0053-PERP-022" href="#0053-PERP-022">0053-PERP-022</a>)
 1. A perpetual market which is active and has open orders. Wait for a new network history snapshot to be created. Load a new data node from network history. All market data is preserved. (<a name="0053-PERP-023" href="#0053-PERP-023">0053-PERP-023</a>)
 1. When the funding payment does not coincide with mark to market settlement time, a party has insufficient funds to fully cover their funding payment such that the shortfall amount if $x$ and the balance of market's insurance pool is $\frac{x}{3}$, then the entire insurance pool balance gets used to cover the shortfall and the remaining missing amount $\frac{2x}{3}$ gets dealt with using loss socialisation. (<a name="0053-PERP-024" href="#0053-PERP-024">0053-PERP-024</a>)
+
+1. Assume a market trades steadily generating a stream in mark price observations, but the first spot price observation only arrives during the 4th funding period of that market. Then funding payments for periods 1, 2 and 3 all equal 0. (<a name="0053-PERP-025" href="#0053-PERP-025">0053-PERP-025</a>)
+
+1. Assume the market has been in a long auction so that a funding period has started and ended while the market never went back into continuous trading. In that case the funding payment should be equal to 0 and no transfers should be exchanged. (<a name="0053-PERP-026" href="#0053-PERP-026">0053-PERP-026</a>)
+
+1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market.
+
+Assume the last known mark price before the start of the period to be `10` and that it gets updated every 2 minutes as follows:
+| Time (min) since period start | mark price  |
+| ----------------------------- | ----------- |
+| 1                             | 11          |
+| 3                             | 10          |
+| 5                             | 9           |
+| 7                             | 8           |
+| 9                             | 7           |
+
+Assume the last known spot price before this funding period is `11`. Then assume the subsequent spot price observations get ingested according to the schedule specified below:
+| Time (min) since period start | spot price  |
+| ----------------------------- | ----------- |
+| 1                             | 9           |
+| 3                             | 10          |
+| 5                             | 12          |
+| 6                             | 11          |
+| 7                             | 8           |
+| 9                             | 14          |
+
+Then, assuming no auctions during the period we get:
+$\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(7-5)+8\cdot(9-7)+7\cdot(10-9)}{10}=9.3$,
+$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+12\cdot(6-5)+11\cdot(7-6)+8\cdot(9-7)+14\cdot(10-9)}{10}=10.3$. (<a name="0053-PERP-027" href="#0053-PERP-027">0053-PERP-027</a>)
+
+1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market. Furthermore, assume that in this period that market is in an auction which starts 5 minutes into the period and ends 7 minutes into the period.
+
+Assume the last known mark price before the start of the period to be `10` and that it gets updated as follows:
+| Time (min) since period start | mark price  |
+| ----------------------------- | ----------- |
+| 1                             | 11          |
+| 3                             | 10          |
+| 7                             | 9           |
+| 8                             | 8           |
+| 10                            | 30          |
+
+Assume the last known spot price before this funding period is `11`. Then assume the subsequent spot price observations get ingested according to the schedule specified below:
+| Time (min) since period start | spot price  |
+| ----------------------------- | ----------- |
+| 1                             | 9           |
+| 3                             | 10          |
+| 5                             | 12          |
+| 6                             | 11          |
+| 8                             | 8           |
+| 9                             | 14          |
+
+Then, taking the auction into account we get:
+$\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(8-7)+8\cdot(10-8)+30\cdot(10-10)}{8}=9.625$,
+$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8\cdot(9-8)+14\cdot(10-9)}{10}=10.25$. (<a name="0053-PERP-028" href="#0053-PERP-028">0053-PERP-028</a>)
