@@ -167,27 +167,27 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 
 ### Applying benefit factors
 
-1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading. (<a name="0029-FEES-023" href="#0029-FEES-023">0029-FEES-023</a>)
+1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-023" href="#0029-FEES-023">0029-FEES-023</a>)
     - `infrastructure_referral_fee_discount`
     - `liquidity_fee_referral_discount`
     - `maker_fee_referral_discount`
-1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction. (<a name="0029-FEES-024" href="#0029-FEES-024">0029-FEES-024</a>)
+1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction (assuming no volume discounts due to party) (<a name="0029-FEES-024" href="#0029-FEES-024">0029-FEES-024</a>)
     - `infrastructure_fee_referral_discount`
     - `liquidity_fee_referral_discount`
-1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading. (<a name="0029-FEES-025" href="#0029-FEES-025">0029-FEES-025</a>)
+1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-025" href="#0029-FEES-025">0029-FEES-025</a>)
     - `infrastructure_fee_referral_reward`
     - `liquidity_fee_referral_reward`
     - `maker_fee_referral_reward`
-1. Referrer rewards are correctly calculated and transferred for each fee component when exiting an auction. (<a name="0029-FEES-026" href="#0029-FEES-026">0029-FEES-026</a>)
+1. Referrer rewards are correctly calculated and transferred for each fee component when exiting an auction (assuming no volume discounts due to party) (<a name="0029-FEES-026" href="#0029-FEES-026">0029-FEES-026</a>)
     - `infrastructure_fee_referral_reward`
     - `liquidity_fee_referral_reward`
 1. If the referral reward due to the referrer is strictly less than `1`, no reward is transferred (<a name="0029-FEES-029" href="#0029-FEES-029">0029-FEES-029</a>).
 1. If the referral discount due to the referee is strictly less than `1`, no discount is applied (<a name="0029-FEES-030" href="#0029-FEES-030">0029-FEES-030</a>).
 1. The proportion of fees transferred to the referrer as a reward cannot be greater than the network parameter `referralProgram.maxReferralRewardProportion` (<a name="0029-FEES-031" href="#0029-FEES-031">0029-FEES-031</a>).
-1. Volume discount rewards are correctly calculated and transferred for each taker fee component during continuous trading. (<a name="0029-FEES-027" href="#0029-FEES-027">0029-FEES-027</a>)
+1. Volume discount rewards are correctly calculated and transferred for each taker fee component during continuous trading (assuming no referral discounts due to party) (<a name="0029-FEES-027" href="#0029-FEES-027">0029-FEES-027</a>)
     - `infrastructure_fee_volume_discount`
     - `liquidity_fee_volume_discount`
     - `maker_fee_volume_discount`
-1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction. (<a name="0029-FEES-028" href="#0029-FEES-028">0029-FEES-028</a>)
+1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction (assuming no referral discounts due to party) (<a name="0029-FEES-028" href="#0029-FEES-028">0029-FEES-028</a>)
     - `infrastructure_fee_volume_discount`
     - `liquidity_fee_volume_discount`
