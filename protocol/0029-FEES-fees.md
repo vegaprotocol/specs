@@ -191,3 +191,5 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction (assuming no referral discounts due to party) (<a name="0029-FEES-028" href="#0029-FEES-028">0029-FEES-028</a>)
     - `infrastructure_fee_volume_discount`
     - `liquidity_fee_volume_discount`
+1. During continuous trading, discounts from multiple sources are correctly calculated and applied one after the other, each time using the resulting fee component after the previous discount was applied. (<a name="0029-FEES-032" href="#0029-FEES-032">0029-FEES-032</a>).
+1. When exiting an auction, discounts from multiple sources are correctly calculated and applied one after the other, each time using the resulting fee component after the previous discount was applied. (<a name="0029-FEES-033" href="#0029-FEES-033">0029-FEES-033</a>).
