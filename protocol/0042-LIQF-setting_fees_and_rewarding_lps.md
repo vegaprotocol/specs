@@ -12,6 +12,10 @@ The aim of this specification is to set out how fees on Vega are set based on co
 
 ## Calculating liquidity fee factor
 
+There are three ways to set the liquidity fee factor, and the default method is the 'Ascending Clock Auction'.
+
+###  Ascending Clock Auction method 
+
 The [liquidity fee factor](./0029-FEES-fees.md) is an input to the total taker fee that a price taker of a trade pays:
 
 `total_fee = infrastructure_fee + maker_fee + liquidity_fee`
@@ -34,7 +38,7 @@ We now find the smallest integer `k` such that `[target stake] < sum from i=1 to
 
 Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liquidity-fee-factor`.
 
-### Example for fee setting mechanism
+### Example for fee setting mechanism in Ascending Clock Auction method
 
 In the example below there are 3 liquidity providers all bidding for their chosen fee level. The LP orders they submit are sorted into increasing fee order so that the lowest fee bid is at the top and the highest is at the bottom. The fee level chosen for the market is derived from the liquidity commitment of the market (`target stake`) and the amount of stake committed from each bidder. Vega processes the LP orders from top to bottom by adding up the commitment stake as it goes until it reaches a level greater than or equal to the `target stake`. When that point is reached the fee used is the fee of the last liquidity order processed.
 
@@ -175,6 +179,14 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 ```text
 (average entry valuation) = 1090.9
 ```
+
+###  "Vickrey-Clarke-Groves (VCG) auction" ("VCG mechanism") for setting the liquidity fee factor
+
+The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider, which can also account for the impact of one supplier's actions on others.
+
+###  Vickrey auction for setting the liquidity fee factor 
+
+The liquidity fee factor is set as the second lowest liquidity fee factor.
 
 ### Calculating the instantaneous liquidity score
 
