@@ -10,11 +10,11 @@ The aim of this specification is to set out how fees on Vega are set based on co
 - **Target stake**: as defined in [target stake spec](./0041-TSTK-target_stake.md). The ideal amount of stake LPs would commit to a market.
 - `market.liquidityProvision.minLpStakeQuantumMultiple`: There is a network wide parameter specifying the minimum LP stake as the `quantum` specified per asset, see [asset framework spec](../protocol/0040-ASSF-asset_framework.md).
 
-## Calculating liquidity fee factor
+## Calculating the Liquidity Fee Factor
 
-There are three ways to set the liquidity fee factor, and the default method is the 'Ascending Clock Auction'.
+There are three methods for setting the liquidity fee factor, with the default method being the 'Marginal Cost method.' The liquidity fee setting mechanism is configured per market as part of the market proposal.
 
-###  Ascending Clock Auction method 
+###  Marginal Cost method 
 
 The [liquidity fee factor](./0029-FEES-fees.md) is an input to the total taker fee that a price taker of a trade pays:
 
@@ -180,13 +180,14 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 (average entry valuation) = 1090.9
 ```
 
-###  "Vickrey-Clarke-Groves (VCG) auction" ("VCG mechanism") for setting the liquidity fee factor
+### Stake-weighted-average method for setting the liquidity fee factor
 
 The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider, which can also account for the impact of one supplier's actions on others.
 
-###  Vickrey auction for setting the liquidity fee factor 
+### "Constant Liquidity Fee" Method
 
-The liquidity fee factor is set as the second lowest liquidity fee factor.
+The liquidity fee factor is set to a constant number
+
 
 ### Calculating the instantaneous liquidity score
 
