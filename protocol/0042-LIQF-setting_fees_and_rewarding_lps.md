@@ -14,7 +14,7 @@ The aim of this specification is to set out how fees on Vega are set based on co
 
 There are three methods for setting the liquidity fee factor, with the default method being the 'Marginal Cost method.' The liquidity fee setting mechanism is configured per market as part of the market proposal.
 
-###  Marginal Cost method 
+### Marginal Cost method
 
 The [liquidity fee factor](./0029-FEES-fees.md) is an input to the total taker fee that a price taker of a trade pays:
 
