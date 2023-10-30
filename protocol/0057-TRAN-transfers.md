@@ -236,6 +236,11 @@ message CancelTransfer {
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
+  - As a user when I do a transfer from any of the valid accounts (I control them and they're a valid source), and transfer fees (which are capped by `transfer.fee.Maxfactor`) are taken from the source account when the transfer is executed. (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
+  - The fee cost is correctly calculated using the network parameter `transfer.fee.Maxfactor`
+  - If I have enough funds to pay transfer and fees, the transfer happens.
+  - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
+  - The fees are being paid into the infrastructure pool
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
   - The funds arrive in the target account when the transaction is processed (i.e. with the correct delay), which is not before the timestamp occurs
   - A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.
