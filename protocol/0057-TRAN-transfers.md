@@ -231,12 +231,12 @@ message CancelTransfer {
 - As a user I cannot transfer funds from accounts I own but from the type is not supported:
   - for accounts created in a futures market, bond and margin (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
   - for accounts created in a spot market, bond and holding (<a name="0057-TRAN-063" href="#0057-TRAN-063">0057-TRAN-063</a>)
-- As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed. (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
+- As a user I can do a transfer from any of the valid accounts and `transfer.fee.factor <= transfer.fee.Maxfactor` (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed. (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
   - The fee cost is correctly calculated using the network parameter
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
-- As a user when I do a transfer from any of the valid accounts (I control them and they're a valid source), and transfer fees (which are capped by `transfer.fee.Maxfactor`) are taken from the source account when the transfer is executed. (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
+- As a user when I do a transfer from any of the valid accounts `transfer.fee.factor > transfer.fee.Maxfactor` (I control them and they're a valid source), and transfer fees (which are capped by `transfer.fee.Maxfactor`) are taken from the source account when the transfer is executed. (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
   - The fee cost is correctly calculated using the network parameter `transfer.fee.Maxfactor`
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
