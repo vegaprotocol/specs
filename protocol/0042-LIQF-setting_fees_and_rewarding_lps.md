@@ -186,7 +186,7 @@ The liquidity fee factor is set as the weighted average of the liquidity fee fac
 
 ### "Constant Liquidity Fee" Method
 
-The liquidity fee factor is set to a constant directly as part of the market proposal. 
+The liquidity fee factor is set to a constant directly as part of the market proposal.
 
 
 ### Calculating the instantaneous liquidity score
