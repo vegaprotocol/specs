@@ -236,7 +236,7 @@ message CancelTransfer {
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
-  - As a user when I do a transfer from any of the valid accounts (I control them and they're a valid source), and transfer fees (which are capped by `transfer.fee.Maxfactor`) are taken from the source account when the transfer is executed. (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
+- As a user when I do a transfer from any of the valid accounts (I control them and they're a valid source), and transfer fees (which are capped by `transfer.fee.Maxfactor`) are taken from the source account when the transfer is executed. (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
   - The fee cost is correctly calculated using the network parameter `transfer.fee.Maxfactor`
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
