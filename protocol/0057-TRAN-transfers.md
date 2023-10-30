@@ -259,7 +259,7 @@ As a user I can create a recurring transfer _which expires after a specified epo
 - The same amount is transferred every epoch.
 - In the epoch after the `end epoch`, no transfers are executed.
 
-As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-051" href="#0057-TRAN-051">0057-TRAN-051</a>) when (when `transfer amount * transfer.fee.factor <= transfer.fee.maxQuantumAmount * quantum`)
+As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-051" href="#0057-TRAN-051">0057-TRAN-051</a>) when `start amount * transfer.fee.factor <= transfer.fee.maxQuantumAmount * quantum`
 
 - I specify a start and end epoch, and a factor of `0.7`
 - Until the start epoch is reached not transfers are executed
@@ -268,7 +268,7 @@ As a user I can create a recurring transfer _that decreases over time_ (<a name=
 - The amount transferred every epoch decreases.
 - After I reach the epoch `?`, no transfers are executed anymore
 
-As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-065" href="#0057-TRAN-065">0057-TRAN-065</a>) when (when `transfer amount * transfer.fee.factor > transfer.fee.maxQuantumAmount * quantum`)
+As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-065" href="#0057-TRAN-065">0057-TRAN-065</a>) when `start amount * transfer.fee.factor > transfer.fee.maxQuantumAmount * quantum`
 
 - I specify a start and end epoch, and a factor of `0.7`
 - Until the start epoch is reached not transfers are executed
