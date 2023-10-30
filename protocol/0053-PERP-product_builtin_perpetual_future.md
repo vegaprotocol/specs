@@ -92,7 +92,7 @@ Please refer to the following subsections for the details of calculation of the 
 
 #### TWAP calculation
 
-Same methodology applies to spot (external) and perps (internal prices). The available prices (spot and perps considered separately of course) should be used to calculate the time weighted average price within the funding period. If no observations at or prior to the funding period start exist then the start of the period used for calculation should be moved forward to the time of the first observation. An observation is assumed to be applying until a subsequent observation is available. Periods spent in auction should be excluded from the calculation.
+Same methodology applies to spot (external) and perps (internal prices). The available prices (spot and perps considered separately of course) should be used to calculate the time weighted average price within the funding period. If no observations at or prior to the funding period start exist then the start of the period used for calculation should be moved forward to the time of the first observation. An observation is assumed to be applying until a subsequent observation is available. Periods spent in auction should be excluded from the calculation. This implies that spot datapoints received during the auction except for the latest one should be disregarded. Please refer to 0053-PERP-027 and 0053-PERP-028 for a detailed example.
 
 #### Funding payment calculation
 
