@@ -217,7 +217,7 @@ message CancelTransfer {
 | `spam.protection.maxUserTransfersPerEpoch` | String (integer) | strictly greater than `0`   | `"20"`         | The most transfers a use can initiate per epoch |
 | `transfer.minTransferQuantumMultiple`      | String (decimal) | greater than or equal to `0`| `"0.1"`        | This, when multiplied by `quantum` (which is specified per asset) determines the minimum transfer amount |
 | `transfer.fee.factor`                      | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The proportion of the transfer charged as a fee  |
-| `transfer.fee.maxQuantumAmount`            | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The miltiplier of the transfer fee  |
+| `transfer.fee.maxQuantumAmount`            | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The multiplier of the transfer fee  |
 
 ## Acceptance criteria
 
