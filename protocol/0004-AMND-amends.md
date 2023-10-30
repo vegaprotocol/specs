@@ -4,9 +4,9 @@
 
 - Only LIMIT or PEGGED orders can be amended. Any attempt to amend a MARKET order is rejected (<a name="0004-AMND-001" href="#0004-AMND-001">0004-AMND-001</a>). For product spot: (<a name="0004-AMND-030" href="#0004-AMND-030">0004-AMND-030</a>)
 - Price change amends remove the order from the book and insert the order at the back of the queue at the new price level (<a name="0004-AMND-002" href="#0004-AMND-002">0004-AMND-002</a>). For product spot: (<a name="0004-AMND-031" href="#0004-AMND-031">0004-AMND-031</a>)
-- Reducing the quantity leaves the order in its current spot but reduces the remaining amount accordingly (<a name="0004-AMND-003" href="#0004-AMND-003">0004-AMND-003</a>). For product spot: (<a name="0004-AMND-032" href="#0004-AMND-032">0004-AMND-032</a>)
-- Quantity after amendment must be a multiple of the smallest increment possible given the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then quantity must be a whole multiple of 0.01. (<a name="0004-AMND-004" href="#0004-AMND-004">0004-AMND-004</a>). For product spot: (<a name="0004-AMND-055" href="#0004-AMND-055">0004-AMND-055</a>)
-- Increasing the quantity causes the order to be removed from the book and inserted at the back of the price level queue with the updated quantity (<a name="0004-AMND-005" href="#0004-AMND-005">0004-AMND-005</a>). For product spot: (<a name="0004-AMND-033" href="#0004-AMND-033">0004-AMND-033</a>)
+- Size change amends specifying a size greater than the current size remove and reinsert the order at the back of the price level and increase the remaining amount accordingly (<a name="0004-AMND-055" href="#0004-AMND-055">0004-AMND-055</a>).
+- Size change amends specifying a size lower than the current size leave the order in its current spot and reduce the remaining amount of the order accordingly (<a name="0004-AMND-056" href="#0004-AMND-056">0004-AMND-056</a>).
+- Size change amends which would result in the remaining part of the order being reduced below zero should instead cancel the order (<a name="0004-AMND-057" href="#0004-AMND-057">0004-AMND-057</a>).
 - Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag is rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.  (<a name="0004-AMND-006" href="#0004-AMND-006">0004-AMND-006</a>). For product spot: (<a name="0004-AMND-034" href="#0004-AMND-034">0004-AMND-034</a>)
 - Any attempt to amend to or from the `TIF` values `GFA` and `GFN` will result in a rejected amend. (<a name="0004-AMND-007" href="#0004-AMND-007">0004-AMND-007</a>). For product spot: (<a name="0004-AMND-035" href="#0004-AMND-035">0004-AMND-035</a>)
 - All updates to an existing order update the `UpdatedAt` time stamp field in the order (<a name="0004-AMND-008" href="#0004-AMND-008">0004-AMND-008</a>). For product spot: (<a name="0004-AMND-036" href="#0004-AMND-036">0004-AMND-036</a>)
@@ -42,7 +42,7 @@ The amend order can alter the quantity, price and expiry time/`TIF` type. For pe
 
 ## Guide-level explanation
 
-The amend order message is a custom message containing the `orderID` of the original order and optional fields that can be altered. Prices can be changed with a new absolute value, quantity can be reduced or increased from their current remaining size. Expiry time can be set to a new value and the `TIF` type can be toggled between `GTC` and `GTT`. Changing the `TIF` field will impact the value in the `ExpiryTime` field as it will either be blanked or set to a new valid value.
+The amend order message is a custom message containing the `orderID` of the original order and optional fields that can be altered. Prices and sizes can be changed with new absolute values. Expiry time can be set to a new value and the `TIF` type can be toggled between `GTC` and `GTT`. Changing the `TIF` field will impact the value in the `ExpiryTime` field as it will either be blanked or set to a new valid value.
 
 Some examples:
 A LIMIT order sitting on the bid side of the order book:
@@ -54,7 +54,7 @@ If I send an amend with the following details:
 ```json
 amendOrder{
     orderID: "V0000000001-0000000001"
-    sizeDelta: 200
+    size: 300
 }
 ```
 
@@ -85,8 +85,8 @@ The fields which can be altered are:
 
 - `Price`
   - Amending the price causes the order to be removed from the book and re-inserted at the new price level. This can result in the order being filled if the price is moved to a level that would cross.
-- `SizeDelta`
-  - A size change is specified as a delta to the current amount. This will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then `SizeDelta` must be a whole multiple of 0.01. (NB: `SizeDelta` may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp). In case PDP is negative this again applies e.g. if PDP = -1 then `SizeDelta` must be a whole multiple of 10.
+- `Size`
+  - Amending the size causes the the `Size` and `Remaining` part of the order to be amended by the difference between the original and amended size. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then `Size` must be a whole multiple of 0.01. (NB: `Size` may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp). In case PDP is negative this again applies e.g. if PDP = -1 then `Size` must be a whole multiple of 10.
 - `TimeInForce`
   - The `TIF` enumeration can only be toggled between `GTT` and `GTC`. Amending to `GTT` requires an `expiryTime` value to be set. Amending to `GTC` removes the `expiryTime` value.
 - `ExpiryTime`
@@ -106,14 +106,14 @@ To keep all versions of an order available for historic lookup, when an order is
 message amendOrder {
     string orderID 1 [(validator.field) = {string_not_empty : true}];
     uint64 price 2;
-    int64  sizeDelta 3;
+    int64  size 3;
     enum   TIF 4;
     int64  expiryTime 5;
     PeggedOrder *peggedOrder 6;
 }
 ```
 
-An example of using a negative size is shown below:
+An example of reducing the size is shown below:
 
 `Bids: 100@1000 GTC (OrderID V0000000001-0000000001)`
 
@@ -121,7 +121,7 @@ If we send the following `amendOrder`:
 
 ```json
 amendOrder{ orderID:"V0000000001-0000000001",
-            sizeDelta: -50 }
+            size: 50 }
 ```
 
 The resulting order book will be:
