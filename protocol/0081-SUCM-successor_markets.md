@@ -23,7 +23,6 @@ Moreover, part of the insurance pool of a parent market can be earmarked for tra
 
 A market [governance] proposal for a successor market must contain all the information of a full proposal with additionally specified `parent market Id` and `insurancePoolFraction`.
 The product type, settlement asset, and margin asset must match but all other inputs can be different (e.g. position and price decimal places, risk model, price monitoring, termination and settlement oracles etc.).
-For [spot markets](./0080-SPOT-product_builtin_spot.md) base and quote assets must match.
 
 The parent market must be either: a) in one of `proposed`, `pending`, `active`, `suspended` or `trading terminated`
 or b) `settled` state but with time since settlement less than or equal `market.liquidity.successorLaunchWindowLength`
@@ -64,11 +63,7 @@ Market proposal may specify parent market ID. If it does then:
 - It must also specify insurance pool fraction (<a name="0081-SUCM-001" href="#0081-SUCM-001">0081-SUCM-001</a>)
 - The product type, settlement asset and margin asset must match between parent and successor; if not proposal is rejected:
   - futures to perpetuals (<a name="0081-SUCM-002" href="#0081-SUCM-002">0081-SUCM-002</a>)
-  - perpetuals to spot (<a name="0081-SUCM-033" href="#0081-SUCM-033">0081-SUCM-033</a>)
-  - spot to futures (<a name="0081-SUCM-034" href="#0081-SUCM-034">0081-SUCM-034</a>)
 - It is possible for the successor to specify different trading termination and settlement oracle data (<a name="0081-SUCM-003" href="#0081-SUCM-003">0081-SUCM-003</a>).
-
-It is possibly to cancel a [spot market](./0080-SPOT-product_builtin_spot.md) via governance and propose a new spot market as a successor with different `market_decimal_places` and `position_decimal_places` (aka `size_decimal_places` for spot); the LPs virtual stakes are carried over (<a name="0081-SUCM-004" href="#0081-SUCM-004">0081-SUCM-004</a>).
 
 It is possibly to cancel a [perpetual futures](./0053-PERP-product_builtin_perpetual_future.md) market via governance and propose a new perpetual futures market as a successor of the aforementioned cancelled / to be cancelled with different `market_decimal_places` and `position_decimal_places`; the LPs virtual stakes are carried over (<a name="0081-SUCM-015" href="#0081-SUCM-015">0081-SUCM-015</a>).
 

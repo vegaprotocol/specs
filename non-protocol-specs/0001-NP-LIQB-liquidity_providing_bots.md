@@ -7,7 +7,7 @@ At the moment bots on Vega run on certain markets to make them look "real".
 For that purpose they:
 
 1. Are given large amounts of collateral via faucets.
-1. Keep track of current spot or futures price on another exchange (at e.g. 30s, 5 min intervals)
+1. Keep track of current futures price on another exchange (at e.g. 30s, 5 min intervals)
 1. Post GTC limit orders randomly on both sides of the order book at random volumes using the above reference price as mid.
 
 This achieves the following: the price on the market looks "real" and there is volume for participants to trade.

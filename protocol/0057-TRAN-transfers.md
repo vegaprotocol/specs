@@ -229,7 +229,6 @@ message CancelTransfer {
 - As a user I cannot transfer funds from accounts that I do not control. (<a name="0057-TRAN-005" href="#0057-TRAN-005">0057-TRAN-005</a>)
 - As a user I cannot transfer funds from accounts I own but from the type is not supported:
   - for accounts created in a futures market, bond and margin (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
-  - for accounts created in a spot market, bond and holding (<a name="0057-TRAN-063" href="#0057-TRAN-063">0057-TRAN-063</a>)
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed. (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
   - The fee cost is correctly calculated using the network parameter
   - If I have enough funds to pay transfer and fees, the transfer happens.
