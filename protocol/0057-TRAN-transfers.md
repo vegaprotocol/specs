@@ -155,7 +155,9 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-The fee is set by the `transfer.fee.factor` [network parameter](#network-parameters) that defines the proportion of each transfer taken as a fee.
+The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
+
+As such, the transfer fee value used will be: `min(transfer amount * transfer.fee.factor, transfer.fee.maxQuantumAmount * quantum)`, `quantum` is for asset
 The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
 It is [paid in to the infrastructure fee pool](./0029-FEES-fees.md#collecting-and-distributing-fees).
 Fees are charged in the asset that is being transferred.
@@ -217,6 +219,7 @@ message CancelTransfer {
 | `spam.protection.maxUserTransfersPerEpoch` | String (integer) | strictly greater than `0`   | `"20"`         | The most transfers a use can initiate per epoch |
 | `transfer.minTransferQuantumMultiple`      | String (decimal) | greater than or equal to `0`| `"0.1"`        | This, when multiplied by `quantum` (which is specified per asset) determines the minimum transfer amount |
 | `transfer.fee.factor`                      | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The proportion of the transfer charged as a fee  |
+| `transfer.fee.maxQuantumAmount`            | String (decimal) | greater than or equal to `0`  | `"100"`      | The cap of the transfer fee  |
 
 ## Acceptance criteria
 
@@ -230,8 +233,13 @@ message CancelTransfer {
 - As a user I cannot transfer funds from accounts I own but from the type is not supported:
   - for accounts created in a futures market, bond and margin (<a name="0057-TRAN-006" href="#0057-TRAN-006">0057-TRAN-006</a>)
   - for accounts created in a spot market, bond and holding (<a name="0057-TRAN-063" href="#0057-TRAN-063">0057-TRAN-063</a>)
-- As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed. (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
+- As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed (when `transfer amount * transfer.fee.factor <= transfer.fee.maxQuantumAmount * quantum`). (<a name="0057-TRAN-007" href="#0057-TRAN-007">0057-TRAN-007</a>)
   - The fee cost is correctly calculated using the network parameter
+  - If I have enough funds to pay transfer and fees, the transfer happens.
+  - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
+  - The fees are being paid into the infrastructure pool
+- As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed (when `transfer amount * transfer.fee.factor > transfer.fee.maxQuantumAmount * quantum`). (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
+  - The fee cost is correctly calculated using the network parameter `transfer.fee.Maxfactor`
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
@@ -251,12 +259,21 @@ As a user I can create a recurring transfer _which expires after a specified epo
 - The same amount is transferred every epoch.
 - In the epoch after the `end epoch`, no transfers are executed.
 
-As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-051" href="#0057-TRAN-051">0057-TRAN-051</a>)
+As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-051" href="#0057-TRAN-051">0057-TRAN-051</a>) when `start amount * transfer.fee.factor <= transfer.fee.maxQuantumAmount * quantum`
 
 - I specify a start and end epoch, and a factor of `0.7`
 - Until the start epoch is reached not transfers are executed
-- Once I reach the start epoch transfers happen and the first transfer is for the `start amount`. The fee amount taken from the source account is `start amount x transfer.fee.factor` and transferred to the infrastructure fee account for the asset.
-- The transfer at end of  `start epoch + 1` is `0.7 x start amount` and the fee amount is `0.7 x start amount x transfer.fee.factor`.
+- Once I reach the start epoch transfers happen and the first transfer is for the `start amount`. The fee amount taken from the source account is `min(start amount * transfer.fee.factor, transfer.fee.maxQuantumAmount * quantum)` and transferred to the infrastructure fee account for the asset.
+- The transfer at end of  `start epoch + 1` is `0.7 x start amount` and the fee amount is `0.7 x start amount * transfer.fee.factor`.
+- The amount transferred every epoch decreases.
+- After I reach the epoch `?`, no transfers are executed anymore
+
+As a user I can create a recurring transfer _that decreases over time_ (<a name="0057-TRAN-065" href="#0057-TRAN-065">0057-TRAN-065</a>) when `start amount * transfer.fee.factor > transfer.fee.maxQuantumAmount * quantum`
+
+- I specify a start and end epoch, and a factor of `0.7`
+- Until the start epoch is reached not transfers are executed
+- Once I reach the start epoch transfers happen and the first transfer is for the `start amount`. The fee amount taken from the source account is `min(start amount * transfer.fee.factor, transfer.fee.maxQuantumAmount * quantum)` and transferred to the infrastructure fee account for the asset.
+- The transfer at end of  `start epoch + 1` is `0.7 x start amount` and the fee amount is `0.7 x transfer.fee.maxQuantumAmount * quantum`.
 - The amount transferred every epoch decreases.
 - After I reach the epoch `?`, no transfers are executed anymore
 
@@ -312,6 +329,9 @@ A user's recurring transfer to a reward account does not occur if there are no p
 
 If the network parameter `transfer.fee.factor` is modified, this modification is applied
 immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-062" href="#0057-TRAN-062">0057-TRAN-062</a>)
+
+If the network parameter `transfer.fee.maxQuantumAmount` is modified, this modification is applied
+immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-064" href="#0057-TRAN-064">0057-TRAN-064</a>)
 
 If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified, this modification is applied immediately, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. In the case of a decrease, existing recurring transfers are not cancelled. (<a name="0057-TRAN-060" href="#0057-TRAN-060">0057-TRAN-060</a>)
 
