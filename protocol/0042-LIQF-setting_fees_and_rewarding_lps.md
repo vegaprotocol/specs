@@ -10,7 +10,11 @@ The aim of this specification is to set out how fees on Vega are set based on co
 - **Target stake**: as defined in [target stake spec](./0041-TSTK-target_stake.md). The ideal amount of stake LPs would commit to a market.
 - `market.liquidityProvision.minLpStakeQuantumMultiple`: There is a network wide parameter specifying the minimum LP stake as the `quantum` specified per asset, see [asset framework spec](../protocol/0040-ASSF-asset_framework.md).
 
-## Calculating liquidity fee factor
+## Calculating the Liquidity Fee Factor
+
+There are three methods for setting the liquidity fee factor, with the default method being the 'Marginal Cost method.' The liquidity fee setting mechanism is configured per market as part of the market proposal.
+
+### Marginal Cost method
 
 The [liquidity fee factor](./0029-FEES-fees.md) is an input to the total taker fee that a price taker of a trade pays:
 
@@ -34,7 +38,7 @@ We now find the smallest integer `k` such that `[target stake] < sum from i=1 to
 
 Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liquidity-fee-factor`.
 
-### Example for fee setting mechanism
+### Example for fee setting mechanism using the marginal cost method
 
 In the example below there are 3 liquidity providers all bidding for their chosen fee level. The LP orders they submit are sorted into increasing fee order so that the lowest fee bid is at the top and the highest is at the bottom. The fee level chosen for the market is derived from the liquidity commitment of the market (`target stake`) and the amount of stake committed from each bidder. Vega processes the LP orders from top to bottom by adding up the commitment stake as it goes until it reaches a level greater than or equal to the `target stake`. When that point is reached the fee used is the fee of the last liquidity order processed.
 
@@ -175,6 +179,15 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 ```text
 (average entry valuation) = 1090.9
 ```
+
+### Stake-weighted-average method for setting the liquidity fee factor
+
+The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider, which can also account for the impact of one supplier's actions on others.
+
+### "Constant Liquidity Fee" Method
+
+The liquidity fee factor is set to a constant directly as part of the market proposal.
+
 
 ### Calculating the instantaneous liquidity score
 
