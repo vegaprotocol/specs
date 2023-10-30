@@ -649,8 +649,6 @@
       "0008-TRAD-008",
       "0004-AMND-030",
       "0004-AMND-031",
-      "0004-AMND-032",
-      "0004-AMND-033",
       "0004-AMND-034",
       "0004-AMND-035",
       "0004-AMND-036",
@@ -914,7 +912,7 @@
       "0081-SUCM-034"
     ]
   },
-  "Fixed Aize Amendments": {
+  "Fixed Size Amendments": {
     "milestone": "deployment-3",
     "acs": [
       "0004-AMND-055",
