@@ -9,8 +9,8 @@ The initial value is 128.
 Valid range is any integer >= 0
 The initial value is 128.
 
-1. `performance_weights` is a vector containing four integer values w0,w1,w2,w3; this parameter defines the weights of the different performance measurements that impact the reward. The weight formular (given performance values p1, p2 and p3) is w0*p1*p2*p3 + w1*p1+w2*p2+w3*p3). 
-If more performance measurements are added later, this vector is expanded correspondingy.
+1. `performance_weights` is a vector containing four integer values w0,w1,w2,w3; this parameter defines the weights of the different performance measurements that impact the reward. The weight formula (given performance values p1, p2 and p3) is w0*p1*p2*p3 + w1*p1+w2*p2+w3*p3). 
+If more performance measurements are added later, this vector is expanded correspondingly.
 
 Legal values are all floats that sum up to 1. The initial value is (0,1,0,0)
 
