@@ -46,4 +46,11 @@ Note that the independent long and short ranges mean that at `base price` the ma
 
 #### Determining Volumes
 
-The volume to offer at each price level is determined by whether the price level falls within the upper or lower 
+The volume to offer at each price level is determined by whether the price level falls within the upper or lower price bands alongside the market maker's current position. In order to calculate this we use the concept of `Virtual Liquidity` from Uniswap's concentrated liquidity model, corresponding to a theoretical shifted version of the actual liquidity curve to map to an infinite range liquidity curve. The exact mathematics of this can be found in the Uniswap v3 whitepaper and are expanded in depth in the useful guide [Liquidity Math in Uniswap v3](http://atiselsts.github.io/pdfs/uniswap-v3-liquidity-math.pdf).
+
+The calculation for setting volumes at each level can be broken into two steps. First, the `reference price` must be determined. This is the price implied by the market maker's current position vs the maximum allowed by the configuration and can be thought of as the market maker's current mid price. From there, the shape of the orders can be determined by calculating the volume of futures which would have to be bought(/sold) to move the price to various price levels above(/below) the `reference price`. If a price move would switch to the other curve then the cumulative amount to shift to the `reference price` is taken then the other curve is used.
+
+For calculating the reference price:
+
+  1. Select the appropriate liquidity curve. If the market maker's current position is `<=0` then the curve `[base price, upper price]` should be used. If the market maker's current position is `>0` then the curve `[lower price, base price]` should be used.
+  1. Calculate the theoretical liquidity value of the position, which can later be used to calculate the price moves for trade amounts. This is performed by utilising the simplification that at the top of each respective range (`base price` for the lower range and `upper price` for the upper range) the position will be fully in cash (and assume that, for the upper position, we started with some volume of the future at `base price` which resulted in us )
