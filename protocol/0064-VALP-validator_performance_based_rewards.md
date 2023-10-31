@@ -1,5 +1,19 @@
 # Validator performance based rewards
 
+## Network Parameters
+1. `ethereum_heartbeat_period`: This parameter defines how many ethereum events need to pass (in average) for a validator to have to forward a heartbeat event. If it is set to 0, heartbeats are deactivated.
+Valid range is any integer >= 0
+The initial value is 128.
+
+1. `ethereum_read_heartbeat_period`: This parameter defines how many ethereum events need to pass (in average) for a validator to have to forward a heartbeat event. If it is set to 0, heartbeats are deactivated.
+Valid range is any integer >= 0
+The initial value is 128.
+
+1. `performance_weights` is a vector containing four integer values w0,w1,w2,w3; this parameter defines the weights of the different performance measurements that impact the reward. The weight formular (given performance values p1, p2 and p3) is w0*p1*p2*p3 + w1*p1+w2*p2+w3*p3). 
+If more performance measurements are added later, this vector is expanded correspondingy.
+
+Legal values are all floats that sum up to 1. The initial value is (0,1,0,0)
+
 ## Adjusting Validator Rewards Based on Performance
 
 The Vega chain is a delegated proof-of-stake based chain where validators are rewarded from fees generated or from on-chain treasury.
@@ -35,6 +49,46 @@ odd effects due to lack of time for performances to average out; for mainnet, th
 be modified and set to neutral defaults (i.e., 0)
 
 Then `validator_performance = max(0.05, min((p'/expected, 1))`
+Goal 2: Detect unforwarded Ethereum events and lack or read access and punish the validator that does not forward them
+Detection: Events forwarded by some validators are not forwarded by others.
+
+#### Ethereum Heartbeat
+For the Ethereum Heartbeat, we use the network parameter `ethereum_heartbeat_period`. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128, which would create a hearbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch). Legal values are all integers larger or equal to 0.
+
+For every Ethereum block, if the hash of this block mod `ethereum_heartbeat_period` equals the identity of the a validator (taken mod ethereum_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms. The heartbeat also does contain the Ethereum hash of the corresponding block.
+If the parameter is set to 0, the heartbeats are effectively turned off.
+
+If a validator forwards a heartbeat, all other validators have to validate its correctness by checking if the hashes work out. 
+
+#### Ethereum Read Access Heartbeat
+For every Ethereum block, if the hash of [The balance of the key that initiated the first transaction on the block / the random value of that block] mod `ethereum_read_heartbeat_period` equals the identity of the a validator (taken mod ethereum_read_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but otherwise ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms. 
+
+
+#### Performance Measurements
+At the end of each epoch, it is counted how many Ethereum events have been forwarded by each validator; this is (number_of_ethereum_blocks_per_epoch)/`ethereum_heartbeat_period`)+number_of_ethereum_events_per_validator
+
+Let `expected_f` be the maximum number of Ethereum events forwarded by any Validator given above conditions (i.e. the best validator defines the expectation), and `f` be the number of blocks a given validator has forwarded. If `expected_f` equals zero, then all scores are set to 1. 
+Let `low_volume_correction` be `abs(3-expected_f)`.
+
+[Comment: expected_f is not calculated using statistics, as that would mean that an issue with the Ethereum chain would cause punishment for the validators. A more precise estiimate (all validators coiunting what all others should forward) is also possilbe, but unnecessarily complex).
+
+
+Else, validator_ethereum_performance = `(min((f+low_volume_correction)/(expected_f)*1.1, 1)))`,
+
+The exact same calculation is used to compute validator_ethereum_read_performance.
+
+Explanation: low_volume_correction handle the case that the number of events is very low, and a validator might just by bad luck never get anything to forward (which also would only happen if the heartbeat is deactivated). Thus, if a validator is expected to forward 2 or less events, it is not penalised if it didn't forward any.
+The multiplication with 1.1 is adding preventing a validator to get penalised if they got slightly less than others (which always can happen due to the random distribution). Thus, a validator that forwards 95% of the events that others do is not penalised. We could get more precision here (differentiating between the heartbeat and the expected real events etc), but that'd be overthinking. 
+In the end, we make sure no score is bigger than 1 (which might happen due to the multiplicative bonus).
+
+### Total Performance
+As we have several performance measurements, they need to be combined to a total score. To this end, we have a system variable `performance_weights`, 
+which has n+1 parameters (weight_0,.. weight_n) for n measurements (currently 2, the tendermint-performance and the ethereum-performance. Weights are normalised, so the sum of all weights needs to be 1. Also, all individual performance measurements are normalised to be between 0 and 1.
+
+The total performance then is
+`weight_0*(validator_ethereum_performance*validator_tendermint_performance)+weight_1*(validator_tendermint_performance)+weight_2*(validator_ethereum_performance)+weight_3*validator_ethereum_read_performance`
+
+The initial values for the weights are {0,1,0,0}.
 
 ### Ersatz and pending validators
 
@@ -87,6 +141,9 @@ The performance score should be available on all the same API endpoints as the `
     - Verify that, at the beginning of the next epoch, all performance scores are 0 and voting power for all is 1 but the network keeps producing blocks and no nodes were removed from Tendermint.
 1. Scores are restored after a snapshot restart (<a name="0064-VALP-006" href="#0064-VALP-006">0064-VALP-006</a>):
     - With a snapshot that was taken at a block-height that falls in the middle of an epoch, restart a node from that snapshot. Ensure that at the end of the epoch the node remains in consensus and has produced the correct performance scores.
+
+1. Setting the performance weights to (0,0,1,0) and (0,0,0,1) penalises validators only based on missed ethereum events and missed read access, respectively.
+
 
 ## Future Stuff (in here for discussion purposes, not yet to be implemented)
 
