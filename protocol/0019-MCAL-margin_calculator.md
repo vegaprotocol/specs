@@ -164,7 +164,7 @@ When submitting, amending, or deleting an order in isolated margin mode and an a
 When an order trades which increases the position (increasing the absolute value of the trader's position), the target amount to be transferred is calculated as:
 
 ```math
-margin to add = margin factor * sum across executed trades(abs(trade size) * trade price)
+\text{margin to add} = \text{margin factor} \cdot \text{sum across executed trades}(|\text{trade size}| \cdot \text{trade price})
 ```
 
 This will be taken by performing three steps:
@@ -180,7 +180,7 @@ NB: In implementation, for any volume that trades immediately on entry, the addi
 When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is determined by the fraction of the position which is being closed. However, this fraction should also take into account that the entire position's margin may be due to change since the current trading price may have diverged from the last mark price update. As such the margin released should be calculated as:
 
 ```math
-margin to remove = margin required for entire position at VWAP trade price * abs(total size of new trades) / abs(entire position prior to trade)
+\text{margin to remove} = \text{margin required for entire position at VWAP trade price} \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
 ```
 
 Note: This requires a calculation of the position's margin at trade time.
