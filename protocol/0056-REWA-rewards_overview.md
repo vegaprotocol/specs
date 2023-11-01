@@ -1,12 +1,11 @@
 # Reward framework
 
-The reward framework provides a mechanism for measuring and rewarding a number of key activities on the Vega network.
+The reward framework provides a mechanism for measuring and rewarding individuals or [teams](./0083-RFPR-on_chain_referral_program.md#glossary) (collectively referred to within this spec as entities) for a number of key activities on the Vega network.
 These rewards operate in addition to the main protocol economic incentives which come from
 [fees](0029-FEES-fees.md) on every trade.
 These fees are the fundamental income stream for [liquidity providers LPs](0042-LIQF-setting_fees_and_rewarding_lps.md) and [validators](./0061-REWP-pos_rewards.md).
 
 The additional rewards described here can be funded arbitrarily by users of the network and may be used by the project team, token holders (via governance), and individual traders and market makers to incentivise mutually beneficial behaviour.
-Note that transfers via governance, including to fund rewards, is a post-Oregon Trail feature.
 
 Note that validator rewards (and the reward account for those) is covered in [validator rewards](./0061-REWP-pos_rewards.md) and is separate from the trading reward framework described here.
 
@@ -20,28 +19,32 @@ Therefore, for example, to reward futures markets when they reach a lifetime tra
 
 At a high level, rewards work as follows:
 
-- Reward metrics are calculated for each combination of [reward type, party, market].
-  - The calculation used for the reward metric is specific to each reward type.
+- Individual reward metrics are calculated for each combination of [reward type, party, market] and team reward metrics for each combination of [reward type, team, market].
 
 At the end of the epoch:
 
-1. Recurring reward transfers (set up by the parties funding the rewards) are made to the reward account(s) for a specific reward type, for one or more markets in scope where the total reward metric is `>0`. See [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts).
-1. Then the entire balance of each reward account is distributed to the parties with a non-zero reward metric for that reward type and market, pro-rata by their reward metric.
+1. Recurring reward transfers (set up by the parties funding the rewards or via governance) are made to the reward account(s) for a specific reward type, for one or more markets in scope where the total reward metric is `>0`. See [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts).
+1. Then the entire balance of each reward account is distributed amongst entities with a non-zero reward metric for that reward type and market using the mechanism specified in the recurring transfer.
+1. Distributed rewards are transferred to a [vesting account](./0085-RVST-rewards_vesting.md).
 
-## Reward metrics
+## Individual reward metrics
 
-Fee-based reward metrics are scoped by [`reward type`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
-Therefore a party may be in scope for the same reward type multiple times but no more than once per market per epoch.
-Metrics will be calculated at the end of every epoch, for every eligible party, in each market for each reward type.
+Individual reward metrics are scoped by [`recurring transfer`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
+
+Therefore a party may be in scope for the same reward type multiple times per epoch.
+Metrics will be calculated at the end of every epoch, for every eligible party, in each market, for each recurring transfer.
 Metrics only need to be calculated where the [market, reward type] reward account has a non-zero balance of at least one asset.
 
 Reward metrics will be calculated once for each party/market combination in the reward metric asset which is the [settlement asset](0070-MKTD-market-decimal-places.md) of the market.
 This is the original precision for the metric source data.
 
-### Market activity (fee based) reward metrics
+For reward metrics relating to trading, an individual must meet the [staking requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) **AND** [notional time-weighted average position requirement](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts)) set in the recurring transfer. If they do not then their reward metric is set to `0`. Note, these requirements do not apply to the [validator ranking metric](#validator-ranking-metric) or the [market creation reward metric](#market-creation-reward-metrics).
 
-There will be three market activity reward metrics calculated based on fees (as a proxy for activity).
-Each of these represents a reward type with its own segregated reward accounts for each market.
+For reward transfers where the [scope](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) is set to teams, each party must meet the minimum time in team requirement. That is, given a party has been in a team for $N$ epochs, if $N$ is strictly less than the network parameter `rewards.minimumEpochsInTeam` (an integer defaulting to `0`) their reward metric is set to `0`.
+
+### Fee-based reward metrics
+
+There will be three reward metrics calculated based on fees.
 
 1. Sum of maker fees paid by the party on the market this epoch
 1. Sum of maker fees received by the party on the market this epoch
@@ -49,9 +52,84 @@ Each of these represents a reward type with its own segregated reward accounts f
 
 These metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
-If the reward account balance is 0 at the end of the epoch for a given market, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
+If the reward account balance is `0` at the end of the epoch for a given recurring transfer, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
-Market activity (fee based) reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
+Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
+
+### Average position metric
+
+The average position metric, $m_{ap}$, measures each parties time-weighted average position over a number of epochs.
+
+At the start of each epoch, the network must reset each parties time weighted average position for the epoch ($\bar{P}$) to `0`. Whenever a parties position changes during an epoch, **and** at the end of the epoch, this value should be updated as follows.
+
+Let:
+
+- $\bar{P}$ be the parties time weighted average position in the epoch so far
+- $P_{n}$ be the parties position before their position changed
+- $t_{n}$ be the time the party held the previous position in seconds
+- $t$ be the amount of time elapsed in the current epoch so far
+
+
+$$\bar{P}  \leftarrow  \bar{P} \cdot \left(1 - \frac{t_{n}}{t}\right) + \frac{|P_{n}| \cdot t_{n}}{t}$$
+
+At the end of the epoch, the network must store the parties time weighted average position and then calculate their average position reward metric as follows.
+
+Let:
+
+- $m_{ap}$ be the parties average position reward metric
+- $\bar{P_{i}}$ be the parties time weighted average position in the $i$-th epoch
+- $N$ be the window length specified in the recurring transfer.
+
+$$m_{ap} = \frac{\sum_{i}^{n}\bar{P_{i}}}{N}$$
+
+### Relative return metric
+
+The relative return metric, $m_{rr}$, measures each parties average relative return, weighted by their [time-weighted average position](#average-position-metric), over a number of epochs.
+
+At the end of each epoch, the network must calculate and store the parties relative returns as follows.
+
+Let:
+
+- $r_i$ be the parties relative returns in the epoch
+- $m2m_{wins}$ be the sum of all mark-to-market win transfers in the epoch
+- $m2m_{losses}$ be the sum of all mark-to-market loss transfers in the epoch
+- $\bar{P}$ be the parties time-weighted average position in the epoch.
+
+$$r = \frac{|m2m_{wins}| - |m2m_{losses}|}{\bar{P}}$$
+
+And calculate their average relative returns over the last $N$ epochs as follows.
+
+Let:
+
+- $m_{rr}$ be the parties relative return reward metric
+- $r_i$ be the parties change in pnl in the i th epoch
+- $N$ be the window length specified in the recurring transfer.
+
+$$m_{rr} = \max(\frac{\sum_{i}^{n}{r_{i}}}{N}, 0)$$
+
+### Returns volatility metric
+
+The return volatility metric, $m_{rv}$, measures the volatility of a parties returns across a number of epochs.
+
+At the end of an epoch, if a party has had net returns less than or equal to `0` over the last $N$ epochs (where $N$ is the window length specified in the recurring transfer), their reward metric $m_{rv}$ is set to `0`. Otherwise, the network should calculate the variance of the set of each parties returns over the last $N$ epochs.
+
+Given the set:
+
+$$R = \{r_i \mid i = 1, 2, \ldots, N\}$$
+
+The reward metric $m_{rv}$ is the variance of the set $R$.
+
+### Validator ranking metric
+
+The validator ranking metric, $m_v$, measures the ranking score of consensus and standby validators.
+
+At the end of each epoch, for each party who **is** a consensus or standby validator set their reward metric as follows.
+
+$$m_v = ranking_score$$
+
+If a party **is not** a consensus or standby validator, their reward metric is simply:
+
+$$m_v = 0$$
 
 ### Market creation reward metrics
 
@@ -82,41 +160,123 @@ This flag is used to prevent any given funder from funding a creation reward in 
 
 Market creation reward metrics (both each market's `cumulative volume` and the payout record flags to identify [funder, market scope, reward asset] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
 
+Note this reward metric **is not** available for team rewards.
+
+## Team reward metrics
+
+All metrics (except [market creation](#market-creation-reward-metrics)) can be used to define the distribution of both individual rewards and team rewards.
+
+A team’s reward metric is the average metric score of the top performing `n` % of team members by number where `n` is specified when creating the recurring transfer (i.e. for a team of 100 parties with `n=0.1`, the 10 members with the highest metric score).
+
 ## Reward accounts
 
-Trading reward accounts are defined by the reward asset (the asset in which the reward is paid out), the market, and the reward type (metric).
-That is, there can be multiple rewards with the same type paid in different assets for the same market.
+Trading reward accounts are defined by a hash of the fields specified in the recurring transfer funding the reward account (see the [transfers](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) spec for relevant details about each field). This allows multiple recurring transfers to fund the same reward pool.
 
-Note that the market settlement asset has nothing to do in particular with the asset used to pay out a reward for a market.
+Note as part of the recurring transfer a user specifies a settlement asset. The market settlement asset has nothing to do in in particular with the asset used to pay out a reward.
+
 That is, a participant might receive rewards in the settlement asset of the market, in VEGA governance tokens, and in any number of other unrelated tokens (perhaps governance of "loyalty"/reward tokens issued by LPs or market creators, or stablecoins like DAI).
 
-Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward.
-These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
-Recurring transfers can target groups of markets, or all markets for a settlement asset, in which case the amount paid to each market is determined pro-rata by the markets' relative total reward metrics for the given reward type. See [transfers](./0057-TRAN-transfers.md) for more detail.
+Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward. These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
+Recurring transfers can target groups of markets, or all markets for a settlement asset. See [transfers](./0057-TRAN-transfers.md) for more detail.
 
 Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for across a restart.
 
 ## Reward distribution
 
-All rewards are paid out at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed.
-The entire reward account balance is paid out every epoch unless the total value of the metric over all parties is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
-There are no payout delays, rewards are paid out instantly at epoch end.
+All rewards are distributed to [vesting accounts](./0085-RVST-rewards_vesting.md) at the end of each epoch *after* [recurring transfers](0057-TRAN-transfers.md) have been executed. Funds distributed to the vesting account will not start vesting until the [`lock period`](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) defined in the recurring transfer has expired.
 
-Rewards will be distributed pro-rata by the party's reward metric value to all parties that have metric values `>0`. Note that for the market creation reward, the metric is defined to either be `0` or `1`, which will lead to equal payments for each eligible market under the pro-rata calculation. If we have reward account balance `R` and parties `p_1 – p_n` with non-zero metrics `m_1 – m_n` on the market in question:
+The entire reward account balance is paid out every epoch unless the total value of the metric over all entities is zero, in which case the balance will also be zero anyway (there are no fractional payouts).
 
-```math
-[p_1, m_1]
-[p_2, m_2]
-...
-[p_n, m_n]
+Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
+
+### Distributing rewards amongst entities
+
+Rewards are distributed amongst entities based on the distribution method defined in the recurring transfer.
+
+The protocol currently supports the following distribution strategies:
+
+- [pro-rata]:(#distributing-pro-rata) distributed pro-rata by reward metric
+- [rank]:(#distributing-based-on-rank) distributed by entities rank when ordered by reward metric
+
+#### Distributing pro-rata
+
+Rewards funded using the pro-rata strategy should be distributed pro-rata by each entities reward metric scaled by any active multipliers that party has, i.e.
+
+Let:
+
+- $d_{i}$ be the payout factor for entity $i$
+- $r_{i}$ be the reward metric value for entity $i$
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
+- $s_{i}$ be the share of the rewards for entity $i$
+
+$$d_{i}=r_{i} M_{i}$$
+
+Note if the entity is a team, $M_{i}$ is set to `1` as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
+
+Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
+
+$$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
+
+#### Distributing based on rank
+
+Rewards funded using the rank-distribution strategy should be distributed as follows.
+
+1. Calculate each entity's reward metric.
+2. Arrange all entities in a list in descending order based on their reward metric values and determine their rank. If multiple entities share the same reward metric value, they should be assigned the same rank. The next entity's rank should be adjusted to account for the shared rank among the previous entities. For instance, if two entities share rank 2, the next entity should be assigned rank 4 (since there are two entities with rank 2).
+3. Set the entities `share_ratio` based on their position in the `rank_table` specified in the recurring transfer.
+4. Calculate each entities share of the rewards.
+
+```pseudo
+Given:
+    rank_table = [
+        {"start_rank": 1, "share_ratio": 10},
+        {"start_rank": 2, "share_ratio": 5},
+        {"start_rank": 4, "share_ratio": 2},
+        {"start_rank": 10, "share_ratio": 1},
+        {"start_rank": 20, "share_ratio": 0},
+    ]
+    rank=6
+
+Then:
+    share_ratio=2
 ```
 
-Then calculate `M := m_1 + m_2 + … + m_n` and transfer `R ✖️ m_i / M` to party `p_i` (for each `p_i`) at the end of the epoch.
+Calculate each entities share of the rewards as follows.
 
-If `M=0` (no-one incurred or received fees as specified by the metric type for the given market) then no transfer will have been made to the reward account and therefore there are no rewards to pay out.
-The transfer will be retried the next epoch if it is still active.
+Let:
 
-Reward payouts will be calculated using the decimal precision of the reward payout asset. If this allows less precision than the reward metric asset (the market's settlement asset) then the ratios between reward payouts may not match exactly the ratio between the reward metrics for any two parties. All funds will always be paid out.
+- $d_{i}$ be the payout factor for entity $i$
+- $s_{i}$ be the share of the rewards for entity $i$
+- $r_{i}$ be the share ratio of entity $i$ as determined from the rank table
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
+
+$$d_{i}=M_{i} * r_{i}$$
+
+Note if the entity is a team, $M_{i}$ is set to 1 as reward payout multipliers are considered later when distributing rewards [amongst the team members](#distributing-rewards-amongst-team-members).
+
+Calculate each entities share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
+
+$$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
+
+### Distributing rewards amongst team members
+
+If rewards are distributed to a team, rewards must then be distributed between team members who had a reward metric, $m$, greater than `0` based on their payout multipliers.
+
+Let:
+
+- $d_{i}$ be the payout for team member $i$
+- $s_{i}$ be the share of the rewards for team member $i$
+- $m$ be the reward metric of the team member
+- $M_{i}$ be the sum of all reward payout multipliers for entity $i$ (reward payout multipliers include the [activity streak multiplier](./0086-ASPR-activity_streak_program.md#applying-the-activity-reward-multiplier) and [bonus rewards multiplier](./0085-RVST-rewards_vesting.md#determining-the-rewards-bonus-multiplier)).
+
+$$d_{i} = \begin{cases}
+   0 &\text{if } m = 0 \\
+   M_{i} &\text{if } m > 0
+\end{cases}$$
+
+Calculate each parties share of the rewards, $s_{i}$ pro-rata based on $d_{i}$, i.e.
+
+$$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
 
 ## Acceptance criteria
 
@@ -193,11 +353,11 @@ At the end of epoch 2:
 
 #### Rationale 2
 
-This is identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010) just without funding the corresponding reward account.
+This is identical to [acceptance code `REWA 010`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010) just without funding the corresponding reward account.
 
 #### Setup 2
 
-Identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
+Identical to [acceptance code `REWA 010`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
 
 #### Funding reward accounts 2
 
@@ -215,11 +375,11 @@ After having an epoch with trading activity, fund the reward account, but have n
 
 #### Setup 3
 
-Identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
+Identical to [acceptance code `REWA 010`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
 
 #### Funding reward accounts 3
 
-Identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
+Identical to [acceptance code `REWA 010`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010)
 
 Then, during epoch 3 we fund the reward accounts for the metric:
 
@@ -261,7 +421,7 @@ There are no markets.
 
 #### Expectation 4
 
-The calculation of eligibility is identical to [acceptance code REWA-010](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010) but the expected payout is:
+The calculation of eligibility is identical to [acceptance code `REWA 010`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010) but the expected payout is:
 
 - for market `ETHUSD-MAR22`:
   - `party_1` is paid `90 x 3.36 / 4.98 = 60.72.` $VEGA from the reward account into its $VEGA general account.
@@ -319,11 +479,11 @@ At the end of epoch `2` `party_0` is paid `120 x 2.8 / (2.79+2.8)` USDC from the
 
 #### Rationale 6
 
-This is identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020) just without funding the corresponding reward account.
+This is identical to [acceptance code `REWA 020`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020) just without funding the corresponding reward account.
 
 #### Setup 6
 
-Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
+Identical to [acceptance code `REWA 020`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
 
 #### Funding reward accounts 6
 
@@ -335,17 +495,18 @@ At the end of epoch 2 although there was trading in the market `ETHUSD-MAR22`, n
 
 ### Distributing maker fees received rewards - funded account - no trading activity (<a name="0056-REWA-022" href="#0056-REWA-022">0056-REWA-022</a>)
 
+
 #### Rationale 7
 
 After having an epoch with trading activity, fund the reward account, but have no trading activity and assert that no payout is made.
 
 #### Setup 7
 
-Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020)
+Identical to [acceptance code `REWA 020`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020)
 
 #### Funding reward accounts 7
 
-Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020)
+Identical to [acceptance code `REWA 020`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020)
 
 Then, during epoch 3 we fund the reward accounts for the metric:
 
@@ -358,6 +519,7 @@ Then, during epoch 3 we fund the reward accounts for the metric:
 Looking only at epoch 3 - as no trading activity was done, we expect the reward balances in both $VEGA and USDC for the metric to remain unchanged.
 
 ### Distributing maker fees received rewards - multiple markets (<a name="0056-REWA-023" href="#0056-REWA-023">0056-REWA-023</a>)
+
 
 #### Rationale 8
 
@@ -387,7 +549,7 @@ There are no markets.
 
 #### Expectation 8
 
-The calculation of eligibility is identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020) but the expected payout is:
+The calculation of eligibility is identical to [acceptance code `REWA 020`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020) but the expected payout is:
 
 - for market `ETHUSD-MAR22`:
   - At the end of epoch `2` `party_1` is paid `90 x 2.79 / (2.79+2.8)` $VEGA from the reward account into its `$VEGA` general account.
@@ -398,17 +560,18 @@ The calculation of eligibility is identical to [acceptance code REWA-020](https:
 
 ### Distributing LP fees received rewards (<a name="0056-REWA-030" href="#0056-REWA-030">0056-REWA-030</a>)
 
+
 #### Rationale 9
 
 A market has 2 reward accounts for the metric, one paying in $VEGA and the other paying in USDC.
 
 #### Setup 9
 
-Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
+Identical to [acceptance code `REWA 020`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
 
 #### Funding reward accounts 9
 
-Identical to [acceptance code REWA-020](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
+Identical to [acceptance code `REWA 020`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020).
 
 #### Expectation 9
 
@@ -423,13 +586,14 @@ At the end of epoch `2` `party_0` is paid `120` `USDC` from the reward account i
 
 ### Distributing LP fees received rewards - unfunded account (<a name="0056-REWA-031" href="#0056-REWA-031">0056-REWA-031</a>)
 
+
 #### Rationale 10
 
-Identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030), but without funding the corresponding reward account.
+Identical to [acceptance code `REWA-030`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030), but without funding the corresponding reward account.
 
 #### Setup 10
 
-Identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
+Identical to [acceptance code `REWA-030`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
 
 #### Funding reward accounts 10
 
@@ -441,17 +605,18 @@ At the end of epoch 2 although there was trading in the market `ETHUSD-MAR22`, n
 
 ### Distributing maker fees received  rewards - funded account - no trading activity (<a name="0056-REWA-032" href="#0056-REWA-032">0056-REWA-032</a>)
 
+
 #### Rationale 11
 
 After having an epoch with trading activity, fund the reward account, but have no trading activity and assert that no payout is made.
 
 #### Setup 11
 
-Identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
+Identical to [acceptance code `REWA-030`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
 
 #### Funding reward accounts 11
 
-Identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
+Identical to [acceptance code `REWA-030`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030)
 
 Then, during epoch 3 we fund the reward accounts for the metric:
 
@@ -465,13 +630,14 @@ Looking only at epoch 3 - as no trading activity was done, we expect the reward 
 
 ### Distributing LP fees received - multiple markets (<a name="0056-REWA-033" href="#0056-REWA-033">0056-REWA-033</a>)
 
+
 #### Rationale 12
 
 There are multiple markets, each paying its own reward where due.
 
 #### Setup 12
 
-Identical to [acceptance code REWA-023](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards---multiple-markets-0056-rewa-023)
+Identical to [acceptance code `REWA-023`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards---multiple-markets-0056-rewa-023)
 
 #### Funding reward accounts 12
 
@@ -481,7 +647,7 @@ Identical to [acceptance code REWA-023](https://github.com/vegaprotocol/specs/bl
 
 #### Expectation 12
 
-The calculation of eligibility is identical to [acceptance code REWA-030](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030) but the expected payout is:
+The calculation of eligibility is identical to [acceptance code `REWA-030`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-lp-fees-received-rewards-0056-rewa-030) but the expected payout is:
 
 - for market `ETHUSD-MAR22`:
   - At the end of epoch `2` `party_0` is paid `90` `$VEGA` from the reward account into its `$VEGA` general account.
@@ -489,6 +655,7 @@ The calculation of eligibility is identical to [acceptance code REWA-030](https:
   - t the end of epoch `2` `party_0` is paid `120` `USDC` from the reward account into its `USDC` general account.
 
 ### Distributing market creation rewards - no eligibility (<a name="0056-REWA-040" href="#0056-REWA-040">0056-REWA-040</a>)
+
 
 #### Rationale 13
 
@@ -508,6 +675,7 @@ Market has been trading but not yet eligible for proposer bonus.
 At the end of the epoch no payout has been made for the market `ETHUSDT` and the reward account balances should remain unchanged.
 
 ### Distributing market creation rewards - eligible are paid no more than once (<a name="0056-REWA-041" href="#0056-REWA-041">0056-REWA-041</a>)
+
 
 #### Rationale 14
 
@@ -531,6 +699,7 @@ At the end of epoch 3 make sure that no transfer is made to the reward account a
 
 ### Distributing market creation rewards - account funded after reaching requirement (<a name="0056-REWA-042" href="#0056-REWA-042">0056-REWA-042</a>)
 
+
 #### Rationale 15
 
 Market goes above the threshold in trading value in an epoch before the reward account for the market for the reward type has any balance - proposer does receive reward even if account is funded at a later epoch.
@@ -551,6 +720,7 @@ At the end of epoch 3, a payout of 10000 VEGA and 20000 USDC is made for the mar
 The reward pool balance should be 0.
 
 ### Distributing market creation rewards - multiple asset rewards (<a name="0056-REWA-043" href="#0056-REWA-043">0056-REWA-043</a>)
+
 
 #### Rationale 16
 
@@ -574,6 +744,7 @@ The reward pool balance should be 0.
 
 ### Distributing market creation rewards - multiple asset rewards simultaneous payout (<a name="0056-REWA-045" href="#0056-REWA-045">0056-REWA-045</a>)
 
+
 #### Rationale 17
 
 A market should be able to be rewarded multiple times if several reward pools are created with different payout assets.
@@ -596,6 +767,7 @@ general account.
 The reward pool balance should be 0.
 
 ### Distributing market creation rewards - Same asset multiple party rewards (<a name="0056-REWA-044" href="#0056-REWA-044">0056-REWA-044</a>)
+
 
 #### Rationale 18
 
@@ -624,6 +796,7 @@ Then, at the end of epoch 4, no further VEGA rewards should be distributed, the 
 The reward account balance should still be empty, as there were no eligible markets so no transfer should occur.
 
 ### Distributing market creation rewards - Multiple markets eligible, one already paid (<a name="0056-REWA-046" href="#0056-REWA-046">0056-REWA-046</a>)
+
 
 #### Rationale 19
 
@@ -657,6 +830,7 @@ At the end of epoch 3, 10000 VEGA should be split between the `BTCDAI` creator a
 
 ### Reward accounts cannot be topped up with a one-off transfer (<a name="0056-REWA-049" href="#0056-REWA-049">0056-REWA-049</a>)
 
+
 The following account types require metric-based distribution. As a one-off transfer cannot specify how it is rewarded, one-off transfers to metric-based reward pools must be **rejected**.
 A one-off transfer from a user to any of the following account types is rejected. No assets are transferred:
 
@@ -666,6 +840,7 @@ A one-off transfer from a user to any of the following account types is rejected
 - `ACCOUNT_TYPE_REWARD_MARKET_PROPOSERS`
 
 ### Distributing market creation rewards - Market ineligible through metric asset (<a name="0056-REWA-048" href="#0056-REWA-048">0056-REWA-048</a>)
+
 
 #### Rationale 20
 
@@ -690,6 +865,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to only the `ETH
 - The reward pool balance should be 0.
 
 ### Distributing market creation rewards - Multiple markets eligible, one already paid, specified asset (<a name="0056-REWA-047" href="#0056-REWA-047">0056-REWA-047</a>)
+
 
 #### Rationale 21
 
@@ -738,10 +914,70 @@ immediately and the new value used at the end of the epoch to decide if market c
   - Transfer 10000 $VEGA to `ETHUSDT | market creation | $VEGA`
 - During epoch 1 start trading such that traded value for fee purposes in USDT is less than 10^6 but greater than 10^5
 - During epoch 2 update the value of `marketCreationQuantumMultiple` via governance to `10^5`.
-  
+
 #### Expectation 22
 
 At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT` creator.
 
 - The general account balance of the `ETHUSDT` creator should be 10000.
 - The reward pool balance should be 0.
+
+### Reward Eligibility
+
+- If a parties staked governance tokens ($VEGA) is strictly less than the `staking_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-076" href="#0056-REWA-076">0056-REWA-076</a>).
+- If a parties time-weighted average position (across all in scope-markets) is strictly less than the `notional_time_weighted_average_position_requirement` specified in the recurring transfer funding the reward pool, then their reward metric should be `0` and they should receive no rewards (<a name="0056-REWA-077" href="#0056-REWA-077">0056-REWA-077</a>).
+
+### Average Position
+
+- If an eligible party opens a position at the beginning of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-078" href="#0056-REWA-078">0056-REWA-078</a>).
+- If an eligible party held an open position at the start of the epoch, their average position reward metric should be equal to the size of the position at the end of the epoch (<a name="0056-REWA-079" href="#0056-REWA-079">0056-REWA-079</a>).
+- If an eligible party opens a position half way through the epoch, their average position reward metric should be half the size of the position at the end of the epoch (<a name="0056-REWA-080" href="#0056-REWA-080">0056-REWA-080</a>).
+- If an eligible party held an open position at the start of the epoch and closes it half-way through the epoch, their average position reward metric should be equal to the size of that position at the end of the epoch (<a name="0056-REWA-081" href="#0056-REWA-081">0056-REWA-081</a>).
+- If an eligible party held positions in multiple in-scope markets, their average position reward metric should be the sum of the size of their time-weighted-average-position in each market (<a name="0056-REWA-082" href="#0056-REWA-082">0056-REWA-082</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties average position reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-083" href="#0056-REWA-083">0056-REWA-083</a>).
+
+### Relative returns
+
+- If an eligible party has negative net returns, their relative returns reward metric should be zero (<a name="0056-REWA-084" href="#0056-REWA-084">0056-REWA-084</a>).
+- If an eligible party has positive net returns, their relative returns reward metric should be equal to the size of their returns divided by their time-weighted average position (<a name="0056-REWA-085" href="#0056-REWA-085">0056-REWA-085</a>).
+- If an eligible party is participating in multiple in-scope markets, their relative returns reward metric should be the sum of their relative returns from each market (<a name="0056-REWA-086" href="#0056-REWA-086">0056-REWA-086</a>).
+- If a `window_length>1` is specified in the recurring transfer, an eligible parties relative returns reward metric should be the average of their reward metrics over the last `window_length` epochs (<a name="0056-REWA-087" href="#0056-REWA-087">0056-REWA-087</a>).
+
+### Returns volatility
+
+- If an eligible party has net relative returns less than or equal to `0` over the last `window_length` epochs, their returns volatility reward metric should be zero (<a name="0056-REWA-088" href="#0056-REWA-088">0056-REWA-088</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs, their returns volatility reward metric should equal the variance of their relative returns over the last `window_length` epochs (<a name="0056-REWA-089" href="#0056-REWA-089">0056-REWA-089</a>).
+- If an eligible party has net relative returns strictly greater than `0` over the last `window_length` epochs in multiple in-scope markets, their return volatility reward metric should be the variance of their relative returns in each market (<a name="0056-REWA-090" href="#0056-REWA-090">0056-REWA-090</a>).
+
+### Validator ranking metric
+
+- If a party is a consensus or standby validator their validator ranking reward metric should be set to their ranking score (<a name="0056-REWA-091" href="#0056-REWA-091">0056-REWA-091</a>).
+- If a party is not a consensus or standby validator their validator ranking reward metric should be set to `0` (<a name="0056-REWA-092" href="#0056-REWA-092">0056-REWA-092</a>).
+
+### Distribution Strategy
+
+- If the pro-rata distribution strategy was specified in the recurring transfer, each eligible parties share of the rewards pool should be equal to their reward metric (assuming no other multipliers) (<a name="0056-REWA-093" href="#0056-REWA-093">0056-REWA-093</a>).
+- If the rank distribution strategy was specified in the recurring transfer, each eligible parties share of the reward pool should be equal to the `share_ratio` defined by their position in the `rank_table` (assuming no other multipliers) (<a name="0056-REWA-094" href="#0056-REWA-094">0056-REWA-094</a>).
+
+
+### Entity Scope
+
+#### Individuals
+
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, transfers setting the `teams_scope` field should be rejected as invalid (<a name="0056-REWA-095" href="#0056-REWA-095">0056-REWA-095</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, transfers not setting the `individual_scope` field should be rejected as invalid (<a name="0056-REWA-096" href="#0056-REWA-096">0056-REWA-096</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_ALL`, all individual parties should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-097" href="#0056-REWA-097">0056-REWA-097</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_IN_A_TEAM`, only individual parties who are in a team should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-098" href="#0056-REWA-098">0056-REWA-098</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS` and the individual scope is `INDIVIDUAL_SCOPE_NOT_IN_A_TEAM`, only individual parties not in a team should be eligible for rewards providing they meet all other eligibility conditions (<a name="0056-REWA-099" href="#0056-REWA-099">0056-REWA-099</a>).
+- If the entity scope is `ENTITY_SCOPE_INDIVIDUALS`, rewards should be distributed among eligible individual parties according to each parties reward metric value (<a name="0056-REWA-100" href="#0056-REWA-100">0056-REWA-100</a>).
+
+#### Teams
+
+- If the entity scope is `ENTITY_SCOPE_TEAMS`, transfers setting the `individual_scope` field should be rejected as invalid (<a name="0056-REWA-101" href="#0056-REWA-101">0056-REWA-101</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` transfers not setting the `n_top_performers` field should be rejected as invalid (<a name="0056-REWA-102" href="#0056-REWA-102">0056-REWA-102</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` and the teams scope is not-set, then all teams are eligible for rewards (<a name="0056-REWA-103" href="#0056-REWA-103">0056-REWA-103</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS` and the teams scope is set, then only the teams specified in the teams scope are eligible for rewards (<a name="0056-REWA-104" href="#0056-REWA-104">0056-REWA-104</a>).
+- If the entity scope is `ENTITY_SCOPE_TEAMS`, then rewards should be allocated to teams according to each teams reward metric value (<a name="0056-REWA-105" href="#0056-REWA-105">0056-REWA-105</a>).
+- Each team’s reward metric should be the average metric of the top `n_top_performers` % of team members, e.g. for a team of 100 parties with `n_top_performers=0.1`, the 10 members with the highest metric (<a name="0056-REWA-106" href="#0056-REWA-106">0056-REWA-106</a>).
+- If a team member has a non-zero reward metric, they should receive a share of the rewards proportional to their individual payout multipliers (<a name="0056-REWA-107" href="#0056-REWA-107">0056-REWA-107</a>).
+- If a team member has a zero reward metric, they should receive no share of the rewards allocated to the team (<a name="0056-REWA-108" href="#0056-REWA-108">0056-REWA-108</a>).

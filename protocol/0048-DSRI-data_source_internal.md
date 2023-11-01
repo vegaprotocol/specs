@@ -24,20 +24,22 @@ value { type: number, value: 1400.5 }
 
 ## 1.2 Time triggered
 
-This data source would be used to emit an event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example.
+### 1.2.1 One-off
+
+This data source would be used to emit a a single event/value at/after a given Vega time (i.e. the time printed on the block). This would be used to trigger "trading terminated" for futures, for example.
 
 This trigger will emit the contents of the specified data source (could be omitted if just triggering trading termination, or could be a value as described in 1.1, or another data source in order to implement a delay/ensure the value from the data source is not emitted before a certain time).
 
 Note that trading terminated in the futures definition uses a data source as a trigger intentionally to (a) demonstrate that this is how time based product events would work; and (b) because although the trigger MAY be time based, it could also be another data source such as a signed message oracle, if the trading terminates at an unknown time.
 
-In future, there will be a need to support repeating time based triggers, for example every 2 days or at 04:00, 12:00 and 20:00 every day, etc. (as some products will have triggers that happen regularly).
+Once the data source emits the event it should become inactive.
 
 Pseudocode example:
 
 ```rust
 on: {
-	timestamp: '20210401T09:00:00'
-	data: value { type: number, value: 420.69 }
+  timestamp: '20210401T09:00:00'
+  data: value { type: number, value: 420.69 }
 }
 
 ```
@@ -46,10 +48,14 @@ Pseudocode example: (no data, just used to trigger event like trading terminated
 
 ```rust
 on: {
-	timestamp: '202112311T23:59:59'
+  timestamp: '202112311T23:59:59'
 }
 
 ```
+
+### 1.2.2 Repeating
+
+The repeating internal time triggered oracles will be used by the [perpetual futures](protocol/0053-PERP-product_builtin_perpetual_future.md) product, hence it must be possible to set them up to model a schedule like: every day at 04:00, 12:00 and 20:00. It should also be possible to model a completely arbitrary time schedule with a fixed number of events (e.g. 01/02/2023 08:52, 11/03/2023 15:45, 20/04/2023 21:37). Appropriate anti-spam measures should be considered to prevent the ability to specify an internal time triggered oracle that puts exceedingly high strain on the resources.
 
 ## 1.3 Vega time changed
 
@@ -67,10 +73,10 @@ Pseudocode example: (with filter - i.e. for trading terminated trigger)
 
 ```rust
 filter {
-	data: vegaprotocol.builtin.timestamp,
-	filters: [
-		greaterOrEqual { key: 'timestamp', value: '2023-12-31T23:55:00Z' }
-	]
+  data: vegaprotocol.builtin.timestamp,
+  filters: [
+    greaterOrEqual { key: 'timestamp', value: '2023-12-31T23:55:00Z' }
+  ]
 }
 ```
 
@@ -85,16 +91,16 @@ Currently (as of Oregon Trail), only the *Vega time changed (1.3 above)* interna
 ```proto
  “oracleSpecForTradingTermination”:{
     filters”:[
-	 {
-	  “key”:{
-	    “name”:“vegaprotocol.builtin.timestamp”,
-	    “type”:“TYPE_TIMESTAMP”
-	  },
-	  “conditions”:[{
-	    “operator”:“OPERATOR_GREATER_THAN_OR_EQUAL”,
-	    “value”:“1650447351"
-	  }]
-	}
+   {
+    “key”:{
+      “name”:“vegaprotocol.builtin.timestamp”,
+      “type”:“TYPE_TIMESTAMP”
+    },
+    “conditions”:[{
+      “operator”:“OPERATOR_GREATER_THAN_OR_EQUAL”,
+      “value”:“1650447351"
+    }]
+  }
     ]
 }
 ```
@@ -102,30 +108,32 @@ Currently (as of Oregon Trail), only the *Vega time changed (1.3 above)* interna
 ## Acceptance criteria
 
 1. A simple value data source can be provided
-	1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a Value source. The market settles immediately with the value provided as the settlement data. (<a name="0048-COSMICELEVATOR-001" href="#0048-COSMICELEVATOR-001">0048-COSMICELEVATOR-001</a>)
-	1. Change a cash settled futures market's trading terminated trigger source with a market governance proposal to a blank Value data source (or one with any value, to be discarded) and ensure the market state changes to trading terminated. (<a name="0048-COSMICELEVATOR-002" href="#0048-COSMICELEVATOR-002">0048-COSMICELEVATOR-002</a>)
+    1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a Value source. The market settles immediately with the value provided as the settlement data. (<a name="0048-DSRI-001" href="#0048-DSRI-001">0048-DSRI-001</a>)
+    1. Change a cash settled futures market's trading terminated trigger source with a market governance proposal to a blank Value data source (or one with any value, to be discarded) and ensure the market state changes to trading terminated. (<a name="0048-DSRI-002" href="#0048-DSRI-002">0048-DSRI-002</a>)
 1. A time triggered value data source can be provided
-	1. Use a market governance proposal to change a cash settled futures market that is already in Trading Terminated state and has a signed message data source configured for settlement data (where no signed message is ever received) so that the settlement data source is a time triggered Value source with the trigger time in the future after the proposal is enacted. The market settles at the trigger time with the value provided as the settlement data (this allows governance to settle a market with a dead oracle). (<a name="0048-COSMICELEVATOR-009" href="#0048-COSMICELEVATOR-009">0048-COSMICELEVATOR-009</a>)
-	1. Create a cash settled futures market with a time triggered value data source for the settlement data. Trigger trading terminated before the time specified in the trigger for the settlement data source. The market settles at the time specified in the trigger. (<a name="0048-COSMICELEVATOR-003" href="#0048-COSMICELEVATOR-003">0048-COSMICELEVATOR-003</a>)
-	1. Create a cash settled futures market with a time triggered value data source  for the settlement data. Trigger trading terminated after the time specified in the trigger for the settlement data source. The market settles immediately once trading terminated is triggered. (<a name="0048-COSMICELEVATOR-004" href="#0048-COSMICELEVATOR-004">0048-COSMICELEVATOR-004</a>)
-	1. Create a cash settled futures market with the trading terminated trigger source being a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the future. The market state changes to trading terminated at the time of the trigger.  (<a name="0048-COSMICELEVATOR-005" href="#0048-COSMICELEVATOR-005">0048-COSMICELEVATOR-005</a>)
-	1. Change a cash settled futures market so the trading terminated trigger source becomes a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the future. The market state changes to trading terminated at the time of the trigger. (<a name="0048-COSMICELEVATOR-006" href="#0048-COSMICELEVATOR-006">0048-COSMICELEVATOR-006</a>)
-	1. Change a cash settled futures market so the trading terminated trigger source becomes a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the past. The market state changes to trading terminated immediately. (<a name="0048-COSMICELEVATOR-007" href="#0048-COSMICELEVATOR-007">0048-COSMICELEVATOR-007</a>)
-	1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a time triggered Value source with the trigger time in the past. The market settles immediately with the value provided as the settlement data. (<a name="0048-COSMICELEVATOR-008" href="#0048-COSMICELEVATOR-008">0048-COSMICELEVATOR-008</a>)
-	1. It's possible to query all active and deactivated internal data sources for a market via REST, gRPC and GraphQL. (<a name="0048-COSMICELEVATOR-009" href="#0048-COSMICELEVATOR-008">0048-COSMICELEVATOR-009</a>)
+    1. Use a market governance proposal to change a cash settled futures market that is already in Trading Terminated state and has a signed message data source configured for settlement data (where no signed message is ever received) so that the settlement data source is a time triggered Value source with the trigger time in the future after the proposal is enacted. The market settles at the trigger time with the value provided as the settlement data (this allows governance to settle a market with a dead oracle). (<a name="0048-DSRI-009" href="#0048-DSRI-009">0048-DSRI-009</a>)
+    1. Create a cash settled futures market with a time triggered value data source for the settlement data. Trigger trading terminated before the time specified in the trigger for the settlement data source. The market settles at the time specified in the trigger. (<a name="0048-DSRI-003" href="#0048-DSRI-003">0048-DSRI-003</a>)
+    1. Create a cash settled futures market with a time triggered value data source  for the settlement data. Trigger trading terminated after the time specified in the trigger for the settlement data source. The market settles immediately once trading terminated is triggered. (<a name="0048-DSRI-004" href="#0048-DSRI-004">0048-DSRI-004</a>)
+    1. Create a cash settled futures market with the trading terminated trigger source being a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the future. The market state changes to trading terminated at the time of the trigger.  (<a name="0048-DSRI-005" href="#0048-DSRI-005">0048-DSRI-005</a>)
+    1. Change a cash settled futures market so the trading terminated trigger source becomes a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the future. The market state changes to trading terminated at the time of the trigger. (<a name="0048-DSRI-006" href="#0048-DSRI-006">0048-DSRI-006</a>)
+    1. Change a cash settled futures market so the trading terminated trigger source becomes a time triggered blank Value data source (or one with any value, to be discarded) with the trigger time being in the past. The market state changes to trading terminated immediately. (<a name="0048-DSRI-007" href="#0048-DSRI-007">0048-DSRI-007</a>)
+    1. Change a cash settled futures market that is already in Trading Terminated state so that the settlement data source is a time triggered Value source with the trigger time in the past. The market settles immediately with the value provided as the settlement data. (<a name="0048-DSRI-008" href="#0048-DSRI-008">0048-DSRI-008</a>)
 1. A Vega time changed value data source can be provided
-	1. Create a cash settled futures market with the trading terminated trigger source being a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger.  (<a name="0048-DSRI-010" href="#0048-DSRI-010">0048-DSRI-010</a>)
-	1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger. (<a name="0048-DSRI-011" href="#0048-DSRI-011">0048-DSRI-011</a>)
-	1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the past. The market state changes to trading terminated immediately. (<a name="0048-DSRI-012" href="#0048-DSRI-012">0048-DSRI-012</a>)
+    1. Create a cash settled futures market with the trading terminated trigger source being a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger.  (<a name="0048-DSRI-010" href="#0048-DSRI-010">0048-DSRI-010</a>)
+    1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the future. The market state changes to trading terminated at the time of the trigger. (<a name="0048-DSRI-011" href="#0048-DSRI-011">0048-DSRI-011</a>)
+    1. Change a cash settled futures market so the trading terminated trigger source becomes a Vega time changed value data source with a greater than or greater than or equal filter against a time in the past. The market state changes to trading terminated immediately. (<a name="0048-DSRI-012" href="#0048-DSRI-012">0048-DSRI-012</a>)
 1. Termination oracle updated after market is terminated (<a name="0048-DSRI-015" href="#0048-DSRI-015">0048-DSRI-015</a>)
-	- setup one market with a boolean termination
-	- terminate the market (but do not settle it)
-	- update the market to have a time based termination
-	- update the market to have an earlier time based termination
-	- wait until the first timer to tick
-	- send through valid settlement data
-	- assert the the market settles successfully
+    - setup one market with a boolean termination
+    - terminate the market (but do not settle it)
+    - update the market to have a time based termination
+    - update the market to have an earlier time based termination
+    - wait until the first timer to tick
+    - send through valid settlement data
+    - assert the the market settles successfully
 1. Time based termination across multiple markets (<a name="0048-DSRI-014" href="#0048-DSRI-014">0048-DSRI-014</a>)
-	- setup 3 markets, all with time based termination with identical signer details, two with the same time, one with a later time
-	- wait to all of them to terminate successfully
-	- assert they all settle successfully
+    - setup 3 markets, all with time based termination with identical signer details, two with the same time, one with a later time
+    - wait to all of them to terminate successfully
+    - assert they all settle successfully
+1. The repeating internal time triggered oracle can be used to model a time schedule of the form: every day at 12:00, 15:00 and 18:00. (<a name="0048-DSRI-018" href="#0048-DSRI-018">0048-DSRI-018</a>)
+1. The repeating internal time triggered oracle can be used to model a time schedule of the form: 01/02/2023 08:52, 11/03/2023 15:45, 20/04/2023 21:37. (<a name="0048-DSRI-016" href="#0048-DSRI-016">0048-DSRI-016</a>)
+1. The repeating internal time triggered oracle with a schedule of "every day at 12:00", always sends an event as soon as the block with a timestamp with time of 12:00 or higher is received (the time the oracle sends an event doesn't drift forward even after many days). (<a name="0048-DSRI-017" href="#0048-DSRI-017">0048-DSRI-017</a>)

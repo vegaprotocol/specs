@@ -1,6 +1,7 @@
 ABCI
 ABCI++
 ABI
+actioned
 Allowlist
 allowlisted
 antiwhaling
@@ -49,9 +50,11 @@ cryptocurrencies
 cryptographic
 CQRS
 cumulated
+customisable
 customised
 DAI
 datanode
+datapoint
 datatypes
 datetime
 decentralised
@@ -68,6 +71,7 @@ disincentivise
 DLT
 DPOS
 durations
+earlyExitPenalty
 ECDSA
 EEF
 EIP
@@ -137,7 +141,9 @@ keypair
 keypairs
 keystore
 KMS
+leftarrow
 lifecycle
+linearisation
 linearised
 linkings
 linux
@@ -149,9 +155,11 @@ LP
 LPs
 MacOS
 mainnet
+maint
 malus
 margined
 margining
+marketID
 messager
 math
 mempool
@@ -168,6 +176,8 @@ multisignature
 NFTs
 nonfungible
 OAUTH
+OCO
+OCOs
 OKR
 onwards
 OpenOracle
@@ -189,10 +199,12 @@ pre
 pro
 protobuf
 Pseudocode
+pseudorandom
 pubkey
 rata
 reimplemented
 repo
+renormalise
 reponse
 repurpose
 resync
@@ -213,6 +225,7 @@ SHA
 sharded
 SHA3
 siskas
+SLA
 Solana
 src
 stablecoin
@@ -221,6 +234,7 @@ stakers
 statebridge
 stateful
 statesync
+structs
 SSD
 SSL
 suboptimal
@@ -236,12 +250,14 @@ Tendermint
 testnet
 testnets
 TIF
+TODO
 tokenholder
 tokenholders
 tradable
 trackable
 Tron
 trustless
+TWAP
 tx
 TXs
 quant
@@ -292,3 +308,14 @@ wBTC
 whitepaper
 Yubikey
 $VEGA
+DS
+teamUrl
+avatarUrl
+dApp
+leaderboards
+ReferralSet
+CreateReferralSet
+enum
+ldots
+infty
+leq

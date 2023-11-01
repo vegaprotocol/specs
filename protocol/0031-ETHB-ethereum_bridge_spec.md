@@ -153,12 +153,6 @@ This example connects the network to Ropsten:
   - A valid multisig bundle can be passed to the `list_asset` function to successfully add a token to the allowed list (<a name="0031-ETHB-016" href="#0031-ETHB-016">0031-ETHB-016</a>)
   - An invalid multisig bundle is rejected by the `list_asset` function (<a name="0031-ETHB-017" href="#0031-ETHB-017">0031-ETHB-017</a>)
 
-### Blocklist a token (by eth address)
-
-- ERC-20 smart contract specific requirements:
-  - A valid multisig bundle can be passed to the `remove_asset` function to successfully remove a previously  allow listed token (<a name="0031-COSMICELEVATOR-019" href="#0031-COSMICELEVATOR-019">0031-COSMICELEVATOR-019</a>)
-  - An invalid multisig bundle is rejected by the `remove_asset` function (<a name="0031-COSMICELEVATOR-020" href="#0031-COSMICELEVATOR-020">0031-COSMICELEVATOR-020</a>)
-
 ### ERC20 Bridge Logic to Vega Integration Tests (Vega System Tests)
 
 To ensure complete coverage of public and external smart contract functions, listed below are all of the callable functions on `ERC20_Bridge_Logic` and their corresponding acceptance criteria.

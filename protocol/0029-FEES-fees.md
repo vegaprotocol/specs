@@ -21,6 +21,62 @@ Fees are calculated and collected in the settlement currency of the market, coll
 
 Note that maker_fee = 0 if there is no maker, taker relationship between the trading parties (in particular auctions).
 
+## Applying benefit factors
+
+Before fees are transferred, if there is an [active referral program](./0083-RFPR-on_chain_referral_program.md) or [volume discount program](./0085-VDPR-volume_discount_program.md), each parties fee components must be modified as follows.
+
+Note, discounts are calculated and applied one after the other and **before** rewards are calculated.
+
+1. Calculate any referral discounts due to the party.
+
+    ```pseudo
+    infrastructure_fee_referral_discount = floor(original_infrastructure_fee * referral_discount_factor)
+    liquidity_fee_referral_discount = floor(original_liquidity_fee * referral_discount_factor)
+    maker_fee_referral_discount = floor(original_maker_fee * referral_discount_factor)
+    ```
+
+1. Apply referral discounts to the original fee.
+
+    ```pseudo
+    infrastructure_fee_after_referral_discount = original_infrastructure_fee - infrastructure_fee_referral_discount
+    liquidity_fee_after_referral_discount = original_infrastructure_fee - liquidity_fee_referral_discount
+    maker_fee_after_referral_discount = original_infrastructure_fee - maker_fee_referral_discount
+    ```
+
+1. Calculate any volume discounts due to the party.
+
+    ```pseudo
+    infrastructure_fee_volume_discount = floor(infrastructure_fee_after_referral_discount * volume_discount_factor)
+    liquidity_fee_volume_discount = floor(liquidity_fee_after_referral_discount * volume_discount_factor)
+    maker_fee_volume_discount = floor(maker_fee_after_referral_discount * volume_discount_factor)
+    ```
+
+1. Apply any volume discounts to the fee after referral discounts.
+
+    ```pseudo
+    infrastructure_fee_after_volume_discount = infrastructure_fee_after_referral_discount - infrastructure_fee_volume_discount
+    liquidity_fee_after_volume_discount = liquidity_fee_after_referral_discount - liquidity_fee_volume_discount
+    maker_fee_after_volume_discount = maker_fee_after_referral_discount - maker_fee_volume_discount
+    ```
+
+1. Calculate any referral rewards due to the parties referrer (Note we are using the updated fee components from step 4 and the `referralProgram.maxReferralRewardProportion` is the network parameter described in the [referral program spec](./0083-RFPR-on_chain_referral_program.md#network-parameters))
+
+    ```pseudo
+    infrastructure_fee_referral_reward = floor(infrastructure_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
+    liquidity_fee_referral_reward = floor(liquidity_fee * min(liquidity_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
+    maker_fee_referral_reward = floor(maker_fee * min(maker_fee_after_volume_discount * min(referral_reward_factor * referral_reward_multiplier, referralProgram.maxReferralRewardProportion))
+    ```
+
+1. Finally, update the fee components by applying the rewards.
+
+    ```pseudo
+    final_infrastructure_fee = maker_fee_after_volume_discount - infrastructure_fee_referral_reward
+    final_liquidity_fee = maker_fee_after_volume_discount - liquidity_fee_referral_reward
+    final_maker_fee = maker_fee_after_volume_discount - maker_fee_referral_reward
+    ```
+
+(Note the rewards and discounts are floored rather than raised to ensure the final fees cannot be negative.)
+
 ### Factors
 
 - infrastructure: staking/governance system/engine (network wide)
@@ -42,7 +98,7 @@ NB: size of trade needs to take into account Position Decimal Places specified i
 
 ### Collecting and Distributing Fees
 
-We need to calculate the total fee for the transaction.
+We need to calculate the total fee for the transaction (before applying benefit factors).
 Attempt to transfer the full fee from the trader into a temporary bucket, one bucket per trade (so we know who the maker is) from the trader general account.
 If insufficient, then take the remainder (possibly full fee) from the margin account.
 The margin account should have enough left after paying the fees to cover maintenance level of margin for the trades.
@@ -55,11 +111,12 @@ Other than the criteria whether to proceed or discard, this is exactly the same 
 
 The transfer of fees must be completed before performing the normal post-trade calculations (MTM Settlement, position resolution etc...). The transfers have to be identifiable as fee transfers and separate for the three components.
 
-Now distribute funds from the "temporary fee bucket" as follows:
+Now [apply benefit factors](#applying-benefit-factors) and then distribute funds from the "temporary fee bucket" as follows:
 
-1. Infrastructure_fee is transferred to infrastructure fee pool for that asset. Its distribution is described in [0061 - Proof of Stake rewards](./0061-REWP-pos_rewards.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to validator score and type.
-1. The maker_fee is transferred to the relevant party.
-1. The liquidity_fee is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+1. The `infrastructure_fee` is transferred to infrastructure fee pool for that asset. Its distribution is described in [0061 - Proof of Stake rewards](./0061-REWP-pos_rewards.md). In particular, at the end of each epoch the amount due to each validator and delegator is to be calculated and then distributed subject to validator score and type.
+1. The `maker_fee` is transferred to the relevant party (the maker).
+1. The `liquidity_fee` is distributed as described in [this spec](./0042-LIQF-setting_fees_and_rewarding_lps.md).
+1. The referral fee components (if any) can then be individually transferred to the relevant party (the referee).
 
 ### During Continuous Trading
 
@@ -83,7 +140,7 @@ Order that entered the book in the current batch are considered aggressive order
 
 The trades that were netted off against each other during position resolution incur no fees.
 During position resolution all of the parties being liquidated share the total fee for the network order, pro-rated by the size of position.
-As for fees in other cases, the fee is taken out of the general + margin account for the liable traders (the insurance pool is not used to top up fees that cannot be paid). If the general + margin account is insufficient to cover the fee then the fee (or part of it) is not going to get paid. In this case we first pay out the maker_fee (or as much as possible), then then infrastructure_fee (or as much as possible) and finally the liquidity_fee.
+As for fees in other cases, the fee is taken out of the general + margin account for the liable traders (the market's insurance pool is not used to top up fees that cannot be paid). If the general + margin account is insufficient to cover the fee then the fee (or part of it) is not going to get paid. In this case we first pay out the maker_fee (or as much as possible), then then infrastructure_fee (or as much as possible) and finally the liquidity_fee.
 
 ### Rounding
 
@@ -93,17 +150,46 @@ For example, Ether is 18 decimals (wei). The smallest unit, non divisible is 1 w
 
 ## Acceptance Criteria
 
-- Fees are collected during continuous trading and auction modes and distributed to the appropriate accounts, as described above. (<a name="0029-FEES-001" href="#0029-FEES-001">0029-FEES-001</a>)
+- Fees are collected during continuous trading and auction modes and distributed to the appropriate accounts, as described above. (<a name="0029-FEES-001" href="#0029-FEES-001">0029-FEES-001</a>).
 - Fees are debited from the general (+ margin if needed) account on any market orders that during continuous trading, the price maker gets the appropriate fee credited to their general account and the remainder is split between the market making pool and infrastructure (staking) pool. (<a name="0029-FEES-002" href="#0029-FEES-002">0029-FEES-002</a>)
 - Fees are debited from the general (+ margin if needed) account on the volume that resulted in a trade on any "aggressive / price taking" limit order that executed during continuous trading, the price maker gets the appropriate fee credited to their general account and the remainder is split between the market making pool and staking pool.  (<a name="0029-FEES-003" href="#0029-FEES-003">0029-FEES-003</a>)
 - Fees are debited from the general (+ margin if needed) account on any "aggressive / price taking" pegged order that executed during continuous trading, the price maker gets the appropriate fee credited to their general account and the remainder is split between the market making pool and staking pool. (<a name="0029-FEES-004" href="#0029-FEES-004">0029-FEES-004</a>)
-- Fees are collected in one case of amends: you amend the price so far that it causes an immediate trade.  (<a name="0029-FEES-005" href="#0029-FEES-005">0029-FEES-005</a>)
+- Fees are collected in one case of amends: you amend the price so far that it causes an immediate trade.  (<a name="0029-FEES-005" href="#0029-FEES-005">0029-FEES-005</a>).
 - During auctions, each side of a trade is debited 1/2 (infrastructure_fee + liquidity_fee) from their general (+ margin if needed) account. The infrastructure_fee fee is credited to the staking pool, the liquidity_fee is credited to the market making pool. (<a name="0029-FEES-006" href="#0029-FEES-006">0029-FEES-006</a>)
 - During continuous trading, if a trade is matched and the aggressor / price taker has insufficient balance in their general (+ margin if needed) account, then the trade doesn't execute if maintenance level of trade is not met. (<a name="0029-FEES-007" href="#0029-FEES-007">0029-FEES-007</a>)
-- During auctions, if either of the two sides has insufficient balance in their general (+ margin if needed) account, the trade still goes ahead only if :-) the margin account should have enough left after paying the fees to cover maintenance level of margin for the orders and then converted trades. (<a name="0029-FEES-008" href="#0029-FEES-008">0029-FEES-008</a>)
-- Changing parameters (via governance votes) does change the fees being collected appropriately even if the market is already running.  (<a name="0029-FEES-009" href="#0029-FEES-009">0029-FEES-009</a>)
-- A "buyer_fee" and "seller_fee" are exposed in APIs for every trade, split into the three components (after the trade definitely happened) (<a name="0029-FEES-010" href="#0029-FEES-010">0029-FEES-010</a>)
-- Users should be able to understand the breakdown of the fee to the three components (by querying for fee payment transfers by trade ID, this requires enough metadata in the transfer API to see the transfer type and the associated trade.) (<a name="0029-FEES-011" href="#0029-FEES-011">0029-FEES-011</a>)
-- The three component fee rates (fee_factor[infrastructure, fee_factor[maker], fee_factor[liquidity] are available via an API such as the market data API or market framework. (<a name="0029-FEES-012" href="#0029-FEES-012">0029-FEES-012</a>)
-- A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to 2. A market order of size 1.23 is placed which is filled at VWAP of 100. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `1.23 x 100 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-013" href="#0029-FEES-013">0029-FEES-013</a>)
-- A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to -2. A market order of size 12300 is placed which is filled at VWAP of 0.01. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `12300 x 0.01 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-014" href="#0029-FEES-014">0029-FEES-014</a>)
+- During auctions, if either of the two sides has insufficient balance in their general (+ margin if needed) account, the trade still goes ahead only if the margin account should have enough left after paying the fees to cover maintenance level of margin for the orders and then converted trades. (<a name="0029-FEES-008" href="#0029-FEES-008">0029-FEES-008</a>)
+- Changing parameters (via governance votes) does change the fees being collected appropriately even if the market is already running.  (<a name="0029-FEES-009" href="#0029-FEES-009">0029-FEES-009</a>).
+- A "buyer_fee" and "seller_fee" are exposed in APIs for every trade, split into the three components (after the trade definitely happened) (<a name="0029-FEES-010" href="#0029-FEES-010">0029-FEES-010</a>).
+- Users should be able to understand the breakdown of the fee to the three components (by querying for fee payment transfers by trade ID, this requires enough metadata in the transfer API to see the transfer type and the associated trade.) (<a name="0029-FEES-011" href="#0029-FEES-011">0029-FEES-011</a>).
+- The three component fee rates (fee_factor[infrastructure], fee_factor[maker], fee_factor[liquidity]) are available via an API such as the market data API or market framework. (<a name="0029-FEES-012" href="#0029-FEES-012">0029-FEES-012</a>).
+- A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to 2. A market order of size 1.23 is placed which is filled at VWAP of 100. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `1.23 x 100 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-013" href="#0029-FEES-013">0029-FEES-013</a>).
+- A market is set with [Position Decimal Places" (PDP)](0052-FPOS-fractional_orders_positions.md) set to -2. A market order of size 12300 is placed which is filled at VWAP of 0.01. We have fee_factor[infrastructure] = 0.001, fee_factor[maker] = 0.002, fee_factor[liquidity] = 0.05. The total fee charged to the party that placed this order is `12300 x 0.01 x (0.001 + 0.002 + 0.05) = 6.519` and is correctly transferred to the appropriate accounts / pools. (<a name="0029-FEES-014" href="#0029-FEES-014">0029-FEES-014</a>).
+
+### Applying benefit factors
+
+1. Referee discounts are correctly calculated and applied for each taker fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-023" href="#0029-FEES-023">0029-FEES-023</a>)
+    - `infrastructure_referral_fee_discount`
+    - `liquidity_fee_referral_discount`
+    - `maker_fee_referral_discount`
+1. Referee discounts are correctly calculated and applied for each fee component when exiting an auction (assuming no volume discounts due to party) (<a name="0029-FEES-024" href="#0029-FEES-024">0029-FEES-024</a>)
+    - `infrastructure_fee_referral_discount`
+    - `liquidity_fee_referral_discount`
+1. Referrer rewards are correctly calculated and transferred for each fee component during continuous trading (assuming no volume discounts due to party) (<a name="0029-FEES-025" href="#0029-FEES-025">0029-FEES-025</a>)
+    - `infrastructure_fee_referral_reward`
+    - `liquidity_fee_referral_reward`
+    - `maker_fee_referral_reward`
+1. Referrer rewards are correctly calculated and transferred for each fee component when exiting an auction (assuming no volume discounts due to party) (<a name="0029-FEES-026" href="#0029-FEES-026">0029-FEES-026</a>)
+    - `infrastructure_fee_referral_reward`
+    - `liquidity_fee_referral_reward`
+1. If the referral reward due to the referrer is strictly less than `1`, no reward is transferred (<a name="0029-FEES-029" href="#0029-FEES-029">0029-FEES-029</a>).
+1. If the referral discount due to the referee is strictly less than `1`, no discount is applied (<a name="0029-FEES-030" href="#0029-FEES-030">0029-FEES-030</a>).
+1. The proportion of fees transferred to the referrer as a reward cannot be greater than the network parameter `referralProgram.maxReferralRewardProportion` (<a name="0029-FEES-031" href="#0029-FEES-031">0029-FEES-031</a>).
+1. Volume discount rewards are correctly calculated and transferred for each taker fee component during continuous trading (assuming no referral discounts due to party) (<a name="0029-FEES-027" href="#0029-FEES-027">0029-FEES-027</a>)
+    - `infrastructure_fee_volume_discount`
+    - `liquidity_fee_volume_discount`
+    - `maker_fee_volume_discount`
+1. Volume discount rewards are correctly calculated and transferred for each fee component when exiting an auction (assuming no referral discounts due to party) (<a name="0029-FEES-028" href="#0029-FEES-028">0029-FEES-028</a>)
+    - `infrastructure_fee_volume_discount`
+    - `liquidity_fee_volume_discount`
+1. During continuous trading, discounts from multiple sources are correctly calculated and applied one after the other, each time using the resulting fee component after the previous discount was applied. (<a name="0029-FEES-032" href="#0029-FEES-032">0029-FEES-032</a>).
+1. When exiting an auction, discounts from multiple sources are correctly calculated and applied one after the other, each time using the resulting fee component after the previous discount was applied. (<a name="0029-FEES-033" href="#0029-FEES-033">0029-FEES-033</a>).

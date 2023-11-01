@@ -30,10 +30,11 @@ Information to store:
 
 - All [network parameters](../protocol/0054-NETP-network_parameters.md), including those defined [below](#network-parameters).
 - All [asset definitions](../protocol/0040-ASSF-asset_framework.md#asset-definition).
-Insurance pool balances, [Reward account balance](../protocol/0056-REWA-rewards_overview.md), [LP committed liquidity](../protocol/0038-OLIQ-liquidity_provision_order_type.md) and [LP fee pool](../protocol/0029-FEES-fees.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market.
+- Insurance pool balances (global for each asset and per-market), [Reward account balance](../protocol/0056-REWA-rewards_overview.md) and [LP committed liquidity](./0044-LIME-lp_mechanics.md) balances for the markets that have been enacted will be stored with the accepted market proposal that must have preceded the market.
 - All market proposals ([creation](../protocol/0028-GOVE-governance.md#1-create-market) and [update](../protocol/0028-GOVE-governance.md#2-change-market-parameters)) that have been *accepted* but not those where the market already started trading and reached *trading terminated* state.
 - All [asset proposals](../protocol/0028-GOVE-governance.md) that have been *accepted*.
 - All delegation info.
+- [LP fee pool](../protocol/0029-FEES-fees.md) for undistributed LP fee balances on a market will be added to the LP's general account balances (without applying any SLA penalties).
 - On chain treasury balances and on-chain rewards for staking and delegation [Staking and delegation](../protocol/0056-REWA-rewards_overview.md).
 - [Account balances](../protocol/0013-ACCT-accounts.md) for all parties per asset: sum of general, margin and LP bond accounts.
 - Event ID of the last processed deposit event for all bridged chains
@@ -134,8 +135,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 1. There is an asset USD.
 1. There is a market `id_xxx` in status "pending".
-1. The party LP has a `USD` general account balance equal to `LP_gen_bal + LP_margin_bal`.
-1. The party LP has `LP_bond_bal` committed to market `id_xxx`.
+1. The party LP has a `USD` general account balance equal to `LP_gen_bal + LP_margin_bal` + `LP_bond_bal`.
 1. The other party has a `USD` general account balance equal to `other_gen_bal + other_margin_bal`.
 
 ### Test case 3: Governance proposals are maintained across resets, votes are not
@@ -158,7 +158,45 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_margin_bal`.
 
+#### Test case 3.1.1: Spot market is proposed, accepted, restored (<a name="0073-LIMN-102" href="#0073-LIMN-102">0073-LIMN-102</a>)
+
+1. There is an asset USD and no asset proposals.
+1. There are no markets and no market proposals.
+1. There is a party a party called `LP party` with general balance of 10 000 USD.
+1. A market is proposed by a party called `LP party` and has enactment date 1 year in the future. The market has id `id_xxx`.
+1. `LP party` commits a stake of 1000 USD to `id_xxx`.
+1. Other parties vote on the market and the proposal is accepted (passes rules for vote majority and participation). The market has id `id_xxx`.
+1. The market is in `pending` state, see [market lifecycle](../protocol/0043-MKTL-market_lifecycle.md).
+1. Another party places a limit sell order on the market and has `other_gen_bal`, holding balance `other_hold_bal`.
+1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
+1. There is an asset USD.
+1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
+1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
+1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_hold_bal`.
+
+#### Test case 3.1.2: Perpetual market is proposed, accepted, restored (<a name="0073-LIMN-105" href="#0073-LIMN-105">0073-LIMN-105</a>)
+
+1. There is an asset USD and no asset proposals.
+1. There are no markets and no market proposals.
+1. There is a party a party called `LP party` with general balance of 10 000 USD.
+1. A market is proposed by a party called `LP party` and has enactment date 1 year in the future. The market has id `id_xxx`.
+1. `LP party` commits a stake of 1000 USD to `id_xxx`.
+1. Other parties vote on the market and the proposal is accepted (passes rules for vote majority and participation). The market has id `id_xxx`.
+1. The market is in `pending` state, see [market lifecycle](../protocol/0043-MKTL-market_lifecycle.md).
+1. Another party places a limit sell order on the market and has `other_gen_bal`, holding balance `other_hold_bal`.
+1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
+1. The network is shut down.
+1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
+1. There is an asset USD.
+1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
+1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
+1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_hold_bal`.
+
 #### Test case 3.2: Market is proposed, voting hasn't closed, not restored (<a name="0073-LIMN-010" href="#0073-LIMN-010">0073-LIMN-010</a>)
+
+for product perpetuals: (<a name="0073-LIMN-106" href="#0073-LIMN-106">0073-LIMN-106</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -173,6 +211,8 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is no market and there are no market proposals.
 
 #### Test case 3.3: Market is proposed, voting has closed, market rejected, proposal not restored (<a name="0073-LIMN-011" href="#0073-LIMN-011">0073-LIMN-011</a>)
+
+for product perpetuals:(<a name="0073-LIMN-107" href="#0073-LIMN-107">0073-LIMN-107</a>)
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -189,6 +229,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 #### Test case 3.4: Recovery from proposed Markets with no votes, voting is open, proposal not restored (<a name="0073-LIMN-012" href="#0073-LIMN-012">0073-LIMN-012</a>)
 
+
+for product perpetuals:(<a name="0073-LIMN-108" href="#0073-LIMN-108">0073-LIMN-108</a>)
+
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 USD.
@@ -201,6 +244,10 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The LP party has general account balance in USD of `10 000`.
 
 #### Test case 3.5: Recovery from proposed Markets with votes, voting is open, proposal not restored (<a name="0073-LIMN-013" href="#0073-LIMN-013">0073-LIMN-013</a>)
+
+
+for product perpetuals:(<a name="0073-LIMN-109" href="#0073-LIMN-109">0073-LIMN-109</a>)
+
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -215,6 +262,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 #### Test case 3.6: Market proposals ignored when restoring twice from same checkpoint (<a name="0073-LIMN-014" href="#0073-LIMN-014">0073-LIMN-014</a>)
 
+for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-110</a>)
+
+
 1. A party has general account balance of 100 USD.
 1. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
 1. The network is shut down.
@@ -225,13 +275,21 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. There is no market and there are no market proposals.
 1. The party has general account balance in USD of `0` and The party has "signed for withdrawal" `100`.
 
-### Test case 4: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-016" href="#0073-LIMN-016">0073-LIMN-016</a>)
+### Test case 4a: Party's Margin Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-016" href="#0073-LIMN-016">0073-LIMN-016</a>) (for perpetuals: <a name="0073-LIMN-111" href="#0073-LIMN-111">0073-LIMN-111</a>)
 
 1. A party has USD general account balance of 100 USD.
 2. That party has USD margin account balance of 100 USD.
 3. The network is shut down.
 4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 5. That party has a USD general account balance of 200 USD
+
+### Test case 4b: In Spot market, party's Holding Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-080" href="#0073-LIMN-080">0073-LIMN-080</a>)
+
+1. A party has USD general account balance of 100 USD.
+2. That party has USD holding account balance of 50 USD.
+3. The network is shut down.
+4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
+5. That party has a USD general account balance of 150 USD
 
 ### Test case 5: Add or remove stake during checkpoint restart (<a name="0073-LIMN-017" href="#0073-LIMN-017">0073-LIMN-017</a>)
 
@@ -277,7 +335,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Enacted, listed ERC-20 asset is remembered in checkpoint (<a name="0073-LIMN-023" href="#0073-LIMN-023">0073-LIMN-023</a>)
 1. An ERC-20 asset loaded from checkpoint can be used in a market loaded from a checkpoint (<a name="0073-LIMN-024" href="#0073-LIMN-024">0073-LIMN-024</a>)
 1. An ERC-20 asset loaded from checkpoint can be updated (<a name="0073-LIMN-025" href="#0073-LIMN-025">0073-LIMN-025</a>)
-1. An ERC-20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>)
+1. An ERC-20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>).
 1. Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a name="0073-LIMN-027" href="#0073-LIMN-027">0073-LIMN-027</a>)
 
 1. Propose a valid ERC-20 asset.
@@ -291,6 +349,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Propose an update to the asset, and ensure that you can update the ERC20 bridge with the asset update and signature bundle.
 
 ### Test case 13: A market with future enactment date can become enacted after being restored from checkpoint (<a name="0073-LIMN-028" href="#0073-LIMN-028">0073-LIMN-028</a>)
+
 
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
@@ -312,26 +371,28 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 ### Test case 14: Market with trading terminated is not restored, collateral moved correctly
 
 1. Set LP fee distribution time step to non-zero value.
-1. Propose, enact, trade in the market, close out distressed party so that insurance pool balance > 0, submit trading terminated.
+1. Propose, enact, trade in the market, close out distressed party so that market's insurance pool balance > 0, submit trading terminated.
 1. System saves LNL checkpoint at a time when undistributed LP fees for the market are > 0.
 1. Restart Vega, load LNL checkpoint.
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>)
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>).
 1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-030" href="#0073-LIMN-030">0073-LIMN-030</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-031" href="#0073-LIMN-031">0073-LIMN-031</a>)
-1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-033" href="#0073-LIMN-033">0073-LIMN-033</a>)
-1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-034" href="#0073-LIMN-034">0073-LIMN-034</a>)
+1. In Spot market, for parties that had holdings in the holding account on the market this is now in their general account for the asset.  (<a name="0073-LIMN-084" href="#0073-LIMN-084">0073-LIMN-084</a>)
+1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>).
+1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-112" href="#0073-LIMN-112">0073-LIMN-112</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-034" href="#0073-LIMN-034">0073-LIMN-034</a>).
 
 ### Test case 15: Market with trading terminated that settled is not restored, collateral moved correctly
 
 1. Propose, enact, trade in the market, submit trading terminated and settlement data, observe final settlement cashflows for at least 2 parties.
 1. System saves LNL checkpoint.
 1. Restart Vega, load LNL checkpoint.
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>)
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>).
 1. If the market exists in the data node it is marked as settled with correct settlement data. (<a name="0073-LIMN-041" href="#0073-LIMN-041">0073-LIMN-041</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-043" href="#0073-LIMN-043">0073-LIMN-043</a>)
-1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>)
+1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset.  (<a name="0073-LIMN-088" href="#0073-LIMN-088">0073-LIMN-088</a>)
+1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-113" href="#0073-LIMN-113">0073-LIMN-113</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>).
 
 ### Test case 16: Markets can be settled and terminated after restore as proposed
 
@@ -340,19 +401,20 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Restart Vega, load LNL checkpoint.
 1. A party submits liquidity provision to the market, orders are submitted to the opening auction to allow uncrossing; at least two parties now have a position.
 1. Submit the trading terminated transaction and settlement date transaction as set out in the proposal and observe the final settlement cashflows for the parties with positions.  (<a name="0073-LIMN-050" href="#0073-LIMN-050">0073-LIMN-050</a>)
-1. It's not possible to submit orders or LP provisions to this market).  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>)
+1. It's not possible to submit orders or LP provisions to this market.  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>).
 
-### Test case 17: Markets with internal time trigger for trading terminated that rings between shutdown and restore
+### Test case 17: Markets with internal time trigger for trading terminated that fires between shutdown and restore
 
 1. Propose, enact a market with some trading terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties.
-1. System saves LNL checkpoint before the trading terminated trigger rings.
+1. System saves LNL checkpoint before the trading terminated trigger is set off.
 1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung.
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>); if it exists it in `cancelled` state.
-1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>)
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>).
+1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>).
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
-1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>)
-1. The insurance pool balance has been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-064" href="#0073-LIMN-064">0073-LIMN-064</a>)
-1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>)
+1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset. (<a name="0073-LIMN-094" href="#0073-LIMN-094">0073-LIMN-094</a>)
+1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>).
+1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-114" href="#0073-LIMN-114">0073-LIMN-114</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>).
 
 ### Test case 18: market definition is the same pre and post LNL restore
 
@@ -360,9 +422,9 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 - System saves LNL checkpoint.
 - Restart Vega, load LNL checkpoint.
 - The market has the same:
-  - risk model and parameters (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>)
-  - price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>)
-  - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>)
+  - risk model and parameters (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>).
+  - price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>).
+  - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>).
   - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
 
 ### Test case 19: Deposit tokens during checkpoint restore
@@ -372,7 +434,7 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. Stop the network.
 1. Deposit tokens to a vega party via the ERC20 assert bridge.
 1. Restart the vega network from the checkpoint created earlier.
-1. There party's newly deposited assets are available. (<a name="0073-LIMN-074" href="#0073-LIMN-074">0073-LIMN-074</a>)
+1. There party's newly deposited assets are available. (<a name="0073-LIMN-074" href="#0073-LIMN-074">0073-LIMN-074</a>).
 
 ### Test case 20: Multisig updates during checkpoint restart
 

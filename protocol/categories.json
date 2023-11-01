@@ -1,6 +1,6 @@
 {
   "Fundamentals": {
-    "specs": ["0017-PART", "0022-AUTH", "0051-PROD", "0016-PFUT", "0053-PERP", "0040-ASSF", "0013-ACCT", "0054-NETP", "0068-MATC", "0067-KEYS", "0057-TRAN", "0052-FPOS"]
+    "specs": ["0017-PART", "0022-AUTH", "0051-PROD", "0016-PFUT", "0053-PERP", "0040-ASSF", "0013-ACCT", "0054-NETP", "0068-MATC", "0067-KEYS", "0057-TRAN", "0052-FPOS", "0080-SPOT"]
   },
   "Markets": {
     "specs": ["0035-LIQM", "0032-PRIM", "0043-MKTL", "0026-AUCT", "0006-POSI", "0008-TRAD", "0001-MKTF", "0009-MRKP", "0012-POSR", "0021-MDAT", "0039-MKTD", "0070-MKTD"]
@@ -12,7 +12,7 @@
     "specs": ["0073-LIMN", "0072-SPPW", "0062-SPAM", "0060-WEND", "0003-NP-LIMI", "0072-SPPW", "0078-NWLI", "0079-TGAP"]
   },
   "Liquidity": {
-    "specs": ["0044-LIME", "0042-LIQF", "0034-PROB"]
+    "specs": ["0044-LIME", "0042-LIQF", "0034-PROB", "0012-NP-LIPE"]
   },
   "Governance": {
     "specs": ["0028-GOVE", "0027-ASSP", "0058-REWS", "0056-REWA", "0055-TREA"]

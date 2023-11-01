@@ -34,7 +34,7 @@ Data Structures
 
 ```json
 TransferRequest {
-  from: [Account], // This is an array of accounts in order of precedence, e.g. the first account in the list is emptied first when making transfers. For settlement at expiry scenarios, transferRequests will be sequenced to access 1. the trader's margin account for the Market, 2. the trader's collateral account and 3. the insurance pool.
+  from: [Account], // This is an array of accounts in order of precedence, e.g. the first account in the list is emptied first when making transfers. For settlement at expiry scenarios, transferRequests will be sequenced to access 1. the trader's margin account for the Market, 2. the trader's collateral account and 3. the market's insurance pool.
   to: Account,
   amount: FinancialAmount,
   reference: ???,  // some way to link back to the causal event that created this transfer

@@ -39,7 +39,7 @@ If all requested amounts are successfully transferred to the *market settlement 
 
 #### Loss socialisation
 
-If some of the collection transfers are not able to supply the full amount to the *market settlement account* due to some traders having insufficient collateral in their margin account and general account to handle the price / position (mark to market) move, and if the insurance pool can't cover the shortfall for some of these, then not enough funds will have been collected to distribute the full amount of the mark to market gains made by traders on the other side. Therefore, settlement needs to decide how to fairly distribute the funds that have been collected. This is called *loss socialisation*.
+If some of the collection transfers are not able to supply the full amount to the *market settlement account* due to some traders having insufficient collateral in their margin account and general account to handle the price / position (mark to market) move, and if the market's insurance pool can't cover the shortfall for some of these, then not enough funds will have been collected to distribute the full amount of the mark to market gains made by traders on the other side. Therefore, settlement needs to decide how to fairly distribute the funds that have been collected. This is called *loss socialisation*.
 
 In future, a more sophisticated algorithm may be used for this (perhaps taking into account a trader's overall profit on their positions, for example) but initially this will be implemented by reducing the amount to distribute to each trader with an MTM gain pro-rata by relative position size:
 
@@ -50,7 +50,7 @@ distribute_amount[trader] = mtm_gain[trader] * ( actual_collected_amount / targe
 
 ### Network orders
 
-When a trader is distressed their position is closed out by the network placing an order to bring their position back to 0. This [network order](../protocol/0014-ORDT-order_types.md) will match against normal orders in the order book and will be part of a [mark-to-market settlement](./0003-MTMK-mark_to_market_settlement.md) action. As [the network user is a virtual user](./0017-PART-party.md#network-party) it does not have collateral accounts from which to provide or collect wins and loses. The [market insurance account](./0015-INSR-market_insurance_pool_collateral.md) is used in place of these. If a network order is settled as a win, the collateral will be transferred from the matched trader directly into the insurance account for the market. If the network order is a loss, the insurance pool will be used to pay the matched traders. [Loss socialisation](#loss-socialisation) is used if the insurance pool does not have enough collateral to cover the loss situation.
+When a trader is distressed their position is closed out by the network placing an order to bring their position back to 0. This [network order](../protocol/0014-ORDT-order_types.md) will match against normal orders in the order book and will be part of a [mark-to-market settlement](./0003-MTMK-mark_to_market_settlement.md) action. As [the network user is a virtual user](./0017-PART-party.md#network-party) it does not have collateral accounts from which to provide or collect wins and loses. The [market insurance account](./0015-INSR-market_insurance_pool_collateral.md) is used in place of these. If a network order is settled as a win, the collateral will be transferred from the matched trader directly into the insurance account for the market. If the network order is a loss, the market's insurance pool will be used to pay the matched traders. [Loss socialisation](#loss-socialisation) is used if the market's insurance pool does not have enough collateral to cover the loss situation.
 
 ## Settlement at instrument expiry
 
@@ -64,7 +64,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 
 ## Acceptance Criteria
 
-### The typical "Happy Path" case (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>)
+### The typical "Happy Path" case (<a name="0002-STTL-001" href="#0002-STTL-001">0002-STTL-001</a>,)
 
 - With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market.
 
@@ -79,7 +79,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
+1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
 1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>)
@@ -95,7 +95,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
+1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
 1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-005" href="#0002-STTL-005">0002-STTL-005</a>)
@@ -124,6 +124,6 @@ All of that happens while processing the trading terminated transaction.
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) to the on-chain treasury for the settlement asset of the market and other insurance pools using the same asset.
+1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
