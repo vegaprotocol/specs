@@ -92,7 +92,52 @@ Please refer to the following subsections for the details of calculation of the 
 
 #### TWAP calculation
 
-Same methodology applies to spot (external) and perps (internal prices). The available prices (spot and perps considered separately of course) should be used to calculate the time weighted average price within the funding period. If no observations at or prior to the funding period start exist then the start of the period used for calculation should be moved forward to the time of the first observation. An observation is assumed to be applying until a subsequent observation is available. Periods spent in auction should be excluded from the calculation. This implies that spot datapoints received during the auction except for the latest one should be disregarded. Please refer to 0053-PERP-027 and 0053-PERP-028 for a detailed example.
+Same methodology applies to spot (external) and perps (internal). The available prices (spot and perps considered separately of course) should be used to calculate the time weighted average price within the funding period. If no observations at or prior to the funding period start exist then the start of the period used for calculation should be moved forward to the time of the first observation. An observation is assumed to be applying until a subsequent observation is available. Periods spent in auction should be excluded from the calculation. This implies that spot datapoints received during the auction except for the latest one should be disregarded. Please refer to 0053-PERP-027 and 0053-PERP-028 for a detailed example.
+
+Calculation of the TWAP is carried out by maintaining the following variables: `numerator`, `denominator`, `previous_price` and `previous_time`. It's also assumed that a function `current_time()` is available which returns the current Vega time, and a function `in_auction()` exists which returns `true` if the market being considered is currently in auction and `false` otherwise.
+The variables are maintained as follows.
+
+When a new `price` observation arrives:
+
+```go
+if previous_price != nil && in_auction() {
+    time_delta = current_time()-previous_time
+    numerator += previous_price*time_delta
+    denominator += time_delta
+}
+previous_price = price
+previous_time = current_time()
+```
+
+When the market goes into auction:
+
+```go
+time_delta = current_time()-previous_time
+numerator += previous_price*time_delta
+denominator += time_delta
+```
+
+When the market goes out of auction:
+
+```go
+previous_time = current_time()
+```
+
+When the funding payment cue arrives TWAP gets calculated and returned as:
+
+```go
+if !in_auction() {
+    time_delta = current_time()-previous_time
+    numerator += previous_price*time_delta
+    denominator += time_delta
+}
+previous_time = current_time
+if denominator == 0 {
+    return 0
+}
+return numerator / denominator
+
+```
 
 #### Funding payment calculation
 
