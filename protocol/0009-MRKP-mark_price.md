@@ -8,7 +8,8 @@ Introduce a network parameter `network.markPriceUpdateMaximumFrequency` with min
 
 ## Acceptance criteria
 
-- The mark price must be set when the market leaves opening auction  (<a name="0009-MRKP-002" href="#0009-MRKP-002">0009-MRKP-002</a>)
+- The mark price must be set when the market leaves opening auction. (<a name="0009-MRKP-002" href="#0009-MRKP-002">0009-MRKP-002</a>)
+- Each time the mark price changes the market data event containing the new mark price should be emitted. Specifically, the mark price set after leaving each auction, every interim mark price as well as the mark price based on last trade used at market termination and the one based on oracle data used for final settlement should all be observable from market data events. (<a name="0009-MRKP-009" href="#0009-MRKP-009">0009-MRKP-009</a>)
 
 Algorithm 1:
 
@@ -16,7 +17,7 @@ Algorithm 1:
 - If `network.markPriceUpdateMaximumFrequency>0` then out of a sequence of transactions with the same time-stamp the last transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade but only provided that at least `network.markPriceUpdateMaximumFrequency` has elapsed since the last update. (<a name="0009-MRKP-007" href="#0009-MRKP-007">0009-MRKP-007</a>)
 - A transaction that doesn't result in a trade does not cause the mark price to change. (<a name="0009-MRKP-004" href="#0009-MRKP-004">0009-MRKP-004</a>)
 - A transaction out of a sequence of transactions with the same time stamp which isn't the last trade-causing transaction will *not* result in a mark price change. (<a name="0009-MRKP-008" href="#0009-MRKP-008">0009-MRKP-008</a>)
-- The mark price must be using market decimal place setting (<a name="0009-MRKP-006" href="#0009-MRKP-006">0009-MRKP-006</a>)
+- The mark price must be using market decimal place setting. (<a name="0009-MRKP-006" href="#0009-MRKP-006">0009-MRKP-006</a>)
 
 ## Guide-level explanation
 
@@ -71,3 +72,4 @@ The mark price is set to the higher / lower of the last traded price, bid/offer.
 ### 5. Defined as part of the product
 
   The *Mark Price* may be calculated using an algorithm defined by the product -- and 'selected' by a market parameter.
+

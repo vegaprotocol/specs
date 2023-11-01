@@ -93,7 +93,7 @@ All Vega clients that submitted transactions can verify that their transaction h
 - Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on) (<a name="0072-SPPW-004" href="#0072-SPPW-004">0072-SPPW-004</a>)
 - Reusing a transaction identifier in a way that several transactions with the same ID end up in the same block is detected and the transactions are rejected (<a name="0072-SPPW-005" href="#0072-SPPW-005">0072-SPPW-005</a>)
 - A blocked account is unblocked after the maximum of 1/48 of an Epoch or 30 seconds. For transactions sent in the meantime, a meaningful error message is returned. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
-- PoW attached to a valid transaction will be accepted provided it's using correct chain ID and, at time of submission, the block hash is one of the last `spam.pow.numberOfPastBlocks` blocks.  (<a name="0072-COSMICELEVATOR-007" href="#0072-COSMICELEVATOR-007">0072-COSMICELEVATOR-007</a>)
+- PoW attached to a valid transaction will be accepted provided it's using correct chain ID and, at time of submission, the block hash is one of the last `spam.pow.numberOfPastBlocks` blocks.  (<a name="0072-SPPW-007" href="#0072-SPPW-007">0072-SPPW-007</a>)
 - For each transaction less than or equal to `spam.pow.numberOfTxPerBlock` in a block `spam.pow.difficulty` zeros are needed in the proof-of-work (<a name="0072-SPPW-008" href="#0072-SPPW-008">0072-SPPW-008</a>)
 - For each `spam.pow.numberOfTxPerBlock` sized block of transactions greater than `spam.pow.numberOfTxPerBlock` an additional 0 is required in the proof-of-work (1 additional zero for the first batch, two additional for the second batch etc) (<a name="0072-SPPW-009" href="#0072-SPPW-009">0072-SPPW-009</a>)
 - For a given block, a user is able to submit more than `spam.pow.numberOfTxPerBlock` transactions with only `spam.pow.difficulty` zeros by tying them to one or more historic blocks all of which are within `spam.pow.numberOfPastBlocks` blocks (<a name="0072-SPPW-010" href="#0072-SPPW-010">0072-SPPW-010</a>)
@@ -101,30 +101,30 @@ All Vega clients that submitted transactions can verify that their transaction h
 
 - The parameter `spam.pow.difficulty` is increased.  Verify that
   - Transactions tied to such a block using the original difficulty are rejected with an error message.
-  - The effect of `pow.increaseDifficulty` is still applied, i.e., a wallet key that had the increased difficulty still has the increased difficulty w.r.t. the new baseline. (<a name="0072-COSMICELEVATOR-008" href="#0072-COSMICELEVATOR-008">0072-COSMICELEVATOR-008</a>)
+  - The effect of `pow.increaseDifficulty` is still applied, i.e., a wallet key that had the increased difficulty still has the increased difficulty w.r.t. the new baseline. (<a name="0072-SPPW-013" href="#0072-SPPW-013">0072-SPPW-013</a>)
 
 - The parameter `spam.pow.difficulty` is decreased. Verify that
   - Transactions tied to such a block using the new difficulty are not rejected.
-  - The effect of `pow.increaseDifficulty` is still applied, i.e., a wallet key that had the increased difficulty still has the increased difficulty w.r.t. the new baseline. (<a name="0072-COSMICELEVATOR-009" href="#0072-COSMICELEVATOR-009">0072-COSMICELEVATOR-009</a>)
+  - The effect of `pow.increaseDifficulty` is still applied, i.e., a wallet key that had the increased difficulty still has the increased difficulty w.r.t. the new baseline. (<a name="0072-SPPW-014" href="#0072-SPPW-014">0072-SPPW-014</a>)
 
 - The parameter `spam.pow.increaseDifficulty` is changed from 0 to 1.  Verify that
-  - Transactions tied to such a block using insufficient difficulty due to the new parameter are rejected with an error message. (<a name="0072-COSMICELEVATOR-010" href="#0072-COSMICELEVATOR-010">0072-COSMICELEVATOR-010</a>)
+  - Transactions tied to such a block using insufficient difficulty due to the new parameter are rejected with an error message. (<a name="0072-SPPW-015" href="#0072-SPPW-015">0072-SPPW-015</a>)
 
 - The parameter `spam.pow.increaseDifficulty` is changed from 1 to 0. Verify that
-  - Transactions tied to such a block using the base difficulty are not rejected. (<a name="0072-COSMICELEVATOR-011" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-011</a>)
+  - Transactions tied to such a block using the base difficulty are not rejected. (<a name="0072-SPPW-016" href="#0072-SPPW-016">0072-SPPW-016</a>)
 
 - The parameter `spam.pow.numberofTxPerBlock` is decreased.  Verify that
-  - The new parameter is used for all blocks with a block height higher than the current one, i.e., a number of transactions that was allowed before and is no longer due to the new parameter is rejected (leaving the spam difficulty level constant) (<a name="0072-COSMICELEVATOR-012" href="#0072-COSMICELEVATOR-012">0072-COSMICELEVATOR-012</a>)
+  - The new parameter is used for all blocks with a block height higher than the current one, i.e., a number of transactions that was allowed before and is no longer due to the new parameter is rejected (leaving the spam difficulty level constant) (<a name="0072-SPPW-017" href="#0072-SPPW-017">0072-SPPW-017</a>)
 
 - The parameter `spam.pow.numberofTxPerBlock` is increased. Verify that
-  - If a number of transactions is submitted with the lower lever PoW that would have exceeded the `spam.pow.numberOfTXPerBlock` before the change and not after, no transaction is rejected. (<a name="0072-COSMICELEVATOR-013" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-013</a>)
+  - If a number of transactions is submitted with the lower lever PoW that would have exceeded the `spam.pow.numberOfTXPerBlock` before the change and not after, no transaction is rejected. (<a name="0072-SPPW-018" href="#0072-SPPW-018">0072-SPPW-018</a>)
 
 - Repeat tests 008-013,  where in the same block,
   - `Spam.pow.difficulty` is increased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is increased.
   - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is increased.
   - `Spam.pow.difficulty` is increased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased.
-  - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased. (<a name="0072-COSMICELEVATOR-014" href="#0072-COSMICELEVATOR-011">0072-COSMICELEVATOR-014</a>)
+
+  - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased. (<a name="0072-SPPW-019" href="#0072-SPPW-019">0072-SPPW-019</a>)
 
 
 - *Mempool pruning* Cause congestion in the mempool by submitting many transactions (perhaps from several parties). Submit a transaction `T` tied to block number `N_old`. Make sure the transactions causing congestion create sufficiently large `N_current`. At some point we'll have `N_old + spam.pow.numberOfPastBlocks < N_current` and the transaction `T` is removed from the mempool and never scheduled. (<a name="0072-SPPW-012" href="#0072-SPPW-012">0072-SPPW-012</a>)
-

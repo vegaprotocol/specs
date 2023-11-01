@@ -50,7 +50,6 @@
 - [Order submission](./0025-OCRE-order_submission.md)
 - [Pegged orders](./0037-OPEG-pegged_orders.md)
 - [Cancelling orders](./0033-OCAN-cancel_orders.md)
-- [Liquidity provisions](./0038-OLIQ-liquidity_provision_order_type.md)
 
 ## Margin, collateral & risk
 
@@ -58,7 +57,8 @@
 - [Collateral](./0005-COLL-collateral.md)
 - [Margin orchestration](./0010-MARG-margin_orchestration.md)
 - [Check order, allocate margin](./0011-MARA-check_order_allocate_margin.md)
-- [Market insurance pool](./0015-INSR-market_insurance_pool_collateral.md)
+- [Market insurance pool](./0015-INSR-market_insurance_pool_collateral.md#market-insurance-pool)
+- [Global insurance pool](./0015-INSR-market_insurance_pool_collateral.md#global-insurance-pool)
 - [Margin calculator](./0019-MCAL-margin_calculator.md)
 - [Quant risk models (Python notebook)](./0018-RSKM-quant_risk_models.ipynb)
 

@@ -91,27 +91,13 @@ The delegator cannot move the tokens before the epoch ends, they remain locked.
 ## Undelegate now
 
 The action can be announced at any time and is executed immediately following the block
-it is announced in. However, the stake is still counted as delegated to the validator until
-the last block of the epoch, though the delegator rewards are not paid to the delegator, but
-into an appropriate vega pool (the insurance pool, for example). The tokens are
-released though, and the delegator can transfer their tokens in the smart contract.
+it is announced in. The delegator is no longer considered for rewards. The stake is no longer counted as delegated to the previously chosen validator.
+The tokens are released immediately, and the delegator can transfer their tokens in the smart contract.
 
 Rationale: This allows a delegator to sell their tokens in a rush, without requiring
 any interaction between the smart contract and the details of the delegation system.
 This also allows the delegator to change their mind about a delegation before it is
 activated.
-
-## Undelegate in anger
-
-This action is announced at any time and is executed immediately following the block it
-is announced in. The delegator loses the delegated stake and the income with it, as well
-as their voting weight. As this is not required for first mainnet, and involves more subtleties
-(weights need to be recalculated on the fly, there may be a mixture of normal undelegated
-and undelegate in anger, ...), this feature does not need to be implemented right away for
-Mainnet alpha.
-
-Rationale: A validator is found to have done something outrageous, and needs to be removed
-right away.
 
 ## Undelegation of locked stake
 
@@ -211,7 +197,7 @@ Edge case: Multiple epochs can pass within the same block (<a name="0050-EPOC-00
 Nomination takes effect at epoch changeover:
 
 - During epoch 1, `party 1` nominates any valid amount to `validator 1`
-  - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>) (note: this can be tested by trying to delegate again, which will be rejected)
+  - `party 1`s staking balanced is reduced immediately upon execution of the transaction (<a name="0050-EPOC-005" href="#0050-EPOC-005">0050-EPOC-005</a>)(note: this can be tested by trying to delegate again, which will be rejected)
   - `validator 1`s nominated balance is not increased in epoch 1 (<a name="0050-EPOC-006" href="#0050-EPOC-006">0050-EPOC-006</a>)
   - `validator 1`s nominated balance is increased in the first block of epoch 2 (<a name="0050-EPOC-007" href="#0050-EPOC-007">0050-EPOC-007</a>)
 

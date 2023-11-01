@@ -157,7 +157,8 @@ struct InstrumentMetadata {
 }
 
 enum Product {
-  // maturity should be some sort of DateTime, settlement_asset is however we refer to crypto-assets (collateral) on Vega
+  // Oracle will include both info on how trading terminates and settlement data 
+  // settlement_asset is asset id
   Future { oracle: Oracle, settlement_asset: String },
   // EuropeanOption {},
   // SmartProduct {},
@@ -216,9 +217,30 @@ Market {
 }
 ```
 
+## Successor market
+
+If a market proposal, see [governance](./0028-GOVE-governance.md), designates an existing market as a *parent market* then it must have the same *product*, *settlement asset(s)* and *margin asset(s)*.
+It may propose new risk model and parameters, price monitoring parameters, position and market decimal places.
+It must provide oracle definitions, both for trading terminated and for settlement data.
+Each market can have exactly one market as a *successor* market.
+
+1. if there already is a market (possibly pending i.e. in opening auction, see [lifecycle spec](./0043-MKTL-market_lifecycle.md)) naming a parent market which is referenced in the proposal then the proposal is rejected.
+1. if there are two proposals naming the same parent market then whichever one gets into the pending state first (i.e. passes governance vote) becomes the successor of the named parent; the other proposal is cancelled with reason "parent market not available".
+
+
 ## Acceptance criteria
 
 - Details of a market's instrument must be available for each market through the API (<a name="0001-MKTF-001" href="#0001-MKTF-001">0001-MKTF-001</a>)
 - Details of a market's product must be available for each market through the API (<a name="0001-MKTF-002" href="#0001-MKTF-002">0001-MKTF-002</a>)
 - Details of a market's tradable instrument must be available for each market through the API (<a name="0001-MKTF-003" href="#0001-MKTF-003">0001-MKTF-003</a>)
 - Market framework can report position decimal places <a name="0001-MKTF-004" href="#0001-MKTF-004">0001-MKTF-004</a>
+- It is possible to designate a market as perpetual; this is visible via APIs in market data.
+  - GRPC <a name="0001-MKTF-005" href="#0001-MKTF-005">0001-MKTF-005</a>
+  - REST <a name="0001-MKTF-011" href="#0001-MKTF-011">0001-MKTF-011</a>
+  - GraphQL <a name="0001-MKTF-012" href="#0001-MKTF-012">0001-MKTF-012</a>
+- A market may have a "parent" market; the parent market is visible via APIs in the form of the `marketID` of the parent market. <a name="0001-MKTF-006" href="#0001-MKTF-006">0001-MKTF-006</a>
+- A market may have a "successor" market; the parent market is visible via APIs in the form of the `marketID` (or `proposalID`) of the successor market. <a name="0001-MKTF-007" href="#0001-MKTF-007">0001-MKTF-007</a>
+- A parent and successor markets must have the same:
+  - product <a name="0001-MKTF-008" href="#0001-MKTF-008">0001-MKTF-008</a>
+  - settlement asset(s) <a name="0001-MKTF-009" href="#0001-MKTF-009">0001-MKTF-009</a>
+  - margin asset(s). <a name="0001-MKTF-010" href="#0001-MKTF-010">0001-MKTF-010</a>

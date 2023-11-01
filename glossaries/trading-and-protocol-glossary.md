@@ -175,7 +175,9 @@ Parameters:
 
 ### Insurance Pool
 
-A store of capital instantiated with the order book into which fines are contributed.  It is utilised for financially covering [close out trades](#close-out-trades).
+[Market insurance pool](../protocol/0015-INSR-market_insurance_pool_collateral.md#market-insurance-pool): a store of capital instantiated with the order book into which fines are contributed.  It is utilised for financially covering [close out trades](#close-out-trades).
+
+[Global insurance pool](../protocol/0015-INSR-market_insurance_pool_collateral.md#global-insurance-pool): an insurance pool per given asset, not associated with any market. It receives part of remaining funds from insurance pool of the market using the same settlement asset. Funds can be transferred out of the global insurance pool using a governance initiated [transfer](../protocol/0028-GOVE-governance.md).
 
 ## L
 
@@ -185,7 +187,7 @@ The net riskiest composition of a trader's open positions and live orders.  For 
 
 ### Liquidity Providers
 
-Liquidity providers commit a bond and place a special Liquidity Commitment that automatically maintains orders on the book for a specific market. In return, liquidity providers earn a [fee](#fees) for ensuring that markets always have open volume. See [the liquidity provision spec](./../protocol/0044-LIME-lp_mechanics.md) for more detail.
+Liquidity providers commit a bond which specifies their SLA obligations. In return for meeting these the liquidity providers earn a portion of the trading [fees](#fees) from the market in which they operate. See [the liquidity provision spec](./../protocol/0044-LIME-lp_mechanics.md) for more detail.
 
 ## M
 

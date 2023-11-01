@@ -107,7 +107,6 @@ All of these should be available at various time resolutions: on every change, o
 
 - LP order submissions
 - Equity-like share changes
-- Market value proxy
 - Target stake
 - Supplied stake
 
@@ -146,7 +145,7 @@ It must be possible to add to the data node APIs that return the result of calcu
 
 ### Data synchronisation
 
-1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-COSMICELEVATOR-001" href="#0076-COSMICELEVATOR-001">0076-COSMICELEVATOR-001</a>)
+1. To ensure no loss of historical data access; data nodes must be able to have access to and synchronise all historical data since genesis block or LNL restart (<a name="0076-DANO-001" href="#0076-DANO-001">0076-DANO-001</a>)
 1. To ensure that new nodes joining the network have access to all historical data; nodes must be able to have access to and synchronise all historical data across the network without having to replay the full chain (<a name="0076-DANO-003" href="#0076-DANO-003">0076-DANO-003</a>)
 1. Nodes must be able to start processing new blocks having loaded the only the most recent history  (<a name="0076-DANO-023" href="#0076-DANO-023">0076-DANO-023</a>)
 1. Nodes that have been temporarily disconnected from the network should be able to load the missed history to get back up to the current network height (or most recently produced history) and then be able to start processing new blocks  (<a name="0076-DANO-024" href="#0076-DANO-024">0076-DANO-024</a>)
@@ -176,8 +175,8 @@ It must be possible to add to the data node APIs that return the result of calcu
 
 ### Schema compatibility
 
-1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
-1. Restoring a node from decentralised history should work across schema upgrade boundaries and the state of the datanode should match that of a datanode populated purely by event consumption (<a name="0076-COSMICELEVATOR-XXX" href="#0076-COSMICELEVATOR-XXX">0076-COSMICELEVATOR-XXX</a>)
+1. It is possible to identify if schema versions are NOT backwards compatible. Pull existing network snapshots start network, run a protocol upgrade to at later version and ensure both the core state and data-node data is correct (<a name="0076-DANO-041" href="#0076-DANO-041">0076-DANO-041</a>)
+1. Restoring a node from decentralised history should work across schema upgrade boundaries and the state of the datanode should match that of a datanode populated purely by event consumption (<a name="0076-DANO-042" href="#0076-DANO-042">0076-DANO-042</a>)
 
 ### Data Retention
 
@@ -207,3 +206,4 @@ It must be possible to add to the data node APIs that return the result of calcu
 1. The event bus stream is available from validators, non validators and the DataNode (<a name="0076-DANO-017" href="#0076-DANO-017">0076-DANO-017</a>)
 1. If a DataNode loses connection to a Vega node if will attempt to reconnect and if the cached data received from the Vega node is enough to continue working it can resume being a DataNode. (<a name="0076-DANO-019" href="#0076-DANO-019">0076-DANO-019</a>)
 1. The DataNode must provide its current block height and vega time on responses to client requests so the client can determine whether or not the data is stale. (<a name="0076-DANO-021" href="#0076-DANO-021">0076-DANO-021</a>)
+
