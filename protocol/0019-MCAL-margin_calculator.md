@@ -84,20 +84,140 @@
 
 ## Summary
 
-The *margin calculator* returns the set of relevant margin levels for a given position and entry price:
+The *margin calculator* returns the set of margin levels for a given *actual position*, along with the amount of additional margin (if any) required to support the party's *potential position* (i.e. active orders including any that are parked/untriggered/undeployed).
 
-1. ***Maintenance margin***
-1. ***Collateral search level***
-1. ***Initial margin***
-1. ***Collateral release level***
+
+### Margining modes
+
+The system can operate in one of two margining modes for each position.
+The current mode will be stored alongside of party's position record.
+
+1. **Cross-margin mode (default)**: this is the mode used by all newly created positions.
+When in cross-margin mode, margin is dynamically acquired and released as a position is marked to market, allowing profitable positions to offset losing positions for higher capital efficiency (especially with e.g. pairs trades).
+
+1. **Isolated margin mode**: this mode sacrifices capital efficiency for predictability and risk management by segregating positions.
+In this mode, the entire margin for any newly opened position volume is transferred to the margin account when the trade is executed.
+This includes completely new positions and increases to position size. Other than at time of future trades, the general account will then
+*never* be searched for additional funds (a position will be allowed to be closed out instead), nor will profits be moved into the
+general account from the margin account.
+
+### Actual position margin levels
+
+1. **Maintenance margin**: the minimum margin a party must have in their margin account to avoid the position being liquidated.
+
+1. **Collateral search level**: when in cross-margin mode, the margin account balance below which the system will seek to recollateralise the margin account back to the initial margin level.
+
+1. **Initial margin**: when in cross-margin mode, the margin account balance initially allocated for the position, and the balance to which the margin account will be returned after collateral search and release, if possible.
+
+1. **Collateral release level**: when in cross-margin mode, the margin account balance above which the system will return collateral from a profitable position to the party's general account for potential use elsewhere.
 
 The protocol is designed such that ***Maintenance margin < Collateral search level < Initial margin < Collateral release level***.
+
+### Potential position margin level
+
+1. **Order margin**: the amount of additional margin on top of the amount in the margin account that is required for the party's current active orders.
+Note that this may be zero if the active orders can only decrease the position size.
+
 
 Margin levels are used by the protocol to ascertain whether a trader has sufficient collateral to maintain a margined trade. When the trader enters an open position, this required amount is equal to the *initial margin*. Subsequently, throughout the life of this open position, the minimum required amount is the *maintenance margin*. As a trader's collateral level dips below the *collateral search level* the protocol will automatically search for more collateral to be assigned to support this open position from the trader's general collateral accounts. In the event that a trader has collateral that is above the *collateral release level* the protocol will automatically release collateral to a trader's general collateral account for the relevant asset.
 
 **Whitepaper reference:** 6.1, section "Margin Calculation"
 
 In future there can be multiple margin calculator implementations that would be configurable in the market framework. This spec describes one implementation.
+
+## Isolated margin mode
+
+When in isolated margin mode, the position on the market has an associated margin factor.
+The margin factor must be greater than 0 and less than or equal to 1, and also greater than `max(risk factor long, risk factor short)`.
+
+Isolated margin mode can be enabled by placing an *update margin mode* transaction.
+The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`.
+This value must be above the `initial margin` for the current position or the transaction will be rejected.
+
+The default when placing an order with no change to margin mode specified must be to retain the current margin mode of the position.
+
+### Placing an order
+
+When submitting, amending, or deleting an order in isolated margin mode and continuous trading, a two step process will be followed:
+
+   1. First, the core will check whether the order will trade, either fully or in part, immediately upon entry. If so:
+      1. If the trade would increase the party's position, the required additional funds as specified in the Increasing Position section will be calculated. The total expected margin balance (current plus new funds) will then be compared to the `maintenance margin` for the expected position, if the margin balance would be less than maintenance, instead reject the order in it's entirety. If the margin will be greater than the maintenance margin their general account will be checked for sufficient funds.
+         1. If they have sufficient, that amount will be moved into their margin account and the immediately matching portion of the order will trade.
+         1. If they do not have sufficient, the order will be rejected in it's entirety for not meeting margin requirements.
+      1. If the trade would decrease the party's position, that portion will trade and margin will be released as in the Decreasing Position section
+   1. If the order is not persistent this is the end, if it is persistent any portion of the order which has not traded in step 1 will move to being placed on the order book.
+      1. At this point, the party's general account will be checked for margin to cover the additional amount required for the new orders. Each side can be checked individually and the maximum for either side taken into the order margin pool. This calculation must be rerun every time the party's orders or position change. For each side:
+         1. Sort all orders by price, starting from first to execute (highest price for buying, lowest price for selling).
+         1. If the party currently has a position `x`, assign `0` margin requirement the first-to-trade `x` of volume on the opposite side as this would reduce their position (for example, if a party had a long position `10` and sell orders of `15` at a price of `$100` and `10` at a price of `$150`, the first `10` of the sell order at `$100` would not require any order margin).
+         1. For any remaining volume, sum `side margin = limit price * size * margin factor` for each price level, as this is the worst-case trade price of the remaining component.
+      1. Take the maximum margin from the two `side margin`s as the margin required in the order margin account. Now the full margin requirement for all orders, including any new one, and open position should be run through the full margin calculator to obtain a `maintenance margin` value. If the new `side margin + margin account balance < maintenance margin`, or if the party's `general` account does not contain sufficient funds to cover any increases to the `order margin` account to be equal to `side margin` then:
+         1. If a newly placed order is being evaluated, that order is `stopped`
+         1. If the evaluation is the result of any other position/order update, all open orders are `stopped` and margin re-evaluated.
+      1. The `order margin` account is now updated to the new `side margin` value and any new orders can be placed on the book.
+
+NB: This means that a party's order could partially match, with a trade executed and some funds moved to the margin account with correct leverage whilst the rest of the order is immediately stopped.
+
+When submitting, amending, or deleting an order in isolated margin mode and an auction is active there is no concept of an order trading immediately on entry, however the case of someone putting in a sell order for a very low price must be handled (as it is likely to execute at a much higher price). To handle this, when in an auction the amount taken into the order margin account should be the larger of either `limit price * size * margin factor` or `max(mark price, indicative uncrossing price) * size * margin factor`. All other steps are as above.
+
+### Increasing Position
+
+When an order trades which increases the position (increasing the absolute value of the trader's position), the target amount to be transferred is calculated as:
+
+```math
+\text{margin to add} = \text{margin factor} \cdot \text{sum across executed trades}(|\text{trade size}| \cdot \text{trade price})
+```
+
+This will be taken by performing three steps:
+
+ 1. The margin to add as calculated here is compared to the margin which would have been placed into the order margin account for this order, `limit price * remaining size * margin factor`.
+ 2. If it is equal, this amount is taken from the order margin account and placed into the margin account
+ 3. If the order traded at a price which means less margin should be taken then the amount `margin to add` above is taken from the order margin account into the margin account and the excess is returned from the order margin account to the general account
+
+NB: In implementation, for any volume that trades immediately on entry, the additional margin may be transferred directly from the general account to the margin account.
+
+### Reducing Position
+
+When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is determined by the fraction of the position which is being closed. However, this fraction should also take into account that the entire position's margin may be due to change since the current trading price may have diverged from the last mark price update. As such the margin released should be calculated as:
+
+```math
+\text{margin to remove} = \text{margin required for entire position at VWAP trade price} \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
+```
+
+Note: This requires a calculation of the position's margin at trade time.
+
+### Changing Sides
+
+A single order could move a trader from a short to a long position (or vice versa) which either increases or decreases the required margin. When this occurs, the trade should be seen as two steps. One in which the position is reduced to zero (and so margin can be released) followed immediately by one which increases to the new position. (Note that these should *not* be two separate trades, merely modelled as such. The two account movements should occur at once with no other changes allowed between them).
+
+
+### Position Resolution
+
+Isolated margin acts slightly differently to cross margining mode at times when the position becomes distressed. In the case of an open position dropping below maintenance margin levels active orders will remain active as these are margined separately and will not be cancelled.
+
+However in addition at each margin calculation update the returned `order margin` from the calculator should be compared to the balance in the `order margin account`. If the margin calculator `order margin > order margin account balance` all orders should be cancelled and the funds returned to the general account (any active positions will remain untouched and active).
+
+### Setting margin mode
+
+When isolated margin mode is enabled, amount to be transferred is a fraction of the position's notional size that must be specified by the user when enabling isolated margin mode.
+
+The transaction to update/change margin mode can be included in a batch transaction in order to allow updates when placing an order.
+
+When in isolated margin mode, it is possible to request to both increase or decrease the margin factor setting:
+
+- The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`. This value must be above the `initial margin` for the current position or the transaction will be rejected.
+  - If this is less than the balance currently in the margin account, the difference will be moved from the margin account to the general account
+  - If this is larger than the balance currently in the margin account, the difference will be moved from the general account to the margin account. If there are not enough funds to complete this transfer, the transaction will be rejected and no change of margin factor will occur.
+
+When switching to isolated margin mode, the following steps will be taken:
+
+  1. For any active position, calculate `average entry price * abs(position) * margin factor`. Calculate the amount of funds which will be added to, or subtracted from, the general account in order to do this. If additional funds must be added which are not available, reject the transaction immediately.
+  2. For any active orders, calculate the quantity `limit price * remaining size * margin factor` which needs to be placed in the order margin account. Add this amount to the difference calculated in step 1. If this amount is less than or equal to the amount in the general account, perform the transfers (first move funds into/out of margin account, then move funds into the order margin account). If there are insufficient funds, reject the transaction.
+  3. Move account to isolated margin mode on this market
+
+When switching from isolated margin mode to cross margin mode, the following steps will be taken:
+
+   1. Any funds in the order margin account will be moved to the margin account.
+   2. At this point trading can continue with the account switched to the cross margining account type. If there are excess funds in the margin account they will be freed at the next margin release cycle.
 
 ## Reference Level Explanation
 
@@ -112,9 +232,10 @@ The calculator takes as inputs:
 Note: `open_volume` may be fractional, depending on the `Position Decimal Places` specified in the [Market Framework](./0001-MKTF-market_framework.md). If this is the case, it may also be that order/positions sizes and open volume are stored as integers (i.e. int64). In this case, **care must be taken** to ensure that the actual fractional sizes are used when calculating margins. For example, if Position Decimals Places (PDP) = 3, then an open volume of 12345 is actually 12.345 (`12345 / 10^3`). This is important to avoid margins being off by orders of magnitude. It is notable because outside of margin calculations, and display to end users, the integer values can generally be used as-is.
 Note also that if PDP is negative e.g. PDP = -2 then an integer open volume of 12345  is actually 1234500.
 
-and returns 4 margin requirement levels
+and returns 5 margin requirement levels
 
 1. Maintenance margin
+1. Order margin
 1. Collateral search level
 1. Initial margin
 1. Collateral release level
@@ -125,7 +246,7 @@ and returns 4 margin requirement levels
 1. Calculate the maintenance margin for the riskiest short position.
 1. Select the maintenance margin that is highest out of steps 1 & 2.
 1. Scale this maintenance margin by the margin level scaling factors.
-1. Return 4 numbers: the maintenance margin, collateral search level, initial margin and collateral release level.
+1. Return 5 numbers: the maintenance margin, order margin, collateral search level, initial margin and collateral release level.
 
 ## Calculation of riskiest long and short positions
 
@@ -197,7 +318,35 @@ where meanings of terms in Step 1 apply except for:
 
 ### **Step 3**
 
-`maintenance_margin = max ( maintenance_margin_long, maintenance_margin_short)`
+If `open_volume > 0`:
+
+`maintenance_margin = max(min(open_volume * slippage_per_unit, product.value(market_observable)  * (open_volume * market.maxSlippageFraction[1] + open_volume^2 * market.maxSlippageFraction[2])), 0)
+    +  open_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`
+where
+
+`slippage_per_unit = max(0, Product.value(market_observable) - Product.value(exit_price))`
+
+If `open_volume < 0`:
+
+```formula
+maintenance_margin
+    = max(min(abs(open_volume) * slippage_per_unit, mark_price * (abs(open_volume) *  market.maxSlippageFraction[1] + abs(slippage_volume)^2 * market.maxSlippageFraction[2])),  0)
+    + abs(open_volume) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ]`
+```
+
+where
+
+`slippage_per_unit = max(0, Product.value(market_observable) - Product.value(exit_price))`
+
+If `open_volume == 0`:
+
+`maintenance_margin = 0`
+
+### **Step 4**
+
+`maintenance_margin_with_orders = max(maintenance_margin_long, maintenance_margin_short)`
+
+`order_margin = maintenance_margin_with_orders - maintenance_margin`
 
 ## Margin calculation for auctions
 
@@ -215,7 +364,7 @@ Note that because the order book is empty during auctions we will always end up 
 
 ## Scaling other margin levels
 
-### **Step 4**
+### **Step 5**
 
 The other three margin levels are scaled relative to the maintenance margin level, using scaling levels defined in the risk parameters for a market.
 
@@ -287,9 +436,18 @@ Since riskiest short == 0 then maintenance_margin_short = 0
 
 # Step 3
 
-maintenance_margin = max ( 677.6, 0) = 677.6
+Since open_volume == 10
+
+maintenance_margin = max(min(open_volume * slippage_per_unit, product.value(market_observable)  * (open_volume * market.maxSlippageFraction[1] + open_volume^2 * market.maxSlippageFraction[2])), 0)
+    +  open_volume * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]
+ =  max(min(14 * 34, 144*(14 * 0.25 + 14 * 14 * 0.001), 0) + 10 * 0.1 * 144 = max(min(476, 532.224), 0) + 10 * 0.1 * 144 = 620
 
 # Step 4
+
+maintenance_margin_with_orders = max ( 677.6, 0) = 677.6
+order_margin = 677.6 - 620 = 57.6
+
+# Step 5
 
 collateral_release_level = 677.6 * collateral_release_scaling_factor = 677.6 * 1.1
 initial_margin = 677.6 * initial_margin_scaling_factor = 677.6 * 1.2
@@ -328,3 +486,4 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
+

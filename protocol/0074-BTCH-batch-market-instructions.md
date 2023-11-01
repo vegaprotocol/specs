@@ -25,12 +25,13 @@ Overall, building the ability to handle batches of market instructions in a sing
   - **Cancellations**: this is a list (repeated field) of Cancel Order instructions
   - **Amendments**: this is a list (repeated field) of Amend Order instructions
   - **Submissions**: this is a list (repeated field) of Submit Order instructions
-- The total number of instructions across all three lists (i.e. sum of the lengths of the lists) must be less than or equal to the current value of the network parameter `network.spam_protection.max.batch.size`.
+- Additionally the batch may contain a single transaction to change the current margin mode.
+- The total number of instructions across all three lists (i.e. sum of the lengths of the lists) must be less than or equal to the current value of the network parameter `network.spam_protection.max.batch.size`. The margin mode update transaction is not included in this limit.
 
 ### Processing a batch
 
 - A batch is considered a single transaction, with a single transaction ID and a single timestamp applying to all instructions within it. Each instruction should be given a sub-identifier and index allowing it to be placed sequentially in the transaction (e.g. by consumers of the event stream). These identifiers must be sufficient for a user to determine which instruction within a batch any result (order updates, trades, errors, etc.) relates to.
-- The batches must be processed in the order **all cancellations, then all amendments, then all submissions**. This is to prevent gaming the system, and to prevent any order being modified by more than one action in the batch.
+- The batches must be processed in the order **all cancellations, then all amendments, any margin mode update, then all submissions**. This is to prevent gaming the system, and to prevent any order being modified by more than one action in the batch. Updating the margin mode after cancellations and amendments allows the party to have control of which orders are outstanding when the margin mode changes.
 - When processing each list, the instructions within the list must be processed in the order they appear in the list (i.e. in the order prescribed by the submitter). (Notwithstanding that each list is processed in its entirety before moving onto the next list, in the order specified above).
 - All instructions within each list must be validated as normal **at the time that the instruction is processed**. That is, instructions cannot be pre-validated as a batch. If a prior instruction, would create a state that would cause a later instruction to fail validation, the later instruction must fail validation (and vice verse). If validation fails, that instruction must be skipped and the subsequent instructions must still be processed. Any validation or other errors should be returned, as well as a reference to the instruction to which they relate, in the response.
 - Any errors encountered in processing an instruction after it passes validation must cause it to be skipped, and the errors, as well as the instruction to which they relate, must be available in the result of the transaction.
