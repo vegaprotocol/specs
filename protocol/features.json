@@ -87,8 +87,7 @@
   "Margin isolation": {
     "milestone": "palazzo",
     "acs": []
-  }
-},
+  },
   "Qudratic slippage removal": {
     "milestone": "palazzo",
     "acs": [
@@ -99,8 +98,7 @@
       "0019-MCAL-028",
       "0019-MCAL-029"
     ]
-  }
-},
+  },
   "Modify liquidation mechanics": {
     "milestone": "palazzo",
     "acs": []
