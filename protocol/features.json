@@ -68,9 +68,9 @@
   "Fixed size amendments": {
     "milestone": "palazzo",
     "acs": [
-      "0004-AMND-055",
       "0004-AMND-056",
-      "0004-AMND-057"
+      "0004-AMND-057",
+      "0004-AMND-058"
     ]
   },
   "Ethereum heartbeat": {
