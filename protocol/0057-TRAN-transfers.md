@@ -155,7 +155,7 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 ## Fees
 
-A fee is taken from all transfers (except transfers from a vested account), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
+A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
@@ -245,7 +245,8 @@ message CancelTransfer {
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
-- As a user I can do a transfer from a vested account without incurring any fees (<a name="0057-TRAN-066" href="#0057-TRAN-066">0057-TRAN-066</a>).
+- As a user I can do a transfer from a vested account to a general account held by the same key without incurring any fees (<a name="0057-TRAN-066" href="#0057-TRAN-066">0057-TRAN-066</a>).
+- As a user I can do a transfer from a vested account to another account that isn't general account for my key but in this case transfer fees are incurred (<a name="0057-TRAN-069" href="#0057-TRAN-069">0057-TRAN-069</a>).
 - As a user, I **can not** transfer a quantum amount less than `transfer.fee.minTransferQuantumAmount` from any of the valid accounts excluding a vested account (<a name="0057-TRAN-067" href="#0057-TRAN-067">0057-TRAN-067</a>).
 - As a user, I **can** transfer a quantum amount less than `transfer.fee.minTransferQuantumAmount` from a vested account if and only if I transfer the full balance (<a name="0057-TRAN-068" href="#0057-TRAN-068">0057-TRAN-068</a>).
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
