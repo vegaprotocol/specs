@@ -21,9 +21,7 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 - At each block, immediately prior to the evaluation of liquidity provision for SLA purposes, for each configured AMM:
   - The party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be cancelled. 
   - Each running AMM will be queried for it's provided orders. All orders from this party on this market will then be cancelled, followed by the placement of these new orders on the book. There are a couple of things to note here:
-  - All orders are placed as-if arriving from the party's key externally.
-  - No bond is taken for the market maker, the party is responsible for ensuring the key remains sufficiently collateralised.
-  - No lock is placed on the key, the party may continue to sign and submit other trading transactions and orders. However, any orders resting on the book will be cancelled alongside others each time the AMM updates.
+    - All orders are placed as-if arriving from the party's key externally.
 - If the party submits a `CancelAMM` transaction the AMM configuration for that party, on that market, will be cancelled. All active orders from the AMM will be cancelled and all funds and positions associated with the sub-account will be transferred back to the main account.
 
 ## Sub-Account Configuration
