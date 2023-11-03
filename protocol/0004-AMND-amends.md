@@ -10,6 +10,7 @@
 - Size change amends specifying a `size` greater than the current size remove and reinsert the order at the back of the price level and increase the remaining amount accordingly (<a name="0004-AMND-056" href="#0004-AMND-056">0004-AMND-056</a>).
 - Size change amends specifying a `size` lower than the current size leave the order in its current spot and reduce the remaining amount of the order accordingly (<a name="0004-AMND-057" href="#0004-AMND-057">0004-AMND-057</a>).
 - Size change amends which would result in the remaining part of the order being reduced below zero should instead cancel the order (<a name="0004-AMND-058" href="#0004-AMND-058">0004-AMND-058</a>).
+- A transaction specifying both a `sizeDelta` and `size` field should be rejected as invalid (<a name="0004-AMND-059" href="#0004-AMND-059">0004-AMND-059</a>).
 - Changing the `TIF` can only occur between `GTC` and `GTT`. Any attempt to amend to another `TIF` flag is rejected. A `GTT` must have an `expiresAt` value but a `GTC` must not have one.  (<a name="0004-AMND-006" href="#0004-AMND-006">0004-AMND-006</a>). For product spot: (<a name="0004-AMND-034" href="#0004-AMND-034">0004-AMND-034</a>)
 - Any attempt to amend to or from the `TIF` values `GFA` and `GFN` will result in a rejected amend. (<a name="0004-AMND-007" href="#0004-AMND-007">0004-AMND-007</a>). For product spot: (<a name="0004-AMND-035" href="#0004-AMND-035">0004-AMND-035</a>)
 - All updates to an existing order update the `UpdatedAt` time stamp field in the order (<a name="0004-AMND-008" href="#0004-AMND-008">0004-AMND-008</a>). For product spot: (<a name="0004-AMND-036" href="#0004-AMND-036">0004-AMND-036</a>)
@@ -45,7 +46,7 @@ The amend order can alter the quantity, price and expiry time/`TIF` type. For pe
 
 ## Guide-level explanation
 
-The amend order message is a custom message containing the `orderID` of the original order and optional fields that can be altered. Prices can be changed with a new absolute value, sizes can be changed by either specifying a size delta or a new absolute value. Expiry time can be set to a new value and the `TIF` type can be toggled between `GTC` and `GTT`. Changing the `TIF` field will impact the value in the `ExpiryTime` field as it will either be blanked or set to a new valid value.
+The amend order message is a custom message containing the `orderID` of the original order and optional fields that can be altered. Prices can be changed with a new absolute value, sizes can be changed by either specifying a size delta or a new absolute value. If a user attempts to amend the size of an order by specifying both a size delta and anew absolute value the order should be rejected. Expiry time can be set to a new value and the `TIF` type can be toggled between `GTC` and `GTT`. Changing the `TIF` field will impact the value in the `ExpiryTime` field as it will either be blanked or set to a new valid value.
 
 Some examples:
 A LIMIT order sitting on the bid side of the order book:
