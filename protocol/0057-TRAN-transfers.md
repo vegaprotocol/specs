@@ -39,8 +39,10 @@ In order to prevent the abuse of user-initiated transfers as spam attack there w
 
 ## Minimum transfer amount
 
-This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-ASSF-asset_framework.md)).
+This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-ASSF-asset_framework.md).
 The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`.
+
+If a user is transferring funds from a vested account, if their balance (expressed in quantum) is less than the minimum amount, they should be able to transfer the full balance (note, transferring less then the full balance is not permitted).
 
 ## Recurring transfers
 
@@ -153,7 +155,7 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 ## Fees
 
-A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
+A fee is taken from all transfers (except transfers from a vested account), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
@@ -243,6 +245,9 @@ message CancelTransfer {
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
+- As a user I can do a transfer from a vested account without incurring any fees (<a name="0057-TRAN-066" href="#0057-TRAN-066">0057-TRAN-066</a>).
+- As a user, I **can not** transfer a quantum amount less than `transfer.fee.minTransferQuantumAmount` from any of the valid accounts excluding a vested account (<a name="0057-TRAN-067" href="#0057-TRAN-067">0057-TRAN-067</a>).
+- As a user, I **can** transfer a quantum amount less than `transfer.fee.minTransferQuantumAmount` from a vested account if and only if I transfer the full balance (<a name="0057-TRAN-068" href="#0057-TRAN-068">0057-TRAN-068</a>).
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
   - The funds arrive in the target account when the transaction is processed (i.e. with the correct delay), which is not before the timestamp occurs
   - A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.

@@ -114,6 +114,14 @@
       "0057-TRAN-065"
     ]
   },
+  "Transfers from vesting": {
+    "milestone": "palazzo",
+    "acs": [
+      "0057-TRAN-066",
+      "0057-TRAN-067",
+      "0057-TRAN-068"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
