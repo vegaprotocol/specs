@@ -177,6 +177,18 @@ Let:
 
 $$m_{rz} = \frac{\sum_{i}^{n}{rz_{i}}}{N}$$
 
+### Time on Book metric
+
+This metric specifically relates to accounts with either an active liquidity provision, or an active AMM, running on a market. 
+
+For every block where their provision/AMM is active, their score should be incremented as the sum product of all prices and volumes for active orders within SLA liquidity bounds on the market. For keys with a standard liquidity provision this is calculated as:
+
+$$m_{tob} = \sum_{order_0}^{order_n} p_i \cdot v_i$$
+
+for all bids and asks between lower and upper SLA bounds.
+
+For AMM pools, this can be calculated as the volume required to move the pool's price to the upper/lower bound from it's current fair price.
+
 ### Market creation reward metrics
 
 There will be a single market creation reward metric and reward type.
