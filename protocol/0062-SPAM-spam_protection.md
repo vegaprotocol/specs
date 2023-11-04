@@ -67,7 +67,7 @@ To avoid spamming of `CreateReferralSet` and `UpdateReferralSet` transactions, a
 
 To avoid spamming of `ApplyReferralCode`, a party must meet the deposited funds threshold set by the network parameter `spam.protection.applyReferral.min.funds`.  All assets count towards this threshold and balances should be scaled appropriately by the assets quantum. A party who does not meet this requirement should have any transactions of the aforementioned type pre-block rejected. This requirement will be checked against snapshots of account balances taken at a frequency determined by the network parameter `spam.protection.balanceSnapshotFrequency`. This network parameter is a duration (e.g. `5s`, `1m5s`).
 
-Further, each party is allowed to submit up to `n` transactions per epoch where `n` is controlled by the respective network parameter for that transaction type (`spam.protection.max.CreateReferralSet`, `spam.protection.max.UpdateReferralSet`, `spam.protection.max.ApplyReferralCode`). 
+Further, each party is allowed to submit up to `n` transactions per epoch where `n` is controlled by the respective network parameter for that transaction type (`spam.protection.max.CreateReferralSet`, `spam.protection.max.UpdateReferralSet`, `spam.protection.max.ApplyReferralCode`).
 
 ### Related topics
 
@@ -104,7 +104,6 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - A party who has submitted more than `spam.protection.max.updateReferralSet` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **pre-block** rejected (<a name="0062-SPAM-034" href="#0062-SPAM-034">0062-SPAM-034</a>).
 - A party who has submitted strictly more than `spam.protection.max.applyReferralCode` `ApplyReferralCode` transactions in an epoch should have any future `ApplyReferralCode` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-031" href="#0062-SPAM-031">0062-SPAM-031</a>).
 - A party who has submitted more than `spam.protection.max.applyReferralCode` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **pre-block** rejected (<a name="0062-SPAM-036" href="#0062-SPAM-036">0062-SPAM-036</a>).
-
 
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
