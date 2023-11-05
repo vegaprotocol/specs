@@ -157,6 +157,8 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
+For each party, we aggregate the fees paid during an epoch and maintain a running total. If there is a transfer activity, we deduct the corresponding fee from the accumulated total. Once this total reaches zero, the party incurs charges. We require API support to enable the frontend to transparently display the amount eligible for fee-free transfers.
+
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
 As such, the transfer fee value used will be: `min(transfer amount * transfer.fee.factor, transfer.fee.maxQuantumAmount * quantum)`, `quantum` is for asset
@@ -255,6 +257,7 @@ message CancelTransfer {
 - The spam protection mechanics prevent me to do more than `spam.protection.maxUserTransfersPerEpoch` transfers per epoch. (<a name="0057-TRAN-009" href="#0057-TRAN-009">0057-TRAN-009</a>)
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
 - A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-059" href="#0057-TRAN-059">0057-TRAN-059</a>)
+- As a user, I can accumulate the fees I collect over an epoch. When I initiate a transfer that incurs a transfer fee, I have the ability to view the amount that is exempt from transfer fees through the API. (<a name="0057-TRAN-012" href="#0057-TRAN-012">0057-TRAN-012</a>)
 
 ### Recurring transfer tests
 
