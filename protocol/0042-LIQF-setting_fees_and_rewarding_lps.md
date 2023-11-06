@@ -86,7 +86,7 @@ In the example below there are 3 liquidity providers all bidding for their chose
 [LP 3 stake = 60 ETH, LP 3 liquidity-fee-factor = 3.75%]
 ```
 
-but the market was proposed with a constant fee of 0.08 so that is what the liquidity-fee-factor will be.
+but the market was proposed with a constant fee of 0.8% so that is what the liquidity-fee-factor will be.
 
 ### Timing market's liquidity-fee-factor changes
 
