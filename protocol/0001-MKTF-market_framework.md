@@ -32,6 +32,7 @@ Data:
 - **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a `BTSUSD` market.
   - If this is negative e.g. -3 this means that the smallest order and position is of size 1000.
   - Accepted values are `-6,...,-1,0,1,2,...,6`.
+- **Liquidation strategy**: A field specifying the liqudation strategy for the market. Please refer to [0012-POSR-position_resolution](./0012-POSR-position_resolution.md#managing-networks-position) for supported strategies.  
 
 Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. This also means that, for instance, it would not be possible to create a `BTCUSD` market that allows order/position sizes equivalent to 1 sat.
 

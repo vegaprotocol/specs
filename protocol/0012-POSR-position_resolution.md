@@ -48,12 +48,12 @@ Whilst network has a non-zero position in a given market it's treated as any oth
 
 Whenever the network party has a non-zero position it attempts to unload it using an [immediate or cancel](./0014-ORDT-order_types.md) limit order. If the the network has a `long` position it will submit a `sell` order. If it has a short position it will submit a buy order. The size of that order is chosen according to the liquidation strategy which forms a part of the marke's configuration. The strategy can be updated at any point whilst market is active with a market change [governance vote](./0028-GOVE-governance.md#2-change-market-parameters).
 
-The liquidation strategy consists of:
+Currently only one liquidation strategy is supported and its defined by the following parameters:
 
-- `disposal time step` (mandatory, e.g. `n=10s`): network attempts to unload its position in a given market every time it goes out of auction and then every `n` seconds as long as market is not in auction mode and while the network's position is not equal to `0`,
-- `disposal fraction` (e.g. `0.1`): fraction of network's current open volume that it will try to reduce in a single disposal attempt,
-- `full disposal size` (e.g. `20`): once net absolute value of network's open volume is at or below that value, the network will attempt to dispose the remaining amount in one go,
-- `max fraction of book side within liquidity bounds consumed` (e.g. `m=0.05`): once the network chooses the size of its order (`s_candidate`) the effective size will be calcualted as `s_effective=min(m*N, s_candidate)`, where `N` is the sum of volume (on the side of the book with which the network's order will be matching) that falls within the range implied by the `market.liquidity.priceRange` [parameter](./0044-LIME-lp_mechanics.md#market-parameters),
+- `disposal time step` (min: `1s`, max: `1h`, default: `10s`): network attempts to unload its position in a given market every time it goes out of auction and then every `n` seconds as long as market is not in auction mode and while the network's position is not equal to `0`,
+- `disposal fraction` (min: `0,01`, max: `1`, default: `0.1`): fraction of network's current open volume that it will try to reduce in a single disposal attempt,
+- `full disposal size` (min: `0`, max: `max int`, default: `20`): once net absolute value of network's open volume is at or below that value, the network will attempt to dispose the remaining amount in one go,
+- `max fraction of book side within liquidity bounds consumed` (min: `0`, max: `1`, default: `0.05`): once the network chooses the size of its order (`s_candidate`) the effective size will be calcualted as `s_effective=min(m*N, s_candidate)`, where `N` is the sum of volume (on the side of the book with which the network's order will be matching) that falls within the range implied by the `market.liquidity.priceRange` [parameter](./0044-LIME-lp_mechanics.md#market-parameters),
 
 Assume the price range implied by the `market.liquidity.priceRange` is `[a, b]`. Once the network has worked out a size of its immediate or cancel limit order it sets it's price to `a` if it's a sell order or `b` if it's a buy order, and it submits the order.
 
