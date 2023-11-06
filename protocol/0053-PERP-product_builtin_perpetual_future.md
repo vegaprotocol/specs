@@ -139,6 +139,8 @@ return numerator / denominator
 
 ```
 
+Note that depending on what type of oracle is used for the spot price it may be that the oracle points only become known shortly before or at the funding payment cue time, so the above pseudocode is just an illustration of how these quantities should be calculated and the implementation will need to be able to apply such calculation retrospectively.
+
 #### Funding payment calculation
 
 The next step is to calculate the periodic settlement funding payment. We allow the optional interest rate and clamp component, where $\text{clamp}(a,b;x)=min(b,max(a, x))$. The funding payment then takes the form:
