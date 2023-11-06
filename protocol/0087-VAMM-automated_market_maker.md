@@ -45,9 +45,12 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Volume at Upper Limit**: The volume the market maker will hit at the upper limit (this will be a short volume). Note that as the market maker is operating a constant function market curve there is an inherent link between traded price and position which allows this assertion. The combination of this volume and the range between `base price` and `upper price` will determine the volume placed at each price level inbetween.
 - **Volume at Lower Limit**: The volume the market maker will hit at the lower limit (this will be a long volume). Note that as the market maker is operating a constant function market curve there is an inherent link between traded price and position which allows this assertion. The combination of this volume and the range between `base price` and `lower price` will determine the volume placed at each price level inbetween.
 
-_To Determine_: Should tick spacing be customisable or enforced?
-
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
+
+#### Determining Margin
+
+Although the AMM does not directly post orders onto 
+
 
 
 #### Determining Volumes
