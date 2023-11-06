@@ -38,7 +38,7 @@ We now find the smallest integer `k` such that `[target stake] < sum from i=1 to
 
 Finally, we set the liquidity-fee-factor for this market to be the fee `LP-k-liquidity-fee-factor`.
 
-### Example for fee setting mechanism using the marginal cost method
+#### Example for fee setting mechanism using the marginal cost method
 
 In the example below there are 3 liquidity providers all bidding for their chosen fee level. The LP orders they submit are sorted into increasing fee order so that the lowest fee bid is at the top and the highest is at the bottom. The fee level chosen for the market is derived from the liquidity commitment of the market (`target stake`) and the amount of stake committed from each bidder. Vega processes the LP orders from top to bottom by adding up the commitment stake as it goes until it reaches a level greater than or equal to the `target stake`. When that point is reached the fee used is the fee of the last liquidity order processed.
 
@@ -53,6 +53,41 @@ In the example below there are 3 liquidity providers all bidding for their chose
 1. If the `target stake = 240` then even putting all the liquidity supplied above does not meet the estimated market liquidity demand and thus we set `k=N` and so the market's liquidity-fee-factor is `LP N fee = LP 3 fee = 3.75%`.
 1. Initially (before market opened) the `[target stake]` is by definition zero (it's not possible to have a position on a market that's not opened yet). Hence by default the market's initial liquidity-fee-factor is the lowest liquidity-fee-factor.
 
+
+### Stake-weighted-average method for setting the liquidity fee factor
+
+The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider, which can also account for the impact of one supplier's actions on others.
+
+#### Example for fee setting mechanism using the Stake-weighted-average method
+
+In the example below there are 3 liquidity providers all bidding for their chosen fee level. The overall liquidity fee factor is the weight-average of their nominations:
+
+```text
+[LP 1 stake = 120 ETH, LP 1 liquidity-fee-factor = 0.5%]
+[LP 2 stake = 20 ETH, LP 2 liquidity-fee-factor = 0.75%]
+[LP 3 stake = 60 ETH, LP 3 liquidity-fee-factor = 3.75%]
+
+then
+
+liquidity-fee-factor = (120 * 0.05) + (20 * 0.075) + (60 8 0.0375) / (120 + 20 + 160) = 0.04875
+```
+
+### "Constant Liquidity Fee" Method
+
+The liquidity fee factor is set to a constant directly as part of the market proposal.
+
+#### Example for fee setting mechanism using the constant method
+
+In the example below there are 3 liquidity providers all bidding for their chosen fee level and the overall liquidity fee factor is:
+
+```text
+[LP 1 stake = 120 ETH, LP 1 liquidity-fee-factor = 0.5%]
+[LP 2 stake = 20 ETH, LP 2 liquidity-fee-factor = 0.75%]
+[LP 3 stake = 60 ETH, LP 3 liquidity-fee-factor = 3.75%]
+```
+
+but the market was proposed with a constant fee of 0.08 so that is what the liquidity-fee-factor will be.
+
 ### Timing market's liquidity-fee-factor changes
 
 Once the market opens (opening auction starts) a clock starts ticking. We calculate the `[target stake]` using [target stake](./0041-TSTK-target_stake.md). The fee is re-evaluated using the mechanism above at the start of each epoch using LPs commitments at start of epoch.
@@ -61,7 +96,7 @@ Once the market opens (opening auction starts) a clock starts ticking. We calcul
 
 At time of call:
 
-- The `liquidity-fee-factor` for the market.
+- The `liquidity-fee-factor` for the market, and the method used to calculate it.
 - Current liquidity provider commitments and their individually nominated fee factors
 - [Target stake](./0041-TSTK-target_stake.md)
 
@@ -179,14 +214,6 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 ```text
 (average entry valuation) = 1090.9
 ```
-
-### Stake-weighted-average method for setting the liquidity fee factor
-
-The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider, which can also account for the impact of one supplier's actions on others.
-
-### "Constant Liquidity Fee" Method
-
-The liquidity fee factor is set to a constant directly as part of the market proposal.
 
 
 ### Calculating the instantaneous liquidity score
@@ -324,6 +351,7 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
 - Liquidity fee factors are recalculated every time the liquidity demand estimate changes. (<a name="0042-LIQF-005" href="#0042-LIQF-005">0042-LIQF-005</a>)
 - If a change in the open interest causes the liquidity demand estimate to change, then fee factor is correctly recalculated.  (<a name="0042-LIQF-006" href="#0042-LIQF-006">0042-LIQF-006</a>)
 - If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated.  (<a name="0042-LIQF-007" href="#0042-LIQF-007">0042-LIQF-007</a>)
+- A market can be proposed with a choice of liquidity fee settings. These settings can be updated by a subsequent market update proposal.  (<a name="0042-LIQF-056" href="#0042-LIQF-056">0042-LIQF-056</a>)
 
 
 ### CHANGE OF NETWORK PARAMETERS TESTS
