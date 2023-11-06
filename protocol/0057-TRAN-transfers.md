@@ -157,7 +157,7 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-For each party, we aggregate the fees paid during an epoch and maintain a running total. If there is a transfer activity, we deduct the corresponding fee from the accumulated total. Once this total reaches zero, the party incurs charges. We require API support to enable the frontend to transparently display the amount eligible for fee-free transfers.
+For each party, we aggregate taker fees paid over a specific number of epochs defined by `transfer.fee.offset.numberOfEpoch` and maintain a cumulative total. If a transfer activity occurs within the same time frame of `transfer.fee.offset.numberOfEpoch` epochs, we deduct the corresponding fee from the accumulated total. When this cumulative total reaches zero, the party becomes liable for charges of tranfer fees. To achieve this, we require API support, allowing the frontend to provide a transparent display of the amount eligible for fee-free transfers. It's important to note that this mechanism applies on a per-asset basis. `transfer.fee.offset.numberOfEpoch` serves as a network parameter that sets the time window during which taker fees can offset transfer fees.
 
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
@@ -258,6 +258,7 @@ message CancelTransfer {
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
 - A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-059" href="#0057-TRAN-059">0057-TRAN-059</a>)
 - As a user, I can accumulate the fees I collect over an epoch. When I initiate a transfer that incurs a transfer fee, I have the ability to view the amount that is exempt from transfer fees through the API. (<a name="0057-TRAN-012" href="#0057-TRAN-012">0057-TRAN-012</a>)
+- By setting `transfer.fee.offset.numberOfEpoch` to 3 epochs, you establish a time window spanning 3 consecutive epochs. During these 3 epochs, if you place market orders and subsequently initiate a transfer incurring a transfer fee, the 'free transfer amount' is calculated based on the cumulative fees collected over those same 3 epochs.(<a name="0057-TRAN-013" href="#0057-TRAN-013">0057-TRAN-013</a>)
 
 ### Recurring transfer tests
 
