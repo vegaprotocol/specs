@@ -69,7 +69,7 @@ In the example below there are 3 liquidity providers all bidding for their chose
 
 then
 
-liquidity-fee-factor = (120 * 0.05) + (20 * 0.075) + (60 8 0.0375) / (120 + 20 + 160) = 0.04875
+liquidity-fee-factor = ((120 * 0.5%) + (20 * 0.75%) + (60 * 3.75%)) / (120 + 20 + 60) = 1.5%
 ```
 
 ### "Constant Liquidity Fee" Method
