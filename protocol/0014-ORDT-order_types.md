@@ -51,12 +51,12 @@ Notes on scope of current version of this spec:
 
 ### Stop orders
 
-In addition to normal immediately executing order, Vega should accept the submission of stop orders.
+In addition to normal immediately executing orders, Vega should accept the submission of stop orders.
 These differ from normal orders in that they sit off the order book until triggered, when they are entered as normal.
 These are generally used to exit positions under pre-defined conditions, either as a "stop loss" order that controls the maximum losses a position may take, a "take profit" order that closes a position once a defined level of profit has been made, or both.
 
 
-A stop order submission can be made (stop loss or take profit are probably both just called a stop order internally).
+A stop order submission can be made (stop loss or take profit are both just called a stop order internally).
 
 - Stop order submissions must include either a trigger price OR trailing stop distance as a % move from the reference price in addition to a normal order submission.
 
@@ -71,8 +71,8 @@ If it has an expiry then it can be set either to cancel on expiry (i.e. it is de
 An OCO contains TWO stop order submissions, and must include one in each trigger direction.
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
-  - An OCO submission cannot be set to execute at expiry.
-
+  - An OCO submission can be set to trigger either one side or the other at expiry, or cancel.
+  
 - The stop order submission wraps a normal order submission.
 
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
@@ -347,6 +347,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A stop order with expiration time `T` set to expire at that time will expire at time `T` if reached without being triggered. (<a name="0014-ORDT-052" href="#0014-ORDT-052">0014-ORDT-052</a>)
 - A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-053" href="#0014-ORDT-053">0014-ORDT-053</a>)
   - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-054" href="#0014-ORDT-054">0014-ORDT-054</a>)
+  - An OCO stop order with expiration time `T` with one side set to execute at that time will execute at time `T` if reached without being triggered, with the specified side triggering and the other side cancelling. (<a name="0014-ORDT-124" href="#0014-ORDT-124">0014-ORDT-124</a>)
 
 - A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>)
 - If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>)
