@@ -42,7 +42,7 @@ In order to prevent the abuse of user-initiated transfers as spam attack there w
 This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-ASSF-asset_framework.md).
 The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`.
 
-If a user is transferring funds from a vested account, if their balance (expressed in quantum) is less than the minimum amount, they should be able to transfer the full balance (note, transferring less then the full balance is not permitted).
+If a user is transferring funds from a vested account, if their balance (expressed in quantum) is less than the minimum amount, they should be able to transfer the full balance (note, transferring less than the full balance is not permitted).
 
 ## Recurring transfers
 
