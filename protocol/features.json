@@ -94,7 +94,9 @@
   },
   "Modify liquidation mechanics": {
     "milestone": "palazzo",
-    "acs": []
+    "acs": [
+      "0042-LIQF-056"
+    ]
   },
   "Passive liquidity": {
     "milestone": "palazzo",
