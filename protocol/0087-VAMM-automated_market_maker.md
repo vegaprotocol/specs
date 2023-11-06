@@ -4,7 +4,7 @@
 
 The automated market maker (AMM) framework is designed to allow for the provision of an on-chain market making methodology which automatically provides prices according to a simple set of rules based on current market data. These rulesets are not created with the expectation of providing any profit nor of remaining solvent under any specific conditions, and so should be limited to conceptually simple setups. The initial methodology follows a concentrated-liquidity style constant-function market setup, with configurable maximum and minimum price bounds.
 
-An automated market maker is configured at a per-key level, and is enabled by submitting a transaction with the requisite parameters. At this point in time the protocol will move committed funds to a sub-account which will be used to manage order and position margin for the AMM. Once enabled, the configuration will be queried once per block and the resultant orders will be placed on the book, combined with all current orders from the key being cancelled. 
+An automated market maker is configured at a per-key level, and is enabled by submitting a transaction with the requisite parameters. At this point in time the protocol will move committed funds to a sub-account which will be used to manage margin for the AMM. Once enabled, the configuration will be added to the pool of available AMMs to be utilised by the matching engine.
 
 Each party may have only one AMM configuration per market.
 
@@ -18,10 +18,7 @@ The configuration and resultant lifecycle of an automated market maker is as fol
   - Price bounds (upper, lower, base)
   - Granularity of price levels to post
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
-- At each block, immediately prior to the evaluation of liquidity provision for SLA purposes, for each configured AMM:
-  - The party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be cancelled. 
-  - Each running AMM will be queried for it's provided orders. All orders from this party on this market will then be cancelled, followed by the placement of these new orders on the book. There are a couple of things to note here:
-    - All orders are placed as-if arriving from the party's key externally.
+- At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be cancelled. 
 - If the party submits a `CancelAMM` transaction the AMM configuration for that party, on that market, will be cancelled. All active orders from the AMM will be cancelled and all funds and positions associated with the sub-account will be transferred back to the main account.
 
 ## Sub-Account Configuration
@@ -47,11 +44,23 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
+#### Matching Process (To merge with 0068-MATC once confirmed)
+
+For all incoming active orders, the matching process will coordinate between the on- and off-book sources of liquidity. When an order comes in which may immediately trade (there are not already resting orders of the same type for the best applicable price) the following steps should be followed. If at any point the order's full volume has traded the process is immediately halted:
+
+  1. For the first applicable price level, all on-book orders should be checked. Any volume at this price level which can be met through on-book orders will then trade. 
+  1. For any `remaining volume`, the AMMs will be checked. This requires an algorithm to ensure we do not have to check every price level individually:
+     1. Call the current price level `current price`
+     1. Check the price level which has the next resting on-book order, set this to be the `outer price` for the check.
+     1. Check all active AMMs, collect those where `current_price` is between their `upper price` and `lower price`.
+     1. Within these, select either the minimum `upper price` (if the incoming order is a buy) or the maximum `lower price` (if the incoming order is a sell), call this `amm bound price`. This is the range where all of these AMMs are active. Finally, select either the minimum (for a buy) or maximum (for a sell) between `amm bound price` and `outer price`. From this form an interval `current price, outer price`. 
+     1. Now, for each AMM within this range, calculate the volume of trading required to move each from the `current price` to the `outer price`. Call the sum of this volume `total volume`.
+     1. If `remaining volume <= total volume` split trades between the AMMs according to their proportional contribution to `total volume` (e.g. larger liquidity receives a higher proportion of the trade). This ensures their mid prices will move equally (TODO: Is trade splitting more involved than this?).
+     1. If `remaining volume > total volume` execute all trades to move the respective AMMs to their boundary at `outer price`. Now, return to step `1` with `current price = outer price`, checking first for on-book liquidity at the new level then following this process again until all order volume is traded or liquidity exhausted.  
+
 #### Determining Margin
 
-Although the AMM does not directly post orders onto 
-
-
+TODO
 
 #### Determining Volumes
 
@@ -83,9 +92,7 @@ For each, there are associated benefits and risks:
 
 
 
-## TBC
-
-#### Determining Volumes
+#### Determining Volumes for Display
 
 The volume to offer at each price level is determined by whether the price level falls within the upper or lower price bands alongside the market maker's current position. In order to calculate this we use the concept of `Virtual Liquidity` from Uniswap's concentrated liquidity model, corresponding to a theoretical shifted version of the actual liquidity curve to map to an infinite range liquidity curve. The exact mathematics of this can be found in the Uniswap v3 whitepaper and are expanded in depth in the useful guide [Liquidity Math in Uniswap v3](http://atiselsts.github.io/pdfs/uniswap-v3-liquidity-math.pdf).
 
