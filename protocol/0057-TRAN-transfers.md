@@ -185,7 +185,7 @@ Take `transfer.feeDiscountNumOfEpoch = 2`.
 | transfer fee theoretical | 5                   | 15                  | 3                   | 4                |
 | transfer fee paid        | 5                   | 5                   | 0                   | 0                |
 
-The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee. 
+The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
 As such, the transfer fee value used will be: `min(transfer amount * transfer.fee.factor, transfer.fee.maxQuantumAmount * quantum)`, `quantum` is for asset
 The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
