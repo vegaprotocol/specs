@@ -465,7 +465,7 @@ The enactment timestamp, however, should be customisable and can be different fo
 
 Once submitted, a single voting period should be run in which participants may place a single vote to approve/disapprove of the entire batch. It *must* not be possible to vote for components in the batch separately.
 Once the closing timestamp is reached each individual proposal within the batch is evaluated against the votes received. 
-If all proposals pass (on their own rules on participation, majority, LP-ELS voting etc.) then the entire batch passes. 
+If all individual proposals would pass (given the votes received, based on their individual rules on participation, majority, LP-ELS voting etc.) then the entire batch passes. 
 If even one proposal within the batch would fail then the entire batch fails. 
 
 If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp does not need to be defined and should be considered indeterminate from a user's point-of-view.
@@ -705,6 +705,9 @@ It is NOT possible to submit a governance proposal where the source account is t
 1. referal programe,
 1. governance transfer, 
 can be submitted, voted through and each proposal enacted. (<a name="0028-GOVE-160" href="#0028-GOVE-160">0028-GOVE-160</a>)
+
+- A batch proposal can be submitted changing the same network parameter twice to two different values with two different enactment timestamps. 
+The voting to approve the batch happens, the batch passes, both changes are observed at the desired time. (<a name="0028-GOVE-161" href="#0028-GOVE-161">0028-GOVE-161</a>)
 
 
 
