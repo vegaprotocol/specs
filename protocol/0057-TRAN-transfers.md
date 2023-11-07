@@ -174,7 +174,7 @@ At the end of epoch `k`:
 
 We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
-### Example:
+### Example
 
 Take `transfer.feeDiscountNumOfEpoch = 2`.
 
