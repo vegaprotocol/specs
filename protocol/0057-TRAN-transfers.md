@@ -157,7 +157,7 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the time frame over which we accumulate the taker fees that can offset transfer fees.
+Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the time frame over which we accumulate the taker fees that can offset transfer fees. The default value for `transfer.feeDiscountNumOfEpoch` is 30, with an upper boundary of 1000 and a lower boundary of 0.
 
 For each party and for each asset store the taker fees paid by the party in a given epoch for `N` epochs; this will be used to determine a transfer fee discount as described below.
 
