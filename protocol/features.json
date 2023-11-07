@@ -104,9 +104,15 @@
   "Modify liquidation mechanics": {
     "milestone": "palazzo",
     "acs": [
-      "0042-LIQF-056",
-      "0042-LIQF-057",
-      "0042-LIQF-058"
+      "0012-POSR-001",
+      "0012-POSR-005",
+      "0012-POSR-009",
+      "0012-POSR-010",
+      "0012-POSR-011",
+      "0012-POSR-012",
+      "0012-POSR-013",
+      "0012-POSR-014",
+      "0012-POSR-015"
     ]
   },
   "Passive liquidity": {
@@ -138,6 +144,10 @@
   },
   "Unknown": {
     "milestone": "unknown",
-    "acs": []
+    "acs": [
+      "0042-LIQF-056",
+      "0042-LIQF-057",
+      "0042-LIQF-058"
+    ]
   }
 }
