@@ -16,7 +16,6 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 - Party submits a transaction containing configuration for the strategy on a given market. This will contain:
   - Amount of funds to commit
   - Price bounds (upper, lower, base)
-  - Granularity of price levels to post
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
 - At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be cancelled. 
 - If the party submits a `CancelAMM` transaction the AMM configuration for that party, on that market, will be cancelled. All active orders from the AMM will be cancelled and all funds and positions associated with the sub-account will be transferred back to the main account.
@@ -62,37 +61,9 @@ For all incoming active orders, the matching process will coordinate between the
 
 TODO
 
-#### Determining Volumes
-
-There are two potential approaches to how a concentrated liquidity AMM interacts with the market, these can be summarised as:
-
-- Placing orders directly on the book
-  - This approach entails the AMM generating orders at some frequency and placing them directly on the book. In this case for the rest of the system behaviour would be identical to if an external party were placing these orders and managing any resulting trades
-- A separate off-book liquidity source, which is queried after trades at each price level
-  - This approach entails the AMM acting as a separate liquidity pool which only acts when an aggressive order arrives. At that point in time, for each price level the protocol would first check the order book for volume, trading with that if it is available, it would then check for any AMMs offering volume at that price level, trading with those if available, before moving on to the next best price level in a similar manner. 
-
-
-For each, there are associated benefits and risks:
-
-- Placing orders directly on the book
-  - Benefits
-    - Outside the loop of generating and placing these orders the system needs very few changes, everything else can interact with and visualise the market as before
-  - Risks
-    - A large number of orders may need to be generated each time the AMM is updated. It is possible that this compounding with large numbers of people utilising an AMM could result in performance impacts.
-    - If the AMMs update too infrequently the spread on the market could widen (as opposed to a true AMM which updates immediately after each trade). A once-per-block update would mean that a buy immediately following someone else's sell would not benefit from the reduced price on the AMM
-- Separate off-book liquidity
-  - Benefits
-    - Only requires updating or interacting with on the arrival of orders which may immediately trade, improving performance
-    - Acts as a more 'pure' AMM structure, immediately updating on each trade before interacting with the next
-  - Risks
-    - The AMMs would have to be each checked for every tick on the market, adding a performance impact to the choice of decimal places, or another parameter which needed to be set for tick size of AMMs on a market. It is possible this performance impact is significant.
-      - This also requires that core matching code outside the new AMM logic is aware of these changes and can handle them, potentially adding uncertainty to scope of change work.
-    - A "complete" order book picture would now require understanding the AMM presence at a given timepoint too. To build a full order book, calculations would have to be performed in downstream systems to expand the AMM into virtual orders, combining those with real orders resting on the book. Failure to do this correctly would result in an inaccurate picture of available liquidity.
-    - Additional margin considerations for the AMM. When expanding out the AMM to virtual orders for a book, how does one ensure liquidity is not shown which would actually not be tradable with the funds available to that AMM.
-
-
-
 #### Determining Volumes for Display
+
+Although AMM prices are not placed onto the book as orders it is important for users to be able to see a combined view of all available liquidity, and the clearest way to do so is in an orderbook format. As such, we need an algorithm to convert the compact representation of an AMM (`upper price`, `base price`, `lower price`, `available funds`, `position`) to orderbook price levels. This should not be performed in core, which will output the aforementioned compact representation, but may be executed in any downstream component, such as a data node, in order to generate a virtual order book from AMM positions
 
 The volume to offer at each price level is determined by whether the price level falls within the upper or lower price bands alongside the market maker's current position. In order to calculate this we use the concept of `Virtual Liquidity` from Uniswap's concentrated liquidity model, corresponding to a theoretical shifted version of the actual liquidity curve to map to an infinite range liquidity curve. The exact mathematics of this can be found in the Uniswap v3 whitepaper and are expanded in depth in the useful guide [Liquidity Math in Uniswap v3](http://atiselsts.github.io/pdfs/uniswap-v3-liquidity-math.pdf).
 
