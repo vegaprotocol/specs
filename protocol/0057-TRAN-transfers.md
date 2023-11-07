@@ -159,6 +159,8 @@ A fee is taken from all transfers (except transfers from a vested account to a g
 
 Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the time frame over which we accumulate the taker fees that can offset transfer fees.
 
+For each party and for each asset store the taker fees paid by the party in a given epoch for `N` epochs; this will be used to determine a transfer fee discount as described below.
+
 For each key for each asset assume you store a value denoted `c`.
 During the epoch `k`:
 
@@ -172,13 +174,16 @@ At the end of epoch `k`:
 
 We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
-example (if `transfer.feeDiscountNumOfEpoch` = 2):
-| Epoch                    | 1                        | 2                        |  3                       |  4                    |
-| ------------------------ |--------------------------|--------------------------|--------------------------|-----------------------|
-| taker fee paid           | 10                       | 20                       | 5                        | 8                     |
-| counter                  | 0                        | 10                       | 20                       | 22                    |
-| transfer fee theoretical | 5                        | 15                       | 3                        | 4                     |
-| transfer fee paid        | if(5>0),5-0, else 0      | if(15>10),15-10, else 0  | if(3>20),3-20, else 0    | if(4>22),4-22 else, 0 |
+###Example:
+
+Take `transfer.feeDiscountNumOfEpoch = 2`.
+
+| Epoch                    | 1                   | 2                   |  3                  |  4               |
+| ------------------------ |---------------------|---------------------|---------------------|------------------|
+| taker fee paid           | 10                  | 20                  | 5                   | 8                |
+| counter                  | 0                   | 10                  | 20                  | 22               |
+| transfer fee theoretical | 5                   | 15                  | 3                   | 4                |
+| transfer fee paid        | 5                   | 5                   | 0                   | 0                |
 
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
