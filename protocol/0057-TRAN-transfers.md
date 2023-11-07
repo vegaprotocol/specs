@@ -157,14 +157,18 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the timeframe over which we accumulate the taker fees that can offset transfer fees.
+Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the time frame over which we accumulate the taker fees that can offset transfer fees.
 
-For each key for each asset assume you store a value denoted `c`. 
+For each key for each asset assume you store a value denoted `c`.
 During the epoch `k`:
+
 - if the party makes a transfer and `f` would be the theoretical fee the party should pay then the fee on the transfer that is actually charged is `-min(c-f,0)`. The system subsequently updates `c <- max(0,c-f)`.
+
 At the end of epoch `k`:
-1. update `c <- c - old_taker_fees`, where `old_taker_fees` is set to the total taker fees paid during epoch `k-N` if this value exists and `0` otherwise. 
-1. update `c <- c - taker_fees`, where `taker_fees` is the total taker fees paid during the epoch that just ended i.e. epoch `k`. 
+
+1. update `c <- c - old_taker_fees`, where `old_taker_fees` is set to the total taker fees paid during epoch `k-N` if this value exists and `0` otherwise.
+
+1. update `c <- c - taker_fees`, where `taker_fees` is the total taker fees paid during the epoch that just ended i.e. epoch `k`.
 
 We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
@@ -174,7 +178,7 @@ example (if `transfer.feeDiscountNumOfEpoch` = 2):
 | taker fee paid           | 10                       | 20                       | 5                        | 8                     |
 | counter                  | 0                        | 10                       | 20                       | 22                    |
 | transfer fee theoretical | 5                        | 15                       | 3                        | 4                     |
-| transfer fee paid        | if(5>0),5-0, else 0      | if(15>10),15-10, else 0  | if(3>20),3-20, else 0    | if(4>22),4-22 else, 0 |         
+| transfer fee paid        | if(5>0),5-0, else 0      | if(15>10),15-10, else 0  | if(3>20),3-20, else 0    | if(4>22),4-22 else, 0 |
 
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
