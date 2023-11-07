@@ -38,8 +38,7 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Base Price**: The base price is the central price for the market maker. When trading at this level the market maker will have a position of `0`. Volumes for prices above this level will be taken from the `upper` curve and volumes for prices below will be taken from the `lower` curve.
 - **Upper Price**: The maximum price bound for market making. Prices between the `base price` and this price will have volume placed, with no orders above this price. This is optional and if not supplied no volume will be placed above `base price`. At these prices the market maker will always be short
 - **Lower Price**: The minimum price bound for market making. Prices between the `base price` and this will have volume placed, with no orders below this price. This is optional and if not supplied no volume will be placed below `base price`. At these prices the market maker will always be long
-- **Volume at Upper Limit**: The volume the market maker will hit at the upper limit (this will be a short volume). Note that as the market maker is operating a constant function market curve there is an inherent link between traded price and position which allows this assertion. The combination of this volume and the range between `base price` and `upper price` will determine the volume placed at each price level inbetween.
-- **Volume at Lower Limit**: The volume the market maker will hit at the lower limit (this will be a long volume). Note that as the market maker is operating a constant function market curve there is an inherent link between traded price and position which allows this assertion. The combination of this volume and the range between `base price` and `lower price` will determine the volume placed at each price level inbetween.
+- **Commitment**: This is the initial volume of funds to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail.
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
@@ -60,6 +59,15 @@ For all incoming active orders, the matching process will coordinate between the
 #### Determining Margin
 
 TODO
+
+
+- Expand out order book, sample once per block one LP perhaps
+- ELS minimum value per epoch
+- Can pools cross? Post only?
+  - If they cross they cross
+- ELS fraction configuration
+- On entry/adjustment rebase AMM
+
 
 #### Determining Volumes for Display
 
