@@ -173,7 +173,7 @@ At the end of epoch `k`:
 We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
 example (if `transfer.feeDiscountNumOfEpoch` = 2):
-| Epoch                    | 1                        | 2                        |  3                       |  4                    |    
+| Epoch                    | 1                        | 2                        |  3                       |  4                    | 
 | ------------------------ |--------------------------|--------------------------|--------------------------|-----------------------|
 | taker fee paid           | 10                       | 20                       | 5                        | 8                     |
 | counter                  | 0                        | 10                       | 20                       | 22                    |
