@@ -455,11 +455,20 @@ Notes:
 
 ## Batch Proposals
 
-A `BatchProposalSubmission` is a top-level proposal type (living at the same level in a `Transaction` object as a standard `ProposalSubmission` ) which allows grouping of several related changes into a single proposal, ensuring that all changes will pass or fail governance voting together. The batch proposal is a wrapper containing the same `reference` and `rationale` fields as a standard `ProposalSubmission` alongside a repeated list of `ProposalSubmission`s.
+A `BatchProposalSubmission` is a top-level proposal type (living at the same level in a `Transaction` object as a standard `ProposalSubmission`) which allows grouping of several individual proposals into a single proposal, ensuring that all changes will pass or fail governance voting together.
+The batch proposal is a wrapper containing the same `reference` and `rationale` fields as a standard `ProposalSubmission` alongside a repeated list of `ProposalSubmission`s. 
+The individual submissions keep their own rationale entries. 
 
-Validation should be applied by the protocol when accepting such a transaction that all proposals within the batch are of the same category for the purposes of ensuring voting thresholds and minimum voting periods can be uniquely determined. Additionally, the closing time of each proposal's voting period must be identical to ensure that a single voting period can be run to determine the result of all. The enactment timestamp, however, should be customisable and can be different for each proposal within the batch.
+Validation should be applied by the protocol when accepting such a transaction to verify that all proposals within the batch meet their own minimum voting periods (if not transaction is rejected).
+Additionally, the closing time of each proposal's voting period must be identical to ensure that a single voting period can be run to determine the result of all. 
+The enactment timestamp, however, should be customisable and can be different for each proposal within the batch, as long as the minimum enactment time of each individual proposal within the batch is respected.
 
-Once submitted, a single voting period should be run in which participants may place a single vote to approve/disapprove of the entire batch. It should not be possible to vote for components in the batch separately. If the batch fails to pass the vote, the entire batch should be discarded as with any other proposal. If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp does not need to be defined and should be considered indeterminate from a user's point-of-view.
+Once submitted, a single voting period should be run in which participants may place a single vote to approve/disapprove of the entire batch. It *must* not be possible to vote for components in the batch separately.
+Once the closing timestamp is reached each individual proposal within the batch is evaluated against the votes received. 
+If all proposals pass (on their own rules on participation, majority, LP-ELS voting etc.) then the entire batch passes. 
+If even one proposal within the batch would fail then the entire batch fails. 
+
+If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp does not need to be defined and should be considered indeterminate from a user's point-of-view.
 
 ## APIs
 
@@ -679,14 +688,25 @@ It is NOT possible to submit a governance proposal where the source account is t
 
 ##### Batch Proposals
 
-- A batch proposal containing one or more component submissions for each type of proposal term can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-146" href="#0028-GOVE-146">0028-GOVE-146</a>)
+- A batch proposal containing one or more component submissions mixing different proposal types can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-146" href="#0028-GOVE-146">0028-GOVE-146</a>)
 
-- A batch proposal containing component submissions with different categories will be rejected with an informative error message. (<a name="0028-GOVE-147" href="#0028-GOVE-147">0028-GOVE-147</a>)
+- A batch proposal submitted with component submissions having different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
 
-- A batch proposal submitted with component submissions having the same category but different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
-
-- A batch proposal submitted with component submissions having the same category and the same closing timestamps but different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-149" href="#0028-GOVE-149">0028-GOVE-149</a>)
+- A batch proposal submitted with component submissions with different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-149" href="#0028-GOVE-149">0028-GOVE-149</a>)
    1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
+
+- A batch proposal containing 
+1. freeform proposal,
+1. an asset proposal, 
+1. a network parameter change, 
+1. a market proposal, 
+1. a change proposal for another market,  
+1. volume discount program,
+1. referal programe,
+1. governance transfer, 
+can be submitted, voted through and each proposal enacted. (<a name="0028-GOVE-160" href="#0028-GOVE-160">0028-GOVE-160</a>)
+
+
 
 ##### Network History
 
