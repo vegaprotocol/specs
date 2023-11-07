@@ -157,7 +157,7 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the timeframe over which we acumulate the taker fees that can offset transfer fees.
+Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the timeframe over which we accumulate the taker fees that can offset transfer fees.
 
 For each key for each asset assume you store a value denoted `c`. 
 During the epoch `k`:
@@ -166,7 +166,7 @@ At the end of epoch `k`:
 1. update `c <- c - old_taker_fees`, where `old_taker_fees` is set to the total taker fees paid during epoch `k-N` if this value exists and `0` otherwise. 
 1. update `c <- c - taker_fees`, where `taker_fees` is the total taker fees paid during the epoch that just ended i.e. epoch `k`. 
 
-We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any tranfer a party is proposing.
+We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
 example (if `transfer.feeDiscountNumOfEpoch` = 2):
 | Epoch                    | 1                        | 2                        |  3                       |  4                    |    
