@@ -275,8 +275,8 @@ message CancelTransfer {
   - The fees are being paid into the infrastructure pool
 - As a user I can do a transfer from a vested account to a general account held by the same key without incurring any fees (<a name="0057-TRAN-066" href="#0057-TRAN-066">0057-TRAN-066</a>).
 - As a user I can do a transfer from a vested account to another account that isn't general account for my key but in this case transfer fees are incurred (<a name="0057-TRAN-069" href="#0057-TRAN-069">0057-TRAN-069</a>).
-- As a user, I **can not** transfer a quantum amount less than `transfer.fee.minTransferQuantumAmount` from any of the valid accounts excluding a vested account (<a name="0057-TRAN-067" href="#0057-TRAN-067">0057-TRAN-067</a>).
-- As a user, I **can** transfer a quantum amount less than `transfer.fee.minTransferQuantumAmount` from a vested account if and only if I transfer the full balance (<a name="0057-TRAN-068" href="#0057-TRAN-068">0057-TRAN-068</a>).
+- As a user, I **can not** transfer a quantum amount less than `transfer.minTransferQuantumAmount` from any of the valid accounts excluding a vested account (<a name="0057-TRAN-067" href="#0057-TRAN-067">0057-TRAN-067</a>).
+- As a user, I **can** transfer a quantum amount less than `transfer.minTransferQuantumAmount` from a vested account if and only if I transfer the full balance (<a name="0057-TRAN-068" href="#0057-TRAN-068">0057-TRAN-068</a>).
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
   - The funds arrive in the target account when the transaction is processed (i.e. with the correct delay), which is not before the timestamp occurs
   - A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.
