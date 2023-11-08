@@ -94,6 +94,8 @@ Market change proposals can also be submitted by any party which has at least th
 Moreover, market LPs can vote on market change proposals even if they don't have `governance.proposal.updateMarket.minVoterBalance` governance tokens.
 So, for example, if `governance.proposal.updateMarket.minProposerEquityLikeShare = 0.05` and a party has `equity-like share` on the market of `0.3` and no governance tokens then they can make a market change proposal. If, on the other hand, a party has `equity-like share` of `0.03` and no governance tokens then they cannot submit a market change proposal.
 
+If a party has any sub-account running [AMM strategies](./0087-VAMM-automated_market_maker.md) then the `equity-like share` of the party's votes on that market should be the sum of the `equity-like share` for the key itself and any assigned to the sub-account.
+
 ### Duration of the proposal
 
 A new proposal will have a close date specified as a timestamp. After the proposal is created in the system and before the close date, the proposal is open for votes. e.g: A proposal is created and people have 3 weeks from the day it is sent to the network in order to submit votes for it.
