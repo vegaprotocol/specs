@@ -71,7 +71,7 @@ If it has an expiry then it can be set either to cancel on expiry (i.e. it is de
 An OCO contains TWO stop order submissions, and must include one in each trigger direction.
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
-  - An OCO submission can be set to have one of three different behaviours at expiry, either trigger one side, the other or expire without any action.
+  - An OCO submission can be set to have one of three different behaviours at expiry, either triggering one side, triggering the other, or expire without any action.
   
 - The stop order submission wraps a normal order submission.
 
