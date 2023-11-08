@@ -16,6 +16,7 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 - Party submits a transaction containing configuration for the strategy on a given market. This will contain:
   - Amount of funds to commit
   - Price bounds (upper, lower, base)
+  - Maximum slippage (%)
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
 - At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be cancelled. 
 - If the party submits a `CancelAMM` transaction the AMM configuration for that party, on that market, will be cancelled. All active orders from the AMM will be cancelled and all funds and positions associated with the sub-account will be transferred back to the main account.
@@ -26,6 +27,13 @@ Each main Vega key will have one associated sub account for a given market, on w
 
 - Creation: A sub-account will be funded when a user configures an AMM strategy with a set of criteria and a commitment amount. At this point in time the commitment amount will be transferred to the sub-account's general account and the AMM strategy will commence
 - Cancellation: When the AMM is cancelled all active orders are first cancelled. Following this cancellation, all funds in the sub-account's margin account should be transferred to the associated main account's margin account, with the same then happening for funds in the general account. Finally, any associated non-zero position on the market should be reassigned from the sub-account to the main account. At this point processing can continue, allowing the standard margining cycle to perform any required transfers from margin to general account.
+
+## Interface
+
+All AMM configurations should implement two key interfaces:
+
+- One taking simply the current state (`position` and `total funds`) and returning the best offered bid/ask values. For an AMM this will be the price to buy/sell the smallest volume unit on the market.
+- The second taking (`position`, `total funds`, `side`, `start price`, `end price`) should return the full volume the AMM would trade between the two prices (inclusive).
 
 ## AMM Configurations
 
@@ -42,7 +50,12 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
-#### Matching Process (To merge with 0068-MATC once confirmed)
+#### Creation Process
+
+A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided)
+
+
+### Matching Process (To merge with 0068-MATC once confirmed)
 
 For all incoming active orders, the matching process will coordinate between the on- and off-book sources of liquidity. When an order comes in which may immediately trade (there are not already resting orders of the same type for the best applicable price) the following steps should be followed. If at any point the order's full volume has traded the process is immediately halted:
 
@@ -56,7 +69,19 @@ For all incoming active orders, the matching process will coordinate between the
      1. If `remaining volume <= total volume` split trades between the AMMs according to their proportional contribution to `total volume` (e.g. larger liquidity receives a higher proportion of the trade). This ensures their mid prices will move equally (TODO: Is trade splitting more involved than this?).
      1. If `remaining volume > total volume` execute all trades to move the respective AMMs to their boundary at `outer price`. Now, return to step `1` with `current price = outer price`, checking first for on-book liquidity at the new level then following this process again until all order volume is traded or liquidity exhausted.  
 
-#### Determining Margin
+### Determining Liquidity Contribution
+
+The provided liquidity from an AMM commitment must be determined for two reasons. Firstly to decide instantaneous distribution of liquidity fees between the various liquidity types and secondly to calculate a virtual liquidity commitment amount for assigning AMM users with an ELS value. This will be used for determining the distribution of ELS-eligible fees on a market along with voting weight in market change proposals.
+
+As an AMM does not directly place orders on the book this calculation first needs to infer what the orders would be at each level within the eligible price bounds (those required by SLA parameters on the given market). From here any given AMM curve should implement functionality to take two prices and return all theoretical orders on a given side between these bounds. Call this function twice with the lower and upper SLA bounds (once for bid and once for ask) to retrieve the full order book shape for each AMM.
+
+Once these are retrieved, the price / volume points should be combined with a precomputed array of the probability of trading at each price level to calculate the liquidity supplied on each side of the orderbook as defined in [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb). Once this is calculated, use this value as the instantaneous liquidity score for fee distribution as defined in [setting fees and rewards](./0042-LIQF-setting_fees_and_rewarding_lps.md). A market configurable value `equityLikeShareFeeFraction` defines a split within liquidity fee payments between two portions. Within the portion `equityLikeShareFeeFraction` the liquidity fee payments are weighted by the rolling ELS of each liquidity provider, whereas within the proportion `1 - equityLikeShareFeeFraction` the payment is divided strictly by the liquidity score within the present epoch only.
+
+As the computation of this virtual order shape may be heavy when run across a large number of passive AMMs the number of AMMs updated per block should be throttled to a fixed maximum number, updating on a rolling frequency, or when updated/first created.
+
+A given AMM's average liquidity score across the epoch should also be tracked, giving a time-weighted average at the end of each epoch (including `0` values for any time when the AMM either did not exist or was not providing liquidity on one side of the book). From this, a virtual stake amount can be calculated by dividing through by the `market.liquidity.stakeToCcyVolume` value and the AMM key'
+s ELS updated as normal.
+
 
 TODO
 
@@ -69,7 +94,7 @@ TODO
 - On entry/adjustment rebase AMM
 
 
-#### Determining Volumes for Display
+### Determining Volumes for Display
 
 Although AMM prices are not placed onto the book as orders it is important for users to be able to see a combined view of all available liquidity, and the clearest way to do so is in an orderbook format. As such, we need an algorithm to convert the compact representation of an AMM (`upper price`, `base price`, `lower price`, `available funds`, `position`) to orderbook price levels. This should not be performed in core, which will output the aforementioned compact representation, but may be executed in any downstream component, such as a data node, in order to generate a virtual order book from AMM positions
 
