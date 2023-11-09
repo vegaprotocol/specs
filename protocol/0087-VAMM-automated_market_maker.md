@@ -119,7 +119,7 @@ $$
 P_i = L * \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}}
 $$
 
-Then simply return the absolute difference between these two prices
+Then simply return the absolute difference between these two prices.
 
 ## Matching Process (To merge with 0068-MATC once confirmed)
 
