@@ -143,12 +143,16 @@
       "0057-TRAN-069"
     ]
   },
-  "Unknown": {
-    "milestone": "unknown",
+  "Liquidity fee setting": {
+    "milestone": "palazzo",
     "acs": [
       "0042-LIQF-056",
       "0042-LIQF-057",
       "0042-LIQF-058"
     ]
+  },
+  "Unknown": {
+    "milestone": "unknown",
+    "acs": [ ]
   }
 }
