@@ -72,15 +72,54 @@ Although AMM prices are not placed onto the book as orders it is necessary to be
 
 The volume to offer at each price level is determined by whether the price level falls within the upper or lower price bands alongside the market maker's current position. In order to calculate this we use the concept of `Virtual Liquidity` from Uniswap's concentrated liquidity model, corresponding to a theoretical shifted version of the actual liquidity curve to map to an infinite range liquidity curve. The exact mathematics of this can be found in the Uniswap v3 whitepaper and are expanded in depth in the useful guide [Liquidity Math in Uniswap v3](http://atiselsts.github.io/pdfs/uniswap-v3-liquidity-math.pdf). Here we cover only the steps needed to obtain prices/volumes without much exposition.
 
-The AMM position can be thought of as two separate liquidity provision curves, one between `upper price` and `base price`, and another between `base price` and `lower price`. Within each of these, the AMM is buying/selling position on the market in exchange for the quote currency. As the price lowers the AMM is buying position and reducing currency, and as the price rises the AMM is selling position and increasing currency. One outcome of this is that the curve between `base price` and `lower price` is marginally easier to conceptualise directly from our parameters. At the lowest price side o
+The AMM position can be thought of as two separate liquidity provision curves, one between `upper price` and `base price`, and another between `base price` and `lower price`. Within each of these, the AMM is buying/selling position on the market in exchange for the quote currency. As the price lowers the AMM is buying position and reducing currency, and as the price rises the AMM is selling position and increasing currency. 
 
+One outcome of this is that the curve between `base price` and `lower price` is marginally easier to conceptualise directly from our parameters. At the lowest price side of a curve (`lower price` in this case) the market should be fully in the market contract position, whilst at the highest price (`base price` in this case) it should be fully sold out into cash. This is exactly the formulation we have, where at `base price` we desire zero position and a cash amount of `commitment amount`. However given that there is likely to be some degree of leverage allowed on the market this is not directly the amount of funds we want to calculate using. An AMM with a `commitment amount` of `X` is ultimately defined by the requirement of using `X` in margin at the outer price bounds, so we need to work backwards from that requirement to determine the theoretical cash value. We then calculate the two ranges separately to determine two different `Liquidity` values for the two ranges, which is a value used to later define volumes required to move the price a specified value.
 
-The calculation for setting volumes at each level can be broken into two steps. First, the `reference price` must be determined. This is the price implied by the market maker's current position vs the maximum allowed by the configuration and can be thought of as the market maker's current mid price. From there, the shape of the orders can be determined by calculating the volume of futures which would have to be bought(/sold) to move the price to various price levels above(/below) the `reference price`. If a price move would switch to the other curve then the cumulative amount to shift to the `reference price` is taken then the other curve is used.
+We can calculate that, in the worst case, the dollar value at which all margin is utilised will be
 
-For calculating the reference price:
+$$
+v_{worst} = \frac{c}{ (f_s + f_l) \cdotp f_i} ,
+$$
 
-  1. Select the appropriate liquidity curve. If the market maker's current position is `<=0` then the curve `[base price, upper price]` should be used. If the market maker's current position is `>0` then the curve `[lower price, base price]` should be used.
-  2. Calculate the theoretical liquidity value of the position, which can later be used to calculate the price moves for trade amounts. This is performed by utilising the simplification that at the top of each respective range (`base price` for the lower range and `upper price` for the upper range) the position will be fully in cash.
+where $c$ is the commitment amount, $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor.
+
+Calculating this separately for the upper and lower ranges (using the `short` factor for the upper range and the `long` factor for the lower range) we can calculate the liquidity value `L` for each range with the formula
+
+$$
+L = \frac{v_{worst}}{\sqrt{p_u} - \sqrt{p_l}} , 
+$$
+
+where $v_{worst}$ is as above, $p_u$ is the price at the top of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the price at the bottom of the range (`base price` for the lower range and `lower price` for the lower range). This gives the two `L` values for the two ranges.
+
+#### Fair price
+
+From here the first step is calculating a `fair` price, which can be done by utilising the `L` value for the respective range to calculate `virtual` values for the pool balances. From here on we will refer to `y` as the cash balance of the pool and `x` as the position.
+
+  1. First, identify the current position, `p`. If it is `0` then the current fair price is the base price, and we are done.
+  1. If `P > 0`:
+     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_l}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_l$ is the `base price`.
+     1. The virtual `y` of the position can be calculated as $y_v = \frac{c_c}{ (f_s + f_l) \cdotp f_i} + L \cdotp \sqrt{p_l}$ where $c_c$ is the current total dollar balance of the AMM across margin and general accounts and `p_l` is the `lower price`. Other variables are as defined above.
+  1. If `P < 0`:
+     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{ p_u \cdotp (f_s + f_l) \cdotp f_i} + \frac{L}{\sqrt{p_l}}$ where $p_l$ is the `base price` and `p_u` is the `upper price`.
+     1. The virtual `y` can be calculated as $v_y = abs(P) * p_e + L * p_l$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price` 
+  1. Now the `fair` price is simply `v_y / v_x` 
+
+#### Volume between two prices
+
+For the second interface we need to calculate the volume which would be posted to the book between two price levels. In order to calculate this for an AMM we are ultimately asking the question "what volume of swap would cause the fair price to move from price A to price B?"
+
+To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `lower price`) and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
+
+We then need to calculate the implied position at `starting price` and `ending price` and return the difference. 
+
+For a given price $p$ we calculate implied position $P_i$ with 
+
+$$
+P_i = L * \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}}
+$$
+
+Then simply return the absolute difference between these two prices
 
 ## Matching Process (To merge with 0068-MATC once confirmed)
 
