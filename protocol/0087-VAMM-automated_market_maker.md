@@ -28,6 +28,7 @@ Each main Vega key will have one associated sub account for a given market, on w
 
 - Creation: A sub-account will be funded when a user configures an AMM strategy with a set of criteria and a commitment amount. At this point in time the commitment amount will be transferred to the sub-account's general account and the AMM strategy will commence
 - Cancellation: When the AMM is cancelled all active orders are first cancelled. Following this cancellation, all funds in the sub-account's margin account should be transferred to the associated main account's margin account, with the same then happening for funds in the general account. Finally, any associated non-zero position on the market should be reassigned from the sub-account to the main account. At this point processing can continue, allowing the standard margining cycle to perform any required transfers from margin to general account.
+- Amendment: Updates the strategy or commitment for a sub-account
 
 ## Interface
 
@@ -37,6 +38,21 @@ All AMM configurations should implement two key interfaces:
 - The second taking (`position`, `total funds`, `side`, `start price`, `end price`) should return the full volume the AMM would trade between the two prices (inclusive).
 
 ## AMM Configurations
+
+Initially there will only be one option for AMM behaviour, that of a constant-function curve, however there may be others available in future. As such, the parameters pertaining to this model in particular should be passed in their own structure such that the creation message is similar to:
+
+```
+{
+  commitment,
+  market,
+  slippage_tolerance,
+  concentrated_liquidity_params: {
+    base_price,
+    lower_price,
+    upper_price
+  }
+}
+```
 
 ### Concentrated Liquidity
 
