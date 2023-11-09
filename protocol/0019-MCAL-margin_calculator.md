@@ -34,9 +34,9 @@
     sell 10 @ 100 100
     ```
 
-    then the maintenance margin for the party is `15 900 x 0.25 x 1 + 0.1 x 1 x 15 900 = 5 565`. (<a name="0019-MCAL-024" href="#0019-MCAL-024">0019-MCAL-024</a>)
+    then the maintenance margin for the party is `min(1*(100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`. (<a name="0019-MCAL-024" href="#0019-MCAL-024">0019-MCAL-024</a>)
 
-- In the same situation as above, if `market.linearSlippageFactor = 100`, (i.e. 10 000%) instead, then the margin for the party is `1 590 000 + 0.1 x 1 x 15900 = 1 591 590`. (<a name="0019-MCAL-025" href="#0019-MCAL-025">0019-MCAL-025</a>)
+- In the same situation as above, if `market.linearSlippageFactor = 100`, (i.e. 10 000%) instead, then the margin for the party is `min(1*(100000-15900), 15900 x 100 x 1) + 0.1 x 1 x 15900 = 85690`. (<a name="0019-MCAL-025" href="#0019-MCAL-025">0019-MCAL-025</a>)
 
 - If the `market.linearSlippageFactor` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-013" href="#0019-MCAL-013">0019-MCAL-013</a>)
 
@@ -51,7 +51,7 @@
     sell 10 @ 100 100
     ```
 
-    then the dated future maintenance margin component for the party is `15 900 x 0.25 x 1 + 0.1 x 1 x 15 900 = 5 565`. The current accrued funding payment for the perpetual component is calculated using
+    then the dated future maintenance margin component for the party is `min(1*(100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`. The current accrued funding payment for the perpetual component is calculated using
 
     ```book
     delta_t = funding_period_end - max(funding_period_start, internal_data_points[0].t)
