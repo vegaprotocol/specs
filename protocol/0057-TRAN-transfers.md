@@ -274,7 +274,7 @@ message CancelTransfer {
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
 - As a user I can do a transfer from a vested account to a general account held by the same key without incurring any fees (<a name="0057-TRAN-066" href="#0057-TRAN-066">0057-TRAN-066</a>).
-- As a user I can do a transfer from a vested account to another account that isn't general account for my key but in this case transfer fees are incurred (<a name="0057-TRAN-069" href="#0057-TRAN-069">0057-TRAN-069</a>).
+- If a user transfers funds from their vested account to any valid account other than their general account for that asset, they will incur fees. This includes accounts not owned by the user. (<a name="0057-TRAN-069" href="#0057-TRAN-069">0057-TRAN-069</a>).
 - As a user, I **can not** transfer a quantum amount less than `transfer.minTransferQuantumAmount` from any of the valid accounts excluding a vested account (<a name="0057-TRAN-067" href="#0057-TRAN-067">0057-TRAN-067</a>).
 - As a user, I **can** transfer a quantum amount less than `transfer.minTransferQuantumAmount` from a vested account if and only if I transfer the full balance (<a name="0057-TRAN-068" href="#0057-TRAN-068">0057-TRAN-068</a>).
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
