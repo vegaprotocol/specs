@@ -59,6 +59,7 @@ DAI
 dApp
 datanode
 datapoint
+datapoints
 datatypes
 datetime
 decentralised
@@ -200,6 +201,8 @@ PDP
 performant
 permissioned
 permissionless
+PERP
+perps
 PME
 PnL
 PoS

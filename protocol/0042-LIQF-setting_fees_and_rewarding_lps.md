@@ -352,6 +352,8 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
 - If a change in the open interest causes the liquidity demand estimate to change, then fee factor is correctly recalculated.  (<a name="0042-LIQF-006" href="#0042-LIQF-006">0042-LIQF-006</a>)
 - If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated.  (<a name="0042-LIQF-007" href="#0042-LIQF-007">0042-LIQF-007</a>)
 - A market can be proposed with a choice of liquidity fee settings. These settings can be updated by a subsequent market update proposal.  (<a name="0042-LIQF-056" href="#0042-LIQF-056">0042-LIQF-056</a>)
+- The above example for the liquidity fee when the method is weighted-average results in a fee-factor of 1.5% (<a name="0042-LIQF-057" href="#0042-LIQF-057">0042-LIQF-057</a>)
+- The above example for the liquidity fee when the method is constant-fee results in a fee-factor of 0.8% (<a name="0042-LIQF-058" href="#0042-LIQF-058">0042-LIQF-058</a>)
 
 
 ### CHANGE OF NETWORK PARAMETERS TESTS
