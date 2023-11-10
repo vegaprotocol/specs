@@ -157,40 +157,36 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the time frame over which we accumulate the taker fees that can offset transfer fees. The default value for `transfer.feeDiscountNumOfEpoch` is 30, with an upper boundary of 1000 and a lower boundary of 0.
-
-For each party and for each asset store the taker fees paid by the party in a given epoch for `N` epochs; this will be used to determine a transfer fee discount as described below.
-
-For each key for each asset assume you store a value denoted `c`.
-During the epoch `k`:
-
-- if the party makes a transfer and `f` would be the theoretical fee the party should pay then the fee on the transfer that is actually charged is `-min(c-f,0)`. The system subsequently updates `c <- max(0,c-f)`.
-
-At the end of epoch `k`:
-
-1. update `c <- c - old_taker_fees`, where `old_taker_fees` is set to the total taker fees paid during epoch `k-N` if this value exists and `0` otherwise.
-
-1. update `c <- c - taker_fees`, where `taker_fees` is the total taker fees paid during the epoch that just ended i.e. epoch `k`.
-
-We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
-
-### Example
-
-Take `transfer.feeDiscountNumOfEpoch = 2`.
-
-| Epoch                    | 1                   | 2                   |  3                  |  4               |
-| ------------------------ |---------------------|---------------------|---------------------|------------------|
-| taker fee paid           | 10                  | 20                  | 5                   | 8                |
-| counter                  | 0                   | 10                  | 20                  | 22               |
-| transfer fee theoretical | 5                   | 15                  | 3                   | 4                |
-| transfer fee paid        | 5                   | 5                   | 0                   | 0                |
-
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
 As such, the transfer fee value used will be: `min(transfer amount * transfer.fee.factor, transfer.fee.maxQuantumAmount * quantum)`, `quantum` is for asset
 The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
 It is [paid in to the infrastructure fee pool](./0029-FEES-fees.md#collecting-and-distributing-fees).
 Fees are charged in the asset that is being transferred.
+
+Fee are primarily a spam-protection mechanism, so for accounts generating "useful activity" discounts apply.
+
+### Transfer fee discounts
+
+Let `D` stand for `transfer.feeDiscountDecay`. This is a network parameter that specifies the how cumulated trading fees decay for the purpose of being used to do transfer-fee-free transfers. Minimum value is `0`, maximum value is any decimal strictly less than `1` and default it `0.5`.
+Let `M` stand for network parameter `transfer.feeDiscountMinimumTrackedAmount`. Minimum value is `0`, there is no maximum beyond that dictated by the data type used and the default is `0.001`.
+
+For each party and for each asset store the an amount which tracks all trading fees paid and received by the party with transfer fees subtracted and the amount decayed as specified below.
+
+For each key for each asset assume you store a value denoted `c`.
+During the epoch `k`:
+
+- if the party makes a transfer and `f` would be the theoretical fee the party should pay then the fee on the transfer that is actually charged is `-min(f-c,0)`. The system subsequently updates `c <- max(0,c-f)`.
+
+At the end of epoch `k`:
+
+1. update `c <- c x D`, i.e. apply the decay factor `D`
+
+1. update `c <- c + all_trading_fees_for_trades_involved_in`, where `all_trading_fees_for_trades_involved_in` are the cumulated trading fees paid by the aggressive party (taker fees) but also cumulated (with a +sign) the trading fees result from any trade in which the party was involved as the passive party (i.e. their limit order got lifted).
+
+1. if `c` is less than `M x quantum` (where quantum is the asset quantum) then set `c <- 0`.  
+
+We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
 ## Proposed command
 
