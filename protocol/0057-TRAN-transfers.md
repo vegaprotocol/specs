@@ -157,9 +157,9 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
-Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the time frame over which we accumulate the taker fees that can offset transfer fees. The default value for `transfer.feeDiscountNumOfEpoch` is 30, with an upper boundary of 1000 and a lower boundary of 0.
+Let `N` stand for `transfer.feeDiscountNumOfEpoch`. This is a network parameter that specifies the time frame over which we accumulate the total fees that can offset transfer fees. The default value for `transfer.feeDiscountNumOfEpoch` is 30, with an upper boundary of 1000 and a lower boundary of 0.
 
-For each party and for each asset store the taker fees paid by the party in a given epoch for `N` epochs; this will be used to determine a transfer fee discount as described below.
+For each party and for each asset store the total fees paid by the party in a given epoch for `N` epochs; this will be used to determine a transfer fee discount as described below.
 
 For each key for each asset assume you store a value denoted `c`.
 During the epoch `k`:
@@ -181,7 +181,7 @@ Take `transfer.feeDiscountNumOfEpoch = 2`.
 
 | Epoch                    | 1                   | 2                   |  3                  |  4               |
 | ------------------------ |---------------------|---------------------|---------------------|------------------|
-| taker fee paid           | 10                  | 20                  | 5                   | 8                |
+| total fee paid           | 10                  | 20                  | 5                   | 8                |
 | counter                  | 0                   | 10                  | 20                  | 22               |
 | transfer fee theoretical | 5                   | 15                  | 3                   | 4                |
 | transfer fee paid        | 5                   | 5                   | 0                   | 0                |
