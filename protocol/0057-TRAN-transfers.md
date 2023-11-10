@@ -180,9 +180,9 @@ During the epoch `k`:
 
 At the end of epoch `k`:
 
-1. update `c <- c + all_trading_fees_for_trades_involved_in`, where `all_trading_fees_for_trades_involved_in` are the cumulated trading fees paid by the aggressive party (taker fees) but also cumulated (with a +sign) the trading fees result from any trade in which the party was involved as the passive party (i.e. their limit order got lifted).
-
 1. update `c <- c x D`, i.e. apply the decay factor `D`
+
+1. update `c <- c + all_trading_fees_for_trades_involved_in`, where `all_trading_fees_for_trades_involved_in` are the cumulated trading fees paid by the aggressive party (taker fees) but also cumulated (with a +sign) the trading fees result from any trade in which the party was invovled as the passive party (i.e. their limit order got lifted).
 
 1. if `c` is less than `M x quantum` (where quantum is the asset quantum) then set `c <- 0`.  
 
