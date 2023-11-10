@@ -84,7 +84,33 @@
   },
   "Margin isolation": {
     "milestone": "palazzo",
-    "acs": []
+    "acs": [
+      "0019-MCAL-032",
+      "0019-MCAL-033",
+      "0019-MCAL-034",
+      "0019-MCAL-035",
+      "0019-MCAL-036",
+      "0019-MCAL-037",
+      "0019-MCAL-038",
+      "0019-MCAL-039",
+      "0019-MCAL-040",
+      "0019-MCAL-041",
+      "0019-MCAL-042",
+      "0019-MCAL-043",
+      "0019-MCAL-044",
+      "0019-MCAL-045",
+      "0019-MCAL-046",
+      "0019-MCAL-047",
+      "0019-MCAL-048",
+      "0019-MCAL-049",
+      "0019-MCAL-050",
+      "0019-MCAL-051",
+      "0019-MCAL-052",
+      "0019-MCAL-053",
+      "0019-MCAL-054",
+      "0019-MCAL-055",
+      "0019-MCAL-056"
+    ]
   },
   "Quadratic slippage removal": {
     "milestone": "palazzo",
