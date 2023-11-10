@@ -157,6 +157,13 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
+The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
+
+As such, the transfer fee value used will be: `min(transfer amount * transfer.fee.factor, transfer.fee.maxQuantumAmount * quantum)`, `quantum` is for asset
+The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
+It is [paid in to the infrastructure fee pool](./0029-FEES-fees.md#collecting-and-distributing-fees).
+Fees are charged in the asset that is being transferred.
+
 Fee are primarily a spam-protection mechanism, so for accounts generating "useful activity" discounts apply. 
 
 ### Transfer fee discounts
@@ -181,23 +188,7 @@ At the end of epoch `k`:
 
 We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
-### Example
 
-Take `transfer.feeDiscountNumOfEpoch = 2`.
-
-| Epoch                    | 1                   | 2                   |  3                  |  4               |
-| ------------------------ |---------------------|---------------------|---------------------|------------------|
-| total fee paid           | 10                  | 20                  | 5                   | 8                |
-| counter                  | 0                   | 10                  | 20                  | 22               |
-| transfer fee theoretical | 5                   | 15                  | 3                   | 4                |
-| transfer fee paid        | 5                   | 5                   | 0                   | 0                |
-
-The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
-
-As such, the transfer fee value used will be: `min(transfer amount * transfer.fee.factor, transfer.fee.maxQuantumAmount * quantum)`, `quantum` is for asset
-The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
-It is [paid in to the infrastructure fee pool](./0029-FEES-fees.md#collecting-and-distributing-fees).
-Fees are charged in the asset that is being transferred.
 
 ## Proposed command
 
