@@ -157,19 +157,19 @@ When submitting, amending, or deleting an order in isolated margin mode and cont
 
 NB: This means that a party's order could partially match, with a trade executed and some funds moved to the margin account with correct leverage whilst the rest of the order is immediately stopped.
 
-When submitting, amending, or deleting an order in isolated margin mode and an auction is active there is no concept of an order trading immediately on entry, however the case of someone putting in a sell order for a very low price must be handled (as it is likely to execute at a much higher price). To handle this, when in an auction the amount taken into the order margin account should be the larger of either `limit price * size * margin factor` or `max(mark price, indicative uncrossing price) * size * margin factor`. All other steps are as above.
+When submitting, amending, or deleting an order in isolated margin mode and an auction is active there is no concept of an order trading immediately on entry, however the case of someone putting in a sell order for a very low price must be handled (as it is likely to execute at a much higher price). To handle this, when in an auction the amount taken into the order margin account should be the larger of either `limit price * size * margin factor` or `max(mark price, indicative uncrossing price) * size * margin factor`. After uncrossing, all remaining open order volume should be rebased back to simply `limit price * size * margin factor` in the order margin account. All other steps are as above.
 
 ### Increasing Position
 
 When an order trades which increases the position (increasing the absolute value of the trader's position), the target amount to be transferred is calculated as:
 
-```math
+$$
 \text{margin to add} = \text{margin factor} \cdot \text{sum across executed trades}(|\text{trade size}| \cdot \text{trade price})
-```
+$$
 
 This will be taken by performing three steps:
 
- 1. The margin to add as calculated here is compared to the margin which would have been placed into the order margin account for this order, `limit price * remaining size * margin factor`.
+ 1. The margin to add as calculated here is compared to the margin which would have been placed into the order margin account for this order, `limit price * total traded size * margin factor`.
  2. If it is equal, this amount is taken from the order margin account and placed into the margin account
  3. If the order traded at a price which means less margin should be taken then the amount `margin to add` above is taken from the order margin account into the margin account and the excess is returned from the order margin account to the general account
 
@@ -179,9 +179,9 @@ NB: In implementation, for any volume that trades immediately on entry, the addi
 
 When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is determined by the fraction of the position which is being closed. However, this fraction should also take into account that the entire position's margin may be due to change since the current trading price may have diverged from the last mark price update. As such the margin released should be calculated as:
 
-```math
+$$
 \text{margin to remove} = \text{margin required for entire position at VWAP trade price} \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
-```
+$$
 
 Note: This requires a calculation of the position's margin at trade time.
 
