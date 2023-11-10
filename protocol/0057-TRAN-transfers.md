@@ -164,14 +164,14 @@ The fee is taken from the transfer initiator's account immediately on execution,
 It is [paid in to the infrastructure fee pool](./0029-FEES-fees.md#collecting-and-distributing-fees).
 Fees are charged in the asset that is being transferred.
 
-Fee are primarily a spam-protection mechanism, so for accounts generating "useful activity" discounts apply. 
+Fee are primarily a spam-protection mechanism, so for accounts generating "useful activity" discounts apply.
 
 ### Transfer fee discounts
 
 Let `D` stand for `transfer.feeDiscountDecay`. This is a network parameter that specifies the how cumulated trading fees decay for the purpose of being used to do transfer-fee-free transfers. Minimum value is `0`, maximum value is any decimal strictly less than `1` and default it `0.5`.
-Let `M` stand for network parameter `transfer.feeDiscountMinimumTrackedAmount`. Minimum value is `0`, there is no maximum beyond that dictated by the data type used and the default is `0.001`. 
+Let `M` stand for network parameter `transfer.feeDiscountMinimumTrackedAmount`. Minimum value is `0`, there is no maximum beyond that dictated by the data type used and the default is `0.001`.
 
-For each party and for each asset store the an amount which tracks all trading fees paid and received by the party with tranfer fees subtracted and the amount decayed as specified below.
+For each party and for each asset store the an amount which tracks all trading fees paid and received by the party with transfer fees subtracted and the amount decayed as specified below.
 
 For each key for each asset assume you store a value denoted `c`.
 During the epoch `k`:
@@ -180,15 +180,13 @@ During the epoch `k`:
 
 At the end of epoch `k`:
 
-1. update `c <- c + all_trading_fees_for_trades_involved_in`, where `all_trading_fees_for_trades_involved_in` are the cumulated trading fees paid by the aggressive party (taker fees) but also cumulated (with a +sign) the trading fees result from any trade in which the party was invovled as the passive party (i.e. their limit order got lifted).
+1. update `c <- c + all_trading_fees_for_trades_involved_in`, where `all_trading_fees_for_trades_involved_in` are the cumulated trading fees paid by the aggressive party (taker fees) but also cumulated (with a +sign) the trading fees result from any trade in which the party was involved as the passive party (i.e. their limit order got lifted).
 
 1. update `c <- c x D`, i.e. apply the decay factor `D`
 
 1. if `c` is less than `M x quantum` (where quantum is the asset quantum) then set `c <- 0`.  
 
 We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
-
-
 
 ## Proposed command
 
