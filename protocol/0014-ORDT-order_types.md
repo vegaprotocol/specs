@@ -395,6 +395,14 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 - API end points should be available to query stop orders with all relevant fields. (<a name="0014-ORDT-080" href="#0014-ORDT-080">0014-ORDT-080</a>)
 
+## Stop Orders - Linked
+
+- A stop order with a size override linked to an existing order will use the total matched amount of that order as the size of the triggered order. (<a name="0014-ORDT-1240" href="#0014-ORDT-124">0014-ORDT-124</a>)
+- A stop order with a size override linked to an existing order will cancel the existing order when triggered. (<a name="0014-ORDT-125" href="#0014-ORDT-125">0014-ORDT-125</a>)
+- A stop order with a size override linked to an existing order that is no longer active will not update the order size of the triggered order. (<a name="0014-ORDT-126" href="#0014-ORDT-126">0014-ORDT-126</a>)
+- A stop order with a size override linked to the position of the trader will use the current position as an override of the triggered order size. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
+- All stop orders with a position size override should be cancelled if the trader's position flips sides (long->short or short->long). (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
+
 ## Perpetuals
 
 - All order types should be able to be placed and act in the same way on a perpetual market as on an expiring future market. Specifically this includes:
