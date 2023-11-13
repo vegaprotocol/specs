@@ -458,6 +458,8 @@ Notes:
 A `BatchProposalSubmission` is a top-level proposal type (living at the same level in a `Transaction` object as a standard `ProposalSubmission`) which allows grouping of several individual proposals into a single proposal, ensuring that all changes will pass or fail governance voting together.
 The batch proposal is a wrapper containing the same `reference` and `rationale` fields as a standard `ProposalSubmission` alongside a repeated list of `ProposalSubmission`s.
 The individual submissions keep their own rationale entries.
+Any governance proposal can be included in a batch *except* proposals to add new assets.
+For avoidance of doubt: asset *change* proposals can be included. 
 
 Validation should be applied by the protocol when accepting such a transaction to verify that all proposals within the batch meet their own minimum voting periods (if not transaction is rejected).
 Additionally, the closing time of each proposal's voting period must be identical to ensure that a single voting period can be run to determine the result of all.
@@ -469,6 +471,7 @@ If all individual proposals would pass (given the votes received, based on their
 If even one proposal within the batch would fail then the entire batch fails.
 
 If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp does not need to be defined and should be considered indeterminate from a user's point-of-view.
+In particular asset update proposals may emit signed bundles to be submitted to the bridge on ethereum side (for withdrawal delay / threshold updates).
 
 ## APIs
 
@@ -697,14 +700,15 @@ It is NOT possible to submit a governance proposal where the source account is t
 
 - A batch proposal containing
 1. freeform proposal,
-1. an asset proposal,
+1. an update asset proposal changing the asset quantum, withdrawal delay and withdrawal delay threshold
 1. a network parameter change,
 1. a market proposal,
 1. a change proposal for another market,
 1. volume discount program,
 1. referral program,
 1. governance transfer,
-can be submitted, voted through and each proposal enacted. (<a name="0028-GOVE-160" href="#0028-GOVE-160">0028-GOVE-160</a>)
+can be submitted, voted through and each proposal enacted.
+On top of that signed bundles for changing withdrawal delay and threshold on the bridge are emmitted (<a name="0028-GOVE-160" href="#0028-GOVE-160">0028-GOVE-160</a>)
 
 - A batch proposal can be submitted changing the same network parameter twice to two different values with two different enactment timestamps.
 The voting to approve the batch happens, the batch passes, both changes are observed at the desired time. (<a name="0028-GOVE-161" href="#0028-GOVE-161">0028-GOVE-161</a>)
