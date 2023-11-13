@@ -39,8 +39,10 @@ In order to prevent the abuse of user-initiated transfers as spam attack there w
 
 ## Minimum transfer amount
 
-This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-ASSF-asset_framework.md)).
+This is controlled by the `transfer.minTransferQuantumMultiple` and quantum specified for the [asset](0040-ASSF-asset_framework.md).
 The minimum transfer amount is `transfer.minTransferQuantumMultiple x quantum`.
+
+If a user is transferring funds from a vested account, if their balance (expressed in quantum) is less than the minimum amount, they should be able to transfer the full balance (note, transferring less than the full balance is not permitted).
 
 ## Recurring transfers
 
@@ -153,7 +155,7 @@ Note: if there is no market with contribution to the reward metric - no transfer
 
 ## Fees
 
-A fee is taken from all transfers, and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
+A fee is taken from all transfers (except transfers from a vested account to a general account held by the same key), and paid out to validators in a similar manner to the existing [infrastructure fees](0061-REWP-pos_rewards.md). For recurring transfers, the fee is charged each time the transfer occurs.
 
 The fee is determined by the `transfer.fee.factor` and is subject to a cap defined by the multiplier `transfer.fee.maxQuantumAmount` as specified in the network parameters, which governs the proportion of each transfer taken as a fee.
 
@@ -161,6 +163,30 @@ As such, the transfer fee value used will be: `min(transfer amount * transfer.fe
 The fee is taken from the transfer initiator's account immediately on execution, and is taken on top of the total amount transferred.
 It is [paid in to the infrastructure fee pool](./0029-FEES-fees.md#collecting-and-distributing-fees).
 Fees are charged in the asset that is being transferred.
+
+Fee are primarily a spam-protection mechanism, so for accounts generating "useful activity" discounts apply.
+
+### Transfer fee discounts
+
+Let `D` stand for `transfer.feeDiscountDecay`. This is a network parameter that specifies the how cumulated trading fees decay for the purpose of being used to do transfer-fee-free transfers. Minimum value is `0`, maximum value is any decimal strictly less than `1` and default it `0.5`.
+Let `M` stand for network parameter `transfer.feeDiscountMinimumTrackedAmount`. Minimum value is `0`, there is no maximum beyond that dictated by the data type used and the default is `0.001`.
+
+For each party and for each asset store the an amount which tracks all trading fees paid and received by the party with transfer fees subtracted and the amount decayed as specified below.
+
+For each key for each asset assume you store a value denoted `c`.
+During the epoch `k`:
+
+- if the party makes a transfer and `f` would be the theoretical fee the party should pay then the fee on the transfer that is actually charged is `-min(f-c,0)`. The system subsequently updates `c <- max(0,c-f)`.
+
+At the end of epoch `k`:
+
+1. update `c <- c x D`, i.e. apply the decay factor `D`
+
+1. update `c <- c + all_trading_fees_for_trades_involved_in`, where `all_trading_fees_for_trades_involved_in` are the cumulated trading fees paid by the aggressive party (taker fees) but also cumulated (with a +sign) the trading fees result from any trade in which the party was involved as the passive party (i.e. their limit order got lifted).
+
+1. if `c` is less than `M x quantum` (where quantum is the asset quantum) then set `c <- 0`.  
+
+We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
 ## Proposed command
 
@@ -243,12 +269,18 @@ message CancelTransfer {
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
+- As a user I can do a transfer from a vested account to a general account held by the same key without incurring any fees (<a name="0057-TRAN-066" href="#0057-TRAN-066">0057-TRAN-066</a>).
+- If a user transfers funds from their vested account to any valid account other than their general account for that asset, they will incur fees. This includes accounts not owned by the user. (<a name="0057-TRAN-069" href="#0057-TRAN-069">0057-TRAN-069</a>).
+- As a user, I **can not** transfer a quantum amount less than `transfer.minTransferQuantumAmount` from any of the valid accounts excluding a vested account (<a name="0057-TRAN-067" href="#0057-TRAN-067">0057-TRAN-067</a>).
+- As a user, I **can** transfer a quantum amount less than `transfer.minTransferQuantumAmount` from a vested account if and only if I transfer the full balance (<a name="0057-TRAN-068" href="#0057-TRAN-068">0057-TRAN-068</a>).
 - As a user, when I initiate a delayed transfer, the funds are taken from my account immediately (<a name="0057-TRAN-008" href="#0057-TRAN-008">0057-TRAN-008</a>)
   - The funds arrive in the target account when the transaction is processed (i.e. with the correct delay), which is not before the timestamp occurs
   - A delayed transfer that is invalid (to an invalid account type) is rejected when it is received, and the funds are not taken from the origin account.
 - The spam protection mechanics prevent me to do more than `spam.protection.maxUserTransfersPerEpoch` transfers per epoch. (<a name="0057-TRAN-009" href="#0057-TRAN-009">0057-TRAN-009</a>)
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
 - A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-059" href="#0057-TRAN-059">0057-TRAN-059</a>)
+- As a user, I can accumulate the fees I collect over an epoch. When I initiate a transfer that incurs a transfer fee, I have the ability to view the amount that is exempt from transfer fees through the API. (<a name="0057-TRAN-012" href="#0057-TRAN-012">0057-TRAN-012</a>)
+- By setting `transfer.feeDiscountNumOfEpoch` to 3 epochs, you establish a time window spanning 3 consecutive epochs. During these 3 epochs, if you place market orders and subsequently initiate a transfer incurring a transfer fee, the 'free transfer amount' is calculated based on the cumulative fees collected over those same 3 epochs.(<a name="0057-TRAN-013" href="#0057-TRAN-013">0057-TRAN-013</a>)
 
 ### Recurring transfer tests
 
