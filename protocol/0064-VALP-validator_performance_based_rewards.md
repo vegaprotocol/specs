@@ -52,12 +52,12 @@ be modified and set to neutral defaults (i.e., 0)
 
 Then `validator_performance = max(0.05, min((p'/expected, 1))`
 
-Goal 2: Detect unforwarded Ethereum events and lack or read access and punish the validator that does not forward them
+Goal 2: Detect un-forwarded Ethereum events and lack or read access and punish the validator that does not forward them
 Detection: Events forwarded by some validators are not forwarded by others.
 
 #### Ethereum Heartbeat
 
-For the Ethereum Heartbeat, we use the network parameter `ethereum_heartbeat_period`. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128, which would create a hearbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch). Legal values are all integers larger or equal to 0.
+For the Ethereum Heartbeat, we use the network parameter `ethereum_heartbeat_period`. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128, which would create a heartbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch). Legal values are all integers larger or equal to 0.
 
 For every Ethereum block, if the hash of this block mod `ethereum_heartbeat_period` equals the identity of the a validator (taken mod ethereum_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms. The heartbeat also does contain the Ethereum hash of the corresponding block.
 If the parameter is set to 0, the heartbeats are effectively turned off.
@@ -75,7 +75,7 @@ t the end of each epoch, it is counted how many Ethereum events have been forwar
 Let `expected_f` be the maximum number of Ethereum events forwarded by any Validator given above conditions (i.e. the best validator defines the expectation), and `f` be the number of blocks a given validator has forwarded. If `expected_f` equals zero, then all scores are set to 1.
 Let `low_volume_correction` be `abs(3-expected_f)`.
 
-[Comment: expected_f is not calculated using statistics, as that would mean that an issue with the Ethereum chain would cause punishment for the validators. A more precise estiimate (all validators coiunting what all others should forward) is also possilbe, but unnecessarily complex).
+[Comment: expected_f is not calculated using statistics, as that would mean that an issue with the Ethereum chain would cause punishment for the validators. A more precise estimate (all validators counting what all others should forward) is also possible, but unnecessarily complex).
 
 
 Else, validator_ethereum_performance = `(min((f+low_volume_correction)/(expected_f)*1.1, 1)))`,
