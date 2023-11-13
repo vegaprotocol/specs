@@ -470,7 +470,7 @@ Once the closing timestamp is reached each individual proposal within the batch 
 If all individual proposals would pass (given the votes received, based on their individual rules on participation, majority, LP-ELS voting etc.) then the entire batch passes.
 If even one proposal within the batch would fail then the entire batch fails.
 
-If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp does not need to be defined and should be considered indeterminate from a user's point-of-view.
+If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp: they enact in the order they appear in the batch.
 In particular asset update proposals may emit signed bundles to be submitted to the bridge on ethereum side (for withdrawal delay / threshold updates).
 
 ## APIs
