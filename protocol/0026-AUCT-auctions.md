@@ -6,7 +6,8 @@ Auctions are a trading mode that 'collect' orders during an *auction call period
 
 In comparison to continuous trading, the auction mode for a market, is a state of the orderbook where each order placed is just sitting on the book, for a given period of time or until some requirements are met (called `call period`), then the matching orders are uncrossed.
 
-They are mostly useful in less liquid markets, or in specific scenarios where a price must be determined, i.e. at opening of a market, when a potentially excessively large price move might occur (price monitoring) or when liquidity needs to be sourced and aggregated (liquidity monitoring). In traditional markets (where markets open and close every day) we can run an open and closing auction for the price to stabilise at both ends.
+They are mostly useful in less liquid markets, or in specific scenarios where a price must be determined, i.e. at opening of a market, when a potentially excessively large price move might occur (price monitoring).
+In traditional markets (where markets open and close every day) we can run an open and closing auction for the price to stabilise at both ends.
 
 ## Reference-level explanation
 
@@ -22,7 +23,7 @@ All auctions have a `min_auction_length` (which is a single network parameter fo
 
 - Any auction that would be less than `min_auction_length` seconds (network parameter) should not be started (e.g. if the market is nearing the end of its open period / active trading). This is to prevent auction calls that are too short given the network latency/granularity, so should be some multiple of the worst case expected block time at some confidence level, which is best maintained by governance voting (hence being a network parameter).
 - a proposal should be rejected if it would require an auction shorter `min_auction_length`
-- for price/liquidity monitoring, etc. the auction must last for at least the `min_auction_length` and therefore we can avoid checking other conditions until that length is reached
+- for price monitoring, etc. the auction must last for at least the `min_auction_length` and therefore we can avoid checking other conditions until that length is reached
 - if the parameter is changed it needs to be re-applied to any current auctions, this means that shortening it could trigger an auction ending
 
 ### Opening auctions (at creation of the market)
@@ -39,7 +40,7 @@ The frequent batch auction mode is a trading mode in perpetual auction, meaning 
 
 e.g: auctions could be set to last 10 minutes, then every 10 minutes the book would uncross, potentially generating trades.
 
-Note that FBAs will still have an opening auction (which must have a duration equal to or greater than the minimum batch auction duration, as well as meeting the minimum opening auction duration. Price and liquidity monitoring will be able to override the trading mode and push the market into longer auctions to resolve the triggering event.
+Note that FBAs will still have an opening auction (which must have a duration equal to or greater than the minimum batch auction duration, as well as meeting the minimum opening auction duration. Price monitoring will be able to override the trading mode and push the market into longer auctions to resolve the triggering event.
 
 #### Duration of frequent batch auctions
 
@@ -97,7 +98,7 @@ Auction periods may be ended with an uncrossing and the creation of any resultin
 - the auction call period end time being reached (if such a time is set); or
 - other functionality (related to the type of auction period) that triggers the end of auction.
 
-Auction periods do not end if the resulting state would immediately cause another auction to occur. Instead the current auction gets extended. For example, if a liquidity monitoring auction would be triggered at the end of an opening auction, then the opening auction continues and the *auction extension trigger* field in the [market data API](./0021-MDAT-market_data_spec.md) is updated to account for the fact that the opening auction has been extended due to insufficient liquidity.
+Auction periods do not end if the resulting state would immediately cause another auction to occur. Instead the current auction gets extended.
 
 ### Ending when a market is going to enter Trading Terminated status
 
@@ -109,7 +110,7 @@ Functionality that either triggers the end of an auction or delays the auction e
 
 - opening auction (market creation): [governance](./0028-GOVE-governance.md)
 - [price monitoring](./0032-PRIM-price_monitoring.md)
-- [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)
+
 
 ## First/Naive implementation
 
