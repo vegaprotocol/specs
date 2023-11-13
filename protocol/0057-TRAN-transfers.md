@@ -184,7 +184,7 @@ At the end of epoch `k`:
 
 1. update `c <- c + all_trading_fees_for_trades_involved_in`, where `all_trading_fees_for_trades_involved_in` are the cumulated trading fees paid by the aggressive party (taker fees) but also cumulated (with a +sign) the trading fees result from any trade in which the party was involved as the passive party (i.e. their limit order got lifted).
 
-1. if `c` is less than `M x quantum` (where quantum is the asset quantum) then set `c <- 0`.  
+1. if `c` is less than `M x quantum` (where quantum is the asset quantum) then set `c <- 0`.
 
 We need appropriate APIs to enable the frontend to display the amount eligible for fee-free transfers / correctly display the fee on any transfer a party is proposing.
 
@@ -270,13 +270,13 @@ message CancelTransfer {
   - The transfer fee discount is correctly applied with network parameter`transfer.feeDiscountDecay`(<a name="0057-TRAN-014" href="#0057-TRAN-014">0057-TRAN-014</a>)
   - The fee-free transfer amount is accessible while API (<a name="0057-TRAN-017" href="#0057-TRAN-017">0057-TRAN-017</a>)
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed (when `transfer amount * transfer.fee.factor > transfer.fee.maxQuantumAmount * quantum`). (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
-  - The fee cost is correctly calculated using the network parameter 
+  - The fee cost is correctly calculated using the network parameter
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
   - The transfer fee discount is correctly applied with network parameter`transfer.feeDiscountDecay`(<a name="0057-TRAN-015" href="#0057-TRAN-015">0057-TRAN-015</a>)
   - The fee-free transfer amount is accessible while API (<a name="0057-TRAN-018" href="#0057-TRAN-018">0057-TRAN-018</a>)
-  - When transfer fee discount amount is less than `M x quantum` (M is network parameter `transfer.feeDiscountMinimumTrackedAmount`), then no tranfer fee discount will be applied (<a name="0057-TRAN-016" href="#0057-TRAN-016">0057-TRAN-016</a>)
+  - When transfer fee discount amount is less than `M x quantum` (M is network parameter `transfer.feeDiscountMinimumTrackedAmount`), then no transfer fee discount will be applied (<a name="0057-TRAN-016" href="#0057-TRAN-016">0057-TRAN-016</a>)
 - As a user I can do a transfer from a vested account to a general account held by the same key without incurring any fees (<a name="0057-TRAN-066" href="#0057-TRAN-066">0057-TRAN-066</a>).
 - If a user transfers funds from their vested account to any valid account other than their general account for that asset, they will incur fees. This includes accounts not owned by the user. (<a name="0057-TRAN-069" href="#0057-TRAN-069">0057-TRAN-069</a>).
 - As a user, I **can not** transfer a quantum amount less than `transfer.minTransferQuantumAmount` from any of the valid accounts excluding a vested account (<a name="0057-TRAN-067" href="#0057-TRAN-067">0057-TRAN-067</a>).
