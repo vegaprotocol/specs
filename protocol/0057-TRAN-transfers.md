@@ -246,6 +246,9 @@ message CancelTransfer {
 | `transfer.minTransferQuantumMultiple`      | String (decimal) | greater than or equal to `0`| `"0.1"`        | This, when multiplied by `quantum` (which is specified per asset) determines the minimum transfer amount |
 | `transfer.fee.factor`                      | String (decimal) | in `[0.0,1.0]`              | `"0.001"`      | The proportion of the transfer charged as a fee  |
 | `transfer.fee.maxQuantumAmount`            | String (decimal) | greater than or equal to `0`  | `"100"`      | The cap of the transfer fee  |
+| `transfer.feeDiscountMinimumTrackedAmount` | String (decimal) | greater than or equal to `0`  | `"0.001"`      | The lower bound of transfer fee tracked |
+| `transfer.feeDiscountDecay` | String (decimal) | greater than or equal to `0` and strictly less than `1` | `"0.5"`      | The speed of cumulated trading fees decay for the purpose of being used to do transfer-fee-free transfers |
+
 
 ## Acceptance criteria
 
@@ -264,11 +267,14 @@ message CancelTransfer {
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
+  - The transfer fee discount is correctly applied with network parameter`transfer.feeDiscountDecay`(<a name="0057-TRAN-014" href="#0057-TRAN-014">0057-TRAN-014</a>)
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed (when `transfer amount * transfer.fee.factor > transfer.fee.maxQuantumAmount * quantum`). (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
-  - The fee cost is correctly calculated using the network parameter `transfer.fee.Maxfactor`
+  - The fee cost is correctly calculated using the network parameter 
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool
+  - The transfer fee discount is correctly applied with network parameter`transfer.feeDiscountDecay`(<a name="0057-TRAN-015" href="#0057-TRAN-015">0057-TRAN-015</a>)
+  - When transfer fee discount amount is less than `M x quantum` (M is network parameter `transfer.feeDiscountMinimumTrackedAmount`), then no tranfer fee discount will be applied (<a name="0057-TRAN-016" href="#0057-TRAN-016">0057-TRAN-016</a>)
 - As a user I can do a transfer from a vested account to a general account held by the same key without incurring any fees (<a name="0057-TRAN-066" href="#0057-TRAN-066">0057-TRAN-066</a>).
 - If a user transfers funds from their vested account to any valid account other than their general account for that asset, they will incur fees. This includes accounts not owned by the user. (<a name="0057-TRAN-069" href="#0057-TRAN-069">0057-TRAN-069</a>).
 - As a user, I **can not** transfer a quantum amount less than `transfer.minTransferQuantumAmount` from any of the valid accounts excluding a vested account (<a name="0057-TRAN-067" href="#0057-TRAN-067">0057-TRAN-067</a>).
@@ -280,7 +286,6 @@ message CancelTransfer {
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
 - A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-059" href="#0057-TRAN-059">0057-TRAN-059</a>)
 - As a user, I can accumulate the fees I collect over an epoch. When I initiate a transfer that incurs a transfer fee, I have the ability to view the amount that is exempt from transfer fees through the API. (<a name="0057-TRAN-012" href="#0057-TRAN-012">0057-TRAN-012</a>)
-- By setting `transfer.feeDiscountNumOfEpoch` to 3 epochs, you establish a time window spanning 3 consecutive epochs. During these 3 epochs, if you place market orders and subsequently initiate a transfer incurring a transfer fee, the 'free transfer amount' is calculated based on the cumulative fees collected over those same 3 epochs.(<a name="0057-TRAN-013" href="#0057-TRAN-013">0057-TRAN-013</a>)
 
 ### Recurring transfer tests
 
