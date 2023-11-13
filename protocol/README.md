@@ -29,7 +29,6 @@
 ## Market protections
 
 - [Price monitoring](./0032-PRIM-price_monitoring.md)
-- [Liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)
 
 ## Liquidity
 
