@@ -3,7 +3,7 @@
 There are parameters within Vega that influence the behaviour of the system:
 
 - some are set in genesis block but fixed once network is running,
-- while others are changeable by on-chain [governance](../protocol/0028-GOVE-governance.md) but initialised to genesis values during network launch. For more info see [network paramters](../protocol/0054-NETP-network_parameters.md)
+- while others are changeable by on-chain [governance](../protocol/0028-GOVE-governance.md) but initialised to genesis values during network launch. For more info see [network parameters](../protocol/0054-NETP-network_parameters.md)
 
 On [Sweetwater (Restricted Mainnet) Release](https://github.com/orgs/vegaprotocol/projects/114) Vega Team wishes to control how certain parameters are initialised while letting validators change others as they see fit.
 As the process of decentralisation progresses Vega Team the number of such parameters will be reduced.
@@ -22,8 +22,8 @@ The values to be specified as a PR against ??? repo.
 
 | Name                                                        | Comment                                                            | Suggested value (optional) |
 |-------------------------------------------------------------|:------------------------------------------------------------------:| :-------------------------:|
-| `min number of validators` (not in sweetwater)              | Not in [network paramters](../protocol/0054-NETP-network_parameters.md) |                            |
-| `validator min balance`                                     | Not in [network paramters](../protocol/0054-NETP-network_parameters.md) | 3000 VEGA                  |
+| `min number of validators` (not in sweetwater)              | Not in [network parameters](../protocol/0054-NETP-network_parameters.md) |                            |
+| `validator min balance`                                     | Not in [network parameters](../protocol/0054-NETP-network_parameters.md) | 3000 VEGA                  |
 | `governance.proposal.updateNetParam.requiredMajority`       | So that what is set in genesis cannot be changed too easily        | 0.5                        |
 | `governance.proposal.updateNetParam.requiredParticipation`  | So that what is set in genesis cannot be changed too easily        | 0.5                        |
 | `validators.epoch.length`                                   | Rewards currently make an assumption on epoch length, best fix it. | 1 day                      |
