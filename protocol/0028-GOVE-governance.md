@@ -456,16 +456,16 @@ Notes:
 ## Batch Proposals
 
 A `BatchProposalSubmission` is a top-level proposal type (living at the same level in a `Transaction` object as a standard `ProposalSubmission`) which allows grouping of several individual proposals into a single proposal, ensuring that all changes will pass or fail governance voting together.
-The batch proposal is a wrapper containing the same `reference` and `rationale` fields as a standard `ProposalSubmission` alongside a repeated list of `ProposalSubmission`s.
-The individual submissions keep their own rationale entries.
+The batch proposal is a wrapper containing one `rationale` (i.e. `title` and `description`) field as a standard `ProposalSubmission`, one `closingTimestamp` field and a list of `ProposalSubmission`s which omit certain fields.
+The individual `ProposalSubmission` have no `rationale` entry (i.e. no `title` and `description`).
+The individual `ProposalSubmission` have no `closingTimestamp` entry.
 Any governance proposal can be included in a batch _except_ proposals to add new assets.
 For avoidance of doubt: asset _change_ proposals can be included.
 
 Validation should be applied by the protocol when accepting such a transaction to verify that all proposals within the batch meet their own minimum voting periods (if not transaction is rejected).
-Additionally, the closing time of each proposal's voting period must be identical to ensure that a single voting period can be run to determine the result of all.
-The enactment timestamp, however, should be customisable and can be different for each proposal within the batch, as long as the minimum enactment time of each individual proposal within the batch is respected.
+The enactment timestamp, is customisable and can be different for each proposal within the batch, as long as the minimum enactment time of each individual proposal within the batch is respected and as long as every `enactmentTimestamp` is greater than or equal to `closingTimestamp` of the entire batch.
 
-Once submitted, a single voting period should be run in which participants may place a single vote to approve/disapprove of the entire batch. It _must_ not be possible to vote for components in the batch separately.
+Once submitted, a single voting period should be run in which participants may place a single vote to approve/disapprove of the entire batch. It _must_ _not_ be possible to vote for components in the batch separately.
 Once the closing timestamp is reached each individual proposal within the batch is evaluated against the votes received.
 If all individual proposals would pass (given the votes received, based on their individual rules on participation, majority, LP-ELS voting etc.) then the entire batch passes.
 If even one proposal within the batch would fail then the entire batch fails.
