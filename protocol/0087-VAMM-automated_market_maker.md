@@ -45,11 +45,12 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
 {
   commitment,
   market,
-  slippage_tolerance,
+  slippage_tolerance_percentage,
   concentrated_liquidity_params: {
     base_price,
     lower_price,
-    upper_price
+    upper_price,
+    margin_ratio_at_bounds,
   }
 }
 ```
@@ -64,8 +65,11 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Upper Price**: The maximum price bound for market making. Prices between the `base price` and this price will have volume placed, with no orders above this price. This is optional and if not supplied no volume will be placed above `base price`. At these prices the market maker will always be short
 - **Lower Price**: The minimum price bound for market making. Prices between the `base price` and this will have volume placed, with no orders below this price. This is optional and if not supplied no volume will be placed below `base price`. At these prices the market maker will always be long
 - **Commitment**: This is the initial volume of funds to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail.
+- **Margin Ratio at Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this we must compare the commitment with what leverage that might allow at the price bounds. One way to do this is to assume we will use the value at which `commitment == initial margin` for the position at that price, however users may wish to take a more conservative approach. Using this parameter allows them to set a value such that `position = commitment / margin ratio`, however with the restriction that commitment must still be `>= initial margin`. This parameter should be optional.
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
+
+Additionally, as all commitments require some processing overhead on the core, there should be a network parameter `market.amm.minCommitmentQuantum` which defines a minimum quantum for commitment. Any `create` or `amend` transaction where `commitment / asset quantum < market.amm.minCommitmentQuantum` should be rejected.
 
 ### Creation/Amendment Process
 
@@ -92,13 +96,21 @@ The AMM position can be thought of as two separate liquidity provision curves, o
 
 One outcome of this is that the curve between `base price` and `lower price` is marginally easier to conceptualise directly from our parameters. At the lowest price side of a curve (`lower price` in this case) the market should be fully in the market contract position, whilst at the highest price (`base price` in this case) it should be fully sold out into cash. This is exactly the formulation we have, where at `base price` we desire zero position and a cash amount of `commitment amount`. However given that there is likely to be some degree of leverage allowed on the market this is not directly the amount of funds we want to calculate using. An AMM with a `commitment amount` of `X` is ultimately defined by the requirement of using `X` in margin at the outer price bounds, so we need to work backwards from that requirement to determine the theoretical cash value. We then calculate the two ranges separately to determine two different `Liquidity` values for the two ranges, which is a value used to later define volumes required to move the price a specified value.
 
-We can calculate that, in the worst case, the dollar value at which all margin is utilised will be
+We can calculate a scaling factor that is the smaller of a fraction specified in the commitment (`margin_ratio_at_bounds`) or the market's worst case margin. If `margin_ratio_at_bounds` is not set the other value is taken automatically
 
 $$
-v_{worst} = \frac{c}{ (f_s + f_l) \cdotp f_i} ,
+r_f = \min(\frac{1}{m_r}, \frac{1}{ (f_s + f_l) \cdotp f_i}) ,
 $$
 
-where $c$ is the commitment amount, $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor.
+where $m_r$ is the value `margin_ratio_at_bounds`, $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor.
+
+The dollar value at which all margin is utilised will then be
+
+$$
+v_{worst} = c \cdotp r_f
+$$
+
+where $c$ is the commitment amount and $r_f$ is as above.
 
 Calculating this separately for the upper and lower ranges (using the `short` factor for the upper range and the `long` factor for the lower range) we can calculate the liquidity value `L` for each range with the formula
 
@@ -115,17 +127,17 @@ From here the first step is calculating a `fair` price, which can be done by uti
   1. First, identify the current position, `p`. If it is `0` then the current fair price is the base price, and we are done.
   1. If `P > 0`:
      1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_l}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_l$ is the `base price`.
-     1. The virtual `y` of the position can be calculated as $y_v = \frac{c_c}{ (f_s + f_l) \cdotp f_i} + L \cdotp \sqrt{p_l}$ where $c_c$ is the current total dollar balance of the AMM across margin and general accounts and `p_l` is the `lower price`. Other variables are as defined above.
+     1. The virtual `y` of the position can be calculated as $y_v = c_c \cdotp r_f + L \cdotp \sqrt{p_l}$ where $c_c$ is the current total dollar balance of the AMM across margin and general accounts and `p_l` is the `lower price`. Other variables are as defined above.
   1. If `P < 0`:
-     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{ p_u \cdotp (f_s + f_l) \cdotp f_i} + \frac{L}{\sqrt{p_l}}$ where $p_l$ is the `base price` and `p_u` is the `upper price`.
-     1. The virtual `y` can be calculated as $v_y = abs(P) * p_e + L * p_l$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price` 
-  1. Now the `fair` price is simply `v_y / v_x` 
+     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{p_u} \cdotp r_f + \frac{L}{\sqrt{p_l}}$ where $p_l$ is the `base price` and `p_u` is the `upper price`.
+     2. The virtual `y` can be calculated as $v_y = abs(P) \cdotp p_e + L \cdotp p_l$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price` 
+  2. Now the `fair` price is simply $\frac{y_v}{x_v}$ 
 
 #### Volume between two prices
 
 For the second interface we need to calculate the volume which would be posted to the book between two price levels. In order to calculate this for an AMM we are ultimately asking the question "what volume of swap would cause the fair price to move from price A to price B?"
 
-To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `lower price`) and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
+To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `base price`) and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
 
 We then need to calculate the implied position at `starting price` and `ending price` and return the difference. 
 
@@ -148,8 +160,8 @@ For all incoming active orders, the matching process will coordinate between the
      1. Check all active AMMs, querying their quote price API with the smallest trade unit on the market in the direction of trading (if the incoming order is a `buy`, query the AMM's `ask`, or vice versa). Retain those where this price < `outer price`
      1. Within these, select either the minimum `upper price` (if the incoming order is a buy) or the maximum `lower price` (if the incoming order is a sell), call this `amm bound price`. This is the range where all of these AMMs are active. Finally, select either the minimum (for a buy) or maximum (for a sell) between `amm bound price` and `outer price`. From this form an interval `current price, outer price`. 
      1. Now, for each AMM within this range, calculate the volume of trading required to move each from the `current price` to the `outer price`. Call the sum of this volume `total volume`.
-     1. If `remaining volume <= total volume` split trades between the AMMs according to their proportional contribution to `total volume` (e.g. larger liquidity receives a higher proportion of the trade). This ensures their mid prices will move equally (TODO: Is trade splitting more involved than this?).
-     1. If `remaining volume > total volume` execute all trades to move the respective AMMs to their boundary at `outer price`. Now, return to step `1` with `current price = outer price`, checking first for on-book liquidity at the new level then following this process again until all order volume is traded or liquidity exhausted.  
+     2. If `remaining volume <= total volume` split trades between the AMMs according to their proportional contribution to `total volume` (e.g. larger liquidity receives a higher proportion of the trade). This ensures their mid prices will move equally. Each of these trades should count as a single aggressive trade with the given AMM and pay fees accordingly. 
+     3. If `remaining volume > total volume` execute all trades to move the respective AMMs to their boundary at `outer price`. Now, return to step `1` with `current price = outer price`, checking first for on-book liquidity at the new level then following this process again until all order volume is traded or liquidity exhausted.  
 
 ## Determining Liquidity Contribution
 
