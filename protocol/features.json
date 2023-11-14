@@ -122,7 +122,16 @@
   },
   "Batch governance proposals": {
     "milestone": "palazzo",
-    "acs": []
+    "acs": [
+      "0028-GOVE-067",
+      "0028-GOVE-068",
+      "0028-GOVE-145",
+      "0028-GOVE-146",
+      "0028-GOVE-148",
+      "0028-GOVE-149",
+      "0028-GOVE-160",
+      "0028-GOVE-161"
+    ]
   },
   "Transfer fee cap": {
     "milestone": "palazzo",
