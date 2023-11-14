@@ -4,7 +4,6 @@
 
 - All orders of "distressed traders" in cross-margin mode are cancelled (<a name="0012-POSR-001" href="#0012-POSR-001">0012-POSR-001</a>)
 - Open positions of distressed traders are closed immediately (<a name="0012-POSR-002" href="#0012-POSR-002">0012-POSR-002</a>)
-- Mark Price is never updated during position resolution (<a name="0012-POSR-004" href="#0012-POSR-004">0012-POSR-004</a>)
 - Non-distressed traders who trade with the network because their open orders are hit during the networks' trade have their positions settled correctly. (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
 - When a distressed party has a [staking account](./0013-ACCT-accounts.md) with the same currency as the settlement currency of the market where it's distressed the staking account is NOT used in margin search and liquidation. (<a name="0012-POSR-006" href="#0012-POSR-006">0012-POSR-006</a>)
 - When a party is distressed and gets closed out the network's position gets modified to reflect that it's now the network party that holds that volume. (<a name="0012-POSR-009" href="#0012-POSR-009">0012-POSR-009</a>)
@@ -26,6 +25,10 @@
 - It is possible to check the network party's open volume and margin level in any market via the API. (<a name="0012-POSR-014" href="#0012-POSR-014">0012-POSR-014</a>)
 
 - It is possible to check the time of the next liquidation trade attempt in any market via the API. (<a name="0012-POSR-015" href="#0012-POSR-015">0012-POSR-015</a>)
+
+- When the network places an order to reduce its position such that resulting trades would activate the price monitoring trigger the order gets cancelled, network's position remains unchanged and no further orders get placed by the network in this time instance. (<a name="0012-POSR-016" href="#0012-POSR-016">0012-POSR-016</a>)
+
+- When the network places an order which trades successfully and there are no other trades within the mark-to-market window then then when the window elapses the price from network's last trade is used as the mark price  (<a name="0012-POSR-017" href="#0012-POSR-017">0012-POSR-017</a>)
 
 ## Summary
 
@@ -84,6 +87,8 @@ Note that setting:
 is closest to reproducing the legacy setup where party would get liquidated immediately (with a difference that closeout now happens immediately even if there's not enough volume on the book to fully absorb it) hence the above values should be used when migrating existing markets to a new version. For all new markets these values should be specified explicitly.
 
 Different liquidation strategies with different parameters might be proposed in the future, hence implementation should allow for easy substitution of strategies.
+
+Note that network's trade is treated as any other trade in a sense that its price can be used as the mark price.
 
 API requirements:
 
