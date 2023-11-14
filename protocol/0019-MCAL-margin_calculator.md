@@ -94,20 +94,20 @@
     sell 10 @ 100 100 
     ```
 
-    then the maintenance margin (under cross-margin mode) for the party is `min(1 x (100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`, and margin account should have initial margin level which is `5565 x 1.5 = 8348`. 
+    then the maintenance margin (under cross-margin mode) for the party is `min(1 x (100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`, and margin account should have initial margin level which is `5565 x 1.5 = 8348`.
     when switching to isolated-margin mode and the `margin factor short = 0.3`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.3 = 17250`, and margin account should be updated to `17250`. (<a name="0019-MCAL-031" href="#0019-MCAL-031">0019-MCAL-031</a>)
 
     when switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected. (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
 
     when switching to isolated-margin mode and the `margin factor short = 0.3`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.3 = 17250`, and margin account should be updated to `17250`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
 
-- When the party place a new short order of `1` with price `15000`, and the market is in continouse trading.
+- When the party place a new short order of `1` with price `15000`, and the market is in continous trading.
 
     The margin account should have additional amount `average entry price x current position x new margin factor = 59524 x 1 x 0.3 = 17857` added if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
 
     The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-035" href="#0019-MCAL-035">0019-MCAL-035</a>)
 
-- When the party place a new short order of `1` with price `45000`, and the market is in continouse trading.
+- When the party place a new short order of `1` with price `45000`, and the market is in continous trading.
 
     The margin account should have additional amount `limit price * size * margin factor = 45000 x 1 x 0.3 = 13500` added if the party has enough asset in the general account(<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
 
@@ -133,7 +133,7 @@
 
 - A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-047" href="#0019-MCAL-047">0019-MCAL-047</a>)
 
-- A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-047" href="#0019-MCAL-048">0019-MCAL-048</a>)
+- A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
 
 - For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
@@ -173,7 +173,7 @@
       - `clamp_upper_bound*s_twap < max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap)`
       - `funding payment = f_twap - s_twap + clamp_upper_bound*s_twap = f_twap + s_twap * (clamp_upper_bound - 1)`.
       - Then with `s_twap = 1600`, `clamp_upper_bound = 0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (0.05 - 1) = 1590 - 1520 = 70`
-      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * 70 * 1 = 5600` (<a name="0019-MCAL-027" href="#0019-MCAL-027">0019-MCAL-027</a>)
+      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * 70 * 1 = 5600` (<a name="0019-MCAL-058" href="#0019-MCAL-058">0019-MCAL-058</a>)
       - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, 70 * -1) = 5565`(<a name="0019-MCAL-054" href="#0019-MCAL-054">0019-MCAL-054</a>)
 
     - If instead
