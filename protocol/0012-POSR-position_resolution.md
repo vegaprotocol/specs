@@ -28,7 +28,9 @@
 
 - When the network places an order to reduce its position such that resulting trades would activate the price monitoring trigger the order gets cancelled, network's position remains unchanged and no further orders get placed by the network in this time instance. (<a name="0012-POSR-016" href="#0012-POSR-016">0012-POSR-016</a>)
 
-- When the network places an order which trades successfully and there are no other trades within the mark-to-market window then then when the window elapses the price from network's last trade is used as the mark price  (<a name="0012-POSR-017" href="#0012-POSR-017">0012-POSR-017</a>)
+- When the network places an order which trades successfully and there are no other trades within the mark-to-market window then then when the window elapses the price from network's last trade is used as the mark price (<a name="0012-POSR-017" href="#0012-POSR-017">0012-POSR-017</a>)
+
+- Network initiated trades get registered within price monitoring engine like any other trades (<a name="0012-POSR-018" href="#0012-POSR-018">0012-POSR-018</a>)
 
 ## Summary
 
