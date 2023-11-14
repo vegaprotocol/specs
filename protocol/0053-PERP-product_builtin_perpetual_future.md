@@ -183,7 +183,7 @@ If `rate_upper_bound` is specified set:
 funding_payment = min(rate_upper_bound*s_twap, funding_payment)
 ```
 
-Please note that scaling should happen strictly before any of the bounds are applied, i.e. if all 3 paramters are specified then the resulting funding rate is guaranteed to fall within the specified bounds irrespective of how big the scaling factor may be.
+Please note that scaling should happen strictly before any of the bounds are applied, i.e. if all 3 parameters are specified then the resulting funding rate is guaranteed to fall within the specified bounds irrespective of how big the scaling factor may be.
 
 #### Funding rate calculation
 
