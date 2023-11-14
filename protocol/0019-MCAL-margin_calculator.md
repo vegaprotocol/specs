@@ -183,6 +183,12 @@ $$
 \text{margin to remove} = \text{theoretical account balance} \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
 $$
 
+Conceretely, this should resolve to:
+
+$$
+\text{margin to remove} = (\text{balance before}  + \text{position before} \cdot (\text{new trade VWAP} -  \text{mark price})) \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
+$$
+
 Note: This requires a calculation of the position's margin at trade time.
 
 ### Changing Sides
