@@ -216,6 +216,7 @@ pseudorandom
 pubkey
 quant
 rata
+rebased
 recollateralise
 ReferralSet
 reimplemented
