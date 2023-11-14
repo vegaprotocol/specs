@@ -693,7 +693,7 @@ It is NOT possible to submit a governance proposal where the source account is t
 
 - A batch proposal containing one or more component submissions mixing different proposal types can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-146" href="#0028-GOVE-146">0028-GOVE-146</a>)
 
-- A batch proposal submitted with component submissions having different closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
+- A batch proposal submitted with component submissions having different one or more enactment timestamps lower than the closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
 
 - A batch proposal submitted with component submissions with different enactment timestamps will be accepted and move to voting.  (<a name="0028-GOVE-149" href="#0028-GOVE-149">0028-GOVE-149</a>)
    1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
