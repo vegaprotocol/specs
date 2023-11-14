@@ -714,6 +714,11 @@ On top of that signed bundles for changing withdrawal delay and threshold on the
 - A batch proposal can be submitted changing the same network parameter twice to two different values with two different enactment timestamps.
 The voting to approve the batch happens, the batch passes, both changes are observed at the desired time. (<a name="0028-GOVE-161" href="#0028-GOVE-161">0028-GOVE-161</a>)
 
+A batch proposal submission must not contain a batch proposal submission (<a name="0028-GOVE-162" href="#0028-GOVE-162">0028-GOVE-162</a>)
+
+A vote cannot be submitted for an invidual component in a batch (<a name="0028-GOVE-163" href="#0028-GOVE-163">0028-GOVE-163</a>)
+
+When a batch contains two proposals with identical enactment timestamps, they are executed in the order the appear in the batch. For example two network parameter update proposals in the same batch with the same enactment timestamp will both be executed, in the order specified. (<a name="0028-GOVE-164" href="#0028-GOVE-164">0028-GOVE-164</a>)
 
 ##### Network History
 
