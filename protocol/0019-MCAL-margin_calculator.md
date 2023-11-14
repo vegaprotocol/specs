@@ -177,7 +177,9 @@ NB: In implementation, for any volume that trades immediately on entry, the addi
 
 ### Reducing Position
 
-When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is determined by the fraction of the position which is being closed. However, this fraction should also take into account that the entire position's margin may be due to change since the current trading price may have diverged from the last mark price update. As such the margin released should be calculated by first calculating what the `theoretical account balance` of the margin account would be if the entire pre-existing position (i.e. the position prior to any reduction) were margined at the VWAP of the executed trade, then taking the proportion of that corresponding to the proportion of the position closed.
+When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is determined by the fraction of the position which is being closed. If the entire position is being closed (either as a result of changing sides as below or just moving to `0`) then the entirety of the margin balance will be moved back to the general account.
+
+However, if only a fraction is being closed then this fraction should also take into account that the entire position's margin may be due to change, since the current trading price may have diverged from the last mark price update. As such the margin released should be calculated by first calculating what the `theoretical account balance` of the margin account would be if the entire pre-existing position (i.e. the position prior to any reduction) were margined at the VWAP of the executed trade, then taking the proportion of that corresponding to the proportion of the position closed.
 
 $$
 \text{margin to remove} = \text{theoretical account balance} \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
