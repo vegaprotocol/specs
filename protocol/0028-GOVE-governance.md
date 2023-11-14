@@ -458,7 +458,7 @@ Notes:
 A `BatchProposalSubmission` is a top-level proposal type (living at the same level in a `Transaction` object as a standard `ProposalSubmission`) which allows grouping of several individual proposals into a single proposal, ensuring that all changes will pass or fail governance voting together.
 The batch proposal is a wrapper containing the same `reference` and `rationale` fields as a standard `ProposalSubmission` alongside a repeated list of `ProposalSubmission`s.
 The individual submissions keep their own rationale entries.
-Any governance proposal can be included in a batch *except* proposals to add new assets.
+Any governance proposal can be included in a batch _except_ proposals to add new assets.
 For avoidance of doubt: asset _change_ proposals can be included.
 
 Validation should be applied by the protocol when accepting such a transaction to verify that all proposals within the batch meet their own minimum voting periods (if not transaction is rejected).
