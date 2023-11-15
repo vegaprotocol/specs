@@ -1,34 +1,26 @@
 {
   "Iceberg Orders": {
-    "milestone": "cosmic",
+    "milestone": "cosmic-carryover",
     "acs": [
       "0014-ORDT-069"
     ]
   },
   "Successor Markets": {
-    "milestone": "cosmic",
+    "milestone": "cosmic-carryover",
     "acs": [
       "0001-MKTF-008",
       "0081-SUCM-035"
     ]
   },
   "Ethereum oracles": {
-    "milestone": "cosmic",
+    "milestone": "cosmic-carryover",
     "acs": [
       "0082-ETHD-035",
       "0082-ETHD-041"
     ]
   },
-  "Referral program": {
-    "milestone": "cosmic",
-    "acs": [
-      "0062-SPAM-033",
-      "0062-SPAM-035",
-      "0062-SPAM-037"
-    ]
-  },
   "Stop Orders": {
-    "milestone": "cosmic",
+    "milestone": "cosmic-carryover",
     "acs": [
       "0079-TGAP-004",
       "0079-TGAP-005"
