@@ -51,6 +51,13 @@ We can also imagine that an auction period could come to an end once a give numb
 
 Once the auction period finishes, vega needs to figure out the best price for the order range in the book which can be uncrossed. The first stage in this is to calculate the Volume Maximising Price Range - the range of prices (which will be a contiguous range in an unconstrained order book) at which the highest total quantity of trades can occur.
 
+For including [AMM](./0087-VAMM-automated_market_maker.md) configurations in the auction uncrossing process and volume maximising price range, first each active AMM on the market should be queried for their best bid and ask prices. A range should then be created between:
+
+- The minimum ask price across all AMMs and the minimum ask price on the book
+- The maximum bid price across all AMMs and the maximum bid price on the book
+
+Once this (min ask, max bid) range is known, the AMMs should be queried for their orders at each price level within this range, first starting at the lower end and asking each for their successive ask at increasing price levels, then from the upper asking for bids at successive price levels. For the first price at each end of the range this should be compared with the AMM's current indicative price. If the range is narrowed the volumes should be re-checked. 
+
 Initially we will use the mid price within this range. For example, if the volume maximising range is 98-102, we would price all trades in the uncrossing at 100 ((minimum price of range+maximum price of range)/2). In future there will be other options, which will be selectable via a network parameter specified at market creation, and changeable through governance. These other options are not yet specified.
 
 ## APIs related to auctions

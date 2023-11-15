@@ -65,7 +65,9 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Upper Price**: The maximum price bound for market making. Prices between the `base price` and this price will have volume placed, with no orders above this price. This is optional and if not supplied no volume will be placed above `base price`. At these prices the market maker will always be short
 - **Lower Price**: The minimum price bound for market making. Prices between the `base price` and this will have volume placed, with no orders below this price. This is optional and if not supplied no volume will be placed below `base price`. At these prices the market maker will always be long
 - **Commitment**: This is the initial volume of funds to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail.
-- **Margin Ratio at Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this we must compare the commitment with what leverage that might allow at the price bounds. One way to do this is to assume we will use the value at which `commitment == initial margin` for the position at that price, however users may wish to take a more conservative approach. Using this parameter allows them to set a value such that `position = commitment / margin ratio`, however with the restriction that commitment must still be `>= initial margin`. This parameter should be optional.
+- **Margin Ratio at Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this we must compare the commitment with what leverage that might allow at the price bounds. One way to do this is to assume we will use the value at which `commitment == initial margin` for the position at that price, however users may wish to take a more conservative approach. Using this parameter allows them to set a value such that `position = commitment / margin ratio at bound`, however with the restriction that commitment must still be `>= initial margin`. This parameter should be optional. There is a separate parameter for each potential bound.
+  - **Upper Bound Ratio**
+  - **Lower Bound Ratio**
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
@@ -86,6 +88,10 @@ A `Concentrated Liquidity` AMM has an inherent linkage between position and impl
 
 A similar process is followed in the case of amendments. Changes to the `upper`, `lower` or `base` price, or the `commitment amount` will affect the position implied at a certain price, meaning that the market maker may need to trade to update it's position in line with this. These trades should be calculated as in the process for creation above after the relevant bounds have been changed, and comparing `fair price` from the pool before and after the changes, rather than `mark price`.
 
+When changing `commitment amount`, an increase can be handled trivially, the general account is first topped up by the requisite amount (note that the change should be considered vs the current balance of margin + general rather than the original commitment amount) and then the balancing trade is attempted. If this trade fails then the amount should be moved back to the main key's general account and the transaction stopped.
+
+If reducing the `commitment amount` then the position once the funds are reduced should be calculated, then an attempted balancing trade with relevant slippage limits made. If the trade fails the transaction is stopped. If the trade succeeds then the funds may now be released. These funds should be first taken from the general account, and then from the margin account.
+
 ### Determining Volumes and Prices
 
 Although AMM prices are not placed onto the book as orders it is necessary to be able to be able to quote prices for a given volume, or know what trading volume would move the fair price to a certain level. To do this we need to 
@@ -102,7 +108,7 @@ $$
 r_f = \min(\frac{1}{m_r}, \frac{1}{ (f_s + f_l) \cdotp f_i}) ,
 $$
 
-where $m_r$ is the value `margin_ratio_at_bounds`, $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor.
+where $m_r$ is the sided value `margin_ratio_at_bounds` (`upper ratio` if the upper band is being considered and `lower ratio` if the lower band is), $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor.
 
 The dollar value at which all margin is utilised will then be
 
