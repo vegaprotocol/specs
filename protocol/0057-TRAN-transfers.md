@@ -301,7 +301,6 @@ message CancelTransfer {
 - A delayed one-off transfer cannot be cancelled once set-up. (<a name="0057-TRAN-010" href="#0057-TRAN-010">0057-TRAN-010</a>)
 - A one-off transfer `to` a non-`000000000...0`, and an account type that a party cannot have, must be rejected (<a name="0057-TRAN-059" href="#0057-TRAN-059">0057-TRAN-059</a>)
 - As a user, I can accumulate the fees I collect over an epoch. When I initiate a transfer that incurs a transfer fee, I have the ability to view the amount that is exempt from transfer fees through the API. (<a name="0057-TRAN-012" href="#0057-TRAN-012">0057-TRAN-012</a>)
-- By setting `transfer.feeDiscountNumOfEpoch` to 3 epochs, you establish a time window spanning 3 consecutive epochs. During these 3 epochs, if you place market orders and subsequently initiate a transfer incurring a transfer fee, the 'free transfer amount' is calculated based on the cumulative fees collected over those same 3 epochs.(<a name="0057-TRAN-013" href="#0057-TRAN-013">0057-TRAN-013</a>)
 
 ### Recurring transfer tests
 
