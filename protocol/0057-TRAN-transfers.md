@@ -267,14 +267,14 @@ message CancelTransfer {
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool.
   - The transfer fee discount is correctly applied with network parameter`transfer.feeDiscountDecay`(<a name="0057-TRAN-014" href="#0057-TRAN-014">0057-TRAN-014</a>)
-  - The fee-free transfer amount is accessible while API (<a name="0057-TRAN-017" href="#0057-TRAN-017">0057-TRAN-017</a>)
+  - The fee-free transfer amount is accessible through the API (<a name="0057-TRAN-017" href="#0057-TRAN-017">0057-TRAN-017</a>)
 - As a user I can do a transfer from any of the valid accounts (I control them and they're a valid source), and fees are taken from the source account when the transfer is executed (when `transfer amount x transfer.fee.factor > transfer.fee.maxQuantumAmount x quantum`). (<a name="0057-TRAN-011" href="#0057-TRAN-011">0057-TRAN-011</a>)
   - The fee cost is correctly calculated using the network parameters listed above.
   - If I have enough funds to pay transfer and fees, the transfer happens.
   - If I do not have enough funds to pay transfer and fees, the transfer is cancelled.
   - The fees are being paid into the infrastructure pool.
   - The transfer fee discount is correctly applied with network parameter `transfer.feeDiscountDecay` (<a name="0057-TRAN-015" href="#0057-TRAN-015">0057-TRAN-015</a>)
-  - The fee-free transfer amount is accessible while API (<a name="0057-TRAN-018" href="#0057-TRAN-018">0057-TRAN-018</a>)
+  - The fee-free transfer amount is accessible through the API (<a name="0057-TRAN-018" href="#0057-TRAN-018">0057-TRAN-018</a>)
 - when a party makes a transfer and fee-free discount is `c = 0`, then the full transfer fee amount is paid (<a name="0057-TRAN-016" href="#0057-TRAN-016">0057-TRAN-016</a>)
   - The fee cost is correctly calculated using the network parameter `transfer.fee.factor`.
   - If I have enough funds to pay transfer and fees, the transfer happens.
