@@ -14,7 +14,6 @@ Markets proposed via [governance proposals](./0028-GOVE-governance.md#1-create-m
 
 All markets are proposed without any [liquidity commitment](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction).
 If the proposal is successful the market will go into opening auction at least until the proposed `enactment` date.
-However, the market may stay in an opening auction past the proposed `enactment` date until at least on party makes a liquidity commitment that meets criteria for exiting [liquidity auction](./0035-LIQM-liquidity_monitoring.md).
 
 ## Market lifecycle statuses
 
@@ -27,7 +26,7 @@ A market can progress through a number of statuses through its life. The overall
 | Pending            |   Yes          | Opening auction     | Governance vote passes/wins                                     | Governance vote (to close) OR enactment date reached
 | Cancelled           |  No           | No trading          | Market triggers cancellation condition                          | N/A
 | Active             |   Yes          | Normal trading      | Enactment date reached and usual auction exit checks pass       | Governance vote (to close) OR trigger for trading terminated for of market
-| Suspended          |   Yes          | Exceptional auction | Price monitoring or liquidity monitoring trigger, or product lifecycle trigger                | Exit conditions met per monitoring spec. that triggered it, no other monitoring triggered or governance vote if allowed (see below)
+| Suspended          |   Yes          | Exceptional auction | Price monitoring trigger, or product lifecycle trigger                | Exit conditions met per monitoring spec. that triggered it, no other monitoring triggered or governance vote if allowed (see below)
 | Closed             |   No           | No trading          | Governance vote (to close)                                      | N/A
 | Trading Terminated |   No           | No trading          | Defined by the product (i.e. from a product parameter, specified in market definition, giving close date/time) | Settlement event commences
 | Settled            |   No           | No trading          | Settlement triggered and completed as defined by product                                      | N/A
@@ -128,12 +127,12 @@ All data sources that are only referenced by this market should be unregistered.
 
 ### Active
 
-Once the enactment date is reached and the other conditions specified to exit the Pending state are met, the market becomes Active on conclusion of uncrossing of the opening auction. This status indicates it is trading via its normally configured trading mode according to the market framework (continuous trading, frequent batch auction, RFQ, block only, etc.). The specification for the trading mode should describe which orders are accepted and how trading proceeds. The market will terminate trading according to a product trigger (for futures, if the trading termination date is reached) and can be temporarily suspended automatically by various monitoring systems ([price monitoring](./0032-PRIM-price_monitoring.md), [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md)). The market can also be closed via a governance vote (market parameter update) to change the status to closed [see the governance spec](./0028-GOVE-governance.md).
+Once the enactment date is reached and the other conditions specified to exit the Pending state are met, the market becomes Active on conclusion of uncrossing of the opening auction. This status indicates it is trading via its normally configured trading mode according to the market framework (continuous trading, frequent batch auction, RFQ, block only, etc.). The specification for the trading mode should describe which orders are accepted and how trading proceeds. The market will terminate trading according to a product trigger (for futures, if the trading termination date is reached) and can be temporarily suspended automatically by ([price monitoring](./0032-PRIM-price_monitoring.md). The market can also be closed via a governance vote (market parameter update) to change the status to closed [see the governance spec](./0028-GOVE-governance.md).
 
 **Entry:**
 
 - From Pending: enactment date reached and conditions to transition from Pending state to Active as detailed above are met
-- From Suspended: conditions specified in [price monitoring](./0032-PRIM-price_monitoring.md) and [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) are met for the market to exit the suspended status back to Active.
+- From Suspended: conditions specified in [price monitoring](./0032-PRIM-price_monitoring.md) are met for the market to exit the suspended status back to Active.
 
 **Exit:**
 
@@ -160,7 +159,7 @@ Suspension currently always operates as an auction call period. Depending on the
 
 **Exit:**
 
-- Conditions specified in [price monitoring](./0032-PRIM-price_monitoring.md) and [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) and the usual [ending of auction checks](./0026-AUCT-auctions.md) pass → Active
+- Conditions specified in [price monitoring](./0032-PRIM-price_monitoring.md) and the usual [ending of auction checks](./0026-AUCT-auctions.md) pass → Active
 - Governance vote to close a market passes → Closed
 - Market was suspended by governance vote of product lifecycle trigger and a governance vote passes to set the status to ACTIVE → Active
 
@@ -209,7 +208,7 @@ A market moves from this termination state to Settled when enough information ex
 - During the transition out of this state:
   - All final settlement cashflows are calculated and applied (settled)
   - Margins are transferred back to general accounts
-- No risk management or price/liquidity monitoring occurs
+- No risk management or price occurs
 
 ### Settled
 
@@ -267,12 +266,6 @@ Market state is `active`.
 Market state is `suspended`.
 1. Price monitoring auction ends and the market is in continuous trading again.
 The market state is `active`.
-1. Parties cancel orders so that there is no "best static bid" on the order book.
-The market enters [liquidity monitoring auction](0035-LIQM-liquidity_monitoring.md).
-The market state is `suspended`.
-1. A party place bid; this becomes a best static bid.
-After the specified time the liquidity auction ends.
-The market state is `active`.
 1. Make sure that trades happen so that at least two parties have open positions.
 The mark price is `p`.
 1. The time specified at market proposal by the internal time oracle is reached.
@@ -314,12 +307,6 @@ Market state is `active`.
 1. Parties place orders so that a [price monitoring auction is triggered](0032-PRIM-price_monitoring.md).
 Market state is `suspended`.
 1. Price monitoring auction ends and the market is in continuous trading again.
-The market state is `active`.
-1. Parties cancel orders so that there is no "best static bid" on the order book.
-The market enters [liquidity monitoring auction](0035-LIQM-liquidity_monitoring.md).
-The market state is `suspended`.
-1. A party place bid; this becomes a best static bid.
-After the specified time the liquidity auction ends.
 The market state is `active`.
 1. Make sure that trades happen so that at least two parties have open positions.
 

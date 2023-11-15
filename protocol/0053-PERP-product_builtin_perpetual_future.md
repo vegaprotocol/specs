@@ -17,6 +17,9 @@ Unlike traditional futures contracts, the perpetual futures never expire. Withou
 1. `interest_rate`: a continuously compounded interest rate used in funding rate calculation.
 1. `clamp_lower_bound`: a lower bound for the clamp function used as part of the funding rate calculation.
 1. `clamp_upper_bound`: an upper bound for the clamp function used as part of the funding rate calculation.
+1. `scaling_factor`: optional scaling factor applied to funding payment.
+1. `rate_lower_bound`: optional lower bound applied to funding payment such that the resulting funding rate will never be lower than the specified value.
+1. `rate_upper_bound`: optional upper bound applied to funding payment such that the resulting funding rate will never be greater than than the specified value.
 
 Validation:
 
@@ -24,7 +27,17 @@ Validation:
 - `interest_rate` in range `[-1,1]`,
 - `clamp_lower_bound` in range `[-1,1]`,
 - `clamp_upper_bound` in range `[-1,1]`,
-- `clamp_upper_bound` >= `clamp_lower_bound`.
+- `scaling_factor` any positive real number,
+- `rate_lower_bound` any real number,
+- `rate_upper_bound` any real number,
+- `clamp_upper_bound` >= `clamp_lower_bound`,
+- `rate_upper_bound` >= `rate_lower_bound`.
+
+When migrating legacy markets the following value should be used:
+
+- `scaling_factor` = `1.0`,
+- `rate_lower_bound` = -`max supported value`,
+- `rate_upper_bound` = `max supported value`.
 
 ### Example specification
 
@@ -83,62 +96,63 @@ Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.m
 
 When the `settlement_schedule` event is received we need to calculate the funding payment. Store the current vega time as `funding_period_end`.
 
-If there are no oracle data points with a timestamp less than `funding_period_end` available then funding payment is skipped and `funding_period_start` gets overwritten with `funding_period_end`.
+Skip the funding payment calculation (set payment to `0`) if any of the following conditions is met:
 
-If such points are available then the calculations discussed in the following subsections get executed and funding payments get exchanged.
+- no spot (external) data has been ingested since market was created,
+- market has been in auction throughout the entire funding period.
 
-#### TWAP spot price calculation
+Please refer to the following subsections for the details of calculation of the funding payment if none of the above conditions are met.
 
-Traverse all the available oracle data point tuples `(s,t)` and calculate the time-weighted average spot price (`s_twap`) as:
+#### TWAP calculation
 
-```go
-var previous_point
-sum_product := 0
+Same methodology applies to spot (external) and perps (internal). The available prices (spot and perps considered separately of course) should be used to calculate the time weighted average price within the funding period. If no observations at or prior to the funding period start exist then the start of the period used for calculation should be moved forward to the time of the first observation. An observation is assumed to be applying until a subsequent observation is available. Periods spent in auction should be excluded from the calculation. This implies that spot datapoints received during the auction except for the latest one should be disregarded. Please refer to the acceptance criteria for a detailed example.
 
-for p := range oracle_data_points {
-    if p.t <= funding_period_start {
-        previous_point = p
-        continue
-    }
-    if p.t >= funding_period_end {
-        break
-    }
-    if previous_point != nil {
-        sum_product += previous_point*(p.t-max(funding_period_start,previous_point.t))
-    }
-    previous_point = p
-}
+Calculation of the TWAP is carried out by maintaining the following variables: `numerator`, `denominator`, `previous_price` and `previous_time`. It's also assumed that a function `current_time()` is available which returns the current Vega time, and a function `in_auction()` exists which returns `true` if the market being considered is currently in auction and `false` otherwise.
+The variables are maintained as follows.
 
-sum_product += previous_point.s*(funding_period_end-max(funding_period_start,previous_point.t))
-s_twap = sum_product / (funding_period_end - max(funding_period_start, oracle_data_points[0].t))
-```
-
-Only the oracle data point with largest timestamp that's less than or equal to `funding_period_end` (and any data points with larger timestamps) need to be kept from that point on.
-
-#### TWAP mark price calculation
-
-Traverse all the available internal data point tuples `(f,t)` and calculated the time-weighted average mark price (`f_twap`) as:
+When a new `price` observation arrives:
 
 ```go
-var previous_point
-sum_product := 0
-
-for p := range internal_data_points {
-    if p.t <= funding_period_start {
-        previous_point = p
-        continue
-    }
-    if previous_point != nil {
-        sum_product += previous_point*(p.t-max(funding_period_start,previous_point.t))
-    }
-    previous_point = p
+if previous_price != nil && in_auction() {
+    time_delta = current_time()-previous_time
+    numerator += previous_price*time_delta
+    denominator += time_delta
 }
-
-sum_product += previous_point.f*(funding_period_end-max(funding_period_start,previous_point.t))
-f_twap = sum_product / (funding_period_end - max(funding_period_start, internal_data_points[0].t))
+previous_price = price
+previous_time = current_time()
 ```
 
-Only the internal data point with largest timestamp needs to be kept from that point on.
+When the market goes into auction:
+
+```go
+time_delta = current_time()-previous_time
+numerator += previous_price*time_delta
+denominator += time_delta
+```
+
+When the market goes out of auction:
+
+```go
+previous_time = current_time()
+```
+
+When the funding payment cue arrives TWAP gets calculated and returned as:
+
+```go
+if !in_auction() {
+    time_delta = current_time()-previous_time
+    numerator += previous_price*time_delta
+    denominator += time_delta
+}
+previous_time = current_time
+if denominator == 0 {
+    return 0
+}
+return numerator / denominator
+
+```
+
+Note that depending on what type of oracle is used for the spot price it may be that the oracle points only become known shortly before or at the funding payment cue time, so the above pseudocode is just an illustration of how these quantities should be calculated and the implementation will need to be able to apply such calculation retrospectively.
 
 #### Funding payment calculation
 
@@ -151,6 +165,26 @@ funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower
 
 where `(1 + delta_t * interest_rate)` is the linearisation of  `exp(delta_t*interest_rate)` and `delta_t` is expressed as a year fraction.
 
+If `scaling_factor` is specified set:
+
+```go
+funding_payment = scaling_factor * funding_payment
+```
+
+If `rate_lower_bound` is specified set:
+
+```go
+funding_payment = max(rate_lower_bound*s_twap, funding_payment)
+```
+
+If `rate_upper_bound` is specified set:
+
+```go
+funding_payment = min(rate_upper_bound*s_twap, funding_payment)
+```
+
+Please note that scaling should happen strictly before any of the bounds are applied, i.e. if all 3 parameters are specified then the resulting funding rate is guaranteed to fall within the specified bounds irrespective of how big the scaling factor may be.
+
 #### Funding rate calculation
 
 While not needed for calculation of cashflows to be exchanged by market participants, the funding rate is useful for tracking market's relation to the underlying spot market over time.
@@ -158,7 +192,7 @@ While not needed for calculation of cashflows to be exchanged by market particip
 Funding rate should be calculated as:
 
 ```go
-funding_rate = (f_twap - s_twap) / s_twap
+funding_rate = funding_payment / s_twap
 ```
 
 and emitted as an event.
@@ -222,7 +256,6 @@ In both cases the estimates are for a hypothetical position of size 1.
 1. [Mark to market settlement](./0003-MTMK-mark_to_market_settlement.md) works correctly with a predefined frequency irrespective of the behaviour of any of the oracles specified for the market. (<a name="0053-PERP-005" href="#0053-PERP-005">0053-PERP-005</a>)
 1. Receiving an event from the settlement schedule oracle during the opening auction does not cause settlement. (<a name="0053-PERP-006" href="#0053-PERP-006">0053-PERP-006</a>)
 1. Receiving correctly formatted data from settlement data oracles and settlement schedule oracles during continuous trading results in periodic settlement. (<a name="0053-PERP-007" href="#0053-PERP-007">0053-PERP-007</a>)
-1. Receiving correctly formatted data from the settlement data and settlement schedule oracles during liquidity monitoring auction results in the exchange of periodic settlement cashflows. Market remains in liquidity monitoring auction until enough additional liquidity gets committed to the market. (<a name="0053-PERP-008" href="#0053-PERP-008">0053-PERP-008</a>)
 1. Receiving correctly formatted data from the settlement data and settlement schedule oracles during price monitoring auction results in the exchange of periodic settlement cashflows. Market remains in price monitoring auction until its original duration elapses, uncrosses the auction and goes back to continuous trading mode. (<a name="0053-PERP-009" href="#0053-PERP-009">0053-PERP-009</a>)
 1. When the funding payment is positive the margin levels of parties with long positions are larger than what the basic margin calculations imply. Parties with short positions are not impacted. (<a name="0053-PERP-015" href="#0053-PERP-015">0053-PERP-015</a>)
 1. When the funding payment is negative the margin levels of parties with short positions are larger than what the basic margin calculations imply. Parties with long positions are not impacted. (<a name="0053-PERP-016" href="#0053-PERP-016">0053-PERP-016</a>)
@@ -234,3 +267,70 @@ In both cases the estimates are for a hypothetical position of size 1.
 1. A perpetual market which is active and has open orders, after checkpoint restart, is in opening auction. All margin accounts are transferred to general accounts. (<a name="0053-PERP-022" href="#0053-PERP-022">0053-PERP-022</a>)
 1. A perpetual market which is active and has open orders. Wait for a new network history snapshot to be created. Load a new data node from network history. All market data is preserved. (<a name="0053-PERP-023" href="#0053-PERP-023">0053-PERP-023</a>)
 1. When the funding payment does not coincide with mark to market settlement time, a party has insufficient funds to fully cover their funding payment such that the shortfall amount if $x$ and the balance of market's insurance pool is $\frac{x}{3}$, then the entire insurance pool balance gets used to cover the shortfall and the remaining missing amount $\frac{2x}{3}$ gets dealt with using loss socialisation. (<a name="0053-PERP-024" href="#0053-PERP-024">0053-PERP-024</a>)
+
+1. Assume a market trades steadily generating a stream in mark price observations, but the first spot price observation only arrives during the 4th funding period of that market. Then funding payments for periods 1, 2 and 3 all equal 0. (<a name="0053-PERP-025" href="#0053-PERP-025">0053-PERP-025</a>)
+
+1. Assume the market has been in a long auction so that a funding period has started and ended while the market never went back into continuous trading. In that case the funding payment should be equal to 0 and no transfers should be exchanged. (<a name="0053-PERP-026" href="#0053-PERP-026">0053-PERP-026</a>)
+
+1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market.
+
+Assume the last known mark price before the start of the period to be `10` and that it gets updated every 2 minutes as follows:
+| Time (min) since period start | mark price  |
+| ----------------------------- | ----------- |
+| 1                             | 11          |
+| 3                             | 10          |
+| 5                             | 9           |
+| 7                             | 8           |
+| 9                             | 7           |
+
+Assume the last known spot price before this funding period is `11`. Then assume the subsequent spot price observations get ingested according to the schedule specified below:
+| Time (min) since period start | spot price  |
+| ----------------------------- | ----------- |
+| 1                             | 9           |
+| 3                             | 10          |
+| 5                             | 12          |
+| 6                             | 11          |
+| 7                             | 8           |
+| 9                             | 14          |
+
+Then, assuming no auctions during the period we get:
+$\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(7-5)+8\cdot(9-7)+7\cdot(10-9)}{10}=9.3$,
+$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+12\cdot(6-5)+11\cdot(7-6)+8\cdot(9-7)+14\cdot(10-9)}{10}=10.3$. (<a name="0053-PERP-027" href="#0053-PERP-027">0053-PERP-027</a>)
+
+1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market. Furthermore, assume that in this period that market is in an auction which starts 5 minutes into the period and ends 7 minutes into the period.
+
+Assume the last known mark price before the start of the period to be `10` and that it gets updated as follows:
+| Time (min) since period start | mark price  |
+| ----------------------------- | ----------- |
+| 1                             | 11          |
+| 3                             | 10          |
+| 7                             | 9           |
+| 8                             | 8           |
+| 10                            | 30          |
+
+Assume the last known spot price before this funding period is `11`. Then assume the subsequent spot price observations get ingested according to the schedule specified below:
+| Time (min) since period start | spot price  |
+| ----------------------------- | ----------- |
+| 1                             | 9           |
+| 3                             | 10          |
+| 5                             | 12          |
+| 6                             | 11          |
+| 8                             | 8           |
+| 9                             | 14          |
+
+Then, taking the auction into account we get:
+$\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(8-7)+8\cdot(10-8)+30\cdot(10-10)}{8}=9.625$,
+$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8\cdot(9-8)+14\cdot(10-9)}{10}=10.25$. (<a name="0053-PERP-028" href="#0053-PERP-028">0053-PERP-028</a>)
+
+When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=2.5$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.025$. (<a name="0053-PERP-029" href="#0053-PERP-029">0053-PERP-029</a>)
+
+When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=1$, $\text{rate_lower_bound}=-0.015$, $\text{rate_upper_bound}=0.005$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.015$. (<a name="0053-PERP-030" href="#0053-PERP-030">0053-PERP-030</a>)
+
+When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=1$, $\text{rate_lower_bound}=-0.015$, $\text{rate_upper_bound}=0.005$ and the funding period ends with $\text{internal TWAP}=101$, $\text{external TWAP} = 100$ then the resulting funding rate equals $0.005$. (<a name="0053-PERP-031" href="#0053-PERP-031">0053-PERP-031</a>)
+
+When migrating the market existing prior to introduction of the additional parameters their values get set to:
+
+- $\text{scaling factor}=1$,
+- $\text{rate_lower_bound}= -\text{max supported value}$,
+- $\text{rate_upper_bound}= \text{max supported value}$
+(<a name="0053-PERP-032" href="#0053-PERP-032">0053-PERP-032</a>).

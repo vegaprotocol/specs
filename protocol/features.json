@@ -35,7 +35,19 @@
       "0073-LIMN-110",
       "0073-LIMN-111",
       "0081-SUCM-015",
-      "0053-PERP-024"
+      "0014-ORDT-120",
+      "0014-ORDT-121",
+      "0014-ORDT-122",
+      "0014-ORDT-123",
+      "0053-PERP-024",
+      "0053-PERP-025",
+      "0053-PERP-026",
+      "0053-PERP-027",
+      "0053-PERP-028",
+      "0053-PERP-029",
+      "0053-PERP-030",
+      "0053-PERP-031",
+      "0053-PERP-032"
     ]
   },
   "Team rewards": {
@@ -60,9 +72,10 @@
   "Fixed size amendments": {
     "milestone": "palazzo",
     "acs": [
-      "0004-AMND-055",
       "0004-AMND-056",
-      "0004-AMND-057"
+      "0004-AMND-057",
+      "0004-AMND-058",
+      "0004-AMND-059"
     ]
   },
   "Ethereum heartbeat": {
@@ -81,12 +94,23 @@
       "0019-MCAL-026",
       "0019-MCAL-027",
       "0019-MCAL-028",
-      "0019-MCAL-029"
+      "0019-MCAL-029",
+      "0019-MCAL-030"
     ]
   },
   "Modify liquidation mechanics": {
     "milestone": "palazzo",
-    "acs": []
+    "acs": [
+      "0012-POSR-001",
+      "0012-POSR-005",
+      "0012-POSR-009",
+      "0012-POSR-010",
+      "0012-POSR-011",
+      "0012-POSR-012",
+      "0012-POSR-013",
+      "0012-POSR-014",
+      "0012-POSR-015"
+    ]
   },
   "Passive liquidity": {
     "milestone": "palazzo",
@@ -100,12 +124,31 @@
     "milestone": "palazzo",
     "acs": [
       "0057-TRAN-011",
+      "0057-TRAN-012",
+      "0057-TRAN-013",
       "0057-TRAN-064",
       "0057-TRAN-065"
     ]
   },
+  "Transfers from vesting": {
+    "milestone": "palazzo",
+    "acs": [
+      "0057-TRAN-066",
+      "0057-TRAN-067",
+      "0057-TRAN-068",
+      "0057-TRAN-069"
+    ]
+  },
+  "Liquidity fee setting": {
+    "milestone": "palazzo",
+    "acs": [
+      "0042-LIQF-056",
+      "0042-LIQF-057",
+      "0042-LIQF-058"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
-    "acs": []
+    "acs": [ ]
   }
 }

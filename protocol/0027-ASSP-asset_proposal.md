@@ -167,6 +167,7 @@ This must be an integer strictly greater than `0`.
 - As a user I can vote for an asset proposal. (<a name="0027-ASSP-002" href="#0027-ASSP-002">0027-ASSP-002</a>)
 - As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset. (<a name="0027-ASSP-003" href="#0027-ASSP-003">0027-ASSP-003</a>)
 - `quantum` is a required parameter  (<a name="0027-ASSP-004" href="#0027-ASSP-004">0027-ASSP-004</a>)
+- If an update asset proposal passed and it changes `quantum` _only_ then this new value becomes used immediately on enactment. (<a name="0027-ASSP-025" href="#0027-ASSP-025">0027-ASSP-025</a>)
 
 ### Node actions
 
