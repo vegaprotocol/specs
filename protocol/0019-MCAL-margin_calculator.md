@@ -101,13 +101,13 @@
 
     when switching to isolated-margin mode and the `margin factor short = 0.3`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.3 = 17250`, and margin account should be updated to `17250`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
 
-- When the party place a new short order of `1` with price `15000`, and the market is in continous trading.
+- When the party place a new short order of `1` with price `15000`, and the market is in continuous trading.
 
     The margin account should have additional amount `average entry price x current position x new margin factor = 59524 x 1 x 0.3 = 17857` added if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
 
     The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-035" href="#0019-MCAL-035">0019-MCAL-035</a>)
 
-- When the party place a new short order of `1` with price `45000`, and the market is in continous trading.
+- When the party place a new short order of `1` with price `45000`, and the market is in continuous trading.
 
     The margin account should have additional amount `limit price * size * margin factor = 45000 x 1 x 0.3 = 13500` added if the party has enough asset in the general account(<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
 
