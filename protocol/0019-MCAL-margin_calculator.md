@@ -113,9 +113,9 @@
 
     The order will be rejected if the party does not have enough asset in the general account(<a name="0019-MCAL-037" href="#0019-MCAL-037">0019-MCAL-037</a>)
 
-- When the party place a new long order of `1` with price `145000` and the party has existing short position of `3`, and the market is in continous trading. The margin account should not change(<a name="0019-MCAL-038" href="#0019-MCAL-038">0019-MCAL-038</a>)
+- When the party place a new long order of `1` with price `145000` and the party has existing short position of `3`, and the market is in continuous trading. The margin account should not change(<a name="0019-MCAL-038" href="#0019-MCAL-038">0019-MCAL-038</a>)
 
-- When the party place a new long order of `10` with price `145000` and the party has existing short position of `3`, and the market is in continous trading. The margin account should have additional amount `limit price * size * margin factor = 145000 x (10-3) x 0.3 = 304500` added if the party has enough asset in the general account(<a name="0019-MCAL-039" href="#0019-MCAL-039">0019-MCAL-039</a>)
+- When the party place a new long order of `10` with price `145000` and the party has existing short position of `3`, and the market is in continuous trading. The margin account should have additional amount `limit price * size * margin factor = 145000 x (10-3) x 0.3 = 304500` added if the party has enough asset in the general account(<a name="0019-MCAL-039" href="#0019-MCAL-039">0019-MCAL-039</a>)
 
 - Margin levels are correctly calculated in the case of an open position dropping below maintenance margin levels active orders will remain active as these are margined separately and will not be cancelled.(<a name="0019-MCAL-040" href="#0019-MCAL-040">0019-MCAL-040</a>)
 
