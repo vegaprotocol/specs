@@ -17,6 +17,9 @@ Unlike traditional futures contracts, the perpetual futures never expire. Withou
 1. `interest_rate`: a continuously compounded interest rate used in funding rate calculation.
 1. `clamp_lower_bound`: a lower bound for the clamp function used as part of the funding rate calculation.
 1. `clamp_upper_bound`: an upper bound for the clamp function used as part of the funding rate calculation.
+1. `scaling_factor`: optional scaling factor applied to funding payment.
+1. `rate_lower_bound`: optional lower bound applied to funding payment such that the resulting funding rate will never be lower than the specified value.
+1. `rate_upper_bound`: optional upper bound applied to funding payment such that the resulting funding rate will never be greater than than the specified value.
 
 Validation:
 
@@ -24,7 +27,17 @@ Validation:
 - `interest_rate` in range `[-1,1]`,
 - `clamp_lower_bound` in range `[-1,1]`,
 - `clamp_upper_bound` in range `[-1,1]`,
-- `clamp_upper_bound` >= `clamp_lower_bound`.
+- `scaling_factor` any positive real number,
+- `rate_lower_bound` any real number,
+- `rate_upper_bound` any real number,
+- `clamp_upper_bound` >= `clamp_lower_bound`,
+- `rate_upper_bound` >= `rate_lower_bound`.
+
+When migrating legacy markets the following value should be used:
+
+- `scaling_factor` = `1.0`,
+- `rate_lower_bound` = -`max supported value`,
+- `rate_upper_bound` = `max supported value`.
 
 ### Example specification
 
@@ -152,6 +165,26 @@ funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower
 
 where `(1 + delta_t * interest_rate)` is the linearisation of  `exp(delta_t*interest_rate)` and `delta_t` is expressed as a year fraction.
 
+If `scaling_factor` is specified set:
+
+```go
+funding_payment = scaling_factor * funding_payment
+```
+
+If `rate_lower_bound` is specified set:
+
+```go
+funding_payment = max(rate_lower_bound*s_twap, funding_payment)
+```
+
+If `rate_upper_bound` is specified set:
+
+```go
+funding_payment = min(rate_upper_bound*s_twap, funding_payment)
+```
+
+Please note that scaling should happen strictly before any of the bounds are applied, i.e. if all 3 parameters are specified then the resulting funding rate is guaranteed to fall within the specified bounds irrespective of how big the scaling factor may be.
+
 #### Funding rate calculation
 
 While not needed for calculation of cashflows to be exchanged by market participants, the funding rate is useful for tracking market's relation to the underlying spot market over time.
@@ -159,7 +192,7 @@ While not needed for calculation of cashflows to be exchanged by market particip
 Funding rate should be calculated as:
 
 ```go
-funding_rate = (f_twap - s_twap) / s_twap
+funding_rate = funding_payment / s_twap
 ```
 
 and emitted as an event.
@@ -288,3 +321,16 @@ Assume the last known spot price before this funding period is `11`. Then assume
 Then, taking the auction into account we get:
 $\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(8-7)+8\cdot(10-8)+30\cdot(10-10)}{8}=9.625$,
 $\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8\cdot(9-8)+14\cdot(10-9)}{10}=10.25$. (<a name="0053-PERP-028" href="#0053-PERP-028">0053-PERP-028</a>)
+
+When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=2.5$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.025$. (<a name="0053-PERP-029" href="#0053-PERP-029">0053-PERP-029</a>)
+
+When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=1$, $\text{rate_lower_bound}=-0.015$, $\text{rate_upper_bound}=0.005$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.015$. (<a name="0053-PERP-030" href="#0053-PERP-030">0053-PERP-030</a>)
+
+When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=1$, $\text{rate_lower_bound}=-0.015$, $\text{rate_upper_bound}=0.005$ and the funding period ends with $\text{internal TWAP}=101$, $\text{external TWAP} = 100$ then the resulting funding rate equals $0.005$. (<a name="0053-PERP-031" href="#0053-PERP-031">0053-PERP-031</a>)
+
+When migrating the market existing prior to introduction of the additional parameters their values get set to:
+
+- $\text{scaling factor}=1$,
+- $\text{rate_lower_bound}= -\text{max supported value}$,
+- $\text{rate_upper_bound}= \text{max supported value}$
+(<a name="0053-PERP-032" href="#0053-PERP-032">0053-PERP-032</a>).
