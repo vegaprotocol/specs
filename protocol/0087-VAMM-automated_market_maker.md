@@ -16,6 +16,7 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 - Party submits a transaction containing configuration for the strategy on a given market. This will contain:
   - Amount of funds to commit
   - Price bounds (upper, lower, base)
+  - Margin ratios at upper and lower bound (ratio for leverage at bounds. Reciprocal of leverage multiplier e.g. 0.1 = 10x leverage)
 - Additionally, the transaction should contain data related to the setup of the position but which does not need to be stored:
   - Maximum slippage (%), used for rebasing position when creating/updating AMM
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
@@ -50,7 +51,8 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
     base_price,
     lower_price,
     upper_price,
-    margin_ratio_at_bounds,
+    margin_ratio_at_upper_bound,
+    margin_ratio_at_lower_bound,
   }
 }
 ```
@@ -66,8 +68,8 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Lower Price**: The minimum price bound for market making. Prices between the `base price` and this will have volume placed, with no orders below this price. This is optional and if not supplied no volume will be placed below `base price`. At these prices the market maker will always be long
 - **Commitment**: This is the initial volume of funds to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail.
 - **Margin Ratio at Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this the commitment must be compared with what leverage that might allow at the price bounds. One way to do this is to assume the network will use the value at which `commitment == initial margin` for the position at that price, however users may wish to take a more conservative approach. Using this parameter allows them to set a value such that `position = commitment / margin ratio at bound`, however with the restriction that commitment must still be `>= initial margin`. This parameter should be optional. There is a separate parameter for each potential bound.
-  - **Upper Bound Ratio**
-  - **Lower Bound Ratio**
+  - **Upper Bound Ratio**: `margin_ratio_at_upper_bound`
+  - **Lower Bound Ratio**: `margin_ratio_at_lower_bound`
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
