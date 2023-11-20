@@ -248,7 +248,6 @@ The following are immutable and cannot be changed:
 - market decimal places
 - position decimal places
 - `settlementAsset`
-- name
 
 ## 3. Change network parameters
 
@@ -258,7 +257,7 @@ All _change network parameter proposals_ have their validation configured by the
 
 ## 4.1 Add a new asset
 
-New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)).
+New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md).
 All new asset proposals have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`.
 
 ## 4.2 Modify an existing asset
@@ -547,6 +546,8 @@ APIs should also exist for clients to:
 - A market change proposal that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the proposed modification is enacted. (<a name="0028-GOVE-070" href="#0028-GOVE-070">0028-GOVE-070</a>)
 - In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the proposed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)
 - A market change that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)
+- A market change proposal that aims to modify the market name in any state will modify the market name at the time of vote enactment. (<a name="0028-GOVE-159" href="#0028-GOVE-159">0028-GOVE-159</a>)
+- A market change proposal that aims to modify the market code in any state will modify the market code at the time of vote enactment. (<a name="0028-GOVE-166" href="#0028-GOVE-166">0028-GOVE-166</a>)
 - A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
 - When there's already been a market closure governance proposal successfully voted in for a given market, but not yet enacted it is still possible to submit additional market closure governance proposals for that market. If another market closure governance proposal gets voted it and it has an earlier enactment time then it's the final settlement price of that proposal which gets used. (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
 - Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to resume the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
