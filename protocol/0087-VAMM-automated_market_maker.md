@@ -20,7 +20,7 @@ The configuration and resultant lifecycle of an automated market maker is as fol
 - Additionally, the transaction should contain data related to the setup of the position but which does not need to be stored:
   - Maximum slippage (%), used for rebasing position when creating/updating AMM
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
-- At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be stopped. 
+- At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be stopped.
 - If the party submits a `CancelAMM` transaction the AMM configuration for that party, on that market, will be cancelled. All active orders from the AMM will be cancelled and all funds and positions associated with the sub-account will be transferred back to the main account.
 
 ## Sub-Account Configuration
@@ -42,7 +42,7 @@ All AMM configurations should implement two key interfaces:
 
 Initially there will only be one option for AMM behaviour, that of a constant-function curve, however there may be others available in future. As such, the parameters pertaining to this model in particular should be passed in their own structure such that the creation message is similar to:
 
-```
+```json
 {
   commitment,
   market,
@@ -78,7 +78,7 @@ Additionally, as all commitments require some processing overhead on the core, t
 
 ### Creation/Amendment Process
 
-#### Creation 
+#### Creation
 
 A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided), however it is possible to configure an AMM such that this `base price` is far from the market's current `mark price`. In order to bring the AMM into line with where it "should" be an initial aggressive trade is attempted based on the configuration and current market `mark price`:
 
@@ -101,7 +101,7 @@ Although AMM prices are not placed onto the book as orders it is necessary to be
 
 The volume to offer at each price level is determined by whether the price level falls within the upper or lower price bands alongside the market maker's current position. In order to calculate this, use the concept of `Virtual Liquidity` from Uniswap's concentrated liquidity model, corresponding to a theoretical shifted version of the actual liquidity curve to map to an infinite range liquidity curve. The exact mathematics of this can be found in the Uniswap v3 whitepaper and are expanded in depth in the useful guide [Liquidity Math in Uniswap v3](http://atiselsts.github.io/pdfs/uniswap-v3-liquidity-math.pdf). Here will be covered cover only the steps needed to obtain prices/volumes without much exposition.
 
-The AMM position can be thought of as two separate liquidity provision curves, one between `upper price` and `base price`, and another between `base price` and `lower price`. Within each of these, the AMM is buying/selling position on the market in exchange for the quote currency. As the price lowers the AMM is buying position and reducing currency, and as the price rises the AMM is selling position and increasing currency. 
+The AMM position can be thought of as two separate liquidity provision curves, one between `upper price` and `base price`, and another between `base price` and `lower price`. Within each of these, the AMM is buying/selling position on the market in exchange for the quote currency. As the price lowers the AMM is buying position and reducing currency, and as the price rises the AMM is selling position and increasing currency.
 
 One outcome of this is that the curve between `base price` and `lower price` is marginally easier to conceptualise directly from our parameters. At the lowest price side of a curve (`lower price` in this case) the market should be fully in the market contract position, whilst at the highest price (`base price` in this case) it should be fully sold out into cash. This is exactly the formulation used, where at `base price` a zero position is used and a cash amount of `commitment amount`. However given that there is likely to be some degree of leverage allowed on the market this is not directly the amount of funds to calculate using. An AMM with a `commitment amount` of `X` is ultimately defined by the requirement of using `X` in margin at the outer price bounds, so work backwards from that requirement to determine the theoretical cash value. We then calculate the two ranges separately to determine two different `Liquidity` values for the two ranges, which is a value used to later define volumes required to move the price a specified value.
 
@@ -124,7 +124,7 @@ where $c$ is the commitment amount and $r_f$ is as above.
 Calculating this separately for the upper and lower ranges (using the `short` factor for the upper range and the `long` factor for the lower range) one can calculate the liquidity value `L` for each range with the formula
 
 $$
-L = \frac{v_{worst}}{\sqrt{p_u} - \sqrt{p_l}} , 
+L = \frac{v_{worst}}{\sqrt{p_u} - \sqrt{p_l}} ,
 $$
 
 where $v_{worst}$ is as above, $p_u$ is the price at the top of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the price at the bottom of the range (`base price` for the lower range and `lower price` for the lower range). This gives the two `L` values for the two ranges.
@@ -139,8 +139,8 @@ From here the first step is calculating a `fair` price, which can be done by uti
      2. The virtual `y` of the position can be calculated as $y_v = c_c \cdotp r_f + L \cdotp \sqrt{p_l}$ where $c_c$ is the current total dollar balance of the AMM across margin and general accounts and `p_l` is the `lower price`. Other variables are as defined above.
   3. If `P < 0`:
      1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{p_u} \cdotp r_f + \frac{L}{\sqrt{p_l}}$ where $p_l$ is the `base price` and `p_u` is the `upper price`.
-     2. The virtual `y` can be calculated as $v_y = abs(P) \cdotp p_e + L \cdotp p_l$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price` 
-  4. Now the `fair` price is simply $\frac{y_v}{x_v}$ 
+     2. The virtual `y` can be calculated as $v_y = abs(P) \cdotp p_e + L \cdotp p_l$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price`
+  4. Now the `fair` price is simply $\frac{y_v}{x_v}$
 
 #### Volume between two prices
 
@@ -148,9 +148,9 @@ For the second interface one needs to calculate the volume which would be posted
 
 To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `base price`) and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
 
-We then need to calculate the implied position at `starting price` and `ending price` and return the difference. 
+We then need to calculate the implied position at `starting price` and `ending price` and return the difference.
 
-For a given price $p$ calculate implied position $P_i$ with 
+For a given price $p$ calculate implied position $P_i$ with
 
 $$
 P_i = L * \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}}
@@ -162,15 +162,15 @@ Then simply return the absolute difference between these two prices.
 
 For all incoming active orders, the matching process will coordinate between the on- and off-book sources of liquidity. When an order comes in which may immediately trade (there are not already resting orders of the same type for the best applicable price) the following steps should be followed. If at any point the order's full volume has traded the process is immediately halted:
 
-  1. For the first applicable price level, all on-book orders should be checked. Any volume at this price level which can be met through on-book orders will then trade. 
+  1. For the first applicable price level, all on-book orders should be checked. Any volume at this price level which can be met through on-book orders will then trade.
   1. For any `remaining volume`, the AMMs will be checked. This requires an algorithm to ensure the protocol does not have to check every price level individually:
      1. Call the current price level `current price`
      1. Check the price level which has the next resting on-book order, set this to be the `outer price` for the check.
      1. Check all active AMMs, querying their quote price API with the smallest trade unit on the market in the direction of trading (if the incoming order is a `buy`, query the AMM's `ask`, or vice versa). Retain those where this price < `outer price`
-     1. Within these, select either the minimum `upper price` (if the incoming order is a buy) or the maximum `lower price` (if the incoming order is a sell), call this `amm bound price`. This is the range where all of these AMMs are active. Finally, select either the minimum (for a buy) or maximum (for a sell) between `amm bound price` and `outer price`. From this form an interval `current price, outer price`. 
+     1. Within these, select either the minimum `upper price` (if the incoming order is a buy) or the maximum `lower price` (if the incoming order is a sell), call this `amm bound price`. This is the range where all of these AMMs are active. Finally, select either the minimum (for a buy) or maximum (for a sell) between `amm bound price` and `outer price`. From this form an interval `current price, outer price`.
      1. Now, for each AMM within this range, calculate the volume of trading required to move each from the `current price` to the `outer price`. Call the sum of this volume `total volume`.
-     2. If `remaining volume <= total volume` split trades between the AMMs according to their proportional contribution to `total volume` (e.g. larger liquidity receives a higher proportion of the trade). This ensures their mid prices will move equally. Each of these trades should count as a single aggressive trade with the given AMM and pay fees accordingly. 
-     3. If `remaining volume > total volume` execute all trades to move the respective AMMs to their boundary at `outer price`. Now, return to step `1` with `current price = outer price`, checking first for on-book liquidity at the new level then following this process again until all order volume is traded or liquidity exhausted.  
+     1. If `remaining volume <= total volume` split trades between the AMMs according to their proportional contribution to `total volume` (e.g. larger liquidity receives a higher proportion of the trade). This ensures their mid prices will move equally. Each of these trades should count as a single aggressive trade with the given AMM and pay fees accordingly.
+     1. If `remaining volume > total volume` execute all trades to move the respective AMMs to their boundary at `outer price`. Now, return to step `1` with `current price = outer price`, checking first for on-book liquidity at the new level then following this process again until all order volume is traded or liquidity exhausted.  
 
 ## Determining Liquidity Contribution
 
@@ -187,4 +187,4 @@ s ELS updated as normal.
 
 ## Setting Fees
 
-The `proposed_fee` provided as part of the AMM construction contributes to the fee determination logic on the market, if a setup where LPs decide on the market fee is in use. In the case where it is the AMM's current assigned ELS, or the running average liquidity provided so far if the commitment was made in the current epoch, is used for weighting the AMM's vote for the fee. 
+The `proposed_fee` provided as part of the AMM construction contributes to the fee determination logic on the market, if a setup where LPs decide on the market fee is in use. In the case where it is the AMM's current assigned ELS, or the running average liquidity provided so far if the commitment was made in the current epoch, is used for weighting the AMM's vote for the fee.

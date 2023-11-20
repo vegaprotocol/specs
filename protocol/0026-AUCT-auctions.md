@@ -56,7 +56,7 @@ For including [AMM](./0087-VAMM-automated_market_maker.md) configurations in the
 - The minimum ask price across all AMMs and the minimum ask price on the book
 - The maximum bid price across all AMMs and the maximum bid price on the book
 
-Once this (min ask, max bid) range is known, the AMMs should be queried for their orders at each price level within this range, first starting at the lower end and asking each for their successive ask at increasing price levels, then from the upper asking for bids at successive price levels. For the first price at each end of the range this should be compared with the AMM's current indicative price. If the range is narrowed the volumes should be re-checked. 
+Once this (min ask, max bid) range is known, the AMMs should be queried for their orders at each price level within this range, first starting at the lower end and asking each for their successive ask at increasing price levels, then from the upper asking for bids at successive price levels. For the first price at each end of the range this should be compared with the AMM's current indicative price. If the range is narrowed the volumes should be re-checked.
 
 Initially we will use the mid price within this range. For example, if the volume maximising range is 98-102, we would price all trades in the uncrossing at 100 ((minimum price of range+maximum price of range)/2). In future there will be other options, which will be selectable via a network parameter specified at market creation, and changeable through governance. These other options are not yet specified.
 
