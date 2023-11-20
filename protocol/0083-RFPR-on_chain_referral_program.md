@@ -228,6 +228,7 @@ If a referral set is currently designated as a team, a party is able to effectiv
 To apply a referral code and become a referee, a party must fulfil the following criteria:
 
 - party must not currently be a **referrer**
+- party must not currently be a **referee** associated with a valid referral set (Note: for a set to be valid, the sets referrer must be meeting the staking requirement.)
 
 To become a referee, a referee must submit a signed `ApplyReferralCode` transaction with the following fields:
 
@@ -241,9 +242,30 @@ message ApplyReferralCode{
 }
 ```
 
-If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors and reward multipliers updated](#setting-benefit-factors-and-reward-multipliers) accordingly. Their key must then become associated with the referrer's key. All referral rewards will be transferred to this referrer's key, regardless of whether the party reapplies a new referral code.
+If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors and reward multipliers updated](#setting-benefit-factors-and-reward-multipliers) accordingly. If a team exists for this referral set, they will also be added to that team.
 
-If a party is already a referee, and submits another `ApplyReferralCode` transaction, they will not be transferred to the new referral set but they will be added to the associated team at the start of the next epoch (providing a team exists). Note, if the referee has submitted multiple transactions in an epoch, the referee will be added to the new team specified in the latest valid transaction.
+
+If a party is already a referee, and submits another `ApplyReferralCode` transaction, the transaction will be rejected unless the referrer of the current referral set is not meeting the [staking requirement](#creating-a-referral-set). In this case, the party will be removed from the current referral set and added to the new referral set.
+
+
+### Joining a team
+
+If a party is already a referee in a valid set, to join or move between teams, a party can submit a `JoinTeam` transaction with the following fields:
+
+- `id`: the id of the team they wish to join
+- `alias`: Optional string defining an alias which should be associated with the key and should appear on leaderboards in the keys place.
+
+```protobuf
+message JoinTeam{
+    id: "mYr3f3rra1c0d3"
+    alias: "myPuBlicA1ias"
+}
+```
+
+The party will be added to the team providing the following criteria are met.
+
+- the team is not `closed`
+- the team has no `allow_list` or the party is specified in the teams `allow_list`
 
 ### Party volumes
 
@@ -472,21 +494,25 @@ The Estimate Fees API should now calculate the following additional information:
     - the party **will** be added to the associated referral set.
     - the party **will** be added to the associated team (if one exists, the team is not closed, and the party is allowed by the `allow_list`).
 
-1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-026" href="#0083-RFPR-026">0083-RFPR-026</a>)
-
-    - the party **will not**  be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists and the team is not closed, and the party is allowed by the `allow_list`).
 
 1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-027" href="#0083-RFPR-027">0083-RFPR-027</a>).
 
     - the party **will** be added to the associated referral set.
     - the party **will** be added to the associated team (if one exists and the team is not closed, and the party is allowed by the `allow_list`).
 
+1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then the transaction will be rejected.
+
 1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team has **no** `allow_list` specified, then the party **should** be added to the team.
 1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team.
 1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, but the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team.
 1. An `ApplyReferralCode` transaction should be rejected if the party is a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
 1. An `ApplyReferralCode` transaction should be rejected if the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the team to be closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
+
+### Joining a team
+
+1. If a party submits a `JoinTeam` transaction and the team has **no** `allow_list` specified, then the party **should** be added to the team.
+1. If a party submits a `JoinTeam` transaction and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team.
+1. If a party submits a `JoinTeam` transaction and the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team.
 
 #### Epoch and running volumes
 
