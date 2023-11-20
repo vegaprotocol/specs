@@ -158,20 +158,6 @@ $$
 
 Then simply return the absolute difference between these two prices.
 
-## Matching Process (To merge with 0068-MATC once confirmed)
-
-For all incoming active orders, the matching process will coordinate between the on- and off-book sources of liquidity. When an order comes in which may immediately trade (there are not already resting orders of the same type for the best applicable price) the following steps should be followed. If at any point the order's full volume has traded the process is immediately halted:
-
-  1. For the first applicable price level, all on-book orders should be checked. Any volume at this price level which can be met through on-book orders will then trade.
-  1. For any `remaining volume`, the AMMs will be checked. This requires an algorithm to ensure the protocol does not have to check every price level individually:
-     1. Call the current price level `current price`
-     1. Check the price level which has the next resting on-book order, set this to be the `outer price` for the check.
-     1. Check all active AMMs, querying their quote price API with the smallest trade unit on the market in the direction of trading (if the incoming order is a `buy`, query the AMM's `ask`, or vice versa). Retain those where this price < `outer price`
-     1. Within these, select either the minimum `upper price` (if the incoming order is a buy) or the maximum `lower price` (if the incoming order is a sell), call this `amm bound price`. This is the range where all of these AMMs are active. Finally, select either the minimum (for a buy) or maximum (for a sell) between `amm bound price` and `outer price`. From this form an interval `current price, outer price`.
-     1. Now, for each AMM within this range, calculate the volume of trading required to move each from the `current price` to the `outer price`. Call the sum of this volume `total volume`.
-     1. If `remaining volume <= total volume` split trades between the AMMs according to their proportional contribution to `total volume` (e.g. larger liquidity receives a higher proportion of the trade). This ensures their mid prices will move equally. Each of these trades should count as a single aggressive trade with the given AMM and pay fees accordingly.
-     1. If `remaining volume > total volume` execute all trades to move the respective AMMs to their boundary at `outer price`. Now, return to step `1` with `current price = outer price`, checking first for on-book liquidity at the new level then following this process again until all order volume is traded or liquidity exhausted.  
-
 ## Determining Liquidity Contribution
 
 The provided liquidity from an AMM commitment must be determined for two reasons. Firstly to decide instantaneous distribution of liquidity fees between the various liquidity types and secondly to calculate a virtual liquidity commitment amount for assigning AMM users with an ELS value. This will be used for determining the distribution of ELS-eligible fees on a market along with voting weight in market change proposals.
