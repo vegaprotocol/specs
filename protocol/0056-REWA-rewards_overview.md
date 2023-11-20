@@ -179,7 +179,7 @@ $$m_{rz} = \frac{\sum_{i}^{n}{rz_{i}}}{N}$$
 
 ### Time on Book metric
 
-This metric specifically relates to accounts with either an active liquidity provision, or an active AMM, running on a market. 
+This metric specifically relates to accounts with either an active liquidity provision, or an active AMM, running on a market.
 
 For every block where their provision/AMM is active, their score should be incremented as the sum product of all prices and volumes for active orders within SLA liquidity bounds on the market. For keys with a standard liquidity provision this is calculated as:
 
