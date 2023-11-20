@@ -247,7 +247,7 @@ The account is under control of the network and funds from this account will be 
 A network parameter `market.liquidity.providersFeeCalculationTimeStep` will control how often fees are distributed from the market's aggregate LP fee account.
 Starting with the end of the opening auction the clock starts ticking and then rings every time `market.liquidity.providersFeeCalculationTimeStep` has passed. Every time this happens the balance in this account is transferred to the liquidity provider's general account for the market settlement asset.
 
-The liquidity fees are transferred from the market's aggregate LP fee account into the LP-per-market fee account, pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time.
+The liquidity fees are transferred from the market's aggregate LP fee account into the LP-per-market fee account from two different configurable size buckets, defined by the network parameter `market.liquidity.equityLikeShareFeeFraction`. The first bucket, a proportion equal to `market.liquidity.equityLikeShareFeeFraction` of the fee, is divided pro-rata depending on the `LP i equity-like share` multiplied by `LP i liquidity score` scaled back to `1` across all LPs at a given time. The other bucket, `1 - market.liquidity.equityLikeShareFeeFraction`, is divided purely by each LP's in-epoch liquidity score `LP i liquidity score`, scaled again across the value of all LPs at that time.
 
 The LP parties don't control the LP-per-market fee account; the fees from there are then transferred to the LPs' general account at the end epoch as described below.
 
