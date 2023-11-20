@@ -500,19 +500,19 @@ The Estimate Fees API should now calculate the following additional information:
     - the party **will** be added to the associated referral set.
     - the party **will** be added to the associated team (if one exists and the team is not closed, and the party is allowed by the `allow_list`).
 
-1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then the transaction will be rejected.
+1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then the transaction will be rejected. (<a name="0083-RFPR-052" href="#0083-RFPR-052">0083-RFPR-052</a>).
 
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team has **no** `allow_list` specified, then the party **should** be added to the team.
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team.
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, but the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team.
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team has **no** `allow_list` specified, then the party **should** be added to the team. (<a name="0083-RFPR-053" href="#0083-RFPR-053">0083-RFPR-053</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team. (<a name="0083-RFPR-054" href="#0083-RFPR-054">0083-RFPR-054</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, but the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team. (<a name="0083-RFPR-055" href="#0083-RFPR-055">0083-RFPR-055</a>).
 1. An `ApplyReferralCode` transaction should be rejected if the party is a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
 1. An `ApplyReferralCode` transaction should be rejected if the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the team to be closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
 
 ### Joining a team
 
-1. If a party submits a `JoinTeam` transaction and the team has **no** `allow_list` specified, then the party **should** be added to the team.
-1. If a party submits a `JoinTeam` transaction and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team.
-1. If a party submits a `JoinTeam` transaction and the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team.
+1. If a party submits a `JoinTeam` transaction and the team has **no** `allow_list` specified, then the party **should** be added to the team. (<a name="0083-RFPR-056" href="#0083-RFPR-056">0083-RFPR-056</a>).
+1. If a party submits a `JoinTeam` transaction and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team. (<a name="0083-RFPR-057" href="#0083-RFPR-057">0083-RFPR-057</a>).
+1. If a party submits a `JoinTeam` transaction and the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team. (<a name="0083-RFPR-058" href="#0083-RFPR-058">0083-RFPR-058</a>).
 
 #### Epoch and running volumes
 
