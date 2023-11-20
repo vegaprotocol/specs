@@ -249,7 +249,7 @@ The following are immutable and cannot be changed:
 - position decimal places
 - `settlementAsset`
 
-## 3 Change network parameters
+## 3. Change network parameters
 
 [Network parameters](./0054-NETP-network_parameters.md) that may be changed are described in the _Network Parameters_ spec, this document for details on these parameters, including the category of the parameters. New network parameters require a code change, so there is no support for adding new network parameters.
 
