@@ -144,6 +144,7 @@ To create a referral set and generate a referral code, the party must submit a s
   - `name`: mandatory string team name
   - `team_url`: optional string of a link to a team forum, discord, etc. (defaults to empty string / none-type)
   - `avatar_url`: optional string of a link to an image to be used as the teams avatar (defaults to empty string / none-type)
+  - `allow_list`: optional list of public keys which are allowed to join the team. If empty, all public keys are allowed to join the team.
   - `closed`: optional boolean, defines whether a team is accepting new members (defaults to false)
 
 *Example: if party wants to create a simple referral set.*
@@ -169,6 +170,21 @@ message CreateReferralSet{
 }
 ```
 
+*Example: if party wants to create a referral set and team.*
+
+```protobuf
+message CreateReferralSet{
+    is_team: True
+    team_details: {
+        name: "VegaRocks",
+        team_url: "https://discord.com/channels/vegarocks",
+        avatar_url: "https://vega-rocks/logo-360x360.jpg",
+        allow_list: ["publ1ck3y001", "publ1ck3y002", publ1ck3y003]
+        closed: False,
+    }
+}
+```
+
 When the network receives a valid `CreateReferralSet` transaction, the network will create a referral set with the referral set `id` as the referral code. Any future parties who [apply](#applying-a-referral-code) the referral code will be added to the referral set.
 
 ### Updating a referral set
@@ -186,6 +202,7 @@ To update a referral set the party submit a signed `UpdateReferralSet` transacti
   - `name`: optional string team name
   - `team_url`: optional string of a link to a team forum, discord, etc.
   - `avatar_url`: optional string of a link to an image to be used as the teams avatar
+  - `allow_list`: optional list of public keys which are allowed to join the team. If empty, all public keys are allowed to join the team.
   - `closed`: optional boolean, defines whether a team is accepting new members
 
 ```protobuf
@@ -201,6 +218,8 @@ message UpdateReferralSet{
 ```
 
 If a referral set is currently designated as a team, a referrer should be able to "close" their team to any new members by setting the `closed` field to `True`. Note, closing a team is the same as closing a referral set and as such all `ApplyReferralCode` transactions applying the referral code associated with the closed referrals set should be rejected.
+
+Note, if a referrer updates the `allow_list` defining the parties which are allowed to join the team, the updated list is only used to validate attempts to join the team, i.e. if an existing member is removed from the list, they are not removed from the team.
 
 If a referral set is currently designated as a team, a party is able to effectively "disband" a team by updating their referral set and setting their `is_team` value to `False`. Note a team should only be "disbanded" and removed from leaderboards at the end of the current epoch after rewards have been distributed.
 
@@ -444,24 +463,28 @@ The Estimate Fees API should now calculate the following additional information:
 1. If a party is currently the referrer of a referral set from which a team **has not** yet been created, the party can **create** a team by submitting a signed `UpdateReferralSet` transaction and setting `is_team=True` (<a name="0083-RFPR-022" href="#0083-RFPR-022">0083-RFPR-022</a>).
 1. If a party is currently the referrer of a referral set from which a team **has** already been created, the party can **update** a team by submitting a signed `UpdateReferralSet` transaction specifying the fields they want to update (<a name="0083-RFPR-023" href="#0083-RFPR-023">0083-RFPR-023</a>).
 1. If a party submits an `UpdateReferralSet` transaction for a referral set they are not the referrer off, the transaction should be rejected (<a name="0083-RFPR-024" href="#0083-RFPR-024">0083-RFPR-024</a>).
+1. If a referrer updates the `allow_list` associated with the team, existing members who are no longer on the allow_list should **not** be removed from the team.
 
 #### Applying a referral code
 
 1. If a party **is not** currently a **referee**, if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-025" href="#0083-RFPR-025">0083-RFPR-025</a>)
 
     - the party **will** be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists and the team is not closed).
+    - the party **will** be added to the associated team (if one exists, the team is not closed, and the party is allowed by the `allow_list`).
 
 1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-026" href="#0083-RFPR-026">0083-RFPR-026</a>)
 
     - the party **will not**  be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists and the team is not closed).
+    - the party **will** be added to the associated team (if one exists and the team is not closed, and the party is allowed by the `allow_list`).
 
 1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-027" href="#0083-RFPR-027">0083-RFPR-027</a>).
 
     - the party **will** be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists and the team is not closed).
+    - the party **will** be added to the associated team (if one exists and the team is not closed, and the party is allowed by the `allow_list`).
 
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team has **no** `allow_list` specified, then the party **should** be added to the team.
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team.
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, but the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team.
 1. An `ApplyReferralCode` transaction should be rejected if the party is a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
 1. An `ApplyReferralCode` transaction should be rejected if the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the team to be closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
 
