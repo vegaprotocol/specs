@@ -47,6 +47,7 @@ Initially there will only be one option for AMM behaviour, that of a constant-fu
   commitment,
   market,
   slippage_tolerance_percentage,
+  proposed_fee,
   concentrated_liquidity_params: {
     base_price,
     lower_price,
@@ -104,7 +105,7 @@ The AMM position can be thought of as two separate liquidity provision curves, o
 
 One outcome of this is that the curve between `base price` and `lower price` is marginally easier to conceptualise directly from our parameters. At the lowest price side of a curve (`lower price` in this case) the market should be fully in the market contract position, whilst at the highest price (`base price` in this case) it should be fully sold out into cash. This is exactly the formulation used, where at `base price` a zero position is used and a cash amount of `commitment amount`. However given that there is likely to be some degree of leverage allowed on the market this is not directly the amount of funds to calculate using. An AMM with a `commitment amount` of `X` is ultimately defined by the requirement of using `X` in margin at the outer price bounds, so work backwards from that requirement to determine the theoretical cash value. We then calculate the two ranges separately to determine two different `Liquidity` values for the two ranges, which is a value used to later define volumes required to move the price a specified value.
 
-We can calculate a scaling factor that is the smaller of a fraction specified in the commitment (`margin_ratio_at_bounds`) or the market's worst case margin. If `margin_ratio_at_bounds` is not set the other value is taken automatically
+We can calculate a scaling factor that is the smaller of a fraction specified in the commitment (`margin_ratio_at_bounds`, either upper or lower depending on the side considered) or the market's worst case margin. If `margin_ratio_at_bounds` for the relevant side is not set then the market's worst case initial margin is taken automatically
 
 $$
 r_f = \min(\frac{1}{m_r}, \frac{1}{ (f_s + f_l) \cdotp f_i}) ,
@@ -177,9 +178,13 @@ The provided liquidity from an AMM commitment must be determined for two reasons
 
 As an AMM does not directly place orders on the book this calculation first needs to infer what the orders would be at each level within the eligible price bounds (those required by SLA parameters on the given market). From here any given AMM curve should implement functionality to take two prices and return the volume it would place to trade fully across that range. Calling this function across the price range out to lower and upper SLA bounds retrieves the full order book shape for each AMM.
 
-Once these are retrieved, the price / volume points should be combined with a precomputed array of the probability of trading at each price level to calculate the liquidity supplied on each side of the orderbook as defined in [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb). Once this is calculated, use this value as the instantaneous liquidity score for fee distribution as defined in [setting fees and rewards](./0042-LIQF-setting_fees_and_rewarding_lps.md). A market configurable value `equityLikeShareFeeFraction` defines a split within liquidity fee payments between two portions. Within the portion `equityLikeShareFeeFraction` the liquidity fee payments are weighted by the rolling ELS of each liquidity provider, whereas within the proportion `1 - equityLikeShareFeeFraction` the payment is divided strictly by the liquidity score within the present epoch only.
+Once these are retrieved, the price / volume points should be combined with a precomputed array of the probability of trading at each price level to calculate the liquidity supplied on each side of the orderbook as defined in [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb). Once this is calculated, use this value as the instantaneous liquidity score for fee distribution as defined in [setting fees and rewards](./0042-LIQF-setting_fees_and_rewarding_lps.md).
 
 As the computation of this virtual order shape may be heavy when run across a large number of passive AMMs the number of AMMs updated per block should be throttled to a fixed maximum number, updating on a rolling frequency, or when updated/first created.
 
 A given AMM's average liquidity score across the epoch should also be tracked, giving a time-weighted average at the end of each epoch (including `0` values for any time when the AMM either did not exist or was not providing liquidity on one side of the book). From this, a virtual stake amount can be calculated by dividing through by the `market.liquidity.stakeToCcyVolume` value and the AMM key'
 s ELS updated as normal.
+
+## Setting Fees
+
+The `proposed_fee` provided as part of the AMM construction contributes to the fee determination logic on the market, if a setup where LPs decide on the market fee is in use. In the case where it is the AMM's current assigned ELS, or the running average liquidity provided so far if the commitment was made in the current epoch, is used for weighting the AMM's vote for the fee. 
