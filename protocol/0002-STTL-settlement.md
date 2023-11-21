@@ -1,3 +1,5 @@
+0002
+
 # Settlement
 
 Settlement is the process of moving collateral between accounts when a position is closed,  the market expires or if there is an interim settlement action defined in the product.
@@ -68,7 +70,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 
 - With a market configured to take an oracle termination time and settlement price and put into continuous trading mode. When there are traders with open positions on the market and the termination trigger from oracle is sent so the market is terminated. Send market settlement price and assert that it is no longer possible to trade on this market.
 
-### Example 1 - A typical path of a cash settled futures market nearing expiry when market is trading in continuous session (<a name="0002-STTL-002" href="#0002-STTL-002">0002-STTL-002</a>)
+### Example 1 - A typical path of a cash settled futures market nearing expiry when market is trading in continuous session (<a name="0002-STTL-011" href="#0002-STTL-011">0002-STTL-011</a>)
 
 1. Market has a status of ACTIVE and is trading in default trading mode
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
@@ -79,12 +81,12 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset.
+1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) into the global insurance pool using the same settlement asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
 1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-003" href="#0002-STTL-003">0002-STTL-003</a>)
 
-### Example 2 - A less typical path of such a futures market nearing expiry when market is suspended (<a name="0002-STTL-004" href="#0002-STTL-004">0002-STTL-004</a>)
+### Example 2 - A less typical path of such a futures market nearing expiry when market is suspended (<a name="0002-STTL-012" href="#0002-STTL-012">0002-STTL-012</a>)
 
 1. Market has a status of SUSPENDED and in a protective auction
 1. The product's [trading terminated trigger is hit](./0016-PFUT-product_builtin_future.md#41-termination-of-trading)
@@ -95,7 +97,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset.
+1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) into the global insurance pool using the same settlement asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
 1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-005" href="#0002-STTL-005">0002-STTL-005</a>)
@@ -107,7 +109,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. If margin and general account of trader are insufficient to cover collateral transfers, then collateral is attempted to be taken from market's insurance pool. (<a name="0002-STTL-008" href="#0002-STTL-008">0002-STTL-008</a>)
 1. If the full required amount for collateral cannot be collected from individual or combination of these accounts, then as much as possible in the above sequence of accounts is collected and loss socialisation occurs. (<a name="0002-STTL-009" href="#0002-STTL-009">0002-STTL-009</a>)
 
-### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-010" href="#0002-STTL-010">0002-STTL-010</a>)
+### Example 3 - Settlement data to cash settled future is submitted before trading is terminated (<a name="0002-STTL-013" href="#0002-STTL-013">0002-STTL-013</a>)
 
 1. A [cash settled futures](0016-PFUT-product_builtin_future.md) market has a status of ACTIVE and is trading in default trading mode (continuous trading)
 1. An [oracle event occurs](./0045-DSRC-data_sourcing.md) that is eligible to settle the market, as defined on the [Product](./0001-MKTF-market_framework.md) (see also [cash settled futures spec](./0016-PFUT-product_builtin_future.md)). In other words the settlement price is submitted to the market before trading is terminated.
@@ -124,6 +126,7 @@ All of that happens while processing the trading terminated transaction.
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset.
+1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) into the global insurance pool using the same settlement asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
+
