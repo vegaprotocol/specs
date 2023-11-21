@@ -81,6 +81,11 @@ An OCO submission allows a user to have a stop loss and take profit applied to t
   - If set to `Position`, triggering should override the contained order's size with the trader's entire current position on the market.
     - All `Position` stop orders existing should be cancelled if a trader's position changes from long to short (or vice versa).
 
+- For a stop order with `Size Override` enabled linked to an `Order`:
+  - If the linked order trades fully prior to the stop loss being triggered, the stop loss order will be converted to a regular stop loss order with size equal to the full size of the `Order`
+  - If the linked order is cancelled prior to trading any volume at all the linked stop order will also be cancelled
+  - If the linked order trades partially and then is cancelled, the stop loss order will be converted to a regular stop loss order with size equal to the size of the `Order` traded before cancellation
+
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
 
 - If and when the trigger price is breached in the specified direction the order provided in the stop order submission is created and enters the book or trades as normal, as if it was just submitted.
@@ -402,6 +407,9 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A stop order with a size override linked to an existing order that is no longer active will not update the order size of the triggered order. (<a name="0014-ORDT-126" href="#0014-ORDT-126">0014-ORDT-126</a>)
 - A stop order with a size override linked to the position of the trader will use the current position as an override of the triggered order size. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
 - All stop orders with a position size override should be cancelled if the trader's position flips sides (long->short or short->long). (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
+- A stop order with a size override linked to an order, where the linked order is cancelled before trading any volume, should also be cancelled. (<a name="0014-ORDT-129" href="#0014-ORDT-129">0014-ORDT-129</a>)
+- A stop order with a size override linked to an order, where the linked order is cancelled after trading some portion of volume, should be converted to a stop order of a fixed size equal to the volume of the order traded prior to cancellation. (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>)
+- A stop order with a size override linked to an order, where the linked order trades fully, should be converted to a stop order of a fixed size equal to the full volume of the order. (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>)
 
 ## Perpetuals
 
