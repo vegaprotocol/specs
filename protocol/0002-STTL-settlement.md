@@ -1,5 +1,3 @@
-0002
-
 # Settlement
 
 Settlement is the process of moving collateral between accounts when a position is closed,  the market expires or if there is an interim settlement action defined in the product.

@@ -4,7 +4,7 @@
 
 A party only has control over balances in the "general" account for each asset.
 [Parties](./0017-PART-party.md) are identified by Vega public keys. Each party that makes a deposit on one of the asset bridges, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md) will have a general account for the relevant [asset](./0040-ASSF-asset_framework.md) created.
-In order to submit [orders](./0014-ORDT-order_types.md a non-zero general account balance is needed; Vega will transfer appropriate amount to the [margin account](./0011-MARA-check_order_allocate_margin.md) for the party and the market.
+In order to submit [orders](./0014-ORDT-order_types.md) a non-zero general account balance is needed; Vega will transfer appropriate amount to the [margin account](./0011-MARA-check_order_allocate_margin.md) for the party and the market.
 
 Any party can submit a withdrawal transaction to withdraw assets from the general account to a specified address on another chain, currently only [Ethereum ERC20 bridge](./0031-ETHB-ethereum_bridge_spec.md).
 
@@ -85,7 +85,7 @@ Every market will have at least one insurance pool account that holds collateral
 
 When a [market launches](./0043-MKTL-market_lifecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md).
 
-When a market is finalised / closed remaining funds are redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
+When a market is finalised / closed remaining funds are redistributed into the global insurance pool using the same settlement asset. This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
 
 ## General insurance pool
 
@@ -159,7 +159,7 @@ Additional accounts associated with [distribution](./0056-REWA-rewards_overview.
 
 - When a market opens for trading, there is an insurance account that is able to be used by that market for every settlement asset of that market. (<a name="0013-ACCT-020" href="#0013-ACCT-020">0013-ACCT-020</a>)
 - Only protocol-initiated aka internal transfer requests move money in or out of the insurance account. User initiated transfer requests cannot be used to move funds in or out of insurance pool. (<a name="0013-ACCT-021" href="#0013-ACCT-021">0013-ACCT-021</a>)
-- When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds redistributed to the global insurance pool account for the appropriate asset (if it doesn't exist create it) and other insurance pools using the same asset. (<a name="0013-ACCT-032" href="#0013-ACCT-032">0013-ACCT-032</a>)
+- When all markets of a risk universe expire and/or are closed, the insurance pool account has its outstanding funds redistributed to the global insurance pool account for the appropriate asset (if it doesn't exist create it), other insurance pools using the same asset will not get the outstanding funds. (<a name="0013-ACCT-033" href="#0013-ACCT-033">0013-ACCT-033</a>)
 
 ### Special case: Staking accounts
 

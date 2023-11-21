@@ -14,7 +14,7 @@ When a market is finalised / closed remaining funds are distributed equally amon
 
 ## Global insurance pool
 
-One global insurance pool per each of the settlement asset in which markets were terminated with remaining market-level insurance pool funds exists. It receives a portion of the funds from market's insurance pool upon its closure (funds get distributed equally between the global insurance pool and remaining active markets using the same settlement asset, e.g. if there are 4 such markets then the global insurance pool receives 1/5 of the funds).
+One global insurance pool per each of the settlement asset in which markets were terminated with remaining market-level insurance pool funds exists. It receives all the funds from market's insurance pool upon its closure.
 
 Global insurance pool is not included in the margin search process when party is insolvent - only the insurance pool of the market in which the insolvent party's liabilities are considered gets searched, if funds therein are insufficient then the remaining shortfall gets dealt with using loss socialisation.
 
