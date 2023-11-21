@@ -6,6 +6,9 @@ ABIs
 actioned
 Allowlist
 allowlisted
+AMM
+AMM's
+AMMs
 antiwhaling
 API
 APIs
@@ -147,6 +150,7 @@ int64
 integrations
 intrablock
 IOC
+joinable
 JSON
 keyholder
 keypair
