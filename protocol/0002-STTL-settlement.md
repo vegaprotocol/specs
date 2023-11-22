@@ -95,7 +95,7 @@ The [market lifecycle spec](./0043-MKTL-market_lifecycle.md) provides detail on 
 1. Any remaining balances in parties' margin and LP bond accounts are moved to their general account.
 1. The margin accounts and LP bond accounts for these markets are no longer required.
 1. Positions can be left as open, or set to zero (this isn't important for the protocol but should be made clear on the API either way).
-1. The market's insurance pool is [redistributed](./0015-INSR-market_insurance_pool_collateral.md) into the global insurance pool using the same settlement asset.
+1. The [market's insurance pool](./0015-INSR-market_insurance_pool_collateral.md) balance is transferred into the global insurance pool using the same settlement asset.
 1. Market status is now set to [SETTLED](./0043-MKTL-market_lifecycle.md).
 1. Now the market can be deleted.
 1. This mechanism does not incur fees to traders that have open positions that are settled at expiry. (<a name="0002-STTL-005" href="#0002-STTL-005">0002-STTL-005</a>)
