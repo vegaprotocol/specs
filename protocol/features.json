@@ -8,8 +8,7 @@
   "Successor Markets": {
     "milestone": "cosmic-carryover",
     "acs": [
-      "0001-MKTF-008",
-      "0081-SUCM-035"
+      "0001-MKTF-008"
     ]
   },
   "Ethereum oracles": {
@@ -204,6 +203,21 @@
     "acs": [
       "0028-GOVE-159",
       "0028-GOVE-166"
+    ]
+  },
+  "Insurance pools redistribution": {
+    "milestone": "palazzo",
+    "acs": [
+      "0002-STTL-011",
+      "0002-STTL-012",
+      "0002-STTL-013",
+      "0013-ACCT-033",
+      "0015-INSR-005",
+      "0043-MKTL-010",
+      "0073-LIMN-115",
+      "0073-LIMN-116",
+      "0073-LIMN-117",
+      "0081-SUCM-036"
     ]
   },
   "Unknown": {
