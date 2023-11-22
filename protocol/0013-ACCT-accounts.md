@@ -85,7 +85,7 @@ Every market will have at least one insurance pool account that holds collateral
 
 When a [market launches](./0043-MKTL-market_lifecycle.md), an insurance pool account is created for that market for each settlement asset. This account is used by the protocol during the collection of [margin requirements](./0010-MARG-margin_orchestration.md) and the collection of [mark to market settlement](./0003-MTMK-mark_to_market_settlement.md).
 
-When a market is finalised / closed remaining funds are transfered into the global insurance pool using the same settlement asset. This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
+When a market is finalised / closed remaining funds are transfetred into the global insurance pool using the same settlement asset. This occurs using ledger entries to preserve double entry accounting records within the collateral engine.
 
 ## General insurance pool
 
