@@ -94,12 +94,13 @@
     sell 10 @ 100 100 
     ```
 
-    then the maintenance margin (under cross-margin mode) for the party is `min(1 x (100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`, and margin account should have initial margin level which is `5565 x 1.5 = 8348`.
-    when switching to isolated-margin mode and the `margin factor short = 0.3`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.3 = 17250`, and margin account should be updated to `17250`. (<a name="0019-MCAL-031" href="#0019-MCAL-031">0019-MCAL-031</a>)
-
     when switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected. (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
 
-    when switching to isolated-margin mode and the `margin factor short = 0.3`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.3 = 17250`, and margin account should be updated to `17250`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
+    when switching to isolated-margin mode and the `margin factor short = 0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
+
+    when decreasing the `margin factor short` from `0.9` to `0.7`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.7 = 11130`, and margin account should be updated to `11130`. (<a name="0019-MCAL-031" href="#0019-MCAL-031">0019-MCAL-031</a>)
+
+    when increasing the `margin factor short` from `0.7` to `0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-059" href="#0019-MCAL-059">0019-MCAL-059</a>)
 
 - When the party place a new short order of `1` with price `15000`, and the market is in continuous trading.
 
