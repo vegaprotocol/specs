@@ -93,6 +93,7 @@
     sell 1 @ 100 000
     sell 10 @ 100 100 
     ```
+    
     when switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected. (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
 
     when switching to isolated-margin mode and the `margin factor short = 0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
