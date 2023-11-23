@@ -1,6 +1,6 @@
 # Margin Calculator
 
-## Acceptance Criteria
+## Acceptance Criteria (under Cross-margin modes)
 
 - Get four margin levels for one or more parties (<a name="0019-MCAL-001" href="#0019-MCAL-001">0019-MCAL-001</a>)
 
@@ -82,6 +82,107 @@
       - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * 1) = 5565` (<a name="0019-MCAL-028" href="#0019-MCAL-028">0019-MCAL-028</a>)
       - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * -1) = 5610`(<a name="0019-MCAL-029" href="#0019-MCAL-029">0019-MCAL-029</a>)
 
+## Acceptance Criteria (under Isolated-margin modes)
+
+- If a party has a newly created short position of `1` and the mark price is `15 900` and `market.linearSlippageFactor = 0.25`, `RF short = 0.1` and `Initial margin factor = 1.5` and order book is
+
+    ```book
+    buy 1 @ 15 000
+    buy 10 @ 14 900
+    and
+    sell 1 @ 100 000
+    sell 10 @ 100 100 
+    ```
+
+    then the maintenance margin (under cross-margin mode) for the party is `min(1 x (100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`, and margin account should have initial margin level which is `5565 x 1.5 = 8348`.
+    when switching to isolated-margin mode and the `margin factor short = 0.3`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.3 = 17250`, and margin account should be updated to `17250`. (<a name="0019-MCAL-031" href="#0019-MCAL-031">0019-MCAL-031</a>)
+
+    when switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected. (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
+
+    when switching to isolated-margin mode and the `margin factor short = 0.3`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.3 = 17250`, and margin account should be updated to `17250`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
+
+- When the party place a new short order of `1` with price `15000`, and the market is in continuous trading.
+
+    The margin account should have additional amount `average entry price x current position x new margin factor = 59524 x 1 x 0.3 = 17857` added if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
+
+    The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-035" href="#0019-MCAL-035">0019-MCAL-035</a>)
+
+- When the party place a new short order of `1` with price `45000`, and the market is in continuous trading.
+
+    The margin account should have additional amount `limit price * size * margin factor = 45000 x 1 x 0.3 = 13500` added if the party has enough asset in the general account(<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
+
+    The order will be rejected if the party does not have enough asset in the general account(<a name="0019-MCAL-037" href="#0019-MCAL-037">0019-MCAL-037</a>)
+
+- When the party place a new long order of `1` with price `145000` and the party has existing short position of `3`, and the market is in continuous trading. The margin account should not change(<a name="0019-MCAL-038" href="#0019-MCAL-038">0019-MCAL-038</a>)
+
+- When the party place a new long order of `10` with price `145000` and the party has existing short position of `3`, and the market is in continuous trading. The margin account should have additional amount `limit price * size * margin factor = 145000 x (10-3) x 0.3 = 304500` added if the party has enough asset in the general account(<a name="0019-MCAL-039" href="#0019-MCAL-039">0019-MCAL-039</a>)
+
+- Margin levels are correctly calculated in the case of an open position dropping below maintenance margin levels active orders will remain active as these are margined separately and will not be cancelled.(<a name="0019-MCAL-040" href="#0019-MCAL-040">0019-MCAL-040</a>)
+
+- Zero position and zero orders results in all zero margin levels. (<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
+
+- If a trader has a long position and there are no bids on the order book, the `exit price` is equal to infinity and hence the slippage cap is used as the slippage component of the margin calculation. (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)
+
+- If a trader's `long position > 0 && 0 < *sum of volume of order book bids* < long position`, the `exit price` is equal to infinity.  (<a name="0019-MCAL-043" href="#0019-MCAL-043">0019-MCAL-043</a>)
+
+- If a trader's `short position < 0 && 0 < *sum of absolute volume of order book offers* < short position`, the `exit price` is equal to infinity. (<a name="0019-MCAL-044" href="#0019-MCAL-044">0019-MCAL-044</a>)
+
+- If a trader's `long position > 0 &&  long position < *sum of volume of order book bids*`, the `exit price` is equal to the *volume weighted price of the order book bids* with cumulative volume equal to the riskiest long, starting from best bid.  (<a name="0019-MCAL-045" href="#0019-MCAL-045">0019-MCAL-045</a>)
+
+- If a trader's `short position < 0 && 0 < abs(short position) < *sum of absolute volume of order book offers*`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-046" href="#0019-MCAL-046">0019-MCAL-046</a>)
+
+- A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-047" href="#0019-MCAL-047">0019-MCAL-047</a>)
+
+- A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
+
+- For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
+
+- In the same situation as above, if `market.linearSlippageFactor = 100`, (i.e. 10 000%) instead, then the margin for the party is `min(1 x (100000-15900), 15900 x 100 x 1) + 0.1 x 1 x 15900 = 85690`. (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+
+- If the `market.linearSlippageFactor` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-052" href="#0019-MCAL-052">0019-MCAL-052</a>)
+
+- For a perpetual future market, the maintenance margin is equal to the maintenance margin on an equivalent dated future market, plus a component related to the expected upcoming margin funding payment. Specifically:
+  - If a party is long `1` unit and the mark price is `15 900` and `market.linearSlippageFactor = 0.25` and `RF long = 0.1` and order book is
+
+    ```book
+    buy 1 @ 15 000
+    buy 10 @ 14 900
+    and
+    sell 1 @ 100 000
+    sell 10 @ 100 100
+    ```
+
+    then the dated future maintenance margin component for the party is `min(1 x (100000-15900), 15900 x 0.25 x 1) + 0.1 x 1 x 15900 = 5565`. The current accrued funding payment for the perpetual component is calculated using
+
+    ```book
+    delta_t = funding_period_end - max(funding_period_start, internal_data_points[0].t)
+    funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap))
+    ```
+
+    Where `f_twap` represents the internal mark price TWAP and `s_twap` represents the TWAP from the external oracle feed. When clamp bounds are large we use:
+
+    ```book
+    funding_payment = f_twap - s_twap + (1 + delta_t * interest_rate)*s_twap-f_twap
+                    = s_twap * delta_t * interest_rate
+    ```
+
+    - If `s_twap = 1600`, `delta_t = 0.002` and `interest_rate = 0.05` then `funding_payment = 1600 * 0.002 * 0.05 = 0.16`.
+      - Thus, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * 0.16 * 1 = 5565.08` (<a name="0019-MCAL-053" href="#0019-MCAL-053">0019-MCAL-053</a>)
+
+    - If instead
+      - `clamp_upper_bound*s_twap < max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap)`
+      - `funding payment = f_twap - s_twap + clamp_upper_bound*s_twap = f_twap + s_twap * (clamp_upper_bound - 1)`.
+      - Then with `s_twap = 1600`, `clamp_upper_bound = 0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (0.05 - 1) = 1590 - 1520 = 70`
+      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * 70 * 1 = 5600` (<a name="0019-MCAL-058" href="#0019-MCAL-058">0019-MCAL-058</a>)
+      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, 70 * -1) = 5565`(<a name="0019-MCAL-054" href="#0019-MCAL-054">0019-MCAL-054</a>)
+
+    - If instead
+      - `clamp_upper_bound*s_twap > clamp_lower_bound*s_twap > (1 + delta_t * interest_rate)*s_twap-f_twap)`
+      - `funding payment = f_twap - s_twap + clamp_lower_bound*s_twap = f_twap + s_twap * (clamp_lower_bound - 1)`.
+      - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (-0.05 - 1) = 1590 - 1680 = -90`
+      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * 1) = 5565` (<a name="0019-MCAL-055" href="#0019-MCAL-055">0019-MCAL-055</a>)
+      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * -1) = 5610`(<a name="0019-MCAL-056" href="#0019-MCAL-056">0019-MCAL-056</a>)
+
 ## Summary
 
 The *margin calculator* returns the set of margin levels for a given *actual position*, along with the amount of additional margin (if any) required to support the party's *potential position* (i.e. active orders including any that are parked/untriggered/undeployed).
@@ -157,19 +258,19 @@ When submitting, amending, or deleting an order in isolated margin mode and cont
 
 NB: This means that a party's order could partially match, with a trade executed and some funds moved to the margin account with correct leverage whilst the rest of the order is immediately stopped.
 
-When submitting, amending, or deleting an order in isolated margin mode and an auction is active there is no concept of an order trading immediately on entry, however the case of someone putting in a sell order for a very low price must be handled (as it is likely to execute at a much higher price). To handle this, when in an auction the amount taken into the order margin account should be the larger of either `limit price * size * margin factor` or `max(mark price, indicative uncrossing price) * size * margin factor`. All other steps are as above.
+When submitting, amending, or deleting an order in isolated margin mode and an auction is active there is no concept of an order trading immediately on entry, however the case of someone putting in a sell order for a very low price must be handled (as it is likely to execute at a much higher price). To handle this, when in an auction the amount taken into the order margin account should be the larger of either `limit price * size * margin factor` or `max(mark price, indicative uncrossing price) * size * margin factor`. After uncrossing, all remaining open order volume should be rebased back to simply `limit price * size * margin factor` in the order margin account. All other steps are as above.
 
 ### Increasing Position
 
 When an order trades which increases the position (increasing the absolute value of the trader's position), the target amount to be transferred is calculated as:
 
-```math
+$$
 \text{margin to add} = \text{margin factor} \cdot \text{sum across executed trades}(|\text{trade size}| \cdot \text{trade price})
-```
+$$
 
 This will be taken by performing three steps:
 
- 1. The margin to add as calculated here is compared to the margin which would have been placed into the order margin account for this order, `limit price * remaining size * margin factor`.
+ 1. The margin to add as calculated here is compared to the margin which would have been placed into the order margin account for this order, `limit price * total traded size * margin factor`.
  2. If it is equal, this amount is taken from the order margin account and placed into the margin account
  3. If the order traded at a price which means less margin should be taken then the amount `margin to add` above is taken from the order margin account into the margin account and the excess is returned from the order margin account to the general account
 
@@ -177,11 +278,19 @@ NB: In implementation, for any volume that trades immediately on entry, the addi
 
 ### Reducing Position
 
-When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is determined by the fraction of the position which is being closed. However, this fraction should also take into account that the entire position's margin may be due to change since the current trading price may have diverged from the last mark price update. As such the margin released should be calculated as:
+When an order trades which reduces the trader's current position the amount to be withdrawn from the margin account is determined by the fraction of the position which is being closed. If the entire position is being closed (either as a result of changing sides as below or just moving to `0`) then the entirety of the margin balance will be moved back to the general account.
 
-```math
-\text{margin to remove} = \text{margin required for entire position at VWAP trade price} \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
-```
+However, if only a fraction is being closed then this fraction should also take into account that the entire position's margin may be due to change, since the current trading price may have diverged from the last mark price update. As such the margin released should be calculated by first calculating what the `theoretical account balance` of the margin account would be if the entire pre-existing position (i.e. the position prior to any reduction) were margined at the VWAP of the executed trade, then taking the proportion of that corresponding to the proportion of the position closed.
+
+$$
+\text{margin to remove} = \text{theoretical account balance} \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
+$$
+
+Concretely, this should resolve to:
+
+$$
+\text{margin to remove} = (\text{balance before}  + \text{position before} \cdot (\text{new trade VWAP} -  \text{mark price})) \cdot \frac{|\text{total size of new trades}|}{|\text{entire position prior to trade}|}
+$$
 
 Note: This requires a calculation of the position's margin at trade time.
 
@@ -486,4 +595,3 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
-

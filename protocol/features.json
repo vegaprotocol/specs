@@ -1,34 +1,25 @@
 {
   "Iceberg Orders": {
-    "milestone": "cosmic",
+    "milestone": "cosmic-carryover",
     "acs": [
       "0014-ORDT-069"
     ]
   },
   "Successor Markets": {
-    "milestone": "cosmic",
+    "milestone": "cosmic-carryover",
     "acs": [
-      "0001-MKTF-008",
-      "0081-SUCM-035"
+      "0001-MKTF-008"
     ]
   },
   "Ethereum oracles": {
-    "milestone": "cosmic",
+    "milestone": "cosmic-carryover",
     "acs": [
       "0082-ETHD-035",
       "0082-ETHD-041"
     ]
   },
-  "Referral program": {
-    "milestone": "cosmic",
-    "acs": [
-      "0062-SPAM-033",
-      "0062-SPAM-035",
-      "0062-SPAM-037"
-    ]
-  },
   "Stop Orders": {
-    "milestone": "cosmic",
+    "milestone": "cosmic-carryover",
     "acs": [
       "0079-TGAP-004",
       "0079-TGAP-005"
@@ -51,7 +42,11 @@
       "0053-PERP-025",
       "0053-PERP-026",
       "0053-PERP-027",
-      "0053-PERP-028"
+      "0053-PERP-028",
+      "0053-PERP-029",
+      "0053-PERP-030",
+      "0053-PERP-031",
+      "0053-PERP-032"
     ]
   },
   "Team rewards": {
@@ -88,7 +83,34 @@
   },
   "Margin isolation": {
     "milestone": "palazzo",
-    "acs": []
+    "acs": [
+      "0019-MCAL-031",
+      "0019-MCAL-032",
+      "0019-MCAL-033",
+      "0019-MCAL-034",
+      "0019-MCAL-035",
+      "0019-MCAL-036",
+      "0019-MCAL-037",
+      "0019-MCAL-038",
+      "0019-MCAL-039",
+      "0019-MCAL-040",
+      "0019-MCAL-041",
+      "0019-MCAL-042",
+      "0019-MCAL-043",
+      "0019-MCAL-044",
+      "0019-MCAL-045",
+      "0019-MCAL-046",
+      "0019-MCAL-047",
+      "0019-MCAL-049",
+      "0019-MCAL-051",
+      "0019-MCAL-052",
+      "0019-MCAL-053",
+      "0019-MCAL-054",
+      "0019-MCAL-055",
+      "0019-MCAL-056",
+      "0019-MCAL-057",
+      "0019-MCAL-058"
+    ]
   },
   "Quadratic slippage removal": {
     "milestone": "palazzo",
@@ -122,14 +144,39 @@
   },
   "Batch governance proposals": {
     "milestone": "palazzo",
-    "acs": []
+    "acs": [
+      "0028-GOVE-067",
+      "0028-GOVE-068",
+      "0028-GOVE-145",
+      "0028-GOVE-146",
+      "0028-GOVE-148",
+      "0028-GOVE-149",
+      "0028-GOVE-160",
+      "0028-GOVE-161",
+      "0028-GOVE-162",
+      "0028-GOVE-163",
+      "0028-GOVE-164",
+      "0028-GOVE-165"
+    ]
   },
   "Transfer fee cap": {
     "milestone": "palazzo",
     "acs": [
       "0057-TRAN-011",
       "0057-TRAN-012",
-      "0057-TRAN-013",
+      "0057-TRAN-014",
+      "0057-TRAN-015",
+      "0057-TRAN-016",
+      "0057-TRAN-017",
+      "0057-TRAN-018",
+      "0057-TRAN-019",
+      "0057-TRAN-020",
+      "0057-TRAN-021",
+      "0057-TRAN-022",
+      "0057-TRAN-023",
+      "0057-TRAN-024",
+      "0057-TRAN-027",
+      "0057-TRAN-028",
       "0057-TRAN-064",
       "0057-TRAN-065"
     ]
@@ -149,6 +196,28 @@
       "0042-LIQF-056",
       "0042-LIQF-057",
       "0042-LIQF-058"
+    ]
+  },
+  "Governance market name change": {
+    "milestone": "palazzo",
+    "acs": [
+      "0028-GOVE-159",
+      "0028-GOVE-166"
+    ]
+  },
+  "Insurance pools redistribution": {
+    "milestone": "palazzo",
+    "acs": [
+      "0002-STTL-011",
+      "0002-STTL-012",
+      "0002-STTL-013",
+      "0013-ACCT-033",
+      "0015-INSR-005",
+      "0043-MKTL-010",
+      "0073-LIMN-115",
+      "0073-LIMN-116",
+      "0073-LIMN-117",
+      "0081-SUCM-036"
     ]
   },
   "Unknown": {

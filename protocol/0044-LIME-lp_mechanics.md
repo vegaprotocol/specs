@@ -161,7 +161,6 @@ Note that in the case of spot market or any market that isn't running an insuran
 
 Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire $\text{commitment-variation}_i$ as the `delta`.
 
-Note that as a consequence the market may land in a liquidity auction the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP(s) reducing their commitment to an immediate liquidity auction evaluation).
 
 ## Fees
 
@@ -353,10 +352,6 @@ In the case of spot markets it will be transferred into the network treasury for
     (<a name="0044-LIME-050" href="#0044-LIME-050">0044-LIME-050</a>). For spot (<a name="0044-LIME-054" href="#0044-LIME-054">0044-LIME-054</a>)
   - LP can decrease or cancel their commitment and it will take effect immediately without incurring penalties (<a name="0044-LIME-051" href="#0044-LIME-051">0044-LIME-051</a>). For spot (<a name="0044-LIME-055" href="#0044-LIME-055">0044-LIME-055</a>)
   - If target stake is 0 then any LP can cancel their commitment without incurring penalties (<a name="0044-LIME-053" href="#0044-LIME-053">0044-LIME-053</a>)
-
-- Consider a market in liquidity auction, when a LP increases their commitment it will take effect immediate for the purposes of LP stake supplied to the market. Where LP `supplied stake > target stake` the market will leave liquidity auction when the liquidity auction ends
-  - In terms of the liquidity they are expected to supply: this only takes effect from the start of the next epoch
-  (<a name="0044-LIME-102" href="#0044-LIME-102">0044-LIME-102</a>)
 
 - For a market that is in continuous trading and a single LP has committed liquidity:
   - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>). For spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
