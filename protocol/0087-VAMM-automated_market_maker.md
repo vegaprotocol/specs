@@ -174,3 +174,24 @@ s ELS updated as normal.
 ## Setting Fees
 
 The `proposed_fee` provided as part of the AMM construction contributes to the fee determination logic on the market, if a setup where LPs decide on the market fee is in use. In the case where it is the AMM's current assigned ELS, or the running average liquidity provided so far if the commitment was made in the current epoch, is used for weighting the AMM's vote for the fee.
+
+## Calculating Square Roots
+
+Much of the calculation work for the concentrated liquidity curve requires the use of square root functions. These work fine for AMMs with tick prices based around integer powers of a small number, but are less tractable in a system with fixed tick sizes. As frequent calculation of a square root in floating point arithmetic is very costly, and requires a consensus vote slowing it down further, an alternative method is needed.
+
+In order to handle this, the protocol should maintain a mapping table between proximate prices to current market price and their log scale equivalents, which can be used instead where square roots are needed. This table should consist of a wide range of prices and be updated at some low frequency. If any trade causes prices outside this table to be needed, then an expansion should be calculated automatically and used. In order to calculate the table, there are two possible approaches:
+
+  1. First, the float `log2` function and floating-point consensus may be possible depending on time/processing constraints
+  1. Second, an integer version of `log2` of the form below would allow local calculation of the table:
+
+```c
+int log2(int64_t num) {
+    int res = 0, pw = 0;    
+    for(int i = 32; i > 0; i --) {
+        res += i;
+        if(((1LL << res) - 1) & num)
+            res -= i;
+    }
+    return res;
+}
+```
