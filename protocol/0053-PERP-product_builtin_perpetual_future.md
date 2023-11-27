@@ -295,7 +295,7 @@ Assume the last known spot price before this funding period is `11`. Then assume
 
 Then, assuming no auctions during the period we get:
 $\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(7-5)+8\cdot(9-7)+7\cdot(10-9)}{10}=9.3$,
-$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+12\cdot(6-5)+11\cdot(7-6)+8\cdot(9-7)+14\cdot(10-9)}{10}=10.3$. (<a name="0053-PERP-027" href="#0053-PERP-027">0053-PERP-027</a>)
+$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+12\cdot(6-5)+11\cdot(7-6)+8\cdot(9-7)+14\cdot(10-9)}{10}=10.2$. (<a name="0053-PERP-027" href="#0053-PERP-027">0053-PERP-027</a>)
 
 1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market. Furthermore, assume that in this period that market is in an auction which starts 5 minutes into the period and ends 7 minutes into the period.
 
@@ -320,7 +320,7 @@ Assume the last known spot price before this funding period is `11`. Then assume
 
 Then, taking the auction into account we get:
 $\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(8-7)+8\cdot(10-8)+30\cdot(10-10)}{8}=9.625$,
-$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8\cdot(9-8)+14\cdot(10-9)}{10}=10.25$. (<a name="0053-PERP-028" href="#0053-PERP-028">0053-PERP-028</a>)
+$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8\cdot(9-8)+14\cdot(10-9)}{8}=10.25$. (<a name="0053-PERP-028" href="#0053-PERP-028">0053-PERP-028</a>)
 
 When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=2.5$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.025$. (<a name="0053-PERP-029" href="#0053-PERP-029">0053-PERP-029</a>)
 
