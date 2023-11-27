@@ -303,7 +303,7 @@ Assume the last known mark price before the start of the period to be `10` and t
 | Time (min) since period start | mark price  |
 | ----------------------------- | ----------- |
 | 1                             | 11          |
-| 3                             | 10          |
+| 3                             | 11          |
 | 7                             | 9           |
 | 8                             | 8           |
 | 10                            | 30          |
@@ -313,13 +313,13 @@ Assume the last known spot price before this funding period is `11`. Then assume
 | ----------------------------- | ----------- |
 | 1                             | 9           |
 | 3                             | 10          |
-| 5                             | 12          |
+| 5                             | 30          |
 | 6                             | 11          |
 | 8                             | 8           |
 | 9                             | 14          |
 
 Then, taking the auction into account we get:
-$\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(8-7)+8\cdot(10-8)+30\cdot(10-10)}{8}=9.625$,
+$\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+11\cdot(5-3)+9\cdot(8-7)+8\cdot(10-8)+30\cdot(10-10)}{8}=9.875$,
 $\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8\cdot(9-8)+14\cdot(10-9)}{8}=10.25$. (<a name="0053-PERP-028" href="#0053-PERP-028">0053-PERP-028</a>)
 
 When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=2.5$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.025$. (<a name="0053-PERP-029" href="#0053-PERP-029">0053-PERP-029</a>)
