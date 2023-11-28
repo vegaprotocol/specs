@@ -94,34 +94,35 @@
     sell 10 @ 100 100 
     ```
 
-    - when switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected. (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
+    When switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected. (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
 
-    - when switching to isolated-margin mode and the `margin factor short = 0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
+    When switching to isolated-margin mode and the `margin factor short = 0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
 
-    - when decreasing the `margin factor short` from `0.9` to `0.7`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.7 = 11130`, and margin account should be updated to `11130`. (<a name="0019-MCAL-031" href="#0019-MCAL-031">0019-MCAL-031</a>)
+    When decreasing the `margin factor short` from `0.9` to `0.7`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.7 = 11130`, and margin account should be updated to `11130`. (<a name="0019-MCAL-031" href="#0019-MCAL-031">0019-MCAL-031</a>)
 
-    - when increasing the `margin factor short` from `0.7` to `0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-059" href="#0019-MCAL-059">0019-MCAL-059</a>)
+    When increasing the `margin factor short` from `0.7` to `0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-059" href="#0019-MCAL-059">0019-MCAL-059</a>)
 
-    - Switch to isolated margin mode will be rejected if the party does not have enough asset in the general account(<a name="0019-MCAL-066" href="#0019-MCAL-066">0019-MCAL-066</a>)
+    Switch to isolated margin mode will be rejected if the party does not have enough asset in the general account(<a name="0019-MCAL-066" href="#0019-MCAL-066">0019-MCAL-066</a>)
 
 - When the party place a new short order of `10` with price `15910` which does not offset the existing position, and the market is in continuous trading.
 
-    - The margin account should have additional amount `limit price x size x margin factor = 15910 x 10 x 0.9 = 143190` transfered into "order margin" account if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
+    The margin account should have additional amount `limit price x size x margin factor = 15910 x 10 x 0.9 = 143190` transfered into "order margin" account if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
 
-    - The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-035" href="#0019-MCAL-035">0019-MCAL-035</a>)
+    The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-035" href="#0019-MCAL-035">0019-MCAL-035</a>)
 
-    - The party amend the order size to `5`, and the amount `limit price x size x margin factor = 15912 x 5 x 0.9 = 71604` will be transfered from "order margin" account into general account (<a name="0019-MCAL-060" href="#0019-MCAL-060">0019-MCAL-060</a>)
+    The party amend the order size to `5`, and the amount `limit price x size x margin factor = 15912 x 5 x 0.9 = 71604` will be transfered from "order margin" account into general account (<a name="0019-MCAL-060" href="#0019-MCAL-060">0019-MCAL-060</a>)
 
-    - Another trader placed a buy order of `3` with price `15912`, party's position becomes `4`, party's margin account should be updated to `15912 x 4 x 0.9 =57283` and order margin should be `15912x 2 x 0.9 = 28642` (<a name="0019-MCAL-061" href="#0019-MCAL-061">0019-MCAL-061</a>)
+    Another trader placed a buy order of `3` with price `15912`, party's position becomes `4`, party's margin account should be updated to `15912 x 4 x 0.9 =57283` and order margin should be `15912x 2 x 0.9 = 28642` (<a name="0019-MCAL-061" href="#0019-MCAL-061">0019-MCAL-061</a>)
 
-    - Switch margin mode from isolated margin to cross margin when party holds position only, the margin account should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310` (<a name="0019-MCAL-065" href="#0019-MCAL-065">0019-MCAL-065</a>)
+    Switch margin mode from isolated margin to cross margin when party holds position only, the margin account should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310` (<a name="0019-MCAL-065" href="#0019-MCAL-065">0019-MCAL-065</a>)
 
-    - Switch from isolated margin to cross margin mode, the margin account is only updated in the next MTM (<a name="0019-MCAL-063" href="#0019-MCAL-063">0019-MCAL-063</a>)
+    Switch from isolated margin to cross margin mode, the margin account is only updated in the next MTM (<a name="0019-MCAL-063" href="#0019-MCAL-063">0019-MCAL-063</a>)
 
-    - Switch from cross margin to isolated margin mode, check both margin account and order margin are updated (<a name="0019-MCAL-064" href="#0019-MCAL-064">0019-MCAL-064</a>)
+    Switch from cross margin to isolated margin mode, check both margin account and order margin are updated (<a name="0019-MCAL-064" href="#0019-MCAL-064">0019-MCAL-064</a>)
 
-    - When the party has no orders, their order margin account should be `0` (<a name="0019-MCAL-062" href="#0019-MCAL-062">0019-MCAL-062</a>)
-    - Create some MTM, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
+    When the party has no orders, their order margin account should be `0` (<a name="0019-MCAL-062" href="#0019-MCAL-062">0019-MCAL-062</a>)
+    
+    Create some MTM, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
 
 - When the party place a new long order of `2` with price `15912` which does offset the existing position, and the market is in continuous trading.
 
