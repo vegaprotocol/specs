@@ -121,7 +121,7 @@
     Switch from cross margin to isolated margin mode, check both margin account and order margin are updated (<a name="0019-MCAL-064" href="#0019-MCAL-064">0019-MCAL-064</a>)
 
     When the party has no orders, their order margin account should be `0` (<a name="0019-MCAL-062" href="#0019-MCAL-062">0019-MCAL-062</a>)
-    
+
     Create some MTM, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
 
 - When the party place a new long order of `2` with price `15912` which does offset the existing position, and the market is in continuous trading.
