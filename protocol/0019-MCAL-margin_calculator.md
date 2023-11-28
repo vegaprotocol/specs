@@ -106,11 +106,11 @@
 
 - When the party place a new short order of `10` with price `15910` which does not offset the existing position, and the market is in continuous trading.
 
-    The margin account should have additional amount `limit price x size x margin factor = 15910 x 10 x 0.9 = 143190` transfered into "order margin" account if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
+    The margin account should have additional amount `limit price x size x margin factor = 15910 x 10 x 0.9 = 143190` transferred into "order margin" account if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
 
     The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-035" href="#0019-MCAL-035">0019-MCAL-035</a>)
 
-    The party amend the order size to `5`, and the amount `limit price x size x margin factor = 15912 x 5 x 0.9 = 71604` will be transfered from "order margin" account into general account (<a name="0019-MCAL-060" href="#0019-MCAL-060">0019-MCAL-060</a>)
+    The party amend the order size to `5`, and the amount `limit price x size x margin factor = 15912 x 5 x 0.9 = 71604` will be transferred from "order margin" account into general account (<a name="0019-MCAL-060" href="#0019-MCAL-060">0019-MCAL-060</a>)
 
     Another trader placed a buy order of `3` with price `15912`, party's position becomes `4`, party's margin account should be updated to `15912 x 4 x 0.9 =57283` and order margin should be `15912x 2 x 0.9 = 28642` (<a name="0019-MCAL-061" href="#0019-MCAL-061">0019-MCAL-061</a>)
 
@@ -128,7 +128,7 @@
 
   - The margin account should not change as no additional margin is required (<a name="0019-MCAL-038" href="#0019-MCAL-038">0019-MCAL-038</a>)
 
-  - When the party switch to cross margin mode, the margin accounts will not updated till nect MTM(<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
+  - When the party switch to cross margin mode, the margin accounts will not updated till next MTM(<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
 
   - The order will be rejected if the party does not have enough asset in the general account(<a name="0019-MCAL-037" href="#0019-MCAL-037">0019-MCAL-037</a>)
 
