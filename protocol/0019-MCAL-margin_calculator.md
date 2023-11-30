@@ -159,7 +159,7 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - When the party reduces the pegged order size only, the order margin should be reduced (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
 
-- When the party reduces the pegged order price only, the order margin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)(<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+- When the party reduces the pegged order price only, the order margin should be reduced (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
 
 - When the party increases the pegged order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-052" href="#0019-MCAL-052">0019-MCAL-052</a>)
 
@@ -183,21 +183,102 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - When the party is closeout, insurance pool should be updated accordingly (<a name="0019-MCAL-074" href="#0019-MCAL-074">0019-MCAL-074</a>)
 
-**When market is in auction mode:**
+**Switch between margin modes:**
 
-- When the market is in auctions, switch from cross margin mode to isolated margin mode (<a name="0019-MCAL-080" href="#0019-MCAL-080">0019-MCAL-080</a>)
+- switch to isolated margin with no position and no order (before the first order ever has been sent) in continuous mode(<a name="0019-MCAL-100" href="#0019-MCAL-100">0019-MCAL-100</a>)
 
-- When the market is in auctions, switch from cross margin mode to isolated margin mode (<a name="0019-MCAL-081" href="#0019-MCAL-081">0019-MCAL-081</a>)
+- switch back to cross margin with no position and no order in continuous mode(<a name="0019-MCAL-101" href="#0019-MCAL-101">0019-MCAL-101</a>)
+
+- switch to isolated margin with no position and no order (before the first order ever has been sent) in auction(<a name="0019-MCAL-102" href="#0019-MCAL-102">0019-MCAL-102</a>)
+
+- switch back to cross margin with no position and no order in continuous mode in auction(<a name="0019-MCAL-103" href="#0019-MCAL-103">0019-MCAL-103</a>)
+
+- switch to isolated margin with position and no orders with margin factor such that position margin is < initial should fail in continuous(<a name="0019-MCAL-104" href="#0019-MCAL-104">0019-MCAL-104</a>)
+
+- switch to isolated margin with position and no orders with margin factor such that position margin is < initial should fail in auction(<a name="0019-MCAL-105" href="#0019-MCAL-105">0019-MCAL-105</a>)
+
+- switch to isolated margin without position and with orders with margin factor such that position margin is < initial should fail in continuous(<a name="0019-MCAL-106" href="#0019-MCAL-106">0019-MCAL-106</a>)
+
+- switch to isolated margin without position and with orders with margin factor such that position margin is < initial should fail in auction(<a name="0019-MCAL-107" href="#0019-MCAL-107">0019-MCAL-107</a>)
+
+- switch to isolated margin with position and with orders with margin factor such that position margin is < initial should fail in continuous(<a name="0019-MCAL-108" href="#0019-MCAL-108">0019-MCAL-108</a>)
+
+- switch to isolated margin with position and with orders with margin factor such that position margin is < initial should fail in auction(<a name="0019-MCAL-109" href="#0019-MCAL-109">0019-MCAL-109</a>)
+
+- switch to isolated margin without position and no orders with margin factor such that there is insufficient balance in the general account in continuous mode(<a name="0019-MCAL-110" href="#0019-MCAL-110">0019-MCAL-110</a>)
+
+- switch to isolated margin without position and no orders with margin factor such that there is insufficient balance in the general account in auction mode(<a name="0019-MCAL-111" href="#0019-MCAL-111">0019-MCAL-111</a>)
+
+- switch to isolated margin with position and no orders with margin factor such that there is insufficient balance in the general account in continuous mode(<a name="0019-MCAL-112" href="#0019-MCAL-112">0019-MCAL-112</a>)
+
+- switch to isolated margin with position and no orders with margin factor such that there is insufficient balance in the general account in auction mode(<a name="0019-MCAL-113" href="#0019-MCAL-113">0019-MCAL-113</a>)
+
+- switch to isolated margin with position and with orders with margin factor such that there is insufficient balance in the general account in continuous mode(<a name="0019-MCAL-114" href="#0019-MCAL-114">0019-MCAL-114</a>)
+
+- switch to isolated margin with position and with orders with margin factor such that there is insufficient balance in the general account in auction mode
+- switch to isolate margin with out of range margin factor(<a name="0019-MCAL-115" href="#0019-MCAL-115">0019-MCAL-115</a>)
+
+- submit update margin mode transaction with no state change (already in cross margin, "change" to cross margin, or already in isolated, submit with same margin factor)(<a name="0019-MCAL-116" href="#0019-MCAL-116">0019-MCAL-116</a>)
+
+- update margin factor when already in isolated mode to the same cases as in switch to isolated failures.(<a name="0019-MCAL-117" href="#0019-MCAL-117">0019-MCAL-117</a>)
+
+- switch to isolated margin without position and no orders successful in continuous mode(<a name="0019-MCAL-118" href="#0019-MCAL-118">0019-MCAL-118</a>)
+
+- switch to isolated margin without position and no orders successful in auction(<a name="0019-MCAL-119" href="#0019-MCAL-119">0019-MCAL-119</a>)
+
+- switch to isolated margin with position and no orders successful in continuous mode(<a name="0019-MCAL-120" href="#0019-MCAL-120">0019-MCAL-120</a>)
+
+- switch to isolated margin with position and no orders successful in auction(<a name="0019-MCAL-121" href="#0019-MCAL-121">0019-MCAL-121</a>)
+
+- switch to isolated margin without position and with orders successful in continuous mode(<a name="0019-MCAL-122" href="#0019-MCAL-122">0019-MCAL-122</a>)
+
+- switch to isolated margin without position and with orders successful in auction(<a name="0019-MCAL-123" href="#0019-MCAL-123">0019-MCAL-123</a>)
+
+- switch to isolated margin with position and with orders successful in continuous mode(<a name="0019-MCAL-124" href="#0019-MCAL-124">0019-MCAL-124</a>)
+
+- switch to isolated margin with position and with orders successful in auction(<a name="0019-MCAL-125" href="#0019-MCAL-125">0019-MCAL-125</a>)
+
+- increase margin factor in isolated margin without position and no orders successful in continuous mode(<a name="0019-MCAL-126" href="#0019-MCAL-126">0019-MCAL-126</a>)
+
+- increase margin factor in isolated margin without position and no orders successful in auction(<a name="0019-MCAL-127" href="#0019-MCAL-127">0019-MCAL-127</a>)
+
+- increase margin factor in isolated margin with position and no orders successful in continuous mode(<a name="0019-MCAL-128" href="#0019-MCAL-128">0019-MCAL-128</a>)
+
+- increase margin factor in isolated margin with position and no orders successful in auction(<a name="0019-MCAL-129" href="#0019-MCAL-129">0019-MCAL-129</a>)
+
+- increase margin factor in isolated margin without position and with orders successful in continuous mode(<a name="0019-MCAL-130" href="#0019-MCAL-130">0019-MCAL-130</a>)
+
+- increase margin factor in isolated margin without position and with orders successful in auction(<a name="0019-MCAL-131" href="#0019-MCAL-131">0019-MCAL-131</a>)
+
+- increase margin factor in isolated margin with position and with orders successful in continuous mode(<a name="0019-MCAL-132" href="#0019-MCAL-132">0019-MCAL-132</a>)
+
+- increase margin factor in isolated margin with position and with orders successful in auction(<a name="0019-MCAL-133" href="#0019-MCAL-133">0019-MCAL-133</a>)
+
+- switch to cross margin without position and no orders successful in continuous mode(<a name="0019-MCAL-134" href="#0019-MCAL-134">0019-MCAL-134</a>)
+
+- switch to cross margin without position and no orders successful in auction(<a name="0019-MCAL-135" href="#0019-MCAL-135">0019-MCAL-135</a>)
+
+- switch to cross margin with position and no orders successful in continuous mode(<a name="0019-MCAL-136" href="#0019-MCAL-136">0019-MCAL-136</a>)
+
+- switch to cross margin with position and no orders successful in auction(<a name="0019-MCAL-137" href="#0019-MCAL-137">0019-MCAL-137</a>)
+
+- switch to cross margin without position and with orders successful in continuous mode(<a name="0019-MCAL-138" href="#0019-MCAL-138">0019-MCAL-138</a>)
+
+- switch to cross margin without position and with orders successful in auction(<a name="0019-MCAL-139" href="#0019-MCAL-139">0019-MCAL-139</a>)
+
+- switch to cross margin with position and with orders successful in continuous mode(<a name="0019-MCAL-140" href="#0019-MCAL-140">0019-MCAL-140</a>)
+
+- switch to cross margin with position and with orders successful in auction(<a name="0019-MCAL-141" href="#0019-MCAL-141">0019-MCAL-141</a>)
 
 **Check decimals:**
 
-- A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-047" href="#0019-MCAL-047">0019-MCAL-047</a>)
+- A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-090" href="#0019-MCAL-090">0019-MCAL-090</a>)
 
-- A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
+- A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-091" href="#0019-MCAL-091">0019-MCAL-091</a>)
 
-**Check decimals:**
+**Check API:**
 
-- For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
+- For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-092" href="#0019-MCAL-092">0019-MCAL-092</a>)
 
 ## Acceptance Criteria (perpetual market in isolated margin mode)
 
