@@ -93,7 +93,7 @@
     buy 10 @ 14 900
     and
     sell 1 @ 100 000
-    sell 10 @ 100 100 
+    sell 10 @ 100 100
     ```
 
 - When switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected. (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
@@ -139,11 +139,11 @@ The margin account should have additional amount `limit price x size x margin fa
 
 **Amending order:**
 
-- When the party cancels the order, the order magin should be `0`(<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
+- When the party cancels the order, the order margin should be `0`(<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
 
-- When the party reduces the order size only, the order magin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)
+- When the party reduces the order size only, the order margin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)
 
-- When the party reduces the order price only, the order magin should be reduced (<a name="0019-MCAL-043" href="#0019-MCAL-043">0019-MCAL-043</a>)
+- When the party reduces the order price only, the order margin should be reduced (<a name="0019-MCAL-043" href="#0019-MCAL-043">0019-MCAL-043</a>)
 
 - When the party increases the order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-044" href="#0019-MCAL-044">0019-MCAL-044</a>)
 
@@ -155,11 +155,11 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - When the party's order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-048" href="#0019-MCAL-048">0019-MCAL-048</a>)
 
-- When the party cancels the pegged order, the order magin should be `0`(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
+- When the party cancels the pegged order, the order margin should be `0`(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
-- When the party reduces the pegged order size only, the order magin should be reduced (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
-  
-- When the party reduces the pegged order price only, the order magin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)(<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+- When the party reduces the pegged order size only, the order margin should be reduced (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
+
+- When the party reduces the pegged order price only, the order margin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)(<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
 
 - When the party increases the pegged order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-052" href="#0019-MCAL-052">0019-MCAL-052</a>)
 
@@ -175,7 +175,7 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - Margin levels are correctly calculated in the case of an open position dropping below maintenance margin levels active orders will remain active as these are margined separately and will not be cancelled.(<a name="0019-MCAL-070" href="#0019-MCAL-070">0019-MCAL-070</a>)
 
-- When the party (who holds open positions and orders) gets distressed, orders will be canceled, if party is still distressed, clseout will be triggered(<a name="0019-MCAL-071" href="#0019-MCAL-071">0019-MCAL-071</a>)
+- When the party (who holds open positions and orders) gets distressed, orders will be cancelled, if party is still distressed, closeout will be triggered(<a name="0019-MCAL-071" href="#0019-MCAL-071">0019-MCAL-071</a>)
 
 - When the party (who holds open positions and bond account) gets closed out, the bond account will be emptied (<a name="0019-MCAL-072" href="#0019-MCAL-072">0019-MCAL-072</a>)
 
@@ -196,9 +196,10 @@ The margin account should have additional amount `limit price x size x margin fa
 - A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
 
 **Check decimals:**
+
 - For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
-## Acceptance Criteria (perpetural market in isolated margin mode)
+## Acceptance Criteria (perpetual market in isolated margin mode)
 
 - For a perpetual future market, the maintenance margin is equal to the maintenance margin on an equivalent dated future market, plus a component related to the expected upcoming margin funding payment. Specifically:
   - If a party is long `1` unit and the mark price is `15 900` and `market.linearSlippageFactor = 0.25` and `RF long = 0.1` and order book is
@@ -654,4 +655,3 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
-
