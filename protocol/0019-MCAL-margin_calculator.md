@@ -82,7 +82,9 @@
       - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * 1) = 5565` (<a name="0019-MCAL-028" href="#0019-MCAL-028">0019-MCAL-028</a>)
       - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * -1) = 5610`(<a name="0019-MCAL-029" href="#0019-MCAL-029">0019-MCAL-029</a>)
 
-## Acceptance Criteria (under Isolated-margin modes)
+## Acceptance Criteria (Isolated-margin)
+
+**When party has a newly created short position:**
 
 - If a party has a newly created short position of `1` and the mark price is `15 900` and `market.linearSlippageFactor = 0.25`, `RF short = 0.1` and `Initial margin factor = 1.5` and order book is
 
@@ -104,6 +106,8 @@
 
     Switching to isolated margin mode will be rejected if the party does not have enough asset in the general account(<a name="0019-MCAL-066" href="#0019-MCAL-066">0019-MCAL-066</a>)
 
+**When party has a position and a order which does not offset the position:**
+
 - When the party places a new short order of `10` with price `15910` which does not offset the existing position, and the market is in continuous trading.
 
     The margin account should have additional amount `limit price x size x margin factor = 15910 x 10 x 0.9 = 143190` transferred into "order margin" account if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
@@ -122,39 +126,81 @@
 
     Create some MTM, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
 
-- When the party places a new long order of `2` with price `15912` which does offset the existing position, and the market is in continuous trading.
+**Amending order:**
+
+  - When the party cancels the order, the order magin should be `0`(<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
+
+  - When the party reduces the order size only, the order magin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)
+  - When the party reduces the order price only, the order magin should be reduced (<a name="0019-MCAL-043" href="#0019-MCAL-043">0019-MCAL-043</a>)
+
+  - When the party increases the order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-044" href="#0019-MCAL-044">0019-MCAL-044</a>)
+
+  - When the party increases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-045" href="#0019-MCAL-045">0019-MCAL-045</a>)
+
+  - When the party increases the order size while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-046" href="#0019-MCAL-046">0019-MCAL-046</a>)
+
+  - When the party increases the order price while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-047" href="#0019-MCAL-047">0019-MCAL-047</a>)
+
+  - When the party's order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-048" href="#0019-MCAL-048">0019-MCAL-048</a>)
+
+  - When the party cancels the pegged order, the order magin should be `0`(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
+
+  - When the party reduces the pegged order size only, the order magin should be reduced (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
+  
+  - When the party reduces the pegged order price only, the order magin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)(<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+
+  - When the party increases the pegged order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-052" href="#0019-MCAL-052">0019-MCAL-052</a>)
+
+  - When the party increases the pegged order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-075" href="#0019-MCAL-075">0019-MCAL-075</a>)
+
+  - When the party increases the pegged order size while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-076" href="#0019-MCAL-076">0019-MCAL-076</a>)
+
+  - When the party increases the pegged order price while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-077" href="#0019-MCAL-077">0019-MCAL-077</a>)
+
+  - When the party's pegged order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-078" href="#0019-MCAL-078">0019-MCAL-078</a>)
+
+**When a party has a position and an order which offsets the position:**
+
+- When the party places a new long order of `2` with price `15912` which offsets the existing position, and the market is in continuous trading.
 
   - The margin account should not change as no additional margin is required (<a name="0019-MCAL-038" href="#0019-MCAL-038">0019-MCAL-038</a>)
 
-  - When the party switches to cross margin mode, the margin accounts will not be updated until the next MTM(<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
+  - When the party switches to cross margin mode, the margin accounts will not be updated until the next MTM (<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
 
-  - The order will be rejected if the party does not have enough asset in the general account(<a name="0019-MCAL-037" href="#0019-MCAL-037">0019-MCAL-037</a>)
+  - The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-037" href="#0019-MCAL-037">0019-MCAL-037</a>)
 
   - When the party place a new long order of `10` with price `145000` and the party has existing short position of `3`, and the market is in continuous trading. The margin account should have additional amount `limit price * size * margin factor = 145000 x (10-3) x 0.9 = 913500` added if the party has enough asset in the general account(<a name="0019-MCAL-039" href="#0019-MCAL-039">0019-MCAL-039</a>)
 
-- Margin levels are correctly calculated in the case of an open position dropping below maintenance margin levels active orders will remain active as these are margined separately and will not be cancelled.(<a name="0019-MCAL-040" href="#0019-MCAL-040">0019-MCAL-040</a>)
+  - When increasing the `margin factor` and the party does not have enough asset in the general account to cover the new maintenance margin, then the new margin factor will be rejected (<a name="0019-MCAL-040" href="#0019-MCAL-040">0019-MCAL-040</a>)
 
-- Zero position and zero orders results in all zero margin levels. (<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
+**When a party is distressed:**
 
-- If a trader has a long position and there are no bids on the order book, the `exit price` is equal to infinity and hence the slippage cap is used as the slippage component of the margin calculation. (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)
+- Margin levels are correctly calculated in the case of an open position dropping below maintenance margin levels active orders will remain active as these are margined separately and will not be cancelled.(<a name="0019-MCAL-070" href="#0019-MCAL-070">0019-MCAL-070</a>)
 
-- If a trader's `long position > 0 && 0 < *sum of volume of order book bids* < long position`, the `exit price` is equal to infinity.  (<a name="0019-MCAL-043" href="#0019-MCAL-043">0019-MCAL-043</a>)
+- When the party (who holds open positions and orders) gets distressed, orders will be canceled, if party is still distressed, clseout will be triggered(<a name="0019-MCAL-071" href="#0019-MCAL-071">0019-MCAL-071</a>)
 
-- If a trader's `short position < 0 && 0 < *sum of absolute volume of order book offers* < short position`, the `exit price` is equal to infinity. (<a name="0019-MCAL-044" href="#0019-MCAL-044">0019-MCAL-044</a>)
+- When the party (who holds open positions and bond account) gets closed out, the bond account will be emptied (<a name="0019-MCAL-072" href="#0019-MCAL-072">0019-MCAL-072</a>)
 
-- If a trader's `long position > 0 &&  long position < *sum of volume of order book bids*`, the `exit price` is equal to the *volume weighted price of the order book bids* with cumulative volume equal to the riskiest long, starting from best bid.  (<a name="0019-MCAL-045" href="#0019-MCAL-045">0019-MCAL-045</a>)
+- When the party (who holds open orders and bond account) gets distressed, the bond account will be emptied (<a name="0019-MCAL-073" href="#0019-MCAL-073">0019-MCAL-073</a>)
 
-- If a trader's `short position < 0 && 0 < abs(short position) < *sum of absolute volume of order book offers*`, the `exit price` is equal to the *volume weighted price of the order book offers*.  (<a name="0019-MCAL-046" href="#0019-MCAL-046">0019-MCAL-046</a>)
+- When the party is closeout, insurance pool should be updated accordingly (<a name="0019-MCAL-074" href="#0019-MCAL-074">0019-MCAL-074</a>)
+
+**When market is in auction mode:**
+
+- When the market is in auctions, switch from cross margin mode to isolated margin mode (<a name="0019-MCAL-080" href="#0019-MCAL-080">0019-MCAL-080</a>)
+
+- When the market is in auctions, switch from cross margin mode to isolated margin mode (<a name="0019-MCAL-081" href="#0019-MCAL-081">0019-MCAL-081</a>)
+
+**Check decimals:**
 
 - A feature test that checks margin in case market PDP > 0 is created and passes. (<a name="0019-MCAL-047" href="#0019-MCAL-047">0019-MCAL-047</a>)
 
 - A feature test that checks margin in case market PDP < 0 is created and passes. (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
 
+**Check decimals:**
 - For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
-- In the same situation as above, if `market.linearSlippageFactor = 100`, (i.e. 10 000%) instead, then the margin for the party is `min(1 x (100000-15900), 15900 x 100 x 1) + 0.1 x 1 x 15900 = 85690`. (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
-
-- If the `market.linearSlippageFactor` is updated via governance then it will be used at the next margin evaluation i.e. at the first mark price update following the parameter update. (<a name="0019-MCAL-052" href="#0019-MCAL-052">0019-MCAL-052</a>)
+## Acceptance Criteria (perpetural market)
 
 - For a perpetual future market, the maintenance margin is equal to the maintenance margin on an equivalent dated future market, plus a component related to the expected upcoming margin funding payment. Specifically:
   - If a party is long `1` unit and the mark price is `15 900` and `market.linearSlippageFactor = 0.25` and `RF long = 0.1` and order book is
@@ -610,3 +656,4 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
+
