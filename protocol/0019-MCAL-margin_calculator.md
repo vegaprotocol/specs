@@ -1,6 +1,6 @@
 # Margin Calculator
 
-## Acceptance Criteria (under Cross-margin modes)
+## Acceptance Criteria (Cross margin)
 
 - Get four margin levels for one or more parties (<a name="0019-MCAL-001" href="#0019-MCAL-001">0019-MCAL-001</a>)
 
@@ -126,6 +126,20 @@
 
     Create some MTM, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
 
+**When a party has a position and an order which offsets the position:**
+
+- When the party places a new long order of `2` with price `15912` which offsets the existing position, and the market is in continuous trading.
+
+  - The margin account should not change as no additional margin is required (<a name="0019-MCAL-038" href="#0019-MCAL-038">0019-MCAL-038</a>)
+
+  - When the party switches to cross margin mode, the margin accounts will not be updated until the next MTM (<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
+
+  - The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-037" href="#0019-MCAL-037">0019-MCAL-037</a>)
+
+  - When the party place a new long order of `10` with price `145000` and the party has existing short position of `3`, and the market is in continuous trading. The margin account should have additional amount `limit price * size * margin factor = 145000 x (10-3) x 0.9 = 913500` added if the party has enough asset in the general account(<a name="0019-MCAL-039" href="#0019-MCAL-039">0019-MCAL-039</a>)
+
+  - When increasing the `margin factor` and the party does not have enough asset in the general account to cover the new maintenance margin, then the new margin factor will be rejected (<a name="0019-MCAL-040" href="#0019-MCAL-040">0019-MCAL-040</a>)
+
 **Amending order:**
 
   - When the party cancels the order, the order magin should be `0`(<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
@@ -158,20 +172,6 @@
   - When the party increases the pegged order price while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-077" href="#0019-MCAL-077">0019-MCAL-077</a>)
 
   - When the party's pegged order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-078" href="#0019-MCAL-078">0019-MCAL-078</a>)
-
-**When a party has a position and an order which offsets the position:**
-
-- When the party places a new long order of `2` with price `15912` which offsets the existing position, and the market is in continuous trading.
-
-  - The margin account should not change as no additional margin is required (<a name="0019-MCAL-038" href="#0019-MCAL-038">0019-MCAL-038</a>)
-
-  - When the party switches to cross margin mode, the margin accounts will not be updated until the next MTM (<a name="0019-MCAL-036" href="#0019-MCAL-036">0019-MCAL-036</a>)
-
-  - The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-037" href="#0019-MCAL-037">0019-MCAL-037</a>)
-
-  - When the party place a new long order of `10` with price `145000` and the party has existing short position of `3`, and the market is in continuous trading. The margin account should have additional amount `limit price * size * margin factor = 145000 x (10-3) x 0.9 = 913500` added if the party has enough asset in the general account(<a name="0019-MCAL-039" href="#0019-MCAL-039">0019-MCAL-039</a>)
-
-  - When increasing the `margin factor` and the party does not have enough asset in the general account to cover the new maintenance margin, then the new margin factor will be rejected (<a name="0019-MCAL-040" href="#0019-MCAL-040">0019-MCAL-040</a>)
 
 **When a party is distressed:**
 
