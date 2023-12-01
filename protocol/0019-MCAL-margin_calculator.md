@@ -177,11 +177,11 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - Open positions should be closed in the case of open positions dropping below maintenance margin level, active orders will be cancelled if closing positions lead order margin level to increase.(<a name="0019-MCAL-071" href="#0019-MCAL-071">0019-MCAL-071</a>)
 
-- When a party (who holds open positions and bond account) gets closed out, the bond account will be emptied (<a name="0019-MCAL-072" href="#0019-MCAL-072">0019-MCAL-072</a>)
+- When a party (who holds open positions and bond account) gets distressed, open positions will be closed, the bond account will be emptied (<a name="0019-MCAL-072" href="#0019-MCAL-072">0019-MCAL-072</a>)
 
-- When a party (who holds open orders and bond account) gets distressed, the bond account will be emptied (<a name="0019-MCAL-073" href="#0019-MCAL-073">0019-MCAL-073</a>)
+- When a party (who holds open positions, open orders and bond account) gets distressed, the bond account will be emptied, active orders will remain active if closing positions does not lead order margin level to increase. (<a name="0019-MCAL-073" href="#0019-MCAL-073">0019-MCAL-073</a>)
 
-- When a party is closeout, insurance pool should be updated accordingly (<a name="0019-MCAL-074" href="#0019-MCAL-074">0019-MCAL-074</a>)
+- When a party (who holds open positions, open orders and bond account) gets distressed, the bond account will be emptied, active orders will be cancelled if closing positions lead order margin level to increase. (<a name="0019-MCAL-074" href="#0019-MCAL-074">0019-MCAL-074</a>)
 
 **Switch between margin modes:**
 
