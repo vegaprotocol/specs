@@ -324,7 +324,7 @@ $\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8
 
 When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=2.5$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.025$. (<a name="0053-PERP-029" href="#0053-PERP-029">0053-PERP-029</a>)
 
-When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=1$, $\text{rate_lower_bound}=-0.015$, $\text{rate_upper_bound}=0.005$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.015$. (<a name="0053-PERP-030" href="#0053-PERP-030">0053-PERP-030</a>)
+When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=1$, $\text{rate_lower_bound}=-0.005$, $\text{rate_upper_bound}=0.015$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.005$. (<a name="0053-PERP-030" href="#0053-PERP-030">0053-PERP-030</a>)
 
 When $\text{clamp_lower_bound}=\text{clamp_upper_bound}=0$, $\text{scaling factor}=1$, $\text{rate_lower_bound}=-0.015$, $\text{rate_upper_bound}=0.005$ and the funding period ends with $\text{internal TWAP}=101$, $\text{external TWAP} = 100$ then the resulting funding rate equals $0.005$. (<a name="0053-PERP-031" href="#0053-PERP-031">0053-PERP-031</a>)
 
