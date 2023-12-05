@@ -280,6 +280,8 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-092" href="#0019-MCAL-092">0019-MCAL-092</a>)
 
+- For each market and each party which has either orders or positions on the market, the API provides the current margin mode and, when in isolated margin mode, leverage setting.  (<a name="0019-MCAL-142" href="#0019-MCAL-142">0019-MCAL-142</a>)
+
 ## Acceptance Criteria (perpetual market in isolated margin mode)
 
 - For a perpetual future market, the maintenance margin is equal to the maintenance margin on an equivalent dated future market, plus a component related to the expected upcoming margin funding payment. Specifically:

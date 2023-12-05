@@ -1,29 +1,19 @@
 {
   "Iceberg Orders": {
     "milestone": "cosmic-carryover",
-    "acs": [
-      "0014-ORDT-069"
-    ]
+    "acs": ["0014-ORDT-069"]
   },
   "Successor Markets": {
     "milestone": "cosmic-carryover",
-    "acs": [
-      "0001-MKTF-008"
-    ]
+    "acs": ["0001-MKTF-008"]
   },
   "Ethereum oracles": {
     "milestone": "cosmic-carryover",
-    "acs": [
-      "0082-ETHD-035",
-      "0082-ETHD-041"
-    ]
+    "acs": ["0082-ETHD-035", "0082-ETHD-041"]
   },
   "Stop Orders": {
     "milestone": "cosmic-carryover",
-    "acs": [
-      "0079-TGAP-004",
-      "0079-TGAP-005"
-    ]
+    "acs": ["0079-TGAP-004", "0079-TGAP-005"]
   },
   "Perpetuals": {
     "milestone": "palazzo",
@@ -70,12 +60,7 @@
   },
   "Fixed size amendments": {
     "milestone": "palazzo",
-    "acs": [
-      "0004-AMND-056",
-      "0004-AMND-057",
-      "0004-AMND-058",
-      "0004-AMND-059"
-    ]
+    "acs": ["0004-AMND-056", "0004-AMND-057", "0004-AMND-058", "0004-AMND-059"]
   },
   "Ethereum heartbeat": {
     "milestone": "palazzo",
@@ -116,7 +101,8 @@
       "0019-MCAL-064",
       "0019-MCAL-065",
       "0019-MCAL-066",
-      "0019-MCAL-067"
+      "0019-MCAL-067",
+      "0019-MCAL-142"
     ]
   },
   "Quadratic slippage removal": {
@@ -190,27 +176,15 @@
   },
   "Transfers from vesting": {
     "milestone": "palazzo",
-    "acs": [
-      "0057-TRAN-066",
-      "0057-TRAN-067",
-      "0057-TRAN-068",
-      "0057-TRAN-069"
-    ]
+    "acs": ["0057-TRAN-066", "0057-TRAN-067", "0057-TRAN-068", "0057-TRAN-069"]
   },
   "Liquidity fee setting": {
     "milestone": "palazzo",
-    "acs": [
-      "0042-LIQF-056",
-      "0042-LIQF-057",
-      "0042-LIQF-058"
-    ]
+    "acs": ["0042-LIQF-056", "0042-LIQF-057", "0042-LIQF-058"]
   },
   "Governance market name change": {
     "milestone": "palazzo",
-    "acs": [
-      "0028-GOVE-159",
-      "0028-GOVE-166"
-    ]
+    "acs": ["0028-GOVE-159", "0028-GOVE-166"]
   },
   "Insurance pools redistribution": {
     "milestone": "palazzo",
@@ -229,6 +203,6 @@
   },
   "Unknown": {
     "milestone": "unknown",
-    "acs": [ ]
+    "acs": []
   }
 }
