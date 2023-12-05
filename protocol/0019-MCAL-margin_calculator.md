@@ -115,7 +115,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - The party amends the order size to `5`, and the amount `limit price x size x margin factor = 15912 x 5 x 0.9 = 71604` will be transferred from "order margin" account into general account (<a name="0019-MCAL-060" href="#0019-MCAL-060">0019-MCAL-060</a>)
 
-- Another trader places a buy order of `3` with price `15912`, party's position changes from `1` to `4`, party's margin account should have additional `15912 x 3 x 0.9 =42962` transfered from general account and order margin should be reduced to `15912x 2 x 0.9 = 28642`since party's order size has been reduced from `5` to `2` after the trade  (<a name="0019-MCAL-061" href="#0019-MCAL-061">0019-MCAL-061</a>)
+- Another trader places a buy order of `3` with price `15912`, party's position changes from `1` to `4`, party's margin account should have additional `15912 x 3 x 0.9 =42962` transferred from general account and order margin should be reduced to `15912x 2 x 0.9 = 28642`since party's order size has been reduced from `5` to `2` after the trade  (<a name="0019-MCAL-061" href="#0019-MCAL-061">0019-MCAL-061</a>)
 
 - Switch margin mode from isolated margin to cross margin when party holds position only, the margin account should be updated to initial margin level in cross margin mode(<a name="0019-MCAL-065" href="#0019-MCAL-065">0019-MCAL-065</a>)
 
