@@ -25,7 +25,7 @@ Overall, building the ability to handle batches of market instructions in a sing
   - **Cancellations**: this is a list (repeated field) of Cancel Order instructions
   - **Amendments**: this is a list (repeated field) of Amend Order instructions
   - **Submissions**: this is a list (repeated field) of Submit Order instructions
-- Additionally the batch may contain a single transaction to change the current margin mode. Unlike cancellations/amendments/submissions, if this fails the rest of the batch will be cancelled.
+- Additionally the batch may contain a single transaction to change the current margin mode. If this transaction fails, all later transactions within the batch (cancellations/amendments/submissions) for the market referred to in the update are Stopped for reason MARGIN_MODE_UPDATE_FAILED.
 - The total number of instructions across all three lists (i.e. sum of the lengths of the lists) must be less than or equal to the current value of the network parameter `network.spam_protection.max.batch.size`. The margin mode update transaction is not included in this limit.
 
 ### Processing a batch
@@ -61,4 +61,5 @@ After entering or exiting an auction mid-batch, the full batch must be processed
 - Funds released by cancellations or amendments within the batch should be immediately available for later instructions (<a name="0074-BTCH-009" href="#0074-BTCH-009">0074-BTCH-009</a>). For product spot: (<a name="0074-BTCH-019" href="#0074-BTCH-019">0074-BTCH-019</a>)
 - If an instruction within a batch causes another party to become distressed, position resolution should be attempted before further instructions within the batch are executed (<a name="0074-BTCH-010" href="#0074-BTCH-010">0074-BTCH-010</a>)
 - Instructions within the same category within a batch should be executed in the order they are received. For example, if two Cancellations instructions are submitted in a batch: [C1, C2], then C1 should be executed before C2. (<a name="0074-BTCH-011" href="#0074-BTCH-011">0074-BTCH-011</a>)
-- If the margin mode update transaction fails the batch fails entirely and no further components (submissions/amendments/cancellations) are tried(<a name="0074-BTCH-012" href="#0074-BTCH-012">0074-BTCH-012</a>)
+- If the margin mode update transaction fails all transactions in the batch referring to the same market are Stopped. (<a name="0074-BTCH-012" href="#0074-BTCH-012">0074-BTCH-012</a>)
+- If the margin mode update transaction fails all transactions in the batch referring to a different market are attempted as usual. (<a name="0074-BTCH-013" href="#0074-BTCH-013">0074-BTCH-013</a>)
