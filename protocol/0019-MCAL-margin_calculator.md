@@ -96,7 +96,7 @@
     sell 10 @ 100 100
     ```
 
-- When switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected. (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
+- When switching to isolated-margin mode and the `margin factor short = 0.11`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 57500 x 1 x 0.11 = 6325`, the switching will be rejected with message "required position margin must be greater than initial margin". (<a name="0019-MCAL-032" href="#0019-MCAL-032">0019-MCAL-032</a>)
 
 - When switching to isolated-margin mode and the `margin factor short = 0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-033" href="#0019-MCAL-033">0019-MCAL-033</a>)
 
@@ -104,18 +104,18 @@
 
 - When increasing the `margin factor short` from `0.7` to `0.9`, the maintenance margin should be updated to `average entry price x current position x new margin factor = 15900 x 1 x 0.9 = 14310`, and margin account should be updated to `14310`. (<a name="0019-MCAL-059" href="#0019-MCAL-059">0019-MCAL-059</a>)
 
-- Switching to isolated margin mode will be rejected if the party does not have enough asset in the general account(<a name="0019-MCAL-066" href="#0019-MCAL-066">0019-MCAL-066</a>)
+- Switching to isolated margin mode will be rejected if the party does not have enough asset in the general account to top up the margin account to the new required level (<a name="0019-MCAL-066" href="#0019-MCAL-066">0019-MCAL-066</a>)
 
 **When party has a position and an order which does not offset the position:**
 
 - When the party places a new short order of `10` with price `15910` which does not offset the existing position, and the market is in continuous trading.
-The margin account should have additional amount `limit price x size x margin factor = 15910 x 10 x 0.9 = 143190` transferred into "order margin" account if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
+There should be an additional amount `limit price x size x margin factor = 15910 x 10 x 0.9 = 143190` transferred into "order margin" account if the party has enough asset in the general account(<a name="0019-MCAL-034" href="#0019-MCAL-034">0019-MCAL-034</a>)
 
 - The order will be rejected if the party does not have enough asset in the general account (<a name="0019-MCAL-035" href="#0019-MCAL-035">0019-MCAL-035</a>)
 
 - The party amends the order size to `5`, and the amount `limit price x size x margin factor = 15912 x 5 x 0.9 = 71604` will be transferred from "order margin" account into general account (<a name="0019-MCAL-060" href="#0019-MCAL-060">0019-MCAL-060</a>)
 
-- Another trader places a buy order of `3` with price `15912`, party's position becomes `4`, party's margin account should be updated to `15912 x 4 x 0.9 =57283` and order margin should be `15912x 2 x 0.9 = 28642` (<a name="0019-MCAL-061" href="#0019-MCAL-061">0019-MCAL-061</a>)
+- Another trader places a buy order of `3` with price `15912`, party's position changes from `1` to `4`, party's margin account should have additional `15912 x 3 x 0.9 =42962` transferred from general account and order margin should be reduced to `15912x 2 x 0.9 = 28642`since party's order size has been reduced from `5` to `2` after the trade  (<a name="0019-MCAL-061" href="#0019-MCAL-061">0019-MCAL-061</a>)
 
 - Switch margin mode from isolated margin to cross margin when party holds position only, the margin account should be updated to initial margin level in cross margin mode(<a name="0019-MCAL-065" href="#0019-MCAL-065">0019-MCAL-065</a>)
 
@@ -123,7 +123,7 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - When the party has no orders, their order margin account should be `0` (<a name="0019-MCAL-062" href="#0019-MCAL-062">0019-MCAL-062</a>)
 
-- Create some MTM, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
+- When the mark price moves, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
 
 **When a party has a position and an order which offsets the position:**
 
@@ -139,7 +139,7 @@ The margin account should have additional amount `limit price x size x margin fa
 
 **Amending order:**
 
-- When the party cancels the order, the order margin should be `0`(<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
+- When the party cancels all orders, the order margin should be `0`(<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
 
 - When the party reduces the order size only, the order margin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)
 
@@ -151,15 +151,17 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - When the party increases the order size while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-046" href="#0019-MCAL-046">0019-MCAL-046</a>)
 
-- When the party increases the order price while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-047" href="#0019-MCAL-047">0019-MCAL-047</a>)
+- When the party increases the order price while decreases the order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-047" href="#0019-MCAL-047">0019-MCAL-047</a>)
 
 - When the party's order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-048" href="#0019-MCAL-048">0019-MCAL-048</a>)
 
-- When the party cancels the pegged order, the order margin should be `0`(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
+- When the party cancels a pegged order, which was their only order, the order margin should be `0`(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
 - When the party reduces the pegged order size only, the order margin should be reduced (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
 
-- When the party reduces the pegged order price only, the order margin should be reduced (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+- When the party reduces the pegged buy order offset price, the order margin should be reduced (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+
+- When the party increases the pegged sell order offset price, the order margin should be reduced (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
 
 - When the party increases the pegged order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-052" href="#0019-MCAL-052">0019-MCAL-052</a>)
 
@@ -179,7 +181,7 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - When a party (who holds open positions and bond account) gets distressed, open positions will be closed, the bond account will be emptied (<a name="0019-MCAL-072" href="#0019-MCAL-072">0019-MCAL-072</a>)
 
-- When a party (who holds open positions, open orders and bond account) gets distressed, the bond account will be emptied, active orders will remain active if closing positions does not lead order margin level to increase. (<a name="0019-MCAL-073" href="#0019-MCAL-073">0019-MCAL-073</a>)
+- When a party (who holds open positions, open orders and bond account) gets distressed, the bond account will be treated as in cross margin mode, however active orders will remain active if closing positions does not lead order margin level to increase. (<a name="0019-MCAL-073" href="#0019-MCAL-073">0019-MCAL-073</a>)
 
 - When a party (who holds open positions, open orders and bond account) gets distressed, the bond account will be emptied, active orders will be cancelled if closing positions lead order margin level to increase. (<a name="0019-MCAL-074" href="#0019-MCAL-074">0019-MCAL-074</a>)
 
@@ -215,7 +217,7 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - switch to isolated margin with position and with orders with margin factor such that there is insufficient balance in the general account in continuous mode(<a name="0019-MCAL-114" href="#0019-MCAL-114">0019-MCAL-114</a>)
 
-- switch to isolated margin with position and with orders with margin factor such that there is insufficient balance in the general account in auction mode
+- switch to isolated margin with position and with orders with margin factor such that there is insufficient balance in the general account in auction mode(<a name="0019-MCAL-142" href="#0019-MCAL-142">0019-MCAL-142/a>)
 - switch to isolate margin with out of range margin factor(<a name="0019-MCAL-115" href="#0019-MCAL-115">0019-MCAL-115</a>)
 
 - submit update margin mode transaction with no state change (already in cross margin, "change" to cross margin, or already in isolated, submit with same margin factor)(<a name="0019-MCAL-116" href="#0019-MCAL-116">0019-MCAL-116</a>)
@@ -280,7 +282,7 @@ The margin account should have additional amount `limit price x size x margin fa
 
 - For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-092" href="#0019-MCAL-092">0019-MCAL-092</a>)
 
-- For each market and each party which has either orders or positions on the market, the API provides the current margin mode and, when in isolated margin mode, leverage setting.  (<a name="0019-MCAL-142" href="#0019-MCAL-142">0019-MCAL-142</a>)
+- For each market and each party which has either orders or positions on the market, the API provides the current margin mode and, when in isolated margin mode, leverage setting.  (<a name="0019-MCAL-143" href="#0019-MCAL-143">0019-MCAL-143</a>)
 
 ## Acceptance Criteria (perpetual market in isolated margin mode)
 
@@ -738,3 +740,4 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
+
