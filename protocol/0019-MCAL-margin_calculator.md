@@ -282,7 +282,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-092" href="#0019-MCAL-092">0019-MCAL-092</a>)
 
-- For each market and each party which has either orders or positions on the market, the API provides the current margin mode and, when in isolated margin mode, leverage setting.  (<a name="0019-MCAL-143" href="#0019-MCAL-143">0019-MCAL-143</a>)
+- For each market and each party which has either orders or positions on the market, the API provides the current margin mode and, when in isolated margin mode, margin factor.  (<a name="0019-MCAL-143" href="#0019-MCAL-143">0019-MCAL-143</a>)
 
 ## Acceptance Criteria (perpetual market in isolated margin mode)
 
