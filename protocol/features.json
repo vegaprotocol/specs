@@ -1,29 +1,19 @@
 {
   "Iceberg Orders": {
     "milestone": "cosmic-carryover",
-    "acs": [
-      "0014-ORDT-069"
-    ]
+    "acs": ["0014-ORDT-069"]
   },
   "Successor Markets": {
     "milestone": "cosmic-carryover",
-    "acs": [
-      "0001-MKTF-008"
-    ]
+    "acs": ["0001-MKTF-008"]
   },
   "Ethereum oracles": {
     "milestone": "cosmic-carryover",
-    "acs": [
-      "0082-ETHD-035",
-      "0082-ETHD-041"
-    ]
+    "acs": ["0082-ETHD-035", "0082-ETHD-041"]
   },
   "Stop Orders": {
     "milestone": "cosmic-carryover",
-    "acs": [
-      "0079-TGAP-004",
-      "0079-TGAP-005"
-    ]
+    "acs": ["0079-TGAP-004", "0079-TGAP-005"]
   },
   "Perpetuals": {
     "milestone": "palazzo",
@@ -70,12 +60,7 @@
   },
   "Fixed size amendments": {
     "milestone": "palazzo",
-    "acs": [
-      "0004-AMND-056",
-      "0004-AMND-057",
-      "0004-AMND-058",
-      "0004-AMND-059"
-    ]
+    "acs": ["0004-AMND-056", "0004-AMND-057", "0004-AMND-058", "0004-AMND-059"]
   },
   "Ethereum heartbeat": {
     "milestone": "palazzo",
@@ -108,7 +93,6 @@
       "0019-MCAL-054",
       "0019-MCAL-055",
       "0019-MCAL-056",
-      "0019-MCAL-057",
       "0019-MCAL-058",
       "0019-MCAL-059",
       "0019-MCAL-060",
@@ -118,49 +102,51 @@
       "0019-MCAL-065",
       "0019-MCAL-066",
       "0019-MCAL-067",
-      "0019-MCAL-100", 
-      "0019-MCAL-101", 
-      "0019-MCAL-102", 
-      "0019-MCAL-103", 
-      "0019-MCAL-104", 
-      "0019-MCAL-105", 
-      "0019-MCAL-106", 
-      "0019-MCAL-107", 
-      "0019-MCAL-108", 
-      "0019-MCAL-109", 
-      "0019-MCAL-110", 
-      "0019-MCAL-111", 
-      "0019-MCAL-112", 
-      "0019-MCAL-113", 
-      "0019-MCAL-114", 
-      "0019-MCAL-115", 
-      "0019-MCAL-116", 
-      "0019-MCAL-117", 
-      "0019-MCAL-118", 
-      "0019-MCAL-119", 
-      "0019-MCAL-120", 
-      "0019-MCAL-121", 
-      "0019-MCAL-122", 
-      "0019-MCAL-123", 
-      "0019-MCAL-124", 
-      "0019-MCAL-125", 
-      "0019-MCAL-126", 
-      "0019-MCAL-127", 
-      "0019-MCAL-128", 
-      "0019-MCAL-129", 
-      "0019-MCAL-130", 
-      "0019-MCAL-131", 
-      "0019-MCAL-132", 
-      "0019-MCAL-133", 
-      "0019-MCAL-134", 
-      "0019-MCAL-135", 
-      "0019-MCAL-136", 
-      "0019-MCAL-137", 
-      "0019-MCAL-138", 
-      "0019-MCAL-139", 
-      "0019-MCAL-140", 
-      "0019-MCAL-141", 
-      "0019-MCAL-142"
+      "0019-MCAL-100",
+      "0019-MCAL-101",
+      "0019-MCAL-102",
+      "0019-MCAL-103",
+      "0019-MCAL-104",
+      "0019-MCAL-105",
+      "0019-MCAL-106",
+      "0019-MCAL-107",
+      "0019-MCAL-108",
+      "0019-MCAL-109",
+      "0019-MCAL-110",
+      "0019-MCAL-111",
+      "0019-MCAL-112",
+      "0019-MCAL-113",
+      "0019-MCAL-114",
+      "0019-MCAL-115",
+      "0019-MCAL-116",
+      "0019-MCAL-117",
+      "0019-MCAL-118",
+      "0019-MCAL-119",
+      "0019-MCAL-120",
+      "0019-MCAL-121",
+      "0019-MCAL-122",
+      "0019-MCAL-123",
+      "0019-MCAL-124",
+      "0019-MCAL-125",
+      "0019-MCAL-126",
+      "0019-MCAL-127",
+      "0019-MCAL-128",
+      "0019-MCAL-129",
+      "0019-MCAL-130",
+      "0019-MCAL-131",
+      "0019-MCAL-132",
+      "0019-MCAL-133",
+      "0019-MCAL-134",
+      "0019-MCAL-135",
+      "0019-MCAL-136",
+      "0019-MCAL-137",
+      "0019-MCAL-138",
+      "0019-MCAL-139",
+      "0019-MCAL-140",
+      "0019-MCAL-141",
+      "0019-MCAL-142",
+      "0074-BTCH-020",
+      "0074-BTCH-021"
     ]
   },
   "Quadratic slippage removal": {
@@ -233,27 +219,15 @@
   },
   "Transfers from vesting": {
     "milestone": "palazzo",
-    "acs": [
-      "0057-TRAN-066",
-      "0057-TRAN-067",
-      "0057-TRAN-068",
-      "0057-TRAN-069"
-    ]
+    "acs": ["0057-TRAN-066", "0057-TRAN-067", "0057-TRAN-068", "0057-TRAN-069"]
   },
   "Liquidity fee setting": {
     "milestone": "palazzo",
-    "acs": [
-      "0042-LIQF-056",
-      "0042-LIQF-057",
-      "0042-LIQF-058"
-    ]
+    "acs": ["0042-LIQF-056", "0042-LIQF-057", "0042-LIQF-058"]
   },
   "Governance market name change": {
     "milestone": "palazzo",
-    "acs": [
-      "0028-GOVE-159",
-      "0028-GOVE-166"
-    ]
+    "acs": ["0028-GOVE-159", "0028-GOVE-166"]
   },
   "Insurance pools redistribution": {
     "milestone": "palazzo",

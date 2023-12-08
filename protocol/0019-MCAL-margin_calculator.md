@@ -282,6 +282,8 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-092" href="#0019-MCAL-092">0019-MCAL-092</a>)
 
+- For each market and each party which has either orders or positions on the market, the API provides the current margin mode and, when in isolated margin mode, margin factor.  (<a name="0019-MCAL-143" href="#0019-MCAL-143">0019-MCAL-143</a>)
+
 ## Acceptance Criteria (perpetual market in isolated margin mode)
 
 - For a perpetual future market, the maintenance margin is equal to the maintenance margin on an equivalent dated future market, plus a component related to the expected upcoming margin funding payment. Specifically:
@@ -394,10 +396,10 @@ When submitting, amending, or deleting an order in isolated margin mode and cont
          1. Sort all orders by price, starting from first to execute (highest price for buying, lowest price for selling).
          1. If the party currently has a position `x`, assign `0` margin requirement the first-to-trade `x` of volume on the opposite side as this would reduce their position (for example, if a party had a long position `10` and sell orders of `15` at a price of `$100` and `10` at a price of `$150`, the first `10` of the sell order at `$100` would not require any order margin).
          1. For any remaining volume, sum `side margin = limit price * size * margin factor` for each price level, as this is the worst-case trade price of the remaining component.
-      1. Take the maximum margin from the two `side margin`s as the margin required in the order margin account. Now the full margin requirement for all orders, including any new one, and open position should be run through the full margin calculator to obtain a `maintenance margin` value. If the new `side margin + margin account balance < maintenance margin`, or if the party's `general` account does not contain sufficient funds to cover any increases to the `order margin` account to be equal to `side margin` then:
+      2. Take the maximum margin from the two `side margin`s as the margin required in the order margin account. If the party's `general` account does not contain sufficient funds to cover any increases to the `order margin` account to be equal to `side margin` then:
          1. If a newly placed order is being evaluated, that order is `stopped`
-         1. If the evaluation is the result of any other position/order update, all open orders are `stopped` and margin re-evaluated.
-      1. The `order margin` account is now updated to the new `side margin` value and any new orders can be placed on the book.
+         2. If the evaluation is the result of any other position/order update, all open orders are `stopped` and margin re-evaluated.
+      3. The `order margin` account is now updated to the new `side margin` value and any new orders can be placed on the book.
 
 NB: This means that a party's order could partially match, with a trade executed and some funds moved to the margin account with correct leverage whilst the rest of the order is immediately stopped.
 
