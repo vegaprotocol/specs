@@ -233,12 +233,10 @@ To apply a referral code and become a referee, a party must fulfil the following
 To become a referee, a referee must submit a signed `ApplyReferralCode` transaction with the following fields:
 
 - `referral_code`: the referral code they wish to apply
-- `alias`: Optional string defining an alias which should be associated with the key applying the referral code and should appear on leaderboards in the keys place.
 
 ```protobuf
 message ApplyReferralCode{
     id: "mYr3f3rra1c0d3"
-    alias: "myPuBlicA1ias"
 }
 ```
 
@@ -253,12 +251,10 @@ If a party is already a referee, and submits another `ApplyReferralCode` transac
 If a party is already a referee in a valid set, to join or move between teams, a party can submit a `JoinTeam` transaction with the following fields:
 
 - `id`: the id of the team they wish to join
-- `alias`: Optional string defining an alias which should be associated with the key and should appear on leaderboards in the keys place.
 
 ```protobuf
 message JoinTeam{
     id: "mYr3f3rra1c0d3"
-    alias: "myPuBlicA1ias"
 }
 ```
 
