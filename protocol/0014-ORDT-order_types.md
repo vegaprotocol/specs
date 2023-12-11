@@ -398,7 +398,6 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 - A stop order with a size override linked to the position of the trader will use the current position as an override of the triggered order size. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
 - All stop orders with a position size override should be cancelled if the trader's position flips sides (long->short or short->long). (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
-- A stop order with a size override linked to an order, where the linked order is cancelled before trading any volume, should also be cancelled. (<a name="0014-ORDT-129" href="#0014-ORDT-129">0014-ORDT-129</a>)
 
 ## Perpetuals
 
