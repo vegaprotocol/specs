@@ -78,6 +78,7 @@ An OCO submission allows a user to have a stop loss and take profit applied to t
 - A stop order submission may have an optional `Size Override`:
   - If unset, the size within the contained normal order submission will be used
   - If set to `Position`, triggering should override the contained order's size with the trader's entire current position on the market.
+    - The `Position` overridde configuration should also include the option `position_fraction` which determines what proportion of the position is closed when the stop order is triggered. At time of triggerring the size of the order will be determined by $fraction \cdotp position$. 
     - All `Position` stop orders existing should be cancelled if a trader's position changes from long to short (or vice versa).
 
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
@@ -398,6 +399,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 - A stop order with a size override linked to the position of the trader will use the current position as an override of the triggered order size. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
 - All stop orders with a position size override should be cancelled if the trader's position flips sides (long->short or short->long). (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
+- A stop order with a position size override with a position_fraction set to 0.75, for a trader with long position 20, should create a stop order for selling size 15 when triggered (<a name="0014-ORDT-129" href="#0014-ORDT-129>0014-ORDT-129</a>)
 
 ## Perpetuals
 
