@@ -80,11 +80,6 @@ An OCO submission allows a user to have a stop loss and take profit applied to t
   - If set to `Position`, triggering should override the contained order's size with the trader's entire current position on the market.
     - All `Position` stop orders existing should be cancelled if a trader's position changes from long to short (or vice versa).
 
-- For a stop order with `Size Override` enabled linked to an `Order`:
-  - If the linked order trades fully prior to the stop loss being triggered, the stop loss order will be converted to a regular stop loss order with size equal to the full size of the `Order`
-  - If the linked order is cancelled prior to trading any volume at all the linked stop order will also be cancelled
-  - If the linked order trades partially and then is cancelled, the stop loss order will be converted to a regular stop loss order with size equal to the size of the `Order` traded before cancellation
-
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
 
 - If and when the trigger price is breached in the specified direction the order provided in the stop order submission is created and enters the book or trades as normal, as if it was just submitted.
