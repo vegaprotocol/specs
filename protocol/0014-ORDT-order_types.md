@@ -78,7 +78,7 @@ An OCO submission allows a user to have a stop loss and take profit applied to t
 - A stop order submission may have an optional `Size Override`:
   - If unset, the size within the contained normal order submission will be used
   - If set to `Position`, triggering should override the contained order's size with the trader's entire current position on the market.
-    - The `Position` overridde configuration should also include the option `position_fraction` which determines what proportion of the position is closed when the stop order is triggered. At time of triggerring the size of the order will be determined by $fraction \cdotp position$. 
+    - The `Position` override configuration should also include the option `position_fraction` which determines what proportion of the position is closed when the stop order is triggered. At time of triggering the size of the order will be determined by $fraction \cdot position$.
     - All `Position` stop orders existing should be cancelled if a trader's position changes from long to short (or vice versa).
 
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
