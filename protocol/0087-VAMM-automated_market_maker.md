@@ -93,7 +93,12 @@ A similar process is followed in the case of amendments. Changes to the `upper`,
 
 When changing `commitment amount`, an increase can be handled trivially, the general account is first topped up by the requisite amount (note that the change should be considered vs the current balance of margin + general rather than the original commitment amount) and then the balancing trade is attempted. If this trade fails then the amount should be moved back to the main key's general account and the transaction stopped.
 
+Amendments must also include an additional field `Reduction Strategy` which can take three values:
+
+ - `Abandon Position`: In this case, 
+
 If reducing the `commitment amount` then the position once the funds are reduced should be calculated, then an attempted balancing trade with relevant slippage limits made. If the trade fails the transaction is stopped. If the trade succeeds then the funds may now be released. These funds should be first taken from the general account, and then from the margin account.
+
 
 ### Determining Volumes and Prices
 
