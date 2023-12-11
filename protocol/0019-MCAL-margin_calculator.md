@@ -169,8 +169,6 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When the party increases the pegged order size while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the amendment is rejected and the original order is not effected (<a name="0019-MCAL-076" href="#0019-MCAL-076">0019-MCAL-076</a>)
 
-- When the party increases the pegged order price while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the amendment is rejected and the original order is not effected (<a name="0019-MCAL-077" href="#0019-MCAL-077">0019-MCAL-077</a>)
-
 - When the party's pegged order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-078" href="#0019-MCAL-078">0019-MCAL-078</a>)
 
 **When a party is distressed:**
