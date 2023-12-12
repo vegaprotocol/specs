@@ -93,12 +93,23 @@ A similar process is followed in the case of amendments. Changes to the `upper`,
 
 When changing `commitment amount`, an increase can be handled trivially, the general account is first topped up by the requisite amount (note that the change should be considered vs the current balance of margin + general rather than the original commitment amount) and then the balancing trade is attempted. If this trade fails then the amount should be moved back to the main key's general account and the transaction stopped.
 
-Amendments must also include an additional field `Reduction Strategy` which can take three values:
-
- - `Abandon Position`: In this case, 
-
 If reducing the `commitment amount` then the position once the funds are reduced should be calculated, then an attempted balancing trade with relevant slippage limits made. If the trade fails the transaction is stopped. If the trade succeeds then the funds may now be released. These funds should be first taken from the general account, and then from the margin account.
 
+
+#### Cancellation
+
+In addition to amending to reduce the size a user may also cancel their AMM entirely. In order to do this they must submit a transaction containing only a field `Reduction Strategy` which can take two values:
+
+ - `Abandon Position`: In this case, any existing position the AMM holds is given up to the network to close as a liquidation. This is performed in two steps:
+   - All funds in the AMM's `general` account are transferred back to the party who created the AMM.
+   - The position is marked as requiring liquidation and is taken over by the network through the usual liquidation processes. All funds in the margin account are transferred to the network's insurance pool as in a forced liquidation
+ - `Reduce-Only`: This moves the AMM to a reduce-only state, in which case the position is reduced over time and ranges dynamically update to ensure no further position is taken. As such:
+   - If the AMM is currently short, the `lower bound` is removed
+   - If the AMM is currently long, the `upper bound` is removed
+   - The `upper`/`lower` bound (if the AMM is currently short/long) is then set to the AMM's current `fair price`. In this mode the AMM should only ever quote on the side which will reduce it's position (it's `upper`/`lower` bound should always be equal to the current `fair price` belief).
+   - Once the position reaches `0` the AMM can be cancelled and all funds in the general account can be returned to the creating party
+
+Note that, whilst an `Abandon Position` transaction immediately closes the AMM a `Reduce-Only` transaction will keep it active for an uncertain amount of time into the future. During this time, any Amendment transactions received should move the AMM out of `Reduce-Only` mode and back into standard continuous operation.
 
 ### Determining Volumes and Prices
 
