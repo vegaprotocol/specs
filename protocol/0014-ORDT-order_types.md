@@ -51,12 +51,12 @@ Notes on scope of current version of this spec:
 
 ### Stop orders
 
-In addition to normal immediately executing order, Vega should accept the submission of stop orders.
+In addition to normal immediately executing orders, Vega should accept the submission of stop orders.
 These differ from normal orders in that they sit off the order book until triggered, when they are entered as normal.
 These are generally used to exit positions under pre-defined conditions, either as a "stop loss" order that controls the maximum losses a position may take, a "take profit" order that closes a position once a defined level of profit has been made, or both.
 
 
-A stop order submission can be made (stop loss or take profit are probably both just called a stop order internally).
+A stop order submission can be made (stop loss or take profit are both just called a stop order internally).
 
 - Stop order submissions must include either a trigger price OR trailing stop distance as a % move from the reference price in addition to a normal order submission.
 
@@ -71,9 +71,15 @@ If it has an expiry then it can be set either to cancel on expiry (i.e. it is de
 An OCO contains TWO stop order submissions, and must include one in each trigger direction.
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
-  - An OCO submission cannot be set to execute at expiry.
-
+  - An OCO submission can be set to have one of three different behaviours at expiry, either triggering one side, triggering the other, or expire without any action. This is configured through the setting of the expiry behaviour on each leg. Setting each leg to trade at expiration will result in the OCO being rejected.
+  
 - The stop order submission wraps a normal order submission.
+
+- A stop order submission may have an optional `Size Override`:
+  - If unset, the size within the contained normal order submission will be used
+  - If set to `Position`, triggering should override the contained order's size with the trader's entire current position on the market.
+    - The `Position` override configuration should also include the option `position_fraction` which determines what proportion of the position is closed when the stop order is triggered. At time of triggering the size of the order will be determined by $fraction \cdot position$.
+    - All `Position` stop orders existing should be cancelled if a trader's position changes from long to short (or vice versa).
 
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
 
@@ -347,6 +353,8 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A stop order with expiration time `T` set to expire at that time will expire at time `T` if reached without being triggered. (<a name="0014-ORDT-052" href="#0014-ORDT-052">0014-ORDT-052</a>)
 - A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-053" href="#0014-ORDT-053">0014-ORDT-053</a>)
   - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-054" href="#0014-ORDT-054">0014-ORDT-054</a>)
+  - An OCO stop order with expiration time `T` with one side set to execute at that time will execute at time `T` if reached without being triggered, with the specified side triggering and the other side cancelling. (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>)
+  - An OCO stop order with expiration time `T` with both sides set to execute at that time will be rejected on submission (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>)
 
 - A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>)
 - If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>)
@@ -387,6 +395,12 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 ## Stop Orders - API
 
 - API end points should be available to query stop orders with all relevant fields. (<a name="0014-ORDT-080" href="#0014-ORDT-080">0014-ORDT-080</a>)
+
+## Stop Orders - Linked
+
+- A stop order with a size override linked to the position of the trader will use the current position as an override of the triggered order size. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
+- All stop orders with a position size override should be cancelled if the trader's position flips sides (long->short or short->long). (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
+- A stop order with a position size override with a position_fraction set to 0.75, for a trader with long position 20, should create a stop order for selling size 15 when triggered (<a name="0014-ORDT-129" href="#0014-ORDT-129">0014-ORDT-129</a>)
 
 ## Perpetuals
 
