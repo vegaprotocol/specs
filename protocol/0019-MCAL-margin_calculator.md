@@ -155,21 +155,11 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When the party's order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-048" href="#0019-MCAL-048">0019-MCAL-048</a>)
 
-- When the party cancels a pegged order, which was their only order, the order margin should be `0`(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
+- When the party submit a pegged order, it should be rejected(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
-- When the party reduces the pegged order size only, the order margin should be reduced (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
+- When the party has pegged orders and switches from cross margin mode to isolated margin mode, all the pegged orders will be stopped. (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
 
-- When the party reduces the pegged buy order offset price, the order margin should be reduced (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
-
-- When the party increases the pegged sell order offset price, the order margin should be reduced (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
-
-- When the party increases the pegged order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the amendment is rejected and the original order is not affected (<a name="0019-MCAL-052" href="#0019-MCAL-052">0019-MCAL-052</a>)
-
-- When the party increases the pegged order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the amendment is rejected and the original order is not affected (<a name="0019-MCAL-075" href="#0019-MCAL-075">0019-MCAL-075</a>)
-
-- When the party increases the pegged order size while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the amendment is rejected and the original order is not affected (<a name="0019-MCAL-076" href="#0019-MCAL-076">0019-MCAL-076</a>)
-
-- When the party's pegged order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-078" href="#0019-MCAL-078">0019-MCAL-078</a>)
+- When the party has iceberg pegged orders and switches from cross margin mode to isolated margin mode, all the iceberg pegged orders will be stopped. (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
 
 **When a party is distressed:**
 
@@ -402,6 +392,8 @@ When submitting, amending, or deleting an order in isolated margin mode and cont
 NB: This means that a party's order could partially match, with a trade executed and some funds moved to the margin account with correct leverage whilst the rest of the order is immediately stopped.
 
 When submitting, amending, or deleting an order in isolated margin mode and an auction is active there is no concept of an order trading immediately on entry, however the case of someone putting in a sell order for a very low price must be handled (as it is likely to execute at a much higher price). To handle this, when in an auction the amount taken into the order margin account should be the larger of either `limit price * size * margin factor` or `max(mark price, indicative uncrossing price) * size * margin factor`. After uncrossing, all remaining open order volume should be rebased back to simply `limit price * size * margin factor` in the order margin account. All other steps are as above.
+
+Pegged orders are not supported in isolated margin mode.
 
 ### Increasing Position
 
