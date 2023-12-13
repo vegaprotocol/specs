@@ -50,6 +50,14 @@ When including orders we sort the orders in the order they will get filled in (d
     - update $S^{\text{current}}$ to equal $S^{\text{order}}$,
   - otherwise return last calculated $S^{\text{liquidation}}$ (assumes other orders will get cancelled and the remaining position will be liquidated).
 
+### Margin mode considerations
+
+Depending on the [margining mode](../protocol/0019-MCAL-margin_calculator.md#margining-modes) selected by the party for the market on which its position is being considered the $\text{collateral available}$ will differ.
+
+Cross-margin mode: $\text{collateral available} = \text{margin account balance} + \text{general account balance}$.
+
+Isolated margin mode: $\text{collateral available} = \text{margin account balance}$.
+
 ### Acceptance criteria
 
 1. An estimate is obtained for a long position with no open orders, mark price keeps going down in small increments and the actual liquidation takes place within the estimated range. (<a name="0012-NP-LIPE-001" href="#0012-NP-LIPE-001">0012-NP-LIPE-001</a>)
@@ -58,3 +66,4 @@ When including orders we sort the orders in the order they will get filled in (d
 1. An estimate is obtained for a long position with multiple limit sell order with the absolute value of the total remaining size of the orders less than the open volume. The estimated liquidation price with sell orders is lower than that for the open volume only. As the limit orders get filled the estimated liquidation price for the (updated) open volume converges to the estimate originally obtained with open sell orders. (<a name="0012-NP-LIPE-004" href="#0012-NP-LIPE-004">0012-NP-LIPE-004</a>)
 1. An estimate is obtained for a short position with multiple limit sell order with the absolute value of the total remaining size of the orders less than the open volume. The estimated liquidation price with sell orders is lower than that for the open volume only. As the limit orders get filled the estimated liquidation price for the (updated) open volume converges to the estimate originally obtained with open sell orders. As the price keeps moving in small increments the liquidation happens within the originally estimated range (with sell orders) (<a name="0012-NP-LIPE-005" href="#0012-NP-LIPE-005">0012-NP-LIPE-005</a>)
 1. There's no difference in the estimate for an open volume and that with `0` open volume and market order of the same size. (<a name="0012-NP-LIPE-006" href="#0012-NP-LIPE-006">0012-NP-LIPE-006</a>)
+1. When margining mode gets successfully changed and party has non-zero general account balance afterwards than its liquidation price estimate for all cases (position only, with buy orders, with sell orders) moves closer to the current mark price (compared to cross-margin figure). (<a name="0012-NP-LIPE-007" href="#0012-NP-LIPE-007">0012-NP-LIPE-007</a>)
