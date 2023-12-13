@@ -157,9 +157,9 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When the party submit a pegged order, it should be rejected(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
-- When the party has pegged orders and switches from cross margin mode to isolated margin mode, all the pegged orders will be stoped. (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
+- When the party has pegged orders and switches from cross margin mode to isolated margin mode, all the pegged orders will be stopped. (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
 
-- When the party has iceberg pegged orders and switches from cross margin mode to isolated margin mode, all the iceberg pegged orders will be stoped. (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+- When the party has iceberg pegged orders and switches from cross margin mode to isolated margin mode, all the iceberg pegged orders will be stopped. (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
 
 **When a party is distressed:**
 
@@ -393,7 +393,7 @@ NB: This means that a party's order could partially match, with a trade executed
 
 When submitting, amending, or deleting an order in isolated margin mode and an auction is active there is no concept of an order trading immediately on entry, however the case of someone putting in a sell order for a very low price must be handled (as it is likely to execute at a much higher price). To handle this, when in an auction the amount taken into the order margin account should be the larger of either `limit price * size * margin factor` or `max(mark price, indicative uncrossing price) * size * margin factor`. After uncrossing, all remaining open order volume should be rebased back to simply `limit price * size * margin factor` in the order margin account. All other steps are as above.
 
-Pegged orders are not supported in isolated margin mode. 
+Pegged orders are not supported in isolated margin mode.
 
 ### Increasing Position
 
