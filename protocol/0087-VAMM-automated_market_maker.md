@@ -135,15 +135,21 @@ $$
 v_{worst} = c \cdotp r_f
 $$
 
-where $c$ is the commitment amount and $r_f$ is as above.
+where $c$ is the current commitment amount (the sum of all funds controlled by the key across margin and general accounts) and $r_f$ is as above.
 
-Calculating this separately for the upper and lower ranges (using the `short` factor for the upper range and the `long` factor for the lower range) one can calculate the liquidity value `L` for each range with the formula
+Calculating this separately for the upper and lower ranges (using the `short` factor for the upper range and the `long` factor for the lower range) one can calculate the liquidity value `L` using the knowledge that at the `upper` and `lower` prices the position notional value should be $v_{worst}$. Thus, the absolute position reached at either position bound can be calculated as 
 
 $$
-L = \frac{v_{worst}}{\sqrt{p_u} - \sqrt{p_l}} ,
+P_v = \frac{v_{worst}}{p} ,
 $$
 
-where $v_{worst}$ is as above, $p_u$ is the price at the top of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the price at the bottom of the range (`base price` for the lower range and `lower price` for the lower range). This gives the two `L` values for the two ranges.
+Where $P_v$ is the theoretical volume, $v_{worst}$ is as above and $p$ is either the `upper price` or `lower price` depending on whether the upper or lower range is being considered. The final $L$ scores can then be reached with the equation 
+
+$$
+L = P_v \cdot \frac{\sqrt{p_u} \sqrt{p_l}}{\sqrt{p_u} - \sqrt{p_l}} ,
+$$
+
+where $P_v$ is the virtual position from the previous formulat, $p_u$ is the price at the top of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the price at the bottom of the range (`base price` for the lower range and `lower price` for the lower range). This gives the two `L` values for the two ranges.
 
 #### Fair price
 
@@ -152,10 +158,10 @@ From here the first step is calculating a `fair` price, which can be done by uti
   1. First, identify the current position, `p`. If it is `0` then the current fair price is the base price.
   2. If `P > 0`:
      1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_l}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_l$ is the `base price`.
-     2. The virtual `y` of the position can be calculated as $y_v = c_c \cdotp r_f + L \cdotp \sqrt{p_l}$ where $c_c$ is the current total dollar balance of the AMM across margin and general accounts and `p_l` is the `lower price`. Other variables are as defined above.
+     2. The virtual `y` of the position can be calculated as $y_v = c_c \cdotp r_f - P \cdot p_e + L \cdotp \sqrt{p_l}$ where $c_c$ is the current total dollar balance of the AMM across margin and general accounts, $p_e$ is the average entry price of the position and $p_l$ is the `lower price`. Other variables are as defined above.
   3. If `P < 0`:
      1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{p_u} \cdotp r_f + \frac{L}{\sqrt{p_l}}$ where $p_l$ is the `base price` and `p_u` is the `upper price`.
-     2. The virtual `y` can be calculated as $v_y = abs(P) \cdotp p_e + L \cdotp p_l$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price`
+     2. The virtual `y` can be calculated as $y_v = abs(P) \cdotp p_e + L \cdotp \sqrt{p_l}$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price`
   4. Now the `fair` price is simply $\frac{y_v}{x_v}$
 
 #### Volume between two prices
@@ -169,7 +175,7 @@ We then need to calculate the implied position at `starting price` and `ending p
 For a given price $p$ calculate implied position $P_i$ with
 
 $$
-P_i = L * \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}}
+P_i = L \cdot \frac{\sqrt{p_u} - \sqrt{p}}{\sqrt{p} \cdotp \sqrt{p_u}}
 $$
 
 Then simply return the absolute difference between these two prices.
