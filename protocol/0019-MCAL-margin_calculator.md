@@ -179,9 +179,9 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - A party with a parked iceberg pegged order switches from cross margin mode to isolated margin mode, the parked iceberg pegged order is cancelled (<a name="0019-MCAL-144" href="#0019-MCAL-144">0019-MCAL-144</a>)
 
-- A market in auction and party with a partially filled pegged order switches from cross marging mode to isolated margin mode the unfilled portion of the pegged order is cancelled (<a name="0019-MCAL-145" href="#0019-MCAL-145">0019-MCAL-145</a>)
+- A market in auction and party with a partially filled pegged order switches from cross margin mode to isolated margin mode the unfilled portion of the pegged order is cancelled (<a name="0019-MCAL-145" href="#0019-MCAL-145">0019-MCAL-145</a>)
 
-- A market in an auction and party with a partially filled iceberg pegged order switches from cross marging mode to isolated margin mode the unfilled portion of the iceberg pegged order is cancelled (<a name="0019-MCAL-146" href="#0019-MCAL-146">0019-MCAL-146</a>)
+- A market in an auction and party with a partially filled iceberg pegged order switches from cross margin mode to isolated margin mode the unfilled portion of the iceberg pegged order is cancelled (<a name="0019-MCAL-146" href="#0019-MCAL-146">0019-MCAL-146</a>)
 
 **When a party is distressed:**
 
