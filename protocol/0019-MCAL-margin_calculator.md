@@ -155,11 +155,33 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When the party's order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-048" href="#0019-MCAL-048">0019-MCAL-048</a>)
 
+**Pegged Orders:**
+
 - When the party submit a pegged order, it should be rejected(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
-- When the party has pegged orders and switches from cross margin mode to isolated margin mode, all the pegged orders will be stopped. (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
+- When the party submit a iceberg pegged order, it should be rejected(<a name="0019-MCAL-052" href="#0019-MCAL-052">0019-MCAL-052</a>)
 
-- When the party has iceberg pegged orders and switches from cross margin mode to isolated margin mode, all the iceberg pegged orders will be stopped. (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+- When the party has pegged orders and switches from cross margin mode to isolated margin mode, all the pegged orders will be cancelled. (<a name="0019-MCAL-050" href="#0019-MCAL-050">0019-MCAL-050</a>)
+
+- When the party has iceberg pegged orders and switches from cross margin mode to isolated margin mode, all the iceberg pegged orders will be cancelled. (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
+
+- A party with multiple types of orders in cross margin mode switches to isolated margin only their pegged orders are cancelled. (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
+
+- A market in continuous trading and a party with a partially filled pegged order in cross marging mode switches to isolated margin mode the unfilled portion of the pegged order is cancelled (<a name="0019-MCAL-075" href="#0019-MCAL-075">0019-MCAL-075</a>)
+
+- A market in continuous trading and a party with a partially filled iceberg pegged order in cross marging mode switches to isolated margin mode the unfilled portion of the pegged order is cancelled (<a name="0019-MCAL-078" href="#0019-MCAL-078">0019-MCAL-078</a>)
+
+- A market in auction trading and a party with a partially filled pegged order in cross marging mode switches to isolated margin mode the unfilled portion of the pegged order is cancelled (<a name="0019-MCAL-147" href="#0019-MCAL-147">0019-MCAL-147</a>)
+
+- A market in auction trading and a party with a partially filled iceberg pegged order in cross marging mode switches to isolated margin mode the unfilled portion of the pegged order is cancelled (<a name="0019-MCAL-148" href="#0019-MCAL-148">0019-MCAL-148</a>)
+
+- A party with a parked pegged order switches from cross margin mode to isolated margin mode, the parked pegged order is cancelled (<a name="0019-MCAL-143" href="#0019-MCAL-143">0019-MCAL-143</a>)
+
+- A party with a parked iceberg pegged order switches from cross margin mode to isolated margin mode, the parked iceberg pegged order is cancelled (<a name="0019-MCAL-144" href="#0019-MCAL-144">0019-MCAL-144</a>)
+
+- A market in auction and party with a partially filled pegged order switches from cross marging mode to isolated margin mode the unfilled portion of the pegged order is cancelled (<a name="0019-MCAL-145" href="#0019-MCAL-145">0019-MCAL-145</a>)
+
+- A market in an auction and party with a partially filled iceberg pegged order switches from cross marging mode to isolated margin mode the unfilled portion of the iceberg pegged order is cancelled (<a name="0019-MCAL-146" href="#0019-MCAL-146">0019-MCAL-146</a>)
 
 **When a party is distressed:**
 
