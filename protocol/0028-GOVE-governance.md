@@ -717,10 +717,10 @@ The voting to approve the batch happens, the batch passes, both changes are obse
 
 A vote cannot be submitted for an individual component in a batch (<a name="0028-GOVE-163" href="#0028-GOVE-163">0028-GOVE-163</a>)
 
+When a batch contains two proposals with identical enactment timestamps, they are executed in the order the appear in the batch. For example two network parameter update proposals in the same batch with the same enactment timestamp will both be executed, in the order specified. (<a name="0028-GOVE-164" href="#0028-GOVE-164">0028-GOVE-164</a>)
+
 - A batch proposal can be submitted changing the same network parameter twice to two different values with the same enactment timestamps.
 The voting to approve the batch happens, the batch passes, the value of the proposal appearing later in the batch is observed at the desired time. (<a name="0028-GOVE-165" href="#0028-GOVE-165">0028-GOVE-165</a>)
-
-When a batch contains two proposals with identical enactment timestamps, they are executed in the order the appear in the batch. For example two network parameter update proposals in the same batch with the same enactment timestamp will both be executed, in the order specified. (<a name="0028-GOVE-164" href="#0028-GOVE-164">0028-GOVE-164</a>)
 
 
 ##### Network History
