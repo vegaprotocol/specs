@@ -274,11 +274,11 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - when party has no position, and place short orders size -3 during auction, and long orders size 4, which is over the offset size, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-204" href="#0019-MCAL-204">0019-MCAL-204</a>)
 
-- When the party changes the order price during auction, order margin should be updated using max(price, mark Price, indicativePrice)(<a name="0019-MCAL-205" href="#0019-MCAL-205">0019-MCAL-205</a>)
+- When the party changes the order price during auction, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-205" href="#0019-MCAL-205">0019-MCAL-205</a>)
 
 - When the party reduces the order size only during auction, the order margin should be reduced (<a name="0019-MCAL-206" href="#0019-MCAL-206">0019-MCAL-206</a>)
 
-- when party has no position, and place 2 short orders size 3 and 4 long orders of size 4, which is over the offset size, order margin should be updated using max(price, mark Price, indicativePrice)(<a name="0019-MCAL-207" href="#0019-MCAL-207">0019-MCAL-207</a>)
+- when party has no position, and place 2 short orders size 3 and 4 long orders of size 4, which is over the offset size, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-207" href="#0019-MCAL-207">0019-MCAL-207</a>)
 
 - GFA order added during auction should not be used to count order margin in continuous(<a name="0019-MCAL-220" href="#0019-MCAL-220">0019-MCAL-220</a>)
 
