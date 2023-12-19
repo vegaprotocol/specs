@@ -125,6 +125,8 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When the mark price moves, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
 
+- Amend the order (change size) so that new side margin + margin account balance < maintenance margin, the remaining should be stopped (<a name="0019-MCAL-068" href="#0019-MCAL-068">0019-MCAL-068</a>)
+
 **When a party has a position and an order which offsets the position:**
 
 - When the party places a new long order of `2` with price `15912` which offsets the existing position, and the market is in continuous trading. The margin account should not change as no additional margin is required (<a name="0019-MCAL-038" href="#0019-MCAL-038">0019-MCAL-038</a>)
@@ -138,24 +140,6 @@ There should be an additional amount `limit price x size x margin factor = 15910
 - When increasing the `margin factor` and the party does not have enough asset in the general account to cover the new maintenance margin, then the new margin factor will be rejected (<a name="0019-MCAL-040" href="#0019-MCAL-040">0019-MCAL-040</a>)
 
 **Amending order:**
-
-- When the party cancels all orders, the order margin should be `0`(<a name="0019-MCAL-041" href="#0019-MCAL-041">0019-MCAL-041</a>)
-
-- When the party reduces the order size only, the order margin should be reduced (<a name="0019-MCAL-042" href="#0019-MCAL-042">0019-MCAL-042</a>)
-
-- When the party reduces the order price only, the order margin should be reduced (<a name="0019-MCAL-043" href="#0019-MCAL-043">0019-MCAL-043</a>)
-
-- When the party increases the order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-044" href="#0019-MCAL-044">0019-MCAL-044</a>)
-
-- When the party increases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-045" href="#0019-MCAL-045">0019-MCAL-045</a>)
-
-- When the party increases the order size while decreases the order price and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-046" href="#0019-MCAL-046">0019-MCAL-046</a>)
-
-- When the party increases the order price while decreases the order size and the party's general account does not contain sufficient funds to cover any increases to the order margin account to be equal to side margin then the order should be stopped (<a name="0019-MCAL-047" href="#0019-MCAL-047">0019-MCAL-047</a>)
-
-- When the party's order is partially filled, the order margin and general margin should be updated accordingly (<a name="0019-MCAL-048" href="#0019-MCAL-048">0019-MCAL-048</a>)
-
-**Pegged Orders:**
 
 - When the party submit a pegged order, it should be rejected(<a name="0019-MCAL-049" href="#0019-MCAL-049">0019-MCAL-049</a>)
 
@@ -219,8 +203,6 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - switch to isolated margin without position and no orders with margin factor such that there is insufficient balance in the general account in continuous mode(<a name="0019-MCAL-110" href="#0019-MCAL-110">0019-MCAL-110</a>)
 
-- switch to isolated margin without position and no orders with margin factor such that there is insufficient balance in the general account in auction mode(<a name="0019-MCAL-111" href="#0019-MCAL-111">0019-MCAL-111</a>)
-
 - switch to isolated margin with position and no orders with margin factor such that there is insufficient balance in the general account in continuous mode(<a name="0019-MCAL-112" href="#0019-MCAL-112">0019-MCAL-112</a>)
 
 - switch to isolated margin with position and no orders with margin factor such that there is insufficient balance in the general account in auction mode(<a name="0019-MCAL-113" href="#0019-MCAL-113">0019-MCAL-113</a>)
@@ -233,8 +215,6 @@ There should be an additional amount `limit price x size x margin factor = 15910
 - submit update margin mode transaction with no state change (already in cross margin, "change" to cross margin, or already in isolated, submit with same margin factor)(<a name="0019-MCAL-116" href="#0019-MCAL-116">0019-MCAL-116</a>)
 
 - update margin factor when already in isolated mode to the same cases as in switch to isolated failures.(<a name="0019-MCAL-117" href="#0019-MCAL-117">0019-MCAL-117</a>)
-
-- switch to isolated margin without position and no orders successful in continuous mode(<a name="0019-MCAL-118" href="#0019-MCAL-118">0019-MCAL-118</a>)
 
 - switch to isolated margin without position and no orders successful in auction(<a name="0019-MCAL-119" href="#0019-MCAL-119">0019-MCAL-119</a>)
 
@@ -281,6 +261,49 @@ There should be an additional amount `limit price x size x margin factor = 15910
 - switch to cross margin with position and with orders successful in continuous mode(<a name="0019-MCAL-140" href="#0019-MCAL-140">0019-MCAL-140</a>)
 
 - switch to cross margin with position and with orders successful in auction(<a name="0019-MCAL-141" href="#0019-MCAL-141">0019-MCAL-141</a>)
+
+**Check order margin:**
+
+- when party has no position, and place 2 short orders during auction, order margin should be updated(<a name="0019-MCAL-200" href="#0019-MCAL-200">0019-MCAL-200</a>)
+
+- when party has no position, and place short orders size -3 during auction, and long order size 1 which can offset, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-201" href="#0019-MCAL-201">0019-MCAL-201</a>)
+
+- when party has no position, and place short orders size -3 during auction, and long orders size 2 which can offset, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-202" href="#0019-MCAL-202">0019-MCAL-202</a>)
+
+- when party has no position, and place short orders size -3 during auction, and long orders size 3 which can offset, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-203" href="#0019-MCAL-203">0019-MCAL-203</a>)
+
+- when party has no position, and place short orders size -3 during auction, and long orders size 4, which is over the offset size, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-204" href="#0019-MCAL-204">0019-MCAL-204</a>)
+
+- When the party changes the order price during auction, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-205" href="#0019-MCAL-205">0019-MCAL-205</a>)
+
+- When the party reduces the order size only during auction, the order margin should be reduced (<a name="0019-MCAL-206" href="#0019-MCAL-206">0019-MCAL-206</a>)
+
+- when party has no position, and place 2 short orders size 3 and 4 long orders of size 4, which is over the offset size, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-207" href="#0019-MCAL-207">0019-MCAL-207</a>)
+
+- GFA order added during auction should not be used to count order margin in continuous(<a name="0019-MCAL-220" href="#0019-MCAL-220">0019-MCAL-220</a>)
+
+- when party has no position, and place 2 short orders during auction, order margin should be updated(<a name="0019-MCAL-221" href="#0019-MCAL-221">0019-MCAL-221</a>)
+
+- When the party cancel one of the two orders during continuous, order margin should be reduced. When the party increases the order price during continuous, order margin should increase(<a name="0019-MCAL-222" href="#0019-MCAL-222">0019-MCAL-222</a>)
+
+- When the party decreases the order price during continuous, order margin should decrease(<a name="0019-MCAL-223" href="#0019-MCAL-223">0019-MCAL-223</a>)
+
+- When the party decreases the order volume during continuous, order margin should decrease(<a name="0019-MCAL-224" href="#0019-MCAL-224">0019-MCAL-224</a>)
+
+- When the party increases the order volume while decrease price during continuous, order margin should update accordingly(<a name="0019-MCAL-225" href="#0019-MCAL-225">0019-MCAL-225</a>)
+
+- When the party's order is partially filled during continuous, order margin should update accordingly(<a name="0019-MCAL-226" href="#0019-MCAL-226">0019-MCAL-226</a>)
+
+- When the party cancel one of the two orders during continuous, order margin should be reduced(<a name="0019-MCAL-227" href="#0019-MCAL-227">0019-MCAL-227</a>)
+
+- place a GFA order during continuous, order should be rejected(<a name="0019-MCAL-228" href="#0019-MCAL-228">0019-MCAL-228</a>)
+
+- When the party has position -1 and order -3, and new long order with size 1 will be offset(<a name="0019-MCAL-229" href="#0019-MCAL-229">0019-MCAL-229</a>)
+
+- When the party has position -1 and order -3, and new long orders with size 2 will be offset(<a name="0019-MCAL-230" href="#0019-MCAL-230">0019-MCAL-230</a>)
+
+- When the party has position -1 and order -3, and new long orders with size 3 will be offset(<a name="0019-MCAL-231" href="#0019-MCAL-231">0019-MCAL-231</a>)
+
 
 **Check decimals:**
 
@@ -752,4 +775,3 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
-
