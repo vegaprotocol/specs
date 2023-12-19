@@ -125,7 +125,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When the mark price moves, the margin account should be updated while order margin account should not (<a name="0019-MCAL-067" href="#0019-MCAL-067">0019-MCAL-067</a>)
 
-- Amend the order (change size) so that new side margin + margin account balance < maintenance margin, the remainding should be stopped (<a name="0019-MCAL-068" href="#0019-MCAL-068">0019-MCAL-068</a>)
+- Amend the order (change size) so that new side margin + margin account balance < maintenance margin, the remaining should be stopped (<a name="0019-MCAL-068" href="#0019-MCAL-068">0019-MCAL-068</a>)
 
 **When a party has a position and an order which offsets the position:**
 
@@ -149,7 +149,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When the party has iceberg pegged orders and switches from cross margin mode to isolated margin mode, all the iceberg pegged orders will be cancelled. (<a name="0019-MCAL-051" href="#0019-MCAL-051">0019-MCAL-051</a>)
 
-A party with multiple types of orders in cross margin mode switches to isolated margin only their pegged orders are cancelled. (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
+- A party with multiple types of orders in cross margin mode switches to isolated margin only their pegged orders are cancelled. (<a name="0019-MCAL-057" href="#0019-MCAL-057">0019-MCAL-057</a>)
 
 - A market in continuous trading and a party with a partially filled pegged order in cross margin mode switches to isolated margin mode the unfilled portion of the pegged order is cancelled (<a name="0019-MCAL-075" href="#0019-MCAL-075">0019-MCAL-075</a>)
 
@@ -266,37 +266,37 @@ A party with multiple types of orders in cross margin mode switches to isolated 
 
 - when party has no position, and place 2 short orders during auction, order margin should be updated(<a name="0019-MCAL-200" href="#0019-MCAL-200">0019-MCAL-200</a>)
 
-- when party has no position, and place short orders size -3 during auction, and long order size 1 which can offset, order margin should be updated using max(price, markPrice, indicativePrice)(<a name="0019-MCAL-201" href="#0019-MCAL-201">0019-MCAL-201</a>)
+- when party has no position, and place short orders size -3 during auction, and long order size 1 which can offset, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-201" href="#0019-MCAL-201">0019-MCAL-201</a>)
 
-- when party has no position, and place short orders size -3 during auction, and long orders size 2 which can offset, order margin should be updated using max(price, markPrice, indicativePrice)(<a name="0019-MCAL-202" href="#0019-MCAL-202">0019-MCAL-202</a>)
+- when party has no position, and place short orders size -3 during auction, and long orders size 2 which can offset, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-202" href="#0019-MCAL-202">0019-MCAL-202</a>)
 
-- when party has no position, and place short orders size -3 during auction, and long orders size 3 which can offset, order margin should be updated using max(price, markPrice, indicativePrice)(<a name="0019-MCAL-203" href="#0019-MCAL-203">0019-MCAL-203</a>)
+- when party has no position, and place short orders size -3 during auction, and long orders size 3 which can offset, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-203" href="#0019-MCAL-203">0019-MCAL-203</a>)
 
-- when party has no position, and place short orders size -3 during auction, and long orders size 4, which is over the offset size, order margin should be updated using max(price, markPrice, indicativePrice)(<a name="0019-MCAL-204" href="#0019-MCAL-204">0019-MCAL-204</a>)
+- when party has no position, and place short orders size -3 during auction, and long orders size 4, which is over the offset size, order margin should be updated using max(price, mark Price, indicative Price)(<a name="0019-MCAL-204" href="#0019-MCAL-204">0019-MCAL-204</a>)
 
-- When the party changes the order price during auction, order margin should be updated using max(price, markPrice, indicativePrice)(<a name="0019-MCAL-205" href="#0019-MCAL-205">0019-MCAL-205</a>)
+- When the party changes the order price during auction, order margin should be updated using max(price, mark Price, indicativePrice)(<a name="0019-MCAL-205" href="#0019-MCAL-205">0019-MCAL-205</a>)
 
 - When the party reduces the order size only during auction, the order margin should be reduced (<a name="0019-MCAL-206" href="#0019-MCAL-206">0019-MCAL-206</a>)
 
-- when party has no position, and place 2 short orders size 3 and 4 long orders of size 4, which is over the offset size, order margin should be updated using max(price, markPrice, indicativePrice)(<a name="0019-MCAL-207" href="#0019-MCAL-207">0019-MCAL-207</a>)
+- when party has no position, and place 2 short orders size 3 and 4 long orders of size 4, which is over the offset size, order margin should be updated using max(price, mark Price, indicativePrice)(<a name="0019-MCAL-207" href="#0019-MCAL-207">0019-MCAL-207</a>)
 
 - GFA order added during auction should not be used to count order margin in continuous(<a name="0019-MCAL-220" href="#0019-MCAL-220">0019-MCAL-220</a>)
 
 - when party has no position, and place 2 short orders during auction, order margin should be updated(<a name="0019-MCAL-221" href="#0019-MCAL-221">0019-MCAL-221</a>)
 
-- When the party cancel one of the two orders during continunous, order margin should be reducedWhen the party increases the order price during continunous, order margin should increase(<a name="0019-MCAL-222" href="#0019-MCAL-222">0019-MCAL-222</a>)
+- When the party cancel one of the two orders during continuous, order margin should be reduced. When the party increases the order price during continuous, order margin should increase(<a name="0019-MCAL-222" href="#0019-MCAL-222">0019-MCAL-222</a>)
 
-- When the party decreases the order price during continunous, order margin should decrease(<a name="0019-MCAL-223" href="#0019-MCAL-223">0019-MCAL-223</a>)
+- When the party decreases the order price during continuous, order margin should decrease(<a name="0019-MCAL-223" href="#0019-MCAL-223">0019-MCAL-223</a>)
 
-- When the party decreases the order volume during continunous, order margin should decrease(<a name="0019-MCAL-224" href="#0019-MCAL-224">0019-MCAL-224</a>)
+- When the party decreases the order volume during continuous, order margin should decrease(<a name="0019-MCAL-224" href="#0019-MCAL-224">0019-MCAL-224</a>)
 
-- When the party increases the order volume while decrease price during continunous, order margin should update accordingly(<a name="0019-MCAL-225" href="#0019-MCAL-225">0019-MCAL-225</a>)
+- When the party increases the order volume while decrease price during continuous, order margin should update accordingly(<a name="0019-MCAL-225" href="#0019-MCAL-225">0019-MCAL-225</a>)
 
-- When the party's order is partially filled during continunous, order margin should update accordingly(<a name="0019-MCAL-226" href="#0019-MCAL-226">0019-MCAL-226</a>)
+- When the party's order is partially filled during continuous, order margin should update accordingly(<a name="0019-MCAL-226" href="#0019-MCAL-226">0019-MCAL-226</a>)
 
-- When the party cancel one of the two orders during continunous, order margin should be reduced(<a name="0019-MCAL-227" href="#0019-MCAL-227">0019-MCAL-227</a>)
+- When the party cancel one of the two orders during continuous, order margin should be reduced(<a name="0019-MCAL-227" href="#0019-MCAL-227">0019-MCAL-227</a>)
 
-- place a GFA order duing continuous, order should be rejected(<a name="0019-MCAL-228" href="#0019-MCAL-228">0019-MCAL-228</a>)
+- place a GFA order during continuous, order should be rejected(<a name="0019-MCAL-228" href="#0019-MCAL-228">0019-MCAL-228</a>)
 
 - When the party has position -1 and order -3, and new long order with size 1 will be offset(<a name="0019-MCAL-229" href="#0019-MCAL-229">0019-MCAL-229</a>)
 
@@ -775,5 +775,3 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
-
-
