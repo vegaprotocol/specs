@@ -260,7 +260,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
   for this market the party switches to isolated margin with `margin factor=0.9` then the party will have margin account balance of
   `average entry price x current position x new margin factor = 57 500 x 1 x 0.9 = 6325`
-  the difference topped up from the party’s general account(<a name="0019-MCAL-231" href="#0019-MCAL-231">0019-MCAL-231</a>)
+  the difference topped up from the party’s general account(<a name="0019-MCAL-233" href="#0019-MCAL-233">0019-MCAL-233</a>)
 
 - In isolated margin mode, a party `short 1@15 900`, `margin factor=0.9` and order book is
 
