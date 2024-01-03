@@ -144,8 +144,8 @@ To create a referral set and generate a referral code, the party must submit a s
   - `name`: mandatory string team name
   - `team_url`: optional string of a link to a team forum, discord, etc. (defaults to empty string / none-type)
   - `avatar_url`: optional string of a link to an image to be used as the teams avatar (defaults to empty string / none-type)
-  - `allow_list`: optional list of public keys which are allowed to join the team. If empty, all public keys are allowed to join the team.
-  - `closed`: optional boolean, defines whether a team is accepting new members (defaults to false)
+  - `closed`: optional boolean, defines whether a team is closed to members not specified in the `allow_list`, i.e. when `True` the team is joinable by invite only.
+  - `allow_list`: optional list of public keys which defines which parties are allowed to join if the team is joinable by invite only.
 
 *Example: if party wants to create a simple referral set.*
 
@@ -202,8 +202,8 @@ To update a referral set the party submit a signed `UpdateReferralSet` transacti
   - `name`: optional string team name
   - `team_url`: optional string of a link to a team forum, discord, etc.
   - `avatar_url`: optional string of a link to an image to be used as the teams avatar
-  - `allow_list`: optional list of public keys which are allowed to join the team. If empty, all public keys are allowed to join the team.
-  - `closed`: optional boolean, defines whether a team is accepting new members
+  - `closed`: optional boolean, defines whether a team is closed to members not specified in the `allow_list`, i.e. when `True` the team can be joined by invite only.
+  - `allow_list`: optional list of public keys which defines which parties are allowed to join if the team is joinable by invite only.
 
 ```protobuf
 message UpdateReferralSet{
@@ -217,9 +217,9 @@ message UpdateReferralSet{
 }
 ```
 
-If a referral set is currently designated as a team, a referrer should be able to "close" their team to any new members by setting the `closed` field to `True`. Note, closing a team is the same as closing a referral set and as such all `ApplyReferralCode` transactions applying the referral code associated with the closed referrals set should be rejected.
+If a referral set is currently designated as a team, a referrer should be able to "close" their team to any new members not specified in the `allow_list` by setting the `closed` field to `True`.
 
-Note, if a referrer updates the `allow_list` defining the parties which are allowed to join the team, the updated list is only used to validate attempts to join the team, i.e. if an existing member is removed from the list, they are not removed from the team.
+Note, if a referrer updates `closed` or the `allow_list` defining the parties which are allowed to join the team, the updated list is only used to validate attempts to join the team, i.e. existing members are not removed from the team.
 
 If a referral set is currently designated as a team, a party is able to effectively "disband" a team by updating their referral set and setting their `is_team` value to `False`. Note a team should only be "disbanded" and removed from leaderboards at the end of the current epoch after rewards have been distributed.
 
@@ -258,10 +258,7 @@ message JoinTeam{
 }
 ```
 
-The party will be added to the team providing the following criteria are met.
-
-- the team is not `closed`
-- the team has no `allow_list` or the party is specified in the teams `allow_list`
+The party will be added to the team providing the team is not `closed` (anyone can join) or the team is `closed` (joinable by invite only) and the party is specified in the `allow_list`.
 
 ### Party volumes
 
@@ -485,30 +482,29 @@ The Estimate Fees API should now calculate the following additional information:
 
 #### Applying a referral code
 
-1. If a party **is not** currently a **referee**, if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-025" href="#0083-RFPR-025">0083-RFPR-025</a>)
+1. If a party **is not** currently a **referee**, if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>)
 
     - the party **will** be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists, the team is not closed, and the party is allowed by the `allow_list`).
+    - the party **will** be added to the associated team (if one exists) and the team is not `closed` or the team is `closed` and the party is allowed by the `allow_list`.
 
 
-1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-027" href="#0083-RFPR-027">0083-RFPR-027</a>).
+1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
 
     - the party **will** be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists and the team is not closed, and the party is allowed by the `allow_list`).
+    - the party **will** be added to the associated team (if one exists) and the team is not `closed` or the team is `closed` and the party is allowed by the `allow_list`.
 
 1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then the transaction will be rejected. (<a name="0083-RFPR-052" href="#0083-RFPR-052">0083-RFPR-052</a>).
 
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team has **no** `allow_list` specified, then the party **should** be added to the team. (<a name="0083-RFPR-053" href="#0083-RFPR-053">0083-RFPR-053</a>).
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team. (<a name="0083-RFPR-054" href="#0083-RFPR-054">0083-RFPR-054</a>).
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id`, but the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team. (<a name="0083-RFPR-055" href="#0083-RFPR-055">0083-RFPR-055</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
 1. An `ApplyReferralCode` transaction should be rejected if the party is a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
-1. An `ApplyReferralCode` transaction should be rejected if the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the team to be closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
 
 ### Joining a team
 
-1. If a party submits a `JoinTeam` transaction and the team has **no** `allow_list` specified, then the party **should** be added to the team. (<a name="0083-RFPR-056" href="#0083-RFPR-056">0083-RFPR-056</a>).
-1. If a party submits a `JoinTeam` transaction and the parties key **is** specified in the teams `allow_list`, then the party **should** be added to the team. (<a name="0083-RFPR-057" href="#0083-RFPR-057">0083-RFPR-057</a>).
-1. If a party submits a `JoinTeam` transaction and the party key **is not** specified in the teams `allow_list`, then the party **should not** be added to the team. (<a name="0083-RFPR-058" href="#0083-RFPR-058">0083-RFPR-058</a>).
+1. If a party submits a `JoinTeam` transaction and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
+1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
+1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
 
 #### Epoch and running volumes
 
