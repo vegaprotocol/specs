@@ -260,7 +260,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
   for this market the party switches to isolated margin with `margin factor=0.9` then the party will have margin account balance of
   `average entry price x current position x new margin factor = 57 500 x 1 x 0.9 = 6325`
-  the difference topped up from the party’s general account(<a name="0019-MCAL-143" href="#0019-MCAL-143">0019-MCAL-143</a>)
+  the difference topped up from the party’s general account(<a name="0019-MCAL-231" href="#0019-MCAL-231">0019-MCAL-231</a>)
 
 - In isolated margin mode, a party `short 1@15 900`, `margin factor=0.9` and order book is
 
@@ -277,7 +277,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
   for this market the party switches to cross margin and the market has `market.linearSlippageFactor = 0.25`, `RF short = 0.1` then the maintenance margin for the party is `min(1 x (100 000-159 00), 159 00 x 0.25 x 1) + 0.1 x 1 x 159 00 = 5565`
   but if `5565 < collatoral release level` the maintenance margin will remain unchanged at `6325`
   
-  the difference topped up from the party’s general account(<a name="0019-MCAL-144" href="#0019-MCAL-144">0019-MCAL-144</a>)
+  the difference topped up from the party’s general account(<a name="0019-MCAL-232" href="#0019-MCAL-232">0019-MCAL-232</a>)
 
 - switch to cross margin without position and no orders successful in continuous mode(<a name="0019-MCAL-134" href="#0019-MCAL-134">0019-MCAL-134</a>)
 
