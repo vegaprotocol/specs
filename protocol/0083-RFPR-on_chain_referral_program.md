@@ -482,29 +482,29 @@ The Estimate Fees API should now calculate the following additional information:
 
 #### Applying a referral code
 
-1. If a party **is not** currently a **referee**, if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>)
+1. If a party **is not** currently a **referee**, if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-059" href="#0083-RFPR-059">0083-RFPR-059</a>)
 
     - the party **will** be added to the associated referral set.
     - the party **will** be added to the associated team (if one exists) and the team is not `closed` or the team is `closed` and the party is allowed by the `allow_list`.
 
 
-1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
+1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-060" href="#0083-RFPR-060">0083-RFPR-060</a>).
 
     - the party **will** be added to the associated referral set.
     - the party **will** be added to the associated team (if one exists) and the team is not `closed` or the team is `closed` and the party is allowed by the `allow_list`.
 
 1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then the transaction will be rejected. (<a name="0083-RFPR-052" href="#0083-RFPR-052">0083-RFPR-052</a>).
 
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
-1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-061" href="#0083-RFPR-061">0083-RFPR-061</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-062" href="#0083-RFPR-062">0083-RFPR-062</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-063" href="#0083-RFPR-063">0083-RFPR-063</a>).
 1. An `ApplyReferralCode` transaction should be rejected if the party is a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
 
 ### Joining a team
 
-1. If a party submits a `JoinTeam` transaction and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
-1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
-1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-0XX" href="#0083-RFPR-0XX">0083-RFPR-0XX</a>).
+1. If a party submits a `JoinTeam` transaction and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-064" href="#0083-RFPR-064">0083-RFPR-064</a>).
+1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-065" href="#0083-RFPR-065">0083-RFPR-065</a>).
+1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-066" href="#0083-RFPR-066">0083-RFPR-066</a>).
 
 #### Epoch and running volumes
 
