@@ -246,7 +246,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - increase margin factor in isolated margin with position and with orders successful in auction(<a name="0019-MCAL-133" href="#0019-MCAL-133">0019-MCAL-133</a>)
 
-- In cross margin mode, a party `short 1`, `mark price = 15 900`, `market.linearSlippageFactor = 0.25`, `RF short = 0.1` and order book is
+- In cross margin mode for a market with no price monitoring, a party `short 1`, `mark price = 15 900`, `market.linearSlippageFactor = 0.25`, `RF short = 0.1` and order book is
 
   ```book
   buy 1 @ 15 000
