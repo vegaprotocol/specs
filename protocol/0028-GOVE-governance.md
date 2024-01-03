@@ -701,7 +701,7 @@ It is NOT possible to submit a governance proposal where the source account is t
 
 - A batch proposal containing
    1. freeform proposal,
-   1. an update asset proposal changing the asset quantum, withdrawal delay and withdrawal delay threshold
+   1. an update asset proposal changing the asset quantum, maximum lifetime deposit and withdrawal delay threshold
    1. a network parameter change,
    1. a market proposal,
    1. a change proposal for another market,
