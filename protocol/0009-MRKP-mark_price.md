@@ -30,15 +30,15 @@ Now 10.1s has elapsed since the last update and there is a market buy order for 
 
 ### 2. Flexible mark price methodology
 
-The calculations are specified in [markprice methodology research note](https://github.com/vegaprotocol/research/blob/markprice-updates/papers/markprice-methodology/markprice-methodology.tex). 
-Here, we only write the acceptance criteria. 
-Note that for calculating the median with an even number of entries we sort, pick out the two values that are in the middle of the list and average those. So in particular with two values a median is the same as the average for our purposes. 
+The calculations are specified in [markprice methodology research note](https://github.com/vegaprotocol/research/blob/markprice-updates/papers/markprice-methodology/markprice-methodology.tex).
+Here, we only write the acceptance criteria.
+Note that for calculating the median with an even number of entries we sort, pick out the two values that are in the middle of the list and average those. So in particular with two values a median is the same as the average for our purposes.
 
 
 ## Acceptance criteria
 
 - The mark price must be set when the market leaves opening auction. (<a name="0009-MRKP-002" href="#0009-MRKP-002">0009-MRKP-002</a>)
-- Each time the mark price changes the market data event containing the new mark price should be emitted. Specifically, the mark price set after leaving each auction, every interim mark price as well as the mark price based on last trade used at market termination and the one based on oracle data used for final settlement should all be observable from market data events. (<a name="0009-MRKP-009" href="#0009-MRKP-009">0009-MRKP-009</a>)
+- Each time the mark price changes the market data event containing the new mark price should be emitted.Specifically, the mark price set after leaving each auction, every interim mark price as well as the mark price based on last trade used at market termination and the one based on oracle data used for final settlement should all be observable from market data events. (<a name="0009-MRKP-009" href="#0009-MRKP-009">0009-MRKP-009</a>)
 
 ### Algorithm 1 (last trade price, excluding network trades):
 
@@ -53,34 +53,34 @@ Note that for calculating the median with an even number of entries we sort, pic
 
 - It is possible to configure a cash settled futures market to use Algorithm 1 (ie last trade price) (<a name="0009-MRKP-010" href="#0009-MRKP-010">0009-MRKP-010</a>) and a perps market (<a name="0009-MRKP-011" href="#0009-MRKP-011">0009-MRKP-011</a>).
 - It is possible to configure a cash settled futures market to use weighted average of trades over `network.markPriceUpdateMaximumFrequency` with decay weight `1` and power `1` (linear decay) (<a name="0009-MRKP-012" href="#0009-MRKP-012">0009-MRKP-012</a>) and a perps market (<a name="0009-MRKP-013" href="#0009-MRKP-013">0009-MRKP-013</a>).
-- It is possible to configure a cash settled futures market to use impact of leveraged notional on the order book with the value of USDT `100` for mark price (<a name="0009-MRKP-014" href="#0009-MRKP-014">0009-MRKP-014</a>) and a perps market (<a name="0009-MRKP-014" href="#0009-MRKP-014">0009-MRKP-014</a>).
-- It is possible to configure a cash settled futures market to use an oracle source for the mark price (<a name="0009-MRKP-015" href="#0009-MRKP-015">0009-MRKP-015</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-016" href="#0009-MRKP-016">0009-MRKP-016</a>). 
+- It is possible to configure a cash settled futures market to use impact of leveraged notional on the order book with the value of USDT `100` for mark price (<a name="0009-MRKP-014" href="#0009-MRKP-014">0009-MRKP-014</a>) and a perps market (<a name="0009-MRKP-015" href="#0009-MRKP-015">0009-MRKP-015</a>).
+- It is possible to configure a cash settled futures market to use an oracle source for the mark price (<a name="0009-MRKP-016" href="#0009-MRKP-016">0009-MRKP-016</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-017" href="#0009-MRKP-017">0009-MRKP-017</a>).
 
 ### Flexible mark price methodology, combinations
 
-- It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and 3. an oracle source and if last trade is last updated more than 1 minute ago then it is removed and the remaining re-weighted and if the oracle is last updated more than 5 minutes ago then it is removed and the remaining re-weighted (<a name="0009-MRKP-017" href="#0009-MRKP-017">0009-MRKP-017</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-018" href="#0009-MRKP-018">0009-MRKP-018</a>). 
+- It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and 3. an oracle source and if last trade is last updated more than 1 minute ago then it is removed and the remaining re-weighted and if the oracle is last updated more than 5 minutes ago then it is removed and the remaining re-weighted (<a name="0009-MRKP-018" href="#0009-MRKP-018">0009-MRKP-018</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-019" href="#0009-MRKP-019">0009-MRKP-019</a>).
 
-- It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and if last trade is last updated more than 1 minute ago then it is removed and the remaining re-weighted and if the oracle is last updated more than 5 minutes ago then it is removed and the remaining re-weighted and if both sources are stale than the mark price stops updating (<a name="0009-MRKP-019" href="#0009-MRKP-019">0009-MRKP-019</a>) and a perps market (<a name="0009-MRKP-020" href="#0009-MRKP-020">0009-MRKP-020</a>). 
+- It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and if last trade is last updated more than 1 minute ago then it is removed and the remaining re-weighted and if the oracle is last updated more than 5 minutes ago then it is removed and the remaining re-weighted and if both sources are stale than the mark price stops updating (<a name="0009-MRKP-020" href="#0009-MRKP-020">0009-MRKP-020</a>) and a perps market (<a name="0009-MRKP-021" href="#0009-MRKP-021">0009-MRKP-021</a>).
 
-- It is possible to configure a cash settled futures market to use a median of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and 3. an oracle source and if last trade is last updated more than 1 minute ago then it is removed and if the oracle is last updated more than 5 minutes ago then it is removed (<a name="0009-MRKP-021" href="#0009-MRKP-021">0009-MRKP-021</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-022" href="#0009-MRKP-022">0009-MRKP-022</a>). 
+- It is possible to configure a cash settled futures market to use a median of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and 3. an oracle source and if last trade is last updated more than 1 minute ago then it is removed and if the oracle is last updated more than 5 minutes ago then it is removed (<a name="0009-MRKP-022" href="#0009-MRKP-022">0009-MRKP-022</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-023" href="#0009-MRKP-023">0009-MRKP-023</a>).
 
-### Example 1 - A typical path of a cash settled futures market from end of openning aucton till expiry (median mark price method)(<a name="0009-MRKP-023" href="#0009-MRKP-023">0009-MRKP-023</a>)
+### Example 1 - A typical path of a cash settled futures market from end of openning auction till expiry (median mark price method)(<a name="0009-MRKP-024" href="#0009-MRKP-024">0009-MRKP-024</a>)
 
-1. Market is in openning auction, no mark price 
-2. Order uncrossed, ends of opening auction, market is in active state. New event is emited for new mark price.
-3. New trade triggers new traded price, mark price recalcuated, new event is emited for new mark price.
-4. New Oracle price comes, mark price recalcuated, new event is emited for new mark price.
-5. Another Oracle price comes, mark price recalcuated, new event is emited for new mark price.
-6. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalcuated, new event is emited for new mark price.
-7. market's status is set to trading terminated, An [oracle event occurs] that is eligible to settle the market, new event is emited for new mark price.
+1. Market is in opening auction, no mark price.
+2. Order uncrossed, ends of opening auction, market is in active state. New event is emitted for new mark price.
+3. New trade triggers new traded price, mark price recalculated, new event is emitted for new mark price.
+4. New Oracle price comes, mark price recalculated, new event is emitted for new mark price.
+5. Another Oracle price comes, mark price recalculated, new event is emitted for new mark price.
+6. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalculated, new event is emitted for new mark price.
+7. market's status is set to trading terminated, An [oracle event occurs] that is eligible to settle the market, new event is emitted for new mark price.
 
-### Example 2 - A typical path of a cash settled perps market from end of openning aucton (median mark price method)(<a name="0009-MRKP-024" href="#0009-MRKP-024">0009-MRKP-024</a>)
+### Example 2 - A typical path of a cash settled perps market from end of openning auction (median mark price method)(<a name="0009-MRKP-025" href="#0009-MRKP-025">0009-MRKP-025</a>)
 
-1. Market is in openning auction, no mark price 
-2. Order uncrossed, ends of opening auction, market is in active state. New event is emited for new mark price.
-3. New trade triggers new traded price, mark price recalcuated, new event is emited for new mark price.
-4. New Oracle price comes, mark price recalcuated, new event is emited for new mark price.
-5. Another Oracle price comes, mark price recalcuated, new event is emited for new mark price.
-5. Oracle price comes for funding payments, mark price recalcuated, new event is emited for new mark price.
-6. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalcuated, new event is emited for new mark price.
+1. Market is in opening auction, no mark price.
+2. Order uncrossed, ends of opening auction, market is in active state. New event is emitted for new mark price.
+3. New trade triggers new traded price, mark price recalculated, new event is emitted for new mark price.
+4. New Oracle price comes, mark price recalculated, new event is emitted for new mark price.
+5. Another Oracle price comes, mark price recalculated, new event is emitted for new mark price.
+5. Oracle price comes for funding payments, mark price recalculated, new event is emitted for new mark price.
+6. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalculated, new event is emitted for new mark price.
 
