@@ -3,10 +3,10 @@
     "specs": ["0017-PART", "0022-AUTH", "0051-PROD", "0016-PFUT", "0053-PERP", "0040-ASSF", "0013-ACCT", "0054-NETP", "0068-MATC", "0067-KEYS", "0057-TRAN", "0052-FPOS", "0080-SPOT"]
   },
   "Markets": {
-    "specs": ["0035-LIQM", "0032-PRIM", "0043-MKTL", "0026-AUCT", "0006-POSI", "0008-TRAD", "0001-MKTF", "0009-MRKP", "0012-POSR", "0021-MDAT", "0039-MKTD", "0070-MKTD"]
+    "specs": ["0035-LIQM", "0032-PRIM", "0043-MKTL", "0026-AUCT", "0006-POSI", "0008-TRAD", "0001-MKTF", "0009-MRKP", "0012-POSR", "0021-MDAT", "0039-MKTD", "0070-MKTD", "0081-SUCM"]
   },
   "Settlement & Oracles": {
-    "specs": ["0002-STTL", "0003-MTMK", "0045-DSRC", "0046-DSRM", "0047-DSRF", "0048-DSRI"]
+    "specs": ["0002-STTL", "0003-MTMK", "0045-DSRC", "0046-DSRM", "0047-DSRF", "0048-DSRI", "0082-ETHD", "0087-EL2D"]
   },
   "Protections": {
     "specs": ["0073-LIMN", "0072-SPPW", "0062-SPAM", "0060-WEND", "0003-NP-LIMI", "0072-SPPW", "0078-NWLI", "0079-TGAP"]
@@ -34,6 +34,9 @@
   },
   "Data": {
     "specs": ["0076-DANO", "0020-APIS", "0007-POSN"]
+  },
+  "Referral": {
+    "specs": ["0083-RFPR", "0084-VDPR", "0085-RVST", "0086-ASPR"]
   },
   "UI": {
     "specs": ["1000-ASSO", "1001-VEST", "1002-STAK", "1003-INCO", "1004-VOTE", "3002-PROP", "1006-NETW", "1007-WALL", "3000-DEPO", "3001-WITH", "5000-MARK", "6000-COLL", "6001-SORD", "6002-MORD", "6003-POSI", "6004-FILL"]
