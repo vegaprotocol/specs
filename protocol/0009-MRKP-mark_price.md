@@ -74,7 +74,7 @@ Note that for calculating the median with an even number of entries we sort, pic
 6. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalcuated, new event is emited for new mark price.
 7. market's status is set to trading terminated, An [oracle event occurs] that is eligible to settle the market, new event is emited for new mark price.
 
-### Example 2 - A typical path of a cash settled perps market from end of openning aucton till expiry (median mark price method)(<a name="0009-MRKP-024" href="#0009-MRKP-024">0009-MRKP-024</a>)
+### Example 2 - A typical path of a cash settled perps market from end of openning aucton (median mark price method)(<a name="0009-MRKP-024" href="#0009-MRKP-024">0009-MRKP-024</a>)
 
 1. Market is in openning auction, no mark price 
 2. Order uncrossed, ends of opening auction, market is in active state. New event is emited for new mark price.
