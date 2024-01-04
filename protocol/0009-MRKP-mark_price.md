@@ -42,16 +42,13 @@ Note that for calculating the median with an even number of entries we sort, pic
 
 ### Algorithm 1 (last trade price, excluding network trades):
 
-- If `network.markPriceUpdateMaximumFrequency=0s` then any transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade. (<a name="0009-MRKP-003" href="#0009-MRKP-003">0009-MRKP-003</a>)
 - If `network.markPriceUpdateMaximumFrequency>0` then out of a sequence of transactions with the same time-stamp the last transaction that results in one or more trades causes the mark price to change to the value of the last trade and only the last trade but only provided that at least `network.markPriceUpdateMaximumFrequency` has elapsed since the last update. (<a name="0009-MRKP-007" href="#0009-MRKP-007">0009-MRKP-007</a>)
 - A transaction that doesn't result in a trade does not cause the mark price to change. (<a name="0009-MRKP-004" href="#0009-MRKP-004">0009-MRKP-004</a>)
 - A transaction out of a sequence of transactions with the same time stamp which isn't the last trade-causing transaction will *not* result in a mark price change. (<a name="0009-MRKP-008" href="#0009-MRKP-008">0009-MRKP-008</a>)
 - The mark price must be using market decimal place setting. (<a name="0009-MRKP-006" href="#0009-MRKP-006">0009-MRKP-006</a>)
-
+- It is possible to configure a cash settled futures market to use Algorithm 1 (ie last trade price) (<a name="0009-MRKP-010" href="#0009-MRKP-010">0009-MRKP-010</a>) and a perps market (<a name="0009-MRKP-011" href="#0009-MRKP-011">0009-MRKP-011</a>).
 
 ### Flexible mark price methodology, no combinations yet
-
-- It is possible to configure a cash settled futures market to use Algorithm 1 (ie last trade price) (<a name="0009-MRKP-010" href="#0009-MRKP-010">0009-MRKP-010</a>) and a perps market (<a name="0009-MRKP-011" href="#0009-MRKP-011">0009-MRKP-011</a>).
 - It is possible to configure a cash settled futures market to use weighted average of trades over `network.markPriceUpdateMaximumFrequency` with decay weight `1` and power `1` (linear decay) (<a name="0009-MRKP-012" href="#0009-MRKP-012">0009-MRKP-012</a>) and a perps market (<a name="0009-MRKP-013" href="#0009-MRKP-013">0009-MRKP-013</a>).
 - It is possible to configure a cash settled futures market to use impact of leveraged notional on the order book with the value of USDT `100` for mark price (<a name="0009-MRKP-014" href="#0009-MRKP-014">0009-MRKP-014</a>) and a perps market (<a name="0009-MRKP-015" href="#0009-MRKP-015">0009-MRKP-015</a>).
 - It is possible to configure a cash settled futures market to use an oracle source for the mark price (<a name="0009-MRKP-016" href="#0009-MRKP-016">0009-MRKP-016</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-017" href="#0009-MRKP-017">0009-MRKP-017</a>).
@@ -64,23 +61,30 @@ Note that for calculating the median with an even number of entries we sort, pic
 
 - It is possible to configure a cash settled futures market to use a median of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and 3. an oracle source and if last trade is last updated more than 1 minute ago then it is removed and if the oracle is last updated more than 5 minutes ago then it is removed (<a name="0009-MRKP-022" href="#0009-MRKP-022">0009-MRKP-022</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-023" href="#0009-MRKP-023">0009-MRKP-023</a>).
 
-### Example 1 - A typical path of a cash settled futures market from end of openning auction till expiry (median mark price method)(<a name="0009-MRKP-024" href="#0009-MRKP-024">0009-MRKP-024</a>)
+- When market is leaving auction, mark price should be recalculated (<a name="0009-MRKP-024" href="#0009-MRKP-024">0009-MRKP-024</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-025" href="#0009-MRKP-025">0009-MRKP-025</a>).
+
+- When market is at mornitoring auction, book price should be indicative uncrossing price, mark price should be recalculated (<a name="0009-MRKP-026" href="#0009-MRKP-026">0009-MRKP-026</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-027" href="#0009-MRKP-027">0009-MRKP-027</a>).
+
+- It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and when the book does not have enough volume, then the book price should not be included (<a name="0009-MRKP-028" href="#0009-MRKP-028">0009-MRKP-028</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-029" href="#0009-MRKP-029">0009-MRKP-029</a>).
+
+- It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `0` and the book price should be mid price (<a name="0009-MRKP-030" href="#0009-MRKP-030">0009-MRKP-030</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-031" href="#0009-MRKP-031">0009-MRKP-031</a>).
+
+### Example 1 - A typical path of a cash settled futures market from end of opening auction till expiry (use Algorithm 2 (ie median price))(<a name="0009-MRKP-040" href="#0009-MRKP-040">0009-MRKP-040</a>)
 
 1. Market is in opening auction, no mark price.
 2. Order uncrossed, ends of opening auction, market is in active state. New event is emitted for new mark price.
-3. New trade triggers new traded price, mark price recalculated, new event is emitted for new mark price.
-4. New Oracle price comes, mark price recalculated, new event is emitted for new mark price.
-5. Another Oracle price comes, mark price recalculated, new event is emitted for new mark price.
-6. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalculated, new event is emitted for new mark price.
+3. New trade triggers new traded price, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
+4. New Oracle price comes, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
+5. Another Oracle price comes, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
+6. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
 7. market's status is set to trading terminated, An [oracle event occurs] that is eligible to settle the market, new event is emitted for new mark price.
 
-### Example 2 - A typical path of a cash settled perps market from end of openning auction (median mark price method)(<a name="0009-MRKP-025" href="#0009-MRKP-025">0009-MRKP-025</a>)
+### Example 2 - A typical path of a cash settled perps market from end of opening auction (use Algorithm 2 (ie median price))(<a name="0009-MRKP-041" href="#0009-MRKP-041">0009-MRKP-041</a>)
 
 1. Market is in opening auction, no mark price.
 2. Order uncrossed, ends of opening auction, market is in active state. New event is emitted for new mark price.
-3. New trade triggers new traded price, mark price recalculated, new event is emitted for new mark price.
-4. New Oracle price comes, mark price recalculated, new event is emitted for new mark price.
-5. Another Oracle price comes, mark price recalculated, new event is emitted for new mark price.
-5. Oracle price comes for funding payments, mark price recalculated, new event is emitted for new mark price.
+3. New trade triggers new traded price, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
+4. New Oracle price comes, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
+5. Another Oracle price comes, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
+5. Oracle price comes for funding payments, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
 6. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalculated, new event is emitted for new mark price.
-
