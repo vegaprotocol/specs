@@ -246,6 +246,39 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - increase margin factor in isolated margin with position and with orders successful in auction(<a name="0019-MCAL-133" href="#0019-MCAL-133">0019-MCAL-133</a>)
 
+- In cross margin mode for a market with no price monitoring, a party `short 1`, `mark price = 15 900`, `market.linearSlippageFactor = 0.25`, `RF short = 0.1` and order book is
+
+  ```book
+  buy 1 @ 15 000
+  buy 10 @ 14 900
+  and
+  sell 1 @ 100 000
+  sell 10 @ 100 100
+  ```
+
+  the maintenance margin for the party is `min(1 x (100 000-159 00), 159 00 x 0.25 x 1) + 0.1 x 1 x 159 00 = 5565`
+
+  for this market the party switches to isolated margin with `margin factor=0.9` then the party will have margin account balance of
+  `average entry price x current position x new margin factor = 57 500 x 1 x 0.9 = 6325`
+  the difference topped up from the party’s general account(<a name="0019-MCAL-233" href="#0019-MCAL-233">0019-MCAL-233</a>)
+
+- In isolated margin mode, a party `short 1@15 900`, `margin factor=0.9` and order book is
+
+  ```book
+  buy 1 @ 15 000
+  buy 10 @ 14 900
+  and
+  sell 1 @ 100 000
+  sell 10 @ 100 100
+  ```
+
+  the margin account will hold `average entry price x current position x new margin factor = 57 500 x 1 x 0.9 = 6325`
+
+  for this market the party switches to cross margin and the market has `market.linearSlippageFactor = 0.25`, `RF short = 0.1` then the maintenance margin for the party is `min(1 x (100 000-159 00), 159 00 x 0.25 x 1) + 0.1 x 1 x 159 00 = 5565`
+  but if `5565 < collatoral release level` the maintenance margin will remain unchanged at `6325`
+  
+  the difference topped up from the party’s general account(<a name="0019-MCAL-232" href="#0019-MCAL-232">0019-MCAL-232</a>)
+
 - switch to cross margin without position and no orders successful in continuous mode(<a name="0019-MCAL-134" href="#0019-MCAL-134">0019-MCAL-134</a>)
 
 - switch to cross margin without position and no orders successful in auction(<a name="0019-MCAL-135" href="#0019-MCAL-135">0019-MCAL-135</a>)
