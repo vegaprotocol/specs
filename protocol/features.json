@@ -320,7 +320,7 @@
     ]
   },
   "Ethereum RPC and EVM based data sources": {
-    "milestone": "unknown",
+    "milestone": "palazzo",
     "acs": [
       "0087-EVMD-001",
       "0087-EVMD-002",
