@@ -13,7 +13,7 @@
   },
   "Stop Orders": {
     "milestone": "cosmic-carryover",
-    "acs": ["0079-TGAP-004", "0079-TGAP-005"]
+    "acs": ["0079-TGAP-004", "0079-TGAP-005", "0014-ORDT-132", "0014-ORDT-133", "0014-ORDT-134", "0014-ORDT-135", "0014-ORDT-136"]
   },
   "Perpetuals": {
     "milestone": "palazzo",
