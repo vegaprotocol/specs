@@ -4,9 +4,13 @@ This built-in product provides perpetual futures contracts that are cash-settled
 
 Background reading: [1](https://www.paradigm.xyz/2021/05/everlasting-options/#Perpetual_Futures), [2](https://arxiv.org/pdf/2212.06888.pdf).
 
-Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md). Additionally, a settlement using external data is carried out whenever `settlement_schedule` is triggered. Data obtained from the `settlement_data` oracle between two consecutive `settlement_schedule` events is used to calculate the funding payment and exchange cashflows between parties with open positions in the market.
+Perpetual futures are a simple "delta one" product. Mark-to-market settlement occurs with a predefined frequency as per [0003-MTMK-mark_to_market_settlement](0003-MTMK-mark_to_market_settlement.md). Additionally, a settlement using external data (funding payment) is carried out whenever `settlement_schedule` is triggered. Data obtained from the `settlement_data` oracle between two consecutive `settlement_schedule` events is used to calculate the funding payment and exchange cashflows between parties with open positions in the market.
 
-Unlike traditional futures contracts, the perpetual futures never expire. Without the settlement at expiry there would be nothing in the fixed-expiry futures to tether the contract price to the underlying spot market it's based on. To assure that the perpetuals market tracks the underlying spot market sufficiently well a periodic cashflow is exchanged based on the relative prices in the two markets. Such payment covering the time period $t_{i-1}$ to $t_i$ takes the basic form $G_i = \frac{1}{t_i-t_{i-1}} \int_{t_{i-1}}^{t_i}(F_u-S_u)du$, where $F_u$ and $S_u$ are respectively: the perpetual futures price and the spot price at time $u$. We choose to use the mark price to approximate $F_u$ and oracle to approximate $S_u$, so this is effectively the difference between the time-weighted average prices (TWAP) of the two. An optional interest rate and clamp function are included in the funding rate calculation, see the [funding payment calculation](#funding-payment-calculation) section for details.
+Unlike traditional futures contracts, the perpetual futures never expire. Without the settlement at expiry there would be nothing in the fixed-expiry futures to tether the contract price to the underlying spot market it's based on. To assure that the perpetuals market tracks the underlying spot market sufficiently well a periodic cashflow is exchanged based on the relative prices in the two markets. Such payment covering the time period $t_{i-1}$ to $t_i$ takes the basic form $G_i = \frac{1}{t_i-t_{i-1}} \int_{t_{i-1}}^{t_i}(F_u-S_u)du$, where $F_u$ and $S_u$ are respectively: the perpetual futures price and the spot price at time $u$.
+We choose to use either:
+
+- the mark price of the market to approximate $F_u$ or
+- configure the "market price for funding purposes" as part of the market proposal and use this methodology to approximate $F_u$ and  oracle to approximate $S_u$, so this is effectively the difference between the time-weighted average prices (TWAP) of the two. An optional interest rate and clamp function are included in the funding rate calculation, see the [funding payment calculation](#funding-payment-calculation) section for details.
 
 ## 1. Product parameters
 
@@ -334,3 +338,10 @@ When migrating the market existing prior to introduction of the additional param
 - $\text{rate_lower_bound}= -\text{max supported value}$,
 - $\text{rate_upper_bound}= \text{max supported value}$
 (<a name="0053-PERP-032" href="#0053-PERP-032">0053-PERP-032</a>).
+
+It is possible to create a perpetual futures market which uses the last traded price algorithm for its mark price but uses "impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-033" href="#0053-PERP-033">0053-PERP-033</a>).
+
+It is possible to create a perpetual futures market which uses an oracle source (same as that used for funding) for the mark price determining the mark-to-market cashflows and that uses "impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-034" href="#0053-PERP-034">0053-PERP-034</a>).
+
+It is possible to create a perpetual futures market which uses an oracle source (same as that used for funding) for the mark price determining the mark-to-market cashflows and that uses "time-weighted trade prices in over `network.markPriceUpdateMaximumFrequency` if these have been updated within the last 30s but falls back onto impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-035" href="#0053-PERP-035">0053-PERP-035</a>).
+
