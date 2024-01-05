@@ -27,6 +27,18 @@
 
 - It is possible to check the time of the next liquidation trade attempt in any market via the API. (<a name="0012-POSR-015" href="#0012-POSR-015">0012-POSR-015</a>)
 
+### Network Profit and Loss
+
+- Given the network starts with no position and does not dispose any of it's position during the scenario: (<a name="0012-POSR-016" href="#0012-POSR-016">0012-POSR-016</a>)
+    - The mark price moves to `100`, the network liquidates a distressed party with a long position of `1`. The network should report a position of `1` and a realised and unrealised pnl of `0` and `0` respectively.
+    - The mark price moves to `120`, the network liquidates a distressed party with a short position of `-1`. The network should report a position of `-1` and a realised and unrealised pnl of `20` and `0` respectively.
+    - The mark price moves to `60`. The network should report a position of `-1` and a realised and unrealised pnl of `20` and `60` respectively.
+
+- Given the network starts with no position and does not dispose any of it's position during the scenario: (<a name="0012-POSR-017" href="#0012-POSR-017">0012-POSR-017</a>)
+    - The mark price moves to `100`, the network liquidates a distressed party with a long position of `1`. The network should report a position of `1` and a realised and unrealised pnl of `0` and `0` respectively.
+    - The mark price moves to `90`, the network liquidates a distressed party with a long position of `1` (AEP now equals `95`). The network should report a position of `2` and a realised and unrealised pnl of `0` and `-10` respectively.
+    - The mark price moves to `60`. The network should report a position of `2` and a realised and unrealised pnl of `0` and `-70` respectively.
+
 ## Summary
 
 Position resolution is the mechanism which deals with closing out distressed positions on a given market. It is instigated when one or more participant's margin account balance falls below their latest maintenance margin level.
