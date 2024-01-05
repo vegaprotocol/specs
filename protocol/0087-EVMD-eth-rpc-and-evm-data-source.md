@@ -42,20 +42,20 @@ A proposal for a new market will fail at enactment stage if it's referencing an 
 
 ```yaml
 source: EthereumEvent {
-			source_chain_id: 0x123
+            source_chain_id: 0x123
             contract: 0xDEADBEEF
-			ABI: "...JSON..."
-			event: "MyFaveEvent"
+            ABI: "...JSON..."
+            event: "MyFaveEvent"
 ```
 
 and market 2 with
 
 ```yaml
 source: EthereumEvent {
-			source_chain_id: 0x789
+            source_chain_id: 0x789
             contract: 0xDEADBEEF
-			ABI: "...JSON..."
-			event: "MyFaveEvent"
+            ABI: "...JSON..."
+            event: "MyFaveEvent"
 ```
 
 Then market 1 only sees events of that type from `EthRpcEvmCompatible` 0x123 while market 2 only sees events of that type from `EthRpcEvmCompatible` 0x789 (<a name="0087-EVMD-005" href="#0087-EVMD-005">0087-EVMD-005</a>).
