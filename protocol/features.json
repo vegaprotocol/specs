@@ -319,6 +319,16 @@
       "0053-PERP-035"
     ]
   },
+  "Ethereum RPC and EVM based data sources": {
+    "milestone": "unknown",
+    "acs": [
+      "0087-EVMD-001",
+      "0087-EVMD-002",
+      "0087-EVMD-003",
+      "0087-EVMD-004",
+      "0087-EVMD-005"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
