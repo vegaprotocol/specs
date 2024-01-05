@@ -31,9 +31,9 @@ A proposal for a new market will fail at enactment stage if it's referencing an 
 ## Acceptance criteria
 
 
-### External Oracles - Creation
+- It is possible to remove an EthRpcEvmCompatible via governance. The proposal will fail at enactment stage if there is any market that's not settled / closed that reference the EthRpcEvmCompatible. This is a future requirement and does not have an AC code. 
 
-- It is possible to add `EthRpcEvmCompatible` via governance (<a name="0087-EVMD-001" href="#0087-EVMD-001">0087-EVMD-001</a>).
+- A market proposal that reference an EthRpcEvmCompatible that's not registered will fail at enactment stage.
 
 
 ### External Oracles - Deactivation (not implemented in Palazzo milestone)
