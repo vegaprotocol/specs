@@ -375,11 +375,11 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A stop order placed during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>)
 - A stop order placed during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>)
 
-- A stop order placed prior to an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-124" href="#0014-ORDT-124">0014-ORDT-124</a>)
-- A stop order placed prior to an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-125" href="#0014-ORDT-125">0014-ORDT-125</a>)
+- A stop order placed prior to an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>)
+- A stop order placed prior to an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>)
 
-- A party places a stop order on a market in continuous trading, the market moves to an auction and the party cancels the stop order. When the market exits the auction the party no longer has a stop order. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
-- A stop order placed during the opening auction, will be rejected. (<a name="0014-ORDT-126" href="#0014-ORDT-126">0014-ORDT-126</a>)
+- A party places a stop order on a market in continuous trading, the market moves to an auction and the party cancels the stop order. When the market exits the auction the party no longer has a stop order. (<a name="0014-ORDT-132" href="#0014-ORDT-132">0014-ORDT-132</a>)
+- A stop order placed during the opening auction, will be rejected. (<a name="0014-ORDT-133" href="#0014-ORDT-133">0014-ORDT-133</a>)
 
 - If a trader has open stop orders and their position moves to zero whilst they still have open limit orders their stop orders will remain active. (<a name="0014-ORDT-067" href="#0014-ORDT-067">0014-ORDT-067</a>)
 - If a trader has open stop orders and their position moves to zero with no open limit orders their stop orders are cancelled. (<a name="0014-ORDT-068" href="#0014-ORDT-068">0014-ORDT-068</a>)
