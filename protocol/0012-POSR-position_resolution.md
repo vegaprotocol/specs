@@ -38,7 +38,7 @@
 - Given the network starts with no position and does not dispose any of it's position during the scenario: (<a name="0012-POSR-017" href="#0012-POSR-017">0012-POSR-017</a>)
 
   - The mark price moves to `100`, the network liquidates a distressed party with a long position of `1`. The network should report a position of `1` and a realised and unrealised pnl of `0` and `0` respectively.
-  - The mark price moves to `90`, the network liquidates a distressed party with a long position of `1` (AEP now equals `95`). The network should report a position of `2` and a realised and unrealised pnl of `0` and `-10` respectively.
+  - The mark price moves to `90`, the network liquidates a distressed party with a long position of `1` (average entry price now equals `95`). The network should report a position of `2` and a realised and unrealised pnl of `0` and `-10` respectively.
   - The mark price moves to `60`. The network should report a position of `2` and a realised and unrealised pnl of `0` and `-70` respectively.
 
 ## Summary
