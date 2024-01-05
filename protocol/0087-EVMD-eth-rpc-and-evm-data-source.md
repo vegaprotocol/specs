@@ -22,7 +22,7 @@ Example value:
 {"configs": [{"network_id": 10, "chain_id": 10, "confirmations": 3, "name":"optimism"}]}
 ```
 
-Duplicate values of "network_id": 10, "chain_id" or  "name":"optimism" are not allowed (an update will be rejected at validation stage).
+Duplicate values of `network_id`, `chain_id` or  `name` are not allowed (an update will be rejected at validation stage).
 Any update must always change the entire JSON (it's not possible to change individual entries).
 A proposal to *remove* a registered Ethereum RPC+EVM compatible chain / L2 must fail at enactment stage if a market is referencing an `EthRpcEvmCompatible` data source.
 A proposal for a new market will fail at enactment stage if it's referencing an `EthRpcEvmCompatible` that's not registered.
