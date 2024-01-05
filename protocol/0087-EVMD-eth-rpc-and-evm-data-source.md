@@ -38,7 +38,7 @@ A proposal for a new market will fail at enactment stage if it's referencing an 
 
 ### External Oracles - Deactivation (not implemented in Palazzo milestone)
 
-- It is possible to remove an `EthRpcEvmCompatible` via governance. The proposal will fail at enactment stage if there is any market that's not settled / closed that reference the `EthRpcEvmCompatible` (<a name="0087-NEBULA-002" href="#0087-NEBULA-002">0087-NEBULA-002</a>).
+- It is possible to remove an `EthRpcEvmCompatible` via governance. The proposal will fail at enactment stage if there is any market that's not settled / closed that reference the `EthRpcEvmCompatible`.
 
 
 ### External Oracles - Amendments
@@ -47,7 +47,7 @@ A proposal for a new market will fail at enactment stage if it's referencing an 
 - Update an existing market using the market update proposal to change the smart contract address and read method. The changes take effect after the market update proposal is enacted and data is sourced from the new smart contract. The old data source  will be deactivated when the proposal is enacted (<a name="0087-EVMD-004" href="#0087-EVMD-004">0087-EVMD-004</a>)
 - Using the market update proposal all data elements for the ethereum oracles can be updated. On successful enactment , a new oracle data source is created for the market. In case any existing data source matches the new data source , then a new data source is not created and the existing one is used (<a name="0087-EVMD-005" href="#0087-EVMD-005">0087-EVMD-005</a>)
 - Ensure existing oracle data sources are deactivated when market data sources are amended on another market. Create 2 markets to use different ethereum oracles for termination and settlement. Two sets of ethereum oracles are created and are ACTIVE. Then amend Market 2 to use exactly the same ethereum oracles for termination and settlement as Market1. Now ,the ethereum oracles originally created for for Market2 should be set to DEACTIVATED. No new ethereum oracles should be created and the Market2 should use the existing ethereum oracles created for Market1 (<a name="0087-EVMD-006" href="#0087-EVMD-006">0087-EVMD-006</a>)
-- Ensure that when a market data source type is amended from internal, external, ethereum or open (coinbase) to an alternative for both termination and settlement we see that old data source is deactivated (if no other market is using) and we see the new data source created and it supports termination and settlement specific to its data source type (<a name="0087-EVMD-007" href="#0087-EVMD-07">0087-EVMD-007</a>)
+- Ensure that when a market data source type is amended from internal, external, ethereum or open (coinbase) to an alternative for both termination and settlement we see that old data source is deactivated (if no other market is using) and we see the new data source created and it supports termination and settlement specific to its data source type (<a name="0087-EVMD-007" href="#0087-EVMD-007">0087-EVMD-007</a>)
 
 
 ### External Oracles - Validations
