@@ -2,7 +2,11 @@
 
 ## Summary
 
-This specification adds a new way of sourcing data from any chain or Ethereum L2 that supports Ethereum RPC calls and runs an EVM.
+This specification adds a new way of sourcing data from any chain or Ethereum Layer 2 blockchain (L2) that supports Ethereum RPC calls and runs an EVM.
+
+> [!TIP]
+> A Layer 2 blockchain refers to network protocols that are layered on top of a Layer 1 solution. Layer 2 protocols use the Layer 1 blockchain for network and security infrastructure.
+
 The data is to be ingested as an Ethereum [data source](./0045-DSRC-data_sourcing.md) but pointing at a different RPC endpoint.
 Hence this is in addition to and building upon [Ethereum data source](./0082-ETHD-ethereum-data-source.md).
 
@@ -31,14 +35,14 @@ A proposal for a new market will fail at enactment stage if it's referencing an 
 ## Acceptance criteria
 
 
-- It is possible to remove an EthRpcEvmCompatible via governance. The proposal will fail at enactment stage if there is any market that's not settled / closed that reference the EthRpcEvmCompatible. This is a future requirement and does not have an AC code. 
+### External Oracles - Creation
 
-- A market proposal that reference an EthRpcEvmCompatible that's not registered will fail at enactment stage.
+- It is possible to add `EthRpcEvmCompatible` via governance (<a name="0087-EVMD-001" href="#0087-EVMD-001">0087-EVMD-001</a>).
 
 
 ### External Oracles - Deactivation (not implemented in Palazzo milestone)
 
-- It is possible to remove an `EthRpcEvmCompatible` via governance. The proposal will fail at enactment stage if there is any market that's not settled / closed that reference the `EthRpcEvmCompatible`.
+- It is possible to remove an `EthRpcEvmCompatible` via governance. The proposal will fail at enactment stage if there is any market that's not settled / closed that reference the `EthRpcEvmCompatible`.  This is a future requirement and does not have an AC code.
 
 
 ### External Oracles - Amendments
