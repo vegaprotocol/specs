@@ -54,7 +54,6 @@ A proposal for a new market will fail at enactment stage if it's referencing an 
 - Ensure that when a market data source type is amended from internal, external, ethereum or open (coinbase) to an alternative for both termination and settlement we see that old data source is deactivated (if no other market is using) and we see the new data source created and it supports termination and settlement specific to its data source type (<a name="0087-EVMD-007" href="#0087-EVMD-007">0087-EVMD-007</a>)
 
 
-
 ### External Oracles - Validations
 
 - A market proposal that reference an `EthRpcEvmCompatible` that's not active will fail at enactment stage (<a name="0087-EVMD-008" href="#0087-EVMD-008">0087-EVMD-008</a>).
@@ -129,8 +128,8 @@ Then market 1 only sees events of that type from `EthRpcEvmCompatible` 0x123 whi
 - Create a perpetual market with an `EthRpcEvmCompatible` for settlement such that it polls at a specific time. Perform a protocol upgrade such that the settlement price matching the filters is triggered in the middle of the protocol upgrade. Once the network is up , the settlement should be triggered and the market should be terminated. (<a name="0087-EVMD-038" href="#0087-EVMD-038">0087-EVMD-038</a>)
 - Ensure that markets with `EthRpcEvmCompatible` termination and settlement data sources continue to successfully terminate and settle markets after the protocol upgrade. (<a name="0087-EVMD-039" href="#0087-EVMD-039">0087-EVMD-039</a>)
 
-### Perpetual futures focused tests
+### Perpetual futures focused tests
 
 - Update an existing perpetuals market using the market update proposal to change from Ethereum to EthRpcEvmCompatible chain referenced, smart contract address and read method. The changes take effect after the market update proposal is enacted and data is sourced from the new smart contract. The old data source  will be deactivated when the proposal is enacted (<a name="0087-EVMD-040" href="#0087-EVMD-040">0087-EVMD-040</a>). 
-- Create a perpetual futures market which uses an EthRpcEvmCompatible chain reads/events contract data for settlement payment schedule from chain `A` and EthRpcEvmCompatible chain reads/events contract data for the index price from chain `B` (<a name="0087-EVMD-041" href="#0087-EVMD-041">0087-EVMD-041</a>). 
-- Create a perpetual futures market which uses an EthRpcEvmCompatible chain reads/events contract data for settlement payment schedule from; the trigger for the countdown to the first funding payment being publication of a valid value for the index price. The index price must not be available at the time the market is created and leaves opening auction; it must only become available sometime after. The aim is to test futures markets for underlyings that don't trade *yet* be where there is an agreed oracle source that will start publishing the price *once* they begin trading. (<a name="0087-EVMD-042" href="#0087-EVMD-042">0087-EVMD-042</a>). 
+- Create a perpetual futures market which uses an EthRpcEvmCompatible chain reads/events contract data for settlement payment schedule from chain `A` and EthRpcEvmCompatible chain reads/events contract data for the index price from chain `B` (<a name="0087-EVMD-041" href="#0087-EVMD-041">0087-EVMD-041</a>).
+- Create a perpetual futures market which uses an EthRpcEvmCompatible chain reads/events contract data for settlement payment schedule from; the trigger for the countdown to the first funding payment being publication of a valid value for the index price. The index price must not be available at the time the market is created and leaves opening auction; it must only become available sometime after. The aim is to test futures markets for underlyings that don't trade *yet* be where there is an agreed oracle source that will start publishing the price *once* they begin trading. (<a name="0087-EVMD-042" href="#0087-EVMD-042">0087-EVMD-042</a>).
