@@ -50,9 +50,32 @@ Note that for calculating the median with an even number of entries we sort, pic
 
 ### Flexible mark price methodology, no combinations yet
 
+#### Trade-size-weighted average price
+
 - It is possible to configure a cash settled futures market to use weighted average of trades over `network.markPriceUpdateMaximumFrequency` with decay weight `1` and power `1` (linear decay) (<a name="0009-MRKP-012" href="#0009-MRKP-012">0009-MRKP-012</a>) and a perps market (<a name="0009-MRKP-013" href="#0009-MRKP-013">0009-MRKP-013</a>).
+- when choosing price type `weight` and set weight on `trade-size-weight price` only, set decay weight to `0` and decay power to `1`, and set up trade at price `15920`, `15940`, `15960`, `15990` at various size, and check if the weighted average mark price is corrected calculated (<a name="0009-MRKP-110" href="#0009-MRKP-110">0009-MRKP-110</a>)
+-when choosing price type `weight` and set weight on `trade-size-weight price` only, set decay weight to `0` and decay power to `1`, and set up trade at price `15940`, `15960`, `15990` at various size, and check if the weighted average mark price is corrected calculated (<a name="0009-MRKP-111" href="#0009-MRKP-111">0009-MRKP-111</a>)
+- when choosing price type `weight` and set weight on `trade-size-weight price` only, set decay weight to `1` and decay power to `1`, and set up trade at price `15920`, `15940`, `15960`, `15990` at various size, and check if the weighted average mark price is corrected calculated (<a name="0009-MRKP-112" href="#0009-MRKP-112">0009-MRKP-112</a>)
+- when choosing price type `weight` and set weight on `trade-size-weight price` only, set decay weight to `1` and decay power to `0`, and set up trade at price `15920`, `15940`, `15960`, `15990` at various size, and check if the weighted average mark price is corrected calculated (<a name="0009-MRKP-113" href="#0009-MRKP-113">0009-MRKP-113</a>)
+- when choosing price type `weight` and set weight on `trade-size-weight price` only, set decay weight to `0.5` and decay power to `1`, and set up trade at price `15920`, `15940`, `15960`, `15990` at various size, and check if the weighted average mark price is corrected calculated (<a name="0009-MRKP-114" href="#0009-MRKP-114">0009-MRKP-114</a>)
+
+#### Leverage-notional book price
+
 - It is possible to configure a cash settled futures market to use impact of leveraged notional on the order book with the value of USDT `100` for mark price (<a name="0009-MRKP-014" href="#0009-MRKP-014">0009-MRKP-014</a>) and a perps market (<a name="0009-MRKP-015" href="#0009-MRKP-015">0009-MRKP-015</a>).
+- when choosing price type `weight` and set weight on `leverage-notional book price` only, set cash amount to `100` (which should make the notional volume at sell and buy round to `0`), and place a few orders on the book with best bid `15900` and best ask `16000` and the leverage-notional book price should be the mid-price (<a name="0009-MRKP-120" href="#0009-MRKP-120">0009-MRKP-120</a>)
+- when choosing price type `weight` and set weight on `leverage-notional book price` only, set cash amount to `100,000` and place a few orders on the book with best bid `15900` and best ask `16000` and check if leverage-notional book price is corrected calculated (<a name="0009-MRKP-121" href="#0009-MRKP-121">0009-MRKP-121</a>)
+- when choosing price type `weight` and set weight on `leverage-notional book price` only, set cash amount to `5,000,000` (which should make the notional volume too big for the book) and place a few orders on the book with best bid `15900` and best ask `16000` and the leverage-notional book price should be the mid-price (<a name="0009-MRKP-122" href="#0009-MRKP-122">0009-MRKP-122</a>)
+
+#### Oracle source price
+
 - It is possible to configure a cash settled futures market to use an oracle source for the mark price (<a name="0009-MRKP-016" href="#0009-MRKP-016">0009-MRKP-016</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-017" href="#0009-MRKP-017">0009-MRKP-017</a>).
+
+- when choosing price type `weight` and set weight on `oracle source price` only, set up 2 oracle prices at different time, and check if the oracle mark price is correctly calculated (<a name="0009-MRKP-130" href="#0009-MRKP-130">0009-MRKP-130</a>)
+
+- when choosing price type `weight` and set weight on `oracle source price` only, set up oracle prices at different time, and check if the oracle mark price updated according to  is correctly calculated according to `network.markPriceUpdateMaximumFrequency` (<a name="0009-MRKP-131" href="#0009-MRKP-131">0009-MRKP-131</a>)
+
+- when choosing price type `weight` and set weight on `oracle source price` only, set up 3 oracle prices at different time with 1 of them becomes stale, and check if the oracle mark price updated according to  is correctly calculated by using the right price (<a name="0009-MRKP-132" href="#0009-MRKP-132">0009-MRKP-132</a>)
+
 
 ### Flexible mark price methodology, combinations
 
@@ -69,6 +92,14 @@ Note that for calculating the median with an even number of entries we sort, pic
 - It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and when the book does not have enough volume, then the book price should not be included (<a name="0009-MRKP-028" href="#0009-MRKP-028">0009-MRKP-028</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-029" href="#0009-MRKP-029">0009-MRKP-029</a>).
 
 - It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `0` and the book price should be mid price (<a name="0009-MRKP-030" href="#0009-MRKP-030">0009-MRKP-030</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-031" href="#0009-MRKP-031">0009-MRKP-031</a>).
+
+### Validation
+
+- Boundary values are respected for the market parameters
+  - `markPriceConfiguration: decayWeight` valid values: `>=0`, `<=1` (<a name="0044-LIME-083" href="#0044-LIME-083">0044-LIME-083</a>)
+
+
+markPriceConfiguration": {"decayWeight": "0", "decayPower": 0, "cashAmount":"0","compositePriceType":"COMPOSITE_PRICE_TYPE_UNSPECIFIED"}}'
 
 ### Example 1 - A typical path of a cash settled futures market from end of opening auction till expiry (use Algorithm 2 (ie median price))(<a name="0009-MRKP-040" href="#0009-MRKP-040">0009-MRKP-040</a>)
 
