@@ -108,7 +108,7 @@ point of uncrossing the opening auction, then the auction uncrossing price is se
 
   - `markPriceConfiguration: source weight` valid values: `[0,1]`(<a name="0009-MRKP-053" href="#0009-MRKP-053">0009-MRKP-053</a>)
 
-  - `markPriceConfiguration: source staleness tolerance ` valid values: `time format`(<a name="0009-MRKP-054" href="#0009-MRKP-054">0009-MRKP-054</a>)
+  - `markPriceConfiguration: source staleness tolerance` valid values: `time format: hms`(<a name="0009-MRKP-054" href="#0009-MRKP-054">0009-MRKP-054</a>)
 
 
 ### Example 1 - A typical path of a cash settled futures market from end of opening auction till expiry (use Algorithm 2 (ie median price))(<a name="0009-MRKP-040" href="#0009-MRKP-040">0009-MRKP-040</a>)
