@@ -261,7 +261,19 @@ message UpdateFlags {
 }
 ```
 
-Allowing proposals to add and remove flags independently from others.
+allowing proposals to add and remove flags independently from others.
+
+The following network parameters will decide how these proposals are treated:
+`governance.proposal.updateMarketFlags.maxClose` e.g. `720h`,
+`governance.proposal.updateMarketFlags.minClose` e,g. `168h`,
+`governance.proposal.updateMarketFlags.maxEnact` e.g. `720h`,
+`governance.proposal.updateMarketFlags.minEnact` e,g. `168h`,
+`governance.proposal.updateMarketFlags.minProposerBalance` e.g. `1000000000000000000` i.e. 1 VEGA,
+`governance.proposal.updateMarketFlags.minVoterBalance`   e.g. `1000000000000000000` i.e. 1 VEGA,
+`governance.proposal.updateMarketFlags.requiredMajority`  e.g. `0.66`,
+`governance.proposal.updateMarketFlags.requiredParticipation` e.g. `0.05`.
+
+Note: Although flags cannot be amended in an update market proposal, they may be included in the same batch proposal as one.
 
 ## 3. Change network parameters
 
