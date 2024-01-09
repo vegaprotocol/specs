@@ -37,7 +37,7 @@ Note that for calculating the median with an even number of entries we sort, pic
 
 - The mark price must be set when the market leaves opening auction. (<a name="0009-MRKP-002" href="#0009-MRKP-002">0009-MRKP-002</a>)
 - Each time the mark price changes the market data event containing the new mark price should be emitted.Specifically, the mark price set after leaving each auction, every interim mark price as well as the mark price based on last trade used at market termination and the one based on oracle data used for final settlement should all be observable from market data events. (<a name="0009-MRKP-009" href="#0009-MRKP-009">0009-MRKP-009</a>)
-- Every market will wait in opening auction until the first mark price is available or it is certain that leaving the opening auction will set it.(<a name="0009-MRKP-001" href="#0009-MRKP-001">0009-MRKP-001</a>)
+- When leaving the opening auction, if the mark price is undefined then use the opening auction uncrossing price.(<a name="0009-MRKP-001" href="#0009-MRKP-001">0009-MRKP-001</a>)
 
 ### Algorithm 1 (last trade price, excluding network trades)
 
