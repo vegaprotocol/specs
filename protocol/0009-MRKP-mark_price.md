@@ -102,7 +102,7 @@ point of uncrossing the opening auction, then the auction uncrossing price is se
 
   - `markPriceConfiguration: decayWeight` valid values: `[0,1]`(<a name="0009-MRKP-050" href="#0009-MRKP-050">0009-MRKP-050</a>)
 
-  - `markPriceConfiguration: decayPower` valid values: `(1,2,3)`(<a name="0009-MRKP-051" href="#0009-MRKP-051">0009-MRKP-051</a>)
+  - `markPriceConfiguration: decayPower` valid values: `{1,2,3}`(<a name="0009-MRKP-051" href="#0009-MRKP-051">0009-MRKP-051</a>)
 
   - `markPriceConfiguration: cashAmount` valid values: `>=0`(<a name="0009-MRKP-052" href="#0009-MRKP-052">0009-MRKP-052</a>)
 
