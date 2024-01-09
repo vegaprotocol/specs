@@ -734,9 +734,10 @@ It is NOT possible to submit a governance proposal where the source account is t
    1. volume discount program,
    1. referral program,
    1. governance transfer,
+   1. a market flags proposal
 
 can be submitted, voted through and each proposal enacted.
-On top of that signed bundles for changing withdrawal delay and threshold on the bridge are emitted (<a name="0028-GOVE-160" href="#0028-GOVE-160">0028-GOVE-160</a>)
+On top of that signed bundles for changing withdrawal delay and threshold on the bridge are emitted (<a name="0028-GOVE-177" href="#0028-GOVE-177">0028-GOVE-177</a>)
 
 - A batch proposal can be submitted changing the same network parameter twice to two different values with two different enactment timestamps.
 The voting to approve the batch happens, the batch passes, both changes are observed at the desired time. (<a name="0028-GOVE-161" href="#0028-GOVE-161">0028-GOVE-161</a>)
