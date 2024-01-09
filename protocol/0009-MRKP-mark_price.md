@@ -100,11 +100,11 @@ point of uncrossing the opening auction, then the auction uncrossing price is se
 
 - Boundary values are respected for the market parameters
 
-  - `markPriceConfiguration: decayWeight` valid values: `>=0`(<a name="0009-MRKP-050" href="#0009-MRKP-050">0009-MRKP-050</a>)
+  - `markPriceConfiguration: decayWeight` valid values: `[0,1]`(<a name="0009-MRKP-050" href="#0009-MRKP-050">0009-MRKP-050</a>)
 
-  - `markPriceConfiguration: decayPower` valid values: `natural numbers but not 0`(<a name="0009-MRKP-051" href="#0009-MRKP-051">0009-MRKP-051</a>)
+  - `markPriceConfiguration: decayPower` valid values: `(1,2,3)`(<a name="0009-MRKP-051" href="#0009-MRKP-051">0009-MRKP-051</a>)
 
-  - `markPriceConfiguration: cashAmount` valid values: `>=`(<a name="0009-MRKP-052" href="#0009-MRKP-052">0009-MRKP-052</a>)
+  - `markPriceConfiguration: cashAmount` valid values: `>=0`(<a name="0009-MRKP-052" href="#0009-MRKP-052">0009-MRKP-052</a>)
 
 ### Example 1 - A typical path of a cash settled futures market from end of opening auction till expiry (use Algorithm 2 (ie median price))(<a name="0009-MRKP-040" href="#0009-MRKP-040">0009-MRKP-040</a>)
 
