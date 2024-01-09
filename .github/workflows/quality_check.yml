@@ -9,6 +9,7 @@ name: "Quality checks"
       - master
       - cosmicelevator
       - palazzo
+      - nebula
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
