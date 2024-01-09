@@ -37,8 +37,7 @@ Note that for calculating the median with an even number of entries we sort, pic
 
 - The mark price must be set when the market leaves opening auction. (<a name="0009-MRKP-002" href="#0009-MRKP-002">0009-MRKP-002</a>)
 - Each time the mark price changes the market data event containing the new mark price should be emitted.Specifically, the mark price set after leaving each auction, every interim mark price as well as the mark price based on last trade used at market termination and the one based on oracle data used for final settlement should all be observable from market data events. (<a name="0009-MRKP-009" href="#0009-MRKP-009">0009-MRKP-009</a>)
-- If a market mark price is configured in such a way that the mark price methodology hasn't provided a price at the 
-point of uncrossing the opening auction, then the auction uncrossing price is set as the first mark price, regardless of what the mark price methodology says. (<a name="0009-MRKP-001" href="#0009-MRKP-001">0009-MRKP-001</a>)
+- If a market mark price is configured in such a way that the mark price methodology hasn't provided a price at the point of uncrossing the opening auction, then the auction uncrossing price is set as the first mark price, regardless of what the mark price methodology says. (<a name="0009-MRKP-001" href="#0009-MRKP-001">0009-MRKP-001</a>)
 
 ### Algorithm 1 (last trade price, excluding network trades)
 
@@ -91,10 +90,9 @@ point of uncrossing the opening auction, then the auction uncrossing price is se
 - It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and when the book does not have enough volume, then the book price should not be included (<a name="0009-MRKP-028" href="#0009-MRKP-028">0009-MRKP-028</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-029" href="#0009-MRKP-029">0009-MRKP-029</a>).
 
 - It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `0` and the book price should be mid price (<a name="0009-MRKP-030" href="#0009-MRKP-030">0009-MRKP-030</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-031" href="#0009-MRKP-031">0009-MRKP-031</a>).
+- Set price type to "median", only have data source available from "Trade-size-weighted average price" and "Leverage-notional book price" and 1 trade at 15920, check the mark price is correctly calculated (<a name="0009-MRKP-032" href="#0009-MRKP-032">0009-MRKP-032</a>) and a perps market (<a name="0009-MRKP-033" href="#0009-MRKP-033">0009-MRKP-033</a>)
 
-- Set price type to "median", only have data souce availabel from "Trade-size-weighted average price" and "Leverage-notional book price" and 1 trade at 15920, check the mark price is correctly calculated (<a name="0009-MRKP-032" href="#0009-MRKP-032">0009-MRKP-032</a>) and a perps market (<a name="0009-MRKP-033" href="#0009-MRKP-033">0009-MRKP-033</a>)
-
-- Set price type to "median", only have data souce availabel from "Trade-size-weighted average price" and "Leverage-notional book price" and 1 trade at 15920, and 1 trade at 15940, move time, and check stale price should not be included (<a name="0009-MRKP-032" href="#0009-MRKP-032">0009-MRKP-032</a>) and a perps market (<a name="0009-MRKP-033" href="#0009-MRKP-033">0009-MRKP-033</a>) 
+- Set price type to "median", only have data source available from "Trade-size-weighted average price" and "Leverage-notional book price" and 1 trade at 15920, and 1 trade at 15940, move time, and check stale price should not be included (<a name="0009-MRKP-034" href="#0009-MRKP-034">0009-MRKP-034</a>) and a perps market (<a name="0009-MRKP-035" href="#0009-MRKP-035">0009-MRKP-035</a>)
 
 ### Validation
 
