@@ -255,6 +255,7 @@ Separately to a general market change proposal, proposers can create a proposal 
 
 ```proto
 message UpdateFlags {
+  string marketId;
   repeated string addFlags;
   repeated string removeFlags;
 }
@@ -750,3 +751,7 @@ The voting to approve the batch happens, the batch passes, the value of the prop
   - When that proposal is approved and enacted the flags are immediately removed and added to that market's flags property. (<a name="0028-GOVE-172" href="#0028-GOVE-172">0028-GOVE-172</a>)
 - Neither market creation nor market update proposals can change the flags property on a market. (<a name="0028-GOVE-173" href="#0028-GOVE-173">0028-GOVE-173</a>)
 - A voter's equity-like share does not give them any additional voting weight when voting on a market flags update proposal. (<a name="0028-GOVE-174" href="#0028-GOVE-174">0028-GOVE-174</a>)
+- A proposal to add flags with any flag longer than `governance.proposal.market.maxFlagLength` is rejected as invalid (<a name="0028-GOVE-175" href="#0028-GOVE-175">0028-GOVE-175</a>)
+- A proposal to remove flags with any flag longer than `governance.proposal.market.maxFlagLength` is rejected as invalid (<a name="0028-GOVE-176" href="#0028-GOVE-176">0028-GOVE-176</a>)
+
+
