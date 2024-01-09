@@ -249,6 +249,19 @@ The following are immutable and cannot be changed:
 - position decimal places
 - `settlementAsset`
 
+### 2.1 Change market flags
+
+Separately to a general market change proposal, proposers can create a proposal to add or remove lists of free-text string flags to a market. Although these proposals change only a single market, it is possible that these tags will be used to control external behaviour of systems interacting with the vega chain, therefore they do not allow for voting using ELS and instead must be voted through by the general pool of token holders as with any other proposal. The maximum length of a flag is specified by the network parameter `governance.proposal.market.maxFlagLength`. The flags on a market are controlled by a single proposal type, `UpdateFlags` with a structure akin to:
+
+```proto
+message UpdateFlags {
+  repeated string addFlags;
+  repeated string removeFlags;
+}
+```
+
+Allowing proposals to add and remove flags independently from others.
+
 ## 3. Change network parameters
 
 [Network parameters](./0054-NETP-network_parameters.md) that may be changed are described in the _Network Parameters_ spec, this document for details on these parameters, including the category of the parameters. New network parameters require a code change, so there is no support for adding new network parameters.
@@ -726,3 +739,14 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 ##### Network History
 
 - A datanode restored from network history will contain any recurring and one-off transfers created prior to the restore and these can be retrieved via APIs on the new datanode.(<a name="0028-GOVE-127" href="#0028-GOVE-127">0028-GOVE-127</a>)
+
+##### Market Flags
+
+- A proposal to add flags to a market can be successfully submitted. (<a name="0028-GOVE-167" href="#0028-GOVE-167">0028-GOVE-167</a>)
+  - When that proposal is approved and enacted the flags are immediately added to that market's flags property. (<a name="0028-GOVE-168" href="#0028-GOVE-168">0028-GOVE-168</a>)
+- A proposal to remove flags from a market can be successfully submitted. (<a name="0028-GOVE-169" href="#0028-GOVE-169">0028-GOVE-169</a>)
+  - When that proposal is approved and enacted the flags are immediately removed from that market's flags property. (<a name="0028-GOVE-170" href="#0028-GOVE-170">0028-GOVE-170</a>)
+- A proposal to add some and remove other flags from a market can be successfully submitted. (<a name="0028-GOVE-171" href="#0028-GOVE-171">0028-GOVE-171</a>)
+  - When that proposal is approved and enacted the flags are immediately removed and added to that market's flags property. (<a name="0028-GOVE-172" href="#0028-GOVE-172">0028-GOVE-172</a>)
+- Neither market creation nor market update proposals can change the flags property on a market. (<a name="0028-GOVE-173" href="#0028-GOVE-173">0028-GOVE-173</a>)
+- A voter's equity-like share does not give them any additional voting weight when voting on a market flags update proposal. (<a name="0028-GOVE-174" href="#0028-GOVE-174">0028-GOVE-174</a>)
