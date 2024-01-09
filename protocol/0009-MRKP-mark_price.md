@@ -1,6 +1,3 @@
-Spec 0009
-
-
 # Mark Price
 
 ## Summary
@@ -30,13 +27,11 @@ The mark price isn't updated because `network.markPriceUpdateMaximumFrequency = 
 
 Now 10.1s has elapsed since the last update and there is a market buy order for volume 5 which executes against book volume as 1 @ 1220, 2 @ 1250 and 2 @ 1500. The mark price is updated to 1500.
 
-
 ### 2. Flexible mark price methodology
 
 The calculations are specified in [markprice methodology research note](https://github.com/vegaprotocol/research/blob/markprice-updates/papers/markprice-methodology/markprice-methodology.tex).
 Here, we only write the acceptance criteria.
 Note that for calculating the median with an even number of entries we sort, pick out the two values that are in the middle of the list and average those. So in particular with two values a median is the same as the average for our purposes.
-
 
 ## Acceptance criteria
 
@@ -125,5 +120,3 @@ Note that for calculating the median with an even number of entries we sort, pic
 5. Another Oracle price comes, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
 6. Oracle price comes for funding payments, mark price recalculated when the time indicated by the mark price frequency is crossed, new event is emitted for new mark price.
 7. Traded price at step 2 is stale, and Oracle price at step 4 is stale, mark price recalculated, new event is emitted for new mark price.
-
-
