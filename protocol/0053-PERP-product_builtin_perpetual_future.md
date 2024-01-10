@@ -100,7 +100,7 @@ Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.m
 
 When the `settlement_schedule` event is received we need to calculate the funding payment. Store the current vega time as `funding_period_end`.
 
-Skip the funding payment calculation (set payment to `0`) if no spot (external) data has been ingested since market was create, otherwise calculate the funding payment as outlined below.
+Skip the funding payment calculation (set payment to `0`) if no spot (external) data has been ingested since market was created, otherwise calculate the funding payment as outlined below.
 
 #### TWAP calculation
 
@@ -172,7 +172,7 @@ Furthermore, if any time was spent in auction during the funding period then the
 funding_payment = (period_duration-time_spent_in_auction)/period_duration * funding_payment
 ```
 
-Please note that this implies no funding payments for periods during which the market has been in auction for their entire duration.
+Please note that this implies no funding payments for periods during which the market has been in auction / suspended for their entire duration.
 
 If `scaling_factor` is specified set:
 
