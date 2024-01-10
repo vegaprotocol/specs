@@ -12,14 +12,14 @@ Hence this is in addition to and building upon [Ethereum data source](./0082-ETH
 
 ## Description
 
-In addition to listening to Ethereum events and reading from Ethereum contracts as described in [Ethereum data source](./0082-ETHD-ethereum-data-source.md) it will be possible for Vega nodes to listen to events from and read from other chains that implement Ethereum RPC and run EVM, in particular Ethereum L2.
+In addition to listening to Ethereum events and reading from Ethereum contracts as described in [Ethereum data source](./0082-ETHD-ethereum-data-source.md) it will be possible for Vega nodes to listen to events from and read from other chains that implement Ethereum RPC and run EVM, in particular Ethereum L2s.
 
 The overarching principle is that the chain provides ethereum RPC / EVMs and thus contracts and ABIs are assumed to be functionally the same as on Ethereum itself.
 
 ## Registration / removal
 
 A new network parameter, a JSON list of network id / chain id / name one per Ethereum RPC and EVM chain will be used for setting supported L2. This is set via [governance](./0028-GOVE-governance.md).
-Name `blockchains.ethereumL2Configs`.
+Name `blockchains.ethereumRpcAndEvmCompatDataSourcesConfig`.
 Example value:
 
 ```json
@@ -28,28 +28,35 @@ Example value:
 
 Duplicate values of `network_id`, `chain_id` or  `name` are not allowed (an update will be rejected at validation stage).
 Any update must always change the entire JSON (it's not possible to change individual entries).
-A proposal to *remove* a registered Ethereum RPC+EVM compatible chain / L2 must fail at enactment stage if a market is referencing an `EthRpcEvmCompatible` data source.
+In current minimal scope, at proposal validation, check that only change is 
+1. changing number of confirmation or 
+1. adding another source. 
+
+For later release: A proposal to *remove* a registered Ethereum RPC+EVM compatible chain / L2 must fail at enactment stage if a market is referencing an `EthRpcEvmCompatible` data source.
+
 A proposal for a new market will fail at enactment stage if it's referencing an `EthRpcEvmCompatible` that's not registered.
 
 
 ## Acceptance criteria
 
-
 ### External Oracles - Creation
 
 - It is possible to add `EthRpcEvmCompatible` via governance (<a name="0087-EVMD-001" href="#0087-EVMD-001">0087-EVMD-001</a>).
 
+### External Oracles - External Chain Config Changes
 
-### External Oracles - Deactivation (not implemented in Palazzo milestone)
+- At network proposal validation step we check that the only change to `blockchains.ethereumRpcAndEvmCompatDataSourcesConfig` is to either change number of confirmations or add another external chain. (<a name="0087-EVMD-043" href="#0087-EVMD-043">0087-EVMD-043</a>)
+
+### External Oracles - Deactivation (not scoped in Palazzo milestone)
 
 - It is possible to remove an `EthRpcEvmCompatible` via governance. The proposal will fail at enactment stage if there is any market that's not settled / closed that reference the `EthRpcEvmCompatible`.  This is a future requirement and does not have an AC code.
 
 
-### External Oracles - Amendments
+### External Oracles - Market Amendments
 
 - It may happen that an `EthRpcEvmCompatible` that cannot be read from is proposed (because not enough validator nodes have it configured etc.). In that case a proposed / enacted market will not see the oracle inputs but it must be possible to change the said market via on-chain governance (<a name="0087-EVMD-003" href="#0087-EVMD-003">0087-EVMD-003</a>).
 - Update an existing futures market using the market update proposal to change the `EthRpcEvmCompatible` chain referenced, smart contract address and read method. The changes take effect after the market update proposal is enacted and data is sourced from the new smart contract. The old data source  will be deactivated when the proposal is enacted (<a name="0087-EVMD-004" href="#0087-EVMD-004">0087-EVMD-004</a>)
-- Using the market update proposal all data elements for the ethereum oracles can be updated. On successful enactment , a new oracle data source is created for the market. In case any existing data source matches the new data source , then a new data source is not created and the existing one is used (<a name="0087-EVMD-005" href="#0087-EVMD-005">0087-EVMD-005</a>)
+- Using the market update proposal all data elements for the ethereum oracles can be updated. On successful enactment, a new oracle data source is created for the market. In case any existing data source matches the new data source, then a new data source is not created and the existing one is used (<a name="0087-EVMD-005" href="#0087-EVMD-005">0087-EVMD-005</a>)
 - Ensure existing oracle data sources are deactivated when market data sources are amended on another market. Create 2 markets to use different ethereum oracles for termination and settlement. Two sets of ethereum oracles are created and are ACTIVE. Then amend Market 2 to use exactly the same ethereum oracles for termination and settlement as Market1. Now ,the ethereum oracles originally created for for Market2 should be set to DEACTIVATED. No new ethereum oracles should be created and the Market2 should use the existing ethereum oracles created for Market1 (<a name="0087-EVMD-006" href="#0087-EVMD-006">0087-EVMD-006</a>)
 - Ensure that when a market data source type is amended from internal, external, ethereum or open (coinbase) to an alternative for both termination and settlement we see that old data source is deactivated (if no other market is using) and we see the new data source created and it supports termination and settlement specific to its data source type (<a name="0087-EVMD-007" href="#0087-EVMD-007">0087-EVMD-007</a>)
 
