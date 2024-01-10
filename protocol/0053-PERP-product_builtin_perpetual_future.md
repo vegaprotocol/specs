@@ -359,6 +359,6 @@ If a market insurance pool does not have enough funds to cover a funding payment
 
 Assert that all scaling factors are being applied before the funding cap is applied (<a name="0053-PERP-040" href="#0053-PERP-040">0053-PERP-040</a>).
 
-Assert all funding payments are coorrect when a perpertual market is suspended and then terminated via governance. (<a name="0053-PERP-041" href="#0053-PERP-041">0053-PERP-041</a>).
+Assert all funding payments are coorrect when a perpetual market is suspended and then terminated via governance. (<a name="0053-PERP-041" href="#0053-PERP-041">0053-PERP-041</a>).
 
 The upper and lower clamp values are being correctly validated as per the [parameters defined in the spec](https://github.com/vegaprotocol/specs/blob/palazzo/protocol/0053-PERP-product_builtin_perpetual_future.md#1-product-parameters). (<a name="0053-PERP-042" href="#0053-PERP-042">0053-PERP-042</a>).
