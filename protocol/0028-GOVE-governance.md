@@ -767,4 +767,3 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 - A proposal to add community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-175" href="#0028-GOVE-175">0028-GOVE-175</a>)
 - A proposal to remove community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-176" href="#0028-GOVE-176">0028-GOVE-176</a>)
 
-

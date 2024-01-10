@@ -64,7 +64,7 @@ spellcheck:
 # Checks for duplicated ACs in the features.json file
 .PHONY: check-features
 check-features:
-	npx github:vegaprotocol/approbation check-features --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}" --features="./protocol/features.json"
+	npx github:vegaprotocol/approbation check-features --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}" --features="./protocol/nebula-features.json"
 
 clean:
 	rm -rf $(TEMP)
