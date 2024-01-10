@@ -388,7 +388,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A Stop order that hasn't been triggered can be cancelled. (<a name="0014-ORDT-071" href="#0014-ORDT-071">0014-ORDT-071</a>)
 - All stop orders for a specific party can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-072" href="#0014-ORDT-072">0014-ORDT-072</a>)
 - All stop orders for a specific party for a specific market can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-073" href="#0014-ORDT-073">0014-ORDT-073</a>)
-- A party with a long position enters a buy stop order with position size overide and is valid but at the time of trigger it is cancelled then the stop order should be cancelled. (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
+- A party with a long position enters a buy stop order with position size override and is valid but at the time of trigger it is cancelled then the stop order should be cancelled. (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
 - If a stop order is placed with a position_fraction equal to 0.5 and the order size is 2.5 then the rounding should be equal to 3 (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
 
 
@@ -399,7 +399,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - Stop orders submitted with expiry in the past are rejected. (<a name="0014-ORDT-076" href="#0014-ORDT-076">0014-ORDT-076</a>)
 - GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>)
 - Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>)
-- If a stop order is placed with a position_fraction equal to 0 the order should be rejected. (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
+- If a stop order is placed with a position_fraction equal to 0 the order should be rejected. (<a name="0014-ORDT-139" href="#0014-ORDT-139">0014-ORDT-139</a>)
 
 ## Stop Orders - Snapshots
 
