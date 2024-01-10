@@ -372,7 +372,6 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 
 - A stop order placed either prior to or during a monitoring auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>)
 - A stop order placed either prior to or during a monitoring auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>)
-- A stop order will be rejected if submitted while the market is in opening auction (<a name="0014-ORDT-132" href="#0014-ORDT-132">0014-ORDT-132</a>)
 
 - If a trader has open stop orders and their position moves to zero whilst they still have open limit orders their stop orders will remain active. (<a name="0014-ORDT-067" href="#0014-ORDT-067">0014-ORDT-067</a>)
 - If a trader has open stop orders and their position moves to zero with no open limit orders their stop orders are cancelled. (<a name="0014-ORDT-068" href="#0014-ORDT-068">0014-ORDT-068</a>)
