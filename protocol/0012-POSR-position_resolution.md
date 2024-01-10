@@ -27,6 +27,46 @@
 
 - It is possible to check the time of the next liquidation trade attempt in any market via the API. (<a name="0012-POSR-015" href="#0012-POSR-015">0012-POSR-015</a>)
 
+### Network position disposal
+
+- When calculating the available volume, the full remaining size of iceberg orders should be considered. (<a name="0012-POSR-019" href="#0012-POSR-019">0012-POSR-019</a>)
+- When calculating the available volume, volume outside price monitoring bounds should be considered. (<a name="0012-POSR-020" href="#0012-POSR-020">0012-POSR-020</a>)
+- When calculating the available volume, volume outside the liquidity price range should not be considered. (<a name="0012-POSR-021" href="#0012-POSR-021">0012-POSR-021</a>)
+- Given a highly liquid market, if the network’s position is greater than `full disposal size`. The network must attempt to dispose `position * disposal fraction` at the next disposal step. (<a name="0012-POSR-022" href="#0012-POSR-022">0012-POSR-022</a>)
+- Given a highly liquid market, if the network’s position is less than or equal to `full disposal size`. The network must attempt to dispose of its full position at the next disposal step. (<a name="0012-POSR-023" href="#0012-POSR-023">0012-POSR-023</a>)
+- Given a highly liquid market, if the network’s `disposal fraction<1` and `full disposal size`=0, the network must still eventually dispose of its full position. (<a name="0012-POSR-024" href="#0012-POSR-024">0012-POSR-024</a>)
+- The network must never dispose more than `available volume  * max fraction of book side within liquidity bounds consumed` in a single order. (<a name="0012-POSR-025" href="#0012-POSR-025">0012-POSR-025</a>)
+- A network disposal order which generates trades must not affect the mark price. (<a name="0012-POSR-026" href="#0012-POSR-026">0012-POSR-026</a>)
+- A network disposal order can not cross with orders outside the liquidity price range. (<a name="0012-POSR-027" href="#0012-POSR-027">0012-POSR-027</a>)
+- A network disposal order can cross with orders outside price monitoring bounds but must not trigger a price monitoring auction. (<a name="0012-POSR-028" href="#0012-POSR-028">0012-POSR-028</a>)
+- A network disposal order which crosses multiple orders should generate multiple atomic trades. (<a name="0012-POSR-029" href="#0012-POSR-029">0012-POSR-029</a>)
+
+### Network Profit and Loss
+
+- Given the network starts with no position and does not dispose any of it's position during the scenario: (<a name="0012-POSR-016" href="#0012-POSR-016">0012-POSR-016</a>)
+
+  - The mark price moves to `100`, the network liquidates a distressed party with a long position of `1`. The network should report a position of `1` and a realised and unrealised pnl of `0` and `0` respectively.
+  - The mark price moves to `120`, the network liquidates a distressed party with a short position of `-1`. The network should report a position of `-1` and a realised and unrealised pnl of `20` and `0` respectively.
+  - The mark price moves to `60`. The network should report a position of `-1` and a realised and unrealised pnl of `20` and `60` respectively.
+
+- Given the network starts with no position and does not dispose any of it's position during the scenario: (<a name="0012-POSR-017" href="#0012-POSR-017">0012-POSR-017</a>)
+
+  - The mark price moves to `100`, the network liquidates a distressed party with a long position of `1`. The network should report a position of `1` and a realised and unrealised pnl of `0` and `0` respectively.
+  - The mark price moves to `90`, the network liquidates a distressed party with a long position of `1` (average entry price now equals `95`). The network should report a position of `2` and a realised and unrealised pnl of `0` and `-10` respectively.
+  - The mark price moves to `60`. The network should report a position of `2` and a realised and unrealised pnl of `0` and `-70` respectively.
+
+- Given an empty insurance pool and the liquidation strategy `disposal time step = 5`, `disposal fraction = 0.5`, `full disposal size=0` and `max fraction of book side within liquidity bounds consumed = 0.01` during the below scenario: (<a name="0012-POSR-018" href="#0012-POSR-018">0012-POSR-018</a>)
+  - The mark price moves to 100, the network liquidates a distressed party with a long position of 2. The network should report a position of 2 and a realised and unrealised pnl of 0 and 0 respectively.
+  - Given the order book:
+    | side | price | size |
+    |------|-------|------|
+    | buy  | 90    | 1000 |
+    | sell | 110   | 1000 |
+  - The time updates to the next disposal time, the network reduces its position by 1. The network should report a position of 1 and a realised and unrealised pnl of -10 and 0 respectively.
+  - The time updates to the next disposal time, the network reduces its position by 1. The network should report a position of 1 and a realised and unrealised pnl of -20 and 0 respectively.
+  - Loss socialisation should be applied and the accumulated balance for all accounts should be unchanged.
+
+
 ## Summary
 
 Position resolution is the mechanism which deals with closing out distressed positions on a given market. It is instigated when one or more participant's margin account balance falls below their latest maintenance margin level.

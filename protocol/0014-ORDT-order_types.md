@@ -92,7 +92,9 @@ Therefore the trigger level of a stop order moves with the market allowing the t
 
 - The order can't be triggered or trade at all during an auction (even if the current price would normally trigger it immediately on entry).
 
-- A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
+- A stop order can be entered during an auction (except opening auction), and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
+
+- A stop order entered during opening auction will be rejected.
 
 - GFA is not a valid TIF for a stop order submission.
 
@@ -370,8 +372,15 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
   - Be triggered by a fall to `45`. (<a name="0014-ORDT-063" href="#0014-ORDT-063">0014-ORDT-063</a>)
   - Not be triggered by a fall to `46`. (<a name="0014-ORDT-064" href="#0014-ORDT-064">0014-ORDT-064</a>)
 
-- A stop order placed either prior to or during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>)
-- A stop order placed either prior to or during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>)
+- A stop order placed during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>)
+- A stop order placed during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>)
+
+- A stop order placed prior to an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-134" href="#0014-ORDT-134">0014-ORDT-134</a>)
+- A stop order placed prior to an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-135" href="#0014-ORDT-135">0014-ORDT-135</a>)
+- An order with a stop is placed during continuous trading. The market goes into auction. The market exits auction, the condition for triggering the stop is not met. The stop order is still present. (<a name="0014-ORDT-136" href="#0014-ORDT-136">0014-ORDT-136</a>)
+
+- A party places a stop order on a market in continuous trading, the market moves to an auction and the party cancels the stop order. When the market exits the auction the party no longer has a stop order. (<a name="0014-ORDT-132" href="#0014-ORDT-132">0014-ORDT-132</a>)
+- A stop order placed during the opening auction, will be rejected. (<a name="0014-ORDT-133" href="#0014-ORDT-133">0014-ORDT-133</a>)
 
 - If a trader has open stop orders and their position moves to zero whilst they still have open limit orders their stop orders will remain active. (<a name="0014-ORDT-067" href="#0014-ORDT-067">0014-ORDT-067</a>)
 - If a trader has open stop orders and their position moves to zero with no open limit orders their stop orders are cancelled. (<a name="0014-ORDT-068" href="#0014-ORDT-068">0014-ORDT-068</a>)

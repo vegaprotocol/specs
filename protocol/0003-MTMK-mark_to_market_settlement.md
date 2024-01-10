@@ -22,6 +22,10 @@
 1. If the mark price hasn't changed:
     1. A trader with no change in open position size has no transfers in or out of their margin account (<a name="0003-MTMK-012" href="#0003-MTMK-012">0003-MTMK-012</a>)
 1. An aggressive order to buy 2 units at 1010 which matches with two passive orders each of size one resting on the book with prices of 1000 and 1010 results in a transfer of 10 flowing from the party with order priced at 1000 to the aggressive party during the next MTM settlement <a name="0003-MTMK-013" href="#0003-MTMK-013">0003-MTMK-013</a>)
+1. If the network party has a non-zero position and the mark-price moves in favour of the network's position gains from mark-to-market settlement should be paid into the market insurance pool. (<a name="0003-MTMK-015" href="#0003-MTMK-015">0003-MTMK-015</a>)
+1. If the network party has a non-zero position and the mark-price moves against the network's position, losses from mark-to-market settlement should be paid from the market insurance pool. (<a name="0003-MTMK-016" href="#0003-MTMK-016">0003-MTMK-016</a>)
+1. If the network does not have enough funds in the market insurance pool to cover its mark-to-market losses, loss-socialisation occurs. (<a name="0003-MTMK-017" href="#0003-MTMK-017">0003-MTMK-017</a>)
+
 
 ## Market with position decimal places > 0 scenario
 

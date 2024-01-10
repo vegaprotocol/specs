@@ -478,7 +478,7 @@ The Estimate Fees API should now calculate the following additional information:
 1. If a party is currently the referrer of a referral set from which a team **has not** yet been created, the party can **create** a team by submitting a signed `UpdateReferralSet` transaction and setting `is_team=True` (<a name="0083-RFPR-022" href="#0083-RFPR-022">0083-RFPR-022</a>).
 1. If a party is currently the referrer of a referral set from which a team **has** already been created, the party can **update** a team by submitting a signed `UpdateReferralSet` transaction specifying the fields they want to update (<a name="0083-RFPR-023" href="#0083-RFPR-023">0083-RFPR-023</a>).
 1. If a party submits an `UpdateReferralSet` transaction for a referral set they are not the referrer off, the transaction should be rejected (<a name="0083-RFPR-024" href="#0083-RFPR-024">0083-RFPR-024</a>).
-1. If a referrer updates the `allow_list` associated with the team, existing members who are no longer on the allow_list should **not** be removed from the team.
+1. If a referrer updates the `allow_list` associated with the team, existing members who are no longer on the allow_list should **not** be removed from the team (<a name="0083-RFPR-067" href="#0083-RFPR-067">0083-RFPR-067</a>).
 
 #### Applying a referral code
 
