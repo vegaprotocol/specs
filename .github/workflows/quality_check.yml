@@ -77,4 +77,4 @@ jobs:
 
       - name: "Run Check Features"
         run: |
-          npx github:vegaprotocol/approbation check-features --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}" --features="./protocol/features.json"
+          npx github:vegaprotocol/approbation check-features --specs="{./non-protocol-specs/**/*.md,./protocol/**/*.md,./protocol/**/*.ipynb}" --features="./protocol/nebula-features.json"
