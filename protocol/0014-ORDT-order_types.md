@@ -72,7 +72,7 @@ An OCO contains TWO stop order submissions, and must include one in each trigger
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
   - An OCO submission can be set to have one of three different behaviours at expiry, either triggering one side, triggering the other, or expire without any action. This is configured through the setting of the expiry behaviour on each leg. Setting each leg to trade at expiration will result in the OCO being rejected.
-  
+
 - The stop order submission wraps a normal order submission.
 
 - A stop order submission may have an optional `Size Override`:
@@ -355,7 +355,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A stop order with expiration time `T` set to expire at that time will expire at time `T` if reached without being triggered. (<a name="0014-ORDT-052" href="#0014-ORDT-052">0014-ORDT-052</a>)
 - A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-053" href="#0014-ORDT-053">0014-ORDT-053</a>)
   - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-054" href="#0014-ORDT-054">0014-ORDT-054</a>)
-  - An OCO stop order with expiration time `T` with one side set to execute at that time will execute at time `T` if reached without being triggered, with the specified side triggering and the other side cancelling. (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>)
+  - An OCO stop order with expiration time `T` with one side set to execute at that time will execute at time `T` if reached without being triggered, with the specified side triggering and the other side cancelling. This must be tested both sides (fall below and rise above). (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>)
   - An OCO stop order with expiration time `T` with both sides set to execute at that time will be rejected on submission (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>)
 
 - A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>)
@@ -388,6 +388,9 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A Stop order that hasn't been triggered can be cancelled. (<a name="0014-ORDT-071" href="#0014-ORDT-071">0014-ORDT-071</a>)
 - All stop orders for a specific party can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-072" href="#0014-ORDT-072">0014-ORDT-072</a>)
 - All stop orders for a specific party for a specific market can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-073" href="#0014-ORDT-073">0014-ORDT-073</a>)
+- A party with a long position enters a buy stop order with position size overide and is valid but at the time of trigger it is cancelled then the stop order should be cancelled. (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
+- If a stop order is placed with a position_fraction equal to 0.5 and the order size is 2.5 then the rounding should be equal to 3 (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
+
 
 ## Stop Orders - Negative Cases
 
@@ -396,6 +399,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - Stop orders submitted with expiry in the past are rejected. (<a name="0014-ORDT-076" href="#0014-ORDT-076">0014-ORDT-076</a>)
 - GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>)
 - Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>)
+- If a stop order is placed with a position_fraction equal to 0 the order should be rejected. (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
 
 ## Stop Orders - Snapshots
 

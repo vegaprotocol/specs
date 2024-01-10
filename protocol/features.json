@@ -72,10 +72,6 @@
     "milestone": "palazzo",
     "acs": ["0004-AMND-056", "0004-AMND-057", "0004-AMND-058", "0004-AMND-059"]
   },
-  "Ethereum heartbeat": {
-    "milestone": "palazzo",
-    "acs": []
-  },
   "Margin isolation": {
     "milestone": "palazzo",
     "acs": [
@@ -230,10 +226,6 @@
       "0053-PERP-039"
     ]
   },
-  "Passive liquidity": {
-    "milestone": "palazzo",
-    "acs": []
-  },
   "Batch governance proposals": {
     "milestone": "palazzo",
     "acs": [
@@ -305,7 +297,10 @@
       "0014-ORDT-128",
       "0014-ORDT-129",
       "0014-ORDT-130",
-      "0014-ORDT-131"
+      "0014-ORDT-131",
+      "0014-ORDT-137",
+      "0014-ORDT-138",
+      "0014-ORDT-139"
     ]
   },
   "Markprice updates": {
