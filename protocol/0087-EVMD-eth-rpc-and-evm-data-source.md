@@ -28,9 +28,10 @@ Example value:
 
 Duplicate values of `network_id`, `chain_id` or  `name` are not allowed (an update will be rejected at validation stage).
 Any update must always change the entire JSON (it's not possible to change individual entries).
-In current minimal scope, at proposal validation, check that only change is 
-1. changing number of confirmation or 
-1. adding another source. 
+In current minimal scope, at proposal validation, check that only change is
+
+1. changing number of confirmation or
+1. adding another source.
 
 For later release: A proposal to *remove* a registered Ethereum RPC+EVM compatible chain / L2 must fail at enactment stage if a market is referencing an `EthRpcEvmCompatible` data source.
 
