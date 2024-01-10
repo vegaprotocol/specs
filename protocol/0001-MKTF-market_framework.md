@@ -80,6 +80,7 @@ Data:
 - **Name:** full and fairly descriptive name for the instrument.
 - **Metadata fields:** A series of arbitrary strings that can be used in clients
 - **Product:** a reference to or instance of a fully specified product, including all required product parameters for that product.
+- **Community Tags:** A list of string community tags assigning the market to certain categories. Each of these is a free text field of a network parameter defined maximum length. These are managed through a separate proposal type and cannot be set at market creation or changed in a normal market update proposal.
 
 ## Product
 
