@@ -249,6 +249,32 @@ The following are immutable and cannot be changed:
 - position decimal places
 - `settlementAsset`
 
+### 2.1 Change community tags
+
+Separately to a general market change proposal, proposers can create a proposal to add or remove lists of free-text string community tags to a market. Although these proposals change only a single market, it is possible that these tags will be used to control external behaviour of systems interacting with the vega chain, therefore they do not allow for voting using ELS and instead must be voted through by the general pool of token holders as with any other proposal. The maximum length of a community tags is specified by the network parameter `governance.proposal.market.maxCommunityTagLength`. The community tags on a market are controlled by a single proposal type, `UpdateCommunityTags` with a structure akin to:
+
+```proto
+message UpdateCommunityTags {
+  string marketId;
+  repeated string addTags;
+  repeated string removeTags;
+}
+```
+
+allowing proposals to add and remove tags independently from others.
+
+The following network parameters will decide how these proposals are treated:
+`governance.proposal.updateCommunityTags.maxClose` e.g. `720h`,
+`governance.proposal.updateCommunityTags.minClose` e,g. `168h`,
+`governance.proposal.updateCommunityTags.maxEnact` e.g. `720h`,
+`governance.proposal.updateCommunityTags.minEnact` e,g. `168h`,
+`governance.proposal.updateCommunityTags.minProposerBalance` e.g. `1000000000000000000` i.e. 1 VEGA,
+`governance.proposal.updateCommunityTags.minVoterBalance`   e.g. `1000000000000000000` i.e. 1 VEGA,
+`governance.proposal.updateCommunityTags.requiredMajority`  e.g. `0.66`,
+`governance.proposal.updateCommunityTags.requiredParticipation` e.g. `0.05`.
+
+Note: Although community tags cannot be amended in an update market proposal, they may be included in the same batch proposal as one.
+
 ## 3. Change network parameters
 
 [Network parameters](./0054-NETP-network_parameters.md) that may be changed are described in the _Network Parameters_ spec, this document for details on these parameters, including the category of the parameters. New network parameters require a code change, so there is no support for adding new network parameters.
@@ -708,9 +734,10 @@ It is NOT possible to submit a governance proposal where the source account is t
    1. volume discount program,
    1. referral program,
    1. governance transfer,
+   1. a community tags proposal
 
 can be submitted, voted through and each proposal enacted.
-On top of that signed bundles for changing withdrawal delay and threshold on the bridge are emitted (<a name="0028-GOVE-160" href="#0028-GOVE-160">0028-GOVE-160</a>)
+On top of that signed bundles for changing withdrawal delay and threshold on the bridge are emitted (<a name="0028-GOVE-177" href="#0028-GOVE-177">0028-GOVE-177</a>)
 
 - A batch proposal can be submitted changing the same network parameter twice to two different values with two different enactment timestamps.
 The voting to approve the batch happens, the batch passes, both changes are observed at the desired time. (<a name="0028-GOVE-161" href="#0028-GOVE-161">0028-GOVE-161</a>)
@@ -726,3 +753,17 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 ##### Network History
 
 - A datanode restored from network history will contain any recurring and one-off transfers created prior to the restore and these can be retrieved via APIs on the new datanode.(<a name="0028-GOVE-127" href="#0028-GOVE-127">0028-GOVE-127</a>)
+
+##### Community Market Tags
+
+- A proposal to add community tags to a market can be successfully submitted. (<a name="0028-GOVE-167" href="#0028-GOVE-167">0028-GOVE-167</a>)
+  - When that proposal is approved and enacted the community tags are immediately added to that market's community tags property. (<a name="0028-GOVE-168" href="#0028-GOVE-168">0028-GOVE-168</a>)
+- A proposal to remove community tags from a market can be successfully submitted. (<a name="0028-GOVE-169" href="#0028-GOVE-169">0028-GOVE-169</a>)
+  - When that proposal is approved and enacted the community tags are immediately removed from that market's community tags property. (<a name="0028-GOVE-170" href="#0028-GOVE-170">0028-GOVE-170</a>)
+- A proposal to add some and remove other community tags from a market can be successfully submitted. (<a name="0028-GOVE-171" href="#0028-GOVE-171">0028-GOVE-171</a>)
+  - When that proposal is approved and enacted the community tags are immediately removed and added to that market's community tags property. (<a name="0028-GOVE-172" href="#0028-GOVE-172">0028-GOVE-172</a>)
+- Neither market creation nor market update proposals can change the community tags property on a market. (<a name="0028-GOVE-173" href="#0028-GOVE-173">0028-GOVE-173</a>)
+- A voter's equity-like share does not give them any additional voting weight when voting on a market community tags update proposal. (<a name="0028-GOVE-174" href="#0028-GOVE-174">0028-GOVE-174</a>)
+- A proposal to add community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-175" href="#0028-GOVE-175">0028-GOVE-175</a>)
+- A proposal to remove community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-176" href="#0028-GOVE-176">0028-GOVE-176</a>)
+
