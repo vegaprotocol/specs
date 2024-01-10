@@ -100,12 +100,7 @@ Every time a [mark to market settlement](./0003-MTMK-mark_to_market_settlement.m
 
 When the `settlement_schedule` event is received we need to calculate the funding payment. Store the current vega time as `funding_period_end`.
 
-Skip the funding payment calculation (set payment to `0`) if any of the following conditions is met:
-
-- no spot (external) data has been ingested since market was created,
-- market has been in auction throughout the entire funding period.
-
-Please refer to the following subsections for the details of calculation of the funding payment if none of the above conditions are met.
+Skip the funding payment calculation (set payment to `0`) if no spot (external) data has been ingested since market was created, otherwise calculate the funding payment as outlined below.
 
 #### TWAP calculation
 
@@ -168,6 +163,16 @@ funding_payment = f_twap - s_twap + min(clamp_upper_bound*s_twap,max(clamp_lower
 ```
 
 where `(1 + delta_t * interest_rate)` is the linearisation of  `exp(delta_t*interest_rate)` and `delta_t` is expressed as a year fraction.
+
+Furthermore, if any time was spent in auction during the funding period then the funding payment should be scaled down by the fraction of the period spent outside of auction:
+
+`period_duration = period_end - period_start`
+
+```go
+funding_payment = (period_duration-time_spent_in_auction)/period_duration * funding_payment
+```
+
+Please note that this implies no funding payments for periods during which the market has been in auction / suspended for their entire duration.
 
 If `scaling_factor` is specified set:
 
@@ -301,7 +306,7 @@ Then, assuming no auctions during the period we get:
 $\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+10\cdot(5-3)+9\cdot(7-5)+8\cdot(9-7)+7\cdot(10-9)}{10}=9.3$,
 $\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+12\cdot(6-5)+11\cdot(7-6)+8\cdot(9-7)+14\cdot(10-9)}{10}=10.2$. (<a name="0053-PERP-027" href="#0053-PERP-027">0053-PERP-027</a>)
 
-1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market. Furthermore, assume that in this period that market is in an auction which starts 5 minutes into the period and ends 7 minutes into the period.
+1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market. Furthermore, assume that in this period that market is in an auction which starts 5 minutes into the period and ends 7 minutes into the period. Assume `interest_rate`=`clamp_lower_bound`=`clamp_upper_bound`=`0`, `scaling_factor`=`1` and no rate upper or lower bound.
 
 Assume the last known mark price before the start of the period to be `10` and that it gets updated as follows:
 | Time (min) since period start | mark price  |
@@ -323,8 +328,9 @@ Assume the last known spot price before this funding period is `11`. Then assume
 | 9                             | 14          |
 
 Then, taking the auction into account we get:
-$\text{internal TWAP}= \frac{10\cdot(1-0)+11\cdot(3-1)+11\cdot(5-3)+9\cdot(8-7)+8\cdot(10-8)+30\cdot(10-10)}{8}=9.875$,
-$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8\cdot(9-8)+14\cdot(10-9)}{8}=10.25$. (<a name="0053-PERP-028" href="#0053-PERP-028">0053-PERP-028</a>)
+$\text{internal TWAP}=\frac{10\cdot(1-0)+11\cdot(3-1)+11\cdot(5-3)+9\cdot(8-7)+8\cdot(10-8)+30\cdot(10-10)}{8}=9.875$,
+$\text{external TWAP}=\frac{11\cdot(1-0)+9\cdot(3-1)+10\cdot(5-3)+11\cdot(8-7)+8\cdot(9-8)+14\cdot(10-9)}{8}=10.25$,
+$\text{funding payment}=(10-(7-5))/10 * (9.875 - 10.25) = -0.3$. (<a name="0053-PERP-036" href="#0053-PERP-036">0053-PERP-036</a>)
 
 When $\text{clamp lower bound}=\text{clamp upper bound}=0$, $\text{scaling factor}=2.5$ and the funding period ends with $\text{internal TWAP}=99$, $\text{external TWAP} = 100$ then the resulting funding rate equals $-0.025$. (<a name="0053-PERP-029" href="#0053-PERP-029">0053-PERP-029</a>)
 
@@ -335,8 +341,8 @@ When $\text{clamp lower bound}=\text{clamp upper bound}=0$, $\text{scaling facto
 When migrating the market existing prior to introduction of the additional parameters their values get set to:
 
 - $\text{scaling factor}=1$,
-- $\text{rate_lower_bound}= -\text{max supported value}$,
-- $\text{rate_upper_bound}= \text{max supported value}$
+- $\text{rate lower bound}= -\text{max supported value}$,
+- $\text{rate upper bound}= \text{max supported value}$
 (<a name="0053-PERP-032" href="#0053-PERP-032">0053-PERP-032</a>).
 
 It is possible to create a perpetual futures market which uses the last traded price algorithm for its mark price but uses "impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-033" href="#0053-PERP-033">0053-PERP-033</a>).
