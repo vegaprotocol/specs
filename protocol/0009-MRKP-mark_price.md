@@ -106,7 +106,7 @@ Note that for calculating the median with an even number of entries we sort, pic
 
   - `markPriceConfiguration: source weight` valid values: `[0,1]`(<a name="0009-MRKP-053" href="#0009-MRKP-053">0009-MRKP-053</a>)
 
-  - `markPriceConfiguration: source staleness tolerance` valid values: `time format: hms`(<a name="0009-MRKP-054" href="#0009-MRKP-054">0009-MRKP-054</a>)
+  - `markPriceConfiguration: source staleness tolerance` valid values: `valid duration string, e.g. "5s", "24h"`(<a name="0009-MRKP-054" href="#0009-MRKP-054">0009-MRKP-054</a>)
 
 
 ### Example 1 - A typical path of a cash settled futures market from end of opening auction till expiry (use Algorithm 2 (ie median price))(<a name="0009-MRKP-040" href="#0009-MRKP-040">0009-MRKP-040</a>)
