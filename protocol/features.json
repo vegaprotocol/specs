@@ -273,7 +273,15 @@
   },
   "Liquidity fee setting": {
     "milestone": "palazzo",
-    "acs": ["0042-LIQF-056", "0042-LIQF-057", "0042-LIQF-058"]
+    "acs": [
+      "0042-LIQF-056",
+      "0042-LIQF-057",
+      "0042-LIQF-058",
+      "0042-LIQF-059",
+      "0042-LIQF-060",
+      "0042-LIQF-061",
+      "0042-LIQF-062"
+    ]
   },
   "Governance market name change": {
     "milestone": "palazzo",
