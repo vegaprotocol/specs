@@ -357,7 +357,7 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
   - Marginal cost (<a name="0042-LIQF-062" href="#0042-LIQF-062">0042-LIQF-062</a>)
 - The above example for the liquidity fee when the method is weighted-average results in a fee-factor of 1.5% (<a name="0042-LIQF-057" href="#0042-LIQF-057">0042-LIQF-057</a>)
 - The above example for the liquidity fee when the method is constant-fee results in a fee-factor of 0.8% (<a name="0042-LIQF-058" href="#0042-LIQF-058">0042-LIQF-058</a>)
-- The above example for the liquidity fee when the method is marginal cost results in a fee-factor of `TODO` (<a name="0042-LIQF-059" href="#0042-LIQF-059">0042-LIQF-059</a>)
+- The above example for the liquidity fee when the method is marginal cost results in a fee-factor of `3.75%` (<a name="0042-LIQF-059" href="#0042-LIQF-059">0042-LIQF-059</a>)
 - For the constant-fee method validate that the fee factor can only be between 0 and 1 inclusive (<a name="0042-LIQF-060" href="#0042-LIQF-060">0042-LIQF-060</a>)
 
 
