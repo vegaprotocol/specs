@@ -86,6 +86,12 @@ Note that for calculating the median with an even number of entries we sort, pic
 
 - When market is leaving auction (including opening auction and monitoring auction), mark price should be recalculated (<a name="0009-MRKP-024" href="#0009-MRKP-024">0009-MRKP-024</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-025" href="#0009-MRKP-025">0009-MRKP-025</a>).
 
+- When leaving opening auction, market should either wait in opening auction until the first mark price is available or it is certain that leaving the opening auction will set it. (<a name="0009-MRKP-026" href="#0009-MRKP-026">0009-MRKP-026</a>)and a perps market (<a name="0009-MRKP-027" href="#0009-MRKP-027">0009-MRKP-027</a>)
+
+- When market is in continuous trading mode, mark price is updated when the time indicated by the mark price frequency is crossed (<a name="0009-MRKP-036" href="#0009-MRKP-036">0009-MRKP-036</a>) and a perps market (<a name="0009-MRKP-037" href="#0009-MRKP-037">0009-MRKP-037</a>)
+
+- In terms of mark price update during action, we don’t do mark price updates (even if they come from external oracle). We do a MTM update upon leaving the auction with the latest available value. (<a name="0009-MRKP-038" href="#0009-MRKP-038">0009-MRKP-038</a>) and a perps market (<a name="0009-MRKP-039" href="#0009-MRKP-039">0009-MRKP-039</a>)
+
 - It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and when the book does not have enough volume, then the book price should not be included (<a name="0009-MRKP-028" href="#0009-MRKP-028">0009-MRKP-028</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-029" href="#0009-MRKP-029">0009-MRKP-029</a>).
 
 - It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `0` and the book price should be mid price (<a name="0009-MRKP-030" href="#0009-MRKP-030">0009-MRKP-030</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-031" href="#0009-MRKP-031">0009-MRKP-031</a>).
