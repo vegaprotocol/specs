@@ -351,7 +351,7 @@ Each LP further gets a performance bonus: $b_i \times B$ with a transfer type th
 - Liquidity fee factors are recalculated every time the liquidity demand estimate changes. (<a name="0042-LIQF-005" href="#0042-LIQF-005">0042-LIQF-005</a>)
 - If a change in the open interest causes the liquidity demand estimate to change, then fee factor is correctly recalculated.  (<a name="0042-LIQF-006" href="#0042-LIQF-006">0042-LIQF-006</a>)
 - If passage of time causes the liquidity demand estimate to change, the fee factor is correctly recalculated.  (<a name="0042-LIQF-007" href="#0042-LIQF-007">0042-LIQF-007</a>)
-- A market can be proposed with a choice of liquidity fee settings. These settings can be updated by a subsequent market update proposal. For the above have criteria that the correct fee value and method can be read from the data node APIs. As liquidity fee factor only changes at the epoch boundary the API reports the current and upcoming value. The tests should be carried out with the following methods:
+- A market can be proposed with a choice of liquidity fee settings. These settings can be updated by a subsequent market update proposal. Moreover, the correct fee value and liquidity fee setting method can be read from the data node APIs. As liquidity fee factor only changes at the epoch boundary the API reports the current and upcoming value. The tests should be carried out with the following methods:
   - Weighted average (<a name="0042-LIQF-056" href="#0042-LIQF-056">0042-LIQF-056</a>)
   - Constant fee (<a name="0042-LIQF-061" href="#0042-LIQF-061">0042-LIQF-061</a>)
   - Marginal cost (<a name="0042-LIQF-062" href="#0042-LIQF-062">0042-LIQF-062</a>)
