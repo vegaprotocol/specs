@@ -339,6 +339,10 @@
       "0009-MRKP-030",
       "0009-MRKP-031",
       "0009-MRKP-032",
+      "0009-MRKP-036",
+      "0009-MRKP-037",
+      "0009-MRKP-038",
+      "0009-MRKP-039",
       "0009-MRKP-040",
       "0009-MRKP-041",
       "0009-MRKP-050",
@@ -372,6 +376,14 @@
       "0053-PERP-033",
       "0053-PERP-034",
       "0053-PERP-035"
+    ]
+  },
+  "Price Biulder": {
+    "milestone": "palazzo",
+    "acs": [
+      "0088-PRBD-001",
+      "0088-PRBD-002",
+      "0088-PRBD-003"
     ]
   },
   "Ethereum RPC and EVM based data sources": {

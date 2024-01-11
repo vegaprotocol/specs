@@ -11,9 +11,3 @@ For perpetual futures markets there should be a “mark price” configuration a
 - It is possible to obtain a time series for the market mark price from the data node from the time of the market proposal enactment onwards (subject to data node retention policies).(<a name="0088-PRBD-001" href="#0088-PRBD-001">0088-PRBD-001</a>)
 - It is possible to obtain a time series for the price used for “vega side price” of the funding twap from the data node from the time of the market proposal enactment onwards (subject to data node retention policies).(<a name="0088-PRBD-002" href="#0088-PRBD-002">0088-PRBD-002</a>)
 - It’s possible to specify start and end times / dates when requesting the time series of prices. (<a name="0088-PRBD-003" href="#0088-PRBD-003">0088-PRBD-003</a>)
-
-
-
-
-
-
