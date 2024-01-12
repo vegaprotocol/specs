@@ -349,8 +349,8 @@ There should be an additional amount `limit price x size x margin factor = 15910
 - For each market and each party which has positions or has switched between margin modes on the market, the API provides the maintenance margin levels. (<a name="0019-MCAL-092" href="#0019-MCAL-092">0019-MCAL-092</a>)
 
 - For each market and each party which has orders only and no positions or has switched between margin modes on the market
-  - cross margin to isolated margin, the API provides maintenance margin level of zero. (<a name="0019-MCAL-144" href="#0019-MCAL-144">0019-MCAL-144</a>)
-  - isolated margin to cross margin, the API provides expected maintenance margin level . (<a name="0019-MCAL-145" href="#0019-MCAL-145">0019-MCAL-145</a>)
+  - cross margin to isolated margin, the API provides maintenance margin level of zero. (<a name="0019-MCAL-150" href="#0019-MCAL-150">0019-MCAL-150</a>)
+  - isolated margin to cross margin, the API provides expected maintenance margin level . (<a name="0019-MCAL-151" href="#0019-MCAL-151">0019-MCAL-151</a>)
 
 - For each market and each party which has either orders or positions on the market, the API provides the current margin mode and, when in isolated margin mode, margin factor.  (<a name="0019-MCAL-143" href="#0019-MCAL-143">0019-MCAL-143</a>)
 
