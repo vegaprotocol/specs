@@ -357,7 +357,12 @@
       "0009-MRKP-132",
       "0053-PERP-033",
       "0053-PERP-034",
-      "0053-PERP-035"
+      "0053-PERP-035",
+      "0009-MRKP-057",
+      "0009-MRKP-058",
+      "0009-MRKP-059",
+      "0009-MRKP-060",
+      "0009-MRKP-061"
     ]
   },
   "Ethereum RPC and EVM based data sources": {
