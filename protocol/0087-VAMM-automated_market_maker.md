@@ -217,3 +217,52 @@ int log2(int64_t num) {
     return res;
 }
 ```
+
+
+## Acceptance Criteria
+
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `100`, a user with `1000 USDT` is able to create a vAMM with commitment `1000`, base price `100`, upper price `150`, lower price `85` and leverage ratio at each bound `0.25`. (<a name="0087-VAMM-001" href="#0087-VAMM-001">0087-VAMM-001</a>)
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `100`, a user with `1000 USDT` is able to create a vAMM with commitment `1000`, base price `100`, no upper price, lower price `85` and leverage ratio at lower bound `0.25`. (<a name="0087-VAMM-002" href="#0087-VAMM-002">0087-VAMM-002</a>)
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `100`, a user with `1000 USDT` is able to create a vAMM with commitment `1000`, base price `100`, upper price `150`, no lower price and leverage ratio at upper bound `0.25`. (<a name="0087-VAMM-003" href="#0087-VAMM-003">0087-VAMM-003</a>)
+
+- When `market.amm.minCommitmentQuantum` is `1`, mid price of the market `100`, a user with `100 USDT` is unable to create a vAMM with commitment `1000`, and any other combination of settings. (<a name="0087-VAMM-004" href="#0087-VAMM-004">0087-VAMM-004</a>)
+- When `market.amm.minCommitmentQuantum` is `1000`, mid price of the market `100`, a user with `1000 USDT` is able to create a vAMM with commitment `100`, and any other combination of settings. (<a name="0087-VAMM-005" href="#0087-VAMM-005">0087-VAMM-005</a>)
+
+- When `market.amm.minCommitmentQuantum` is `1000`, mid price of the market `100`, and a user with `1000 USDT` creates a vAMM with commitment `1000`, base price `100`, upper price `150`, lower price `85` and leverage ratio at each bound `0.25`:
+  - If other traders trade to move the market mid price to `140` the vAMM has a short position. (<a name="0087-VAMM-006" href="#0087-VAMM-006">0087-VAMM-006</a>)
+  - If other traders trade to move the market mid price to `90` the vAMM has a long position (<a name="0087-VAMM-007" href="#0087-VAMM-007">0087-VAMM-007</a>)
+  - If other traders trade to move the market mid price to `150` the vAMM will post no further sell orders above this price, and the vAMM's position notional value will be equal to `4x` its total account balance. (<a name="0087-VAMM-008" href="#0087-VAMM-008">0087-VAMM-008</a>)
+  - If other traders trade to move the market mid price to `85` the vAMM will post no further buy orders below this price, and the vAMM's position notional value will be equal to `4x` its total account balance.(<a name="0087-VAMM-009" href="#0087-VAMM-009">0087-VAMM-009</a>)
+  - If other traders trade to move the market mid price to `110` and then trade to move the mid price back to `100` the vAMM will have a position of `0`. (<a name="0087-VAMM-010" href="#0087-VAMM-010">0087-VAMM-010</a>)
+  - If other traders trade to move the market mid price to `90` and then trade to move the mid price back to `100` the vAMM will have a position of `0`. (<a name="0087-VAMM-011" href="#0087-VAMM-011">0087-VAMM-011</a>)
+  - If other traders trade to move the market mid price to `90` and then in one trade move the mid price to `110` then trade to move the mid price back to `100` the vAMM will have a position of `0`. (<a name="0087-VAMM-012" href="#0087-VAMM-012">0087-VAMM-012</a>)
+  - If other traders trade to move the market mid price to `90` and then move the mid price back to `100` in several trades of varying size, the vAMM will have a position of `0`. (<a name="0087-VAMM-013" href="#0087-VAMM-013">0087-VAMM-013</a>)
+  - If other traders trade to move the market mid price to `90` and then in one trade move the mid price to `110` then trade to move the mid price to `120` the vAMM will have a larger (more negative) but comparable position to if they had been moved straight from `100` to `120`. (<a name="0087-VAMM-014" href="#0087-VAMM-014">0087-VAMM-014</a>)
+  
+- A vAMM which has been created and is active contributes with it's proposed fee level to the active fee setting mechanism. (<a name="0087-VAMM-015" href="#0087-VAMM-015">0087-VAMM-015</a>)
+- A vAMM's virtual ELS should be equal to the ELS of a regular LP with the same committed volume on the book (i.e. if a vAMM has an average volume on each side of the book across the epoch of 10k USDT, their ELS should be equal to that of a regular LP who has a commitment which requires supplying 10k USDT who joined at the same time as them). (<a name="0087-VAMM-016" href="#0087-VAMM-016">0087-VAMM-016</a>)
+  - A vAMM's virtual ELS should grow at the same rate as a full LP's ELS who joined at the same time. (<a name="0087-VAMM-017" href="#0087-VAMM-017">0087-VAMM-017</a>)
+- A vAMM can vote in market update proposals with the additional weight of their ELS (i.e. not just from governance token holdings). (<a name="0087-VAMM-018" href="#0087-VAMM-018">0087-VAMM-018</a>)
+
+- If a vAMM is cancelled with `Abandon Position` then it is closed immediately. All funds which were in the `general` account of the vAMM are returned to the user who created the vAMM and the remaining position and margin funds are moved to the network to close out as it would a regular defaulted position. (<a name="0087-VAMM-019" href="#0087-VAMM-019">0087-VAMM-019</a>)
+
+- If a vAMM is cancelled and set in `Reduce-Only` mode when it is currently long, then: (<a name="0087-VAMM-020" href="#0087-VAMM-020">0087-VAMM-020</a>)
+  - It creates no further buy orders even if the current price is above the configured lower price.
+  - When one of it's sell orders is executed it still does not produce buy orders, and correctly quotes sell orders from a higher price.
+  - When the position reaches `0` the vAMM is closed and all funds are released to the user after the next mark to market.
+
+
+- If a vAMM is cancelled and set in `Reduce-Only` mode when it is currently short, then: (<a name="0087-VAMM-021" href="#0087-VAMM-021">0087-VAMM-021</a>)
+  - It creates no further sell orders even if the current price is below the configured upper price.
+  - When one of it's buy orders is executed it still does not produce sell orders, and correctly quotes buy orders from a lower price.
+  - When the position reaches `0` the vAMM is closed and all funds are released to the user after the next mark to market.
+
+- If a vAMM is cancelled and set in `Reduce-Only` mode when it currently has no position then all funds are released after the next mark to market. (<a name="0087-VAMM-022" href="#0087-VAMM-022">0087-VAMM-022</a>)
+
+- If a vAMM is cancelled and set into `Reduce-Only` mode, then an amend is sent by the user who created it, the vAMM is amended according to those instructions and is moved out of `Reduce-Only` mode back into normal operation. (<a name="0087-VAMM-023" href="#0087-VAMM-023">0087-VAMM-023</a>)
+
+- When `market.amm.minCommitmentQuantum` is `1000`, mid price of the market `100`, and a user with `1000 USDT` creates a vAMM with commitment `1000`, base price `100`, upper price `150`, lower price `85` and leverage ratio at each bound `0.25`: 
+  - If other traders trade to move the market mid price to `140` the vAMM has a short position. (<a name="0087-VAMM-024" href="#0087-VAMM-024">0087-VAMM-024</a>)
+  - If the vAMM is then amended such that it has a new base price of `140` it should attempt to place a trade to rebalance it's position to `0` at a mid price of `140`.
+    - If that trade can execute with the slippage as configured in the request then the transaction is accepted. (<a name="0087-VAMM-025" href="#0087-VAMM-025">0087-VAMM-025</a>)
+    - If the trade cannot execute with the slippage as configured in the request then the transaction is rejected and no changes to the vAMM are made. (<a name="0087-VAMM-026" href="#0087-VAMM-026">0087-VAMM-026</a>)
