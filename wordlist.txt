@@ -2,6 +2,7 @@ $VEGA
 ABCI
 ABCI++
 ABI
+ABIs
 actioned
 Allowlist
 allowlisted
@@ -97,6 +98,7 @@ ETHB
 Ethereum
 eventbus
 EVM
+EVMs
 executables
 familiarise
 FBAs
@@ -290,6 +292,7 @@ undelegating
 undelegation
 undelegations
 undeployed
+underlyings
 unencrypted
 unitless
 unmarshal
