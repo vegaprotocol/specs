@@ -402,7 +402,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 ## Acceptance Criteria  (Protocol upgrade)
 
 - All order margin balances are restored after a protocol upgrade (<a name="0019-MCAL-152" href="#0019-MCAL-152">0019-MCAL-152</a>).
-- The margin mode of any given party must be preserved after a protocol upgrade (<a name="0019-MCAL-153" href="#0019-MCAL-153">0019-MCAL-153</a>).
+- The `margin mode` and `margin factor` of any given party must be preserved after a protocol upgrade (<a name="0019-MCAL-153" href="#0019-MCAL-153">0019-MCAL-153</a>).
 
 ## Summary
 
