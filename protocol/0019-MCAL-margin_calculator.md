@@ -398,6 +398,12 @@ There should be an additional amount `limit price x size x margin factor = 15910
       - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * 1) = 5565` (<a name="0019-MCAL-055" href="#0019-MCAL-055">0019-MCAL-055</a>)
       - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * -1) = 5610`(<a name="0019-MCAL-056" href="#0019-MCAL-056">0019-MCAL-056</a>)
 
+
+## Acceptance Criteria  (Protocol upgrade)
+
+- All order margin balances are restored after a protocol upgrade (<a name="0019-MCAL-152" href="#0019-MCAL-152">0019-MCAL-152</a>).
+- The margin mode of any given party must be preserved after a protocol upgrade (<a name="0019-MCAL-153" href="#0019-MCAL-153">0019-MCAL-153</a>).
+
 ## Summary
 
 The *margin calculator* returns the set of margin levels for a given *actual position*, along with the amount of additional margin (if any) required to support the party's *potential position* (i.e. active orders including any that are parked/untriggered/undeployed).
