@@ -1,20 +1,4 @@
 {
-  "Iceberg Orders": {
-    "milestone": "cosmic-carryover",
-    "acs": ["0014-ORDT-069"]
-  },
-  "Successor Markets": {
-    "milestone": "cosmic-carryover",
-    "acs": ["0001-MKTF-008"]
-  },
-  "Ethereum oracles": {
-    "milestone": "cosmic-carryover",
-    "acs": ["0082-ETHD-035", "0082-ETHD-041"]
-  },
-  "Stop Orders": {
-    "milestone": "cosmic-carryover",
-    "acs": ["0079-TGAP-004", "0079-TGAP-005", "0014-ORDT-132", "0014-ORDT-133", "0014-ORDT-134", "0014-ORDT-135", "0014-ORDT-136"]
-  },
   "Perpetuals": {
     "milestone": "palazzo",
     "acs": [
@@ -27,7 +11,6 @@
       "0053-PERP-025",
       "0053-PERP-026",
       "0053-PERP-027",
-      "0053-PERP-036",
       "0053-PERP-029",
       "0053-PERP-030",
       "0053-PERP-031",
@@ -158,6 +141,10 @@
       "0019-MCAL-147",
       "0019-MCAL-148",
       "0019-MCAL-149",
+      "0019-MCAL-150",
+      "0019-MCAL-151",
+      "0019-MCAL-152",
+      "0019-MCAL-153",
       "0019-MCAL-200",
       "0019-MCAL-201",
       "0019-MCAL-202",
@@ -294,12 +281,7 @@
       "0002-STTL-012",
       "0002-STTL-013",
       "0013-ACCT-033",
-      "0015-INSR-005",
-      "0043-MKTL-010",
-      "0073-LIMN-115",
-      "0073-LIMN-116",
-      "0073-LIMN-117",
-      "0081-SUCM-036"
+      "0043-MKTL-010"
     ]
   },
   "Position Linked Stop-Orders": {
@@ -309,7 +291,10 @@
       "0014-ORDT-128",
       "0014-ORDT-129",
       "0014-ORDT-130",
-      "0014-ORDT-131"
+      "0014-ORDT-131",
+      "0014-ORDT-137",
+      "0014-ORDT-138",
+      "0014-ORDT-139"
     ]
   },
   "Markprice updates": {
@@ -339,6 +324,9 @@
       "0009-MRKP-030",
       "0009-MRKP-031",
       "0009-MRKP-032",
+      "0053-PERP-033",
+      "0053-PERP-034",
+      "0053-PERP-035",
       "0009-MRKP-040",
       "0009-MRKP-041",
       "0009-MRKP-050",
@@ -348,6 +336,14 @@
       "0009-MRKP-054",
       "0009-MRKP-055",
       "0009-MRKP-056",
+      "0009-MRKP-057",
+      "0009-MRKP-058",
+      "0009-MRKP-059",
+      "0009-MRKP-060",
+      "0009-MRKP-061",
+      "0009-MRKP-062",
+      "0009-MRKP-063",
+      "0009-MRKP-064",
       "0009-MRKP-110",
       "0009-MRKP-111",
       "0009-MRKP-112",
@@ -368,10 +364,7 @@
       "0009-MRKP-127",
       "0009-MRKP-130",
       "0009-MRKP-131",
-      "0009-MRKP-132",
-      "0053-PERP-033",
-      "0053-PERP-034",
-      "0053-PERP-035"
+      "0009-MRKP-132"
     ]
   },
   "Ethereum RPC and EVM based data sources": {
@@ -417,7 +410,8 @@
       "0087-EVMD-039",
       "0087-EVMD-040",
       "0087-EVMD-041",
-      "0087-EVMD-042"
+      "0087-EVMD-042",
+      "0087-EVMD-043"
     ]
   },
   "Unknown": {
