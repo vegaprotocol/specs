@@ -35,7 +35,9 @@ In current minimal scope, at proposal validation, check that only change is
 
 For later release: A proposal to *remove* a registered Ethereum RPC+EVM compatible chain / L2 must fail at enactment stage if a market is referencing an `EthRpcEvmCompatible` data source.
 
-A proposal for a new market will fail at enactment stage if it's referencing an `EthRpcEvmCompatible` that's not registered.
+In current minimal scope: A proposal for a new market will fail at validation stage if it's referencing an `EthRpcEvmCompatible` that's not registered.
+
+For later release: A proposal for a new market will fail at enactment stage if it's referencing an `EthRpcEvmCompatible` that's not registered.
 
 
 ## Acceptance criteria
@@ -64,7 +66,8 @@ A proposal for a new market will fail at enactment stage if it's referencing an 
 
 ### External Oracles - Validations
 
-- A market proposal that reference an `EthRpcEvmCompatible` that's not active will fail at enactment stage (<a name="0087-EVMD-008" href="#0087-EVMD-008">0087-EVMD-008</a>).
+- A new market proposal that reference an `EthRpcEvmCompatible` that's not active will fail at validation stage (<a name="0087-EVMD-008" href="#0087-EVMD-008">0087-EVMD-008</a>)
+- A market change proposal that reference an `EthRpcEvmCompatible` that's not active will fail at validation stage (<a name="0087-EVMD-044" href="#0087-EVMD-044">0087-EVMD-044</a>)
 - Validate if the smart contract address is valid (<a name="0087-EVMD-009" href="#0087-EVMD-009">0087-EVMD-009</a>)
 - Validate if the data elements of the oracle data source is valid - e.g. call the smart contract and check if the types in the ABI match whats provided in the oracle spec (<a name="0087-EVMD-010" href="#0087-EVMD-010">0087-EVMD-010</a>)
 - Validations for min / max frequency of listening for events / read a smart contract (<a name="0087-EVMD-011" href="#0087-EVMD-011">0087-EVMD-011</a>)
