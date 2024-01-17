@@ -5,7 +5,10 @@
   },
   "TBC": {
     "milestone": "palazzo-carryover",
-    "acs": []
+    "acs": [
+      "0032-PRIM-039",
+      "0032-PRIM-040"
+    ]
   },
   "Community Tags": {
     "milestone": "nebula",
