@@ -276,7 +276,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
   for this market the party switches to cross margin and the market has `market.linearSlippageFactor = 0.25`, `RF short = 0.1` then the maintenance margin for the party is `min(1 x (100 000-159 00), 159 00 x 0.25 x 1) + 0.1 x 1 x 159 00 = 5565`
   but if `5565 < collatoral release level` the maintenance margin will remain unchanged at `6325`
-  
+
   the difference topped up from the party’s general account(<a name="0019-MCAL-232" href="#0019-MCAL-232">0019-MCAL-232</a>)
 
 - switch to cross margin without position and no orders successful in continuous mode(<a name="0019-MCAL-134" href="#0019-MCAL-134">0019-MCAL-134</a>)
@@ -346,7 +346,11 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 **Check API:**
 
-- For each market and each party which has either orders or positions on the market, the API provides the maintenance margin levels.  (<a name="0019-MCAL-092" href="#0019-MCAL-092">0019-MCAL-092</a>)
+- For each market and each party which has positions or has switched between margin modes on the market, the API provides the maintenance margin levels. (<a name="0019-MCAL-092" href="#0019-MCAL-092">0019-MCAL-092</a>)
+
+- For each market and each party which has orders only and no positions or has switched between margin modes on the market
+  - cross margin to isolated margin, the API provides maintenance margin level of zero. (<a name="0019-MCAL-150" href="#0019-MCAL-150">0019-MCAL-150</a>)
+  - isolated margin to cross margin, the API provides expected maintenance margin level . (<a name="0019-MCAL-151" href="#0019-MCAL-151">0019-MCAL-151</a>)
 
 - For each market and each party which has either orders or positions on the market, the API provides the current margin mode and, when in isolated margin mode, margin factor.  (<a name="0019-MCAL-143" href="#0019-MCAL-143">0019-MCAL-143</a>)
 
@@ -393,6 +397,12 @@ There should be an additional amount `limit price x size x margin factor = 15910
       - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (-0.05 - 1) = 1590 - 1680 = -90`
       - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * 1) = 5565` (<a name="0019-MCAL-055" href="#0019-MCAL-055">0019-MCAL-055</a>)
       - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * -1) = 5610`(<a name="0019-MCAL-056" href="#0019-MCAL-056">0019-MCAL-056</a>)
+
+
+## Acceptance Criteria  (Protocol upgrade)
+
+- All order margin balances are restored after a protocol upgrade (<a name="0019-MCAL-152" href="#0019-MCAL-152">0019-MCAL-152</a>).
+- The `margin mode` and `margin factor` of any given party must be preserved after a protocol upgrade (<a name="0019-MCAL-153" href="#0019-MCAL-153">0019-MCAL-153</a>).
 
 ## Summary
 

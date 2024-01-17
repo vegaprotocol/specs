@@ -1,42 +1,24 @@
 {
-  "Iceberg Orders": {
-    "milestone": "cosmic-carryover",
-    "acs": ["0014-ORDT-069"]
-  },
-  "Successor Markets": {
-    "milestone": "cosmic-carryover",
-    "acs": ["0001-MKTF-008"]
-  },
-  "Ethereum oracles": {
-    "milestone": "cosmic-carryover",
-    "acs": ["0082-ETHD-035", "0082-ETHD-041"]
-  },
-  "Stop Orders": {
-    "milestone": "cosmic-carryover",
-    "acs": ["0079-TGAP-004", "0079-TGAP-005", "0014-ORDT-132", "0014-ORDT-133", "0014-ORDT-134", "0014-ORDT-135", "0014-ORDT-136"]
-  },
   "Perpetuals": {
     "milestone": "palazzo",
     "acs": [
-      "0073-LIMN-105",
-      "0073-LIMN-107",
-      "0073-LIMN-108",
-      "0073-LIMN-110",
-      "0073-LIMN-111",
-      "0081-SUCM-015",
       "0014-ORDT-120",
       "0014-ORDT-121",
       "0014-ORDT-122",
       "0014-ORDT-123",
+      "0082-ETHD-052",
       "0053-PERP-024",
       "0053-PERP-025",
       "0053-PERP-026",
       "0053-PERP-027",
-      "0053-PERP-036",
       "0053-PERP-029",
       "0053-PERP-030",
       "0053-PERP-031",
-      "0053-PERP-032"
+      "0053-PERP-032",
+      "0053-PERP-039",
+      "0053-PERP-040",
+      "0053-PERP-041",
+      "0053-PERP-042"
     ]
   },
   "Team rewards": {
@@ -104,6 +86,11 @@
       "0019-MCAL-066",
       "0019-MCAL-067",
       "0019-MCAL-068",
+      "0019-MCAL-070",
+      "0019-MCAL-071",
+      "0019-MCAL-072",
+      "0019-MCAL-073",
+      "0019-MCAL-074",
       "0019-MCAL-075",
       "0019-MCAL-078",
       "0019-MCAL-100",
@@ -154,6 +141,10 @@
       "0019-MCAL-147",
       "0019-MCAL-148",
       "0019-MCAL-149",
+      "0019-MCAL-150",
+      "0019-MCAL-151",
+      "0019-MCAL-152",
+      "0019-MCAL-153",
       "0019-MCAL-200",
       "0019-MCAL-201",
       "0019-MCAL-202",
@@ -174,10 +165,10 @@
       "0019-MCAL-229",
       "0019-MCAL-230",
       "0019-MCAL-231",
-      "0074-BTCH-020",
-      "0074-BTCH-021",
       "0019-MCAL-232",
-      "0019-MCAL-233"
+      "0019-MCAL-233",
+      "0074-BTCH-020",
+      "0074-BTCH-021"
     ]
   },
   "Quadratic slippage removal": {
@@ -269,7 +260,15 @@
   },
   "Liquidity fee setting": {
     "milestone": "palazzo",
-    "acs": ["0042-LIQF-056", "0042-LIQF-057", "0042-LIQF-058"]
+    "acs": [
+      "0042-LIQF-056",
+      "0042-LIQF-057",
+      "0042-LIQF-058",
+      "0042-LIQF-059",
+      "0042-LIQF-060",
+      "0042-LIQF-061",
+      "0042-LIQF-062"
+    ]
   },
   "Governance market name change": {
     "milestone": "palazzo",
@@ -282,12 +281,7 @@
       "0002-STTL-012",
       "0002-STTL-013",
       "0013-ACCT-033",
-      "0015-INSR-005",
-      "0043-MKTL-010",
-      "0073-LIMN-115",
-      "0073-LIMN-116",
-      "0073-LIMN-117",
-      "0081-SUCM-036"
+      "0043-MKTL-010"
     ]
   },
   "Position Linked Stop-Orders": {
@@ -306,6 +300,7 @@
   "Markprice updates": {
     "milestone": "palazzo",
     "acs": [
+      "0009-MRKP-001",
       "0009-MRKP-010",
       "0009-MRKP-011",
       "0009-MRKP-012",
@@ -328,11 +323,95 @@
       "0009-MRKP-029",
       "0009-MRKP-030",
       "0009-MRKP-031",
-      "0009-MRKP-040",
-      "0009-MRKP-041",
+      "0009-MRKP-032",
       "0053-PERP-033",
       "0053-PERP-034",
-      "0053-PERP-035"
+      "0053-PERP-035",
+      "0009-MRKP-040",
+      "0009-MRKP-041",
+      "0009-MRKP-050",
+      "0009-MRKP-051",
+      "0009-MRKP-052",
+      "0009-MRKP-053",
+      "0009-MRKP-054",
+      "0009-MRKP-055",
+      "0009-MRKP-056",
+      "0009-MRKP-057",
+      "0009-MRKP-058",
+      "0009-MRKP-059",
+      "0009-MRKP-060",
+      "0009-MRKP-061",
+      "0009-MRKP-062",
+      "0009-MRKP-063",
+      "0009-MRKP-064",
+      "0009-MRKP-110",
+      "0009-MRKP-111",
+      "0009-MRKP-112",
+      "0009-MRKP-113",
+      "0009-MRKP-114",
+      "0009-MRKP-115",
+      "0009-MRKP-116",
+      "0009-MRKP-117",
+      "0009-MRKP-118",
+      "0009-MRKP-119",
+      "0009-MRKP-120",
+      "0009-MRKP-121",
+      "0009-MRKP-122",
+      "0009-MRKP-123",
+      "0009-MRKP-124",
+      "0009-MRKP-125",
+      "0009-MRKP-126",
+      "0009-MRKP-127",
+      "0009-MRKP-130",
+      "0009-MRKP-131",
+      "0009-MRKP-132"
+    ]
+  },
+  "Ethereum RPC and EVM based data sources": {
+    "milestone": "palazzo",
+    "acs": [
+      "0087-EVMD-001",
+      "0087-EVMD-003",
+      "0087-EVMD-004",
+      "0087-EVMD-005",
+      "0087-EVMD-006",
+      "0087-EVMD-007",
+      "0087-EVMD-008",
+      "0087-EVMD-009",
+      "0087-EVMD-010",
+      "0087-EVMD-011",
+      "0087-EVMD-012",
+      "0087-EVMD-013",
+      "0087-EVMD-014",
+      "0087-EVMD-015",
+      "0087-EVMD-016",
+      "0087-EVMD-017",
+      "0087-EVMD-018",
+      "0087-EVMD-019",
+      "0087-EVMD-020",
+      "0087-EVMD-021",
+      "0087-EVMD-022",
+      "0087-EVMD-023",
+      "0087-EVMD-024",
+      "0087-EVMD-025",
+      "0087-EVMD-026",
+      "0087-EVMD-027",
+      "0087-EVMD-028",
+      "0087-EVMD-029",
+      "0087-EVMD-030",
+      "0087-EVMD-031",
+      "0087-EVMD-032",
+      "0087-EVMD-033",
+      "0087-EVMD-034",
+      "0087-EVMD-035",
+      "0087-EVMD-036",
+      "0087-EVMD-037",
+      "0087-EVMD-038",
+      "0087-EVMD-039",
+      "0087-EVMD-040",
+      "0087-EVMD-041",
+      "0087-EVMD-042",
+      "0087-EVMD-043"
     ]
   },
   "Unknown": {
