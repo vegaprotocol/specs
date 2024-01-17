@@ -26,6 +26,10 @@
       "0028-GOVE-177"
     ]
   },
+  "Perpetual funding rates": {
+    "milestone": "nebula",
+    "acs": ["0053-PERP-036"]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
