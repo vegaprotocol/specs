@@ -115,12 +115,18 @@ Note that for calculating the median with an even number of entries we sort, pic
 
   - `markPriceConfiguration: source weight` and `markPriceConfiguration: source staleness tolerance` should have the same length(<a name="0009-MRKP-055" href="#0009-MRKP-055">0009-MRKP-055</a>)
 
-  - `markPriceConfiguration: source weight` and `markPriceConfiguration: source staleness tolerance` length should be 3 plus number of oracle data sources (<a name="0009-MRKP-056" href="#0009-MRKP-056">0009-MRKP-056</a>)
+  - Mark price configuration `source_weight` length should be 3 plus number of oracle data sources if the price type is weighted (<a name="0009-MRKP-056" href="#0009-MRKP-056">0009-MRKP-056</a>).
+
+  - If the mark price type is not weighted the source weight must be empty (<a name="0009-MRKP-062" href="#0009-MRKP-062">0009-MRKP-062</a>).
+
+  - Mark price configuration `source staleness tolerance` length must be 3 plus number of oracle data sources if price type is weighted or median (<a name="0009-MRKP-063" href="#0009-MRKP-063">0009-MRKP-063</a>).
+
+  - If the mark price type is weighted, there must be at least one non zero weight (<a name="0009-MRKP-064" href="#0009-MRKP-064">0009-MRKP-064</a>).
 
   - When `markPriceConfiguration: price type` is **not** `Last Trade Price`, the `markPriceConfiguration: source staleness tolerance`, `markPriceConfiguration: source weight`, `markPriceConfiguration: decayPower` and `markPriceConfiguration: cashAmount` must be provided
     - new market (<a name="0009-MRKP-057" href="#0009-MRKP-057">0009-MRKP-057</a>)
     - update market (<a name="0009-MRKP-058" href="#0009-MRKP-058">0009-MRKP-058</a>)
-  
+
   - When `markPriceConfiguration: source weight` is provided then it must not be all `0` (<a name="0009-MRKP-059" href="#0009-MRKP-059">0009-MRKP-059</a>)
 
 ### Example 1 - A typical path of a cash settled futures market from end of opening auction till expiry (use Algorithm 2 (ie median price))(<a name="0009-MRKP-040" href="#0009-MRKP-040">0009-MRKP-040</a>)
