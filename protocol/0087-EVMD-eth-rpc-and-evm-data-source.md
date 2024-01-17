@@ -66,8 +66,8 @@ For later release: A proposal for a new market will fail at enactment stage if i
 
 ### External Oracles - Validations
 
-- A new market proposal that reference an `EthRpcEvmCompatible` that's not active will fail at validation stage (<a name="0087-EVMD-008" href="#0087-EVMD-008">0087-EVMD-008</a>) 
-- A market change proposal that reference an `EthRpcEvmCompatible` that's not active will fail at validation stage (<a name="0087-EVMD-043" href="#0087-EVMD-043">0087-EVMD-043</a>) 
+- A new market proposal that reference an `EthRpcEvmCompatible` that's not active will fail at validation stage (<a name="0087-EVMD-008" href="#0087-EVMD-008">0087-EVMD-008</a>)
+- A market change proposal that reference an `EthRpcEvmCompatible` that's not active will fail at validation stage (<a name="0087-EVMD-043" href="#0087-EVMD-043">0087-EVMD-043</a>)
 - Validate if the smart contract address is valid (<a name="0087-EVMD-009" href="#0087-EVMD-009">0087-EVMD-009</a>)
 - Validate if the data elements of the oracle data source is valid - e.g. call the smart contract and check if the types in the ABI match whats provided in the oracle spec (<a name="0087-EVMD-010" href="#0087-EVMD-010">0087-EVMD-010</a>)
 - Validations for min / max frequency of listening for events / read a smart contract (<a name="0087-EVMD-011" href="#0087-EVMD-011">0087-EVMD-011</a>)
