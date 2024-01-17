@@ -249,7 +249,7 @@ Furthermore, within the ongoing funding period the following data should be emit
 - funding rate estimate,
 - funding payment estimate,
 - external (spot) price TWAP to-date,
-- internal (mark) price TWAP to-date.
+- internal (mark) price  to-date.
 
  The estimates are obtained assuming the current period ended now. The time for which the estimate was obtained is recorded as `estimate time`.
  Please note that the above estimates calculated within the ongoing funding period should be available internally for inclusion in the margin calculation as outlined in the [margin considerations](#5-margin-considerations) subsection as well as on the data-node. Only the most recent observation should be kept in both these places.
@@ -344,12 +344,6 @@ When migrating the market existing prior to introduction of the additional param
 - $\text{rate lower bound}= -\text{max supported value}$,
 - $\text{rate upper bound}= \text{max supported value}$
 (<a name="0053-PERP-032" href="#0053-PERP-032">0053-PERP-032</a>).
-
-It is possible to create a perpetual futures market which uses the last traded price algorithm for its mark price but uses "impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-033" href="#0053-PERP-033">0053-PERP-033</a>).
-
-It is possible to create a perpetual futures market which uses an oracle source (same as that used for funding) for the mark price determining the mark-to-market cashflows and that uses "impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-034" href="#0053-PERP-034">0053-PERP-034</a>).
-
-It is possible to create a perpetual futures market which uses an oracle source (same as that used for funding) for the mark price determining the mark-to-market cashflows and that uses "time-weighted trade prices in over `network.markPriceUpdateMaximumFrequency` if these have been updated within the last 30s but falls back onto impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-035" href="#0053-PERP-035">0053-PERP-035</a>).
 
 When funding payments are due to the network party they are paid into the market insurance pool (<a name="0053-PERP-037" href="#0053-PERP-037">0053-PERP-037</a>).
 

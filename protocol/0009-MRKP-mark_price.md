@@ -27,12 +27,6 @@ The mark price isn't updated because `network.markPriceUpdateMaximumFrequency = 
 
 Now 10.1s has elapsed since the last update and there is a market buy order for volume 5 which executes against book volume as 1 @ 1220, 2 @ 1250 and 2 @ 1500. The mark price is updated to 1500.
 
-### 2. Flexible mark price methodology
-
-The calculations are specified in [markprice methodology research note](https://github.com/vegaprotocol/research/blob/markprice-updates/papers/markprice-methodology/markprice-methodology.tex).
-Here, we only write the acceptance criteria.
-Note that for calculating the median with an even number of entries we sort, pick out the two values that are in the middle of the list and average those. So in particular with two values a median is the same as the average for our purposes.
-
 ## Acceptance criteria
 
 - The mark price must be set when the market leaves opening auction. (<a name="0009-MRKP-002" href="#0009-MRKP-002">0009-MRKP-002</a>)
@@ -45,7 +39,6 @@ Note that for calculating the median with an even number of entries we sort, pic
 - A transaction that doesn't result in a trade does not cause the mark price to change. (<a name="0009-MRKP-004" href="#0009-MRKP-004">0009-MRKP-004</a>)
 - A transaction out of a sequence of transactions with the same time stamp which isn't the last trade-causing transaction will *not* result in a mark price change. (<a name="0009-MRKP-008" href="#0009-MRKP-008">0009-MRKP-008</a>)
 - The mark price must be using market decimal place setting. (<a name="0009-MRKP-006" href="#0009-MRKP-006">0009-MRKP-006</a>)
-- It is possible to configure a cash settled futures market to use Algorithm 1 (ie last trade price) (<a name="0009-MRKP-010" href="#0009-MRKP-010">0009-MRKP-010</a>) and a perps market (<a name="0009-MRKP-011" href="#0009-MRKP-011">0009-MRKP-011</a>).
 
 ### Flexible mark price methodology, no combinations yet
 
