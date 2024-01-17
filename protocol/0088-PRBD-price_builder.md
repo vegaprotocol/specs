@@ -2,7 +2,7 @@
 
 ## Summary
 
-This specification adds a flexible way to configure "price" method for different purpose.
+This specification adds a flexible way to configure "price" method for different purposes: mark price or the "internal" price for TWAP for perpetuals' funding payments.
 
 For perpetual futures markets there should be a “mark price” configuration and a “market price for funding” configuration so that the market can, potentially use different mark price for mark-to-market and price monitoring and completely different price for calculating funding.
 
