@@ -349,7 +349,7 @@ It is possible to create a perpetual futures market which uses the last traded p
 
 It is possible to create a perpetual futures market which uses an oracle source (same as that used for funding) for the mark price determining the mark-to-market cashflows and that uses "impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-034" href="#0053-PERP-034">0053-PERP-034</a>).
 
-It is possible to create a perpetual futures market which uses an oracle source (same as that used for funding) for the mark price determining the mark-to-market cashflows and that uses "time-weighted trade prices in over `network.markPriceUpdateMaximumFrequency` if these have been updated within the last 30s but falls back onto impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-PERP-035" href="#0053-PERP-035">0053-PERP-035</a>).
+It is possible to create a perpetual futures market which uses an oracle source (same as that used for funding) for the mark price determining the mark-to-market cashflows and that uses "time-weighted trade prices in over `network.markPriceUpdateMaximumFrequency` if these have been updated within the last 30s but falls back onto impact volume of notional of 1000 USDT" for the purpose of calculating the TWAP of the market price for funding payments (<a name="0053-NEBULA-035" href="#0053-NEBULA-035">0053-NEBULA-035</a>).
 
 When funding payments are due to the network party they are paid into the market insurance pool (<a name="0053-PERP-037" href="#0053-PERP-037">0053-PERP-037</a>).
 
