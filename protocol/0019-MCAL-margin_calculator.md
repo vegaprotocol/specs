@@ -429,7 +429,7 @@ general account from the margin account.
 
 1. **Collateral search level**: when in cross-margin mode, the margin account balance below which the system will seek to recollateralise the margin account back to the initial margin level.
 
-1. **Initial margin**: when in cross-margin mode, the margin account balance initially allocated for the position, and the balance to which the margin account will be returned after collateral search and release, if possible.
+1. **Initial margin**: when in cross-margin mode, the margin account balance initially allocated for the position, and the balance that will be returned to the margin account after collateral search and release, if possible. When in isolated margin mode, the margin account balance initially allocated for the position. The balance will not be returned to the margin account while the position is open, as there is no collateral search and release.
 
 1. **Collateral release level**: when in cross-margin mode, the margin account balance above which the system will return collateral from a profitable position to the party's general account for potential use elsewhere.
 
