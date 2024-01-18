@@ -220,7 +220,7 @@ An existing LP has `average entry valuation 1090.9` and `S=110`. Currently the s
 
 At every vega time change calculate the liquidity score for each committed LP.
 This is done by taking into account all orders they have deployed within the `[min_lp_price,max_lp_price]` [range](./0044-LIME-lp_mechanics.md) and then calculating the volume-weighted [probability of trading](./0034-PROB-prob_weighted_liquidity_measure.ipynb) at each price level - call it instantaneous liquidity score.
-For orders outside the tightest price monitoring bounds set probability of trading to 0.
+For orders outside the tightest price monitoring bounds set probability of trading to 0. For orders which have less than 10% [probability of trading], we set the probability to 0 when calculating liquidity score.
 Note that parked [pegged orders](./0037-OPEG-pegged_orders.md) and not-yet-triggered [stop orders](./0014-ORDT-order_types.md) are not included.
 
 Now calculate the total of the instantaneous liquidity scores obtained for each committed LP:
