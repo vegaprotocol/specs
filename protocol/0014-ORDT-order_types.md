@@ -388,7 +388,6 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - A Stop order that hasn't been triggered can be cancelled. (<a name="0014-ORDT-071" href="#0014-ORDT-071">0014-ORDT-071</a>)
 - All stop orders for a specific party can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-072" href="#0014-ORDT-072">0014-ORDT-072</a>)
 - All stop orders for a specific party for a specific market can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-073" href="#0014-ORDT-073">0014-ORDT-073</a>)
-- A party with a long position enters a buy stop order with position size override and is valid but at the time of trigger it is cancelled then the stop order should be cancelled. (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
 - If a stop order is placed with a position_fraction equal to 0.5 and the position size is 5 then the rounding should be equal to 3 (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
 
 
@@ -400,6 +399,7 @@ In Spot market, for multiple iceberg orders submitted as a batch of orders with 
 - GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>)
 - Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>)
 - If a stop order is placed with a position_fraction equal to 0 the order should be rejected. (<a name="0014-ORDT-139" href="#0014-ORDT-139">0014-ORDT-139</a>)
+- A party with a long position cannot enter a buy stop order, and a party witha  short position cannot enter a sell stop order (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
 
 ## Stop Orders - Snapshots
 
