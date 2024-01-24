@@ -17,8 +17,8 @@ An `UpdatePartyProfile` has the following fields.
 If metadata is specified, the metadata must adhere to the following rules:
 
 - no more than 10 key value pairs can be specified
-- a key must be no longer than 33 characters
-- a value must be no longer than 256 characters
+- a key must be no longer than 32 characters
+- a value must be no longer than 255 characters
 
 If an alias is specified, it must adhere to the following rules:
 
@@ -33,5 +33,5 @@ In order to validate uniqueness of an alias, core must keep a record of the alia
 - If a party updates there profile with an alias of a length greater than 32 characters, the transaction is rejected. (<a name="0088-PPRF-001" href="#0088-PPRF-001">0088-PPRF-001</a>)
 - If a party updates there profile with an alias which is already associated with another key, the transaction is rejected. (<a name="0088-PPRF-002" href="#0088-PPRF-002">0088-PPRF-002</a>)
 - If a party update there profile with metadata with more then 10 key pairs, the transaction is rejected. (<a name="0088-PPRF-003" href="#0088-PPRF-003">0088-PPRF-003</a>)
-- If a party update there profile with metadata with a key of  a length more than 33 characters, the transaction is rejected. (<a name="0088-PPRF-004" href="#0088-PPRF-004">0088-PPRF-004</a>)
-- If a party update there profile with metadata with a value of a length more than 256 characters, the transaction is rejected. (<a name="0088-PPRF-005" href="#0088-PPRF-005">0088-PPRF-005</a>)
+- If a party update there profile with metadata with a key of  a length more than 32 characters, the transaction is rejected. (<a name="0088-PPRF-004" href="#0088-PPRF-004">0088-PPRF-004</a>)
+- If a party update there profile with metadata with a value of a length more than 255 characters, the transaction is rejected. (<a name="0088-PPRF-005" href="#0088-PPRF-005">0088-PPRF-005</a>)
