@@ -77,7 +77,12 @@ The [party profile feature](./0088-PPRF-party_profile.md) adds a transaction typ
 
 To avoid spamming of `UpdatePartyProfile`, a party must meet the deposited funds threshold set by the network parameter `spam.protection.updatePartyProfile.min.funds`.  All assets count towards this threshold and balances should be scaled appropriately by the assets quantum. A party who does not meet this requirement should have any transactions of the aforementioned type pre-block rejected. This requirement will be checked against snapshots of account balances taken at a frequency determined by the network parameter `spam.protection.balanceSnapshotFrequency`. This network parameter is a duration (e.g. `5s`, `1m5s`).
 
+**Note** `spam.protection.updatePartyProfile.min.funds` must be an integer greater than or equal to `0` (and default to `10`).
+
 Further, each party is allowed to submit up to `n` transactions per epoch where `n` is controlled by the respective network parameter for the transaction type (`spam.protection.max.updatePartyProfile`).
+
+**Note** `spam.protection.max.updatePartyProfile` must be an integer greater than or equal to `0` (and default to `5`).
+
 
 ### Related topics
 
