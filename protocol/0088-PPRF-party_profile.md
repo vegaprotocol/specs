@@ -28,12 +28,6 @@ If an alias is specified, it must adhere to the following rules:
 **Note:**
 In order to validate uniqueness of an alias, core must keep a record of the aliases associated with each party. If a party is no longer active.
 
-### Alias Squatting
-
-To prevent alias squatting the network will track the number of consecutive epochs each party has funds totalling less than `spam.protection.updatePartyProfile.min.funds` (quantum) across all their accounts.
-
-If the number of consecutive epochs is greater than or equal to `spam.protection.updatePartyProfile.maxInactiveEpochs` the network will no longer associate the alias and metadata with the key.
-
 ### Acceptance Criteria
 
 - If a party updates there profile with an alias of a length greater than 32 characters, the transaction is rejected. (<a name="0088-PPRF-001" href="#0088-PPRF-001">0088-PPRF-001</a>)
@@ -41,4 +35,3 @@ If the number of consecutive epochs is greater than or equal to `spam.protection
 - If a party update there profile with metadata with more then 10 key pairs, the transaction is rejected. (<a name="0088-PPRF-003" href="#0088-PPRF-003">0088-PPRF-003</a>)
 - If a party update there profile with metadata with a key of  a length more than 33 characters, the transaction is rejected. (<a name="0088-PPRF-004" href="#0088-PPRF-004">0088-PPRF-004</a>)
 - If a party update there profile with metadata with a value of a length more than 256 characters, the transaction is rejected. (<a name="0088-PPRF-005" href="#0088-PPRF-005">0088-PPRF-005</a>)
-- If a parties balance across all accounts is less than `spam.protection.updatePartyProfile.min.funds` for `spam.protection.updatePartyProfile.maxInactiveEpochs` consecutive epochs, then the network no longer stores their alias and it becomes available to any other party. (<a name="0088-PPRF-006" href="#0088-PPRF-006">0088-PPRF-006</a>).
