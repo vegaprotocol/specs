@@ -4,7 +4,7 @@
 
 A *Mark Price* is a concept derived from traditional markets.  It is a calculated value for the 'current market price' on a market.
 
-Introduce a network parameter `network.markPriceUpdateMaximumFrequency` with minimum allowable value of `0s` maximum allowable value of `1h` and a default of `5s`.
+Introduce a network parameter ` ` with minimum allowable value of `0s` maximum allowable value of `1h` and a default of `5s`.
 
 The *Mark Price* represents the "current" market value for an instrument that is being traded on a market on Vega. It is a calculated value primarily used to value trader's open portfolios against the prices they executed their trades at. Specifically, it is used to calculate the cash flows for [mark-to-market settlement](./0003-MTMK-mark_to_market_settlement.md).
 
@@ -75,6 +75,9 @@ Note that for calculating the median with an even number of entries we sort, pic
 - when choosing price type `weight` and set weight on `oracle source price` only, set up oracle prices at different time, and check if the oracle mark price updated according to  is correctly calculated according to `network.markPriceUpdateMaximumFrequency` (<a name="0009-MRKP-131" href="#0009-MRKP-131">0009-MRKP-131</a>)
 
 - when choosing price type `weight` and set weight on `oracle source price` only, set up 3 oracle prices at different time with 1 of them becomes stale, and check if the oracle mark price updated according to  is correctly calculated by using the right price (<a name="0009-MRKP-132" href="#0009-MRKP-132">0009-MRKP-132</a>)
+
+- It is possible to obtain a time series for the market mark price from the data node from the time of the market proposal enactment onwards (subject to data node retention policies).(<a name="0009-MRKP-133" href="#0009-MRKP-133">0009-MRKP-133</a>)
+
 
 ### Flexible mark price methodology, combinations
 
