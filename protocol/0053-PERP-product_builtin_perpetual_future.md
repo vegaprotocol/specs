@@ -281,6 +281,8 @@ In both cases the estimates are for a hypothetical position of size 1.
 
 1. Assume the market has been in a long auction so that a funding period has started and ended while the market never went back into continuous trading. In that case the funding payment should be equal to 0 and no transfers should be exchanged. (<a name="0053-PERP-026" href="#0053-PERP-026">0053-PERP-026</a>)
 
+1. It is possible to obtain a time series for the price used for “vega side price” of the funding twap from the data node from the time of the market proposal enactment onwards (subject to data node retention policies) (<a name="0053-PERP-043 " href="#0053-PERP-043">0053-PERP-043</a>)
+
 1. Assume a 10 minute funding period. Assume a few funding periods have already passed for this market.
 
 Assume the last known mark price before the start of the period to be `10` and that it gets updated every 2 minutes as follows:
