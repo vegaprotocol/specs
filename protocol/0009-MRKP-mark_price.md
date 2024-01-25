@@ -4,7 +4,7 @@
 
 A *Mark Price* is a concept derived from traditional markets.  It is a calculated value for the 'current market price' on a market.
 
-Introduce a network parameter `network.markPriceUpdateMaximumFrequency` with minimum allowable value of `0s` maximum allowable value of `1h` and a default of `5s`.
+Introduce a network parameter ` ` with minimum allowable value of `0s` maximum allowable value of `1h` and a default of `5s`.
 
 The *Mark Price* represents the "current" market value for an instrument that is being traded on a market on Vega. It is a calculated value primarily used to value trader's open portfolios against the prices they executed their trades at. Specifically, it is used to calculate the cash flows for [mark-to-market settlement](./0003-MTMK-mark_to_market_settlement.md).
 
