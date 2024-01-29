@@ -423,6 +423,26 @@
       "0087-EVMD-044"
     ]
   },
+  "Price estimate": {
+    "milestone": "palazzo",
+    "acs": [
+      "0012-NP-LIPE-001",
+      "0012-NP-LIPE-002",
+      "0012-NP-LIPE-003",
+      "0012-NP-LIPE-004",
+      "0012-NP-LIPE-005",
+      "0012-NP-LIPE-006",
+      "0012-NP-LIPE-007",
+      "0013-NP-POSE-001",
+      "0013-NP-POSE-002",
+      "0013-NP-POSE-003",
+      "0013-NP-POSE-004",
+      "0013-NP-POSE-005",
+      "0013-NP-POSE-006",
+      "0013-NP-POSE-007",
+      "0013-NP-POSE-008"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
