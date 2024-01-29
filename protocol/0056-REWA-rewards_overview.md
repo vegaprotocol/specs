@@ -27,6 +27,8 @@ At the end of the epoch:
 1. Then the entire balance of each reward account is distributed amongst entities with a non-zero reward metric for that reward type and market using the mechanism specified in the recurring transfer.
 1. Distributed rewards are transferred to a [vesting account](./0085-RVST-rewards_vesting.md).
 
+Note, reward metrics should be calculated and exposed through an API even if the the reward pool is not to be funded this epoch (i.e. when the `transfer_interval` set in the [recurring transfer](./0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) is strictly greater than `1`).
+
 ## Individual reward metrics
 
 Individual reward metrics are scoped by [`recurring transfer`, `market`, `party`] (this triplet can be thought of as a primary key for fee-based reward metrics).
