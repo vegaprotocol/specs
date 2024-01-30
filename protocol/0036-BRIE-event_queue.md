@@ -29,7 +29,7 @@ Once all validators have confirmed the event happened on the external chain, the
 
 All the smart contracts monitored by the validator nodes are defined in the `ethereumConfig` network parameter. Along with the contract itself, the creation time of the contract is required for the very first launch of the network. This is required in order for the validator nodes to poll all blocks since the creation of the contract.
 
-Later on in the life of the network, this information is stored in the snapshot state / checkpoint with last sourced block on Ethereum to avoid interpreting events twice.
+Later on in the life of the network, this information is stored in the snapshot state with last sourced block on Ethereum to avoid interpreting events twice.
 
 Finally, the amount of confirmations expected for Ethereum is specified, this is set to 50 confirmation in mainnet.
 

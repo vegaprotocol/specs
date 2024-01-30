@@ -54,7 +54,6 @@ These metrics apply only to the sum of fees for the epoch in question.
 That is, the metrics are reset to zero for all parties at the end of the epoch.
 If the reward account balance is `0` at the end of the epoch for a given recurring transfer, any parties with non-zero metrics will not be rewarded for that epoch and their metric scores do not roll over (they are still zeroed).
 
-Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
 
 ### Average position metric
 
@@ -158,8 +157,6 @@ See the [transfers](./0057-TRAN-transfers.md) spec.
 - A flag is stored on each market for each combination of [`funder`, `market scope`, `reward asset`] that was included in the reward payout.
 This flag is used to prevent any given funder from funding a creation reward in the same reward asset more than once for any given *market scope*.
 
-Market creation reward metrics (both each market's `cumulative volume` and the payout record flags to identify [funder, market scope, reward asset] combinations that have already been rewarded) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and will be restored after a checkpoint restart.
-
 Note this reward metric **is not** available for team rewards.
 
 ## Team reward metrics
@@ -179,7 +176,6 @@ That is, a participant might receive rewards in the settlement asset of the mark
 Reward accounts are funded by setting up recurring transfers, which may be set to occur only once for a one off reward. These allow a reward type to be automatically funded on an ongoing basis from a pool of assets.
 Recurring transfers can target groups of markets, or all markets for a settlement asset. See [transfers](./0057-TRAN-transfers.md) for more detail.
 
-Reward accounts and balances must be saved in [LNL checkpoints](./0073-LIMN-limited_network_life.md) to ensure all funds remain accounted for across a restart.
 
 ## Reward distribution
 

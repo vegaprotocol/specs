@@ -170,10 +170,6 @@ Select {
 1. Ability to query data source specs defined for ethereum oracle sources, for settlement and termination, via an API endpoint (REST, gRPC and graphQL) - filters should be available for data source - internal OR external, status - Active / Inactive / Expired (<a name="0082-ETHD-038" href="#0082-ETHD-038">0082-ETHD-038</a>)
 2. Ability to query historic data sent by an ethereum oracle source, for settlement and termination, and processed by a market in vega network (<a name="0082-ETHD-039" href="#0082-ETHD-039">0082-ETHD-039</a>)
 
-### Checkpoints
-
-1. Oracle data sources should be stored in checkpoints and should be restored when restarting a network from checkpoints. Therefore enacted markets with termination or settlement ethereum data sources are able to terminate and settle correctly post restart. (<a name="0082-ETHD-040" href="#0082-ETHD-040">0082-ETHD-040</a>)
-2. Ensure that any ethereum oracle events that were generated during network downtime are correctly processed as soon as the network is restored and operational. This means that any termination or settlement actions that would of occurred during downtime are immediately actioned when network is up and we ensure they are processed in sequenced that they were received by the core polling. (<a name="0082-ETHD-041" href="#0082-ETHD-041">0082-ETHD-041</a>)
 
 ### Snapshots
 

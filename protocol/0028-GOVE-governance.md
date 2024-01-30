@@ -383,9 +383,7 @@ transfer_amount == min(
 
 This is done as a governance proposal. Takes a transfer ID (which is the proposal ID of the original transfer) and would cancel a recurring governance initiated transfer. Only recurring governance initiated transfers can be cancelled via governance initiated transfer cancellation proposal. Trying to cancel any other transfer should fail upon validation of the proposal.
 
-### Checkpoint/snapshot
-
-Enacted and active transfers (i.e. scheduled one off governance initiated transfers, or recurring governance initiated transfers) must be included in LNL banking checkpoint and resume after the checkpoint restore.
+### Snapshots
 
 All in memory active governance initiated transfers must be included in the snapshot of the banking engine.
 
@@ -685,9 +683,8 @@ Below `*` stands for any of `asset, market, updateMarket, updateNetParam, freeFo
 - One off delivery transfers proposed before an upgrade which are due to start during or after an upgrade should complete either when the network is available again or at the proposed delivery date/time (<a name="0028-GOVE-131" href="#0028-GOVE-131">0028-GOVE-131</a>)
 
 
-##### Checkpoints and Snapshots
+##### Snapshots
 
-- Active or dormant governance initiated transfer (one-off or recurring) must be included in checkpoint and where the network is down during the proposed delivery time, the transfer will occur as soon as the network is available. For recurring transfers the transfers spanning the restore will continue until the end epoch. (<a name="0028-GOVE-103" href="#0028-GOVE-103">0028-GOVE-103</a>)
 - Active or dormant governance initiated transfer (one-off or recurring) must be included in snapshots and data nodes which join the network will support retrieval of the transfer data (<a name="0028-GOVE-133" href="#0028-GOVE-133">0028-GOVE-133</a>)
 
 
@@ -701,8 +698,6 @@ It is NOT possible to submit a governance proposal where the source account is t
 ##### Recurring governance initiated transfers
 
 - For a recurring proposal, the proposal is only active from defined start epoch and optional end epoch, the transfer will be executed every epoch while the proposal is active. (<a name="0028-GOVE-104" href="#0028-GOVE-104">0028-GOVE-104</a>)
-
-- Enacted and active recurring governance initiated transfers must be included in LNL banking checkpoint and resume after the checkpoint restore.(<a name="0028-GOVE-105" href="#0028-GOVE-105">0028-GOVE-105</a>)
 
 - When a transfer gets enacted it emits transfer event similar to regular transfer events from regular transfers, however with governance-recurring types. At the time of enactment no amount is attached to the transfer and it will show 0.(<a name="0028-GOVE-106" href="#0028-GOVE-106">0028-GOVE-106</a>)
 
