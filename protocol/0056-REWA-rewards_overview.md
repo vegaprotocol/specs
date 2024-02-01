@@ -56,6 +56,8 @@ If the reward account balance is `0` at the end of the epoch for a given recurri
 
 Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
 
+Each key's taker reward is capped at `market.maxreward.taker * rewards_taker_paid_fee`. 
+
 ### Average position metric
 
 The average position metric, $m_{ap}$, measures each parties time-weighted average position over a number of epochs.
