@@ -56,14 +56,6 @@ If the reward account balance is `0` at the end of the epoch for a given recurri
 
 Fee-based reward metrics (the total fees paid/received by each party as defined above) are stored in [LNL checkpoints](./0073-LIMN-limited_network_life.md) and are restored after a checkpoint restart to ensure rewards are not lost.
 
-The taker reward for each key is capped at `market.maxreward.taker * rewards_taker_paid_fee`. Whatever left in the reward pool will remain for the next epoch.
-
-The maker reward for each key is capped at `market.maxreward.maker * rewards_maker_fee`. Whatever left in the reward pool will remain for the next epoch.
-
-Market parameter `market.maxreward.taker` (decimal) —  maximum fraction of `rewards_taker_paid_fee` each key can receive each epoch. This is a decimal number in the interval $[0,1]$, when set to $0$ then each key will not receive any taker fee reward, when set to $1$ and if the key is the only price taker on the market, then the key will get all the `rewards_taker_paid_fee` in the epoch.
-
-Market parameter `market.maxreward.maker` (decimal) —  maximum fraction of `rewards_maker_fee` each key can receive each epoch. This is a decimal number in the interval $[0,1]$, when set to $0$ then each key will not receive any maker fee reward, when set to $1$ and if the key is the only market makers, then this key will get all the `maker_fee` in the epoch.
-
 ### Average position metric
 
 The average position metric, $m_{ap}$, measures each parties time-weighted average position over a number of epochs.
