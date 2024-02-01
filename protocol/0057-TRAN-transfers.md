@@ -109,7 +109,7 @@ A party should be able to configure the distribution of rewards by specifying th
 
 - `window_length` - the number of epochs over which to evaluate the reward metric. The value should be limited to 100 epochs.
 - `lock_period` - the number of epochs after distribution to delay [vesting of rewards](./0085-RVST-rewards_vesting.md#vesting-mechanics) by.
-- `cap_reward` -  maximum fraction of `reward` each key can receive each epoch from the reward pool each epoch. Once the cap is applied, whatever left in the reward pool will remain in the reward pool for the next epoch.
+- `cap_reward` -  maximum fraction of `reward` each key can receive each epoch from the reward pool. Once the cap is applied, whatever left in the reward pool will remain in the reward pool for the next epoch.
 - `distribution_strategy` - enum defining which [distribution strategy](./0056-REWA-rewards_overview.md#distributing-rewards-between-entities) to use.
   - `DISTRIBUTION_STRATEGY_PRO_RATA` - rewards should be distributed among entities [pro-rata](./0056-REWA-rewards_overview.md#distributing-pro-rata) by reward-metric.
   - `DISTRIBUTION_STRATEGY_RANK` - rewards should be distributed among entities [based on their rank](./0056-REWA-rewards_overview.md#distributing-based-on-rank) when ordered by reward-metric.
