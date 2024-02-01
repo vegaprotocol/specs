@@ -16,6 +16,7 @@
 - The order version is not updated during a repricing (<a name="0037-OPEG-012" href="#0037-OPEG-012">0037-OPEG-012</a>)
 - Pegged orders are included in the calculation of the BEST_BID, BEST_ASK and MID prices but excluded from BEST_STATIC_BID, BEST_STATIC_ASK and STATIC_MID (<a name="0037-OPEG-013" href="#0037-OPEG-013">0037-OPEG-013</a>)
 - A parked pegged order can be amended. (<a name="0037-OPEG-014" href="#0037-OPEG-014">0037-OPEG-014</a>). For product spot: (<a name="0037-OPEG-019" href="#0037-OPEG-019">0037-OPEG-019</a>)
+- A pegged order specifying an offset which is not an integer multiple of the markets tick size should be rejected.
 - A pegged order with an offset which would cause it to be priced <= 0 is parked. (<a name="0037-OPEG-017" href="#0037-OPEG-017">0037-OPEG-017</a>)
 - An active pegged order can be amended. (<a name="0037-OPEG-016" href="#0037-OPEG-016">0037-OPEG-016</a>)
 - A transaction submitting a pegged order with negative offset fails with an error explaining the cause was negative offset. (<a name="0037-OPEG-018" href="#0037-OPEG-018">0037-OPEG-018</a>)
@@ -30,7 +31,7 @@ Pegged orders are limit orders where the price is specified of the form `REFEREN
 
 **Reference Price:** This is the price against which the final order priced is calculated. Possible options are best bid/ask and mid price.
 
-**Offset:** This is a value added to the reference price. It must be non-negative or positive (see table below) and must be a multiple of the tick size.
+**Offset:** This is a value added to the reference price. It must be non-negative or positive (see table below) and must be a multiple of the tick size defined by the [market framework](./0001-MKTF-market_framework.md#market).
 
 When a party submits a new pegged order, only a LIMIT order is accepted. The party also specifies the reference price to which the order will be priced along with an offset to apply to this price. The reference price is looked up from the live market and the final price is calculated and used to insert the new order. The order is placed on the book at the back of the calculated price level.
 

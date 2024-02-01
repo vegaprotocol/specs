@@ -4,6 +4,7 @@
 
 - Only LIMIT or PEGGED orders can be amended. Any attempt to amend a MARKET order is rejected (<a name="0004-AMND-001" href="#0004-AMND-001">0004-AMND-001</a>). For product spot: (<a name="0004-AMND-030" href="#0004-AMND-030">0004-AMND-030</a>)
 - Price change amends remove the order from the book and insert the order at the back of the queue at the new price level (<a name="0004-AMND-002" href="#0004-AMND-002">0004-AMND-002</a>). For product spot: (<a name="0004-AMND-031" href="#0004-AMND-031">0004-AMND-031</a>)
+- Price change amends specifying a new price which is not an integer multiple of the markets tick size should be rejected and the original order should be left in place.
 - Reducing the quantity by specifying a `sizeDelta` leaves the order in its current spot but reduces the remaining amount accordingly (<a name="0004-AMND-003" href="#0004-AMND-003">0004-AMND-003</a>). For product spot: (<a name="0004-AMND-032" href="#0004-AMND-032">0004-AMND-032</a>)
 - Quantity after amendment using a `sizeDelta` must be a multiple of the smallest increment possible given the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then quantity must be a whole multiple of 0.01. (<a name="0004-AMND-004" href="#0004-AMND-004">0004-AMND-004</a>). For product spot: (<a name="0004-AMND-055" href="#0004-AMND-055">0004-AMND-055</a>)
 - Increasing the quantity by specifying a `sizeDelta` causes the order to be removed from the book and inserted at the back of the price level queue with the updated quantity (<a name="0004-AMND-005" href="#0004-AMND-005">0004-AMND-005</a>). For product spot: (<a name="0004-AMND-033" href="#0004-AMND-033">0004-AMND-033</a>)
@@ -96,7 +97,7 @@ Amending an order does not alter the `orderID` and creation time of the original
 The fields which can be altered are:
 
 - `Price`
-  - Amending the price causes the order to be removed from the book and re-inserted at the new price level. This can result in the order being filled if the price is moved to a level that would cross.
+  - Amending the price causes the order to be removed from the book and re-inserted at the new price level. This can result in the order being filled if the price is moved to a level that would cross. The amended price must be an integer multiple of the [markets tick size](./0001-MKTF-market_framework.md#market).
 - `SizeDelta`
   - Amending the size by specifying a `sizeDelta` will be applied to both the `Size` and `Remaining` part of the order. In the case that the remaining amount it reduced to zero or less, the order is cancelled. This must be a multiple of the smallest value allowed by the `Position Decimal Places` (PDP) specified in the [Market Framework](./0001-MKTF-market_framework.md), i.e. is PDP = 2 then `SizeDelta` must be a whole multiple of 0.01. (NB: `SizeDelta` may use an int64 where the int value 1 is the smallest multiple allowable given the configured dp). In case PDP is negative this again applies e.g. if PDP = -1 then `SizeDelta` must be a whole multiple of 10.
 - `Size`
