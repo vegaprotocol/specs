@@ -119,9 +119,9 @@ The volume to offer at each price level is determined by whether the price level
 
 The AMM position can be thought of as two separate liquidity provision curves, one between `upper price` and `base price`, and another between `base price` and `lower price`. Within each of these, the AMM is buying/selling position on the market in exchange for the quote currency. As the price lowers the AMM is buying position and reducing currency, and as the price rises the AMM is selling position and increasing currency.
 
-One outcome of this is that the curve between `base price` and `lower price` is marginally easier to conceptualise directly from our parameters. At the lowest price side of a curve (`lower price` in this case) the market should be fully in the market contract position, whilst at the highest price (`base price` in this case) it should be fully sold out into cash. This is exactly the formulation used, where at `base price` a zero position is used and a cash amount of `commitment amount`. However given that there is likely to be some degree of leverage allowed on the market this is not directly the amount of funds to calculate using. An AMM with a `commitment amount` of `X` is ultimately defined by the requirement of using `X` in margin at the outer price bounds, so work backwards from that requirement to determine the theoretical cash value. We then calculate the two ranges separately to determine two different `Liquidity` values for the two ranges, which is a value used to later define volumes required to move the price a specified value.
+One outcome of this is that the curve between `base price` and `lower price` is marginally easier to conceptualise directly from our parameters. At the lowest price side of a curve (`lower price` in this case) the market should be fully in the market contract position, whilst at the highest price (`base price` in this case) it should be fully sold out into cash. This is exactly the formulation used, where at `base price` a zero position is used and a cash amount of `commitment amount`. However given that there is likely to be some degree of leverage allowed on the market this is not directly the amount of funds to calculate using. An AMM with a `commitment amount` of `X` is ultimately defined by the requirement of using `X` in margin at the outer price bounds, so work backwards from that requirement to determine the theoretical cash value. Next calculate the two ranges separately to determine two different `Liquidity` values for the two ranges, which is a value used to later define volumes required to move the price a specified value.
 
-We can calculate a scaling factor that is the smaller of a fraction specified in the commitment (`margin_ratio_at_bounds`, either upper or lower depending on the side considered) or the market's worst case margin. If `margin_ratio_at_bounds` for the relevant side is not set then the market's worst case initial margin is taken automatically
+One can calculate a scaling factor that is the smaller of a fraction specified in the commitment (`margin_ratio_at_bounds`, either upper or lower depending on the side considered) or the market's worst case margin. If `margin_ratio_at_bounds` for the relevant side is not set then the market's worst case initial margin is taken automatically
 
 $$
 r_f = \min(\frac{1}{m_r}, \frac{1}{ (f_s + f_l) \cdotp f_i}) ,
@@ -156,13 +156,33 @@ where $P_v$ is the virtual position from the previous formula, $p_u$ is the pric
 From here the first step is calculating a `fair` price, which can be done by utilising the `L` value for the respective range to calculate `virtual` values for the pool balances. From here on `y` will be the cash balance of the pool and `x` the position.
 
   1. First, identify the current position, `p`. If it is `0` then the current fair price is the base price.
-  2. If `P > 0`:
+  1. If `P > 0`:
      1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_l}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_l$ is the `base price`.
-     2. The virtual `y` of the position can be calculated as $y_v = L \cdot (\sqrt{p_u} - \sqrt{p_l}) - P \cdot p_e + L \cdotp \sqrt{p_l}$ where $p_e$ is the average entry price of the position, $p_u$ is the `base price` and $p_l$ is the `lower price`. Other variables are as defined above.
-  3. If `P < 0`:
+     1. The virtual `y` of the position can be calculated as $y_v = L \cdot (\sqrt{p_u} - \sqrt{p_l}) - P \cdot p_e + L \cdotp \sqrt{p_l}$ where $p_e$ is the average entry price of the position, $p_u$ is the `base price` and $p_l$ is the `lower price`. Other variables are as defined above.
+  1. If `P < 0`:
      1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{p_u} \cdotp r_f + \frac{L}{\sqrt{p_l}}$ where $p_l$ is the `base price` and `p_u` is the `upper price`.
-     2. The virtual `y` can be calculated as $y_v = abs(P) \cdotp p_e + L \cdotp \sqrt{p_l}$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price`
-  4. Now the `fair` price is simply $\frac{y_v}{x_v}$
+     1. The virtual `y` can be calculated as $y_v = abs(P) \cdotp p_e + L \cdotp \sqrt{p_l}$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price`
+  1. Now the `fair` price is simply $\frac{y_v}{x_v}$
+
+#### Price to trade a given volume
+
+Finally, the protocol needs to calculate the inverse of the previous section. That is, given a volume bought from/sold to the AMM, at what price should the trade be executed. This could be calculated naively by summing across all the smallest increment volume differences, however this would be computationally inefficient and can be optimised by instead considering the full trade size. 
+
+To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `base price`), `lower price of the current range` $p_l$ (`base price` if `P < 0` else `lower price`), the volume to trade $\Delta x$ and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
+
+First, the steps for calculating a fair price should be followed in order to obtain the virtual asset amounts $x_v$ and $y_v$. Once obtained, the price can be obtained from the fundamental requirement of the product $y \cdot x$ remaining constant. This gives the relationship
+
+$$
+y_v \cdot x_v = (y_v + \Delta y) \cdot (x_v - \Delta x)
+$$
+
+From which $\Delta y$ must be calculated
+
+$$
+\Delta y = \frac{y_v \cdot x_v}{x_v - \Delta x} - y_v
+$$
+
+Thus giving a final execution price to return of $\frac{\Delta y}{\Delta x}$.
 
 #### Volume between two prices
 
@@ -170,7 +190,7 @@ For the second interface one needs to calculate the volume which would be posted
 
 To calculate this, the interface will need the `starting price` $p_s$, `ending price` $p_e$, `upper price of the current range` $p_u$ (`upper price` if `P < 0` else `base price`) and the `L` value for the current range. At `P = 0` use the values for the range which the volume change will cause the position to move into.
 
-We then need to calculate the implied position at `starting price` and `ending price` and return the difference.
+First, calculate the implied position at `starting price` and `ending price` and return the difference.
 
 For a given price $p$ calculate implied position $P_i$ with
 
