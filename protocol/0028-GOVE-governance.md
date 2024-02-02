@@ -472,6 +472,8 @@ If even one proposal within the batch would fail then the entire batch fails.
 If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp: they enact in the order they appear in the batch.
 In particular asset update proposals may emit signed bundles to be submitted to the bridge on ethereum side (for withdrawal delay / threshold updates).
 
+The number of individual proposals that can be submitted within a single batch is limited to 250.
+
 ## APIs
 
 The core should expose via core APIs:
