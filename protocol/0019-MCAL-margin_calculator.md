@@ -183,17 +183,17 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When a party holds orders and positions, decreases the order size, the orders will not uncross (<a name="0019-MCAL-167" href="#0019-MCAL-167">0019-MCAL-167</a>)
 
-- When a party holds orders and positions, decreases the orders price, the order will be stopped (becuase if the orders is fully filled and then party will distressed) (<a name="0019-MCAL-168" href="#0019-MCAL-168">0019-MCAL-168</a>)
+- When a party holds orders and positions, decreases the orders price, the order will be stopped (because if the orders is fully filled and then party will distressed) (<a name="0019-MCAL-168" href="#0019-MCAL-168">0019-MCAL-168</a>)
 
-- When a party holds orders and positions, decreases the orders price, the order will be stopped (becuase if the orders is partially filled and then party will distressed) (<a name="0019-MCAL-169" href="#0019-MCAL-169">0019-MCAL-169</a>)
+- When a party holds orders and positions, decreases the orders price, the order will be stopped (because if the orders is partially filled and then party will distressed) (<a name="0019-MCAL-169" href="#0019-MCAL-169">0019-MCAL-169</a>)
 
 - When a party holds orders and positions, decreases the orders price, the order will be fully filled (<a name="0019-MCAL-172" href="#0019-MCAL-172">0019-MCAL-172</a>)
 
 - When a party holds orders and positions, decreases the orders price, the order will be partially filled (<a name="0019-MCAL-173" href="#0019-MCAL-173">0019-MCAL-173</a>)
 
-- When a party holds orders and positions, decreases the orders price, the order will be stopped (becuase if the orders is fully filled and then their margin balance will be less than the margin maintenance level) (<a name="0019-MCAL-174" href="#0019-MCAL-174">0019-MCAL-174</a>)
+- When a party holds orders and positions, decreases the orders price, the order will be stopped (because if the orders is fully filled and then their margin balance will be less than the margin maintenance level) (<a name="0019-MCAL-174" href="#0019-MCAL-174">0019-MCAL-174</a>)
 
-- When a party holds orders and positions, decreases the orders price, the order will be stopped (becuase if the orders is partially filled and then their margin balance will be less than the margin maintenance level) (<a name="0019-MCAL-175" href="#0019-MCAL-175">0019-MCAL-175</a>)
+- When a party holds orders and positions, decreases the orders price, the order will be stopped (because if the orders is partially filled and then their margin balance will be less than the margin maintenance level) (<a name="0019-MCAL-175" href="#0019-MCAL-175">0019-MCAL-175</a>)
 
 
 **When a party is distressed:**
