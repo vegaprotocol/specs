@@ -195,7 +195,7 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - When a party holds orders and positions, decreases the orders price, the order will be stopped (because if the orders is partially filled and then their margin balance will be less than the margin maintenance level) (<a name="0019-MCAL-175" href="#0019-MCAL-175">0019-MCAL-175</a>)
 
-- When a party holds orders and positions, amend the orders price, the order will be partialy filled but order margin level will increase, so the rest of the order is canceled (<a name="0019-MCAL-176" href="#0019-MCAL-176">0019-MCAL-176</a>)
+- When a party holds orders and positions, amend the orders price, the order will be partially filled but order margin level will increase, so the rest of the order is cancelled (<a name="0019-MCAL-176" href="#0019-MCAL-176">0019-MCAL-176</a>)
 
 **When a party is distressed:**
 
@@ -848,3 +848,4 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
+
