@@ -56,7 +56,7 @@ In the example below there are 3 liquidity providers all bidding for their chose
 
 ### Stake-weighted-average method for setting the liquidity fee factor
 
-The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider, which can also account for the impact of one supplier's actions on others.
+The liquidity fee factor is set as the weighted average of the liquidity fee factors, with weights assigned based on the supplied stake from each liquidity provider.
 
 #### Example for fee setting mechanism using the Stake-weighted-average method
 
