@@ -35,11 +35,11 @@ Liquidation price estimate as specified in [0012-NP-LIPE-liquidation-price-estim
 
 Depending on the [margining mode](../protocol/0019-MCAL-margin_calculator.md#margining-modes) selected by the party for the market on which its position is being considered the $\text{collateral available}$ will differ.
 
-Cross-margin mode: $\text{collateral available} = \text{margin account balance} + \text{general account balance}$.
+Cross-margin mode: $\text{collateral available} = \text{margin account balance} + \text{general account balance} + \text{order margin account balance}$.
 
-Isolated margin mode: $\text{collateral available} = \text{margin account balance} + \text{order margin account balance}$.
+Isolated margin mode: $\text{collateral available} = \text{margin account balance}$.
 
-The position estimate request has an additional `include_collateral_increase_in_available_collateral` argument. It's relevant for the isolated margin mode: when set to `false` the collateral available used in liquidation price estimate will be the sum of the specified margin and order margin accounts only. When set to `true` the collateral increase estimated for the specified position will also be included in the available collateral.
+The position estimate request has an additional `include_collateral_increase_in_available_collateral` argument. It's relevant for the isolated margin mode: when set to `false` the collateral available used in liquidation price estimate will be the margin account balance only. When set to `true` the portion of the collateral increase estimated for the specified position only (not for the additional orders) will also be included in the available collateral.
 
 The endpoint request contains additional optional argument `scale_liquidation_price_to_market_decimals`. When set to `false` the liquidation price estimates are scaled to asset decimal places, when set to `true` these estimates are scaled to market decimal places.
 
