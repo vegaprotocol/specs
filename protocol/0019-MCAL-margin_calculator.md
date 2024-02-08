@@ -610,8 +610,8 @@ For any sub-account running [AMM strategies], we would calculate it as follows:
 
 ```formula
 maintenance_margin_long
-    = max(product.value(market_observable  * riskiest_long * market.linearSlippageFactor), 0)
-    +  max(open_volume, 0) * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ] + buy_orders * [ quantitative_model.risk_factors_long ] . [ Product.value(market_observable) ]`,
+    = max(product.value(market_observable * riskiest_long * market.linearSlippageFactor), 0)
+    +  max(open_volume, 0) * [quantitative_model.risk_factors_long] * [Product.value(market_observable)] + buy_orders * [ quantitative_model.risk_factors_long ] * [ Product.value(market_observable)]`,
 ```
 
 where
@@ -656,8 +656,9 @@ For any sub-account running [AMM strategies], we would calculate it as follows:
 
 ```formula
 maintenance_margin_short
-    = max(mark_price * abs(riskiest short) *  market.linearSlippageFactor,  0)
-    + abs(min( open_volume, 0 )) * [ quantitative_model.risk_factors_short ] . [ Product.value(market_observable) ] + abs
+    = max(mark_price * abs(riskiest short) * market.linearSlippageFactor,  0)
+    + abs(min(open_volume, 0 )) * [quantitative_model.risk_factors_short] * [Product.value(market_observable)] + abs
+    (sell_orders) * [ quantitative_model.risk_factors_short ] * [Product.value(market_observable)]`
 ```
 
 where meanings of terms in Step 1 apply except for:
