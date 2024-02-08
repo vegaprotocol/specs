@@ -2,19 +2,32 @@
 
 ## Network Parameters
 
-1. `ethereum_heartbeat_period`: This parameter defines how many ethereum events need to pass (in average) for a validator to have to forward a heartbeat event. If it is set to 0, heartbeats are deactivated.
+1. `bridge_heartbeat_periods[]`: This parameter defines how many events on the chain hosting the a bridge (e.g., Ethereum) need to pass (in average) for a validator to have to forward a heartbeat event. If it is set to 0, heartbeats are deactivated. As Vega supports several bridges, this parameter is an array.
+To assure that there is a clear limk between bridge identity and its parameter, the parameter takes the form
+<string> bridge_id_1, <int> period_1,
+<string> bridge_id_2, <int> period_2,
+...
+Valid range for the period is any integer >= 0
+The initial value is "Ethereum_Mainnet", 128.
 
+If a new bridge is added, this parameter can be extended without a governance vote to accomodate the new bridge.
+
+1. `read_heartbeat_periods[]`: This parameter defines how many chain events need to pass (in average) for a validator to have to forward a heartbeat event for read events, e.g., oracle access.. If it is set to 0, heartbeats are deactivated. This parameter also is an array.
+To assure that there is a clear limk between bridge identity and its parameter, the parameter takes the form
+<string> read_id_1, <int> period_1,
+<string> read_id_2, <int> period_2,
+...
 Valid range is any integer >= 0
-The initial value is 128.
+The initial value is "Ethereum_Mainnet_Read_Access",128.
 
-1. `ethereum_read_heartbeat_period`: This parameter defines how many ethereum events need to pass (in average) for a validator to have to forward a heartbeat event. If it is set to 0, heartbeats are deactivated.
-Valid range is any integer >= 0
-The initial value is 128.
+If a new oracle/chain is added, this parameter can be extended without a governance vote to accomodate the new chain.
 
-1. `performance_weights` is a vector containing four integer values w0,w1,w2,w3; this parameter defines the weights of the different performance measurements that impact the reward. The weight formula (given performance values p1, p2 and p3) is w0*p1*p2*p3 + w1*p1+w2*p2+w3*p3).
+1. `performance_weights` is a vector containing n+2 integer values w0,w1,w2,w3...,wn, where n is the number of performace attributes. This parameter defines the weights of the different performance measurements that impact the reward. The weight formula (given performance values p1, p2 and p3) is w0*p1*p2*p3 + w1*p1+w2*p2+w3*p3).
 If more performance measurements are added later, this vector is expanded correspondingly.
 
-Legal values are all floats that sum up to 1. The initial value is (0,1,0,0)
+At the moment, we measure three attributes (Tendermint, Bridge Observation, Ethereum Read access, in that order).
+
+Legal values are all floats that sum up to 1. The initial value is (0,1,0,0), i.e., only tendermint performance has any impact on the rewards.
 
 ## Adjusting Validator Rewards Based on Performance
 
@@ -57,16 +70,18 @@ Detection: Events forwarded by some validators are not forwarded by others.
 
 #### Ethereum Heartbeat
 
-For the Ethereum Heartbeat, we use the network parameter `ethereum_heartbeat_period`. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128, which would create a heartbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch). Legal values are all integers larger or equal to 0.
+For the each Bridge Heartbeat, we use the network parameter `bridge_heartbeat_period`. This parameter should be either 0 or a value bigger than the number of validators; the recommended initial value is 128 on Ethereum, which would create a heartbeat per validator about every 20 minutes (i.e., about 120 heartbeats per validator per epoch); chains with a different speed should adapt the parameter correspondingly. Legal values are all integers larger or equal to 0.
 
-For every Ethereum block, if the hash of this block mod `ethereum_heartbeat_period` equals the identity of the a validator (taken mod ethereum_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms. The heartbeat also does contain the Ethereum hash of the corresponding block.
+For every block on the target chain, if the hash of this block mod `bridge_heartbeat_period` equals the identity of the a validator (taken mod bridge_heartbeat_period)+1, then this validator has to forward this as an event. This event is confirmed by other validators just like any other event, but then ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms. The heartbeat also does contain the block hash of the corresponding block.
 If the parameter is set to 0, the heartbeats are effectively turned off.
 
 If a validator forwards a heartbeat, all other validators have to validate its correctness by checking if the hashes work out.
 
-#### Ethereum Read Access Heartbeat
+#### Read Access Heartbeat
 
-For every Ethereum block, if the hash of [The balance of the key that initiated the first transaction on the block / the random value of that block] mod `ethereum_read_heartbeat_period` equals the identity of the a validator (taken mod ethereum_read_heartbeat_period)+1, then this validator has to forward this as an Ethereum event. This event is confirmed by other validators just like any other Ethereum event, but otherwise ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms.
+For each measured chain defined in read_ethereum_period[], the following is done
+
+For every block on the measured chain, if the hash of [The balance of the key that initiated the first transaction on the block / the random value of that block] mod `read_heartbeat_period` equals the identity of the a validator (taken mod ethereum_read_heartbeat_period)+1, then this validator has to forward this as an event. This event is confirmed by other validators just like any other Ethereum event, but otherwise ignored. If that block also contains a valid Vega event that requires an action, this is forwarded independently by the normal event forwarding mechanisms.
 
 #### Performance Measurements
 
@@ -91,10 +106,14 @@ In the end, we make sure no score is bigger than 1 (which might happen due to th
 As we have several performance measurements, they need to be combined to a total score. To this end, we have a system variable `performance_weights`,
 which has n+1 parameters (weight_0,.. weight_n) for n measurements (currently 2, the tendermint-performance and the ethereum-performance. Weights are normalised, so the sum of all weights needs to be 1. Also, all individual performance measurements are normalised to be between 0 and 1.
 
-The total performance then is
-`weight_0*(validator_ethereum_performance*validator_tendermint_performance)+weight_1*(validator_tendermint_performance)+weight_2*(validator_ethereum_performance)+weight_3*validator_ethereum_read_performance`
+the weight formula (given performance values p1, p2,... pn) is weight_0*p1*p2*...*pn + weight_1*p1+weight_2*p2+...+weight_n*pn).
 
-The initial values for the weights are {0,1,0,0}.
+Currently, we have 3 performance measurements, namely
+p1 = tendermint performance
+p2 = Ethereum Bridge Performance
+p3 = Etherum Read Performance, 
+
+the weight formula (given performance values p1, p2 and p3) is weight_0*p1*p2*p3 + weight_1*p1+weight_2*p2+weight_3*p3).
 
 ### Ersatz and pending validators
 
