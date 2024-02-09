@@ -101,6 +101,7 @@ To support entity scoping, the transaction include the following fields:
   - `INDIVIDUAL_SCOPE_ALL` - all parties on the network are within the scope of this reward
   - `INDIVIDUAL_SCOPE_IN_TEAM` - all parties which are part of a team are within the scope of this reward
   - `INDIVIDUAL_SCOPE_NOT_IN_TEAM` - all parties which are not part of a team are within the scope of this reward
+  - `INDIVIDUAL_SCOPE_AMM` - all keys representing AMM parties, excluding those directly controlled by parties are within the scope of this reward
 - `team scope` - optional list if the reward type is `ENTITY_SCOPE_TEAMS`, field allows the funder to define a list of team ids which are eligible to be rewarded from this transfer
 - `staking_requirement` - the required minimum number of governance (e.g. VEGA) tokens staked for a party to be considered eligible. Defaults to `0`.
 - `notional_time_weighted_average_position_requirement` - the required minimum notional time-weighted averaged position required for a party to be considered eligible. Defaults to `0`.
@@ -387,4 +388,6 @@ If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified,
 
 If the network parameter `transfer.minTransferQuantumMultiple` is modified, this modification is applied
 immediately on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-061" href="#0057-TRAN-061">0057-TRAN-061</a>)
+
+A recurring transfer to a reward account with entity scope set to individuals and individual scope set to `INDIVIDUAL_SCOPE_AMM` will only be divided amongst AMM parties based on their score in the relevant metric (<a name="0057-TRAN-070" href="#0057-TRAN-070">0057-TRAN-070</a>)
 
