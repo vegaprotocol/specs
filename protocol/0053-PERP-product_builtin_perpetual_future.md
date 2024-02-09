@@ -364,3 +364,9 @@ Assert that the scaling factor is applied before the funding cap is applied (<a 
 Assert all funding payments are correct when a perpetual market is suspended and then terminated via governance. (<a name="0053-PERP-041" href="#0053-PERP-041">0053-PERP-041</a>).
 
 The upper and lower clamp values are being correctly validated as per the [parameters defined in the spec](https://github.com/vegaprotocol/specs/blob/palazzo/protocol/0053-PERP-product_builtin_perpetual_future.md#1-product-parameters). (<a name="0053-PERP-042" href="#0053-PERP-042">0053-PERP-042</a>).
+
+Launch a perpetual futures market which sets `internalCompositePrice` to `Nil` (mark price is used) for the "vega side price" for funding calculation. Submit a market update proposal to change this to a composite price with a configuration which uses the impact notional price from the order book. Observe that the new methodology for funding calculations is applied correctly from enactment onwards. (<a name="0053-PERP-044" href="#0053-PERP-044">0053-PERP-044</a>).
+
+Launch a perpetual futures market which sets `internalCompositePrice` to a configuration which uses the impact notional price from the order book. for the "vega side price" for funding calculation. Submit a market update proposal to change this `Nil` (so that mark price gets used for the vega side price). Observe that the new methodology for funding calculations is applied correctly from enactment onwards. (<a name="0053-PERP-045" href="#0053-PERP-045">0053-PERP-045</a>).
+
+Launch a perpetual futures market which uses the "Last Traded Price" for the "vega side price" for funding calculation. Submit a market update proposal to change this to a composite price with a configuration which uses the impact notional price from the order book. Observe that the new methodology for funding calculations is applied correctly from enactment onwards. (<a name="0053-PERP-046" href="#0053-PERP-046">0053-PERP-046</a>).
