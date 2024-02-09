@@ -69,6 +69,21 @@ To avoid spamming of `ApplyReferralCode`, a party must meet the deposited funds 
 
 Further, each party is allowed to submit up to `n` transactions per epoch where `n` is controlled by the respective network parameter for that transaction type (`spam.protection.max.CreateReferralSet`, `spam.protection.max.UpdateReferralSet`, `spam.protection.max.ApplyReferralCode`).
 
+### Party Profile spam
+
+The [party profile feature](./0088-PPRF-party_profile.md) adds a transaction types which can be submitted with no cost/risk to the party:
+
+- `UpdatePartyProfile`
+
+To avoid spamming of `UpdatePartyProfile`, a party must meet the deposited funds threshold set by the network parameter `spam.protection.updatePartyProfile.min.funds`.  All assets count towards this threshold and balances should be scaled appropriately by the assets quantum. A party who does not meet this requirement should have any transactions of the aforementioned type pre-block rejected. This requirement will be checked against snapshots of account balances taken at a frequency determined by the network parameter `spam.protection.balanceSnapshotFrequency`. This network parameter is a duration (e.g. `5s`, `1m5s`).
+
+**Note** `spam.protection.updatePartyProfile.min.funds` must be an integer greater than or equal to `0` (and default to `10`).
+
+Further, each party is allowed to submit up to `n` transactions per epoch where `n` is controlled by the respective network parameter for the transaction type (`spam.protection.max.updatePartyProfile`).
+
+**Note** `spam.protection.max.updatePartyProfile` must be an integer greater than or equal to `0` (and default to `5`).
+
+
 ### Related topics
 
 - [Spam protection: Proof of work](https://github.com/vegaprotocol/specs/blob/master/protocol/0072-SPPW-spam-protection-PoW.md)
@@ -97,8 +112,8 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Issue a valid withdrawal bundle. Increase `spam.protection.minimumWithdrawalQuantumMultiple` to a value that would no longer allow the creation of the bundle. Ask for the bundle to be re-issued and verify that it's not rejected. (<a name="0062-PALAZZO-001" href="#0062-PALAZZO-001">0062-PALAZZO-001</a>)
 - A party staking less than `referralProgram.minStakedVegaTokens` should have any `CreateReferralSet` transactions **pre-block** rejected (<a name="0062-SPAM-026" href="#0062-SPAM-026">0062-SPAM-026</a>).
 - A party staking less than `referralProgram.minStakedVegaTokens` should have any `UpdateReferral` transactions **pre-block** rejected (<a name="0062-SPAM-027" href="#0062-SPAM-027">0062-SPAM-027</a>).
-- A party holding less than `spam.protection.referralProgram.min.funds x quantum` should have any `CreateReferralSet` transactions **pre-block** rejected (<a name="0062-SPAM-033" href="#0062-SPAM-033">0062-SPAM-033</a>)
-- A party holding no less than `spam.protection.referralProgram.min.funds x quantum` should not have any `CreateReferralSet` transactions **pre-block** rejected (<a name="0062-SPAM-035" href="#0062-SPAM-035">0062-SPAM-035</a>)
+- A party holding less than `spam.protection.referralSet.min.funds x quantum` should have any `CreateReferralSet` transactions **pre-block** rejected (<a name="0062-SPAM-033" href="#0062-SPAM-033">0062-SPAM-033</a>).
+- A party holding no less than `spam.protection.referralSet.min.funds x quantum` should not have any `CreateReferralSet` transactions **pre-block** rejected (<a name="0062-SPAM-035" href="#0062-SPAM-035">0062-SPAM-035</a>).
 - Given longer than `spam.protection.balanceSnapshotFrequency` has elapsed since a party deposited or transferred funds, a party who has less then `spam.protection.applyReferral.min.funds` in their accounts should have any `ApplyReferralCode` transactions **pre-block** rejected. All assets count towards this threshold and balances should be scaled appropriately by the assets quantum. (<a name="0062-SPAM-028" href="#0062-SPAM-028">0062-SPAM-028</a>).
 - A party who has submitted strictly more than `spam.protection.max.CreateReferralSet` `CreateReferralSet` transactions in an epoch should have any future `CreateReferralSet` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-029" href="#0062-SPAM-029">0062-SPAM-029</a>).
 - A party who has submitted more than `spam.protection.max.CreateReferralSet` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **pre-block** rejected (<a name="0062-SPAM-032" href="#0062-SPAM-032">0062-SPAM-032</a>).
@@ -106,6 +121,12 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - A party who has submitted more than `spam.protection.max.updateReferralSet` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **pre-block** rejected (<a name="0062-SPAM-034" href="#0062-SPAM-034">0062-SPAM-034</a>).
 - A party who has submitted strictly more than `spam.protection.max.applyReferralCode` `ApplyReferralCode` transactions in an epoch should have any future `ApplyReferralCode` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-031" href="#0062-SPAM-031">0062-SPAM-031</a>).
 - A party who has submitted more than `spam.protection.max.applyReferralCode` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **pre-block** rejected (<a name="0062-SPAM-036" href="#0062-SPAM-036">0062-SPAM-036</a>).
+- Given longer than `spam.protection.balanceSnapshotFrequency` has elapsed since a party deposited or transferred funds, a party who has less then `spam.protection.updatePartyProfile.min.funds` in their accounts should have any `UpdatePartyProfile` transactions **pre-block** rejected. All assets count towards this threshold and balances should be scaled appropriately by the assets quantum. (<a name="0062-SPAM-037" href="#0062-SPAM-037">0062-SPAM-037</a>).
+- A party holding 2 assets, and each of the assets are less than `spam.protection.referralSet.min.funds` x quantum, but the sum of the 2 assets are greater than  `spam.protection.referralSet.min.funds` x quantum, then the party should not have any `UpdateReferralSettransactions` pre-block rejected (<a name="0062-SPAM-042" href="#0062-SPAM-042">0062-SPAM-042</a>).
+- A party holding less than `spam.protection.referralProgram.min.funds` x quantum should have any `UpdateReferralSettransactions` pre-block rejected (<a name="0062-SPAM-040" href="#0062-SPAM-040">0062-SPAM-040</a>).
+- A party holding no less than `spam.protection.referralSet.min.funds` x quantum and staking no less than `referralProgram.minStakedVegaTokens` should not have any `UpdateReferralSettransactions` pre-block rejected (<a name="0062-SPAM-041" href="#0062-SPAM-041">0062-SPAM-041</a>).
+- A party who has submitted strictly more than `spam.protection.max.updatePartyProfile` `UpdatePartyProfile` transactions in an epoch should have any future `UpdatePartyProfile` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-038" href="#0062-SPAM-038">0062-SPAM-038</a>).
+- A party who has submitted more than `spam.protection.max.updatePartyProfile` `UpdatePartyProfile` transactions in the current epoch plus in the current block, should have their `UpdatePartyProfile` transactions submitted in the current block **pre-block** rejected (<a name="0062-SPAM-039" href="#0062-SPAM-039">0062-SPAM-039</a>).
 
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.

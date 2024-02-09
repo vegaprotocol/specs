@@ -157,6 +157,36 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - A market in an auction and party with a partially filled iceberg pegged order switches from cross margin mode to isolated margin mode the unfilled portion of the iceberg pegged order is cancelled (<a name="0019-MCAL-146" href="#0019-MCAL-146">0019-MCAL-146</a>)
 
+- When a party holds only orders, increases the orders price, the orders will not uncross (<a name="0019-MCAL-160" href="#0019-MCAL-160">0019-MCAL-160</a>)
+
+- When a party holds orders and positions, and increases the orders price, the orders will not uncross (<a name="0019-MCAL-161" href="#0019-MCAL-161">0019-MCAL-161</a>)
+
+- When a party holds only orders, increases the orders size, the orders will not uncross (<a name="0019-MCAL-162" href="#0019-MCAL-162">0019-MCAL-162</a>)
+
+- When a party holds orders and positions, increases the order size, the orders will not uncross (<a name="0019-MCAL-163" href="#0019-MCAL-163">0019-MCAL-163</a>)
+
+- When a party holds only orders, decreases the orders price, the orders will not uncross (<a name="0019-MCAL-164" href="#0019-MCAL-164">0019-MCAL-164</a>)
+
+- When a party holds orders and positions, and decreases the orders price, the orders will not uncross (<a name="0019-MCAL-165" href="#0019-MCAL-165">0019-MCAL-165</a>)
+
+- When a party holds only orders, decreases the orders size, the orders will not uncross (<a name="0019-MCAL-166" href="#0019-MCAL-166">0019-MCAL-166</a>)
+
+- When a party holds orders and positions, decreases the order size, the orders will not uncross (<a name="0019-MCAL-167" href="#0019-MCAL-167">0019-MCAL-167</a>)
+
+- When a party holds orders and positions, increase the order size, the order will be stopped (because their margin balance will be less than the margin maintenance level) (<a name="0019-MCAL-168" href="#0019-MCAL-168">0019-MCAL-168</a>)
+
+- When a party holds orders and positions, decreases the orders size, the order and order margin will be update (<a name="0019-MCAL-169" href="#0019-MCAL-169">0019-MCAL-169</a>)
+
+- When a party holds orders and positions, decreases the orders price, the order will be fully filled (<a name="0019-MCAL-172" href="#0019-MCAL-172">0019-MCAL-172</a>)
+
+- When a party holds orders and positions, decreases the orders price, the order will be partially filled (<a name="0019-MCAL-173" href="#0019-MCAL-173">0019-MCAL-173</a>)
+
+- When a party holds orders and positions, decreases the orders price, the order will be stopped (because if the orders is fully filled and then their margin balance will be less than the margin maintenance level) (<a name="0019-MCAL-174" href="#0019-MCAL-174">0019-MCAL-174</a>)
+
+- When a party holds orders and positions, decreases the orders price, the order will be stopped (because if the orders is partially filled and then their margin balance will be less than the margin maintenance level) (<a name="0019-MCAL-175" href="#0019-MCAL-175">0019-MCAL-175</a>)
+
+- When a party holds orders and positions, amend the orders price, the order will be partially filled but order margin level will increase, so the rest of the order is cancelled (<a name="0019-MCAL-176" href="#0019-MCAL-176">0019-MCAL-176</a>)
+
 **When a party is distressed:**
 
 - Open positions should be closed in the case of open positions dropping below maintenance margin level, active orders will remain active if closing positions does not lead order margin level to increase.(<a name="0019-MCAL-070" href="#0019-MCAL-070">0019-MCAL-070</a>)
@@ -766,3 +796,4 @@ riskiest short: -1
 ## SCENARIOS
 
 Scenarios found [here](https://docs.google.com/spreadsheets/d/1VXMdpgyyA9jp0hoWcIQTUFrhOdtu-fak/edit#gid=1586131462)
+

@@ -78,6 +78,7 @@ Note that for calculating the median with an even number of entries we sort, pic
 
 - It is possible to obtain a time series for the market mark price from the data node from the time of the market proposal enactment onwards (subject to data node retention policies).(<a name="0009-MRKP-133" href="#0009-MRKP-133">0009-MRKP-133</a>)
 
+
 ### Flexible mark price methodology, combinations
 
 - It is possible to configure a cash settled futures market to use a weighted average of 1. weighted average of trades over `network.markPriceUpdateMaximumFrequency` and 2. impact of leveraged notional on the order book with the value of USDT `100` and 3. an oracle source and if last trade is last updated more than 1 minute ago then it is removed and the remaining re-weighted and if the oracle is last updated more than 5 minutes ago then it is removed and the remaining re-weighted (<a name="0009-MRKP-018" href="#0009-MRKP-018">0009-MRKP-018</a>) and a perps market (with the oracle source different to that used for the external price in the perps market) (<a name="0009-MRKP-019" href="#0009-MRKP-019">0009-MRKP-019</a>).
@@ -130,6 +131,11 @@ Note that for calculating the median with an even number of entries we sort, pic
     - update market (<a name="0009-MRKP-058" href="#0009-MRKP-058">0009-MRKP-058</a>)
 
   - When `markPriceConfiguration: source weight` is provided then it must not be all `0` (<a name="0009-MRKP-059" href="#0009-MRKP-059">0009-MRKP-059</a>)
+
+  - Launch a cash settled futures market which uses the "Last Traded Price" mark price method. Submit a market update proposal to change this to a composite price with some chosen configuration. Observe that the new methodology is applied correctly from enactment onwards. (<a name="0009-MRKP-134" href="#0009-MRKP-134">0009-MRKP-134</a>).
+
+- Launch a perpetual futures market which uses the "Last Traded Price" mark price method. Submit a market update proposal to change this to a composite price with some chosen configuration. Observe that the new methodology is applied correctly from enactment onwards. (<a name="0009-MRKP-135" href="#0009-MRKP-135">0009-MRKP-135</a>).
+
 
 ### Example 1 - A typical path of a cash settled futures market from end of opening auction till expiry (use Algorithm 2 (ie median price))(<a name="0009-MRKP-040" href="#0009-MRKP-040">0009-MRKP-040</a>)
 
