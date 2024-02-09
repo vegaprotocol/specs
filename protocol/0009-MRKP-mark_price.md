@@ -134,7 +134,7 @@ Note that for calculating the median with an even number of entries we sort, pic
 
   - Launch a cash settled futures market which uses the "Last Traded Price" mark price method. Submit a market update proposal to change this to a composite price with some chosen configuration. Observe that the new methodology is applied correctly from enactment onwards. (<a name="0009-MRKP-060" href="#0009-MRKP-060">0009-MRKP-060</a>).
 
-- Launch a perpetual futures market which uses the "Last Traded Price" mark price method. Submit a market update proposal to change this to a composite price with some chosen configuration. Observe that the new methodology is applied correctly from enactment onwards. (<a name="0009-MRKP-061" href="#0009-MRKP-061">0009-MRKP-061</a>).
+- Launch a perpetual futures market which uses the "Last Traded Price" mark price method. Submit a market update proposal to change this to a composite price with some chosen configuration. Observe that the new methodology is applied correctly from enactment onwards. (<a name="0009-MRKP-065" href="#0009-MRKP-065">0009-MRKP-065</a>).
 
 
 ### Example 1 - A typical path of a cash settled futures market from end of opening auction till expiry (use Algorithm 2 (ie median price))(<a name="0009-MRKP-040" href="#0009-MRKP-040">0009-MRKP-040</a>)
