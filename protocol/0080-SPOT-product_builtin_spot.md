@@ -119,8 +119,6 @@ Price-monitoring auctions are still required and should be implemented following
 ## 9. Acceptance Criteria
 
 1. Create a `Spot` for any `quote_asset` / `base_asset` pair that are configured in Vega (<a name="0080-SPOT-001" href="#0080-SPOT-001">0080-SPOT-001</a>)
-1. It is not possible to change the `quote_asset` via governance (<a name="0080-SPOT-002" href="#0080-SPOT-002">0080-SPOT-002</a>)
-1. It is not possible to change the `base_asset` via governance (<a name="0080-SPOT-003" href="#0080-SPOT-003">0080-SPOT-003</a>)
 1. A `Spot` market can be closed through governance (<a name="0080-SPOT-004" href="#0080-SPOT-004">0080-SPOT-004</a>)
 1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-SPOT-006" href="#0080-SPOT-006">0080-SPOT-006</a>)
 1. If a "sell" order does not trade immediately (or only trades in part), an amount of the base_asset should be transferred to a holding_account to cover the remaining size of the order for the base_asset.(<a name="0080-SPOT-009" href="#0080-SPOT-009">0080-SPOT-009</a>)
