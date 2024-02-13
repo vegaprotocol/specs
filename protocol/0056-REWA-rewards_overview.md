@@ -988,6 +988,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - If a party is a consensus or standby validator their validator ranking reward metric should be set to their ranking score (<a name="0056-REWA-091" href="#0056-REWA-091">0056-REWA-091</a>).
 - If a party is not a consensus or standby validator their validator ranking reward metric should be set to `0` (<a name="0056-REWA-092" href="#0056-REWA-092">0056-REWA-092</a>).
+- For reward metrics relating to trading, an individual must meet the [staking requirement](https://github.com/vegaprotocol/specs/blob/palazzo/protocol/0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) AND [notional time-weighted average position requirement](https://github.com/vegaprotocol/specs/blob/palazzo/protocol/0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) set in the recurring transfer. If they do not then their reward metric is set to 0. Note, these requirements do not apply to the [validator ranking metric](https://github.com/vegaprotocol/specs/blob/palazzo/protocol/0056-REWA-rewards_overview.md#validator-ranking-metric) or the [market creation reward metric](https://github.com/vegaprotocol/specs/blob/palazzo/protocol/0056-REWA-rewards_overview.md#market-creation-reward-metrics). (<a name="0056-REWA-109" href="#0056-REWA-109">0056-REWA-109</a>).
 
 ### Distribution Strategy
 
