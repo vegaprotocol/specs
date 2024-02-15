@@ -65,22 +65,22 @@
                     = s_twap * delta_t * interest_rate
     ```
 
-    - If `s_twap = 1600`, `delta_t = 0.002` and `interest_rate = 0.05` then `funding_payment = 1600 * 0.002 * 0.05 = 0.16`.
-      - Thus, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * 0.16 * 1 = 5565.08` (<a name="0019-MCAL-026" href="#0019-MCAL-026">0019-MCAL-026</a>)
+    - If `s_twap = 1600`, `f_twap = 1590` `delta_t = 0.002` and `interest_rate = 0.05` then `funding_payment = 1600 * 0.002 * 0.05 = 0.16`.
+      - Thus, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 556.5 + 0.5 * 0.16 * 1 = 556.58` (<a name="0019-MCAL-026" href="#0019-MCAL-026">0019-MCAL-026</a>)
 
     - If instead
       - `clamp_upper_bound*s_twap < max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap)`
       - `funding payment = f_twap - s_twap + clamp_upper_bound*s_twap = f_twap + s_twap * (clamp_upper_bound - 1)`.
-      - Then with `s_twap = 1600`, `clamp_upper_bound = 0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (0.05 - 1) = 1590 - 1520 = 70`
-      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * 70 * 1 = 5600` (<a name="0019-MCAL-027" href="#0019-MCAL-027">0019-MCAL-027</a>)
-      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, 70 * -1) = 5565`(<a name="0019-MCAL-030" href="#0019-MCAL-030">0019-MCAL-030</a>)
+      - Then with `s_twap = 1600`, `clamp_upper_bound = 0.05` and `f_twap = 1500`, `funding_payment = 1500 + 1600 * (0.05 - 1) = -20`
+      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 525 + 0.5 * max(0, -20 * 1) = 525` (<a name="0019-MCAL-027" href="#0019-MCAL-027">0019-MCAL-027</a>)
+      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 525 + 0.5 * max(0, -20 * -1 = 535)`(<a name="0019-MCAL-030" href="#0019-MCAL-030">0019-MCAL-030</a>)
 
     - If instead
       - `clamp_upper_bound*s_twap > clamp_lower_bound*s_twap > (1 + delta_t * interest_rate)*s_twap-f_twap)`
       - `funding payment = f_twap - s_twap + clamp_lower_bound*s_twap = f_twap + s_twap * (clamp_lower_bound - 1)`.
-      - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (-0.05 - 1) = 1590 - 1680 = -90`
-      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * 1) = 5565` (<a name="0019-MCAL-028" href="#0019-MCAL-028">0019-MCAL-028</a>)
-      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * -1) = 5610`(<a name="0019-MCAL-029" href="#0019-MCAL-029">0019-MCAL-029</a>)
+      - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1700`, `funding_payment = 1700 + 1600 * (-0.05 - 1) = 20`
+      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 595 + 0.5 * max(0, 20 * 1) = 605` (<a name="0019-MCAL-028" href="#0019-MCAL-028">0019-MCAL-028</a>)
+      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 595 + 0.5 * max(0, 20 * -1) = 595`(<a name="0019-MCAL-029" href="#0019-MCAL-029">0019-MCAL-029</a>)
 
 ## Acceptance Criteria (Isolated-margin)
 
@@ -411,8 +411,8 @@ There should be an additional amount `limit price x size x margin factor = 15910
                     = s_twap * delta_t * interest_rate
     ```
 
-    - If `s_twap = 1600`, `delta_t = 0.002` and `interest_rate = 0.05` then `funding_payment = 1600 * 0.002 * 0.05 = 0.16`.
-      - Thus, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * 0.16 * 1 = 5565.08` (<a name="0019-MCAL-053" href="#0019-MCAL-053">0019-MCAL-053</a>)
+    - If `s_twap = 1600`, `f_twap=1590`, `delta_t = 0.002` and `interest_rate = 0.05` then `funding_payment = 1600 * 0.002 * 0.05 = 0.16`.
+      - Thus, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 556.5 + 0.5 * 0.16 * 1 = 556.58` (<a name="0019-MCAL-053" href="#0019-MCAL-053">0019-MCAL-053</a>)
 
     - If instead
       - `clamp_upper_bound*s_twap < max(clamp_lower_bound*s_twap, (1 + delta_t * interest_rate)*s_twap-f_twap)`
@@ -424,9 +424,9 @@ There should be an additional amount `limit price x size x margin factor = 15910
     - If instead
       - `clamp_upper_bound*s_twap > clamp_lower_bound*s_twap > (1 + delta_t * interest_rate)*s_twap-f_twap)`
       - `funding payment = f_twap - s_twap + clamp_lower_bound*s_twap = f_twap + s_twap * (clamp_lower_bound - 1)`.
-      - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1550`, `funding_payment = 1590 + 1600 * (-0.05 - 1) = 1590 - 1680 = -90`
-      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * 1) = 5565` (<a name="0019-MCAL-055" href="#0019-MCAL-055">0019-MCAL-055</a>)
-      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 5565 + 0.5 * max(0, -90 * -1) = 5610`(<a name="0019-MCAL-056" href="#0019-MCAL-056">0019-MCAL-056</a>)
+      - Then with `s_twap = 1600`, `clamp_lower_bound = -0.05` and `f_twap = 1700`, `funding_payment = 1700 + 1600 * (-0.05 - 1) = 20`
+      - Thus, with `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 595 + 0.5 * max(0, 20 * 1) = 605` (<a name="0019-MCAL-055" href="#0019-MCAL-055">0019-MCAL-055</a>)
+      - However is position is instead `-1`, with the same margin requirement, if `margin funding factor = 0.5`, `total margin requirement = futures margin + funding margin = 595 + 0.5 * max(0, 20 * -1) = 595`(<a name="0019-MCAL-056" href="#0019-MCAL-056">0019-MCAL-056</a>)
 
 
 ## Acceptance Criteria  (Protocol upgrade)
