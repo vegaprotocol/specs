@@ -96,6 +96,16 @@ Further, each party is allowed to submit up to `n` transactions per epoch where 
 
 Any party who manages to fit more then `n` transactions of a single type into a single block will have their excess transactions post-block rejected. A party who has more than 50% of their transactions post-block rejected will be banned for 1/48th of an epoch, or un till the end of the current epoch, whichever comes first.
 
+### Transaction Spam
+Network parameter: `spam.order.MinimalMarginQuantumMultiple` (between 0 and infinite)
+
+If the maintenance margin for a given transaction is smaller than the parameter `spam.order.MinimalMarginSizeQuantumMultiple`, then the transaction is pre-block rejected.
+
+The calculation for this should be done after the other anti-spam calculations but before the gas
+cost calculation as margin calculation is computationally heavier than simple calculations such 
+as number of transactions, but rejected transactions should not get into the calculation of the
+gas cost.
+
 ### Related topics
 
 - [Spam protection: Proof of work](https://github.com/vegaprotocol/specs/blob/master/protocol/0072-SPPW-spam-protection-PoW.md)
@@ -146,5 +156,6 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - A party who has submitted more than `spam.protection.max.applyReferralCode` transactions in the current epoch plus in the current block, should have their transactions submitted in the current block **post-block** rejected (<a name="0062-SPAM-036" href="#0062-SPAM-036">0062-SPAM-036</a>).
 - A party who has more than 50% of their `ApplyReferralCode` transactions post-block rejected should be banned for 1/48th of an epoch or un till the end of the current epoch (whichever comes first). When banned for the above reason, `ApplyReferralCode` transactions should be pre-block rejected (<a name="0062-SPAM-037" href="#0062-SPAM-037">0062-SPAM-037</a>).
 
+- Issue a set of orders with decreasing order sizes for a given market, and verify that the first one rejected through the order-spam rejection is the first one of which the initial margin is smaller than `spam.order.MinimalMarginQuantumMultiple`. Increase the parameter, and repeat the sequence. Decrease the parameter, and repeat the sequence again.
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
