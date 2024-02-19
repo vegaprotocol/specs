@@ -598,8 +598,6 @@ APIs should also exist for clients to:
 - Ensure that when a market is suspended and then resumed via a governance proposal we can still terminate and settle the market using ethereum oracle. (<a name="0028-GOVE-153" href="#0028-GOVE-153">0028-GOVE-153</a>)
 - A market change proposal specifying a new tick size less than or equal to `0` gets rejected.
 - A market change proposal specifying a new tick size which is not an exact multiple of `10^-mdp` gets rejected (where `mdp` is the market decimal places).
-- At enactment, a market change proposal updating the tick size cancels all orders where the quoted price is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places).
-- At enactment, a market change proposal updating the tick size cancels all pegged orders where the offset is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places).
 
 #### Network parameter change proposals
 
