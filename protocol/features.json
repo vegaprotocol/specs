@@ -37,6 +37,8 @@
       "0056-REWA-106",
       "0056-REWA-107",
       "0056-REWA-108",
+      "0056-REWA-109",
+      "0056-REWA-110",
       "0083-RFPR-052",
       "0083-RFPR-059",
       "0083-RFPR-060",
@@ -65,7 +67,12 @@
   },
   "Fixed size amendments": {
     "milestone": "palazzo",
-    "acs": ["0004-AMND-056", "0004-AMND-057", "0004-AMND-058", "0004-AMND-059"]
+    "acs": [
+      "0004-AMND-056",
+      "0004-AMND-057",
+      "0004-AMND-058",
+      "0004-AMND-059"
+    ]
   },
   "Margin isolation": {
     "milestone": "palazzo",
@@ -284,7 +291,12 @@
   },
   "Transfers from vesting": {
     "milestone": "palazzo",
-    "acs": ["0057-TRAN-066", "0057-TRAN-067", "0057-TRAN-068", "0057-TRAN-069"]
+    "acs": [
+      "0057-TRAN-066",
+      "0057-TRAN-067",
+      "0057-TRAN-068",
+      "0057-TRAN-069"
+    ]
   },
   "Liquidity fee setting": {
     "milestone": "palazzo",
@@ -300,7 +312,10 @@
   },
   "Governance market name change": {
     "milestone": "palazzo",
-    "acs": ["0028-GOVE-159", "0028-GOVE-166"]
+    "acs": [
+      "0028-GOVE-159",
+      "0028-GOVE-166"
+    ]
   },
   "Insurance pools redistribution": {
     "milestone": "palazzo",
@@ -460,12 +475,12 @@
       "0012-NP-LIPE-007",
       "0013-NP-POSE-001",
       "0013-NP-POSE-002",
-      "0013-NP-POSE-003",
       "0013-NP-POSE-004",
       "0013-NP-POSE-005",
       "0013-NP-POSE-006",
       "0013-NP-POSE-007",
-      "0013-NP-POSE-008"
+      "0013-NP-POSE-008",
+      "0013-NP-POSE-009"
     ]
   },
   "Unknown": {

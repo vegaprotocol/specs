@@ -21,13 +21,16 @@ Margin level estimate contains the levels specified in [0019-MCAL-margin_calcula
 
 ### Collateral increase estimate
 
-Collateral increase estimate provides an approximate amount of the additional funds above the specified margin and order margin account level balances required.
-
-In cross-margin mode it's the difference between the initial margin level estimate for the specified position and the margin account balance specified in the request.
+Collateral increase estimate provides an approximate difference between the current collateral and the resulting collateral for the specified theoretical position.
 
 In isolated margin mode it's the difference between collateral required to support the specified position and orders with the margin factor provided and the balance of margin and order margin accounts specified in the request.
 
-Collateral increase estimate is always floored at 0, it only tries to estimate the increase in the collateral request, not the potential collateral release amount. If the request is made such that the account balances specified are equal to or greater than the required margin then 0 is returned.
+In cross-margin mode:
+
+- if the collateral required for the specified position is higher than the combined margin and order margin account balances then it's the difference between the initial margin level for the specified position and the sum of those account balances.
+- if the collateral required for the specified position is lower than the combined margin and order margin account balances then:
+  - if the combined account balances are above the margin release level for the specified position: it's the difference between the initial margin level for the specified position and the sum of those account balances,
+  - otherwise it's `0`.
 
 ### Liquidation price estimate
 
@@ -47,7 +50,7 @@ The endpoint request contains additional optional argument `scale_liquidation_pr
 
 1. In isolated margin mode the request with `0` open volume and one or more limit orders specified results in a non-zero order margin in the margin level estimate and margin mode correctly representing isolated margin mode. (<a name="0013-NP-POSE-001" href="#0013-NP-POSE-001">0013-NP-POSE-001</a>)
 1. When account balances are set to `0` and market has slippage factors set to `0`, the collateral increase figure per specified theoretical position correctly approximates (absolute relative difference of less than $10^{-6}$) the actual margin and order margin account balances for a party which opens such a position. (<a name="0013-NP-POSE-002" href="#0013-NP-POSE-002">0013-NP-POSE-002</a>)
-1. When response for a given request contains figure `x` as the collateral increase best case then resubmitting the request with margin account balance increased by `x` should result in `0` collateral increase estimate for the best case. When increasing the margin account balance in the request further the collateral increase should remain at `0`. Same should be true when the above is repeated for the worst case. (<a name="0013-NP-POSE-003" href="#0013-NP-POSE-003">0013-NP-POSE-003</a>)
+1. For a market with slippage cap factor set to `0`, when the response for a given request contains figure `x` as the collateral increase (best and worst case should be the same) then resubmitting the request with margin account balance increased by `x` should result in `0` collateral increase estimate. When increasing the margin account balance in the request further the collateral increase should get negative by the amount of the increase when in isolated margin mode. In cross margin mode it should remain at `0` until the combined margin and order balances are above the margin release level for the theoretical position. Then the collateral increase amount should be negative and equal to: `initial margin level for the specified position - margin account balance - order account balance`. (<a name="0013-NP-POSE-009" href="#0013-NP-POSE-009">0013-NP-POSE-009</a>)
 1. In isolated margin mode increasing general account balance specified in the request has no impact on the collateral increase estimate and the liquidation price estimate. (<a name="0013-NP-POSE-004" href="#0013-NP-POSE-004">0013-NP-POSE-004</a>)
 1. In isolated margin mode the liquidation price estimate for a position with non-zero additional margin requirement with `include_collateral_increase_in_available_collateral` argument set to `true` results in liquidation price which is closer to the current mark price than the result obtained with argument set to `false`. (<a name="0013-NP-POSE-005" href="#0013-NP-POSE-005">0013-NP-POSE-005</a>)
 1. When market is set with different number of decimal places then its settlement asset then setting `scale_liquidation_price_to_market_decimals` to `false` results in liquidation price estimates scaled to asset decimal places, when set to `true` these estimates get scaled to market decimal places. (<a name="0013-NP-POSE-006" href="#0013-NP-POSE-006">0013-NP-POSE-006</a>)
