@@ -865,9 +865,9 @@ Given the following trader positions:
 
 | Tables        | Open           | Buys  | Sells |
 | ------------- |:-------------:| -----:| -----:|
-| case-1      | 1 | 1 | -2
-| case-2      | -1 | 2| 0
-| case-3 | 1 | 0 | -2
+| case-1      | 1 | 1 | -2 |
+| case-2      | -1 | 2| 0 |
+| case-3 | 1 | 0 | -2 |
 
 #### *case-1*
 
