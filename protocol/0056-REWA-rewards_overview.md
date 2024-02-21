@@ -282,7 +282,6 @@ $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
 
 ### Funding reward accounts (<a name="0056-REWA-001" href="#0056-REWA-001">0056-REWA-001</a>)
 
-for product spot: (<a name="0056-REWA-062" href="#0056-REWA-062">0056-REWA-062</a>)
 
 Trading reward accounts are defined by a pair: [`payout_asset, dispatch_strategy`].
 
@@ -296,7 +295,6 @@ Run for another epoch with no fee generated. Expect no transfer to be made to th
 
 ### Funding reward accounts - with markets in scope (<a name="0056-REWA-002" href="#0056-REWA-002">0056-REWA-002</a>)
 
-for product spot: (<a name="0056-REWA-061" href="#0056-REWA-061">0056-REWA-061</a>)
 
 There are two assets configured on the Vega chain: $VEGA and USDT.
 
@@ -308,7 +306,6 @@ Run for another epoch with no fee generated. Expect no transfer to be made to th
 
 ### Distributing fees paid rewards (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
 
-for product spot: (<a name="0056-REWA-060" href="#0056-REWA-060">0056-REWA-060</a>)
 
 #### Rationale 1
 
@@ -357,7 +354,6 @@ At the end of epoch 2:
 
 ### Distributing fees paid rewards - unfunded account (<a name="0056-REWA-011" href="#0056-REWA-011">0056-REWA-011</a>)
 
-for product spot: (<a name="0056-REWA-059" href="#0056-REWA-059">0056-REWA-059</a>)
 
 #### Rationale 2
 
@@ -377,7 +373,6 @@ At the end of epoch 2 although there was trading in the market `ETHUSD-MAR22`, n
 
 ### Distributing fees paid rewards - funded account - no trading activity (<a name="0056-REWA-012" href="#0056-REWA-012">0056-REWA-012</a>)
 
-for product spot: (<a name="0056-REWA-058" href="#0056-REWA-058">0056-REWA-058</a>)
 
 #### Rationale 3
 
@@ -403,7 +398,6 @@ Looking only at epoch 3 - as no trading activity was done, we expect the reward 
 
 ### Distributing fees paid rewards - multiple markets (<a name="0056-REWA-013" href="#0056-REWA-013">0056-REWA-013</a>)
 
-for product spot: (<a name="0056-REWA-057" href="#0056-REWA-057">0056-REWA-057</a>)
 
 #### Rationale 4
 
@@ -444,7 +438,6 @@ The calculation of eligibility is identical to [acceptance code `REWA 010`](http
 
 ### Distributing maker fees received rewards (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>)
 
-for product spot: (<a name="0056-REWA-056" href="#0056-REWA-056">0056-REWA-056</a>)
 
 #### Rationale 5
 
@@ -491,7 +484,6 @@ At the end of epoch `2` `party_0` is paid `120 x 2.8 / (2.79+2.8)` USDC from the
 
 ### Distributing maker fees received rewards - unfunded account (<a name="0056-REWA-021" href="#0056-REWA-021">0056-REWA-021</a>)
 
-for product spot: (<a name="0056-REWA-055" href="#0056-REWA-055">0056-REWA-055</a>)
 
 #### Rationale 6
 

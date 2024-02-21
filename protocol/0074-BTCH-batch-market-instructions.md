@@ -49,16 +49,16 @@ After entering or exiting an auction mid-batch, the full batch must be processed
 
 ## Acceptance criteria
 
-- Given a market with a party having two orders, A and B, a batch transaction to cancel A, amend B to B' and place a limit order which does not immediately execute C should result in a market with orders B' and C. (<a name="0074-BTCH-001" href="#0074-BTCH-001">0074-BTCH-001</a>). For product spot: (<a name="0074-BTCH-012" href="#0074-BTCH-012">0074-BTCH-012</a>)
+- Given a market with a party having two orders, A and B, a batch transaction to cancel A, amend B to B' and place a limit order which does not immediately execute C should result in a market with orders B' and C. (<a name="0074-BTCH-001" href="#0074-BTCH-001">0074-BTCH-001</a>).
 - Any batch transaction containing more than one amend to the same order ID should attempt to execute the first as normal but all further amends should error without being executed. (<a name="0074-BTCH-002" href="#0074-BTCH-002">0074-BTCH-002</a>)
 - An error in any instruction should be logged and returned to the caller but later instructions should still be attempted. (<a name="0074-BTCH-003" href="#0074-BTCH-003">0074-BTCH-003</a>)
-- If an instruction causes the market to enter a Price Monitoring Auction the market should enter the auction immediately before continuing with later instructions. (<a name="0074-BTCH-005" href="#0074-BTCH-005">0074-BTCH-005</a>). For product spot: (<a name="0074-BTCH-015" href="#0074-BTCH-015">0074-BTCH-015</a>)
-- An instruction which is valid at the start of the batch execution but becomes invalid before it is executed should fail. (<a name="0074-BTCH-006" href="#0074-BTCH-006">0074-BTCH-006</a>). For product spot: (<a name="0074-BTCH-016" href="#0074-BTCH-016">0074-BTCH-016</a>) In particular:
+- If an instruction causes the market to enter a Price Monitoring Auction the market should enter the auction immediately before continuing with later instructions. (<a name="0074-BTCH-005" href="#0074-BTCH-005">0074-BTCH-005</a>).
+- An instruction which is valid at the start of the batch execution but becomes invalid before it is executed should fail. (<a name="0074-BTCH-006" href="#0074-BTCH-006">0074-BTCH-006</a>). In particular:
   - A batch consisting of two limit order placements C1 and C2 where the party has enough balance to place either of them individually but not both should place C1 but reject C2.
   - A batch transaction containing aggressive limit order C1 which moves the market into price monitoring auction and a C2 which is marked `GFN` (good for normal) should execute C1 but reject C2.
 - A batch transaction with more instructions than `network.spam_protection.max_batch_size` should fail. (<a name="0074-BTCH-007" href="#0074-BTCH-007">0074-BTCH-007</a>)
 - Instructions in the batch should be executed in the order Cancellations -> Amendments -> Creations.  (<a name="0074-BTCH-008" href="#0074-BTCH-008">0074-BTCH-008</a>)
-- Funds released by cancellations or amendments within the batch should be immediately available for later instructions (<a name="0074-BTCH-009" href="#0074-BTCH-009">0074-BTCH-009</a>). For product spot: (<a name="0074-BTCH-019" href="#0074-BTCH-019">0074-BTCH-019</a>)
+- Funds released by cancellations or amendments within the batch should be immediately available for later instructions (<a name="0074-BTCH-009" href="#0074-BTCH-009">0074-BTCH-009</a>).
 - If an instruction within a batch causes another party to become distressed, position resolution should be attempted before further instructions within the batch are executed (<a name="0074-BTCH-010" href="#0074-BTCH-010">0074-BTCH-010</a>)
 - Instructions within the same category within a batch should be executed in the order they are received. For example, if two Cancellations instructions are submitted in a batch: [C1, C2], then C1 should be executed before C2. (<a name="0074-BTCH-011" href="#0074-BTCH-011">0074-BTCH-011</a>)
 - If the margin mode update transaction fails all transactions in the batch referring to the same market are Stopped. (<a name="0074-BTCH-020" href="#0074-BTCH-020">0074-BTCH-020</a>)

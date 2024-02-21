@@ -67,7 +67,6 @@ Market proposal may specify parent market ID. If it does then:
   - spot to futures (<a name="0081-SUCM-034" href="#0081-SUCM-034">0081-SUCM-034</a>)
 - It is possible for the successor to specify different trading termination and settlement oracle data (<a name="0081-SUCM-003" href="#0081-SUCM-003">0081-SUCM-003</a>).
 
-It is possibly to cancel a [spot market](./0080-SPOT-product_builtin_spot.md) via governance and propose a new spot market as a successor with different `market_decimal_places` and `position_decimal_places` (aka `size_decimal_places` for spot); the LPs virtual stakes are carried over (<a name="0081-SUCM-004" href="#0081-SUCM-004">0081-SUCM-004</a>).
 
 It is possibly to cancel a [perpetual futures](./0053-PERP-product_builtin_perpetual_future.md) market via governance and propose a new perpetual futures market as a successor of the aforementioned cancelled / to be cancelled with different `market_decimal_places` and `position_decimal_places`; the LPs virtual stakes are carried over (<a name="0081-SUCM-015" href="#0081-SUCM-015">0081-SUCM-015</a>).
 

@@ -110,8 +110,6 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 
 ### Test case 1: Withdrawal status is correctly tracked across resets (<a name="0073-LIMN-007" href="#0073-LIMN-007">0073-LIMN-007</a>)
 
-for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</a>)
-
 1. A party has general account balance of 100 USD.
 1. The party submits a withdrawal transaction for 100 USD. A checkpoint is immediately created.
 1. The network is shut down.
@@ -159,24 +157,6 @@ for product spot: (<a name="0073-LIMN-101" href="#0073-LIMN-101">0073-LIMN-101</
 1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_margin_bal`.
-
-#### Test case 3.1.1: Spot market is proposed, accepted, restored (<a name="0073-LIMN-102" href="#0073-LIMN-102">0073-LIMN-102</a>)
-
-1. There is an asset USD and no asset proposals.
-1. There are no markets and no market proposals.
-1. There is a party a party called `LP party` with general balance of 10 000 USD.
-1. A market is proposed by a party called `LP party` and has enactment date 1 year in the future. The market has id `id_xxx`.
-1. `LP party` commits a stake of 1000 USD to `id_xxx`.
-1. Other parties vote on the market and the proposal is accepted (passes rules for vote majority and participation). The market has id `id_xxx`.
-1. The market is in `pending` state, see [market lifecycle](../protocol/0043-MKTL-market_lifecycle.md).
-1. Another party places a limit sell order on the market and has `other_gen_bal`, holding balance `other_hold_bal`.
-1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
-1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
-1. There is an asset USD.
-1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
-1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
-1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_hold_bal`.
 
 #### Test case 3.1.2: Perpetual market is proposed, accepted, restored (<a name="0073-LIMN-105" href="#0073-LIMN-105">0073-LIMN-105</a>)
 
@@ -285,14 +265,6 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 5. That party has a USD general account balance of 200 USD
 
-### Test case 4b: In Spot market, party's Holding Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-080" href="#0073-LIMN-080">0073-LIMN-080</a>)
-
-1. A party has USD general account balance of 100 USD.
-2. That party has USD holding account balance of 50 USD.
-3. The network is shut down.
-4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
-5. That party has a USD general account balance of 150 USD
-
 ### Test case 5: Add or remove stake during checkpoint restart (<a name="0073-LIMN-017" href="#0073-LIMN-017">0073-LIMN-017</a>)
 
 1. There is a Vega token asset.
@@ -337,7 +309,7 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 1. Enacted, listed ERC-20 asset is remembered in checkpoint (<a name="0073-LIMN-023" href="#0073-LIMN-023">0073-LIMN-023</a>)
 1. An ERC-20 asset loaded from checkpoint can be used in a market loaded from a checkpoint (<a name="0073-LIMN-024" href="#0073-LIMN-024">0073-LIMN-024</a>)
 1. An ERC-20 asset loaded from checkpoint can be updated (<a name="0073-LIMN-025" href="#0073-LIMN-025">0073-LIMN-025</a>)
-1. An ERC-20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>). For product spot: (<a name="0073-LIMN-081" href="#0073-LIMN-081">0073-LIMN-081</a>)
+1. An ERC-20 asset loaded from checkpoint can be used in newly proposed markets (<a name="0073-LIMN-026" href="#0073-LIMN-026">0073-LIMN-026</a>).
 1. Can deposit and withdraw funds to/from ERC-20 asset loaded from checkpoint (<a name="0073-LIMN-027" href="#0073-LIMN-027">0073-LIMN-027</a>)
 
 1. Propose a valid ERC-20 asset.
@@ -375,13 +347,12 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 1. Propose, enact, trade in the market, close out distressed party so that market's insurance pool balance > 0, submit trading terminated.
 1. System saves LNL checkpoint at a time when undistributed LP fees for the market are > 0.
 1. Restart Vega, load LNL checkpoint.
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>). For product spot: (<a name="0073-LIMN-083" href="#0073-LIMN-083">0073-LIMN-083</a>)
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>).
 1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-030" href="#0073-LIMN-030">0073-LIMN-030</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-031" href="#0073-LIMN-031">0073-LIMN-031</a>)
-1. In Spot market, for parties that had holdings in the holding account on the market this is now in their general account for the asset.  (<a name="0073-LIMN-084" href="#0073-LIMN-084">0073-LIMN-084</a>)
-1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>). For product spot: (<a name="0073-LIMN-085" href="#0073-LIMN-085">0073-LIMN-085</a>)
+1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>).
 1. The insurance pool balance has been transferred into the global insurance pool using the same settlement asset. (<a name="0073-LIMN-115" href="#0073-LIMN-115">0073-LIMN-115</a>)
-1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-034" href="#0073-LIMN-034">0073-LIMN-034</a>). For product spot: (<a name="0073-LIMN-086" href="#0073-LIMN-086">0073-LIMN-086</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-034" href="#0073-LIMN-034">0073-LIMN-034</a>).
 
 
 ### Test case 15: Market with trading terminated that settled is not restored, collateral moved correctly
@@ -389,12 +360,11 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 1. Propose, enact, trade in the market, submit trading terminated and settlement data, observe final settlement cashflows for at least 2 parties.
 1. System saves LNL checkpoint.
 1. Restart Vega, load LNL checkpoint.
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>). For product spot: (<a name="0073-LIMN-087" href="#0073-LIMN-087">0073-LIMN-087</a>)
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>).
 1. If the market exists in the data node it is marked as settled with correct settlement data. (<a name="0073-LIMN-041" href="#0073-LIMN-041">0073-LIMN-041</a>)
-1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>)
-1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset.  (<a name="0073-LIMN-088" href="#0073-LIMN-088">0073-LIMN-088</a>)
+1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>
 1. The insurance pool balance has been transferred into the global insurance pool using the same settlement asset. (<a name="0073-LIMN-116" href="#0073-LIMN-116">0073-LIMN-116</a>)
-1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>). For product spot: (<a name="0073-LIMN-089" href="#0073-LIMN-089">0073-LIMN-089</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>).
 
 ### Test case 16: Markets can be settled and terminated after restore as proposed
 
@@ -403,21 +373,19 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 1. Restart Vega, load LNL checkpoint.
 1. A party submits liquidity provision to the market, orders are submitted to the opening auction to allow uncrossing; at least two parties now have a position.
 1. Submit the trading terminated transaction and settlement date transaction as set out in the proposal and observe the final settlement cashflows for the parties with positions.  (<a name="0073-LIMN-050" href="#0073-LIMN-050">0073-LIMN-050</a>)
-1. In Spot market, market can be closed after a restore. (<a name="0073-LIMN-090" href="#0073-LIMN-090">0073-LIMN-090</a>)
-1. It's not possible to submit orders or LP provisions to this market.  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>). For product spot: (<a name="0073-LIMN-091" href="#0073-LIMN-091">0073-LIMN-091</a>)
+1. It's not possible to submit orders or LP provisions to this market.  (<a name="0073-LIMN-051" href="#0073-LIMN-051">0073-LIMN-051</a>).
 
 ### Test case 17: Markets with internal time trigger for trading terminated that fires between shutdown and restore
 
 1. Propose, enact a market with some trading terminated given by internal time trigger. Trade in the market creating positions for at least 2 parties.
 1. System saves LNL checkpoint before the trading terminated trigger is set off.
 1. Restart Vega, load LNL checkpoint at a time which is after trading terminated trigger should have rung.
-1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>). For product spot: (<a name="0073-LIMN-092" href="#0073-LIMN-092">0073-LIMN-092</a>); if it exists it in `cancelled` state.
-1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>). For product spot: (<a name="0073-LIMN-093" href="#0073-LIMN-093">0073-LIMN-093</a>)
+1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>).
+1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>).
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
-1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset. (<a name="0073-LIMN-094" href="#0073-LIMN-094">0073-LIMN-094</a>)
-1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>). For product spot: (<a name="0073-LIMN-095" href="#0073-LIMN-095">0073-LIMN-095</a>)
+1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>).
 1. The insurance pool balance has been transferred into the global insurance pool using the same settlement asset. (<a name="0073-LIMN-117" href="#0073-LIMN-117">0073-LIMN-117</a>)
-1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>). For product spot: (<a name="0073-LIMN-096" href="#0073-LIMN-096">0073-LIMN-096</a>)
+1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>).
 
 ### Test case 18: market definition is the same pre and post LNL restore
 
@@ -425,9 +393,9 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 - System saves LNL checkpoint.
 - Restart Vega, load LNL checkpoint.
 - The market has the same:
-  - risk model and parameters (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>). For product spot: (<a name="0073-LIMN-097" href="#0073-LIMN-097">0073-LIMN-097</a>)
-  - price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>). For product spot: (<a name="0073-LIMN-098" href="#0073-LIMN-098">0073-LIMN-098</a>)
-  - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>). For product spot: (<a name="0073-LIMN-099" href="#0073-LIMN-099">0073-LIMN-099</a>)
+  - risk model and parameters (<a name="0073-LIMN-070" href="#0073-LIMN-070">0073-LIMN-070</a>).
+  - price monitoring bounds (<a name="0073-LIMN-071" href="#0073-LIMN-071">0073-LIMN-071</a>).
+  - oracle settings (<a name="0073-LIMN-072" href="#0073-LIMN-072">0073-LIMN-072</a>).
   - margin scaling factors (<a name="0073-LIMN-073" href="#0073-LIMN-073">0073-LIMN-073</a>)
 
 ### Test case 19: Deposit tokens during checkpoint restore
@@ -437,7 +405,7 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 1. Stop the network.
 1. Deposit tokens to a vega party via the ERC20 assert bridge.
 1. Restart the vega network from the checkpoint created earlier.
-1. There party's newly deposited assets are available. (<a name="0073-LIMN-074" href="#0073-LIMN-074">0073-LIMN-074</a>). For product spot: (<a name="0073-LIMN-100" href="#0073-LIMN-100">0073-LIMN-100</a>)
+1. There party's newly deposited assets are available. (<a name="0073-LIMN-074" href="#0073-LIMN-074">0073-LIMN-074</a>).
 
 ### Test case 20: Multisig updates during checkpoint restart
 

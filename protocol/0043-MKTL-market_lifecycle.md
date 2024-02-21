@@ -278,20 +278,6 @@ Margin account balances are transferred to the general account.
 The market state is `settled`.
 After `market.liquidity.successorLaunchWindowLength` has passed since market settlement, any [insurance pool](./0015-INSR-market_insurance_pool_collateral.md) balance is transferred into the global insurance pool using the same settlement asset.
 
-### Lifecycle happy path in Spot market (<a name="0043-MKTL-006" href="#0043-MKTL-006">0043-MKTL-006</a>)
-
-1. Market `m1` is proposed. Price monitoring is configured (e.g. like `2668-price-monitoring.feature`).
-Market state is `proposed`.
-The LP bond of the party that proposed the market is transferred from general to bond account.
-1. Market `m1` is accepted and enters opening auction.
-Market state is `pending`.
-1. Parties place orders and at least one trade happens in continuous trading mode.
-Market state is `active`.
-1. Parties place orders so that a [price monitoring auction is triggered](0032-PRIM-price_monitoring.md).
-Market state is `suspended`.
-1. Price monitoring auction ends and the market is in continuous trading again.
-The market state is `active`.
-1. When a new governance proposal for "closing" the Spot market, then market state is `trading terminated`.
 
 ### Lifecycle happy path in Perpetual market(<a name="0043-MKTL-009" href="#0043-MKTL-009">0043-MKTL-009</a>)
 
@@ -326,13 +312,6 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 1. All data sources that are only referenced by that market are unregistered.
 1. The market state is set to cancelled.
 
-### Market (Spot) never leaves opening auction, market cancelled by governance proposal(<a name="0043-MKTL-007" href="#0043-MKTL-007">0043-MKTL-007</a>)
-
-1. A market is proposed, approved by governance process and enters the opening auction (Pending state).
-1. Market cancelled before the market leaves the opening auction (so market never left Pending state so far).
-1. All orders should be cancelled and holdings returned to respective parties general account for the relevant asset.
-1. All LP commitments should be cancelled and their bond returned to the general account for the relevant asset.
-1. The market state is set to cancelled.
 
 ### Market gets closed via a governance proposal (<a name="0043-MKTL-004" href="#0043-MKTL-004">0043-MKTL-004</a>)
 
@@ -344,14 +323,6 @@ After `market.liquidity.successorLaunchWindowLength` has passed since market set
 1. All the funds from market specific accounts get released to appropriate accounts; the insurance pool perhaps after the delay to allow for transfer into a successor market.
 1. Market gets deleted.
 
-### Market (Spot) gets closed via a governance proposal (<a name="0043-MKTL-008" href="#0043-MKTL-008">0043-MKTL-008</a>)
-
-1. Once the governance proposal to close the market gets enacted any auction that the market may be in gets uncrossed and trades get generated.
-1. All the other orders are cancelled and no further trades get generated.
-1. Any new orders get rejected.
-1. Liquidity commitments cannot be modified or cancelled.
-1. All the funds from market specific accounts get released to appropriate accounts.
-1. Market gets deleted.
 
 ### Market gets suspended via a governance proposal
 
