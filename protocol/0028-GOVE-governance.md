@@ -555,7 +555,7 @@ APIs should also exist for clients to:
 - Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to resume the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
 - Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. Resuming the market will then put the market in the state it was in prior to it being suspended.
   - monitoring auction (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
-  - opening auction (<a name="0028-GOVE-166" href="#0028-GOVE-166">0028-GOVE-167</a>)
+  - opening auction (<a name="0028-GOVE-167" href="#0028-GOVE-167">0028-GOVE-167</a>)
 - Resuming a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
 - A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
 - Verify that a party with 0 balance of the governance token, but with sufficient ELS can submit a market change proposal successfully. (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)
