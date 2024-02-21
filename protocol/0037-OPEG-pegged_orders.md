@@ -20,7 +20,7 @@
 - A pegged order with an offset which would cause it to be priced <= 0 is parked. (<a name="0037-OPEG-017" href="#0037-OPEG-017">0037-OPEG-017</a>)
 - An active pegged order can be amended. (<a name="0037-OPEG-016" href="#0037-OPEG-016">0037-OPEG-016</a>)
 - A transaction submitting a pegged order with negative offset fails with an error explaining the cause was negative offset. (<a name="0037-OPEG-018" href="#0037-OPEG-018">0037-OPEG-018</a>)
-- Given a mid-price which is not an integer multiple of the market tick size, a buy order pegged to the mid price should have it's price rounded up to the nearest market tick size.
+- Given a mid-price which is not an integer multiple of the market tick size, a buy order pegged to the mid price should have it's price rounded up to the nearest market tick size (<a name="0037-OPEG-020" href="#0037-OPEG-020">0037-OPEG-020</a>).
     For example, given:
         - `tick_size=10`
         - `best_bid_price=100`
@@ -28,7 +28,7 @@
         - `mid_price=145`
     Then:
         - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=140`.
-- Given a mid-price which is not an integer multiple of the market tick size, a buy orders pegged to the mid price should have it's price rounded up to the nearest market tick size.
+- Given a mid-price which is not an integer multiple of the market tick size, a buy orders pegged to the mid price should have it's price rounded up to the nearest market tick size (<a name="0037-OPEG-021" href="#0037-OPEG-021">0037-OPEG-021</a>).
     For example, given:
         - `tick_size=10`
         - `best_bid_price=100`
