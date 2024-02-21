@@ -47,26 +47,13 @@ Furthermore, the validators check that:
 - The same identifier has not been used for another transaction from a previously committed block. If the same identifier is used for several transactions in the same block, these transactions need to be removed during post-processing, and the initiator blocked as a spammer.
 - The same block has not been used for more than `spam.pow.numberOfTxPerBlock` transactions by the same party per spam difficulty level (i.e., if `spam.pow.increaseDifficulty` is `= 1`, the same block can be used for more transactions if the PoW accordingly increases in difficulty).
 
-Violations of the latter rules cannot lead to a transaction being removed, as different validators have a different view on this; however, they can be verified post-agreement, and the offending vega-key can be banished for the duration of 1/48 of an Epoch with a minimum duration of 30 seconds. E.g. if the epoch duration is 1 day, then the ban period is 30 minutes. If however the epoch is 10 seconds, then the ban period is 30 seconds; this is measured starting at the blocktime in which the violation occurs, and transactions are allowed again in the first block after. Validators should return a meaningful error message to the wallet to let it know that/why a transaction got rejected.
-Linking a transaction to a too old block will not lead to a banishment, but only to a rejection of the offending transaction.
-
 Notes:
 
 - We do not require feeding the hash of the actual transaction into the hash function;
 this allows users to pre-compute the PoW and thus allows them to perform low
 latency transactions.
 - As for replay protection, there is a danger that a trader communicates with a slow validator, and thus gets a wrong block number. The safest is to check validators worth > 1/3 of the  weight and take the highest block hash.
-- Due to Tendermint constraints, a decision if a transaction is to be rejected or not can only be done based on information that is either synchronised through the chain or contained in the transaction itself, but not based on any other transactions in the mempool. Thus, if a client ties too many transactions to the same block or does not execute the increased difficulty properly, we can not stop this pre-agreement, only detect it post-agreement. This is the reason why some violations are punished with banishment rather than prevented.
-- In the [0062 spam protection spec](./0062-SPAM-spam_protection.md), we want to do anti-spam before verifying signatures; this order, however, cannot be done if the consequence of spam is banishment.
 
-Thus, here the order is:
-
-1. check if the account is banished and (if so) ignore the transaction
-2. check if the basic PoW with lowest difficulty is done properly
-3. verify the signatures
-4. put the transaction on the blockchain
-5. if the signed transactions violate the conditions, issue the banishment
-6. if the signed transactions in a block violate the conditions, remove the offending ones from the block before calling vega [May need discussion]
 
 Depending on how things pan out, we may have an issue with the timing; to make sure traders have sufficient time to get the block height needs us to have a large parameter of `spam.pow.numberOfPastBlocks`, which may allow too many transactions. There are ways to fix this (e.g., the block height needs to end with the same bit as the validator ID), but for now we assume this doesn't cause an issue.
 
@@ -89,10 +76,9 @@ All Vega clients that submitted transactions can verify that their transaction h
 
 - A message with a missing/wrong PoW is rejected (<a name="0072-SPPW-001" href="#0072-SPPW-001">0072-SPPW-001</a>)
 - Reusing the same PoW for several messages is detected and the messages are rejected (<a name="0072-SPPW-002" href="#0072-SPPW-002">0072-SPPW-002</a>)
-- Linking too many transactions to the same block is detected and leads to a blocking of that account (if the increasing difficulty is turned off) (<a name="0072-SPPW-003" href="#0072-SPPW-003">0072-SPPW-003</a>)
-- Linking too many transactions with a low difficulty level to a block is detected and leads to blocking of the account (if increasing difficulty is turned on) (<a name="0072-SPPW-004" href="#0072-SPPW-004">0072-SPPW-004</a>)
+- Linking too many transactions to the same block is detected and leads to rejecting the transactions that are too many (if the increasing difficulty is turned off) (<a name="0072-SPPW-003" href="#0072-SPPW-003">0072-SPPW-003</a>)
+- Linking too many transactions with a low difficulty level to a block is detected and leads rejecting the transactions that are too many (<a name="0072-SPPW-004" href="#0072-SPPW-004">0072-SPPW-004</a>)
 - Reusing a transaction identifier in a way that several transactions with the same ID end up in the same block is detected and the transactions are rejected (<a name="0072-SPPW-005" href="#0072-SPPW-005">0072-SPPW-005</a>)
-- A blocked account is unblocked after the maximum of 1/48 of an Epoch or 30 seconds. For transactions sent in the meantime, a meaningful error message is returned. (<a name="0072-SPPW-006" href="#0072-SPPW-006">0072-SPPW-006</a>)
 - PoW attached to a valid transaction will be accepted provided it's using correct chain ID and, at time of submission, the block hash is one of the last `spam.pow.numberOfPastBlocks` blocks.  (<a name="0072-SPPW-007" href="#0072-SPPW-007">0072-SPPW-007</a>)
 - For each transaction less than or equal to `spam.pow.numberOfTxPerBlock` in a block `spam.pow.difficulty` zeros are needed in the proof-of-work (<a name="0072-SPPW-008" href="#0072-SPPW-008">0072-SPPW-008</a>)
 - For each `spam.pow.numberOfTxPerBlock` sized block of transactions greater than `spam.pow.numberOfTxPerBlock` an additional 0 is required in the proof-of-work (1 additional zero for the first batch, two additional for the second batch etc) (<a name="0072-SPPW-009" href="#0072-SPPW-009">0072-SPPW-009</a>)
@@ -123,7 +109,6 @@ All Vega clients that submitted transactions can verify that their transaction h
   - `Spam.pow.difficulty` is increased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is increased.
   - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is increased.
   - `Spam.pow.difficulty` is increased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased.
-
   - `Spam.pow.difficulty` is decreased and `spam.pow.increaseDifficulty` is increased (0 to 1), and `spam.pow.numberOfTXPerBlock` is decreased. (<a name="0072-SPPW-019" href="#0072-SPPW-019">0072-SPPW-019</a>)
 
 

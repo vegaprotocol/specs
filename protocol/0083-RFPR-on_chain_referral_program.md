@@ -103,11 +103,11 @@ When submitting a referral program proposal through governance the following con
 - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
 - all `minimum_running_notional_taker_volume` values must be an integer value strictly greater than `0`.
 - all `minimum_epochs` values must be an integer strictly greater than 0
-- all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
+- all `referral_reward_factor` values must be greater than `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor`.
 - the number of tiers in `staking_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers`.
 - all `minimum_staked_tokens` values must be an integer value strictly greater than `0`.
 - all `referral_reward_multiplier` values must be a float value greater than or equal to `1`.
-- all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
+- all `referral_discount_factor` values must be greater than `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor`.
 - `window_length` must be an integer strictly greater than zero.
 
 The referral program will start the epoch after the `enactment_timestamp` is reached.
@@ -144,7 +144,8 @@ To create a referral set and generate a referral code, the party must submit a s
   - `name`: mandatory string team name
   - `team_url`: optional string of a link to a team forum, discord, etc. (defaults to empty string / none-type)
   - `avatar_url`: optional string of a link to an image to be used as the teams avatar (defaults to empty string / none-type)
-  - `closed`: optional boolean, defines whether a team is accepting new members (defaults to false)
+  - `closed`: optional boolean, defines whether a team is closed to members not specified in the `allow_list`, i.e. when `True` the team is joinable by invite only.
+  - `allow_list`: optional list of public keys which defines which parties are allowed to join if the team is joinable by invite only.
 
 *Example: if party wants to create a simple referral set.*
 
@@ -169,6 +170,21 @@ message CreateReferralSet{
 }
 ```
 
+*Example: if party wants to create a referral set and team.*
+
+```protobuf
+message CreateReferralSet{
+    is_team: True
+    team_details: {
+        name: "VegaRocks",
+        team_url: "https://discord.com/channels/vegarocks",
+        avatar_url: "https://vega-rocks/logo-360x360.jpg",
+        allow_list: ["publ1ck3y001", "publ1ck3y002", publ1ck3y003]
+        closed: False,
+    }
+}
+```
+
 When the network receives a valid `CreateReferralSet` transaction, the network will create a referral set with the referral set `id` as the referral code. Any future parties who [apply](#applying-a-referral-code) the referral code will be added to the referral set.
 
 ### Updating a referral set
@@ -186,7 +202,8 @@ To update a referral set the party submit a signed `UpdateReferralSet` transacti
   - `name`: optional string team name
   - `team_url`: optional string of a link to a team forum, discord, etc.
   - `avatar_url`: optional string of a link to an image to be used as the teams avatar
-  - `closed`: optional boolean, defines whether a team is accepting new members
+  - `closed`: optional boolean, defines whether a team is closed to members not specified in the `allow_list`, i.e. when `True` the team can be joined by invite only.
+  - `allow_list`: optional list of public keys which defines which parties are allowed to join if the team is joinable by invite only.
 
 ```protobuf
 message UpdateReferralSet{
@@ -200,7 +217,9 @@ message UpdateReferralSet{
 }
 ```
 
-If a referral set is currently designated as a team, a referrer should be able to "close" their team to any new members by setting the `closed` field to `True`. Note, closing a team is the same as closing a referral set and as such all `ApplyReferralCode` transactions applying the referral code associated with the closed referrals set should be rejected.
+If a referral set is currently designated as a team, a referrer should be able to "close" their team to any new members not specified in the `allow_list` by setting the `closed` field to `True`.
+
+Note, if a referrer updates `closed` or the `allow_list` defining the parties which are allowed to join the team, the updated list is only used to validate attempts to join the team, i.e. existing members are not removed from the team.
 
 If a referral set is currently designated as a team, a party is able to effectively "disband" a team by updating their referral set and setting their `is_team` value to `False`. Note a team should only be "disbanded" and removed from leaderboards at the end of the current epoch after rewards have been distributed.
 
@@ -209,6 +228,7 @@ If a referral set is currently designated as a team, a party is able to effectiv
 To apply a referral code and become a referee, a party must fulfil the following criteria:
 
 - party must not currently be a **referrer**
+- party must not currently be a **referee** associated with a valid referral set (Note: for a set to be valid, the sets referrer must be meeting the staking requirement.)
 
 To become a referee, a referee must submit a signed `ApplyReferralCode` transaction with the following fields:
 
@@ -220,13 +240,29 @@ message ApplyReferralCode{
 }
 ```
 
-If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors and reward multipliers updated](#setting-benefit-factors-and-reward-multipliers) accordingly. Their key must then become associated with the referrer's key. All referral rewards will be transferred to this referrer's key, regardless of whether the party reapplies a new referral code.
+If a party is not currently a referee, they must immediately be added to the referral set and [benefit factors and reward multipliers updated](#setting-benefit-factors-and-reward-multipliers) accordingly. If a team exists for this referral set, they will also be added to that team.
 
-If a party is already a referee, and submits another `ApplyReferralCode` transaction, they will not be transferred to the new referral set but they will be added to the associated team at the start of the next epoch (providing a team exists). Note, if the referee has submitted multiple transactions in an epoch, the referee will be added to the new team specified in the latest valid transaction.
+
+If a party is already a referee, and submits another `ApplyReferralCode` transaction, the transaction will be rejected unless the referrer of the current referral set is not meeting the [staking requirement](#creating-a-referral-set). In this case, the party will be removed from the current referral set and added to the new referral set.
+
+
+### Joining a team
+
+If a party is already a referee in a valid set, to join or move between teams, a party can submit a `JoinTeam` transaction with the following fields:
+
+- `id`: the id of the team they wish to join
+
+```protobuf
+message JoinTeam{
+    id: "mYr3f3rra1c0d3"
+}
+```
+
+The party will be added to the team providing the team is not `closed` (anyone can join) or the team is `closed` (joinable by invite only) and the party is specified in the `allow_list`.
 
 ### Party volumes
 
-The network must now track the cumulative notional volume of taker trades for each party in an epoch, call this value `party_epoch_notional_taker_volume`. Note, trades generated by auction uncrossing are not counted. Each time a eligible trade is generated, the network should increment a parties `party_epoch_notional_taker_volume` by the quantum notional volume of the trade.
+The network must now track the cumulative notional volume of taker trades for each party in an epoch, call this value `party_epoch_notional_taker_volume`. Note, trades generated by auction uncrossing are not counted. Each time a eligible trade is generated, the network should increment a parties `party_epoch_notional_taker_volume` by the quantum notional volume of the trade. For a spot market, the quantum is the quantum of the asset used to express the price (i.e. the [quote_asset](./0080-SPOT-product_builtin_spot.md/#1-product-parameters)).
 
 ```pseudo
 party_epoch_notional_taker_volume = party_epoch_notional_taker_volume + (trade_price * trade_size / settlement_asset_quantum)
@@ -406,8 +442,8 @@ The Estimate Fees API should now calculate the following additional information:
     - the number of tiers in `benefit_tiers` must be less than or equal to the network parameter `referralProgram.maxReferralTiers` (<a name="0083-RFPR-002" href="#0083-RFPR-002">0083-RFPR-002</a>).
     - all `minimum_running_notional_taker_volume` values must be an integer strictly greater than 0 (<a name="0083-RFPR-051" href="#0083-RFPR-051">0083-RFPR-051</a>).
     - all `minimum_epochs_in_team` values must be an integer strictly greater than 0 (<a name="0083-RFPR-003" href="#0083-RFPR-003">0083-RFPR-003</a>).
-    - all `referral_reward_factor` values must be greater than or equal to `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-004" href="#0083-RFPR-004">0083-RFPR-004</a>).
-    - all `referral_discount_factor` values must be greater than or equal to `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-005" href="#0083-RFPR-005">0083-RFPR-005</a>).
+    - all `referral_reward_factor` values must be greater than `0` and less than or equal to the network parameter `referralProgram.maxReferralRewardFactor` (<a name="0083-RFPR-004" href="#0083-RFPR-004">0083-RFPR-004</a>).
+    - all `referral_discount_factor` values must be greater than `0` and be less than or equal to the network parameter `referralProgram.maxReferralDiscountFactor` (<a name="0083-RFPR-005" href="#0083-RFPR-005">0083-RFPR-005</a>).
     - the `window_length` must be an integer strictly greater than zero (<a name="0083-RFPR-006" href="#0083-RFPR-006">0083-RFPR-006</a>).
 1. A referral program should be started the first epoch change after the `enactment_datetime` is reached (<a name="0083-RFPR-007" href="#0083-RFPR-007">0083-RFPR-007</a>).
 1. A referral program should be closed the first epoch change after the `end_of_program_timestamp` is reached (<a name="0083-RFPR-008" href="#0083-RFPR-008">0083-RFPR-008</a>).
@@ -442,26 +478,33 @@ The Estimate Fees API should now calculate the following additional information:
 1. If a party is currently the referrer of a referral set from which a team **has not** yet been created, the party can **create** a team by submitting a signed `UpdateReferralSet` transaction and setting `is_team=True` (<a name="0083-RFPR-022" href="#0083-RFPR-022">0083-RFPR-022</a>).
 1. If a party is currently the referrer of a referral set from which a team **has** already been created, the party can **update** a team by submitting a signed `UpdateReferralSet` transaction specifying the fields they want to update (<a name="0083-RFPR-023" href="#0083-RFPR-023">0083-RFPR-023</a>).
 1. If a party submits an `UpdateReferralSet` transaction for a referral set they are not the referrer off, the transaction should be rejected (<a name="0083-RFPR-024" href="#0083-RFPR-024">0083-RFPR-024</a>).
+1. If a referrer updates the `allow_list` associated with the team, existing members who are no longer on the allow_list should **not** be removed from the team (<a name="0083-RFPR-067" href="#0083-RFPR-067">0083-RFPR-067</a>).
 
 #### Applying a referral code
 
-1. If a party **is not** currently a **referee**, if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-025" href="#0083-RFPR-025">0083-RFPR-025</a>)
+1. If a party **is not** currently a **referee**, if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-059" href="#0083-RFPR-059">0083-RFPR-059</a>)
 
     - the party **will** be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists and the team is not closed).
+    - the party **will** be added to the associated team (if one exists) and the team is not `closed` or the team is `closed` and the party is allowed by the `allow_list`.
 
-1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-026" href="#0083-RFPR-026">0083-RFPR-026</a>)
 
-    - the party **will not**  be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists and the team is not closed).
-
-1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-027" href="#0083-RFPR-027">0083-RFPR-027</a>).
+1. If a party **is** currently a **referee** (and the referrer **is not** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then: (<a name="0083-RFPR-060" href="#0083-RFPR-060">0083-RFPR-060</a>).
 
     - the party **will** be added to the associated referral set.
-    - the party **will** be added to the associated team (if one exists and the team is not closed).
+    - the party **will** be added to the associated team (if one exists) and the team is not `closed` or the team is `closed` and the party is allowed by the `allow_list`.
 
+1. If a party **is** currently a **referee** (and the referrer **is** meeting the staking requirement), if they submit a signed `ApplyReferralCode` transaction then the transaction will be rejected. (<a name="0083-RFPR-052" href="#0083-RFPR-052">0083-RFPR-052</a>).
+
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-061" href="#0083-RFPR-061">0083-RFPR-061</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-062" href="#0083-RFPR-062">0083-RFPR-062</a>).
+1. If a party submits an `ApplyReferralCode` transaction, a team exists for the specified `id` and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-063" href="#0083-RFPR-063">0083-RFPR-063</a>).
 1. An `ApplyReferralCode` transaction should be rejected if the party is a **referrer** (<a name="0083-RFPR-029" href="#0083-RFPR-029">0083-RFPR-029</a>).
-1. An `ApplyReferralCode` transaction should be rejected if the `id` in the `ApplyReferralCode` transaction is for a referral set which is designated as a team and has set the team to be closed (<a name="0083-RFPR-030" href="#0083-RFPR-030">0083-RFPR-030</a>).
+
+### Joining a team
+
+1. If a party submits a `JoinTeam` transaction and the team is not `closed` then the party **should** be added to the team. (<a name="0083-RFPR-064" href="#0083-RFPR-064">0083-RFPR-064</a>).
+1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will** be added to the team if **they are** specified in the `allow_list`. (<a name="0083-RFPR-065" href="#0083-RFPR-065">0083-RFPR-065</a>).
+1. If a party submits a `JoinTeam` transaction and the team is `closed` then the party **will not** be added to the team if **they are not** specified in the `allow_list`. (<a name="0083-RFPR-066" href="#0083-RFPR-066">0083-RFPR-066</a>).
 
 #### Epoch and running volumes
 

@@ -92,7 +92,7 @@ Liquidity provider bond account:
 - A liquidity provider can only prompt a transfer of funds to or from this account by (re)submitting the LP commitment  transaction: a valid transaction to create, increase, or decrease their commitment to the market.
   - Transfers to/from this account also occur when it is used for settlement or margin shortfall, when penalties are applied, and if the account is under-collateralised because of these uses and is subsequently topped up to the commitment amount during collateral search (see below)
 - Collateral withdrawn from this account may only be transferred to either:
-  - The insurance pool of the market for markets trading on margin (in event of penalties/slashing)
+  - The insurance pool of the market for markets trading on margin or the network treasury for the asset (for spot markets) (in event of penalties/slashing)
   - The liquidity provider's margin account or the network's settlement account/other participant's margin accounts (during a margin search and mark to market settlement) in the event that they have zero balance in their general account.
   - The liquidity provider's general account (in event of liquidity provider reducing their commitment)
 
@@ -157,10 +157,10 @@ $$
 Transfer $\text{maximum-penalty-free-reduction-amount}_i$ to their general account.
 
 Now transfer $(1-\text{market.liquidity.earlyExitPenalty}) \cdot \text{penalty-incurring-reduction-amount}_i$ to their general account and transfer $\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incurring-reduction-amount}_i$ to the market insurance pool.
+Note that in the case of spot market or any market that isn't running an insurance pool the transfer should go into the network treasury for the asset.
 
 Finally update the ELS as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md) using the entire $\text{commitment-variation}_i$ as the `delta`.
 
-Note that as a consequence the market may land in a liquidity auction the next time conditions for liquidity auctions are evaluated (but there is no need to tie the event of LP(s) reducing their commitment to an immediate liquidity auction evaluation).
 
 ## Fees
 
@@ -309,10 +309,13 @@ Note:
 
 - If a liquidity provider has `fraction_of_time_on_book` >= `market.liquidity.commitmentMinTimeFraction`, no penalty will be taken from their bond account (<a name="0044-LIME-013" href="#0044-LIME-013">0044-LIME-013</a>)
 - If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.commitmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `35%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-014" href="#0044-LIME-014">0044-LIME-014</a>)
+and in the case of spot markets into the network treasury for the asset (<a name="0044-LIME-048" href="#0044-LIME-048">0044-LIME-048</a>)
 - If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.commitmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6`and the market parameter change `market.liquidity.commitmentMinTimeFraction = 0.3` is enacted during the epoch then at the end of the current epoch LP will have their bond slashed. If the LP has `fraction_of_time_on_book` = `0.3` at the end of the next epoch, they are meeting their commitment and will not forfeit any of their bond stake. (<a name="0044-LIME-088" href="#0044-LIME-088">0044-LIME-088</a>)
 - If a liquidity provider has `fraction_of_time_on_book` = `0.3`, `market.liquidity.commitmentMinTimeFraction = 0.0`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6`and the market parameter change `market.liquidity.commitmentMinTimeFraction = 0.6` is enacted during the epoch then at the end of the current epoch LP will not forfeit any of their bond stake. If the LP has `fraction_of_time_on_book` = `0.3` at the end of the next epoch at the end of the next epoch, the LP will have their bond slashed. (<a name="0044-LIME-089" href="#0044-LIME-089">0044-LIME-089</a>)
 - If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.commitmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.7`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `60%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-015" href="#0044-LIME-015">0044-LIME-015</a>)
+and in the case of spot markets into the network treasury for the asset (<a name="0044-LIME-046" href="#0044-LIME-046">0044-LIME-046</a>)
 - If a liquidity provider has `fraction_of_time_on_book` = `0`, `market.liquidity.commitmentMinTimeFraction = 0.6`, `market.liquidity.sla.nonPerformanceBondPenaltySlope = 0.2`, `market.liquidity.sla.nonPerformanceBondPenaltyMax = 0.6` at the end of an epoch then they will forfeit `20%` of their bond stake, which will be transferred into the market's insurance pool (<a name="0044-LIME-016" href="#0044-LIME-016">0044-LIME-016</a>)
+and in the case of spot markets into the network treasury for the asset (<a name="0044-LIME-047" href="#0044-LIME-047">0044-LIME-047</a>)
 
 - If a liquidity provider with an active liquidity provision at the start of an epoch reduces their liquidity provision staked commitment during the epoch the initial committed level at the start of the epoch will remain in effect until the end of the epoch, at which point the protocol will attempt to reduce the bond to the new level. (<a name="0044-LIME-018" href="#0044-LIME-018">0044-LIME-018</a>)
 - If a liquidity provider with an active liquidity provision at the start of an epoch reduces their liquidity provision staked commitment during the epoch the initial committed level at the start of the epoch will remain in effect until the end of the epoch, at which point the protocol will attempt to reduce the bond to the new level. If the reduced level has been changed several times during an epoch, only the latest value will take effect (<a name="0044-LIME-019" href="#0044-LIME-019">0044-LIME-019</a>)
@@ -325,9 +328,13 @@ Note:
 
 - A liquidity provider who reduces their liquidity provision such that the total stake on the market is still above the target stake after reduction will have no penalty applied and will receive their full reduction in stake back at the end of the epoch. (<a name="0044-LIME-022" href="#0044-LIME-022">0044-LIME-022</a>)
 - For a market with `market.liquidity.earlyExitPenalty = 0.25` and `target stake > total stake` already, a liquidity provider who reduces their commitment by `100` will only receive `75` back into their general account with `25` transferred into the market's insurance account. (<a name="0044-LIME-023" href="#0044-LIME-023">0044-LIME-023</a>)
+In the case of spot markets it will be transferred into the network treasury for the asset (<a name="0044-LIME-045" href="#0044-LIME-045">0044-LIME-045</a>)
 - For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 40` already, a liquidity provider who reduces their commitment by `100` will receive a total of `85` back into their general account with `15` transferred into the market's insurance account (`40` received without penalty, then the remaining `60` receiving a `25%` penalty). (<a name="0044-LIME-024" href="#0044-LIME-024">0044-LIME-024</a>)
+- In the case of spot markets it will be transferred into the network treasury for the asset (<a name="0044-LIME-044" href="#0044-LIME-044">0044-LIME-044</a>)
 
 - For a market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if one liquidity provider places a transaction to reduce their stake by `100` followed by a second liquidity provider who reduces their commitment by `100`, the first liquidity provider will receive a full `100` stake back whilst the second will receive a total of `85` back into their general account with `15` transferred into the market's insurance account (`40` received without penalty, then the remaining `60` receiving a `25%` penalty). (<a name="0044-LIME-025" href="#0044-LIME-025">0044-LIME-025</a>)
+
+In the case of spot markets it will be transferred into the network treasury for the asset (<a name="0044-LIME-043" href="#0044-LIME-043">0044-LIME-043</a>)
 
 
 - For a futures market with `market.liquidity.earlyExitPenalty = 0.25` and `total stake = target stake + 140` already, if the following transactions occur:
@@ -341,16 +348,12 @@ Note:
   - When a LP increases their commitment then:
     - It takes effect immediately for the purposes of LP stake supplied to the market
     - In terms of the liquidity they are expected to supply: this only takes effect from the start of the next epoch
-    (<a name="0044-LIME-050" href="#0044-LIME-050">0044-LIME-050</a>)
-  - LP can decrease or cancel their commitment and it will take effect immediately without incurring penalties (<a name="0044-LIME-051" href="#0044-LIME-051">0044-LIME-051</a>).
+    (<a name="0044-LIME-050" href="#0044-LIME-050">0044-LIME-050</a>). For spot (<a name="0044-LIME-054" href="#0044-LIME-054">0044-LIME-054</a>)
+  - LP can decrease or cancel their commitment and it will take effect immediately without incurring penalties (<a name="0044-LIME-051" href="#0044-LIME-051">0044-LIME-051</a>). For spot (<a name="0044-LIME-055" href="#0044-LIME-055">0044-LIME-055</a>)
   - If target stake is 0 then any LP can cancel their commitment without incurring penalties (<a name="0044-LIME-053" href="#0044-LIME-053">0044-LIME-053</a>)
 
-- Consider a market in liquidity auction, when a LP increases their commitment it will take effect immediate for the purposes of LP stake supplied to the market. Where LP `supplied stake > target stake` the market will leave liquidity auction when the liquidity auction ends
-  - In terms of the liquidity they are expected to supply: this only takes effect from the start of the next epoch
-  (<a name="0044-LIME-102" href="#0044-LIME-102">0044-LIME-102</a>)
-
 - For a market that is in continuous trading and a single LP has committed liquidity:
-  - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>).
+  - The LP can cancel their commitment at any time (though this may involve incurring a penalty) (<a name="0044-LIME-060" href="#0044-LIME-060">0044-LIME-060</a>). For spot (<a name="0044-LIME-056" href="#0044-LIME-056">0044-LIME-056</a>)
 - During continuous trading an LP can submit a transaction to decrease commitment but it will only happen at the end of current epoch. (<a name="0044-LIME-101" href="#0044-LIME-101">0044-LIME-101</a>)
 
 - For a market that is in continuous trading and LP has committed liquidity
@@ -373,21 +376,21 @@ Note:
 
 - Consider a market, where `market.liquidity.priceRange = 0.05`, and which is in monitoring auction with `last trade price` set to `5` and we do not have `indicative uncrossing price`. There is a LP who's committed to provide liquidity. They place a buy orders at price `4.75` and sell order at price `5.25`. At the end of the epoch, the LP is meeting their committed volume of notional rendering them exempt from a bond penalty. (<a name="0044-LIME-092" href="#0044-LIME-092">0044-LIME-092</a>)
 
-- When the LP increases its commitment and the increment is higher than its general account balance, the increments are rejected, and the old provision persists. (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>).
-- When LP decreases its commitment so that $\text{commitment-variation}_i <= \text{maximum-penalty-free-reduction-amount}_i$, then the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md)(<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>).
-- When LP decreases its commitment so that $\text{commitment-variation}_i > \text{maximum-penalty-free-reduction-amount}_i$ , $(1-\text{market.liquidity.earlyExitPenalty}) \cdot \text{penalty-incurring-reduction-amount}_i$ should be transferred into its general account and $\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incurring-reduction-amount}_i$ should be transferred into market insurance pool (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>).
-- When an LP creates a new provision with zero commitment, it should be rejected with an error message stating that the commitment amount is zero. (<a name="0044-LIME-069" href="#0044-LIME-069">0044-LIME-069</a>).
-- When an LP amends the Fee Factor to a value greater than `market.liquidity.maximumLiquidityFeeFactorLevel`, the amendments are rejected (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>).
-- A distressed LP (when `bond account == 0 && general account == 0 && margin account < maintenance margin`) will have their orders cancelled. If the LP remains distressed, the network takes over any positions the LP may hold and zeroes them out (closes them out) (<a name="0044-LIME-073" href="#0044-LIME-073">0044-LIME-073</a>).
-- If a party submits LP provisions in multiple markets then multiple bond accounts are created and managed by Vega.(<a name="0044-LIME-075" href="#0044-LIME-075">0044-LIME-075</a>).
+- When the LP increases its commitment and the increment is higher than its general account balance, the increments are rejected, and the old provision persists. (<a name="0044-LIME-063" href="#0044-LIME-063">0044-LIME-063</a>). For spot (<a name="0044-LIME-064" href="#0044-LIME-064">0044-LIME-064</a>)
+- When LP decreases its commitment so that $\text{commitment-variation}_i <= \text{maximum-penalty-free-reduction-amount}_i$, then the entire amount by which they decreased their commitment is transferred to their general account, their ELS got updated as per the [ELS calculation](0042-LIQF-setting_fees_and_rewarding_lps.md)(<a name="0044-LIME-065" href="#0044-LIME-065">0044-LIME-065</a>). For spot (<a name="0044-LIME-066" href="#0044-LIME-066">0044-LIME-066</a>)
+- When LP decreases its commitment so that $\text{commitment-variation}_i > \text{maximum-penalty-free-reduction-amount}_i$ , $(1-\text{market.liquidity.earlyExitPenalty}) \cdot \text{penalty-incurring-reduction-amount}_i$ should be transferred into its general account and $\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incurring-reduction-amount}_i$ should be transferred into market insurance pool (<a name="0044-LIME-067" href="#0044-LIME-067">0044-LIME-067</a>). For spot $\text{market.liquidity.earlyExitPenalty} \cdot  \text{penalty-incurring-reduction-amount}_i$ should be transferred into the network treasury for the asset (<a name="0044-LIME-068" href="#0044-LIME-068">0044-LIME-068</a>)
+- When an LP creates a new provision with zero commitment, it should be rejected with an error message stating that the commitment amount is zero. (<a name="0044-LIME-069" href="#0044-LIME-069">0044-LIME-069</a>). For spot (<a name="0044-LIME-070" href="#0044-LIME-070">0044-LIME-070</a>)
+- When an LP amends the Fee Factor to a value greater than `market.liquidity.maximumLiquidityFeeFactorLevel`, the amendments are rejected (<a name="0044-LIME-071" href="#0044-LIME-071">0044-LIME-071</a>). For spot (<a name="0044-LIME-072" href="#0044-LIME-072">0044-LIME-072</a>)
+- A distressed LP (when `bond account == 0 && general account == 0 && margin account < maintenance margin`) will have their orders cancelled. If the LP remains distressed, the network takes over any positions the LP may hold and zeroes them out (closes them out) (<a name="0044-LIME-073" href="#0044-LIME-073">0044-LIME-073</a>). For spot (<a name="0044-LIME-074" href="#0044-LIME-074">0044-LIME-074</a>)
+- If a party submits LP provisions in multiple markets then multiple bond accounts are created and managed by Vega.(<a name="0044-LIME-075" href="#0044-LIME-075">0044-LIME-075</a>). For spot (<a name="0044-LIME-076" href="#0044-LIME-076">0044-LIME-076</a>)
 
 
 ### Qualifying Order Types
 
-- Once liquidity is committed, LPs can meet their commitment by placing limit orders, pegged limit orders, and iceberg orders. For iceberg orders, all the volume (including displayed and remaining volume) counts towards the commitment. (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>).
-- Parked pegged limit orders and stop-loss orders do not count towards an LPs liquidity commitment. (<a name="0044-LIME-077" href="#0044-LIME-077">0044-LIME-077</a>).
-- GFA orders during auction from LP count towards LPs liquidity commitment (<a name="0044-LIME-079" href="#0044-LIME-079">0044-LIME-079</a>).
-- GFA orders during continuous trading mode from LP do not count towards the LP's liquidity commitment (<a name="0044-LIME-081" href="#0044-LIME-081">0044-LIME-081</a>).
+- Once liquidity is committed, LPs can meet their commitment by placing limit orders, pegged limit orders, and iceberg orders. For iceberg orders, all the volume (including displayed and remaining volume) counts towards the commitment. (<a name="0044-LIME-028" href="#0044-LIME-028">0044-LIME-028</a>). For spot (<a name="0044-LIME-029" href="#0044-LIME-029">0044-LIME-029</a>)
+- Parked pegged limit orders and stop-loss orders do not count towards an LPs liquidity commitment. (<a name="0044-LIME-077" href="#0044-LIME-077">0044-LIME-077</a>). For spot (<a name="0044-LIME-078" href="#0044-LIME-078">0044-LIME-078</a>)
+- GFA orders during auction from LP count towards LPs liquidity commitment (<a name="0044-LIME-079" href="#0044-LIME-079">0044-LIME-079</a>). For spot (<a name="0044-LIME-080" href="#0044-LIME-080">0044-LIME-080</a>)
+- GFA orders during continuous trading mode from LP do not count towards the LP's liquidity commitment (<a name="0044-LIME-081" href="#0044-LIME-081">0044-LIME-081</a>). For spot (<a name="0044-LIME-082" href="#0044-LIME-082">0044-LIME-082</a>)
 
 ### Snapshot
 

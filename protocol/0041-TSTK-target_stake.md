@@ -5,15 +5,11 @@
 This spec outlines how to measure how much stake we want committed to a market relative to what is happening on the market (currently open interest).
 The target stake is a calculated quantity, utilised by various mechanisms in the protocol:
 
-- If the LPs total committed stake is less than c_1 x `target_stake` we trigger liquidity auction. See [Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md). Note that there is a one-to-one correspondence between the amount of stake LPs committed and the supplied liquidity.
-The parameter c_1 is a market parameter defined in the [liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md) spec.
-- It is used to set the fee factor for the LPs: see [Setting fees and rewarding LPs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-
 ### Definitions / Parameters used
 
 - **Open interest**: the volume of all open positions in a given market.
 - `market.stake.target.timeWindow` is a network parameter providing the default length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds. A market proposal / update can override this by setting  `timeWindow` in `liquidityMonitoringParameters.targetStakeParameters`.
-- `market.stake.target.scalingFactor` is a network parameter providing the default scaling between liquidity demand estimate based on open interest and target stake. A market proposal / update can override this by setting  `scalingFactor` in  `liquidityMonitoringParameters.targetStakeParameters`.
+- `market.stake.target.scalingFactor` is a network parameter providing the default scaling between liquidity demand estimate based on open interest and target stake.
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see [the Quant Risk Models spec](./0018-RSKM-quant_risk_models.ipynb).
 - `mark_price`, see [mark price](./0009-MRKP-mark_price.md) spec.
 - `indicative_uncrossing_price`, see [auction](./0026-AUCT-auctions.md) spec.
@@ -68,6 +64,32 @@ Example 3: if `market.stake.target.scalingFactor = 10`, `rf = 0.004` and `max_oi
 - Change of `market.stake.target.scalingFactor` will immediately change the scaling between liquidity demand estimate based on open interest and target stake, hence immediately change the target stake. (<a name="0041-TSTK-004" href="#0041-TSTK-004">0041-TSTK-004</a>)
 - Change of `market.stake.target.timeWindow` will immediately change the length of time window over which open interest is measured, hence will immediately change the value of `max_oi`. (<a name="0041-TSTK-005" href="#0041-TSTK-005">0041-TSTK-005</a>)
 
+## Target stake for spot markets
+
+See [spot market spec](0080-SPOT-product_builtin_spot.md).3600s
+
+The target stake of a market is calculated as a fraction of the maximum `total_stake` over a rolling time window. The fraction is controlled by the parameter `scaling_factor` and the length of the window is controlled by the parameter `time_window`.
+
+```pseudo
+e.g.
+
+Given: the following total_stake values
+
+    [time, total_stake] = [[17:59, 12000], [18:01, 11000], [18:30, 9000], [18:59, 10000]]
+
+If: the time value and market parameters are
+
+    current_time = 19:00
+
+    time_window = 3600s
+    target_stake_factor = 0.25
+
+Then: the target stake value is
+
+    target_stake = 0.25 * 11000 = 2750 DAI
+```
+
+The above design ensures the `target_stake` of a market is unable to fluctuate dramatically over the window. Controlling the `target_stake` impacts the `total_stake` as reducing the commitment beyond `maximum_reduction_amount` means the LPs will be charged a penalty for doing so.
 
 ### Acceptance criteria
 

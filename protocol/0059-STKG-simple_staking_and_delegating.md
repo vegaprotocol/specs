@@ -164,7 +164,7 @@ Another edge case is the following: during the epoch the party had x tokens asso
 
 Actual validator score calculation is in [simple scheme for Sweetwater](0061-simple-POS-rewards\ -\ SweetWater.md) and it introduces its own network parameters.
 
-See the [network paramters spec](./0054-NETP-network_parameters.md#current-network-parameters) for a full list of parameters.
+See the [network parameters spec](./0054-NETP-network_parameters.md#current-network-parameters) for a full list of parameters.
 
 ## Acceptance Criteria
 

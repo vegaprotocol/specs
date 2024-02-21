@@ -51,12 +51,11 @@ Notes on scope of current version of this spec:
 
 ### Stop orders
 
-In addition to normal immediately executing order, Vega should accept the submission of stop orders.
+In addition to normal immediately executing orders, Vega should accept the submission of stop orders.
 These differ from normal orders in that they sit off the order book until triggered, when they are entered as normal.
 These are generally used to exit positions under pre-defined conditions, either as a "stop loss" order that controls the maximum losses a position may take, a "take profit" order that closes a position once a defined level of profit has been made, or both.
 
-
-A stop order submission can be made (stop loss or take profit are probably both just called a stop order internally).
+A stop order submission can be made (stop loss or take profit are both just called a stop order internally).
 
 - Stop order submissions must include either a trigger price OR trailing stop distance as a % move from the reference price in addition to a normal order submission.
 
@@ -71,9 +70,15 @@ If it has an expiry then it can be set either to cancel on expiry (i.e. it is de
 An OCO contains TWO stop order submissions, and must include one in each trigger direction.
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
-  - An OCO submission cannot be set to execute at expiry.
+  - An OCO submission can be set to have one of three different behaviours at expiry, either triggering one side, triggering the other, or expire without any action. This is configured through the setting of the expiry behaviour on each leg. Setting each leg to trade at expiration will result in the OCO being rejected.
 
 - The stop order submission wraps a normal order submission.
+
+- A stop order submission may have an optional `Size Override`:
+  - If unset, the size within the contained normal order submission will be used
+  - If set to `Position`, triggering should override the contained order's size with the trader's entire current position on the market.
+    - The `Position` override configuration should also include the option `position_fraction` which determines what proportion of the position is closed when the stop order is triggered. At time of triggering the size of the order will be determined by $fraction \cdot position$.
+    - All `Position` stop orders existing should be cancelled if a trader's position changes from long to short (or vice versa).
 
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
 
@@ -86,7 +91,9 @@ Therefore the trigger level of a stop order moves with the market allowing the t
 
 - The order can't be triggered or trade at all during an auction (even if the current price would normally trigger it immediately on entry).
 
-- A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
+- A stop order can be entered during an auction (except opening auction), and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
+
+- A stop order entered during opening auction will be rejected.
 
 - GFA is not a valid TIF for a stop order submission.
 
@@ -255,46 +262,47 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 ## Acceptance Criteria
 
 - Immediate orders, continuous trading:
-  - An aggressive persistent (GTT, GTC) limit order that is not crossed with the order book is included on the order book at limit order price at the back of the queue of orders at that price. No trades are generated. (<a name="0014-ORDT-001" href="#0014-ORDT-001">0014-ORDT-001</a>).
-  - An aggressive persistent (GTT, GTC) limit order that crosses with trades >= to its volume is filled completely and does not appear on the order book or in the order book volume. Trades are atomically generated for the full volume. (<a name="0014-ORDT-002" href="#0014-ORDT-002">0014-ORDT-002</a>).
-  - An aggressive persistent (GTT, GTC) limit order that is partially filled generates trades commensurate with the filled volume. The remaining volume is placed on the order book at the limit order price, at the back of the queue of orders at that price. (<a name="0014-ORDT-003" href="#0014-ORDT-003">0014-ORDT-003</a>).
-  - Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporates its volume and/or price level. (<a name="0014-ORDT-004" href="#0014-ORDT-004">0014-ORDT-004</a>).
-  - A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>).
-- No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>).
-- A pegged order (including iceberg pegged orders) never has its price updated during the execution of an incoming aggressive order (even as price levels get consumed so that its reference price changes after the execution). (<a name="0014-ORDT-039" href="#0014-ORDT-039">0014-ORDT-039</a>).
+  - An aggressive persistent (GTT, GTC) limit order that is not crossed with the order book is included on the order book at limit order price at the back of the queue of orders at that price. No trades are generated. (<a name="0014-ORDT-001" href="#0014-ORDT-001">0014-ORDT-001</a>). For product spot: (<a name="0014-ORDT-081" href="#0014-ORDT-081">0014-ORDT-081</a>)
+  - An aggressive persistent (GTT, GTC) limit order that crosses with trades >= to its volume is filled completely and does not appear on the order book or in the order book volume. Trades are atomically generated for the full volume. (<a name="0014-ORDT-002" href="#0014-ORDT-002">0014-ORDT-002</a>). For product spot: (<a name="0014-ORDT-082" href="#0014-ORDT-082">0014-ORDT-082</a>)
+  - An aggressive persistent (GTT, GTC) limit order that is partially filled generates trades commensurate with the filled volume. The remaining volume is placed on the order book at the limit order price, at the back of the queue of orders at that price. (<a name="0014-ORDT-003" href="#0014-ORDT-003">0014-ORDT-003</a>). For product spot: (<a name="0014-ORDT-083" href="#0014-ORDT-083">0014-ORDT-083</a>)
+  - Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporates its volume and/or price level. (<a name="0014-ORDT-004" href="#0014-ORDT-004">0014-ORDT-004</a>). For product spot: (<a name="0014-ORDT-084" href="#0014-ORDT-084">0014-ORDT-084</a>)
+  - A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>). For product spot: (<a name="0014-ORDT-085" href="#0014-ORDT-085">0014-ORDT-085</a>)
+- No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>). For product spot: (<a name="0014-ORDT-086" href="#0014-ORDT-086">0014-ORDT-086</a>)
+- A pegged order (including iceberg pegged orders) never has its price updated during the execution of an incoming aggressive order (even as price levels get consumed so that its reference price changes after the execution). (<a name="0014-ORDT-039" href="#0014-ORDT-039">0014-ORDT-039</a>)
 
 ### Iceberg Orders AC's
 
 #### Iceberg Order Submission
 
-1. A persistent (GTC, GTT, GFA, GFN) iceberg order that is not crossed with the order book is included in the order book with order book volume == initial peak size. No trades are generated (<a name="0014-ORDT-007" href="#0014-ORDT-007">0014-ORDT-007</a>).
-2. An iceberg order with either an ordinary or pegged limit price can be submitted (<a name="0014-ORDT-008" href="#0014-ORDT-008">0014-ORDT-008</a>).
-3. An iceberg post only order can be submitted  (<a name="0014-ORDT-009" href="#0014-ORDT-009">0014-ORDT-009</a>).
-4. An iceberg reduce only order is rejected (<a name="0014-ORDT-010" href="#0014-ORDT-010">0014-ORDT-010</a>).
+1. A persistent (GTC, GTT, GFA, GFN) iceberg order that is not crossed with the order book is included in the order book with order book volume == initial peak size. No trades are generated (<a name="0014-ORDT-007" href="#0014-ORDT-007">0014-ORDT-007</a>). For product spot: (<a name="0014-ORDT-087" href="#0014-ORDT-087">0014-ORDT-087</a>)
+2. An iceberg order with either an ordinary or pegged limit price can be submitted (<a name="0014-ORDT-008" href="#0014-ORDT-008">0014-ORDT-008</a>). For product spot: (<a name="0014-ORDT-088" href="#0014-ORDT-088">0014-ORDT-088</a>)
+3. An iceberg post only order can be submitted  (<a name="0014-ORDT-009" href="#0014-ORDT-009">0014-ORDT-009</a>). For product spot: (<a name="0014-ORDT-089" href="#0014-ORDT-089">0014-ORDT-089</a>)
+4. An iceberg reduce only order is rejected (<a name="0014-ORDT-010" href="#0014-ORDT-010">0014-ORDT-010</a>). For product spot: (<a name="0014-ORDT-090" href="#0014-ORDT-090">0014-ORDT-090</a>)
 5. For an iceberg order that is submitted with total size x and display size y the margin taken should be identical to a regular order of size `x` rather than one of size `y` (<a name="0014-ORDT-011" href="#0014-ORDT-011">0014-ORDT-011</a>)
 In Spot market, for an iceberg order that is submitted with total size x and display size y the holding asset taken should be identical to a regular order of size `x` rather than one of size `y` (<a name="0014-ORDT-091" href="#0014-ORDT-091">0014-ORDT-091</a>)
-6. For an iceberg order, the orders are refreshed immediately after producing a trade. Every time volume is taken from the displayed quantity , the order is refreshed if display quantity < minimum peak size (<a name="0014-ORDT-012" href="#0014-ORDT-012">0014-ORDT-012</a>).
+6. For an iceberg order, the orders are refreshed immediately after producing a trade. Every time volume is taken from the displayed quantity , the order is refreshed if display quantity < minimum peak size (<a name="0014-ORDT-012" href="#0014-ORDT-012">0014-ORDT-012</a>). For product spot: (<a name="0014-ORDT-092" href="#0014-ORDT-092">0014-ORDT-092</a>)
    - If the order is successfully refreshed , then the order loses its time priority and is pushed to the back of the queue
-7. For an iceberg order that's submitted when the market is in auction, iceberg orders trade according to their behaviour if they were already on the book (trading first the visible size, then additional if the full visible price level is exhausted in the uncrossing) (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>).
+7. For an iceberg order that's submitted when the market is in auction, iceberg orders trade according to their behaviour if they were already on the book (trading first the visible size, then additional if the full visible price level is exhausted in the uncrossing) (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>). For product spot: (<a name="0014-ORDT-093" href="#0014-ORDT-093">0014-ORDT-093</a>)
 
 #### Iceberg Order Batch Submission
 
 1. For multiple iceberg orders submitted as a batch of orders with a mix of ordinary limit orders and market orders, the iceberg orders are processed atomically and the order book volume and price, margin calculations , order status are all correct (<a name="0014-ORDT-014" href="#0014-ORDT-014">0014-ORDT-014</a>)
-2. For an iceberg order submitted in a batch that trades against multiple other orders sitting on the book, the iceberg order refreshes between each order in the batch (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>).
+In Spot market, for multiple iceberg orders submitted as a batch of orders with a mix of ordinary limit orders and market orders, the iceberg orders are processed atomically and the order book volume and price, holding calculations , order status are all correct. (<a name="0014-ORDT-094" href="#0014-ORDT-094">0014-ORDT-094</a>)
+2. For an iceberg order submitted in a batch that trades against multiple other orders sitting on the book, the iceberg order refreshes between each order in the batch (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>). For product spot: (<a name="0014-ORDT-095" href="#0014-ORDT-095">0014-ORDT-095</a>)
 
 #### Iceberg Order Submission - Negative tests
 
-1. An iceberg order with a non persistent TIF (IOC, FOK) is rejected with a valid error message (<a name="0014-ORDT-016" href="#0014-ORDT-016">0014-ORDT-016</a>).
-2. An iceberg market order with any TIF is rejected with a valid error message (<a name="0014-ORDT-017" href="#0014-ORDT-017">0014-ORDT-017</a>).
-3. A reduce-only iceberg order with any TIF is rejected with a valid error message (<a name="0014-ORDT-018" href="#0014-ORDT-018">0014-ORDT-018</a>).
-4. An iceberg order with initial peak size greater than the total order size is rejected with a valid error message (<a name="0014-ORDT-020" href="#0014-ORDT-020">0014-ORDT-020</a>).
-5. An iceberg order with minimum peak size less than 0 is rejected with a valid error message (<a name="0014-ORDT-021" href="#0014-ORDT-021">0014-ORDT-021</a>).
-6. An iceberg order with minimum peak size greater than initial peak size is rejected with a valid error message (<a name="0014-ORDT-022" href="#0014-ORDT-022">0014-ORDT-022</a>).
+1. An iceberg order with a non persistent TIF (IOC, FOK) is rejected with a valid error message (<a name="0014-ORDT-016" href="#0014-ORDT-016">0014-ORDT-016</a>). For product spot: (<a name="0014-ORDT-096" href="#0014-ORDT-096">0014-ORDT-096</a>)
+2. An iceberg market order with any TIF is rejected with a valid error message (<a name="0014-ORDT-017" href="#0014-ORDT-017">0014-ORDT-017</a>). For product spot: (<a name="0014-ORDT-097" href="#0014-ORDT-097">0014-ORDT-097</a>)
+3. A reduce-only iceberg order with any TIF is rejected with a valid error message (<a name="0014-ORDT-018" href="#0014-ORDT-018">0014-ORDT-018</a>). For product spot: (<a name="0014-ORDT-098" href="#0014-ORDT-098">0014-ORDT-098</a>)
+4. An iceberg order with initial peak size greater than the total order size is rejected with a valid error message (<a name="0014-ORDT-020" href="#0014-ORDT-020">0014-ORDT-020</a>). For product spot: (<a name="0014-ORDT-099" href="#0014-ORDT-099">0014-ORDT-099</a>)
+5. An iceberg order with minimum peak size less than 0 is rejected with a valid error message (<a name="0014-ORDT-021" href="#0014-ORDT-021">0014-ORDT-021</a>). For product spot: (<a name="0014-ORDT-100" href="#0014-ORDT-100">0014-ORDT-100</a>)
+6. An iceberg order with minimum peak size greater than initial peak size is rejected with a valid error message (<a name="0014-ORDT-022" href="#0014-ORDT-022">0014-ORDT-022</a>). For product spot: (<a name="0014-ORDT-119" href="#0014-ORDT-119">0014-ORDT-119</a>)
 
 #### Iceberg Order Amendment
 
-1. Amending an iceberg order to increase size will increase the total and remaining quantities of the order and time priority of the order is not lost (<a name="0014-ORDT-023" href="#0014-ORDT-023">0014-ORDT-023</a>).
-2. Amending an iceberg order to decrease size will decrease the total and remaining quantities and time priority of the order is not lost (<a name="0014-ORDT-024" href="#0014-ORDT-024">0014-ORDT-024</a>).
+1. Amending an iceberg order to increase size will increase the total and remaining quantities of the order and time priority of the order is not lost (<a name="0014-ORDT-023" href="#0014-ORDT-023">0014-ORDT-023</a>). For product spot: (<a name="0014-ORDT-101" href="#0014-ORDT-101">0014-ORDT-101</a>)
+2. Amending an iceberg order to decrease size will decrease the total and remaining quantities and time priority of the order is not lost (<a name="0014-ORDT-024" href="#0014-ORDT-024">0014-ORDT-024</a>). For product spot: (<a name="0014-ORDT-102" href="#0014-ORDT-102">0014-ORDT-102</a>)
 3. Amend an iceberg order to decrease size so that the displayed quantity is decreased. Total, displayed and remaining quantity is decreased, margin is recalculated and released and time priority is not lost (<a name="0014-ORDT-025" href="#0014-ORDT-025">0014-ORDT-025</a>)
 4. In Spot market, amend an iceberg order to decrease size so that the displayed quantity is decreased. Total, displayed and remaining quantity is decreased, margin is recalculated and released and time priority is not lost. (<a name="0014-ORDT-103" href="#0014-ORDT-103">0014-ORDT-103</a>)
 
@@ -305,27 +313,27 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 
 #### Iceberg Order Execution
 
-1. An aggressive iceberg order that crosses with an order where volume > iceberg volume, the iceberg order gets fully filled on entry, the iceberg order status is filled, the remaining quantity = 0. Atomic trades are generated if matched against multiple orders (<a name="0014-ORDT-027" href="#0014-ORDT-027">0014-ORDT-027</a>).
-2. An aggressive iceberg order that crosses with an order where volume < iceberg volume. The initial display quantity is filled and the remaining volume is unfilled. Status of iceberg order is active , the volume remaining = (quantity - initial volume) and the remaining volume sits on the book. When additional orders are submitted which consume the remaining volume on the iceberg order , the volume of the iceberg order is refreshed as and when the volume dips below the minimum peak size (<a name="0014-ORDT-028" href="#0014-ORDT-028">0014-ORDT-028</a>).
-3. A passive iceberg order (the only order at a particular price level) when crossed with another order that comes in which consumes the full volume of the iceberg order is fully filled. Status of iceberg order is filled and the remaining = 0. Atomic trades are produced (<a name="0014-ORDT-029" href="#0014-ORDT-029">0014-ORDT-029</a>).
-4. A passive iceberg order with a couple of order that sit behind the iceberg order at the same price that crosses with an order where volume > display quantity of iceberg order. After the first trade is produced , the iceberg order is pushed to the back of the queue and gets filled only when the other orders in front get fully filled (<a name="0014-ORDT-030" href="#0014-ORDT-030">0014-ORDT-030</a>).
-5. Submit an aggressive iceberg order for size 100. There are multiple matching orders of size 30,40,50. Ensure the orders are matched and filled in time priority of the orders and any remaining volume on the orders is correctly left behind. (<a name="0014-ORDT-031" href="#0014-ORDT-031">0014-ORDT-031</a>).
-6. Submit an aggressive iceberg order for size 100. There are multiple matching orders of size 20,30. Ensure the orders are matched and filled in time priority of the orders. Ensure remaining volume on the iceberg order is (100 - (20+30)) (<a name="0014-ORDT-032" href="#0014-ORDT-032">0014-ORDT-032</a>).
-7. When a non iceberg order sitting on the book is amended such that it trades with with an iceberg order, then the iceberg order is refreshed (<a name="0014-ORDT-033" href="#0014-ORDT-033">0014-ORDT-033</a>).
-8. Wash trading is not permitted for iceberg orders. The same party has one iceberg order that sits at the back of the queue, another normal order in opposite direction, when the iceberg at the back comes in front the normal order should be stopped. ( <a name="0014-ORDT-034" href="#0014-ORDT-034">0014-ORDT-034</a>).
+1. An aggressive iceberg order that crosses with an order where volume > iceberg volume, the iceberg order gets fully filled on entry, the iceberg order status is filled, the remaining quantity = 0. Atomic trades are generated if matched against multiple orders (<a name="0014-ORDT-027" href="#0014-ORDT-027">0014-ORDT-027</a>). For product spot: (<a name="0014-ORDT-105" href="#0014-ORDT-105">0014-ORDT-105</a>)
+2. An aggressive iceberg order that crosses with an order where volume < iceberg volume. The initial display quantity is filled and the remaining volume is unfilled. Status of iceberg order is active , the volume remaining = (quantity - initial volume) and the remaining volume sits on the book. When additional orders are submitted which consume the remaining volume on the iceberg order , the volume of the iceberg order is refreshed as and when the volume dips below the minimum peak size (<a name="0014-ORDT-028" href="#0014-ORDT-028">0014-ORDT-028</a>). For product spot: (<a name="0014-ORDT-106" href="#0014-ORDT-106">0014-ORDT-106</a>)
+3. A passive iceberg order (the only order at a particular price level) when crossed with another order that comes in which consumes the full volume of the iceberg order is fully filled. Status of iceberg order is filled and the remaining = 0. Atomic trades are produced (<a name="0014-ORDT-029" href="#0014-ORDT-029">0014-ORDT-029</a>). For product spot: (<a name="0014-ORDT-107" href="#0014-ORDT-107">0014-ORDT-107</a>)
+4. A passive iceberg order with a couple of order that sit behind the iceberg order at the same price that crosses with an order where volume > display quantity of iceberg order. After the first trade is produced , the iceberg order is pushed to the back of the queue and gets filled only when the other orders in front get fully filled (<a name="0014-ORDT-030" href="#0014-ORDT-030">0014-ORDT-030</a>). For product spot: (<a name="0014-ORDT-108" href="#0014-ORDT-108">0014-ORDT-108</a>)
+5. Submit an aggressive iceberg order for size 100. There are multiple matching orders of size 30,40,50. Ensure the orders are matched and filled in time priority of the orders and any remaining volume on the orders is correctly left behind. (<a name="0014-ORDT-031" href="#0014-ORDT-031">0014-ORDT-031</a>). For product spot: (<a name="0014-ORDT-109" href="#0014-ORDT-109">0014-ORDT-109</a>)
+6. Submit an aggressive iceberg order for size 100. There are multiple matching orders of size 20,30. Ensure the orders are matched and filled in time priority of the orders. Ensure remaining volume on the iceberg order is (100 - (20+30)) (<a name="0014-ORDT-032" href="#0014-ORDT-032">0014-ORDT-032</a>). For product spot: (<a name="0014-ORDT-110" href="#0014-ORDT-110">0014-ORDT-110</a>)
+7. When a non iceberg order sitting on the book is amended such that it trades with with an iceberg order, then the iceberg order is refreshed (<a name="0014-ORDT-033" href="#0014-ORDT-033">0014-ORDT-033</a>). For product spot: (<a name="0014-ORDT-111" href="#0014-ORDT-111">0014-ORDT-111</a>)
+8. Wash trading is not permitted for iceberg orders. The same party has one iceberg order that sits at the back of the queue, another normal order in opposite direction, when the iceberg at the back comes in front the normal order should be stopped. ( <a name="0014-ORDT-034" href="#0014-ORDT-034">0014-ORDT-034</a>). For product spot:  ( <a name="0014-ORDT-118" href="#0014-ORDT-118">0014-ORDT-118</a>)
 9. For a price level with multiple iceberg orders, if an aggressive order hits this price level, any volume greater than the displayed volume at a level is split proportionally between the hidden components of iceberg orders at that price level
-   1. If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. (<a name="0014-ORDT-037" href="#0014-ORDT-037">0014-ORDT-037</a>).
-   1. If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 600 lots would be split 200 to the first order and 100 to the two 100 lot orders, with 200 lots then taking farther price levels. (<a name="0014-ORDT-038" href="#0014-ORDT-038">0014-ORDT-038</a>).
+   1. If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 300 lots would be split 150 to the first order and 75 to the two 100 lot orders. (<a name="0014-ORDT-037" href="#0014-ORDT-037">0014-ORDT-037</a>). For product spot: (<a name="0014-ORDT-112" href="#0014-ORDT-112">0014-ORDT-112</a>)
+   1. If there are three iceberg orders with remaining volume 200 lots, 100 lots and 100 lots, an order for 600 lots would be split 200 to the first order and 100 to the two 100 lot orders, with 200 lots then taking farther price levels. (<a name="0014-ORDT-038" href="#0014-ORDT-038">0014-ORDT-038</a>). For product spot: (<a name="0014-ORDT-113" href="#0014-ORDT-113">0014-ORDT-113</a>)
 
 ### Snapshots
 
-1. All data pertaining to iceberg orders is saved and can be restored using the snapshot (<a name="0014-ORDT-035" href="#0014-ORDT-035">0014-ORDT-035</a>).
+1. All data pertaining to iceberg orders is saved and can be restored using the snapshot (<a name="0014-ORDT-035" href="#0014-ORDT-035">0014-ORDT-035</a>). For product spot: (<a name="0014-ORDT-114" href="#0014-ORDT-114">0014-ORDT-114</a>)
 
 ### API
 
-1. API end points should be available to query initial peak size, minimum peak size, quantity, displayed quantity and remaining (<a name="0014-ORDT-036" href="#0014-ORDT-036">0014-ORDT-036</a>).
-2. The additional fields relating to iceberg orders should be available in the streaming api end points (<a name="0014-ORDT-069" href="#0014-ORDT-069">0014-ORDT-069</a>).
-3. API end points showing market-depth or price-level volume should include the full volume of iceberg orders (<a name="0014-ORDT-070" href="#0014-ORDT-070">0014-ORDT-070</a>).
+1. API end points should be available to query initial peak size, minimum peak size, quantity, displayed quantity and remaining (<a name="0014-ORDT-036" href="#0014-ORDT-036">0014-ORDT-036</a>). For product spot: (<a name="0014-ORDT-115" href="#0014-ORDT-115">0014-ORDT-115</a>)
+2. The additional fields relating to iceberg orders should be available in the streaming api end points (<a name="0014-ORDT-069" href="#0014-ORDT-069">0014-ORDT-069</a>). For product spot: (<a name="0014-ORDT-116" href="#0014-ORDT-116">0014-ORDT-116</a>)
+3. API end points showing market-depth or price-level volume should include the full volume of iceberg orders (<a name="0014-ORDT-070" href="#0014-ORDT-070">0014-ORDT-070</a>). For product spot: (<a name="0014-ORDT-117" href="#0014-ORDT-117">0014-ORDT-117</a>)
 
 ### Stop orders
 
@@ -346,6 +354,8 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 - A stop order with expiration time `T` set to expire at that time will expire at time `T` if reached without being triggered. (<a name="0014-ORDT-052" href="#0014-ORDT-052">0014-ORDT-052</a>)
 - A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-053" href="#0014-ORDT-053">0014-ORDT-053</a>)
   - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-054" href="#0014-ORDT-054">0014-ORDT-054</a>)
+  - An OCO stop order with expiration time `T` with one side set to execute at that time will execute at time `T` if reached without being triggered, with the specified side triggering and the other side cancelling. This must be tested both sides (fall below and rise above). (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>)
+  - An OCO stop order with expiration time `T` with both sides set to execute at that time will be rejected on submission (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>)
 
 - A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>)
 - If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>)
@@ -363,6 +373,15 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 
 - A stop order placed either prior to or during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>)
 - A stop order placed either prior to or during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>)
+- A stop order placed during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>)
+- A stop order placed during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>)
+
+- A stop order placed prior to an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-134" href="#0014-ORDT-134">0014-ORDT-134</a>)
+- A stop order placed prior to an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-135" href="#0014-ORDT-135">0014-ORDT-135</a>)
+- An order with a stop is placed during continuous trading. The market goes into auction. The market exits auction, the condition for triggering the stop is not met. The stop order is still present. (<a name="0014-ORDT-136" href="#0014-ORDT-136">0014-ORDT-136</a>)
+
+- A party places a stop order on a market in continuous trading, the market moves to an auction and the party cancels the stop order. When the market exits the auction the party no longer has a stop order. (<a name="0014-ORDT-132" href="#0014-ORDT-132">0014-ORDT-132</a>)
+- A stop order placed during the opening auction, will be rejected. (<a name="0014-ORDT-133" href="#0014-ORDT-133">0014-ORDT-133</a>)
 
 - If a trader has open stop orders and their position moves to zero whilst they still have open limit orders their stop orders will remain active. (<a name="0014-ORDT-067" href="#0014-ORDT-067">0014-ORDT-067</a>)
 - If a trader has open stop orders and their position moves to zero with no open limit orders their stop orders are cancelled. (<a name="0014-ORDT-068" href="#0014-ORDT-068">0014-ORDT-068</a>)
@@ -370,6 +389,8 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 - A Stop order that hasn't been triggered can be cancelled. (<a name="0014-ORDT-071" href="#0014-ORDT-071">0014-ORDT-071</a>)
 - All stop orders for a specific party can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-072" href="#0014-ORDT-072">0014-ORDT-072</a>)
 - All stop orders for a specific party for a specific market can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-073" href="#0014-ORDT-073">0014-ORDT-073</a>)
+- If a stop order is placed with a position_fraction equal to 0.5 and the position size is 5 then the rounding should be equal to 3 (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
+
 
 ## Stop Orders - Negative Cases
 
@@ -378,6 +399,8 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 - Stop orders submitted with expiry in the past are rejected. (<a name="0014-ORDT-076" href="#0014-ORDT-076">0014-ORDT-076</a>)
 - GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>)
 - Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>)
+- If a stop order is placed with a position_fraction equal to 0 the order should be rejected. (<a name="0014-ORDT-139" href="#0014-ORDT-139">0014-ORDT-139</a>)
+- A party with a long position cannot enter a buy stop order, and a party with a short position cannot enter a sell stop order (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
 
 ## Stop Orders - Snapshots
 
@@ -386,6 +409,12 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 ## Stop Orders - API
 
 - API end points should be available to query stop orders with all relevant fields. (<a name="0014-ORDT-080" href="#0014-ORDT-080">0014-ORDT-080</a>)
+
+## Stop Orders - Linked
+
+- A stop order with a size override linked to the position of the trader will use the current position as an override of the triggered order size. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
+- All stop orders with a position size override should be cancelled if the trader's position flips sides (long->short or short->long). (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
+- A stop order with a position size override with a position_fraction set to 0.75, for a trader with long position 20, should create a stop order for selling size 15 when triggered (<a name="0014-ORDT-129" href="#0014-ORDT-129">0014-ORDT-129</a>)
 
 ## Perpetuals
 

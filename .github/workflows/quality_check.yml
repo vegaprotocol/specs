@@ -8,7 +8,8 @@ name: "Quality checks"
     branches:
       - master
       - cosmicelevator
-      - palazzomistero
+      - palazzo
+      - colosseo
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

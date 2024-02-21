@@ -34,6 +34,8 @@ When transferring funds from the vesting account to the vested account, a new tr
 
 Once vested rewards are transferred to the vested account, the party will be able to transfer funds to their general account using a normal transfer.
 
+When transferring funds from a vested account to the general account held by their key a party will incur no transfer fees and if transferring the full balance they will not be subject to the minimum quantum transfer amount.
+
 Alternatively, they can leave their rewards in the vested account to increase their total rewards balance and receive a multiplier on their reward payout share. The size of this multiplier is dependent on their total rewards balance, i.e. the sum of the parties locked rewards, vesting rewards and vested rewards. Note, funds removed from the vested account are not included in this total.
 
 Note, a party will be unable to transfer funds in to the vested account.
@@ -103,4 +105,3 @@ Must expose the following:
 1. A parties `reward_distribution_bonus_multiplier` should be set equal to the value in the highest tier where they fulfil the `minimum_quantum_balance` required. (<a name="0085-RVST-012" href="#0085-RVST-012">0085-RVST-012</a>)
 1. Funds in both the parties vesting account and vested account should contribute to their `minimum_quantum_balance`. (<a name="0085-RVST-013" href="#0085-RVST-013">0085-RVST-013</a>)
 1. Assuming all parties perform equally, a party with a greater `reward_distribution_bonus_multiplier` should receive a larger share of a reward pool. (<a name="0085-RVST-014" href="#0085-RVST-014">0085-RVST-014</a>)
-
