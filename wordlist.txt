@@ -6,6 +6,9 @@ ABIs
 actioned
 Allowlist
 allowlisted
+AMM
+AMM's
+AMMs
 antiwhaling
 API
 APIs
@@ -30,6 +33,7 @@ cashflows
 CCP
 ccy
 cdot
+cdotp
 ceil
 ceiled
 CFD
@@ -72,6 +76,7 @@ delegateable
 delegator
 delegators
 deterministically
+differentiator
 discoverability
 disincentivise
 DLT
@@ -145,6 +150,7 @@ int64
 integrations
 intrablock
 IOC
+joinable
 JSON
 keyholder
 keypair
@@ -211,6 +217,7 @@ PoS
 PoW
 PoWs
 pre
+precomputed
 pro
 protobuf
 Pseudocode
@@ -218,7 +225,10 @@ pseudorandom
 pubkey
 quant
 rata
+rebalance
+rebalancing
 rebased
+rebasing
 recollateralise
 ReferralSet
 reimplemented
@@ -232,6 +242,7 @@ RFQ
 roadmap
 Ropsten
 RPC
+rulesets
 runnable
 runtime
 scalability
@@ -246,6 +257,7 @@ sharded
 siskas
 SLA
 Solana
+sqrt
 src
 SSD
 SSL
@@ -294,6 +306,8 @@ undelegations
 undeployed
 underlyings
 unencrypted
+Uniswap
+Uniswap's
 unitless
 unmarshal
 unnominated
@@ -312,6 +326,9 @@ UTC
 validator
 validator's
 validators
+vAMM
+vAMMs
+vAMM's
 vega
 vegaprotocol
 vegatools
@@ -328,4 +345,3 @@ wBTC
 wei
 whitepaper
 Yubikey
-joinable
