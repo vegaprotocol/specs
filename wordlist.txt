@@ -323,6 +323,7 @@ validator's
 validators
 vAMM
 vAMMs
+vAMM's
 vega
 vegaprotocol
 vegatools

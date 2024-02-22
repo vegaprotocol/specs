@@ -98,7 +98,6 @@ source: EthereumEvent {
 ```
 
 Then market 1 only sees events of that type from `EthRpcEvmCompatible` 0x123 while market 2 only sees events of that type from `EthRpcEvmCompatible` 0x789 (<a name="0087-EVMD-014" href="#0087-EVMD-014">0087-EVMD-014</a>).
-
 - It should be possible to use only `EthRpcEvmCompatible` data sources in a market proposal, or create any combination with any of the other types of currently existing external or internal data sources (<a name="0087-EVMD-015" href="#0087-EVMD-015">0087-EVMD-015</a>)
 - Create a market to use an internal data source to terminate a market and an `EthRpcEvmCompatible` to settle the market (<a name="0087-EVMD-016" href="#0087-EVMD-016">0087-EVMD-016</a>)
 - Create a market to use an external data source to terminate a market and an `EthRpcEvmCompatible` to settle the market (<a name="0087-EVMD-017" href="#0087-EVMD-017">0087-EVMD-017</a>)
