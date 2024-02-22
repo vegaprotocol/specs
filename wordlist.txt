@@ -33,6 +33,7 @@ cashflows
 CCP
 ccy
 cdot
+cdotp
 ceil
 ceiled
 CFD
@@ -75,6 +76,7 @@ delegateable
 delegator
 delegators
 deterministically
+differentiator
 discoverability
 disincentivise
 DLT
@@ -215,6 +217,7 @@ PoS
 PoW
 PoWs
 pre
+precomputed
 pro
 protobuf
 Pseudocode
@@ -222,7 +225,9 @@ pseudorandom
 pubkey
 quant
 rata
+rebalance
 rebased
+rebasing
 recollateralise
 ReferralSet
 reimplemented
@@ -236,6 +241,7 @@ RFQ
 roadmap
 Ropsten
 RPC
+rulesets
 runnable
 runtime
 scalability
@@ -250,6 +256,7 @@ sharded
 siskas
 SLA
 Solana
+sqrt
 src
 SSD
 SSL
@@ -298,6 +305,8 @@ undelegations
 undeployed
 underlyings
 unencrypted
+Uniswap
+Uniswap's
 unitless
 unmarshal
 unnominated
