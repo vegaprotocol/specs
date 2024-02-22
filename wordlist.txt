@@ -226,6 +226,7 @@ pubkey
 quant
 rata
 rebalance
+rebalancing
 rebased
 rebasing
 recollateralise
@@ -326,6 +327,7 @@ validator
 validator's
 validators
 vAMM
+vAMMs
 vAMM's
 vega
 vegaprotocol
