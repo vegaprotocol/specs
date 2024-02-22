@@ -2,17 +2,74 @@
 
 ## Acceptance Criteria
 
-- All orders of "distressed traders" are cancelled (<a name="0012-POSR-001" href="#0012-POSR-001">0012-POSR-001</a>)
-- Open positions of distressed traders are closed (<a name="0012-POSR-002" href="#0012-POSR-002">0012-POSR-002</a>)
-- One market order is submitted for the net liability (<a name="0012-POSR-003" href="#0012-POSR-003">0012-POSR-003</a>)
+- All orders of "distressed traders" in cross-margin mode are cancelled (<a name="0012-POSR-001" href="#0012-POSR-001">0012-POSR-001</a>)
+- Open positions of distressed traders are closed immediately (<a name="0012-POSR-002" href="#0012-POSR-002">0012-POSR-002</a>)
 - Mark Price is never updated during position resolution (<a name="0012-POSR-004" href="#0012-POSR-004">0012-POSR-004</a>)
-- Non-distressed traders who trade with the network because their open orders are hit during the close out trade have their positions settled correctly. (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
+- Non-distressed traders who trade with the network because their open orders are hit during the networks' trade have their positions settled correctly. (<a name="0012-POSR-005" href="#0012-POSR-005">0012-POSR-005</a>)
 - When a distressed party has a [staking account](./0013-ACCT-accounts.md) with the same currency as the settlement currency of the market where it's distressed the staking account is NOT used in margin search and liquidation. (<a name="0012-POSR-006" href="#0012-POSR-006">0012-POSR-006</a>)
-- When a party is distressed at the point of leaving an auction it should get closed out as soon as the market returns to continuous trading mode and all the parked orders (pegged and LP) get added back to the order book. (<a name="0012-POSR-008" href="#0012-POSR-008">0012-POSR-008</a>)
+- When a party is distressed and gets closed out the network's position gets modified to reflect that it's now the network party that holds that volume. (<a name="0012-POSR-009" href="#0012-POSR-009">0012-POSR-009</a>)
+
+- When the network party holds a non-zero position and there are not enough funds in market's insurance pool to meet the mark-to-market payment the network's position is unaffected and loss socialisation is applied. (<a name="0012-POSR-010" href="#0012-POSR-010">0012-POSR-010</a>)
+
+- When the network party holds a non-zero position and the market's insurance pool balance is below the network party's maintenance margin for that market the network's position in that market remains unaffected. (<a name="0012-POSR-011" href="#0012-POSR-011">0012-POSR-011</a>)
+
+- The liquidation strategy can be updated using the market update transaction  (<a name="0012-POSR-012" href="#0012-POSR-012">0012-POSR-012</a>)
+
+- When the market is configured to use:
+  - `disposal time step` = `10s`,
+  - `disposal fraction` =  `0.5`,
+  - `full disposal size` = `50`,
+  - `max fraction of book side within liquidity bounds consumed` = `0.01`
+
+  and the volume on the buy side of the book within the liquidity bounds is always `10,000` (as volume on the book gets filled new orders get placed) then liquidating a distressed party with an open volume of `280` results in 4 network trades in total spaced `10s` apart with volumes of: `100`, `90`, `45`, `45`.  (<a name="0012-POSR-013" href="#0012-POSR-013">0012-POSR-013</a>)
+
+- It is possible to check the network party's open volume and margin level in any market via the API. (<a name="0012-POSR-014" href="#0012-POSR-014">0012-POSR-014</a>)
+
+- It is possible to check the time of the next liquidation trade attempt in any market via the API. (<a name="0012-POSR-015" href="#0012-POSR-015">0012-POSR-015</a>)
+
+### Network position disposal
+
+- When calculating the available volume, the full remaining size of iceberg orders should be considered. (<a name="0012-POSR-019" href="#0012-POSR-019">0012-POSR-019</a>)
+- When calculating the available volume, volume outside price monitoring bounds should be considered. (<a name="0012-POSR-020" href="#0012-POSR-020">0012-POSR-020</a>)
+- When calculating the available volume, volume outside the liquidity price range should not be considered. (<a name="0012-POSR-021" href="#0012-POSR-021">0012-POSR-021</a>)
+- Given a highly liquid market, if the network’s position is greater than `full disposal size`. The network must attempt to dispose `position * disposal fraction` at the next disposal step. (<a name="0012-POSR-022" href="#0012-POSR-022">0012-POSR-022</a>)
+- Given a highly liquid market, if the network’s position is less than or equal to `full disposal size`. The network must attempt to dispose of its full position at the next disposal step. (<a name="0012-POSR-023" href="#0012-POSR-023">0012-POSR-023</a>)
+- Given a highly liquid market, if the network’s `disposal fraction<1` and `full disposal size`=0, the network must still eventually dispose of its full position. (<a name="0012-POSR-024" href="#0012-POSR-024">0012-POSR-024</a>)
+- The network must never dispose more than `available volume  * max fraction of book side within liquidity bounds consumed` in a single order. (<a name="0012-POSR-025" href="#0012-POSR-025">0012-POSR-025</a>)
+- A network disposal order which generates trades must not affect the mark price. (<a name="0012-POSR-026" href="#0012-POSR-026">0012-POSR-026</a>)
+- A network disposal order can not cross with orders outside the liquidity price range. (<a name="0012-POSR-027" href="#0012-POSR-027">0012-POSR-027</a>)
+- A network disposal order can cross with orders outside price monitoring bounds but must not trigger a price monitoring auction. (<a name="0012-POSR-028" href="#0012-POSR-028">0012-POSR-028</a>)
+- A network disposal order which crosses multiple orders should generate multiple atomic trades. (<a name="0012-POSR-029" href="#0012-POSR-029">0012-POSR-029</a>)
+
+### Network Profit and Loss
+
+- Given the network starts with no position and does not dispose any of it's position during the scenario: (<a name="0012-POSR-016" href="#0012-POSR-016">0012-POSR-016</a>)
+
+  - The mark price moves to `100`, the network liquidates a distressed party with a long position of `1`. The network should report a position of `1` and a realised and unrealised pnl of `0` and `0` respectively.
+  - The mark price moves to `120`, the network liquidates a distressed party with a short position of `-1`. The network should report a position of `-1` and a realised and unrealised pnl of `20` and `0` respectively.
+  - The mark price moves to `60`. The network should report a position of `-1` and a realised and unrealised pnl of `20` and `60` respectively.
+
+- Given the network starts with no position and does not dispose any of it's position during the scenario: (<a name="0012-POSR-017" href="#0012-POSR-017">0012-POSR-017</a>)
+
+  - The mark price moves to `100`, the network liquidates a distressed party with a long position of `1`. The network should report a position of `1` and a realised and unrealised pnl of `0` and `0` respectively.
+  - The mark price moves to `90`, the network liquidates a distressed party with a long position of `1` (average entry price now equals `95`). The network should report a position of `2` and a realised and unrealised pnl of `0` and `-10` respectively.
+  - The mark price moves to `60`. The network should report a position of `2` and a realised and unrealised pnl of `0` and `-70` respectively.
+
+- Given an empty insurance pool and the liquidation strategy `disposal time step = 5`, `disposal fraction = 0.5`, `full disposal size=0` and `max fraction of book side within liquidity bounds consumed = 0.01` during the below scenario: (<a name="0012-POSR-018" href="#0012-POSR-018">0012-POSR-018</a>)
+  - The mark price moves to 100, the network liquidates a distressed party with a long position of 2. The network should report a position of 2 and a realised and unrealised pnl of 0 and 0 respectively.
+  - Given the order book:
+    | side | price | size |
+    |------|-------|------|
+    | buy  | 90    | 1000 |
+    | sell | 110   | 1000 |
+  - The time updates to the next disposal time, the network reduces its position by 1. The network should report a position of 1 and a realised and unrealised pnl of -10 and 0 respectively.
+  - The time updates to the next disposal time, the network reduces its position by 1. The network should report a position of 1 and a realised and unrealised pnl of -20 and 0 respectively.
+  - Loss socialisation should be applied and the accumulated balance for all accounts should be unchanged.
+
 
 ## Summary
 
-Position resolution is the mechanism which deals with closing out distressed positions on a given market. It is instigated when one or more participant's collateral balance is insufficient to fulfil their settlement or margin liabilities.
+Position resolution is the mechanism which deals with closing out distressed positions on a given market. It is instigated when one or more participant's margin account balance falls below their latest maintenance margin level.
 
 ## Guide-level explanation
 
@@ -22,147 +79,54 @@ Any trader that has insufficient collateral to cover their margin liability is r
 
 ### Position resolution algorithm
 
-See [Whitepaper](https://vega.xyz/papers/vega-protocol-whitepaper.pdf), Section 5.3 , steps 1 - 3
+#### Liquidating distressed party's position in a market
 
-1. A "distressed trader" has all their open orders on that market cancelled. Note, the network must then recalculate their margin requirement on their remaining open position and if they now have sufficient collateral (i.e. aren't in the close out zone) they are no longer considered a distressed trader and not subject to position resolution. The market may at any point in time have multiple distressed traders that require position resolution. They are 'resolved' together in a batch.
-1. The batch of distressed open positions that require position resolution may be comprised of a collection of long and short positions. The network calculates the overall net long or short position. This tells the network how much volume (either long or short) needs to be sourced from the order book. For example, if there are 3 distressed traders with +5, -4 and +2 positions respectively.  Then the net outstanding liability is +3. If this is a non-zero number, do Step 3.
-1. This net outstanding liability is sourced from the market's order book via a single market order (in above example, that would be a market order to sell 3 on the order book) executed by the network as a counterpart. This internal entity is the counterpart of all trades that result from this single market order and now has a position which is comprised of a set of trades that transacted with the non-distressed traders on the order book. Note, the network's order should not incur a margin liability. Also, these new positions (including that incurred by the network) will need to be "MTM settled". This should happen after Step 5 to ensure we don't bankrupt the market's insurance pool before collecting the distressed trader's collateral.  This has been included as Step 6.
-1. The network then generates a set of trades with all the distressed traders all at the volume weighted average price of the network's (new) open position.   These trades should be readily distinguished from the trades executed by the network counterpart in Step 3 (suggest by a flag on the trades)
-    1. Note, If there was no market order (i.e step 3 didn't happen) the close-out price is the most recently calculated _Mark Price_. See Scenario 1 below for the list of resulting trades for the above example. The open positions of all the "distressed" traders is now zero and the networks position is also zero. Note, no updates to the _Mark Price_ should happen as a result of any of these trades (as this would result in a new market-wide mark to market settlement at this new price and potentially lead to cascade close outs).
-1. All bankrupt trader's remaining collateral in their margin account for this market is confiscated to the market's insurance pool.
-1. If an order was executed on the market (in Step 3), the resulting trade volume between the network and passive orders must be mark-to-market settled for all parties involved including the network's internal 'virtual' party. As the network's closeout counterparty doesn't have collateral, any funds it 'owes' will be transferred from the market's insurance fund during this settlement process (as defined in the [settlement spec](./0003-MTMK-mark_to_market_settlement.md).). It's worth noting that the network close-out party must never have margins calculated for it. This also should naturally happen because no margin calculations would happen during the period that the network temporarily (instantaneously) has an open position, as the entire position resolution process must happen atomically.
+- Position resolution evaluation gets carried out each time the mark price is updated, strictly after the margin levels margin level update and mark-to-market settlement.
 
-### Note
+- During position resolution evaluation party's margin account balance is compared to it's latest maintenance margin level. If the account balance is below the margin level then the party gets marked as distressed.
 
-- Entire distressed position should always be liquidated - even if reducing position size, by say 50%, would result in the remaining portion being above the trader's maintenance margin.
-- When there's insufficient volume on the order-book to close out a distressed position no action should be taken: the position remains open and any amounts in trader's margin account should stay there. Same principle should apply if upon next margin recalculation the position is still distressed.
-- If the party is distressed at a point of leaving auction it should be closedout immediately (provided there's enough volume on the book once all the pegged and liquidity provision orders get redeployed).
+- If a party marked as "distressed" has the cross-margin mode selected for the market being considered:
 
-## Examples and Pseudo code
+  - all their open orders on that market get cancelled without releasing any collateral from the margin account,
+  - their margin level then gets recalculated to account only for the open volume they hold in a market
+  - if party's margin account balance is now above or equal to their latest maintenance margin level then such party is no longer marked as "distressed".
 
-### _Scenario -  All steps_
+- If party's is marked as "distressed" at this stage then:
 
-`Trader1 open position: +5`
-`Trader1 open orders:  0`
-`Trader2 open position: -4`
-`Trader2 open orders:   0`
-`Trader3 open position: +2`
-`Trader3 open orders:   0`
+  - their open volume gets added to network's open volume for that market,
+  - party's open volume in that market gets set to 0,
+  - the full amount of party's margin account balance gets transferred to market's insurance pool.
 
-#### STEP 1
+This concludes the position resolution from party's perspective.
 
-No traders are removed from the distressed trader list.
+#### Managing network's position
 
-#### STEP 2
+Whilst network has a non-zero position in a given market it's treated as any other party with market's insurance in that market acting as its margin account and with and exception that margin search, margin release or liquidation are never attempted on a network party.
 
-`NetOutstandingLiability = 5 - 4 + 2 = 3`
+Whenever the network party has a non-zero position it attempts to unload it using an [immediate or cancel](./0014-ORDT-order_types.md) limit order. If the the network has a `long` position it will submit a `sell` order. If it has a short position it will submit a buy order. The size of that order is chosen according to the liquidation strategy which forms a part of the market's configuration. The strategy can be updated at any point whilst market is active with a market change [governance vote](./0028-GOVE-governance.md#2-change-market-parameters).
 
-#### STEP 3
+Currently only one liquidation strategy is supported and its defined by the following parameters:
 
-```json
-LiquiditySourcingOrder: {
-  type: 'market',
-  direction: 'sell',
-  size: 3
-}
+- `disposal time step` (min: `1s`, max: `1h`): network attempts to unload its position in a given market every time it goes out of auction and then every `disposal time step` seconds as long as market is not in auction mode and while the network's position is not equal to `0`,
+- `disposal fraction` (min: `0.01`, max: `1`): fraction of network's current open volume that it will try to reduce in a single disposal attempt,
+- `full disposal size` (min: `0`, max: `max int`): once net absolute value of network's open volume is at or below that value, the network will attempt to dispose the remaining amount in one go,
+- `max fraction of book side within liquidity bounds consumed` (min: `0`, max: `1`): once the network chooses the size of its order (`s_candidate`) the effective size will be calculated as `s_effective=min(m*N, s_candidate)`, where `N` is the sum of volume (on the side of the book with which the network's order will be matching) that falls within the range implied by the `market.liquidity.priceRange` [parameter](./0044-LIME-lp_mechanics.md#market-parameters) and `m` is the `max fraction of book side within liquidity bounds consumed`.
 
-LiquiditySourcingTrade1: {
-  buyer: Trader4,
-  seller: Network,
-  size: 2,
-  price: 120,
-  type: 'liquidity-sourcing'
-}
+Assume the price range implied by the `market.liquidity.priceRange` is `[a, b]`. Once the network has worked out a size of its immediate or cancel limit order it sets it's price to `a` if it's a sell order or `b` if it's a buy order, and it submits the order.
 
-LiquiditySourcingTrade2: {
-  buyer: Trader5,
-  seller: Network,
-  size: 1,
-  price: 100,
-  type: 'liquidity-sourcing'
+Note that setting:
 
-}
+- `disposal time step` = `0s`,
+- `disposal fraction` = `1`,
+- `full disposal size` = `max int`,
+- `max fraction of book side within liquidity bounds consumed` = `1`
 
-```
+is closest to reproducing the legacy setup where party would get liquidated immediately (with a difference that closeout now happens immediately even if there's not enough volume on the book to fully absorb it) hence the above values should be used when migrating existing markets to a new version. For all new markets these values should be specified explicitly.
 
-#### STEP 4
+Different liquidation strategies with different parameters might be proposed in the future, hence implementation should allow for easy substitution of strategies.
 
-Close out trades are generated with the distressed traders
+API requirements:
 
-```json
-CloseOutTrade1 {
-  buyer: Network,
-  seller: Trader1,
-  size: 5,
-  price: 113.33,
-  type: 'safety-provision'
-}
-
-CloseOutTrade2 {
-  buyer: Trade2,
-  seller: Network,
-  size: 4,
-  price: 113.33,
-  type: 'safety-provision'
-}
-
-CloseOutTrade3 {
-  buyer: Network,
-  seller: Trader3,
-  size: 2,
-  price: 113.33,
-  type: 'safety-provision'
-}
-```
-
-This results in the open position sizes for all distressed traders and the network entities to be zero.
-
-`// OpenPosition of Network =  -3 +5 -4 +2 = 0`
-`// OpenPosition of Trader1 =  +5 -5 = 0`
-`// OpenPosition of Trader2 = -4 +4 =  0`
-`// OpenPosition of Trader3 =  +2 - 2 = 0`
-
-#### STEP 5
-
-The collateral from distressed traders is moved to the market's insurance pool
-
-```json
-// sent by Settlement Engine to the Collateral Engine
-TransferRequest1 {
-  from: [Trader1_MarginAccount],
-  to: MarketInsuranceAccount,
-  amount: Trader1_MarginAccount.size, // this needs to be the full amount
-}
-
-TransferRequest2 {
-  from: [Trader2_MarginAccount],
-  to: MarketInsuranceAccount,
-  amount: Trader2_MarginAccount.size, // this needs to be the full amount
-}
-
-TransferRequest3 {
-  from: [Trader3_MarginAccount],
-  to:  MarketInsuranceAccount,
-  amount: Trader3_MarginAccount.size, // this needs to be the full amount
-}
-```
-
-#### STEP 6
-
-Traders from step 3 need to be settled.
-
-Prior to STEP 3 trades, assume Trader 4 and Trader 5 had the following open positions.
-
-`// OpenPosition of Trader4 =  -3`
-`// OpenPosition of Trader5 =  15`
-
-Trader 4 has therefore closed out 2 contracts through the `LiquiditySourcingTrade` 1. These need to be settled against the trade price.
-
-```json
-TransferRequest4 {
-  from: [MarketInsuranceAccount],
-  to:  Trader4_MarginAccount,
-  amount: (120 - PreviousMarkPrice) * -2, // this is the movement since the last settlement multiplied by the volume of the closed out amount
-}
-
-```
+- create an endpoint to easily identify network's position in any given market,
+- create an endpoint to easily identify network's margin levels in any given market,
+- create an endpoint to easily check time of next liquidation trade attempt.

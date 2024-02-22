@@ -51,12 +51,11 @@ Notes on scope of current version of this spec:
 
 ### Stop orders
 
-In addition to normal immediately executing order, Vega should accept the submission of stop orders.
+In addition to normal immediately executing orders, Vega should accept the submission of stop orders.
 These differ from normal orders in that they sit off the order book until triggered, when they are entered as normal.
 These are generally used to exit positions under pre-defined conditions, either as a "stop loss" order that controls the maximum losses a position may take, a "take profit" order that closes a position once a defined level of profit has been made, or both.
 
-
-A stop order submission can be made (stop loss or take profit are probably both just called a stop order internally).
+A stop order submission can be made (stop loss or take profit are both just called a stop order internally).
 
 - Stop order submissions must include either a trigger price OR trailing stop distance as a % move from the reference price in addition to a normal order submission.
 
@@ -71,9 +70,15 @@ If it has an expiry then it can be set either to cancel on expiry (i.e. it is de
 An OCO contains TWO stop order submissions, and must include one in each trigger direction.
 OCOs work exactly like two separate stop orders except that if one of the pair is triggered, cancelled, deleted, or rejected, the other one is automatically cancelled.
 An OCO submission allows a user to have a stop loss and take profit applied to the same amount of their position without the risk of both trading and reducing their position by more than intended.
-  - An OCO submission cannot be set to execute at expiry.
+  - An OCO submission can be set to have one of three different behaviours at expiry, either triggering one side, triggering the other, or expire without any action. This is configured through the setting of the expiry behaviour on each leg. Setting each leg to trade at expiration will result in the OCO being rejected.
 
 - The stop order submission wraps a normal order submission.
+
+- A stop order submission may have an optional `Size Override`:
+  - If unset, the size within the contained normal order submission will be used
+  - If set to `Position`, triggering should override the contained order's size with the trader's entire current position on the market.
+    - The `Position` override configuration should also include the option `position_fraction` which determines what proportion of the position is closed when the stop order is triggered. At time of triggering the size of the order will be determined by $fraction \cdot position$.
+    - All `Position` stop orders existing should be cancelled if a trader's position changes from long to short (or vice versa).
 
 - The submission is validated when it is received but does not initially interact with the order book unless it is triggered immediately (see below).
 
@@ -86,7 +91,9 @@ Therefore the trigger level of a stop order moves with the market allowing the t
 
 - The order can't be triggered or trade at all during an auction (even if the current price would normally trigger it immediately on entry).
 
-- A stop order can be entered during an auction, and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
+- A stop order can be entered during an auction (except opening auction), and can then be triggered by the auction uncrossing price if the auction results in a trade, as well as any trades (including auction uncrossing trades) after that.
+
+- A stop order entered during opening auction will be rejected.
 
 - GFA is not a valid TIF for a stop order submission.
 
@@ -261,7 +268,7 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
   - Any GTT limit order that [still] resides on the order book at its expiry time is cancelled and removed from the book before any events are processed that rely on its being present on the book, including any calculation that incorporates its volume and/or price level. (<a name="0014-ORDT-004" href="#0014-ORDT-004">0014-ORDT-004</a>).
   - A GTT order submitted at a time >= its expiry time is rejected. (<a name="0014-ORDT-005" href="#0014-ORDT-005">0014-ORDT-005</a>).
 - No party can submit a [network order type](#network-orders)  (<a name="0014-ORDT-006" href="#0014-ORDT-006">0014-ORDT-006</a>).
-- A pegged order (including iceberg pegged orders) never has its price updated during the execution of an incoming aggressive order (even as price levels get consumed so that its reference price changes after the execution). (<a name="0014-ORDT-039" href="#0014-ORDT-039">0014-ORDT-039</a>).
+- A pegged order (including iceberg pegged orders) never has its price updated during the execution of an incoming aggressive order (even as price levels get consumed so that its reference price changes after the execution). (<a name="0014-ORDT-039" href="#0014-ORDT-039">0014-ORDT-039</a>)
 
 ### Iceberg Orders AC's
 
@@ -272,7 +279,6 @@ Network orders are used during [position resolution](./0012-POSR-position_resolu
 3. An iceberg post only order can be submitted  (<a name="0014-ORDT-009" href="#0014-ORDT-009">0014-ORDT-009</a>).
 4. An iceberg reduce only order is rejected (<a name="0014-ORDT-010" href="#0014-ORDT-010">0014-ORDT-010</a>).
 5. For an iceberg order that is submitted with total size x and display size y the margin taken should be identical to a regular order of size `x` rather than one of size `y` (<a name="0014-ORDT-011" href="#0014-ORDT-011">0014-ORDT-011</a>)
-In Spot market, for an iceberg order that is submitted with total size x and display size y the holding asset taken should be identical to a regular order of size `x` rather than one of size `y` (<a name="0014-ORDT-091" href="#0014-ORDT-091">0014-ORDT-091</a>)
 6. For an iceberg order, the orders are refreshed immediately after producing a trade. Every time volume is taken from the displayed quantity , the order is refreshed if display quantity < minimum peak size (<a name="0014-ORDT-012" href="#0014-ORDT-012">0014-ORDT-012</a>).
    - If the order is successfully refreshed , then the order loses its time priority and is pushed to the back of the queue
 7. For an iceberg order that's submitted when the market is in auction, iceberg orders trade according to their behaviour if they were already on the book (trading first the visible size, then additional if the full visible price level is exhausted in the uncrossing) (<a name="0014-ORDT-013" href="#0014-ORDT-013">0014-ORDT-013</a>).
@@ -296,12 +302,10 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 1. Amending an iceberg order to increase size will increase the total and remaining quantities of the order and time priority of the order is not lost (<a name="0014-ORDT-023" href="#0014-ORDT-023">0014-ORDT-023</a>).
 2. Amending an iceberg order to decrease size will decrease the total and remaining quantities and time priority of the order is not lost (<a name="0014-ORDT-024" href="#0014-ORDT-024">0014-ORDT-024</a>).
 3. Amend an iceberg order to decrease size so that the displayed quantity is decreased. Total, displayed and remaining quantity is decreased, margin is recalculated and released and time priority is not lost (<a name="0014-ORDT-025" href="#0014-ORDT-025">0014-ORDT-025</a>)
-4. In Spot market, amend an iceberg order to decrease size so that the displayed quantity is decreased. Total, displayed and remaining quantity is decreased, margin is recalculated and released and time priority is not lost. (<a name="0014-ORDT-103" href="#0014-ORDT-103">0014-ORDT-103</a>)
 
 #### Iceberg Order Cancellation
 
 1. Cancelling an iceberg order will cancel the order, remove it from the order book , release margin and update order book to reflect the change (<a name="0014-ORDT-026" href="#0014-ORDT-026">0014-ORDT-026</a>)
-1. In Spot market, cancelling an iceberg order will cancel the order, remove it from the order book , release holding asset and update order book to reflect the change (<a name="0014-ORDT-104" href="#0014-ORDT-104">0014-ORDT-104</a>)
 
 #### Iceberg Order Execution
 
@@ -346,6 +350,8 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 - A stop order with expiration time `T` set to expire at that time will expire at time `T` if reached without being triggered. (<a name="0014-ORDT-052" href="#0014-ORDT-052">0014-ORDT-052</a>)
 - A stop order with expiration time `T` set to execute at that time will execute at time `T` if reached without being triggered. (<a name="0014-ORDT-053" href="#0014-ORDT-053">0014-ORDT-053</a>)
   - If the order is triggered before reaching time `T`, the order will have been removed and will *not* trigger at time `T`. (<a name="0014-ORDT-054" href="#0014-ORDT-054">0014-ORDT-054</a>)
+  - An OCO stop order with expiration time `T` with one side set to execute at that time will execute at time `T` if reached without being triggered, with the specified side triggering and the other side cancelling. This must be tested both sides (fall below and rise above). (<a name="0014-ORDT-131" href="#0014-ORDT-131">0014-ORDT-131</a>)
+  - An OCO stop order with expiration time `T` with both sides set to execute at that time will be rejected on submission (<a name="0014-ORDT-130" href="#0014-ORDT-130">0014-ORDT-130</a>)
 
 - A stop order set to trade volume `x` with a trigger set to `Rises Above` at a given price will trigger at the first trade at or above that price. (<a name="0014-ORDT-055" href="#0014-ORDT-055">0014-ORDT-055</a>)
 - If a pair of stop orders are specified as OCO, one being triggered also removes the other from the book. (<a name="0014-ORDT-056" href="#0014-ORDT-056">0014-ORDT-056</a>)
@@ -361,8 +367,15 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
   - Be triggered by a fall to `45`. (<a name="0014-ORDT-063" href="#0014-ORDT-063">0014-ORDT-063</a>)
   - Not be triggered by a fall to `46`. (<a name="0014-ORDT-064" href="#0014-ORDT-064">0014-ORDT-064</a>)
 
-- A stop order placed either prior to or during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>)
-- A stop order placed either prior to or during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>)
+- A stop order placed during an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-065" href="#0014-ORDT-065">0014-ORDT-065</a>)
+- A stop order placed during an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-066" href="#0014-ORDT-066">0014-ORDT-066</a>)
+
+- A stop order placed prior to an auction will not execute during an auction, nor will it participate in the uncrossing. (<a name="0014-ORDT-134" href="#0014-ORDT-134">0014-ORDT-134</a>)
+- A stop order placed prior to an auction, where the uncrossing price is within the triggering range, will immediately execute following uncrossing. (<a name="0014-ORDT-135" href="#0014-ORDT-135">0014-ORDT-135</a>)
+- An order with a stop is placed during continuous trading. The market goes into auction. The market exits auction, the condition for triggering the stop is not met. The stop order is still present. (<a name="0014-ORDT-136" href="#0014-ORDT-136">0014-ORDT-136</a>)
+
+- A party places a stop order on a market in continuous trading, the market moves to an auction and the party cancels the stop order. When the market exits the auction the party no longer has a stop order. (<a name="0014-ORDT-132" href="#0014-ORDT-132">0014-ORDT-132</a>)
+- A stop order placed during the opening auction, will be rejected. (<a name="0014-ORDT-133" href="#0014-ORDT-133">0014-ORDT-133</a>)
 
 - If a trader has open stop orders and their position moves to zero whilst they still have open limit orders their stop orders will remain active. (<a name="0014-ORDT-067" href="#0014-ORDT-067">0014-ORDT-067</a>)
 - If a trader has open stop orders and their position moves to zero with no open limit orders their stop orders are cancelled. (<a name="0014-ORDT-068" href="#0014-ORDT-068">0014-ORDT-068</a>)
@@ -370,6 +383,8 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 - A Stop order that hasn't been triggered can be cancelled. (<a name="0014-ORDT-071" href="#0014-ORDT-071">0014-ORDT-071</a>)
 - All stop orders for a specific party can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-072" href="#0014-ORDT-072">0014-ORDT-072</a>)
 - All stop orders for a specific party for a specific market can be cancelled by a single stop order cancellation. (<a name="0014-ORDT-073" href="#0014-ORDT-073">0014-ORDT-073</a>)
+- If a stop order is placed with a position_fraction equal to 0.5 and the position size is 5 then the rounding should be equal to 3 (<a name="0014-ORDT-138" href="#0014-ORDT-138">0014-ORDT-138</a>)
+
 
 ## Stop Orders - Negative Cases
 
@@ -378,6 +393,8 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 - Stop orders submitted with expiry in the past are rejected. (<a name="0014-ORDT-076" href="#0014-ORDT-076">0014-ORDT-076</a>)
 - GFA Stop orders submitted are rejected. (<a name="0014-ORDT-077" href="#0014-ORDT-077">0014-ORDT-077</a>)
 - Stop orders once triggered can not be cancelled. (<a name="0014-ORDT-078" href="#0014-ORDT-078">0014-ORDT-078</a>)
+- If a stop order is placed with a position_fraction equal to 0 the order should be rejected. (<a name="0014-ORDT-139" href="#0014-ORDT-139">0014-ORDT-139</a>)
+- A party with a long position cannot enter a buy stop order, and a party with a short position cannot enter a sell stop order (<a name="0014-ORDT-137" href="#0014-ORDT-137">0014-ORDT-137</a>)
 
 ## Stop Orders - Snapshots
 
@@ -386,6 +403,12 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 ## Stop Orders - API
 
 - API end points should be available to query stop orders with all relevant fields. (<a name="0014-ORDT-080" href="#0014-ORDT-080">0014-ORDT-080</a>)
+
+## Stop Orders - Linked
+
+- A stop order with a size override linked to the position of the trader will use the current position as an override of the triggered order size. (<a name="0014-ORDT-127" href="#0014-ORDT-127">0014-ORDT-127</a>)
+- All stop orders with a position size override should be cancelled if the trader's position flips sides (long->short or short->long). (<a name="0014-ORDT-128" href="#0014-ORDT-128">0014-ORDT-128</a>)
+- A stop order with a position size override with a position_fraction set to 0.75, for a trader with long position 20, should create a stop order for selling size 15 when triggered (<a name="0014-ORDT-129" href="#0014-ORDT-129">0014-ORDT-129</a>)
 
 ## Perpetuals
 

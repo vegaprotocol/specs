@@ -239,7 +239,7 @@ A market in Proposed state accepts [liquidity commitments](./0044-LIME-lp_mechan
 [Market parameters](./0001-MKTF-market_framework.md#market) that may be changed are described in the spec for the Market Framework, and additionally the specs for the Risk Model and Product being used by the market.
 See the [Market Framework spec](./0001-MKTF-market_framework.md#market) for details on these parameters, including those that cannot be changed and the category of the parameters.
 
-To change any market parameter the proposer submits the same data as to create a market with the desired updates to the fields / structures that should change.
+To change any market parameter the proposer submits the same data as to create a market with the desired updates to the fields / structures that should change. Changes for markets in a closed/cancelled/terminated state should not be permitted.
 Ideally, it should be possible to not repeat things that are not changing or are immutable but we leave this to implementation detail.
 
 The following are immutable and cannot be changed:
@@ -248,7 +248,6 @@ The following are immutable and cannot be changed:
 - market decimal places
 - position decimal places
 - `settlementAsset`
-- name
 
 ## 3. Change network parameters
 
@@ -258,7 +257,7 @@ All _change network parameter proposals_ have their validation configured by the
 
 ## 4.1 Add a new asset
 
-New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md)).
+New [assets](./0040-ASSF-asset_framework.md) can be proposed through the governance system. The procedure is covered in detail in the [asset proposal spec](./0027-ASSP-asset_proposal.md).
 All new asset proposals have their validation configured by the network parameters `governance.proposal.asset.<CATEGORY>`.
 
 ## 4.2 Modify an existing asset
@@ -387,7 +386,7 @@ Any type of market (either fixed expiry market or perpetual) can be closed via a
 
 A proposal to close a market contains:
 
-1. final settlement price formatted accounting for market's decimal places
+1. final settlement price (not required for spot markets) formatted accounting for market's decimal places
 
 Once market is closed the process cannot be reversed. Note that this implies that once a governance proposal to close the market has been voted in the market will definitely close at the enactment time of that vote at the latest. While the market is still open it's still possible to submit additional governance votes to close the market, however they'll only have any effect if their enactment date is prior to that of the market closure proposal which has already passed.
 
@@ -453,6 +452,28 @@ Notes:
 - The categorisation of parameters is liable to change and be added to as the protocol evolves.
 - As these are themselves network parameters, a set of parameters will control these parameters for the actions that update these parameters (including being self-referential), i.e. the parameter `Governance.UpdateNetwork.GovernanceProposalValidation.MinimumRequiredParticipation` would control the amount of voting participation needed to change these parameters. See the Network Parameters spec.
 
+## Batch Proposals
+
+A `BatchProposalSubmission` is a top-level proposal type (living at the same level in a `Transaction` object as a standard `ProposalSubmission`) which allows grouping of several individual proposals into a single proposal, ensuring that all changes will pass or fail governance voting together.
+The batch proposal is a wrapper containing one `rationale` (i.e. `title` and `description`) field as a standard `ProposalSubmission`, one `closingTimestamp` field and a list of `ProposalSubmission`s which omit certain fields.
+The individual `ProposalSubmission` have no `rationale` entry (i.e. no `title` and `description`).
+The individual `ProposalSubmission` have no `closingTimestamp` entry.
+Any governance proposal can be included in a batch _except_ proposals to add new assets.
+For avoidance of doubt: asset _change_ proposals can be included.
+
+Validation should be applied by the protocol when accepting such a transaction to verify that all proposals within the batch meet their own minimum voting periods (if not transaction is rejected).
+The enactment timestamp, is customisable and can be different for each proposal within the batch, as long as the minimum enactment time of each individual proposal within the batch is respected and as long as every `enactmentTimestamp` is greater than or equal to `closingTimestamp` of the entire batch.
+
+Once submitted, a single voting period should be run in which participants may place a single vote to approve/disapprove of the entire batch. It _must_ _not_ be possible to vote for components in the batch separately.
+Once the closing timestamp is reached each individual proposal within the batch is evaluated against the votes received.
+If all individual proposals would pass (given the votes received, based on their individual rules on participation, majority, LP-ELS voting etc.) then the entire batch passes.
+If even one proposal within the batch would fail then the entire batch fails.
+
+If the batch passes, each of the component proposals should be enacted at their enactment timestamp exactly as if each had been proposed and passed individually. The enactment order of two proposals in the batch with the same enactment timestamp: they enact in the order they appear in the batch.
+In particular asset update proposals may emit signed bundles to be submitted to the bridge on ethereum side (for withdrawal delay / threshold updates).
+
+The number of individual proposals that can be submitted within a single batch is limited to 250.
+
 ## APIs
 
 The core should expose via core APIs:
@@ -506,7 +527,6 @@ APIs should also exist for clients to:
 
 - As the vega network, if a proposal is accepted and the duration required before change takes effect is reached, the changes are applied (<a name="0028-GOVE-008" href="#0028-GOVE-008">0028-GOVE-008</a>)
 - New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
-- A market that has been proposed and successfully voted through doesn't leave the opening auction until the `enactment date/time` is reached and until sufficient [liquidity commitment](./0044-LIME-lp_mechanics.md#commit-liquidity-network-transaction) has been made for the market. Sufficient means that it meets all the criteria set in [liquidity monitoring](./0035-LIQM-liquidity_monitoring.md). (<a name="0028-GOVE-025" href="#0028-GOVE-025">0028-GOVE-025</a>)
 - A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
 - A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
 
@@ -528,10 +548,14 @@ APIs should also exist for clients to:
 - A market change proposal that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the proposed modification is enacted. (<a name="0028-GOVE-070" href="#0028-GOVE-070">0028-GOVE-070</a>)
 - In particular a market change proposal that's to modify the parent market on a market in `pending` state (i.e. voting has successfully completed and the market is in the opening auction) will be accepted and if it's the enactment time happens to be before the opening auction ends then the parent is used (assuming the proposed parent doesn't already have a successor). (<a name="0028-GOVE-071" href="#0028-GOVE-071">0028-GOVE-071</a>)
 - A market change that's to modify any parameters on a market in `pending` state (i.e. voting has successfully completed on the market creation and the market is in the opening auction) will run voting rules the same as market creation proposals i.e. LPs don't get a vote. (<a name="0028-GOVE-072" href="#0028-GOVE-072">0028-GOVE-072</a>)
-- A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it. (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
+- A market change proposal that aims to modify the market name in any state (apart from closed/terminated) will modify the market name at the time of vote enactment. (<a name="0028-GOVE-159" href="#0028-GOVE-159">0028-GOVE-159</a>)
+- A market change proposal that aims to modify the market code in any state (apart from closed/terminated) will modify the market code at the time of vote enactment. (<a name="0028-GOVE-166" href="#0028-GOVE-166">0028-GOVE-166</a>)
+- A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
 - When there's already been a market closure governance proposal successfully voted in for a given market, but not yet enacted it is still possible to submit additional market closure governance proposals for that market. If another market closure governance proposal gets voted it and it has an earlier enactment time then it's the final settlement price of that proposal which gets used. (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
 - Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to resume the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
-- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
+- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. Resuming the market will then put the market in the state it was in prior to it being suspended.
+  - monitoring auction (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
+  - opening auction (<a name="0028-GOVE-167" href="#0028-GOVE-167">0028-GOVE-167</a>)
 - Resuming a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
 - A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
 - Verify that a party with 0 balance of the governance token, but with sufficient ELS can submit a market change proposal successfully. (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)
@@ -668,6 +692,40 @@ It is NOT possible to submit a governance proposal where the source account is t
 - Recurring transfers can be cancelled only after the transfer proposal reached an enacted state. Attempts to cancel before the recurring transfer proposal has enacted will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-124" href="#0028-GOVE-124">0028-GOVE-124</a>)
 - Using a governance proposal to cancel, attempts to cancel an using an invalid transfer ID will result in a proposal rejection which states the transfer does not exist (<a name="0028-GOVE-125" href="#0028-GOVE-125">0028-GOVE-125</a>)
 - When a transfer is cancelled vega will produce an event conveying the cancellation to datanode. This will contain a cancellation status and zero transfer amount. No ledger events will be produced.(<a name="0028-GOVE-126" href="#0028-GOVE-126">0028-GOVE-126</a>)
+
+
+##### Batch Proposals
+
+- A batch proposal containing one or more component submissions mixing different proposal types can be submitted and is accepted as a valid proposal. (<a name="0028-GOVE-146" href="#0028-GOVE-146">0028-GOVE-146</a>)
+
+- A batch proposal submitted with component submissions having different one or more enactment timestamps lower than the closing timestamps will be rejected with an informative error message. (<a name="0028-GOVE-148" href="#0028-GOVE-148">0028-GOVE-148</a>)
+
+- A batch proposal submitted with component submissions with different enactment timestamps, all of which are valid for the type of change being proposed for that enactment time, will be accepted and move to voting.  (<a name="0028-GOVE-149" href="#0028-GOVE-149">0028-GOVE-149</a>)
+   1. If this proposal is accepted, each of the components will be enacted at the time of their differing enactment timestamps. (<a name="0028-GOVE-145" href="#0028-GOVE-145">0028-GOVE-145</a>)
+
+- A batch proposal containing
+   1. freeform proposal,
+   1. an update asset proposal changing the asset quantum, maximum lifetime deposit and withdrawal delay threshold
+   1. a network parameter change,
+   1. a market proposal,
+   1. a change proposal for another market,
+   1. volume discount program,
+   1. referral program,
+   1. governance transfer,
+
+can be submitted, voted through and each proposal enacted.
+On top of that signed bundles for changing withdrawal delay and threshold on the bridge are emitted (<a name="0028-GOVE-160" href="#0028-GOVE-160">0028-GOVE-160</a>)
+
+- A batch proposal can be submitted changing the same network parameter twice to two different values with two different enactment timestamps.
+The voting to approve the batch happens, the batch passes, both changes are observed at the desired time. (<a name="0028-GOVE-161" href="#0028-GOVE-161">0028-GOVE-161</a>)
+
+A vote cannot be submitted for an individual component in a batch (<a name="0028-GOVE-163" href="#0028-GOVE-163">0028-GOVE-163</a>)
+
+When a batch contains two proposals with identical enactment timestamps, they are executed in the order the appear in the batch. For example two network parameter update proposals in the same batch with the same enactment timestamp will both be executed, in the order specified. (<a name="0028-GOVE-164" href="#0028-GOVE-164">0028-GOVE-164</a>)
+
+- A batch proposal can be submitted changing the same network parameter twice to two different values with the same enactment timestamps.
+The voting to approve the batch happens, the batch passes, the value of the proposal appearing later in the batch is observed at the desired time. (<a name="0028-GOVE-165" href="#0028-GOVE-165">0028-GOVE-165</a>)
+
 
 ##### Network History
 

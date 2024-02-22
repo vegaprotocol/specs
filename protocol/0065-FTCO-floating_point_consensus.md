@@ -98,7 +98,6 @@ This section outlines floating-point quantities `vega` currently relies on:
     - When the opening auction ends (choose uncrossing price that's different from first indicative uncrossing price) price monitoring bounds and probability of trading get recalculated.
     - When the market goes into price monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
     - When the time-based trigger elapses price monitoring bounds and probability of trading get recalculated.
-    - When the market goes into liquidity monitoring auction the state variables stay the same as prior to its' start, when that auction concludes (choose a price that's not been traded at before) price monitoring bounds and probability of trading get recalculated again and the time-based trigger countdown gets reset.
 
 1. Event announcing diverging values gets emitted (<a name="0065-FTCO-004" href="#0065-FTCO-004">0065-FTCO-004</a>).
    - For all the state variables nodes submit candidate values that differ by up to half the tolerance.

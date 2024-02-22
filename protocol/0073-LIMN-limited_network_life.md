@@ -158,24 +158,6 @@ If for `network.checkpoint.timeElapsedBetweenCheckpoints` the value is set to `0
 1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
 1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_margin_bal`.
 
-#### Test case 3.1.1: Spot market is proposed, accepted, restored (<a name="0073-LIMN-102" href="#0073-LIMN-102">0073-LIMN-102</a>)
-
-1. There is an asset USD and no asset proposals.
-1. There are no markets and no market proposals.
-1. There is a party a party called `LP party` with general balance of 10 000 USD.
-1. A market is proposed by a party called `LP party` and has enactment date 1 year in the future. The market has id `id_xxx`.
-1. `LP party` commits a stake of 1000 USD to `id_xxx`.
-1. Other parties vote on the market and the proposal is accepted (passes rules for vote majority and participation). The market has id `id_xxx`.
-1. The market is in `pending` state, see [market lifecycle](../protocol/0043-MKTL-market_lifecycle.md).
-1. Another party places a limit sell order on the market and has `other_gen_bal`, holding balance `other_hold_bal`.
-1. Enough time passes so a checkpoint is created and no party submitted any withdrawal transactions throughout.
-1. The network is shut down.
-1. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
-1. There is an asset USD.
-1. There is a market with `id_xxx` with all the same parameters as the accepted proposal had.
-1. The LP party has general account balance in USD of `9000` and bond account balance `1000` on the market `id_xxx`.
-1. The other party has no open orders anywhere and general account balance in USD of `other_gen_bal + other_hold_bal`.
-
 #### Test case 3.1.2: Perpetual market is proposed, accepted, restored (<a name="0073-LIMN-105" href="#0073-LIMN-105">0073-LIMN-105</a>)
 
 1. There is an asset USD and no asset proposals.
@@ -283,14 +265,6 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
 5. That party has a USD general account balance of 200 USD
 
-### Test case 4b: In Spot market, party's Holding Account balance is put in to a General Account balance for that asset after a reset (<a name="0073-LIMN-080" href="#0073-LIMN-080">0073-LIMN-080</a>)
-
-1. A party has USD general account balance of 100 USD.
-2. That party has USD holding account balance of 50 USD.
-3. The network is shut down.
-4. The network is restarted with the checkpoint hash from the above checkpoint in genesis. The checkpoint restore transaction is submitted and processed.
-5. That party has a USD general account balance of 150 USD
-
 ### Test case 5: Add or remove stake during checkpoint restart (<a name="0073-LIMN-017" href="#0073-LIMN-017">0073-LIMN-017</a>)
 
 1. There is a Vega token asset.
@@ -350,7 +324,6 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 
 ### Test case 13: A market with future enactment date can become enacted after being restored from checkpoint (<a name="0073-LIMN-028" href="#0073-LIMN-028">0073-LIMN-028</a>)
 
-
 1. There is an asset USD and no asset proposals.
 1. There are no markets and no market proposals.
 1. There is a party a party called `LP party` with general balance of 10 000 USD.
@@ -377,10 +350,10 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-029" href="#0073-LIMN-029">0073-LIMN-029</a>).
 1. If the market exists in the data node it is marked as settled with no settlement price info (<a name="0073-LIMN-030" href="#0073-LIMN-030">0073-LIMN-030</a>)
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-031" href="#0073-LIMN-031">0073-LIMN-031</a>)
-1. In Spot market, for parties that had holdings in the holding account on the market this is now in their general account for the asset.  (<a name="0073-LIMN-084" href="#0073-LIMN-084">0073-LIMN-084</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-032" href="#0073-LIMN-032">0073-LIMN-032</a>).
-1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-112" href="#0073-LIMN-112">0073-LIMN-112</a>)
+1. The insurance pool balance has been transferred into the global insurance pool using the same settlement asset. (<a name="0073-LIMN-115" href="#0073-LIMN-115">0073-LIMN-115</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-034" href="#0073-LIMN-034">0073-LIMN-034</a>).
+
 
 ### Test case 15: Market with trading terminated that settled is not restored, collateral moved correctly
 
@@ -389,9 +362,8 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 1. Restart Vega, load LNL checkpoint.
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-040" href="#0073-LIMN-040">0073-LIMN-040</a>).
 1. If the market exists in the data node it is marked as settled with correct settlement data. (<a name="0073-LIMN-041" href="#0073-LIMN-041">0073-LIMN-041</a>)
-1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>)
-1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset.  (<a name="0073-LIMN-088" href="#0073-LIMN-088">0073-LIMN-088</a>)
-1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-113" href="#0073-LIMN-113">0073-LIMN-113</a>)
+1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-042" href="#0073-LIMN-042">0073-LIMN-042</a>
+1. The insurance pool balance has been transferred into the global insurance pool using the same settlement asset. (<a name="0073-LIMN-116" href="#0073-LIMN-116">0073-LIMN-116</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-044" href="#0073-LIMN-044">0073-LIMN-044</a>).
 
 ### Test case 16: Markets can be settled and terminated after restore as proposed
@@ -411,9 +383,8 @@ for product perpetuals:(<a name="0073-LIMN-110" href="#0073-LIMN-110">0073-LIMN-
 1. The market is not restored (it doesn't exist in core i.e. it's not possible to submit orders or LP provisions to this market) (<a name="0073-LIMN-060" href="#0073-LIMN-060">0073-LIMN-060</a>).
 1. If the market exists in the data node it is labelled as `cancelled` (<a name="0073-LIMN-061" href="#0073-LIMN-061">0073-LIMN-061</a>).
 1. For parties that had margin balance position on the market this is now in their general account for the asset.  (<a name="0073-LIMN-062" href="#0073-LIMN-062">0073-LIMN-062</a>)
-1. In Spot market, for parties that had holdings in their holding accounts on the market this is now in their general account for the asset. (<a name="0073-LIMN-094" href="#0073-LIMN-094">0073-LIMN-094</a>)
 1. The LP fees that were not distributed have been transferred to the Vega treasury for the asset. (<a name="0073-LIMN-063" href="#0073-LIMN-063">0073-LIMN-063</a>).
-1. The insurance pool balance has been redistributed equally between the global insurance pool and the insurance pools of the remaining active markets using the same settlement asset. (<a name="0073-LIMN-114" href="#0073-LIMN-114">0073-LIMN-114</a>)
+1. The insurance pool balance has been transferred into the global insurance pool using the same settlement asset. (<a name="0073-LIMN-117" href="#0073-LIMN-117">0073-LIMN-117</a>)
 1. The LP bond account balance has been transferred to the party's general account for the asset. (<a name="0073-LIMN-065" href="#0073-LIMN-065">0073-LIMN-065</a>).
 
 ### Test case 18: market definition is the same pre and post LNL restore

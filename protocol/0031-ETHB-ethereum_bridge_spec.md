@@ -109,7 +109,7 @@ The Ethereum Bridge uses 1 network parameter, `blockchains.ethereumConfig`, a JS
 
 | Property         | Type   | Example value | Description |
 |------------------|--------| ------------|--------------|
-| `chain_id`       | String |  `"3"`        | Ethereum [Chain ID](https://eips.ethereum.org/EIPS/eip-155) to connect to
+| `chain_id`       | String |  `"3"`        | Ethereum [Chain ID](https://eips.ethereum.org/EIPS/eip-155) to connect to |
 | `network_id`     | String |  `"3"`        | Ethereum [Network ID](https://eips.ethereum.org/EIPS/eip-155) to connect to     |
 | `collateral_bridge_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The address for a deployed instance of the bridge contract |
 | `staking_bridge_contract` | {string, integer} | `{address: "0xCcB517899f714BD1B2f32931fF429aDEdDd02A93", deployment_height: 1}`            | The addresses to listen to for [staking events](./0059-STKG-simple_staking_and_delegating.md). |

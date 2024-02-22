@@ -34,9 +34,10 @@ This specification outlines:
 
 ### **Background - how margin levels are calculated**
 
-The [margin calculator](./0019-MCAL-margin_calculator.md) will calculate the margin levels when instructed to do so. It will return four margin levels for each trader:
+The [margin calculator](./0019-MCAL-margin_calculator.md) will calculate the margin levels when instructed to do so. It will return five margin levels for each trader:
 
 1. maintenance margin
+1. order margin
 1. collateral search level
 1. initial margin
 1. collateral release level
@@ -71,11 +72,11 @@ The [margin calculator](./0019-MCAL-margin_calculator.md) returns four margin le
 
 The protocol compares these levels to the balance in the trader's margin account for a market.
 
-| Traders Collateral        | Protocol  Action           | Whitepaper Description
+| Traders Collateral        | Protocol  Action           | Whitepaper Description |
 | ------------- |:-------------:| -----:|
-| less than  _collateral search level_     | Collateral search, possibly close outs | Collateral search, Close out zone
-| greater than  _collateral release level_       | Collateral release      | Collateral release
-| greater than _collateral search level_ and less than  _initial margin_  | no action     | No financial risk to network
+| less than  _collateral search level_     | Collateral search, possibly close outs | Collateral search, Close out zone |
+| greater than  _collateral release level_       | Collateral release      | Collateral release |
+| greater than _collateral search level_ and less than  _initial margin_  | no action     | No financial risk to network |
 
 When posting a new order the initial margin for the overall position including the new order is calculated and order is only allowed to go ahead if party has enough funds to bring their margin account balance to that figure. An exception to this is when a party has an open position and tries to reduce it, but cannot afford the new margin. Then orders from the opposite side (short orders for a long position, long orders for a short position) are accepted as follows:
 

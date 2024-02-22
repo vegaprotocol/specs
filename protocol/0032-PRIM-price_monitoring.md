@@ -13,7 +13,7 @@ Please see the [auction spec](./0026-AUCT-auctions.md) for auction details.
 
 ### Note
 
-Price monitoring likely won't be the only possible trigger of auction period ([liquidity monitoring](./0035-LIQM-liquidity_monitoring.md) or governance action could be the other ones). Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
+Price monitoring likely won't be the only possible trigger of auction period e.g. governance action could be the other ones. Thus the framework put in place as part of this spec should be flexible enough to easily accommodate other types of triggers.
 
 Likewise, pre-processing transactions will be needed as part of the [fees spec](./0029-FEES-fees.md), hence it should be implemented in such a way that it's easy to repurpose it.
 
@@ -124,7 +124,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
 - When market is in price monitoring auction, change of a risk model or any of its parameters doesn't affect the previously calculated auction end time, any remaining price monitoring bounds cannot extend the auction further. Upon uncrossing price monitoring bounds get reset using the updated parameter values. (<a name="0032-PRIM-014" href="#0032-PRIM-014">0032-PRIM-014</a>).
 - Specifying a non-positive horizon results in an error. (<a name="0032-PRIM-015" href="#0032-PRIM-015">0032-PRIM-015</a>).
 - Specifying a probability outside the range (0.9,1) results in an error. (<a name="0032-PRIM-016" href="#0032-PRIM-016">0032-PRIM-016</a>).
-- Specifying a non-positive auction extension results in an error. (<a name="0032-PRIM-017" href="#0032-PRIM-017">0032-PRIM-017</a>).
+- Specifying a non-positive auction extension results in an error. (<a name="0032-PRIM-017" href="#0032-PRIM-017">0032-PRIM-017</a>)
 - Settlement price outside the current price monitoring bounds does not trigger an auction (<a name="0032-PRIM-018" href="#0032-PRIM-018">0032-PRIM-018</a>)
 - A network trade (during closeout) with a price outside price monitoring bounds does not trigger an auction. (<a name="0032-PRIM-019" href="#0032-PRIM-019">0032-PRIM-019</a>)
 - Persistent order causing trade with the price outwith both bands triggers an auction. Initial auction duration is equal to the extension period of the first trigger. Once the initial period ends the auction gets extended by the extension period of the second trigger. No other orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-020" href="#0032-PRIM-020">0032-PRIM-020</a>).

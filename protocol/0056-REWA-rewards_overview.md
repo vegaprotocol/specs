@@ -282,6 +282,7 @@ $$s_{i} = \frac{d_{i}}{\sum_{i=1}^{n}d_{i}}$$
 
 ### Funding reward accounts (<a name="0056-REWA-001" href="#0056-REWA-001">0056-REWA-001</a>)
 
+
 Trading reward accounts are defined by a pair: [`payout_asset, dispatch_strategy`].
 
 There are two assets configured on the Vega chain: $VEGA and USDT.
@@ -294,6 +295,7 @@ Run for another epoch with no fee generated. Expect no transfer to be made to th
 
 ### Funding reward accounts - with markets in scope (<a name="0056-REWA-002" href="#0056-REWA-002">0056-REWA-002</a>)
 
+
 There are two assets configured on the Vega chain: $VEGA and USDT.
 
 Setup a recurring transfer of 1000 $VEGA with the following dispatch strategy: asset=`USDT`, metric=`DISPATCH_METRIC_TAKER_FEES_PAID`, markets=[`market1`, `market2`].
@@ -303,6 +305,7 @@ Create 3 markets settling in USDT. Wait for a new epoch to begin, in the next ep
 Run for another epoch with no fee generated. Expect no transfer to be made to the reward pools of the accounts.
 
 ### Distributing fees paid rewards (<a name="0056-REWA-010" href="#0056-REWA-010">0056-REWA-010</a>)
+
 
 #### Rationale 1
 
@@ -351,6 +354,7 @@ At the end of epoch 2:
 
 ### Distributing fees paid rewards - unfunded account (<a name="0056-REWA-011" href="#0056-REWA-011">0056-REWA-011</a>)
 
+
 #### Rationale 2
 
 This is identical to [acceptance code `REWA 010`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-fees-paid-rewards-0056-rewa-010) just without funding the corresponding reward account.
@@ -368,6 +372,7 @@ No funding done.
 At the end of epoch 2 although there was trading in the market `ETHUSD-MAR22`, no reward is given to any participant as the reward account was not funded.
 
 ### Distributing fees paid rewards - funded account - no trading activity (<a name="0056-REWA-012" href="#0056-REWA-012">0056-REWA-012</a>)
+
 
 #### Rationale 3
 
@@ -392,6 +397,7 @@ Then, during epoch 3 we fund the reward accounts for the metric:
 Looking only at epoch 3 - as no trading activity was done, we expect the reward balances in both $VEGA and USDC for the metric to remain unchanged.
 
 ### Distributing fees paid rewards - multiple markets (<a name="0056-REWA-013" href="#0056-REWA-013">0056-REWA-013</a>)
+
 
 #### Rationale 4
 
@@ -431,6 +437,7 @@ The calculation of eligibility is identical to [acceptance code `REWA 010`](http
   - `party_2` is paid `120 x 1.62 / 4.98 = 39.03.` $VEGA from the reward account into its $VEGA general account.
 
 ### Distributing maker fees received rewards (<a name="0056-REWA-020" href="#0056-REWA-020">0056-REWA-020</a>)
+
 
 #### Rationale 5
 
@@ -477,6 +484,7 @@ At the end of epoch `2` `party_0` is paid `120 x 2.8 / (2.79+2.8)` USDC from the
 
 ### Distributing maker fees received rewards - unfunded account (<a name="0056-REWA-021" href="#0056-REWA-021">0056-REWA-021</a>)
 
+
 #### Rationale 6
 
 This is identical to [acceptance code `REWA 020`](https://github.com/vegaprotocol/specs/blob/master/protocol/0056-REWA-rewards_overview.md#distributing-maker-fees-received-rewards-0056-rewa-020) just without funding the corresponding reward account.
@@ -494,7 +502,6 @@ No funding done.
 At the end of epoch 2 although there was trading in the market `ETHUSD-MAR22`, no reward is given to any participant as the reward account was not funded.
 
 ### Distributing maker fees received rewards - funded account - no trading activity (<a name="0056-REWA-022" href="#0056-REWA-022">0056-REWA-022</a>)
-
 
 #### Rationale 7
 
@@ -629,7 +636,6 @@ Then, during epoch 3 we fund the reward accounts for the metric:
 Looking only at epoch 3 - as no trading activity was done, we expect the reward balances in both $VEGA and USDC for the metric to remain unchanged.
 
 ### Distributing LP fees received - multiple markets (<a name="0056-REWA-033" href="#0056-REWA-033">0056-REWA-033</a>)
-
 
 #### Rationale 12
 
@@ -901,6 +907,7 @@ At the end of epoch 3, 10000 VEGA should be distributed split between the `BTCUS
 
 ### Updating the network parameter `rewards.marketCreationQuantumMultiple` (<a name="0056-REWA-050" href="#0056-REWA-050">0056-REWA-050</a>)
 
+
 #### Rationale 22
 
 When the network parameter `rewards.marketCreationQuantumMultiple` is changed via governance, the change should take affect
@@ -953,6 +960,8 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 
 - If a party is a consensus or standby validator their validator ranking reward metric should be set to their ranking score (<a name="0056-REWA-091" href="#0056-REWA-091">0056-REWA-091</a>).
 - If a party is not a consensus or standby validator their validator ranking reward metric should be set to `0` (<a name="0056-REWA-092" href="#0056-REWA-092">0056-REWA-092</a>).
+- For a party that is a consensus or standby validator, the [staking requirement](https://github.com/vegaprotocol/specs/blob/palazzo/protocol/0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) and [notional time-weighted average position requirement](https://github.com/vegaprotocol/specs/blob/palazzo/protocol/0057-TRAN-transfers.md#recurring-transfers-to-reward-accounts) do not apply to their validator ranking metric.  (<a name="0056-REWA-109" href="#0056-REWA-109">0056-REWA-109</a>).
+- A party does not need to meet the staking requirements and notional time-weighted average position set in the recurring transfer for market creation reward metric.  (<a name="0056-REWA-110" href="#0056-REWA-110">0056-REWA-110</a>).
 
 ### Distribution Strategy
 

@@ -73,7 +73,7 @@ When a [market moves into an auction](./0026-AUCT-auctions.md#upon-entering-auct
 
 - All [PEGGED](./0014-ORDT-order_types.md#auction) orders are parked (and have their status set to PARKED). (<a name="0068-MATC-026" href="#0068-MATC-026">0068-MATC-026</a>)
 - All [GFN](./0014-ORDT-order_types.md#time-in-force---validity) orders are cancelled. (<a name="0068-MATC-027" href="#0068-MATC-027">0068-MATC-027</a>).
-- All [GTC/GTT](./0014-ORDT-order_types.md#time-in-force---validity) orders remain on the book untouched. (<a name="0068-MATC-028" href="#0068-MATC-028">0068-MATC-028</a>).
+- All [GTC/GTT](./0014-ORDT-order_types.md#time-in-force---validity) orders remain on the book untouched. (<a name="0068-MATC-028" href="#0068-MATC-028">0068-MATC-028</a>)
 
 When a market [market exits an auction](./0026-AUCT-auctions.md#upon-exiting-auction-mode):
 

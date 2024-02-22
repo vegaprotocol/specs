@@ -113,7 +113,6 @@ There are three priority categories:
 
 ### Test we don't overfill a block with a market (<a name="0079-TGAP-005" href="#0079-TGAP-005">0079-TGAP-005</a>)
 
-
 1. Set `network.transactions.maxgasperblock = 500` and `network.transaction.defaultgas = 1`.
 1. Place 2 matching orders, 1 buy order below the matching price and 1 sell order above the matching price. Uncross the opening auction.
 1. Place 3 pegged orders with different non-zero offsets.

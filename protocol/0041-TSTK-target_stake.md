@@ -5,15 +5,11 @@
 This spec outlines how to measure how much stake we want committed to a market relative to what is happening on the market (currently open interest).
 The target stake is a calculated quantity, utilised by various mechanisms in the protocol:
 
-- If the LPs total committed stake is less than c_1 x `target_stake` we trigger liquidity auction. See [Liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md). Note that there is a one-to-one correspondence between the amount of stake LPs committed and the supplied liquidity.
-The parameter c_1 is a market parameter defined in the [liquidity Monitoring](./0035-LIQM-liquidity_monitoring.md) spec.
-- It is used to set the fee factor for the LPs: see [Setting fees and rewarding LPs](./0042-LIQF-setting_fees_and_rewarding_lps.md).
-
 ### Definitions / Parameters used
 
 - **Open interest**: the volume of all open positions in a given market.
 - `market.stake.target.timeWindow` is a network parameter providing the default length of window over which we measure open interest (see below). This should be measured in seconds and a typical value is one week i.e. `7 x 24 x 3600` seconds. A market proposal / update can override this by setting  `timeWindow` in `liquidityMonitoringParameters.targetStakeParameters`.
-- `market.stake.target.scalingFactor` is a network parameter providing the default scaling between liquidity demand estimate based on open interest and target stake. A market proposal / update can override this by setting  `scalingFactor` in  `liquidityMonitoringParameters.targetStakeParameters`.
+- `market.stake.target.scalingFactor` is a network parameter providing the default scaling between liquidity demand estimate based on open interest and target stake.
 - `risk_factor_short`, `risk_factor_long` are the market risk factors, see [the Quant Risk Models spec](./0018-RSKM-quant_risk_models.ipynb).
 - `mark_price`, see [mark price](./0009-MRKP-mark_price.md) spec.
 - `indicative_uncrossing_price`, see [auction](./0026-AUCT-auctions.md) spec.
