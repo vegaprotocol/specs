@@ -217,27 +217,9 @@ s ELS updated as normal.
 
 The `proposed_fee` provided as part of the AMM construction contributes to the fee determination logic on the market, if a setup where LPs decide on the market fee is in use. In the case where it is the AMM's current assigned ELS, or the running average liquidity provided so far if the commitment was made in the current epoch, is used for weighting the AMM's vote for the fee.
 
-## Calculating Square Roots
+## Market Settlement
 
-Much of the calculation work for the concentrated liquidity curve requires the use of square root functions. These work fine for AMMs with tick prices based around integer powers of a small number, but are less tractable in a system with fixed tick sizes. As frequent calculation of a square root in floating point arithmetic is very costly, and requires a consensus vote slowing it down further, an alternative method is needed.
-
-In order to handle this, the protocol should maintain a mapping table between proximate prices to current market price and their log scale equivalents, which can be used instead where square roots are needed. This table should consist of a wide range of prices and be updated at some low frequency. If any trade causes prices outside this table to be needed, then an expansion should be calculated automatically and used. In order to calculate the table, there are two possible approaches:
-
-  1. First, the float `log2` function and floating-point consensus may be possible depending on time/processing constraints
-  1. Second, an integer version of `log2` of the form below would allow local calculation of the table:
-
-```c
-int log2(int64_t num) {
-    int res = 0, pw = 0;    
-    for(int i = 32; i > 0; i --) {
-        res += i;
-        if(((1LL << res) - 1) & num)
-            res -= i;
-    }
-    return res;
-}
-```
-
+At market settlement, an AMM's position will be settled alongside all others as if they are a standard party. Once settlement is complete, any remaining funds in the AMM's account will be transferred back to the creator's general account and the AMM can be removed.
 
 ## Acceptance Criteria
 
@@ -286,3 +268,19 @@ int log2(int64_t num) {
   - If the vAMM is then amended such that it has a new base price of `140` it should attempt to place a trade to rebalance it's position to `0` at a mid price of `140`.
     - If that trade can execute with the slippage as configured in the request then the transaction is accepted. (<a name="0087-VAMM-025" href="#0087-VAMM-025">0087-VAMM-025</a>)
     - If the trade cannot execute with the slippage as configured in the request then the transaction is rejected and no changes to the vAMM are made. (<a name="0087-VAMM-026" href="#0087-VAMM-026">0087-VAMM-026</a>)
+
+- When a user with `1000 USDT` creates a vAMM with commitment `1000`, base price `100`, upper price `150`, lower price `85` and leverage ratio at each bound `0.25`, if other traders trade to move the market mid price to `140` quotes with a mid price of `140` (volume quotes above `140` should be sells, volume quotes below `140` should be buys). (<a name="0087-VAMM-027" href="#0087-VAMM-027">0087-VAMM-027</a>)
+
+- When a user with `1000 USDT` creates a vAMM with commitment `1000`, base price `100`, upper price `150`, lower price `85` and leverage ratio at each bound `0.25`, the volume quoted to move from price `100` to price `110` in one step is the same as the sum of the volumes to move in 10 steps of `1` e.g. `100` -> `101`, `101` -> `102` etc. (<a name="0087-VAMM-028" href="#0087-VAMM-028">0087-VAMM-028</a>)
+
+- When a user with `1000 USDT` creates a vAMM with commitment `1000`, base price `100`, upper price `150`, lower price `85` and leverage ratio at each bound `0.25`, the volume quoted to move from price `100` to price `90` in one step is the same as the sum of the volumes to move in 10 steps of `1` e.g. `100` -> `99`, `99` -> `98` etc. (<a name="0087-VAMM-029" href="#0087-VAMM-029">0087-VAMM-029</a>)
+
+- When a user with `1000 USDT` creates a vAMM with commitment `1000`, base price `100`, upper price `150`, lower price `85` and leverage ratio at each bound `0.25`:
+  1. Take quoted volumes to move to `110` and `90`
+  1. Execute a trade of the quoted size to move the fair price to `110`
+  1. Take a quote to move to price `90`
+  1. Ensure this is equal to the sum of the quotes from step `1` (with the volume from `100` to `110` negated) (<a name="0087-VAMM-030" href="#0087-VAMM-030">0087-VAMM-030</a>)
+
+- When an AMM is active on a market at time of settlement with a position in a well collateralised state, the market can settle successfully and then all funds on the AMM key are transferred back to the main party's account (<a name="0087-VAMM-031" href="#0087-VAMM-031">0087-VAMM-031</a>)
+
+- When an AMM is active on a market at time of settlement but the settlement price means that the party is closed out no funds are transfeered back to the main party's account (<a name="0087-VAMM-032" href="#0087-VAMM-032">0087-VAMM-032</a>)
