@@ -8,26 +8,6 @@
       "0032-PRIM-040"
     ]
   },
-  "Community Tags": {
-    "milestone": "colosseo",
-    "acs": [
-      "0028-GOVE-167",
-      "0028-GOVE-168",
-      "0028-GOVE-169",
-      "0028-GOVE-170",
-      "0028-GOVE-171",
-      "0028-GOVE-172",
-      "0028-GOVE-173",
-      "0028-GOVE-174",
-      "0028-GOVE-175",
-      "0028-GOVE-176",
-      "0028-GOVE-177"
-    ]
-  },
-  "Perpetual funding rates": {
-    "milestone": "colosseo",
-    "acs": ["0053-PERP-036"]
-  },
     "Spot": {
     "milestone": "colosseo",
     "acs": [
@@ -314,6 +294,26 @@
       "0079-TGAP-006",
       "0079-TGAP-007"
     ]
+  },
+  "Community Tags": {
+    "milestone": "colosseo",
+    "acs": [
+      "0028-GOVE-167",
+      "0028-GOVE-168",
+      "0028-GOVE-169",
+      "0028-GOVE-170",
+      "0028-GOVE-171",
+      "0028-GOVE-172",
+      "0028-GOVE-173",
+      "0028-GOVE-174",
+      "0028-GOVE-175",
+      "0028-GOVE-176",
+      "0028-GOVE-177"
+    ]
+  },
+  "Perpetual funding rates": {
+    "milestone": "colosseo",
+    "acs": ["0053-PERP-036"]
   },
   "Unknown": {
     "milestone": "unknown",
