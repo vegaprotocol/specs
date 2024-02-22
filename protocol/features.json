@@ -1,6 +1,6 @@
 {
   "Markprice updates": {
-    "milestone": "nebula",
+    "milestone": "colosseo",
     "acs": [
       "0009-MRKP-132",
       "0053-PERP-043",
@@ -9,7 +9,7 @@
     ]
   },
   "Community Tags": {
-    "milestone": "nebula",
+    "milestone": "colosseo",
     "acs": [
       "0028-GOVE-167",
       "0028-GOVE-168",
@@ -25,7 +25,7 @@
     ]
   },
   "Perpetual funding rates": {
-    "milestone": "nebula",
+    "milestone": "colosseo",
     "acs": ["0053-PERP-036"]
   },
   "Unknown": {
