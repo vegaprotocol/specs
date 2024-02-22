@@ -63,7 +63,7 @@ On any Vega node, I can:
 | Requirement | Acceptance Criteria code |
 |-----------|:------------------------:|
 | List all governance proposals via REST & GRPC |<a name="0020-APIS-001" href="#0020-APIS-001">0020-APIS-001</a>|
-| List all governance proposals by a specified party via REST & GRPC             |<a name="0020-APIS-002" href="#0020-APIS-002">0020-APIS-002</a>
+| List all governance proposals by a specified party via REST & GRPC             |<a name="0020-APIS-002" href="#0020-APIS-002">0020-APIS-002</a> |
 | Retrieve a specific governance proposals by id via REST & GRPC             |<a name="0020-APIS-003" href="#0020-APIS-003">0020-APIS-003</a> |
 | Retrieve a list of votes via REST & GRPC |<a name="0020-APIS-004" href="#0020-APIS-004">0020-APIS-004</a>|
 | Retrieve the governance stake for a specified party via REST & GRPC |<a name="0020-APIS-005" href="#0020-APIS-005">0020-APIS-005</a>|

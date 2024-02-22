@@ -119,8 +119,6 @@ Price-monitoring auctions are still required and should be implemented following
 ## 9. Acceptance Criteria
 
 1. Create a `Spot` for any `quote_asset` / `base_asset` pair that are configured in Vega (<a name="0080-SPOT-001" href="#0080-SPOT-001">0080-SPOT-001</a>)
-1. It is not possible to change the `quote_asset` via governance (<a name="0080-SPOT-002" href="#0080-SPOT-002">0080-SPOT-002</a>)
-1. It is not possible to change the `base_asset` via governance (<a name="0080-SPOT-003" href="#0080-SPOT-003">0080-SPOT-003</a>)
 1. A `Spot` market can be closed through governance (<a name="0080-SPOT-004" href="#0080-SPOT-004">0080-SPOT-004</a>)
 1. Parties are unable to submit liquidity commitments they do not have the necessary funds for (<a name="0080-SPOT-006" href="#0080-SPOT-006">0080-SPOT-006</a>)
 1. If a "sell" order does not trade immediately (or only trades in part), an amount of the base_asset should be transferred to a holding_account to cover the remaining size of the order for the base_asset.(<a name="0080-SPOT-009" href="#0080-SPOT-009">0080-SPOT-009</a>)
@@ -134,3 +132,4 @@ Price-monitoring auctions are still required and should be implemented following
 1. For a "buy" order to be considered valid during an auction, the party must have a sufficient amount of the quote_asset to cover the order size, as well as any potential fees that may be incurred due to the order trading in the auction.(<a name="0080-SPOT-018" href="#0080-SPOT-018">0080-SPOT-018</a>).
 1. If the fee rates change for any reason within an auction, when the auction exits the amount required to cover fees must be recalculated. If a party does not have enough funds to cover the increase their order should be stopped with a clear return code. (<a name="0080-SPOT-021" href="#0080-SPOT-021">0080-SPOT-021</a>).
 1. When exiting an auction, for any orders that are still open, the funds held in the parties' holding_account to cover potential fees can be released to their respective general_account, so that the remaining amount in the holding_account is only sufficient to cover the value of the order.(<a name="0080-SPOT-020" href="#0080-SPOT-020">0080-SPOT-020</a>).
+1. Spot governance proposal fails with asset error, when quote_asset and base_asset has same assets. (<a name="0080-SPOT-022" href="#0080-SPOT-022">0080-SPOT-022</a>).
