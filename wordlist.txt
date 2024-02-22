@@ -231,6 +231,7 @@ pubkey
 quant
 rata
 rebalance
+rebalancing
 rebased
 rebasing
 recollateralise
