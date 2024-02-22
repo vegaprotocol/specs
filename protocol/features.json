@@ -512,11 +512,7 @@
   },
   "Explicit liquidation range": {
     "milestone": "colosseo",
-    "acs": [
-      "0012-POSR-031",
-      "0012-POSR-032",
-      "0012-POSR-033"
-    ]
+    "acs": ["0012-POSR-031", "0012-POSR-032", "0012-POSR-033"]
   },
   "Community Tags": {
     "milestone": "colosseo",
@@ -588,7 +584,7 @@
       "0057-TRAN-079"
     ]
   },
-   "vAMMs": {
+  "vAMMs": {
     "milestone": "colosseo",
     "acs": [
       "0042-LIQF-063",
@@ -620,6 +616,12 @@
       "0087-VAMM-024",
       "0087-VAMM-025",
       "0087-VAMM-026",
+      "0087-VAMM-027",
+      "0087-VAMM-028",
+      "0087-VAMM-029",
+      "0087-VAMM-030",
+      "0087-VAMM-031",
+      "0087-VAMM-032",
       "0057-TRAN-070"
     ]
   },
