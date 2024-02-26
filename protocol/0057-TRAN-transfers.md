@@ -392,15 +392,9 @@ If the network parameter `cap_reward_fee_multiple` is set, and if `calculated_re
 
 If the network parameter `cap_reward_fee_multiple` is set, and if `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum`(<a name="0057-TRAN-071" href="#0057-TRAN-071">0057-TRAN-071</a>)
 
-If the network parameter `cap_reward_fee_multiple` is set, and if some reward is left from the applied cap, the remaining balance should be recalculated only for parties that have not reacher their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10
+If the network parameter `cap_reward_fee_multiple` is set, and if some reward is left from the applied cap, the remaining balance should be recalculated only for parties that have not reached their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10
 (<a name="0057-TRAN-072" href="#0057-TRAN-072">0057-TRAN-072</a>)
 
 If the network parameter `cap_reward_fee_multiple` is set, and if all keys are capped, then the remaining balance must be left in the reward pool and included in the distribution in the future epochs. (<a name="0057-TRAN-073" href="#0057-TRAN-073">0057-TRAN-073</a>)
 
 If the scenario above occurs, and the total transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
-
-
-
-
-
-
