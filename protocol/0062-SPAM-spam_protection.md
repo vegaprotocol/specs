@@ -87,7 +87,7 @@ Further, each party is allowed to submit up to `n` transactions per epoch where 
 
 Network parameter: `spam.order.MinimalMarginQuantumMultiple` (between 0 and infinite)
 
-If the maintenance margin for a given transaction is smaller than the parameter `spam.order.MinimalMarginSizeQuantumMultiple`, then the transaction is pre-block rejected. 
+If the maintenance margin for a given transaction is smaller than the parameter `spam.order.MinimalMarginSizeQuantumMultiple`, then the transaction is pre-block rejected.
 I.e. if `(rf + linear slippage param) x size x price <  spam.order.MinimalMarginSizeQuantumMultiple x asset quantum amount` then the order is rejected. Here `rf` is the risk factor (and will be different for long and for short) `linear slippage param` is a market parameter and `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively.
 
 If the market does not exist and thus the maintenance margin is not defined, the transaction is rejected.
