@@ -326,6 +326,16 @@
       "0037-OPEG-021"
     ]
   },
+  "Taker fee cap": {
+    "milestone": "colosseo",
+    "acs": [
+      "0057-TRAN-070"
+      "0057-TRAN-071",
+      "0057-TRAN-072",
+      "0057-TRAN-073",
+      "0057-TRAN-074"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
