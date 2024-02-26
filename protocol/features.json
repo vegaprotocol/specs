@@ -329,7 +329,7 @@
   "Taker fee cap": {
     "milestone": "colosseo",
     "acs": [
-      "0057-TRAN-070"
+      "0057-TRAN-070",
       "0057-TRAN-071",
       "0057-TRAN-072",
       "0057-TRAN-073",
