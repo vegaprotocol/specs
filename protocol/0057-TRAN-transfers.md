@@ -397,4 +397,4 @@ If the network parameter `cap_reward_fee_multiple` is set, and if some reward is
 
 If the network parameter `cap_reward_fee_multiple` is set, and if all keys are capped, then the remaining balance must be left in the reward pool and included in the distribution in the future epochs. (<a name="0057-TRAN-073" href="#0057-TRAN-073">0057-TRAN-073</a>)
 
-If the scenario above occurs, and the total transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
+If the network parameter `cap_reward_fee_multiple` is set, and the total reward transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
