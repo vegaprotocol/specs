@@ -399,4 +399,4 @@ If the network parameter `cap_reward_fee_multiple` is set, and if all keys are c
 
 If the network parameter `cap_reward_fee_multiple` is set, and the total reward transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
 
-If the network parameter `cap_reward_fee_multiple` is set to be `<0`, then it should be rejected (<a name="0057-TRAN-075" href="#0057-TRAN-075">0057-TRAN-075</a>)
+If the network parameter `cap_reward_fee_multiple` is set to be `<=0`, then it should be rejected (<a name="0057-TRAN-075" href="#0057-TRAN-075">0057-TRAN-075</a>)
