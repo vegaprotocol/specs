@@ -92,7 +92,7 @@ I.e. if `(rf + linear slippage param) x size x price <  spam.order.MinimalMargin
 
 If the market does not exist and thus the maintenance margin is not defined, the transaction is rejected.
 
-Non-persistent orders (e.g., spot orders) are not blocked by this mechanism as long as the market exists.
+Non-persistent orders (on both spot and futures markets) are not blocked by this mechanism as long as the market exists.
 
 The calculation for this should be done  before the gas cost calculation as rejected transactions should not get into the calculation of the
 gas cost.
