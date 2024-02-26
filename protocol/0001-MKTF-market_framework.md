@@ -32,6 +32,7 @@ Data:
 - **Position Decimal Places**: number of decimal places for orders and positions, i.e. if this is 2 then the smallest increment that can be traded is 0.01, for example 0.01 BTC in a `BTSUSD` market.
   - If this is negative e.g. -3 this means that the smallest order and position is of size 1000.
   - Accepted values are `-6,...,-1,0,1,2,...,6`.
+- **Tick size**: the minimum change in quote price for the market. Order prices and offsets for pegged orders must be given as an exact multiple of the tick size. For example if the tick size is 0.02 USD. then a price of 100.02 USD is acceptable and a price of 100.03 USD is not. The tick size of a market can be updated through governance. Note, the tick size should be specified in terms of the market decimals, e.g. for a scaled tick size of `0.02` (USDT) in a market using `5` decimal places, the tick size would be set to `2000`.
 - **Liquidation strategy**: A field specifying the liquidation strategy for the market. Please refer to [0012-POSR-position_resolution](./0012-POSR-position_resolution.md#managing-networks-position) for supported strategies.  
 
 Note: it is agreed that initially the integer representation of the full precision of both order and positions can be required to fit into an int64, so this means that the largest position/order size possible reduces by a factor of ten for every extra decimal place used. This also means that, for instance, it would not be possible to create a `BTCUSD` market that allows order/position sizes equivalent to 1 sat.
@@ -222,7 +223,7 @@ Market {
 ## Successor market
 
 If a market proposal, see [governance](./0028-GOVE-governance.md), designates an existing market as a *parent market* then it must have the same *product*, *settlement asset(s)* and *margin asset(s)*.
-It may propose new risk model and parameters, price monitoring parameters, position and market decimal places.
+It may propose new risk model and parameters, price monitoring parameters, tick size, position and market decimal places.
 It must provide oracle definitions, both for trading terminated and for settlement data.
 Each market can have exactly one market as a *successor* market.
 
