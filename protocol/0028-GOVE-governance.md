@@ -555,6 +555,9 @@ APIs should also exist for clients to:
 - New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
 - A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
 - A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
+- A market proposal with a tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-180" href="#0028-GOVE-180">0028-GOVE-180</a>).
+- A market proposal with a tick size which is not an exact multiple of `10^-mdp` gets rejected (where `mdp` is the market decimal places) (<a name="0028-GOVE-181" href="#0028-GOVE-181">0028-GOVE-181</a>).
+- At enactment, a market change proposal updating the tick size leaves in place all orders where the quoted price is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places) (<a name="0028-GOVE-182" href="#0028-GOVE-182">0028-GOVE-182</a>).
 
 #### Market change proposals
 
@@ -594,6 +597,8 @@ APIs should also exist for clients to:
 - Markets which have been suspended via a governance proposal can be terminated after a protocol upgrade restarts the network. (<a name="0028-GOVE-151" href="#0028-GOVE-151">0028-GOVE-151</a>)
 - Oracle data sources shared between multiple markets are not deactivated if one of the markets sharing the oracle data sources is terminated and settled using governance proposals. Now the status of the data sources should still be ACTIVE as Market2 is still using them. (<a name="0028-GOVE-152" href="#0028-GOVE-152">0028-GOVE-152</a>)
 - Ensure that when a market is suspended and then resumed via a governance proposal we can still terminate and settle the market using ethereum oracle. (<a name="0028-GOVE-153" href="#0028-GOVE-153">0028-GOVE-153</a>)
+- A market change proposal specifying a new tick size less than or equal to `0` gets rejected.
+- A market change proposal specifying a new tick size which is not an exact multiple of `10^-mdp` gets rejected (where `mdp` is the market decimal places).
 
 #### Network parameter change proposals
 
