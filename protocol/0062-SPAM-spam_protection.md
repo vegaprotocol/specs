@@ -89,6 +89,9 @@ Network parameter: `spam.order.MinimalMarginQuantumMultiple` (between 0 and infi
 
 If the maintenance margin for a given transaction is smaller than the parameter `spam.order.MinimalMarginSizeQuantumMultiple`, then the transaction is pre-block rejected.
 I.e. if `(rf + linear slippage param) x size x price <  spam.order.MinimalMarginSizeQuantumMultiple x asset quantum amount` then the order is rejected. Here `rf` is the risk factor (and will be different for long and for short) `linear slippage param` is a market parameter and `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively.
+- For peg orders we check the `price` implied by the peg and the book at submission time. 
+- For amendments: we use the same check ie if the order is being amended to a smaller size or smaller price so that it would no longer pass the spam check then the amendment is rejected. 
+
 
 If the market does not exist and thus the maintenance margin is not defined, the transaction is rejected.
 
@@ -96,6 +99,7 @@ Non-persistent orders (on both spot and futures markets) are not blocked by this
 
 The calculation for this should be done  before the gas cost calculation as rejected transactions should not get into the calculation of the
 gas cost.
+
 
 
 ### Related topics
