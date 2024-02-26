@@ -557,6 +557,7 @@ APIs should also exist for clients to:
 - A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
 - A market proposal with a tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-180" href="#0028-GOVE-180">0028-GOVE-180</a>).
 - A market proposal with a tick size which is not an exact multiple of `10^-mdp` gets rejected (where `mdp` is the market decimal places) (<a name="0028-GOVE-181" href="#0028-GOVE-181">0028-GOVE-181</a>).
+- At enactment, a market change proposal updating the tick size leaves in place all orders where the quoted price is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places) (<a name="0028-GOVE-182" href="#0028-GOVE-182">0028-GOVE-182</a>).
 
 #### Market change proposals
 
