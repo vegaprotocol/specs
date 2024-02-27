@@ -581,7 +581,9 @@ APIs should also exist for clients to:
 - A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
 - When there's already been a market closure governance proposal successfully voted in for a given market, but not yet enacted it is still possible to submit additional market closure governance proposals for that market. If another market closure governance proposal gets voted it and it has an earlier enactment time then it's the final settlement price of that proposal which gets used. (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
 - Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to resume the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
-- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
+- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. Resuming the market will then put the market in the state it was in prior to it being suspended.
+  - monitoring auction (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
+  - opening auction (<a name="0028-GOVE-167" href="#0028-GOVE-167">0028-GOVE-167</a>)
 - Resuming a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
 - A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
 - Verify that a party with 0 balance of the governance token, but with sufficient ELS can submit a market change proposal successfully. (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)
@@ -762,7 +764,7 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 
 ##### Community Market Tags
 
-- A proposal to add community tags to a market can be successfully submitted. (<a name="0028-GOVE-167" href="#0028-GOVE-167">0028-GOVE-167</a>)
+- A proposal to add community tags to a market can be successfully submitted. (<a name="0028-GOVE-178" href="#0028-GOVE-178">0028-GOVE-178</a>)
   - When that proposal is approved and enacted the community tags are immediately added to that market's community tags property. (<a name="0028-GOVE-168" href="#0028-GOVE-168">0028-GOVE-168</a>)
 - A proposal to remove community tags from a market can be successfully submitted. (<a name="0028-GOVE-169" href="#0028-GOVE-169">0028-GOVE-169</a>)
   - When that proposal is approved and enacted the community tags are immediately removed from that market's community tags property. (<a name="0028-GOVE-170" href="#0028-GOVE-170">0028-GOVE-170</a>)
@@ -772,4 +774,3 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 - A voter's equity-like share does not give them any additional voting weight when voting on a market community tags update proposal. (<a name="0028-GOVE-174" href="#0028-GOVE-174">0028-GOVE-174</a>)
 - A proposal to add community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-175" href="#0028-GOVE-175">0028-GOVE-175</a>)
 - A proposal to remove community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-176" href="#0028-GOVE-176">0028-GOVE-176</a>)
-

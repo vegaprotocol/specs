@@ -298,7 +298,6 @@
   "Community Tags": {
     "milestone": "colosseo",
     "acs": [
-      "0028-GOVE-167",
       "0028-GOVE-168",
       "0028-GOVE-169",
       "0028-GOVE-170",
@@ -308,7 +307,8 @@
       "0028-GOVE-174",
       "0028-GOVE-175",
       "0028-GOVE-176",
-      "0028-GOVE-177"
+      "0028-GOVE-177",
+      "0028-GOVE-178"
     ]
   },
   "Perpetual funding rates": {
@@ -340,6 +340,10 @@
       "0057-TRAN-074",
       "0057-TRAN-075"
     ]
+  },
+  "Closeout trades and auctions": {
+    "milestone": "colosseo",
+    "acs": ["0012-POSR-030"]
   },
   "Unknown": {
     "milestone": "unknown",
