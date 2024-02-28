@@ -87,7 +87,7 @@ Further, each party is allowed to submit up to `n` transactions per epoch where 
 
 Before any order or liquidity commitment is accepted for a perpetual futures or expiring futures check that the party has `margin + general > 0` with `margin` being the balance in the margin account for the relevant market and `general` the balance in the general account for the relevant asset. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
 
-Before any order or liquidity commitment is for a spot market check that the party has `general > 0` with `general` the balance in the general account for the asset that the order is potentially disposing of / commiting in terms of liquidity. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
+Before any order or liquidity commitment is accepted for a spot market, check that the party has balances where `holding + general > 0` for the asset that the order is potentially disposing of / committing in terms of liquidity. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
 
 
 Network parameter: `spam.order.MinimalMarginQuantumMultiple` (between 0 and infinite)
