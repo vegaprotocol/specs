@@ -85,12 +85,14 @@ Further, each party is allowed to submit up to `n` transactions per epoch where 
 
 ### Transaction Spam
 
+Before any order is accepted check that the party has `margin + general > 0` with `margin` being the balance in the margin account for the relevant market and `general` the balance in the general account for the relevant asset. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
+
 Network parameter: `spam.order.MinimalMarginQuantumMultiple` (between 0 and infinite)
 
 If the maintenance margin for a given transaction is smaller than the parameter `spam.order.MinimalMarginSizeQuantumMultiple`, then the transaction is pre-block rejected.
 I.e. if `(rf + linear slippage param) x size x price <  spam.order.MinimalMarginSizeQuantumMultiple x asset quantum amount` then the order is rejected. Here `rf` is the risk factor (and will be different for long and for short) `linear slippage param` is a market parameter and `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively.
 
-- For peg orders use `mark price +/- offset` instead of price. The `mark price` value can be cached from end of last block (if that helps for performance, we need this to be cheap). In opening auctions mark price won't exist; in this case allow pegged order submission *but* upon opening auction uncrossing run a check on all the pegged orders in the market and cancel all those that don't meet the minimum margin condition.
+- For peg orders use `mark price +/- offset` instead of price. The `mark price` value can be cached from end of last block (if that helps for performance, we need this to be cheap). In opening auctions pegged orders should be rejected.
 - For amendments: we use the same check ie if the order is being amended to a smaller size or smaller price so that it would no longer pass the spam check then the amendment is rejected.
 - For batch transactions: each order has to pass its own order spam check; if any order in the batch fails the check then reject the whole batch.
 - For stop / position linked orders: we don't necessarily have either price or size. However there is a limit on the number per key so we let these through.  
