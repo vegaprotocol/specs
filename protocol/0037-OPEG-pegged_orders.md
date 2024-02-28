@@ -20,28 +20,28 @@
 - A pegged order with an offset which would cause it to be priced <= 0 is parked. (<a name="0037-OPEG-017" href="#0037-OPEG-017">0037-OPEG-017</a>)
 - An active pegged order can be amended. (<a name="0037-OPEG-016" href="#0037-OPEG-016">0037-OPEG-016</a>)
 - A transaction submitting a pegged order with negative offset fails with an error explaining the cause was negative offset. (<a name="0037-OPEG-018" href="#0037-OPEG-018">0037-OPEG-018</a>)
-- Given a mid-price which is not an integer multiple of the market tick size, a buy order pegged to the mid price should have it's price rounded up to the nearest market tick size (<a name="0037-OPEG-020" href="#0037-OPEG-020">0037-OPEG-020</a>).
+- Given a mid-price which is not an integer multiple of the market tick size, a buy order pegged to the mid price should have it's price rounded down to the nearest market tick size (<a name="0037-OPEG-020" href="#0037-OPEG-020">0037-OPEG-020</a>).
     For example, given:
         - `tick_size=10`
         - `best_bid_price=100`
         - `best_ask_price=190`
         - `mid_price=145`
     Then:
-        - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=140`.
-- Given a mid-price which is not an integer multiple of the market tick size, a buy orders pegged to the mid price should have it's price rounded up to the nearest market tick size (<a name="0037-OPEG-021" href="#0037-OPEG-021">0037-OPEG-021</a>).
+        - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=130`.
+- Given a mid-price which is not an integer multiple of the market tick size, a sell order pegged to the mid price should have it's price rounded up to the nearest market tick size (<a name="0037-OPEG-021" href="#0037-OPEG-021">0037-OPEG-021</a>).
     For example, given:
         - `tick_size=10`
         - `best_bid_price=100`
         - `best_ask_price=190`
         - `mid_price=145`
     Then:
-        - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=150`.
+        - A pegged buy order using the mid price as the reference and `offset=10` should be inserted at `price=160`.
 
 ## Summary
 
 Market Makers and some other market participants are interested in maintaining limit orders on the order book that are a defined distance from a reference price (i.e. best bid, mid and best offer/ask) rather than at a specific limit price. In addition to being impossible to achieve perfectly through simple Amend commands, this method also creates many additional transactions. These problems are enough of an issue for centralised exchanges that many implement pegged orders, which are automatically repriced when the reference price moves. For decentralised trading with greater constraints on throughput and potentially orders of magnitude higher latency, pegged orders are all but essential to maintain a healthy and liquid order book.
 
-Pegged orders are limit orders where the price is specified of the form `REFERENCE / OFFSET`, therefore 'pegged' is a _price type_, and can be used for any limit order that is valid during continuous trading. A pegged order's price is calculated from the value of the reference price on entry to the order book. Note, to ensure orders are inserted at valid price levels allowed by the market's tick size, buy orders are rounded up to the nearest valid price and sell orders are rounded down to the nearest valid price (a valid price is one which is an exact multiple of the tick size). This ensures a pegged buy and sell order both with the smallest allowed offset from the mid form the smallest possible spread (one tick). Pegged orders that are persistent will be repriced, losing time priority, _after processing any event_ which causes the `REFERENCE` price to change. Pegged orders are not permitted in some trading period types, most notably auctions, and pegged orders that are on the book at the start of such a period will be parked (moved to a separate off-book area) in time priority until they are cancelled or expire, or the market enters a period that allows pegs, in which case they are re-priced and added back to the order book. Pegged orders entered during a period that does not accept them will be added to the parked area. Pegged orders submitted to a market with a main trading mode that does not support pegged orders will be rejected. All pegged orders in the system are held in a sorted by entry time list so that actions like re-pricing and parking/un-parking are performed in the same order as which the orders were entered into the system.
+Pegged orders are limit orders where the price is specified of the form `REFERENCE / OFFSET`, therefore 'pegged' is a _price type_, and can be used for any limit order that is valid during continuous trading. A pegged order's price is calculated from the value of the reference price on entry to the order book. Note, to ensure orders are inserted at valid price levels allowed by the market's tick size, buy orders are rounded down to the nearest valid price and sell orders are rounded up to the nearest valid price (a valid price is one which is an exact multiple of the tick size). This ensures pegged buy and sell orders will not cross, even if the market tick size is increased through governance. Pegged orders that are persistent will be repriced, losing time priority, _after processing any event_ which causes the `REFERENCE` price to change. Pegged orders are not permitted in some trading period types, most notably auctions, and pegged orders that are on the book at the start of such a period will be parked (moved to a separate off-book area) in time priority until they are cancelled or expire, or the market enters a period that allows pegs, in which case they are re-priced and added back to the order book. Pegged orders entered during a period that does not accept them will be added to the parked area. Pegged orders submitted to a market with a main trading mode that does not support pegged orders will be rejected. All pegged orders in the system are held in a sorted by entry time list so that actions like re-pricing and parking/un-parking are performed in the same order as which the orders were entered into the system.
 
 ## Guide-level explanation
 
