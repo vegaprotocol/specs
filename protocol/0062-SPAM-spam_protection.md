@@ -156,6 +156,9 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Pegged orders are rejected if the market has a mark price and the mark price is used as the reference price for the spam check purposes *but* the order fails `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-049" href="#0062-SPAM-049">0062-SPAM-049</a>).
 - Batch order is accepted if all orders in batch individually meet the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-050" href="#0062-SPAM-050">0062-SPAM-050</a>).
 - Batch order is rejected if one or more orders in batch individually *fail to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-050" href="#0062-SPAM-050">0062-SPAM-050</a>).
+- Order amends are accepted if the order with the new price / size meets the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-051" href="#0062-SPAM-051">0062-SPAM-051</a>).
+- Order amends are rejected if the order with the new price / size meets *fails to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-052" href="#0062-SPAM-052">0062-SPAM-052</a>).
+
 
 
 
