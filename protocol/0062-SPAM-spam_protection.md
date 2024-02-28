@@ -172,7 +172,7 @@ On perps and futures markets order are rejected `margin + general = 0` with marg
 - liquidity commitment (<a name="0062-SPAM-056" href="#0062-SPAM-056">0062-SPAM-056</a>).
 - stop-loss / position-linked order (<a name="0062-SPAM-057" href="#0062-SPAM-057">0062-SPAM-057</a>).
 
-On spot markets orders are rejected if `holding + general = 0` for the asset that the order is (or potentially is) disposing of for
+On spot markets orders are rejected if `holding + general = 0` for the asset that the order is (or potentially is) disposing of with the following order types
 
 - market orders (<a name="0062-SPAM-057" href="#0062-SPAM-057">0062-SPAM-057</a>).
 - limit orders (<a name="0062-SPAM-058" href="#0062-SPAM-058">0062-SPAM-058</a>).
