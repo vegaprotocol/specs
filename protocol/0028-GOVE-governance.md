@@ -599,7 +599,7 @@ APIs should also exist for clients to:
 - Oracle data sources shared between multiple markets are not deactivated if one of the markets sharing the oracle data sources is terminated and settled using governance proposals. Now the status of the data sources should still be ACTIVE as Market2 is still using them. (<a name="0028-GOVE-152" href="#0028-GOVE-152">0028-GOVE-152</a>)
 - Ensure that when a market is suspended and then resumed via a governance proposal we can still terminate and settle the market using ethereum oracle. (<a name="0028-GOVE-153" href="#0028-GOVE-153">0028-GOVE-153</a>)
 - A market change proposal specifying a new tick size less than or equal to `0` gets rejected.
-- A market change proposal specifying a new tick size which is not an exact multiple of `10^-mdp` gets rejected (where `mdp` is the market decimal places).
+- At enactment, a market change proposal updating the tick size cancels all pegged orders where their offset is no longer an exact integer multiple of the tick size (<a name="0028-GOVE-183" href="#0028-GOVE-183">0028-GOVE-183</a>).
 
 #### Network parameter change proposals
 
