@@ -151,5 +151,12 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Issue a set of orders for an existing, but not yet enacted market, starting with the minimum price, and doubling the order price with every order. Once the first order passes the spam filter, quadruple the parameter `spam.order.MinimalMarginQuantumMultiple` and continue. Once the next order passes the filter, quadruple the quantum size for the underlying asset, and continue until an order passes the filter again. Verify that all rejected orders had a margin smaller than `spam.order.MinimalMarginQuantumMultiple`, and all accepted ones one bigger or equal. (<a name="0062-SPAM-044" href="#0062-SPAM-044">0062-SPAM-044</a>).
 - Create an order for a non-existing market, and verify that it is rejected by the spam filter. (<a name="0062-SPAM-045" href="#0062-SPAM-045">0062-SPAM-045</a>).
 - Create a non-persistent order for an existing market with a minimum order price, and verify that it is not rejected by the spam filter. (<a name="0062-SPAM-046" href="#0062-SPAM-046">0062-SPAM-046</a>).
+- Pegged orders are rejected during an opening auction (<a name="0062-SPAM-047" href="#0062-SPAM-047">0062-SPAM-047</a>).
+- Pegged orders are accepted once the market has a mark price and the mark price is used as the reference price for the spam check purposes and the order meets `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-048" href="#0062-SPAM-048">0062-SPAM-048</a>).
+- Pegged orders are rejected if the market has a mark price and the mark price is used as the reference price for the spam check purposes *but* the order fails `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-049" href="#0062-SPAM-049">0062-SPAM-049</a>).
+- Batch order is accepted if all orders in batch individually meet the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-050" href="#0062-SPAM-050">0062-SPAM-050</a>).
+- Batch order is rejected if one or more orders in batch individually *fail to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-050" href="#0062-SPAM-050">0062-SPAM-050</a>).
+
+
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
