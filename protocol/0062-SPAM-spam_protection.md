@@ -85,7 +85,10 @@ Further, each party is allowed to submit up to `n` transactions per epoch where 
 
 ### Transaction Spam
 
-Before any order is accepted check that the party has `margin + general > 0` with `margin` being the balance in the margin account for the relevant market and `general` the balance in the general account for the relevant asset. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
+Before any order or liquidity commitment is accepted for a perpetual futures or expiring futures check that the party has `margin + general > 0` with `margin` being the balance in the margin account for the relevant market and `general` the balance in the general account for the relevant asset. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
+
+Before any order or liquidity commitment is for a spot market check that the party has `general > 0` with `general` the balance in the general account for the asset that the order is potentially disposing of / commiting in terms of liquidity. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
+
 
 Network parameter: `spam.order.MinimalMarginQuantumMultiple` (between 0 and infinite)
 
@@ -159,6 +162,22 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Order amends are accepted if the order with the new price / size meets the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-051" href="#0062-SPAM-051">0062-SPAM-051</a>).
 - Order amends are rejected if the order with the new price / size meets *fails to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-052" href="#0062-SPAM-052">0062-SPAM-052</a>).
 
+#### Balance checks 
+On perps and futures markets order are rejected `margin + general = 0` with margin being the margin account balance for the relevant market and general being the general account balance for the settlement asset for the market for 
+
+- market orders (<a name="0062-SPAM-053" href="#0062-SPAM-053">0062-SPAM-053</a>).
+- limit orders (<a name="0062-SPAM-054" href="#0062-SPAM-054">0062-SPAM-054</a>).
+- pegged orders (<a name="0062-SPAM-055" href="#0062-SPAM-055">0062-SPAM-055</a>).
+- liquidity commitment (<a name="0062-SPAM-056" href="#0062-SPAM-056">0062-SPAM-056</a>).
+- stop-loss / position-linked order (<a name="0062-SPAM-057" href="#0062-SPAM-057">0062-SPAM-057</a>).
+
+On spot markets orders are rejected if `general = 0` for the asset that the order is (or potentially is) disposing of for
+
+- market orders (<a name="0062-SPAM-057" href="#0062-SPAM-057">0062-SPAM-057</a>).
+- limit orders (<a name="0062-SPAM-058" href="#0062-SPAM-058">0062-SPAM-058</a>).
+- pegged orders (<a name="0062-SPAM-059" href="#0062-SPAM-059">0062-SPAM-059</a>).
+- liquidity commitment (<a name="0062-SPAM-060" href="#0062-SPAM-060">0062-SPAM-060</a>).
+- stop-loss / position-linked order (<a name="0062-SPAM-061" href="#0062-SPAM-061">0062-SPAM-061</a>).
 
 
 
