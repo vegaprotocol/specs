@@ -163,6 +163,7 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Order amends are rejected if the order with the new price / size meets *fails to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-052" href="#0062-SPAM-052">0062-SPAM-052</a>).
 
 #### Balance checks 
+
 On perps and futures markets order are rejected `margin + general = 0` with margin being the margin account balance for the relevant market and general being the general account balance for the settlement asset for the market for 
 
 - market orders (<a name="0062-SPAM-053" href="#0062-SPAM-053">0062-SPAM-053</a>).
@@ -178,7 +179,5 @@ On spot markets orders are rejected if `holding + general = 0` for the asset tha
 - pegged orders (<a name="0062-SPAM-059" href="#0062-SPAM-059">0062-SPAM-059</a>).
 - liquidity commitment (<a name="0062-SPAM-060" href="#0062-SPAM-060">0062-SPAM-060</a>).
 - stop-loss / position-linked order (<a name="0062-SPAM-061" href="#0062-SPAM-061">0062-SPAM-061</a>).
-
-
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
