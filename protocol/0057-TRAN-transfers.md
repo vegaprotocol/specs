@@ -71,7 +71,7 @@ A recurring transfers needs to contain this specific information:
 The amount paid at the end of each epoch is calculated using the following formula:
 
 ```math
-amount = \text{start amount} x \text{factor}^{(\text{current epoch} - \text{start epoch})}
+\text{amount} = \text{start amount} x \text{factor}^{(\text{current epoch} - \text{start epoch})}
 ```
 
 If insufficient funds are present in the source account at the time a transfer is initiated by the network, the whole recurring transfer is cancelled.
