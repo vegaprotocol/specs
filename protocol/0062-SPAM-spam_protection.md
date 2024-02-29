@@ -158,7 +158,7 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Pegged orders are accepted once the market has a mark price and the mark price is used as the reference price for the spam check purposes and the order meets `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-048" href="#0062-SPAM-048">0062-SPAM-048</a>).
 - Pegged orders are rejected if the market has a mark price and the mark price is used as the reference price for the spam check purposes *but* the order fails `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-049" href="#0062-SPAM-049">0062-SPAM-049</a>).
 - Batch order is accepted if all orders in batch individually meet the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-050" href="#0062-SPAM-050">0062-SPAM-050</a>).
-- Batch order is rejected if one or more orders in batch individually *fail to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-050" href="#0062-SPAM-050">0062-SPAM-050</a>).
+- Batch order is rejected if one or more orders in batch individually *fail to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-062" href="#0062-SPAM-062">0062-SPAM-062</a>).
 - Order amends are accepted if the order with the new price / size meets the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-051" href="#0062-SPAM-051">0062-SPAM-051</a>).
 - Order amends are rejected if the order with the new price / size meets *fails to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-052" href="#0062-SPAM-052">0062-SPAM-052</a>).
 
@@ -174,7 +174,7 @@ On perps and futures markets order are rejected `margin + order margin + general
 
 On spot markets orders are rejected if `holding + general = 0` for the asset that the order is (or potentially is) disposing of with the following order types
 
-- market orders (<a name="0062-SPAM-057" href="#0062-SPAM-057">0062-SPAM-057</a>).
+- market orders (<a name="0062-SPAM-063" href="#0062-SPAM-063">0062-SPAM-063</a>).
 - limit orders (<a name="0062-SPAM-058" href="#0062-SPAM-058">0062-SPAM-058</a>).
 - pegged orders (<a name="0062-SPAM-059" href="#0062-SPAM-059">0062-SPAM-059</a>).
 - liquidity commitment (<a name="0062-SPAM-060" href="#0062-SPAM-060">0062-SPAM-060</a>).
