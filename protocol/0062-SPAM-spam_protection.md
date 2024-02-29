@@ -85,7 +85,7 @@ Further, each party is allowed to submit up to `n` transactions per epoch where 
 
 ### Transaction Spam
 
-Before any order or liquidity commitment is accepted for a perpetual futures or expiring futures check that the party has `margin + general > 0` with `margin` being the balance in the margin account for the relevant market and `general` the balance in the general account for the relevant asset. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
+Before any order or liquidity commitment is accepted for a perpetual futures or expiring futures check that the party has `margin + order margin + general > 0` with `margin` being the balance in the margin account for the relevant, `order margin` is the balance for the order margin if party is in isolated margin mode for the for the relevant market and `general` the balance in the general account for the relevant asset. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
 
 Before any order or liquidity commitment is accepted for a spot market, check that the party has balances where `holding + general > 0` for the asset that the order is potentially disposing of / committing in terms of liquidity. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
 
@@ -164,13 +164,13 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 
 #### Balance checks 
 
-On perps and futures markets order are rejected `margin + general = 0` with margin being the margin account balance for the relevant market and general being the general account balance for the settlement asset for the market for 
+On perps and futures markets order are rejected `margin + order margin + general = 0` with `margin` being the margin account balance for the relevant market, `order margin` being the order margin account balance for the relevant market and general being the general account balance for the settlement asset for the market for 
 
-- market orders (<a name="0062-SPAM-053" href="#0062-SPAM-053">0062-SPAM-053</a>).
-- limit orders (<a name="0062-SPAM-054" href="#0062-SPAM-054">0062-SPAM-054</a>).
-- pegged orders (<a name="0062-SPAM-055" href="#0062-SPAM-055">0062-SPAM-055</a>).
+- market orders in cross margin mode and in isolated margin mode (<a name="0062-SPAM-053" href="#0062-SPAM-053">0062-SPAM-053</a>).
+- limit orders in cross margin mode and in isolated margin mode (<a name="0062-SPAM-054" href="#0062-SPAM-054">0062-SPAM-054</a>).
+- pegged orders in cross margin mode and in isolated margin mode (<a name="0062-SPAM-055" href="#0062-SPAM-055">0062-SPAM-055</a>).
 - liquidity commitment (<a name="0062-SPAM-056" href="#0062-SPAM-056">0062-SPAM-056</a>).
-- stop-loss / position-linked order (<a name="0062-SPAM-057" href="#0062-SPAM-057">0062-SPAM-057</a>).
+- stop-loss / position-linked order in cross margin mode and in isolated margin mode (<a name="0062-SPAM-057" href="#0062-SPAM-057">0062-SPAM-057</a>).
 
 On spot markets orders are rejected if `holding + general = 0` for the asset that the order is (or potentially is) disposing of with the following order types
 
