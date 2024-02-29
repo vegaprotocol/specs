@@ -157,11 +157,11 @@ From here the first step is calculating a `fair` price, which can be done by uti
 
   1. First, identify the current position, `p`. If it is `0` then the current fair price is the base price.
   1. If `P > 0`:
-     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_l}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_l$ is the `base price`.
-     1. The virtual `y` of the position can be calculated as $y_v = L \cdot (\sqrt{p_u} - \sqrt{p_l}) - P \cdot p_e + L \cdotp \sqrt{p_l}$ where $p_e$ is the average entry price of the position, $p_u$ is the `base price` and $p_l$ is the `lower price`. Other variables are as defined above.
+     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{L}{\sqrt{p_b}}$, where $L$ is the value for the lower range, $P$ is the market position and $p_b$ is the `base price`.
+     1. The virtual `y` of the position can be calculated as $y_v = L \cdot (\sqrt{p_b} - \sqrt{p_l}) - P \cdot p_e + L \cdotp \sqrt{p_l}$ where $p_e$ is the average entry price of the position, $p_b$ is the `base price` and $p_l$ is the `lower price`. Other variables are as defined above.
   1. If `P < 0`:
-     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{p_u} \cdotp r_f + \frac{L}{\sqrt{p_l}}$ where $p_l$ is the `base price` and `p_u` is the `upper price`.
-     1. The virtual `y` can be calculated as $y_v = abs(P) \cdotp p_e + L \cdotp \sqrt{p_l}$ where $p_e$ is the average entry price of the position and $p_l$ is the `base price`
+     1. The virtual `x` of the position can be calculated as $x_v = P + \frac{c}{p_u} \cdotp r_f + \frac{L}{\sqrt{p_u}}$ where `p_u` is the `upper price`.
+     1. The virtual `y` can be calculated as $y_v = abs(P) \cdotp p_e + L \cdotp \sqrt{p_b}$ where $p_e$ is the average entry price of the position and $p_b$ is the `base price`
   1. Now the `fair` price is simply $\frac{y_v}{x_v}$
 
 #### Price to trade a given volume
