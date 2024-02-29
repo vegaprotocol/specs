@@ -85,10 +85,20 @@ Further, each party is allowed to submit up to `n` transactions per epoch where 
 
 ### Transaction Spam
 
+Before any order or liquidity commitment is accepted for a perpetual futures or expiring futures check that the party has `margin + order margin + general > 0` with `margin` being the balance in the margin account for the relevant, `order margin` is the balance for the order margin if party is in isolated margin mode for the for the relevant market and `general` the balance in the general account for the relevant asset. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
+
+Before any order or liquidity commitment is accepted for a spot market, check that the party has balances where `holding + general > 0` for the asset that the order is potentially disposing of / committing in terms of liquidity. Orders from parties that don't meet this criteria are rejected. This is to be done after the PoW check.
+
+
 Network parameter: `spam.order.MinimalMarginQuantumMultiple` (between 0 and infinite)
 
 If the maintenance margin for a given transaction is smaller than the parameter `spam.order.MinimalMarginSizeQuantumMultiple`, then the transaction is pre-block rejected.
 I.e. if `(rf + linear slippage param) x size x price <  spam.order.MinimalMarginSizeQuantumMultiple x asset quantum amount` then the order is rejected. Here `rf` is the risk factor (and will be different for long and for short) `linear slippage param` is a market parameter and `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively.
+
+- For peg orders use `mark price +/- offset` instead of price. The `mark price` value can be cached from end of last block (if that helps for performance, we need this to be cheap). In opening auctions pegged orders should be rejected.
+- For amendments: we use the same check ie if the order is being amended to a smaller size or smaller price so that it would no longer pass the spam check then the amendment is rejected.
+- For batch transactions: each order has to pass its own order spam check; if any order in the batch fails the check then reject the whole batch.
+- For stop / position linked orders: we don't necessarily have either price or size. However there is a limit on the number per key so we let these through.  
 
 If the market does not exist and thus the maintenance margin is not defined, the transaction is rejected.
 
@@ -96,7 +106,6 @@ Non-persistent orders (on both spot and futures markets) are not blocked by this
 
 The calculation for this should be done  before the gas cost calculation as rejected transactions should not get into the calculation of the
 gas cost.
-
 
 ### Related topics
 
@@ -145,5 +154,30 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Issue a set of orders for an existing, but not yet enacted market, starting with the minimum price, and doubling the order price with every order. Once the first order passes the spam filter, quadruple the parameter `spam.order.MinimalMarginQuantumMultiple` and continue. Once the next order passes the filter, quadruple the quantum size for the underlying asset, and continue until an order passes the filter again. Verify that all rejected orders had a margin smaller than `spam.order.MinimalMarginQuantumMultiple`, and all accepted ones one bigger or equal. (<a name="0062-SPAM-044" href="#0062-SPAM-044">0062-SPAM-044</a>).
 - Create an order for a non-existing market, and verify that it is rejected by the spam filter. (<a name="0062-SPAM-045" href="#0062-SPAM-045">0062-SPAM-045</a>).
 - Create a non-persistent order for an existing market with a minimum order price, and verify that it is not rejected by the spam filter. (<a name="0062-SPAM-046" href="#0062-SPAM-046">0062-SPAM-046</a>).
+- Pegged orders are rejected during an opening auction (<a name="0062-SPAM-047" href="#0062-SPAM-047">0062-SPAM-047</a>).
+- Pegged orders are accepted once the market has a mark price and the mark price is used as the reference price for the spam check purposes and the order meets `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-048" href="#0062-SPAM-048">0062-SPAM-048</a>).
+- Pegged orders are rejected if the market has a mark price and the mark price is used as the reference price for the spam check purposes *but* the order fails `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-049" href="#0062-SPAM-049">0062-SPAM-049</a>).
+- Batch order is accepted if all orders in batch individually meet the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-050" href="#0062-SPAM-050">0062-SPAM-050</a>).
+- Batch order is rejected if one or more orders in batch individually *fail to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-062" href="#0062-SPAM-062">0062-SPAM-062</a>).
+- Order amends are accepted if the order with the new price / size meets the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-051" href="#0062-SPAM-051">0062-SPAM-051</a>).
+- Order amends are rejected if the order with the new price / size meets *fails to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-052" href="#0062-SPAM-052">0062-SPAM-052</a>).
+
+#### Balance checks
+
+On perps and futures markets order are rejected `margin + order margin + general = 0` with `margin` being the margin account balance for the relevant market, `order margin` being the order margin account balance for the relevant market and general being the general account balance for the settlement asset for the market for
+
+- market orders in cross margin mode and in isolated margin mode (<a name="0062-SPAM-053" href="#0062-SPAM-053">0062-SPAM-053</a>).
+- limit orders in cross margin mode and in isolated margin mode (<a name="0062-SPAM-054" href="#0062-SPAM-054">0062-SPAM-054</a>).
+- pegged orders in cross margin mode and in isolated margin mode (<a name="0062-SPAM-055" href="#0062-SPAM-055">0062-SPAM-055</a>).
+- liquidity commitment (<a name="0062-SPAM-056" href="#0062-SPAM-056">0062-SPAM-056</a>).
+- stop-loss / position-linked order in cross margin mode and in isolated margin mode (<a name="0062-SPAM-057" href="#0062-SPAM-057">0062-SPAM-057</a>).
+
+On spot markets orders are rejected if `holding + general = 0` for the asset that the order is (or potentially is) disposing of with the following order types
+
+- market orders (<a name="0062-SPAM-063" href="#0062-SPAM-063">0062-SPAM-063</a>).
+- limit orders (<a name="0062-SPAM-058" href="#0062-SPAM-058">0062-SPAM-058</a>).
+- pegged orders (<a name="0062-SPAM-059" href="#0062-SPAM-059">0062-SPAM-059</a>).
+- liquidity commitment (<a name="0062-SPAM-060" href="#0062-SPAM-060">0062-SPAM-060</a>).
+- stop-loss / position-linked order (<a name="0062-SPAM-061" href="#0062-SPAM-061">0062-SPAM-061</a>).
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
