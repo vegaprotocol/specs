@@ -388,15 +388,15 @@ If the network parameter `spam.protection.maxUserTransfersPerEpoch` is modified,
 If the network parameter `transfer.minTransferQuantumMultiple` is modified, this modification is applied
 immediately on, i.e., transfers are accepted/rejected according to the new parameter. This holds for both increase and decrease. (<a name="0057-TRAN-061" href="#0057-TRAN-061">0057-TRAN-061</a>)
 
-If the network parameter `cap_reward_fee_multiple` is set, and if `calculated_reward_in_quantum < cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `calculated_reward_in_quantum`(<a name="0057-TRAN-070" href="#0057-TRAN-070">0057-TRAN-070</a>)
+If the parameter of each transfer `cap_reward_fee_multiple` is set, and if `calculated_reward_in_quantum < cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `calculated_reward_in_quantum`(<a name="0057-TRAN-070" href="#0057-TRAN-070">0057-TRAN-070</a>)
 
-If the network parameter `cap_reward_fee_multiple` is set, and if `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum`(<a name="0057-TRAN-071" href="#0057-TRAN-071">0057-TRAN-071</a>)
+If the parameter of each transfer `cap_reward_fee_multiple` is set, and if `calculated_reward_in_quantum > cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum` then the actual amount of reward transferred to each public key during distribution for this transfer will be `cap_reward_fee_multiple × fees_paid_this_epoch_in_quantum`(<a name="0057-TRAN-071" href="#0057-TRAN-071">0057-TRAN-071</a>)
 
-If the network parameter `cap_reward_fee_multiple` is set, and if some reward is left from the applied cap, the remaining balance should be recalculated only for parties that have not reached their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10
+If the parameter of each transfer `cap_reward_fee_multiple` is set, and if some reward is left from the applied cap, the remaining balance should be recalculated only for parties that have not reached their cap until the leftover is less than 1 reward asset unit or the maximum rounds of recalculation is 10
 (<a name="0057-TRAN-072" href="#0057-TRAN-072">0057-TRAN-072</a>)
 
-If the network parameter `cap_reward_fee_multiple` is set, and if all keys are capped, then the remaining balance must be left in the reward pool and included in the distribution in the future epochs. (<a name="0057-TRAN-073" href="#0057-TRAN-073">0057-TRAN-073</a>)
+If the parameter of each transfer `cap_reward_fee_multiple` is set, and if all keys are capped, then the remaining balance must be left in the reward pool and included in the distribution in the future epochs. (<a name="0057-TRAN-073" href="#0057-TRAN-073">0057-TRAN-073</a>)
 
-If the network parameter `cap_reward_fee_multiple` is set, and the total reward transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
+If the parameter of each transfer `cap_reward_fee_multiple` is set, and the total reward transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
 
-If the network parameter `cap_reward_fee_multiple` is set to be `<=0`, then it should be rejected (<a name="0057-TRAN-075" href="#0057-TRAN-075">0057-TRAN-075</a>)
+If the parameter of each transfer `cap_reward_fee_multiple` is set to be `<=0`, then it should be rejected (<a name="0057-TRAN-075" href="#0057-TRAN-075">0057-TRAN-075</a>)
