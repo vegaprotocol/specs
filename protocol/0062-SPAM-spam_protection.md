@@ -162,9 +162,9 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - Order amends are accepted if the order with the new price / size meets the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-051" href="#0062-SPAM-051">0062-SPAM-051</a>).
 - Order amends are rejected if the order with the new price / size meets *fails to meet* the `spam.order.MinimalMarginQuantumMultiple` requirement (<a name="0062-SPAM-052" href="#0062-SPAM-052">0062-SPAM-052</a>).
 
-#### Balance checks 
+#### Balance checks
 
-On perps and futures markets order are rejected `margin + order margin + general = 0` with `margin` being the margin account balance for the relevant market, `order margin` being the order margin account balance for the relevant market and general being the general account balance for the settlement asset for the market for 
+On perps and futures markets order are rejected `margin + order margin + general = 0` with `margin` being the margin account balance for the relevant market, `order margin` being the order margin account balance for the relevant market and general being the general account balance for the settlement asset for the market for
 
 - market orders in cross margin mode and in isolated margin mode (<a name="0062-SPAM-053" href="#0062-SPAM-053">0062-SPAM-053</a>).
 - limit orders in cross margin mode and in isolated margin mode (<a name="0062-SPAM-054" href="#0062-SPAM-054">0062-SPAM-054</a>).
