@@ -17,8 +17,6 @@ The configuration and resultant lifecycle of an automated market maker is as fol
   - Amount of funds to commit
   - Price bounds (upper, lower, base)
   - Margin ratios at upper and lower bound (ratio for leverage at bounds. Reciprocal of leverage multiplier e.g. 0.1 = 10x leverage)
-- Additionally, the transaction should contain data related to the setup of the position but which does not need to be stored:
-  - Maximum slippage (%), used for rebasing position when creating/updating AMM
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
 - At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be stopped.
 - If the party submits a `CancelAMM` transaction the AMM configuration for that party, on that market, will be cancelled. All active orders from the AMM will be cancelled and all funds and positions associated with the sub-account will be transferred back to the main account.
@@ -80,20 +78,30 @@ Additionally, as all commitments require some processing overhead on the core, t
 
 #### Creation
 
-A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided), however it is possible to configure an AMM such that this `base price` is far from the market's current `mark price`. In order to bring the AMM into line with where it "should" be an initial aggressive trade is attempted based on the configuration and current market `mark price`:
+A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided), however it is possible to configure an AMM such that this `base price` is far from the market's current `mark price`. In order to bring the AMM in line with where it "should" be the AMM begins in `single-sided` mode until the position is equal to what is expected at that price. The logic for entering this mode is:
 
-  1. Request from the AMM it's current `fair price` by requesting a quote of volume `0`
-  1. Request from the AMM the total trade volume required to move between `fair price` and `mark price`. Note that if `mark price` > `base price` this should be negative (i.e. the AMM will be selling) and it `mark price` < `base price` it should be positive (i.e. the AMM will be buying).
-     1. If no upper(/lower) price is specified then if the price is above(/below) the mid the AMM should return `0` volume
-  1. Create a limit order with `FOK` execution at a price equal to `mark price` shifted by the AMM's `max slippage %` for this volume. If the limit order would not trade, reject the entire creation/amendment as `CANNOT_REBASE_SLIPPAGE_BEYOND_LIMITS`.
+  1. If the AMM's `base price` is between the current `best bid` and `best ask` on the market (including other active AMMs) it is marked as synchronised and enters normal two-sided quoting.
+  1. If the AMM's `base price` is below the current `best bid` and the AMM has an upper range specified, it enters `single-sided` mode and will only `sell` until it's position is equal to expected at it's last traded price.
+     1. If there is no upper range specified, it is marked as synchronised immediately.
+  1. If the AMM's `base price` is above the current `best ask` and the AMM has a lower range specified, it enters `single-sided` mode and will only `buy` until it's position is equal to expected at it's last traded price.
+     1. If there is no lower range specified, it is marked as synchronised immediately.
+
+Once in `single-sided` quoting mode, certain behaviour will be different to once in standard `two-sided` quoting mode:
+
+  1. No buy or sell quotes will be provided at a price level where there are existing limit orders or AMMs offering the opposite side (i.e. `single-sided` mode acts as if all orders were `post-only`)
+  1. When requested for a volume at any price within the range (i.e. below the `upper price` and above the `lower price`) the volume quoted is the full volume difference between the AMM's current position and that required to move it to the new price.
+     1. This can be obtained through first querying the AMM for it's current `fair price` and then asking for the volume quote between said `fair price` and the price level in question.
+  1. No volume will be posted to move the AMM's position away from the target (e.g if the price is above the `base price` the AMM will not buy even if the price moves downwards)
+  1. No volume will be posted outside of the `upper price` - `lower price` range
+  1. Once the AMM's `fair price` is equal to the price level being questioned the AMM will be marked as synchronised and enter normal two-sided quoting
+
+Note that this rebasing procedure can bound the price range such that movement in either direction will eventually mark the AMM as synchronised. For example, if the price is currently below the `base price` but above the `lower price`, any movement downwards will hit the AMM's buys until it is synchronised, and any movement upwards will eventually bring the price to the `base price` at which point the AMM will become synchronised by default.
 
 #### Amendment
 
-A similar process is followed in the case of amendments. Changes to the `upper`, `lower` or `base` price, or the `commitment amount` will affect the position implied at a certain price, meaning that the market maker may need to trade to update it's position in line with this. These trades should be calculated as in the process for creation above after the relevant bounds have been changed, and comparing `fair price` from the pool before and after the changes, rather than `mark price`.
+A similar process is followed in the case of amendments. Changes to the `upper`, `lower` or `base` price, or the `commitment amount` will affect the position implied at a certain price, meaning that the market maker may need to enter `single-sided` quoting mode once more until it is synchronised. In general, the behaviour above will be followed. Entering the mode can be checked by comparing the before and after implied positions at the AMM's current fair price. If the implied position increases then the AMM will enter a buy-only `single-sided` mode and if it decreases then it will enter `sell-only` mode.
 
-When changing `commitment amount`, an increase can be handled trivially, the general account is first topped up by the requisite amount (note that the change should be considered vs the current balance of margin + general rather than the original commitment amount) and then the balancing trade is attempted. If this trade fails then the amount should be moved back to the main key's general account and the transaction stopped.
-
-If reducing the `commitment amount` then the position once the funds are reduced should be calculated, then an attempted balancing trade with relevant slippage limits made. If the trade fails the transaction is stopped. If the trade succeeds then the funds may now be released. These funds should be first taken from the general account, and then from the margin account.
+If reducing the `commitment amount` then only funds contained within the AMMs `general` account are eligible for removal. If the deduction is less than the `general` account's balance then the reduced funds will be removed immediately and the AMM will enter `single-sided` mode as specified above to reduce the position. If a deduction of greater than the `general` account is requested then the transaction is rejected and no changes are made.
 
 
 #### Cancellation
@@ -108,6 +116,7 @@ In addition to amending to reduce the size a user may also cancel their AMM enti
    - If the AMM is currently long, the `upper bound` is removed
    - The `upper`/`lower` bound (if the AMM is currently short/long) is then set to the AMM's current `fair price`. In this mode the AMM should only ever quote on the side which will reduce it's position (it's `upper`/`lower` bound should always be equal to the current `fair price` belief).
    - Once the position reaches `0` the AMM can be cancelled and all funds in the general account can be returned to the creating party
+   - This acts similarly to the mode when an AMM is synchronising, except that the position will be closed in pieces as the price moves towards the `base price` rather than all at once at the nearest price.
 
 Note that, whilst an `Abandon Position` transaction immediately closes the AMM a `Reduce-Only` transaction will keep it active for an uncertain amount of time into the future. During this time, any Amendment transactions received should move the AMM out of `Reduce-Only` mode and back into standard continuous operation.
 
