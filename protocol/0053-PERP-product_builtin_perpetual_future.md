@@ -10,7 +10,7 @@ Unlike traditional futures contracts, the perpetual futures never expire. Withou
 We choose to use either:
 
 - the mark price of the market to approximate $F_u$ or
-- configure the "market price for funding purposes" as part of the market proposal and use this methodology to approximate $F_u$ and  oracle to approximate $S_u$, so this is effectively the difference between the time-weighted average prices (TWAP) of the two. An optional interest rate and clamp function are included in the funding rate calculation, see the [funding payment calculation](#funding-payment-calculation) section for details.
+- configure the "market price for funding purposes" as part of the market proposal using [composite prices method](./0089-COMP-composing_prices.md) and use this methodology to approximate $F_u$ and oracle to approximate $S_u$, so this is effectively the difference between the time-weighted average prices (TWAP) of the two. An optional interest rate and clamp function are included in the funding rate calculation, see the [funding payment calculation](#funding-payment-calculation) section for details.
 
 ## 1. Product parameters
 
