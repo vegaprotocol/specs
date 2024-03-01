@@ -2,138 +2,123 @@
 
 ## Summary
 
-This specs covers authentication of a user with the vega network.
-We'll introduce a new tool to use with the vega network in order to allow a user to authenticate a transaction.
-No implementation details will be covered.
+This specs covers authentication of a user on the Vega network.
 
-In a blockchain / decentralised / public world authentication is often done by pairing a payload with the corresponding cryptographic signature (e.g: a `submitOrder` transaction) that a user is sending to the application (in our case the vega network).
-Creating a signature is often made by using a public key signature system (e.g:`ed25519`), which are composed of a private key (which the user need to keep secure) which will allow a user to sign a payload (basically a blob of bytes), and a public key derived from the private key (meant to be share with any actors in the system) used in order to verify a signature for a given payload. As the private key is meant to be used only by the owner of it, we can assume that if a signature can be verified, the original transaction was emitted by the owner of the private key.
+In a decentralised world, authentication is often done by pairing a payload sent to an application with a cryptographic signature.
+
+Creating this cryptographic signature is often made by using a public key signature system (e.g:`ed25519`). This system is composed of a **private key** and a **public key**.
+
+The **private key** is used to generate a unique signature of a payload. It's a critical component that must be kept secure, and should only be known to the user. The payload being signed can be any blob of bytes.
+
+The **public key**, derived from the private key, is used to verify the authenticity of the signature of a given payload. Contrary to the private key, this key is meant to be shared with any actors of a system, so anyone can verify the signature. Therefore, the public key belongs to the user's identity. And, as the private key is meant to only be used by its owner (the user), we can determine whether a signed payload has been emitted by that user, or not.
+
+By leveraging such system, we can safely authenticate users and their transactions on the Vega network. Any transaction with an invalid signature is rejected by the network.
+
+## Terminology
 
 For the purposes of this spec, we use the following terminology:
 
-- A _user_ is a user as registered in the wallet / KMS service.
-- A _party_ is one set of key pairs, created by the user.
-- A user can have many key pairs / parties.
+- A _wallet_ is a set of cryptographic key pairs. Each key pair is composed of a public and private keys.
+- A _party_ is one set of key pairs, associated to a _wallet_.
+- A _user_ is a person owning one or several _wallets_, that can use any of the _parties_ to sign transactions.
 
 ## Guide-level explanation
 
-As a first version of the authentication, we do not expect the vega network itself to create the signature for a given transaction only to verify such signature, we expect the user to send any transaction paired with the signature.
-In order to facilitate this process we will provide a new service responsible for storing users private keys, and signing an arbitrary blob of bytes (the actual transaction), requested by the user associated to a specific identity on the service, we can call this service a `wallet service`. This service will run separately from the node.
-Users should log in to this service, and be able to choose one of their keys they want to use to sign their transactions
+For a transaction to be accepted by the Vega network, we expect users to send their transactions paired with cryptographic signatures, as well as their associated public keys.
 
-The Vega network will implement a new command to be submitted to the chain to propagate a new public key over the network. This should be initiated by the owner of the public private key.
-Once this new command made it to a block, we would expect the whole network to be able to verify any signature from this user.
+In order to facilitate this process, we provide a system responsible for:
 
-Any transaction with an invalid signature should be rejected by the network.
+- creating and managing wallets
+- generating and managing parties
+- signing transactions using a party selected by the user
+- and, sending the signed transactions to the Vega network.
+
+This system is called the `wallet management application`. It runs separately from the node, and, is usually run by the users themselves. It acts as a middle-man between the users and the Vega network.
 
 ## High level walkthrough
 
-- The Vega network exists with X validators
-- Y Markets are configured and live
-- 0 parties exist within the network
+The process of sending the first transaction for a user is as follows:
 
-The process of adding a new party to the network and placing the first order will be as follows:
+1. Bob creates a wallet and generates a party in that wallet using his wallet management application.
+2. Bob requests to his wallet management application a signature of a transaction by submitting the transaction and the public key of the party to use.
+3. The transaction is checked, signed, and bundled with the signature and the public key by the wallet management application.
+4. The signed transaction is then submitted to the Vega network, which verify the authenticity of the transaction and its content to ensure the transaction was signed on behalf of the correct party.
+5. The network also verifies the transaction is not an attempt to replay an old transaction.
+6. If correct, the transaction is executed.
 
-- Bob knows the address of a node running a wallet service
-- Bob calls the create user API on that wallet service and creates a wallet service account on that node, receiving an authentication token in return
-- Bob calls the create party API on that wallet service, which creates a public and private key pair for a party belonging to the user 'bob'
-- Bob creates an order object and submits it (unsigned, unencrypted) with his auth token to the wallet service for signing, receiving back a signature for the transaction
-- Bob calls the create transaction API on a vega validator, including the unencrypted transaction and signature
-- As this is the first transaction for this party, the public key announce message is submitted to the chain
-- The transaction passes basic validation and is submitted to the chain
-- Upon execution the public key is derived from the transaction signature and validated to ensure that the transaction was signed on behalf of the correct party
-- The transaction is executed
+There is no prior announcement of the party required for the party to be used. As long as the party has enough resources to execute the transaction, the Vega network welcomes it.
 
 ## Reference-level explanation
 
-### Core changes
+### Wallet management application
 
-- Uses of the old auth service will no longer exist
-- The existing `partyId` will be replaced with a public key
+The wallet management application should provide the following features:
 
-### Wallet service
+- **Manage wallets**
+  - Create a wallet
+  - Delete a wallet
+  - Restore a wallet
+- **Manage parties of a wallet**
+  - Generate a party and associated key pair
+  - List all parties and key pairs
+- **Sign any payload**
+  - Sign a text
+  - Sign a transaction
+- **Send transactions**
 
-The wallet service should provide the following features:
+## Technical reference
 
-- Manage users
-  - Create a new user
-  - sign-in, login, logout to the wallet (authentication method to be defined by implementation)
-- Manage a user's parties and associated key pairs (a party is associated with exactly one key pair)
-  - create a party and associated key pair
-  - list all parties and key pairs
-  - delete a party and its associated key pair
-- Sign blob of data
-  - accept a request from a authenticated user containing a blob of data and reference to a party (and therefore a key pair) to be used to sign the blob
+### Wallet generation
 
-#### Wallet service: A user
+The wallet should be implemented as a _hierarchical deterministic wallet_.
 
-A user in the wallet service consists of:
+1. The recovery phrase (commonly known as _mnemonic_) is generated using [BIP-0039](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) implementation. The entropy bit size to use is 256, which should generate a list of 24 words.
+2. The seed is derived from the recovery phrase without password.
+3. The root master key is derived from the seed using [SLIP-0010](https://github.com/satoshilabs/slips/blob/master/slip-0010.md). This master key is the upmost key of the wallet.
+4. We derive the Vega wallet master key from the following hardened index path `1789'/0'`. This node is the one used to derive the parties.
 
-- The minimum details required to support an authentication such as OAUTH
-- A list of parties consisting of:
-  - A private key
-  - A public key
+The key generation for parties starts at the hardened index `1'`. So, the generation of the keys follow the following sequence:
 
-The root user ID is not used or represented in the Vega chain. It only exists on the Wallet Service on the node that the user is connecting to the network through, and is used to tie together Parties, the public and private key pairs that are used to make and validate transactions on the network.
+1. `1789'/0'/1'`: First party
+2. `1789'/0'/2'`: Second party
+3. `1789'/0'/3'`: Third party
+4. `1789'/0'/x'`: Party number _x_
 
-#### Wallet service: Signing a blob of user
+#### Using the Vega wallet master key
 
-- Via an API, the user will provide a transaction in JSON (or similar) format, and also provide a session token that validates their access to the signing service.
-- The API will return the complete data required to submit that transaction to the network
+This master key should only be used when the Vega network needs to identify multiple parties as tied to a single user, like with key rotations for validator. This is not covered in this specification. See [0063-VALK](0063-VALK-validator_vega_master_keys.md).
 
-#### Wallet service: exporting a wallet
+### Signed transaction format
 
-A wallet is represented as an encrypted file containing a list of public and private key.
-
-- We want a user of the wallet service to be able to download his wallet.
-- The API should return the full wallet file of the user.
-- The user should be able to use the file locally and decrypt it in order to use the public and private key.
-
-### Network
-
-The network will need to update the existing command in order to add to them a signature or public key.
-
-- Each transaction is paired with a signature, so it can verify the user address/ID from the signature
-- The recovered user address is the `partyID`
-
-The network will verify `partyID` from signature for all transactions.
-When to verify them will need to be decided and profile as verifying transaction will be at some cost for the nodes, but ideally we should:
-
-- Verify a signature for a transaction before it's sent to the chain so we can stop a transaction to be proposed to the chain if it's an invalid signature
-- Verify a signature for a transaction after it's added to the block for security as well.
-
-## Pseudo-code / Examples
-
-Protobuf proposal for the new transaction format sent through the chain:
+The transaction sent through the chain could be represented by the following Protocol Buffers message:
 
 ```proto
 messge TransactionBundle {
-	// the protobuf transaction bytes, e.g: submitOrder, cancelOrder, ...
-	bytes tx = 1;
-	// signature
-	bytes sig = 2;
-	// either a signature or a public key
-	oneof auth {
-		bytes address = 3;
-		bytes pubKey = 4;
-	}
+	// The transaction serialized as bytes.
+	bytes transaction = 1;
+
+	// The signature of the transaction specified at field number 1.
+	bytes signature = 2;
+
+	// The public key to use to verify the signature at field number 2.
+	bytes public_key = 3;
 }
 ```
 
-## Acceptance Criteria
+## Acceptance criteria
 
-### Wallet service acceptance criteria
+### Wallet
 
-- As a user, I can create a new account on the Wallet service (account creation requirement to be implementation details)  (<a name="0022-AUTH-001" href="#0022-AUTH-001">0022-AUTH-001</a>)
-- As a user, I can login to the Wallet service with my wallet name and password (<a name="0022-AUTH-002" href="#0022-AUTH-002">0022-AUTH-002</a>)
-- As a user, I can logout of the Wallet service with a token given to me at login (<a name="0022-AUTH-003" href="#0022-AUTH-003">0022-AUTH-003</a>)
-- As a user, if I'm logged in, I can create a new party (with a key pair) for for my account on the Wallet service. (<a name="0022-AUTH-004" href="#0022-AUTH-004">0022-AUTH-004</a>)
-- As a user, if I'm logged in, I can list all my parties (and their key pairs) on the Wallet service (<a name="0022-AUTH-005" href="#0022-AUTH-005">0022-AUTH-005</a>)
-- As a user, if I'm logged in, I can create a signature for a blob of data, using one of my parties (and its key pair). (<a name="0022-AUTH-007" href="#0022-AUTH-007">0022-AUTH-007</a>)
+- As a user, I can create a wallet. It automatically generates the first key, and I get a recovery phrase in return.
+- As a user, I can generate additional keys.
+- As a user, I can list the public keys hold by my wallet.
+- As a user, I can delete a wallet.
+- As a user, I can restore a wallet using the recovery phrase. The generated keys are the same as my previous instance. It is deterministically generated.
+- As a user, I can sign a transaction and send it to the network. (<a name="0022-AUTH-008" href="#0022-AUTH-008">0022-AUTH-008</a>)
+- As a user, I can sign an arbitrary blob of bytes.
 
-### Vega network acceptance criteria
+### On the network
 
-- As a user, I can send a transaction to the vega network with a signature for it. (<a name="0022-AUTH-008" href="#0022-AUTH-008">0022-AUTH-008</a>)
 - As a vega node, I ensure that all transaction are paired with a signature. (<a name="0022-AUTH-009" href="#0022-AUTH-009">0022-AUTH-009</a>)
   - A signature is verified before the transaction is sent to the chain.
   - If a signature is valid, the transaction is sent to the chain (<a name="0022-AUTH-010" href="#0022-AUTH-010">0022-AUTH-010</a>)
@@ -141,10 +126,3 @@ messge TransactionBundle {
   - A transaction with an invalid signature is never sent to the chain and the transaction is discarded. (<a name="0022-AUTH-013" href="#0022-AUTH-013">0022-AUTH-013</a>)
   - A transaction with no signature is rejected (<a name="0022-AUTH-014" href="#0022-AUTH-014">0022-AUTH-014</a>)
 - A `partyId` that is not a valid public key is inherently invalid, and should be rejected (<a name="0022-AUTH-015" href="#0022-AUTH-015">0022-AUTH-015</a>)
-  - _Note:_ In early versions of Vega, the `partyId` was an arbitrary string. This is no longer valid, and should be rejected. This includes the [network party](./0017-PART-party.md#network-party) - that is used where transactions are generated by the system, and it should never be possible to submit a transaction as `network`.
-
-## Future work
-
-The implementation outline explicitly ties the party performing the action to the public key. We may in future want to allow
-a key to sign actions on behalf of another party. This would probably involve some sort of new chain-based announcement of the
-delegation.
