@@ -12,6 +12,7 @@ This means that either (a) the proposed mark price methodology has produced a va
 Subsequent updates will follow the set methodology.
 
 ## Proposed composite price methodology
+
 We update the mark at the end of every mark price period and the funding price possibly at a different frequency (also set as network parameter specifying a period).
 In the sequel both will be referred to as "mark price period".
 
