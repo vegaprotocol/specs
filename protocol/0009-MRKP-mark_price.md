@@ -29,7 +29,8 @@ Now 10.1s has elapsed since the last update and there is a market buy order for 
 
 ### 2. Flexible mark price methodology
 
-The calculations are specified in [markprice methodology research note](https://github.com/vegaprotocol/research/blob/markprice-updates/papers/markprice-methodology/markprice-methodology.tex).
+The calculations are specified in [composite prices spec](./0089-COMP-composing_prices.md).
+
 Here, we only write the acceptance criteria.
 Note that for calculating the median with an even number of entries we sort, pick out the two values that are in the middle of the list and average those. So in particular with two values a median is the same as the average for our purposes.
 
