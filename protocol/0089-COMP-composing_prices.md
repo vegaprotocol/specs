@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Prices are composed to create mark price and on perpetual futures markets a view of what the price on the vega side is for purposes of comapring to the underlying price and an eventual funding calculation.
+Prices are composed to create mark price and on perpetual futures markets a view of what the price on the vega side is for purposes of comparing to the underlying price and an eventual funding calculation.
 Mark price is used by Vega protocol to calculate mark-to-market cashflows, feed the risk calculation, to provide ``unrealised'' profit-and-loss (PnL) information and drive price monitoring.
 
 For perpetual futures markets there should be a composite *mark price* configuration and a composite *market price for funding* configuration so that the market can, potentially use different mark price for mark-to-market and price monitoring and completely different price for calculating funding.
@@ -11,9 +11,8 @@ Every market will have a mark price upon leaving opening auction.
 This means that either (a) the proposed mark price methodology has produced a value during the opening auction or (b) if it has not, upon leaving the opening auction the first mark price is set to the auction uncrossing price regardless of the mark price methodology. 
 Subsequent updates will follow the set methodology.
 
-
 ## Proposed composite price methodology
-We update the mark at the end of every mark price period and the funding price possibly at a different frequency (also set as network parameter specifying a period). 
+We update the mark at the end of every mark price period and the funding price possibly at a different frequency (also set as network parameter specifying a period).
 In the sequel both will be referred to as "mark price period".
 
 ### Price from observed trades
