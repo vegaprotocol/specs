@@ -83,20 +83,6 @@ Further, each party is allowed to submit up to `n` transactions per epoch where 
 
 **Note** `spam.protection.max.updatePartyProfile` must be an integer greater than or equal to `0` (and default to `5`).
 
-### Transaction Spam
-
-Network parameter: `spam.order.MinimalMarginQuantumMultiple` (between 0 and infinite)
-
-If the maintenance margin for a given transaction is smaller than the parameter `spam.order.MinimalMarginSizeQuantumMultiple`, then the transaction is pre-block rejected.
-I.e. if `(rf + linear slippage param) x size x price <  spam.order.MinimalMarginSizeQuantumMultiple x asset quantum amount` then the order is rejected. Here `rf` is the risk factor (and will be different for long and for short) `linear slippage param` is a market parameter and `size` and `price` are assumed to be correctly scaled by, PDPs and MDPs respectively.
-
-If the market does not exist and thus the maintenance margin is not defined, the transaction is rejected.
-
-Non-persistent orders (on both spot and futures markets) are not blocked by this mechanism as long as the market exists.
-
-The calculation for this should be done  before the gas cost calculation as rejected transactions should not get into the calculation of the
-gas cost.
-
 
 ### Related topics
 
@@ -141,9 +127,5 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - A party holding no less than `spam.protection.referralSet.min.funds` x quantum and staking no less than `referralProgram.minStakedVegaTokens` should not have any `UpdateReferralSettransactions` pre-block rejected (<a name="0062-SPAM-041" href="#0062-SPAM-041">0062-SPAM-041</a>).
 - A party who has submitted strictly more than `spam.protection.max.updatePartyProfile` `UpdatePartyProfile` transactions in an epoch should have any future `UpdatePartyProfile` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-038" href="#0062-SPAM-038">0062-SPAM-038</a>).
 - A party who has submitted more than `spam.protection.max.updatePartyProfile` `UpdatePartyProfile` transactions in the current epoch plus in the current block, should have their `UpdatePartyProfile` transactions submitted in the current block **pre-block** rejected (<a name="0062-SPAM-039" href="#0062-SPAM-039">0062-SPAM-039</a>).
-- Issue a set of orders starting with the minimum price, and doubling the order price with every order. Once the first order passes the spam filter, quadruple the parameter `spam.order.MinimalMarginQuantumMultiple` and continue. Once the next order passes the filter, quadruple the quantum size for the underlying asset, and continue until an order passes the filter again. Verify that all rejected orders had a margin smaller than `spam.order.MinimalMarginQuantumMultiple`, and all accepted ones one bigger or equal. (<a name="0062-SPAM-043" href="#0062-SPAM-043">0062-SPAM-043</a>).
-- Issue a set of orders for an existing, but not yet enacted market, starting with the minimum price, and doubling the order price with every order. Once the first order passes the spam filter, quadruple the parameter `spam.order.MinimalMarginQuantumMultiple` and continue. Once the next order passes the filter, quadruple the quantum size for the underlying asset, and continue until an order passes the filter again. Verify that all rejected orders had a margin smaller than `spam.order.MinimalMarginQuantumMultiple`, and all accepted ones one bigger or equal. (<a name="0062-SPAM-044" href="#0062-SPAM-044">0062-SPAM-044</a>).
-- Create an order for a non-existing market, and verify that it is rejected by the spam filter. (<a name="0062-SPAM-045" href="#0062-SPAM-045">0062-SPAM-045</a>).
-- Create a non-persistent order for an existing market with a minimum order price, and verify that it is not rejected by the spam filter. (<a name="0062-SPAM-046" href="#0062-SPAM-046">0062-SPAM-046</a>).
 
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
