@@ -74,8 +74,6 @@ $$
 \text{amount} = \text{start amount} \cdot \text{factor}^{(\text{current epoch} - \text{start epoch})}
 $$
 
-
-
 If insufficient funds are present in the source account at the time a transfer is initiated by the network, the whole recurring transfer is cancelled.
 If the `amount` is less than `transfer.minTransferQuantumMultiple x quantum` then the recurring transfer is cancelled.
 
