@@ -71,7 +71,7 @@ P^{\text{book}}_s :=
 $$
 if not, don't include it in the time average.
 If $C$ (the initial cash amount to consider) is set to $0$ then it's the usual mid price.
-During auctions $P^{\text{book}}_s$ is set as undefined (and as not updating for purpose of staleness). 
+During auctions $P^{\text{book}}_s$ is set as undefined (and as not updating for purpose of staleness).
 At auction uncrossing the book price $P^{\text{book}}_s$ is set to the uncrossing price.
 
 ### Prices observed from data sourcing framework (oracles)
