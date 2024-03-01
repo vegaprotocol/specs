@@ -84,7 +84,7 @@ Obtain $(P^{\text{oracle}}_i)_{i=1}^n$ if $n \in \{0\}\cup \mathbb N$ oracle sou
 ### Median of observations
 
 Set $L^{i}=L^{i}(s)$, $i=1,\ldots,n+2$ to be the functions which reports when a given price source from the list above was last updated and $(\delta_i)_{i=1}^d$ values defining when a given price is too old.
-If for all $t-L_i(t) > \delta_i$ then all sources are stale and we do not update this source. 
+If for all $t-L_i(t) > \delta_i$ then all sources are stale and we do not update this source.
 If at least for one $i$ we have $t-L_i(t) < \delta_i$ we do
 $$
 M((P_i)_{i=1}^{2+n}) = \text{median}(\{P_i : t-L_i(t) < \delta_i\}) \,.
