@@ -8,7 +8,7 @@ Mark price is used by Vega protocol to calculate mark-to-market cashflows, feed 
 For perpetual futures markets there should be a composite *mark price* configuration and a composite *market price for funding* configuration so that the market can, potentially use different mark price for mark-to-market and price monitoring and completely different price for calculating funding.
 
 Every market will have a mark price upon leaving opening auction.
-This means that either (a) the proposed mark price methodology has produced a value during the opening auction or (b) if it has not, upon leaving the opening auction the first mark price is set to the auction uncrossing price regardless of the mark price methodology. 
+This means that either (a) the proposed mark price methodology has produced a value during the opening auction or (b) if it has not, upon leaving the opening auction the first mark price is set to the auction uncrossing price regardless of the mark price methodology.
 Subsequent updates will follow the set methodology.
 
 ## Proposed composite price methodology
