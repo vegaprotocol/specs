@@ -397,6 +397,6 @@ If the parameter of each transfer `cap_reward_fee_multiple` is set, and if some 
 
 If the parameter of each transfer `cap_reward_fee_multiple` is set, and if all keys are capped, then the remaining balance must be left in the reward pool and included in the distribution in the future epochs. (<a name="0057-TRAN-073" href="#0057-TRAN-073">0057-TRAN-073</a>)
 
-If the parameter of each transfer `cap_reward_fee_multiple` is set, and the total reward transferred in a given epoch, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
+If the parameter of each transfer `cap_reward_fee_multiple` is set, and the total reward transferred in a given epoch is not spent due to the cap, this does not affect the size of the next iteration, which proceeds as normal (including decay factors etc.) as if the full transfer has been made (<a name="0057-TRAN-074" href="#0057-TRAN-074">0057-TRAN-074</a>)
 
 If the parameter of each transfer `cap_reward_fee_multiple` is set to be `<=0`, then it should be rejected (<a name="0057-TRAN-075" href="#0057-TRAN-075">0057-TRAN-075</a>)
