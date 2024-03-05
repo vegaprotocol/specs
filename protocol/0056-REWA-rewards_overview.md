@@ -232,6 +232,8 @@ The entire reward account balance is paid out every epoch unless the total value
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
+Any rewards which would be distributed to an AMM sub-key should instead be sent to the parent key's corresponding account. These transfers should be labelled with a field `from_key` which specifies the sub-key as the original recipient. This field should be blank for rewards earned by a standard key.
+
 ### Distributing rewards amongst entities
 
 Rewards are distributed amongst entities based on the distribution method defined in the recurring transfer.
@@ -1110,3 +1112,7 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is relative returns, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-149" href="#0056-REWA-149">0056-REWA-149</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is returns volatility, a teams reward metric should be updated and published every `rewards.updateFrequency` seconds. (<a name="0056-REWA-150" href="#0056-REWA-150">0056-REWA-150</a>).
 - Given a recurring transfer where the entity scope is teams and the dispatch metric is validator ranking, a teams reward metric should be updated and published at the end of every epoch. (<a name="0056-REWA-151" href="#0056-REWA-151">0056-REWA-151</a>).
+#### vAMMs
+
+- If an AMM sub-key earns rewards which would be transferred to it's vesting account, these rewards are instead transferred to the parent key's vesting account with a `from_key` field specifying the sub-key (<a name="0056-REWA-152" href="#0056-REWA-152">0056-REWA-152</a>).
+- If an AMM sub-key earns rewards which would be transferred to it's locked account, these rewards are instead transferred to the parent key's locked account with a `from_key` field specifying the sub-key (<a name="0056-REWA-153" href="#0056-REWA-153">0056-REWA-153</a>).
