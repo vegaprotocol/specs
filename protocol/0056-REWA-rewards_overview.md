@@ -189,6 +189,8 @@ The entire reward account balance is paid out every epoch unless the total value
 
 Rewards are first [distributed amongst entities](#distributing-rewards-amongst-entities) (individuals or teams) and then any rewards distributed to teams are [distributed amongst team members](#distributing-rewards-amongst-team-members).
 
+Any rewards which would be distributed to an AMM sub-key should instead be sent to the parent key's corresponding account. These transfers should be labelled with a field `from_key` which specifies the sub-key as the original recipient. This field should be blank for rewards earned by a standard key.
+
 ### Distributing rewards amongst entities
 
 Rewards are distributed amongst entities based on the distribution method defined in the recurring transfer.
@@ -1018,3 +1020,9 @@ At the end of epoch 2, 10000 VEGA rewards should be distributed to the `ETHUSDT`
 - Each team’s reward metric should be the average metric of the top `n_top_performers` % of team members, e.g. for a team of 100 parties with `n_top_performers=0.1`, the 10 members with the highest metric (<a name="0056-REWA-106" href="#0056-REWA-106">0056-REWA-106</a>).
 - If a team member has a non-zero reward metric, they should receive a share of the rewards proportional to their individual payout multipliers (<a name="0056-REWA-107" href="#0056-REWA-107">0056-REWA-107</a>).
 - If a team member has a zero reward metric, they should receive no share of the rewards allocated to the team (<a name="0056-REWA-108" href="#0056-REWA-108">0056-REWA-108</a>).
+
+
+#### vAMMs
+
+- If an AMM sub-key earns rewards which would be transferred to it's vesting account, these rewards are instead transferred to the parent key's vesting account with a `from_key` field specifying the sub-key (<a name="0056-REWA-111" href="#0056-REWA-111">0056-REWA-111</a>).
+- If an AMM sub-key earns rewards which would be transferred to it's locked account, these rewards are instead transferred to the parent key's locked account with a `from_key` field specifying the sub-key (<a name="0056-REWA-112" href="#0056-REWA-112">0056-REWA-112</a>).

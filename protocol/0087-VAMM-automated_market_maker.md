@@ -93,7 +93,7 @@ Once in `single-sided` quoting mode, certain behaviour will be different to once
      1. This can be obtained through first querying the AMM for it's current `fair price` and then asking for the volume quote between said `fair price` and the price level in question.
   1. No volume will be posted to move the AMM's position away from the target (e.g if the price is above the `base price` the AMM will not buy even if the price moves downwards)
   1. No volume will be posted outside of the `upper price` - `lower price` range
-  1. Once the AMM's `fair price` is equal to the price level being questioned the AMM will be marked as synchronised and enter normal two-sided quoting
+  1. Once the AMM's `fair price` is equal to the price level being questioned the AMM will be marked as synchronised and enter normal two-sided quoting.
 
 Note that this rebasing procedure can bound the price range such that movement in either direction will eventually mark the AMM as synchronised. For example, if the price is currently below the `base price` but above the `lower price`, any movement downwards will hit the AMM's buys until it is synchronised, and any movement upwards will eventually bring the price to the `base price` at which point the AMM will become synchronised by default.
 
