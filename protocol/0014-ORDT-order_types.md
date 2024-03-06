@@ -289,7 +289,7 @@ In Spot market, for an iceberg order that is submitted with total size x and dis
 
 1. For multiple iceberg orders submitted as a batch of orders with a mix of ordinary limit orders and market orders, the iceberg orders are processed atomically and the order book volume and price, margin calculations , order status are all correct (<a name="0014-ORDT-014" href="#0014-ORDT-014">0014-ORDT-014</a>)
 In Spot market, for multiple iceberg orders submitted as a batch of orders with a mix of ordinary limit orders and market orders, the iceberg orders are processed atomically and the order book volume and price, holding calculations , order status are all correct. (<a name="0014-ORDT-094" href="#0014-ORDT-094">0014-ORDT-094</a>)
-2. For an iceberg order submitted in a batch that trades against multiple other orders sitting on the book, the iceberg order refreshes between each order in the batch (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>). For product spot: (<a name="0014-ORDT-095" href="#0014-ORDT-095">0014-ORDT-095</a>)
+2. For an iceberg order sitting on the book, when a batch containing normal orders and other iceberg orders that will trades against the existing iceberg sitting on the book is sent, the resting iceberg order refreshes between each order in the batch (<a name="0014-ORDT-015" href="#0014-ORDT-015">0014-ORDT-015</a>). For product spot: (<a name="0014-ORDT-095" href="#0014-ORDT-095">0014-ORDT-095</a>)
 
 #### Iceberg Order Submission - Negative tests
 
