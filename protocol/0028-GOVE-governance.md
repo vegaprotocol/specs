@@ -555,6 +555,8 @@ APIs should also exist for clients to:
 - New market proposals cannot be created before [`limits.markets.proposeEnabledFrom`](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md#network-parameters) is in the past (<a name="0028-GOVE-024" href="#0028-GOVE-024">0028-GOVE-024</a>)
 - A market proposal with a negative or non-integer value supplied for market decimal places  gets rejected. (<a name="0028-GOVE-061" href="#0028-GOVE-061">0028-GOVE-061</a>)
 - A market proposal with position decimal places not in `{-6,...,-1,0,1,2,...,6}` gets rejected. (<a name="0028-GOVE-062" href="#0028-GOVE-062">0028-GOVE-062</a>)
+- A market proposal with a tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-180" href="#0028-GOVE-180">0028-GOVE-180</a>).
+- At enactment, a market change proposal updating the tick size leaves in place all orders where the quoted price is not an exact multiple of `10^-mdp` (where `mdp` is the market decimal places) (<a name="0028-GOVE-182" href="#0028-GOVE-182">0028-GOVE-182</a>).
 
 #### Market change proposals
 
@@ -579,7 +581,9 @@ APIs should also exist for clients to:
 - A governance proposal to close a market which doesn't specify the final settlement price gets rejected by the markets which require it (non-spot). (<a name="0028-GOVE-108" href="#0028-GOVE-108">0028-GOVE-108</a>)
 - When there's already been a market closure governance proposal successfully voted in for a given market, but not yet enacted it is still possible to submit additional market closure governance proposals for that market. If another market closure governance proposal gets voted it and it has an earlier enactment time then it's the final settlement price of that proposal which gets used. (<a name="0028-GOVE-110" href="#0028-GOVE-110">0028-GOVE-110</a>)
 - Governance vote to suspend a market that's currently in continuous trading mode puts it into auction mode at vote enactment time. The only way to put the market back into continuous trading mode is with a successful governance vote to resume the market. (<a name="0028-GOVE-113" href="#0028-GOVE-113">0028-GOVE-113</a>)
-- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
+- Governance vote to suspend a market that's currently in auction trading mode keeps it in auction mode at vote enactment time. Even if the trigger that originally put the market into auction mode is no longer violated the market must remain in auction. Resuming the market will then put the market in the state it was in prior to it being suspended.
+  - monitoring auction (<a name="0028-GOVE-114" href="#0028-GOVE-114">0028-GOVE-114</a>)
+  - opening auction (<a name="0028-GOVE-167" href="#0028-GOVE-167">0028-GOVE-167</a>)
 - Resuming a market with other auction triggers active does not put it out of auction until those triggers allow to do so. (<a name="0028-GOVE-115" href="#0028-GOVE-115">0028-GOVE-115</a>)
 - A market suspended by the governance vote does not allow trade generation of margin account balance reduction. (<a name="0028-GOVE-116" href="#0028-GOVE-116">0028-GOVE-116</a>)
 - Verify that a party with 0 balance of the governance token, but with sufficient ELS can submit a market change proposal successfully. (<a name="0028-GOVE-117" href="#0028-GOVE-117">0028-GOVE-117</a>)
@@ -594,6 +598,8 @@ APIs should also exist for clients to:
 - Markets which have been suspended via a governance proposal can be terminated after a protocol upgrade restarts the network. (<a name="0028-GOVE-151" href="#0028-GOVE-151">0028-GOVE-151</a>)
 - Oracle data sources shared between multiple markets are not deactivated if one of the markets sharing the oracle data sources is terminated and settled using governance proposals. Now the status of the data sources should still be ACTIVE as Market2 is still using them. (<a name="0028-GOVE-152" href="#0028-GOVE-152">0028-GOVE-152</a>)
 - Ensure that when a market is suspended and then resumed via a governance proposal we can still terminate and settle the market using ethereum oracle. (<a name="0028-GOVE-153" href="#0028-GOVE-153">0028-GOVE-153</a>)
+- A market change proposal specifying a new tick size less than or equal to `0` gets rejected (<a name="0028-GOVE-184" href="#0028-GOVE-184">0028-GOVE-184</a>).
+- At enactment, a market change proposal updating the tick size cancels all pegged orders where their offset is no longer an exact integer multiple of the tick size (<a name="0028-GOVE-183" href="#0028-GOVE-183">0028-GOVE-183</a>).
 
 #### Network parameter change proposals
 
@@ -758,7 +764,7 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 
 ##### Community Market Tags
 
-- A proposal to add community tags to a market can be successfully submitted. (<a name="0028-GOVE-167" href="#0028-GOVE-167">0028-GOVE-167</a>)
+- A proposal to add community tags to a market can be successfully submitted. (<a name="0028-GOVE-178" href="#0028-GOVE-178">0028-GOVE-178</a>)
   - When that proposal is approved and enacted the community tags are immediately added to that market's community tags property. (<a name="0028-GOVE-168" href="#0028-GOVE-168">0028-GOVE-168</a>)
 - A proposal to remove community tags from a market can be successfully submitted. (<a name="0028-GOVE-169" href="#0028-GOVE-169">0028-GOVE-169</a>)
   - When that proposal is approved and enacted the community tags are immediately removed from that market's community tags property. (<a name="0028-GOVE-170" href="#0028-GOVE-170">0028-GOVE-170</a>)
@@ -768,4 +774,3 @@ The voting to approve the batch happens, the batch passes, the value of the prop
 - A voter's equity-like share does not give them any additional voting weight when voting on a market community tags update proposal. (<a name="0028-GOVE-174" href="#0028-GOVE-174">0028-GOVE-174</a>)
 - A proposal to add community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-175" href="#0028-GOVE-175">0028-GOVE-175</a>)
 - A proposal to remove community tags with any community tags longer than `governance.proposal.market.maxCommunityTagLength` is rejected as invalid (<a name="0028-GOVE-176" href="#0028-GOVE-176">0028-GOVE-176</a>)
-

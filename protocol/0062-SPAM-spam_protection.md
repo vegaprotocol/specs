@@ -128,5 +128,4 @@ More than 360 delegation changes in one epoch (or, respectively, the value of `s
 - A party who has submitted strictly more than `spam.protection.max.updatePartyProfile` `UpdatePartyProfile` transactions in an epoch should have any future `UpdatePartyProfile` transactions in that epoch **pre-block** rejected (<a name="0062-SPAM-038" href="#0062-SPAM-038">0062-SPAM-038</a>).
 - A party who has submitted more than `spam.protection.max.updatePartyProfile` `UpdatePartyProfile` transactions in the current epoch plus in the current block, should have their `UpdatePartyProfile` transactions submitted in the current block **pre-block** rejected (<a name="0062-SPAM-039" href="#0062-SPAM-039">0062-SPAM-039</a>).
 
-
 > **Note**: If other governance functionality (beyond delegation-changes, votes, and proposals) are added, the spec and its acceptance criteria need to be augmented accordingly. This issue will be fixed in a follow up version.
