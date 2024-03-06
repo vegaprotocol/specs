@@ -2,6 +2,12 @@
   "Markprice updates": {
     "milestone": "colosseo",
     "acs": [
+      "0064-VALP-007"
+    ]
+  },
+  "Ethereum heartbeat": {
+    "milestone": "colosseo",
+    "acs": [
       "0009-MRKP-132",
       "0053-PERP-043",
       "0032-PRIM-039",
