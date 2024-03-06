@@ -9,6 +9,7 @@ allowlisted
 antiwhaling
 API
 APIs
+Arbitrum
 AST
 asynchrony
 atomicity
