@@ -5,7 +5,9 @@
       "0009-MRKP-132",
       "0053-PERP-043",
       "0032-PRIM-039",
-      "0032-PRIM-040"
+      "0032-PRIM-040",
+      "0009-MRKP-036",
+      "0009-MRKP-037"
     ]
   },
     "Spot": {
@@ -315,10 +317,6 @@
     "milestone": "colosseo",
     "acs": ["0053-PERP-036"]
   },
-  "Order spam": {
-    "milestone": "colosseo",
-    "acs": ["0062-SPAM-043", "0062-SPAM-044", "0062-SPAM-045", "0062-SPAM-046"]
-  },
   "Market tick size": {
     "milestone": "colosseo",
     "acs": [
@@ -326,6 +324,8 @@
       "0025-OCRE-006",
       "0028-GOVE-180",
       "0028-GOVE-182",
+      "0028-GOVE-183",
+      "0028-GOVE-184",
       "0037-OPEG-020",
       "0037-OPEG-021"
     ]
