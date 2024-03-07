@@ -114,18 +114,20 @@ Note that this could become obsolete if a future version of the protocol impleme
 When a nodes is promoted or demoted from the tendermint validator set the multisig control contracts on each bridge should be updated to reflect the new set. To be able to update the signers on the multisig control contract a signature bundle authorising the addition or removal of a signer is required containing a quorum of signatures from those already on the multisig control contract.
 
 As rewards are withheld from all parties who have staked and delegated to the Vega network, any party is allowed to request a signature bundle to resolve the multisig contract and continue receiving rewards. This can be done by sending in a transaction to the network containing the following information:
-```
+
+```json
 {
-    "submitter": "abc", # the Ethereum address that will submit the transaction to the multisig contract
-    "node_id": "xyz",   # the node ID who needs to be added or removed 
-    "type": "add/remove",         # whether the node needs to be added or removed
-    "chain_id": "1",    # the ID of the EVM chain the signature bundle is for
+    "submitter": "abc",   # the Ethereum address that will submit the transaction to the multisig contract
+    "node_id": "xyz",     # the node ID who needs to be added or removed 
+    "type": "add/remove", # whether the node needs to be added or removed
+    "chain_id": "1",      # the ID of the EVM chain the signature bundle is for
 }
 ```
 
 Then result from a successful submission will be the generation of a signature bundle made available via a data node. 
 
 A transaction to issue signatures must fail if:
+
 - the request *does not* correspond to a validator the needs adding/removing from the contract
 - the given chain-id does not belong to any bridge
 
