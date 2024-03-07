@@ -111,9 +111,9 @@ Note that this could become obsolete if a future version of the protocol impleme
 
 ## Issuing signatures bundles to update Multisig contracts
 
-When a nodes is promoted or demoted from the tendermint validator set the multisig control contracts on each bridge should be updated to reflect the new set. To be able to update the signers on the multisig control contract a signature bundle authorising the addition or removal of a sign is required containing a quorum of signatures from those already on the multisig control control.
+When a nodes is promoted or demoted from the tendermint validator set the multisig control contracts on each bridge should be updated to reflect the new set. To be able to update the signers on the multisig control contract a signature bundle authorising the addition or removal of a signer is required containing a quorum of signatures from those already on the multisig control contract.
 
-As rewards are withheld from all parties who have staked and delegated to the Vega network, any party is allowed to request a signature bundle to resolve the multisig contract. This can be done by sending in a transaction to the network containing the following information:
+As rewards are withheld from all parties who have staked and delegated to the Vega network, any party is allowed to request a signature bundle to resolve the multisig contract and continue receiving rewards. This can be done by sending in a transaction to the network containing the following information:
 ```
 {
     "submitter": "abc", # the Ethereum address that will submit the transaction to the multisig contract
@@ -123,13 +123,13 @@ As rewards are withheld from all parties who have staked and delegated to the Ve
 }
 ```
 
-Then result from a successful submission will the generation of a signature bundle made available via a data node. 
+Then result from a successful submission will be the generation of a signature bundle made available via a data node. 
 
 A transaction to issue signatures must fail if:
 - the request *does not* correspond to a validator the needs adding/removing from the contract
 - the given chain-id does not belong to any bridge
 
-Once a validator who needs adding/removing from the contract has been added/removed (or no longer needs to be added or removed) it must not be possible to request more signature bundles for its adding/removable.
+Once a validator who needs adding/removing from the contract has been added/removed (or no longer needs to be added or removed) it must not be possible to request more signature bundles for it.
 
 All signature bundles for a particular adding/removal event *must* use the same nonce. For example if validator `v` is promoted and needs to be added to the contract, when three different parties submit transactions to issue signatures, each of their bundles should use the same nonce. This necessary so that ones one bundle has been used, the other 2 are now defunct. 
 
