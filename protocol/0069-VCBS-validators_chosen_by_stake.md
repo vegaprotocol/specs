@@ -97,7 +97,7 @@ Thus for each validator that is on each multisig contract it will know the valid
 We will have `network.validators.multisig.numberOfSigners` represented on each multisig (currently `13`) but this could change.
 Note that `network.validators.multisig.numberOfSigners` must always be less than or equal to `network.validators.tendermint.number`.
 
-In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *not* on the multisig contract.
+In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *not* on all multisig contracts.
 
 Thus a validator who is not there but should be has incentive to pay gas to update each multisig. Moreover a validator who's score has gone up substantially will want to do so as well.
 
@@ -643,3 +643,9 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 
 1. Issue 5 requests from a vega key in the same block, 4 of which with invalid signatures. Verify that only the one with the correct signature is passed to consensus, and is properly executed.
 (<a name="0069-VCBS-087" href="#0069-VCBS-087">0069-VCBS-087</a>)
+
+1. After a node has been promoted, issue a request for a signature to add it to the multisig control contract but provide a chain-id that does not correspond to any bridge. It should fail.
+(<a name="0069-VCBS-089" href="#0069-VCBS-089">0069-VCBS-089</a>)
+
+1. After a node has been demoted, issue a request for a signature to remove it to the multisig control contract but provide a chain-id that does not correspond to any bridge. It should fail.
+(<a name="0069-VCBS-090" href="#0069-VCBS-090">0069-VCBS-089</a>)
