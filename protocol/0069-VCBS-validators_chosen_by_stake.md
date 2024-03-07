@@ -103,10 +103,36 @@ Thus a validator who is not there but should be has incentive to pay gas to upda
 
 As a consequence, if a potential validator joined the Vega chain validators but has *not* updated the Multisig members (and/or weights) for each bridge, then at the end of the epoch their score will be `0`. They will not get any rewards.
 
-In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators to remove the demoted member from all Multisig contracts. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed from each bridge.
+In the case where a node is removed due reduced delegation, or due to not meeting self-delegation criteria, or due to lack of performance, or due to a reduction in the value of `network.validators.tendermint.number`, the onus is on all of the remaining validators and the community to remove the demoted member from all Multisig contracts. They are incentivised to do so by all receiving a `validator_score` of `0` *in the reward calculation* until the excess member is removed from each bridge.
 Bear in mind that currently in this situation the unpaid rewards stay in the reward pool and eventually everything gets distributed at the end of any epoch where the multisig is updated.
 
 Note that this could become obsolete if a future version of the protocol implements threshold signatures or another method that allows all validators to approve Ethereum actions.
+
+
+## Issuing signatures bundles to update Multisig contracts
+
+When a nodes is promoted or demoted from the tendermint validator set the multisig control contracts on each bridge should be updated to reflect the new set. To be able to update the signers on the multisig control contract a signature bundle authorising the addition or removal of a sign is required containing a quorum of signatures from those already on the multisig control control.
+
+As rewards are withheld from all parties who have staked and delegated to the Vega network, any party is allowed to request a signature bundle to resolve the multisig contract. This can be done by sending in a transaction to the network containing the following information:
+```
+{
+    "submitter": "abc", # the Ethereum address that will submit the transaction to the multisig contract
+    "node_id": "xyz",   # the node ID who needs to be added or removed 
+    "type": "add/remove",         # whether the node needs to be added or removed
+    "chain_id": "1",    # the ID of the EVM chain the signature bundle is for
+}
+```
+
+Then result from a successful submission will the generation of a signature bundle made available via a data node. 
+
+A transaction to issue signatures must fail if:
+- the request *does not* correspond to a validator the needs adding/removing from the contract
+- the given chain-id does not belong to any bridge
+
+Once a validator who needs adding/removing from the contract has been added/removed (or no longer needs to be added or removed) it must not be possible to request more signature bundles for its adding/removable.
+
+All signature bundles for a particular adding/removal event *must* use the same nonce. For example if validator `v` is promoted and needs to be added to the contract, when three different parties submit transactions to issue signatures, each of their bundles should use the same nonce. This necessary so that ones one bundle has been used, the other 2 are now defunct. 
+
 
 ## Ersatz/Standby validators
 
@@ -158,6 +184,8 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
 |`network.validators.multisig.numberOfSigners`              | String (integer) |       9       | Currently set to the number of validators on the network. In future will be used to scale multisig Validator participation.  |
 |`network.validators.ersatz.rewardFactor`                   | String (float)   |      0.2      | Scales down [the rewards](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz validators relative to actual validators  |
 |`network.validators.ersatz.multipleOfTendermintValidators` | String (integer) |       2       | Used to [calculate the number](./0069-VCBS-validators_chosen_by_stake.md#ersatz-validators) of ersatz Validators that will earn rewards |
+|`spam.protection.minMultisigUpdates`                       | String (integer) |       5       | Minimum number of staked tokens a party must have to be able to submit a transaction to issue signatures |
+|`spam.protection.max.MultisigUpdates`                      | String (integer) |       5       | Maximum number of times per epoch a party can submit a transaction to issue signatures |
 
 ## Acceptance criteria
 
