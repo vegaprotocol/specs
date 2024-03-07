@@ -261,7 +261,7 @@ See [limited network life spec](./0073-LIMN-limited_network_life.md).
     - Run a Vega network where a validator joins and gets a lot delegated in order for it to become one of the top `network.validators.multisig.numberOfSigners`
     - Ensure its ethereum key is **NOT** put on any of the multisig contract.
     - Verify the validator has 0 for their multisig score and receives no staking reward.
-1. All multisig contracts must be updated for non-zero multisig scores (<a name="0069-VCBS-088" href="#0069-VCBS-088">0069-VCBS-088</a>)
+1. All multisig contracts must be updated for non-zero multisig scores (<a name="0069-VCBS-092" href="#0069-VCBS-092">0069-VCBS-092</a>)
     - Arrange a network with N validators and 1 ersatz validator.
     - Set `network.validators.multisig.numberOfSigners` = N.
     - Arrange for one of the validators to be demoted and the ersatz validator to be promoted.
