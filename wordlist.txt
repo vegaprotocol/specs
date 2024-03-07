@@ -186,6 +186,7 @@ misconfiguration
 MTM
 mu
 multisig
+multisigs
 MultisigControl
 multisignature
 NFTs

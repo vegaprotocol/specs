@@ -118,13 +118,13 @@ As rewards are withheld from all parties who have staked and delegated to the Ve
 ```json
 {
     "submitter": "abc",   # the Ethereum address that will submit the transaction to the multisig contract
-    "node_id": "xyz",     # the node ID who needs to be added or removed 
+    "node_id": "xyz",     # the node ID who needs to be added or removed
     "type": "add/remove", # whether the node needs to be added or removed
     "chain_id": "1",      # the ID of the EVM chain the signature bundle is for
 }
 ```
 
-Then result from a successful submission will be the generation of a signature bundle made available via a data node. 
+Then result from a successful submission will be the generation of a signature bundle made available via a data node.
 
 A transaction to issue signatures must fail if:
 
@@ -133,7 +133,7 @@ A transaction to issue signatures must fail if:
 
 Once a validator who needs adding/removing from the contract has been added/removed (or no longer needs to be added or removed) it must not be possible to request more signature bundles for it.
 
-All signature bundles for a particular adding/removal event *must* use the same nonce. For example if validator `v` is promoted and needs to be added to the contract, when three different parties submit transactions to issue signatures, each of their bundles should use the same nonce. This necessary so that ones one bundle has been used, the other 2 are now defunct. 
+All signature bundles for a particular adding/removal event *must* use the same nonce. For example if validator `v` is promoted and needs to be added to the contract, when three different parties submit transactions to issue signatures, each of their bundles should use the same nonce. This necessary so that ones one bundle has been used, the other 2 are now defunct.
 
 
 ## Ersatz/Standby validators
@@ -650,4 +650,4 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 (<a name="0069-VCBS-089" href="#0069-VCBS-089">0069-VCBS-089</a>)
 
 1. After a node has been demoted, issue a request for a signature to remove it to the multisig control contract but provide a chain-id that does not correspond to any bridge. It should fail.
-(<a name="0069-VCBS-090" href="#0069-VCBS-090">0069-VCBS-089</a>)
+(<a name="0069-VCBS-090" href="#0069-VCBS-090">0069-VCBS-090</a>)
