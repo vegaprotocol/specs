@@ -341,6 +341,10 @@
       "0057-TRAN-075"
     ]
   },
+  "Isolated margin": {
+    "milestone": "colosseo",
+    "acs": ["0019-MCAL-208"]
+  },
   "Closeout trades and auctions": {
     "milestone": "colosseo",
     "acs": ["0012-POSR-030"]
