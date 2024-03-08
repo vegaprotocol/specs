@@ -165,11 +165,11 @@ where $P_v$ is the virtual position from the previous formula, $p_u$ is the pric
 From here the first step is calculating a `fair` price, which can be done by utilising the `L` value for the respective range to calculate `virtual` values for the pool balances. From here on `y` will be the cash balance of the pool and `x` the position.
 
   1. First, identify the current position, `P`. If it is `0` then the current fair price is the base price.
-  1. If `P != 0` then calculate the implied price from the current position using the virtual position $p_v$ which is equal to $P$ when $P > 0$ or $P + \frac{c}{p_u} \cdotp r_f$ where $P < 0$.
+  1. If `P != 0` then calculate the implied price from the current position using the virtual position $P_v$ which is equal to $P$ when $P > 0$ or $P + \frac{c}{p_u} \cdotp r_f$ where $P < 0$.
   1. The fair price can then be calculated as 
    
 $$
-p_f = \frac{p_u}{p_v \cdotp p_u \cdotp \frac{1}{L} + 1}^2 ,
+p_f = \frac{\sqrt{p_u}}{P_v \cdotp \sqrt{p_u} \cdotp \frac{1}{L} + 1}^2 ,
 $$
 
 where $p_u$ is `base price` when $P > 0$ or `upper price` when $P < 0$.
