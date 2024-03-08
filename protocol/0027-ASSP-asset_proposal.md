@@ -165,9 +165,9 @@ This must be an integer strictly greater than `0`.
 
 ### User actions
 
-- As a user I can submit a new proposal asset to be used in vega for the first bridge (<a name="0027-ASSP-001" href="#0027-ASSP-001">0027-ASSP-001</a>) and for the second bridge (<a name="0027-ASSP-025" href="#0027-ASSP-025">0027-ASSP-025</a>)
+- As a user I can submit a new proposal asset to be used in vega for the first bridge (<a name="0027-ASSP-001" href="#0027-ASSP-001">0027-ASSP-001</a>) and the second bridge to Arbitrum (<a name="0027-ASSP-034" href="#0027-ASSP-034">0027-ASSP-034</a>)
 - As a user I can vote for an asset proposal. (<a name="0027-ASSP-002" href="#0027-ASSP-002">0027-ASSP-002</a>)
-- As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset on the first bridge (<a name="0027-ASSP-003" href="#0027-ASSP-003">0027-ASSP-003</a>) and the second bridge  (<a name="0027-ASSP-026" href="#0027-ASSP-026">0027-ASSP-026</a>)
+- As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset on the first bridge (<a name="0027-ASSP-003" href="#0027-ASSP-003">0027-ASSP-003</a>) and the second bridge to Arbitrum  (<a name="0027-ASSP-035" href="#0027-ASSP-035">0027-ASSP-035</a>)
 - `quantum` is a required parameter  (<a name="0027-ASSP-004" href="#0027-ASSP-004">0027-ASSP-004</a>)
 - If an update asset proposal passed and it changes `quantum` _only_ then this new value becomes used immediately on enactment. (<a name="0027-ASSP-025" href="#0027-ASSP-025">0027-ASSP-025</a>)
 - As a user if I submit a new proposal asset for an ERC20 asset without specifying a chain-id, the proposal is rejected (<a name="0027-ASSP-031" href="#0027-ASSP-031">0027-ASSP-031</a>)
@@ -206,4 +206,3 @@ This must be an integer strictly greater than `0`.
 
 - There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. Withdrawal in asset `X` below `t1` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t1` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-023" href="#0027-ASSP-023">0027-ASSP-023</a>)
 - There is an asset `X` on vega / bridge with withdrawal delay threshold `t1`. An asset update proposal is submitted to change these to `t2`; it passes voting and is submitted to Ethereum bridge contract. The new thresholds now apply i.e. withdrawal in asset `X` below `t2` has no delay i.e. can be finalised on Ethereum as soon as the withdrawal bundle is received. A withdrawal in asset `X` with amount greater than or equal to `t2` will be rejected by the bridge before time `bundle creation + delay` but can be finalised after `delay` time passes from bundle creation. Here `delay` is the global bridge delay parameter. (<a name="0027-ASSP-024" href="#0027-ASSP-024">0027-ASSP-024</a>)
-
