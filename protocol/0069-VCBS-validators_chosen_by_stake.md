@@ -654,4 +654,4 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 
 
 1. After a successful transaction to issue signatures, the data node API containing the signature bundles also includes the chain-id for the multisig contract it corresponds to.
-(<a name="0069-VCBS-091" href="#0069-VCBS-091">0069-VCBS-091</a>)
+(<a name="0069-VCBS-093" href="#0069-VCBS-093">0069-VCBS-093</a>)
