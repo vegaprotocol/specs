@@ -17,16 +17,18 @@ The configuration and resultant lifecycle of an automated market maker is as fol
   - Amount of funds to commit
   - Price bounds (upper, lower, base)
   - Margin ratios at upper and lower bound (ratio for leverage at bounds. Reciprocal of leverage multiplier e.g. 0.1 = 10x leverage)
+- Additionally, the transaction should contain data related to the setup of the position but which does not need to be stored:
+   - Maximum slippage (%), used for rebasing position when creating/updating vAMM
 - Once accepted, the network will transfer funds to a sub-account and use the other parameters for maintaining the position.
-- At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the AMM configuration will be stopped.
-- If the party submits a `CancelAMM` transaction the AMM configuration for that party, on that market, will be cancelled. All active orders from the AMM will be cancelled and all funds and positions associated with the sub-account will be transferred back to the main account.
+- At each block, the party's available balance (including margin and general accounts) for trading on the market will be checked. If the total balance is `0` the vAMM configuration will be stopped.
+- The party is finally able to cancel the vAMM through a few different methods. They can choose to either set it into a mode in which it will only reduce position, eventually cancelling when/if the position reaches `0`, or choose to give up the existing position and associated required collateral.
 
 ## Sub-Account Configuration
 
 Each main Vega key will have one associated sub account for a given market, on which an AMM may be set up. The account key should be generated through a hash of the main account key plus the ID of the market to generate a valid Vega address in a predictable manner. Outside of the AMM framework the sub-accounts are treated identically to any other account, they will have the standard associated margin/general accounts and be able to place orders if required as with any other account. The key differentiator is that no external party will have the private key to control these accounts directly. The maintenance of such an account will be performed through a few actions:
 
 - Creation: A sub-account will be funded when a user configures an AMM strategy with a set of criteria and a commitment amount. At this point in time the commitment amount will be transferred to the sub-account's general account and the AMM strategy will commence
-- Cancellation: When the AMM is cancelled all funds in the sub-account's margin account should be transferred to the associated main account's margin account, with the same then happening for funds in the general account. Finally, any associated non-zero position on the market should be reassigned from the sub-account to the main account. At this point processing can continue, allowing the standard margining cycle to perform any required transfers from margin to general account.
+- Cancellation: When the vAMM is cancelled the strategy specified will be followed. Either any positions associated with the vAMM will be abandoned and given up to the network liquidation engine to close out, along with any associated required collateral, or the vAMM will be set into a mode in which it can only reduce position over time.
 - Amendment: Updates the strategy or commitment for a sub-account
 
 ## Interface
@@ -66,9 +68,9 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Upper Price**: The maximum price bound for market making. Prices between the `base price` and this price will have volume placed, with no orders above this price. This is optional and if not supplied no volume will be placed above `base price`. At these prices the market maker will always be short
 - **Lower Price**: The minimum price bound for market making. Prices between the `base price` and this will have volume placed, with no orders below this price. This is optional and if not supplied no volume will be placed below `base price`. At these prices the market maker will always be long
 - **Commitment**: This is the initial volume of funds to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail.
-- **Margin Ratio at Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this the commitment must be compared with what leverage that might allow at the price bounds. One way to do this is to assume the network will use the value at which `commitment == initial margin` for the position at that price, however users may wish to take a more conservative approach. Using this parameter allows them to set a value such that `position = commitment / margin ratio at bound`, however with the restriction that commitment must still be `>= initial margin`. This parameter should be optional. There is a separate parameter for each potential bound.
-  - **Upper Bound Ratio**: `margin_ratio_at_upper_bound`
-  - **Lower Bound Ratio**: `margin_ratio_at_lower_bound`
+- **Commitment Loss At Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this the commitment must be compared with what position should be taken at the upper and lower price bounds. One way to do this is to work backwards from what loss the vAMM may have taken on as the price moved towards either bound. As the volume sold at each price level is a function of the volume at the bound, the loss at a given boundary uniquely defines the volume traded. Using this parameter allows them to intuitively know how much loss will be taken on at a maximum whilst the price moves within their configured range. User-facing tools can also use this value to calculate what the position itself will be at each bound, allowing a visualisation of the risk as the price moves outside these values. There is a separate parameter for each potential bound.
+  - **Loss At Upper Price Boundary**: `commitment_loss_at_upper_bound`
+  - **Loss At Lower Price Boundary**: `commitment_loss_at_lower_bound`
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
@@ -78,28 +80,27 @@ Additionally, as all commitments require some processing overhead on the core, t
 
 #### Creation
 
-A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided), however it is possible to configure an AMM such that this `base price` is far from the market's current `mark price`. In order to bring the AMM in line with where it "should" be the AMM begins in `single-sided` mode until the position is equal to what is expected at that price. The logic for entering this mode is:
+A `Concentrated Liquidity` AMM has an inherent linkage between position and implied price. By configuration, this position is `0` at `base price` but non-zero above and below that (assuming both an upper and lower bound have been provided), however it is possible to configure an AMM such that this `base price` is far from the market's current `mark price`. In order to bring the vAMM in line with where it "should" be the vAMM will determine whether the order book is currently able to synchronise the vAMM and reject the transaction if not
 
-  1. If the AMM's `base price` is between the current `best bid` and `best ask` on the market (including other active AMMs) it is marked as synchronised and enters normal two-sided quoting.
-  1. If the AMM's `base price` is below the current `best bid` and the AMM has an upper range specified, it enters `single-sided` mode and will only `sell` until it's position is equal to expected at it's last traded price.
-     1. If there is no upper range specified, it is marked as synchronised immediately.
-  1. If the AMM's `base price` is above the current `best ask` and the AMM has a lower range specified, it enters `single-sided` mode and will only `buy` until it's position is equal to expected at it's last traded price.
-     1. If there is no lower range specified, it is marked as synchronised immediately.
-
-Once in `single-sided` quoting mode, certain behaviour will be different to once in standard `two-sided` quoting mode:
-
-  1. No buy or sell quotes will be provided at a price level where there are existing limit orders or AMMs offering the opposite side (i.e. `single-sided` mode acts as if all orders were `post-only`)
-  1. When requested for a volume at any price within the range (i.e. below the `upper price` and above the `lower price`) the volume quoted is the full volume difference between the AMM's current position and that required to move it to the new price.
-     1. This can be obtained through first querying the AMM for it's current `fair price` and then asking for the volume quote between said `fair price` and the price level in question.
-  1. No volume will be posted to move the AMM's position away from the target (e.g if the price is above the `base price` the AMM will not buy even if the price moves downwards)
-  1. No volume will be posted outside of the `upper price` - `lower price` range
-  1. Once the AMM's `best bid` is lower than all other `best ask`s (on book and other vAMMs) and `best ask` is lower than all other `best bid`s it can be marked as synchronised and begin quoting on both sides of the book.
-
-Note that this rebasing procedure can bound the price range such that movement in either direction will eventually mark the AMM as synchronised. For example, if the price is currently below the `base price` but above the `lower price`, any movement downwards will hit the AMM's buys until it is synchronised, and any movement upwards will eventually bring the price to the `base price` at which point the AMM will become synchronised by default.
+  1. If the AMM's `base price` is between the current `best bid` and `best ask` on the market (including other active vAMMs) it is marked as created and enters normal quoting with no trade necessary.
+  1. If the AMM's `base price` is below the current `best bid` and the AMM has an upper range specified, then the vAMM would need to become short in order to synchronise with the market. In order to do this, the protocol will query each price level in turn starting from `best bid` and:
+     1. At each level:
+        1. Check the full volume available across all limit orders and other vAMMs at this price and every higher bid (store a running cumulative volume in order to track this).
+        1. Check the volume required for the incoming vAMM to have a fair price at that level.
+        1. If the volume required is less than the full cumulative volume including this level, place a single order on the market for the volume required at the *previous* price level, with a price equal to the *current* price level. e.g. With:
+           - `best bid` at `10 USDT`
+           - Cumulative volume at `8 USDT` equal to `4` contracts
+           - Bid offers for `4` contracts at `7 USDT` 
+           - And a vAMM which would be short `5` contracts for a fair price at `8 USDT` and short `4` contracts at `7 USDT`
+           - Enter a limit order to sell `5` contracts for `7 USDT` into the order book and allow it to match.
+     1. If a price level is reached such that the current price is more than the max slippage specified away from the best bid, reject the transaction.
+     1. If there is no upper range specified, it is marked as created immediately.
+  1. If the AMM's `base price` is above the current `best ask` and the AMM has a lower range specified, then the vAMM would need to become short in order to synchronise with the market. Follow an identical process as above but instead on increasing price levels from `best ask`
+     1. If there is no lower range specified, it is marked as created immediately.
 
 #### Amendment
 
-A similar process is followed in the case of amendments. Changes to the `upper`, `lower` or `base` price, or the `commitment amount` will affect the position implied at a certain price, meaning that the market maker may need to enter `single-sided` quoting mode once more until it is synchronised. In general, the behaviour above will be followed. Entering the mode can be checked by comparing the before and after implied positions at the AMM's current fair price. If the implied position increases then the AMM will enter a buy-only `single-sided` mode and if it decreases then it will enter `sell-only` mode.
+A similar process is followed in the case of amendments. Changes to the `upper`, `lower` or `base` price, or the `commitment amount` will affect the position implied at a certain price, meaning that the market maker may need to enter an aggressive trade to synchronise. In general, the behaviour above will be followed. As the vAMM may be currently holding a position, the existing position should be compared to that required at both sides (best bid/ask) of the order book to determine whether buying or selling is necessary. If the current position is between that required at best bid and best ask the amendment succeeds without requiring a trade.
 
 If reducing the `commitment amount` then only funds contained within the AMMs `general` account are eligible for removal. If the deduction is less than the `general` account's balance then the reduced funds will be removed immediately and the AMM will enter `single-sided` mode as specified above to reduce the position. If a deduction of greater than the `general` account is requested then the transaction is rejected and no changes are made.
 
