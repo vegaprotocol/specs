@@ -82,8 +82,7 @@ The hot key needs to be signing many transactions with low latency. Hence storin
 
 ## Future Features [Event-Forwarder]
 
-We expect that a key change can be done through a transaction on the chain and a form of restarting a single validator once checkpoints
-are fully implemented.
+We expect that a key change can be done through a transaction on the chain and a form of restarting a single validator.
 
 ### Vega Key [Event-Forwarder]
 
@@ -227,7 +226,7 @@ need to be hashed individually).
 
 1. After both a Vega and Ethereum key rotation, rewards are still produced (<a name="0067-KEYS-006" href="#0067-KEYS-006">0067-KEYS-006</a>)
 2. After both a Vega and Ethereum key rotation the node still has the ability to self stake/delegate and delegate to other validator nodes (<a name="0067-KEYS-007" href="#0067-KEYS-007">0067-KEYS-007</a>)
-3. After both a Vega and Ethereum key rotation the node still can generate snapshots and checkpoints and these can successfully be used for node restarts and network restoring respectively (<a name="0067-KEYS-008" href="#0067-KEYS-008">0067-KEYS-008</a>)
+3. After both a Vega and Ethereum key rotation the node still can generate snapshots and these can successfully be used for node restarts (<a name="0067-KEYS-008" href="#0067-KEYS-008">0067-KEYS-008</a>)
 4. After both a Vega and Ethereum key rotation ensure there is no impact on node validator scores; meaning that if - the validator has been proposing blocks as expected and thus has a score close to `1` then after key rotation there is no sudden change in score. (<a name="0067-KEYS-009" href="#0067-KEYS-009">0067-KEYS-009</a>)
     - If the validator has not been proposing blocks as expected and their score is close to `0` then after the rotation there is no sudden jump in score towards `1`.  (<a name="0067-KEYS-010" href="#0067-KEYS-010">0067-KEYS-010</a>)
 

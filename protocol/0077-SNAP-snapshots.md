@@ -19,7 +19,7 @@ A snapshot is generated when the current block height MOD blocks_between_snapsho
 
 ### The contents of a snapshot
 
-A snapshot should contain the full state of the core (collateral, markets and their orderbooks, etc...), in such a way so a node can be loaded into the exact same state the node that created the snapshot was in. After loading a snapshot, any subsequent transactions that node processes _has_ to produce the exact same result as if that node had replayed the entire chain. Compared to checkpoints, for example, where collateral aggregates the balances per party, per asset, a snapshot ought to contain every account a party has, and what its balance is.
+A snapshot should contain the full state of the core (collateral, markets and their orderbooks, etc...), in such a way so a node can be loaded into the exact same state the node that created the snapshot was in. After loading a snapshot, any subsequent transactions that node processes _has_ to produce the exact same result as if that node had replayed the entire chain. Compared to [checkpoints](https://github.com/vegaprotocol/specs/blob/master/protocol/0075-PLUP-protocol_upgrades.md#early-state-of-upgrading-the-vega-network), for example, where collateral aggregates the balances per party, per asset, a snapshot ought to contain every account a party has, and what its balance is.
 
 The snapshot type in tendermint itself does not contain any state data, but rather identifying information and metadata. The data is sent out in chunks. Our snapshot metadata should contain hashes for all the chunks, so that the node can verify each chunk as it receives it from another node. If a node provides a chunk with a different hash, either the snapshot data we are trying to load is corrupt (unlikely), or a malicious node is providing bad data, in which case we can, and should, reject the chunk (and fetch it again), and perhaps ban that node so as to not receive any more potentially corrupt data.
 
@@ -29,7 +29,7 @@ The snapshot chunks will reflect the core's internal structure quite a lot. Tend
 snapshot{
     Height: 123,
     Hash: "0xDEADBEEF", // hash of the entire snapshot
-    Chunks: 14, // this checkpoint comes in 14 chunks
+    Chunks: 14, // this snapshot comes in 14 chunks
     Metadata: {
         Assets: {
             Chunk: 0, // which chunk is expected to contain this data
@@ -61,6 +61,4 @@ A bad node can swamp the network by requesting snapshots from other nodes which 
 - A node will generate snapshots files on the local filesystem (most likely using GOLevelDB) (<a name="0077-SNAP-002" href="#0077-SNAP-002">0077-SNAP-002</a>)
 - A node will have a maximum amount of snapshots file on the filesystem. Older ones will be to be removed before a new one can be created. How many snapshots we keep may be something that can be configured. (<a name="0077-SNAP-003" href="#0077-SNAP-003">0077-SNAP-003</a>)
 - The state of a node that is started from a snapshot should be identical to a node that had reached the same block height via replay. (<a name="0077-SNAP-004" href="#0077-SNAP-004">0077-SNAP-004</a>)
-- Post a checkpoint restore we see snapshots continuing to be produced as before and can be used to add a node to the network (<a name="0077-SNAP-005" href="#0077-SNAP-005">0077-SNAP-005</a>)
 - With  `snapshot.interval.length` set to `k` all the nodes in a network will create a snapshot at block height `k`, `2k`, `3k`, ... (<a name="0077-SNAP-006" href="#0077-SNAP-006">0077-SNAP-006</a>)
-
