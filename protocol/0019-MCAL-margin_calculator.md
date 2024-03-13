@@ -313,6 +313,8 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - when switch to isolated margin mode, valid value of the margin factor must be greater than 0, and also greater than `max(risk factor long, risk factor short) + linear slippage factor`(<a name="0019-MCAL-208" href="#0019-MCAL-208">0019-MCAL-208</a>)
 
+- when amend margin factor during isolated margin mode, margin factor greater than 1 should be not rejected (<a name="0019-MCAL-209" href="#0019-MCAL-209">0019-MCAL-209</a>)
+
 **Check order margin:**
 
 - when party has no position, and place 2 short orders during auction, order margin should be updated(<a name="0019-MCAL-200" href="#0019-MCAL-200">0019-MCAL-200</a>)
