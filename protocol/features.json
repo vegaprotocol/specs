@@ -5,7 +5,9 @@
       "0009-MRKP-132",
       "0053-PERP-043",
       "0032-PRIM-039",
-      "0032-PRIM-040"
+      "0032-PRIM-040",
+      "0009-MRKP-036",
+      "0009-MRKP-037"
     ]
   },
     "Spot": {
@@ -151,7 +153,6 @@
       "0024-OSTA-042",
       "0024-OSTA-043",
       "0024-OSTA-044",
-      "0024-OSTA-045",
       "0024-OSTA-046",
       "0024-OSTA-047",
       "0024-OSTA-048",
@@ -298,7 +299,6 @@
   "Community Tags": {
     "milestone": "colosseo",
     "acs": [
-      "0028-GOVE-167",
       "0028-GOVE-168",
       "0028-GOVE-169",
       "0028-GOVE-170",
@@ -308,12 +308,45 @@
       "0028-GOVE-174",
       "0028-GOVE-175",
       "0028-GOVE-176",
-      "0028-GOVE-177"
+      "0028-GOVE-177",
+      "0028-GOVE-178"
     ]
   },
   "Perpetual funding rates": {
     "milestone": "colosseo",
     "acs": ["0053-PERP-036"]
+  },
+  "Market tick size": {
+    "milestone": "colosseo",
+    "acs": [
+      "0004-AMND-060",
+      "0025-OCRE-006",
+      "0028-GOVE-180",
+      "0028-GOVE-182",
+      "0028-GOVE-183",
+      "0028-GOVE-184",
+      "0037-OPEG-020",
+      "0037-OPEG-021"
+    ]
+  },
+  "Taker fee cap": {
+    "milestone": "colosseo",
+    "acs": [
+      "0057-TRAN-070",
+      "0057-TRAN-071",
+      "0057-TRAN-072",
+      "0057-TRAN-073",
+      "0057-TRAN-074",
+      "0057-TRAN-075"
+    ]
+  },
+  "Isolated margin": {
+    "milestone": "colosseo",
+    "acs": ["0019-MCAL-208"]
+  },
+  "Closeout trades and auctions": {
+    "milestone": "colosseo",
+    "acs": ["0012-POSR-030"]
   },
   "Unknown": {
     "milestone": "unknown",

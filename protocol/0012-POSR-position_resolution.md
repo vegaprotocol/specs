@@ -38,7 +38,7 @@
 - The network must never dispose more than `available volume  * max fraction of book side within liquidity bounds consumed` in a single order. (<a name="0012-POSR-025" href="#0012-POSR-025">0012-POSR-025</a>)
 - A network disposal order which generates trades must not affect the mark price. (<a name="0012-POSR-026" href="#0012-POSR-026">0012-POSR-026</a>)
 - A network disposal order can not cross with orders outside the liquidity price range. (<a name="0012-POSR-027" href="#0012-POSR-027">0012-POSR-027</a>)
-- A network disposal order can cross with orders outside price monitoring bounds but must not trigger a price monitoring auction. (<a name="0012-POSR-028" href="#0012-POSR-028">0012-POSR-028</a>)
+- A network disposal order will not cross with orders outside price monitoring bounds (internally has to behave like an IOC at one tick inside the price monitoring bound). Hence a network disposal cannot trade at a price outside the tightest price monitoring and it won't ever trigger a price monitoring auction. (<a name="0012-POSR-030" href="#0012-POSR-030">0012-POSR-030</a>)
 - A network disposal order which crosses multiple orders should generate multiple atomic trades. (<a name="0012-POSR-029" href="#0012-POSR-029">0012-POSR-029</a>)
 
 ### Network Profit and Loss

@@ -7,6 +7,7 @@ To allow traders to interact with the market, they must be able to enter an orde
 ## Reference-level explanation
 
 - Orders can be submitted into any market that is active - i.e not in [a protective auction](./0026-AUCT-auctions.md) or [matured/expired/settled](./0043-MKTL-market_lifecycle.md).
+- Order submissions will only be accepted if the quoted price is an integer multiple of the markets tick size.
 - Orders will only be accepted if sufficient margin can be allocated (see : [Margin Orchestration](./0010-MARG-margin_orchestration.md) and [Margin Calculator](./0019-MCAL-margin_calculator.md))
 - Amendments that change price or increase available (displayed) quantity will be executed as an atomic cancel/replace (i.e. as if the original order was cancelled and removed from the book and a new order submitted with the modified values - that is, time priority is lost)
 Note that this means that increasing the quantity of an iceberg (transparent iceberg) order can be done without losing time priority, as the current displayed size will not be changed.
@@ -38,6 +39,7 @@ Self-trading / "wash" trading is allowed on auction uncrossing (i.e. to leave an
 ## Acceptance Criteria
 
 - An order's size must be valid according to the [Fractional Order Size spec](./0052-FPOS-fractional_orders_positions.md)  (<a name="0025-OCRE-001" href="#0025-OCRE-001">0025-OCRE-001</a>). For product spot: (<a name="0025-OCRE-004" href="#0025-OCRE-004">0025-OCRE-004</a>)
+- If an order's price is not an exact multiple of the markets tick size it should be rejected (<a name="0025-OCRE-007" href="#0025-OCRE-007">0025-OCRE-007</a>).
 - Margin will taken before the order is entered into the book (<a name="0025-OCRE-002" href="#0025-OCRE-002">0025-OCRE-002</a>)
   - If sufficient margin cannot be reserved, the order will have a status of `REJECTED` (<a name="0025-OCRE-003" href="#0025-OCRE-003">0025-OCRE-003</a>)
 - Fees are charged as per [0029-FEES](./0029-FEES-fees.md).
