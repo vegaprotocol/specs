@@ -89,15 +89,15 @@ A network parameter, `network.validators.minimumEthereumEventsForNewValidator`, 
 
 ## Multisig updates (and multisig weight updates if those are used)
 
-Vega will know the initial multisig signer list (and weights) and watch for `signer added` and `signer removed` events to track which ethereum keys are present on each bridge's multisig.
+Vega will know the initial multisig signer list (and weights) and watch for `signer added` and `signer removed` events to track which ethereum keys are present on the multisig on every registered EVM/ERPC chain. 
 
 Once (if) the multisig contracts supports validator weights the vega node will watch for Ethereum events announcing the weight changing.
 Thus for each validator that is on each multisig contract it will know the validator score (weight) the multisig is using.
 
-We will have `network.validators.multisig.numberOfSigners` represented on each multisig (currently `13`) but this could change.
+We will have `network.validators.multisig.numberOfSigners` represented on each multisig.
 Note that `network.validators.multisig.numberOfSigners` must always be less than or equal to `network.validators.tendermint.number`.
 
-In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, ethereum_multisig_weight)` when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *not* on all multisig contracts.
+In the reward calculation for the top `network.validators.multisig.numberOfSigners` by `validator_score` (as seen on VEGA) use `min(validator_score, chain_1_multisig_weight, ..., chain_n_multisig_weight)`, with `n` representing the number of registered EVM/ERPC chains for assets, when calculating the final reward with `0` for those who are in the top `network.validators.multisig.numberOfSigners` by score but *missing* from the  multisig contract on any of the `n` registered asset chains.
 
 Thus a validator who is not there but should be has incentive to pay gas to update each multisig. Moreover a validator who's score has gone up substantially will want to do so as well.
 
