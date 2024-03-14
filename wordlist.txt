@@ -9,6 +9,7 @@ allowlisted
 antiwhaling
 API
 APIs
+Arbitrum
 AST
 asynchrony
 atomicity
@@ -92,6 +93,7 @@ ERC
 ERC-1155
 ERC-20
 ERC-721
+ERPC
 ETH
 ETH's
 ETHB
@@ -185,6 +187,7 @@ misconfiguration
 MTM
 mu
 multisig
+multisigs
 MultisigControl
 multisignature
 NFTs
@@ -322,6 +325,7 @@ vegawallet
 verifiably
 verifier
 visor
+VM
 VW
 VWAP
 walkthrough
