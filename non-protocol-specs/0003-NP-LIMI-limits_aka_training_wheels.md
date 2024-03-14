@@ -134,7 +134,7 @@ This is primarily for liquidity providers and other sophisticated participants a
     - An ETH address that is listed on the smart contract as exempt can deposit more than `max lifetime deposit`
     - Any ETH address can use a method on the smart contract to add or remove itself (own ETH address) from the exemption list
 1. `max lifetime deposit` can be updated per asset via an Ethereum transaction (<a name="0003-NP-LIMI-003" href="#0003-NP-LIMI-003">0003-NP-LIMI-003</a>)
-1. Validators can, via multisig, stop and recommence processing bridge transactions on all bridges (<a name="0003-NP-LIMI-007" href="#0003-NP-LIMI-007">0003-NP-LIMI-007</a>)
+1. Validators can, via multisig, stop and recommence processing bridge transactions on any of the bridges (<a name="0003-NP-LIMI-007" href="#0003-NP-LIMI-007">0003-NP-LIMI-007</a>)
     - A representative set of validators can produce a multisig transaction that stops all future deposits and withdrawals
     - A representative set of validators can produce a multisig transaction that allows the bridge to resume processing future deposits and withdrawals
     - All withdrawals that are submitted while the bridge is 'stopped' are rejected
