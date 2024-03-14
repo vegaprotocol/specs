@@ -177,7 +177,7 @@ This must be an integer strictly greater than `0`.
 
 ### Node actions
 
-- As a node, when a new asset proposal is emitted, I can validate the asset with it's chain, and send the result of the validation through the chain to the other nodes (first phase proposal) on any asset bridge  (<a name="0027-ASSP-027" href="#0027-ASSP-027">0027-ASSP-027</a>)
+- As a node, when a new asset proposal is emitted, I can validate the asset with its chain, and send the result of the validation through the chain to the other nodes (first phase proposal) on any asset bridge  (<a name="0027-ASSP-027" href="#0027-ASSP-027">0027-ASSP-027</a>)
 - As a node, when a new asset is accepted through governance, I can sign a payload to the user so they can whitelist the asset on any asset bridge (<a name="0027-ASSP-028" href="#0027-ASSP-028">0027-ASSP-028</a>)
 - As a node, I receive events from the external blockchain queue, that confirm the asset is enabled on any asset bridge (<a name="0027-ASSP-029" href="#0027-ASSP-029">0027-ASSP-029</a>)
 - As a node, when an existing asset is modified through governance changing any one of `maximumLifetimeDeposit` or `withdrawalDelayThreshold`, emit a signed a payload to the world so that they can update the corresponding parameters on any asset bridge (<a name="0027-ASSP-030" href="#0027-ASSP-030">0027-ASSP-030</a>)
