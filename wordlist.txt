@@ -324,6 +324,7 @@ vegawallet
 verifiably
 verifier
 visor
+VM
 VW
 VWAP
 walkthrough
