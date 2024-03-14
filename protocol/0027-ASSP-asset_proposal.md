@@ -166,7 +166,7 @@ This must be an integer strictly greater than `0`.
 
 ### User actions
 
-- As a user I can submit a new proposal asset to be used in vega for the for any asset bridge (<a name="0027-ASSP-034" href="#0027-ASSP-034">0027-ASSP-034</a>)
+- As a user I can submit a new proposal asset to be used in vega for any EVM-ERPC asset bridge (<a name="0027-ASSP-034" href="#0027-ASSP-034">0027-ASSP-034</a>)
 - As a user I can vote for an asset proposal. (<a name="0027-ASSP-002" href="#0027-ASSP-002">0027-ASSP-002</a>)
 - As a user, original submitter of the asset, I can call the node to get a signature of the asset, so I can send it to the asset bridge, and whitelist the asset on any asset bridge (<a name="0027-ASSP-035" href="#0027-ASSP-035">0027-ASSP-035</a>)
 - `quantum` is a required parameter  (<a name="0027-ASSP-004" href="#0027-ASSP-004">0027-ASSP-004</a>)
