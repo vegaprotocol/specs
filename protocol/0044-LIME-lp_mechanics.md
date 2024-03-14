@@ -401,10 +401,6 @@ In the case of spot markets it will be transferred into the network treasury for
 
 - After a protocol upgrade each market's aggregate LP fee accounts and their balances are retained (<a name="0044-LIME-033" href="#0044-LIME-033">0044-LIME-033</a>)
 
-### Checkpoint
-
-- Each market's aggregate LP fee accounts must be included in the checkpoint and where the network is restored, the aggregate LP fee account balance will be transferred to the LP's general account. (<a name="0044-LIME-034" href="#0044-LIME-034">0044-LIME-034</a>)
-
 #### Network History - Data node restored from network history segments
 
 - A datanode restored from network history will contain each market's aggregate LP fee accounts which were created prior to the restore and these can be retrieved via APIs on the new datanode. (<a name="0044-LIME-036" href="#0044-LIME-036">0044-LIME-036</a>)
@@ -427,4 +423,3 @@ In the case of spot markets it will be transferred into the network treasury for
   - `market.liquidity.priceRange` valid values: `>0`, `<=20` (<a name="0044-LIME-084" href="#0044-LIME-084">0044-LIME-084</a>)
   - `market.liquidity.slaCompetitionFactor` valid values: `>=0`, `<=1` (<a name="0044-LIME-085" href="#0044-LIME-085">0044-LIME-085</a>)
   - `market.liquidity.performanceHysteresisEpochs` valid values: `>=0`, `<=366` (<a name="0044-LIME-086" href="#0044-LIME-086">0044-LIME-086</a>)
-

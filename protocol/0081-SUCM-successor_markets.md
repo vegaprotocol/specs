@@ -105,17 +105,8 @@ It is possible to fetch a market "parent / successor chain" containing the initi
 When fetching a market that is part of a "parent / successor chain", we should see both the parent and each successor `marketID` (<a name="0081-SUCM-013" href="#0081-SUCM-013">0081-SUCM-013</a>)
 
 
-### Snapshots / checkpoints / Protocol Upgrade / Network History
+### Snapshots / Protocol Upgrade / Network History
 
-After a LNL checkpoint restart the successor (child) / parent market state is preserved where applicable inc. the LPs ELS (<a name="0081-SUCM-016" href="#0081-SUCM-016">0081-SUCM-016</a>)
-
-A market which has been settled, but is still inside successor expiry window, is retained in a checkpoint, and can be used by a successor market after restart(<a name="0081-SUCM-029" href="#0081-SUCM-029">0081-SUCM-029</a>)
-
-A market which has been settled, and beyond the successor expiry window, is not retained in a checkpoint, and cannot be used by a successor market after restart(<a name="0081-SUCM-030" href="#0081-SUCM-030">0081-SUCM-030</a>)
-
-A market which has been settled, and already has a child which has succeeded it, is retained in a checkpoint. Market can be queried via APIs and settled market state can be retrieved. Both child and parent retain parent/child links in market state, and are listed in "successor chain" API request(<a name="0081-SUCM-031" href="#0081-SUCM-031">0081-SUCM-031</a>)
-
-For a parent and child (explicitly: the child has left opening auction), after a checkpoint restart, parent and child both enter opening auction again. It is not possible to propose a new market which attempts to succeed that parent.(<a name="0081-SUCM-032" href="#0081-SUCM-032">0081-SUCM-032</a>)
 
 After snapshot restart the successor (child) / parent market state is preserved where applicable including the LPs ELS (<a name="0081-SUCM-017" href="#0081-SUCM-017">0081-SUCM-017</a>)
 

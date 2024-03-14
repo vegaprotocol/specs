@@ -91,7 +91,7 @@ The current network parameters are specified in the code specifiying the min and
 
 ## Acceptance criteria
 
-- All network parameter set in `genesis.json` can be queried and the values returned are the correct ones (unless overridden by [LNL checkpoint](./0073-LIMN-limited_network_life.md) value). (<a name="0054-NETP-001" href="#0054-NETP-001">0054-NETP-001</a>). For product spot: (<a name="0054-NETP-007" href="#0054-NETP-007">0054-NETP-007</a>)
+- All network parameter set in `genesis.json` can be queried and the values returned are the correct ones. (<a name="0054-NETP-001" href="#0054-NETP-001">0054-NETP-001</a>). For product spot: (<a name="0054-NETP-007" href="#0054-NETP-007">0054-NETP-007</a>)
 - For `blockchains.ethereumConfig` set in `genesis.json` a governance proposal to change this parameter will be rejected with a rejection error `network parameter update disabled for blockchains.ethereumConfig`. (<a name="0054-NETP-002" href="#0054-NETP-002">0054-NETP-002</a>). For product spot: (<a name="0054-NETP-008" href="#0054-NETP-008">0054-NETP-008</a>)
 - For `market.margin.scalingFactors` set in `genesis.json` or in a governance proposal we validate the format and the fact that "1.0 <= search <= initial <= release"; if these are invalid a useful error is returned. (<a name="0054-NETP-003" href="#0054-NETP-003">0054-NETP-003</a>)
 - For `market.monitor.price.defaultParameters` set in `genesis.json` or in a governance proposal we validate the format; if these are invalid a useful error is returned. (<a name="0054-NETP-004" href="#0054-NETP-004">0054-NETP-004</a>). For product spot: (<a name="0054-NETP-009" href="#0054-NETP-009">0054-NETP-009</a>)

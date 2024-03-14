@@ -153,7 +153,6 @@
       "0024-OSTA-042",
       "0024-OSTA-043",
       "0024-OSTA-044",
-      "0024-OSTA-045",
       "0024-OSTA-046",
       "0024-OSTA-047",
       "0024-OSTA-048",
@@ -210,7 +209,6 @@
       "0039-MKTD-031",
       "0039-MKTD-032",
       "0039-MKTD-033",
-      "0043-MKTL-005",
       "0043-MKTL-006",
       "0043-MKTL-007",
       "0043-MKTL-008",
@@ -340,6 +338,10 @@
       "0057-TRAN-074",
       "0057-TRAN-075"
     ]
+  },
+  "Isolated margin": {
+    "milestone": "colosseo",
+    "acs": ["0019-MCAL-208"]
   },
   "Closeout trades and auctions": {
     "milestone": "colosseo",

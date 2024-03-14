@@ -2,14 +2,14 @@
 
 ## Summary
 
-### Current state of upgrading the vega network
+### Early state of upgrading the vega network
 
-As of today, upgrading the protocol is near impossible when a major changes to the step are possible without proceeding with a [Limited Network Life checkpoint restore](./0073-LIMN-limited_network_life.md). This functionality has the following significant issues:
+At the beginning of the Vega mainnet network, upgrading the protocol was near impossible when a major changes to the step are possible without proceeding with a checkpoint file. This functionality had the following significant issues:
 
 - A synchronous restart is required
 - All node need to be restarted in a very short time so all state can be restore from Ethereum, and the network can start properly with a checkpoint.
 
-Limited Network Life is not the end goal. This spec outlines how the protocol evolves from LNL checkpoints to rolling software updates, controlled by a reasonable set of governance and user controls.
+This spec outlines how the protocol evolved from checkpoints to rolling software updates, controlled by a reasonable set of governance and user controls.
 
 ### How other protocols proceed
 
@@ -23,7 +23,7 @@ The idea in this spec is to draw inspiration from the design of cosmovisor and b
 
 ### Prior example of upgrading the nodes asynchronously
 
-Back in December 2021, vega proceeded to a LNL restore. Unfortunately, a bug in the code prevented the dispatch of the network parameters after the restore. This left
+Back in December 2021, vega proceeded to a checkpoint restore. Unfortunately, a bug in the code prevented the dispatch of the network parameters after the restore. This left
 the network in a semi invalid state where the network parameters were defined by the ones from the genesis block instead of the one from the checkpoint from the previous network.
 
 The solution employed at the time was to:
@@ -158,10 +158,6 @@ For the purposes of protocol upgrade each validator that participates in consens
 - (<a name="0075-PLUP-025" href="#0075-PLUP-025">0075-PLUP-025</a>) Node starting from snapshot which has a proposal at a given block, ensure during replay when the block height is reached a new version is loaded and also post load an upgrade takes place at target block.
 - (<a name="0075-PLUP-045" href="#0075-PLUP-045">0075-PLUP-045</a>) Arrange a network where n nodes are required for consensus, and at least n+1 nodes in the network. Schedule a protocol upgrade where n-1 nodes automatically start on the new version after upgrade, i.e: No consensus after upgrade. Start the (n+1)th node and consensus is achieved. For the nth node, clear vega and tm, and restart the node using state-sync at the upgrade block height. All nodes produce blocks.
 
-## LNL Checkpoints
-
-- (<a name="0075-PLUP-026" href="#0075-PLUP-026">0075-PLUP-026</a>) Validator proposals should not be stored in the checkpoints and restored into the network
-- (<a name="0075-PLUP-027" href="#0075-PLUP-027">0075-PLUP-027</a>) Upgrade will not occur after a post checkpoint restore until new proposals are made and block height reached
 
 ## API
 
@@ -183,8 +179,7 @@ For the purposes of protocol upgrade each validator that participates in consens
 
 ### Mainnet
 
-- (<a name="0075-COSMICELEVATOR-033" href="#0075-COSMICELEVATOR-033">0075-COSMICELEVATOR-033</a>) Check that we can protocol upgrade a system which has been restarted from mainnet snapshots with current mainnet version, to next intended release version. Check all data available pre-upgrade is still available.
-- (<a name="0075-PLUP-046" href="#0075-PLUP-046">0075-PLUP-046</a>) Check that we can protocol upgrade a system which has been restarted from latest mainnet checkpoint with current mainnet version, to next intended release version. Check all data available pre-upgrade is still available.
+- Check that we can protocol upgrade a system which has been restarted from mainnet snapshots with current mainnet version, to next intended release version. Check all data available pre-upgrade is still available. This AC is covered in a Jenkins pipeline and not a system test.
 
 ### Overwriting transactions
 

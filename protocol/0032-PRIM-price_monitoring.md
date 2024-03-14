@@ -61,11 +61,11 @@ If any of the above parameters or the risk model gets modified in any way, the p
 
 #### Hard-coded
 
-- Vega allows maximum of `5` price monitoring parameter triples in `priceMonitoringParameters` per market.
+- Vega allows maximum of `100` price monitoring parameter triples in `priceMonitoringParameters` per market.
 
 There are several reasons why this maximum is enforced.
 
-1. anything more than `5` triplets makes reasoning about what and when will trigger an auction more difficult and could lead to markets that behave in unexpected ways.
+1. anything more than `100` triplets makes reasoning about what and when will trigger an auction more difficult and could lead to markets that behave in unexpected ways.
 1. allowing high number of triplets could have performance impact
 1. testing everything works correctly is more manageable if the number is capped.
 
@@ -124,7 +124,7 @@ to the risk model and obtains the range of valid up/down price moves per each of
 (<a name="0032-PRIM-003" href="#0032-PRIM-003">0032-PRIM-003</a>). For product spot: (<a name="0032-PRIM-023" href="#0032-PRIM-023">0032-PRIM-023</a>)
 - The market continues in regular fashion once price protection auction period ends and price monitoring bounds get reset based on last traded price (which may come from the auction itself if it resulted in trades)  (<a name="0032-PRIM-005" href="#0032-PRIM-005">0032-PRIM-005</a>). For product spot: (<a name="0032-PRIM-024" href="#0032-PRIM-024">0032-PRIM-024</a>)
 - Persistent order results in an auction (one trigger breached), no orders placed during auction, auction terminates with a trade from order that originally triggered the auction. (<a name="0032-PRIM-006" href="#0032-PRIM-006">0032-PRIM-006</a>). For product spot: (<a name="0032-PRIM-025" href="#0032-PRIM-025">0032-PRIM-025</a>)
-- A maximum of `5` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>). For product spot: (<a name="0032-PRIM-026" href="#0032-PRIM-026">0032-PRIM-026</a>)
+- A maximum of `100` price monitoring triggers can be added per market (<a name="0032-PRIM-007" href="#0032-PRIM-007">0032-PRIM-007</a>). For product spot: (<a name="0032-PRIM-026" href="#0032-PRIM-026">0032-PRIM-026</a>)
 - Persistent order results in an auction (1 out of 2 triggers breached), orders placed during auction result in trade with indicative price outside the price monitoring bounds of the 2nd trigger, hence auction get extended (by extension period specified for the 2nd trigger), additional orders resulting in more trades (indicative price still outside the 2nd trigger bounds) placed, auction concludes. (<a name="0032-PRIM-008" href="#0032-PRIM-008">0032-PRIM-008</a>). For product spot: (<a name="0032-PRIM-027" href="#0032-PRIM-027">0032-PRIM-027</a>)
 - If the cumulative extensions period of various chained auctions is more than the "time horizon" in a given triplet then there is no relevant reference price and this triplet is ignored. (<a name="0032-PRIM-009" href="#0032-PRIM-009">0032-PRIM-009</a>). For product spot: (<a name="0032-PRIM-028" href="#0032-PRIM-028">0032-PRIM-028</a>)
 - Change of `market.monitor.price.defaultParameters` will change the default market parameters used in price monitoring when a new market is proposed and market parameters don't get explicitly specified. (<a name="0032-PRIM-010" href="#0032-PRIM-010">0032-PRIM-010</a>). For product spot: (<a name="0032-PRIM-029" href="#0032-PRIM-029">0032-PRIM-029</a>)

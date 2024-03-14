@@ -167,14 +167,6 @@ is a out-of-the ordinary event and should be logged.
 
 At this point, Ersatz validators are not part of any Multisig.
 
-## Restarts from LNL checkpoint
-
-See [limited network life spec](./0073-LIMN-limited_network_life.md).
-
-1. At each checkpoint we include node IDs of validators and their scores (meaning all the ones participating in consensus and those who submitted a transaction to become a validator and thus are eligible to be a validator or ersatz validator).
-1. When initiating the restart all the nodes participating have the same Tendermint weight in genesis (or whatever they set / agree). This is used until the LNL file has finished processing.
-1. When loading LNL file we have to run the same algorithm that selects the "correct" validators; after this is done Tendermint weights are updated.
-1. If the validators arising from LNL weight updates are missing from the chain because they haven't started nodes then the chain will stop. The restart needs better coordination so the relevant nodes are present.
 
 ## Network Parameters
 
@@ -551,7 +543,7 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Verify that all Validators round it the same way, and that there are three Ersatz validators
 
 1. Demote one of the original validators and replace with a new validator. Update the multisig to include the new validator. Ensure multisig threshold is set to '999' (require all signatures). Attempt a withdrawal. (<a name="0069-VCBS-069" href="#0069-VCBS-069">0069-VCBS-069</a>)
-1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>). Restart from checkpoint ((<a name="0069-VCBS-080" href="#0069-VCBS-080">0069-VCBS-080</a>)), all validator nodes are still correct.
+1. On a network with n original validators, gradually replace (via demotion of existing node and promotion of a new node) and stop all of the original validators. (Original nodes not even participating as ersatz or pending). Ensure that consensus continues, and that asset withdrawals are possible. (<a name="0069-VCBS-070" href="#0069-VCBS-070">0069-VCBS-070</a>).
 1. Ensure multisig threshold is set to '666'. Request an asset withdrawal (but do not yet exercise this in the er20 bridge). Demote one of the original validators and replace with a new validator. Update the multisig. Attempt to enact the withdrawal on the erc20 bridge. Funds are received by the party on eth chain, and are no longer present in vega chain account(s). (<a name="0069-VCBS-072" href="#0069-VCBS-072">0069-VCBS-072</a>)
 
 ### Announce Node
@@ -562,48 +554,6 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
     - Send a valid announce node from a validator node should result in a validator update event with the details of the validator and a validator ranking event.
 1. Node announces using same keys as existing node via announce node command (<a name="0069-VCBS-060" href="#0069-VCBS-060">0069-VCBS-060</a>):
     - Should be rejected
-
-### Checkpoints
-
-1. Base case (<a name="0069-VCBS-046" href="#0069-VCBS-046">0069-VCBS-046</a>):
-    - Setup a network with 5 Tendermint validators
-    - Take a checkpoint
-    - Restore from checkpoint with the 5 same validators, which should pass.
-    - Verify that after the network is restarted, the validators have voting power as per the checkpoint until the end of the epoch.
-1. Base + ersatz (<a name="0069-VCBS-047" href="#0069-VCBS-047">0069-VCBS-047</a>):
-    - Setup a network with 5 Tendermint validators (where 5 is also the number of allowed Tendermint validators)
-    - Announce 2 new nodes and wait for them to become ersatz validators (set the network parameter `network.validators.minimumEthereumEventsForNewValidator` to 0).
-    - Take a checkpoint and verify it includes the ersatz validators.
-    - Restore from the checkpoint (all nodes are running)
-    - Verify that the validators have the voting power as per the checkpoint and that the ersatz validators are shown on data node having status ersatz.
-1. Missing validators (<a name="0069-VCBS-048" href="#0069-VCBS-048">0069-VCBS-048</a>):
-    - Setup a network with 5 validators such that 3 of them have 70% of the voting power. Note: this is done by delegating 70% of the total stake to them.
-    - Take a checkpoint
-    - Restore from the checkpoint – starting only the 3 nodes with the 70% stake.
-    - Verify that after the restore the network should be able to proceed generating blocks although with slower pace.
-1. Missing validators stop the network (<a name="0069-VCBS-049" href="#0069-VCBS-049">0069-VCBS-049</a>):
-    - Setup a network with 5 validators with equal delegation to them.
-    - Verify before the checkpoint that the voting power of all of them is equal.
-    - Take a checkpoint.
-    - Restart the network starting only 3 of the validators.
-    - Restore from the checkpoint.
-    - Verify the network is not able to produce blocks.
-1. Checkpoints store validator changes (<a name="0069-VCBS-079" href="#0069-VCBS-079">0069-VCBS-079</a>):
-    - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
-    - Stop and relegate one of the original validators (v1) such that v6 is promoted to tendermint validator, and v7 is promoted to ersatz.
-    - Restart v1 and announce to pending.
-    - Take a checkpoint.
-    - Restart the network
-    - Verify that v2-v6 are tendermint validators, v7 is ersatz and v1 is pending.
-    - Verify that all stakes and delegations are correct for each node.
-1. Validator, ersatz and pending node scores for current epoch are persisted in checkpoints (<a name="0069-VCBS-088" href="#0069-VCBS-088">0069-VCBS-088</a>):
-    - Setup a network with 5 validators with non-equal delegation (v1-v5), 1 ersatz validator (v6) and 1 pending validator (v7).
-    - Take a checkpoint.
-    - Wait until the current epoch will have expired.
-    - Restart the network. (This will result in a 1-block epoch)
-    - Verify that v1-v5 are tendermint validators, v6 is ersatz and v7 is pending.
-    - Verify that all tendermint validators have non-zero performance scores, which will reflect the data that was collected pre-checkpoint to calculate scores at the end of the last epoch.
-    - Verify that ersatz and pending validators have non-zero performance scores.
 
 ### Multisig update
 
