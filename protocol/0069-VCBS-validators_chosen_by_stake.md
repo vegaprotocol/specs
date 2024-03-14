@@ -602,6 +602,5 @@ Setup a network with 6 nodes (3 validators, 2 ersatz validators, 1 pending valid
 1. After a node has been demoted, issue a request for a signature to remove it to the multisig control contract but provide a chain-id that does not correspond to any bridge. It should fail.
 (<a name="0069-VCBS-090" href="#0069-VCBS-090">0069-VCBS-090</a>)
 
-
 1. After a successful transaction to issue signatures, the data node API containing the signature bundles also includes the chain-id for the multisig contract it corresponds to.
 (<a name="0069-VCBS-093" href="#0069-VCBS-093">0069-VCBS-093</a>)
