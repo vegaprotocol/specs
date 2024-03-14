@@ -138,15 +138,13 @@ This example connects the network to Ropsten:
 ### Deposit
 
 - ERC-20 smart contract (This can be repeated for many token standards - NFTs and crypto items will be more complex):
-  - An Ethereum address can call the deposit function and successfully deposit any token that is listed via `list_asset` (<a name="0031-ETHB-008" href="#0031-ETHB-008">0031-ETHB-008</a>).
-  - An Arbitrum address can call the deposit function and successfully deposit any token that is listed via `list_asset` (<a name="0031-ETHB-084" href="#0031-ETHB-084">0031-ETHB-084</a>).
+  - A wallet address can call the deposit function and successfully deposit any token that is listed via `list_asset` via any asset bridge (<a name="0031-ETHB-084" href="#0031-ETHB-084">0031-ETHB-084</a>).
   - A deposit call with a removed token `remove_asset` is rejected (<a name="0031-COSMICELEVATOR-009" href="#0031-COSMICELEVATOR-009">0031-COSMICELEVATOR-009</a>)
 
 ### Withdraw
 
 - ERC-20 smart contract specific requirements:
-  - A valid multisig bundle can be passed to the withdraw function to successfully withdraw an ERC-20 asset to an Ethereum address (<a name="0031-ETHB-013" href="#0031-ETHB-013">0031-ETHB-013</a>)
-  - A valid multisig bundle can be passed to the withdraw function to successfully withdraw an ERC-20 asset to an Arbitrum address (<a name="0031-ETHB-085" href="#0031-ETHB-085">0031-ETHB-085</a>)
+  - A valid multisig bundle can be passed to the withdraw function to successfully withdraw an ERC-20 asset to a wallet address via any asset bridge (<a name="0031-ETHB-085" href="#0031-ETHB-085">0031-ETHB-085</a>)
   - An invalid multisig bundle will be rejected from withdraw (<a name="0031-ETHB-014" href="#0031-ETHB-014">0031-ETHB-014</a>)
 
 ### Allowlist a token (by eth address)
