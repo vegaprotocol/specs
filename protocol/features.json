@@ -350,6 +350,13 @@
   "New asset bridge": {
     "milestone": "colosseo",
     "acs": [
+      "0027-ASSP-027",
+      "0027-ASSP-028",
+      "0027-ASSP-029",
+      "0027-ASSP-030",
+      "0027-ASSP-031",
+      "0027-ASSP-032",
+      "0027-ASSP-033",
       "0027-ASSP-034",
       "0027-ASSP-035",
       "0031-ETHB-084",
