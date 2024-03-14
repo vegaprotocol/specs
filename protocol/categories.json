@@ -9,7 +9,7 @@
     "specs": ["0002-STTL", "0003-MTMK", "0045-DSRC", "0046-DSRM", "0047-DSRF", "0048-DSRI", "0082-ETHD", "0087-EVMD"]
   },
   "Protections": {
-    "specs": ["0073-LIMN", "0072-SPPW", "0062-SPAM", "0060-WEND", "0003-NP-LIMI", "0072-SPPW", "0078-NWLI", "0079-TGAP"]
+    "specs": ["0073-LIMN", "0072-SPPW", "0062-SPAM", "0060-WEND", "0072-SPPW", "0078-NWLI", "0079-TGAP"]
   },
   "Liquidity": {
     "specs": ["0044-LIME", "0042-LIQF", "0034-PROB", "0012-NP-LIPE"]
@@ -36,7 +36,7 @@
     "specs": ["0076-DANO", "0020-APIS", "0007-POSN"]
   },
   "Referral": {
-    "specs": ["0083-RFPR", "0084-VDPR", "0085-RVST", "0086-ASPR"]
+    "specs": ["0083-RFPR", "0084-VDPR", "0085-RVST", "0086-ASPR", "0088-PPRF"]
   },
   "UI": {
     "specs": ["1000-ASSO", "1001-VEST", "1002-STAK", "1003-INCO", "1004-VOTE", "3002-PROP", "1006-NETW", "1007-WALL", "3000-DEPO", "3001-WITH", "5000-MARK", "6000-COLL", "6001-SORD", "6002-MORD", "6003-POSI", "6004-FILL"]

@@ -311,6 +311,10 @@ There should be an additional amount `limit price x size x margin factor = 15910
 
 - switch to cross margin with position and with orders successful in auction(<a name="0019-MCAL-141" href="#0019-MCAL-141">0019-MCAL-141</a>)
 
+- when switch to isolated margin mode, valid value of the margin factor must be greater than 0, and also greater than `max(risk factor long, risk factor short) + linear slippage factor`(<a name="0019-MCAL-208" href="#0019-MCAL-208">0019-MCAL-208</a>)
+
+- when amend margin factor during isolated margin mode, margin factor greater than 1 should be not rejected (<a name="0019-MCAL-209" href="#0019-MCAL-209">0019-MCAL-209</a>)
+
 **Check order margin:**
 
 - when party has no position, and place 2 short orders during auction, order margin should be updated(<a name="0019-MCAL-200" href="#0019-MCAL-200">0019-MCAL-200</a>)
@@ -465,7 +469,7 @@ In future there can be multiple margin calculator implementations that would be 
 ## Isolated margin mode
 
 When in isolated margin mode, the position on the market has an associated margin factor.
-The margin factor must be greater than 0 and less than or equal to 1, and also greater than `max(risk factor long, risk factor short)`.
+The margin factor must be greater than 0, and also greater than `max(risk factor long, risk factor short) + linear slippage factor`.
 
 Isolated margin mode can be enabled by placing an *update margin mode* transaction.
 The protocol will attempt to set the funds within the margin account equal to `average entry price * current position * new margin factor`.

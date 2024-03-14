@@ -71,7 +71,7 @@ See:
 - [assets proto](https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/assets.proto)
 - [governance proto](https://github.com/vegaprotocol/vega/blob/develop/protos/sources/vega/governance.proto)
 
-The `maximumLifetimeDeposit` and `withdrawalDelayThreshold` govern how [limits](../non-protocol-specs/0003-NP-LIMI-limits_aka_training_wheels.md) behave.
+The `maximumLifetimeDeposit` and `withdrawalDelayThreshold` govern how [limits](../protocol/0031-ETHB-ethereum_bridge_spec.md) behave.
 
 All the asset definition fields are immutable (cannot be changed even by governance) except:
 
