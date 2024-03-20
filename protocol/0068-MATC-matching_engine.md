@@ -54,7 +54,7 @@ For [Good 'Til Time (GTT) / Good 'Till Cancelled (GTC) / Good For Normal (GFN)](
   - An order partially crossing with an existing order on the book will be STOPPED in full with none executed.  (<a name="0068-MATC-042" href="#0068-MATC-042">0068-MATC-042</a>). For product spot: (<a name="0068-MATC-075" href="#0068-MATC-075">0068-MATC-075</a>)
 - A market will enter auction if the volume on either side of the book is empty. (<a name="0068-MATC-017" href="#0068-MATC-017">0068-MATC-017</a>)
 - A market will enter auction if the mark price moves by a larger amount than the price monitoring settings allow. (<a name="0068-MATC-018" href="#0068-MATC-018">0068-MATC-018</a>). For product spot: (<a name="0068-MATC-076" href="#0068-MATC-076">0068-MATC-076</a>)
-- All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and the aggressive side is STOPPED even if partially filled. The passive side is left untouched. (<a name="0068-MATC-019" href="#0068-MATC-019">0068-MATC-019</a>). For product spot: (<a name="0068-MATC-077" href="#0068-MATC-077">0068-MATC-077</a>)
+- All attempts to [self trade](./0024-OSTA-order_status.md#wash-trading) are prevented and the aggressive side is STOPPED if completely unfilled or PARTIALLY_FILLED if some matching occurred before the self trade. The passive side is left untouched. (<a name="0068-MATC-019" href="#0068-MATC-019">0068-MATC-019</a>). For product spot: (<a name="0068-MATC-077" href="#0068-MATC-077">0068-MATC-077</a>)
 - All orders with Reduce-Only set to TRUE are rejected as invalid. (<a name="0068-MATC-054" href="#0068-MATC-054">0068-MATC-054</a>)
 
 In a market that is currently in [Auction Trading](./0026-AUCT-auctions.md):
