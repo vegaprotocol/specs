@@ -68,9 +68,9 @@ The concentrated liquidity market maker consists of two liquidity curves of pric
 - **Upper Price**: The maximum price bound for market making. Prices between the `base price` and this price will have volume placed, with no orders above this price. This is optional and if not supplied no volume will be placed above `base price`. At these prices the market maker will always be short
 - **Lower Price**: The minimum price bound for market making. Prices between the `base price` and this will have volume placed, with no orders below this price. This is optional and if not supplied no volume will be placed below `base price`. At these prices the market maker will always be long
 - **Commitment**: This is the initial volume of funds to transfer into the sub account for use in market making. If this amount is not currently available in the main account's general account the transaction will fail.
-- **Commitment Loss At Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this the commitment must be compared with what position should be taken at the upper and lower price bounds. One way to do this is to work backwards from what loss the vAMM may have taken on as the price moved towards either bound. As the volume sold at each price level is a function of the volume at the bound, the loss at a given boundary uniquely defines the volume traded. Using this parameter allows them to intuitively know how much loss will be taken on at a maximum whilst the price moves within their configured range. User-facing tools can also use this value to calculate what the position itself will be at each bound, allowing a visualisation of the risk as the price moves outside these values. There is a separate parameter for each potential bound.
-  - **Loss At Upper Price Boundary**: `commitment_loss_at_upper_bound`
-  - **Loss At Lower Price Boundary**: `commitment_loss_at_lower_bound`
+- **Leverage at Bounds**: The exact volume scaling is defined by the position at the upper and lower prices. To determine this the commitment must be compared with what leverage that might allow at the price bounds. Using this parameter allows them to set a value such that `position = remaining funds * leverage at bound*`, however with the restriction that commitment must still be `>= initial margin`. This parameter should be optional. There is a separate parameter for each potential bound.
+  - **Upper Bound Leverage**: `leverage_at_upper_bound`
+  - **Lower Bound Leverage**: `leverage_at_lower_bound`
 
 Note that the independent long and short ranges mean that at `base price` the market maker will be flat with respect to the market with a `0` position. This means that a potential market maker with some inherent exposure elsewhere (likely long in many cases as a token holder) can generate a position which is always either opposite to their position elsewhere (with a capped size), thus offsetting pre-existing exposure, or zero.
 
@@ -131,35 +131,39 @@ The AMM position can be thought of as two separate liquidity provision curves, o
 
 One outcome of this is that the curve between `base price` and `lower price` is marginally easier to conceptualise directly from our parameters. At the lowest price side of a curve (`lower price` in this case) the market should be fully in the market contract position, whilst at the highest price (`base price` in this case) it should be fully sold out into cash. This is exactly the formulation used, where at `base price` a zero position is used and a cash amount of `commitment amount`. However given that there is likely to be some degree of leverage allowed on the market this is not directly the amount of funds to calculate using. An AMM with a `commitment amount` of `X` is ultimately defined by the requirement of using `X` in margin at the outer price bounds, so work backwards from that requirement to determine the theoretical cash value. Next calculate the two ranges separately to determine two different `Liquidity` values for the two ranges, which is a value used to later define volumes required to move the price a specified value.
 
-One can calculate a scaling factor that is the smaller of a fraction specified in the commitment (`margin_ratio_at_bounds`, either upper or lower depending on the side considered) or the market's worst case margin. If `margin_ratio_at_bounds` for the relevant side is not set then the market's worst case initial margin is taken automatically
+One can calculate a scaling factor that is the smaller of a multiplier specified in the commitment (`leverage_at_bounds`, either upper or lower depending on the side considered) or the market's worst case margin option. If `leverage_at_bounds` for the relevant side is not set then the market's worst case initial margin is taken automatically
 
 $$
-r_f = \min(\frac{1}{m_r}, \frac{1}{ (f_s + f_l) \cdotp f_i}) ,
+r_f = \min(l_b, \frac{1}{ (f_s + f_l) \cdotp f_i}) ,
 $$
 
-where $m_r$ is the sided value `margin_ratio_at_bounds` (`upper ratio` if the upper band is being considered and `lower ratio` if the lower band is), $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor.
+where $l_b$ is the sided value `leverage_at_bounds` (`upper ratio` if the upper band is being considered and `lower ratio` if the lower band is), $f_s$ is the market's sided risk factor (different for long and short positions), $f_l$ is the market's linear slippage component and $f_i$ is the market's initial margin factor.
 
-The dollar value at which all margin is utilised will then be
-
-$$
-v_{worst} = c \cdotp r_f
-$$
-
-where $c$ is the current commitment amount (the sum of all funds controlled by the key across margin and general accounts) and $r_f$ is as above.
-
-Calculating this separately for the upper and lower ranges (using the `short` factor for the upper range and the `long` factor for the lower range) one can calculate the liquidity value `L` using the knowledge that at the `upper` and `lower` prices the position notional value should be $v_{worst}$. Thus, the absolute position reached at either position bound can be calculated as 
+A few components are needed to calculate the target position at the bounds, which will be used to generate a liquidity value for each curve. First, in order to calculate the average entry price for the full volume traded across the range one can calculate this liquidity, or $L_u$ value, for a range assuming a position of $1$ at the bounds (as the average entry price is invariant to scaling of volume across the curve)
 
 $$
-P_v = \frac{v_{worst}}{p} ,
+L_u = \frac{\sqrt{p_u} \sqrt{p_l}}{\sqrt{p_u} - \sqrt{p_l}} ,
 $$
 
-Where $P_v$ is the theoretical volume, $v_{worst}$ is as above and $p$ is either the `upper price` or `lower price` depending on whether the upper or lower range is being considered. The final $L$ scores can then be reached with the equation 
+where $p_u$ is the price at the top of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the price at the bottom of the range (`base price` for the lower range and `lower price` for the lower range). This gives the two `L` values for the two ranges. With this the average entry price can be calculated as 
 
 $$
-L = P_v \cdot \frac{\sqrt{p_u} \sqrt{p_l}}{\sqrt{p_u} - \sqrt{p_l}} ,
+p_a = L_u  p_u  (1 - \frac{L_u}{L_u + p_u}) ,
 $$
 
-where $P_v$ is the virtual position from the previous formula, $p_u$ is the price at the top of the range (`upper price` for the upper range and `base price` for the lower range) and $p_l$ is the price at the bottom of the range (`base price` for the lower range and `lower price` for the lower range). This gives the two `L` values for the two ranges.
+where $p_a$ is the average execution price across the range and other values are as defined above. With this, the volume required to trade to the bound of the range is
+
+$$
+P_v = \frac{r_f b}{p_l (1 - r_f) + r_f p_a} ,
+$$
+
+where $r_f$ is the `short` factor for the upper range and the `long` factor for the lower range, `b` is the current total balance of the vAMM across all accounts and $P_v$ is the theoretical volume. The final $L$ scores can then be reached with the equation 
+
+$$
+L = P_v \cdot \frac{\sqrt{p_u} \sqrt{p_l}}{\sqrt{p_u} - \sqrt{p_l}} = P_v L_u,
+$$
+
+where $P_v$ is the virtual position from the previous formula, $p_u$ and $p_l$ are as defined above. This gives the two `L` values for the two ranges.
 
 #### Fair price
 
@@ -263,8 +267,8 @@ At market settlement, an AMM's position will be settled alongside all others as 
   - If other traders trade to move the market mid price to `90` and then in one trade move the mid price to `110` then trade to move the mid price to `120` the vAMM will have a larger (more negative) but comparable position to if they had been moved straight from `100` to `120`. (<a name="0087-VAMM-014" href="#0087-VAMM-014">0087-VAMM-014</a>)
   
 - A vAMM which has been created and is active contributes with it's proposed fee level to the active fee setting mechanism. (<a name="0087-VAMM-015" href="#0087-VAMM-015">0087-VAMM-015</a>)
-- A vAMM's virtual ELS should be equal to the ELS of a regular LP with the same committed volume on the book (i.e. if a vAMM has an average volume on each side of the book across the epoch of 10k USDT, their ELS should be equal to that of a regular LP who has a commitment which requires supplying 10k USDT who joined at the same time as them). (<a name="0087-VAMM-016" href="#0087-VAMM-016">0087-VAMM-016</a>)
-  - A vAMM's virtual ELS should grow at the same rate as a full LP's ELS who joined at the same time. (<a name="0087-VAMM-017" href="#0087-VAMM-017">0087-VAMM-017</a>)
+- At the end of an epoch, the vAMM's virtual ELS should be equal to the ELS of a regular LP with the same committed volume on the book who joined at the end of the same epoch as the vAMM did (i.e. if a vAMM has an average volume on each side of the book each epoch of 10k USDT, their ELS should be equal to that of a regular LP who has a commitment which requires supplying 10k USDT who joined at the same time as them). (<a name="0087-VAMM-016" href="#0087-VAMM-016">0087-VAMM-016</a>)
+  - A vAMM's virtual ELS should grow at the same rate as a full LP's ELS who joined at the end of the epoch in which the vAMM joined (<a name="0087-VAMM-017" href="#0087-VAMM-017">0087-VAMM-017</a>)
 - A vAMM can vote in market update proposals with the additional weight of their ELS (i.e. not just from governance token holdings). (<a name="0087-VAMM-018" href="#0087-VAMM-018">0087-VAMM-018</a>)
 
 - If a vAMM is cancelled with `Abandon Position` then it is closed immediately. All funds which were in the `general` account of the vAMM are returned to the user who created the vAMM and the remaining position and margin funds are moved to the network to close out as it would a regular defaulted position. (<a name="0087-VAMM-019" href="#0087-VAMM-019">0087-VAMM-019</a>)
@@ -305,3 +309,22 @@ At market settlement, an AMM's position will be settled alongside all others as 
 - When an AMM is active on a market at time of settlement with a position in a well collateralised state, the market can settle successfully and then all funds on the AMM key are transferred back to the main party's account (<a name="0087-VAMM-031" href="#0087-VAMM-031">0087-VAMM-031</a>)
 
 - When an AMM is active on a market at time of settlement but the settlement price means that the party is closed out no funds are transfeered back to the main party's account (<a name="0087-VAMM-032" href="#0087-VAMM-032">0087-VAMM-032</a>)
+
+- An AMM with base price `1000`, upper price `1100`, lower price `900` and current position `0`:
+  - Quotes a volume of `8.216` units to buy to move fair price to `900`
+  - Quotes a price of `948.683` to buy `8.216` units
+  - Quotes a volume of `7.814` units to sell to move fair price to `1100`
+  - Quotes a price of `1048.809` to sell `7.814` units
+
+- An AMM with base price `1000`, upper price `1100`, lower price `900` and current position short `7.814`:
+  - Quotes a volume of `0` units to buy above `1100`
+  - Quotes a volume of `7.814` units to buy to move fair price to `1000`
+  - Quotes a price of `1048.809` to buy `7.814` units
+  - Quotes a price of `997.488` to sell `16.030` units
+  - Does not quote a price to sell `17` units
+
+- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, but where upper and lower bounds of each are far beyond the base/fair prices, triggers a trade between the two vAMMs, after which they both have the same fair price and the book is not crossed.
+
+- With an existing book consisting solely of one vAMM (at any fair price) a new vAMM entering the market at a differing base price to the existing vAMM's current price, with upper and lower bounds set such that the entire structure is separate to the existing vAMM (e.g. the incoming vAMM's lower price is greater than the existing vAMM's upper price), a trade occurs between the two AMMs leaving at least one of them at the extreme edge of their quoting range.
+
+- With two vAMMs existing on the market, and no other orders, both of which have the same fair price, another counterparty placing a large buy order for a given volume, followed by a large sell order for the same volume, results in the vAMMs both taking a position and then returning to `0` position, with a balance increase equal to the maker fees received plus those for the incoming trader crossing the spread.
