@@ -31,13 +31,13 @@
 
 - When calculating the available volume, the full remaining size of iceberg orders should be considered. (<a name="0012-POSR-019" href="#0012-POSR-019">0012-POSR-019</a>)
 - When calculating the available volume, volume outside price monitoring bounds should be considered. (<a name="0012-POSR-020" href="#0012-POSR-020">0012-POSR-020</a>)
-- When calculating the available volume, volume outside the liquidity price range should not be considered. (<a name="0012-POSR-021" href="#0012-POSR-021">0012-POSR-021</a>)
+- When calculating the available volume, volume outside the disposal price range should not be considered. (<a name="0012-POSR-030" href="#0012-POSR-030">0012-POSR-030</a>)
 - Given a highly liquid market, if the network’s position is greater than `full disposal size`. The network must attempt to dispose `position * disposal fraction` at the next disposal step. (<a name="0012-POSR-022" href="#0012-POSR-022">0012-POSR-022</a>)
 - Given a highly liquid market, if the network’s position is less than or equal to `full disposal size`. The network must attempt to dispose of its full position at the next disposal step. (<a name="0012-POSR-023" href="#0012-POSR-023">0012-POSR-023</a>)
 - Given a highly liquid market, if the network’s `disposal fraction<1` and `full disposal size`=0, the network must still eventually dispose of its full position. (<a name="0012-POSR-024" href="#0012-POSR-024">0012-POSR-024</a>)
 - The network must never dispose more than `available volume  * max fraction of book side within liquidity bounds consumed` in a single order. (<a name="0012-POSR-025" href="#0012-POSR-025">0012-POSR-025</a>)
 - A network disposal order which generates trades must not affect the mark price. (<a name="0012-POSR-026" href="#0012-POSR-026">0012-POSR-026</a>)
-- A network disposal order can not cross with orders outside the liquidity price range. (<a name="0012-POSR-027" href="#0012-POSR-027">0012-POSR-027</a>)
+- A network disposal order can not cross with orders outside the disposal price range. (<a name="0012-POSR-031" href="#0012-POSR-031">0012-POSR-031</a>)
 - A network disposal order will not cross with orders outside price monitoring bounds (internally has to behave like an IOC at one tick inside the price monitoring bound). Hence a network disposal cannot trade at a price outside the tightest price monitoring and it won't ever trigger a price monitoring auction. (<a name="0012-POSR-030" href="#0012-POSR-030">0012-POSR-030</a>)
 - A network disposal order which crosses multiple orders should generate multiple atomic trades. (<a name="0012-POSR-029" href="#0012-POSR-029">0012-POSR-029</a>)
 
@@ -110,15 +110,17 @@ Currently only one liquidation strategy is supported and its defined by the foll
 - `disposal time step` (min: `1s`, max: `1h`): network attempts to unload its position in a given market every time it goes out of auction and then every `disposal time step` seconds as long as market is not in auction mode and while the network's position is not equal to `0`,
 - `disposal fraction` (min: `0.01`, max: `1`): fraction of network's current open volume that it will try to reduce in a single disposal attempt,
 - `full disposal size` (min: `0`, max: `max int`): once net absolute value of network's open volume is at or below that value, the network will attempt to dispose the remaining amount in one go,
-- `max fraction of book side within liquidity bounds consumed` (min: `0`, max: `1`): once the network chooses the size of its order (`s_candidate`) the effective size will be calculated as `s_effective=min(m*N, s_candidate)`, where `N` is the sum of volume (on the side of the book with which the network's order will be matching) that falls within the range implied by the `market.liquidity.priceRange` [parameter](./0044-LIME-lp_mechanics.md#market-parameters) and `m` is the `max fraction of book side within liquidity bounds consumed`.
+- `disposal slippage range` (decimal `>0` with default of `0.1` which is interpreted as `10%`). Just like [SLA range](./0044-LIME-lp_mechanics.md) these are taken from `mid_price` during continuous trading or indicative uncrossing price during auctions so the lower bounds becomes `max(0,price x (1-range)` and upper bound `price x (1+range)`. 
+- `max fraction of book side within bounds consumed` (min: `0`, max: `1`): once the network chooses the size of its order (`s_candidate`) the effective size will be calculated as `s_effective=min(m*N, s_candidate)`, where `N` is the sum of volume (on the side of the book with which the network's order will be matching) that falls within the range implied by the `disposal slippage range` and `m` is the `max fraction of book side within liquidity bounds consumed`.
 
-Assume the price range implied by the `market.liquidity.priceRange` is `[a, b]`. Once the network has worked out a size of its immediate or cancel limit order it sets it's price to `a` if it's a sell order or `b` if it's a buy order, and it submits the order.
+Assume the price range implied by the `disposal slippage range` is `[a, b]`. Once the network has worked out a size of its immediate or cancel limit order it sets its price to `a` if it's a sell order or `b` if it's a buy order, and it submits the order.
 
 Note that setting:
 
 - `disposal time step` = `0s`,
 - `disposal fraction` = `1`,
 - `full disposal size` = `max int`,
+- `disposal slippage range` = `10`,
 - `max fraction of book side within liquidity bounds consumed` = `1`
 
 is closest to reproducing the legacy setup where party would get liquidated immediately (with a difference that closeout now happens immediately even if there's not enough volume on the book to fully absorb it) hence the above values should be used when migrating existing markets to a new version. For all new markets these values should be specified explicitly.

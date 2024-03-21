@@ -370,6 +370,13 @@
       "0003-NP-LIMI-007"
     ]
   },
+  "Explicit liquidation range": {
+    "milestone": "colosseo",
+    "acs": [
+      "0012-POSR-030",
+      "0012-POSR-031"
+    ]
+  },
   "Unknown": {
     "milestone": "unknown",
     "acs": []
