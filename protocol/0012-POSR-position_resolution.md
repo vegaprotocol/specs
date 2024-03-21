@@ -112,8 +112,10 @@ Currently only one liquidation strategy is supported and its defined by the foll
 - `full disposal size` (min: `0`, max: `max int`): once net absolute value of network's open volume is at or below that value, the network will attempt to dispose the remaining amount in one go,
 - `disposal slippage range` (decimal `>0` with default of `0.1` which is interpreted as `10%`, existing markets to default to their current SLA range). Just like [SLA range](./0044-LIME-lp_mechanics.md) these are taken from `mid_price` during continuous trading or indicative uncrossing price during auctions so the lower bounds becomes `max(0,price x (1-range)` and upper bound `price x (1+range)`. 
 - `max fraction of book side within bounds consumed` (min: `0`, max: `1`): once the network chooses the size of its order (`s_candidate`) the effective size will be calculated as `s_effective=min(m*N, s_candidate)`, where `N` is the sum of volume (on the side of the book with which the network's order will be matching) that falls within the range implied by the `disposal slippage range` and `m` is the `max fraction of book side within liquidity bounds consumed`.
+When vAMMs are implemented and provide liquidity then volume implied by vAMMs that lies within the relevant range must be included in the calculation.
 
 Assume the price range implied by the `disposal slippage range` is `[a, b]`. Once the network has worked out a size of its immediate or cancel limit order it sets its price to `a` if it's a sell order or `b` if it's a buy order, and it submits the order.
+
 
 Note that setting:
 
